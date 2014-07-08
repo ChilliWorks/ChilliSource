@@ -30,35 +30,22 @@
 
 #include <CSBackend/Platform/Windows/Core/Base/Screen.h>
 
-//This must be included last.
-#include <CSBackend/Platform/Windows/GLFW/Base/GLFWManager.h>
+#include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
 namespace CSBackend
 {
     namespace Windows
     {
-		namespace
-		{
-			Screen* g_screen = nullptr;
-			//-------------------------------------------------
-			//-------------------------------------------------
-			void OnWindowResized(GLFWwindow* in_window, s32 in_width, s32 in_height)
-			{
-				if (g_screen != nullptr)
-				{
-					g_screen->OnResolutionChanged(CSCore::Vector2((f32)in_width, (f32)in_height));
-				}
-			}
-		}
         CS_DEFINE_NAMEDTYPE(Screen);
         //-------------------------------------------------------
         //-------------------------------------------------------
         Screen::Screen()
         {
-			s32 width, height = 0;
-			GLFWManager::Get()->GetWindowSize(&width, &height);
-			m_resolution.x = (f32)width;
-			m_resolution.y = (f32)height;
+			CSCore::Integer2 size = SFMLWindow::Get()->GetWindowSize();
+			m_resolution.x = (f32)size.x;
+			m_resolution.y = (f32)size.y;
 
 			m_densityScale = m_invDensityScale = 1.0f;
         }
@@ -94,24 +81,24 @@ namespace CSBackend
         }
         //-----------------------------------------------------------
         //------------------------------------------------------------
-        void Screen::OnResolutionChanged(const CSCore::Vector2& in_resolution)
+        void Screen::OnResolutionChanged(const CSCore::Integer2& in_resolution)
         {
-        	m_resolution = in_resolution;
+			m_resolution.x = (f32)in_resolution.x;
+			m_resolution.y = (f32)in_resolution.y;
+
         	m_resolutionChangedEvent.NotifyConnections(m_resolution);
         }
 		//------------------------------------------------
 		//------------------------------------------------
 		void Screen::OnInit()
 		{
-			g_screen = this;
-			GLFWManager::Get()->SetWindowSizeDelegate((GLFWwindowsizefun)&OnWindowResized);
+			m_windowResizeConnection = SFMLWindow::Get()->GetWindowResizedEvent().OpenConnection(CSCore::MakeDelegate(this, &Screen::OnResolutionChanged));
 		}
 		//------------------------------------------------
 		//------------------------------------------------
 		void Screen::OnDestroy()
 		{
-			GLFWManager::Get()->SetWindowSizeDelegate(nullptr);
-			g_screen = nullptr;
+			m_windowResizeConnection = nullptr;
 		}
     }
 }

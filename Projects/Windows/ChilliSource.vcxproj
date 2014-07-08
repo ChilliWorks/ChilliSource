@@ -193,12 +193,12 @@
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Image\PngImage.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Image\PNGImageProvider.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\String\WindowsStringUtils.cpp" />
-    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\GLFW\Base\GLFWManager.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Input\DeviceButtons\DeviceButtonSystem.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Input\Pointer\PointerSystem.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Main.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequest.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequestSystem.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\MeshBuffer.cpp" />
@@ -450,11 +450,11 @@
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Image\PNGImageProvider.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\String\WindowsStringUtils.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\ForwardDeclarations.h" />
-    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\GLFW\Base\GLFWManager.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\DeviceButtons\DeviceButtonSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\Pointer\PointerSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequest.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequestSystem.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLError.h" />
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\GLIncludes.h" />
@@ -502,7 +502,7 @@
     <IntDir>$(SolutionDir)\csobj\$(Configuration)\a\b\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\</IncludePath>
+    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)..\..\Libraries\Core\Windows\Libs\;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\csbin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\csobj\$(Configuration)\a\b\</IntDir>

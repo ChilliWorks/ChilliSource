@@ -42,7 +42,8 @@ typedef char GLchar;
 #include <OpenGLES/EAGLDrawable.h>
 #elif defined CS_TARGETPLATFORM_WINDOWS
 #include <glew.h>
-#include <CSBackend/Platform/Windows/GLFW/Base/GLFWManager.h>
+#include <SFML/OpenGL.hpp>
+#include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 #else
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>

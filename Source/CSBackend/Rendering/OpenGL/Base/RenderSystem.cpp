@@ -590,7 +590,7 @@ namespace CSBackend
 		void RenderSystem::EndFrame(CSRendering::RenderTarget* inpActiveRenderTarget)
 		{
 #ifdef CS_TARGETPLATFORM_WINDOWS
-			CSBackend::Windows::GLFWManager::Get()->SwapBuffers();
+			CSBackend::Windows::SFMLWindow::Get()->Display();
 #endif
 		}
         //----------------------------------------------------------

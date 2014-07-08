@@ -30,12 +30,9 @@
 
 #include <CSBackend/Platform/Windows/Input/Pointer/PointerSystem.h>
 
-#include <CSBackend/Platform/Windows/GLFW/Base/GLFWManager.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
-
-//This needs to be included after windows.h
-#include <glfw3.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
 namespace CSBackend
 {
@@ -43,44 +40,28 @@ namespace CSBackend
 	{
 		namespace
 		{
-			PointerSystem* g_pointerSystem = nullptr;
-
 			//------------------------------------------------
-			/// @author Ian Copland
+			/// @author S Downie
 			///
-			/// @return The current mouse position.
-			//------------------------------------------------
-			CSCore::Vector2 GetMousePosition()
-			{
-				f64 x = 0.0;
-				f64 y = 0.0;
-
-				GLFWManager::Get()->GetCursorPos(&x, &y);
-
-				return CSCore::Vector2((f32)x, (f32)y);
-			}
-			//------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @param The button ID.
+			/// @param The SFML button ID.
 			///
 			/// @return The equivelent Press Type for the
 			/// button Id
 			//------------------------------------------------
-			PointerSystem::InputType ButtonIdToInputType(s32 in_buttonId)
+			PointerSystem::InputType ButtonIdToInputType(sf::Mouse::Button in_button)
 			{
-				switch (in_buttonId)
+				switch (in_button)
 				{
-				case GLFW_MOUSE_BUTTON_LEFT:
+				case sf::Mouse::Button::Left:
 					return PointerSystem::InputType::k_leftMouseButton;
-				case GLFW_MOUSE_BUTTON_MIDDLE:
+				case sf::Mouse::Button::Middle:
 					return PointerSystem::InputType::k_middleMouseButton;
-				case GLFW_MOUSE_BUTTON_RIGHT:
+				case sf::Mouse::Button::Right:
 					return PointerSystem::InputType::k_rightMouseButton;
 				default:
 					return PointerSystem::InputType::k_none;
 				}
-				
+
 			}
 		}
 		CS_DEFINE_NAMEDTYPE(PointerSystem);
@@ -90,65 +71,48 @@ namespace CSBackend
 		{
 			return (CSInput::PointerSystem::InterfaceID == in_interfaceId || PointerSystem::InterfaceID == in_interfaceId);
 		}
-		//----------------------------------------------
-		//----------------------------------------------
-		void PointerSystem::OnMouseMoved(GLFWwindow* in_window, f64 in_xPos, f64 in_yPos)
-		{
-			CS_ASSERT(g_pointerSystem, "OnMouseMoved callback requires a pointer system.");
-
-			CSCore::Vector2 touchLocation((f32)in_xPos, g_pointerSystem->m_screen->GetResolution().y - ((f32)in_yPos));
-			g_pointerSystem->AddPointerMovedEvent(g_pointerSystem->m_pointerId, touchLocation);
-		}
-		//----------------------------------------------
-		//----------------------------------------------
-		void PointerSystem::OnMouseButtonPressed(GLFWwindow* in_window, s32 in_buttonID, s32 in_buttonAction, s32 in_modifierKeys)
-		{
-			CS_ASSERT(g_pointerSystem, "On Mouse Button Pressed callback requires a pointer system.");
-
-			switch (GLFWManager::MouseButtonAction(in_buttonAction))
-			{
-				case GLFWManager::MouseButtonAction::k_press:
-				{
-					InputType type = ButtonIdToInputType(in_buttonID);
-					if (type != InputType::k_none)
-					{
-						g_pointerSystem->AddPointerDownEvent(g_pointerSystem->m_pointerId, type);
-					}
-					break;
-				}
-				case GLFWManager::MouseButtonAction::k_release:
-				{
-					InputType type = ButtonIdToInputType(in_buttonID);
-					if (type != InputType::k_none)
-					{
-						g_pointerSystem->AddPointerUpEvent(g_pointerSystem->m_pointerId, type);
-					}
-					break;
-				}
-				default:
-				{
-					break;
-				}
-			};
-		}
 		//------------------------------------------------
 		//------------------------------------------------
 		void PointerSystem::OnInit()
 		{
 			m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
 			CS_ASSERT(m_screen != nullptr, "Cannot find system required by PointerSystem: Screen.");
-			
-			g_pointerSystem = this;
 
-			//Register for glfw mouse callbacks
-			GLFWManager::Get()->SetCursorPosDelegate(&PointerSystem::OnMouseMoved);
-			GLFWManager::Get()->SetMouseButtonDelegate(&PointerSystem::OnMouseButtonPressed);
+			m_mouseButtonConnection = SFMLWindow::Get()->GetMouseButtonEvent().OpenConnection(CSCore::MakeDelegate(this, &PointerSystem::OnMouseButtonEvent));
+			m_mouseMovedConnection = SFMLWindow::Get()->GetMouseMovedEvent().OpenConnection(CSCore::MakeDelegate(this, &PointerSystem::OnMouseMoved));
 
 			//create the mouse pointer
-			CSCore::Vector2 mousePos = GetMousePosition();
-			mousePos.y = m_screen->GetResolution().y - mousePos.y;
+			CSCore::Integer2 mousePosi = SFMLWindow::Get()->GetMousePosition();
+			CSCore::Vector2 mousePos((f32)mousePosi.x, m_screen->GetResolution().y - (f32)mousePosi.y);
 
 			m_pointerId = AddPointerCreateEvent(mousePos);
+		}
+		//----------------------------------------------
+		//----------------------------------------------
+		void PointerSystem::OnMouseButtonEvent(sf::Mouse::Button in_button, SFMLWindow::MouseButtonEvent in_event, s32 in_xPos, s32 in_yPos)
+		{
+			InputType type = ButtonIdToInputType(in_button);
+			if (type == InputType::k_none)
+			{
+				return;
+			}
+
+			switch (in_event)
+			{
+			case SFMLWindow::MouseButtonEvent::k_pressed:
+				AddPointerDownEvent(m_pointerId, type);
+				break;
+			case SFMLWindow::MouseButtonEvent::k_released:
+				AddPointerUpEvent(m_pointerId, type);
+				break;
+			}
+		}
+		//----------------------------------------------
+		//----------------------------------------------
+		void PointerSystem::OnMouseMoved(s32 in_xPos, s32 in_yPos)
+		{
+			CSCore::Vector2 touchLocation((f32)in_xPos, m_screen->GetResolution().y - (f32)in_yPos);
+			AddPointerMovedEvent(m_pointerId, touchLocation);
 		}
 		//------------------------------------------------
 		//------------------------------------------------
@@ -156,10 +120,8 @@ namespace CSBackend
 		{
 			AddPointerRemoveEvent(m_pointerId);
 
-			GLFWManager::Get()->SetCursorPosDelegate(nullptr);
-			GLFWManager::Get()->SetMouseButtonDelegate(nullptr);
-
-			g_pointerSystem = nullptr;
+			m_mouseButtonConnection = nullptr;
+			m_mouseMovedConnection = nullptr;
 
 			m_screen = nullptr;
 		}

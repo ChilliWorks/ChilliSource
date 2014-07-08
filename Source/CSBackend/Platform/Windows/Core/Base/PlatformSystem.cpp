@@ -29,17 +29,13 @@
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
 #include <CSBackend/Platform/Windows/Core/Base/PlatformSystem.h>
-
+#include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #include <CSBackend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
-#include <ChilliSource/Core/Base/AppConfig.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-
-//As the opengl classes need to include glfw.h, they need to be included after windows.h to avoid macro redefinitions.
-#include <CSBackend/Platform/Windows/GLFW/Base/GLFWManager.h>
 
 namespace CSBackend 
 {
@@ -56,24 +52,8 @@ namespace CSBackend
 		//-----------------------------------------
 		//-----------------------------------------
 		PlatformSystem::PlatformSystem() 
-			: m_isSuspended(false), m_isFocused(false), m_appStartTime(0), m_appPreviousTime(0.0)
 		{
 			QueryPerformanceFrequency(&g_frequency);
-
-			GLFWManager::Create();
-			GLFWManager::Get()->Init(960, 640);
-
-			//Register callbacks
-			GLFWManager::Get()->SetWindowFocusDelegate((GLFWwindowfocusfun)&PlatformSystem::OnWindowFocusChanged);
-			GLFWManager::Get()->SetWindowCloseDelegate((GLFWwindowclosefun)&PlatformSystem::OnWindowClosed);
-
-			//Create the GL context
-			GLenum GlewError = glewInit();
-			if (GLEW_OK != GlewError)
-			{
-				//Problem: glewInit failed, something is seriously wrong.
-				CS_LOG_FATAL("Glew Error On Init: " + std::string((const char*)glewGetErrorString(GlewError)));
-			}
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
@@ -88,80 +68,17 @@ namespace CSBackend
 			in_application->CreateSystem<CSBackend::OpenGL::GLSLShaderProvider>();
 			in_application->CreateSystem<CSBackend::OpenGL::TextureUnitSystem>();
 		}
-		//-----------------------------------------
-		//-----------------------------------------
-		void PlatformSystem::OnResume()
-		{
-			m_isSuspended = false;
-		}
-		//-----------------------------------------
-		//-----------------------------------------
-		void PlatformSystem::OnForeground()
-		{
-			m_isFocused = true;
-		}
-		//-----------------------------------------
-		//-----------------------------------------
-		void PlatformSystem::Run()
-		{
-			GLFWManager::Get()->SetWindowTitle(CSCore::Application::Get()->GetAppConfig()->GetDisplayableName());
-
-			CSCore::Application::Get()->Resume();
-			CSCore::Application::Get()->Foreground();
-
-			m_appStartTime = (u64)GLFWManager::Get()->GetTime();
-
-			while (GLFWManager::Get() && GLFWManager::Get()->IsWindowAlive() == true)
-			{
-				if (!m_isSuspended)
-				{
-					GLFWManager::Get()->PollEvents();
-				}
-				if (!m_isSuspended)
-				{
-					f64 appCurrentTime = GLFWManager::Get()->GetTime();
-
-					f32 deltaTime = (f32)(appCurrentTime - m_appPreviousTime);
-					u64 uddwAppRunningTime = ((u64)m_appPreviousTime - m_appStartTime);
-					m_appPreviousTime = appCurrentTime;
-
-					CSCore::Application::Get()->Update(deltaTime, uddwAppRunningTime);
-					CSCore::Application::Get()->Render();
-				}
-			}
-		}
-		//-----------------------------------------
-		//-----------------------------------------
-		void PlatformSystem::OnBackground()
-		{
-			m_isFocused = false;
-		}
-		//-----------------------------------------
-		//-----------------------------------------
-		void PlatformSystem::OnSuspend()
-		{
-			m_isSuspended = true;
-		}
 		//-------------------------------------------------
 		//-------------------------------------------------
 		void PlatformSystem::SetPreferredFPS(u32 in_fps)
 		{
-			GLFWManager::Get()->SetPreferredFPS(in_fps);
+			SFMLWindow::Get()->SetPreferredFPS(in_fps);
 		}
 		//--------------------------------------------
 		//--------------------------------------------
 		void PlatformSystem::Quit()
 		{
-			if(m_isFocused == true)
-			{
-				CSCore::Application::Get()->Background();
-			}
-			if(m_isSuspended == false)
-			{
-				CSCore::Application::Get()->Suspend();
-			}
-
-			CSCore::Application::Get()->Destroy();
+			SFMLWindow::Get()->Quit();
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -176,32 +93,6 @@ namespace CSBackend
 			LARGE_INTEGER currentTime;
             QueryPerformanceCounter(&currentTime);
 			return (u64)((currentTime.QuadPart) * 1000.0 / g_frequency.QuadPart);
-		}
-		//---GLFW Delegates
-		//-------------------------------------------------
-		//-------------------------------------------------
-		void PlatformSystem::OnWindowClosed(GLFWwindow* in_window)
-		{
-			CSCore::Application::Get()->Quit();
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		void PlatformSystem::OnWindowFocusChanged(GLFWwindow* in_window, s32 in_isFocused)
-		{
-			if (in_isFocused)
-			{
-				CSCore::Application::Get()->Foreground();
-			}
-			else
-			{
-				CSCore::Application::Get()->Background();
-			}
-		}
-		//-----------------------------------------
-		//-----------------------------------------
-		PlatformSystem::~PlatformSystem()
-		{
-			GLFWManager::Destroy();
 		}
 	}
 }

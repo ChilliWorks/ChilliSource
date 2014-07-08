@@ -95,17 +95,6 @@ namespace CSBackend
             /// changes.
 			//-----------------------------------------------------------
             CSCore::IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() override;
-            //-----------------------------------------------------------
-            /// Called when the screen resolution changes. This will update
-            /// the screen resolution and notify listeners that the resolution
-            /// has changed. This is for internal use and should not be
-            /// called manually.
-            ///
-			/// @author Ian Copland
-            ///
-            /// @param The new resolution.
-			//------------------------------------------------------------
-			void OnResolutionChanged(const CSCore::Vector2& in_resolution);
         private:
             friend CSCore::ScreenUPtr CSCore::Screen::Create();
             //-------------------------------------------------------
@@ -124,6 +113,16 @@ namespace CSBackend
 			/// @author Ian Copland
 			//------------------------------------------------
 			void OnInit() override;
+			//-----------------------------------------------------------
+			/// Called when the screen resolution changes. This will update
+			/// the screen resolution and notify listeners that the resolution
+			/// has changed.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The new resolution.
+			//------------------------------------------------------------
+			void OnResolutionChanged(const CSCore::Integer2& in_resolution);
 			//------------------------------------------------
 			/// Called when the application is being destroyed.
 			/// This should be used to cleanup memory and
@@ -139,6 +138,7 @@ namespace CSBackend
             f32 m_densityScale;
             f32 m_invDensityScale;
             CSCore::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
+			CSCore::EventConnectionUPtr m_windowResizeConnection;
         };
     }
 }
