@@ -116,8 +116,7 @@ namespace CSBackend
 			//-----------------------------------------------------------
 			/// Called when the screen resolution changes. This will update
 			/// the screen resolution and notify listeners that the resolution
-			/// has changed. This is for internal use and should not be
-			/// called manually.
+			/// has changed.
 			///
 			/// @author Ian Copland
 			///
