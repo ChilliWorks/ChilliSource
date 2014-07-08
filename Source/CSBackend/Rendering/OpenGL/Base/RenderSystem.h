@@ -517,7 +517,7 @@ namespace CSBackend
 #ifdef CS_TARGETPLATFORM_ANDROID
             ContextRestorer m_contextRestorer;
 #endif
-            
+   
             bool m_hasContext = false;
             
             CSCore::Screen* m_screen;

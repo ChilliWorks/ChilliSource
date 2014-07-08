@@ -28,8 +28,7 @@
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
-#include <CSBackend/Platform/Windows/Core/Base/PlatformSystem.h>
-#include <ChilliSource/Core/Base/Application.h>
+#include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 
 #include <Windows.h>
 
@@ -49,11 +48,9 @@
 //----------------------------------------------------------------------------------
 int CALLBACK WinMain(_In_ HINSTANCE in_instance, _In_ HINSTANCE in_prevInstance, _In_ LPSTR in_cmdLine, _In_ int in_cmdShow)
 {
-    CSCore::Application* app = CreateApplication();
-    app->Init();
-    auto platformSys = app->GetSystem<CSBackend::Windows::PlatformSystem>();
-	platformSys->Run();
-    delete app;
+	CSBackend::Windows::SFMLWindow::Create();
+	CSBackend::Windows::SFMLWindow::Get()->Run();
+	CSBackend::Windows::SFMLWindow::Destroy();
     return 0;
 }
 
