@@ -240,9 +240,21 @@ namespace CSBackend
 			sf::Vector2i pos = sf::Mouse::getPosition(m_window);
 			return CSCore::Integer2((s32)pos.x, (s32)pos.y);
 		}
+		//----------------------------------------------------
+		//----------------------------------------------------
+		void SFMLWindow::HideCursor()
+		{
+			m_window.setMouseCursorVisible(false);
+		}
+		//----------------------------------------------------
+		//----------------------------------------------------
+		void SFMLWindow::ShowCursor()
+		{
+			m_window.setMouseCursorVisible(true);
+		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void SFMLWindow ::Run()
+		void SFMLWindow::Run()
 		{
 			Json::Value appConfigRoot = ReadAppConfig();
 			CSRendering::SurfaceFormat surfaceFormat = ReadSurfaceFormat(appConfigRoot);

@@ -88,6 +88,18 @@ namespace CSBackend
             /// @param The system Id of the touch.
 			//----------------------------------------------------
 			void OnTouchUp(s32 in_systemId);
+            //----------------------------------------------------
+            /// Android has no cursor so this does nothing
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void HideCursor() override {};
+            //----------------------------------------------------
+            /// Android has no cursor so this does nothing
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void ShowCursor() override {};
         private:
             friend CSInput::PointerSystemUPtr CSInput::PointerSystem::Create();
 

@@ -88,6 +88,18 @@ namespace CSBackend
             /// @param The touch.
 			//----------------------------------------------------
 			void OnTouchEnded(UITouch* in_touch);
+            //----------------------------------------------------
+            /// iOS has no cursor so this does nothing
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void HideCursor() override {};
+            //----------------------------------------------------
+            /// iOS has no cursor so this does nothing
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void ShowCursor() override {};
         private:
             friend CSInput::PointerSystemUPtr CSInput::PointerSystem::Create();
             

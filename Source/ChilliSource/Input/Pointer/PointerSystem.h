@@ -158,6 +158,18 @@ namespace ChilliSource
             //----------------------------------------------------
             std::vector<Pointer> GetPointers() const;
             //----------------------------------------------------
+            /// Hide the pointer cursor if one exists
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            virtual void HideCursor() = 0;
+            //----------------------------------------------------
+            /// Show the pointer cursor if one exists
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            virtual void ShowCursor() = 0;
+            //----------------------------------------------------
             /// Process all input events that have been received
             /// from the OS.
             ///

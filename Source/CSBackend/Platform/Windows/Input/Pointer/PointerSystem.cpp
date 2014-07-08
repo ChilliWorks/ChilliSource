@@ -87,6 +87,18 @@ namespace CSBackend
 
 			m_pointerId = AddPointerCreateEvent(mousePos);
 		}
+		//----------------------------------------------------
+		//----------------------------------------------------
+		void PointerSystem::HideCursor()
+		{
+			SFMLWindow::Get()->HideCursor();
+		}
+		//----------------------------------------------------
+		//----------------------------------------------------
+		void PointerSystem::ShowCursor()
+		{
+			SFMLWindow::Get()->ShowCursor();
+		}
 		//----------------------------------------------
 		//----------------------------------------------
 		void PointerSystem::OnMouseButtonEvent(sf::Mouse::Button in_button, SFMLWindow::MouseButtonEvent in_event, s32 in_xPos, s32 in_yPos)

@@ -63,6 +63,18 @@ namespace CSBackend
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			//----------------------------------------------------
+			/// Hide the window cursor
+			///
+			/// @author S Downie
+			//----------------------------------------------------
+			void HideCursor() override;
+			//----------------------------------------------------
+			/// Show the window cursor
+			///
+			/// @author S Downie
+			//----------------------------------------------------
+			void ShowCursor() override;
 		private:
 			friend CSInput::PointerSystemUPtr CSInput::PointerSystem::Create();
 
