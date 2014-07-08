@@ -1,11 +1,11 @@
 //
-//  Keyboard.h
+//  TextEntry.h
 //  Chilli Source
-//  Created by Ian Copland on 31/12/2011
+//  Created by Scott Downie on 08/07/2014
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -28,39 +28,26 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifndef _CSBACKEND_PLATFORM_ANDROID_INPUT_KEYBOARD_KEYBOARD_H_
-#define _CSBACKEND_PLATFORM_ANDROID_INPUT_KEYBOARD_KEYBOARD_H_
+#ifndef _CSBACKEND_PLATFORM_ANDROID_INPUT_TEXTENTRY_TEXTENTRY_H_
+#define _CSBACKEND_PLATFORM_ANDROID_INPUT_TEXTENTRY_TEXTENTRY_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
-#include <ChilliSource/Input/Keyboard/Keyboard.h>
+#include <ChilliSource/Input/TextEntry/TextEntry.h>
 
 namespace CSBackend
 {
 	namespace Android
 	{
 		//----------------------------------------------------------------
-		/// The Android backend to the keyboard system. This provides access
+		/// The Android backend to the text entry system. This provides access
 		/// to the Android virtual keyboard functionality.
 		///
 		/// @author Ian Copland
 		//----------------------------------------------------------------
-		class Keyboard final : public CSInput::Keyboard
+		class TextEntry final : public CSInput::TextEntry
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(Keyboard);
-			//-------------------------------------------------------
-			/// Query whether the object implements an interface
-			/// that has the given ID
-			///
-			/// @author Ian Copland
-			///
-			/// @param Interface ID
-			///
-			/// @return Whether the object implements an interface
-			/// that has the given ID
-			//-------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//-------------------------------------------------------
 			/// Sets whether or not the text input is currently
 			/// enabled or disabled. If the keyboard is virtual, it
@@ -81,13 +68,13 @@ namespace CSBackend
 			///
 			/// @return The current text input buffer (UTF-8).
 			//-------------------------------------------------------
-			const std::string& GetText() const override;
+			const std::string& GetTextBuffer() const override;
 			//-------------------------------------------------------
 			/// @author Ian Copland
 			///
 			/// @param The new text input buffer (UTF-8).
 			//-------------------------------------------------------
-			void SetText(const std::string& in_text) override;
+			void SetTextBuffer(const std::string& in_text) override;
 			//-------------------------------------------------------
 			/// Sets the type of keyboard to display if using a
 			/// virtual keyboard. This must be set prior to the keyboard
@@ -108,29 +95,22 @@ namespace CSBackend
 			/// @param The capitalisation method.
 			//-------------------------------------------------------
 			void SetCapitalisation(Capitalisation in_capitalisation) override;
+            //-------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A delegate that is called when text buffer is
+            /// changed.
+            //-------------------------------------------------------
+            void SetTextBufferChangedDelegate(const TextBufferChangedDelegate& in_delegate) override;
 			//-------------------------------------------------------
-			/// @author Ian Copland
+			/// Destructor.
 			///
-			/// @param An event that is called when text input is
-			/// enabled.
+			/// @author S Downie
 			//-------------------------------------------------------
-			CSCore::IConnectableEvent<KeyboardEventDelegate>& GetTextInputEnabledEvent() override;
-			//-------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @param An event that is called when text input is
-			/// received.
-			//-------------------------------------------------------
-			CSCore::IConnectableEvent<TextInputEventDelegate>& GetTextInputReceivedEvent() override;
-			//-------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @param An event that is called when text input is
-			/// disabled.
-			//-------------------------------------------------------
-			CSCore::IConnectableEvent<KeyboardEventDelegate>& GetTextInputDisabledEvent() override;
+			~TextEntry();
+
 		private:
-			friend CSInput::KeyboardUPtr CSInput::Keyboard::Create();
+			friend CSInput::TextEntryUPtr CSInput::TextEntry::Create();
 
 			//-------------------------------------------------------
 			/// Constructor. Declared private to force the use of the
@@ -138,16 +118,7 @@ namespace CSBackend
 			///
 			/// @author Ian Copland
 			//-------------------------------------------------------
-			Keyboard();
-			//-------------------------------------------------------
-			/// Initialisation method called at a time when
-			/// all App Systems have been created. System
-			/// initialisation occurs in the order they were
-			/// created.
-			///
-			/// @author Ian Copland
-			//-------------------------------------------------------
-			void OnInit() override;
+			TextEntry();
 			//-------------------------------------------------------
 			/// Called when new keyboard text has been received. This
 			/// will try to append it to the current keyboard text.
@@ -169,23 +140,11 @@ namespace CSBackend
 			/// @author Ian Copland
 			//-------------------------------------------------------
 			void OnKeyboardDismissed();
-			//-------------------------------------------------------
-			/// Called when the application is being destroyed.
-			/// This should be used to cleanup memory and
-			/// references to other systems. System destruction
-			/// occurs in the reverse order to which they
-			/// were created
-			///
-			/// @author Ian Copland
-			//-------------------------------------------------------
-			void OnDestroy() override;
 
-			CSCore::Event<KeyboardEventDelegate> m_textInputEnabledEvent;
-			CSCore::Event<TextInputEventDelegate> m_textInputReceivedEvent;
-			CSCore::Event<KeyboardEventDelegate> m_textInputDisabledEvent;
-			bool m_enabled;
+			TextBufferChangedDelegate m_textBufferChangedDelegate;
+			bool m_enabled = false;
 			std::string m_text;
-			KeyboardJavaInterfaceSPtr m_keyboardJI;
+			TextEntryJavaInterfaceSPtr m_textEntryJI;
 		};
 	}
 }

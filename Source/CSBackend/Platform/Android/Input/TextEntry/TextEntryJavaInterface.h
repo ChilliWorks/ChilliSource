@@ -1,5 +1,5 @@
 //
-//  KeyboardJavaInterface.h
+//  TextEntryJavaInterface.h
 //  Chilli Source
 //  Created by Ian Copland on 04/02/2014.
 //
@@ -28,26 +28,26 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifndef _CHILLISOURCE_PLATFORM_ANDROID_INPUT_KEYBOARDJAVAINTERFACE_H_
-#define _CHILLISOURCE_PLATFORM_ANDROID_INPUT_KEYBOARDJAVAINTERFACE_H_
+#ifndef _CHILLISOURCE_PLATFORM_ANDROID_INPUT_TEXTENTRY_TEXTENTRYJAVAINTERFACE_H_
+#define _CHILLISOURCE_PLATFORM_ANDROID_INPUT_TEXTENTRY_TEXTENTRYJAVAINTERFACE_H_
 
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
-#include <ChilliSource/Input/Keyboard/Keyboard.h>
+#include <ChilliSource/Input/TextEntry/TextEntry.h>
 
 namespace CSBackend
 {
 	namespace Android
 	{
 		//=====================================================
-		/// Keyboard Java Interface
+		/// Text Entry Java Interface
 		///
-		/// A Java Interface for Android keyboard input.
+		/// A Java Interface for Android virtual keyboard input.
 		//======================================================
-		class KeyboardJavaInterface : public IJavaInterface
+		class TextEntryJavaInterface : public IJavaInterface
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(KeyboardJavaInterface);
+			CS_DECLARE_NAMEDTYPE(TextEntryJavaInterface);
 			//-----------------------------------------------
 			/// Events
 			//-----------------------------------------------
@@ -57,7 +57,7 @@ namespace CSBackend
 			//-----------------------------------------------
 			/// Constructor
 			//-----------------------------------------------
-			KeyboardJavaInterface();
+			TextEntryJavaInterface();
 			//-----------------------------------------------
 			/// Is A
 			///
@@ -107,7 +107,7 @@ namespace CSBackend
 			/// @param The keyboard type to be used the
 			/// next time the keyboard is displayed.
 			//-------------------------------------------
-            void SetKeyboardType(CSInput::Keyboard::Type ineKeyboardType);
+            void SetKeyboardType(CSInput::TextEntry::Type ineKeyboardType);
 			//-------------------------------------------
 			/// Set Capitalisation Method
 			///
@@ -115,7 +115,7 @@ namespace CSBackend
             /// used the next time the keyboard is
             /// displayed.
 			//-------------------------------------------
-            void SetCapitalisationMethod(CSInput::Keyboard::Capitalisation ineKeyboardCapitalisation);
+            void SetCapitalisationMethod(CSInput::TextEntry::Capitalisation ineKeyboardCapitalisation);
 			//-----------------------------------------------
 			/// On Text Added
 			///

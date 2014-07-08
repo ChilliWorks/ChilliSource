@@ -1,5 +1,5 @@
 //
-//  KeyboardJavaInterface.cpp
+//  TextEntryJavaInterface.cpp
 //  Chilli Source
 //  Created by Ian Copland on 04/02/2014.
 //
@@ -28,7 +28,7 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <CSBackend/Platform/Android/Input/Keyboard/KeyboardJavaInterface.h>
+#include <CSBackend/Platform/Android/Input/TextEntry/TextEntryJavaInterface.h>
 
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
@@ -42,9 +42,9 @@
 //-----------------------------------------------
 extern "C"
 {
-	void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextAdded(JNIEnv* inpEnv, jobject inThis, jstring injstrText);
-	void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextDeleted(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnKeyboardDismissed(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_input_TextEntryNativeInterface_NativeOnTextAdded(JNIEnv* inpEnv, jobject inThis, jstring injstrText);
+	void Java_com_chillisource_input_TextEntryNativeInterface_NativeOnTextDeleted(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chillisource_input_TextEntryNativeInterface_NativeOnKeyboardDismissed(JNIEnv* inpEnv, jobject inThis);
 }
 //-----------------------------------------------
 /// Native On Text Added
@@ -56,13 +56,13 @@ extern "C"
 /// @param The java object calling the function.
 /// @param The additional text.
 //-----------------------------------------------
-void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextAdded(JNIEnv* inpEnv, jobject inThis, jstring injstrText)
+void Java_com_chillisource_input_TextEntryNativeInterface_NativeOnTextAdded(JNIEnv* inpEnv, jobject inThis, jstring injstrText)
 {
-	CSBackend::Android::KeyboardJavaInterfaceSPtr pKeyboardJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::KeyboardJavaInterface>();
+	CSBackend::Android::TextEntryJavaInterfaceSPtr pKeyboardJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::TextEntryJavaInterface>();
 	if (pKeyboardJI != nullptr)
 	{
 		std::string strText = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(injstrText);
-		auto task = std::bind(&CSBackend::Android::KeyboardJavaInterface::OnTextAdded, pKeyboardJI.get(), strText);
+		auto task = std::bind(&CSBackend::Android::TextEntryJavaInterface::OnTextAdded, pKeyboardJI.get(), strText);
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
 	}
 	inpEnv->DeleteLocalRef(injstrText);
@@ -76,12 +76,12 @@ void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextAdded(JNIEn
 /// @param The jni environment.
 /// @param The java object calling the function.
 //-----------------------------------------------
-void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextDeleted(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_input_TextEntryNativeInterface_NativeOnTextDeleted(JNIEnv* inpEnv, jobject inThis)
 {
-	CSBackend::Android::KeyboardJavaInterfaceSPtr pKeyboardJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::KeyboardJavaInterface>();
+	CSBackend::Android::TextEntryJavaInterfaceSPtr pKeyboardJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::TextEntryJavaInterface>();
 	if (pKeyboardJI != nullptr)
 	{
-		auto task = std::bind(&CSBackend::Android::KeyboardJavaInterface::OnTextDeleted, pKeyboardJI.get());
+		auto task = std::bind(&CSBackend::Android::TextEntryJavaInterface::OnTextDeleted, pKeyboardJI.get());
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
 	}
 }
@@ -93,12 +93,12 @@ void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnTextDeleted(JNI
 /// @param The jni environment.
 /// @param The java object calling the function.
 //-----------------------------------------------
-void Java_com_chillisource_input_KeyboardNativeInterface_NativeOnKeyboardDismissed(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chillisource_input_TextEntryNativeInterface_NativeOnKeyboardDismissed(JNIEnv* inpEnv, jobject inThis)
 {
-	CSBackend::Android::KeyboardJavaInterfaceSPtr pKeyboardJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::KeyboardJavaInterface>();
+	CSBackend::Android::TextEntryJavaInterfaceSPtr pKeyboardJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::TextEntryJavaInterface>();
 	if (pKeyboardJI != nullptr)
 	{
-		auto task = std::bind(&CSBackend::Android::KeyboardJavaInterface::OnKeyboardDismissed, pKeyboardJI.get());
+		auto task = std::bind(&CSBackend::Android::TextEntryJavaInterface::OnKeyboardDismissed, pKeyboardJI.get());
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
 	}
 }
@@ -119,13 +119,13 @@ namespace CSBackend
 			/// @param The keyboard type to convert.
 			/// @return The keyboard type in integer form.
 			//-----------------------------------------------
-			s32 KeyboardTypeToInteger(CSInput::Keyboard::Type ineKeyboardType)
+			s32 KeyboardTypeToInteger(CSInput::TextEntry::Type ineKeyboardType)
 			{
 				switch (ineKeyboardType)
 				{
-				case CSInput::Keyboard::Type::k_text:
+				case CSInput::TextEntry::Type::k_text:
 					return 0;
-				case CSInput::Keyboard::Type::k_numeric:
+				case CSInput::TextEntry::Type::k_numeric:
 					return 1;
 				default:
 					CS_LOG_ERROR("Invalid keyboard type, cannot be converted.");
@@ -143,17 +143,17 @@ namespace CSBackend
 			/// @return The Keyboard Capitalisation in integer
 			/// form.
 			//-----------------------------------------------
-			s32 KeyboardCapitalisationToInteger(CSInput::Keyboard::Capitalisation ineKeyboardCapitalisation)
+			s32 KeyboardCapitalisationToInteger(CSInput::TextEntry::Capitalisation ineKeyboardCapitalisation)
 			{
 				switch (ineKeyboardCapitalisation)
 				{
-				case CSInput::Keyboard::Capitalisation::k_none:
+				case CSInput::TextEntry::Capitalisation::k_none:
 					return 0;
-				case CSInput::Keyboard::Capitalisation::k_sentences:
+				case CSInput::TextEntry::Capitalisation::k_sentences:
 					return 1;
-				case CSInput::Keyboard::Capitalisation::k_words:
+				case CSInput::TextEntry::Capitalisation::k_words:
 					return 2;
-				case CSInput::Keyboard::Capitalisation::k_all:
+				case CSInput::TextEntry::Capitalisation::k_all:
 					return 3;
 				default:
 					CS_LOG_ERROR("Invalid keyboard capitalisation, cannot be converted.");
@@ -162,13 +162,13 @@ namespace CSBackend
 			}
 		}
 
-		CS_DEFINE_NAMEDTYPE(KeyboardJavaInterface);
+		CS_DEFINE_NAMEDTYPE(TextEntryJavaInterface);
 		//-----------------------------------------------
 		/// Constructor
 		//-----------------------------------------------
-		KeyboardJavaInterface::KeyboardJavaInterface()
+		TextEntryJavaInterface::TextEntryJavaInterface()
 		{
-			CreateNativeInterface("com/chillisource/input/KeyboardNativeInterface");
+			CreateNativeInterface("com/chillisource/input/TextEntryNativeInterface");
 			CreateMethodReference("Activate", "()V");
 			CreateMethodReference("Deactivate", "()V");
 			CreateMethodReference("SetKeyboardType", "(I)V");
@@ -177,35 +177,35 @@ namespace CSBackend
 		//-----------------------------------------------
 		/// Is A
 		//-----------------------------------------------
-		bool KeyboardJavaInterface::IsA(CSCore::InterfaceIDType inInterfaceID) const
+		bool TextEntryJavaInterface::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
-			return (KeyboardJavaInterface::InterfaceID == inInterfaceID);
+			return (TextEntryJavaInterface::InterfaceID == inInterfaceID);
 		}
 		//-----------------------------------------------
 		/// Set Text Added Delegate
 		//-----------------------------------------------
-		void KeyboardJavaInterface::SetTextAddedDelegate(const TextAddedDelegate& inDelegate)
+		void TextEntryJavaInterface::SetTextAddedDelegate(const TextAddedDelegate& inDelegate)
 		{
 			mTextAddedDelegate = inDelegate;
 		}
 		//-----------------------------------------------
 		/// Set Text Deleted Delegate
 		//-----------------------------------------------
-		void KeyboardJavaInterface::SetTextDeletedDelegate(const TextDeletedDelegate& inDelegate)
+		void TextEntryJavaInterface::SetTextDeletedDelegate(const TextDeletedDelegate& inDelegate)
 		{
 			mTextDeletedDelegate = inDelegate;
 		}
 		//-----------------------------------------------
 		/// Set Keyboard Dismissed Delegate
 		//-----------------------------------------------
-		void KeyboardJavaInterface::SetKeyboardDismissedDelegate(const KeyboardDismissedDelegate& inDelegate)
+		void TextEntryJavaInterface::SetKeyboardDismissedDelegate(const KeyboardDismissedDelegate& inDelegate)
 		{
 			mKeyboardDismissedDelegate = inDelegate;
 		}
 		//-----------------------------------------------
 		/// Activate
 		//-----------------------------------------------
-		void KeyboardJavaInterface::Activate()
+		void TextEntryJavaInterface::Activate()
 		{
 			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Activate"));
@@ -213,7 +213,7 @@ namespace CSBackend
 		//-----------------------------------------------
 		/// Deactivate
 		//-----------------------------------------------
-		void KeyboardJavaInterface::Deactivate()
+		void TextEntryJavaInterface::Deactivate()
 		{
 			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Deactivate"));
@@ -221,7 +221,7 @@ namespace CSBackend
 		//-------------------------------------------
 		/// Set Keyboard Type
 		//-------------------------------------------
-        void KeyboardJavaInterface::SetKeyboardType(CSInput::Keyboard::Type ineKeyboardType)
+        void TextEntryJavaInterface::SetKeyboardType(CSInput::TextEntry::Type ineKeyboardType)
         {
         	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	s32 dwKeyboardType = KeyboardTypeToInteger(ineKeyboardType);
@@ -230,7 +230,7 @@ namespace CSBackend
 		//-------------------------------------------
 		/// Set Capitalisation Method
 		//-------------------------------------------
-        void KeyboardJavaInterface::SetCapitalisationMethod(CSInput::Keyboard::Capitalisation ineKeyboardCapitalisation)
+        void TextEntryJavaInterface::SetCapitalisationMethod(CSInput::TextEntry::Capitalisation ineKeyboardCapitalisation)
         {
         	JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	s32 dwKeyboardCapitalisation = KeyboardCapitalisationToInteger(ineKeyboardCapitalisation);
@@ -239,7 +239,7 @@ namespace CSBackend
 		//-----------------------------------------------
 		/// On Text Added
 		//-----------------------------------------------
-		void KeyboardJavaInterface::OnTextAdded(const std::string& instrText)
+		void TextEntryJavaInterface::OnTextAdded(const std::string& instrText)
 		{
 			if (mTextAddedDelegate != nullptr)
 			{
@@ -249,7 +249,7 @@ namespace CSBackend
 		//-----------------------------------------------
 		/// On Text Deleted
 		//-----------------------------------------------
-		void KeyboardJavaInterface::OnTextDeleted()
+		void TextEntryJavaInterface::OnTextDeleted()
 		{
 			if (mTextDeletedDelegate != nullptr)
 			{
@@ -259,7 +259,7 @@ namespace CSBackend
 		//-----------------------------------------------
 		/// On Keyboard Dismissed
 		//-----------------------------------------------
-		void KeyboardJavaInterface::OnKeyboardDismissed()
+		void TextEntryJavaInterface::OnKeyboardDismissed()
 		{
 			if (mKeyboardDismissedDelegate != nullptr)
 			{

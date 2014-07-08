@@ -1,5 +1,5 @@
 /**
- * KeyboardNativeInterface.java
+ * TextEntryNativeInterface.java
  * Chilli Source
  * Created by Ian Copland on 04/02/2014.
  * 
@@ -39,11 +39,11 @@ import com.chillisource.input.NativeKeyboardInputView.KeyboardType;
 import com.chillisource.core.INativeInterface;
 
 //========================================================
-/// Keyboard Native Interface
+/// TextEntry Native Interface
 ///
 /// A native interface for handling keyboard input. 
 //========================================================
-public class KeyboardNativeInterface extends INativeInterface
+public class TextEntryNativeInterface extends INativeInterface
 {
 	//-------------------------------------------------
 	/// Member data
@@ -53,12 +53,7 @@ public class KeyboardNativeInterface extends INativeInterface
 	private boolean mbHardwareKeyboardOpen = false;
 	private volatile KeyboardType meKeyboardType = KeyboardType.TEXT;
 	private volatile KeyboardCapitalisation meKeyboardCapitalisation = KeyboardCapitalisation.NONE;
-	//-------------------------------------------------
-	/// Constructor
-	//-------------------------------------------------
-	public KeyboardNativeInterface()
-	{
-	}
+
 	//-------------------------------------------------
 	/// Is A
 	///
@@ -78,7 +73,7 @@ public class KeyboardNativeInterface extends INativeInterface
 	//-------------------------------------------------
 	public void Activate()
 	{
-		final KeyboardNativeInterface thisKeyboardNativeInterface = this;
+		final TextEntryNativeInterface thisNativeInterface = this;
 		
 		Runnable task = new Runnable() 
 		{
@@ -86,7 +81,7 @@ public class KeyboardNativeInterface extends INativeInterface
 			{
 				if (mKeyboardView == null)
 				{
-					mKeyboardView = new NativeKeyboardInputView(thisKeyboardNativeInterface, meKeyboardType, meKeyboardCapitalisation);
+					mKeyboardView = new NativeKeyboardInputView(thisNativeInterface, meKeyboardType, meKeyboardCapitalisation);
 					CSApplication.get().addView(mKeyboardView);
 					
 					if (mbHardwareKeyboardOpen == true)

@@ -79,7 +79,7 @@ public class NativeKeyboardInputView extends View
 	//------------------------------------------------------
 	boolean mbKeyboardActive = false;
 	boolean mbHardwareKeyboardShown = false;
-	KeyboardNativeInterface mKeyboardNativeInterface = null;
+	TextEntryNativeInterface mTextEntryNativeInterface = null;
 	KeyboardType meKeyboardType;
 	KeyboardCapitalisation meKeyboardCapitalisation;
 	//------------------------------------------------------
@@ -88,11 +88,11 @@ public class NativeKeyboardInputView extends View
 	/// @param The chilli source activity.
 	/// @param The chilli source surface.
 	//------------------------------------------------------
-	public NativeKeyboardInputView(KeyboardNativeInterface inKeyboardNativeInterface, KeyboardType ineKeyboardType, KeyboardCapitalisation ineKeyboardCapitalisation) 
+	public NativeKeyboardInputView(TextEntryNativeInterface inNativeInterface, KeyboardType ineKeyboardType, KeyboardCapitalisation ineKeyboardCapitalisation) 
 	{
 		super(CSApplication.get().getActivityContext());
 		
-		mKeyboardNativeInterface = inKeyboardNativeInterface;
+		mTextEntryNativeInterface = inNativeInterface;
 		meKeyboardType = ineKeyboardType;
 		meKeyboardCapitalisation = ineKeyboardCapitalisation;
 		
@@ -181,7 +181,7 @@ public class NativeKeyboardInputView extends View
 		if (mbKeyboardActive == true && indwKeyCode != KeyEvent.KEYCODE_DEL)
 		{
 			String strCharacters = inEvent.getCharacters();
-			mKeyboardNativeInterface.OnTextAdded(strCharacters);	
+			mTextEntryNativeInterface.OnTextAdded(strCharacters);	
 			return true;
 		}
 		
@@ -214,18 +214,18 @@ public class NativeKeyboardInputView extends View
 				if (indwKeyCode == KeyEvent.KEYCODE_ENTER)
 				{
 					DeactivateKeyboard();
-					mKeyboardNativeInterface.OnKeyboardDismissed();
+					mTextEntryNativeInterface.OnKeyboardDismissed();
 				}
 				else
 				{
 					String strText = "";
 					strText += (char)dwUnicode;
-					mKeyboardNativeInterface.OnTextAdded(strText);
+					mTextEntryNativeInterface.OnTextAdded(strText);
 				}
 			}
 			else if (indwKeyCode == KeyEvent.KEYCODE_DEL)
 			{
-				mKeyboardNativeInterface.OnTextDeleted();
+				mTextEntryNativeInterface.OnTextDeleted();
 			}
 		
 			return true;
@@ -262,7 +262,7 @@ public class NativeKeyboardInputView extends View
 			if (indwKeyCode == KeyEvent.KEYCODE_BACK && mbKeyboardActive == true && mbHardwareKeyboardShown == false)
 			{
 				mbKeyboardActive = false;
-				mKeyboardNativeInterface.OnKeyboardDismissed();
+				mTextEntryNativeInterface.OnKeyboardDismissed();
 			}
 		}
 		
@@ -366,7 +366,7 @@ public class NativeKeyboardInputView extends View
 			if (mbKeyboardActive == true)
 			{
 				mbKeyboardActive = false;
-				mKeyboardNativeInterface.OnKeyboardDismissed();
+				mTextEntryNativeInterface.OnKeyboardDismissed();
 			}
 		}
 	}
