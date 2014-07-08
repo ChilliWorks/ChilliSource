@@ -336,7 +336,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param The pointer
             //-----------------------------------------------------------
-            void OnButtonSelect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            void OnButtonSelect(GUIView* in_button, const Input::Pointer& in_pointer);
             //-----------------------------------------------------------
             /// Triggered when a button event happens that should
             /// cause the button to fire
@@ -346,7 +346,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param The pointer
             //-----------------------------------------------------------
-            void OnButtonActivated(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            void OnButtonActivated(GUIView* in_button, const Input::Pointer& in_pointer);
             //-----------------------------------------------------------
             /// Triggered when a button event happens that should
             /// cause the button to return to normal
@@ -356,7 +356,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param The pointer
             //-----------------------------------------------------------
-            void OnButtonDeselect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            void OnButtonDeselect(GUIView* in_button, const Input::Pointer& in_pointer);
             //-----------------------------------------------------------
             /// Triggered when a button event happens that should
             /// cause the button to return to normal
@@ -366,7 +366,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param The pointer
             //-----------------------------------------------------------
-            void OnButtonDeselectThreshold(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            void OnButtonDeselectThreshold(GUIView* in_button, const Input::Pointer& in_pointer);
 			//-----------------------------------------------------------
 			/// Draw
 			///

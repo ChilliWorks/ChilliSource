@@ -148,7 +148,7 @@ namespace ChilliSource
 			/// @param The view.
             /// @param The pointer.
 			//-----------------------------------------------------------
-			void OnSliderMoved(GUIView* inpView, const Input::PointerSystem::Pointer& in_pointer);
+			void OnSliderMoved(GUIView* inpView, const Input::Pointer& in_pointer);
 			//-----------------------------------------------------------
 			/// Get Slider Value
 			///

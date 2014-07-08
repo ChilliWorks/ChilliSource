@@ -61,6 +61,7 @@ namespace ChilliSource
         //--------------------------------------------------
         /// Pointer
         //--------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(Pointer);
         CS_FORWARDDECLARE_CLASS(PointerSystem);
 	}
 }

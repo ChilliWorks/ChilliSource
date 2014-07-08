@@ -50,8 +50,8 @@ namespace CSBackend
 		void PointerSystem::OnTouchDown(s32 in_systemId, const CSCore::Vector2& in_location)
 		{
 			CSCore::Vector2 touchLocation(in_location.x, m_screen->GetResolution().y - in_location.y);
-			PointerId pointerId = AddPointerCreateEvent(touchLocation);
-			AddPointerDownEvent(pointerId, InputType::k_touch);
+			CSInput::Pointer::Id pointerId = AddPointerCreateEvent(touchLocation);
+			AddPointerDownEvent(pointerId, CSInput::Pointer::InputType::k_touch);
 			m_systemIdToPointerIdMap.emplace(in_systemId, pointerId);
 		}
 		//----------------------------------------------------
@@ -72,7 +72,7 @@ namespace CSBackend
 			auto it = m_systemIdToPointerIdMap.find(in_systemId);
 			if (it != m_systemIdToPointerIdMap.end())
 			{
-				AddPointerUpEvent(it->second, InputType::k_touch);
+				AddPointerUpEvent(it->second, CSInput::Pointer::InputType::k_touch);
 				AddPointerRemoveEvent(it->second);
 				m_systemIdToPointerIdMap.erase(it);
 			}

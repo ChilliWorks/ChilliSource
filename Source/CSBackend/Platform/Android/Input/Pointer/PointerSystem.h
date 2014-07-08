@@ -119,7 +119,7 @@ namespace CSBackend
             void OnDestroy() override;
 
             CSCore::Screen* m_screen = nullptr;
-            std::unordered_map<s32, PointerId> m_systemIdToPointerIdMap;
+            std::unordered_map<s32, CSInput::Pointer::Id> m_systemIdToPointerIdMap;
         };
     }
 }

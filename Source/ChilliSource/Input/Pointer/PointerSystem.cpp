@@ -66,14 +66,14 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        PointerSystem::InputType PointerSystem::GetDefaultInputType()
+        Pointer::InputType PointerSystem::GetDefaultInputType()
         {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return InputType::k_touch;
+            return Pointer::InputType::k_touch;
 #elif defined CS_TARGETPLATFORM_IOS
-            return InputType::k_touch;
+            return Pointer::InputType::k_touch;
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return InputType::k_leftMouseButton;
+            return Pointer::InputType::k_leftMouseButton;
 #else
             return nullptr;
 #endif
@@ -104,17 +104,17 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        std::vector<PointerSystem::Pointer> PointerSystem::GetPointers() const
+        std::vector<Pointer> PointerSystem::GetPointers() const
         {
             return m_pointers;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool PointerSystem::TryGetPointerWithId(PointerId in_uniqueId, Pointer& out_pointer) const
+        bool PointerSystem::TryGetPointerWithId(Pointer::Id in_uniqueId, Pointer& out_pointer) const
         {
             for (const Pointer& pointer : m_pointers)
             {
-                if (pointer.m_uniqueId == in_uniqueId)
+                if (pointer.GetId() == in_uniqueId)
                 {
                     out_pointer = pointer;
                     return true;
@@ -129,7 +129,7 @@ namespace ChilliSource
         {
             for (const Pointer& pointer : m_pointers)
             {
-                if (pointer.m_pointerIndex == in_index)
+                if (pointer.GetIndex() == in_index)
                 {
                     out_pointer = pointer;
                     return true;
@@ -181,14 +181,14 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        PointerSystem::PointerId PointerSystem::AddPointerCreateEvent(const Core::Vector2& in_position)
+        Pointer::Id PointerSystem::AddPointerCreateEvent(const Core::Vector2& in_position)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
             PointerEvent event;
             event.m_type = PointerEventType::k_add;
             event.m_pointerUniqueId = m_nextUniqueId++;
-            event.m_InputType = InputType::k_none;
+            event.m_InputType = Pointer::InputType::k_none;
             event.m_position = in_position;
             event.m_timestamp = 0.0;
             
@@ -198,7 +198,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void PointerSystem::AddPointerDownEvent(PointerId in_pointerUniqueId, InputType in_inputType)
+        void PointerSystem::AddPointerDownEvent(Pointer::Id in_pointerUniqueId, Pointer::InputType in_inputType)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -213,14 +213,14 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void PointerSystem::AddPointerMovedEvent(PointerId in_pointerUniqueId, const Core::Vector2& in_position)
+        void PointerSystem::AddPointerMovedEvent(Pointer::Id in_pointerUniqueId, const Core::Vector2& in_position)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
             PointerEvent event;
             event.m_type = PointerEventType::k_move;
             event.m_pointerUniqueId = in_pointerUniqueId;
-            event.m_InputType = InputType::k_none;
+            event.m_InputType = Pointer::InputType::k_none;
             event.m_position = in_position;
             event.m_timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
             
@@ -228,7 +228,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void PointerSystem::AddPointerUpEvent(PointerId in_pointerUniqueId, InputType in_inputType)
+        void PointerSystem::AddPointerUpEvent(Pointer::Id in_pointerUniqueId, Pointer::InputType in_inputType)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -243,14 +243,14 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //-----------------------------------------------------
-        void PointerSystem::AddPointerRemoveEvent(PointerId in_pointerUniqueId)
+        void PointerSystem::AddPointerRemoveEvent(Pointer::Id in_pointerUniqueId)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
             
             PointerEvent event;
             event.m_type = PointerEventType::k_remove;
             event.m_pointerUniqueId = in_pointerUniqueId;
-            event.m_InputType = InputType::k_none;
+            event.m_InputType = Pointer::InputType::k_none;
             event.m_position = Core::Vector2::k_zero;
             event.m_timestamp = 0.0;
             
@@ -273,22 +273,42 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //-----------------------------------------------------
-        void PointerSystem::CreatePointer(PointerId in_uniqueId, const Core::Vector2& in_initialPosition)
+        void PointerSystem::CreatePointer(Pointer::Id in_uniqueId, const Core::Vector2& in_initialPosition)
         {
-            Pointer pointer;
-            pointer.m_uniqueId = in_uniqueId;
-            pointer.m_location = in_initialPosition;
-            pointer.m_previousLocation = in_initialPosition;
-            pointer.m_pointerIndex = m_pointers.size();
+            //Find the first free index
+            u32 index = 0;
+
+            while(true)
+            {
+                bool indexAvailable = true;
+                
+                for (const Pointer& pointer : m_pointers)
+                {
+                    if (pointer.GetIndex() == index)
+                    {
+                        indexAvailable = false;
+                        break;
+                    }
+                }
+                
+                if(indexAvailable == true)
+                {
+                    break;
+                }
+                
+                ++index;
+            }
+            
+            Pointer pointer(in_uniqueId, index, in_initialPosition);
             m_pointers.push_back(pointer);
         }
         //----------------------------------------------------
         //-----------------------------------------------------
-        void PointerSystem::PointerDown(PointerId in_uniqueId, f64 in_timestamp, InputType in_inputType)
+        void PointerSystem::PointerDown(Pointer::Id in_uniqueId, f64 in_timestamp, Pointer::InputType in_inputType)
         {
             auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
             {
-                return (in_uniqueId == in_pointer.m_uniqueId);
+                return (in_uniqueId == in_pointer.GetId());
             });
             
             if (pointerIt != m_pointers.end())
@@ -304,17 +324,17 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //-----------------------------------------------------
-        void PointerSystem::PointerMoved(PointerId in_uniqueId, f64 in_timestamp, const Core::Vector2& in_newPosition)
+        void PointerSystem::PointerMoved(Pointer::Id in_uniqueId, f64 in_timestamp, const Core::Vector2& in_newPosition)
         {
             auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
             {
-                return (in_uniqueId == in_pointer.m_uniqueId);
+                return (in_uniqueId == in_pointer.GetId());
             });
             
             if (pointerIt != m_pointers.end())
             {
-                pointerIt->m_previousLocation = pointerIt->m_location;
-                pointerIt->m_location = in_newPosition;
+                pointerIt->m_previousPosition = pointerIt->m_position;
+                pointerIt->m_position = in_newPosition;
                 Pointer copy = *pointerIt;
                 m_pointerMovedEvent.NotifyConnections(copy, in_timestamp);
             }
@@ -325,11 +345,11 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //-----------------------------------------------------
-        void PointerSystem::PointerUp(PointerId in_uniqueId, f64 in_timestamp, InputType in_inputType)
+        void PointerSystem::PointerUp(Pointer::Id in_uniqueId, f64 in_timestamp, Pointer::InputType in_inputType)
         {
             auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
             {
-                return (in_uniqueId == in_pointer.m_uniqueId);
+                return (in_uniqueId == in_pointer.GetId());
             });
             
             if (pointerIt != m_pointers.end())
@@ -345,11 +365,11 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //-----------------------------------------------------
-        void PointerSystem::RemovePointer(PointerId in_uniqueId)
+        void PointerSystem::RemovePointer(Pointer::Id in_uniqueId)
         {
             auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
             {
-                return (in_uniqueId == in_pointer.m_uniqueId);
+                return (in_uniqueId == in_pointer.GetId());
             });
             
             if (pointerIt != m_pointers.end())

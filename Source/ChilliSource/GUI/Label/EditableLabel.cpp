@@ -252,7 +252,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool EditableLabel::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
+        bool EditableLabel::OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
         {
             if(UserInteraction)
             {
@@ -263,11 +263,11 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void EditableLabel::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
+        void EditableLabel::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
         {
             if(UserInteraction && Visible && mpKeyboard && mbSelected)
             {
-               if(Contains(in_pointer.m_location))
+               if(Contains(in_pointer.GetPosition()))
                {
                    //Flag the keyboard as hidden and wait a few seconds so we can slide it in again
 				   if(!mpKeyboard->IsTextInputEnabled())

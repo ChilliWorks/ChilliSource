@@ -118,7 +118,7 @@ namespace CSBackend
             //------------------------------------------------
             void OnDestroy() override;
             
-            std::unordered_map<UITouch*, PointerId> m_touchToIdMap;
+            std::unordered_map<UITouch*, CSInput::Pointer::Id> m_touchToIdMap;
             CSCore::Screen* m_screen;
         };
     }

@@ -268,7 +268,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param The pointer.
             //-----------------------------------------------------------
-            virtual void OnButtonSelect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            virtual void OnButtonSelect(GUIView* in_button, const Input::Pointer& in_pointer);
             //-----------------------------------------------------------
             /// Triggered when a button event happens that should
             /// cause the button to fire
@@ -278,7 +278,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param The pointer.
             //-----------------------------------------------------------
-            virtual void OnButtonActivated(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            virtual void OnButtonActivated(GUIView* in_button, const Input::Pointer& in_pointer);
             //-----------------------------------------------------------
             /// Triggered when a button event happens that should
             /// cause the button to return to On
@@ -288,7 +288,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param The pointer.
             //-----------------------------------------------------------
-            virtual void OnButtonDeselect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            virtual void OnButtonDeselect(GUIView* in_button, const Input::Pointer& in_pointer);
             //-----------------------------------------------------------
             /// Triggered when a button event happens that should
             /// cause the button to return to On
@@ -298,7 +298,7 @@ namespace ChilliSource
             /// @param Button that triggered event
             /// @param The pointer.
             //-----------------------------------------------------------
-            virtual void OnButtonDeselectThreshold(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer);
+            virtual void OnButtonDeselectThreshold(GUIView* in_button, const Input::Pointer& in_pointer);
 			//-----------------------------------------------------------
 			/// Draw
 			///

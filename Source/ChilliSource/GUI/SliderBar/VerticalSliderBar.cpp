@@ -314,9 +314,9 @@ namespace ChilliSource
         //---Touch Delegates
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void VerticalSliderBar::OnSliderMoved(GUIView* inpView, const Input::PointerSystem::Pointer& in_pointer)
+        void VerticalSliderBar::OnSliderMoved(GUIView* inpView, const Input::Pointer& in_pointer)
         {
-            mfSliderValue = ((in_pointer.m_location.y - GetAbsoluteScreenSpacePosition().y)/GetAbsoluteSize().y) + 0.5f;
+            mfSliderValue = ((in_pointer.GetPosition().y - GetAbsoluteScreenSpacePosition().y)/GetAbsoluteSize().y) + 0.5f;
             mpSliderImage->SetPosition(0.5f, mfSliderValue, 0.0f, 0.0f);
         }
 		//-----------------------------------------------------------

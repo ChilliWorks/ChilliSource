@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
+		81B1D2D1196C0167000F13DD /* Pointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2CF196C0167000F13DD /* Pointer.cpp */; };
 		81D8ACF91962CEDC0010DA84 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8ACF81962CEDC0010DA84 /* Foundation.framework */; };
 		81D8B1E61962D1B90010DA84 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1CF1962D1B90010DA84 /* Accounts.framework */; };
 		81D8B1E71962D1B90010DA84 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1D01962D1B90010DA84 /* AddressBook.framework */; };
@@ -322,6 +323,8 @@
 		8158E4B7196AE06B005FF0A8 /* Sprite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
 		8158E4B8196AE074005FF0A8 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		81B1D2CF196C0167000F13DD /* Pointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pointer.cpp; sourceTree = "<group>"; };
+		81B1D2D0196C0167000F13DD /* Pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pointer.h; sourceTree = "<group>"; };
 		81D8ACF51962CEDC0010DA84 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D8ACF81962CEDC0010DA84 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		81D8AD061962CEDC0010DA84 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -1567,6 +1570,8 @@
 		81D8B3401962E0EC0010DA84 /* Pointer */ = {
 			isa = PBXGroup;
 			children = (
+				81B1D2CF196C0167000F13DD /* Pointer.cpp */,
+				81B1D2D0196C0167000F13DD /* Pointer.h */,
 				81D8B3411962E0EC0010DA84 /* PointerSystem.cpp */,
 				81D8B3421962E0EC0010DA84 /* PointerSystem.h */,
 			);
@@ -2403,6 +2408,7 @@
 				81D8B49A1962E0EC0010DA84 /* Cubemap.cpp in Sources */,
 				81D8B45C1962E0EC0010DA84 /* Accelerometer.cpp in Sources */,
 				81D8B4841962E0EC0010DA84 /* SkinnedAnimation.cpp in Sources */,
+				81B1D2D1196C0167000F13DD /* Pointer.cpp in Sources */,
 				81D8B4771962E0EC0010DA84 /* AmbientLightComponent.cpp in Sources */,
 				81D8B4351962E0EC0010DA84 /* UTF8StringUtils.cpp in Sources */,
 				81D8B4221962E0EC0010DA84 /* MathUtils.cpp in Sources */,

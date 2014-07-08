@@ -115,7 +115,7 @@ namespace CSBackend
 			void OnDestroy() override;
 
 			CSCore::Screen* m_screen;
-			PointerId m_pointerId;
+			CSInput::Pointer::Id m_pointerId;
 
 			CSCore::EventConnectionUPtr m_mouseButtonConnection;
 			CSCore::EventConnectionUPtr m_mouseMovedConnection;

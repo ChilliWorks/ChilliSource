@@ -54,7 +54,7 @@ namespace CSBackend
 			CGPoint uitouchLocation = [in_touch locationInView:in_touch.view];
             CSCore::Vector2 touchLocation(uitouchLocation.x * m_screen->GetDensityScale(), m_screen->GetResolution().y - uitouchLocation.y * m_screen->GetDensityScale());
 			u64 pointerId = AddPointerCreateEvent(touchLocation);
-            AddPointerDownEvent(pointerId, InputType::k_touch);
+            AddPointerDownEvent(pointerId, CSInput::Pointer::InputType::k_touch);
 			m_touchToIdMap.emplace(in_touch, pointerId);
         }
         //----------------------------------------------------
@@ -76,7 +76,7 @@ namespace CSBackend
             auto it = m_touchToIdMap.find(in_touch);
 			if (it != m_touchToIdMap.end())
 			{
-				AddPointerUpEvent(it->second, InputType::k_touch);
+				AddPointerUpEvent(it->second, CSInput::Pointer::InputType::k_touch);
                 AddPointerRemoveEvent(it->second);
                 m_touchToIdMap.erase(it);
 			}

@@ -146,7 +146,7 @@ namespace ChilliSource
             ///
             /// @param Touch data
             //-----------------------------------------------------------
-            void OnSliderMoved(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer);
+            void OnSliderMoved(GUIView* in_view, const Input::Pointer& in_pointer);
 			//-----------------------------------------------------------
 			/// Update Slider Position
 			/// 

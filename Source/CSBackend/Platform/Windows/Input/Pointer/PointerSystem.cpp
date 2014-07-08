@@ -48,18 +48,18 @@ namespace CSBackend
 			/// @return The equivelent Press Type for the
 			/// button Id
 			//------------------------------------------------
-			PointerSystem::InputType ButtonIdToInputType(sf::Mouse::Button in_button)
+			CSInput::Pointer::InputType ButtonIdToInputType(sf::Mouse::Button in_button)
 			{
 				switch (in_button)
 				{
 				case sf::Mouse::Button::Left:
-					return PointerSystem::InputType::k_leftMouseButton;
+					return CSInput::Pointer::InputType::k_leftMouseButton;
 				case sf::Mouse::Button::Middle:
-					return PointerSystem::InputType::k_middleMouseButton;
+					return CSInput::Pointer::InputType::k_middleMouseButton;
 				case sf::Mouse::Button::Right:
-					return PointerSystem::InputType::k_rightMouseButton;
+					return CSInput::Pointer::InputType::k_rightMouseButton;
 				default:
-					return PointerSystem::InputType::k_none;
+					return CSInput::Pointer::InputType::k_none;
 				}
 
 			}
@@ -91,8 +91,8 @@ namespace CSBackend
 		//----------------------------------------------
 		void PointerSystem::OnMouseButtonEvent(sf::Mouse::Button in_button, SFMLWindow::MouseButtonEvent in_event, s32 in_xPos, s32 in_yPos)
 		{
-			InputType type = ButtonIdToInputType(in_button);
-			if (type == InputType::k_none)
+			CSInput::Pointer::InputType type = ButtonIdToInputType(in_button);
+			if (type == CSInput::Pointer::InputType::k_none)
 			{
 				return;
 			}
