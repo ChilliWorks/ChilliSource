@@ -31,6 +31,7 @@
 #define _CHILLISOURCE_INPUT_POINTER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
 #endif
