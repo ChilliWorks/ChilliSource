@@ -52,16 +52,14 @@ namespace CSBackend
 		namespace
 		{
 			//-------------------------------------------------------------
-			/// Reads the surface format from the App.config file.
+			/// Reads the app.config file root into a Json object
 			///
 			/// @author Ian Copland
 			///
-			/// @param The surface format.
+			/// @return Json root
 			//-------------------------------------------------------------
-			CSRendering::SurfaceFormat ReadSurfaceFormat()
+			Json::Value ReadAppConfig()
 			{
-				const std::string k_defaultFormat = "rgb565_depth24";
-
 				//get the path to here
 				wchar_t pathChars[MAX_PATH];
 				GetModuleFileName(nullptr, pathChars, MAX_PATH);
@@ -72,23 +70,74 @@ namespace CSBackend
 				//open the file
 				std::ifstream file(workingDir + "assets/AppResources/App.config");
 
-				std::string formatString = k_defaultFormat;
+				Json::Value root;
+
 				if (file.good() == true)
 				{
 					std::string contents((std::istreambuf_iterator<s8>(file)), std::istreambuf_iterator<s8>());
 
 					//parse the json
 					Json::Reader jReader;
-					Json::Value root;
 					if (!jReader.parse(contents, root))
 					{
 						CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormatedErrorMessages());
 					}
-
-					formatString = root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
 				}
 
+				return root;
+			}
+			//-------------------------------------------------------------
+			/// Reads the surface format from the App.config file.
+			///
+			/// @author S Downie
+			///
+			/// @param App config Json root
+			///
+			/// @return The surface format.
+			//-------------------------------------------------------------
+			CSRendering::SurfaceFormat ReadSurfaceFormat(const Json::Value& in_root)
+			{
+				const std::string k_defaultFormat = "rgb565_depth24";
+				std::string formatString = in_root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
 				return CSCore::ParseSurfaceFormat(formatString);
+			}
+			//-------------------------------------------------------------
+			/// Reads the multisample format from the App.config file.
+			///
+			/// @author S Downie
+			///
+			/// @param App config Json root
+			///
+			/// @return Number times multisample 0x, 2x, 4x.
+			//-------------------------------------------------------------
+			u32 ReadMultisampleFormat(const Json::Value& in_root)
+			{
+				const Json::Value& windows = in_root["Windows"];
+
+				if (windows.isNull() == false)
+				{
+					std::string stringFormat = windows.get("Multisample", "None").asString();
+					CSCore::StringUtils::ToLowerCase(stringFormat);
+
+					if (stringFormat == "none")
+					{
+						return 0;
+					}
+					else if (stringFormat == "2x")
+					{
+						return 2;
+					}
+					else if (stringFormat == "4x")
+					{
+						return 4;
+					}
+					else
+					{
+						CS_LOG_FATAL("Unknown multisample format: " + stringFormat + ". Options are None, 2x or 4x");
+					}
+				}
+
+				return 0;
 			}
 			//-------------------------------------------------------------
 			/// Builds an SFML context based on the surface format
@@ -97,15 +146,16 @@ namespace CSBackend
 			/// @author S Downie
 			///
 			/// @param Surface format
+			/// @param Number of samples for MSAA
 			///
 			/// @return Context settings
 			//-------------------------------------------------------------
-			sf::ContextSettings CreateContextSettings(CSRendering::SurfaceFormat in_format)
+			sf::ContextSettings CreateContextSettings(CSRendering::SurfaceFormat in_format, u32 in_multiSampleFormat)
 			{
 				sf::ContextSettings glSettings;
 				glSettings.majorVersion = 2;
 				glSettings.minorVersion = 0;
-				glSettings.antialiasingLevel = 4;
+				glSettings.antialiasingLevel = in_multiSampleFormat;
 				glSettings.stencilBits = 0;
 
 				switch (in_format)
@@ -194,8 +244,10 @@ namespace CSBackend
 		//-------------------------------------------------
 		void SFMLWindow ::Run()
 		{
-			CSRendering::SurfaceFormat format = ReadSurfaceFormat();
-			m_window.create(sf::VideoMode(800, 600, ReadRGBAPixelDepth(format)), "", sf::Style::Default, CreateContextSettings(format));
+			Json::Value appConfigRoot = ReadAppConfig();
+			CSRendering::SurfaceFormat surfaceFormat = ReadSurfaceFormat(appConfigRoot);
+			u32 msaaFormat = ReadMultisampleFormat(appConfigRoot);
+			m_window.create(sf::VideoMode(800, 600, ReadRGBAPixelDepth(surfaceFormat)), "", sf::Style::Default, CreateContextSettings(surfaceFormat, msaaFormat));
 
 			GLenum glewError = glewInit();
 			if (GLEW_OK != glewError)
