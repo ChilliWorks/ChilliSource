@@ -91,6 +91,14 @@ namespace CSBackend
 			//-----------------------------------------------------------
 			using MouseMovedDelegate = std::function<void(s32, s32)>;
 			//-----------------------------------------------------------
+			/// A delegate called when a mouse wheel event occurs.
+			///
+			/// @author S Downie
+			///
+			/// @param The number of ticks the wheel has moved in the y-axis
+			//-----------------------------------------------------------
+			using MouseWheelDelegate = std::function<void(s32)>;
+			//-----------------------------------------------------------
 			/// A delegate called when a text is entered via user input.
 			///
 			/// @author S Downie
@@ -173,6 +181,12 @@ namespace CSBackend
 			//-------------------------------------------------
 			/// @author S Downie
 			///
+			/// @return An event that is called when the mouse wheel scrolls
+			//------------------------------------------------
+			CSCore::IConnectableEvent<MouseWheelDelegate>& GetMouseWheelEvent();
+			//-------------------------------------------------
+			/// @author S Downie
+			///
 			/// @return An event that is called when text is entered
 			//------------------------------------------------
 			CSCore::IConnectableEvent<TextEnteredEvent>& GetTextEnteredEvent();
@@ -231,6 +245,7 @@ namespace CSBackend
 			CSCore::Event<WindowResizeDelegate> m_windowResizeEvent;
 			CSCore::Event<MouseButtonDelegate> m_mouseButtonEvent;
 			CSCore::Event<MouseMovedDelegate> m_mouseMovedEvent;
+			CSCore::Event<MouseWheelDelegate> m_mouseWheelEvent;
 			CSCore::Event<TextEnteredEvent> m_textEnteredEvent;
 			CSCore::Event<KeyPressedDelegate> m_keyPressedEvent;
 			CSCore::Event<KeyReleasedDelegate> m_keyReleasedEvent;

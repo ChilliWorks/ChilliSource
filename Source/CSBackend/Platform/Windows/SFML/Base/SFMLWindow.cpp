@@ -228,6 +228,12 @@ namespace CSBackend
 		}
 		//-------------------------------------------------
 		//------------------------------------------------
+		CSCore::IConnectableEvent<SFMLWindow::MouseWheelDelegate>& SFMLWindow::GetMouseWheelEvent()
+		{
+			return m_mouseWheelEvent;
+		}
+		//-------------------------------------------------
+		//------------------------------------------------
 		CSCore::IConnectableEvent<SFMLWindow::TextEnteredEvent>& SFMLWindow::GetTextEnteredEvent()
 		{
 			return m_textEnteredEvent;
@@ -335,6 +341,9 @@ namespace CSBackend
 							break;
 						case sf::Event::MouseMoved:
 							m_mouseMovedEvent.NotifyConnections(event.mouseMove.x, event.mouseMove.y);
+							break;
+						case sf::Event::MouseWheelMoved:
+							m_mouseWheelEvent.NotifyConnections(event.mouseWheel.delta);
 							break;
 						case sf::Event::KeyPressed:
 							m_keyPressedEvent.NotifyConnections(event.key.code, event.key);

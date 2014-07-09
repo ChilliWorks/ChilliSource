@@ -80,6 +80,7 @@ namespace CSBackend
 
 			m_mouseButtonConnection = SFMLWindow::Get()->GetMouseButtonEvent().OpenConnection(CSCore::MakeDelegate(this, &PointerSystem::OnMouseButtonEvent));
 			m_mouseMovedConnection = SFMLWindow::Get()->GetMouseMovedEvent().OpenConnection(CSCore::MakeDelegate(this, &PointerSystem::OnMouseMoved));
+			m_mouseWheelConnection = SFMLWindow::Get()->GetMouseWheelEvent().OpenConnection(CSCore::MakeDelegate(this, &PointerSystem::OnMouseWheeled));
 
 			//create the mouse pointer
 			CSCore::Integer2 mousePosi = SFMLWindow::Get()->GetMousePosition();
@@ -125,6 +126,13 @@ namespace CSBackend
 		{
 			CSCore::Vector2 touchLocation((f32)in_xPos, m_screen->GetResolution().y - (f32)in_yPos);
 			AddPointerMovedEvent(m_pointerId, touchLocation);
+		}
+		//----------------------------------------------
+		//----------------------------------------------
+		void PointerSystem::OnMouseWheeled(s32 in_delta)
+		{
+			CSCore::Vector2 delta(0.0f, (f32)in_delta);
+			AddPointerScrollEvent(m_pointerId, delta);
 		}
 		//------------------------------------------------
 		//------------------------------------------------

@@ -99,6 +99,14 @@ namespace CSBackend
 			/// @param Current position Y
 			//----------------------------------------------
 			void OnMouseButtonEvent(sf::Mouse::Button in_button, SFMLWindow::MouseButtonEvent in_event, s32 in_xPos, s32 in_yPos);
+			//----------------------------------------------
+			/// Triggered by SFML when the mouse wheel is scrolled
+			///
+			/// @author S Downie
+			///
+			/// @param Number of ticks scrolled in the y-axis
+			//----------------------------------------------
+			void OnMouseWheeled(s32 in_delta);
 			//------------------------------------------------
 			/// Default constructor. Declared private to force
 			/// the use of the factory method.
@@ -131,6 +139,7 @@ namespace CSBackend
 
 			CSCore::EventConnectionUPtr m_mouseButtonConnection;
 			CSCore::EventConnectionUPtr m_mouseMovedConnection;
+			CSCore::EventConnectionUPtr m_mouseWheelConnection;
 		};
 	}
 }
