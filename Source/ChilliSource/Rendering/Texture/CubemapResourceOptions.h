@@ -61,8 +61,16 @@ namespace ChilliSource
             /// @param Filter mode
             /// @param Wrap mode S
             /// @param Wrap mode T
+            /// @param Whether or not the cubemap data should be
+            /// restored after a context loss. This involves maintaining
+            /// a copy of the cubemap data in memory which is costly
+            /// so this should be disabled for any cubemaps that can
+            /// easily be recreated. This has no effect on cubemaps that
+            /// are loaded from file as they are always restored from
+            /// disk. This will only work for RGBA8888, RGB888, RGBA4444
+            /// and RGB565 cubemaps.
             //-------------------------------------------------------
-            CubemapResourceOptions(bool in_mipmaps, Texture::FilterMode in_filter, Texture::WrapMode in_wrapS, Texture::WrapMode in_wrapT);
+            CubemapResourceOptions(bool in_mipmaps, Texture::FilterMode in_filter, Texture::WrapMode in_wrapS, Texture::WrapMode in_wrapT, bool in_restoreCubemapData);
             //-------------------------------------------------------
             /// Generate a unique hash based on the
             /// currently set options
@@ -97,6 +105,19 @@ namespace ChilliSource
             /// @return Filter mode to create texture with
             //-------------------------------------------------------
             Texture::FilterMode GetFilterMode() const;
+            //-------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return Whether or not the cubemap data should be
+            /// restored after a context loss. This involves maintaining
+            /// a copy of the cubemap data in memory which is costly
+            /// so this should be disabled for any cubemaps that can
+            /// easily be recreated. This has no effect on cubemaps that
+            /// are loaded from file as they are always restored from
+            /// disk. This will only work for RGBA8888, RGB888, RGBA4444
+            /// and RGB565 cubemaps.
+            //-------------------------------------------------------
+            bool IsRestoreCubemapDataEnabled() const;
             
         private:
             
@@ -112,6 +133,7 @@ namespace ChilliSource
                 Texture::WrapMode m_wrapModeT = Texture::WrapMode::k_clamp;
                 Texture::FilterMode m_filterMode = Texture::FilterMode::k_bilinear;
                 bool m_hasMipMaps = false;
+                bool m_restoreCubemapData = true;
             };
             
             Options m_options;

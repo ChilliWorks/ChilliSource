@@ -307,7 +307,7 @@ namespace CSBackend
         /// GL makes a copy of the data so we can just
         /// let the incoming data delete itself
         //--------------------------------------------------
-        void Cubemap::Build(const std::array<CSRendering::Texture::Descriptor, 6>& in_descs, const std::array<CSRendering::Texture::TextureDataUPtr, 6>& in_datas, bool in_mipMap)
+        void Cubemap::Build(const std::array<CSRendering::Texture::Descriptor, 6>& in_descs, std::array<CSRendering::Texture::TextureDataUPtr, 6> in_datas, bool in_mipMap, bool in_restoreCubemapData)
         {
             Destroy();
             
@@ -325,24 +325,40 @@ namespace CSBackend
                 CS_ASSERT(in_descs[i].m_width <= m_renderCapabilities->GetMaxTextureSize() && in_descs[i].m_height <= m_renderCapabilities->GetMaxTextureSize(),
                           "OpenGL does not support textures of this size on this device (" + CSCore::ToString(in_descs[i].m_width) + ", " + CSCore::ToString(in_descs[i].m_height) + ")");
                 
+                m_widths[i] = in_descs[i].m_width;
+                m_heights[i] = in_descs[i].m_height;
                 m_formats[i] = in_descs[i].m_format;
+                m_compressions[i] = in_descs[i].m_compression;
                 
-                switch(in_descs[i].m_compression)
+                switch(m_compressions[i])
                 {
                     case CSCore::ImageCompression::k_none:
-                        UploadImageDataNoCompression(i, in_descs[i].m_format, in_descs[i].m_width, in_descs[i].m_height, in_datas[i].get());
+                        UploadImageDataNoCompression(i, m_formats[i], m_widths[i], m_heights[i], in_datas[i].get());
                         break;
                     case CSCore::ImageCompression::k_ETC1:
-                        UploadImageDataETC1(i, in_descs[i].m_format, in_descs[i].m_width, in_descs[i].m_height, in_datas[i].get(), in_descs[i].m_dataSize);
+                        UploadImageDataETC1(i, m_formats[i], m_widths[i], m_heights[i], in_datas[i].get(), in_descs[i].m_dataSize);
                         break;
                     case CSCore::ImageCompression::k_PVR2Bpp:
-                        UploadImageDataPVR2(i, in_descs[i].m_format, in_descs[i].m_width, in_descs[i].m_height, in_datas[i].get(), in_descs[i].m_dataSize);
+                        UploadImageDataPVR2(i, m_formats[i], m_widths[i], m_heights[i], in_datas[i].get(), in_descs[i].m_dataSize);
                         break;
                     case CSCore::ImageCompression::k_PVR4Bpp:
-                        UploadImageDataPVR4(i, in_descs[i].m_format, in_descs[i].m_width, in_descs[i].m_height, in_datas[i].get(), in_descs[i].m_dataSize);
+                        UploadImageDataPVR4(i, m_formats[i], m_widths[i], m_heights[i], in_datas[i].get(), in_descs[i].m_dataSize);
                         break;
                 };
             }
+            
+#ifdef CS_TARGETPLATFORM_ANDROID
+            if (GetStorageLocation() == CSCore::StorageLocation::k_none && in_restoreCubemapData == true)
+            {
+            	m_restoreCubemapData = true;
+                
+                for(u32 i = 0; i < in_descs.size(); ++i)
+                {
+                    m_restorationDataSizes[i] = in_descs[i].m_dataSize;
+                    m_restorationDatas[i] = std::move(in_datas[i]);
+                }
+            }
+#endif
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while building cubemap.");
         }
@@ -387,6 +403,32 @@ namespace CSBackend
             
             m_hasWrapModeChanged = true;
 		}
+#ifdef CS_TARGETPLATFORM_ANDROID
+        //--------------------------------------------------
+        //--------------------------------------------------
+        void Cubemap::Restore()
+        {
+            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none, "Cannot restore texture that was loaded from file. This should be handled using RefreshResource().");
+            
+            std::array<CSRendering::Texture::Descriptor, 6> descs;
+            for (u32 i = 0; i < descs.size(); ++i)
+            {
+                descs[i].m_width = m_widths[i];
+                descs[i].m_height = m_heights[i];
+                descs[i].m_format = m_formats[i];
+                descs[i].m_compression = m_compressions[i];
+                descs[i].m_dataSize = m_restorationDataSizes[i];
+            }
+            
+            CSRendering::Texture::WrapMode sWrap = m_sWrapMode;
+            CSRendering::Texture::WrapMode tWrap = m_tWrapMode;
+            CSRendering::Texture::FilterMode filterMode = m_filterMode;
+            
+            Build(descs, std::move(m_restorationDatas), m_hasMipMaps, m_restoreCubemapData);
+            SetWrapMode(sWrap, tWrap);
+            SetFilterMode(filterMode);
+        }
+#endif
         //--------------------------------------------------
         //--------------------------------------------------
         void Cubemap::Destroy()
@@ -407,6 +449,20 @@ namespace CSBackend
             }
             
             m_cubemapHandle = 0;
+            
+#ifdef CS_TARGETPLATFORM_ANDROID
+            m_restoreCubemapData = false;
+            
+            for (u32 i = 0; i < m_restorationDataSizes.size(); ++i)
+            {
+                m_restorationDataSizes[i] = 0;
+            }
+            
+            for (u32 i = 0; i < m_restorationDatas.size(); ++i)
+            {
+                m_restorationDatas[i].reset();
+            }
+#endif
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying a cubemap.");
         }

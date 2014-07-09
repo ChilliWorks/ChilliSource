@@ -116,7 +116,8 @@ namespace ChilliSource
             /// easily be recreated, i.e any texture that is rendered
             /// into every frame. This has no effect on textures that
             /// are loaded from file as they are always restored from
-            /// disk.
+            /// disk. This will only work for RGBA8888, RGB888, RGBA4444
+            /// and RGB565 textures.
             //-------------------------------------------------------
             bool IsRestoreTextureDataEnabled() const;
         private:

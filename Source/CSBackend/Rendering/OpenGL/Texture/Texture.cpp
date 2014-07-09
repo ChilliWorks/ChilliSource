@@ -473,7 +473,7 @@ namespace CSBackend
         }
         //--------------------------------------------------
         //--------------------------------------------------
-        void Texture::RestoreTexture()
+        void Texture::Restore()
         {
             CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none, "Cannot restore texture that was loaded from file. This should be handled using RefreshResource().");
 
@@ -517,6 +517,12 @@ namespace CSBackend
             }
             
             m_texHandle = 0;
+            
+#ifdef CS_TARGETPLATFORM_ANDROID
+            m_restoreTextureData = false;
+            m_restorationDataSize = 0;
+            m_restorationData.reset();
+#endif
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying texture.");
         }

@@ -78,8 +78,16 @@ namespace ChilliSource
             /// @param Texture descriptors (6)
             /// @param Image datas (6)
             /// @param Whether the texture should have mip maps generated
+            /// @param Whether or not the cubemap data should be
+            /// restored after a context loss. This involves maintaining
+            /// a copy of the cubemap data in memory which is costly
+            /// so this should be disabled for any cubemaps that can
+            /// easily be recreated. This has no effect on cubemaps that
+            /// are loaded from file as they are always restored from
+            /// disk. This will only work for RGBA8888, RGB888, RGBA4444
+            /// and RGB565 cubemaps.
             //--------------------------------------------------
-            virtual void Build(const std::array<Texture::Descriptor, 6>& in_descs, const std::array<Texture::TextureDataUPtr, 6>& in_datas, bool in_mipMap) = 0;
+            virtual void Build(const std::array<Texture::Descriptor, 6>& in_descs, std::array<Texture::TextureDataUPtr, 6> in_datas, bool in_mipMap, bool in_restoreCubemapData) = 0;
 			//--------------------------------------------------------------
             /// Binds this cubemap to the given texture unit allowing it to
             /// be accessed by the shaders and operations to be performed on it

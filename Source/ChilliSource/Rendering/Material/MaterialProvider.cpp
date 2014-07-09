@@ -642,7 +642,7 @@ namespace ChilliSource
                     }
                     case ResourceType::k_cubemap:
                     {
-                        auto options(std::make_shared<CubemapResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV));
+                        auto options(std::make_shared<CubemapResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV, true));
                         resourcePool->LoadResourceAsync<Cubemap>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [in_loadIndex, in_descs, in_delegate, out_material](const CubemapCSPtr& in_cubemap)
                         {
                             if(in_cubemap->GetLoadState() == Core::Resource::LoadState::k_loaded)
@@ -760,7 +760,7 @@ namespace ChilliSource
             {
                 if(cubemapFiles[i].m_filePath.empty() == false)
                 {
-                    auto options(std::make_shared<CubemapResourceOptions>(cubemapFiles[i].m_shouldMipMap, textureFiles[i].m_filterMode, textureFiles[i].m_wrapModeU, textureFiles[i].m_wrapModeV));
+                    auto options(std::make_shared<CubemapResourceOptions>(cubemapFiles[i].m_shouldMipMap, textureFiles[i].m_filterMode, textureFiles[i].m_wrapModeU, textureFiles[i].m_wrapModeV, true));
                     CubemapCSPtr cubemap = resourcePool->LoadResource<Cubemap>(cubemapFiles[i].m_location, cubemapFiles[i].m_filePath, options);
                     if(cubemap == nullptr)
                     {

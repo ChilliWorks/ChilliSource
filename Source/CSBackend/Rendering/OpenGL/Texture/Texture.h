@@ -163,7 +163,7 @@ namespace CSBackend
             ///
             /// @author Ian Copland
             //--------------------------------------------------
-            void RestoreTexture();
+            void Restore();
 #endif
             //--------------------------------------------------
             /// Destroys the texture and resets it to the state
@@ -199,13 +199,12 @@ namespace CSBackend
             
             u32 m_width = 0;
             u32 m_height = 0;
+            CSCore::ImageFormat m_format;
+            CSCore::ImageCompression m_compression;
             
             FilterMode m_filterMode = FilterMode::k_bilinear;
             WrapMode m_sWrapMode = WrapMode::k_clamp;
             WrapMode m_tWrapMode = WrapMode::k_clamp;
-            
-            CSCore::ImageFormat m_format;
-            CSCore::ImageCompression m_compression;
             
             bool m_hasFilterModeChanged = true;
             bool m_hasWrapModeChanged = true;

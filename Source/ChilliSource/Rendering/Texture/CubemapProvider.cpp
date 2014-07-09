@@ -179,7 +179,7 @@ namespace ChilliSource
             {
                 Cubemap* cubemap = (Cubemap*)out_resource.get();
                 const CubemapResourceOptions* options = (const CubemapResourceOptions*)in_options.get();
-                cubemap->Build(descs, *imageDataContainer, options->IsMipMapsEnabled());
+                cubemap->Build(descs, std::move(*imageDataContainer), options->IsMipMapsEnabled(), options->IsRestoreCubemapDataEnabled());
                 cubemap->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
                 cubemap->SetFilterMode(options->GetFilterMode());
                 out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
@@ -190,7 +190,7 @@ namespace ChilliSource
                 {
                     Cubemap* cubemap = (Cubemap*)out_resource.get();
                     const CubemapResourceOptions* options = (const CubemapResourceOptions*)in_options.get();
-                    cubemap->Build(descs, *imageDataContainer, options->IsMipMapsEnabled());
+                    cubemap->Build(descs, std::move(*imageDataContainer), options->IsMipMapsEnabled(), options->IsRestoreCubemapDataEnabled());
                     cubemap->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
                     cubemap->SetFilterMode(options->GetFilterMode());
                     out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);

@@ -31,11 +31,11 @@
 #include <CSBackend/Rendering/OpenGL/Base/ContextRestorer.h>
 
 #include <CSBackend/Rendering/OpenGL/Base/MeshBuffer.h>
-#include <CSBackend/rendering/OpenGL/Texture/Texture.h>
+#include <CSBackend/Rendering/OpenGL/Texture/Cubemap.h>
+#include <CSBackend/Rendering/OpenGL/Texture/Texture.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
-#include <ChilliSource/Rendering/Texture/Cubemap.h>
 
 namespace CSBackend
 {
@@ -82,7 +82,7 @@ namespace CSBackend
                     if (texture->GetStorageLocation() == CSCore::StorageLocation::k_none)
                     {
                         Texture* glTexture = static_cast<Texture*>(const_cast<CSRendering::Texture*>(texture.get()));
-                        glTexture->RestoreTexture();
+                        glTexture->Restore();
                     }
                 }
                 resourcePool->RefreshResources<CSRendering::Texture>();
@@ -91,8 +91,12 @@ namespace CSBackend
                 auto allCubemaps = resourcePool->GetAllResources<CSRendering::Cubemap>();
                 for (const auto& cubemap : allCubemaps)
 				{
-					CS_ASSERT(cubemap->GetStorageLocation() != CSCore::StorageLocation::k_none, "Cannot restore Cube Map because restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
-				}
+					if (cubemap->GetStorageLocation() == CSCore::StorageLocation::k_none)
+                    {
+                        Cubemap* glCubemap = static_cast<Cubemap*>(const_cast<CSRendering::Cubemap*>(cubemap.get()));
+                        glCubemap->Restore();
+                    }
+                }
                 resourcePool->RefreshResources<CSRendering::Cubemap>();
                 
                 //---Meshes

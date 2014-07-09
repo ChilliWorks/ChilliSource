@@ -76,8 +76,16 @@ namespace CSBackend
             /// @param Texture descriptors (6)
             /// @param Image datas (6)
             /// @param Whether the cubemap should be mip-mapped
+            /// @param Whether or not the cubemap data should be
+            /// restored after a context loss. This involves maintaining
+            /// a copy of the cubemap data in memory which is costly
+            /// so this should be disabled for any cubemaps that can
+            /// easily be recreated. This has no effect on cubemaps that
+            /// are loaded from file as they are always restored from
+            /// disk. This will only work for RGBA8888, RGB888, RGBA4444
+            /// and RGB565 cubemaps.
             //--------------------------------------------------
-            void Build(const std::array<CSRendering::Texture::Descriptor, 6>& in_descs, const std::array<CSRendering::Texture::TextureDataUPtr, 6>& in_datas, bool in_mipMap) override;
+            void Build(const std::array<CSRendering::Texture::Descriptor, 6>& in_descs, std::array<CSRendering::Texture::TextureDataUPtr, 6> in_datas, bool in_mipMap, bool in_restoreCubemapData) override;
 			//--------------------------------------------------------------
             /// Binds this cubemap to the given texture unit allowing it to
             /// be accessed by the shaders and operations to be performed on it
@@ -133,6 +141,20 @@ namespace CSBackend
             ///			the cubemap face.
             //--------------------------------------------------
             CSCore::ImageFormat GetFormat(Face in_face) const;
+            
+#ifdef CS_TARGETPLATFORM_ANDROID
+            //--------------------------------------------------
+            /// Restores the cubemap after context loss if the
+            /// cubemap was not loaded from file. If the cubemap
+            /// has restoration data this will be used to
+            /// re-populate the cubemap. Otherwise it will be
+            /// re-created empty. This should not be called for
+            /// any cubemap that was loaded from file.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------
+            void Restore();
+#endif
             //--------------------------------------------------
             /// Destroys the cubemap and resets it to the state
             /// prior to build being called.
@@ -169,11 +191,20 @@ namespace CSBackend
             CSRendering::Texture::WrapMode m_sWrapMode = CSRendering::Texture::WrapMode::k_clamp;
             CSRendering::Texture::WrapMode m_tWrapMode = CSRendering::Texture::WrapMode::k_clamp;
             
+            std::array<u32, 6> m_widths;
+            std::array<u32, 6> m_heights;
             std::array<CSCore::ImageFormat, 6> m_formats;
+            std::array<CSCore::ImageCompression, 6> m_compressions;
             
             bool m_hasFilterModeChanged = true;
             bool m_hasWrapModeChanged = true;
             bool m_hasMipMaps = false;
+            
+#ifdef CS_TARGETPLATFORM_ANDROID
+            bool m_restoreCubemapData = false;
+            std::array<CSRendering::Texture::TextureDataUPtr, 6> m_restorationDatas;
+            std::array<u32, 6> m_restorationDataSizes;
+#endif
         };
 	}
 }
