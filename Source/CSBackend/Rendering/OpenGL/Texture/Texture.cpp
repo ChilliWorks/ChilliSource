@@ -343,8 +343,9 @@ namespace CSBackend
             m_hasMipMaps = in_mipMap;
             
 #ifdef CS_TARGETPLATFORM_ANDROID
-            if (GetStorageLocation() == CSCore::StorageLocation::k_none && GetFilePath() == "" && in_restoreTextureData == true)
+            if (GetStorageLocation() == CSCore::StorageLocation::k_none && in_restoreTextureData == true)
             {
+            	CS_LOG_VERBOSE(" -> Texture restoration enabled: " + GetName() + " <-");
             	m_restoreTextureData = true;
                 m_restorationDataSize = in_desc.m_dataSize;
                 m_restorationData = std::move(in_data);
@@ -411,14 +412,16 @@ namespace CSBackend
         //--------------------------------------------------
         void Texture::UpdateRestorationData()
         {
-            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none && GetFilePath() == "", "Cannot update restoration data on texture that was load from file.");
+            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none, "Cannot update restoration data on texture that was load from file.");
             
             if (m_restoreTextureData == true)
             {
+            	CS_LOG_VERBOSE(" -> Updating restoration data: " + GetName() + " <- ");
+
+				/*
             	Unbind();
 
-            	//TODO:
-				/*glBindFramebuffer(GL_FRAMEBUFFER, udwFrameBufferID);
+				glBindFramebuffer(GL_FRAMEBUFFER, udwFrameBufferID);
 				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mGLTexID, 0);
 				GLuint udwCheck = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 				if(udwCheck != GL_FRAMEBUFFER_COMPLETE)
@@ -428,7 +431,7 @@ namespace CSBackend
 				}
 
 				u32 size = GetWidth() * GetHeight() * 4;
-				u8* data = new u32[size];
+				std::unique_ptr<u8[]> data(new u8[size]);
 				glReadPixels(0, 0, GetWidth(), GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 				outpImage = Core::ImagePtr(new Core::CImage());
@@ -451,6 +454,11 @@ namespace CSBackend
         {
             CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none && GetFilePath() == "", "Cannot restore texture that was loaded from file. This should be handled using RefreshResource().");
             
+            if (m_restoreTextureData == true)
+            	CS_LOG_VERBOSE(" -> Restoring WITH data: " + GetName() + " <-");
+            else
+            	CS_LOG_VERBOSE(" -> Restoring WITHOUT data: " + GetName() + " <-");
+
             Texture::Descriptor desc;
             desc.m_width = m_width;
             desc.m_height = m_height;
@@ -462,7 +470,7 @@ namespace CSBackend
             WrapMode tWrap = m_tWrapMode;
             FilterMode filterMode = m_filterMode;
             
-            Build(desc, std::move(m_restorationData), m_hasMipMaps, true);
+            Build(desc, std::move(m_restorationData), m_hasMipMaps, m_restoreTextureData);
             SetWrapMode(sWrap, tWrap);
             SetFilterMode(filterMode);
         }

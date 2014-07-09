@@ -429,19 +429,18 @@ namespace ChilliSource
             
             //Load the resource
             ResourceSPtr resource(TResourceType::Create());
+            resource->SetStorageLocation(in_location);
+            resource->SetFilePath(deviceFilePath);
+            resource->SetName(deviceFilePath);
+            resource->SetOptions(options);
+            resource->SetId(resourceId);
+
             provider->CreateResourceFromFile(in_location, deviceFilePath, options, resource);
             if(resource->GetLoadState() != Resource::LoadState::k_loaded)
             {
                 CS_LOG_ERROR("Failed to create resource for " + deviceFilePath);
                 return nullptr;
             }
-            
-            //Add it to the cache
-            resource->SetStorageLocation(in_location);
-            resource->SetFilePath(deviceFilePath);
-            resource->SetName(deviceFilePath);
-            resource->SetOptions(options);
-            resource->SetId(resourceId);
             
             lock.lock();
             //Check the async call hasn't sneaked in here with the same resource
@@ -615,11 +614,13 @@ namespace ChilliSource
             
             //Load the resource
             ResourceSPtr resource(TResourceType::Create());
-            
-            //Add it to the cache
             resource->SetStorageLocation(in_location);
             resource->SetFilePath(deviceFilePath);
+            resource->SetName(deviceFilePath);
             resource->SetOptions(options);
+            resource->SetId(resourceId);
+
+            //Add it to the cache
             desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
             lock.unlock();
             
