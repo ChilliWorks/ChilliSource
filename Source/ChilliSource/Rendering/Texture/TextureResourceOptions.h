@@ -68,7 +68,8 @@ namespace ChilliSource
             /// easily be recreated, i.e any texture that is rendered
             /// into every frame. This has no effect on textures that
             /// are loaded from file as they are always restored from
-            /// disk.
+            /// disk. This will only work for RGBA8888, RGB888, RGBA4444
+            /// and RGB565 textures.
             //-------------------------------------------------------
             TextureResourceOptions(bool in_mipmaps, Texture::FilterMode in_filter, Texture::WrapMode in_wrapS, Texture::WrapMode in_wrapT, bool in_restoreTextureData);
             //-------------------------------------------------------

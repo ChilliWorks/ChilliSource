@@ -35,6 +35,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
+#include <ChilliSource/Core/Image/ImageFormatConverter.h>
 
 namespace CSBackend
 {
@@ -345,7 +346,6 @@ namespace CSBackend
 #ifdef CS_TARGETPLATFORM_ANDROID
             if (GetStorageLocation() == CSCore::StorageLocation::k_none && in_restoreTextureData == true)
             {
-            	CS_LOG_VERBOSE(" -> Texture restoration enabled: " + GetName() + " <-");
             	m_restoreTextureData = true;
                 m_restorationDataSize = in_desc.m_dataSize;
                 m_restorationData = std::move(in_data);
@@ -416,48 +416,66 @@ namespace CSBackend
             
             if (m_restoreTextureData == true)
             {
-            	CS_LOG_VERBOSE(" -> Updating restoration data: " + GetName() + " <- ");
-
-				/*
             	Unbind();
 
-				glBindFramebuffer(GL_FRAMEBUFFER, udwFrameBufferID);
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mGLTexID, 0);
-				GLuint udwCheck = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-				if(udwCheck != GL_FRAMEBUFFER_COMPLETE)
+            	//create an bind a new frame buffer.
+            	GLuint frameBufferHandle = 0;
+                glGenFramebuffers(1, &frameBufferHandle);
+				glBindFramebuffer(GL_FRAMEBUFFER, frameBufferHandle);
+
+				//attach the texture
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texHandle, 0);
+				GLuint glCheck = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+				if(glCheck != GL_FRAMEBUFFER_COMPLETE)
 				{
-					ERROR_LOG("Framebuffer Not Complete!");
-					return false;
+					CS_LOG_FATAL("Framebuffer incomplete while updating texture restoration data.");
 				}
 
-				u32 size = GetWidth() * GetHeight() * 4;
-				std::unique_ptr<u8[]> data(new u8[size]);
-				glReadPixels(0, 0, GetWidth(), GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, data);
+				//read the data from the texture.
+				u32 unconvertedDataSize = GetWidth() * GetHeight() * 4;
+				std::unique_ptr<u8[]> unconvertedData(new u8[unconvertedDataSize]);
+				glReadPixels(0, 0, GetWidth(), GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, unconvertedData.get());
 
-				outpImage = Core::ImagePtr(new Core::CImage());
-				outpImage->SetCompression(moFlo::Core::COMPRESSION_NONE);
-				outpImage->SetDataLength(udwSize);
-				outpImage->SetFormat(Core::CImage::RGBA_8888);
-				outpImage->SetWidth(GetWidth());
-				outpImage->SetHeight(GetHeight());
-				outpImage->SetData((u8*)pData);
+				//Convert to the format of this texture
+				CSCore::ImageFormatConverter::ImageBuffer convertedData;
+				switch (m_format)
+				{
+				case CSCore::ImageFormat::k_RGBA8888:
+					convertedData.m_size = unconvertedDataSize;
+					convertedData.m_data = std::move(unconvertedData);
+					break;
+				case CSCore::ImageFormat::k_RGB888:
+					convertedData = CSCore::ImageFormatConverter::RGBA8888ToRGB888(unconvertedData.get(), unconvertedDataSize);
+					unconvertedData.reset();
+					break;
+				case CSCore::ImageFormat::k_RGBA4444:
+					convertedData = CSCore::ImageFormatConverter::RGBA8888ToRGBA4444(unconvertedData.get(), unconvertedDataSize);
+					unconvertedData.reset();
+					break;
+				case CSCore::ImageFormat::k_RGB565:
+					convertedData = CSCore::ImageFormatConverter::RGBA8888ToRGB565(unconvertedData.get(), unconvertedDataSize);
+					unconvertedData.reset();
+					break;
+				default:
+					CS_LOG_FATAL("Texture is not in a restorable format. The restorable texture data option must be disabled for this texture.");
+					break;
+				}
 
+				m_restorationDataSize = convertedData.m_size;
+				m_restorationData = std::move(convertedData.m_data);
+
+				//clean up the frame buffer.
 				glBindFramebuffer(GL_FRAMEBUFFER, 0);
-				glDeleteFramebuffers(1, &udwFrameBufferID);
-				*/
+				glDeleteFramebuffers(1, &frameBufferHandle);
 
+				CS_ASSERT_NOGLERROR("An OpenGL error occurred while updating texture restoration data.");
             }
         }
         //--------------------------------------------------
         //--------------------------------------------------
         void Texture::RestoreTexture()
         {
-            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none && GetFilePath() == "", "Cannot restore texture that was loaded from file. This should be handled using RefreshResource().");
-            
-            if (m_restoreTextureData == true)
-            	CS_LOG_VERBOSE(" -> Restoring WITH data: " + GetName() + " <-");
-            else
-            	CS_LOG_VERBOSE(" -> Restoring WITHOUT data: " + GetName() + " <-");
+            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none, "Cannot restore texture that was loaded from file. This should be handled using RefreshResource().");
 
             Texture::Descriptor desc;
             desc.m_width = m_width;
