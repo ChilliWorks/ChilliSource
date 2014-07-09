@@ -52,6 +52,7 @@ namespace CSBackend
 		/// Input
 		//------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(DeviceButtonSystem);
+		CS_FORWARDDECLARE_CLASS(Keyboard);
 		CS_FORWARDDECLARE_CLASS(PointerSystem);
 		CS_FORWARDDECLARE_CLASS(TextEntry);
 		//------------------------------------------------------

@@ -27,8 +27,8 @@
 //
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
-#ifndef _CSBACKEND_PLATFORM_WINDOWS_SFML_BASE_SFMLWindow_H_
-#define _CSBACKEND_PLATFORM_WINDOWS_SFML_BASE_SFMLWindow_H_
+#ifndef _CSBACKEND_PLATFORM_WINDOWS_SFML_BASE_SFMLWINDOW_H_
+#define _CSBACKEND_PLATFORM_WINDOWS_SFML_BASE_SFMLWINDOW_H_
 
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/ChilliSource.h>

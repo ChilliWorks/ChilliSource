@@ -26,38 +26,38 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_INPUT_KEYBOARD_KEYBOARD_H_
-#define _CHILLISOURCE_INPUT_KEYBOARD_KEYBOARD_H_
+#ifdef CS_TARGETPLATFORM_WINDOWS
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Core/System/AppSystem.h>
+#ifndef _CSBACKEND_PLATFORM_WINDOWS_INPUT_KEYBOARD_KEYBOARD_H_
+#define _CSBACKEND_PLATFORM_WINDOWS_INPUT_KEYBOARD_KEYBOARD_H_
 
-#include <functional>
+#include <ChilliSource/Input/Keyboard/Keyboard.h>
 
-namespace ChilliSource
+namespace CSBackend
 {
-	namespace Input
+	namespace Windows
 	{
         //---------------------------------------------------------------
         /// A system for receiving input from the current keyboard
         ///
         /// @author S Downie
         //---------------------------------------------------------------
-		class Keyboard : public Core::AppSystem
+		class Keyboard final : public CSInput::Keyboard
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(Keyboard);
             
-            //-------------------------------------------------------
-            /// Delegate that receieves events on the key with the
-            /// given code
-            ///
-            /// @author S Downie
-            ///
-            /// @param Key code
-            //-------------------------------------------------------
-            using KeyDelegate = std::function<void(KeyCode)>;
+			//----------------------------------------------------
+			/// Queries whether or not this system implements the
+			/// interface with the given ID.
+			///
+			/// @author S Downie
+			///
+			/// @param The interface Id.
+			///
+			/// @return Whether or not the interface is implemented.
+			//----------------------------------------------------
+			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
             /// Check whether the key is currently down. This is
             /// unbuffered so will only check the state of the key
@@ -69,7 +69,7 @@ namespace ChilliSource
             ///
             /// @return Whether the key is down
             //-------------------------------------------------------
-            virtual bool IsKeyDown(KeyCode in_code) const = 0;
+			bool IsKeyDown(CSInput::KeyCode in_code) const;
             //-------------------------------------------------------
             /// Check whether the key is currently up. This is
             /// unbuffered so will only check the state of the key
@@ -81,7 +81,7 @@ namespace ChilliSource
             ///
             /// @return Whether the key is up
             //-------------------------------------------------------
-            virtual bool IsKeyUp(KeyCode in_code) const = 0;
+			bool IsKeyUp(CSInput::KeyCode in_code) const;
             //-------------------------------------------------------
             /// Get the event that is triggered whenever a key is pressed.
             ///
@@ -94,7 +94,7 @@ namespace ChilliSource
             ///
             /// @return Event to register for key presses
             //-------------------------------------------------------
-            virtual Core::IConnectableEvent<KeyDelegate>& GetKeyPressedEvent() = 0;
+            CSCore::IConnectableEvent<KeyDelegate>& GetKeyPressedEvent();
             //-------------------------------------------------------
             /// Get the event that is triggered whenever a key is released.
             ///
@@ -106,29 +106,27 @@ namespace ChilliSource
             ///
             /// @return Event to register for key releases
             //-------------------------------------------------------
-            virtual Core::IConnectableEvent<KeyDelegate>& GetKeyReleasedEvent() = 0;
+            CSCore::IConnectableEvent<KeyDelegate>& GetKeyReleasedEvent();
+            
+        private:
+            
+			friend CSInput::KeyboardUPtr CSInput::Keyboard::Create();
 			//-------------------------------------------------------
-			/// Virtual destructor
-			///
+			/// Constructor
+			/// 
 			/// @author S Downie
 			//-------------------------------------------------------
-			virtual ~Keyboard(){}
-            
-        protected:
-            
-            friend class Core::Application;
-            //-------------------------------------------------------
-            /// Factory method from creating a new platform specific
-            /// instance of the keyboard system.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @return The new instance of the system.
-            //-------------------------------------------------------
-			static KeyboardUPtr Create();
+			Keyboard() = default;
+
+		private:
+
+			CSCore::Event<KeyDelegate> m_keyPressedEvent;
+			CSCore::Event<KeyDelegate> m_keyReleasedEvent;
 		};
 	}
 }
+
+#endif
 
 #endif
 

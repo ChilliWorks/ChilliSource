@@ -326,7 +326,7 @@ namespace CSBackend
 							break;
 						case sf::Event::TextEntered:
 						{
-							u32 utf8Char = 0;
+							CSCore::UTF8Char utf8Char = 0;
 							sf::Utf32::toUtf8(&event.text.unicode, (&event.text.unicode) + 1, &utf8Char);
 							m_textEnteredEvent.NotifyConnections(utf8Char);
 							break;
