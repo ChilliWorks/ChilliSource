@@ -59,6 +59,7 @@ namespace ChilliSource
         //--------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Keyboard);
         enum class KeyCode;
+        enum class ModifierKeyCode;
         //--------------------------------------------------
         /// Pointer
         //--------------------------------------------------

@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 
 #include <functional>
+#include <vector>
 
 namespace ChilliSource
 {
@@ -51,13 +52,23 @@ namespace ChilliSource
             
             //-------------------------------------------------------
             /// Delegate that receieves events on the key with the
-            /// given code
+            /// given code when key is pressed
+            ///
+            /// @author S Downie
+            ///
+            /// @param Key code
+            /// @param List of modifier keys that are down
+            //-------------------------------------------------------
+            using KeyPressedDelegate = std::function<void(KeyCode, const std::vector<ModifierKeyCode>&)>;
+            //-------------------------------------------------------
+            /// Delegate that receieves events on the key with the
+            /// given code when key is released
             ///
             /// @author S Downie
             ///
             /// @param Key code
             //-------------------------------------------------------
-            using KeyDelegate = std::function<void(KeyCode)>;
+            using KeyReleasedDelegate = std::function<void(KeyCode)>;
             //-------------------------------------------------------
             /// Check whether the key is currently down. This is
             /// unbuffered so will only check the state of the key
@@ -90,11 +101,14 @@ namespace ChilliSource
             /// The polling "IsDown" method should be used for realtime
             /// events such as moving characters on arrow press, etc.
             ///
+            /// The event also returns the current state of the modifier
+            /// keys (Ctrl, Alt, Shift, etc.)
+            ///
             /// @author S Downie
             ///
             /// @return Event to register for key presses
             //-------------------------------------------------------
-            virtual Core::IConnectableEvent<KeyDelegate>& GetKeyPressedEvent() = 0;
+            virtual Core::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent() = 0;
             //-------------------------------------------------------
             /// Get the event that is triggered whenever a key is released.
             ///
@@ -106,7 +120,7 @@ namespace ChilliSource
             ///
             /// @return Event to register for key releases
             //-------------------------------------------------------
-            virtual Core::IConnectableEvent<KeyDelegate>& GetKeyReleasedEvent() = 0;
+            virtual Core::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent() = 0;
 			//-------------------------------------------------------
 			/// Virtual destructor
 			///

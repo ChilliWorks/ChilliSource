@@ -232,6 +232,18 @@ namespace CSBackend
 		{
 			return m_textEnteredEvent;
 		}
+		//-------------------------------------------------------
+		//-------------------------------------------------------
+		CSCore::IConnectableEvent<SFMLWindow::KeyPressedDelegate>& SFMLWindow::GetKeyPressedEvent()
+		{
+			return m_keyPressedEvent;
+		}
+		//-------------------------------------------------------
+		//-------------------------------------------------------
+		CSCore::IConnectableEvent<SFMLWindow::KeyReleasedDelegate>& SFMLWindow::GetKeyReleasedEvent()
+		{
+			return m_keyReleasedEvent;
+		}
 		//------------------------------------------------
 		//------------------------------------------------
 		CSCore::Integer2 SFMLWindow::GetWindowSize() const
@@ -323,6 +335,12 @@ namespace CSBackend
 							break;
 						case sf::Event::MouseMoved:
 							m_mouseMovedEvent.NotifyConnections(event.mouseMove.x, event.mouseMove.y);
+							break;
+						case sf::Event::KeyPressed:
+							m_keyPressedEvent.NotifyConnections(event.key.code, event.key);
+							break;
+						case sf::Event::KeyReleased:
+							m_keyReleasedEvent.NotifyConnections(event.key.code);
 							break;
 						case sf::Event::TextEntered:
 						{

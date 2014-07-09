@@ -98,6 +98,25 @@ namespace CSBackend
 			/// @param UTF-8 character entered
 			//-----------------------------------------------------------
 			using TextEnteredEvent = std::function<void(CSCore::UTF8Char)>;
+			//-------------------------------------------------------
+			/// Delegate that receieves events on the key with the
+			/// given code when key is pressed
+			///
+			/// @author S Downie
+			///
+			/// @param Key code
+			/// @param Event
+			//-------------------------------------------------------
+			using KeyPressedDelegate = std::function<void(sf::Keyboard::Key, const sf::Event::KeyEvent&)>;
+			//-------------------------------------------------------
+			/// Delegate that receieves events on the key with the
+			/// given code when key is released
+			///
+			/// @author S Downie
+			///
+			/// @param Key code
+			//-------------------------------------------------------
+			using KeyReleasedDelegate = std::function<void(sf::Keyboard::Key)>;
 			//-------------------------------------------------
 			/// Create and begin running the SFML window which in turn
 			/// will update and render the app
@@ -157,6 +176,34 @@ namespace CSBackend
 			/// @return An event that is called when text is entered
 			//------------------------------------------------
 			CSCore::IConnectableEvent<TextEnteredEvent>& GetTextEnteredEvent();
+			//-------------------------------------------------------
+			/// Get the event that is triggered whenever a key is pressed.
+			///
+			/// This event is guaranteed and should be used for low
+			/// frequency events such as catching a confirm enter press.
+			/// The polling "IsDown" method should be used for realtime
+			/// events such as moving characters on arrow press, etc.
+			///
+			/// The event also returns the current state of the modifier
+			/// keys (Ctrl, Alt, Shift, etc.)
+			///
+			/// @author S Downie
+			///
+			/// @return Event to register for key presses
+			//-------------------------------------------------------
+			CSCore::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent();
+			//-------------------------------------------------------
+			/// Get the event that is triggered whenever a key is released.
+			///
+			/// This event is guaranteed and should be used for low
+			/// frequency events. The polling "IsUp" method should be
+			/// used for realtime events.
+			///
+			/// @author S Downie
+			///
+			/// @return Event to register for key releases
+			//-------------------------------------------------------
+			CSCore::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent();
 			//------------------------------------------------
 			/// @author S Downie
 			///
@@ -185,6 +232,8 @@ namespace CSBackend
 			CSCore::Event<MouseButtonDelegate> m_mouseButtonEvent;
 			CSCore::Event<MouseMovedDelegate> m_mouseMovedEvent;
 			CSCore::Event<TextEnteredEvent> m_textEnteredEvent;
+			CSCore::Event<KeyPressedDelegate> m_keyPressedEvent;
+			CSCore::Event<KeyReleasedDelegate> m_keyReleasedEvent;
 
 			bool m_isSuspended = false;
 			bool m_isFocused = true;

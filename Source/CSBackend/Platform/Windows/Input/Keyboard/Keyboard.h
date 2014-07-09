@@ -32,6 +32,7 @@
 #define _CSBACKEND_PLATFORM_WINDOWS_INPUT_KEYBOARD_KEYBOARD_H_
 
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
+#include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 
 namespace CSBackend
 {
@@ -82,31 +83,34 @@ namespace CSBackend
             /// @return Whether the key is up
             //-------------------------------------------------------
 			bool IsKeyUp(CSInput::KeyCode in_code) const;
-            //-------------------------------------------------------
-            /// Get the event that is triggered whenever a key is pressed.
-            ///
-            /// This event is guaranteed and should be used for low
-            /// frequency events such as catching a confirm enter press.
-            /// The polling "IsDown" method should be used for realtime
-            /// events such as moving characters on arrow press, etc.
-            ///
-            /// @author S Downie
-            ///
-            /// @return Event to register for key presses
-            //-------------------------------------------------------
-            CSCore::IConnectableEvent<KeyDelegate>& GetKeyPressedEvent();
-            //-------------------------------------------------------
-            /// Get the event that is triggered whenever a key is released.
-            ///
-            /// This event is guaranteed and should be used for low
-            /// frequency events. The polling "IsUp" method should be
-            /// used for realtime events.
-            ///
-            /// @author S Downie
-            ///
-            /// @return Event to register for key releases
-            //-------------------------------------------------------
-            CSCore::IConnectableEvent<KeyDelegate>& GetKeyReleasedEvent();
+			//-------------------------------------------------------
+			/// Get the event that is triggered whenever a key is pressed.
+			///
+			/// This event is guaranteed and should be used for low
+			/// frequency events such as catching a confirm enter press.
+			/// The polling "IsDown" method should be used for realtime
+			/// events such as moving characters on arrow press, etc.
+			///
+			/// The event also returns the current state of the modifier
+			/// keys (Ctrl, Alt, Shift, etc.)
+			///
+			/// @author S Downie
+			///
+			/// @return Event to register for key presses
+			//-------------------------------------------------------
+			CSCore::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent();
+			//-------------------------------------------------------
+			/// Get the event that is triggered whenever a key is released.
+			///
+			/// This event is guaranteed and should be used for low
+			/// frequency events. The polling "IsUp" method should be
+			/// used for realtime events.
+			///
+			/// @author S Downie
+			///
+			/// @return Event to register for key releases
+			//-------------------------------------------------------
+			CSCore::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent();
             
         private:
             
@@ -117,11 +121,45 @@ namespace CSBackend
 			/// @author S Downie
 			//-------------------------------------------------------
 			Keyboard() = default;
+			//-------------------------------------------------------
+			/// Called when the system is initialised and registers
+			/// for SFML key events
+			///
+			/// @author S Downie
+			//-------------------------------------------------------
+			void OnInit() override;
+			//-------------------------------------------------------
+			/// Triggered by SFML when key is pressed
+			///
+			/// @param Key code
+			/// @param Key event
+			///
+			/// @author S Downie
+			//-------------------------------------------------------
+			void OnKeyPressed(sf::Keyboard::Key in_code, const sf::Event::KeyEvent& in_event);
+			//-------------------------------------------------------
+			/// Triggered by SFML when key is released
+			///
+			/// @param Key code
+			///
+			/// @author S Downie
+			//-------------------------------------------------------
+			void OnKeyReleased(sf::Keyboard::Key in_code);
+			//-------------------------------------------------------
+			/// Called when the system is destroyed and unsubscribes
+			/// from SFML key events
+			///
+			/// @author S Downie
+			//-------------------------------------------------------
+			void OnDestroy() override;
 
 		private:
 
-			CSCore::Event<KeyDelegate> m_keyPressedEvent;
-			CSCore::Event<KeyDelegate> m_keyReleasedEvent;
+			CSCore::Event<KeyPressedDelegate> m_keyPressedEvent;
+			CSCore::Event<KeyReleasedDelegate> m_keyReleasedEvent;
+
+			CSCore::EventConnectionUPtr m_keyPressedConnection;
+			CSCore::EventConnectionUPtr m_keyReleasedConnection;
 		};
 	}
 }
