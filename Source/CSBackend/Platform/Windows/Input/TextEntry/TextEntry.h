@@ -26,22 +26,20 @@
 //  THE SOFTWARE.
 //
 
-#ifdef CS_TARGETPLATFORM_IOS
+#ifdef CS_TARGETPLATFORM_WINDOWS
 
-#ifndef _CSBACKEND_PLATFORM_IOS_INPUT_TEXTENTRY_TEXTENTRY_H_
-#define _CSBACKEND_PLATFORM_IOS_INPUT_TEXTENTRY_TEXTENTRY_H_
+#ifndef _CSBACKEND_PLATFORM_WINDOWS_INPUT_TEXTENTRY_TEXTENTRY_H_
+#define _CSBACKEND_PLATFORM_WINDOWS_INPUT_TEXTENTRY_TEXTENTRY_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <CSBackend/Platform/iOS/ForwardDeclarations.h>
+#include <ChilliSource/Core/Event/EventConnection.h>
+#include <ChilliSource/Core/String/UTF8StringUtils.h>
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
-
-@class TextEntryDelegate;
-@class UITextField;
-@class NSString;
+#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 
 namespace CSBackend
 {
-	namespace iOS
+	namespace Windows
 	{
         //----------------------------------------------------------------
         /// The iOS backend to the text entry system. This provides access
@@ -80,21 +78,19 @@ namespace CSBackend
             //-------------------------------------------------------
             void SetTextBuffer(const std::string& in_text) override;
             //-------------------------------------------------------
-            /// Sets the type of keyboard to display if using a
-            /// virtual keyboard. This must be set prior to the keyboard
-            /// being displayed. Note that this is only a suggestion
-            /// and the virtual keyboard implementation may choose to
-            /// ignore it.
+            /// NOTE: This does nothing on Windows
             ///
-            /// @author Ian Copland
+            /// @author S Downie
             ///
             /// @param The keyboard type
             //-------------------------------------------------------
             void SetType(Type in_type) override;
             //-------------------------------------------------------
             /// Sets capitalisation method to be used for text input.
+			///
+			/// NOTE: This does nothing on Windows
             ///
-            /// @author Ian Copland
+            /// @author S Downie
             ///
             /// @param The capitalisation method.
             //-------------------------------------------------------
@@ -118,20 +114,7 @@ namespace CSBackend
             /// @param A delegate that is called when text input is disabled
             //-------------------------------------------------------
             void SetTextInputDisabledDelegate(const TextInputDisabledDelegate& in_delegate) override;
-            //-------------------------------------------------------
-            /// Called when the keyboard text is updated.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The new text.
-            //-------------------------------------------------------
-			bool OnTextUpdated(NSString* in_text);
-            //-------------------------------------------------------
-            /// Destructor.
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------
-			~TextEntry();
+
 		private:
             friend CSInput::TextEntryUPtr CSInput::TextEntry::Create();
         
@@ -141,14 +124,25 @@ namespace CSBackend
             ///
             /// @author S Downie
             //-------------------------------------------------------
-			TextEntry();
+			TextEntry() = default;
+			//-------------------------------------------------------
+			/// Called when a text character is entered
+			///
+			/// @author S Downie
+			///
+			/// @param UTF-8 character
+			//-------------------------------------------------------
+			void OnTextEntered(CSCore::UTF8Char in_unicodeChar);
+
+		private:
             
-			UITextField* m_textView;
-            TextEntryDelegate* m_delegate;
             TextBufferChangedDelegate m_textBufferChangedDelegate;
             TextInputEnabledDelegate m_textInputEnabledDelegate;
             TextInputDisabledDelegate m_textInputDisabledDelegate;
-            std::string m_text;
+
+			CSCore::EventConnectionUPtr m_textEnteredConnection;
+
+			std::string m_text;
 		};
 	}
 }

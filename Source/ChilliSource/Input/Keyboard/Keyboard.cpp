@@ -29,7 +29,7 @@
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 
 #ifdef CS_TARGETPLATFORM_WINDOWS
-#include <CSBackend/Platform/Windows/Input/Keyboard/Keyboard.h>
+//#include <CSBackend/Platform/Windows/Input/Keyboard/Keyboard.h>
 #endif
 
 namespace ChilliSource

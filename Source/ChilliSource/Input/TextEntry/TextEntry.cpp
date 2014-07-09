@@ -36,6 +36,10 @@
 #include <CSBackend/Platform/iOS/Input/TextEntry/TextEntry.h>
 #endif
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <CSBackend/Platform/Windows/Input/TextEntry/TextEntry.h>
+#endif
+
 namespace ChilliSource
 {
     namespace Input
@@ -48,6 +52,8 @@ namespace ChilliSource
             return TextEntryUPtr(new CSBackend::Android::TextEntry());
 #elif defined CS_TARGETPLATFORM_IOS
             return TextEntryUPtr(new CSBackend::iOS::TextEntry());
+#elif defined CS_TARGETPLATFORM_WINDOWS
+            return TextEntryUPtr(new CSBackend::Windows::TextEntry());
 #else
             return nullptr;
 #endif

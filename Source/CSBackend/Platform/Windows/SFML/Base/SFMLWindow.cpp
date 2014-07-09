@@ -226,6 +226,12 @@ namespace CSBackend
 		{
 			return m_mouseMovedEvent;
 		}
+		//-------------------------------------------------
+		//------------------------------------------------
+		CSCore::IConnectableEvent<SFMLWindow::TextEnteredEvent>& SFMLWindow::GetTextEnteredEvent()
+		{
+			return m_textEnteredEvent;
+		}
 		//------------------------------------------------
 		//------------------------------------------------
 		CSCore::Integer2 SFMLWindow::GetWindowSize() const
@@ -287,37 +293,44 @@ namespace CSBackend
 				{
 					switch (event.type)
 					{
-					default:
-						break;
-					case sf::Event::Closed:
-						app->Quit();
-						return;
-					case sf::Event::Resized:
-						m_windowResizeEvent.NotifyConnections(CSCore::Integer2((s32)event.size.width, (s32)event.size.height));
-						break;
-					case sf::Event::GainedFocus:
-						if (m_isFocused == false)
+						default:
+							break;
+						case sf::Event::Closed:
+							app->Quit();
+							return;
+						case sf::Event::Resized:
+							m_windowResizeEvent.NotifyConnections(CSCore::Integer2((s32)event.size.width, (s32)event.size.height));
+							break;
+						case sf::Event::GainedFocus:
+							if (m_isFocused == false)
+							{
+								m_isFocused = true;
+								app->Foreground();
+							}
+							break;
+						case sf::Event::LostFocus:
+							if (m_isFocused == true)
+							{
+								m_isFocused = false;
+								app->Background();
+							}
+							break;
+						case sf::Event::MouseButtonPressed:
+							m_mouseButtonEvent.NotifyConnections(event.mouseButton.button, MouseButtonEvent::k_pressed, event.mouseButton.x, event.mouseButton.y);
+							break;
+						case sf::Event::MouseButtonReleased:
+							m_mouseButtonEvent.NotifyConnections(event.mouseButton.button, MouseButtonEvent::k_released, event.mouseButton.x, event.mouseButton.y);
+							break;
+						case sf::Event::MouseMoved:
+							m_mouseMovedEvent.NotifyConnections(event.mouseMove.x, event.mouseMove.y);
+							break;
+						case sf::Event::TextEntered:
 						{
-							m_isFocused = true;
-							app->Foreground();
+							u32 utf8Char = 0;
+							sf::Utf32::toUtf8(&event.text.unicode, (&event.text.unicode) + 1, &utf8Char);
+							m_textEnteredEvent.NotifyConnections(utf8Char);
+							break;
 						}
-						break;
-					case sf::Event::LostFocus:
-						if (m_isFocused == true)
-						{
-							m_isFocused = false;
-							app->Background();
-						}
-						break;
-					case sf::Event::MouseButtonPressed:
-						m_mouseButtonEvent.NotifyConnections(event.mouseButton.button, MouseButtonEvent::k_pressed, event.mouseButton.x, event.mouseButton.y);
-						break;
-					case sf::Event::MouseButtonReleased:
-						m_mouseButtonEvent.NotifyConnections(event.mouseButton.button, MouseButtonEvent::k_released, event.mouseButton.x, event.mouseButton.y);
-						break;
-					case sf::Event::MouseMoved:
-						m_mouseMovedEvent.NotifyConnections(event.mouseMove.x, event.mouseMove.y);
-						break;
 					}
 				}
 

@@ -34,6 +34,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Singleton.h>
 #include <ChilliSource/Core/Event/Event.h>
+#include <ChilliSource/Core/String/UTF8StringUtils.h>
 
 #include <SFML/Window.hpp>
 
@@ -89,6 +90,14 @@ namespace CSBackend
 			/// @param Mouse position Y
 			//-----------------------------------------------------------
 			using MouseMovedDelegate = std::function<void(s32, s32)>;
+			//-----------------------------------------------------------
+			/// A delegate called when a text is entered via user input.
+			///
+			/// @author S Downie
+			///
+			/// @param UTF-8 character entered
+			//-----------------------------------------------------------
+			using TextEnteredEvent = std::function<void(CSCore::UTF8Char)>;
 			//-------------------------------------------------
 			/// Create and begin running the SFML window which in turn
 			/// will update and render the app
@@ -142,6 +151,12 @@ namespace CSBackend
 			/// @return An event that is called when the mouse moves
 			//------------------------------------------------
 			CSCore::IConnectableEvent<MouseMovedDelegate>& GetMouseMovedEvent();
+			//-------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return An event that is called when text is entered
+			//------------------------------------------------
+			CSCore::IConnectableEvent<TextEnteredEvent>& GetTextEnteredEvent();
 			//------------------------------------------------
 			/// @author S Downie
 			///
@@ -169,6 +184,7 @@ namespace CSBackend
 			CSCore::Event<WindowResizeDelegate> m_windowResizeEvent;
 			CSCore::Event<MouseButtonDelegate> m_mouseButtonEvent;
 			CSCore::Event<MouseMovedDelegate> m_mouseMovedEvent;
+			CSCore::Event<TextEnteredEvent> m_textEnteredEvent;
 
 			bool m_isSuspended = false;
 			bool m_isFocused = true;

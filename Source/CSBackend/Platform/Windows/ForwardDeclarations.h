@@ -53,6 +53,7 @@ namespace CSBackend
 		//------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(DeviceButtonSystem);
 		CS_FORWARDDECLARE_CLASS(PointerSystem);
+		CS_FORWARDDECLARE_CLASS(TextEntry);
 		//------------------------------------------------------
 		/// Networking
 		//------------------------------------------------------
