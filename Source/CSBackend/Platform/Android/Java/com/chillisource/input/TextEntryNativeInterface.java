@@ -1,7 +1,7 @@
 /**
  * TextEntryNativeInterface.java
  * Chilli Source
- * Created by Ian Copland on 04/02/2014.
+ * Created by Scott Downie 08/07/2014.
  * 
  * The MIT License (MIT)
  * 
@@ -28,326 +28,321 @@
 
 package com.chillisource.input;
 
-import android.content.res.Configuration;
+import android.content.Context;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.chillisource.core.CSApplication;
 import com.chillisource.core.Logging;
 import com.chillisource.core.InterfaceIDType;
-import com.chillisource.input.NativeKeyboardInputView.KeyboardCapitalisation;
-import com.chillisource.input.NativeKeyboardInputView.KeyboardType;
 import com.chillisource.core.INativeInterface;
 
-//========================================================
-/// TextEntry Native Interface
-///
-/// A native interface for handling keyboard input. 
-//========================================================
-public class TextEntryNativeInterface extends INativeInterface
+/**
+ * Native interface that wraps a single text entry entity. The system 
+ * will track user text entry and notify native about any changes to the
+ * text buffer
+ * 
+ * @author S Downie
+ *
+ */
+public class TextEntryNativeInterface extends INativeInterface implements TextWatcher, OnEditorActionListener
 {
-	//-------------------------------------------------
-	/// Member data
-	//-------------------------------------------------
 	public static final InterfaceIDType InterfaceID = new InterfaceIDType("CKeyboardNativeInterface");
-	private NativeKeyboardInputView mKeyboardView = null;
-	private boolean mbHardwareKeyboardOpen = false;
-	private volatile KeyboardType meKeyboardType = KeyboardType.TEXT;
-	private volatile KeyboardCapitalisation meKeyboardCapitalisation = KeyboardCapitalisation.NONE;
-
-	//-------------------------------------------------
-	/// Is A
-	///
-	/// @return whether or not this implements the given 
-	/// interface.
-	//-------------------------------------------------
-	@Override public boolean IsA(InterfaceIDType inInterfaceType) 
+	private int m_keyboardTypeFlags = 0;
+	private int m_keyboardCapitalisationFlags = 0;
+	private EditTextBackEvent m_textEntryView;
+	
+	/**
+	 * Extends EditText in order to detect when the keyboard has been dismissed
+	 * 
+	 * @author S Downie
+	 */
+	private class EditTextBackEvent extends EditText
 	{
-		return (inInterfaceType == InterfaceID);
+		private TextEntryNativeInterface m_nativeInterface;
+		
+		/**
+		 * Constructor
+		 * 
+		 * @author S Downie
+		 * 
+		 * @param Context
+		 * @param Text entry interface to notify when keyboard dismissed
+		 */
+		public EditTextBackEvent(Context in_context, TextEntryNativeInterface in_nativeInterface) 
+		{
+			super(in_context);
+			m_nativeInterface = in_nativeInterface;
+		}
+		/**
+		 * Called when the keyboard key event occurs prior to any system being notified
+		 * 
+		 * @author S Downie
+		 * 
+		 * @param key code
+		 * @param key event
+		 * 
+		 * @return Whether the event has been handled
+		 */
+        @Override public boolean onKeyPreIme(int in_keyCode, KeyEvent in_event)
+        {
+            if (in_event.getKeyCode() == KeyEvent.KEYCODE_BACK || in_event.getKeyCode() == KeyEvent.FLAG_EDITOR_ACTION || in_event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+            {
+				m_nativeInterface.Dismiss();
+            	m_nativeInterface.NativeOnKeyboardDismissed();
+            	return true;
+            }
+            
+            return super.onKeyPreIme(in_keyCode, in_event);
+        }
 	}
-	//-------------------------------------------------
-	/// Activate
-	///
-	/// Displays the software keyboard on screen and 
-	/// starts reading from the hardware keyboard 
-	/// if possible.
-	//-------------------------------------------------
+
+	/** 
+	 * Constructor
+	 * 
+	 * @author S Downie
+	 */
+	TextEntryNativeInterface()
+	{
+		//Doesn't matter what we set this to it's invisible
+		m_textEntryView = new EditTextBackEvent(CSApplication.get().getActivityContext(), this);
+		m_textEntryView.setWidth(100);
+		m_textEntryView.setHeight(100);
+		m_textEntryView.setAlpha(0);
+		m_textEntryView.addTextChangedListener(this);
+		m_textEntryView.setOnEditorActionListener(this);
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @param Interface type
+	 * 
+	 * @return Whether this objects interface is of the given type
+	 */
+	@Override public boolean IsA(InterfaceIDType in_interfaceType) 
+	{
+		return (in_interfaceType == InterfaceID);
+	}
+	/**
+	 * Activate text entry. This will display the soft keyboard if required
+	 * 
+	 * @author S Downie
+	 */
 	public void Activate()
 	{
-		final TextEntryNativeInterface thisNativeInterface = this;
-		
 		Runnable task = new Runnable() 
 		{
 			@Override public void run() 
 			{
-				if (mKeyboardView == null)
-				{
-					mKeyboardView = new NativeKeyboardInputView(thisNativeInterface, meKeyboardType, meKeyboardCapitalisation);
-					CSApplication.get().addView(mKeyboardView);
-					
-					if (mbHardwareKeyboardOpen == true)
-					{
-						mKeyboardView.SetHardwareKeyboardOpen();
-					}
-					else
-					{
-						mKeyboardView.SetHardwareKeyboardClosed();
-					}
-					
-					mKeyboardView.ActivateKeyboard();
-				}
+				CSApplication.get().addView(m_textEntryView);
+				m_textEntryView.requestFocus();
+				m_textEntryView.setSelection(m_textEntryView.getText().length());
+				InputMethodManager imm = (InputMethodManager)CSApplication.get().getAppContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.showSoftInput(m_textEntryView, InputMethodManager.SHOW_IMPLICIT);
 			}
 		};
 		CSApplication.get().scheduleUIThreadTask(task);
 	}
-	//-------------------------------------------------
-	/// Deactivate
-	///
-	/// Hides the software keyboard and stops reading 
-	/// from the hardware keyboard if there is one.
-	//-------------------------------------------------
+	/**
+	 * Deactivate text entry. This will hide the soft keyboard if required
+	 * 
+	 * @author S Downie
+	 */
 	public void Deactivate()
 	{
 		Runnable task = new Runnable() 
 		{
 			@Override public void run() 
 			{
-				if (mKeyboardView != null)
-				{
-					mKeyboardView.DeactivateKeyboard();
-					
-					ViewGroup parent = (ViewGroup)mKeyboardView.getParent();
-					if (parent != null)
-					{
-						parent.removeView(mKeyboardView);
-					}
-					
-					mKeyboardView = null;
-				}
+				Dismiss();
 			}
 		};
 		CSApplication.get().scheduleUIThreadTask(task);
 	}
-	//-------------------------------------------------
-	/// Set Keyboard Type
-	///
-	/// Sets the keyboard type that should be used
-	/// the next time a keyboard is created.
-	///
-	/// @param the keyboard type in integer form (so it
-	/// can be passed from native)
-	//-------------------------------------------------
-    public void SetKeyboardType(int indwKeyboardType)
-    {
-    	meKeyboardType = IntegerToKeyboardType(indwKeyboardType);
-    }
-	//-------------------------------------------------
-	/// Set Capitalisation Method
-	///
-	/// Sets the capitalisation method that should be
-    /// used the next time a keyboard is created.
-	///
-	/// @param the capitalisation method in integer form 
-    /// (so it can be passed from native)
-	//-------------------------------------------------
-    public void SetCapitalisationMethod(int indwKeyboardCapitalisation)
-    {
-    	meKeyboardCapitalisation = IntegerToKeyboardCapitalisation(indwKeyboardCapitalisation);
-    }
-	//-----------------------------------------------------
-	/// Set Hardware Keyboard Open
-	///
-	/// Informs the system that the hardware keyboard is 
-	/// now open.
-	//-----------------------------------------------------
-	public void SetHardwareKeyboardOpen()
+	/**
+	 * Dismiss the keyboard
+	 * 
+	 * @author S Downie
+	 */
+	private void Dismiss()
 	{
-		Runnable task = new Runnable() 
+		ViewGroup parent = (ViewGroup)m_textEntryView.getParent();
+		if (parent != null)
 		{
-			@Override public void run() 
-			{
-				mbHardwareKeyboardOpen = true;
-				if (mKeyboardView != null)
-				{
-					mKeyboardView.SetHardwareKeyboardOpen();
-				}
-			}
-		};
-		CSApplication.get().scheduleUIThreadTask(task);
-	}
-	//----------------------------------------------------
-	/// Set Hardware Keyboard Closed
-	///
-	/// Informs the system that the hardware keyboard is 
-	/// now closed.
-	//----------------------------------------------------
-	public void SetHardwareKeyboardClosed()
-	{
-		Runnable task = new Runnable() 
-		{
-			@Override public void run() 
-			{
-				mbHardwareKeyboardOpen = false;
-				if (mKeyboardView != null)
-				{
-					mKeyboardView.SetHardwareKeyboardClosed();
-				}
-			}
-		};
-		CSApplication.get().scheduleUIThreadTask(task);
-	}
-	//---------------------------------------------------
-	/// On Text Added
-	///
-	/// Passes an event down to the native side of the
-	/// engine for adding new text from the keyboard.
-	///
-	/// @param The new text received.
-	//---------------------------------------------------
-	public void OnTextAdded(final String instrText)
-	{
-		//This can be called on any thread as the native side of
-		//the engine will pass it on as a "main thread" task.
-		NativeOnTextAdded(instrText);
-	}
-	//---------------------------------------------------
-	/// On Text Deleted
-	///
-	/// Passes an event down to the native side of the
-	/// engine that will delete a single character from 
-	/// the keyboard.
-	///
-	/// @param The new text received.
-	//---------------------------------------------------
-	public void OnTextDeleted()
-	{
-		//This can be called on any thread as the native side of
-		//the engine will pass it on as a "main thread" task.
-		NativeOnTextDeleted();
-	}
-	//----------------------------------------------------
-	/// On Keyboard Dismissed
-	///
-	/// Lets the native side of the engine know know that 
-	/// the keyboard has been dismissed.
-	//----------------------------------------------------
-	public void OnKeyboardDismissed()
-	{
-		Runnable task = new Runnable() 
-		{
-			@Override public void run() 
-			{
-				if (mKeyboardView != null)
-				{
-					mKeyboardView.DeactivateKeyboard();
-					
-					ViewGroup parent = (ViewGroup)mKeyboardView.getParent();
-					if (parent != null)
-					{
-						parent.removeView(mKeyboardView);
-					}
-					
-					mKeyboardView = null;
-				}
-			}
-		};
-		CSApplication.get().scheduleUIThreadTask(task);
-		
-		//Call this on any thread as this native side of the engine
-		//will create a "main thread" task for it.
-		NativeOnKeyboardDismissed();
-	}
-	//-----------------------------------------------
-	/// Integer To Keyboard Type
-	///
-	/// Converts from an integer to the keyboard
-	/// type enum.
-	///
-	/// @param The keyboard type in integer form.
-	/// @return The keyboard type.
-	//-----------------------------------------------
-	private NativeKeyboardInputView.KeyboardType IntegerToKeyboardType(int indwKeyboardType)
-	{
-		switch (indwKeyboardType)
-		{
-			case 0:
-				return KeyboardType.TEXT;
-			case 1:
-				return KeyboardType.NUMERIC;
-			default:
-				Logging.logError("Invalid keyboard type integer, cannot be converted.");
-				return KeyboardType.TEXT;
-		}
-	}
-	//-----------------------------------------------
-	/// Integer To Keyboard Capitalisation
-	///
-	/// Converts from an integer to the keyboard
-	/// capitalisation enum.
-	///
-	/// @param The keyboard capitalisation in integer 
-	/// form.
-	/// @return The keyboard capitalisation.
-	//-----------------------------------------------
-	private NativeKeyboardInputView.KeyboardCapitalisation IntegerToKeyboardCapitalisation(int indwKeyboardCapitalisation)
-	{
-		switch (indwKeyboardCapitalisation)
-		{
-			case 0:
-				return KeyboardCapitalisation.NONE;
-			case 1:
-				return KeyboardCapitalisation.SENTENCES;
-			case 2:
-				return KeyboardCapitalisation.WORDS;
-			case 3:
-				return KeyboardCapitalisation.ALL;
-			default:
-				Logging.logError("Invalid keyboard capitalisation integer, cannot be converted.");
-				return KeyboardCapitalisation.NONE;
+			parent.removeView(m_textEntryView);
+			InputMethodManager imm = (InputMethodManager)CSApplication.get().getAppContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.toggleSoftInput(0, 0);
 		}
 	}
 	/**
-	 * Triggered when the activity config changes such as orientation,
-	 * hardware keyboards, etc.
+	 * Sets the keyboard type that should be used the next the keyboard is displayed.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param Type as an integer (so it can be passed from native)
+	 */
+    public void SetKeyboardType(int in_type)
+    {
+    	m_keyboardTypeFlags = IntegerToKeyboardType(in_type);
+    	m_textEntryView.setInputType(m_keyboardTypeFlags | m_keyboardCapitalisationFlags);
+    }
+	/**
+	 * Sets the capitalisation method of the text buffer.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param Type as an integer (so it can be passed from native)
+	 */
+    public void SetCapitalisationMethod(int in_method)
+    {
+    	m_keyboardCapitalisationFlags = IntegerToKeyboardCapitalisation(in_method);
+    	m_textEntryView.setInputType(m_keyboardTypeFlags | m_keyboardCapitalisationFlags);
+    }
+	/**
+	 * @author Ian Copland
+	 *
+	 * @param The keyboard type as an CS integer 
+	 *
+	 * @return The input type flag required by Android.
+	 */
+	private int IntegerToKeyboardType(int in_type)
+	{
+		switch (in_type)
+		{
+			case 0:
+				return InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
+			case 1:
+				return InputType.TYPE_CLASS_NUMBER;
+			default:
+				Logging.logError("Invalid keyboard type integer, cannot be converted.");
+				return InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
+		}
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @param The capitalisation method as an CS integer 
+	 *
+	 * @return The capitalisation input type flag required by Android.
+	 */
+	private int IntegerToKeyboardCapitalisation(int in_method)
+	{
+		switch (in_method)
+		{
+			case 0:
+				return 0;
+			case 1:
+				return InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
+			case 2:
+				return InputType.TYPE_TEXT_FLAG_CAP_WORDS;
+			case 3:
+				return InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS;
+			default:
+				Logging.logError("Invalid keyboard capitalisation integer, cannot be converted.");
+				return 0;
+		}
+	}
+	/** 
+	 * @author S Downie
+	 * 
+	 * @param The contents of the text buffer
+	 */
+	public void setTextBuffer(final String in_text)
+	{
+		Runnable task = new Runnable() 
+		{
+			@Override public void run() 
+			{
+				m_textEntryView.setText(in_text);
+			}
+		};
+		CSApplication.get().scheduleUIThreadTask(task);
+	}
+	/**
+	 * Tells the native app that text has changed
 	 * 
 	 * @author S Downie
 	 * 
-	 * @param New config
+	 * @param New text
 	 */
-    @Override public void onActivityConfigurationChanged(Configuration in_config)
-    {
-    	// Checks whether a hardware keyboard is available    
-    	if (in_config.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) 
-    	{   
-    		SetHardwareKeyboardOpen();
-    	} 
-    	else if (in_config.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) 
-    	{
-    		SetHardwareKeyboardClosed();
-    	}
-    }
-	//-------------------------------------------------
-	/// Native On Text Added
-	///
-	/// A native call for passing additional keyboard
-	/// text down to the native side of the engine.
-	///
-	/// @param The updated keyboard text.
-	//-------------------------------------------------
-	native private boolean NativeOnTextAdded(final String instrText);
-	//-------------------------------------------------
-	/// Native On Text Deleted
-	///
-	/// A native call for passing text deletion events
-	/// down to the native side of the engine.
-	///
-	/// @param The updated keyboard text.
-	//-------------------------------------------------
-	native private boolean NativeOnTextDeleted();
-	//-------------------------------------------------
-	/// Native On Keyboard Dismissed
-	///
-	/// A native call for passing the keyboard dismissed
-	/// event down to the native side of the engine.
-	//-------------------------------------------------
+	native private void NativeOnTextChanged(String in_text);
+	/**
+	 * A native call for passing the keyboard dismissed
+	 * event down to the native side of the engine.
+	 * 
+	 * @author S Downie
+	 */
 	native private void NativeOnKeyboardDismissed();
+	/**
+	 * Called when the text string of the given editable has
+	 * changed
+	 * 
+	 * @author S Downie
+	 * 
+	 * @param Editable that has changed
+	 */
+	@Override public void afterTextChanged(Editable in_editable) 
+	{
+
+	}
+	/**
+	 * Called when the text string of the given editable is
+	 * about to change
+	 * 
+	 * @author S Downie
+	 * 
+	 * @param String that is about to change
+	 * @param First character index that is about to change
+	 * @param Number of characters to change from start
+	 * @param Length of string after change
+	 */
+	@Override public void beforeTextChanged(CharSequence in_string, int in_start, int in_count, int in_newLength) 
+	{
+
+	}
+	/**
+	 * Called when the text string of the given editable is
+	 * about to change
+	 * 
+	 * @author S Downie
+	 * 
+	 * @param String that has changed
+	 * @param First character index that changed
+	 * @param Number of characters changed from start
+	 * @param Length of string after change
+	 */
+	@Override public void onTextChanged(CharSequence in_string, int in_start, int in_count, int in_newLength) 
+	{
+		NativeOnTextChanged(in_string.toString());
+	}
+	/**
+	 * Called when the an IME key event
+	 * 
+	 * @author S Downie
+	 * 
+	 * @param Text view on which action occurred
+	 * @param Action code
+	 * @param Key event
+	 * 
+	 * @return Whether the event has been handled
+	 */
+	@Override public boolean onEditorAction(TextView in_view, int in_actionId, KeyEvent in_event)
+	{
+        if (in_actionId == EditorInfo.IME_ACTION_DONE || in_actionId == EditorInfo.IME_ACTION_GO || in_actionId == EditorInfo.IME_ACTION_NEXT)
+        {
+			Dismiss();
+        	NativeOnKeyboardDismissed();
+        	return true;
+        }
+        
+		return false;
+	}
 }

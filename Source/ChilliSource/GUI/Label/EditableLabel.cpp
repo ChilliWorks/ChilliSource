@@ -56,6 +56,7 @@ namespace ChilliSource
         {
             m_textEntrySystem = CSInput::TextEntry::Create();
             m_textEntrySystem->SetTextBufferChangedDelegate(CSCore::MakeDelegate(this, &EditableLabel::OnTextBufferChanged));
+            m_textEntrySystem->SetTextInputDisabledDelegate(CSCore::MakeDelegate(this, &EditableLabel::OnTextInputDisabled));
         }
         //-------------------------------------------------
         /// Constructor
@@ -174,10 +175,6 @@ namespace ChilliSource
             if(m_textEntrySystem)
             {
                 m_textEntrySystem->SetTextInputEnabled(false);
-                mbShowKeyboard = false;
-                m_textInputDisabledEvent.NotifyConnections(this);
-                
-                g_activeEditableLabel = nullptr;
             }
         }
         //-------------------------------------------------------
@@ -212,6 +209,14 @@ namespace ChilliSource
             m_textInputReceivedEvent.NotifyConnections(this);
             return true;
 		}
+        //-------------------------------------------------
+        //----------------------------------------------------
+        void EditableLabel::OnTextInputDisabled()
+        {
+            m_textInputDisabledEvent.NotifyConnections(this);
+            g_activeEditableLabel = nullptr;
+            mbShowKeyboard = false;
+        }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
         bool EditableLabel::OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)

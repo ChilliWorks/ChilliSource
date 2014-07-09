@@ -102,6 +102,18 @@ namespace CSBackend
             /// changed.
             //-------------------------------------------------------
             void SetTextBufferChangedDelegate(const TextBufferChangedDelegate& in_delegate) override;
+            //-------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A delegate that is called when text input is enabled
+            //-------------------------------------------------------
+            void SetTextInputEnabledDelegate(const TextInputEnabledDelegate& in_delegate) override;
+            //-------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A delegate that is called when text input is disabled
+            //-------------------------------------------------------
+            void SetTextInputDisabledDelegate(const TextInputDisabledDelegate& in_delegate) override;
 			//-------------------------------------------------------
 			/// Destructor.
 			///
@@ -120,20 +132,13 @@ namespace CSBackend
 			//-------------------------------------------------------
 			TextEntry();
 			//-------------------------------------------------------
-			/// Called when new keyboard text has been received. This
-			/// will try to append it to the current keyboard text.
+			/// Called when the text entry buffer has changed.
 			///
-			/// @author Ian Copland
+			/// @author S Downie
 			///
 			/// @param The new text.
 			//-------------------------------------------------------
-			void OnTextAdded(const std::string& in_text);
-			//-------------------------------------------------------
-			/// Called when the text is deleted.
-			///
-			/// @author Ian Copland
-			//-------------------------------------------------------
-			void OnTextDeleted();
+			void OnTextChanged(const std::string& in_text);
 			//-------------------------------------------------------
 			/// Called when the keyboard is dismissed.
 			///
@@ -142,9 +147,15 @@ namespace CSBackend
 			void OnKeyboardDismissed();
 
 			TextBufferChangedDelegate m_textBufferChangedDelegate;
+            TextInputEnabledDelegate m_textInputEnabledDelegate;
+            TextInputDisabledDelegate m_textInputDisabledDelegate;
+
 			bool m_enabled = false;
 			std::string m_text;
 			TextEntryJavaInterfaceSPtr m_textEntryJI;
+
+			Type m_type = Type::k_text;
+			Capitalisation m_capitalisation = Capitalisation::k_none;
 		};
 	}
 }

@@ -79,13 +79,26 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// A delegate used for recieving text input events.
             ///
+            /// @author S Downie
+            ///
             /// @param The new updated version of the text.
-            /// @param [Out] Whether or not the change to the text
+            ///
+            /// @return Whether or not the change to the text
             /// has been rejected.
+            //-------------------------------------------------------
+            typedef std::function<bool(const std::string&)> TextBufferChangedDelegate;
+            //-------------------------------------------------------
+            /// A delegate used for recieving events when input is enabled.
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            typedef std::function<bool(const std::string&)> TextBufferChangedDelegate;
+            typedef std::function<void()> TextInputEnabledDelegate;
+            //-------------------------------------------------------
+            /// A delegate used for recieving events when input is disabled.
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            typedef std::function<void()> TextInputDisabledDelegate;
             //-------------------------------------------------------
             /// Factory method from creating a new platform specific
             /// instance of the keyboard system.
@@ -149,6 +162,18 @@ namespace ChilliSource
             /// changed.
             //-------------------------------------------------------
 			virtual void SetTextBufferChangedDelegate(const TextBufferChangedDelegate& in_delegate) = 0;
+            //-------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A delegate that is called when text input is enabled
+            //-------------------------------------------------------
+			virtual void SetTextInputEnabledDelegate(const TextInputEnabledDelegate& in_delegate) = 0;
+            //-------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A delegate that is called when text input is disabled
+            //-------------------------------------------------------
+			virtual void SetTextInputDisabledDelegate(const TextInputDisabledDelegate& in_delegate) = 0;
 		};
 	}
 }

@@ -174,6 +174,12 @@ namespace ChilliSource
 			/// @return Whether to accept the input.
 			//----------------------------------------------------
 			bool OnTextBufferChanged(const std::string& in_text);
+            //-------------------------------------------------
+			/// Called when the text input is disabled.
+			///
+            /// @author S Downie
+			//----------------------------------------------------
+			void OnTextInputDisabled();
             //-----------------------------------------------------------
             /// Called when the window receives cursor/touch input
             ///

@@ -63,11 +63,21 @@ namespace CSBackend
             {
                 [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:m_textView];
 				[m_textView becomeFirstResponder];
+                
+                if(m_textInputEnabledDelegate != nullptr)
+                {
+                    m_textInputEnabledDelegate();
+                }
             }
             else if (in_enabled == false && IsTextInputEnabled() == true)
             {
                 [m_textView resignFirstResponder];
 				[m_textView removeFromSuperview];
+                
+                if(m_textInputDisabledDelegate != nullptr)
+                {
+                    m_textInputDisabledDelegate();
+                }
             }
         }
         //-------------------------------------------------------
@@ -144,6 +154,18 @@ namespace CSBackend
         void TextEntry::SetTextBufferChangedDelegate(const TextBufferChangedDelegate& in_delegate)
         {
             m_textBufferChangedDelegate = in_delegate;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void TextEntry::SetTextInputEnabledDelegate(const TextInputEnabledDelegate& in_delegate)
+        {
+            m_textInputEnabledDelegate = in_delegate;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void TextEntry::SetTextInputDisabledDelegate(const TextInputDisabledDelegate& in_delegate)
+        {
+            m_textInputDisabledDelegate = in_delegate;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

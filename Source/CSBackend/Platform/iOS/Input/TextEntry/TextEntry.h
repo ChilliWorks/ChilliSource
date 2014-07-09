@@ -107,6 +107,18 @@ namespace CSBackend
             //-------------------------------------------------------
             void SetTextBufferChangedDelegate(const TextBufferChangedDelegate& in_delegate) override;
             //-------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A delegate that is called when text input is enabled
+            //-------------------------------------------------------
+            void SetTextInputEnabledDelegate(const TextInputEnabledDelegate& in_delegate) override;
+            //-------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param A delegate that is called when text input is disabled
+            //-------------------------------------------------------
+            void SetTextInputDisabledDelegate(const TextInputDisabledDelegate& in_delegate) override;
+            //-------------------------------------------------------
             /// Called when the keyboard text is updated.
             ///
             /// @author S Downie
@@ -134,6 +146,8 @@ namespace CSBackend
 			UITextField* m_textView;
             TextEntryDelegate* m_delegate;
             TextBufferChangedDelegate m_textBufferChangedDelegate;
+            TextInputEnabledDelegate m_textInputEnabledDelegate;
+            TextInputDisabledDelegate m_textInputDisabledDelegate;
             std::string m_text;
 		};
 	}
