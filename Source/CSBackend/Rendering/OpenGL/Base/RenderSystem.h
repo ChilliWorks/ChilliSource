@@ -425,6 +425,17 @@ namespace CSBackend
             /// @param The new screen resolution.
             //----------------------------------------------------------
             void OnScreenResolutionChanged(const CSCore::Vector2& in_resolution);
+#ifdef CS_TARGETPLATFORM_WINDOWS
+            //----------------------------------------------------------
+            /// Triggered on windows when window is set to Fullscreen mode
+            /// or away from Fullscreen mode; which results in loss of state
+            ///
+            /// @author S Downie
+			///
+			/// @param Window state
+            //----------------------------------------------------------
+			void OnFullscreenChanged(CSBackend::Windows::SFMLWindow::WindowState in_state);
+#endif
             
 		private:
 			
@@ -522,6 +533,10 @@ namespace CSBackend
             
             CSCore::Screen* m_screen;
             CSCore::EventConnectionUPtr m_resolutionChangeConnection;
+            
+#ifdef CS_TARGETPLATFORM_WINDOWS
+            CSCore::EventConnectionUPtr m_fullscreenChangeConnection;
+#endif
 		};
 	}
 }

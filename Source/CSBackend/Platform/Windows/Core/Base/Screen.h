@@ -95,6 +95,22 @@ namespace CSBackend
             /// changes.
 			//-----------------------------------------------------------
             CSCore::IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() override;
+			//----------------------------------------------------------
+			/// Changes the size of the application window
+			///
+			/// @author S Downie
+			///
+			/// @param Screen width in pixels
+			/// @param Screen height in pixels
+			//----------------------------------------------------------
+			void SetResolution(u32 in_width, u32 in_height) override;
+			//----------------------------------------------------------
+			/// Sets the application window to fullscreen and removes
+			/// the menu bar
+			///
+			/// @author S Downie
+			//----------------------------------------------------------
+			void SetFullscreen() override;
         private:
             friend CSCore::ScreenUPtr CSCore::Screen::Create();
             //-------------------------------------------------------

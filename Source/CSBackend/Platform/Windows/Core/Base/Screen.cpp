@@ -79,6 +79,18 @@ namespace CSBackend
         {
             return m_resolutionChangedEvent;
         }
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		void Screen::SetResolution(u32 in_width, u32 in_height)
+		{
+			SFMLWindow::Get()->SetSize(in_width, in_height);
+		}
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		void Screen::SetFullscreen()
+		{
+			SFMLWindow::Get()->SetFullscreen();
+		}
         //-----------------------------------------------------------
         //------------------------------------------------------------
         void Screen::OnResolutionChanged(const CSCore::Integer2& in_resolution)

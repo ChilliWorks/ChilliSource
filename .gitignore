@@ -26,5 +26,4 @@ Projects/Tools/CSFontMaker/bin
 Projects/Tools/CSFontMaker/obj
 Thumbs.db
 *.user
-*.vcxproj.filters
 Projects/Libraries/SFML/build

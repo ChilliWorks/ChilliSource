@@ -95,6 +95,21 @@ namespace CSBackend
             /// changes.
 			//-----------------------------------------------------------
             CSCore::IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() override;
+            //----------------------------------------------------------
+            /// Does nothing on Android due to fixed screen size
+            ///
+            /// @author S Downie
+            ///
+			/// @param Screen width in pixels
+			/// @param Screen height in pixels
+			//----------------------------------------------------------
+			void SetResolution(u32 in_width, u32 in_height) override {}
+            //----------------------------------------------------------
+            /// Does nothing on Android due to fixed screen size
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+            void SetFullscreen() override {}
             //-----------------------------------------------------------
             /// Called when the screen resolution changes. This will update
             /// the screen resolution and notify listeners that the resolution

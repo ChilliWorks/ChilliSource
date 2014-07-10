@@ -210,9 +210,64 @@ namespace CSBackend
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
+		void SFMLWindow::SetSize(u32 in_width, u32 in_height)
+		{
+			//Clamp to the actual screen size
+			in_width = std::min((u32)sf::VideoMode::getDesktopMode().width, in_width);
+			in_height = std::min((u32)sf::VideoMode::getDesktopMode().height, in_height);
+
+			if (m_isFullscreen == true)
+			{
+				m_isFullscreen = false;
+				m_window.create(sf::VideoMode(in_width, in_height, sf::VideoMode::getDesktopMode().bitsPerPixel), "", sf::Style::Default, m_contextSettings);
+				m_windowStateEvent.NotifyConnections(WindowState::k_windowed);
+				m_windowResizeEvent.NotifyConnections(CSCore::Integer2((s32)in_width, (s32)in_height));
+			}
+			else
+			{
+				//This will trigger an SFML resize event
+				sf::Vector2u size(in_width, in_height);
+				m_window.setSize(size);
+			}
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void SFMLWindow::SetFullscreen()
+		{
+			if (m_isFullscreen == true)
+				return;
+
+			m_isFullscreen = true;
+
+			//Pick the best fit RGBA depth based on the supported depths
+			for (auto it = sf::VideoMode::getFullscreenModes().rbegin(); it != sf::VideoMode::getFullscreenModes().rend(); ++it)
+			{
+				s32 bpp = it->bitsPerPixel;
+				if (bpp >= m_preferredRGBADepth)
+				{
+					while (it != sf::VideoMode::getFullscreenModes().rend() && bpp == it->bitsPerPixel)
+					{
+						++it;
+					}
+
+					m_window.create(*it, "", sf::Style::Fullscreen, m_contextSettings);
+					m_windowStateEvent.NotifyConnections(WindowState::k_fullscreen);
+					m_windowResizeEvent.NotifyConnections(CSCore::Integer2(it->width, it->height));
+					break;
+				}
+			}
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
 		CSCore::IConnectableEvent<SFMLWindow::WindowResizeDelegate>& SFMLWindow::GetWindowResizedEvent()
 		{
 			return m_windowResizeEvent;
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		CSCore::IConnectableEvent<SFMLWindow::WindowStateDelegate>& SFMLWindow::GetWindowStateEvent()
+		{
+			return m_windowStateEvent;
 		}
 		//-------------------------------------------------
 		//------------------------------------------------
@@ -283,7 +338,9 @@ namespace CSBackend
 			Json::Value appConfigRoot = ReadAppConfig();
 			CSRendering::SurfaceFormat surfaceFormat = ReadSurfaceFormat(appConfigRoot);
 			u32 msaaFormat = ReadMultisampleFormat(appConfigRoot);
-			m_window.create(sf::VideoMode(800, 600, ReadRGBAPixelDepth(surfaceFormat)), "", sf::Style::Default, CreateContextSettings(surfaceFormat, msaaFormat));
+			m_contextSettings = CreateContextSettings(surfaceFormat, msaaFormat);
+			m_preferredRGBADepth = ReadRGBAPixelDepth(surfaceFormat);
+			m_window.create(sf::VideoMode::getDesktopMode(), "", sf::Style::Default, m_contextSettings);
 
 			GLenum glewError = glewInit();
 			if (GLEW_OK != glewError)

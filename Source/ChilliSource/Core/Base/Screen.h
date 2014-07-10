@@ -42,6 +42,8 @@ namespace ChilliSource
         //----------------------------------------------------------------
         /// An application system for retreiving information on the
         /// screen such as the screen dimensions or the pixel density.
+        /// Screen is really just an alias for Window and refers to the
+        /// renderable area of the screen and not the actual monitor
         ///
         /// @author S Downie
         //----------------------------------------------------------------
@@ -95,6 +97,25 @@ namespace ChilliSource
             /// changes.
 			//-----------------------------------------------------------
 			virtual IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() = 0;
+            //----------------------------------------------------------
+            /// Set the screen size on platforms where that is allowed
+            ///
+            /// NOTE: This can not exceed the monitor resolution
+            ///
+            /// @author S Downie
+            ///
+			/// @param Screen width in pixels
+			/// @param Screen height in pixels
+			//----------------------------------------------------------
+			virtual void SetResolution(u32 in_width, u32 in_height) = 0;
+            //----------------------------------------------------------
+            /// Set the screen size to fullscreen on platforms where
+            /// that is allowed. This will include the removal of any
+            /// status or menu bars
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+            virtual void SetFullscreen() = 0;
             //-----------------------------------------------------------
             /// Destructor
             ///

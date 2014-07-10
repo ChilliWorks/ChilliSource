@@ -53,6 +53,16 @@ namespace CSBackend
 		{
 		public:
 			//-----------------------------------------------------------
+			/// Window states
+			///
+			/// @author S Downie
+			//-----------------------------------------------------------
+			enum class WindowState
+			{
+				k_windowed,
+				k_fullscreen
+			};
+			//-----------------------------------------------------------
 			/// A delegate called when the window size changes.
 			///
 			/// @author S Downie
@@ -60,6 +70,14 @@ namespace CSBackend
 			/// @param The new window size.
 			//-----------------------------------------------------------
 			using WindowResizeDelegate = std::function<void(const CSCore::Integer2&)>;
+			//-----------------------------------------------------------
+			/// A delegate called when the window state changes.
+			///
+			/// @author S Downie
+			///
+			/// @param The new window state.
+			//-----------------------------------------------------------
+			using WindowStateDelegate = std::function<void(WindowState)>;
 			//-----------------------------------------------------------
 			/// List of the events that can occur on a mouse button
 			///
@@ -142,6 +160,24 @@ namespace CSBackend
 			//-------------------------------------------------
 			void SetPreferredFPS(u32 in_fps);
 			//-------------------------------------------------
+			/// Set the size of the window in pixels. This
+			/// will switch from fullscreen mode if enabled
+			///
+			/// @author S Downie
+			///
+			/// @param Width in pixels
+			/// @param Height in pixels
+			//-------------------------------------------------
+			void SetSize(u32 in_width, u32 in_height);
+			//-------------------------------------------------
+			/// Set the window to fullscreen mode which will
+			/// hide the menu bar and override the current 
+			/// window size
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void SetFullscreen();
+			//-------------------------------------------------
 			/// Flush to the display. Should be called at end
 			/// if each frame
 			///
@@ -166,6 +202,12 @@ namespace CSBackend
 			/// @return An event that is called when the window is resized
 			//------------------------------------------------
 			CSCore::IConnectableEvent<WindowResizeDelegate>& GetWindowResizedEvent();
+			//-------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return An event that is called when the window fullscreen is enabled or disabled
+			//-------------------------------------------------
+			CSCore::IConnectableEvent<WindowStateDelegate>& GetWindowStateEvent();
 			//-------------------------------------------------
 			/// @author S Downie
 			///
@@ -243,6 +285,7 @@ namespace CSBackend
 			sf::Window m_window;
 
 			CSCore::Event<WindowResizeDelegate> m_windowResizeEvent;
+			CSCore::Event<WindowStateDelegate> m_windowStateEvent;
 			CSCore::Event<MouseButtonDelegate> m_mouseButtonEvent;
 			CSCore::Event<MouseMovedDelegate> m_mouseMovedEvent;
 			CSCore::Event<MouseWheelDelegate> m_mouseWheelEvent;
@@ -250,8 +293,13 @@ namespace CSBackend
 			CSCore::Event<KeyPressedDelegate> m_keyPressedEvent;
 			CSCore::Event<KeyReleasedDelegate> m_keyReleasedEvent;
 
+			sf::ContextSettings m_contextSettings;
+
+			u32 m_preferredRGBADepth = 32;
+
 			bool m_isSuspended = false;
 			bool m_isFocused = true;
+			bool m_isFullscreen = false;
 		};
 	}
 }
