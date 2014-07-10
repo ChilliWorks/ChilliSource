@@ -760,7 +760,7 @@ namespace ChilliSource
             {
                 if(cubemapFiles[i].m_filePath.empty() == false)
                 {
-                    auto options(std::make_shared<CubemapResourceOptions>(cubemapFiles[i].m_shouldMipMap, textureFiles[i].m_filterMode, textureFiles[i].m_wrapModeU, textureFiles[i].m_wrapModeV, true));
+                    auto options(std::make_shared<CubemapResourceOptions>(cubemapFiles[i].m_shouldMipMap, cubemapFiles[i].m_filterMode, cubemapFiles[i].m_wrapModeU, cubemapFiles[i].m_wrapModeV, true));
                     CubemapCSPtr cubemap = resourcePool->LoadResource<Cubemap>(cubemapFiles[i].m_location, cubemapFiles[i].m_filePath, options);
                     if(cubemap == nullptr)
                     {
