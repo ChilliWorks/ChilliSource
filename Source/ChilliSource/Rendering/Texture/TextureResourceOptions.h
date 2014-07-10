@@ -71,7 +71,7 @@ namespace ChilliSource
             /// disk. This will only work for RGBA8888, RGB888, RGBA4444
             /// and RGB565 textures.
             //-------------------------------------------------------
-            TextureResourceOptions(bool in_mipmaps, Texture::FilterMode in_filter, Texture::WrapMode in_wrapS, Texture::WrapMode in_wrapT, bool in_restoreTextureData);
+            TextureResourceOptions(bool in_mipmaps, Texture::FilterMode in_filter, Texture::WrapMode in_wrapS, Texture::WrapMode in_wrapT, bool in_restoreTextureDataEnabled);
             //-------------------------------------------------------
             /// Generate a unique hash based on the
             /// currently set options
@@ -134,7 +134,7 @@ namespace ChilliSource
                 Texture::WrapMode m_wrapModeT = Texture::WrapMode::k_clamp;
                 Texture::FilterMode m_filterMode = Texture::FilterMode::k_bilinear;
                 bool m_hasMipMaps = false;
-                bool m_restoreTextureData = true;
+                bool m_restoreTextureDataEnabled = true;
             };
             
             Options m_options;

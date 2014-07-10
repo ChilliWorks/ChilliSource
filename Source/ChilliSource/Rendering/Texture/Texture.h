@@ -111,7 +111,7 @@ namespace ChilliSource
             /// disk. This will only work for RGBA8888, RGB888, RGBA4444
             /// and RGB565 textures.
             //--------------------------------------------------------------
-            virtual void Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap, bool in_restoreTextureData) = 0;
+            virtual void Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap, bool in_restoreTextureDataEnabled) = 0;
 			//--------------------------------------------------------------
             /// Binds this texture to the given texture unit allowing it to
             /// be accessed by the shaders and operations to be performed on it

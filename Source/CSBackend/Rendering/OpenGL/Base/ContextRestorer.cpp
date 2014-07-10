@@ -71,7 +71,7 @@ namespace CSBackend
                 auto allShaders = resourcePool->GetAllResources<CSRendering::Shader>();
                 for (const auto& shader : allShaders)
                 {
-                	CS_ASSERT(shader->GetStorageLocation() != CSCore::StorageLocation::k_none, "Cannot restore Shader becuase restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
+                	CS_ASSERT(shader->GetStorageLocation() != CSCore::StorageLocation::k_none, "Cannot restore Shader because restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
                 }
                 resourcePool->RefreshResources<CSRendering::Shader>();
                 

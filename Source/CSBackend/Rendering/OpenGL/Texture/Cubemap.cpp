@@ -307,7 +307,7 @@ namespace CSBackend
         /// GL makes a copy of the data so we can just
         /// let the incoming data delete itself
         //--------------------------------------------------
-        void Cubemap::Build(const std::array<CSRendering::Texture::Descriptor, 6>& in_descs, std::array<CSRendering::Texture::TextureDataUPtr, 6>&& in_datas, bool in_mipMap, bool in_restoreCubemapData)
+        void Cubemap::Build(const std::array<CSRendering::Texture::Descriptor, 6>& in_descs, std::array<CSRendering::Texture::TextureDataUPtr, 6>&& in_datas, bool in_mipMap, bool in_restoreCubemapDataEnabled)
         {
             Destroy();
             
@@ -348,10 +348,10 @@ namespace CSBackend
             }
             
 #ifdef CS_TARGETPLATFORM_ANDROID
-            if (GetStorageLocation() == CSCore::StorageLocation::k_none && in_restoreCubemapData == true)
+            if (GetStorageLocation() == CSCore::StorageLocation::k_none && in_restoreCubemapDataEnabled == true)
             {
-            	m_restoreCubemapData = true;
-                
+            	m_restoreCubemapDataEnabled = true;
+
                 for(u32 i = 0; i < in_descs.size(); ++i)
                 {
                     m_restorationDataSizes[i] = in_descs[i].m_dataSize;
@@ -424,7 +424,7 @@ namespace CSBackend
             CSRendering::Texture::WrapMode tWrap = m_tWrapMode;
             CSRendering::Texture::FilterMode filterMode = m_filterMode;
             
-            Build(descs, std::move(m_restorationDatas), m_hasMipMaps, m_restoreCubemapData);
+            Build(descs, std::move(m_restorationDatas), m_hasMipMaps, m_restoreCubemapDataEnabled);
             SetWrapMode(sWrap, tWrap);
             SetFilterMode(filterMode);
         }
@@ -451,8 +451,8 @@ namespace CSBackend
             m_cubemapHandle = 0;
             
 #ifdef CS_TARGETPLATFORM_ANDROID
-            m_restoreCubemapData = false;
-            
+            m_restoreCubemapDataEnabled = false;
+
             for (u32 i = 0; i < m_restorationDataSizes.size(); ++i)
             {
                 m_restorationDataSizes[i] = 0;

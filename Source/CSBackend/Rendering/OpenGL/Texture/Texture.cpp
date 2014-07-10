@@ -303,7 +303,7 @@ namespace CSBackend
         /// GL makes a copy of the data so we can just
         /// let the incoming data delete itself
         //--------------------------------------------------
-        void Texture::Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap, bool in_restoreTextureData)
+        void Texture::Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap, bool in_restoreTextureDataEnabled)
         {
             Destroy();
             
@@ -344,9 +344,9 @@ namespace CSBackend
             m_hasMipMaps = in_mipMap;
             
 #ifdef CS_TARGETPLATFORM_ANDROID
-            if (GetStorageLocation() == CSCore::StorageLocation::k_none && in_restoreTextureData == true)
+            if (GetStorageLocation() == CSCore::StorageLocation::k_none && in_restoreTextureDataEnabled == true)
             {
-            	m_restoreTextureData = true;
+            	m_restoreTextureDataEnabled = true;
                 m_restorationDataSize = in_desc.m_dataSize;
                 m_restorationData = std::move(in_data);
             }
@@ -412,9 +412,9 @@ namespace CSBackend
         //--------------------------------------------------
         void Texture::UpdateRestorationData()
         {
-            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none, "Cannot update restoration data on texture that was load from file.");
+            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none, "Cannot update restoration data on texture that was loaded from file.");
             
-            if (m_restoreTextureData == true)
+            if (m_restoreTextureDataEnabled == true)
             {
             	Unbind();
 
@@ -431,7 +431,8 @@ namespace CSBackend
 					CS_LOG_FATAL("Framebuffer incomplete while updating texture restoration data.");
 				}
 
-				//read the data from the texture.
+				//read the data from the texture. This can only be read back in RGBA8888 format so it will need
+				//to be converted back to the format of the texture.
 				u32 unconvertedDataSize = GetWidth() * GetHeight() * 4;
 				std::unique_ptr<u8[]> unconvertedData(new u8[unconvertedDataSize]);
 				glReadPixels(0, 0, GetWidth(), GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, unconvertedData.get());
@@ -488,7 +489,7 @@ namespace CSBackend
             WrapMode tWrap = m_tWrapMode;
             FilterMode filterMode = m_filterMode;
             
-            Build(desc, std::move(m_restorationData), m_hasMipMaps, m_restoreTextureData);
+            Build(desc, std::move(m_restorationData), m_hasMipMaps, m_restoreTextureDataEnabled);
             SetWrapMode(sWrap, tWrap);
             SetFilterMode(filterMode);
         }
@@ -519,7 +520,7 @@ namespace CSBackend
             m_texHandle = 0;
             
 #ifdef CS_TARGETPLATFORM_ANDROID
-            m_restoreTextureData = false;
+            m_restoreTextureDataEnabled = false;
             m_restorationDataSize = 0;
             m_restorationData.reset();
 #endif

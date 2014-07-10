@@ -77,7 +77,7 @@ namespace CSBackend
             /// disk. This will only work for RGBA8888, RGB888, RGBA4444
             /// and RGB565 textures.
             //--------------------------------------------------------------
-            void Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap, bool in_restoreTextureData) override;
+            void Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap, bool in_restoreTextureDataEnabled) override;
 			//--------------------------------------------------------------
             /// Binds this texture to the given texture unit allowing it to
             /// be accessed by the shaders and operations to be performed on it
@@ -211,7 +211,7 @@ namespace CSBackend
             bool m_hasMipMaps = false;
             
 #ifdef CS_TARGETPLATFORM_ANDROID
-            bool m_restoreTextureData = false;
+            bool m_restoreTextureDataEnabled = false;
             u32 m_restorationDataSize = 0;
             TextureDataUPtr m_restorationData;
 #endif

@@ -85,7 +85,7 @@ namespace CSBackend
             /// disk. This will only work for RGBA8888, RGB888, RGBA4444
             /// and RGB565 cubemaps.
             //--------------------------------------------------
-            void Build(const std::array<CSRendering::Texture::Descriptor, 6>& in_descs, std::array<CSRendering::Texture::TextureDataUPtr, 6>&& in_datas, bool in_mipMap, bool in_restoreCubemapData) override;
+            void Build(const std::array<CSRendering::Texture::Descriptor, 6>& in_descs, std::array<CSRendering::Texture::TextureDataUPtr, 6>&& in_datas, bool in_mipMap, bool in_restoreCubemapDataEnabled) override;
 			//--------------------------------------------------------------
             /// Binds this cubemap to the given texture unit allowing it to
             /// be accessed by the shaders and operations to be performed on it
@@ -201,7 +201,7 @@ namespace CSBackend
             bool m_hasMipMaps = false;
             
 #ifdef CS_TARGETPLATFORM_ANDROID
-            bool m_restoreCubemapData = false;
+            bool m_restoreCubemapDataEnabled = false;
             std::array<CSRendering::Texture::TextureDataUPtr, 6> m_restorationDatas;
             std::array<u32, 6> m_restorationDataSizes;
 #endif
