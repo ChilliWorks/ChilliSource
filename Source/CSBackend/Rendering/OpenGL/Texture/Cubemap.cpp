@@ -307,7 +307,7 @@ namespace CSBackend
         /// GL makes a copy of the data so we can just
         /// let the incoming data delete itself
         //--------------------------------------------------
-        void Cubemap::Build(const std::array<CSRendering::Texture::Descriptor, 6>& in_descs, std::array<CSRendering::Texture::TextureDataUPtr, 6> in_datas, bool in_mipMap, bool in_restoreCubemapData)
+        void Cubemap::Build(const std::array<CSRendering::Texture::Descriptor, 6>& in_descs, std::array<CSRendering::Texture::TextureDataUPtr, 6>&& in_datas, bool in_mipMap, bool in_restoreCubemapData)
         {
             Destroy();
             

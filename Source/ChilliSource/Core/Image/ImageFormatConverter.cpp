@@ -38,6 +38,13 @@ namespace ChilliSource
     {
         namespace ImageFormatConverter
         {
+			//------------------------------------------------
+			//------------------------------------------------
+			ImageBuffer::ImageBuffer(ImageBuffer&& in_other)
+			{
+				m_data = std::move(in_other.m_data);
+				m_size = in_other.m_size;
+			}
             //---------------------------------------------------
             //---------------------------------------------------
             void RGBA8888ToRGB888(Image* in_image)

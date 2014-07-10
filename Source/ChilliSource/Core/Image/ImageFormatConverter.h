@@ -50,10 +50,29 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			//---------------------------------------------------
-        	struct ImageBuffer
+        	struct ImageBuffer final
         	{
         		Image::ImageDataUPtr m_data;
         		u32 m_size = 0;
+
+				//------------------------------------------------
+				/// Visual C++ 12 doesn't support implicit move
+				/// constructors, so this has to be manually
+				/// specified.
+				///
+				/// @author Ian Copland
+				//------------------------------------------------
+				ImageBuffer() = default;
+				//------------------------------------------------
+				/// Visual C++ 12 doesn't support implicit move
+				/// constructors, so this has to be manually
+				/// specified.
+				///
+				/// @author Ian Copland
+				///
+				/// @param The image buffer to move.
+				//------------------------------------------------
+				ImageBuffer(ImageBuffer&& in_other);
         	};
 			//---------------------------------------------------
 			/// Converts an Image in format RGBA8888 to RGB888
