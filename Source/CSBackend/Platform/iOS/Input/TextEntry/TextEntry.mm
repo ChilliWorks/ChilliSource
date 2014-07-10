@@ -40,6 +40,8 @@ namespace CSBackend
 {
 	namespace iOS
 	{
+        CS_DEFINE_NAMEDTYPE(TextEntry);
+        
         //-------------------------------------------------------
         //-------------------------------------------------------
         TextEntry::TextEntry()
@@ -57,32 +59,46 @@ namespace CSBackend
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void TextEntry::SetTextInputEnabled(bool in_enabled)
+        bool TextEntry::IsA(CSCore::InterfaceIDType in_interfaceId) const
         {
-            if (in_enabled == true && IsTextInputEnabled() == false && [m_textView canBecomeFirstResponder])
+            return in_interfaceId == CSInput::TextEntry::InterfaceID || in_interfaceId == TextEntry::InterfaceID;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void TextEntry::Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
+        {
+            if (IsActive() == false && [m_textView canBecomeFirstResponder])
             {
+                SetType(in_type);
+                SetCapitalisation(in_capitalisation);
+                SetTextBuffer(in_text);
+                m_textBufferChangedDelegate = in_changeDelegate;
+                m_textInputDeactivatedDelegate = in_deactivateDelegate;
+                
                 [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:m_textView];
 				[m_textView becomeFirstResponder];
-                
-                if(m_textInputEnabledDelegate != nullptr)
-                {
-                    m_textInputEnabledDelegate();
-                }
             }
-            else if (in_enabled == false && IsTextInputEnabled() == true)
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void TextEntry::Deactivate()
+        {
+            if (IsActive() == true)
             {
                 [m_textView resignFirstResponder];
 				[m_textView removeFromSuperview];
-                
-                if(m_textInputDisabledDelegate != nullptr)
+            
+                if(m_textInputDeactivatedDelegate != nullptr)
                 {
-                    m_textInputDisabledDelegate();
+                    auto delegate = m_textInputDeactivatedDelegate;
+                    m_textInputDeactivatedDelegate = nullptr;
+                    delegate();
                 }
             }
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool TextEntry::IsTextInputEnabled() const
+        bool TextEntry::IsActive() const
         {
             return m_textView.isFirstResponder;
         }
@@ -148,24 +164,6 @@ namespace CSBackend
                         break;
                 }
             }
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void TextEntry::SetTextBufferChangedDelegate(const TextBufferChangedDelegate& in_delegate)
-        {
-            m_textBufferChangedDelegate = in_delegate;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void TextEntry::SetTextInputEnabledDelegate(const TextInputEnabledDelegate& in_delegate)
-        {
-            m_textInputEnabledDelegate = in_delegate;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void TextEntry::SetTextInputDisabledDelegate(const TextInputDisabledDelegate& in_delegate)
-        {
-            m_textInputDisabledDelegate = in_delegate;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

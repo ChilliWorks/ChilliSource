@@ -337,12 +337,6 @@ namespace CSBackend
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		bool Keyboard::IsKeyUp(CSInput::KeyCode in_code) const
-		{
-			return sf::Keyboard::isKeyPressed(CSKeyCodeToSFMLKeyCode(in_code)) == false;
-		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
 		CSCore::IConnectableEvent<Keyboard::KeyPressedDelegate>& Keyboard::GetKeyPressedEvent()
 		{
 			return m_keyPressedEvent;

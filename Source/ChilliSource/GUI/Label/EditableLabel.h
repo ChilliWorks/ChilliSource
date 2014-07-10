@@ -222,11 +222,14 @@ namespace ChilliSource
 
 		private:
 
-			Input::TextEntryUPtr m_textEntrySystem;
+			Input::TextEntry* m_textEntrySystem;
 
 			Core::Event<TextEventDelegate> m_textInputEnabledEvent;
 			Core::Event<TextEventDelegate> m_textInputDisabledEvent;
 			Core::Event<TextEventDelegate> m_textInputReceivedEvent;
+            
+            Input::TextEntry::Type m_type = Input::TextEntry::Type::k_text;
+            Input::TextEntry::Capitalisation m_capitalisation = Input::TextEntry::Capitalisation::k_none;
 
 			f32 mfTimeToShow;
 			bool mbShowKeyboard;

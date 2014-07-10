@@ -70,19 +70,7 @@ namespace CSBackend
             ///
             /// @return Whether the key is down
             //-------------------------------------------------------
-			bool IsKeyDown(CSInput::KeyCode in_code) const;
-            //-------------------------------------------------------
-            /// Check whether the key is currently up. This is
-            /// unbuffered so will only check the state of the key
-            /// at the moment in time when it is called
-            ///
-            /// @author S Downie
-            ///
-            /// @param Key code
-            ///
-            /// @return Whether the key is up
-            //-------------------------------------------------------
-			bool IsKeyUp(CSInput::KeyCode in_code) const;
+			bool IsKeyDown(CSInput::KeyCode in_code) const override;
 			//-------------------------------------------------------
 			/// Get the event that is triggered whenever a key is pressed.
 			///
@@ -98,7 +86,7 @@ namespace CSBackend
 			///
 			/// @return Event to register for key presses
 			//-------------------------------------------------------
-			CSCore::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent();
+			CSCore::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent() override;
 			//-------------------------------------------------------
 			/// Get the event that is triggered whenever a key is released.
 			///
@@ -110,7 +98,7 @@ namespace CSBackend
 			///
 			/// @return Event to register for key releases
 			//-------------------------------------------------------
-			CSCore::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent();
+			CSCore::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent() override;
             
         private:
             

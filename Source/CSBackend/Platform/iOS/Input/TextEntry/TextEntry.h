@@ -52,21 +52,43 @@ namespace CSBackend
 		class TextEntry final : public CSInput::TextEntry
 		{
 		public:
+            
+            CS_DECLARE_NAMEDTYPE(TextEntry);
             //-------------------------------------------------------
-            /// Sets whether or not the text input is currently
-            /// enabled or disabled. If the keyboard is virtual, it
-            /// will be shown or hidden when enabled or disabled.
+            /// @author S Downie
+            ///
+            /// @param Interface ID
+            ///
+            /// @return Whether this system implements the given inteface
+            //-------------------------------------------------------
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            //-------------------------------------------------------
+            /// The system will now receive text input. This will also
+            /// show the virtual keyboard
+            ///
+            /// @author S Downie
+            ///
+            /// @param Initial buffer contents
+            /// @param Preferred keyboard type
+            /// @param Preferred capitalisation method
+            /// @param Text changed delegate
+            /// @param Deactivate delegate
+            //-------------------------------------------------------
+            void Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate) override;
+            //-------------------------------------------------------
+            /// The system will no longer receive text input. This
+            /// will also hide the virtual keyboard
             ///
             /// @author S Downie
             //-------------------------------------------------------
-			void SetTextInputEnabled(bool in_enabled) override;
+            void Deactivate() override;
             //-------------------------------------------------------
             /// @author S Downie
             ///
             /// @return Whether or not text input is currently
             /// enabled.
             //-------------------------------------------------------
-			bool IsTextInputEnabled() const override;
+			bool IsActive() const override;
             //-------------------------------------------------------
             /// @author S Downie
             ///
@@ -79,45 +101,6 @@ namespace CSBackend
             /// @param The new text input buffer (UTF-8).
             //-------------------------------------------------------
             void SetTextBuffer(const std::string& in_text) override;
-            //-------------------------------------------------------
-            /// Sets the type of keyboard to display if using a
-            /// virtual keyboard. This must be set prior to the keyboard
-            /// being displayed. Note that this is only a suggestion
-            /// and the virtual keyboard implementation may choose to
-            /// ignore it.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The keyboard type
-            //-------------------------------------------------------
-            void SetType(Type in_type) override;
-            //-------------------------------------------------------
-            /// Sets capitalisation method to be used for text input.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The capitalisation method.
-            //-------------------------------------------------------
-            void SetCapitalisation(Capitalisation in_capitalisation) override;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param A delegate that is called when text buffer is
-            /// changed.
-            //-------------------------------------------------------
-            void SetTextBufferChangedDelegate(const TextBufferChangedDelegate& in_delegate) override;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param A delegate that is called when text input is enabled
-            //-------------------------------------------------------
-            void SetTextInputEnabledDelegate(const TextInputEnabledDelegate& in_delegate) override;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param A delegate that is called when text input is disabled
-            //-------------------------------------------------------
-            void SetTextInputDisabledDelegate(const TextInputDisabledDelegate& in_delegate) override;
             //-------------------------------------------------------
             /// Called when the keyboard text is updated.
             ///
@@ -142,12 +125,31 @@ namespace CSBackend
             /// @author S Downie
             //-------------------------------------------------------
 			TextEntry();
+            //-------------------------------------------------------
+            /// Sets the type of keyboard to display if using a
+            /// virtual keyboard. This must be set prior to the keyboard
+            /// being displayed. Note that this is only a suggestion
+            /// and the virtual keyboard implementation may choose to
+            /// ignore it.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The keyboard type
+            //-------------------------------------------------------
+            void SetType(Type in_type);
+            //-------------------------------------------------------
+            /// Sets capitalisation method to be used for text input.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The capitalisation method.
+            //-------------------------------------------------------
+            void SetCapitalisation(Capitalisation in_capitalisation);
             
 			UITextField* m_textView;
             TextEntryDelegate* m_delegate;
             TextBufferChangedDelegate m_textBufferChangedDelegate;
-            TextInputEnabledDelegate m_textInputEnabledDelegate;
-            TextInputDisabledDelegate m_textInputDisabledDelegate;
+            TextInputDeactivatedDelegate m_textInputDeactivatedDelegate;
             std::string m_text;
 		};
 	}

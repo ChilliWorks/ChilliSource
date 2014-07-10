@@ -37,30 +37,44 @@ namespace CSBackend
 {
 	namespace Windows
 	{
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void TextEntry::SetTextInputEnabled(bool in_enabled)
-        {
-            if (in_enabled == true && IsTextInputEnabled() == false)
-            {
+		CS_DEFINE_NAMEDTYPE(TextEntry);
+
+		//-------------------------------------------------------
+		//-------------------------------------------------------
+		bool TextEntry::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		{
+			return in_interfaceId == CSInput::TextEntry::InterfaceID || in_interfaceId == TextEntry::InterfaceID;
+		}
+		//-------------------------------------------------------
+		//-------------------------------------------------------
+		void TextEntry::Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
+		{
+			if (IsActive() == false)
+			{
+				m_text = in_text;
+				m_textBufferChangedDelegate = in_changeDelegate;
+				m_textInputDeactivatedDelegate = in_deactivateDelegate;
 				m_textEnteredConnection = SFMLWindow::Get()->GetTextEnteredEvent().OpenConnection(CSCore::MakeDelegate(this, &TextEntry::OnTextEntered));
-                if(m_textInputEnabledDelegate != nullptr)
-                {
-                    m_textInputEnabledDelegate();
-                }
-            }
-            else if (in_enabled == false && IsTextInputEnabled() == true)
-            {
+			}
+		}
+		//-------------------------------------------------------
+		//-------------------------------------------------------
+		void TextEntry::Deactivate()
+		{
+			if (IsActive() == true)
+			{
 				m_textEnteredConnection.reset();
-                if(m_textInputDisabledDelegate != nullptr)
-                {
-                    m_textInputDisabledDelegate();
-                }
-            }
-        }
+				if (m_textInputDeactivatedDelegate != nullptr)
+				{
+					auto delegate = m_textInputDeactivatedDelegate;
+					m_textInputDeactivatedDelegate = nullptr;
+					delegate();
+				}
+			}
+		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool TextEntry::IsTextInputEnabled() const
+        bool TextEntry::IsActive() const
         {
 			return m_textEnteredConnection != nullptr;
         }
@@ -75,36 +89,6 @@ namespace CSBackend
         void TextEntry::SetTextBuffer(const std::string& in_text)
         {
             m_text = in_text;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void TextEntry::SetType(Type in_type)
-        {
-
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void TextEntry::SetCapitalisation(Capitalisation in_capitalisation)
-        {
-
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void TextEntry::SetTextBufferChangedDelegate(const TextBufferChangedDelegate& in_delegate)
-        {
-            m_textBufferChangedDelegate = in_delegate;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void TextEntry::SetTextInputEnabledDelegate(const TextInputEnabledDelegate& in_delegate)
-        {
-            m_textInputEnabledDelegate = in_delegate;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void TextEntry::SetTextInputDisabledDelegate(const TextInputDisabledDelegate& in_delegate)
-        {
-            m_textInputDisabledDelegate = in_delegate;
         }
 		//-------------------------------------------------------
 		//-------------------------------------------------------

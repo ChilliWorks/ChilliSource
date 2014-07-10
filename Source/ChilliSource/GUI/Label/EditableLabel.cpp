@@ -27,6 +27,8 @@
 //
 
 #include <ChilliSource/GUI/Label/EditableLabel.h>
+
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
@@ -54,9 +56,7 @@ namespace ChilliSource
         //-------------------------------------------------
         EditableLabel::EditableLabel() : SecureEntry(false), CharacterLimit(0), mbShowKeyboard(false), mfTimeToShow(0.0f), mbSelected(false)
         {
-            m_textEntrySystem = CSInput::TextEntry::Create();
-            m_textEntrySystem->SetTextBufferChangedDelegate(CSCore::MakeDelegate(this, &EditableLabel::OnTextBufferChanged));
-            m_textEntrySystem->SetTextInputDisabledDelegate(CSCore::MakeDelegate(this, &EditableLabel::OnTextInputDisabled));
+            m_textEntrySystem = Core::Application::Get()->GetSystem<Input::TextEntry>();
         }
         //-------------------------------------------------
         /// Constructor
@@ -66,7 +66,7 @@ namespace ChilliSource
         EditableLabel::EditableLabel(const Core::ParamDictionary& insParams) 
         : Label(insParams), CharacterLimit(0), SecureEntry(false), mbShowKeyboard(false), mfTimeToShow(0.0f)
         {
-            m_textEntrySystem = CSInput::TextEntry::Create();
+            m_textEntrySystem = Core::Application::Get()->GetSystem<Input::TextEntry>();
             
 			std::string strValue;
 
@@ -172,10 +172,7 @@ namespace ChilliSource
             if(g_activeEditableLabel != this)
                 return;
             
-            if(m_textEntrySystem)
-            {
-                m_textEntrySystem->SetTextInputEnabled(false);
-            }
+            m_textEntrySystem->Deactivate();
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -237,7 +234,7 @@ namespace ChilliSource
                if(Contains(in_pointer.GetPosition()))
                {
                    //Flag the keyboard as hidden and wait a few seconds so we can slide it in again
-				   if(!m_textEntrySystem->IsTextInputEnabled())
+				   if(g_activeEditableLabel != this)
 				   {
                        EnableTextInput();
 				   }
@@ -265,7 +262,9 @@ namespace ChilliSource
             {
                 mfTimeToShow = 0.0f;
                 mbShowKeyboard = false;
-                m_textEntrySystem->SetTextInputEnabled(true);
+                m_textEntrySystem->Activate(Text, m_type, m_capitalisation,
+                                            CSCore::MakeDelegate(this, &EditableLabel::OnTextBufferChanged),
+                                            CSCore::MakeDelegate(this, &EditableLabel::OnTextInputDisabled));
                 m_textInputEnabledEvent.NotifyConnections(this);
                 g_activeEditableLabel = this;
             }
@@ -350,22 +349,19 @@ namespace ChilliSource
         //-------------------------------------------------
         void EditableLabel::SetInputTypeNumeric()
         {
-            if(m_textEntrySystem)
-                m_textEntrySystem->SetType(Input::TextEntry::Type::k_numeric);
+            m_type = Input::TextEntry::Type::k_numeric;
         }
         //-------------------------------------------------
         //-------------------------------------------------
         void EditableLabel::SetInputTypeText()
         {
-            if(m_textEntrySystem)
-                m_textEntrySystem->SetType(Input::TextEntry::Type::k_text);
+            m_type = Input::TextEntry::Type::k_text;
         }
         //------------------------
         //------------------------
         void EditableLabel::SetCapitalisationMethod(Input::TextEntry::Capitalisation ineCapitalisationType)
         {
-            if(m_textEntrySystem)
-                m_textEntrySystem->SetCapitalisation(ineCapitalisationType);
+            m_capitalisation = ineCapitalisationType;
         }
         //------------------------
         //------------------------

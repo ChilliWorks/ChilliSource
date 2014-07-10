@@ -343,7 +343,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_LOG_ERROR("PointerSystem: Received pointer down event for unknown pointer Id.");
+                CS_LOG_FATAL("PointerSystem: Received pointer down event for unknown pointer Id.");
             }
         }
         //----------------------------------------------------
@@ -364,7 +364,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_LOG_ERROR("PointerSystem: Received pointer moved event for unknown pointer Id.");
+                CS_LOG_FATAL("PointerSystem: Received pointer moved event for unknown pointer Id.");
             }
         }
         //----------------------------------------------------
@@ -384,7 +384,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_LOG_ERROR("PointerSystem: Received pointer down event for unknown pointer Id.");
+                CS_LOG_FATAL("PointerSystem: Received pointer down event for unknown pointer Id.");
             }
         }
         //----------------------------------------------------
@@ -403,7 +403,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_LOG_ERROR("PointerSystem: Received pointer scroll event for unknown pointer Id.");
+                CS_LOG_FATAL("PointerSystem: Received pointer scroll event for unknown pointer Id.");
             }
         }
         //----------------------------------------------------
@@ -421,7 +421,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_LOG_ERROR("PointerSystem: Received remove pointer event for unknown pointer Id.");
+                CS_LOG_FATAL("PointerSystem: Received remove pointer event for unknown pointer Id.");
             }
         }
     }

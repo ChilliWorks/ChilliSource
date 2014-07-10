@@ -44,6 +44,8 @@ namespace ChilliSource
 {
     namespace Input
     {
+        CS_DEFINE_NAMEDTYPE(TextEntry);
+        
         //-------------------------------------------------------
         //-------------------------------------------------------
         TextEntryUPtr TextEntry::Create()

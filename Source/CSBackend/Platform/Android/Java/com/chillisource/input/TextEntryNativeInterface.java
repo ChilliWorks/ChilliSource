@@ -53,58 +53,13 @@ import com.chillisource.core.INativeInterface;
  * @author S Downie
  *
  */
-public class TextEntryNativeInterface extends INativeInterface implements TextWatcher, OnEditorActionListener
+public final class TextEntryNativeInterface extends INativeInterface implements TextWatcher, OnEditorActionListener
 {
 	public static final InterfaceIDType InterfaceID = new InterfaceIDType("CKeyboardNativeInterface");
 	private int m_keyboardTypeFlags = 0;
 	private int m_keyboardCapitalisationFlags = 0;
 	private EditTextBackEvent m_textEntryView;
 	
-	/**
-	 * Extends EditText in order to detect when the keyboard has been dismissed
-	 * 
-	 * @author S Downie
-	 */
-	private class EditTextBackEvent extends EditText
-	{
-		private TextEntryNativeInterface m_nativeInterface;
-		
-		/**
-		 * Constructor
-		 * 
-		 * @author S Downie
-		 * 
-		 * @param Context
-		 * @param Text entry interface to notify when keyboard dismissed
-		 */
-		public EditTextBackEvent(Context in_context, TextEntryNativeInterface in_nativeInterface) 
-		{
-			super(in_context);
-			m_nativeInterface = in_nativeInterface;
-		}
-		/**
-		 * Called when the keyboard key event occurs prior to any system being notified
-		 * 
-		 * @author S Downie
-		 * 
-		 * @param key code
-		 * @param key event
-		 * 
-		 * @return Whether the event has been handled
-		 */
-        @Override public boolean onKeyPreIme(int in_keyCode, KeyEvent in_event)
-        {
-            if (in_event.getKeyCode() == KeyEvent.KEYCODE_BACK || in_event.getKeyCode() == KeyEvent.FLAG_EDITOR_ACTION || in_event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
-            {
-				m_nativeInterface.Dismiss();
-            	m_nativeInterface.NativeOnKeyboardDismissed();
-            	return true;
-            }
-            
-            return super.onKeyPreIme(in_keyCode, in_event);
-        }
-	}
-
 	/** 
 	 * Constructor
 	 * 
@@ -113,7 +68,7 @@ public class TextEntryNativeInterface extends INativeInterface implements TextWa
 	TextEntryNativeInterface()
 	{
 		//Doesn't matter what we set this to it's invisible
-		m_textEntryView = new EditTextBackEvent(CSApplication.get().getActivityContext(), this);
+		m_textEntryView = new EditTextBackEvent(CSApplication.get().getActivityContext());
 		m_textEntryView.setWidth(100);
 		m_textEntryView.setHeight(100);
 		m_textEntryView.setAlpha(0);
@@ -168,31 +123,23 @@ public class TextEntryNativeInterface extends INativeInterface implements TextWa
 		CSApplication.get().scheduleUIThreadTask(task);
 	}
 	/**
-	 * Dismiss the keyboard
-	 * 
-	 * @author S Downie
-	 */
-	private void Dismiss()
-	{
-		ViewGroup parent = (ViewGroup)m_textEntryView.getParent();
-		if (parent != null)
-		{
-			parent.removeView(m_textEntryView);
-			InputMethodManager imm = (InputMethodManager)CSApplication.get().getAppContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-			imm.toggleSoftInput(0, 0);
-		}
-	}
-	/**
 	 * Sets the keyboard type that should be used the next the keyboard is displayed.
 	 * 
 	 * @author Ian Copland
 	 * 
 	 * @param Type as an integer (so it can be passed from native)
 	 */
-    public void SetKeyboardType(int in_type)
+    public void SetKeyboardType(final int in_type)
     {
-    	m_keyboardTypeFlags = IntegerToKeyboardType(in_type);
-    	m_textEntryView.setInputType(m_keyboardTypeFlags | m_keyboardCapitalisationFlags);
+		Runnable task = new Runnable() 
+		{
+			@Override public void run() 
+			{
+		    	m_keyboardTypeFlags = IntegerToKeyboardType(in_type);
+		    	m_textEntryView.setInputType(m_keyboardTypeFlags | m_keyboardCapitalisationFlags);
+			}
+		};
+		CSApplication.get().scheduleUIThreadTask(task);
     }
 	/**
 	 * Sets the capitalisation method of the text buffer.
@@ -201,55 +148,18 @@ public class TextEntryNativeInterface extends INativeInterface implements TextWa
 	 * 
 	 * @param Type as an integer (so it can be passed from native)
 	 */
-    public void SetCapitalisationMethod(int in_method)
+    public void SetCapitalisationMethod(final int in_method)
     {
-    	m_keyboardCapitalisationFlags = IntegerToKeyboardCapitalisation(in_method);
-    	m_textEntryView.setInputType(m_keyboardTypeFlags | m_keyboardCapitalisationFlags);
+		Runnable task = new Runnable() 
+		{
+			@Override public void run() 
+			{
+		    	m_keyboardCapitalisationFlags = IntegerToKeyboardCapitalisation(in_method);
+		    	m_textEntryView.setInputType(m_keyboardTypeFlags | m_keyboardCapitalisationFlags);
+			}
+		};
+		CSApplication.get().scheduleUIThreadTask(task);
     }
-	/**
-	 * @author Ian Copland
-	 *
-	 * @param The keyboard type as an CS integer 
-	 *
-	 * @return The input type flag required by Android.
-	 */
-	private int IntegerToKeyboardType(int in_type)
-	{
-		switch (in_type)
-		{
-			case 0:
-				return InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
-			case 1:
-				return InputType.TYPE_CLASS_NUMBER;
-			default:
-				Logging.logError("Invalid keyboard type integer, cannot be converted.");
-				return InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
-		}
-	}
-	/**
-	 * @author Ian Copland
-	 *
-	 * @param The capitalisation method as an CS integer 
-	 *
-	 * @return The capitalisation input type flag required by Android.
-	 */
-	private int IntegerToKeyboardCapitalisation(int in_method)
-	{
-		switch (in_method)
-		{
-			case 0:
-				return 0;
-			case 1:
-				return InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
-			case 2:
-				return InputType.TYPE_TEXT_FLAG_CAP_WORDS;
-			case 3:
-				return InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS;
-			default:
-				Logging.logError("Invalid keyboard capitalisation integer, cannot be converted.");
-				return 0;
-		}
-	}
 	/** 
 	 * @author S Downie
 	 * 
@@ -266,21 +176,6 @@ public class TextEntryNativeInterface extends INativeInterface implements TextWa
 		};
 		CSApplication.get().scheduleUIThreadTask(task);
 	}
-	/**
-	 * Tells the native app that text has changed
-	 * 
-	 * @author S Downie
-	 * 
-	 * @param New text
-	 */
-	native private void NativeOnTextChanged(String in_text);
-	/**
-	 * A native call for passing the keyboard dismissed
-	 * event down to the native side of the engine.
-	 * 
-	 * @author S Downie
-	 */
-	native private void NativeOnKeyboardDismissed();
 	/**
 	 * Called when the text string of the given editable has
 	 * changed
@@ -344,5 +239,120 @@ public class TextEntryNativeInterface extends INativeInterface implements TextWa
         }
         
 		return false;
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @param The keyboard type as an CS integer 
+	 *
+	 * @return The input type flag required by Android.
+	 */
+	private int IntegerToKeyboardType(int in_type)
+	{
+		switch (in_type)
+		{
+			case 0:
+				return InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
+			case 1:
+				return InputType.TYPE_CLASS_NUMBER;
+			default:
+				Logging.logError("Invalid keyboard type integer, cannot be converted.");
+				return InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS;
+		}
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @param The capitalisation method as an CS integer 
+	 *
+	 * @return The capitalisation input type flag required by Android.
+	 */
+	private int IntegerToKeyboardCapitalisation(int in_method)
+	{
+		switch (in_method)
+		{
+			case 0:
+				return 0;
+			case 1:
+				return InputType.TYPE_TEXT_FLAG_CAP_SENTENCES;
+			case 2:
+				return InputType.TYPE_TEXT_FLAG_CAP_WORDS;
+			case 3:
+				return InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS;
+			default:
+				Logging.logError("Invalid keyboard capitalisation integer, cannot be converted.");
+				return 0;
+		}
+	}
+	/**
+	 * Dismiss the keyboard (Must only be called on UI thread)
+	 * 
+	 * @author S Downie
+	 */
+	private void Dismiss()
+	{
+		ViewGroup parent = (ViewGroup)m_textEntryView.getParent();
+		if (parent != null)
+		{
+			parent.removeView(m_textEntryView);
+			InputMethodManager imm = (InputMethodManager)CSApplication.get().getAppContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.toggleSoftInput(0, 0);
+		}
+	}
+	/**
+	 * Tells the native app that text has changed
+	 * 
+	 * @author S Downie
+	 * 
+	 * @param New text
+	 */
+	native private void NativeOnTextChanged(String in_text);
+	/**
+	 * A native call for passing the keyboard dismissed
+	 * event down to the native side of the engine.
+	 * 
+	 * @author S Downie
+	 */
+	native private void NativeOnKeyboardDismissed();
+	
+	/**
+	 * Extends EditText in order to detect when the keyboard has been dismissed
+	 * 
+	 * @author S Downie
+	 */
+	private final class EditTextBackEvent extends EditText
+	{
+		/**
+		 * Constructor
+		 * 
+		 * @author S Downie
+		 * 
+		 * @param Context
+		 */
+		public EditTextBackEvent(Context in_context) 
+		{
+			super(in_context);
+		}
+		/**
+		 * Called when the keyboard key event occurs prior to any system being notified
+		 * 
+		 * @author S Downie
+		 * 
+		 * @param key code
+		 * @param key event
+		 * 
+		 * @return Whether the event has been handled
+		 */
+        @Override public boolean onKeyPreIme(int in_keyCode, KeyEvent in_event)
+        {
+            if (in_event.getKeyCode() == KeyEvent.KEYCODE_BACK || in_event.getKeyCode() == KeyEvent.FLAG_EDITOR_ACTION || in_event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+            {
+				Dismiss();
+            	NativeOnKeyboardDismissed();
+            	return true;
+            }
+            
+            return super.onKeyPreIme(in_keyCode, in_event);
+        }
 	}
 }

@@ -38,6 +38,8 @@ namespace CSBackend
 {
 	namespace Android
 	{
+		CS_DEFINE_NAMEDTYPE(TextEntry);
+
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		TextEntry::TextEntry()
@@ -46,46 +48,53 @@ namespace CSBackend
 			if (m_textEntryJI == nullptr)
 			{
 				m_textEntryJI = TextEntryJavaInterfaceSPtr(new TextEntryJavaInterface());
+				m_textEntryJI->SetTextChangedDelegate(CSCore::MakeDelegate(this, &TextEntry::OnTextChanged));
+				m_textEntryJI->SetKeyboardDismissedDelegate(CSCore::MakeDelegate(this, &TextEntry::OnKeyboardDismissed));
 				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_textEntryJI);
 			}
 		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		void TextEntry::SetTextInputEnabled(bool in_enabled)
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        bool TextEntry::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        {
+            return in_interfaceId == CSInput::TextEntry::InterfaceID || in_interfaceId == TextEntry::InterfaceID;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+		void TextEntry::Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate)
 		{
-			if (in_enabled == true && m_enabled == false)
+			if (m_enabled == false)
 			{
-				m_textEntryJI->SetTextChangedDelegate(CSCore::MakeDelegate(this, &TextEntry::OnTextChanged));
-				m_textEntryJI->SetKeyboardDismissedDelegate(CSCore::MakeDelegate(this, &TextEntry::OnKeyboardDismissed));
-				m_textEntryJI->SetCapitalisationMethod(m_capitalisation);
-				m_textEntryJI->SetKeyboardType(m_type);
-				m_textEntryJI->SetTextBuffer(m_text);
+				m_textBufferChangedDelegate = in_changeDelegate;
+	            m_textInputDeactivatedDelegate = in_deactivateDelegate;
+				m_textEntryJI->SetCapitalisationMethod(in_capitalisation);
+				m_textEntryJI->SetKeyboardType(in_type);
+				m_textEntryJI->SetTextBuffer(in_text);
 
 				m_textEntryJI->Activate();
 				m_enabled = true;
-
-				if(m_textInputEnabledDelegate != nullptr)
-				{
-					m_textInputEnabledDelegate();
-				}
 			}
-			else if (in_enabled == false && m_enabled == true)
+		}
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+		void TextEntry::Deactivate()
+		{
+			if (m_enabled == true)
 			{
 				m_textEntryJI->Deactivate();
 				m_enabled = false;
 
-				m_textEntryJI->SetTextChangedDelegate(nullptr);
-				m_textEntryJI->SetKeyboardDismissedDelegate(nullptr);
-
-				if(m_textInputDisabledDelegate != nullptr)
+				if(m_textInputDeactivatedDelegate != nullptr)
 				{
-					m_textInputDisabledDelegate();
+					auto delegate = m_textInputDeactivatedDelegate;
+					m_textInputDeactivatedDelegate = nullptr;
+					delegate();
 				}
 			}
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		bool TextEntry::IsTextInputEnabled() const
+		bool TextEntry::IsActive() const
 		{
 			return m_enabled;
 		}
@@ -100,37 +109,8 @@ namespace CSBackend
 		void TextEntry::SetTextBuffer(const std::string& in_text)
 		{
 			m_text = in_text;
+			m_textEntryJI->SetTextBuffer(m_text);
 		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		void TextEntry::SetType(Type in_type)
-		{
-			m_type = in_type;
-		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		void TextEntry::SetCapitalisation(Capitalisation in_capitalisation)
-		{
-			m_capitalisation = in_capitalisation;
-		}
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void TextEntry::SetTextBufferChangedDelegate(const TextBufferChangedDelegate& in_delegate)
-        {
-        	m_textBufferChangedDelegate = in_delegate;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void TextEntry::SetTextInputEnabledDelegate(const TextInputEnabledDelegate& in_delegate)
-        {
-            m_textInputEnabledDelegate = in_delegate;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void TextEntry::SetTextInputDisabledDelegate(const TextInputDisabledDelegate& in_delegate)
-        {
-            m_textInputDisabledDelegate = in_delegate;
-        }
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void TextEntry::OnTextChanged(const std::string& in_text)
@@ -158,14 +138,16 @@ namespace CSBackend
 		//-------------------------------------------------------
 		void TextEntry::OnKeyboardDismissed()
 		{
-			m_enabled = false;
-
-			m_textEntryJI->SetTextChangedDelegate(nullptr);
-			m_textEntryJI->SetKeyboardDismissedDelegate(nullptr);
-
-			if(m_textInputDisabledDelegate != nullptr)
+			if (m_enabled == true)
 			{
-				m_textInputDisabledDelegate();
+				m_enabled = false;
+
+				if(m_textInputDeactivatedDelegate != nullptr)
+				{
+					auto delegate = m_textInputDeactivatedDelegate;
+					m_textInputDeactivatedDelegate = nullptr;
+					delegate();
+				}
 			}
 		}
 		//-------------------------------------------------------

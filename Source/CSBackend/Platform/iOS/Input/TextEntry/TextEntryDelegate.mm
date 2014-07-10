@@ -71,7 +71,7 @@
 //---------------------------------------------------------
 -(BOOL) textFieldShouldReturn:(UITextField*)textField
 {
-    textEntry->SetTextInputEnabled(false);
+    textEntry->Deactivate();
     return NO;
 }
 

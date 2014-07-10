@@ -249,7 +249,7 @@ namespace ChilliSource
             //----------------------------------------------------
             void AddPointerUpEvent(Pointer::Id in_pointerUniqueId, Pointer::InputType in_inputType);
             //----------------------------------------------------
-            /// Adds a new pointer up event. This method is thread
+            /// Adds a new pointer scroll event. This method is thread
             /// safe and can be called on any thread.
             ///
             /// @author Ian Copland

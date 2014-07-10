@@ -82,18 +82,6 @@ namespace ChilliSource
             //-------------------------------------------------------
             virtual bool IsKeyDown(KeyCode in_code) const = 0;
             //-------------------------------------------------------
-            /// Check whether the key is currently up. This is
-            /// unbuffered so will only check the state of the key
-            /// at the moment in time when it is called
-            ///
-            /// @author S Downie
-            ///
-            /// @param Key code
-            ///
-            /// @return Whether the key is up
-            //-------------------------------------------------------
-            virtual bool IsKeyUp(KeyCode in_code) const = 0;
-            //-------------------------------------------------------
             /// Get the event that is triggered whenever a key is pressed.
             ///
             /// This event is guaranteed and should be used for low

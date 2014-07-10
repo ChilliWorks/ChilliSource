@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_INPUT_TEXTENTRY_TEXTENTRY_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 #include <functional>
 
@@ -43,9 +44,11 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //---------------------------------------------------------------
-		class TextEntry
+		class TextEntry : public Core::AppSystem
         {
         public:
+            CS_DECLARE_NAMEDTYPE(TextEntry);
+            
             //-------------------------------------------------------
             /// An enum describing the different types of keyboard.
             ///
@@ -88,17 +91,11 @@ namespace ChilliSource
             //-------------------------------------------------------
             typedef std::function<bool(const std::string&)> TextBufferChangedDelegate;
             //-------------------------------------------------------
-            /// A delegate used for recieving events when input is enabled.
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------
-            typedef std::function<void()> TextInputEnabledDelegate;
-            //-------------------------------------------------------
             /// A delegate used for recieving events when input is disabled.
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            typedef std::function<void()> TextInputDisabledDelegate;
+            typedef std::function<void()> TextInputDeactivatedDelegate;
             //-------------------------------------------------------
             /// Factory method from creating a new platform specific
             /// instance of the keyboard system.
@@ -109,20 +106,32 @@ namespace ChilliSource
             //-------------------------------------------------------
 			static TextEntryUPtr Create();
             //-------------------------------------------------------
-            /// Sets whether or not the text input is currently
-            /// enabled or disabled. If the keyboard is virtual, it
-            /// will be shown or hidden when enabled or disabled.
+            /// The system will now receive text input. This will also
+            /// show the virtual keyboard if required
+            ///
+            /// @author S Downie
+            ///
+            /// @param Initial buffer contents
+            /// @param Preferred keyboard type
+            /// @param Preferred capitalisation method
+            /// @param Text changed delegate
+            /// @param Deactivate delegate
+            //-------------------------------------------------------
+			virtual void Activate(const std::string& in_text, Type in_type, Capitalisation in_capitalisation, const TextBufferChangedDelegate& in_changeDelegate, const TextInputDeactivatedDelegate& in_deactivateDelegate) = 0;
+            //-------------------------------------------------------
+            /// The system will no longer receive text input. This
+            /// will also hide the virtual keyboard if required
             ///
             /// @author S Downie
             //-------------------------------------------------------
-			virtual void SetTextInputEnabled(bool in_enabled) = 0;
+			virtual void Deactivate() = 0;
             //-------------------------------------------------------
             /// @author S Downie
             ///
             /// @return Whether or not text input is currently
             /// enabled.
             //-------------------------------------------------------
-			virtual bool IsTextInputEnabled() const = 0;
+			virtual bool IsActive() const = 0;
             //-------------------------------------------------------
             /// @author S Downie
             ///
@@ -135,45 +144,6 @@ namespace ChilliSource
             /// @param The new text input buffer (UTF-8).
             //-------------------------------------------------------
             virtual void SetTextBuffer(const std::string& in_text) = 0;
-            //-------------------------------------------------------
-            /// Sets the type of keyboard to display if using a
-            /// virtual keyboard. This must be set prior to the keyboard
-            /// being displayed. Note that this is only a suggestion
-            /// and the virtual keyboard implementation may choose to
-            /// ignore it.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The keyboard type
-            //-------------------------------------------------------
-            virtual void SetType(Type in_type) = 0;
-            //-------------------------------------------------------
-            /// Sets capitalisation method to be used for text input.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The capitalisation method.
-            //-------------------------------------------------------
-            virtual void SetCapitalisation(Capitalisation in_capitalisation) = 0;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param A delegate that is called when text buffer is
-            /// changed.
-            //-------------------------------------------------------
-			virtual void SetTextBufferChangedDelegate(const TextBufferChangedDelegate& in_delegate) = 0;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param A delegate that is called when text input is enabled
-            //-------------------------------------------------------
-			virtual void SetTextInputEnabledDelegate(const TextInputEnabledDelegate& in_delegate) = 0;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param A delegate that is called when text input is disabled
-            //-------------------------------------------------------
-			virtual void SetTextInputDisabledDelegate(const TextInputDisabledDelegate& in_delegate) = 0;
 		};
 	}
 }
