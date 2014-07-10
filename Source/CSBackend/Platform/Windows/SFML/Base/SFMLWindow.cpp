@@ -210,34 +210,40 @@ namespace CSBackend
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void SFMLWindow::SetSize(u32 in_width, u32 in_height)
+		void SFMLWindow::SetSize(const CSCore::Integer2& in_size)
 		{
 			//Clamp to the actual screen size
-			in_width = std::min((u32)sf::VideoMode::getDesktopMode().width, in_width);
-			in_height = std::min((u32)sf::VideoMode::getDesktopMode().height, in_height);
+			CSCore::Integer2 size = CSCore::Integer2::Max(in_size, CSCore::Integer2::k_one);
+			size.x = std::min((s32)sf::VideoMode::getDesktopMode().width, size.x);
+			size.y = std::min((s32)sf::VideoMode::getDesktopMode().height, size.y);
 
-			if (m_isFullscreen == true)
+			//This will trigger an SFML resize event
+			m_window.setSize(sf::Vector2u(size.x, size.y));
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void SFMLWindow::SetState(WindowState in_state)
+		{
+			if (in_state == m_state)
+				return;
+
+			m_state = in_state;
+
+			switch (m_state)
 			{
-				m_isFullscreen = false;
-				m_window.create(sf::VideoMode(in_width, in_height, sf::VideoMode::getDesktopMode().bitsPerPixel), "", sf::Style::Default, m_contextSettings);
-				m_windowStateEvent.NotifyConnections(WindowState::k_windowed);
-				m_windowResizeEvent.NotifyConnections(CSCore::Integer2((s32)in_width, (s32)in_height));
-			}
-			else
-			{
-				//This will trigger an SFML resize event
-				sf::Vector2u size(in_width, in_height);
-				m_window.setSize(size);
+			case WindowState::k_fullscreen:
+				SetFullscreen();
+				break;
+			case WindowState::k_windowed:
+				SetWindowed();
+				break;
 			}
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
 		void SFMLWindow::SetFullscreen()
 		{
-			if (m_isFullscreen == true)
-				return;
-
-			m_isFullscreen = true;
+			auto currentSize = m_window.getSize();
 
 			//Pick the best fit RGBA depth based on the supported depths
 			for (auto it = sf::VideoMode::getFullscreenModes().rbegin(); it != sf::VideoMode::getFullscreenModes().rend(); ++it)
@@ -245,17 +251,34 @@ namespace CSBackend
 				s32 bpp = it->bitsPerPixel;
 				if (bpp >= m_preferredRGBADepth)
 				{
-					while (it != sf::VideoMode::getFullscreenModes().rend() && bpp == it->bitsPerPixel)
-					{
-						++it;
-					}
-
-					m_window.create(*it, "", sf::Style::Fullscreen, m_contextSettings);
+					m_window.create(sf::VideoMode(currentSize.x, currentSize.y, bpp), m_title, sf::Style::Fullscreen, m_contextSettings);
 					m_windowStateEvent.NotifyConnections(WindowState::k_fullscreen);
-					m_windowResizeEvent.NotifyConnections(CSCore::Integer2(it->width, it->height));
 					break;
 				}
 			}
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void SFMLWindow::SetWindowed()
+		{
+			auto currentSize = m_window.getSize();
+
+			m_window.create(sf::VideoMode(currentSize.x, currentSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), m_title, sf::Style::Default, m_contextSettings);
+			m_windowStateEvent.NotifyConnections(WindowState::k_windowed);
+		}
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		std::vector<CSCore::Integer2> SFMLWindow::GetSupportedResolutions() const
+		{
+			std::vector<CSCore::Integer2> result;
+			result.reserve(sf::VideoMode::getFullscreenModes().size());
+
+			for (const auto& mode : sf::VideoMode::getFullscreenModes())
+			{
+				result.push_back(CSCore::Integer2((s32)mode.width, (s32)mode.height));
+			}
+
+			return result;
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -359,7 +382,9 @@ namespace CSBackend
 
 			auto appConfig = CSCore::Application::Get()->GetAppConfig();
 			m_window.setFramerateLimit(appConfig->GetPreferredFPS());
-			m_window.setTitle(appConfig->GetDisplayableName());
+
+			m_title = appConfig->GetDisplayableName();
+			m_window.setTitle(m_title);
 
 			while (m_isSuspended == false)
 			{
@@ -443,10 +468,12 @@ namespace CSBackend
 			if (m_isFocused == true)
 			{
 				CSCore::Application::Get()->Background();
+				m_isFocused = false;
 			}
 			if (m_isSuspended == false)
 			{
 				CSCore::Application::Get()->Suspend();
+				m_isSuspended = true;
 			}
 
 			CSCore::Application::Get()->Destroy();

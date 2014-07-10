@@ -72,6 +72,9 @@ namespace CSBackend
                 m_densityScale = [UIScreen mainScreen].scale;
                 m_invDensityScale = 1.0f / m_densityScale;
             }
+            
+            m_supportedResolutions.push_back(CSCore::Integer2((s32)m_resolution.x, (s32)m_resolution.y));
+            m_supportedResolutions.push_back(CSCore::Integer2((s32)m_resolution.y, (s32)m_resolution.x));
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -102,6 +105,12 @@ namespace CSBackend
         CSCore::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
         {
             return m_resolutionChangedEvent;
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        std::vector<CSCore::Integer2> Screen::GetSupportedResolutions() const
+        {
+            return m_supportedResolutions;
         }
         //-----------------------------------------------------------
         //------------------------------------------------------------

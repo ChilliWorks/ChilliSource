@@ -160,23 +160,28 @@ namespace CSBackend
 			//-------------------------------------------------
 			void SetPreferredFPS(u32 in_fps);
 			//-------------------------------------------------
-			/// Set the size of the window in pixels. This
-			/// will switch from fullscreen mode if enabled
+			/// Set the size of the window in pixels.
 			///
 			/// @author S Downie
 			///
-			/// @param Width in pixels
-			/// @param Height in pixels
+			/// @param Size in pixels
 			//-------------------------------------------------
-			void SetSize(u32 in_width, u32 in_height);
+			void SetSize(const CSCore::Integer2& in_size);
 			//-------------------------------------------------
-			/// Set the window to fullscreen mode which will
-			/// hide the menu bar and override the current 
-			/// window size
+			/// Set the window to fullscreen mode or windowed mode
+			/// which will hide or the menu bar
 			///
 			/// @author S Downie
+			///
+			/// @param Window state
 			//-------------------------------------------------
-			void SetFullscreen();
+			void SetState(WindowState in_state);
+			//----------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return A list of resolutions supported by the display
+			//----------------------------------------------------------
+			std::vector<CSCore::Integer2> GetSupportedResolutions() const;
 			//-------------------------------------------------
 			/// Flush to the display. Should be called at end
 			/// if each frame
@@ -282,6 +287,21 @@ namespace CSBackend
 
 		private:
 
+			//-------------------------------------------------
+			/// Recreate the window in fullscreen state
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void SetFullscreen();
+			//-------------------------------------------------
+			/// Recreate the window in windowed state
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void SetWindowed();
+
+		private:
+
 			sf::Window m_window;
 
 			CSCore::Event<WindowResizeDelegate> m_windowResizeEvent;
@@ -293,13 +313,15 @@ namespace CSBackend
 			CSCore::Event<KeyPressedDelegate> m_keyPressedEvent;
 			CSCore::Event<KeyReleasedDelegate> m_keyReleasedEvent;
 
+			std::string m_title;
+
 			sf::ContextSettings m_contextSettings;
 
 			u32 m_preferredRGBADepth = 32;
 
 			bool m_isSuspended = false;
 			bool m_isFocused = true;
-			bool m_isFullscreen = false;
+			WindowState m_state = WindowState::k_windowed;
 		};
 	}
 }

@@ -51,6 +51,17 @@ namespace ChilliSource
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(Screen);
+            
+            //-----------------------------------------------------------
+            /// The states of the screen
+            ///
+            /// @author S Downie
+            //-----------------------------------------------------------
+            enum class State
+            {
+                k_windowed,
+                k_fullscreen
+            };
             //-----------------------------------------------------------
             /// A delegate called when the application screen resolution
             /// changes. This can happen when the window is resized in
@@ -100,22 +111,28 @@ namespace ChilliSource
             //----------------------------------------------------------
             /// Set the screen size on platforms where that is allowed
             ///
-            /// NOTE: This can not exceed the monitor resolution
+            /// NOTE: This can not exceed the monitor resolution and
+            /// will be clamped
             ///
             /// @author S Downie
             ///
-			/// @param Screen width in pixels
-			/// @param Screen height in pixels
+			/// @param Screen size in pixels
 			//----------------------------------------------------------
-			virtual void SetResolution(u32 in_width, u32 in_height) = 0;
+			virtual void SetResolution(const Integer2& in_size) = 0;
             //----------------------------------------------------------
-            /// Set the screen size to fullscreen on platforms where
-            /// that is allowed. This will include the removal of any
-            /// status or menu bars
+            /// Set the screen to fullscreen more or windowed mode
+            /// on platforms where that is allowed. This will include the
+            /// removal or addition of any status or menu bars
             ///
             /// @author S Downie
             //----------------------------------------------------------
-            virtual void SetFullscreen() = 0;
+            virtual void SetState(State in_state) = 0;
+            //----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return A list of resolutions supported by the display
+            //----------------------------------------------------------
+            virtual std::vector<Integer2> GetSupportedResolutions() const = 0;
             //-----------------------------------------------------------
             /// Destructor
             ///

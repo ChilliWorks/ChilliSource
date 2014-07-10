@@ -100,17 +100,23 @@ namespace CSBackend
 			///
 			/// @author S Downie
 			///
-			/// @param Screen width in pixels
-			/// @param Screen height in pixels
+			/// @param Screen size in pixels
 			//----------------------------------------------------------
-			void SetResolution(u32 in_width, u32 in_height) override;
+			void SetResolution(const CSCore::Integer2& in_size) override;
 			//----------------------------------------------------------
-			/// Sets the application window to fullscreen and removes
-			/// the menu bar
+			/// Set the screen to fullscreen more or windowed mode
+			/// on platforms where that is allowed. This will include the
+			/// removal or addition of any status or menu bars
 			///
 			/// @author S Downie
 			//----------------------------------------------------------
-			void SetFullscreen() override;
+			void SetState(State in_state) override;
+			//----------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return A list of resolutions supported by the display
+			//----------------------------------------------------------
+			std::vector<CSCore::Integer2> GetSupportedResolutions() const override;
         private:
             friend CSCore::ScreenUPtr CSCore::Screen::Create();
             //-------------------------------------------------------

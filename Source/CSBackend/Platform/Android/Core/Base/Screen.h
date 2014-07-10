@@ -100,16 +100,21 @@ namespace CSBackend
             ///
             /// @author S Downie
             ///
-			/// @param Screen width in pixels
-			/// @param Screen height in pixels
+			/// @param Screen size in pixels
 			//----------------------------------------------------------
-			void SetResolution(u32 in_width, u32 in_height) override {}
+			void SetResolution(const CSCore::Integer2& in_size) override {}
             //----------------------------------------------------------
-            /// Does nothing on Android due to fixed screen size
+            /// Does nothing on Android due to fixed screen state
             ///
             /// @author S Downie
             //----------------------------------------------------------
-            void SetFullscreen() override {}
+            void SetState(State in_state) override {};
+            //----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return A list of resolutions supported by the display
+            //----------------------------------------------------------
+            std::vector<CSCore::Integer2> GetSupportedResolutions() const override;
             //-----------------------------------------------------------
             /// Called when the screen resolution changes. This will update
             /// the screen resolution and notify listeners that the resolution
@@ -131,6 +136,7 @@ namespace CSBackend
 			//-------------------------------------------------------
 			Screen();
             
+			std::vector<CSCore::Integer2> m_supportedResolutions;
             CSCore::Vector2 m_resolution;
             f32 m_densityScale;
             f32 m_invDensityScale;

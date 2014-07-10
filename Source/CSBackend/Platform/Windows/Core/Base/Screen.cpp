@@ -81,15 +81,29 @@ namespace CSBackend
         }
 		//----------------------------------------------------------
 		//----------------------------------------------------------
-		void Screen::SetResolution(u32 in_width, u32 in_height)
+		void Screen::SetResolution(const CSCore::Integer2& in_size)
 		{
-			SFMLWindow::Get()->SetSize(in_width, in_height);
+			SFMLWindow::Get()->SetSize(in_size);
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
-		void Screen::SetFullscreen()
+		void Screen::SetState(State in_state)
 		{
-			SFMLWindow::Get()->SetFullscreen();
+			switch (in_state)
+			{
+			case State::k_windowed:
+				SFMLWindow::Get()->SetState(SFMLWindow::WindowState::k_windowed);
+				break;
+			case State::k_fullscreen:
+				SFMLWindow::Get()->SetState(SFMLWindow::WindowState::k_fullscreen);
+				break;
+			}
+		}
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		std::vector<CSCore::Integer2> Screen::GetSupportedResolutions() const
+		{
+			return SFMLWindow::Get()->GetSupportedResolutions();
 		}
         //-----------------------------------------------------------
         //------------------------------------------------------------
