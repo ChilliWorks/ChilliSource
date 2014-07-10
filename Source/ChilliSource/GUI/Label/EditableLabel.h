@@ -32,67 +32,60 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/GUI/Label/Label.h>
-#include <ChilliSource/Input/Keyboard/Keyboard.h>
+#include <ChilliSource/Input/TextEntry/TextEntry.h>
 
 namespace ChilliSource
 {
 	namespace GUI
 	{
-		class EditableLabel : public Label
+		class EditableLabel final : public Label
 		{
 		public:
 
 			DECLARE_META_CLASS(EditableLabel)
 
-			typedef std::function<void(EditableLabel*)> TextChangeEventDelegate;
+			typedef std::function<void(EditableLabel*)> TextEventDelegate;
 
 			static const s8 kbySecureEntryCharacter = '*';
 
 			EditableLabel();
 			EditableLabel(const Core::ParamDictionary& insParams);
-			virtual ~EditableLabel();
-
+            ~EditableLabel();
 			//-------------------------------------------------
 			/// @author S Downie
             ///
             /// @return A delegate that is called when text
             /// input is enabled.
 			//-------------------------------------------------
-			Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& GetTextInputEnabledEvent();
+			Core::IConnectableEvent<TextEventDelegate>& GetTextInputEnabledEvent();
 			//-------------------------------------------------
 			/// @author S Downie
             ///
             /// @return A delegate that is called when text
             /// input is disabled.
 			//-------------------------------------------------
-			Core::IConnectableEvent<Input::Keyboard::KeyboardEventDelegate>& GetTextInputDisabledEvent();
+			Core::IConnectableEvent<TextEventDelegate>& GetTextInputDisabledEvent();
 			//-------------------------------------------------
 			/// @author S Downie
             ///
             /// @return A delegate that is called when text
             /// input is received.
 			//-------------------------------------------------
-			Core::IConnectableEvent<TextChangeEventDelegate>& GetTextInputReceivedEvent();
+			Core::IConnectableEvent<TextEventDelegate>& GetTextInputReceivedEvent();
             //-------------------------------------------------
-			/// Set Keyboard
-			///
-			/// @param Virtual keyboard
+            /// Enable text input which will show the virtual
+            /// keyboard if required
+            ///
+			/// @author S Downie
 			//-------------------------------------------------
-			void SetKeyboard(Input::Keyboard* inpKeyboard);
-			//-------------------------------------------------
-			/// Get Keyboard Ptr
-			///
-			/// @return Virtual keyboard
-			//-------------------------------------------------
-			Input::Keyboard* GetKeyboardPtr();
+			void EnableTextInput();
             //-------------------------------------------------
-			/// Show Keyboard
+            /// Disable text input which will hide the virtual
+            /// keyboard if required
+            ///
+			/// @author S Downie
 			//-------------------------------------------------
-			void ShowKeyboard();
-            //-------------------------------------------------
-			/// Hide Keyboard
-			//-------------------------------------------------
-			void HideKeyboard();
+			void DisableTextInput();
 			//-------------------------------------------------
 			/// Enable Secure Entry
 			///
@@ -145,49 +138,48 @@ namespace ChilliSource
 			//-------------------------------------------------------
             void ClearText();
             //-------------------------------------------------
-			/// SetKeyboardInputTypeNumeric
+			/// SetInputTypeNumeric
             ///
             /// change displayed keys to numberpad
 			//-------------------------------------------------
-			void SetKeyboardInputTypeNumeric();
+			void SetInputTypeNumeric();
             //-------------------------------------------------
-			/// SetKeyboardInputTypeText
+			/// SetInputTypeText
             ///
             /// change displayed keys to text entry
 			//-------------------------------------------------
-			void SetKeyboardInputTypeText();
+			void SetInputTypeText();
             //------------------------
-            /// Set Keyboard Capitalisation Method
+            /// Set Capitalisation Method
             ///
             /// @param Capitalisation Type
             //------------------------
-            void SetKeyboardCapitalisationMethod(Input::Keyboard::Capitalisation ineCapitalisationType);
+            void SetCapitalisationMethod(Input::TextEntry::Capitalisation ineCapitalisationType);
+            //-------------------------------------------------------
+            /// Set Text
+            ///
+            /// @param Text string (UTF-8)
+            //-------------------------------------------------------
+            void SetText(const std::string& instrText) override;
 
 		protected:
 
-			//-------------------------------------------------
-			/// Called when Text Input is enabled on the
-            /// keyboard.
-            ///
-            /// @author S Downie
-			//-------------------------------------------------
-			void OnKeyboardTextInputEnabled();
             //-------------------------------------------------
-			/// Called when the keyboard text input changes.
+			/// Called when the text buffer changes.
 			///
             /// @author S Downie
             ///
-			/// @param Contents of the keyboard (UTF-8).
-			/// @param [Out] Whether to accept the input.
-			//----------------------------------------------------
-			void OnKeyboardTextInputReceived(const std::string& in_text, bool* out_rejectText);
-			//-------------------------------------------------
-			/// Called when Text Input is disabled on the
-            /// keyboard.
+			/// @param Contents of the text entry buffer (UTF-8).
             ///
+			/// @return Whether to accept the input.
+			//----------------------------------------------------
+			bool OnTextBufferChanged(const std::string& in_text);
+            //-------------------------------------------------
+			/// Called when the text input is disabled.
+			///
             /// @author S Downie
-			//-------------------------------------------------
-			void OnKeyboardTextInputDisabled();
+			//----------------------------------------------------
+			void OnTextInputDisabled();
             //-----------------------------------------------------------
             /// Called when the window receives cursor/touch input
             ///
@@ -230,15 +222,14 @@ namespace ChilliSource
 
 		private:
 
-			Input::Keyboard* mpKeyboard;
+			Input::TextEntry* m_textEntrySystem;
 
-			Core::Event<Input::Keyboard::KeyboardEventDelegate> m_textInputEnabledEvent;
-			Core::Event<Input::Keyboard::KeyboardEventDelegate> m_textInputDisabledEvent;
-			Core::Event<TextChangeEventDelegate> m_textInputReceivedEvent;
+			Core::Event<TextEventDelegate> m_textInputEnabledEvent;
+			Core::Event<TextEventDelegate> m_textInputDisabledEvent;
+			Core::Event<TextEventDelegate> m_textInputReceivedEvent;
             
-            Core::EventConnectionUPtr m_keyboardShownConnection;
-            Core::EventConnectionUPtr m_keyboardHiddenConnection;
-            Core::EventConnectionUPtr m_keyboardTextChangedConnection;
+            Input::TextEntry::Type m_type = Input::TextEntry::Type::k_text;
+            Input::TextEntry::Capitalisation m_capitalisation = Input::TextEntry::Capitalisation::k_none;
 
 			f32 mfTimeToShow;
 			bool mbShowKeyboard;
@@ -246,8 +237,6 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(bool, SecureEntry, EnableSecureEntry, IsSecureEntryEnabled);
 			DECLARE_PROPERTY_A(u32, CharacterLimit, SetCharacterLimit, GetCharacterLimit);
 
-			static EditableLabel* pKeyboardListener;
-            
             bool mbSelected;
 		};
 	}

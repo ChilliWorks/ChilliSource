@@ -27,13 +27,14 @@
 //
 #ifdef CS_TARGETPLATFORM_WINDOWS
 
-#ifndef _CSBACKEND_PLATFORM_WINDOWS_SFML_BASE_SFMLWindow_H_
-#define _CSBACKEND_PLATFORM_WINDOWS_SFML_BASE_SFMLWindow_H_
+#ifndef _CSBACKEND_PLATFORM_WINDOWS_SFML_BASE_SFMLWINDOW_H_
+#define _CSBACKEND_PLATFORM_WINDOWS_SFML_BASE_SFMLWINDOW_H_
 
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Singleton.h>
 #include <ChilliSource/Core/Event/Event.h>
+#include <ChilliSource/Core/String/UTF8StringUtils.h>
 
 #include <SFML/Window.hpp>
 
@@ -52,6 +53,16 @@ namespace CSBackend
 		{
 		public:
 			//-----------------------------------------------------------
+			/// Window display modes
+			///
+			/// @author S Downie
+			//-----------------------------------------------------------
+			enum class DisplayMode
+			{
+				k_windowed,
+				k_fullscreen
+			};
+			//-----------------------------------------------------------
 			/// A delegate called when the window size changes.
 			///
 			/// @author S Downie
@@ -59,6 +70,14 @@ namespace CSBackend
 			/// @param The new window size.
 			//-----------------------------------------------------------
 			using WindowResizeDelegate = std::function<void(const CSCore::Integer2&)>;
+			//-----------------------------------------------------------
+			/// A delegate called when the window mode changes.
+			///
+			/// @author S Downie
+			///
+			/// @param The new window mode.
+			//-----------------------------------------------------------
+			using WindowDisplayModeDelegate = std::function<void(DisplayMode)>;
 			//-----------------------------------------------------------
 			/// List of the events that can occur on a mouse button
 			///
@@ -89,6 +108,41 @@ namespace CSBackend
 			/// @param Mouse position Y
 			//-----------------------------------------------------------
 			using MouseMovedDelegate = std::function<void(s32, s32)>;
+			//-----------------------------------------------------------
+			/// A delegate called when a mouse wheel event occurs.
+			///
+			/// @author S Downie
+			///
+			/// @param The number of ticks the wheel has moved in the y-axis
+			//-----------------------------------------------------------
+			using MouseWheelDelegate = std::function<void(s32)>;
+			//-----------------------------------------------------------
+			/// A delegate called when a text is entered via user input.
+			///
+			/// @author S Downie
+			///
+			/// @param UTF-8 character entered
+			//-----------------------------------------------------------
+			using TextEnteredEvent = std::function<void(CSCore::UTF8Char)>;
+			//-------------------------------------------------------
+			/// Delegate that receieves events on the key with the
+			/// given code when key is pressed
+			///
+			/// @author S Downie
+			///
+			/// @param Key code
+			/// @param Event
+			//-------------------------------------------------------
+			using KeyPressedDelegate = std::function<void(sf::Keyboard::Key, const sf::Event::KeyEvent&)>;
+			//-------------------------------------------------------
+			/// Delegate that receieves events on the key with the
+			/// given code when key is released
+			///
+			/// @author S Downie
+			///
+			/// @param Key code
+			//-------------------------------------------------------
+			using KeyReleasedDelegate = std::function<void(sf::Keyboard::Key)>;
 			//-------------------------------------------------
 			/// Create and begin running the SFML window which in turn
 			/// will update and render the app
@@ -105,6 +159,29 @@ namespace CSBackend
 			/// @param Frame per second limit
 			//-------------------------------------------------
 			void SetPreferredFPS(u32 in_fps);
+			//-------------------------------------------------
+			/// Set the size of the window in pixels.
+			///
+			/// @author S Downie
+			///
+			/// @param Size in pixels
+			//-------------------------------------------------
+			void SetSize(const CSCore::Integer2& in_size);
+			//-------------------------------------------------
+			/// Set the window to fullscreen mode or windowed mode
+			/// which will hide or the menu bar
+			///
+			/// @author S Downie
+			///
+			/// @param Window mode
+			//-------------------------------------------------
+			void SetDisplayMode(DisplayMode in_mode);
+			//----------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return A list of resolutions supported by the display
+			//----------------------------------------------------------
+			std::vector<CSCore::Integer2> GetSupportedResolutions() const;
 			//-------------------------------------------------
 			/// Flush to the display. Should be called at end
 			/// if each frame
@@ -133,6 +210,12 @@ namespace CSBackend
 			//-------------------------------------------------
 			/// @author S Downie
 			///
+			/// @return An event that is called when the window fullscreen is enabled or disabled
+			//-------------------------------------------------
+			CSCore::IConnectableEvent<WindowDisplayModeDelegate>& GetWindowDisplayModeEvent();
+			//-------------------------------------------------
+			/// @author S Downie
+			///
 			/// @return An event that is called when a mouse button event occurs
 			//------------------------------------------------
 			CSCore::IConnectableEvent<MouseButtonDelegate>& GetMouseButtonEvent();
@@ -142,6 +225,46 @@ namespace CSBackend
 			/// @return An event that is called when the mouse moves
 			//------------------------------------------------
 			CSCore::IConnectableEvent<MouseMovedDelegate>& GetMouseMovedEvent();
+			//-------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return An event that is called when the mouse wheel scrolls
+			//------------------------------------------------
+			CSCore::IConnectableEvent<MouseWheelDelegate>& GetMouseWheelEvent();
+			//-------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return An event that is called when text is entered
+			//------------------------------------------------
+			CSCore::IConnectableEvent<TextEnteredEvent>& GetTextEnteredEvent();
+			//-------------------------------------------------------
+			/// Get the event that is triggered whenever a key is pressed.
+			///
+			/// This event is guaranteed and should be used for low
+			/// frequency events such as catching a confirm enter press.
+			/// The polling "IsDown" method should be used for realtime
+			/// events such as moving characters on arrow press, etc.
+			///
+			/// The event also returns the current state of the modifier
+			/// keys (Ctrl, Alt, Shift, etc.)
+			///
+			/// @author S Downie
+			///
+			/// @return Event to register for key presses
+			//-------------------------------------------------------
+			CSCore::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent();
+			//-------------------------------------------------------
+			/// Get the event that is triggered whenever a key is released.
+			///
+			/// This event is guaranteed and should be used for low
+			/// frequency events. The polling "IsUp" method should be
+			/// used for realtime events.
+			///
+			/// @author S Downie
+			///
+			/// @return Event to register for key releases
+			//-------------------------------------------------------
+			CSCore::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent();
 			//------------------------------------------------
 			/// @author S Downie
 			///
@@ -164,14 +287,41 @@ namespace CSBackend
 
 		private:
 
+			//-------------------------------------------------
+			/// Recreate the window in fullscreen state
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void SetFullscreen();
+			//-------------------------------------------------
+			/// Recreate the window in windowed state
+			///
+			/// @author S Downie
+			//-------------------------------------------------
+			void SetWindowed();
+
+		private:
+
 			sf::Window m_window;
 
 			CSCore::Event<WindowResizeDelegate> m_windowResizeEvent;
+			CSCore::Event<WindowDisplayModeDelegate> m_windowDisplayModeEvent;
 			CSCore::Event<MouseButtonDelegate> m_mouseButtonEvent;
 			CSCore::Event<MouseMovedDelegate> m_mouseMovedEvent;
+			CSCore::Event<MouseWheelDelegate> m_mouseWheelEvent;
+			CSCore::Event<TextEnteredEvent> m_textEnteredEvent;
+			CSCore::Event<KeyPressedDelegate> m_keyPressedEvent;
+			CSCore::Event<KeyReleasedDelegate> m_keyReleasedEvent;
+
+			std::string m_title;
+
+			sf::ContextSettings m_contextSettings;
+
+			u32 m_preferredRGBADepth = 32;
 
 			bool m_isSuspended = false;
 			bool m_isFocused = true;
+			DisplayMode m_displayMode = DisplayMode::k_windowed;
 		};
 	}
 }

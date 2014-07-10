@@ -164,6 +164,7 @@ namespace CSBackend
 			
             OnScreenResolutionChanged(m_screen->GetResolution());
             m_resolutionChangeConnection = m_screen->GetResolutionChangedEvent().OpenConnection(CSCore::MakeDelegate(this, &RenderSystem::OnScreenResolutionChanged));
+			m_displayModeChangeConnection = m_screen->GetDisplayModeChangedEvent().OpenConnection(CSCore::MakeDelegate(this, &RenderSystem::OnDisplayModeChanged));
             
             m_hasContextBeenBackedUp = false;
 		}
@@ -174,6 +175,12 @@ namespace CSBackend
 			mbInvalidateAllCaches = true;
             
             RestoreContext();
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+		void RenderSystem::OnDisplayModeChanged(CSCore::Screen::DisplayMode in_mode)
+        {
+            mbInvalidateAllCaches = true;
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -1085,6 +1092,7 @@ namespace CSBackend
 			}
             
             m_resolutionChangeConnection = nullptr;
+			m_displayModeChangeConnection = nullptr;
 		}
 	}
 }

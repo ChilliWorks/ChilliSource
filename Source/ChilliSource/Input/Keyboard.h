@@ -32,5 +32,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
+#include <ChilliSource/Input/Keyboard/KeyCode.h>
+#include <ChilliSource/Input/Keyboard/ModifierKeyCode.h>
 
 #endif

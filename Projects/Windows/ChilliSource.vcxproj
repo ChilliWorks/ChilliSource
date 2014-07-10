@@ -112,6 +112,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Input\Keyboard\Keyboard.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\Pointer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\PointerSystem.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntry.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\ContentDownload\ContentManagementSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\ContentDownload\MoContentDownloader.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\Http\HttpRequestSystem.cpp" />
@@ -195,7 +196,9 @@
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\Image\PNGImageProvider.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Core\String\WindowsStringUtils.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Input\DeviceButtons\DeviceButtonSystem.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Input\Keyboard\Keyboard.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Input\Pointer\PointerSystem.cpp" />
+    <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Input\TextEntry\TextEntry.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Main.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequest.cpp" />
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequestSystem.cpp" />
@@ -352,8 +355,10 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gestures\Gestures.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Keyboard\Keyboard.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Keyboard\KeyCode.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Pointer\Pointer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Pointer\PointerSystem.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntry.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ContentDownload\ContentManagementSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ContentDownload\IContentDownloader.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ContentDownload\MoContentDownloader.h" />
@@ -453,7 +458,9 @@
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\String\WindowsStringUtils.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\DeviceButtons\DeviceButtonSystem.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\Keyboard\Keyboard.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\Pointer\PointerSystem.h" />
+    <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\TextEntry\TextEntry.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequest.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequestSystem.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.h" />

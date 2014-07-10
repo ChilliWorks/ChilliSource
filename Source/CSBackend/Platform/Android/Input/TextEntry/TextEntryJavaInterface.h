@@ -1,5 +1,5 @@
 //
-//  KeyboardJavaInterface.h
+//  TextEntryJavaInterface.h
 //  Chilli Source
 //  Created by Ian Copland on 04/02/2014.
 //
@@ -28,36 +28,35 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifndef _CHILLISOURCE_PLATFORM_ANDROID_INPUT_KEYBOARDJAVAINTERFACE_H_
-#define _CHILLISOURCE_PLATFORM_ANDROID_INPUT_KEYBOARDJAVAINTERFACE_H_
+#ifndef _CHILLISOURCE_PLATFORM_ANDROID_INPUT_TEXTENTRY_TEXTENTRYJAVAINTERFACE_H_
+#define _CHILLISOURCE_PLATFORM_ANDROID_INPUT_TEXTENTRY_TEXTENTRYJAVAINTERFACE_H_
 
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterface.h>
-#include <ChilliSource/Input/Keyboard/Keyboard.h>
+#include <ChilliSource/Input/TextEntry/TextEntry.h>
 
 namespace CSBackend
 {
 	namespace Android
 	{
 		//=====================================================
-		/// Keyboard Java Interface
+		/// Text Entry Java Interface
 		///
-		/// A Java Interface for Android keyboard input.
+		/// A Java Interface for Android virtual keyboard input.
 		//======================================================
-		class KeyboardJavaInterface : public IJavaInterface
+		class TextEntryJavaInterface : public IJavaInterface
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(KeyboardJavaInterface);
+			CS_DECLARE_NAMEDTYPE(TextEntryJavaInterface);
 			//-----------------------------------------------
 			/// Events
 			//-----------------------------------------------
-			typedef std::function<void(const std::string&)> TextAddedDelegate;
-			typedef std::function<void()> TextDeletedDelegate;
+			typedef std::function<void(const std::string&)> TextChangedDelegate;
 			typedef std::function<void()> KeyboardDismissedDelegate;
 			//-----------------------------------------------
 			/// Constructor
 			//-----------------------------------------------
-			KeyboardJavaInterface();
+			TextEntryJavaInterface();
 			//-----------------------------------------------
 			/// Is A
 			///
@@ -65,20 +64,21 @@ namespace CSBackend
 			/// the given interface.
 			//-----------------------------------------------
 			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
-			//-----------------------------------------------
-			/// Set Text Added Delegate
+			//-------------------------------------------------------
+			/// @author Ian Copland
 			///
-			/// @param The delegate that will be called when
-			/// new keyboard text is added.
+			/// @param The new text input buffer (UTF-8).
+			//-------------------------------------------------------
+			void SetTextBuffer(const std::string& in_text);
 			//-----------------------------------------------
-			void SetTextAddedDelegate(const TextAddedDelegate& inDelegate);
-			//-----------------------------------------------
-			/// Set Text Deleted Delegate
+			/// Set the delegate that is called whenever
+			/// the text buffer changes
 			///
-			/// @param The delegate that will be called when
-			/// keyboard text is deleted.
+			/// @author S Downie
+			///
+			/// @param Delegate
 			//-----------------------------------------------
-			void SetTextDeletedDelegate(const TextDeletedDelegate& inDelegate);
+			void SetTextChangedDelegate(const TextChangedDelegate& inDelegate);
 			//-----------------------------------------------
 			/// Set Keyboard Dismissed Delegate
 			///
@@ -107,7 +107,7 @@ namespace CSBackend
 			/// @param The keyboard type to be used the
 			/// next time the keyboard is displayed.
 			//-------------------------------------------
-            void SetKeyboardType(CSInput::Keyboard::Type ineKeyboardType);
+            void SetKeyboardType(CSInput::TextEntry::Type ineKeyboardType);
 			//-------------------------------------------
 			/// Set Capitalisation Method
 			///
@@ -115,24 +115,16 @@ namespace CSBackend
             /// used the next time the keyboard is
             /// displayed.
 			//-------------------------------------------
-            void SetCapitalisationMethod(CSInput::Keyboard::Capitalisation ineKeyboardCapitalisation);
+            void SetCapitalisationMethod(CSInput::TextEntry::Capitalisation ineKeyboardCapitalisation);
 			//-----------------------------------------------
-			/// On Text Added
-			///
-			/// Called when the there is new text to add that
-            /// has been received from the keyboard.
+			/// Called when the contents of the text buffer
+            /// has changed
+            ///
+            /// @author S Downie
 			///
 			/// @param The new text (UTF-8).
 			//-----------------------------------------------
-			void OnTextAdded(const std::string& instrText);
-			//-----------------------------------------------
-			/// On Text Deleted
-			///
-			/// Called when keyboard text has been deleted.
-			///
-			/// @param The new text.
-			//-----------------------------------------------
-			void OnTextDeleted();
+			void OnTextChanged(const std::string& in_text);
 			//-----------------------------------------------
 			/// On Keyboard Dismissed
 			///
@@ -140,8 +132,7 @@ namespace CSBackend
 			//-----------------------------------------------
 			void OnKeyboardDismissed();
 		private:
-			TextAddedDelegate mTextAddedDelegate;
-			TextDeletedDelegate mTextDeletedDelegate;
+			TextChangedDelegate m_textChangedDelegate;
 			KeyboardDismissedDelegate mKeyboardDismissedDelegate;
 		};
 	}

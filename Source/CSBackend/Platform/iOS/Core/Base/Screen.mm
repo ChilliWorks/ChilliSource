@@ -72,6 +72,9 @@ namespace CSBackend
                 m_densityScale = [UIScreen mainScreen].scale;
                 m_invDensityScale = 1.0f / m_densityScale;
             }
+            
+            m_supportedResolutions.push_back(CSCore::Integer2((s32)m_resolution.x, (s32)m_resolution.y));
+            m_supportedResolutions.push_back(CSCore::Integer2((s32)m_resolution.y, (s32)m_resolution.x));
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -102,6 +105,30 @@ namespace CSBackend
         CSCore::IConnectableEvent<Screen::ResolutionChangedDelegate>& Screen::GetResolutionChangedEvent()
         {
             return m_resolutionChangedEvent;
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        CSCore::IConnectableEvent<Screen::DisplayModeChangedDelegate>& Screen::GetDisplayModeChangedEvent()
+        {
+            return m_displayModeChangedEvent;
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        std::vector<CSCore::Integer2> Screen::GetSupportedResolutions() const
+        {
+            return m_supportedResolutions;
+        }
+        //----------------------------------------------------------
+		//----------------------------------------------------------
+		void Screen::SetResolution(const CSCore::Integer2& in_size)
+		{
+			CS_LOG_WARNING("Screen::SetResolution has no effect on iOS");
+		}
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Screen::SetDisplayMode(DisplayMode in_mode)
+        {
+        	CS_LOG_WARNING("Screen::SetDisplayMode has no effect on iOS");
         }
         //-----------------------------------------------------------
         //------------------------------------------------------------

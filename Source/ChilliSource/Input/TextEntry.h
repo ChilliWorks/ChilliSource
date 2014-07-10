@@ -1,7 +1,7 @@
 //
-//  Keyboard.cpp
+//  TextEntry.h
 //  Chilli Source
-//  Created by Scott Downie on 09/07/2014
+//  Created by Scott Downie on 08/07/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,27 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Input/Keyboard/Keyboard.h>
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
-#include <CSBackend/Platform/Windows/Input/Keyboard/Keyboard.h>
+#ifndef _CHILLISOURCE_INPUT_TEXTENTRY_H_
+#define _CHILLISOURCE_INPUT_TEXTENTRY_H_
+
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Input/TextEntry/TextEntry.h>
+
 #endif
-
-namespace ChilliSource
-{
-    namespace Input
-    {
-        CS_DEFINE_NAMEDTYPE(Keyboard);
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        KeyboardUPtr Keyboard::Create()
-        {
-#if defined CS_TARGETPLATFORM_WINDOWS
-            return KeyboardUPtr(new CSBackend::Windows::Keyboard());
-#else
-            return nullptr;
-#endif
-
-        }
-    }
-}

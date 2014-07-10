@@ -210,9 +210,87 @@ namespace CSBackend
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
+		void SFMLWindow::SetSize(const CSCore::Integer2& in_size)
+		{
+			//Clamp to the actual screen size
+			CSCore::Integer2 size = CSCore::Integer2::Max(in_size, CSCore::Integer2::k_one);
+			size.x = std::min((s32)sf::VideoMode::getDesktopMode().width, size.x);
+			size.y = std::min((s32)sf::VideoMode::getDesktopMode().height, size.y);
+
+			//This will trigger an SFML resize event
+			m_window.setSize(sf::Vector2u(size.x, size.y));
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void SFMLWindow::SetDisplayMode(DisplayMode in_mode)
+		{
+			if (in_mode == m_displayMode)
+				return;
+
+			m_displayMode = in_mode;
+
+			switch (m_displayMode)
+			{
+			case DisplayMode::k_fullscreen:
+				SetFullscreen();
+				break;
+			case DisplayMode::k_windowed:
+				SetWindowed();
+				break;
+			}
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void SFMLWindow::SetFullscreen()
+		{
+			auto currentSize = m_window.getSize();
+
+			//Pick the best fit RGBA depth based on the supported depths
+			for (auto it = sf::VideoMode::getFullscreenModes().rbegin(); it != sf::VideoMode::getFullscreenModes().rend(); ++it)
+			{
+				s32 bpp = it->bitsPerPixel;
+				if (bpp >= m_preferredRGBADepth)
+				{
+					m_window.create(sf::VideoMode(currentSize.x, currentSize.y, bpp), m_title, sf::Style::Fullscreen, m_contextSettings);
+					m_windowDisplayModeEvent.NotifyConnections(DisplayMode::k_fullscreen);
+					break;
+				}
+			}
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void SFMLWindow::SetWindowed()
+		{
+			auto currentSize = m_window.getSize();
+
+			m_window.create(sf::VideoMode(currentSize.x, currentSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), m_title, sf::Style::Default, m_contextSettings);
+			m_windowDisplayModeEvent.NotifyConnections(DisplayMode::k_windowed);
+		}
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		std::vector<CSCore::Integer2> SFMLWindow::GetSupportedResolutions() const
+		{
+			std::vector<CSCore::Integer2> result;
+			result.reserve(sf::VideoMode::getFullscreenModes().size());
+
+			for (const auto& mode : sf::VideoMode::getFullscreenModes())
+			{
+				result.push_back(CSCore::Integer2((s32)mode.width, (s32)mode.height));
+			}
+
+			return result;
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
 		CSCore::IConnectableEvent<SFMLWindow::WindowResizeDelegate>& SFMLWindow::GetWindowResizedEvent()
 		{
 			return m_windowResizeEvent;
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		CSCore::IConnectableEvent<SFMLWindow::WindowDisplayModeDelegate>& SFMLWindow::GetWindowDisplayModeEvent()
+		{
+			return m_windowDisplayModeEvent;
 		}
 		//-------------------------------------------------
 		//------------------------------------------------
@@ -225,6 +303,30 @@ namespace CSBackend
 		CSCore::IConnectableEvent<SFMLWindow::MouseMovedDelegate>& SFMLWindow::GetMouseMovedEvent()
 		{
 			return m_mouseMovedEvent;
+		}
+		//-------------------------------------------------
+		//------------------------------------------------
+		CSCore::IConnectableEvent<SFMLWindow::MouseWheelDelegate>& SFMLWindow::GetMouseWheelEvent()
+		{
+			return m_mouseWheelEvent;
+		}
+		//-------------------------------------------------
+		//------------------------------------------------
+		CSCore::IConnectableEvent<SFMLWindow::TextEnteredEvent>& SFMLWindow::GetTextEnteredEvent()
+		{
+			return m_textEnteredEvent;
+		}
+		//-------------------------------------------------------
+		//-------------------------------------------------------
+		CSCore::IConnectableEvent<SFMLWindow::KeyPressedDelegate>& SFMLWindow::GetKeyPressedEvent()
+		{
+			return m_keyPressedEvent;
+		}
+		//-------------------------------------------------------
+		//-------------------------------------------------------
+		CSCore::IConnectableEvent<SFMLWindow::KeyReleasedDelegate>& SFMLWindow::GetKeyReleasedEvent()
+		{
+			return m_keyReleasedEvent;
 		}
 		//------------------------------------------------
 		//------------------------------------------------
@@ -259,7 +361,9 @@ namespace CSBackend
 			Json::Value appConfigRoot = ReadAppConfig();
 			CSRendering::SurfaceFormat surfaceFormat = ReadSurfaceFormat(appConfigRoot);
 			u32 msaaFormat = ReadMultisampleFormat(appConfigRoot);
-			m_window.create(sf::VideoMode(800, 600, ReadRGBAPixelDepth(surfaceFormat)), "", sf::Style::Default, CreateContextSettings(surfaceFormat, msaaFormat));
+			m_contextSettings = CreateContextSettings(surfaceFormat, msaaFormat);
+			m_preferredRGBADepth = ReadRGBAPixelDepth(surfaceFormat);
+			m_window.create(sf::VideoMode::getDesktopMode(), "", sf::Style::Default, m_contextSettings);
 
 			GLenum glewError = glewInit();
 			if (GLEW_OK != glewError)
@@ -278,7 +382,9 @@ namespace CSBackend
 
 			auto appConfig = CSCore::Application::Get()->GetAppConfig();
 			m_window.setFramerateLimit(appConfig->GetPreferredFPS());
-			m_window.setTitle(appConfig->GetDisplayableName());
+
+			m_title = appConfig->GetDisplayableName();
+			m_window.setTitle(m_title);
 
 			while (m_isSuspended == false)
 			{
@@ -287,37 +393,53 @@ namespace CSBackend
 				{
 					switch (event.type)
 					{
-					default:
-						break;
-					case sf::Event::Closed:
-						app->Quit();
-						return;
-					case sf::Event::Resized:
-						m_windowResizeEvent.NotifyConnections(CSCore::Integer2((s32)event.size.width, (s32)event.size.height));
-						break;
-					case sf::Event::GainedFocus:
-						if (m_isFocused == false)
+						default:
+							break;
+						case sf::Event::Closed:
+							app->Quit();
+							return;
+						case sf::Event::Resized:
+							m_windowResizeEvent.NotifyConnections(CSCore::Integer2((s32)event.size.width, (s32)event.size.height));
+							break;
+						case sf::Event::GainedFocus:
+							if (m_isFocused == false)
+							{
+								m_isFocused = true;
+								app->Foreground();
+							}
+							break;
+						case sf::Event::LostFocus:
+							if (m_isFocused == true)
+							{
+								m_isFocused = false;
+								app->Background();
+							}
+							break;
+						case sf::Event::MouseButtonPressed:
+							m_mouseButtonEvent.NotifyConnections(event.mouseButton.button, MouseButtonEvent::k_pressed, event.mouseButton.x, event.mouseButton.y);
+							break;
+						case sf::Event::MouseButtonReleased:
+							m_mouseButtonEvent.NotifyConnections(event.mouseButton.button, MouseButtonEvent::k_released, event.mouseButton.x, event.mouseButton.y);
+							break;
+						case sf::Event::MouseMoved:
+							m_mouseMovedEvent.NotifyConnections(event.mouseMove.x, event.mouseMove.y);
+							break;
+						case sf::Event::MouseWheelMoved:
+							m_mouseWheelEvent.NotifyConnections(event.mouseWheel.delta);
+							break;
+						case sf::Event::KeyPressed:
+							m_keyPressedEvent.NotifyConnections(event.key.code, event.key);
+							break;
+						case sf::Event::KeyReleased:
+							m_keyReleasedEvent.NotifyConnections(event.key.code);
+							break;
+						case sf::Event::TextEntered:
 						{
-							m_isFocused = true;
-							app->Foreground();
+							CSCore::UTF8Char utf8Char = 0;
+							sf::Utf32::toUtf8(&event.text.unicode, (&event.text.unicode) + 1, &utf8Char);
+							m_textEnteredEvent.NotifyConnections(utf8Char);
+							break;
 						}
-						break;
-					case sf::Event::LostFocus:
-						if (m_isFocused == true)
-						{
-							m_isFocused = false;
-							app->Background();
-						}
-						break;
-					case sf::Event::MouseButtonPressed:
-						m_mouseButtonEvent.NotifyConnections(event.mouseButton.button, MouseButtonEvent::k_pressed, event.mouseButton.x, event.mouseButton.y);
-						break;
-					case sf::Event::MouseButtonReleased:
-						m_mouseButtonEvent.NotifyConnections(event.mouseButton.button, MouseButtonEvent::k_released, event.mouseButton.x, event.mouseButton.y);
-						break;
-					case sf::Event::MouseMoved:
-						m_mouseMovedEvent.NotifyConnections(event.mouseMove.x, event.mouseMove.y);
-						break;
 					}
 				}
 
@@ -346,10 +468,12 @@ namespace CSBackend
 			if (m_isFocused == true)
 			{
 				CSCore::Application::Get()->Background();
+				m_isFocused = false;
 			}
 			if (m_isSuspended == false)
 			{
 				CSCore::Application::Get()->Suspend();
+				m_isSuspended = true;
 			}
 
 			CSCore::Application::Get()->Destroy();

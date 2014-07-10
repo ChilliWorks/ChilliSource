@@ -1,11 +1,11 @@
 //
 //  Keyboard.h
 //  Chilli Source
-//  Created by Scott Downie on 26/11/2010
+//  Created by Scott Downie on 09/07/2014
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2010 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -34,14 +34,14 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 
 #include <functional>
+#include <vector>
 
 namespace ChilliSource
 {
 	namespace Input
 	{
         //---------------------------------------------------------------
-        /// A system for receiving input from both virtual and hardware
-        /// keyboards depending on the platform.
+        /// A system for receiving input from the current keyboard
         ///
         /// @author S Downie
         //---------------------------------------------------------------
@@ -49,52 +49,76 @@ namespace ChilliSource
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(Keyboard);
+            
             //-------------------------------------------------------
-            /// An enum describing the different types of keyboard.
+            /// Delegate that receieves events on the key with the
+            /// given code when key is pressed
             ///
             /// @author S Downie
-            //-------------------------------------------------------
-            enum class Type
-            {
-                k_text,
-                k_numeric
-            };
-            //-------------------------------------------------------
-            /// An enum describing the various methods of keyboard
-            /// capitalisation that can be used.
             ///
-            ///  - None: will not capitalise any thing.
-            ///  - Words: will capitalise the first letter
-            ///	   of each word.
-            ///  - Sentences: will capitalise the first letter
-            ///	   of each sentence.
-            ///  - All: will capitalise every letter.
-            ///
-            /// @author Ian Copland
+            /// @param Key code
+            /// @param List of modifier keys that are down
             //-------------------------------------------------------
-            enum class Capitalisation
-            {
-                k_none,
-                k_words,
-                k_sentences,
-                k_all
-            };
+            using KeyPressedDelegate = std::function<void(KeyCode, const std::vector<ModifierKeyCode>&)>;
             //-------------------------------------------------------
-            /// A delegate for receiving keyboard events.
+            /// Delegate that receieves events on the key with the
+            /// given code when key is released
             ///
             /// @author S Downie
-            //-------------------------------------------------------
-            typedef std::function<void()> KeyboardEventDelegate;
-            //-------------------------------------------------------
-            /// A delegate used for recieving text input events.
             ///
-            /// @param The new updated version of the text.
-            /// @param [Out] Whether or not the change to the text
-            /// has been rejected.
+            /// @param Key code
+            //-------------------------------------------------------
+            using KeyReleasedDelegate = std::function<void(KeyCode)>;
+            //-------------------------------------------------------
+            /// Check whether the key is currently down. This is
+            /// unbuffered so will only check the state of the key
+            /// at the moment in time when it is called
             ///
             /// @author S Downie
+            ///
+            /// @param Key code
+            ///
+            /// @return Whether the key is down
             //-------------------------------------------------------
-            typedef std::function<void(const std::string&, bool*)> TextInputEventDelegate;
+            virtual bool IsKeyDown(KeyCode in_code) const = 0;
+            //-------------------------------------------------------
+            /// Get the event that is triggered whenever a key is pressed.
+            ///
+            /// This event is guaranteed and should be used for low
+            /// frequency events such as catching a confirm enter press.
+            /// The polling "IsDown" method should be used for realtime
+            /// events such as moving characters on arrow press, etc.
+            ///
+            /// The event also returns the current state of the modifier
+            /// keys (Ctrl, Alt, Shift, etc.)
+            ///
+            /// @author S Downie
+            ///
+            /// @return Event to register for key presses
+            //-------------------------------------------------------
+            virtual Core::IConnectableEvent<KeyPressedDelegate>& GetKeyPressedEvent() = 0;
+            //-------------------------------------------------------
+            /// Get the event that is triggered whenever a key is released.
+            ///
+            /// This event is guaranteed and should be used for low
+            /// frequency events. The polling "IsUp" method should be
+            /// used for realtime events.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Event to register for key releases
+            //-------------------------------------------------------
+            virtual Core::IConnectableEvent<KeyReleasedDelegate>& GetKeyReleasedEvent() = 0;
+			//-------------------------------------------------------
+			/// Virtual destructor
+			///
+			/// @author S Downie
+			//-------------------------------------------------------
+			virtual ~Keyboard(){}
+            
+        protected:
+            
+            friend class Core::Application;
             //-------------------------------------------------------
             /// Factory method from creating a new platform specific
             /// instance of the keyboard system.
@@ -104,74 +128,6 @@ namespace ChilliSource
             /// @return The new instance of the system.
             //-------------------------------------------------------
 			static KeyboardUPtr Create();
-            //-------------------------------------------------------
-            /// Sets whether or not the text input is currently
-            /// enabled or disabled. If the keyboard is virtual, it
-            /// will be shown or hidden when enabled or disabled.
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------
-			virtual void SetTextInputEnabled(bool in_enabled) = 0;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Whether or not text input is currently
-            /// enabled.
-            //-------------------------------------------------------
-			virtual bool IsTextInputEnabled() const = 0;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The current text input buffer (UTF-8).
-            //-------------------------------------------------------
-			virtual const std::string& GetText() const = 0;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param The new text input buffer (UTF-8).
-            //-------------------------------------------------------
-            virtual void SetText(const std::string& in_text) = 0;
-            //-------------------------------------------------------
-            /// Sets the type of keyboard to display if using a
-            /// virtual keyboard. This must be set prior to the keyboard
-            /// being displayed. Note that this is only a suggestion
-            /// and the virtual keyboard implementation may choose to
-            /// ignore it.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The keyboard type
-            //-------------------------------------------------------
-            virtual void SetType(Type in_type) = 0;
-            //-------------------------------------------------------
-            /// Sets capitalisation method to be used for text input.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The capitalisation method.
-            //-------------------------------------------------------
-            virtual void SetCapitalisation(Capitalisation in_capitalisation) = 0;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param An event that is called when text input is
-            /// enabled.
-            //-------------------------------------------------------
-			virtual Core::IConnectableEvent<KeyboardEventDelegate>& GetTextInputEnabledEvent() = 0;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param An event that is called when text input is
-            /// received.
-            //-------------------------------------------------------
-			virtual Core::IConnectableEvent<TextInputEventDelegate>& GetTextInputReceivedEvent() = 0;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param An event that is called when text input is
-            /// disabled.
-            //-------------------------------------------------------
-			virtual Core::IConnectableEvent<KeyboardEventDelegate>& GetTextInputDisabledEvent() = 0;
 		};
 	}
 }

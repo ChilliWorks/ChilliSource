@@ -91,6 +91,17 @@ namespace ChilliSource
             //----------------------------------------------------
             using PointerUpDelegate = std::function<void(const Pointer&, f64, Pointer::InputType)>;
             //----------------------------------------------------
+            /// A delegate that is used to receive pointer scroll events
+            /// (i.e. mouse wheel).
+            ///
+            /// @param The pointer
+            /// @param The timestamp of the event.
+            /// @param The scroll vector (x, y delta)
+            ///
+            /// @author Scott Downie
+            //----------------------------------------------------
+            using PointerScrollDelegate = std::function<void(const Pointer&, f64, const Core::Vector2&)>;
+            //----------------------------------------------------
             /// Creates a new platfrom specific instance of pointer
             /// system.
             ///
@@ -128,6 +139,12 @@ namespace ChilliSource
             /// @return The pointer up event.
             //----------------------------------------------------
             Core::IConnectableEvent<PointerUpDelegate>& GetPointerUpEvent();
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The event triggered on scroll change (i.e. mouse wheel scroll).
+            //----------------------------------------------------
+            Core::IConnectableEvent<PointerScrollDelegate>& GetPointerScrollEvent();
             //----------------------------------------------------
             /// Tries to get the pointer with the given unique Id.
             ///
@@ -232,6 +249,16 @@ namespace ChilliSource
             //----------------------------------------------------
             void AddPointerUpEvent(Pointer::Id in_pointerUniqueId, Pointer::InputType in_inputType);
             //----------------------------------------------------
+            /// Adds a new pointer scroll event. This method is thread
+            /// safe and can be called on any thread.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The unique Id of the pointer.
+            /// @param The scroll delta in the x-y plane
+            //----------------------------------------------------
+            void AddPointerScrollEvent(Pointer::Id in_pointerUniqueId, const Core::Vector2& in_delta);
+            //----------------------------------------------------
             /// Adds a new remove pointer event. This method is thread
             /// safe and can be called on any thread.
             ///
@@ -261,6 +288,7 @@ namespace ChilliSource
                 k_down,
                 k_move,
                 k_up,
+                k_scroll,
                 k_remove
             };
             //----------------------------------------------------
@@ -320,6 +348,17 @@ namespace ChilliSource
             //-----------------------------------------------------
             void PointerUp(Pointer::Id in_uniqueId, f64 in_timestamp, Pointer::InputType in_inputType);
             //----------------------------------------------------
+            /// Updates the pointer with the given unique id and
+            /// notifies listeners that it has scrolled.
+            ///
+            /// @author S Downie
+            ///
+            /// @param The unique pointer Id.
+            /// @param The timestamp.
+            /// @param The scroll delta.
+            //-----------------------------------------------------
+            void PointerScrolled(Pointer::Id in_uniqueId, f64 in_timestamp, const Core::Vector2& in_delta);
+            //----------------------------------------------------
             /// Removes the pointer with the given Id.
             ///
             /// @author Ian Copland
@@ -331,6 +370,7 @@ namespace ChilliSource
             Core::Event<PointerDownDelegate> m_pointerDownEvent;
             Core::Event<PointerMovedDelegate> m_pointerMovedEvent;
             Core::Event<PointerUpDelegate> m_pointerUpEvent;
+            Core::Event<PointerScrollDelegate> m_pointerScrolledEvent;
             std::mutex m_mutex;
             std::vector<Pointer> m_pointers;
             std::queue<PointerEvent> m_eventQueue;

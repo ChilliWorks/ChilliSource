@@ -1,11 +1,11 @@
 //
-//  VirtualKeyboardDelegate.h
+//  TextEntry.cpp
 //  Chilli Source
-//  Created by Scott Downie on 18/07/2011.
+//  Created by Scott Downie on 08/07/2014
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,39 +26,40 @@
 //  THE SOFTWARE.
 //
 
+#include <ChilliSource/Input/TextEntry/TextEntry.h>
+
+#ifdef CS_TARGETPLATFORM_ANDROID
+#include <CSBackend/Platform/Android/Input/TextEntry/TextEntry.h>
+#endif
+
 #ifdef CS_TARGETPLATFORM_IOS
+#include <CSBackend/Platform/iOS/Input/TextEntry/TextEntry.h>
+#endif
 
-#ifndef _CSBACKEND_PLATFORM_IOS_INPUT_KEYBOARD_H_
-#define _CSBACKEND_PLATFORM_IOS_INPUT_KEYBOARD_H_
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <CSBackend/Platform/Windows/Input/TextEntry/TextEntry.h>
+#endif
 
-#include <ChilliSource/ChilliSource.h>
-#include <CSBackend/Platform/iOS/ForwardDeclarations.h>
-
-#include <UIKit/UIKit.h>
-
-//---------------------------------------------------------
-/// A delegate class for listening for changes from the
-/// iOS virtual keyboard.
-///
-/// @author S Downie
-//---------------------------------------------------------
-@interface VirtualKeyboardDelegate : NSObject<UITextFieldDelegate>
+namespace ChilliSource
 {
-    CSBackend::iOS::Keyboard* keyboard;
+    namespace Input
+    {
+        CS_DEFINE_NAMEDTYPE(TextEntry);
+        
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        TextEntryUPtr TextEntry::Create()
+        {
+#if defined CS_TARGETPLATFORM_ANDROID
+            return TextEntryUPtr(new CSBackend::Android::TextEntry());
+#elif defined CS_TARGETPLATFORM_IOS
+            return TextEntryUPtr(new CSBackend::iOS::TextEntry());
+#elif defined CS_TARGETPLATFORM_WINDOWS
+            return TextEntryUPtr(new CSBackend::Windows::TextEntry());
+#else
+            return nullptr;
+#endif
+
+        }
+    }
 }
-//---------------------------------------------------------
-/// Constructor.
-///
-/// @author S Downie
-///
-/// @param The keyboard system.
-///
-/// @return The new instance of the delegate.
-//---------------------------------------------------------
--(VirtualKeyboardDelegate*) initWithKeyboard:(CSBackend::iOS::Keyboard*) keyboardSystem;
-
-@end
-
-#endif
-
-#endif

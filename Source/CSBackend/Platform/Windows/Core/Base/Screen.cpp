@@ -30,7 +30,6 @@
 
 #include <CSBackend/Platform/Windows/Core/Base/Screen.h>
 
-#include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
@@ -48,6 +47,8 @@ namespace CSBackend
 			m_resolution.y = (f32)size.y;
 
 			m_densityScale = m_invDensityScale = 1.0f;
+
+			m_displayModeChangeConnection = SFMLWindow::Get()->GetWindowDisplayModeEvent().OpenConnection(CSCore::MakeDelegate(this, &Screen::OnDisplayModeChanged));
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -79,6 +80,38 @@ namespace CSBackend
         {
             return m_resolutionChangedEvent;
         }
+		//-----------------------------------------------------------
+		//-----------------------------------------------------------
+		CSCore::IConnectableEvent<Screen::DisplayModeChangedDelegate>& Screen::GetDisplayModeChangedEvent()
+		{
+			return m_displayModeChangedEvent;
+		}
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		void Screen::SetResolution(const CSCore::Integer2& in_size)
+		{
+			SFMLWindow::Get()->SetSize(in_size);
+		}
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		void Screen::SetDisplayMode(DisplayMode in_mode)
+		{
+			switch (in_mode)
+			{
+			case DisplayMode::k_windowed:
+				SFMLWindow::Get()->SetDisplayMode(SFMLWindow::DisplayMode::k_windowed);
+				break;
+			case DisplayMode::k_fullscreen:
+				SFMLWindow::Get()->SetDisplayMode(SFMLWindow::DisplayMode::k_fullscreen);
+				break;
+			}
+		}
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		std::vector<CSCore::Integer2> Screen::GetSupportedResolutions() const
+		{
+			return SFMLWindow::Get()->GetSupportedResolutions();
+		}
         //-----------------------------------------------------------
         //------------------------------------------------------------
         void Screen::OnResolutionChanged(const CSCore::Integer2& in_resolution)
@@ -88,6 +121,20 @@ namespace CSBackend
 
         	m_resolutionChangedEvent.NotifyConnections(m_resolution);
         }
+		//----------------------------------------------------------
+		//----------------------------------------------------------
+		void Screen::OnDisplayModeChanged(SFMLWindow::DisplayMode in_mode)
+		{
+			switch (in_mode)
+			{
+			case SFMLWindow::DisplayMode::k_windowed:
+				m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_windowed);
+				break;
+			case SFMLWindow::DisplayMode::k_fullscreen:
+				m_displayModeChangedEvent.NotifyConnections(DisplayMode::k_fullscreen);
+				break;
+			}
+		}
 		//------------------------------------------------
 		//------------------------------------------------
 		void Screen::OnInit()
@@ -99,6 +146,7 @@ namespace CSBackend
 		void Screen::OnDestroy()
 		{
 			m_windowResizeConnection = nullptr;
+			m_displayModeChangeConnection = nullptr;
 		}
     }
 }

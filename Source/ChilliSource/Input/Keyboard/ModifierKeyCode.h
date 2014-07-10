@@ -1,5 +1,5 @@
 //
-//  Keyboard.cpp
+//  ModifierKeyCode.h
 //  Chilli Source
 //  Created by Scott Downie on 09/07/2014
 //
@@ -26,27 +26,32 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Input/Keyboard/Keyboard.h>
-
-#ifdef CS_TARGETPLATFORM_WINDOWS
-#include <CSBackend/Platform/Windows/Input/Keyboard/Keyboard.h>
-#endif
+#ifndef _CHILLISOURCE_INPUT_KEYBOARD_MODIFIERKEYCODE_H_
+#define _CHILLISOURCE_INPUT_KEYBOARD_MODIFIERKEYCODE_H_
 
 namespace ChilliSource
 {
-    namespace Input
-    {
-        CS_DEFINE_NAMEDTYPE(Keyboard);
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        KeyboardUPtr Keyboard::Create()
-        {
-#if defined CS_TARGETPLATFORM_WINDOWS
-            return KeyboardUPtr(new CSBackend::Windows::Keyboard());
-#else
-            return nullptr;
+	namespace Input
+	{
+        //---------------------------------------------------------------
+        /// List of all the modifier key-codes supported for keyboard events.
+        /// This makes no distinction between left and right keys and therefore
+        /// is independent of standard key codes
+        ///
+        /// @author S Downie
+        //---------------------------------------------------------------
+		enum class ModifierKeyCode
+		{
+            k_ctrl,
+            k_alt,
+            k_shift,
+            k_system, //Windows, Command, etc.
+            
+            k_total
+        };
+	}
+}
+
 #endif
 
-        }
-    }
-}
+

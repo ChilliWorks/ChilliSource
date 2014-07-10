@@ -36,7 +36,7 @@ namespace ChilliSource
         {
             //-----------------------------------------------------
             //-----------------------------------------------------
-            std::string Append(UTF8Char in_char, const std::string& in_string)
+			std::string AppendCopy(UTF8Char in_char, const std::string& in_string)
             {
                 std::string result(in_string);
                 Append(in_char, result);

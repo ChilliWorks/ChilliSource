@@ -104,6 +104,12 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
+        Core::IConnectableEvent<PointerSystem::PointerScrollDelegate>& PointerSystem::GetPointerScrollEvent()
+        {
+            return m_pointerScrolledEvent;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
         std::vector<Pointer> PointerSystem::GetPointers() const
         {
             return m_pointers;
@@ -167,6 +173,9 @@ namespace ChilliSource
                         break;
                     case PointerEventType::k_up:
                         PointerUp(event.m_pointerUniqueId, event.m_timestamp, event.m_InputType);
+                        break;
+                    case PointerEventType::k_scroll:
+                        PointerScrolled(event.m_pointerUniqueId, event.m_timestamp, event.m_position);
                         break;
                     case PointerEventType::k_remove:
                         RemovePointer(event.m_pointerUniqueId);
@@ -238,6 +247,21 @@ namespace ChilliSource
             event.m_InputType = in_inputType;
             event.m_position = Core::Vector2::k_zero;
             event.m_timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
+            
+            m_eventQueue.push(event);
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void PointerSystem::AddPointerScrollEvent(Pointer::Id in_pointerUniqueId, const Core::Vector2& in_delta)
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
+            PointerEvent event;
+            event.m_type = PointerEventType::k_scroll;
+            event.m_pointerUniqueId = in_pointerUniqueId;
+            event.m_InputType = Pointer::InputType::k_none;
+            event.m_timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
+            event.m_position = in_delta;
             
             m_eventQueue.push(event);
         }
@@ -319,7 +343,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_LOG_ERROR("PointerSystem: Received pointer down event for unknown pointer Id.");
+                CS_LOG_FATAL("PointerSystem: Received pointer down event for unknown pointer Id.");
             }
         }
         //----------------------------------------------------
@@ -340,7 +364,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_LOG_ERROR("PointerSystem: Received pointer moved event for unknown pointer Id.");
+                CS_LOG_FATAL("PointerSystem: Received pointer moved event for unknown pointer Id.");
             }
         }
         //----------------------------------------------------
@@ -360,7 +384,26 @@ namespace ChilliSource
             }
             else
             {
-                CS_LOG_ERROR("PointerSystem: Received pointer down event for unknown pointer Id.");
+                CS_LOG_FATAL("PointerSystem: Received pointer down event for unknown pointer Id.");
+            }
+        }
+        //----------------------------------------------------
+        //-----------------------------------------------------
+        void PointerSystem::PointerScrolled(Pointer::Id in_uniqueId, f64 in_timestamp, const Core::Vector2& in_delta)
+        {
+            auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
+            {
+                return (in_uniqueId == in_pointer.GetId());
+            });
+            
+            if (pointerIt != m_pointers.end())
+            {
+                Pointer copy = *pointerIt;
+                m_pointerScrolledEvent.NotifyConnections(copy, in_timestamp, in_delta);
+            }
+            else
+            {
+                CS_LOG_FATAL("PointerSystem: Received pointer scroll event for unknown pointer Id.");
             }
         }
         //----------------------------------------------------
@@ -378,7 +421,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_LOG_ERROR("PointerSystem: Received remove pointer event for unknown pointer Id.");
+                CS_LOG_FATAL("PointerSystem: Received remove pointer event for unknown pointer Id.");
             }
         }
     }

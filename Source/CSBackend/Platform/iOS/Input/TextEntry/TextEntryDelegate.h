@@ -1,11 +1,11 @@
 //
-//  Keyboard.cpp
+//  TextEntryDelegate.h
 //  Chilli Source
-//  Created by Scott Downie on 09/07/2014
+//  Created by Scott Downie on 18/07/2011.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2011 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,27 +26,39 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Input/Keyboard/Keyboard.h>
+#ifdef CS_TARGETPLATFORM_IOS
 
-#ifdef CS_TARGETPLATFORM_WINDOWS
-#include <CSBackend/Platform/Windows/Input/Keyboard/Keyboard.h>
-#endif
+#ifndef _CSBACKEND_PLATFORM_IOS_INPUT_TEXTENTRY_TEXTENTRYDELEGATE_H_
+#define _CSBACKEND_PLATFORM_IOS_INPUT_TEXTENTRY_TEXTENTRYDELEGATE_H_
 
-namespace ChilliSource
+#include <ChilliSource/ChilliSource.h>
+#include <CSBackend/Platform/iOS/ForwardDeclarations.h>
+
+#include <UIKit/UIKit.h>
+
+//---------------------------------------------------------
+/// A delegate class for listening for changes from a UI text
+/// field
+///
+/// @author S Downie
+//---------------------------------------------------------
+@interface TextEntryDelegate : NSObject<UITextFieldDelegate>
 {
-    namespace Input
-    {
-        CS_DEFINE_NAMEDTYPE(Keyboard);
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        KeyboardUPtr Keyboard::Create()
-        {
-#if defined CS_TARGETPLATFORM_WINDOWS
-            return KeyboardUPtr(new CSBackend::Windows::Keyboard());
-#else
-            return nullptr;
+    CSBackend::iOS::TextEntry* textEntry;
+}
+//---------------------------------------------------------
+/// Constructor.
+///
+/// @author S Downie
+///
+/// @param The text entry system to notify.
+///
+/// @return The new instance of the delegate.
+//---------------------------------------------------------
+-(TextEntryDelegate*) initWithTextEntry:(CSBackend::iOS::TextEntry*) in_textEntry;
+
+@end
+
 #endif
 
-        }
-    }
-}
+#endif
