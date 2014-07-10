@@ -53,11 +53,11 @@ namespace CSBackend
 		{
 		public:
 			//-----------------------------------------------------------
-			/// Window states
+			/// Window display modes
 			///
 			/// @author S Downie
 			//-----------------------------------------------------------
-			enum class WindowState
+			enum class DisplayMode
 			{
 				k_windowed,
 				k_fullscreen
@@ -71,13 +71,13 @@ namespace CSBackend
 			//-----------------------------------------------------------
 			using WindowResizeDelegate = std::function<void(const CSCore::Integer2&)>;
 			//-----------------------------------------------------------
-			/// A delegate called when the window state changes.
+			/// A delegate called when the window mode changes.
 			///
 			/// @author S Downie
 			///
-			/// @param The new window state.
+			/// @param The new window mode.
 			//-----------------------------------------------------------
-			using WindowStateDelegate = std::function<void(WindowState)>;
+			using WindowDisplayModeDelegate = std::function<void(DisplayMode)>;
 			//-----------------------------------------------------------
 			/// List of the events that can occur on a mouse button
 			///
@@ -173,9 +173,9 @@ namespace CSBackend
 			///
 			/// @author S Downie
 			///
-			/// @param Window state
+			/// @param Window mode
 			//-------------------------------------------------
-			void SetState(WindowState in_state);
+			void SetDisplayMode(DisplayMode in_mode);
 			//----------------------------------------------------------
 			/// @author S Downie
 			///
@@ -212,7 +212,7 @@ namespace CSBackend
 			///
 			/// @return An event that is called when the window fullscreen is enabled or disabled
 			//-------------------------------------------------
-			CSCore::IConnectableEvent<WindowStateDelegate>& GetWindowStateEvent();
+			CSCore::IConnectableEvent<WindowDisplayModeDelegate>& GetWindowDisplayModeEvent();
 			//-------------------------------------------------
 			/// @author S Downie
 			///
@@ -305,7 +305,7 @@ namespace CSBackend
 			sf::Window m_window;
 
 			CSCore::Event<WindowResizeDelegate> m_windowResizeEvent;
-			CSCore::Event<WindowStateDelegate> m_windowStateEvent;
+			CSCore::Event<WindowDisplayModeDelegate> m_windowDisplayModeEvent;
 			CSCore::Event<MouseButtonDelegate> m_mouseButtonEvent;
 			CSCore::Event<MouseMovedDelegate> m_mouseMovedEvent;
 			CSCore::Event<MouseWheelDelegate> m_mouseWheelEvent;
@@ -321,7 +321,7 @@ namespace CSBackend
 
 			bool m_isSuspended = false;
 			bool m_isFocused = true;
-			WindowState m_state = WindowState::k_windowed;
+			DisplayMode m_displayMode = DisplayMode::k_windowed;
 		};
 	}
 }

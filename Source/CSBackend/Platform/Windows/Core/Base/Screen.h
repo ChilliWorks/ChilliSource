@@ -32,9 +32,10 @@
 #define _CSBACKEND_PLATFORM_WINDOWS_CORE_BASE_SCREEN_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Event/Event.h>
+#include <CSBackend/Platform/Windows/ForwardDeclarations.h>
+#include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 
 namespace CSBackend
 {
@@ -95,6 +96,13 @@ namespace CSBackend
             /// changes.
 			//-----------------------------------------------------------
             CSCore::IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() override;
+			//-----------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return An event that is called when the screen display
+			/// mode changes.
+			//-----------------------------------------------------------
+			CSCore::IConnectableEvent<DisplayModeChangedDelegate>& GetDisplayModeChangedEvent() override;
 			//----------------------------------------------------------
 			/// Changes the size of the application window
 			///
@@ -110,7 +118,7 @@ namespace CSBackend
 			///
 			/// @author S Downie
 			//----------------------------------------------------------
-			void SetState(State in_state) override;
+			void SetDisplayMode(DisplayMode in_mode) override;
 			//----------------------------------------------------------
 			/// @author S Downie
 			///
@@ -145,6 +153,14 @@ namespace CSBackend
 			/// @param The new resolution.
 			//------------------------------------------------------------
 			void OnResolutionChanged(const CSCore::Integer2& in_resolution);
+			//----------------------------------------------------------
+			/// Triggered when window display mode changes
+			///
+			/// @author S Downie
+			///
+			/// @param Display mode
+			//----------------------------------------------------------
+			void OnDisplayModeChanged(SFMLWindow::DisplayMode in_mode);
 			//------------------------------------------------
 			/// Called when the application is being destroyed.
 			/// This should be used to cleanup memory and
@@ -160,7 +176,9 @@ namespace CSBackend
             f32 m_densityScale;
             f32 m_invDensityScale;
             CSCore::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
+			CSCore::Event<DisplayModeChangedDelegate> m_displayModeChangedEvent;
 			CSCore::EventConnectionUPtr m_windowResizeConnection;
+			CSCore::EventConnectionUPtr m_displayModeChangeConnection;
         };
     }
 }

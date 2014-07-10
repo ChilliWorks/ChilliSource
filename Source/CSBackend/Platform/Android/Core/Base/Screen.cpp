@@ -82,6 +82,24 @@ namespace CSBackend
         {
             return m_resolutionChangedEvent;
         }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        CSCore::IConnectableEvent<Screen::DisplayModeChangedDelegate>& Screen::GetDisplayModeChangedEvent()
+        {
+            return m_displayModeChangedEvent;
+        }
+        //----------------------------------------------------------
+		//----------------------------------------------------------
+		void Screen::SetResolution(const CSCore::Integer2& in_size)
+		{
+			CS_LOG_WARNING("Screen::SetResolution has no effect on Android");
+		}
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+        void Screen::SetDisplayMode(DisplayMode in_mode)
+        {
+        	CS_LOG_WARNING("Screen::SetDisplayMode has no effect on Android");
+        }
         //----------------------------------------------------------
         //----------------------------------------------------------
         std::vector<CSCore::Integer2> Screen::GetSupportedResolutions() const

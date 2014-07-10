@@ -222,19 +222,19 @@ namespace CSBackend
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		void SFMLWindow::SetState(WindowState in_state)
+		void SFMLWindow::SetDisplayMode(DisplayMode in_mode)
 		{
-			if (in_state == m_state)
+			if (in_mode == m_displayMode)
 				return;
 
-			m_state = in_state;
+			m_displayMode = in_mode;
 
-			switch (m_state)
+			switch (m_displayMode)
 			{
-			case WindowState::k_fullscreen:
+			case DisplayMode::k_fullscreen:
 				SetFullscreen();
 				break;
-			case WindowState::k_windowed:
+			case DisplayMode::k_windowed:
 				SetWindowed();
 				break;
 			}
@@ -252,7 +252,7 @@ namespace CSBackend
 				if (bpp >= m_preferredRGBADepth)
 				{
 					m_window.create(sf::VideoMode(currentSize.x, currentSize.y, bpp), m_title, sf::Style::Fullscreen, m_contextSettings);
-					m_windowStateEvent.NotifyConnections(WindowState::k_fullscreen);
+					m_windowDisplayModeEvent.NotifyConnections(DisplayMode::k_fullscreen);
 					break;
 				}
 			}
@@ -264,7 +264,7 @@ namespace CSBackend
 			auto currentSize = m_window.getSize();
 
 			m_window.create(sf::VideoMode(currentSize.x, currentSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), m_title, sf::Style::Default, m_contextSettings);
-			m_windowStateEvent.NotifyConnections(WindowState::k_windowed);
+			m_windowDisplayModeEvent.NotifyConnections(DisplayMode::k_windowed);
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
@@ -288,9 +288,9 @@ namespace CSBackend
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
-		CSCore::IConnectableEvent<SFMLWindow::WindowStateDelegate>& SFMLWindow::GetWindowStateEvent()
+		CSCore::IConnectableEvent<SFMLWindow::WindowDisplayModeDelegate>& SFMLWindow::GetWindowDisplayModeEvent()
 		{
-			return m_windowStateEvent;
+			return m_windowDisplayModeEvent;
 		}
 		//-------------------------------------------------
 		//------------------------------------------------

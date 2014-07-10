@@ -53,11 +53,11 @@ namespace ChilliSource
             CS_DECLARE_NAMEDTYPE(Screen);
             
             //-----------------------------------------------------------
-            /// The states of the screen
+            /// The display modes of the screen
             ///
             /// @author S Downie
             //-----------------------------------------------------------
-            enum class State
+            enum class DisplayMode
             {
                 k_windowed,
                 k_fullscreen
@@ -73,6 +73,15 @@ namespace ChilliSource
 			/// @param The new screen resolution.
 			//-----------------------------------------------------------
             using ResolutionChangedDelegate = std::function<void(const Vector2&)>;
+            //-----------------------------------------------------------
+            /// A delegate called when the application screen display mode
+            /// changes.
+            ///
+			/// @author S Downie
+			///
+			/// @param The new screen display mode.
+			//-----------------------------------------------------------
+            using DisplayModeChangedDelegate = std::function<void(DisplayMode)>;
 			//-----------------------------------------------------------
 			/// @author S Downie
 			///
@@ -108,6 +117,13 @@ namespace ChilliSource
             /// changes.
 			//-----------------------------------------------------------
 			virtual IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() = 0;
+            //-----------------------------------------------------------
+            /// @author S Downie
+			///
+			/// @return An event that is called when the screen display
+            /// mode changes.
+			//-----------------------------------------------------------
+			virtual IConnectableEvent<DisplayModeChangedDelegate>& GetDisplayModeChangedEvent() = 0;
             //----------------------------------------------------------
             /// Set the screen size on platforms where that is allowed
             ///
@@ -126,7 +142,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //----------------------------------------------------------
-            virtual void SetState(State in_state) = 0;
+            virtual void SetDisplayMode(DisplayMode in_mode) = 0;
             //----------------------------------------------------------
             /// @author S Downie
             ///

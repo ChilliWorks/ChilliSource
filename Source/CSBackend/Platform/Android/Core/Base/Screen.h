@@ -95,6 +95,13 @@ namespace CSBackend
             /// changes.
 			//-----------------------------------------------------------
             CSCore::IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() override;
+            //-----------------------------------------------------------
+            /// @author S Downie
+			///
+			/// @return An event that is called when the screen display
+            /// mode changes.
+			//-----------------------------------------------------------
+            CSCore::IConnectableEvent<DisplayModeChangedDelegate>& GetDisplayModeChangedEvent() override;
             //----------------------------------------------------------
             /// Does nothing on Android due to fixed screen size
             ///
@@ -102,13 +109,13 @@ namespace CSBackend
             ///
 			/// @param Screen size in pixels
 			//----------------------------------------------------------
-			void SetResolution(const CSCore::Integer2& in_size) override {}
+			void SetResolution(const CSCore::Integer2& in_size) override;
             //----------------------------------------------------------
             /// Does nothing on Android due to fixed screen state
             ///
             /// @author S Downie
             //----------------------------------------------------------
-            void SetState(State in_state) override {};
+            void SetDisplayMode(DisplayMode in_mode) override;
             //----------------------------------------------------------
             /// @author S Downie
             ///
@@ -141,6 +148,7 @@ namespace CSBackend
             f32 m_densityScale;
             f32 m_invDensityScale;
             CSCore::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
+            CSCore::Event<DisplayModeChangedDelegate> m_displayModeChangedEvent;
         };
     }
 }

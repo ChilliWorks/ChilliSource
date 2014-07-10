@@ -160,14 +160,11 @@ namespace CSBackend
                 m_textureUniformNames.push_back("u_texture" + CSCore::ToString(i));
             }
             
-#ifdef CS_TARGETPLATFORM_WINDOWS
-			m_fullscreenChangeConnection = CSBackend::Windows::SFMLWindow::Get()->GetWindowStateEvent().OpenConnection(CSCore::MakeDelegate(this, &RenderSystem::OnFullscreenChanged));
-#endif
-            
             ForceRefreshRenderStates();
 			
             OnScreenResolutionChanged(m_screen->GetResolution());
             m_resolutionChangeConnection = m_screen->GetResolutionChangedEvent().OpenConnection(CSCore::MakeDelegate(this, &RenderSystem::OnScreenResolutionChanged));
+			m_displayModeChangeConnection = m_screen->GetDisplayModeChangedEvent().OpenConnection(CSCore::MakeDelegate(this, &RenderSystem::OnDisplayModeChanged));
             
             m_hasContextBeenBackedUp = false;
 		}
@@ -179,14 +176,12 @@ namespace CSBackend
             
             RestoreContext();
         }
-#ifdef CS_TARGETPLATFORM_WINDOWS
         //----------------------------------------------------------
         //----------------------------------------------------------
-		void RenderSystem::OnFullscreenChanged(CSBackend::Windows::SFMLWindow::WindowState in_state)
+		void RenderSystem::OnDisplayModeChanged(CSCore::Screen::DisplayMode in_mode)
         {
             mbInvalidateAllCaches = true;
         }
-#endif
         //----------------------------------------------------------
         //----------------------------------------------------------
         void RenderSystem::Suspend()
@@ -1080,9 +1075,7 @@ namespace CSBackend
 			}
             
             m_resolutionChangeConnection = nullptr;
-#ifdef CS_TARGETPLATFORM_WINDOWS
-            m_fullscreenChangeConnection = nullptr;
-#endif
+			m_displayModeChangeConnection = nullptr;
 		}
 	}
 }
