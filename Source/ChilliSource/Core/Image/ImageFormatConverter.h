@@ -55,6 +55,7 @@ namespace ChilliSource
         		Image::ImageDataUPtr m_data;
         		u32 m_size = 0;
 
+#ifdef CS_TARGETPLATFORM_WINDOWS
 				//------------------------------------------------
 				/// Visual C++ 12 doesn't support implicit move
 				/// constructors, so this has to be manually
@@ -73,6 +74,7 @@ namespace ChilliSource
 				/// @param The image buffer to move.
 				//------------------------------------------------
 				ImageBuffer(ImageBuffer&& in_other);
+#endif
         	};
 			//---------------------------------------------------
 			/// Converts an Image in format RGBA8888 to RGB888

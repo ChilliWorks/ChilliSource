@@ -38,6 +38,7 @@ namespace ChilliSource
     {
         namespace ImageFormatConverter
         {
+#ifdef CS_TARGETPLATFORM_WINDOWS
 			//------------------------------------------------
 			//------------------------------------------------
 			ImageBuffer::ImageBuffer(ImageBuffer&& in_other)
@@ -45,6 +46,7 @@ namespace ChilliSource
 				m_data = std::move(in_other.m_data);
 				m_size = in_other.m_size;
 			}
+#endif
             //---------------------------------------------------
             //---------------------------------------------------
             void RGBA8888ToRGB888(Image* in_image)
@@ -155,7 +157,7 @@ namespace ChilliSource
                 	pixel24->m_b = pixel32->b;
                 }
 
-                return outputBuffer;
+                return std::move(outputBuffer);
 			}
 			//---------------------------------------------------
 			//---------------------------------------------------
@@ -181,7 +183,7 @@ namespace ChilliSource
 						((((*pixel32 >> 24) & 0xFF) >> 4) << 0); // A
 				}
 
-				return outputBuffer;
+				return std::move(outputBuffer);
 			}
 			//---------------------------------------------------
 			//---------------------------------------------------
@@ -206,7 +208,7 @@ namespace ChilliSource
                     	((((*pixel32 >> 16) & 0xFF) >> 3) << 0);
                 }
 
-                return outputBuffer;
+                return std::move(outputBuffer);
 			}
 			//---------------------------------------------------
 			//---------------------------------------------------
@@ -230,7 +232,7 @@ namespace ChilliSource
                     	((*pixel32 >> 16) & 0xFF00); // A
                 }
 
-                return outputBuffer;
+                return std::move(outputBuffer);
 			}
 			//---------------------------------------------------
 			//---------------------------------------------------
@@ -253,7 +255,7 @@ namespace ChilliSource
 					*pixel8 = ((*pixel32)& 0xFF);
 				}
 
-				return outputBuffer;
+				return std::move(outputBuffer);
 			}
         }
     }
