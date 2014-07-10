@@ -125,6 +125,16 @@ public class Surface extends GLSurfaceView
 				{
 					output = jObject.getString("PreferredSurfaceFormat");
 				}
+				
+				if(jObject.has("Android") == true)
+				{
+					JSONObject android = jObject.getJSONObject("Android");
+					
+					if(android.has("PreferredSurfaceFormat") == true)
+					{
+						output = android.getString("PreferredSurfaceFormat");
+					}
+				}
 			}
 			catch (Exception e)
 			{

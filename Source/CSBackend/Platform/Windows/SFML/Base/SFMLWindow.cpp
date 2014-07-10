@@ -80,7 +80,7 @@ namespace CSBackend
 					Json::Reader jReader;
 					if (!jReader.parse(contents, root))
 					{
-						CS_LOG_FATAL("Could not parse App.config: " + jReader.getFormatedErrorMessages());
+						OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[Chilli Source] Could not parse App.config: " + jReader.getFormatedErrorMessages() + "\n").c_str());
 					}
 				}
 
@@ -99,6 +99,13 @@ namespace CSBackend
 			{
 				const std::string k_defaultFormat = "rgb565_depth24";
 				std::string formatString = in_root.get("PreferredSurfaceFormat", k_defaultFormat).asString();
+
+				const Json::Value& windows = in_root["Windows"];
+				if (windows.isNull() == false && windows.isMember("PreferredSurfaceFormat"))
+				{
+					formatString = windows["PreferredSurfaceFormat"].asString();
+				}
+
 				return CSCore::ParseSurfaceFormat(formatString);
 			}
 			//-------------------------------------------------------------
@@ -112,29 +119,31 @@ namespace CSBackend
 			//-------------------------------------------------------------
 			u32 ReadMultisampleFormat(const Json::Value& in_root)
 			{
+				std::string stringFormat = in_root.get("Multisample", "None").asString();
+
 				const Json::Value& windows = in_root["Windows"];
-
-				if (windows.isNull() == false)
+				if (windows.isNull() == false && windows.isMember("Multisample"))
 				{
-					std::string stringFormat = windows.get("Multisample", "None").asString();
-					CSCore::StringUtils::ToLowerCase(stringFormat);
+					stringFormat = windows["Multisample"].asString();
+				}
 
-					if (stringFormat == "none")
-					{
-						return 0;
-					}
-					else if (stringFormat == "2x")
-					{
-						return 2;
-					}
-					else if (stringFormat == "4x")
-					{
-						return 4;
-					}
-					else
-					{
-						CS_LOG_FATAL("Unknown multisample format: " + stringFormat + ". Options are None, 2x or 4x");
-					}
+				CSCore::StringUtils::ToLowerCase(stringFormat);
+
+				if (stringFormat == "none")
+				{
+					return 0;
+				}
+				else if (stringFormat == "2x")
+				{
+					return 2;
+				}
+				else if (stringFormat == "4x")
+				{
+					return 4;
+				}
+				else
+				{
+					OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[Chilli Source] Unknown multisample format : " + stringFormat + ".Options are None, 2x or 4x\n").c_str());
 				}
 
 				return 0;
@@ -368,7 +377,8 @@ namespace CSBackend
 			GLenum glewError = glewInit();
 			if (GLEW_OK != glewError)
 			{
-				CS_LOG_FATAL("Glew Error On Init: " + std::string((const char*)glewGetErrorString(glewError)));
+				OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[Chilli Source] Glew Error On Init : " + std::string((const char*)glewGetErrorString(glewError)) + "\n").c_str());
+				exit(1);
 			}
 
 			sf::Clock clock;
