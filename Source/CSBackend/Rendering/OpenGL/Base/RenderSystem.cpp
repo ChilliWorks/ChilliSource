@@ -597,7 +597,10 @@ namespace CSBackend
 		void RenderSystem::EndFrame(CSRendering::RenderTarget* inpActiveRenderTarget)
 		{
 #ifdef CS_TARGETPLATFORM_WINDOWS
-			CSBackend::Windows::SFMLWindow::Get()->Display();
+			if (inpActiveRenderTarget == nullptr)
+			{
+				CSBackend::Windows::SFMLWindow::Get()->Display();
+			}
 #endif
             
 #ifdef CS_TARGETPLATFORM_ANDROID
