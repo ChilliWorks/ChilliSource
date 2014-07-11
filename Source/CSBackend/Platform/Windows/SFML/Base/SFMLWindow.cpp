@@ -346,6 +346,12 @@ namespace CSBackend
 		}
 		//------------------------------------------------
 		//------------------------------------------------
+		sf::WindowHandle SFMLWindow::GetWindowHandle() const
+		{
+			return m_window.getSystemHandle();
+		}
+		//------------------------------------------------
+		//------------------------------------------------
 		CSCore::Integer2 SFMLWindow::GetMousePosition() const
 		{
 			sf::Vector2i pos = sf::Mouse::getPosition(m_window);
@@ -390,13 +396,16 @@ namespace CSBackend
 			app->Resume();
 			app->Foreground();
 
+			m_isRunning = true;
+			m_isFocused = true;
+
 			auto appConfig = CSCore::Application::Get()->GetAppConfig();
 			m_window.setFramerateLimit(appConfig->GetPreferredFPS());
 
 			m_title = appConfig->GetDisplayableName();
 			m_window.setTitle(m_title);
 
-			while (m_isSuspended == false)
+			while (m_isRunning == true)
 			{
 				sf::Event event;
 				while (m_window.pollEvent(event))
@@ -480,13 +489,11 @@ namespace CSBackend
 				CSCore::Application::Get()->Background();
 				m_isFocused = false;
 			}
-			if (m_isSuspended == false)
-			{
-				CSCore::Application::Get()->Suspend();
-				m_isSuspended = true;
-			}
 
+			CSCore::Application::Get()->Suspend();
 			CSCore::Application::Get()->Destroy();
+
+			m_isRunning = false;
 		}
 	}
 }

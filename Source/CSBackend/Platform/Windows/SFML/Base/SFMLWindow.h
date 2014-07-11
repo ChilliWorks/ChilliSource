@@ -274,6 +274,12 @@ namespace CSBackend
 			//------------------------------------------------
 			/// @author S Downie
 			///
+			/// @return Current handle of the SFML window
+			//------------------------------------------------
+			sf::WindowHandle GetWindowHandle() const;
+			//------------------------------------------------
+			/// @author S Downie
+			///
 			/// @return Current position of mouse relative to Window
 			//------------------------------------------------
 			CSCore::Integer2 GetMousePosition() const;
@@ -319,7 +325,7 @@ namespace CSBackend
 
 			u32 m_preferredRGBADepth = 32;
 
-			bool m_isSuspended = false;
+			bool m_isRunning = true;
 			bool m_isFocused = true;
 			DisplayMode m_displayMode = DisplayMode::k_windowed;
 		};
