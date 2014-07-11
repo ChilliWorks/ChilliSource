@@ -191,7 +191,7 @@ namespace ChilliSource
             Core::Utils::ReadJson(in_location, in_filePath, &jsonRoot);
             
             const u32 k_numFaces = 6;
-            const std::string k_faces[] = {"Right", "Left", "Top", "Bottom", "Front", "Back"};
+            const std::string k_faces[k_numFaces] = {"Right", "Left", "Top", "Bottom", "Front", "Back"};
             
 			//MSVC does not support moving arrays of unique_ptr at this time and therfore we have
 			//to create a shared pointer in order to pass it into the lambda
