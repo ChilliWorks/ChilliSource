@@ -29,17 +29,97 @@
 #include <ChilliSource/Rendering/Texture/CubemapProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Image/Image.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
 #include <ChilliSource/Rendering/Texture/CubemapResourceOptions.h>
 
+#include <json/json.h>
+
 #include <array>
+#include <utility>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
+        namespace
+        {
+            const std::string k_cubemapExtension = "cscubemap";
+            
+            //----------------------------------------------------------------
+            /// Parses the storage location and file path to a cubemap face
+            /// texture from the csresource file.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The json root.
+            /// @param The name of the face.
+            ///
+            /// @return A pair containing the storage location and the file
+            /// path.
+            //----------------------------------------------------------------
+            std::pair<Core::StorageLocation, std::string> ParseCubemapFace(const Json::Value& in_jsonRoot, const std::string& in_face)
+            {
+                Json::Value face = in_jsonRoot.get(in_face, "");
+                if (face.empty() == true)
+                {
+                    return std::make_pair(Core::StorageLocation::k_none, "");
+                }
+                
+                std::string storageLocation = face.get("StorageLocation", "Package").asString();
+                
+                std::pair<Core::StorageLocation, std::string> output;
+                output.first = Core::ParseStorageLocation(storageLocation);
+                output.second = face.get("FilePath", "").asString();
+                return output;
+            }
+            //----------------------------------------------------------------
+            /// Loads a single image using one of the given providers. This
+            /// image will not be stored in the resource cache.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The image to load data into.
+            /// @param The list of possible resource providers.
+            /// @param The storage location.
+            /// @param The file path of the image.
+            ///
+            /// @return Whether or not the load was successful.
+            //----------------------------------------------------------------
+            bool LoadImage(const Core::ImageSPtr& in_image, const std::vector<Core::ResourceProvider*>& in_imageProviders, Core::StorageLocation in_storageLocation, const std::string& in_fileName)
+            {
+                std::string fileName;
+                std::string fileExtension;
+                Core::StringUtils::SplitBaseFilename(in_fileName, fileName, fileExtension);
+                
+                Core::ResourceProvider* imageProvider = nullptr;
+                for(u32 i=0; i<in_imageProviders.size(); ++i)
+                {
+                    if(in_imageProviders[i]->CanCreateResourceWithFileExtension(fileExtension))
+                    {
+                        imageProvider = in_imageProviders[i];
+                        break;
+                    }
+                }
+                
+                if(imageProvider == nullptr)
+                {
+                    return false;
+                }
+
+                imageProvider->CreateResourceFromFile(in_storageLocation, in_fileName, nullptr, in_image);
+                if(in_image->GetLoadState() == Core::Resource::LoadState::k_failed)
+                {
+                    return false;
+                }
+                
+                return true;
+            }
+        }
+        
         CS_DEFINE_NAMEDTYPE(CubemapProvider);
         
         const Core::IResourceOptionsBaseCSPtr CubemapProvider::s_defaultOptions(std::make_shared<CubemapResourceOptions>());
@@ -81,15 +161,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		bool CubemapProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
 		{
-            for(u32 i=0; i<m_imageProviders.size(); ++i)
-            {
-                if(m_imageProviders[i]->CanCreateResourceWithFileExtension(in_extension))
-                {
-                    return true;
-                }
-            }
-            
-			return false;
+            return (in_extension == k_cubemapExtension);
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -114,54 +186,44 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
 		void CubemapProvider::LoadCubemap(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
-            std::string fileName;
-            std::string fileExtension;
-            Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
-            
-            Core::ResourceProvider* imageProvider = nullptr;
-            for(u32 i=0; i<m_imageProviders.size(); ++i)
-            {
-                if(m_imageProviders[i]->CanCreateResourceWithFileExtension(fileExtension))
-                {
-                    imageProvider = m_imageProviders[i];
-                    break;
-                }
-            }
-            
-            if(imageProvider == nullptr)
-            {
-                CS_LOG_ERROR("Cannot find provider for " + in_filePath);
-                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-                if(in_delegate != nullptr)
-                {
-					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
-                }
-                return;
-            }
+            //read the Cubemap JSON
+            Json::Value jsonRoot;
+            Core::Utils::ReadJson(in_location, in_filePath, &jsonRoot);
             
             const u32 k_numFaces = 6;
+            const std::string k_faces[k_numFaces] = {"Right", "Left", "Top", "Bottom", "Front", "Back"};
+            
 			//MSVC does not support moving arrays of unique_ptr at this time and therfore we have
 			//to create a shared pointer in order to pass it into the lambda
 			auto imageDataContainer = std::make_shared<std::array<Texture::TextureDataUPtr, k_numFaces>>();
             std::array<Texture::Descriptor, k_numFaces> descs;
             
-            for(u32 i=0; i<k_numFaces; ++i)
+            for(u32 i = 0; i < k_numFaces; ++i)
             {
-                std::string facePath = fileName + Core::ToString(i) + "." + fileExtension;
-                Core::ResourceSPtr imageResource(Core::Image::Create());
-                imageProvider->CreateResourceFromFile(in_location, facePath, nullptr, imageResource);
-                Core::ImageSPtr image(std::static_pointer_cast<Core::Image>(imageResource));
-                
-                if(image->GetLoadState() == Core::Resource::LoadState::k_failed)
+                auto textureFile = ParseCubemapFace(jsonRoot, k_faces[i]);
+                if (textureFile.first == Core::StorageLocation::k_none || textureFile.second == "")
                 {
-                    CS_LOG_ERROR("Failed to load cubemap face image " + facePath);
+                    CS_LOG_ERROR("Could not load face '" + k_faces[i] + "' in Cubemap '" + in_filePath + "'.");
                     out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                        Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                     }
                     return;
                 }
+                
+                Core::ImageSPtr image(Core::Image::Create());
+                if (LoadImage(image, m_imageProviders, textureFile.first, textureFile.second) == false)
+                {
+                    CS_LOG_ERROR("Could not load image '" + textureFile.second + "' in Cubemap '" + in_filePath + "'");
+                    out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    }
+                    return;
+                }
+                
                 
 				(*imageDataContainer)[i] = image->MoveData();
                 
