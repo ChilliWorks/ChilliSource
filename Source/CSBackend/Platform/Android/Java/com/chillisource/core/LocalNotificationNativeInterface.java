@@ -29,6 +29,7 @@
 package com.chillisource.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -36,11 +37,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.chillisource.core.InterfaceIDType;
-import com.chillisource.core.LocalNotificationReceiver;
 
 /**
  * A native interface for passing local notifications down
@@ -48,27 +47,20 @@ import com.chillisource.core.LocalNotificationReceiver;
  * 
  * @author Steven Hendrie
  */
-public class LocalNotificationNativeInterface extends INativeInterface
+public final class LocalNotificationNativeInterface extends INativeInterface
 {
 	/**
 	 * Constants
 	 */
-	public final static InterfaceIDType InterfaceID = new InterfaceIDType("CLocalNotificationNativeInterface");
-	public final static String k_paramNameNotificationId = "NotificationId";
-	public final static String k_paramNameIntentId = "IntentId";
-	public final static String k_paramNamePriority = "Priority";
-	private final static String k_intentToTriggerMapName = "IntentIDsToTriggerTime";
-	private final static String k_intentToNotificationMapName = "IntentIDsToNotificationIDs";
-	private final static String k_appOpenedFromNotification = "AppOpenedFromNotification";
-	private final static String k_arrayOfKeysName = "kstrArrayOfKeysName";
-	private final static String k_arrayOfValuesName = "kstrArrayOfValuesName";
+	public final static InterfaceIDType InterfaceID = new InterfaceIDType("LocalNotificationNativeInterface");
+	private final static String k_sharedPrefsName = "LocalNotifications";
 	private final static long k_notificationTimeLimitMs = 500 * 1000; 
 	
 	/**
 	 * Members
 	 */
-	private Intent m_createNotificationIntent;
-	private AlarmManager m_alarmManager;
+	private AlarmManager m_alarmManager = null;
+	private LocalNotificationStore m_notificationStore = new LocalNotificationStore(k_sharedPrefsName);
 	
 	/**
 	 * Constructor
@@ -78,10 +70,8 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	public LocalNotificationNativeInterface()
 	{
 		super();
-		
-		m_createNotificationIntent = new Intent(CSApplication.get().getActivityContext(), LocalNotificationReceiver.class);
-		m_createNotificationIntent.setAction("com.chillisource.core.ALARM_NOTIFICATION_INTENT");
 		m_alarmManager = (AlarmManager)CSApplication.get().getActivityContext().getSystemService(Context.ALARM_SERVICE);
+		freeOutOfDateIntentIDs();
 	}
 	
 	/**
@@ -110,28 +100,16 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	{
 		freeOutOfDateIntentIDs();		
 		
-		//Get the next unique id for the notification so that it will not overwrite any of the previously scheduled notifications.
 		int intentId = getNextIntentID();
-		
-		//Pass any data to the intent so that it can be used when the Alarm is triggered
+		Map<String, String> params = new HashMap<String, String>();
 		for(int paramIndex = 0; paramIndex < in_keys.length; ++paramIndex)
 		{
-			m_createNotificationIntent.putExtra(in_keys[paramIndex], in_values[paramIndex]);
-		}			
-		
-		m_createNotificationIntent.putExtra(k_paramNameNotificationId, in_notificationId);
-		m_createNotificationIntent.putExtra(k_paramNameIntentId, intentId);
-		m_createNotificationIntent.putExtra(k_paramNamePriority, in_priority);	
-		
-		//Map unique intent id to time it will be triggered, this will allow us to remove already fired intents later
-		SharedPreferencesNativeInterface.SetLong(k_intentToTriggerMapName, Integer.toString(intentId), in_time);
-		
-		//Map unique intent id to notifications id - this will allow uys to cancel individual notification ids later
-		SharedPreferencesNativeInterface.SetInt(k_intentToNotificationMapName, Integer.toString(intentId), in_notificationId);
+			params.put(in_keys[paramIndex], in_values[paramIndex]);
+		}
+		LocalNotification notification = new LocalNotification(intentId, in_notificationId, in_priority, in_time, params);
+		m_notificationStore.add(notification);
 
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), intentId , m_createNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-	
-        //set alarm to time of trigger
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), intentId , notification.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
 		m_alarmManager.set(AlarmManager.RTC_WAKEUP, in_time, pendingIntent);
 	}
 	
@@ -141,31 +119,26 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 * 
 	 * @author Steven Hendrie
 	 * 
-	 * @param inID
+	 * @param The notification Id.
 	 */
-	public void cancelByID(int in_id)
+	public void cancelByID(int in_notificationId)
 	{
-		SharedPreferences sharedPreferences = CSApplication.get().getActivityContext().getSharedPreferences(k_intentToNotificationMapName, 0);
-		Map<String, ?> intentIDMap = sharedPreferences.getAll();
-		
-		List<Integer> intentIDsToBeRemoved = new ArrayList<Integer>();
-		
-		for(Map.Entry<String,?> entry : intentIDMap.entrySet())
+		List<LocalNotification> notifications = m_notificationStore.getNotifications();
+		List<LocalNotification> cancelList = new ArrayList<LocalNotification>();
+		for (LocalNotification notification : notifications)
 		{
-			if((Integer)entry.getValue() == in_id)
+			if (notification.getNotificationId() == in_notificationId)
 			{
-				intentIDsToBeRemoved.add(Integer.parseInt(entry.getKey()));
+				cancelList.add(notification);
 			}
 		}
 		
-		for(int dwID = 0; dwID < intentIDsToBeRemoved.size(); ++dwID)
+		for(LocalNotification cancel : cancelList)
 		{
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), intentIDsToBeRemoved.get(dwID) , m_createNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), cancel.getIntentId() , cancel.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
 			m_alarmManager.cancel(pendingIntent);
-			SharedPreferencesNativeInterface.RemoveKey(k_intentToTriggerMapName, Integer.toString(intentIDsToBeRemoved.get(dwID)));
-			SharedPreferencesNativeInterface.RemoveKey(k_intentToNotificationMapName, Integer.toString(intentIDsToBeRemoved.get(dwID)));
+			m_notificationStore.remove(cancel);
 		}
-        
 	}
 	
 	/**
@@ -176,22 +149,12 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 */
 	public void cancelAll()
 	{
-		SharedPreferences sharedPreferences = CSApplication.get().getActivityContext().getSharedPreferences(k_intentToTriggerMapName, 0);
-		Map<String, ?> pendingIntentIDMap = sharedPreferences.getAll();
-		
-		List<Integer> intentIDsToBeRemoved = new ArrayList<Integer>();
-		
-		for(Map.Entry<String,?> entry : pendingIntentIDMap.entrySet())
+		List<LocalNotification> notifications = m_notificationStore.getNotifications();
+		for (LocalNotification notification : notifications)
 		{
-			intentIDsToBeRemoved.add(Integer.parseInt(entry.getKey()));
-		}
-		
-		for(int dwID = 0; dwID < intentIDsToBeRemoved.size(); ++dwID)
-		{
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), intentIDsToBeRemoved.get(dwID) , m_createNotificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), notification.getIntentId(), notification.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
 			m_alarmManager.cancel(pendingIntent);
-			SharedPreferencesNativeInterface.RemoveKey(k_intentToTriggerMapName, Integer.toString(intentIDsToBeRemoved.get(dwID)));
-			SharedPreferencesNativeInterface.RemoveKey(k_intentToNotificationMapName, Integer.toString(intentIDsToBeRemoved.get(dwID)));
+			m_notificationStore.remove(notification);
 		}
 	}
 	
@@ -205,11 +168,12 @@ public class LocalNotificationNativeInterface extends INativeInterface
 		Bundle params = in_intent.getExtras();
 		
 		//remove the extra data from the intent
-		int notificationId = Integer.parseInt(params.getString(k_paramNameNotificationId));
-		int priority = Integer.parseInt(params.getString(k_paramNamePriority));
-		params.remove(LocalNotificationNativeInterface.k_paramNameNotificationId);
-		params.remove(LocalNotificationNativeInterface.k_paramNameIntentId);
-		params.remove(LocalNotificationNativeInterface.k_paramNamePriority);
+		int notificationId = Integer.parseInt(params.getString(LocalNotification.k_paramNameNotificationId));
+		int priority = Integer.parseInt(params.getString(LocalNotification.k_paramNamePriority));
+		params.remove(LocalNotification.k_paramNameNotificationId);
+		params.remove(LocalNotification.k_paramNameIntentId);
+		params.remove(LocalNotification.k_paramNamePriority);
+		params.remove(LocalNotification.k_paramNameTime);
 		
 		//copy the intent contents to the arrays
 		int paramSize = params.size();
@@ -244,7 +208,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 		while(!foundUniqueID)
 		{
 			//if no notification currently uses this ID
-			if(SharedPreferencesNativeInterface.KeyExists(k_intentToTriggerMapName, Integer.toString(count)))
+			if(m_notificationStore.getNotificationWithIntentId(count) != null)
 			{
 				count++;
 			}
@@ -255,7 +219,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 		}
 		return count;
 	}
-	
+
 	/**
 	 * Goes through all currently placed intentIDs and checks the time 
 	 * that they were fired. If they were over the defined time limit 
@@ -266,27 +230,14 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 */
 	private void freeOutOfDateIntentIDs()
 	{
-		SharedPreferences sharedPreferences = CSApplication.get().getActivityContext().getSharedPreferences(k_intentToTriggerMapName, 0);
-		
-		Map<String, ?> intentIDMap = sharedPreferences.getAll();
-		List<String> keysToRemove = new ArrayList<String>();
-		
 		long currentTime = System.currentTimeMillis();
-		
-		for(Map.Entry<String,?> entry : intentIDMap.entrySet())
+		List<LocalNotification> notifications = m_notificationStore.getNotifications();
+		for (LocalNotification notification : notifications)
 		{
-			String currentKey = entry.getKey();
-			long value =((Number)entry.getValue()).longValue();
-			
-			if(currentTime > value + k_notificationTimeLimitMs)
+			if (currentTime > notification.getTime() + k_notificationTimeLimitMs)
 			{
-				keysToRemove.add(currentKey);
+				m_notificationStore.remove(notification);
 			}
-		}		
-		for(int key = 0 ; key < keysToRemove.size(); ++key)
-		{
-			SharedPreferencesNativeInterface.RemoveKey(k_intentToTriggerMapName, keysToRemove.get(key));	
-			SharedPreferencesNativeInterface.RemoveKey(k_intentToNotificationMapName, keysToRemove.get(key));	
 		}
 	}
 	
