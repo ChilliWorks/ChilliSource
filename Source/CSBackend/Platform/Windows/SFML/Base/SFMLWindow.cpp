@@ -378,7 +378,10 @@ namespace CSBackend
 			u32 msaaFormat = ReadMultisampleFormat(appConfigRoot);
 			m_contextSettings = CreateContextSettings(surfaceFormat, msaaFormat);
 			m_preferredRGBADepth = ReadRGBAPixelDepth(surfaceFormat);
-			m_window.create(sf::VideoMode::getDesktopMode(), "", sf::Style::Default, m_contextSettings);
+
+			u32 initWidth = (u32)((f32)sf::VideoMode::getDesktopMode().width * 0.8f);
+			u32 initHeight = (u32)((f32)sf::VideoMode::getDesktopMode().height * 0.8f);
+			m_window.create(sf::VideoMode(initWidth, initHeight, sf::VideoMode::getDesktopMode().bitsPerPixel), "", sf::Style::Default, m_contextSettings);
 
 			GLenum glewError = glewInit();
 			if (GLEW_OK != glewError)
