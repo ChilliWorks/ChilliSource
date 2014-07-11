@@ -74,6 +74,12 @@ namespace CSBackend
 		{
 			SFMLWindow::Get()->SetPreferredFPS(in_fps);
 		}
+		//---------------------------------------------------
+		//---------------------------------------------------
+		void PlatformSystem::SetVSyncEnabled(bool in_enabled)
+		{
+			SFMLWindow::Get()->SetVSyncEnabled(in_enabled);
+		}
 		//--------------------------------------------
 		//--------------------------------------------
 		void PlatformSystem::Quit()

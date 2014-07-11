@@ -73,6 +73,14 @@ namespace CSBackend
             /// This should be in multiples of 15 (15, 30, 60)
             //------------------------------------------------------
             void SetPreferredFPS(u32 in_fps) override;
+            //---------------------------------------------------
+            /// NOTE: Not supported on iOS
+            ///
+            /// @author S Downie
+            ///
+            /// @param Enable/Disable
+            //---------------------------------------------------
+            void SetVSyncEnabled(bool in_enabled) override {};
             //------------------------------------------------------
             /// iOS cannot be manually quit
             ///

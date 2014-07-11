@@ -49,6 +49,8 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(PlatformSystem);
             //---------------------------------------------------
+            /// NOTE: Setting this will disable VSync
+            ///
             /// @author S Downie
             ///
             /// @param The maximum frames per second
@@ -56,6 +58,15 @@ namespace ChilliSource
             /// of 15 (15, 30, 60)
             //---------------------------------------------------
             virtual void SetPreferredFPS(u32 in_fps) = 0;
+            //---------------------------------------------------
+            /// This will turn VSync on or off on platforms that
+            /// support it. NOTE: This will override the preferred FPS
+            ///
+            /// @author S Downie
+            ///
+            /// @param Enable/Disable
+            //---------------------------------------------------
+            virtual void SetVSyncEnabled(bool in_enabled) = 0;
             //---------------------------------------------------
             /// Terminate the app
             ///

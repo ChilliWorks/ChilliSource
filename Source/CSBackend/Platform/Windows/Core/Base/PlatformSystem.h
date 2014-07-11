@@ -78,6 +78,15 @@ namespace CSBackend
 			/// (15, 30, 60)
             //-------------------------------------------------
 			void SetPreferredFPS(u32 in_fps) override;
+			//---------------------------------------------------
+			/// This will turn VSync on or off. 
+			/// NOTE: This will override the preferred FPS
+			///
+			/// @author S Downie
+			///
+			/// @param Enable/Disable
+			//---------------------------------------------------
+			void SetVSyncEnabled(bool in_enabled) override;
 			//-------------------------------------------------
 			/// Stops the update loop causing the application 
 			/// to terminate.

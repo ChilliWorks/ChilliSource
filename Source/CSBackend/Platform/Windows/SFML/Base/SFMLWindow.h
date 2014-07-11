@@ -161,6 +161,14 @@ namespace CSBackend
 			//-------------------------------------------------
 			void SetPreferredFPS(u32 in_fps);
 			//-------------------------------------------------
+			/// Enable or disable VSync
+			///
+			/// @author S Downie
+			///
+			/// @param Whether to enable or disable
+			//-------------------------------------------------
+			void SetVSyncEnabled(bool in_enable);
+			//-------------------------------------------------
 			/// Set the size of the window in pixels.
 			///
 			/// @author S Downie
@@ -327,6 +335,7 @@ namespace CSBackend
 			sf::ContextSettings m_contextSettings;
 
 			u32 m_preferredRGBADepth = 32;
+			f32 m_preferredFPS = 0.0f;
 
 			bool m_isRunning = true;
 			bool m_isFocused = true;

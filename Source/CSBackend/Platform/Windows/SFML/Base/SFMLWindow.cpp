@@ -215,7 +215,24 @@ namespace CSBackend
 		//-------------------------------------------------
 		void SFMLWindow::SetPreferredFPS(u32 in_fps)
 		{
+			m_preferredFPS = in_fps;
+			m_window.setVerticalSyncEnabled(false);
 			m_window.setFramerateLimit(in_fps);
+		}
+		//-------------------------------------------------
+		//-------------------------------------------------
+		void SFMLWindow::SetVSyncEnabled(bool in_enable)
+		{
+			if (in_enable == true)
+			{
+				m_window.setFramerateLimit(0);
+				m_window.setVerticalSyncEnabled(true);
+			}
+			else
+			{
+				m_window.setVerticalSyncEnabled(false);
+				m_window.setFramerateLimit(m_preferredFPS);
+			}
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -397,7 +414,16 @@ namespace CSBackend
 			m_isFocused = true;
 
 			auto appConfig = CSCore::Application::Get()->GetAppConfig();
-			m_window.setFramerateLimit(appConfig->GetPreferredFPS());
+			m_preferredFPS = appConfig->GetPreferredFPS();
+			
+			if (appConfig->IsVSyncEnabled())
+			{
+				SetVSyncEnabled(true);
+			}
+			else
+			{
+				m_window.setFramerateLimit(m_preferredFPS);
+			}
 
 			m_title = appConfig->GetDisplayableName();
 			m_window.setTitle(m_title);

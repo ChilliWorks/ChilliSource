@@ -64,23 +64,29 @@ namespace ChilliSource
         {
         }
         //---------------------------------------------------------
-        //--------------------------------------------------------
+        //---------------------------------------------------------
         bool AppConfig::IsA(InterfaceIDType in_interfaceId) const
         {
             return (AppConfig::InterfaceID == in_interfaceId);
         }
         //---------------------------------------------------------
-        //--------------------------------------------------------
+        //---------------------------------------------------------
         const std::string& AppConfig::GetDisplayableName() const
         {
             return m_displayableName;
         }
         //---------------------------------------------------------
-        //--------------------------------------------------------
+        //---------------------------------------------------------
         u32 AppConfig::GetPreferredFPS() const
         {
             return m_preferredFPS;
         }
+		//---------------------------------------------------------
+		//---------------------------------------------------------
+		bool AppConfig::IsVSyncEnabled() const
+		{
+			return m_isVSyncEnabled;
+		}
         //---------------------------------------------------------
         //---------------------------------------------------------
         void AppConfig::Load()
@@ -90,6 +96,7 @@ namespace ChilliSource
             {
                 m_displayableName = root.get("DisplayableName", k_defaultDisplayableName).asString();
                 m_preferredFPS = root.get("PreferredFPS", k_defaultPreferredFPS).asUInt();
+				m_isVSyncEnabled = root.get("VSync", false).asBool();
                 
                 const Json::Value& fileTags = root["FileTags"];
                 
