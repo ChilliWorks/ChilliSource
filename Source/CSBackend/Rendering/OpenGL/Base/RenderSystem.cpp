@@ -180,7 +180,7 @@ namespace CSBackend
         //----------------------------------------------------------
 		void RenderSystem::OnDisplayModeChanged(CSCore::Screen::DisplayMode in_mode)
         {
-            mbInvalidateAllCaches = true;
+			ForceRefreshRenderStates();
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -1051,6 +1051,8 @@ namespace CSBackend
 		//----------------------------------------------------------
 		void RenderSystem::ForceRefreshRenderStates()
 		{
+			mbInvalidateAllCaches = true;
+
 			//clear the cache.
             m_textureUnitSystem->Clear();
             RenderTarget::ClearCache();
@@ -1060,8 +1062,6 @@ namespace CSBackend
             
 			//we're using pre-multiplied alpha and multipass rendering and therefore require the add blend equation
             glBlendEquation(GL_FUNC_ADD);
-            
-            mbInvalidateAllCaches = true;
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while forcing refresh of render states.");
 		}
