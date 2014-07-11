@@ -222,12 +222,10 @@ namespace CSBackend
 		void SFMLWindow::SetSize(const CSCore::Integer2& in_size)
 		{
 			//Clamp to the actual screen size
-			CSCore::Integer2 size = CSCore::Integer2::Max(in_size, CSCore::Integer2::k_one);
-			size.x = std::min((s32)sf::VideoMode::getDesktopMode().width, size.x);
-			size.y = std::min((s32)sf::VideoMode::getDesktopMode().height, size.y);
+			m_windowSize = CSCore::Integer2::Max(in_size, CSCore::Integer2::k_one);
 
 			//This will trigger an SFML resize event
-			m_window.setSize(sf::Vector2u(size.x, size.y));
+			m_window.setSize(sf::Vector2u(m_windowSize.x, m_windowSize.y));
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -252,15 +250,13 @@ namespace CSBackend
 		//-------------------------------------------------
 		void SFMLWindow::SetFullscreen()
 		{
-			auto currentSize = m_window.getSize();
-
 			//Pick the best fit RGBA depth based on the supported depths
 			for (auto it = sf::VideoMode::getFullscreenModes().rbegin(); it != sf::VideoMode::getFullscreenModes().rend(); ++it)
 			{
 				s32 bpp = it->bitsPerPixel;
 				if (bpp >= m_preferredRGBADepth)
 				{
-					m_window.create(sf::VideoMode(currentSize.x, currentSize.y, bpp), m_title, sf::Style::Fullscreen, m_contextSettings);
+					m_window.create(sf::VideoMode(m_windowSize.x, m_windowSize.y, bpp), m_title, sf::Style::Fullscreen, m_contextSettings);
 					m_windowDisplayModeEvent.NotifyConnections(DisplayMode::k_fullscreen);
 					break;
 				}
@@ -270,9 +266,7 @@ namespace CSBackend
 		//-------------------------------------------------
 		void SFMLWindow::SetWindowed()
 		{
-			auto currentSize = m_window.getSize();
-
-			m_window.create(sf::VideoMode(currentSize.x, currentSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), m_title, sf::Style::Default, m_contextSettings);
+			m_window.create(sf::VideoMode(m_windowSize.x, m_windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), m_title, sf::Style::Default, m_contextSettings);
 			m_windowDisplayModeEvent.NotifyConnections(DisplayMode::k_windowed);
 		}
 		//----------------------------------------------------------
@@ -379,9 +373,9 @@ namespace CSBackend
 			m_contextSettings = CreateContextSettings(surfaceFormat, msaaFormat);
 			m_preferredRGBADepth = ReadRGBAPixelDepth(surfaceFormat);
 
-			u32 initWidth = (u32)((f32)sf::VideoMode::getDesktopMode().width * 0.8f);
-			u32 initHeight = (u32)((f32)sf::VideoMode::getDesktopMode().height * 0.8f);
-			m_window.create(sf::VideoMode(initWidth, initHeight, sf::VideoMode::getDesktopMode().bitsPerPixel), "", sf::Style::Default, m_contextSettings);
+			m_windowSize.x = (s32)((f32)sf::VideoMode::getDesktopMode().width * 0.8f);
+			m_windowSize.y = (s32)((f32)sf::VideoMode::getDesktopMode().height * 0.8f);
+			m_window.create(sf::VideoMode((u32)m_windowSize.x, (u32)m_windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), "", sf::Style::Default, m_contextSettings);
 
 			GLenum glewError = glewInit();
 			if (GLEW_OK != glewError)
@@ -421,7 +415,9 @@ namespace CSBackend
 							app->Quit();
 							return;
 						case sf::Event::Resized:
-							m_windowResizeEvent.NotifyConnections(CSCore::Integer2((s32)event.size.width, (s32)event.size.height));
+							m_windowSize.x = (s32)event.size.width;
+							m_windowSize.y = (s32)event.size.height;
+							m_windowResizeEvent.NotifyConnections(m_windowSize);
 							break;
 						case sf::Event::GainedFocus:
 							if (m_isFocused == false)

@@ -34,6 +34,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Singleton.h>
 #include <ChilliSource/Core/Event/Event.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
 
 #include <SFML/Window.hpp>
@@ -320,6 +321,8 @@ namespace CSBackend
 			CSCore::Event<KeyReleasedDelegate> m_keyReleasedEvent;
 
 			std::string m_title;
+
+			CSCore::Integer2 m_windowSize;
 
 			sf::ContextSettings m_contextSettings;
 
