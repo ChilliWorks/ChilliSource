@@ -189,6 +189,40 @@ public final class LocalNotification
 	/**
 	 * @author Ian Copland
 	 * 
+	 * @return The number of parameters in the notification.
+	 */
+	public int getNumParams()
+	{
+		return m_params.size();
+	}
+	/**
+	 * Provides a method getting the parameters as arrays of keys and
+	 * values. The arrays must be allocated to be the correct size prior
+	 * before being passed in, otherwise an error will occur.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param [Out] The key array.
+	 * @param [Out] The value array.
+	 */
+	public void getParams(String[] out_keys, String[] out_values)
+	{
+		if (out_keys.length < m_params.size() || out_values.length < m_params.size())
+		{
+			Logging.logFatal("Local Notification: cannot get params using array smaller than the param map.");
+		}
+		
+		int index = 0;
+		for (Entry<String, String> entry : m_params.entrySet()) 
+		{
+			out_keys[index] = entry.getKey();
+			out_values[index] = entry.getValue();
+			++index;
+		}
+	}
+	/**
+	 * @author Ian Copland
+	 * 
 	 * @return The local notification in JSON form.
 	 */
 	public JSONObject toJson()

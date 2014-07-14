@@ -71,16 +71,8 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	{
 		super();
 		
-		Runnable task = new Runnable()
-		{
-			@Override public void run()
-			{
-				m_alarmManager = (AlarmManager)CSApplication.get().getActivityContext().getSystemService(Context.ALARM_SERVICE);
-				freeOutOfDateIntentIDs();
-			}
-		};
-		
-		CSApplication.get().scheduleUIThreadTask(task);
+		m_alarmManager = (AlarmManager)CSApplication.get().getActivityContext().getSystemService(Context.ALARM_SERVICE);
+		freeOutOfDateIntentIDs();
 	}
 	
 	/**
@@ -95,7 +87,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	
 	/**
 	 * method accessible from native for allowing System notifications to 
-	 * be scheduled for specified time.
+	 * be scheduled for specified time. This should only be called on the Main thread.
 	 * 
 	 * @author Steven Hendrie
 	 * 
@@ -107,32 +99,38 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 */
 	public void scheduleNotificationForTime(final int in_notificationId, final String[] in_keys, final String[] in_values, final long in_time, final int in_priority)
 	{
-		Runnable task = new Runnable()
-		{
-			@Override public void run()
-			{
-				freeOutOfDateIntentIDs();		
-				
-				int intentId = getNextIntentID();
-				Map<String, String> params = new HashMap<String, String>();
-				for(int paramIndex = 0; paramIndex < in_keys.length; ++paramIndex)
-				{
-					params.put(in_keys[paramIndex], in_values[paramIndex]);
-				}
-				LocalNotification notification = new LocalNotification(intentId, in_notificationId, in_priority, in_time, params);
-				m_notificationStore.add(notification);
-
-				PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), intentId , notification.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
-				m_alarmManager.set(AlarmManager.RTC_WAKEUP, in_time, pendingIntent);
-			}
-		};
+		freeOutOfDateIntentIDs();		
 		
-		CSApplication.get().scheduleUIThreadTask(task);
+		int intentId = getNextIntentID();
+		Map<String, String> params = new HashMap<String, String>();
+		for(int paramIndex = 0; paramIndex < in_keys.length; ++paramIndex)
+		{
+			params.put(in_keys[paramIndex], in_values[paramIndex]);
+		}
+		LocalNotification notification = new LocalNotification(intentId, in_notificationId, in_priority, in_time, params);
+		m_notificationStore.add(notification);
+
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), intentId , notification.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
+		m_alarmManager.set(AlarmManager.RTC_WAKEUP, in_time, pendingIntent);
+	}
+	
+	/**
+	 * method accessible from native that returns all notifications.
+	 * This should only be called on the Main thread.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @return An array of all notifications.
+	 */
+	public LocalNotification[] getNotifications()
+	{
+		List<LocalNotification> notificationList = m_notificationStore.getNotifications();
+		return notificationList.toArray(new LocalNotification[0]);
 	}
 	
 	/**
 	 * method accessable from native for cancelling previously scheduled 
-	 * notifications by id
+	 * notifications by id. This should only be called on the Main thread.
 	 * 
 	 * @author Steven Hendrie
 	 * 
@@ -140,65 +138,50 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 */
 	public void cancelByID(final int in_notificationId)
 	{
-		Runnable task = new Runnable()
+		List<LocalNotification> notifications = m_notificationStore.getNotifications();
+		List<LocalNotification> cancelList = new ArrayList<LocalNotification>();
+		for (LocalNotification notification : notifications)
 		{
-			@Override public void run()
+			if (notification.getNotificationId() == in_notificationId)
 			{
-				List<LocalNotification> notifications = m_notificationStore.getNotifications();
-				List<LocalNotification> cancelList = new ArrayList<LocalNotification>();
-				for (LocalNotification notification : notifications)
-				{
-					if (notification.getNotificationId() == in_notificationId)
-					{
-						cancelList.add(notification);
-					}
-				}
-				
-				for(LocalNotification cancel : cancelList)
-				{
-					PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), cancel.getIntentId() , cancel.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
-					m_alarmManager.cancel(pendingIntent);
-					m_notificationStore.remove(cancel);
-				}
+				cancelList.add(notification);
 			}
-		};
+		}
 		
-		CSApplication.get().scheduleUIThreadTask(task);
+		for(LocalNotification cancel : cancelList)
+		{
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), cancel.getIntentId() , cancel.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
+			m_alarmManager.cancel(pendingIntent);
+			m_notificationStore.remove(cancel);
+		}
 	}
 	
 	/**
 	 * Method accessable from native for cancelling all previously 
-	 * scheduled notifications
+	 * scheduled notifications. This should only be called on the Main thread.
 	 * 
 	 * @author Steven Hendrie
 	 */
 	public void cancelAll()
 	{
-		Runnable task = new Runnable()
+		List<LocalNotification> notifications = m_notificationStore.getNotifications();
+		List<LocalNotification> cancelList = new ArrayList<LocalNotification>();
+		for (LocalNotification notification : notifications)
 		{
-			@Override public void run()
-			{
-				List<LocalNotification> notifications = m_notificationStore.getNotifications();
-				List<LocalNotification> cancelList = new ArrayList<LocalNotification>();
-				for (LocalNotification notification : notifications)
-				{
-					cancelList.add(notification);
-				}
-				
-				for (LocalNotification notification : cancelList)
-				{
-					PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), notification.getIntentId(), notification.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
-					m_alarmManager.cancel(pendingIntent);
-					m_notificationStore.remove(notification);
-				}
-			}
-		};
+			cancelList.add(notification);
+		}
 		
-		CSApplication.get().scheduleUIThreadTask(task);
+		for (LocalNotification notification : cancelList)
+		{
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), notification.getIntentId(), notification.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
+			m_alarmManager.cancel(pendingIntent);
+			m_notificationStore.remove(notification);
+		}
 	}
 	
 	/**
-	 * Called when a new notification intent is received.
+	 * Called when a new notification intent is received. This can be called from
+	 * the UI thread.
 	 * 
 	 * @author Ian Copland
 	 */

@@ -29,7 +29,6 @@
 package com.chillisource.core;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -90,7 +89,7 @@ public final class LocalNotificationStore
 	 * 
 	 * @param The local notification.
 	 */
-	public void add(LocalNotification in_notification)
+	public synchronized void add(LocalNotification in_notification)
 	{
 		m_notifications.add(in_notification);
 		
@@ -109,11 +108,13 @@ public final class LocalNotificationStore
 	/**
 	 * @author Ian Copland
 	 * 
-	 * @return An immutable list of stored notifications.
+	 * @return A copy of the list of stored notifications.
 	 */
-	public List<LocalNotification> getNotifications()
+	public synchronized List<LocalNotification> getNotifications()
 	{
-		return Collections.unmodifiableList(m_notifications);
+		List<LocalNotification> output = new ArrayList<LocalNotification>();
+		output.addAll(m_notifications);
+		return output;
 	}
 	/**
 	 * @author Ian Copland
@@ -121,7 +122,7 @@ public final class LocalNotificationStore
 	 * @return The notification with the given intent Id. If none exists
 	 * then null will be returned.
 	 */
-	public LocalNotification getNotificationWithIntentId(int in_intentId)
+	public synchronized LocalNotification getNotificationWithIntentId(int in_intentId)
 	{
 		for (LocalNotification notification : m_notifications)
 		{
@@ -141,7 +142,7 @@ public final class LocalNotificationStore
 	 * 
 	 * @param The local notification.
 	 */
-	public void remove(LocalNotification in_notification)
+	public synchronized void remove(LocalNotification in_notification)
 	{
 		m_notifications.remove(in_notification);
 		
