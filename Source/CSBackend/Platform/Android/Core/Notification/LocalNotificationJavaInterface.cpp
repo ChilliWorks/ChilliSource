@@ -35,6 +35,7 @@
 #include <CSBackend/Platform/Android/Core/Notification/LocalNotificationSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <jni.h>
 
@@ -62,11 +63,16 @@ void Java_com_chillisource_core_LocalNotificationNativeInterface_nativeOnNotific
 		in_environment->DeleteLocalRef(valueJava);
 	}
 
-	CSBackend::Android::LocalNotificationSystem* localNotificationSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::LocalNotificationSystem>();
-	if (localNotificationSystem != nullptr)
+	auto delegate = [=]()
 	{
-		localNotificationSystem->OnNotificationReceived((CSCore::Notification::ID)in_id, params, (CSCore::Notification::Priority)in_priority);
-	}
+		CSBackend::Android::LocalNotificationSystem* localNotificationSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::LocalNotificationSystem>();
+		if (localNotificationSystem != nullptr)
+		{
+			localNotificationSystem->OnNotificationReceived((CSCore::Notification::ID)in_id, params, (CSCore::Notification::Priority)in_priority);
+		}
+	};
+
+	CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(delegate);
 }
 
 namespace CSBackend

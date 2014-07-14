@@ -69,7 +69,7 @@ public final class LocalNotificationStore
 		{
 			JSONObject jsonRoot = readJson();
 			JSONArray jsonNotifications = jsonRoot.getJSONArray(k_notificationArrayName);
-			for (int i = 0; i < jsonNotifications.length();)
+			for (int i = 0; i < jsonNotifications.length(); ++i)
 			{
 				JSONObject notificationJson = jsonNotifications.getJSONObject(i);
 				LocalNotification notification = new LocalNotification(notificationJson); 
@@ -185,7 +185,7 @@ public final class LocalNotificationStore
 		JSONObject jsonRoot = null;
 		try
 		{
-			if (jsonString != null)
+			if (jsonString != "")
 			{
 				jsonRoot = new JSONObject(jsonString);
 			}

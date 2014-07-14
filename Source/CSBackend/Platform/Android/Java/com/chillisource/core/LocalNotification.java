@@ -30,12 +30,15 @@ package com.chillisource.core;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 /**
  * A container for information on a single Local Notification. 
@@ -51,6 +54,7 @@ public final class LocalNotification
 	public final static String k_paramNamePriority = "Priority";
 	public final static String k_paramNameTime = "Time";
 	
+	private final static String k_paramNameParams = "Params";
 	private final static String k_intentAction = "com.chillisource.core.ALARM_NOTIFICATION_INTENT";
 	
 	private int m_intentId = 0;
@@ -74,7 +78,7 @@ public final class LocalNotification
 	{
 		m_intentId = in_intentId;
 		m_notificationId = in_notificationId;
-		m_priority = in_notificationId;
+		m_priority = in_priority;
 		m_time = in_time;
 		m_params.putAll(in_params);
 	}
@@ -87,7 +91,55 @@ public final class LocalNotification
 	 */
 	public LocalNotification(JSONObject in_json)
 	{
-		//TODO:
+		try
+		{
+			m_intentId = in_json.getInt(k_paramNameIntentId);
+			m_notificationId = in_json.getInt(k_paramNameNotificationId);
+			m_priority = in_json.getInt(k_paramNamePriority);
+			m_time = in_json.getLong(k_paramNameTime);
+			
+			JSONObject jsonParams = in_json.getJSONObject(k_paramNameParams);
+			@SuppressWarnings("unchecked")
+			Iterator<String> it = jsonParams.keys();
+			while (it.hasNext())
+			{
+				String key = it.next();
+				m_params.put(key, jsonParams.getString(key));
+			}
+		}
+		catch (Exception e)
+		{
+			Logging.logFatal("An exception occurred while building a Local Notification from JSON: \n" + ExceptionUtils.ConvertToString(e));
+		}
+	}
+	/**
+	 * Constructor. Creates a local notification from an Intent.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param The intent describing the local notification.
+	 */
+	public LocalNotification(Intent in_intent)
+	{
+		Bundle params = in_intent.getExtras();
+		
+		//remove the extra data from the intent
+		m_intentId = Integer.parseInt(params.getString(LocalNotification.k_paramNameIntentId));
+		m_notificationId = Integer.parseInt(params.getString(LocalNotification.k_paramNameNotificationId));
+		m_priority = Integer.parseInt(params.getString(LocalNotification.k_paramNamePriority));
+		m_time = Long.parseLong(params.getString(LocalNotification.k_paramNameTime));
+
+		Iterator<String> iter = params.keySet().iterator();
+		while(iter.hasNext())
+		{
+			String key = iter.next();			
+			String value = params.get(key).toString();
+			if (key.equals(LocalNotification.k_paramNameIntentId) == false && key.equals(LocalNotification.k_paramNameNotificationId) == false && 
+				key.equals(LocalNotification.k_paramNamePriority) == false && key.equals(LocalNotification.k_paramNameTime) == false)
+			{
+				m_params.put(key, value);
+			}
+		}
 	}
 	/**
 	 * @author Ian Copland
@@ -141,8 +193,27 @@ public final class LocalNotification
 	 */
 	public JSONObject toJson()
 	{
-		//TODO:
-		return null;
+		JSONObject jsonRoot = new JSONObject();
+		try
+		{
+			jsonRoot.put(k_paramNameIntentId, m_intentId);
+			jsonRoot.put(k_paramNameNotificationId, m_notificationId);
+			jsonRoot.put(k_paramNamePriority, m_priority);
+			jsonRoot.put(k_paramNameTime, m_time);
+			
+			JSONObject jsonParams = new JSONObject();
+			for (Entry<String, String> entry : m_params.entrySet()) 
+			{
+				jsonParams.put(entry.getKey(), entry.getValue());
+			}
+			jsonRoot.put(k_paramNameParams, jsonParams);
+		}
+		catch (JSONException e)
+		{
+			Logging.logFatal("An exception occurred while converting a local notification to JSON: \n" + ExceptionUtils.ConvertToString(e));
+		}
+		
+		return jsonRoot;
 	}
 	/**
 	 * @author Ian Copland

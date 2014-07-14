@@ -30,14 +30,14 @@ package com.chillisource.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
 import com.chillisource.core.InterfaceIDType;
 
@@ -47,7 +47,7 @@ import com.chillisource.core.InterfaceIDType;
  * 
  * @author Steven Hendrie
  */
-public final class LocalNotificationNativeInterface extends INativeInterface
+public class LocalNotificationNativeInterface extends INativeInterface
 {
 	/**
 	 * Constants
@@ -70,8 +70,17 @@ public final class LocalNotificationNativeInterface extends INativeInterface
 	public LocalNotificationNativeInterface()
 	{
 		super();
-		m_alarmManager = (AlarmManager)CSApplication.get().getActivityContext().getSystemService(Context.ALARM_SERVICE);
-		freeOutOfDateIntentIDs();
+		
+		Runnable task = new Runnable()
+		{
+			@Override public void run()
+			{
+				m_alarmManager = (AlarmManager)CSApplication.get().getActivityContext().getSystemService(Context.ALARM_SERVICE);
+				freeOutOfDateIntentIDs();
+			}
+		};
+		
+		CSApplication.get().scheduleUIThreadTask(task);
 	}
 	
 	/**
@@ -96,21 +105,29 @@ public final class LocalNotificationNativeInterface extends INativeInterface
 	 * @param the trigger time in milliseconds
 	 * @param The priority.
 	 */
-	public void scheduleNotificationForTime(int in_notificationId, String[] in_keys, String[] in_values, long in_time, int in_priority)
+	public void scheduleNotificationForTime(final int in_notificationId, final String[] in_keys, final String[] in_values, final long in_time, final int in_priority)
 	{
-		freeOutOfDateIntentIDs();		
-		
-		int intentId = getNextIntentID();
-		Map<String, String> params = new HashMap<String, String>();
-		for(int paramIndex = 0; paramIndex < in_keys.length; ++paramIndex)
+		Runnable task = new Runnable()
 		{
-			params.put(in_keys[paramIndex], in_values[paramIndex]);
-		}
-		LocalNotification notification = new LocalNotification(intentId, in_notificationId, in_priority, in_time, params);
-		m_notificationStore.add(notification);
+			@Override public void run()
+			{
+				freeOutOfDateIntentIDs();		
+				
+				int intentId = getNextIntentID();
+				Map<String, String> params = new HashMap<String, String>();
+				for(int paramIndex = 0; paramIndex < in_keys.length; ++paramIndex)
+				{
+					params.put(in_keys[paramIndex], in_values[paramIndex]);
+				}
+				LocalNotification notification = new LocalNotification(intentId, in_notificationId, in_priority, in_time, params);
+				m_notificationStore.add(notification);
 
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), intentId , notification.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
-		m_alarmManager.set(AlarmManager.RTC_WAKEUP, in_time, pendingIntent);
+				PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), intentId , notification.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
+				m_alarmManager.set(AlarmManager.RTC_WAKEUP, in_time, pendingIntent);
+			}
+		};
+		
+		CSApplication.get().scheduleUIThreadTask(task);
 	}
 	
 	/**
@@ -121,24 +138,32 @@ public final class LocalNotificationNativeInterface extends INativeInterface
 	 * 
 	 * @param The notification Id.
 	 */
-	public void cancelByID(int in_notificationId)
+	public void cancelByID(final int in_notificationId)
 	{
-		List<LocalNotification> notifications = m_notificationStore.getNotifications();
-		List<LocalNotification> cancelList = new ArrayList<LocalNotification>();
-		for (LocalNotification notification : notifications)
+		Runnable task = new Runnable()
 		{
-			if (notification.getNotificationId() == in_notificationId)
+			@Override public void run()
 			{
-				cancelList.add(notification);
+				List<LocalNotification> notifications = m_notificationStore.getNotifications();
+				List<LocalNotification> cancelList = new ArrayList<LocalNotification>();
+				for (LocalNotification notification : notifications)
+				{
+					if (notification.getNotificationId() == in_notificationId)
+					{
+						cancelList.add(notification);
+					}
+				}
+				
+				for(LocalNotification cancel : cancelList)
+				{
+					PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), cancel.getIntentId() , cancel.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
+					m_alarmManager.cancel(pendingIntent);
+					m_notificationStore.remove(cancel);
+				}
 			}
-		}
+		};
 		
-		for(LocalNotification cancel : cancelList)
-		{
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), cancel.getIntentId() , cancel.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
-			m_alarmManager.cancel(pendingIntent);
-			m_notificationStore.remove(cancel);
-		}
+		CSApplication.get().scheduleUIThreadTask(task);
 	}
 	
 	/**
@@ -149,13 +174,27 @@ public final class LocalNotificationNativeInterface extends INativeInterface
 	 */
 	public void cancelAll()
 	{
-		List<LocalNotification> notifications = m_notificationStore.getNotifications();
-		for (LocalNotification notification : notifications)
+		Runnable task = new Runnable()
 		{
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), notification.getIntentId(), notification.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
-			m_alarmManager.cancel(pendingIntent);
-			m_notificationStore.remove(notification);
-		}
+			@Override public void run()
+			{
+				List<LocalNotification> notifications = m_notificationStore.getNotifications();
+				List<LocalNotification> cancelList = new ArrayList<LocalNotification>();
+				for (LocalNotification notification : notifications)
+				{
+					cancelList.add(notification);
+				}
+				
+				for (LocalNotification notification : cancelList)
+				{
+					PendingIntent pendingIntent = PendingIntent.getBroadcast(CSApplication.get().getActivityContext(), notification.getIntentId(), notification.toIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
+					m_alarmManager.cancel(pendingIntent);
+					m_notificationStore.remove(notification);
+				}
+			}
+		};
+		
+		CSApplication.get().scheduleUIThreadTask(task);
 	}
 	
 	/**
@@ -165,31 +204,21 @@ public final class LocalNotificationNativeInterface extends INativeInterface
 	 */
 	public void onNotificationReceived(final Intent in_intent)
 	{
-		Bundle params = in_intent.getExtras();
+		LocalNotification localNotification = new LocalNotification(in_intent);
 		
-		//remove the extra data from the intent
-		int notificationId = Integer.parseInt(params.getString(LocalNotification.k_paramNameNotificationId));
-		int priority = Integer.parseInt(params.getString(LocalNotification.k_paramNamePriority));
-		params.remove(LocalNotification.k_paramNameNotificationId);
-		params.remove(LocalNotification.k_paramNameIntentId);
-		params.remove(LocalNotification.k_paramNamePriority);
-		params.remove(LocalNotification.k_paramNameTime);
-		
-		//copy the intent contents to the arrays
+		Map<String, String> params = localNotification.getParams();
 		int paramSize = params.size();
 		String[] keys = new String[paramSize];
 		String[] values = new String[paramSize];
-
-		Iterator<String> iter = params.keySet().iterator();
-		int paramNumber = 0;
-		while(iter.hasNext())
+		int index = 0;
+		for (Entry<String, String> entry : params.entrySet()) 
 		{
-			keys[paramNumber] = iter.next();			
-			values[paramNumber] = params.get(keys[paramNumber]).toString();
-			++paramNumber;
+			keys[index] = entry.getKey();
+			values[index] = entry.getValue();
+			++index;
 		}
 		
-		nativeOnNotificationReceived(notificationId, keys, values, priority);
+		nativeOnNotificationReceived(localNotification.getNotificationId(), keys, values, localNotification.getPriority());
 	}
 	
 	/**
@@ -232,12 +261,18 @@ public final class LocalNotificationNativeInterface extends INativeInterface
 	{
 		long currentTime = System.currentTimeMillis();
 		List<LocalNotification> notifications = m_notificationStore.getNotifications();
+		List<LocalNotification> removeList = new ArrayList<LocalNotification>();
 		for (LocalNotification notification : notifications)
 		{
 			if (currentTime > notification.getTime() + k_notificationTimeLimitMs)
 			{
-				m_notificationStore.remove(notification);
+				removeList.add(notification);
 			}
+		}
+		
+		for (LocalNotification notification : removeList)
+		{
+			m_notificationStore.remove(notification);
 		}
 	}
 	
