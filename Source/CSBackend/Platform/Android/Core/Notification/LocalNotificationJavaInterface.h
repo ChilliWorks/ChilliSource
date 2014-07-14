@@ -83,7 +83,7 @@ namespace CSBackend
 			///
 			/// @param [Out] The list of notifications.
 			/// @param The start time.
-			/// @param The end time.
+			/// @param The time period.
 			//--------------------------------------------------------
 			void GetScheduledNotifications(std::vector<CSCore::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const;
 			//---------------------------------------------------

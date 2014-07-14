@@ -78,6 +78,8 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	/**
 	 * @author Steven Hendrie
 	 * 
+	 * @param The interface Id.
+	 * 
 	 * @return whether or not this implements the given interface.
 	 */
 	@Override public boolean IsA(InterfaceIDType in_interfaceId) 
@@ -184,6 +186,8 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 * the UI thread.
 	 * 
 	 * @author Ian Copland
+	 * 
+	 * @param The received intent.
 	 */
 	public void onNotificationReceived(final Intent in_intent)
 	{
@@ -264,6 +268,11 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 * side of the engine.
 	 * 
 	 * @author Ian Copland
+	 * 
+	 * @param The notification Id.
+	 * @param An array of the parameter keys.
+	 * @param An array of the parameter values.
+	 * @param The priority of the notification.
 	 */
 	native private void nativeOnNotificationReceived(int in_id, String[] in_keys, String[] in_values, int in_priority);
 }
