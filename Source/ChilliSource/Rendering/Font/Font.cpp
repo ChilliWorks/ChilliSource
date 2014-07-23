@@ -108,7 +108,7 @@ namespace ChilliSource
             CharacterInfo info;
             if(TryGetCharacterInfo(k_similarSpaceCharacter, info) == false)
             {
-                CS_LOG_ERROR("Cannot find similar space character in font: " + GetFilePath());
+                CS_LOG_ERROR("Cannot find similar space character in font: " + GetName());
                 info.m_size.x = 1.0f;
                 info.m_offset = Core::Vector2::k_zero;
                 info.m_UVs = Rendering::UVs();

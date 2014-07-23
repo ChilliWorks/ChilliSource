@@ -29,6 +29,8 @@
 #ifndef _CSBACKEND_RENDERING_OPENGL_BASE_CONTEXTRESTORER_H_
 #define _CSBACKEND_RENDERING_OPENGL_BASE_CONTEXTRESTORER_H_
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
 
@@ -95,5 +97,7 @@ namespace CSBackend
         };
     }
 }
+
+#endif
 
 #endif

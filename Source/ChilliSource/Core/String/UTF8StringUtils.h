@@ -145,7 +145,7 @@ namespace ChilliSource
             ///
             /// @return String of code points with character appended
             //-----------------------------------------------------
-            std::string Append(UTF8Char in_char, const std::string& in_string);
+            std::string AppendCopy(UTF8Char in_char, const std::string& in_string);
             //-----------------------------------------------------
             /// Append the given UTF8 character to the list of code
             /// points held in the std::string

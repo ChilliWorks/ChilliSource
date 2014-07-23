@@ -37,7 +37,6 @@ namespace ChilliSource
 	namespace Rendering
 	{
         const u32 kudwNumBuffers = 2;
-        const u32 kudwBufferArrayBounds = kudwNumBuffers - 1;
         
         enum class CommandType
         {

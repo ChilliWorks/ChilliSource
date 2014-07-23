@@ -160,18 +160,6 @@ namespace ChilliSource
             
             return result;
 		}
-		//------------------------------------------------------
-		//------------------------------------------------------
-		void CameraComponent::SetClearColour(const Core::Colour& in_colour)
-		{
-			m_clearCol = in_colour;
-		}
-		//------------------------------------------------------
-		//------------------------------------------------------
-		const Core::Colour& CameraComponent::GetClearColour() const
-		{
-			return m_clearCol;
-		}
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
         const RendererSortPredicateSPtr& CameraComponent::GetOpaqueSortPredicate() const

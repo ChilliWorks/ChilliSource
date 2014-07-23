@@ -87,13 +87,6 @@ CSAppDelegate* singletonInstance = nil;
     
     csApplication = CreateApplication();
     
-#if TARGET_IPHONE_SIMULATOR
-    if ([NSClassFromString(@"WebView") respondsToSelector:@selector(_enableRemoteInspector)])
-    {
-        [NSClassFromString(@"WebView") performSelector:@selector(_enableRemoteInspector)];
-    }
-#endif
-    
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	viewControllerInternal = [[CSGLViewController alloc] initWithDelegate:self];
     [window setRootViewController: viewControllerInternal];

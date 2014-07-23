@@ -1270,7 +1270,7 @@ namespace ChilliSource
         void GUIView::RotateBy(f32 infAngleInRadians)
         {
 			OnTransformChanged((u32)TransformCache::k_transform);
-            Rotation += infAngleInRadians;
+            Rotation -= infAngleInRadians;
         }
         //------------------------------------------------------
         /// Set Size
@@ -1408,9 +1408,9 @@ namespace ChilliSource
 		//------------------------------------------------------
 		const f32 GUIView::GetAbsoluteRotation() const
 		{
-			if (mpParentView && !RotatedWithParent)
+			if (mpParentView && RotatedWithParent)
 			{
-				return Rotation - mpParentView->GetAbsoluteRotation();
+				return Rotation + mpParentView->GetAbsoluteRotation();
 			}
 			
 			return Rotation;
@@ -1548,6 +1548,17 @@ namespace ChilliSource
         {
             return m_screen;
         }
+		//-----------------------------------------------------
+		//------------------------------------------------------
+		const f32 GUIView::GetParentSpaceRotation() const
+		{
+			if (mpParentView && !RotatedWithParent)
+			{
+				return Rotation - mpParentView->GetParentSpaceRotation();
+			}
+			
+			return Rotation;
+		}
         //-----------------------------------------------------
         /// Get Transform
         ///
@@ -1560,7 +1571,7 @@ namespace ChilliSource
 				if(mpParentView)
 				{
 					//Create our transform without respect to our parent
-					Core::Matrix3 matTrans = Core::Matrix3::CreateTransform(GetAbsolutePosition(), Core::Vector2::k_one, GetAbsoluteRotation());
+					Core::Matrix3 matTrans = Core::Matrix3::CreateTransform(GetAbsolutePosition(), Core::Vector2::k_one, GetParentSpaceRotation());
 					
 					//Apply our parents transform
 					mmatTransform = matTrans * mpParentView->GetTransform();
@@ -1696,7 +1707,7 @@ namespace ChilliSource
         //---Touch Delegates
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool GUIView::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
+        bool GUIView::OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
         {
             if(UserInteraction)
             {
@@ -1712,7 +1723,7 @@ namespace ChilliSource
                 {
 					if((*it)->UserInteraction)
 					{
-						bool bContains = (*it)->Contains(in_pointer.m_location);
+						bool bContains = (*it)->Contains(in_pointer.GetPosition());
 						if((*it)->IsAcceptTouchesOutsideOfBoundsEnabled() || bContains)
 						{
 							if((*it)->OnPointerDown(in_pointer, in_timestamp, in_inputType))
@@ -1724,7 +1735,7 @@ namespace ChilliSource
 					}
                 }
                 //Check for input events
-				bool bContains = Contains(in_pointer.m_location);
+				bool bContains = Contains(in_pointer.GetPosition());
 				if(IsAcceptTouchesOutsideOfBoundsEnabled() || bContains)
 				{
 					mInputEvents.OnPointerDown(this, in_pointer, bContains);
@@ -1746,7 +1757,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool GUIView::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
+        bool GUIView::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
         {
             if(UserInteraction)
             {
@@ -1754,11 +1765,11 @@ namespace ChilliSource
 				{
 					if(!AlignedWithParent)
 					{
-						SetPosition(Core::UnifiedVector2(Core::Vector2::k_zero, in_pointer.m_location));
+						SetPosition(Core::UnifiedVector2(Core::Vector2::k_zero, in_pointer.GetPosition()));
 					}
 					else
 					{
-						SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::k_zero, in_pointer.m_location));
+						SetOffsetFromParentAlignment(Core::UnifiedVector2(Core::Vector2::k_zero, in_pointer.GetPosition()));
 					}
 				}
 
@@ -1792,7 +1803,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void GUIView::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
+        void GUIView::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
         {
 			mbIsBeingDragged = false;
 

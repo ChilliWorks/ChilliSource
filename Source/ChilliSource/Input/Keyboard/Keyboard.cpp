@@ -1,7 +1,7 @@
 //
 //  Keyboard.cpp
 //  Chilli Source
-//  Created by Ian Copland on 25/03/2014.
+//  Created by Scott Downie on 09/07/2014
 //
 //  The MIT License (MIT)
 //
@@ -28,12 +28,8 @@
 
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 
-#ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Input/Keyboard/Keyboard.h>
-#endif
-
-#ifdef CS_TARGETPLATFORM_IOS
-#include <CSBackend/Platform/iOS/Input/Keyboard/Keyboard.h>
+#ifdef CS_TARGETPLATFORM_WINDOWS
+#include <CSBackend/Platform/Windows/Input/Keyboard/Keyboard.h>
 #endif
 
 namespace ChilliSource
@@ -45,10 +41,8 @@ namespace ChilliSource
         //-------------------------------------------------------
         KeyboardUPtr Keyboard::Create()
         {
-#if defined CS_TARGETPLATFORM_ANDROID
-            return KeyboardUPtr(new CSBackend::Android::Keyboard());
-#elif defined CS_TARGETPLATFORM_IOS
-            return KeyboardUPtr(new CSBackend::iOS::Keyboard());
+#if defined CS_TARGETPLATFORM_WINDOWS
+            return KeyboardUPtr(new CSBackend::Windows::Keyboard());
 #else
             return nullptr;
 #endif

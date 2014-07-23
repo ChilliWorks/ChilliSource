@@ -218,7 +218,7 @@ namespace ChilliSource
                     
                     //We need to use a matrix so that we can rotate all the patches with respect
                     //to the view
-                    Core::Matrix3 matViewTransform = Core::Matrix3::CreateTransform(GetAbsoluteScreenSpacePosition(), Core::Vector2(1, 1), GetAbsoluteRotation());
+                    Core::Matrix3 matViewTransform = Core::Matrix3::CreateTransform(GetAbsoluteScreenSpacePosition(), Core::Vector2::k_one, GetAbsoluteRotation());
                     
                     const Rendering::AlignmentAnchor alignments[(u32)Patch::k_total] =
                     {

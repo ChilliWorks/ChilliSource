@@ -131,6 +131,12 @@
 {
     CSRendering::SurfaceFormat preferredFormat = CSCore::ParseSurfaceFormat(in_configRoot.get("PreferredSurfaceFormat", "rgb565_depth24").asString());
     
+    const Json::Value& iOS = in_configRoot["iOS"];
+    if(iOS.isNull() == false && iOS.isMember("PreferredSurfaceFormat"))
+    {
+        preferredFormat = CSCore::ParseSurfaceFormat(iOS["PreferredSurfaceFormat"].asString());
+    }
+    
     //apply format
     switch (preferredFormat)
     {
@@ -170,25 +176,26 @@
 {
     GLKViewDrawableMultisample format = GLKViewDrawableMultisampleNone;
     
-    const Json::Value& iOS = in_configRoot["iOS"];
+    std::string stringFormat = in_configRoot.get("Multisample", "None").asString();
     
-    if(iOS.isNull() == false)
+    const Json::Value& iOS = in_configRoot["iOS"];
+    if(iOS.isNull() == false && iOS.isMember("Multisample"))
     {
-        std::string stringFormat = iOS.get("Multisample", "None").asString();
-        CSCore::StringUtils::ToLowerCase(stringFormat);
-        
-        if(stringFormat == "none")
-        {
-            format = GLKViewDrawableMultisampleNone;
-        }
-        else if(stringFormat == "4x")
-        {
-            format = GLKViewDrawableMultisample4X;
-        }
-        else
-        {
-            CS_LOG_FATAL("Unknown multisample format: " + stringFormat + ". Options are None or 4x");
-        }
+        stringFormat = iOS["Multisample"].asString();
+    }
+    
+    CSCore::StringUtils::ToLowerCase(stringFormat);
+    if(stringFormat == "none")
+    {
+        format = GLKViewDrawableMultisampleNone;
+    }
+    else if(stringFormat == "4x")
+    {
+        format = GLKViewDrawableMultisample4X;
+    }
+    else
+    {
+        CS_LOG_FATAL("Unknown multisample format: " + stringFormat + ". Options are None or 4x");
     }
     
     in_view.drawableMultisample = format;

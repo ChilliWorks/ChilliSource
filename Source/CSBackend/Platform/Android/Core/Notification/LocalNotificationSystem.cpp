@@ -81,7 +81,7 @@ namespace CSBackend
 		//--------------------------------------------------
 		void LocalNotificationSystem::GetScheduledNotifications(std::vector<CSCore::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
 		{
-			CS_LOG_WARNING("LocalNotificationScheduler::GetScheduledNotifications() is unimplemented on Android!");
+			m_localNotificationJI->GetScheduledNotifications(out_notifications, in_time, in_period);
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------

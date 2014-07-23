@@ -26,87 +26,171 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_IMAGEFORMATCONVERTER_H
-#define _CHILLISOURCE_CORE_IMAGEFORMATCONVERTER_H
+#ifndef _CHILLISOURCE_CORE_IMAGE_IMAGEFORMATCONVERTER_H
+#define _CHILLISOURCE_CORE_IMAGE_IMAGEFORMATCONVERTER_H
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Image/Image.h>
 
 namespace ChilliSource
 {
     namespace Core
     {
-        //=====================================================
-        /// Image Format Converter
-        ///
-        /// The image format converter provides a number of
-        /// method for converting from one image format to
-        /// another.
-        //=====================================================
+        //---------------------------------------------------------
+        /// The image format converter provides a number of method
+    	/// for converting from one image format to another.
+    	///
+    	/// @author Ian Copland
+        //---------------------------------------------------------
         namespace ImageFormatConverter
         {
-            //---------------------------------------------------
-            /// RGBA8888 To RGB888
-            ///
-            /// Converts an Image in format RGBA8888 to RGB888
-            /// format.
-            ///
-            /// @param The image pointer.
-            //---------------------------------------------------
-            void RGBA8888ToRGB888(Image* inpImage);
-            //---------------------------------------------------
-            /// RGBA8888 To RGBA4444
-            ///
-            /// Converts an Image in format RGBA8888 to RGBA4444
-            /// format.
-            ///
-            /// @param The image pointer.
-            //---------------------------------------------------
-            void RGBA8888ToRGBA4444(Image* inpImage);
-            //---------------------------------------------------
-            /// RGBA8888 To RGB565
-            ///
-            /// Converts an Image in format RGBA8888 to RGBA4444
-            /// format.
-            ///
-            /// @param The image pointer.
-            //---------------------------------------------------
-            void RGBA8888ToRGB565(Image* inpImage);
-            //---------------------------------------------------
-            /// RGBA8888 To LUMA88
-            ///
-            /// Converts an Image in format RGBA8888 to LUMA88
-            /// format.
-            ///
-            /// @param The image pointer.
-            //---------------------------------------------------
-            void RGBA8888ToLUMA88(Image* inpImage);
-            //---------------------------------------------------
-            /// RGBA8888 To LUM8
-            ///
-            /// Converts an Image in format RGBA8888 to LUMA88
-            /// format.
-            ///
-            /// @param The image pointer.
-            //---------------------------------------------------
-            void RGBA8888ToLUM8(Image* inpImage);
-            //---------------------------------------------------
-            /// RGBA8888 To Depth 32
-            ///
-            /// Converts an Image in format RGBA8888 to Depth 32
-            /// format
-            ///
-            /// @param The image pointer.
-            //---------------------------------------------------
-            void RGBA8888ToDepth32(Image* inpImage);
-            //---------------------------------------------------
-            /// RGBA8888 To Depth 16
-            ///
-            /// Converts an Image in format RGBA8888 to Depth 16
-            /// format
-            ///
-            /// @param The image pointer.
-            //---------------------------------------------------
-            void RGBA8888ToDepth16(Image* inpImage);
+			//---------------------------------------------------
+			/// A struct containing the buffer and size of raw
+        	/// image data.
+			///
+			/// @author Ian Copland
+			//---------------------------------------------------
+        	struct ImageBuffer final
+        	{
+        		Image::ImageDataUPtr m_data;
+        		u32 m_size = 0;
+
+#ifdef CS_TARGETPLATFORM_WINDOWS
+				//------------------------------------------------
+				/// Visual C++ 12 doesn't support implicit move
+				/// constructors, so this has to be manually
+				/// specified.
+				///
+				/// @author Ian Copland
+				//------------------------------------------------
+				ImageBuffer() = default;
+				//------------------------------------------------
+				/// Visual C++ 12 doesn't support implicit move
+				/// constructors, so this has to be manually
+				/// specified.
+				///
+				/// @author Ian Copland
+				///
+				/// @param The image buffer to move.
+				//------------------------------------------------
+				ImageBuffer(ImageBuffer&& in_other);
+#endif
+        	};
+			//---------------------------------------------------
+			/// Converts an Image in format RGBA8888 to RGB888
+			/// format. This will allocate a new buffer for the
+        	/// target format data and release the previous
+        	/// buffer.
+        	///
+        	/// @author Ian Copland
+			///
+			/// @param A pointer to the image to convert.
+			//---------------------------------------------------
+			void RGBA8888ToRGB888(Image* in_image);
+			//---------------------------------------------------
+			/// Converts an Image in format RGBA8888 to RGBA4444
+			/// format. This will allocate a new buffer for the
+        	/// target format data and release the previous
+        	/// buffer.
+        	///
+        	/// @author Ian Copland
+			///
+			/// @param A pointer to the image to convert.
+			//---------------------------------------------------
+			void RGBA8888ToRGBA4444(Image* in_image);
+			//---------------------------------------------------
+			/// Converts an Image in format RGBA8888 to RGB565
+			/// format. This will allocate a new buffer for the
+        	/// target format data and release the previous
+        	/// buffer.
+        	///
+        	/// @author Ian Copland
+			///
+			/// @param A pointer to the image to convert.
+			//---------------------------------------------------
+			void RGBA8888ToRGB565(Image* in_image);
+			//---------------------------------------------------
+			/// Converts an Image in format RGBA8888 to LumA88
+			/// format. This will allocate a new buffer for the
+        	/// target format data and release the previous
+        	/// buffer.
+        	///
+        	/// @author Ian Copland
+			///
+			/// @param A pointer to the image to convert.
+			//---------------------------------------------------
+			void RGBA8888ToLumA88(Image* in_image);
+			//---------------------------------------------------
+			/// Converts an Image in format RGBA8888 to LumA88
+			/// format. This will allocate a new buffer for the
+        	/// target format data and release the previous
+        	/// buffer.
+        	///
+        	/// @author Ian Copland
+			///
+			/// @param A pointer to the image to convert.
+			//---------------------------------------------------
+			void RGBA8888ToLum8(Image* in_image);
+			//---------------------------------------------------
+			/// Creates new RGB888 image data from RGBA8888 image
+			/// data.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The input RGBA8888 image data buffer.
+			/// @param The size of the RGBA8888 image data buffer.
+			///
+			/// @return The output RGB888 image data.
+			//---------------------------------------------------
+			ImageBuffer RGBA8888ToRGB888(const u8* in_imageData, u32 in_imageDataSize);
+			//---------------------------------------------------
+			/// Creates new RGBA4444 image data from RGBA8888 image
+			/// data.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The input RGBA8888 image data buffer.
+			/// @param The size of the RGBA8888 image data buffer.
+			///
+			/// @return The output RGBA4444 image data.
+			//---------------------------------------------------
+			ImageBuffer RGBA8888ToRGBA4444(const u8* in_imageData, u32 in_imageDataSize);
+			//---------------------------------------------------
+			/// Creates new RGB565 image data from RGBA8888 image
+			/// data.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The input RGBA8888 image data buffer.
+			/// @param The size of the RGBA8888 image data buffer.
+			///
+			/// @return The output RGB565 image data.
+			//---------------------------------------------------
+			ImageBuffer RGBA8888ToRGB565(const u8* in_imageData, u32 in_imageDataSize);
+			//---------------------------------------------------
+			/// Creates new LumA88 image data from RGBA8888 image
+			/// data.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The input RGBA8888 image data buffer.
+			/// @param The size of the RGBA8888 image data buffer.
+			///
+			/// @return The output LumA88 image data.
+			//---------------------------------------------------
+			ImageBuffer RGBA8888ToLumA88(const u8* in_imageData, u32 in_imageDataSize);
+			//---------------------------------------------------
+			/// Creates new LUM8 image data from RGBA8888 image
+			/// data.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The input RGBA8888 image data buffer.
+			/// @param The size of the RGBA8888 image data buffer.
+			///
+			/// @return The output Lum8 image data.
+			//---------------------------------------------------
+			ImageBuffer RGBA8888ToLum8(const u8* in_imageData, u32 in_imageDataSize);
         }
     }
 }

@@ -60,6 +60,18 @@ namespace ChilliSource
             //------------------------------------------------------
 			virtual void SetTargetTextures(const TextureSPtr& inpColourTexture, const TextureSPtr& inpDepthTexture) = 0;
             //------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The colour texture.
+            //------------------------------------------------------
+			virtual const CSRendering::TextureSPtr& GetColourTexture() const = 0;
+            //------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The depth texture.
+            //------------------------------------------------------
+			virtual const CSRendering::TextureSPtr& GetDepthTexture() const = 0;
+            //------------------------------------------------------
             /// Bind
             ///
             /// Bind the frame buffer to the context

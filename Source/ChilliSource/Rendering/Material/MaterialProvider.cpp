@@ -41,10 +41,7 @@
 #include <ChilliSource/Rendering/Shader/Shader.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
 #include <ChilliSource/Rendering/Texture/CubemapResourceOptions.h>
-#include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureResourceOptions.h>
-
-//TODO: Expose wrap and filter mode of texture and cubemap through texture
 
 namespace ChilliSource
 {
@@ -75,6 +72,9 @@ namespace ChilliSource
                 Core::StorageLocation m_location;
                 ShaderPass m_pass;
                 bool m_shouldMipMap;
+                Texture::FilterMode m_filterMode;
+                Texture::WrapMode m_wrapModeU;
+                Texture::WrapMode m_wrapModeV;
             };
             //----------------------------------------------------------------------------
             /// @author S Downie
@@ -109,6 +109,56 @@ namespace ChilliSource
                 if(in_cullFace == "Back") return CullFace::k_back;
                 
                 return CullFace::k_front;
+            }
+            //----------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param A string describing the texture wrap mode.
+            ///
+            /// @return The wrap mode. If the string was not a valid wrap mode this will
+            /// default to clamp.
+            //----------------------------------------------------------------------------
+            Texture::WrapMode ConvertStringToWrapMode(const std::string& in_wrapModeString)
+            {
+                std::string lowerWrapModeString = in_wrapModeString;
+                CSCore::StringUtils::ToLowerCase(lowerWrapModeString);
+                
+                if(lowerWrapModeString == "clamp")
+                {
+                    return Texture::WrapMode::k_clamp;
+                }
+                if(lowerWrapModeString == "repeat")
+                {
+                    return Texture::WrapMode::k_repeat;
+                }
+                
+                CS_LOG_ERROR("Invalid WrapMode: " + in_wrapModeString);
+                return Texture::WrapMode::k_clamp;
+            }
+            //----------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param A string describing the texture filter mode.
+            ///
+            /// @return The filter mode. If the string was not a valid filter mode this will
+            /// default to bilinear.
+            //----------------------------------------------------------------------------
+            Texture::FilterMode ConvertStringToFilterMode(const std::string& in_filterModeString)
+            {
+                std::string lowerFilterModeString = in_filterModeString;
+                CSCore::StringUtils::ToLowerCase(lowerFilterModeString);
+                
+                if(lowerFilterModeString == "nearestneighbour")
+                {
+                    return Texture::FilterMode::k_nearestNeighbour;
+                }
+                if(lowerFilterModeString == "bilinear")
+                {
+                    return Texture::FilterMode::k_bilinear;
+                }
+                
+                CS_LOG_ERROR("Invalid FilterMode: " + in_filterModeString);
+                return Texture::FilterMode::k_bilinear;
             }
             //----------------------------------------------------------------------------
             /// Each material type has associated shaders. This function will build a
@@ -150,7 +200,7 @@ namespace ChilliSource
                     if (in_renderCapabilities->IsShadowMappingSupported() == true)
                     {
                         out_shaders.push_back({"Shaders/StaticAmbient.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_ambient});
-                        out_shaders.push_back({"Shaders/StaticBlinnShadowedDirectional.csshader", Core::StorageLocation::k_package, ShaderPass::k_directional});
+                        out_shaders.push_back({"Shaders/StaticBlinnShadowedDirectional.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_directional});
                         out_shaders.push_back({"Shaders/StaticBlinnPoint.csshader", Core::StorageLocation::k_chilliSource, ShaderPass::k_point});
                     }
                     else
@@ -479,6 +529,9 @@ namespace ChilliSource
                         desc.m_location = Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValue<std::string>(textureEl, "location", "Package"));
                         desc.m_filePath = Core::XMLUtils::GetAttributeValue<std::string>(textureEl, "image-name", "");
                         desc.m_shouldMipMap = Core::XMLUtils::GetAttributeValue<bool>(textureEl, "mipmapped", false);
+                        desc.m_filterMode = ConvertStringToFilterMode(Core::XMLUtils::GetAttributeValue<std::string>(textureEl, "filter-mode", "Bilinear"));
+                        desc.m_wrapModeU = ConvertStringToWrapMode(Core::XMLUtils::GetAttributeValue<std::string>(textureEl, "wrap-mode-u", "Clamp"));
+                        desc.m_wrapModeV = ConvertStringToWrapMode(Core::XMLUtils::GetAttributeValue<std::string>(textureEl, "wrap-mode-v", "Clamp"));
                         out_textureFiles.push_back(desc);
                         
                         textureEl =  Core::XMLUtils::GetNextSiblingElement(textureEl, "Texture");
@@ -502,6 +555,9 @@ namespace ChilliSource
                     desc.m_location = Core::ParseStorageLocation(Core::XMLUtils::GetAttributeValue<std::string>(cubemapEl, "location", "Package"));
                     desc.m_filePath = Core::XMLUtils::GetAttributeValue<std::string>(cubemapEl, "base-name", "");
                     desc.m_shouldMipMap = Core::XMLUtils::GetAttributeValue<bool>(cubemapEl, "mipmapped", false);
+                    desc.m_filterMode = ConvertStringToFilterMode(Core::XMLUtils::GetAttributeValue<std::string>(cubemapEl, "filter-mode", "Bilinear"));
+                    desc.m_wrapModeU = ConvertStringToWrapMode(Core::XMLUtils::GetAttributeValue<std::string>(cubemapEl, "wrap-mode-u", "Clamp"));
+                    desc.m_wrapModeV = ConvertStringToWrapMode(Core::XMLUtils::GetAttributeValue<std::string>(cubemapEl, "wrap-mode-v", "Clamp"));
                     out_cubemapFiles.push_back(desc);
                 }
             }
@@ -555,7 +611,7 @@ namespace ChilliSource
                     }
                     case ResourceType::k_texture:
                     {
-                        auto options(std::make_shared<TextureResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, Texture::FilterMode::k_bilinear, Texture::WrapMode::k_clamp, Texture::WrapMode::k_clamp));
+                        auto options(std::make_shared<TextureResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV, true));
                         resourcePool->LoadResourceAsync<Texture>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [in_loadIndex, in_descs, in_delegate, out_material](const TextureCSPtr& in_texture)
                         {
                             if(in_texture->GetLoadState() == Core::Resource::LoadState::k_loaded)
@@ -586,7 +642,7 @@ namespace ChilliSource
                     }
                     case ResourceType::k_cubemap:
                     {
-                        auto options(std::make_shared<CubemapResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, Texture::FilterMode::k_bilinear, Texture::WrapMode::k_clamp, Texture::WrapMode::k_clamp));
+                        auto options(std::make_shared<CubemapResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV, true));
                         resourcePool->LoadResourceAsync<Cubemap>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [in_loadIndex, in_descs, in_delegate, out_material](const CubemapCSPtr& in_cubemap)
                         {
                             if(in_cubemap->GetLoadState() == Core::Resource::LoadState::k_loaded)
@@ -688,7 +744,7 @@ namespace ChilliSource
             {
                 if(textureFiles[i].m_filePath.empty() == false)
                 {
-                    auto options(std::make_shared<TextureResourceOptions>(textureFiles[i].m_shouldMipMap, Texture::FilterMode::k_bilinear, Texture::WrapMode::k_clamp, Texture::WrapMode::k_clamp));
+                    auto options(std::make_shared<TextureResourceOptions>(textureFiles[i].m_shouldMipMap, textureFiles[i].m_filterMode, textureFiles[i].m_wrapModeU, textureFiles[i].m_wrapModeV, true));
                     TextureCSPtr texture = resourcePool->LoadResource<Texture>(textureFiles[i].m_location, textureFiles[i].m_filePath, options);
                     if(texture == nullptr)
                     {
@@ -704,7 +760,7 @@ namespace ChilliSource
             {
                 if(cubemapFiles[i].m_filePath.empty() == false)
                 {
-                    auto options(std::make_shared<CubemapResourceOptions>(cubemapFiles[i].m_shouldMipMap, Texture::FilterMode::k_bilinear, Texture::WrapMode::k_clamp, Texture::WrapMode::k_clamp));
+                    auto options(std::make_shared<CubemapResourceOptions>(cubemapFiles[i].m_shouldMipMap, cubemapFiles[i].m_filterMode, cubemapFiles[i].m_wrapModeU, cubemapFiles[i].m_wrapModeV, true));
                     CubemapCSPtr cubemap = resourcePool->LoadResource<Cubemap>(cubemapFiles[i].m_location, cubemapFiles[i].m_filePath, options);
                     if(cubemap == nullptr)
                     {
@@ -761,6 +817,9 @@ namespace ChilliSource
                 desc.m_filePath = textureDesc.m_filePath;
                 desc.m_location = textureDesc.m_location;
                 desc.m_shouldMipMap = textureDesc.m_shouldMipMap;
+                desc.m_filterMode = textureDesc.m_filterMode;
+                desc.m_wrapModeU = textureDesc.m_wrapModeU;
+                desc.m_wrapModeV = textureDesc.m_wrapModeV;
                 desc.m_type = ResourceType::k_texture;
                 resourceFiles.push_back(desc);
             }
@@ -771,6 +830,9 @@ namespace ChilliSource
                 desc.m_filePath = cubemapDesc.m_filePath;
                 desc.m_location = cubemapDesc.m_location;
                 desc.m_shouldMipMap = cubemapDesc.m_shouldMipMap;
+                desc.m_filterMode = cubemapDesc.m_filterMode;
+                desc.m_wrapModeU = cubemapDesc.m_wrapModeU;
+                desc.m_wrapModeV = cubemapDesc.m_wrapModeV;
                 desc.m_type = ResourceType::k_cubemap;
                 resourceFiles.push_back(desc);
             }

@@ -282,7 +282,7 @@ namespace ChilliSource
         {
             if(!m_states.empty())
 			{
-				m_states.back()->OnSuspend();
+				m_states.back()->Suspend();
 			}
         }
         //---------------------------------------------------------

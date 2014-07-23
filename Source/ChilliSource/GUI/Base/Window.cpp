@@ -79,9 +79,9 @@ namespace ChilliSource
         void Window::StopListeningForPointerInput()
         {
         	//send up event for all currently active pointers
-        	for (const Input::PointerSystem::Pointer& pointer : m_pointerSystem->GetPointers())
+        	for (const Input::Pointer& pointer : m_pointerSystem->GetPointers())
         	{
-        		for (const Input::PointerSystem::InputType& type : pointer.m_activeInput)
+        		for (const Input::Pointer::InputType& type : pointer.GetActiveInputs())
         		{
         			_OnPointerUp(pointer, ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0, type);
         		}
@@ -107,7 +107,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		void Window::_OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
+		void Window::_OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
 		{
 			if (in_inputType == Input::PointerSystem::GetDefaultInputType())
             {
@@ -121,7 +121,7 @@ namespace ChilliSource
                 //We need to notify any subviews they get first dibs
                 for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
-                    if(((*it)->IsAcceptTouchesOutsideOfBoundsEnabled() || (*it)->Contains(in_pointer.m_location)))
+                    if(((*it)->IsAcceptTouchesOutsideOfBoundsEnabled() || (*it)->Contains(in_pointer.GetPosition())))
                     {
                         if((*it)->OnPointerDown(in_pointer, in_timestamp, in_inputType))
                         {
@@ -141,9 +141,9 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		void Window::_OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
+		void Window::_OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
 		{
-            if (in_pointer.m_activeInput.find(Input::PointerSystem::GetDefaultInputType()) != in_pointer.m_activeInput.end())
+            if (in_pointer.IsInputDown(Input::PointerSystem::GetDefaultInputType()) == true)
             {
                 if (!UserInteraction)
                     return;
@@ -172,7 +172,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		void Window::_OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
+		void Window::_OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
 		{
             if (in_inputType == Input::PointerSystem::GetDefaultInputType())
             {
@@ -197,19 +197,19 @@ namespace ChilliSource
 		}
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool Window::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
+        bool Window::OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
         {
             return false;
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool Window::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
+        bool Window::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
         {
             return false;
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void Window::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
+        void Window::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
         {
         }
 #ifdef CS_ENABLE_DEBUGSTATS

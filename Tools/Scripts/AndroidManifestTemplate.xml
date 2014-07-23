@@ -57,11 +57,10 @@ THE SOFTWARE.
 
         <!-- Chilli Source main -->
         <activity android:name="com.chillisource.core.CSActivity"
-            android:screenOrientation="sensor"
+            android:screenOrientation="[[ORIENTATION]]"
             android:label="@string/app_name"
-            android:windowSoftInputMode="stateHidden"
             android:launchMode="singleTask"
-            android:configChanges="keyboard|keyboardHidden|orientation|mcc|mnc|locale|touchscreen|navigation|fontScale|screenSize">
+            android:configChanges="orientation|mcc|mnc|locale|touchscreen|navigation|fontScale|screenSize">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -72,7 +71,7 @@ THE SOFTWARE.
 
         <!-- Chilli Source video player -->
         <activity android:name="com.chillisource.video.VideoPlayerActivity" 
-            android:screenOrientation = "landscape" 
+            android:screenOrientation="[[ORIENTATION]]" 
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden"
             android:configChanges="keyboard|keyboardHidden|orientation|mcc|mnc|locale|touchscreen|navigation|fontScale|screenSize" />
@@ -91,13 +90,9 @@ THE SOFTWARE.
 
         <!-- Google Play downloader -->
         <service android:name="com.chillisource.googleplay.GooglePlayDownloaderService" />
-        <activity android:name="com.chillisource.googleplay.GooglePlayDownloaderActivity"
-            	  android:windowSoftInputMode="stateHidden"
-            	  android:screenOrientation = "landscape"
-            	  android:configChanges="keyboard|keyboardHidden|orientation|mcc|mnc|locale|touchscreen|navigation|fontScale|screenSize" />
 
         <!-- Google Play remote notifications -->
-        <meta-data android:name="GoogleProjectID" android:value="[[GOOGLEPLATPROJECTID]]" />
+        <meta-data android:name="GoogleProjectID" android:value="[[GOOGLEPLAYPROJECTID]]" />
         <service android:name="com.chillisource.googleplay.CRemoteNotificationService" />
         <receiver android:name="com.chillisource.googleplay.GooglePlayAlarmReceiver" />
         <receiver android:name="com.chillisource.googleplay.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">

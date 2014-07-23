@@ -32,10 +32,6 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/Image/ImageCompression.h>
-#include <ChilliSource/Core/Image/ImageFormat.h>
-#include <ChilliSource/Core/Resource/ResourcePool.h>
-#include <ChilliSource/Rendering/Base/RenderCapabilities.h>
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Camera/OrthographicCameraComponent.h>
 #include <ChilliSource/Rendering/Camera/PerspectiveCameraComponent.h>
@@ -58,38 +54,6 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-        namespace
-        {
-            //--------------------------------------------------------
-            /// Calculate the size with the maximum dimension of 1.0
-            /// such that the aspect ratio of the given size is maintained
-            ///
-            /// @author S Downie
-            ///
-            /// @param Original size
-            ///
-            /// @return Normalised size maintaining aspect
-            //--------------------------------------------------------
-            Core::Vector2 CalculateNormalisedSizeMaintainingAspect(const Core::Vector2& in_originalSize)
-            {
-                CS_ASSERT(in_originalSize.x != 0.0f && in_originalSize.y != 0.0f, "Cannot have ZERO original size");
-                Core::Vector2 normSize;
-                
-                if(in_originalSize.x >= in_originalSize.y)
-                {
-                    normSize.x = 1.0f;
-                    normSize.y = in_originalSize.y/in_originalSize.x;
-                }
-                else
-                {
-                    normSize.x = in_originalSize.x/in_originalSize.y;
-                    normSize.y = 1.0f;
-                }
-                
-                return normSize;
-            }
-        }
-        
 		CS_DEFINE_NAMEDTYPE(RenderComponentFactory);
         
         //--------------------------------------------------------
@@ -102,12 +66,6 @@ namespace ChilliSource
         //--------------------------------------------------------
         void RenderComponentFactory::OnInit()
         {
-            m_resourcePool = Core::Application::Get()->GetResourcePool();
-            CS_ASSERT(m_resourcePool, "Render component factory is missing required system: Resource Pool");
-            
-            m_renderCapabilities = Core::Application::Get()->GetSystem<RenderCapabilities>();
-            CS_ASSERT(m_renderCapabilities, "Render Component Factory is missing required system: Render Capabilities.");
-            
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
             CS_ASSERT(m_screen, "Render Component Factory is missing required system: Screen.");
             
@@ -197,36 +155,7 @@ namespace ChilliSource
 		//---------------------------------------------------------------------------
 		DirectionalLightComponentUPtr RenderComponentFactory::CreateDirectionalLightComponent(u32 in_shadowMapRes) const
 		{
-            static u32 s_shadowMapCount = 0;
-            
-            TextureSPtr pShadowMap;
-            TextureSPtr pShadowMapDebug;
-            
-            if(m_renderCapabilities->IsShadowMappingSupported() == true && in_shadowMapRes > 0)
-            {
-                pShadowMap = m_resourcePool->CreateResource<Rendering::Texture>("_ShadowMap" + Core::ToString(s_shadowMapCount));
-                Texture::Descriptor desc;
-                desc.m_width = in_shadowMapRes;
-                desc.m_height = in_shadowMapRes;
-                desc.m_format = Core::ImageFormat::k_Depth16;
-                desc.m_compression = Core::ImageCompression::k_none;
-                desc.m_dataSize = 0;
-                pShadowMap->Build(desc, nullptr, false);
-        
-#ifdef CS_ENABLE_DEBUGSHADOW
-                pShadowMapDebug = m_resourcePool->CreateResource<Rendering::Texture>("_ShadowMapDebug" + Core::ToString(s_shadowMapCount));
-                desc.m_width = in_shadowMapRes;
-                desc.m_height = in_shadowMapRes;
-                desc.m_format = Core::ImageFormat::k_RGB888;
-                desc.m_compression = Core::ImageCompression::k_none;
-                desc.m_dataSize = 0;
-                pShadowMapDebug->Build(desc, nullptr, false);
-#endif
-                
-                s_shadowMapCount++;
-            }
-            
-            DirectionalLightComponentUPtr pLight(new DirectionalLightComponent(pShadowMap, pShadowMapDebug));
+            DirectionalLightComponentUPtr pLight(new DirectionalLightComponent(in_shadowMapRes));
 			return pLight;
 		}
         //---------------------------------------------------------------------------

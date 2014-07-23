@@ -28,4 +28,4 @@
 
 #call the android build with debug target flags setup.
 CS_CXXFLAGS_TARGET := -g -DDEBUG -DCS_ENABLE_DEBUG 
-include ChilliSource/Tools/Scripts/android_build.mk
+include ../../ChilliSource/Tools/Scripts/android_build.mk

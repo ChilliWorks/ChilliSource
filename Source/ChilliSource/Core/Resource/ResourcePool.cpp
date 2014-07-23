@@ -132,7 +132,7 @@ namespace ChilliSource
                         if(itResource->second.use_count() == 1)
                         {
                             //The pool is the sole owner so we can safely release the object
-                            CS_LOG_VERBOSE("Releasing resource from pool " + itResource->second->GetFilePath());
+                            CS_LOG_VERBOSE("Releasing resource from pool " + itResource->second->GetName());
                             itResource = descEntry.second.m_cachedResources.erase(itResource);
                             numReleased++;
                         }
@@ -164,8 +164,8 @@ namespace ChilliSource
                 if(itResource->second.get() == in_resource)
                 {
 					ResourceSPtr& resource = itResource->second;
-					CS_ASSERT((resource.use_count() <= 1), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + resource->GetFilePath() + ")");
-					CS_LOG_VERBOSE("Releasing resource from pool " + resource->GetFilePath());
+					CS_ASSERT((resource.use_count() <= 1), "Cannot release a resource if it is owned by another object (i.e. use_count > 0) : (" + resource->GetName() + ")");
+					CS_LOG_VERBOSE("Releasing resource from pool " + resource->GetName());
 					cachedResources.erase(itResource);
                     return;
                 }
@@ -191,7 +191,7 @@ namespace ChilliSource
                 for(auto itResource = descEntry.second.m_cachedResources.begin(); itResource != descEntry.second.m_cachedResources.end(); ++itResource)
                 {
                     //The pool is the sole owner so we can safely release the object
-                    CS_LOG_ERROR("Resource still in use: " + itResource->second->GetFilePath());
+                    CS_LOG_ERROR("Resource still in use: " + itResource->second->GetName());
 					error = true;
                 }
             }

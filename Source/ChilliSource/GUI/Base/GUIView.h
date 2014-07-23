@@ -843,7 +843,7 @@ namespace ChilliSource
 			///
             /// @return Whether touch has been consumed
 			//-----------------------------------------------------------
-			virtual bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType);
+			virtual bool OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType);
 			//-----------------------------------------------------------
 			/// Called when the window receives cursor/touch input
 			///
@@ -854,7 +854,7 @@ namespace ChilliSource
             ///
 			/// @return Whether touch has been consumed
 			//-----------------------------------------------------------
-			virtual bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp);
+			virtual bool OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp);
 			//-----------------------------------------------------------
 			/// Called when the window stops receiving cursor/touch input
 			///
@@ -864,7 +864,7 @@ namespace ChilliSource
             /// @param The timestamp
             /// @param The press type.
 			//-----------------------------------------------------------
-			virtual void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType);
+			virtual void OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType);
 			//-----------------------------------------------------
 			/// Set Parent View 
 			///
@@ -946,6 +946,15 @@ namespace ChilliSource
 			/// attached to root window.
 			//-----------------------------------------------------
 			void LayoutChildrensContent();
+            //-----------------------------------------------------
+            /// Get Absolute Rotation
+			///
+			/// Rotation in parent views space. This is the cumulated
+			/// rotation of the view hierarchy.
+			///
+			/// @return Cumulated rotation of the parent hierarchy
+            //------------------------------------------------------
+            const f32 GetParentSpaceRotation() const;
 		private:
 
 

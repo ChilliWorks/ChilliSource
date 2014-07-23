@@ -31,13 +31,15 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
-#include <ChilliSource/Input/Pointer/PointerSystem.h>
+#include <ChilliSource/Input/Pointer/Pointer.h>
+
+#include <functional>
 
 namespace ChilliSource
 {
     namespace GUI
     {
-        typedef std::function<void(GUIView*, const Input::PointerSystem::Pointer&)> GUIEventDelegate;
+        typedef std::function<void(GUIView*, const Input::Pointer&)> GUIEventDelegate;
         
         class InputEvents
         {
@@ -107,7 +109,7 @@ namespace ChilliSource
             /// @param Touch data
             /// @param Whether the view contains the touch
             //-----------------------------------------------------------
-            void OnPointerDown(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer, bool in_containsTouch);
+            void OnPointerDown(GUIView* in_view, const Input::Pointer& in_pointer, bool in_containsTouch);
             //-----------------------------------------------------------
             /// Called when the window receives cursor/touch input
             ///
@@ -117,7 +119,7 @@ namespace ChilliSource
             ///
             /// @return Whether the view contains the touch
             //-----------------------------------------------------------
-            bool OnPointerMoved(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer);
+            bool OnPointerMoved(GUIView* in_view, const Input::Pointer& in_pointer);
             //-----------------------------------------------------------
             /// Called when the window stops receiving cursor/touch input
             ///
@@ -125,7 +127,7 @@ namespace ChilliSource
             ///
             /// @param Touch data
             //-----------------------------------------------------------
-            void OnPointerUp(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer);
+            void OnPointerUp(GUIView* in_view, const Input::Pointer& in_pointer);
             
         protected:
             
@@ -139,7 +141,7 @@ namespace ChilliSource
             
         private: 
             
-            std::vector<Input::PointerSystem::PointerId> mOpenTouches;
+            std::vector<Input::Pointer::Id> mOpenTouches;
         };
     }
 }

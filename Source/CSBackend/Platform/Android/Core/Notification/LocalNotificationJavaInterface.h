@@ -75,6 +75,17 @@ namespace CSBackend
 			/// to standard priority.
 			//---------------------------------------------------
 			void ScheduleNotificationForTime(CSCore::Notification::ID in_id, const CSCore::ParamDictionary& in_params, TimeIntervalSecs in_time, CSCore::Notification::Priority in_priority);
+			//--------------------------------------------------------
+			/// Builds a list of all notifications currently scheduled
+			/// within the given time period.
+			///
+			/// @author Ian Copland
+			///
+			/// @param [Out] The list of notifications.
+			/// @param The start time.
+			/// @param The time period.
+			//--------------------------------------------------------
+			void GetScheduledNotifications(std::vector<CSCore::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const;
 			//---------------------------------------------------
 			/// Prevent any notifications with given ID type from
 			/// firing

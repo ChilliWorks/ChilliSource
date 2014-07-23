@@ -42,7 +42,7 @@ namespace ChilliSource
             {
                 if(!outpJson)
                 {
-                    CS_LOG_WARNING("Utils::ReadJson| Output is nullptr");
+                    CS_LOG_WARNING("Utils::ReadJson: Output is nullptr");
                     return false;
                 }
                 
@@ -56,7 +56,7 @@ namespace ChilliSource
                 
                 if(!jReader.parse(strJsonString, *outpJson))
                 {
-					CS_LOG_WARNING("Utils::ReadJson| Json could not be parsed:" + jReader.getFormatedErrorMessages());
+					CS_LOG_WARNING("Utils::ReadJson: Json could not be parsed: " + jReader.getFormatedErrorMessages());
                     return false;
                 }
                 
@@ -69,7 +69,7 @@ namespace ChilliSource
                 
                 if(!pFile || pFile->IsOpen() == false)
                 {
-                    CS_LOG_WARNING("Utils::FileToString| Could not open file" + instrPath);
+                    CS_LOG_WARNING("Utils::FileToString: Could not open file: " + instrPath);
                     return false;
                 }
 
@@ -84,7 +84,7 @@ namespace ChilliSource
                 
                 if(!pFile || pFile->IsOpen() == false)
                 {
-                    CS_LOG_WARNING("Utils::StringToFile| Could not open file" + instrPath);
+                    CS_LOG_WARNING("Utils::StringToFile: Could not open file: " + instrPath);
                     return FileStreamSPtr();
                 }
                 

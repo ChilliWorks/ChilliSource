@@ -20,3 +20,10 @@ Projects/Tools/FontTool/bin
 *.pidb
 *.xcworkspace
 *xcuserdata
+Projects/Tools/AndroidManifestGenerator/bin
+*.class
+Projects/Tools/CSFontMaker/bin
+Projects/Tools/CSFontMaker/obj
+Thumbs.db
+*.user
+Projects/Libraries/SFML/build

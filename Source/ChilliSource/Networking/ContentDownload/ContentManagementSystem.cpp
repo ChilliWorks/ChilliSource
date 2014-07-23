@@ -88,44 +88,6 @@ namespace ChilliSource
                 
                 return "";
             }
-            //--------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param A filepath.
-            ///
-            /// @return Returns just the filename portion of the file
-            /// path.
-            //--------------------------------------------------------
-            std::string GetFileNameExcludingPath(const std::string& instrPath)
-            {
-                u32 udwOffset = instrPath.find_last_of("/");
-                if(udwOffset != std::string::npos)
-                {
-                    if(udwOffset + 1 < instrPath.size())
-                    {
-                        return instrPath.substr(udwOffset+1, instrPath.size());
-                    }
-                }
-                
-                return instrPath;
-            }
-            //--------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param A filepath.
-            ///
-            /// @return The root folder without the path.
-            //--------------------------------------------------------
-            std::string GetRootFolderExcludingPath(const std::string& instrPath)
-            {
-                u32 udwOffset = instrPath.find_first_of("/", 1);
-                if(udwOffset != std::string::npos)
-                {
-                    return instrPath.substr(0, udwOffset);
-                }
-                
-                return "";
-            }
         }
         CS_DEFINE_NAMEDTYPE(ContentManagementSystem);
         //--------------------------------------------------------

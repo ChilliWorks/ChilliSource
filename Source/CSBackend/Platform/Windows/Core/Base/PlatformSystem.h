@@ -71,12 +71,6 @@ namespace CSBackend
 			//-------------------------------------------------
 			void CreateDefaultSystems(CSCore::Application* in_application) override;
 			//-------------------------------------------------
-			/// Begin the game loop.
-			///
-			/// @author S Downie
-			//-------------------------------------------------
-			void Run();
-			//-------------------------------------------------
 			/// @author S Downie
 			///
             /// @param The maximum frames per second to clamp 
@@ -84,6 +78,15 @@ namespace CSBackend
 			/// (15, 30, 60)
             //-------------------------------------------------
 			void SetPreferredFPS(u32 in_fps) override;
+			//---------------------------------------------------
+			/// This will turn VSync on or off. 
+			/// NOTE: This will override the preferred FPS
+			///
+			/// @author S Downie
+			///
+			/// @param Enable/Disable
+			//---------------------------------------------------
+			void SetVSyncEnabled(bool in_enabled) override;
 			//-------------------------------------------------
 			/// Stops the update loop causing the application 
 			/// to terminate.
@@ -103,12 +106,6 @@ namespace CSBackend
 			/// @return the current time in milliseconds
 			//-------------------------------------------------
 			u64 GetSystemTimeMS() const override;
-			//--------------------------------------------------
-			/// Destructor
-			///
-			/// @author S Downie
-			//--------------------------------------------------
-			~PlatformSystem();
 		private:
 			friend CSCore::PlatformSystemUPtr CSCore::PlatformSystem::Create();
 			//--------------------------------------------------
@@ -118,59 +115,6 @@ namespace CSBackend
 			/// @author S Downie
 			//-------------------------------------------------
 			PlatformSystem();
-			//-------------------------------------------------
-			/// Called when the app resumes. This resumes
-			/// the main loop
-			///
-			/// @author S Downie
-			//-------------------------------------------------
-			void OnResume() override;
-			//-------------------------------------------------
-			/// Called when the app gets focus
-			///
-			/// @author S Downie
-			//-------------------------------------------------
-			void OnForeground() override;
-			//-------------------------------------------------
-			/// Called when the app loses focus
-			///
-			/// @author S Downie
-			//-------------------------------------------------
-			void OnBackground() override;
-			//-------------------------------------------------
-			/// Called when the app suspends. This pauses
-			/// the main loop
-			///
-			/// @author S Downie
-			//-------------------------------------------------
-			void OnSuspend() override;
-
-			//---GLFW Delegates
-			//-------------------------------------------------
-			/// Triggered when glfw exits the window
-			///
-			/// @author S Downie
-			///
-			/// @param Window that closed
-			//-------------------------------------------------
-			static void OnWindowClosed(GLFWwindow* in_window);
-			//-------------------------------------------------
-			/// Triggered when glfw window gains or loses
-			/// focus
-			///
-			/// @author S Downie
-			///
-			/// @param Window
-			/// @param Int representing focused or not
-			//-------------------------------------------------
-			static void OnWindowFocusChanged(GLFWwindow* in_window, s32 in_isFocused);
-				
-		private:
-			bool m_isSuspended;
-			bool m_isFocused;
-
-			u64 m_appStartTime;
-			f64 m_appPreviousTime;
 		};
 	}
 }

@@ -164,6 +164,7 @@ namespace CSBackend
 			
             OnScreenResolutionChanged(m_screen->GetResolution());
             m_resolutionChangeConnection = m_screen->GetResolutionChangedEvent().OpenConnection(CSCore::MakeDelegate(this, &RenderSystem::OnScreenResolutionChanged));
+			m_displayModeChangeConnection = m_screen->GetDisplayModeChangedEvent().OpenConnection(CSCore::MakeDelegate(this, &RenderSystem::OnDisplayModeChanged));
             
             m_hasContextBeenBackedUp = false;
 		}
@@ -174,6 +175,12 @@ namespace CSBackend
 			mbInvalidateAllCaches = true;
             
             RestoreContext();
+        }
+        //----------------------------------------------------------
+        //----------------------------------------------------------
+		void RenderSystem::OnDisplayModeChanged(CSCore::Screen::DisplayMode in_mode)
+        {
+			ForceRefreshRenderStates();
         }
         //----------------------------------------------------------
         //----------------------------------------------------------
@@ -590,7 +597,27 @@ namespace CSBackend
 		void RenderSystem::EndFrame(CSRendering::RenderTarget* inpActiveRenderTarget)
 		{
 #ifdef CS_TARGETPLATFORM_WINDOWS
-			CSBackend::Windows::GLFWManager::Get()->SwapBuffers();
+			if (inpActiveRenderTarget == nullptr)
+			{
+				CSBackend::Windows::SFMLWindow::Get()->Display();
+			}
+#endif
+            
+#ifdef CS_TARGETPLATFORM_ANDROID
+            if (inpActiveRenderTarget != nullptr)
+            {
+                Texture* colourTexture = static_cast<Texture*>(inpActiveRenderTarget->GetColourTexture().get());
+                if (colourTexture != nullptr)
+                {
+                    colourTexture->UpdateRestorationData();
+                }
+
+                Texture* depthTexture = static_cast<Texture*>(inpActiveRenderTarget->GetDepthTexture().get());
+                if (depthTexture != nullptr)
+                {
+                    depthTexture->UpdateRestorationData();
+                }
+            }
 #endif
 		}
         //----------------------------------------------------------
@@ -1024,6 +1051,8 @@ namespace CSBackend
 		//----------------------------------------------------------
 		void RenderSystem::ForceRefreshRenderStates()
 		{
+			mbInvalidateAllCaches = true;
+
 			//clear the cache.
             m_textureUnitSystem->Clear();
             RenderTarget::ClearCache();
@@ -1033,8 +1062,6 @@ namespace CSBackend
             
 			//we're using pre-multiplied alpha and multipass rendering and therefore require the add blend equation
             glBlendEquation(GL_FUNC_ADD);
-            
-            mbInvalidateAllCaches = true;
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while forcing refresh of render states.");
 		}
@@ -1068,6 +1095,7 @@ namespace CSBackend
 			}
             
             m_resolutionChangeConnection = nullptr;
+			m_displayModeChangeConnection = nullptr;
 		}
 	}
 }

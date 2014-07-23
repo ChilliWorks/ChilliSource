@@ -34,7 +34,9 @@
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
 #include <CSBackend/Platform/Android/Core/Notification/LocalNotificationSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Notification/Notification.h>
 #include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <jni.h>
 
@@ -62,11 +64,16 @@ void Java_com_chillisource_core_LocalNotificationNativeInterface_nativeOnNotific
 		in_environment->DeleteLocalRef(valueJava);
 	}
 
-	CSBackend::Android::LocalNotificationSystem* localNotificationSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::LocalNotificationSystem>();
-	if (localNotificationSystem != nullptr)
+	auto delegate = [=]()
 	{
-		localNotificationSystem->OnNotificationReceived((CSCore::Notification::ID)in_id, params, (CSCore::Notification::Priority)in_priority);
-	}
+		CSBackend::Android::LocalNotificationSystem* localNotificationSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::LocalNotificationSystem>();
+		if (localNotificationSystem != nullptr)
+		{
+			localNotificationSystem->OnNotificationReceived(static_cast<CSCore::Notification::ID>(in_id), params, static_cast<CSCore::Notification::Priority>(in_priority));
+		}
+	};
+
+	CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(delegate);
 }
 
 namespace CSBackend
@@ -80,6 +87,7 @@ namespace CSBackend
 		{
 			CreateNativeInterface("com/chillisource/core/LocalNotificationNativeInterface");
 			CreateMethodReference("scheduleNotificationForTime", "(I[Ljava/lang/String;[Ljava/lang/String;JI)V");
+			CreateMethodReference("getNotifications", "()[Lcom/chillisource/core/LocalNotification;");
 			CreateMethodReference("cancelByID","(I)V");
 			CreateMethodReference("cancelAll","()V");
 		}
@@ -126,6 +134,75 @@ namespace CSBackend
 			environment->DeleteLocalRef(emptyString);
 			environment->DeleteLocalRef(keys);
 			environment->DeleteLocalRef(values);
+		}
+		//--------------------------------------------------------
+		//--------------------------------------------------------
+		void LocalNotificationJavaInterface::GetScheduledNotifications(std::vector<CSCore::NotificationCSPtr>& out_notifications, TimeIntervalSecs in_time, TimeIntervalSecs in_period) const
+		{
+			JNIEnv* environment = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			jobjectArray notificationsJNI = static_cast<jobjectArray>(environment->CallObjectMethod(GetJavaObject(), GetMethodID("getNotifications")));
+
+			s32 length = environment->GetArrayLength(notificationsJNI);
+			for (s32 notificationIndex = 0; notificationIndex < length; ++notificationIndex)
+			{
+				jobject notificationJNI = environment->GetObjectArrayElement(notificationsJNI, notificationIndex);
+				jclass notificationClassJNI = environment->GetObjectClass(notificationJNI);
+
+				//Time
+				jmethodID timeMethodId = environment->GetMethodID(notificationClassJNI, "getTime", "()J");
+				TimeIntervalSecs time = static_cast<TimeIntervalSecs>(environment->CallLongMethod(notificationJNI, timeMethodId) / 1000);
+
+				if (time > in_time && time < in_time + in_period)
+				{
+					CSCore::NotificationSPtr notification(new CSCore::Notification());
+
+					//Notification Id
+					jmethodID idMethodId = environment->GetMethodID(notificationClassJNI, "getNotificationId", "()I");
+					notification->m_id = static_cast<CSCore::Notification::ID>(environment->CallIntMethod(notificationJNI, idMethodId));
+
+					//Priority
+					jmethodID priorityMethodId = environment->GetMethodID(notificationClassJNI, "getPriority", "()I");
+					notification->m_priority = static_cast<CSCore::Notification::Priority>(environment->CallIntMethod(notificationJNI, priorityMethodId));
+
+					//params length
+					jmethodID paramsLengthMethodId = environment->GetMethodID(notificationClassJNI, "getNumParams", "()I");
+					s32 paramsLength = environment->CallIntMethod(notificationJNI, paramsLengthMethodId);
+
+					//params
+					jclass stringClassJNI = environment->FindClass("java/lang/String");
+					jobjectArray keysJNI = environment->NewObjectArray(paramsLength, stringClassJNI, nullptr);
+					jobjectArray valuesJNI = environment->NewObjectArray(paramsLength, stringClassJNI, nullptr);
+					environment->DeleteLocalRef(stringClassJNI);
+
+					jmethodID paramsMethodId = environment->GetMethodID(notificationClassJNI, "getParams", "([Ljava/lang/String;[Ljava/lang/String;)V");
+					environment->CallVoidMethod(notificationJNI, paramsMethodId, keysJNI, valuesJNI);
+
+					//convert the params to param dictionary
+					for (s32 paramIndex = 0; paramIndex < paramsLength; ++paramIndex)
+					{
+						jstring keyJNI = static_cast<jstring>(environment->GetObjectArrayElement(keysJNI, paramIndex));
+						jstring valueJNI = static_cast<jstring>(environment->GetObjectArrayElement(valuesJNI, paramIndex));
+
+						std::string key = JavaInterfaceUtils::CreateSTDStringFromJString(keyJNI);
+						std::string value = JavaInterfaceUtils::CreateSTDStringFromJString(valueJNI);
+
+						notification->m_params.SetValue(key, value);
+
+						environment->DeleteLocalRef(keyJNI);
+						environment->DeleteLocalRef(valueJNI);
+					}
+
+					environment->DeleteLocalRef(keysJNI);
+					environment->DeleteLocalRef(valuesJNI);
+
+					out_notifications.push_back(notification);
+				}
+
+				environment->DeleteLocalRef(notificationClassJNI);
+				environment->DeleteLocalRef(notificationJNI);
+			}
+
+			environment->DeleteLocalRef(notificationsJNI);
 		}
 		//--------------------------------------------------------
 		//--------------------------------------------------------

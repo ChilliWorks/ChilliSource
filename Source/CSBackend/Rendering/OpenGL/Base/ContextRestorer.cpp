@@ -26,14 +26,16 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
 #include <CSBackend/Rendering/OpenGL/Base/ContextRestorer.h>
 
 #include <CSBackend/Rendering/OpenGL/Base/MeshBuffer.h>
+#include <CSBackend/Rendering/OpenGL/Texture/Cubemap.h>
+#include <CSBackend/Rendering/OpenGL/Texture/Texture.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Shader/Shader.h>
-#include <ChilliSource/Rendering/Texture/Cubemap.h>
-#include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace CSBackend
 {
@@ -66,12 +68,35 @@ namespace CSBackend
                 CSCore::ResourcePool* resourcePool = CSCore::Application::Get()->GetResourcePool();
                 
                 //---Shaders
+                auto allShaders = resourcePool->GetAllResources<CSRendering::Shader>();
+                for (const auto& shader : allShaders)
+                {
+                	CS_ASSERT(shader->GetStorageLocation() != CSCore::StorageLocation::k_none, "Cannot restore Shader because restoration of OpenGL resources that were not loaded from file is not supported. To resolve this, manually release the resource on suspend and re-create it on resume.");
+                }
                 resourcePool->RefreshResources<CSRendering::Shader>();
                 
                 //---Textures
+                auto allTextures = resourcePool->GetAllResources<CSRendering::Texture>();
+                for (const auto& texture : allTextures)
+				{
+                    if (texture->GetStorageLocation() == CSCore::StorageLocation::k_none)
+                    {
+                        Texture* glTexture = static_cast<Texture*>(const_cast<CSRendering::Texture*>(texture.get()));
+                        glTexture->Restore();
+                    }
+                }
                 resourcePool->RefreshResources<CSRendering::Texture>();
                 
                 //---Cubemaps
+                auto allCubemaps = resourcePool->GetAllResources<CSRendering::Cubemap>();
+                for (const auto& cubemap : allCubemaps)
+				{
+					if (cubemap->GetStorageLocation() == CSCore::StorageLocation::k_none)
+                    {
+                        Cubemap* glCubemap = static_cast<Cubemap*>(const_cast<CSRendering::Cubemap*>(cubemap.get()));
+                        glCubemap->Restore();
+                    }
+                }
                 resourcePool->RefreshResources<CSRendering::Cubemap>();
                 
                 //---Meshes
@@ -105,3 +130,5 @@ namespace CSBackend
         }
     }
 }
+
+#endif

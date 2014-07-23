@@ -185,7 +185,7 @@ namespace ChilliSource
                 
 				f32 fDenom = Vector3::DotProduct(outIntersection.vDirection, outIntersection.vDirection);
                 
-                if(fDenom < MathUtils::kApproxZero)
+                if(fDenom < std::numeric_limits<f32>::epsilon())
                 {
                     return false;
                 }
@@ -222,16 +222,16 @@ namespace ChilliSource
                 
                 Vector3 vIntersection1, vIntersection2;
                 
-                if(fabsf(fA) <= MathUtils::kApproxZero && fabsf(fE) <= MathUtils::kApproxZero)
+                if(fabsf(fA) <= std::numeric_limits<f32>::epsilon() && fabsf(fE) <= std::numeric_limits<f32>::epsilon())
                 {
                     vIntersection1 = inLineLHS.vStartPos;
                     vIntersection2 = inLineRHS.vStartPos;
                     
                     Vector3 vDir = vIntersection1 - vIntersection2;
-                    return (fabsf(Vector3::DotProduct(vDir, vDir)) <= MathUtils::kApproxZero);
+                    return (fabsf(Vector3::DotProduct(vDir, vDir)) <= std::numeric_limits<f32>::epsilon());
                 }
                 
-                if(fA <= MathUtils::kApproxZero)
+                if(fA <= std::numeric_limits<f32>::epsilon())
                 {
                     fS = 0.0f;
                     fT = MathUtils::Clamp(fF/fE, 0.0f, 1.0f);
@@ -239,7 +239,7 @@ namespace ChilliSource
                 else
                 {
                     f32 fC = Vector3::DotProduct(vAB, vAC);
-                    if(fabsf(fE) <= MathUtils::kApproxZero)
+                    if(fabsf(fE) <= std::numeric_limits<f32>::epsilon())
                     {
                         fT = 0.0f;
                         fS = MathUtils::Clamp(-fC/fA, 0.0f, 1.0f);
@@ -279,7 +279,7 @@ namespace ChilliSource
                 outvIntersection = vIntersection1;
                 
                 Vector3 vDir = vIntersection1 - vIntersection2;
-                return (fabsf(Vector3::DotProduct(vDir, vDir)) <= MathUtils::kApproxZero);
+                return (fabsf(Vector3::DotProduct(vDir, vDir)) <= std::numeric_limits<f32>::epsilon());
             }
             //----------------------------------------------------------------
             /// Ray vs Slab

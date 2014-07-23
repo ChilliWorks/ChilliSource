@@ -30,9 +30,10 @@
 
 #include <CSBackend/Platform/Windows/Core/DialogueBox/DialogueBoxSystem.h>
 
-#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
+#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
+#include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 
 #include <windows.h>
 
@@ -56,7 +57,7 @@ namespace CSBackend
         //-----------------------------------------------------
 		void DialogueBoxSystem::ShowSystemDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
         {
-			MessageBox(nullptr, WindowsStringUtils::UTF8ToUTF16(in_title).c_str(), WindowsStringUtils::UTF8ToUTF16(in_message).c_str(), MB_OK);
+			MessageBox(SFMLWindow::Get()->GetWindowHandle(), WindowsStringUtils::UTF8ToUTF16(in_title).c_str(), WindowsStringUtils::UTF8ToUTF16(in_message).c_str(), MB_OK);
 			if (in_delegate)
 			{
 				in_delegate(in_id, DialogueResult::k_confirm);
@@ -66,7 +67,7 @@ namespace CSBackend
         //-----------------------------------------------------
 		void DialogueBoxSystem::ShowSystemConfirmDialogue(u32 in_id, const CSCore::DialogueBoxSystem::DialogueDelegate& in_delegate, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
         {
-			if (MessageBox(NULL, WindowsStringUtils::UTF8ToUTF16(in_title).c_str(), WindowsStringUtils::UTF8ToUTF16(in_message).c_str(), MB_OKCANCEL) == IDOK)
+			if (MessageBox(SFMLWindow::Get()->GetWindowHandle(), WindowsStringUtils::UTF8ToUTF16(in_title).c_str(), WindowsStringUtils::UTF8ToUTF16(in_message).c_str(), MB_OKCANCEL) == IDOK)
 			{
 				if (in_delegate)
 				{

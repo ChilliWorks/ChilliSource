@@ -88,6 +88,18 @@ namespace CSBackend
             /// @param The touch.
 			//----------------------------------------------------
 			void OnTouchEnded(UITouch* in_touch);
+            //----------------------------------------------------
+            /// iOS has no cursor so this does nothing
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void HideCursor() override {};
+            //----------------------------------------------------
+            /// iOS has no cursor so this does nothing
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void ShowCursor() override {};
         private:
             friend CSInput::PointerSystemUPtr CSInput::PointerSystem::Create();
             
@@ -118,7 +130,7 @@ namespace CSBackend
             //------------------------------------------------
             void OnDestroy() override;
             
-            std::unordered_map<UITouch*, PointerId> m_touchToIdMap;
+            std::unordered_map<UITouch*, CSInput::Pointer::Id> m_touchToIdMap;
             CSCore::Screen* m_screen;
         };
     }

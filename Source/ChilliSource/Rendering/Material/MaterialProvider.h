@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 
 namespace ChilliSource
 {
@@ -70,6 +71,9 @@ namespace ChilliSource
                 std::string m_filePath;
                 Core::StorageLocation m_location;
                 bool m_shouldMipMap;
+                Texture::WrapMode m_wrapModeU;
+                Texture::WrapMode m_wrapModeV;
+                Texture::FilterMode m_filterMode;
             };
             //-------------------------------------------------------------------------
             /// Factory method

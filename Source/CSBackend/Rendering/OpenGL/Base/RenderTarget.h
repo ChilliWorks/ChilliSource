@@ -71,6 +71,18 @@ namespace CSBackend
             //------------------------------------------------------
 			void SetTargetTextures(const CSRendering::TextureSPtr& inpColourTexture, const CSRendering::TextureSPtr& inpDepthTexture);
             //------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The colour texture.
+            //------------------------------------------------------
+			const CSRendering::TextureSPtr& GetColourTexture() const;
+            //------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The depth texture.
+            //------------------------------------------------------
+			const CSRendering::TextureSPtr& GetDepthTexture() const;
+            //------------------------------------------------------
             /// Bind
             ///
             /// Bind the frame buffer to the GLES context
@@ -110,6 +122,9 @@ namespace CSBackend
 			GLuint mFrameBuffer;
 			GLuint mRenderBuffer;
 			GLuint mDepthBuffer;
+            
+            CSRendering::TextureSPtr m_colourTexture;
+            CSRendering::TextureSPtr m_depthTexture;
             
             static RenderTarget* pCurrentlyBoundTarget;
         

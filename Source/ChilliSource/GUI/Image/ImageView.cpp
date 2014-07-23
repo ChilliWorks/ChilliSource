@@ -88,7 +88,7 @@ namespace ChilliSource
             if(insParams.TryGetValue("Texture", strValue))
             {
                 Core::ResourcePool* resourcePool = Core::Application::Get()->GetResourcePool();
-                Texture = resourcePool->LoadResource<Rendering::Texture>(eTextureLocation, strValue);
+                SetTexture(resourcePool->LoadResource<Rendering::Texture>(eTextureLocation, strValue));
             }
             //---Sprite sheet
             Core::StorageLocation eTextureAtlasLocation = Core::StorageLocation::k_package;

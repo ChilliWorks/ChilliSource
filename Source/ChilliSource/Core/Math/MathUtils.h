@@ -26,323 +26,343 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_MATH_MATH_HELPER_H_
-#define _CHILLISOURCE_CORE_MATH_MATH_HELPER_H_
+#ifndef _CHILLISOURCE_CORE_MATH_MATHUTILS_H_
+#define _CHILLISOURCE_CORE_MATH_MATHUTILS_H_
 
 #include <ChilliSource/ChilliSource.h>
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <vector>
 
 namespace ChilliSource
 {
 	namespace Core 
 	{
-        ///////////////////////////////////////////////////////////////////
-		/// Description:
-		///
-		/// Common math utilities
-		///////////////////////////////////////////////////////////////////
+        //---------------------------------------------------------
+        /// A group of miscellaneous mathematical functions
+        ///
+        /// @author S McGaw
+        //---------------------------------------------------------
         namespace MathUtils
         {
-            const f32 kPI = 3.14159265358979323846264338327950288f;
-            const f32 kApproxZero = 0.0001192092896f;
+            const f32 k_pi = 3.1415926536f;
+            
             //---------------------------------------------------------
-            /// Next Power Of Two
+            /// @author S McGaw
             ///
-            /// @param Non-power of two value
+            /// @param Value
+            ///
             /// @return The closest higher power of two
             //---------------------------------------------------------
-			u32 NextPowerOfTwo(u32 inX);
+			u32 NextPowerOfTwo(u32 in_value);
             //---------------------------------------------------------
-            /// Degrees To Radians
+            /// @author S McGaw
             ///
             /// @param Angle in degrees
+            ///
             /// @return Angle in radians
             //---------------------------------------------------------
-			f32 DegToRad(f32 infAngle);
+			f32 DegToRad(f32 in_angle);
             //---------------------------------------------------------
-            /// Radians To Degrees
+            /// @author S McGaw
             ///
             /// @param Angle in radians
+            ///
             /// @return Angle in degrees
             //---------------------------------------------------------
-			f32 RadToDeg(f32 infAngle);
+			f32 RadToDeg(f32 in_angle);
             //---------------------------------------------------------
-            /// fRand
+            /// @author S McGaw
             ///
-            /// @return Normalised random number between 0 and 1
+            /// @return Normalised random number between 0 and 1 (inclusive)
             //---------------------------------------------------------
 			f32 FRand();
             //---------------------------------------------------------
-            /// Random In Range
+            /// @author S McGaw
             ///
-            /// @param The minimum number that can be returned
-            /// @param The maximum number that can be returned
+            /// @param The minimum number that can be returned (inclusive)
+            /// @param The maximum number that can be returned (inclusive)
+            ///
             /// @return Random number within the range
             //---------------------------------------------------------
-            template <typename T> inline T RandomInRange(T inMin, T inMax)
+            template <typename TValueType> TValueType RandomInRange(TValueType in_min, TValueType in_max)
             {
-                return inMin + (T)(FRand()*(inMax-inMin));
+                return in_min + (TValueType)(FRand()*(in_max - in_min));
             }
             //---------------------------------------------------------
-            /// Central Limit
-            ///
-            /// @param The minimum number that can be returned
-            /// @param The maximum number that can be returned
-            /// @return The average of a certain number of random values,
-			/// within the passed range, as define by the
-			/// Central Limit Theorem
-            //---------------------------------------------------------
-            template <typename T> inline T CentralLimit(T inMin, T inMax, u32 inudwPasses = 20)
-            {
-				CS_ASSERT(inudwPasses != 0, "Must have at least one pass");
-				
-				T TotalValue = 0;
-				for(u32 i = 0; i < inudwPasses; ++i)
-					TotalValue += RandomInRange<T>(inMin, inMax);
-                return TotalValue /= inudwPasses;
-            }
-            //---------------------------------------------------------
-            /// Seed Rand On Time
-            ///
-            /// Seed the random number generator based on the
-            /// system clock.
-            //---------------------------------------------------------
-			void SeedRandOnTime();
-            //---------------------------------------------------------
-            /// Get next number
-            ///
-            /// pass in seed
-            //---------------------------------------------------------
-            f32 GetPseudoRandom(u32 inudwSeed);
-			//---------------------------------------------------------
-            /// Lerp
-            ///
-            /// @param Factor to interpolate by
-            /// @param Min value in range
-            /// @param Max value in range
-            /// @return Linearly interpolated value
-            //---------------------------------------------------------
-			template <typename T> inline T Lerp(f32 infFactor, T inV1, T inV2)
-			{
-				return inV1 * (1.0f-infFactor) + inV2 * infFactor;
-			}
-            //---------------------------------------------------------
-            /// Step
+            /// @author A Glass
             ///
             /// @param Value
             /// @param Edge
             /// @param Min
             /// @param Max
+            ///
             /// @return Value >= Edge -> Max Value < Edge -> Min
             //---------------------------------------------------------
-            template <typename T> inline T Step(T inValue, T inEdge, T inMin, T inMax)
+            template <typename TValueType> TValueType Step(TValueType in_value, TValueType in_edge, TValueType in_min, TValueType in_max)
             {
-                return (inValue < inEdge) ? inMin : inMax;
+                return (in_value < in_edge) ? in_min : in_max;
             }
 			//---------------------------------------------------------
-			/// Log2f
-			///
-			/// A cross compatible alternative to log2f() in math.h.
-			///
-			/// @param The same value as log2f();
-			/// @return The same value as log2f();
-			//---------------------------------------------------------
-			f32 Log2f(f32 infValue);
-			//---------------------------------------------------------
-			/// Sign
+			/// @author A Glass
 			///
 			/// @param Value to determine sign of
-			/// @return Sign +1 if positive -1 if negative
+            ///
+			/// @return Sign +1 if positive -1 if negative 0 if zero
 			//---------------------------------------------------------
-			template<typename T> inline T Sign(T inValue)
+			template<typename TValueType> s32 Sign(TValueType in_value)
             {
-                return (inValue < 0) ? (T)-1 : (inValue > 0);
+                return (0 < in_value) - (in_value < 0);
             }
 			//----------------------------------------------------------
-			/// Clamp
+			/// @author S Downie
 			///
 			/// @param Value to clamp between range
 			/// @param Lower range value
 			/// @param Higher range value
+            ///
 			/// @return Value within the given range
 			//----------------------------------------------------------
-			template<typename T> inline T Clamp(T inValue, T inMin, T inMax)
+			template<typename TValueType> TValueType Clamp(TValueType in_value, TValueType in_min, TValueType in_max)
 			{
-				return std::max(inMin, std::min(inValue, inMax));
+				return std::max(in_min, std::min(in_value, in_max));
 			}
             //---------------------------------------------------------
-            /// Smooth Step
+            /// Linearly interpolate between the min and max values
+            /// based on parametric t factor (0 - 1)
             ///
-            /// @param Factor to interpolate by
+            /// @author S Downie
+            ///
+            /// @param t factor
             /// @param Min value in range
             /// @param Max value in range
+            ///
+            /// @return Linearly interpolated value
+            //---------------------------------------------------------
+			template <typename TValueType> TValueType Lerp(f32 in_factor, TValueType in_min, TValueType in_max)
+			{
+				return in_min * (1.0f - in_factor) + in_max * in_factor;
+			}
+            //---------------------------------------------------------
+            /// Cubicly interpolate between the min and max values
+            /// based on parametric t factor (0 - 1) and the smoothstep
+            /// curve
+            ///
+            /// @author A Glass
+            ///
+            /// @param t factor
+            /// @param Min value in range
+            /// @param Max value in range
+            ///
             /// @return Cubicly interpolated value
             //---------------------------------------------------------
-            template <typename T> inline T SmoothStep(f32 infFactor, T inV1, T inV2)
+            template <typename TValueType> TValueType SmoothStep(f32 in_factor, TValueType in_min, TValueType in_max)
             {
-                T t = Clamp((inV1 * -1.0f + infFactor)/(inV2 - inV1), 0.0f, 1.0f);
-                
-                return t*t*( t * -2.0f  + 3.0f);
+                TValueType t = Clamp((in_min * -1.0f + in_factor)/(in_max - in_min), 0.0f, 1.0f);
+                return t * t * ( t * -2.0f  + 3.0f);
+            }
+            //---------------------------------------------------------
+            /// Interpolate between the min and max values
+            /// based on parametric t factor (0 - 1) and the smootherstep
+            /// curve (Ken Perlin)
+            ///
+            /// @author S Downie
+            ///
+            /// @param t factor
+            /// @param Min value in range
+            /// @param Max value in range
+            ///
+            /// @return Smoother step interpolated value
+            //---------------------------------------------------------
+            template <typename TValueType> TValueType SmootherStep(f32 in_factor, TValueType in_min, TValueType in_max)
+            {
+                TValueType t = Clamp((in_min * -1.0f + in_factor)/(in_max - in_min), 0.0f, 1.0f);
+                return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);
             }
             //----------------------------------------------------------
-            /// Is Approx Zero
+            /// @author S Downie
             ///
             /// @param Value
+            ///
             /// @return If the value is within epsilon of zero
             //----------------------------------------------------------
-            bool IsApproxZero(f32 infValue);
+            template <typename TRealType> bool IsApproxZero(TRealType in_value)
+            {
+                return std::abs(in_value) < std::numeric_limits<TRealType>::epsilon();
+            }
 			//----------------------------------------------------------
-			/// Round
-			///
 			/// Rounds the floating point number to the nearest 
-			/// integer. This is a symmetrical round
+			/// whole number. This is a symmetrical round
+            ///
+            /// @author A Glass
 			///
 			/// @param Floating point to round
-			/// @return Rounded integer
-			//----------------------------------------------------------
-			s32 Round(f32 infValue);
-            //----------------------------------------------------
-            /// Mode 
             ///
+			/// @return Rounded number
+			//----------------------------------------------------------
+			template <typename TRealType> TRealType Round(TRealType in_value)
+            {
+                return ((in_value > 0.0) ? std::floor(in_value + 0.5) : std::ceil(in_value - 0.5));
+            }
+            //----------------------------------------------------
             /// Calculate the most common value from the given
             /// data set
             ///
-            /// @param Data set of type T
-            /// @return Most common value of type T
+            /// @author S Downie
+            ///
+            /// @param Beginning of data set
+            /// @param End of data set
+            ///
+            /// @return Value that occurs most often
             //----------------------------------------------------
-            template <typename T> T Mode(std::vector<T>& inDataSet)
+            template <typename TIterType> typename std::iterator_traits<TIterType>::value_type Mode(TIterType in_begin, TIterType in_end)
             {
-                //Sort smallest to largest
-                std::sort(inDataSet.begin(), inDataSet.end());
+                typename std::iterator_traits<TIterType>::value_type result = 0;
+                size_t largestcount = 0;
                 
-                T ModeValue = 0;
-                T CurrentValue = 0;
-                
-                u32 udwGreatestCount = 0;
-                u32 udwCurrentCount = 0;
-                u32 udwSize = inDataSet.size();
-                
-                for(u32 i=0; i<udwSize; ++i)
+                for(auto itOuter = in_begin; itOuter != in_end; ++itOuter)
                 {
-                    //If the height run has ended...
-                    if(CurrentValue != inDataSet[i])
+                    size_t count = 0;
+                    
+                    for(auto itInner = itOuter; itInner != in_end; ++itInner)
                     {
-                        //...check if the run exceeds our greatest. 
-                        if(udwCurrentCount > udwGreatestCount)
+                        if(*itOuter == *itInner)
                         {
-                            //This is the new mode
-                            udwGreatestCount = udwCurrentCount;
-                            ModeValue = CurrentValue;
+                            ++count;
                         }
-                        
-                        CurrentValue = inDataSet[i];
-                        udwCurrentCount = 0;
                     }
-                    udwCurrentCount++;				
+                    
+                    if(count >= largestcount)
+                    {
+                        largestcount = count;
+                        result = *itOuter;
+                    }
                 }
                 
-                return ModeValue;
+                return result;
             }
             //----------------------------------------------------
-            /// Mean 
-            ///
             /// Calculate the avearge value from the given
             /// data set
             ///
-            /// @param Data set of type T
-            /// @return Average value of type T
+            /// @author S Downie
+            ///
+            /// @param Beginning of data set
+            /// @param End of data set
+            ///
+            /// @return Average value
             //----------------------------------------------------
-            template <typename T> T Mean(std::vector<T>& inDataSet)
+            template <typename TIterType> typename std::iterator_traits<TIterType>::value_type Mean(TIterType in_begin, TIterType in_end)
             {
-                if(inDataSet.empty())
-                    return 0;
+                typename std::iterator_traits<TIterType>::value_type result = 0;
                 
-                T MeanValue = 0;
-                
-                u32 udwSize = inDataSet.size();
-                for(u32 i=0; i<udwSize; ++i)
+                size_t size = 0;
+                for(auto it = in_begin; it != in_end; ++it)
                 {
-                    MeanValue += inDataSet[i];
+                    result += (*it);
+                    ++size;
                 }
                 
-                return MeanValue/udwSize;
+                CS_ASSERT(size > 0, "MathUtils::Mean: Cannot pass in empty container");
+                return result/size;
             }
             //----------------------------------------------------
-            /// Median 
-            ///
             /// Calculate the mid point of the data set
             ///
-            /// @param Data set of type T
-            /// @return Average value of type T
-            //----------------------------------------------------
-            template <typename T> T Median(std::vector<T>& inDataSet)
-            {
-                if(inDataSet.empty())
-                    return 0;
-                
-                //Sort smallest to largest
-                std::sort(inDataSet.begin(), inDataSet.end());
-                
-                u32 udwMidPoint = std::floor(inDataSet.size() * 0.5f);
-                
-                return inDataSet[udwMidPoint];
-            }
-            //----------------------------------------------------
-            /// Wrap
+            /// NOTE: This will re-order the array
             ///
-            /// Ensure the value is within the given range by
-            /// wrapping at both ends
+            /// @author S Downie
             ///
-            /// @param Value
-            /// @param Min
-            /// @param Max
-            /// @return Wrapped value
+            /// @param Beginning of data set
+            /// @param End of data set
+            ///
+            /// @return Value at mid point
             //----------------------------------------------------
-            template <typename T> inline T Wrap(T inValue, T inMin, T inMax)
+            template <typename TIterType> typename std::iterator_traits<TIterType>::value_type Median(TIterType in_begin, TIterType in_end)
             {
-                if(inValue > inMax)
+                std::size_t size = in_end - in_begin;
+                
+                CS_ASSERT(size > 0, "MathUtils::Median: Cannot pass in empty container");
+                
+                std::size_t middleIdx = size/2;
+                
+                TIterType itTarget = in_begin + middleIdx;
+                std::nth_element(in_begin, itTarget, in_end);
+                
+                if(size % 2 != 0)
                 {
-                    return inMin;
-                }
-                else if(inValue < inMin)
-                {
-                    return inMax;
+                    return *itTarget;
                 }
                 else
                 {
-                    return inValue;
+                    //Even number of elements
+                    typename std::iterator_traits<TIterType>::value_type targetValue = *itTarget;
+                    TIterType itTargetNeighbor = std::max_element(in_begin, itTarget);
+                    return (targetValue + *itTargetNeighbor)/2.0;
                 }
             }
+            //---------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param The minimum number that can be returned (inclusive)
+            /// @param The maximum number that can be returned (inclusive)
+            /// @param Number of samples
+            ///
+            /// @return The average of a certain number of random values,
+			/// within the range, as defined by the Central Limit Theorem
+            //---------------------------------------------------------
+            template <typename TValueType> TValueType CentralLimit(TValueType in_min, TValueType in_max, u32 in_numSamples)
+            {
+				CS_ASSERT(in_numSamples != 0, "Must have at least one sample");
+				
+				TValueType result = 0;
+                
+				for(u32 i=0; i < in_numSamples; ++i)
+                {
+					result += RandomInRange(in_min, in_max);
+                }
+                
+                return result /= in_numSamples;
+            }
             //----------------------------------------------------
-            /// Normalised Range
+            /// Convert the value in the given range to the range
+            /// 0 - 1 using a linear conversion
+            ///
+            /// @author S McGaw
             ///
             /// @param Value
             /// @param Min
             /// @param Max
+            ///
             /// @return Value converted to the range 0 - 1
             //----------------------------------------------------
-            template <typename T> inline T NormalisedRange(T inValue, T inMin, T inMax)
+            template <typename TValueType> TValueType NormalisedRange(TValueType in_value, TValueType in_originalMin, TValueType in_originalMax)
             {
-				CS_ASSERT(inMax != inMin, "Divide by ZERO error");
+				CS_ASSERT(in_originalMin != in_originalMax, "Divide by ZERO error");
                 
-                return (inValue - inMin) / (inMax - inMin);
+                return (in_value - in_originalMin) / (in_originalMax - in_originalMin);
             }
             //----------------------------------------------------
-            /// Convert Range
+            /// Convert the value in the given range to the new range
+            /// using a linear conversion
+            ///
+            /// @author S McGaw
             ///
             /// @param Value
             /// @param Min Range 1
             /// @param Max Range 1
             /// @param Min Range 2
             /// @param Max Range 2
+            ///
             /// @return Value converted to range 2
             //----------------------------------------------------
-            template <typename T> inline T ConvertRange(T inValue, T inOldMin, T inOldMax, T inNewMin, T inNewMax)
+            template <typename TValueType> TValueType ConvertRange(TValueType in_value, TValueType in_originalMin, TValueType in_originalMax, TValueType in_newMin, TValueType in_newMax)
             {
-                return (((inValue - inOldMin) * (inNewMax - inNewMin)) / (inOldMax - inOldMin)) + inNewMin;
+                CS_ASSERT(in_originalMin != in_originalMax, "Divide by ZERO error");
+                
+                return (((in_value - in_originalMin) * (in_newMax - in_newMin)) / (in_originalMax - in_originalMin)) + in_newMin;
             }
 		};
 	}

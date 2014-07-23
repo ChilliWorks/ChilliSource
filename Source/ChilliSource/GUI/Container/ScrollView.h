@@ -68,7 +68,7 @@ namespace ChilliSource
             /// @param The pointer.
             /// @return Whether touch has been consumed
             //-----------------------------------------------------------
-            bool OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType) override;
+            bool OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType) override;
             //-----------------------------------------------------------
             /// Called when the window receives cursor/touch input
             ///
@@ -79,7 +79,7 @@ namespace ChilliSource
             ///
             /// @return Whether touch has been consumed
             //-----------------------------------------------------------
-            bool OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp) override;
+            bool OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp) override;
 			//-----------------------------------------------------------
 			/// Called when the window receives cursor/touch input
             ///
@@ -89,7 +89,7 @@ namespace ChilliSource
             /// @param The timestamp
             /// @param The press type.
 			//-----------------------------------------------------------
-			void OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType) override;
+			void OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType) override;
             //-----------------------------------------------------------
             /// Enable Horizontal Scrolling
             ///

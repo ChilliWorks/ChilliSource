@@ -387,18 +387,18 @@ namespace ChilliSource
 		}
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void ToggleButton::OnButtonSelect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
+        void ToggleButton::OnButtonSelect(GUIView* in_button, const Input::Pointer& in_pointer)
         {
 			if(!mbSelected)
 			{
-                mvSelectedPos = in_pointer.m_location;
+                mvSelectedPos = in_pointer.GetPosition();
                 
 				mbSelected = true;
 			}
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void ToggleButton::OnButtonDeselect(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
+        void ToggleButton::OnButtonDeselect(GUIView* in_button, const Input::Pointer& in_pointer)
         {
 			if(mbSelected)
 			{
@@ -407,11 +407,11 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void ToggleButton::OnButtonDeselectThreshold(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
+        void ToggleButton::OnButtonDeselectThreshold(GUIView* in_button, const Input::Pointer& in_pointer)
         {
             const f32 kfThreshold = (f32)(GetScreen()->GetResolution().x) * 0.02f;
-            f32 fDistX = std::abs(in_pointer.m_location.x - mvSelectedPos.x);
-            f32 fDisty = std::abs(in_pointer.m_location.y - mvSelectedPos.y);
+            f32 fDistX = std::abs(in_pointer.GetPosition().x - mvSelectedPos.x);
+            f32 fDisty = std::abs(in_pointer.GetPosition().y - mvSelectedPos.y);
 			if(fDistX >= kfThreshold || fDisty >= kfThreshold)
 			{
                 OnButtonDeselect(in_button, in_pointer);
@@ -419,7 +419,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void ToggleButton::OnButtonActivated(GUIView* in_button, const Input::PointerSystem::Pointer& in_pointer)
+        void ToggleButton::OnButtonActivated(GUIView* in_button, const Input::Pointer& in_pointer)
         {
 			if(mbSelected)
 			{

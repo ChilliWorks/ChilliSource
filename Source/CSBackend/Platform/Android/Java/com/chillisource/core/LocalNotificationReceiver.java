@@ -99,19 +99,11 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 	        	intent.putExtra(strKey, mapParams.get(strKey).toString());
 	        }
 	       
-	        Runnable task = new Runnable()
-	        { 
-	        	@Override public void run() 
-	        	{
-	        		LocalNotificationNativeInterface localNotificationNI = (LocalNotificationNativeInterface)CSApplication.get().getSystem(LocalNotificationNativeInterface.InterfaceID);
-	        		if (localNotificationNI != null)
-	        		{
-	        			localNotificationNI.onNotificationReceived(intent);
-	        		}   
-	        	}
-	        };
-
-	        CSApplication.get().scheduleMainThreadTask(task);
+	        LocalNotificationNativeInterface localNotificationNI = (LocalNotificationNativeInterface)CSApplication.get().getSystem(LocalNotificationNativeInterface.InterfaceID);
+	        if (localNotificationNI != null)
+	        {
+	        	localNotificationNI.onNotificationReceived(intent);
+	        }
 		}
 		else
 		{
@@ -129,7 +121,7 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 			Bundle params = in_intent.getExtras();
 			CharSequence title = params.getString(k_paramNameTitle);
 			CharSequence text =  params.getString(k_paramNameBody);		
-			int intentId = params.getInt(LocalNotificationNativeInterface.k_paramNameNotificationId);
+			int intentId = params.getInt(LocalNotification.k_paramNameNotificationId);
 
 			int paramSize = params.size();
 			String[] keys = new String[paramSize];

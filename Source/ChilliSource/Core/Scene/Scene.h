@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_CORE_SCENE_SCENE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/System/StateSystem.h>
@@ -106,6 +107,24 @@ namespace ChilliSource
 			/// @return the list of all the entities in the scene.
 			//-------------------------------------------------------
 			const SharedEntityList& GetEntities() const;
+            //------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @param Screen clear colour
+			//------------------------------------------------------
+			void SetClearColour(const Core::Colour& in_colour);
+			//------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return Screen clear colour
+			//------------------------------------------------------
+			const Core::Colour& GetClearColour() const;
+            //-------------------------------------------------------
+            /// Sends the resume event on to the entities.
+            ///
+            /// @author S Downie
+			//-------------------------------------------------------
+			void ResumeEntities();
 			//-------------------------------------------------------
             /// The scene is now at the forefront and the window
             /// should listen for input
@@ -113,22 +132,42 @@ namespace ChilliSource
             /// @author S Downie
 			//-------------------------------------------------------
 			void OnForeground() override;
-            //--------------------------------------------------------------------------------------------------
-			/// Updates the root window and the entities
+            //-------------------------------------------------------
+            /// Sends the foreground event on to the entities.
+            ///
+            /// @author Ian Copland
+			//-------------------------------------------------------
+			void ForegroundEntities();
+            //-------------------------------------------------------
+			/// Updates the root window
             ///
             /// @author S Downie
 			///
 			/// @param Time since last update in seconds
-			//--------------------------------------------------------------------------------------------------
+			//-------------------------------------------------------
 			void OnUpdate(f32 in_timeSinceLastUpdate) override;
-            //--------------------------------------------------------------------------------------------------
-			/// Updates the root window and the entities at a fixed timestep
+            //-------------------------------------------------------
+			/// Updates all entities.
             ///
-            /// @author S Downie
+            /// @author Ian Copland
 			///
-			/// @param Time since last update in seconds
-			//--------------------------------------------------------------------------------------------------
-			void OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate) override;
+			/// @param Time since last update in seconds.
+			//-------------------------------------------------------
+			void UpdateEntities(f32 in_timeSinceLastUpdate);
+            //-------------------------------------------------------
+			/// Fixed updates all entities.
+            ///
+            /// @author Ian Copland
+			///
+			/// @param Time since last update in seconds.
+			//-------------------------------------------------------
+			void FixedUpdateEntities(f32 in_timeSinceLastUpdate);
+            //-------------------------------------------------------
+            /// Sends the background event on to the entities.
+            ///
+            /// @author Ian Copland
+			//-------------------------------------------------------
+			void BackgroundEntities();
 			//-------------------------------------------------------
             /// The scene is no longer at the forefront and the window
             /// should not listen for input
@@ -136,6 +175,12 @@ namespace ChilliSource
             /// @author S Downie
 			//-------------------------------------------------------
 			void OnBackground() override;
+            //-------------------------------------------------------
+            /// Sends the suspend event on to the entities.
+            ///
+            /// @author Ian Copland
+			//-------------------------------------------------------
+			void SuspendEntities();
 			//--------------------------------------------------------------------------------------------------
 			/// Traverses the contents of the scene and adds any objects that intersect with the ray to the
 			/// list. The list order is undefined. Use the query intersection value on the volume component
@@ -214,8 +259,10 @@ namespace ChilliSource
 		private:
 			
 			GUI::WindowUPtr m_rootWindow;
-			
 			SharedEntityList m_entities;
+            Colour m_clearColour;
+            bool m_entitiesActive = false;
+            bool m_entitiesForegrounded = false;
 		};		
 	}
 }

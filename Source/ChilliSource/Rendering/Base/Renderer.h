@@ -40,7 +40,7 @@ namespace ChilliSource
 		//==================================================
 		/// Description:
 		///
-		/// Does a pre-pass on the scene to convert moFlo
+		/// Does a pre-pass on the scene to convert Chilli Source
 		/// components to plain data for the render system
 		//==================================================
 		class Renderer final : public Core::AppSystem
@@ -186,14 +186,16 @@ namespace ChilliSource
             /// Render the UI views to screen space
             ///
             /// @param Root window
+            /// @param Screen clear colour
 			//----------------------------------------------------------
-			void RenderUI(GUI::Window* inpWindow);
+			void RenderUI(GUI::Window* inpWindow, const Core::Colour& in_clearColour);
             //----------------------------------------------------------
             /// Render UI
             ///
             /// @param Canvas
+            /// @param Screen clear colour
             //----------------------------------------------------------
-            void RenderUI(UI::Canvas* in_canvas);
+            void RenderUI(UI::Canvas* in_canvas, const Core::Colour& in_clearColour);
             //----------------------------------------------------------
             /// Render Scene To Target
             ///

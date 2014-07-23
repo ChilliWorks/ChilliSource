@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_GUI_FORMATTED_LABEL_H_
-#define _CHILLISOURCE_GUI_FORMATTED_LABEL_H_
+#ifndef _CHILLISOURCE_GUI_LABEL_FORMATTEDLABEL_H_
+#define _CHILLISOURCE_GUI_LABEL_FORMATTEDLABEL_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/Label/Label.h>

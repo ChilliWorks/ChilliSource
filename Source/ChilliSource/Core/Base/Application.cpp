@@ -56,6 +56,7 @@
 #include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
+#include <ChilliSource/Input/TextEntry/TextEntry.h>
 
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
@@ -297,6 +298,12 @@ namespace ChilliSource
         //----------------------------------------------------
         void Application::Background()
         {
+            if(m_shouldNotifyConnectionsForegroundEvent == true)
+			{
+				m_shouldNotifyConnectionsForegroundEvent = false;
+                return;
+            }
+            
             for (const AppSystemUPtr& system : m_systems)
             {
                 system->OnBackground();
@@ -306,6 +313,12 @@ namespace ChilliSource
         //----------------------------------------------------
 		void Application::Suspend()
 		{
+            if(m_shouldNotifyConnectionsResumeEvent == true)
+			{
+				m_shouldNotifyConnectionsResumeEvent = false;
+                return;
+            }
+            
             CS_LOG_VERBOSE("App Suspending...");
             
 			m_isSuspending = true;
@@ -374,6 +387,7 @@ namespace ChilliSource
             CreateSystem<Input::Keyboard>();
             m_pointerSystem = CreateSystem<Input::PointerSystem>();
             CreateSystem<Input::DeviceButtonSystem>();
+            CreateSystem<Input::TextEntry>();
             
             //Rendering
             Rendering::RenderCapabilities* renderCapabilities = CreateSystem<Rendering::RenderCapabilities>();

@@ -302,12 +302,12 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool ScrollView::OnPointerDown(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
+        bool ScrollView::OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
         {
             if(UserInteraction && Visible)
             {
 				mbTouchActive = true;
-				mvRealPreviousTouchPosition = in_pointer.m_location;
+				mvRealPreviousTouchPosition = in_pointer.GetPosition();
 				
                 //Stop! Hammer time...
                 mvVelocity = Core::Vector2::k_zero; 
@@ -318,12 +318,12 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool ScrollView::OnPointerMoved(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp)
+        bool ScrollView::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
         {
-            if(UserInteraction && Visible && mbTouchActive && (Contains(in_pointer.m_location) == true || IsAcceptTouchesOutsideOfBoundsEnabled() == true))
+            if(UserInteraction && Visible && mbTouchActive && (Contains(in_pointer.GetPosition()) == true || IsAcceptTouchesOutsideOfBoundsEnabled() == true))
             {
                 //Calculate the displacement
-                mvVelocity = in_pointer.m_location - mvRealPreviousTouchPosition;
+                mvVelocity = in_pointer.GetPosition() - mvRealPreviousTouchPosition;
 				mfTouchTravel += mvVelocity.LengthSquared();
 				
                 if(!ScrollHorizontally)
@@ -335,7 +335,7 @@ namespace ChilliSource
                     mvVelocity.y = 0.0f;
                 }
 				
-				mvNextRealPreviousTouchPosition = in_pointer.m_location;
+				mvNextRealPreviousTouchPosition = in_pointer.GetPosition();
 				mbTouchMoved = true;
 				
 				GUIView::OnPointerMoved(in_pointer, in_timestamp);
@@ -345,7 +345,7 @@ namespace ChilliSource
         }
 		//-----------------------------------------------------------
         //-----------------------------------------------------------
-        void ScrollView::OnPointerUp(const Input::PointerSystem::Pointer& in_pointer, f64 in_timestamp, Input::PointerSystem::InputType in_inputType)
+        void ScrollView::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
         {
 			if(UserInteraction && Visible)
 			{

@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_GUI_DEFAULTS_HORIZONTAL_SLIDER_BAR_H_
-#define _CHILLISOURCE_GUI_DEFAULTS_HORIZONTAL_SLIDER_BAR_H_
+#ifndef _CHILLISOURCE_GUI_SLIDERBAR_HORIZONTALSLIDERBAR_H_
+#define _CHILLISOURCE_GUI_SLIDERBAR_HORIZONTALSLIDERBAR_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/SliderBar/SliderBar.h>
@@ -148,7 +148,7 @@ namespace ChilliSource
 			/// @param The view.
             /// @param The pointer.
 			//-----------------------------------------------------------
-			void OnSliderMoved(GUIView* inpView, const Input::PointerSystem::Pointer& in_pointer);
+			void OnSliderMoved(GUIView* inpView, const Input::Pointer& in_pointer);
 			//-----------------------------------------------------------
 			/// Get Slider Value
 			///

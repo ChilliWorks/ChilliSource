@@ -114,6 +114,14 @@ namespace ChilliSource
             //-------------------------------------------------------------------------------------
             template <typename TResourceType> std::shared_ptr<const TResourceType> GetResource(const std::string& in_uniqueId) const;
             //------------------------------------------------------------------------------------
+            /// Returns all cached resources of the requested type.  The resources are immutable.
+            ///
+            /// @author I Copland
+            ///
+            /// @return A list of all resource of the requested type.
+            //-------------------------------------------------------------------------------------
+            template <typename TResourceType> std::vector<std::shared_ptr<const TResourceType>> GetAllResources() const;
+            //------------------------------------------------------------------------------------
             /// Load the resource of given type from the file location. If the resource at this
             /// location has previously been loaded then the cached version will be returned.
             /// Check the load state of the resources of that type prior to use.
@@ -327,6 +335,26 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------------
         //-------------------------------------------------------------------------------------
+        template <typename TResourceType> std::vector<std::shared_ptr<const TResourceType>> ResourcePool::GetAllResources() const
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            
+            std::vector<std::shared_ptr<const TResourceType>> output;
+            
+            auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
+            if(itDescriptor != m_descriptors.end())
+            {
+                const PoolDesc& desc(itDescriptor->second);
+                for (const auto& resource : desc.m_cachedResources)
+                {
+                    output.push_back(std::static_pointer_cast<const TResourceType>(resource.second));
+                }
+            }
+            
+            return output;
+        }
+        //------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------
         template <typename TResourceType> std::shared_ptr<TResourceType> ResourcePool::CreateResource(const std::string& in_uniqueId)
         {
             CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be created on the main thread");
@@ -334,7 +362,7 @@ namespace ChilliSource
             Resource::ResourceId resourceId = GenerateResourceId(in_uniqueId);
             std::shared_ptr<TResourceType> resource(TResourceType::Create());
             resource->SetId(resourceId);
-			resource->SetFilePath(in_uniqueId);
+            resource->SetName(in_uniqueId);
             
             std::unique_lock<std::mutex> lock(m_mutex);
             
@@ -401,18 +429,18 @@ namespace ChilliSource
             
             //Load the resource
             ResourceSPtr resource(TResourceType::Create());
+            resource->SetStorageLocation(in_location);
+            resource->SetFilePath(deviceFilePath);
+            resource->SetName(deviceFilePath);
+            resource->SetOptions(options);
+            resource->SetId(resourceId);
+
             provider->CreateResourceFromFile(in_location, deviceFilePath, options, resource);
             if(resource->GetLoadState() != Resource::LoadState::k_loaded)
             {
                 CS_LOG_ERROR("Failed to create resource for " + deviceFilePath);
                 return nullptr;
             }
-            
-            //Add it to the cache
-            resource->SetStorageLocation(in_location);
-            resource->SetFilePath(deviceFilePath);
-            resource->SetOptions(options);
-            resource->SetId(resourceId);
             
             lock.lock();
             //Check the async call hasn't sneaked in here with the same resource
@@ -511,13 +539,13 @@ namespace ChilliSource
             {
                 ResourceSPtr& resource(resourceEntry.second);
                 
-                if(resource->GetFilePath().empty() == false)
+                if(resource->GetStorageLocation() != CSCore::StorageLocation::k_none)
                 {
                     //Find a provider that can load this resource
                     ResourceProvider* provider = FindProvider(resource->GetFilePath(), desc);
                     if(provider == nullptr)
                     {
-                        CS_LOG_ERROR("Failed to find resource provider for " + resource->GetFilePath());
+                        CS_LOG_ERROR("Failed to find resource provider for " + resource->GetName());
                         continue;
                     }
                     
@@ -525,7 +553,7 @@ namespace ChilliSource
                     provider->CreateResourceFromFile(resource->GetStorageLocation(), resource->GetFilePath(), resource->GetOptions(), resource);
                     if(resource->GetLoadState() != Resource::LoadState::k_loaded)
                     {
-                        CS_LOG_ERROR("Failed to refresh resource for " + resource->GetFilePath());
+                        CS_LOG_ERROR("Failed to refresh resource for " + resource->GetName());
                         continue;
                     }
                 }
@@ -586,11 +614,13 @@ namespace ChilliSource
             
             //Load the resource
             ResourceSPtr resource(TResourceType::Create());
-            
-            //Add it to the cache
             resource->SetStorageLocation(in_location);
             resource->SetFilePath(deviceFilePath);
+            resource->SetName(deviceFilePath);
             resource->SetOptions(options);
+            resource->SetId(resourceId);
+
+            //Add it to the cache
             desc.m_cachedResources.insert(std::make_pair(resourceId, resource));
             lock.unlock();
             
@@ -626,7 +656,7 @@ namespace ChilliSource
                     if(itResource->second.use_count() == 1)
                     {
                         //The pool is the sole owner so we can safely release the object
-                        CS_LOG_VERBOSE("Releasing resource from pool " + itResource->second->GetFilePath());
+                        CS_LOG_VERBOSE("Releasing resource from pool " + itResource->second->GetName());
                         itResource = cachedResources.erase(itResource);
                         numReleased++;
                     }

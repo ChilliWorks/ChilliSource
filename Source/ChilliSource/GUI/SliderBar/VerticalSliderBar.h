@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_GUI_DEFAULTS_VERTICAL_SLIDER_BAR_H_
-#define _CHILLISOURCE_GUI_DEFAULTS_VERTICAL_SLIDER_BAR_H_
+#ifndef _CHILLISOURCE_GUI_SLIDERBAR_VERTICALSLIDERBAR_H_
+#define _CHILLISOURCE_GUI_SLIDERBAR_VERTICALSLIDERBAR_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/GUI/SliderBar/SliderBar.h>
@@ -146,7 +146,7 @@ namespace ChilliSource
             ///
             /// @param Touch data
             //-----------------------------------------------------------
-            void OnSliderMoved(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer);
+            void OnSliderMoved(GUIView* in_view, const Input::Pointer& in_pointer);
 			//-----------------------------------------------------------
 			/// Update Slider Position
 			/// 

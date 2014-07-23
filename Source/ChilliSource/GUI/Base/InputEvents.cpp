@@ -110,7 +110,7 @@ namespace ChilliSource
         //---Touch Delegates
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void InputEvents::OnPointerDown(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer, bool in_containsTouch)
+        void InputEvents::OnPointerDown(GUIView* in_view, const Input::Pointer& in_pointer, bool in_containsTouch)
         {
             //We must contain this point to be notified so we can trigger an event
             //Events: PressedInside
@@ -120,15 +120,15 @@ namespace ChilliSource
                 mTouchPressedInside.NotifyConnections(in_view, in_pointer);
             }
             
-            mOpenTouches.push_back(in_pointer.m_uniqueId);
+            mOpenTouches.push_back(in_pointer.GetId());
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool InputEvents::OnPointerMoved(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer)
+        bool InputEvents::OnPointerMoved(GUIView* in_view, const Input::Pointer& in_pointer)
         {
-            auto it = std::find(mOpenTouches.begin(), mOpenTouches.end(), in_pointer.m_uniqueId);
+            auto it = std::find(mOpenTouches.begin(), mOpenTouches.end(), in_pointer.GetId());
             
-            bool bContains = in_view->Contains(in_pointer.m_location);
+            bool bContains = in_view->Contains(in_pointer.GetPosition());
             
             if(it == mOpenTouches.end() && bContains)
             {
@@ -152,11 +152,11 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void InputEvents::OnPointerUp(GUIView* in_view, const Input::PointerSystem::Pointer& in_pointer)
+        void InputEvents::OnPointerUp(GUIView* in_view, const Input::Pointer& in_pointer)
         {
-            auto it = std::find(mOpenTouches.begin(), mOpenTouches.end(), in_pointer.m_uniqueId);
+            auto it = std::find(mOpenTouches.begin(), mOpenTouches.end(), in_pointer.GetId());
             
-            if(in_view->Contains(in_pointer.m_location))
+            if(in_view->Contains(in_pointer.GetPosition()))
             {
                 if(it != mOpenTouches.end())
                 {

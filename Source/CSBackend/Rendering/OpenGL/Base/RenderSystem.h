@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Rendering/OpenGL/ForwardDeclarations.h>
+#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Vector3.h>
@@ -425,6 +426,15 @@ namespace CSBackend
             /// @param The new screen resolution.
             //----------------------------------------------------------
             void OnScreenResolutionChanged(const CSCore::Vector2& in_resolution);
+            //----------------------------------------------------------
+            /// Triggered when window is set to Fullscreen mode
+            /// or away from Fullscreen mode; which results in loss of state
+            ///
+            /// @author S Downie
+			///
+			/// @param Display mode
+            //----------------------------------------------------------
+			void OnDisplayModeChanged(CSCore::Screen::DisplayMode in_mode);
             
 		private:
 			
@@ -517,11 +527,12 @@ namespace CSBackend
 #ifdef CS_TARGETPLATFORM_ANDROID
             ContextRestorer m_contextRestorer;
 #endif
-            
+   
             bool m_hasContext = false;
             
             CSCore::Screen* m_screen;
             CSCore::EventConnectionUPtr m_resolutionChangeConnection;
+            CSCore::EventConnectionUPtr m_displayModeChangeConnection;
 		};
 	}
 }

@@ -30,7 +30,6 @@
 #define _CHILLISOURCE_RENDERING_CAMERA_CAMERACOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
@@ -75,18 +74,6 @@ namespace ChilliSource
             /// @author S Downie
             //----------------------------------------------------------
             virtual ~CameraComponent(){}
-			//------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @param Screen clear colour
-			//------------------------------------------------------
-			void SetClearColour(const Core::Colour& in_colour);
-			//------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return Screen clear colour
-			//------------------------------------------------------
-			const Core::Colour& GetClearColour() const;
 			//------------------------------------------------------
 			/// @author S Downie
 			///
@@ -225,8 +212,6 @@ namespace ChilliSource
 			
             Core::Matrix4 m_projMat;
 			Core::Matrix4 m_viewMat;
-            
-            Core::Colour m_clearCol;
 			
             RendererSortPredicateSPtr m_opaqueSortPredicate;
             RendererSortPredicateSPtr m_transparentSortPredicate;

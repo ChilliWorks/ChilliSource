@@ -5,7 +5,7 @@
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -152,7 +152,6 @@ namespace ChilliSource
             CS_FORWARDDECLARE_CLASS(CInstance);
             CS_FORWARDDECLARE_CLASS(CMetaClass);
             CS_FORWARDDECLARE_CLASS(CProperty);
-            template <typename T, typename ReturnType = void> class CMethod;
             enum class PropAccess;
         }
         //---------------------------------------------------------

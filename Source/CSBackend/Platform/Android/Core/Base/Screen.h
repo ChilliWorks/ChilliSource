@@ -96,6 +96,33 @@ namespace CSBackend
 			//-----------------------------------------------------------
             CSCore::IConnectableEvent<ResolutionChangedDelegate>& GetResolutionChangedEvent() override;
             //-----------------------------------------------------------
+            /// @author S Downie
+			///
+			/// @return An event that is called when the screen display
+            /// mode changes.
+			//-----------------------------------------------------------
+            CSCore::IConnectableEvent<DisplayModeChangedDelegate>& GetDisplayModeChangedEvent() override;
+            //----------------------------------------------------------
+            /// Does nothing on Android due to fixed screen size
+            ///
+            /// @author S Downie
+            ///
+			/// @param Screen size in pixels
+			//----------------------------------------------------------
+			void SetResolution(const CSCore::Integer2& in_size) override;
+            //----------------------------------------------------------
+            /// Does nothing on Android due to fixed screen state
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------
+            void SetDisplayMode(DisplayMode in_mode) override;
+            //----------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return A list of resolutions supported by the display
+            //----------------------------------------------------------
+            std::vector<CSCore::Integer2> GetSupportedResolutions() const override;
+            //-----------------------------------------------------------
             /// Called when the screen resolution changes. This will update
             /// the screen resolution and notify listeners that the resolution
             /// has changed. This is for internal use and should not be
@@ -116,10 +143,12 @@ namespace CSBackend
 			//-------------------------------------------------------
 			Screen();
             
+			std::vector<CSCore::Integer2> m_supportedResolutions;
             CSCore::Vector2 m_resolution;
             f32 m_densityScale;
             f32 m_invDensityScale;
             CSCore::Event<ResolutionChangedDelegate> m_resolutionChangedEvent;
+            CSCore::Event<DisplayModeChangedDelegate> m_displayModeChangedEvent;
         };
     }
 }

@@ -213,7 +213,7 @@ namespace ChilliSource
             mpLastMaterial.reset();
                 
             //Swap the buffers
-            mudwCurrentRenderSpriteBatch = Core::MathUtils::Wrap(++mudwCurrentRenderSpriteBatch, 0u, kudwBufferArrayBounds);
+            mudwCurrentRenderSpriteBatch = (mudwCurrentRenderSpriteBatch + 1) % kudwNumBuffers;
 		}
         //----------------------------------------------------------
         /// Destructor

@@ -26,6 +26,9 @@
 //  THE SOFTWARE.
 //
 
+#ifndef _CHILLISOURCE_RENDERING_BASE_VERTEXLAYOUTS_H_
+#define _CHILLISOURCE_RENDERING_BASE_VERTEXLAYOUTS_H_
+
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>
 
@@ -46,3 +49,5 @@ namespace ChilliSource
 		}
 	}
 }
+
+#endif

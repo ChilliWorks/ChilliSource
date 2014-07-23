@@ -73,12 +73,13 @@ namespace ChilliSource
             /// @param The preferred FPS.
             //--------------------------------------------------------
             u32 GetPreferredFPS() const;
-            //---------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @param The preferred surface format.
-            //--------------------------------------------------------
-            Rendering::SurfaceFormat GetPreferredSurfaceFormat() const;
+			//---------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return Whether VSync is enabled or not
+			//---------------------------------------------------------
+			bool IsVSyncEnabled() const;
+            
         private:
             friend class Application;
             //---------------------------------------------------------
@@ -106,6 +107,8 @@ namespace ChilliSource
             
             std::string m_displayableName;
             u32 m_preferredFPS;
+
+			bool m_isVSyncEnabled = false;
         };
     }
 }

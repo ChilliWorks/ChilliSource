@@ -35,6 +35,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Image/ImageCompression.h>
+#include <ChilliSource/Core/Image/ImageFormatConverter.h>
 
 namespace CSBackend
 {
@@ -302,13 +303,14 @@ namespace CSBackend
         /// GL makes a copy of the data so we can just
         /// let the incoming data delete itself
         //--------------------------------------------------
-        void Texture::Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap)
+        void Texture::Build(const Descriptor& in_desc, TextureDataUPtr in_data, bool in_mipMap, bool in_restoreTextureDataEnabled)
         {
             Destroy();
             
             m_width = in_desc.m_width;
             m_height = in_desc.m_height;
             m_format = in_desc.m_format;
+            m_compression = in_desc.m_compression;
             
             CS_ASSERT(m_width <= m_renderCapabilities->GetMaxTextureSize() && m_height <= m_renderCapabilities->GetMaxTextureSize(),
                       "OpenGL does not support textures of this size on this device (" + CSCore::ToString(m_width) + ", " + CSCore::ToString(m_height) + ")");
@@ -318,7 +320,7 @@ namespace CSBackend
             
             u8* data = in_data.get();
             
-			switch(in_desc.m_compression)
+			switch(m_compression)
 			{
 				case CSCore::ImageCompression::k_none:
                     UploadImageDataNoCompression(m_format, m_width, m_height, data);
@@ -340,6 +342,15 @@ namespace CSBackend
             }
             
             m_hasMipMaps = in_mipMap;
+            
+#ifdef CS_TARGETPLATFORM_ANDROID
+            if (GetStorageLocation() == CSCore::StorageLocation::k_none && in_restoreTextureDataEnabled == true)
+            {
+            	m_restoreTextureDataEnabled = true;
+                m_restorationDataSize = in_desc.m_dataSize;
+                m_restorationData = std::move(in_data);
+            }
+#endif
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while building texture.");
         }
@@ -396,6 +407,93 @@ namespace CSBackend
             
             m_hasWrapModeChanged = true;
 		}
+#ifdef CS_TARGETPLATFORM_ANDROID
+        //--------------------------------------------------
+        //--------------------------------------------------
+        void Texture::UpdateRestorationData()
+        {
+            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none, "Cannot update restoration data on texture that was loaded from file.");
+            
+            if (m_restoreTextureDataEnabled == true)
+            {
+            	Unbind();
+
+            	//create an bind a new frame buffer.
+            	GLuint frameBufferHandle = 0;
+                glGenFramebuffers(1, &frameBufferHandle);
+				glBindFramebuffer(GL_FRAMEBUFFER, frameBufferHandle);
+
+				//attach the texture
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texHandle, 0);
+				GLuint glCheck = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+				if(glCheck != GL_FRAMEBUFFER_COMPLETE)
+				{
+					CS_LOG_FATAL("Framebuffer incomplete while updating texture restoration data.");
+				}
+
+				//read the data from the texture. This can only be read back in RGBA8888 format so it will need
+				//to be converted back to the format of the texture.
+				u32 unconvertedDataSize = GetWidth() * GetHeight() * 4;
+				std::unique_ptr<u8[]> unconvertedData(new u8[unconvertedDataSize]);
+				glReadPixels(0, 0, GetWidth(), GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE, unconvertedData.get());
+
+				//Convert to the format of this texture
+				CSCore::ImageFormatConverter::ImageBuffer convertedData;
+				switch (m_format)
+				{
+				case CSCore::ImageFormat::k_RGBA8888:
+					convertedData.m_size = unconvertedDataSize;
+					convertedData.m_data = std::move(unconvertedData);
+					break;
+				case CSCore::ImageFormat::k_RGB888:
+					convertedData = CSCore::ImageFormatConverter::RGBA8888ToRGB888(unconvertedData.get(), unconvertedDataSize);
+					unconvertedData.reset();
+					break;
+				case CSCore::ImageFormat::k_RGBA4444:
+					convertedData = CSCore::ImageFormatConverter::RGBA8888ToRGBA4444(unconvertedData.get(), unconvertedDataSize);
+					unconvertedData.reset();
+					break;
+				case CSCore::ImageFormat::k_RGB565:
+					convertedData = CSCore::ImageFormatConverter::RGBA8888ToRGB565(unconvertedData.get(), unconvertedDataSize);
+					unconvertedData.reset();
+					break;
+				default:
+					CS_LOG_FATAL("Texture is not in a restorable format. The restorable texture data option must be disabled for this texture.");
+					break;
+				}
+
+				m_restorationDataSize = convertedData.m_size;
+				m_restorationData = std::move(convertedData.m_data);
+
+				//clean up the frame buffer.
+				glBindFramebuffer(GL_FRAMEBUFFER, 0);
+				glDeleteFramebuffers(1, &frameBufferHandle);
+
+				CS_ASSERT_NOGLERROR("An OpenGL error occurred while updating texture restoration data.");
+            }
+        }
+        //--------------------------------------------------
+        //--------------------------------------------------
+        void Texture::Restore()
+        {
+            CS_ASSERT(GetStorageLocation() == CSCore::StorageLocation::k_none, "Cannot restore texture that was loaded from file. This should be handled using RefreshResource().");
+
+            Texture::Descriptor desc;
+            desc.m_width = m_width;
+            desc.m_height = m_height;
+            desc.m_format = m_format;
+            desc.m_compression = m_compression;
+            desc.m_dataSize = m_restorationDataSize;
+            
+            WrapMode sWrap = m_sWrapMode;
+            WrapMode tWrap = m_tWrapMode;
+            FilterMode filterMode = m_filterMode;
+            
+            Build(desc, std::move(m_restorationData), m_hasMipMaps, m_restoreTextureDataEnabled);
+            SetWrapMode(sWrap, tWrap);
+            SetFilterMode(filterMode);
+        }
+#endif
         //--------------------------------------------------
         //--------------------------------------------------
         void Texture::Destroy()
@@ -420,6 +518,12 @@ namespace CSBackend
             }
             
             m_texHandle = 0;
+            
+#ifdef CS_TARGETPLATFORM_ANDROID
+            m_restoreTextureDataEnabled = false;
+            m_restorationDataSize = 0;
+            m_restorationData.reset();
+#endif
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while destroying texture.");
         }

@@ -33,6 +33,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
+#include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
 struct GLFWwindow;
@@ -62,31 +63,50 @@ namespace CSBackend
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			//----------------------------------------------------
+			/// Hide the window cursor
+			///
+			/// @author S Downie
+			//----------------------------------------------------
+			void HideCursor() override;
+			//----------------------------------------------------
+			/// Show the window cursor
+			///
+			/// @author S Downie
+			//----------------------------------------------------
+			void ShowCursor() override;
 		private:
 			friend CSInput::PointerSystemUPtr CSInput::PointerSystem::Create();
 
 			//----------------------------------------------
-			/// Triggered by GLFW when the cursor moves
+			/// Triggered by SFML when the cursor moves
 			///
 			/// @author S Downie
 			///
-			/// @param Window that received input
-			/// @param Cursor X Pos
-			/// @param Cursor Y Pos
+			/// @param Current position X
+			/// @param Current position Y
 			//----------------------------------------------
-			static void OnMouseMoved(GLFWwindow* in_window, f64 in_xPos, f64 in_yPos);
+			void OnMouseMoved(s32 in_xPos, s32 in_yPos);
 			//----------------------------------------------
-			/// Triggered by GLFW when a mouse button is
+			/// Triggered by SFML when a mouse button is
 			/// pressed
 			///
 			/// @author S Downie
 			///
-			/// @param Window that received input
 			/// @param Button ID
 			/// @param Button action (Press/Release)
-			/// @param Bit field describing modifier keys
+			/// @param Current position X
+			/// @param Current position Y
 			//----------------------------------------------
-			static void OnMouseButtonPressed(GLFWwindow* in_window, s32 in_buttonID, s32 in_buttonAction, s32 in_modifierKeys);
+			void OnMouseButtonEvent(sf::Mouse::Button in_button, SFMLWindow::MouseButtonEvent in_event, s32 in_xPos, s32 in_yPos);
+			//----------------------------------------------
+			/// Triggered by SFML when the mouse wheel is scrolled
+			///
+			/// @author S Downie
+			///
+			/// @param Number of ticks scrolled in the y-axis
+			//----------------------------------------------
+			void OnMouseWheeled(s32 in_delta);
 			//------------------------------------------------
 			/// Default constructor. Declared private to force
 			/// the use of the factory method.
@@ -115,7 +135,11 @@ namespace CSBackend
 			void OnDestroy() override;
 
 			CSCore::Screen* m_screen;
-			PointerId m_pointerId;
+			CSInput::Pointer::Id m_pointerId;
+
+			CSCore::EventConnectionUPtr m_mouseButtonConnection;
+			CSCore::EventConnectionUPtr m_mouseMovedConnection;
+			CSCore::EventConnectionUPtr m_mouseWheelConnection;
 		};
 	}
 }

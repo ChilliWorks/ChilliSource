@@ -58,10 +58,17 @@ namespace ChilliSource
         /// Keyboard
         //--------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Keyboard);
+        enum class KeyCode;
+        enum class ModifierKeyCode;
         //--------------------------------------------------
         /// Pointer
         //--------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(Pointer);
         CS_FORWARDDECLARE_CLASS(PointerSystem);
+        //--------------------------------------------------
+        /// Text Entry
+        //--------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(TextEntry);
 	}
 }
 

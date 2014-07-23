@@ -85,8 +85,9 @@ namespace ChilliSource
 			/// @param Interpolation function
 			/// @param Duration of a single cycle in seconds
 			/// @param Delay of initial cycle in seconds
+            /// @param Delay at end of cycle in seconds
 			//-----------------------------------------------------------------------
-			Tween(const TInterpFunc& in_interpFunc, f32 in_duration, f32 in_delay = 0.0f);
+			Tween(const TInterpFunc& in_interpFunc, f32 in_duration, f32 in_startDelay = 0.0f, f32 in_endDelay = 0.0f);
 			//-----------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -112,6 +113,12 @@ namespace ChilliSource
 			/// @param Delay in seconds of start of initial cycle
 			//-----------------------------------------------------------------------
 			void SetStartDelay(f32 in_delay);
+            //-----------------------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @param Delay in seconds at end of initial cycle before calling end delegate
+			//-----------------------------------------------------------------------
+			void SetEndDelay(f32 in_delay);
 			//-----------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -198,7 +205,9 @@ namespace ChilliSource
 			f32 m_duration = 0.0f;
 			f32 m_stepDuration = 0.0f;
 			f32 m_startDelay = 0.0f;
-			f32 m_currentDelay = 0.0f;
+            f32 m_endDelay = 0.0f;
+			f32 m_currentStartDelay = 0.0f;
+            f32 m_currentEndDelay = 0.0f;
 			f32 m_currentTime = 0.0f;
 			f32 m_timeScaler = 1.0f;
 			f32 m_currentT = 0.0f;
@@ -214,8 +223,8 @@ namespace ChilliSource
 		};
         //-----------------------------------------------------------------------
         //-----------------------------------------------------------------------
-        template <typename TInterpFunc> Tween<TInterpFunc>::Tween(const TInterpFunc& in_interpFunc, f32 in_duration, f32 in_delay)
-        : m_interpFunc(in_interpFunc), m_duration(in_duration), m_startDelay(in_delay)
+        template <typename TInterpFunc> Tween<TInterpFunc>::Tween(const TInterpFunc& in_interpFunc, f32 in_duration, f32 in_startDelay, f32 in_endDelay)
+        : m_interpFunc(in_interpFunc), m_duration(in_duration), m_startDelay(in_startDelay), m_endDelay(in_endDelay)
         {
             
         }
@@ -239,9 +248,15 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Tween<TInterpFunc>::SetStartDelay(f32 in_delay)
+		template <typename TInterpFunc> void Tween<TInterpFunc>::SetEndDelay(f32 in_delay)
 		{
 			m_startDelay = in_delay;
+		}
+        //-----------------------------------------------------------------------
+		//-----------------------------------------------------------------------
+		template <typename TInterpFunc> void Tween<TInterpFunc>::SetStartDelay(f32 in_delay)
+		{
+			m_endDelay = in_delay;
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
@@ -317,7 +332,8 @@ namespace ChilliSource
 				break;
 			}
 
-			m_currentDelay = m_startDelay;
+			m_currentStartDelay = m_startDelay;
+            m_currentEndDelay = m_endDelay;
 			m_currentTime = 0.0f;
 			m_currentStep = 0;
 
@@ -364,8 +380,8 @@ namespace ChilliSource
 			if (m_isStarted == false)
 			{
 				//We may have a countdown before starting
-				m_currentDelay -= in_timeSinceLastUpdate;
-				if (m_currentDelay > 0.0f)
+				m_currentStartDelay -= in_timeSinceLastUpdate;
+				if (m_currentStartDelay > 0.0f)
 				{
 					return;
 				}
@@ -378,14 +394,27 @@ namespace ChilliSource
 				}
 			}
 
-			m_currentTime = std::min(m_currentTime + in_timeSinceLastUpdate, m_duration);
+			m_currentTime = std::min(m_currentTime + in_timeSinceLastUpdate, m_stepDuration);
 
-			m_currentT = m_currentTime / m_stepDuration;
+            if (m_stepDuration != 0.0f)
+            {
+                m_currentT = m_currentTime / m_stepDuration;
+            }
+            else
+            {
+                m_currentT = 1.0f;
+            }
+            
 			if (m_isReverse)
 				m_currentT = 1.0f - m_currentT;
 
 			if (m_currentTime >= m_stepDuration)
 			{
+                m_currentEndDelay -= in_timeSinceLastUpdate;
+                if(m_currentEndDelay > 0.0f)
+                {
+                    return;
+                }
 				m_currentStep++;
 
 				if (m_isPingPong == true)

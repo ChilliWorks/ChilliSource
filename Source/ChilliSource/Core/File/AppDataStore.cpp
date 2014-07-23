@@ -29,7 +29,6 @@
 #include <ChilliSource/Core/File/AppDataStore.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/Device.h>
 #include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
 #include <ChilliSource/Core/Cryptographic/AESEncrypt.h>
 #include <ChilliSource/Core/Cryptographic/HashSHA1.h>
@@ -44,40 +43,7 @@ namespace ChilliSource
         namespace
         {
             const std::string k_filename = "App.ads";
-            
-            //---------------------------------------------------------
-            /// Generates the key that is used to encrypt the ADS. Note
-            /// that this is not really crytographically secure as none
-            /// of the information used to generate the hash is truely
-            /// private.
-            ///
-            /// @author Ian Copland
-            //---------------------------------------------------------
-            std::string GenerateEncryptionKey()
-            {
-                const std::string k_salt = "aV0r71^jX01}pXMk";
-                Device* device = Application::Get()->GetSystem<Device>();
-                
-                //calculate the SHA1 hash.
-                std::string hashableString = device->GetUDID() + k_salt;
-                std::string hexHash = HashSHA1::GenerateHexHashCode(hashableString.c_str(), hashableString.length());
-                CS_ASSERT(hexHash.length() == 40, "Something has gone wrong with the SHA1 hash.");
-                
-                //truncate into 128 bits.
-                std::string output;
-                for (u32 i = 0; i < 16; i++)
-                {
-                    s8 lower = hexHash[i*2 + 0];
-                    s8 upper = hexHash[i*2 + 1];
-                    s8 combined = (lower + (upper << 4));
-                    output += combined;
-                    
-                    std::string print;
-                    print +=combined;
-                }
-                
-                return output;
-            }
+            const std::string k_privateKey = "aV0r71^jX01}pXMk";
         }
         
         CS_DEFINE_NAMEDTYPE(AppDataStore);
@@ -329,7 +295,7 @@ namespace ChilliSource
                 
                 // Encrypt
                 std::string strDocToBeEncrypted = XMLUtils::ToString(&doc);
-                AESEncrypt::Data encryptedData = AESEncrypt::EncryptString(strDocToBeEncrypted, GenerateEncryptionKey());
+                AESEncrypt::Data encryptedData = AESEncrypt::EncryptString(strDocToBeEncrypted, k_privateKey);
 
                 // Write to disk
                 FileSystem* pFileSystem = Application::Get()->GetFileSystem();
@@ -361,7 +327,7 @@ namespace ChilliSource
 					fileStream->Read(encryptedData.get(), encryptedDataSize);
 					fileStream->Close();
                     
-                    std::string decrypted = AESEncrypt::DecryptString(reinterpret_cast<const u8*>(encryptedData.get()), encryptedDataSize, GenerateEncryptionKey());
+                    std::string decrypted = AESEncrypt::DecryptString(reinterpret_cast<const u8*>(encryptedData.get()), encryptedDataSize, k_privateKey);
 
                     XMLUPtr xml = XMLUtils::ParseDocument(decrypted);
                     XML::Node* root = XMLUtils::GetFirstChildElement(xml->GetDocument());

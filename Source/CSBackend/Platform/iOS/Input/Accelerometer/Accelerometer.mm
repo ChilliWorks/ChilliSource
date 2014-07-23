@@ -94,13 +94,13 @@ namespace CSBackend
                     orientationTransform = CSCore::Matrix4::k_identity;
                     break;
                 case UIInterfaceOrientationLandscapeLeft:
-                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::kPI * 1.5f);
+                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::k_pi * 1.5f);
                     break;
                 case UIInterfaceOrientationLandscapeRight:
-                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::kPI * 0.5f);
+                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::k_pi * 0.5f);
                     break;
                 case UIInterfaceOrientationPortraitUpsideDown:
-                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::kPI);
+                    orientationTransform = CSCore::Matrix4::CreateRotationZ(CSCore::MathUtils::k_pi);
                     break;
                 default:
                     CS_LOG_ERROR("Unknown orientation!");
@@ -108,7 +108,8 @@ namespace CSBackend
                     break;
             }
             
-            CSCore::Vector3 deviceSpaceAcceleration(m_motionManager.accelerometerData.acceleration.x, m_motionManager.accelerometerData.acceleration.y, m_motionManager.accelerometerData.acceleration.z);
+            CMAcceleration acceleration(m_motionManager.accelerometerData.acceleration);
+            CSCore::Vector3 deviceSpaceAcceleration(acceleration.x, acceleration.y, acceleration.z);
             deviceSpaceAcceleration.Transform3x4(orientationTransform);
             return deviceSpaceAcceleration;
         }

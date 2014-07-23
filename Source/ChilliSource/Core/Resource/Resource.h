@@ -87,6 +87,14 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			const std::string& GetFilePath() const;
             //-------------------------------------------------------
+			/// @author Ian Copland
+			///
+			/// @return The name of the resource. If this was loaded
+            /// from file this will be the file name. Otherwise this
+            /// will be the unique string Id of the resource.
+			//-------------------------------------------------------
+			const std::string& GetName() const;
+            //-------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return The resource id as set by the resource pool
@@ -147,6 +155,17 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			void SetFilePath(const std::string& in_filePath);
             //-------------------------------------------------------
+            /// Sets the name of the resource. This is the name
+            /// that can be used to look up the resource using
+            /// ResourcePool::GetResource(). This should only be set
+            /// by the resource pool.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The name of the resource.
+			//-------------------------------------------------------
+			void SetName(const std::string& in_name);
+            //-------------------------------------------------------
             /// NOTE: Not for general application used by the providers
             /// to set the id
             ///
@@ -179,6 +198,7 @@ namespace ChilliSource
             IResourceOptionsBaseCSPtr m_options;
             
 			std::string m_filePath;
+            std::string m_name;
 			StorageLocation m_location;
             ResourceId m_id;
         
