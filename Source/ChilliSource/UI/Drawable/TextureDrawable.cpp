@@ -28,7 +28,6 @@
 
 #include <ChilliSource/UI/Drawable/TextureDrawable.h>
 
-#include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
@@ -36,13 +35,6 @@ namespace ChilliSource
 {
     namespace UI
     {
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        TextureDrawable::TextureDrawable()
-        : m_UVs(0.0f, 0.0f, 1.0f, 1.0f)
-        {
-            
-        }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void TextureDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)

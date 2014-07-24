@@ -46,12 +46,7 @@ namespace ChilliSource
         class TextureDrawable final : public IDrawable
         {
         public:
-            //----------------------------------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            TextureDrawable();
+
             //----------------------------------------------------------------------------------------
             /// Set the texture that should be used in subsequent draws
             ///
@@ -65,7 +60,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Rectanlge containing U, V, S, T
+            /// @param Rectangle containing U, V, S, T
             //----------------------------------------------------------------------------------------
             void SetUVs(const Rendering::UVs& in_UVs);
             //----------------------------------------------------------------------------------------
