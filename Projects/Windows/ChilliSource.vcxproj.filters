@@ -58,6 +58,9 @@
     <Filter Include="ChilliSource\Audio">
       <UniqueIdentifier>{5ea16a5b-a814-4e7a-ad61-79ae11172776}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ChilliSource\UI">
+      <UniqueIdentifier>{fcf07979-fe2f-41bb-9674-6a253c967d79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.cpp">
@@ -668,6 +671,27 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Input\Keyboard\Keyboard.cpp">
       <Filter>CSBackend\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\StretchableDrawable.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\TextureDrawable.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Canvas.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Widget.cpp">
+      <Filter>ChilliSource\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1453,6 +1477,36 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Input\Keyboard\Keyboard.h">
       <Filter>CSBackend\Platform\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\ForwardDeclarations.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\ILayout.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\StretchableDrawable.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\TextureDrawable.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Canvas.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Widget.h">
+      <Filter>ChilliSource\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

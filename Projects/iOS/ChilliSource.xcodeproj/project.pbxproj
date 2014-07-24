@@ -13,6 +13,7 @@
 		81496B951980F1AE004E79F2 /* GridLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B8B1980F1AE004E79F2 /* GridLayout.cpp */; };
 		81496B961980F1AE004E79F2 /* HListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B8D1980F1AE004E79F2 /* HListLayout.cpp */; };
 		81496B971980F1AE004E79F2 /* VListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B901980F1AE004E79F2 /* VListLayout.cpp */; };
+		81496B9A1980F470004E79F2 /* StretchableDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B981980F470004E79F2 /* StretchableDrawable.cpp */; };
 		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
 		81B1D2D1196C0167000F13DD /* Pointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2CF196C0167000F13DD /* Pointer.cpp */; };
 		81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D3196C2410000F13DD /* TextEntry.cpp */; };
@@ -291,6 +292,8 @@
 		81496B8F1980F1AE004E79F2 /* ILayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILayout.h; sourceTree = "<group>"; };
 		81496B901980F1AE004E79F2 /* VListLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListLayout.cpp; sourceTree = "<group>"; };
 		81496B911980F1AE004E79F2 /* VListLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VListLayout.h; sourceTree = "<group>"; };
+		81496B981980F470004E79F2 /* StretchableDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StretchableDrawable.cpp; sourceTree = "<group>"; };
+		81496B991980F470004E79F2 /* StretchableDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StretchableDrawable.h; sourceTree = "<group>"; };
 		8158E483196ACB25005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		8158E484196ACB32005FF0A8 /* Container.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Container.h; sourceTree = "<group>"; };
 		8158E485196ACB41005FF0A8 /* Cryptographic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cryptographic.h; sourceTree = "<group>"; };
@@ -938,6 +941,8 @@
 			isa = PBXGroup;
 			children = (
 				81496B861980F1AE004E79F2 /* IDrawable.h */,
+				81496B981980F470004E79F2 /* StretchableDrawable.cpp */,
+				81496B991980F470004E79F2 /* StretchableDrawable.h */,
 				81496B871980F1AE004E79F2 /* TextureDrawable.cpp */,
 				81496B881980F1AE004E79F2 /* TextureDrawable.h */,
 			);
@@ -2457,6 +2462,7 @@
 				81D8B4281962E0EC0010DA84 /* Instance.cpp in Sources */,
 				81D8B6A61962E0F70010DA84 /* NSNotificationAdapter.mm in Sources */,
 				81496B921980F1AE004E79F2 /* Canvas.cpp in Sources */,
+				81496B9A1980F470004E79F2 /* StretchableDrawable.cpp in Sources */,
 				81D8B4011962E0EC0010DA84 /* Device.cpp in Sources */,
 				81D8B4621962E0EC0010DA84 /* MoContentDownloader.cpp in Sources */,
 				81D8B40D1962E0EC0010DA84 /* OAuth.cpp in Sources */,
