@@ -1,5 +1,5 @@
 //
-//  StretchableDrawable.cpp
+//  NinePatchDrawable.cpp
 //  Chilli Source
 //  Created by Scott Downie on 24/07/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Drawable/StretchableDrawable.h>
+#include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
 
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
@@ -150,7 +150,7 @@ namespace ChilliSource
                 std::array<Core::Vector2, k_numPatches> result;
                 
                 //If the corners at their preferred size are larger than the widget then they need to be scaled down
-                f32 totalPatchSizeX = in_imageSize.x * in_left + in_imageSize.x * in_left;
+                f32 totalPatchSizeX = in_imageSize.x * in_left + in_imageSize.x * in_right;
                 f32 totalPatchSizeY = in_imageSize.y * in_top + in_imageSize.y * in_bottom;
                 f32 scaleX = totalPatchSizeX <= in_widgetSize.x ? 1.0f : in_widgetSize.x/totalPatchSizeX;
                 f32 scaleY = totalPatchSizeY <= in_widgetSize.y ? 1.0f : in_widgetSize.y/totalPatchSizeY;
@@ -235,20 +235,23 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void StretchableDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
+        void NinePatchDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
         {
             m_texture = in_texture;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void StretchableDrawable::SetUVs(const Rendering::UVs& in_UVs)
+        void NinePatchDrawable::SetUVs(const Rendering::UVs& in_UVs)
         {
             m_UVs = in_UVs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void StretchableDrawable::SetInsets(f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
+        void NinePatchDrawable::SetInsets(f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
         {
+            CS_ASSERT(in_left + in_right <= 1.0f, "Insets must not overlap i.e. sum to more than 1");
+            CS_ASSERT(in_top + in_bottom <= 1.0f, "Insets must not overlap i.e. sum to more than 1");
+            
             m_leftInset = in_left;
             m_rightInset = in_right;
             m_topInset = in_top;
@@ -256,16 +259,16 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Vector2 StretchableDrawable::GetPreferredSize() const
+        Core::Vector2 NinePatchDrawable::GetPreferredSize() const
         {
-            CS_ASSERT(m_texture != nullptr, "StretchableDrawable cannot get preferred size without texture");
+            CS_ASSERT(m_texture != nullptr, "NinePatchDrawable cannot get preferred size without texture");
             return Core::Vector2((f32)m_texture->GetWidth(), (f32)m_texture->GetHeight());
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void StretchableDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
+        void NinePatchDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
         {
-            CS_ASSERT(m_texture != nullptr, "StretchableDrawable cannot draw without texture");
+            CS_ASSERT(m_texture != nullptr, "NinePatchDrawable cannot draw without texture");
             
             auto uvs = CalculateNinePatchUVs(m_UVs, m_leftInset, m_rightInset, m_topInset, m_bottomInset);
             auto sizes = CalculateNinePatchSizes(in_absSize, GetPreferredSize(), m_leftInset, m_rightInset, m_topInset, m_bottomInset);

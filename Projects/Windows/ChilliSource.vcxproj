@@ -184,8 +184,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Social\Facebook\FacebookPostSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Canvas.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Widget.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\StretchableDrawable.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\TextureDrawable.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.cpp" />
@@ -451,8 +452,9 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Canvas.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Widget.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\StretchableDrawable.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\TextureDrawable.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.h" />

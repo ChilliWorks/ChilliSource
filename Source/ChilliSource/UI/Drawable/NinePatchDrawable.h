@@ -1,5 +1,5 @@
 //
-//  StretchableDrawable.h
+//  NinePatchDrawable.h
 //  Chilli Source
 //  Created by Scott Downie on 24/07/2014.
 //
@@ -27,8 +27,8 @@
 //
 
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_STRETCHABLEDRAWABLE_H_
-#define _CHILLISOURCE_UI_DRAWABLE_STRETCHABLEDRAWABLE_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_NINEPATCHDRAWABLE_H_
+#define _CHILLISOURCE_UI_DRAWABLE_NINEPATCHDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
@@ -41,7 +41,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         /// Interface for rendering widget with a texture and UVs as a 9 patch. This allows the
         /// widget to be scaled without distorting the edges. The patches are specified by percentage
-        /// insets from the edges of the widget/
+        /// insets from the edges of the widget.
         ///
         /// The right and left patches should be designed to stretch vertically.
         /// The top and bottom patches should be designed to stretch horizontally.
@@ -49,7 +49,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        class StretchableDrawable final : public IDrawable
+        class NinePatchDrawable final : public IDrawable
         {
         public:
 
@@ -73,12 +73,15 @@ namespace ChilliSource
             /// Set the UV insets that should be used to create the patches. Insets are from the edge
             /// and therefore no negative numbers need to be specified for right and bottom insets.
             ///
+            /// NOTE: Insets must compliment each other i.e. left and right cannot sum to more than 1.0
+            /// as they would overlap.
+            ///
             /// @author S Downie
             ///
-            /// @param Left inset as normalised percentage
-            /// @param Right inset as normalised percentage
-            /// @param Top inset as normalised percentage
-            /// @param Bottom inset as normalised percentage
+            /// @param Left inset as normalised fraction (0 - 1)
+            /// @param Right inset as normalised fraction (0 - 1)
+            /// @param Top inset as normalised fraction (0 - 1)
+            /// @param Bottom inset as normalised fraction (0 - 1)
             //----------------------------------------------------------------------------------------
             void SetInsets(f32 in_left, f32 in_right, f32 in_top, f32 in_bottom);
             //----------------------------------------------------------------------------------------

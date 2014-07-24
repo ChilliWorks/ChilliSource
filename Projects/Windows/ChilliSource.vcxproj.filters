@@ -681,9 +681,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.cpp">
       <Filter>ChilliSource\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\StretchableDrawable.cpp">
-      <Filter>ChilliSource\UI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\TextureDrawable.cpp">
       <Filter>ChilliSource\UI</Filter>
     </ClCompile>
@@ -691,6 +688,12 @@
       <Filter>ChilliSource\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Widget.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.cpp">
       <Filter>ChilliSource\UI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1496,9 +1499,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\StretchableDrawable.h">
-      <Filter>ChilliSource\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\TextureDrawable.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
@@ -1506,6 +1506,12 @@
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Widget.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
   </ItemGroup>
