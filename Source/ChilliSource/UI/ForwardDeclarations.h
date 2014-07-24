@@ -47,6 +47,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(IDrawable);
         CS_FORWARDDECLARE_CLASS(TextureDrawable);
+        CS_FORWARDDECLARE_CLASS(StretchableDrawable);
         //---------------------------------------------------------
         /// Layout
         //---------------------------------------------------------
