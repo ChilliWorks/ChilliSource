@@ -239,8 +239,8 @@ namespace ChilliSource
 
                 mpRenderSystem->SetLight(nullptr);
 
-                RenderUI(inpScene->GetWindow(), inpScene->GetClearColour();
-                RenderUI(in_canvas, inpScene->GetClearColour();
+                RenderUI(inpScene->GetWindow(), inpScene->GetClearColour());
+                RenderUI(in_canvas, inpScene->GetClearColour());
 
                 //Present contents of buffer to screen
                 if (inpRenderTarget != nullptr)
@@ -256,8 +256,8 @@ namespace ChilliSource
                 mpRenderSystem->BeginFrame(inpRenderTarget);
 
                 mpRenderSystem->SetLight(nullptr);
-                RenderUI(inpScene->GetWindow(), inpScene->GetClearColour();
-                RenderUI(in_canvas, inpScene->GetClearColour();
+                RenderUI(inpScene->GetWindow(), inpScene->GetClearColour());
+                RenderUI(in_canvas, inpScene->GetClearColour());
                     
                 //Present contents of buffer to screen
                 if (inpRenderTarget != nullptr)
