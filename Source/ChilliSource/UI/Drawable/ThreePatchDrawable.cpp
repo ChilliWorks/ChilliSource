@@ -41,7 +41,7 @@ namespace ChilliSource
         namespace
         {
             //----------------------------------------------------------------------------------------
-            /// Identifier for each patch in the 9 patch. Can be used as index look-ups into
+            /// Identifier for each patch in the 3 patch. Can be used as index look-ups into
             /// arrays of UVs, positions, etc.
             ///
             /// @author S Downie
