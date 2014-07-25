@@ -40,8 +40,6 @@ namespace ChilliSource
     {
         namespace
         {
-            const u32 k_numPatches = 3;
-            
             //----------------------------------------------------------------------------------------
             /// Identifier for each patch in the 9 patch. Can be used as index look-ups into
             /// arrays of UVs, positions, etc.
@@ -55,35 +53,67 @@ namespace ChilliSource
                 k_rightOrTop
             };
             //----------------------------------------------------------------------------------------
-            /// Based on the insets and the given UVs calculate the UVs for each of the 9 patches
+            /// Based on the insets and the given UVs calculate the UVs for each of the 3 patches
             ///
             /// @author S Downie
             ///
             /// @param UVs
-            /// @param Left or bottom inset as normalised percentage
-            /// @param Right or top inset as normalised percentage
+            /// @param Left inset as normalised percentage
+            /// @param Right inset as normalised percentage
             ///
             /// @return UVs for the 3 patches
             //----------------------------------------------------------------------------------------
-            std::array<Rendering::UVs, k_numPatches> CalculateThreePatchUVs(const Rendering::UVs& in_UVs, f32 in_leftOrBottom, f32 in_rightOrTop)
+            std::array<Rendering::UVs, ThreePatchDrawable::k_numPatches> CalculateThreePatchUVsHorizontal(const Rendering::UVs& in_UVs, f32 in_left, f32 in_right)
             {
-                std::array<Rendering::UVs, k_numPatches> result;
+                std::array<Rendering::UVs, ThreePatchDrawable::k_numPatches> result;
                 
                 //Fixed
                 f32 leftU = in_UVs.m_u;
-                f32 leftS = in_UVs.m_s * in_leftOrBottom;
+                f32 leftS = in_UVs.m_s * in_left;
                 result[(u32)Patch::k_leftOrBottom].m_u = leftU;
                 result[(u32)Patch::k_leftOrBottom].m_s = leftS;
                 
-                f32 rightS = in_UVs.m_s * in_rightOrTop;
+                f32 rightS = in_UVs.m_s * in_right;
                 f32 rightU = in_UVs.m_u + in_UVs.m_s - rightS;
                 result[(u32)Patch::k_rightOrTop].m_u = rightU;
                 result[(u32)Patch::k_rightOrTop].m_s = rightS;
                 
                 //Stretchable
                 result[(u32)Patch::k_centre].m_u = leftU + leftS;
-                result[(u32)Patch::k_centre].m_s = result[(u32)Patch::k_rightOrTop].m_u - (result[(u32)Patch::k_leftOrBottom].m_u + result[(u32)Patch::k_leftOrBottom].m_s);
+                result[(u32)Patch::k_centre].m_s = in_UVs.m_s - (leftS + rightS);
 
+                return result;
+            }
+            //----------------------------------------------------------------------------------------
+            /// Based on the insets and the given UVs calculate the UVs for each of the 3 patches
+            ///
+            /// @author S Downie
+            ///
+            /// @param UVs
+            /// @param Bottom inset as normalised percentage
+            /// @param Top inset as normalised percentage
+            ///
+            /// @return UVs for the 3 patches
+            //----------------------------------------------------------------------------------------
+            std::array<Rendering::UVs, ThreePatchDrawable::k_numPatches> CalculateThreePatchUVsVertical(const Rendering::UVs& in_UVs, f32 in_bottom, f32 in_top)
+            {
+                std::array<Rendering::UVs, ThreePatchDrawable::k_numPatches> result;
+                
+                //Fixed
+                f32 topV = in_UVs.m_v;
+                f32 topT = in_UVs.m_t * in_top;
+                result[(u32)Patch::k_rightOrTop].m_v = topV;
+                result[(u32)Patch::k_rightOrTop].m_t = topT;
+                
+                f32 bottomT = in_UVs.m_t * in_bottom;
+                f32 bottomV = in_UVs.m_v + in_UVs.m_t - bottomT;
+                result[(u32)Patch::k_leftOrBottom].m_v = bottomV;
+                result[(u32)Patch::k_leftOrBottom].m_t = bottomT;
+                
+                //Stretchable
+                result[(u32)Patch::k_centre].m_v = topV + topT;
+                result[(u32)Patch::k_centre].m_t = in_UVs.m_t - (topT + bottomT);
+                
                 return result;
             }
             //----------------------------------------------------------------------------------------
@@ -93,20 +123,44 @@ namespace ChilliSource
             ///
             /// @param Widget absolute size
             /// @param Image absolute size
-            /// @param Left or bottom inset as normalised percentage
-            /// @param Right or top inset as normalised percentage
+            /// @param Left inset as normalised percentage
+            /// @param Right inset as normalised percentage
             ///
             /// @return Sizes for the 3 patches
             //----------------------------------------------------------------------------------------
-            std::array<Core::Vector2, k_numPatches> CalculateThreePatchSizes(const Core::Vector2& in_widgetSize, const Core::Vector2& in_imageSize, f32 in_leftOrBottom, f32 in_rightOrTop)
+            std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchSizesHorizontal(const Core::Vector2& in_widgetSize, const Core::Vector2& in_imageSize, f32 in_left, f32 in_right)
             {
-                std::array<Core::Vector2, k_numPatches> result;
+                std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> result;
                 
-                result[(u32)Patch::k_leftOrBottom] = Rendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(Core::Vector2(in_imageSize.x * in_leftOrBottom, in_widgetSize.y), in_imageSize.x * in_leftOrBottom/in_imageSize.y);
-                result[(u32)Patch::k_rightOrTop] = Rendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(Core::Vector2(in_imageSize.x * in_rightOrTop, in_widgetSize.y), in_imageSize.x * in_rightOrTop/in_imageSize.y);
+                result[(u32)Patch::k_leftOrBottom] = Rendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(Core::Vector2(in_imageSize.x * in_left, in_widgetSize.y), (in_imageSize.x * in_left)/in_imageSize.y);
+                result[(u32)Patch::k_rightOrTop] = Rendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(Core::Vector2(in_imageSize.x * in_right, in_widgetSize.y), (in_imageSize.x * in_right)/in_imageSize.y);
                 
                 result[(u32)Patch::k_centre].x = std::max(in_widgetSize.x - result[(u32)Patch::k_leftOrBottom].x - result[(u32)Patch::k_rightOrTop].x, 0.0f);
                 result[(u32)Patch::k_centre].y = result[(u32)Patch::k_leftOrBottom].y;
+                
+                return result;
+            }
+            //----------------------------------------------------------------------------------------
+            /// Based on the widget size and the given insets calculate the absolute size of each patch
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget absolute size
+            /// @param Image absolute size
+            /// @param Bottom inset as normalised percentage
+            /// @param Top inset as normalised percentage
+            ///
+            /// @return Sizes for the 3 patches
+            //----------------------------------------------------------------------------------------
+            std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchSizesVertical(const Core::Vector2& in_widgetSize, const Core::Vector2& in_imageSize, f32 in_bottom, f32 in_top)
+            {
+                std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> result;
+                
+                result[(u32)Patch::k_leftOrBottom] = Rendering::AspectRatioUtils::KeepOriginalWidthAdaptHeight(Core::Vector2(in_widgetSize.x, in_imageSize.y * in_bottom), in_imageSize.x/(in_imageSize.y * in_bottom));
+                result[(u32)Patch::k_rightOrTop] = Rendering::AspectRatioUtils::KeepOriginalWidthAdaptHeight(Core::Vector2(in_widgetSize.x, in_imageSize.y * in_top), in_imageSize.x/(in_imageSize.y * in_top));
+                
+                result[(u32)Patch::k_centre].x = result[(u32)Patch::k_leftOrBottom].x;
+                result[(u32)Patch::k_centre].y = std::max(in_widgetSize.y - result[(u32)Patch::k_leftOrBottom].y - result[(u32)Patch::k_rightOrTop].y, 0.0f);
                 
                 return result;
             }
@@ -120,17 +174,41 @@ namespace ChilliSource
             ///
             /// @return Sizes for the 3 patches
             //----------------------------------------------------------------------------------------
-            std::array<Core::Vector2, k_numPatches> CalculateThreePatchPositions(const std::array<Core::Vector2, k_numPatches>& in_sizes)
+            std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchPositionsHorizontal(const std::array<Core::Vector2, ThreePatchDrawable::k_numPatches>& in_sizes)
             {
-                std::array<Core::Vector2, k_numPatches> result;
+                std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> result;
                 
                 Core::Vector2 halfCentre = in_sizes[(u32)Patch::k_centre] * 0.5f;
-                Core::Vector2 halfLeftOrBottom  = in_sizes[(u32)Patch::k_leftOrBottom] * 0.5f;
-                Core::Vector2 halfRightOrTop = in_sizes[(u32)Patch::k_rightOrTop] * 0.5f;
+                Core::Vector2 halfLeft = in_sizes[(u32)Patch::k_leftOrBottom] * 0.5f;
+                Core::Vector2 halfRight = in_sizes[(u32)Patch::k_rightOrTop] * 0.5f;
                 
-                result[(u32)Patch::k_centre] = Core::Vector2::k_zero;
-                result[(u32)Patch::k_leftOrBottom].x = -halfCentre.x - halfLeftOrBottom.x;
-                result[(u32)Patch::k_rightOrTop].x = halfCentre.x + halfRightOrTop.x;
+                result[(u32)Patch::k_centre] = Core::Vector2(halfLeft.x - halfRight.x, 0.0f);
+                result[(u32)Patch::k_leftOrBottom].x = result[(u32)Patch::k_centre].x - halfCentre.x - halfLeft.x;
+                result[(u32)Patch::k_rightOrTop].x = result[(u32)Patch::k_centre].x + halfCentre.x + halfRight.x;
+                
+                return result;
+            }
+            //----------------------------------------------------------------------------------------
+            /// Calculate the local space positions for each patch with the origin of the overall
+            /// widget at the centre (0, 0)
+            ///
+            /// @author S Downie
+            ///
+            /// @param Patch sizes
+            ///
+            /// @return Sizes for the 3 patches
+            //----------------------------------------------------------------------------------------
+            std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> CalculateThreePatchPositionsVertical(const std::array<Core::Vector2, ThreePatchDrawable::k_numPatches>& in_sizes)
+            {
+                std::array<Core::Vector2, ThreePatchDrawable::k_numPatches> result;
+                
+                Core::Vector2 halfCentre = in_sizes[(u32)Patch::k_centre] * 0.5f;
+                Core::Vector2 halfBottom  = in_sizes[(u32)Patch::k_leftOrBottom] * 0.5f;
+                Core::Vector2 halfTop = in_sizes[(u32)Patch::k_rightOrTop] * 0.5f;
+                
+                result[(u32)Patch::k_centre] = Core::Vector2(0.0f, halfBottom.y - halfTop.y);
+                result[(u32)Patch::k_leftOrBottom].y = result[(u32)Patch::k_centre].y - halfCentre.y - halfBottom.y;
+                result[(u32)Patch::k_rightOrTop].y = result[(u32)Patch::k_centre].y + halfCentre.y + halfTop.y;
                 
                 return result;
             }
@@ -139,7 +217,19 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         ThreePatchDrawable::ThreePatchDrawable(Type in_type)
         {
-            
+            switch (in_type)
+            {
+                case Type::k_horizontal:
+                    m_uvCalculationDelegate = CalculateThreePatchUVsHorizontal;
+                    m_sizeCalculationDelegate = CalculateThreePatchSizesHorizontal;
+                    m_positionCalculationDelegate = CalculateThreePatchPositionsHorizontal;
+                    break;
+                case Type::k_vertical:
+                    m_uvCalculationDelegate = CalculateThreePatchUVsVertical;
+                    m_sizeCalculationDelegate = CalculateThreePatchSizesVertical;
+                    m_positionCalculationDelegate = CalculateThreePatchPositionsVertical;
+                    break;
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -157,6 +247,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void ThreePatchDrawable::SetInsets(f32 in_leftOrBottom, f32 in_rightOrTop)
         {
+            CS_ASSERT(in_leftOrBottom > 0.0f && in_rightOrTop > 0.0f, "Insets must be greater than 0");
             CS_ASSERT(in_leftOrBottom + in_rightOrTop <= 1.0f, "Insets must not overlap i.e. sum to more than 1");
             
             m_leftOrBottomInset = in_leftOrBottom;
@@ -175,12 +266,13 @@ namespace ChilliSource
         {
             CS_ASSERT(m_texture != nullptr, "ThreePatchDrawable cannot draw without texture");
             
-            auto uvs = CalculateThreePatchUVs(m_UVs, m_leftOrBottomInset, m_rightOrTopInset);
-            auto sizes = CalculateThreePatchSizes(in_absSize, GetPreferredSize(), m_leftOrBottomInset, m_rightOrTopInset);
-            auto positions = CalculateThreePatchPositions(sizes);
+            auto uvs = m_uvCalculationDelegate(m_UVs, m_leftOrBottomInset, m_rightOrTopInset);
+            auto sizes = m_sizeCalculationDelegate(in_absSize, GetPreferredSize(), m_leftOrBottomInset, m_rightOrTopInset);
+            auto positions = m_positionCalculationDelegate(sizes);
             
             for(u32 i=0; i<k_numPatches; ++i)
             {
+                //if(i == (u32)Patch::k_leftOrBottom || i == (u32)Patch::k_rightOrTop) continue;
                 Core::Matrix3 patchTransform = Core::Matrix3::CreateTranslation(positions[i]);
                 in_renderer->DrawBox(patchTransform * in_transform, sizes[i], Core::Vector2::k_zero, m_texture, uvs[i], in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
             }
