@@ -67,13 +67,22 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 	 */
 	TextEntryNativeInterface()
 	{
-		//Doesn't matter what we set this to it's invisible
-		m_textEntryView = new EditTextBackEvent(CSApplication.get().getActivityContext());
-		m_textEntryView.setWidth(100);
-		m_textEntryView.setHeight(100);
-		m_textEntryView.setAlpha(0);
-		m_textEntryView.addTextChangedListener(this);
-		m_textEntryView.setOnEditorActionListener(this);
+		final TextEntryNativeInterface finalThis = this;
+		
+		Runnable task = new Runnable() 
+		{
+			@Override public void run() 
+			{
+				//Doesn't matter what we set this to it's invisible
+				m_textEntryView = new EditTextBackEvent(CSApplication.get().getActivityContext());
+				m_textEntryView.setWidth(100);
+				m_textEntryView.setHeight(100);
+				m_textEntryView.setAlpha(0);
+				m_textEntryView.addTextChangedListener(finalThis);
+				m_textEntryView.setOnEditorActionListener(finalThis);
+			}
+		};
+		CSApplication.get().scheduleUIThreadTask(task);
 	}
 	/**
 	 * @author Ian Copland

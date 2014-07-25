@@ -68,6 +68,13 @@ namespace CSBackend
 				jclass jClassType = pEnv->FindClass(instrInterfaceName.c_str());
 				if (jClassType == nullptr)
 				{
+					jthrowable exception = pEnv->ExceptionOccurred();
+					if (exception != nullptr)
+					{
+						pEnv->ExceptionDescribe();
+						pEnv->ExceptionClear();
+					}
+
 					CS_LOG_FATAL("Cannot find native interface class '" + instrInterfaceName + "'");
 				}
 
@@ -76,6 +83,13 @@ namespace CSBackend
 				jobject jClassInstance = pEnv->NewObject(jClassType, jConstructor);
 				if (jClassInstance == nullptr)
 				{
+					jthrowable exception = pEnv->ExceptionOccurred();
+					if (exception != nullptr)
+					{
+						pEnv->ExceptionDescribe();
+						pEnv->ExceptionClear();
+					}
+
 					CS_LOG_FATAL("Cannot create native interface instance '" + instrInterfaceName + "'");
 				}
 
