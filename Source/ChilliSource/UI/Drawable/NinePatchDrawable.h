@@ -74,7 +74,7 @@ namespace ChilliSource
             /// and therefore no negative numbers need to be specified for right and bottom insets.
             ///
             /// NOTE: Insets must compliment each other i.e. left and right cannot sum to more than 1.0
-            /// as they would overlap.
+            /// as they would overlap and insets cannot be zero or less.
             ///
             /// @author S Downie
             ///
@@ -109,10 +109,10 @@ namespace ChilliSource
             Rendering::TextureCSPtr m_texture;
             Rendering::UVs m_UVs;
             
-            f32 m_leftInset = 0.0f;
-            f32 m_rightInset = 0.0f;
-            f32 m_topInset = 0.0f;
-            f32 m_bottomInset = 0.0f;
+            f32 m_leftInset = 0.01f;
+            f32 m_rightInset = 0.01f;
+            f32 m_topInset = 0.01f;
+            f32 m_bottomInset = 0.01f;
         };
     }
 }

@@ -249,6 +249,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void NinePatchDrawable::SetInsets(f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
         {
+            CS_ASSERT(in_left > 0.0f && in_right > 0.0f && in_top > 0.0f && in_bottom > 0.0f, "Insets must be greater than 0");
             CS_ASSERT(in_left + in_right <= 1.0f, "Insets must not overlap i.e. sum to more than 1");
             CS_ASSERT(in_top + in_bottom <= 1.0f, "Insets must not overlap i.e. sum to more than 1");
             
