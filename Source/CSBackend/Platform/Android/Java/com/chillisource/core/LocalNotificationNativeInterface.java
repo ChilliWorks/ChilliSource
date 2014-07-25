@@ -99,7 +99,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 * @param the trigger time in milliseconds
 	 * @param The priority.
 	 */
-	public void scheduleNotificationForTime(final int in_notificationId, final String[] in_keys, final String[] in_values, final long in_time, final int in_priority)
+	public void scheduleNotificationForTime(int in_notificationId, String[] in_keys, String[] in_values, long in_time, int in_priority)
 	{
 		freeOutOfDateIntentIDs();		
 		
@@ -138,7 +138,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 * 
 	 * @param The notification Id.
 	 */
-	public void cancelByID(final int in_notificationId)
+	public void cancelByID(int in_notificationId)
 	{
 		List<LocalNotification> notifications = m_notificationStore.getNotifications();
 		List<LocalNotification> cancelList = new ArrayList<LocalNotification>();
@@ -159,7 +159,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	}
 	
 	/**
-	 * Method accessable from native for cancelling all previously 
+	 * Method accessable from native for canceling all previously 
 	 * scheduled notifications. This should only be called on the Main thread.
 	 * 
 	 * @author Steven Hendrie
@@ -189,23 +189,29 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 * 
 	 * @param The received intent.
 	 */
-	public void onNotificationReceived(final Intent in_intent)
+	public void onNotificationReceived(Intent in_intent)
 	{
-		LocalNotification localNotification = new LocalNotification(in_intent);
+		LocalNotification receivedNotification = new LocalNotification(in_intent);
 		
-		Map<String, String> params = localNotification.getParams();
-		int paramSize = params.size();
-		String[] keys = new String[paramSize];
-		String[] values = new String[paramSize];
-		int index = 0;
-		for (Entry<String, String> entry : params.entrySet()) 
+		LocalNotification storedNotification = m_notificationStore.getNotificationWithIntentId(receivedNotification.getIntentId());
+		if (storedNotification != null)
 		{
-			keys[index] = entry.getKey();
-			values[index] = entry.getValue();
-			++index;
+			m_notificationStore.remove(storedNotification);
+			
+			Map<String, String> params = storedNotification.getParams();
+			int paramSize = params.size();
+			String[] keys = new String[paramSize];
+			String[] values = new String[paramSize];
+			int index = 0;
+			for (Entry<String, String> entry : params.entrySet()) 
+			{
+				keys[index] = entry.getKey();
+				values[index] = entry.getValue();
+				++index;
+			}
+			
+			nativeOnNotificationReceived(storedNotification.getNotificationId(), keys, values, storedNotification.getPriority());
 		}
-		
-		nativeOnNotificationReceived(localNotification.getNotificationId(), keys, values, localNotification.getPriority());
 	}
 	
 	/**

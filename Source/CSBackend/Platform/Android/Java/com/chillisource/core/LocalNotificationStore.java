@@ -50,7 +50,7 @@ public final class LocalNotificationStore
 	private static final String k_notificationJsonKey = "NotificationJson";
 	private static final String k_notificationArrayName = "LocalNotifications";
 	
-	private List<LocalNotification> m_notifications = new ArrayList<LocalNotification>();
+	private List<LocalNotification> m_notifications;
 	private String m_sharedPreferenceName = "";
 	
 	/**
@@ -63,22 +63,7 @@ public final class LocalNotificationStore
 	public LocalNotificationStore(String in_sharedPrefName)
 	{
 		m_sharedPreferenceName = in_sharedPrefName;
-		
-		try
-		{
-			JSONObject jsonRoot = readJson();
-			JSONArray jsonNotifications = jsonRoot.getJSONArray(k_notificationArrayName);
-			for (int i = 0; i < jsonNotifications.length(); ++i)
-			{
-				JSONObject notificationJson = jsonNotifications.getJSONObject(i);
-				LocalNotification notification = new LocalNotification(notificationJson); 
-				m_notifications.add(notification);
-			}
-		}
-		catch (JSONException e)
-		{
-			Logging.logFatal("An exception occurred while constructing the initial local notification store from Json: \n" + ExceptionUtils.ConvertToString(e));
-		}
+		m_notifications = readNotifications();
 	}
 	/**
 	 * Stores the given notification. This keeps a cached version of it and
@@ -92,18 +77,7 @@ public final class LocalNotificationStore
 	public synchronized void add(LocalNotification in_notification)
 	{
 		m_notifications.add(in_notification);
-		
-		try
-		{
-			JSONObject jsonRoot = readJson();
-			JSONArray jsonNotifications = jsonRoot.getJSONArray(k_notificationArrayName);
-			jsonNotifications.put(in_notification.toJson());
-			writeJson(jsonRoot);
-		}
-		catch (JSONException e)
-		{
-			Logging.logFatal("An exception occurred while adding to the local notification Json: \n" + ExceptionUtils.ConvertToString(e));
-		}
+		writeNotifications(m_notifications);
 	}
 	/**
 	 * @author Ian Copland
@@ -145,56 +119,33 @@ public final class LocalNotificationStore
 	public synchronized void remove(LocalNotification in_notification)
 	{
 		m_notifications.remove(in_notification);
-		
-		try
-		{
-			JSONObject jsonRoot = readJson();
-			JSONArray jsonNotifications = jsonRoot.getJSONArray(k_notificationArrayName);
-			for (int i = 0; i < jsonNotifications.length();)
-			{
-				JSONObject notificationJson = jsonNotifications.getJSONObject(i);
-				LocalNotification notification = new LocalNotification(notificationJson); 
-				if (notification.getIntentId() == in_notification.getIntentId())
-				{
-					jsonNotifications.remove(i);
-				}
-				else
-				{
-					++i;
-				}
-			}
-			writeJson(jsonRoot);
-		}
-		catch (JSONException e)
-		{
-			Logging.logFatal("An exception occurred while adding to the local notification Json: \n" + ExceptionUtils.ConvertToString(e));
-		}
+		writeNotifications(m_notifications);
 	}
 	/**
-	 * Read the stored Json from Shared Preferences. If no Json exists,
-	 * a new Empty Json array will be returned.
+	 * Read the notification list from json stored in the shared preferences.
 	 * 
 	 * @author Ian Copland
 	 * 
-	 * @param The local notification.
+	 * @return The output notification list.
 	 */
-	private JSONObject readJson()
+	private List<LocalNotification> readNotifications()
 	{
 		SharedPreferences sharedPref = CSApplication.get().getAppContext().getSharedPreferences(m_sharedPreferenceName, Context.MODE_PRIVATE);
 		String jsonString = sharedPref.getString(k_notificationJsonKey, "");
 		
-		JSONObject jsonRoot = null;
+		List<LocalNotification> output = new ArrayList<LocalNotification>();
 		try
 		{
 			if (jsonString != "")
 			{
-				jsonRoot = new JSONObject(jsonString);
-			}
-			else
-			{
-				jsonRoot = new JSONObject();
-				JSONArray jsonArray = new JSONArray();
-				jsonRoot.put(k_notificationArrayName, jsonArray);
+				JSONObject jsonRoot = new JSONObject(jsonString);
+				JSONArray jsonNotifications = jsonRoot.getJSONArray(k_notificationArrayName);
+				for (int i = 0; i < jsonNotifications.length(); ++i)
+				{
+					JSONObject notificationJson = jsonNotifications.getJSONObject(i);
+					LocalNotification notification = new LocalNotification(notificationJson); 
+					output.add(notification);
+				}
 			}
 		}
 		catch (JSONException e)
@@ -202,20 +153,36 @@ public final class LocalNotificationStore
 			Logging.logFatal("An exception occurred while reading the local notification json: \n" + ExceptionUtils.ConvertToString(e));
 		}
 		
-		return jsonRoot;
+		return output;
 	}
 	/**
-	 * Writes the given notification Json to the Shared Preferences.
+	 * Writes the notification list to the shared preferences in JSON form.
 	 * 
 	 * @author Ian Copland
 	 * 
-	 * @param The notification Json.
+	 * @param The notifications list to write.
 	 */
-	private void writeJson(JSONObject in_newJson)
+	private void writeNotifications(List<LocalNotification> in_notifications)
 	{
-		SharedPreferences sharedPref = CSApplication.get().getAppContext().getSharedPreferences(m_sharedPreferenceName, Context.MODE_PRIVATE);
-		SharedPreferences.Editor editor = sharedPref.edit();
-		editor.putString(k_notificationJsonKey, in_newJson.toString());
-		editor.commit();
+		try
+		{
+			JSONArray jsonNotifications = new JSONArray();
+			for(LocalNotification notification : in_notifications)
+			{
+				jsonNotifications.put(notification.toJson());
+			}
+			
+			JSONObject jsonRoot = new JSONObject();
+			jsonRoot.put(k_notificationArrayName, jsonNotifications);
+			
+			SharedPreferences sharedPref = CSApplication.get().getAppContext().getSharedPreferences(m_sharedPreferenceName, Context.MODE_PRIVATE);
+			SharedPreferences.Editor editor = sharedPref.edit();
+			editor.putString(k_notificationJsonKey, jsonRoot.toString());
+			editor.commit();
+		}
+		catch (JSONException e)
+		{
+			Logging.logFatal("An exception occurred while writing the local notification Json: \n" + ExceptionUtils.ConvertToString(e));
+		}
 	}
 }
