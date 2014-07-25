@@ -311,6 +311,9 @@
 		81496BAA198293E7004E79F2 /* WidgetFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetFactory.h; sourceTree = "<group>"; };
 		81496BAC1982A1B8004E79F2 /* LayoutType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutType.h; sourceTree = "<group>"; };
 		81496BAD1982A607004E79F2 /* PropertyType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyType.cpp; sourceTree = "<group>"; };
+		81496BAF1982B8DB004E79F2 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
+		81496BB01982B8DB004E79F2 /* Drawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawable.h; sourceTree = "<group>"; };
+		81496BB11982B8DB004E79F2 /* Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layout.h; sourceTree = "<group>"; };
 		8158E483196ACB25005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		8158E484196ACB32005FF0A8 /* Container.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Container.h; sourceTree = "<group>"; };
 		8158E485196ACB41005FF0A8 /* Cryptographic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cryptographic.h; sourceTree = "<group>"; };
@@ -935,6 +938,9 @@
 		81496B7F1980F1AE004E79F2 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				81496BAF1982B8DB004E79F2 /* Base.h */,
+				81496BB01982B8DB004E79F2 /* Drawable.h */,
+				81496BB11982B8DB004E79F2 /* Layout.h */,
 				81496B801980F1AE004E79F2 /* Base */,
 				81496B851980F1AE004E79F2 /* Drawable */,
 				81496B891980F1AE004E79F2 /* ForwardDeclarations.h */,

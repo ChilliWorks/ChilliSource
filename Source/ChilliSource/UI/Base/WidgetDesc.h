@@ -53,6 +53,26 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(WidgetDesc);
             
+            //----------------------------------------------------
+            /// Holds the definition of a custom property.
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            struct CustomPropertyDesc
+            {
+                PropertyType m_type;
+                std::string m_name;
+            };
+            //----------------------------------------------------
+            /// Holds the definition of layout properties.
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            struct LayoutPropertiesDesc
+            {
+                LayoutType m_layoutType = LayoutType::k_none;
+                std::vector<CustomPropertyDesc> m_properties;
+            };
             //-------------------------------------------------------
             /// Holds the values of the default properties for a widget
             ///
@@ -73,26 +93,6 @@ namespace ChilliSource
                 SizePolicy m_sizePolicy = SizePolicy::k_none;
                 bool m_isVisible = true;
                 bool m_isSubviewClippingEnabled = false;
-            };
-            //----------------------------------------------------
-            /// Holds the definition of a custom property.
-            ///
-            /// @author S Downie
-            //----------------------------------------------------
-            struct CustomPropertyDesc
-            {
-                PropertyType m_type;
-                std::string m_name;
-            };
-            //----------------------------------------------------
-            /// Holds the definition of layout properties.
-            ///
-            /// @author S Downie
-            //----------------------------------------------------
-            struct LayoutPropertiesDesc
-            {
-                LayoutType m_layoutType = LayoutType::k_none;
-                std::vector<CustomPropertyDesc> m_properties;
             };
             //----------------------------------------------------
             /// Holds the description of the entire widget
