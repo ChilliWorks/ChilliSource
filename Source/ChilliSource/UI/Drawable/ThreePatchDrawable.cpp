@@ -256,7 +256,7 @@ namespace ChilliSource
         Core::Vector2 ThreePatchDrawable::GetPreferredSize() const
         {
             CS_ASSERT(m_texture != nullptr, "ThreePatchDrawable cannot get preferred size without texture");
-            return Core::Vector2((f32)m_texture->GetWidth(), (f32)m_texture->GetHeight());
+            return Core::Vector2((f32)m_texture->GetWidth() * m_UVs.m_s, (f32)m_texture->GetHeight() * m_UVs.m_t);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
