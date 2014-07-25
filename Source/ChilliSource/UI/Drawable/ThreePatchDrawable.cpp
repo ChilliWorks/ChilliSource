@@ -32,8 +32,6 @@
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-#include <array>
-
 namespace ChilliSource
 {
     namespace UI

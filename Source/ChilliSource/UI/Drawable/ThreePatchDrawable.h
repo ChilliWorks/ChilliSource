@@ -31,9 +31,11 @@
 #define _CHILLISOURCE_UI_DRAWABLE_THREEPATCHDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 
+#include <array>
 #include <functional>
 
 namespace ChilliSource
