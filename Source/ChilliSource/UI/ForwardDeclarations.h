@@ -42,6 +42,11 @@ namespace ChilliSource
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Canvas);
         CS_FORWARDDECLARE_CLASS(Widget);
+        CS_FORWARDDECLARE_CLASS(WidgetDesc);
+        CS_FORWARDDECLARE_CLASS(WidgetDescProvider);
+        CS_FORWARDDECLARE_CLASS(WidgetFactory);
+        enum class PropertyType;
+        enum class SizePolicy;
         //---------------------------------------------------------
         /// Drawable
         //---------------------------------------------------------

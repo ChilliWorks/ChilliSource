@@ -696,6 +696,12 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.cpp">
       <Filter>ChilliSource\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDescProvider.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
@@ -1512,6 +1518,12 @@
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDescProvider.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
   </ItemGroup>

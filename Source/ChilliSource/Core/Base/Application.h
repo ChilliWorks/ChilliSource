@@ -254,6 +254,12 @@ namespace ChilliSource
 			/// @return A pointer to the screen system.
 			//-----------------------------------------------------
             Screen* GetScreen() const;
+            //-----------------------------------------------------
+            /// @author S Downie
+			///
+			/// @return A pointer to the widget factory system.
+			//-----------------------------------------------------
+            UI::WidgetFactory* GetWidgetFactory() const;
 #ifdef CS_ENABLE_DEBUGSTATS
             //-----------------------------------------------------
 			/// Returns a pointer to the debug stats system. This
@@ -432,6 +438,7 @@ namespace ChilliSource
             TaggedFilePathResolver* m_taggedPathResolver = nullptr;
             Input::PointerSystem* m_pointerSystem = nullptr;
             AppConfig* m_appConfig = nullptr;
+            UI::WidgetFactory* m_widgetFactory = nullptr;
             
 #ifdef CS_ENABLE_DEBUGSTATS
             Debugging::DebugStats* m_debugStats = nullptr;

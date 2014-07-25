@@ -33,7 +33,9 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
-#include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
+#include <ChilliSource/UI/Base/PropertyType.h>
+#include <ChilliSource/UI/Base/SizePolicy.h>
+#include <ChilliSource/UI/Base/WidgetDesc.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 
@@ -66,49 +68,6 @@ namespace ChilliSource
             CS_DECLARE_NOCOPY(Widget);
             
             //----------------------------------------------------------------------------------------
-            /// Holds the definition of a property that allow it to be set and get from code. The
-            /// description contains the name and type of the property
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            struct PropertyDesc
-            {
-                std::string m_name;
-                std::string m_type;
-            };
-            //----------------------------------------------------------------------------------------
-            /// The supported property types
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            enum class PropertyType
-            {
-                k_unknown,
-                k_bool,
-                k_int,
-                k_float,
-                k_string,
-                k_pointer,
-                k_vec2,
-                k_vec3
-            };
-            //----------------------------------------------------------------------------------------
-            /// Identifiers for functions that maintain the aspect ratio of the widget based on
-            /// current size and preferred size
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            enum class SizePolicy
-            {
-                k_none,
-                k_usePreferredSize,
-                k_useWidthMaintainingAspect,
-                k_useHeightMaintainingAspect,
-                k_fitMaintainingAspect,
-                k_fillMaintainingAspect,
-                k_totalNum
-            };
-            //----------------------------------------------------------------------------------------
             /// Delegate for size policy functions.
             ///
             /// @author S Downie
@@ -120,20 +79,14 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             using SizePolicyDelegate = std::function<Core::Vector2(const Core::Vector2&, const Core::Vector2&)>;
             //----------------------------------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            Widget();
-            //----------------------------------------------------------------------------------------
-            /// Build the widget from the given defintion. This includes creating the custom properties.
-            /// Build should only be called once per instance.
+            /// Constructor that builds the widget from the given definition.
             ///
             /// @author S Downie
             ///
-            /// @param Property descriptors
+            /// @param Default property values
+            /// @param Custom property definitions and values
             //----------------------------------------------------------------------------------------
-            void Build(const std::vector<PropertyDesc>& in_descs);
+            Widget(const WidgetDesc::DefaultPropertiesDesc& in_defaultProperties, const std::vector<WidgetDesc::CustomPropertyDesc>& in_customProperties);
             //----------------------------------------------------------------------------------------
             /// Set the drawable that handles how to render the widget. If this is null then the
             /// widget will not be visible. The widget takes ownership of the drawable.
@@ -421,6 +374,20 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void RemoveWidget(Widget* in_widget);
             //----------------------------------------------------------------------------------------
+            /// Adds a widget as a child of this widget. The widget will be rendered as part of this
+            /// hierarchy and any relative coordinates will now be in relation to this widget.
+            ///
+            /// This widget is effectively a private implementation detail and is not affected by the
+            /// layout and is not returned when querying for widgets
+            ///
+            /// NOTE: Will assert if the widget already has a parent
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget to add
+            //----------------------------------------------------------------------------------------
+            void AddInternalWidget(const WidgetSPtr& in_widget);
+            //----------------------------------------------------------------------------------------
             /// Remove the widget from the child list of its parent. It will no longer be rendered and may
             /// be destroyed if the parent holds the last reference
             ///
@@ -674,10 +641,10 @@ namespace ChilliSource
             
             Core::UnifiedVector2 m_localPosition;
             Core::UnifiedVector2 m_localSize;
-            Core::Vector2 m_preferredSize = Core::Vector2::k_one;
-            Core::Vector2 m_localScale = Core::Vector2::k_one;
+            Core::Vector2 m_preferredSize;
+            Core::Vector2 m_localScale;
             Core::Colour m_localColour;
-            f32 m_localRotation = 0.0f;
+            f32 m_localRotation;
             
             mutable Core::Matrix3 m_cachedLocalTransform;
             mutable Core::Matrix3 m_cachedFinalTransform;
@@ -700,11 +667,11 @@ namespace ChilliSource
             Widget* m_parent = nullptr;
             const Widget* m_canvas = nullptr;
             
-            Rendering::AlignmentAnchor m_originAnchor = Rendering::AlignmentAnchor::k_middleCentre;
-            Rendering::AlignmentAnchor m_parentalAnchor = Rendering::AlignmentAnchor::k_middleCentre;
+            Rendering::AlignmentAnchor m_originAnchor;
+            Rendering::AlignmentAnchor m_parentalAnchor;
             
-            bool m_isVisible = true;
-            bool m_isSubviewClippingEnabled = false;
+            bool m_isVisible;
+            bool m_isSubviewClippingEnabled;
             
             mutable bool m_isParentTransformCacheValid = false;
             mutable bool m_isLocalTransformCacheValid = false;
@@ -739,7 +706,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<typename TType> Widget::PropertyType Widget::GetType() const
+        template<typename TType> PropertyType Widget::GetType() const
         {
             static_assert(std::is_pointer<TType>::value, "Property type not supported");
             return PropertyType::k_pointer;
@@ -751,7 +718,7 @@ namespace ChilliSource
         ///
         /// @return Bool prop type
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<bool>() const;
+        template<> PropertyType Widget::GetType<bool>() const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for int
         ///
@@ -759,7 +726,7 @@ namespace ChilliSource
         ///
         /// @return Int prop type
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<s32>() const;
+        template<> PropertyType Widget::GetType<s32>() const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for string
         ///
@@ -767,7 +734,7 @@ namespace ChilliSource
         ///
         /// @return String prop type
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<std::string>() const;
+        template<> PropertyType Widget::GetType<std::string>() const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for string
         ///
@@ -775,7 +742,7 @@ namespace ChilliSource
         ///
         /// @return String prop type
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<const std::string&>() const;
+        template<> PropertyType Widget::GetType<const std::string&>() const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for string
         ///
@@ -783,7 +750,7 @@ namespace ChilliSource
         ///
         /// @return String prop type
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<const char*>() const;
+        template<> PropertyType Widget::GetType<const char*>() const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for float
         ///
@@ -791,7 +758,7 @@ namespace ChilliSource
         ///
         /// @return Float prop type
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<f32>() const;
+        template<> PropertyType Widget::GetType<f32>() const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for string
         ///
@@ -799,7 +766,7 @@ namespace ChilliSource
         ///
         /// @return Vec2 prop type
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<Core::Vector2>() const;
+        template<> PropertyType Widget::GetType<Core::Vector2>() const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for string
         ///
@@ -807,7 +774,7 @@ namespace ChilliSource
         ///
         /// @return Vec2 prop type
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<const Core::Vector2&>() const;
+        template<> PropertyType Widget::GetType<const Core::Vector2&>() const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for string
         ///
@@ -815,7 +782,7 @@ namespace ChilliSource
         ///
         /// @return Vec3 prop type
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<Core::Vector3>() const;
+        template<> PropertyType Widget::GetType<Core::Vector3>() const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for string
         ///
@@ -823,7 +790,7 @@ namespace ChilliSource
         ///
         /// @return Vec3 prop type
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<const Core::Vector3&>() const;
+        template<> PropertyType Widget::GetType<const Core::Vector3&>() const;
     }
 }
 

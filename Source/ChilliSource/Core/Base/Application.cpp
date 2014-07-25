@@ -78,6 +78,8 @@
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 
+#include <ChilliSource/UI/Base/WidgetFactory.h>
+
 #include <algorithm>
 #include <ctime>
 
@@ -407,6 +409,9 @@ namespace ChilliSource
             CreateSystem<Rendering::ParticleEmitterFactory>();
             CreateSystem<Rendering::ParticleAffectorFactory>();
             CreateSystem<Rendering::CSParticleEffectProvider>();
+            
+            //UI
+            m_widgetFactory = CreateSystem<UI::WidgetFactory>();
 
             //Create any platform specific default systems
             m_platformSystem->CreateDefaultSystems(this);
@@ -530,6 +535,12 @@ namespace ChilliSource
         Screen* Application::GetScreen() const
         {
             return m_screen;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        UI::WidgetFactory* Application::GetWidgetFactory() const
+        {
+            return m_widgetFactory;
         }
 #ifdef CS_ENABLE_DEBUGSTATS
         //-----------------------------------------------------

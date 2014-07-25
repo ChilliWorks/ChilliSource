@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 
@@ -40,52 +41,31 @@ namespace ChilliSource
         namespace
         {
             //----------------------------------------------------------------------------------------
-            /// Convert the string type to internal property type
-            ///
-            /// @author S Downie
-            ///
-            /// @param Type string
-            ///
-            /// @return Property type
-            //----------------------------------------------------------------------------------------
-            Widget::PropertyType GetTypeFromString(const std::string& in_type)
-            {
-                if(in_type == "Int") return Widget::PropertyType::k_int;
-                if(in_type == "Bool") return Widget::PropertyType::k_bool;
-                if(in_type == "Float") return Widget::PropertyType::k_float;
-                if(in_type == "String") return Widget::PropertyType::k_string;
-                if(in_type == "Pointer") return Widget::PropertyType::k_pointer;
-                if(in_type == "Vec2") return Widget::PropertyType::k_vec2;
-                if(in_type == "Vec3") return Widget::PropertyType::k_vec3;
-                
-                return Widget::PropertyType::k_unknown;
-            }
-            //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @param Type
             ///
             /// @return Size of type in bytes
             //----------------------------------------------------------------------------------------
-            u32 GetTypeSize(Widget::PropertyType in_type)
+            u32 GetTypeSize(PropertyType in_type)
             {
                 switch(in_type)
                 {
-                    case Widget::PropertyType::k_bool:
+                    case PropertyType::k_bool:
                         return sizeof(bool);
-                    case Widget::PropertyType::k_int:
+                    case PropertyType::k_int:
                         return sizeof(s32);
-                    case Widget::PropertyType::k_float:
+                    case PropertyType::k_float:
                         return sizeof(f32);
-                    case Widget::PropertyType::k_string:
+                    case PropertyType::k_string:
                         return sizeof(std::string);
-                    case Widget::PropertyType::k_pointer:
+                    case PropertyType::k_pointer:
                         return sizeof(u8*);
-                    case Widget::PropertyType::k_vec2:
+                    case PropertyType::k_vec2:
                         return sizeof(Core::Vector2);
-                    case Widget::PropertyType::k_vec3:
+                    case PropertyType::k_vec3:
                         return sizeof(Core::Vector3);
-                    case Widget::PropertyType::k_unknown:
+                    case PropertyType::k_unknown:
                         return 0;
                 }
                 
@@ -215,7 +195,7 @@ namespace ChilliSource
                     return Rendering::AspectRatioUtils::FitOriginal(in_originalSize, in_preferredSize.x/in_preferredSize.y);
                 }
                 
-                const Widget::SizePolicyDelegate k_sizePolicyFuncs[(u32)Widget::SizePolicy::k_totalNum] =
+                const Widget::SizePolicyDelegate k_sizePolicyFuncs[(u32)SizePolicy::k_totalNum] =
                 {
                     UseOriginalSize,
                     UsePreferredSize,
@@ -228,26 +208,24 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Widget::Widget()
+        Widget::Widget(const WidgetDesc::DefaultPropertiesDesc& in_defaultProperties, const std::vector<WidgetDesc::CustomPropertyDesc>& in_customProperties)
+        :
+        m_name(in_defaultProperties.m_name), m_localPosition(in_defaultProperties.m_localPosition), m_localSize(in_defaultProperties.m_localPosition), m_preferredSize(in_defaultProperties.m_preferredSize),
+        m_localScale(in_defaultProperties.m_localScale), m_localColour(in_defaultProperties.m_localColour), m_localRotation(in_defaultProperties.m_localRotation),
+        m_originAnchor(in_defaultProperties.m_originAnchor), m_parentalAnchor(in_defaultProperties.m_parentalAnchor),
+        m_isVisible(in_defaultProperties.m_isVisible), m_isSubviewClippingEnabled(in_defaultProperties.m_isSubviewClippingEnabled)
         {
-            SetSizePolicy(SizePolicy::k_none);
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::Build(const std::vector<PropertyDesc>& in_descs)
-        {
-            CS_ASSERT(m_propertyBlob == nullptr, "Cannot build widget more than once");
+            SetSizePolicy(in_defaultProperties.m_sizePolicy);
             
             u32 currentOffset = 0;
-            for(const auto& desc : in_descs)
+            for(const auto& customPropertyDesc : in_customProperties)
             {
-                PropertyType type = GetTypeFromString(desc.m_type);
-                CS_ASSERT(type != PropertyType::k_unknown, "Unsupported property type: " + desc.m_type);
+                CS_ASSERT(customPropertyDesc.m_type != PropertyType::k_unknown, "Unsupported property type");
                 
-                PropertyLookup lookup = {type, currentOffset};
-                m_blobOffsets.insert(std::make_pair(desc.m_name, lookup));
+                PropertyLookup lookup = {customPropertyDesc.m_type, currentOffset};
+                m_blobOffsets.insert(std::make_pair(customPropertyDesc.m_name, lookup));
                 
-                u32 typeSize = GetTypeSize(type);
+                u32 typeSize = GetTypeSize(customPropertyDesc.m_type);
                 currentOffset += typeSize;
             }
             
@@ -256,7 +234,7 @@ namespace ChilliSource
             {
                 m_propertyBlob = new u8[currentOffset];
             }
-        
+            
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
         }
         //----------------------------------------------------------------------------------------
@@ -539,6 +517,16 @@ namespace ChilliSource
                     return;
                 }
             }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::AddInternalWidget(const WidgetSPtr& in_widget)
+        {
+            CS_ASSERT(in_widget->GetParent() == nullptr, "Cannot add a widget as a child of more than 1 parent");
+            //TODO: Ensure that the vector is not invalidated during iteration
+            m_internalChildren.push_back(in_widget);
+            in_widget->m_parent = this;
+            in_widget->SetCanvas(m_canvas);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1037,61 +1025,61 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<bool>() const
+        template<> PropertyType Widget::GetType<bool>() const
         {
             return PropertyType::k_bool;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<s32>() const
+        template<> PropertyType Widget::GetType<s32>() const
         {
             return PropertyType::k_int;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<std::string>() const
+        template<> PropertyType Widget::GetType<std::string>() const
         {
             return PropertyType::k_string;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<const std::string&>() const
+        template<> PropertyType Widget::GetType<const std::string&>() const
         {
             return PropertyType::k_string;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<const char*>() const
+        template<> PropertyType Widget::GetType<const char*>() const
         {
             return PropertyType::k_string;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<f32>() const
+        template<> PropertyType Widget::GetType<f32>() const
         {
             return PropertyType::k_float;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<Core::Vector2>() const
+        template<> PropertyType Widget::GetType<Core::Vector2>() const
         {
             return PropertyType::k_vec2;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<const Core::Vector2&>() const
+        template<> PropertyType Widget::GetType<const Core::Vector2&>() const
         {
             return PropertyType::k_vec2;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<Core::Vector3>() const
+        template<> PropertyType Widget::GetType<Core::Vector3>() const
         {
             return PropertyType::k_vec3;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> Widget::PropertyType Widget::GetType<const Core::Vector3&>() const
+        template<> PropertyType Widget::GetType<const Core::Vector3&>() const
         {
             return PropertyType::k_vec3;
         }
