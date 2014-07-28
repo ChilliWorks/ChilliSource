@@ -1,5 +1,5 @@
 //
-//  WidgetDesc.cpp
+//  WidgetDef.cpp
 //  Chilli Source
 //  Created by Scott Downie on 25/07/2014.
 //
@@ -26,34 +26,34 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Base/WidgetDesc.h>
+#include <ChilliSource/UI/Base/WidgetDef.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
-        CS_DEFINE_NAMEDTYPE(WidgetDesc);
+        CS_DEFINE_NAMEDTYPE(WidgetDef);
         //-------------------------------------------------------
         //-------------------------------------------------------
-        WidgetDescUPtr WidgetDesc::Create()
+        WidgetDefUPtr WidgetDef::Create()
         {
-            return WidgetDescUPtr(new WidgetDesc());
+            return WidgetDefUPtr(new WidgetDef());
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool WidgetDesc::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool WidgetDef::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            return in_interfaceId == WidgetDesc::InterfaceID;
+            return in_interfaceId == WidgetDef::InterfaceID;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void WidgetDesc::Build(const HierarchyDesc& in_desc)
+        void WidgetDef::Build(const HierarchyDesc& in_desc)
         {
             m_desc = in_desc;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        const WidgetDesc::HierarchyDesc& WidgetDesc::GetHierarchyDesc() const
+        const WidgetDef::HierarchyDesc& WidgetDef::GetHierarchyDesc() const
         {
             return m_desc;
         }

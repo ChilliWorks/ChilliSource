@@ -1,5 +1,5 @@
 //
-//  WidgetDescProvider.cpp
+//  WidgetDefProvider.cpp
 //  Chilli Source
 //  Created by Scott Downie on 25/07/2014.
 //
@@ -26,13 +26,13 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Base/WidgetDescProvider.h>
+#include <ChilliSource/UI/Base/WidgetDefProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
-#include <ChilliSource/UI/Base/WidgetDesc.h>
+#include <ChilliSource/UI/Base/WidgetDef.h>
 
 #include <json/json.h>
 
@@ -62,40 +62,40 @@ namespace ChilliSource
             }
         }
         
-        CS_DEFINE_NAMEDTYPE(WidgetDescProvider);
+        CS_DEFINE_NAMEDTYPE(WidgetDefProvider);
         //-------------------------------------------------------
         //-------------------------------------------------------
-        WidgetDescProviderUPtr WidgetDescProvider::Create()
+        WidgetDefProviderUPtr WidgetDefProvider::Create()
         {
-            return WidgetDescProviderUPtr(new WidgetDescProvider());
+            return WidgetDefProviderUPtr(new WidgetDefProvider());
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool WidgetDescProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool WidgetDefProvider::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            return (in_interfaceId == Core::ResourceProvider::InterfaceID || in_interfaceId == WidgetDescProvider::InterfaceID);
+            return (in_interfaceId == Core::ResourceProvider::InterfaceID || in_interfaceId == WidgetDefProvider::InterfaceID);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        Core::InterfaceIDType WidgetDescProvider::GetResourceType() const
+        Core::InterfaceIDType WidgetDefProvider::GetResourceType() const
         {
-            return WidgetDesc::InterfaceID;
+            return WidgetDef::InterfaceID;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool WidgetDescProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
+        bool WidgetDefProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
         {
             return (in_extension == k_extension);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-		void WidgetDescProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
+		void WidgetDefProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
         {
             LoadDesc(in_storageLocation, in_filepath, nullptr, out_resource);
         }
         //----------------------------------------------------
         //----------------------------------------------------
-		void WidgetDescProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+		void WidgetDefProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
 			auto task = std::bind(LoadDesc, in_storageLocation, in_filepath, in_delegate, out_resource);
             Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);

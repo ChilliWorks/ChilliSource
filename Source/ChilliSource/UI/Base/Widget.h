@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
-#include <ChilliSource/UI/Base/WidgetDesc.h>
+#include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 
@@ -86,7 +86,7 @@ namespace ChilliSource
             /// @param Default property values
             /// @param Custom property definitions and values
             //----------------------------------------------------------------------------------------
-            Widget(const WidgetDesc::DefaultPropertiesDesc& in_defaultProperties, const std::vector<WidgetDesc::CustomPropertyDesc>& in_customProperties);
+            Widget(const WidgetDef::DefaultPropertiesDesc& in_defaultProperties, const std::vector<WidgetDef::CustomPropertyDesc>& in_customProperties);
             //----------------------------------------------------------------------------------------
             /// Set the drawable that handles how to render the widget. If this is null then the
             /// widget will not be visible. The widget takes ownership of the drawable.

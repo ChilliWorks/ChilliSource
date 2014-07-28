@@ -35,8 +35,8 @@
 #include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
 #include <ChilliSource/UI/Base/Widget.h>
-#include <ChilliSource/UI/Base/WidgetDesc.h>
-#include <ChilliSource/UI/Base/WidgetDescProvider.h>
+#include <ChilliSource/UI/Base/WidgetDef.h>
+#include <ChilliSource/UI/Base/WidgetDefProvider.h>
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 
 #endif

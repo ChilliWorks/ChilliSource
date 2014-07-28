@@ -57,7 +57,7 @@ namespace ChilliSource
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
             CS_ASSERT(m_screen != nullptr, "Canvas must have access to screen");
             
-			m_canvas = WidgetUPtr(new Widget(WidgetDesc::DefaultPropertiesDesc(), std::vector<WidgetDesc::CustomPropertyDesc>()));
+			m_canvas = WidgetUPtr(new Widget(WidgetDef::DefaultPropertiesDesc(), std::vector<WidgetDef::CustomPropertyDesc>()));
             m_canvas->SetName("Canvas");
             m_canvas->SetAbsoluteSize(GetSize());
             m_canvas->SetCanvas(m_canvas.get());

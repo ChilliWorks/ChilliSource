@@ -15,8 +15,8 @@
 		81496B971980F1AE004E79F2 /* VListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B901980F1AE004E79F2 /* VListLayout.cpp */; };
 		81496B9F19814B05004E79F2 /* NinePatchDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B9B19814B05004E79F2 /* NinePatchDrawable.cpp */; };
 		81496BA019814B05004E79F2 /* ThreePatchDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B9D19814B05004E79F2 /* ThreePatchDrawable.cpp */; };
-		81496BA31982569C004E79F2 /* WidgetDescProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496BA11982569C004E79F2 /* WidgetDescProvider.cpp */; };
-		81496BA61982597B004E79F2 /* WidgetDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496BA41982597B004E79F2 /* WidgetDesc.cpp */; };
+		81496BA31982569C004E79F2 /* WidgetDefProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496BA11982569C004E79F2 /* WidgetDefProvider.cpp */; };
+		81496BA61982597B004E79F2 /* WidgetDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496BA41982597B004E79F2 /* WidgetDef.cpp */; };
 		81496BAB198293E7004E79F2 /* WidgetFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496BA9198293E7004E79F2 /* WidgetFactory.cpp */; };
 		81496BAE1982A607004E79F2 /* PropertyType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496BAD1982A607004E79F2 /* PropertyType.cpp */; };
 		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
@@ -301,10 +301,10 @@
 		81496B9C19814B05004E79F2 /* NinePatchDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NinePatchDrawable.h; sourceTree = "<group>"; };
 		81496B9D19814B05004E79F2 /* ThreePatchDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreePatchDrawable.cpp; sourceTree = "<group>"; };
 		81496B9E19814B05004E79F2 /* ThreePatchDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreePatchDrawable.h; sourceTree = "<group>"; };
-		81496BA11982569C004E79F2 /* WidgetDescProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetDescProvider.cpp; sourceTree = "<group>"; };
-		81496BA21982569C004E79F2 /* WidgetDescProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetDescProvider.h; sourceTree = "<group>"; };
-		81496BA41982597B004E79F2 /* WidgetDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetDesc.cpp; sourceTree = "<group>"; };
-		81496BA51982597B004E79F2 /* WidgetDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetDesc.h; sourceTree = "<group>"; };
+		81496BA11982569C004E79F2 /* WidgetDefProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetDefProvider.cpp; sourceTree = "<group>"; };
+		81496BA21982569C004E79F2 /* WidgetDefProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetDefProvider.h; sourceTree = "<group>"; };
+		81496BA41982597B004E79F2 /* WidgetDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetDef.cpp; sourceTree = "<group>"; };
+		81496BA51982597B004E79F2 /* WidgetDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetDef.h; sourceTree = "<group>"; };
 		81496BA719828D71004E79F2 /* SizePolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SizePolicy.h; sourceTree = "<group>"; };
 		81496BA8198291A5004E79F2 /* PropertyType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyType.h; sourceTree = "<group>"; };
 		81496BA9198293E7004E79F2 /* WidgetFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetFactory.cpp; sourceTree = "<group>"; };
@@ -960,10 +960,10 @@
 				81496BA719828D71004E79F2 /* SizePolicy.h */,
 				81496B831980F1AE004E79F2 /* Widget.cpp */,
 				81496B841980F1AE004E79F2 /* Widget.h */,
-				81496BA41982597B004E79F2 /* WidgetDesc.cpp */,
-				81496BA51982597B004E79F2 /* WidgetDesc.h */,
-				81496BA11982569C004E79F2 /* WidgetDescProvider.cpp */,
-				81496BA21982569C004E79F2 /* WidgetDescProvider.h */,
+				81496BA41982597B004E79F2 /* WidgetDef.cpp */,
+				81496BA51982597B004E79F2 /* WidgetDef.h */,
+				81496BA11982569C004E79F2 /* WidgetDefProvider.cpp */,
+				81496BA21982569C004E79F2 /* WidgetDefProvider.h */,
 				81496BA9198293E7004E79F2 /* WidgetFactory.cpp */,
 				81496BAA198293E7004E79F2 /* WidgetFactory.h */,
 			);
@@ -2681,8 +2681,8 @@
 				81D8B49F1962E0EC0010DA84 /* TextureAtlasProvider.cpp in Sources */,
 				81D8B6D61962E0F70010DA84 /* Cubemap.cpp in Sources */,
 				81D8B4371962E0EC0010DA84 /* TaskScheduler.cpp in Sources */,
-				81496BA31982569C004E79F2 /* WidgetDescProvider.cpp in Sources */,
-				81496BA61982597B004E79F2 /* WidgetDesc.cpp in Sources */,
+				81496BA31982569C004E79F2 /* WidgetDefProvider.cpp in Sources */,
+				81496BA61982597B004E79F2 /* WidgetDef.cpp in Sources */,
 				81D8B48E1962E0EC0010DA84 /* ConeParticleEmitter.cpp in Sources */,
 				81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */,
 				81D8B43B1962E0EC0010DA84 /* Timer.cpp in Sources */,

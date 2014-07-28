@@ -64,7 +64,7 @@ namespace ChilliSource
             ///
             /// @param Widget desc resource
             //---------------------------------------------------------------------------
-            WidgetSPtr Create(const WidgetDescCSPtr& in_desc);
+            WidgetSPtr Create(const WidgetDefCSPtr& in_desc);
             
         private:
             

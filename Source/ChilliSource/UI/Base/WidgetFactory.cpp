@@ -30,7 +30,7 @@
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 
 #include <ChilliSource/UI/Base/Widget.h>
-#include <ChilliSource/UI/Base/WidgetDesc.h>
+#include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
 #include <ChilliSource/UI/Drawable/TextureDrawable.h>
@@ -57,7 +57,7 @@ namespace ChilliSource
             ///
             /// @return Layout or nullptr
             //---------------------------------------------------------------------------
-            ILayoutUPtr CreateLayout(const WidgetDesc::LayoutPropertiesDesc& in_desc)
+            ILayoutUPtr CreateLayout(const WidgetDef::LayoutPropertiesDesc& in_desc)
             {
                 //TODO: Handle the properties
                 switch(in_desc.m_layoutType)
@@ -83,7 +83,7 @@ namespace ChilliSource
             ///
             /// @return Drawable or nullptr
             //---------------------------------------------------------------------------
-            IDrawableUPtr CreateDrawable(const WidgetDesc::DrawablePropertiesDesc& in_desc)
+            IDrawableUPtr CreateDrawable(const WidgetDef::DrawablePropertiesDesc& in_desc)
             {
                 //TODO: Handle the properties and the 3-patch type
                 switch(in_desc.m_drawableType)
@@ -109,7 +109,7 @@ namespace ChilliSource
             ///
             /// @return Widget
             //---------------------------------------------------------------------------
-            WidgetSPtr CreateRecursive(const WidgetDesc::HierarchyDesc& in_hierarchyDesc)
+            WidgetSPtr CreateRecursive(const WidgetDef::HierarchyDesc& in_hierarchyDesc)
             {
                 CSUI::WidgetSPtr widget(std::make_shared<CSUI::Widget>(in_hierarchyDesc.m_defaultProperties, in_hierarchyDesc.m_customProperties));
                 
@@ -139,7 +139,7 @@ namespace ChilliSource
 		}
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        WidgetSPtr WidgetFactory::Create(const WidgetDescCSPtr& in_desc)
+        WidgetSPtr WidgetFactory::Create(const WidgetDefCSPtr& in_desc)
         {
             return CreateRecursive(in_desc->GetHierarchyDesc());
         }

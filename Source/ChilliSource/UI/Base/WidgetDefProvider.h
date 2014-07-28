@@ -1,5 +1,5 @@
 //
-//  WidgetDescProvider.h
+//  WidgetDefProvider.h
 //  Chilli Source
 //  Created by Scott Downie on 25/07/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_WIDGETDESCPROVIDER_H_
-#define _CHILLISOURCE_UI_BASE_WIDGETDESCPROVIDER_H_
+#ifndef _CHILLISOURCE_UI_BASE_WIDGETDEFPROVIDER_H_
+#define _CHILLISOURCE_UI_BASE_WIDGETDEFPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
@@ -42,10 +42,10 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------------
-        class WidgetDescProvider final : public Core::ResourceProvider
+        class WidgetDefProvider final : public Core::ResourceProvider
         {
         public:
-            CS_DECLARE_NAMEDTYPE(WidgetDescProvider);
+            CS_DECLARE_NAMEDTYPE(WidgetDefProvider);
 
             //-------------------------------------------------------
             /// Is the object of the given interface type.
@@ -111,13 +111,13 @@ namespace ChilliSource
             ///
             /// @return New backend with ownership transferred
             //-------------------------------------------------------
-            static WidgetDescProviderUPtr Create();
+            static WidgetDefProviderUPtr Create();
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            WidgetDescProvider() = default;
+            WidgetDefProvider() = default;
         };
     }
 }

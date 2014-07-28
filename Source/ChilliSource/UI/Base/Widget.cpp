@@ -208,7 +208,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Widget::Widget(const WidgetDesc::DefaultPropertiesDesc& in_defaultProperties, const std::vector<WidgetDesc::CustomPropertyDesc>& in_customProperties)
+        Widget::Widget(const WidgetDef::DefaultPropertiesDesc& in_defaultProperties, const std::vector<WidgetDef::CustomPropertyDesc>& in_customProperties)
         :
         m_name(in_defaultProperties.m_name), m_localPosition(in_defaultProperties.m_localPosition), m_localSize(in_defaultProperties.m_localPosition), m_preferredSize(in_defaultProperties.m_preferredSize),
         m_localScale(in_defaultProperties.m_localScale), m_localColour(in_defaultProperties.m_localColour), m_localRotation(in_defaultProperties.m_localRotation),

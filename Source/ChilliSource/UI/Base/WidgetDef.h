@@ -1,5 +1,5 @@
 //
-//  WidgetDesc.h
+//  WidgetDef.h
 //  Chilli Source
 //  Created by Scott Downie on 25/07/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_WIDGETDESC_H_
-#define _CHILLISOURCE_UI_BASE_WIDGETDESC_H_
+#ifndef _CHILLISOURCE_UI_BASE_WIDGETDEF_H_
+#define _CHILLISOURCE_UI_BASE_WIDGETDEF_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
@@ -49,10 +49,10 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------------
-        class WidgetDesc final : public Core::Resource
+        class WidgetDef final : public Core::Resource
         {
         public:
-            CS_DECLARE_NAMEDTYPE(WidgetDesc);
+            CS_DECLARE_NAMEDTYPE(WidgetDef);
             
             //----------------------------------------------------
             /// Holds the definition of a custom property.
@@ -154,13 +154,13 @@ namespace ChilliSource
             ///
             /// @return New backend with ownership transferred
             //-------------------------------------------------------
-            static WidgetDescUPtr Create();
+            static WidgetDefUPtr Create();
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            WidgetDesc() = default;
+            WidgetDef() = default;
             
         private:
             
