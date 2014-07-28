@@ -31,6 +31,10 @@
 
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDesc.h>
+#include <ChilliSource/UI/Drawable/DrawableType.h>
+#include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
+#include <ChilliSource/UI/Drawable/TextureDrawable.h>
+#include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
 #include <ChilliSource/UI/Layout/GridLayout.h>
 #include <ChilliSource/UI/Layout/HListLayout.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>
@@ -71,6 +75,32 @@ namespace ChilliSource
                 return nullptr;
             }
             //---------------------------------------------------------------------------
+            /// Create the drawable class based on the given description
+            ///
+            /// @author S Downie
+            ///
+            /// @param Drawable desc
+            ///
+            /// @return Drawable or nullptr
+            //---------------------------------------------------------------------------
+            IDrawableUPtr CreateDrawable(const WidgetDesc::DrawablePropertiesDesc& in_desc)
+            {
+                //TODO: Handle the properties and the 3-patch type
+                switch(in_desc.m_drawableType)
+                {
+                    case DrawableType::k_none:
+                        return nullptr;
+                    case DrawableType::k_texture:
+                        return IDrawableUPtr(new TextureDrawable());
+                    case DrawableType::k_ninePatch:
+                        return IDrawableUPtr(new NinePatchDrawable());
+                    case DrawableType::k_threePatch:
+                        return IDrawableUPtr(new ThreePatchDrawable(ThreePatchDrawable::Type::k_horizontal));
+                }
+                
+                return nullptr;
+            }
+            //---------------------------------------------------------------------------
             /// Recursively create the widget hierarchy from the hierarchy desc
             ///
             /// @author S Downie
@@ -84,6 +114,7 @@ namespace ChilliSource
                 CSUI::WidgetSPtr widget(std::make_shared<CSUI::Widget>(in_hierarchyDesc.m_defaultProperties, in_hierarchyDesc.m_customProperties));
                 
                 widget->SetLayout(CreateLayout(in_hierarchyDesc.m_defaultProperties.m_layoutDesc));
+                widget->SetDrawable(CreateDrawable(in_hierarchyDesc.m_defaultProperties.m_drawableDesc));
                 
                 for(const auto& childHierarchyDesc : in_hierarchyDesc.m_children)
                 {

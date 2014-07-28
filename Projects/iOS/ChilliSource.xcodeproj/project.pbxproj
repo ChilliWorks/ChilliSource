@@ -314,6 +314,7 @@
 		81496BAF1982B8DB004E79F2 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		81496BB01982B8DB004E79F2 /* Drawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawable.h; sourceTree = "<group>"; };
 		81496BB11982B8DB004E79F2 /* Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layout.h; sourceTree = "<group>"; };
+		81496BB21982BB94004E79F2 /* DrawableType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableType.h; sourceTree = "<group>"; };
 		8158E483196ACB25005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		8158E484196ACB32005FF0A8 /* Container.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Container.h; sourceTree = "<group>"; };
 		8158E485196ACB41005FF0A8 /* Cryptographic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cryptographic.h; sourceTree = "<group>"; };
@@ -972,6 +973,7 @@
 		81496B851980F1AE004E79F2 /* Drawable */ = {
 			isa = PBXGroup;
 			children = (
+				81496BB21982BB94004E79F2 /* DrawableType.h */,
 				81496B861980F1AE004E79F2 /* IDrawable.h */,
 				81496B9B19814B05004E79F2 /* NinePatchDrawable.cpp */,
 				81496B9C19814B05004E79F2 /* NinePatchDrawable.h */,

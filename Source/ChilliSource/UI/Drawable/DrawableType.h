@@ -1,5 +1,5 @@
 //
-//  Drawable.h
+//  DrawableType.h
 //  Chilli Source
 //  Created by Scott Downie on 25/07/2014.
 //
@@ -27,14 +27,26 @@
 //
 
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_H_
-#define _CHILLISOURCE_UI_DRAWABLE_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_DRAWABLETYPE_H_
+#define _CHILLISOURCE_UI_DRAWABLE_DRAWABLETYPE_H_
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Drawable/DrawableType.h>
-#include <ChilliSource/UI/Drawable/IDrawable.h>
-#include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
-#include <ChilliSource/UI/Drawable/TextureDrawable.h>
-#include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
+namespace ChilliSource
+{
+	namespace UI
+	{
+        //----------------------------------------------------------------------------------------
+        /// Identifiers for classes that are responsible for drawing a widget
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------------------------------
+        enum class DrawableType
+        {
+            k_none,
+            k_texture,
+            k_ninePatch,
+            k_threePatch
+        };
+	}
+}
 
 #endif
