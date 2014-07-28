@@ -67,13 +67,22 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 	 */
 	TextEntryNativeInterface()
 	{
-		//Doesn't matter what we set this to it's invisible
-		m_textEntryView = new EditTextBackEvent(CSApplication.get().getActivityContext());
-		m_textEntryView.setWidth(100);
-		m_textEntryView.setHeight(100);
-		m_textEntryView.setAlpha(0);
-		m_textEntryView.addTextChangedListener(this);
-		m_textEntryView.setOnEditorActionListener(this);
+		final TextEntryNativeInterface finalThis = this;
+		
+		Runnable task = new Runnable() 
+		{
+			@Override public void run() 
+			{
+				//Doesn't matter what we set this to it's invisible
+				m_textEntryView = new EditTextBackEvent(CSApplication.get().getActivityContext());
+				m_textEntryView.setWidth(100);
+				m_textEntryView.setHeight(100);
+				m_textEntryView.setAlpha(0);
+				m_textEntryView.addTextChangedListener(finalThis);
+				m_textEntryView.setOnEditorActionListener(finalThis);
+			}
+		};
+		CSApplication.get().scheduleUIThreadTask(task);
 	}
 	/**
 	 * @author Ian Copland
@@ -91,7 +100,7 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 	 * 
 	 * @author S Downie
 	 */
-	public void Activate()
+	public void activate()
 	{
 		Runnable task = new Runnable() 
 		{
@@ -111,13 +120,13 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 	 * 
 	 * @author S Downie
 	 */
-	public void Deactivate()
+	public void deactivate()
 	{
 		Runnable task = new Runnable() 
 		{
 			@Override public void run() 
 			{
-				Dismiss();
+				dismiss();
 			}
 		};
 		CSApplication.get().scheduleUIThreadTask(task);
@@ -129,13 +138,13 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 	 * 
 	 * @param Type as an integer (so it can be passed from native)
 	 */
-    public void SetKeyboardType(final int in_type)
+    public void setKeyboardType(final int in_type)
     {
 		Runnable task = new Runnable() 
 		{
 			@Override public void run() 
 			{
-		    	m_keyboardTypeFlags = IntegerToKeyboardType(in_type);
+		    	m_keyboardTypeFlags = integerToKeyboardType(in_type);
 		    	m_textEntryView.setInputType(m_keyboardTypeFlags | m_keyboardCapitalisationFlags);
 			}
 		};
@@ -148,13 +157,13 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 	 * 
 	 * @param Type as an integer (so it can be passed from native)
 	 */
-    public void SetCapitalisationMethod(final int in_method)
+    public void setCapitalisationMethod(final int in_method)
     {
 		Runnable task = new Runnable() 
 		{
 			@Override public void run() 
 			{
-		    	m_keyboardCapitalisationFlags = IntegerToKeyboardCapitalisation(in_method);
+		    	m_keyboardCapitalisationFlags = integerToKeyboardCapitalisation(in_method);
 		    	m_textEntryView.setInputType(m_keyboardTypeFlags | m_keyboardCapitalisationFlags);
 			}
 		};
@@ -216,7 +225,7 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 	 */
 	@Override public void onTextChanged(CharSequence in_string, int in_start, int in_count, int in_newLength) 
 	{
-		NativeOnTextChanged(in_string.toString());
+		nativeOnTextChanged(in_string.toString());
 	}
 	/**
 	 * Called when the an IME key event
@@ -233,8 +242,8 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 	{
         if (in_actionId == EditorInfo.IME_ACTION_DONE || in_actionId == EditorInfo.IME_ACTION_GO || in_actionId == EditorInfo.IME_ACTION_NEXT)
         {
-			Dismiss();
-        	NativeOnKeyboardDismissed();
+			dismiss();
+        	nativeOnKeyboardDismissed();
         	return true;
         }
         
@@ -247,7 +256,7 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 	 *
 	 * @return The input type flag required by Android.
 	 */
-	private int IntegerToKeyboardType(int in_type)
+	private int integerToKeyboardType(int in_type)
 	{
 		switch (in_type)
 		{
@@ -267,7 +276,7 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 	 *
 	 * @return The capitalisation input type flag required by Android.
 	 */
-	private int IntegerToKeyboardCapitalisation(int in_method)
+	private int integerToKeyboardCapitalisation(int in_method)
 	{
 		switch (in_method)
 		{
@@ -289,7 +298,7 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 	 * 
 	 * @author S Downie
 	 */
-	private void Dismiss()
+	private void dismiss()
 	{
 		ViewGroup parent = (ViewGroup)m_textEntryView.getParent();
 		if (parent != null)
@@ -306,14 +315,14 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 	 * 
 	 * @param New text
 	 */
-	native private void NativeOnTextChanged(String in_text);
+	native private void nativeOnTextChanged(String in_text);
 	/**
 	 * A native call for passing the keyboard dismissed
 	 * event down to the native side of the engine.
 	 * 
 	 * @author S Downie
 	 */
-	native private void NativeOnKeyboardDismissed();
+	native private void nativeOnKeyboardDismissed();
 	
 	/**
 	 * Extends EditText in order to detect when the keyboard has been dismissed
@@ -347,8 +356,8 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
         {
             if (in_event.getKeyCode() == KeyEvent.KEYCODE_BACK || in_event.getKeyCode() == KeyEvent.FLAG_EDITOR_ACTION || in_event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
             {
-				Dismiss();
-            	NativeOnKeyboardDismissed();
+				dismiss();
+            	nativeOnKeyboardDismissed();
             	return true;
             }
             
