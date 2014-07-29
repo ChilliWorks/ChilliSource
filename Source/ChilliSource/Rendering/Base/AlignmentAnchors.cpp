@@ -156,7 +156,7 @@ namespace ChilliSource
 		/// @param String
 		/// @return Alignment anchor type corresponding to given string
 		//---------------------------------------------------------------
-		AlignmentAnchor AlignmentAnchorFromString(const std::string& instrString)
+		AlignmentAnchor ParseAlignmentAnchor(const std::string& instrString)
 		{
 			if(instrString == "MiddleCentre")
 			{

@@ -158,12 +158,12 @@ namespace ChilliSource
             //---Local alignment
             if(insParams.TryGetValue("LocalAlignment", strValue))
             {
-                LocalAlignment = Rendering::AlignmentAnchorFromString(strValue);
+                LocalAlignment = Rendering::ParseAlignmentAnchor(strValue);
             }
             //---Parental alignment
             if(insParams.TryGetValue("ParentalAlignment", strValue))
             {
-                ParentalAlignment = Rendering::AlignmentAnchorFromString(strValue);
+                ParentalAlignment = Rendering::ParseAlignmentAnchor(strValue);
             }
             //---Unified parental offset
             if(insParams.TryGetValue("UnifiedParentalOffset", strValue))

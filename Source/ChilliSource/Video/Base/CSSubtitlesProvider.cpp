@@ -262,7 +262,7 @@ namespace ChilliSource
             pStyle->m_fontSize = in_styleJSON.get(k_tagStyleFontSize, k_defaultFontSize).asUInt();
             pStyle->m_colour = Core::ParseColour(in_styleJSON.get(k_tagStyleFontColour, k_defaultColour).asString());
             pStyle->m_fadeTimeMS = ParseTime(in_styleJSON.get(k_tagStyleFadeTime, (s32)k_defaultFadeTimeMS).asString());
-            pStyle->m_alignment = Rendering::AlignmentAnchorFromString(in_styleJSON.get(k_tagStyleAlignment, k_defaultAlignment).asString());
+            pStyle->m_alignment = Rendering::ParseAlignmentAnchor(in_styleJSON.get(k_tagStyleAlignment, k_defaultAlignment).asString());
             pStyle->m_bounds = LoadBounds(in_styleJSON.get(k_tagStyleBounds, ""));
             
             return Subtitles::StyleUPtr(std::move(pStyle));
