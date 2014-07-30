@@ -1,0 +1,25 @@
+{
+  "Defaults": {
+    "Type": "Widget",
+    "Name": "Widget",
+    "RelPosition": "0 0",
+    "AbsPosition": "0 0",
+    "RelSize": "0 0",
+    "AbsSize": "0 0",
+    "PreferredSize": "1 1",
+    "Scale": "1 1",
+    "Colour": "1 1 1 1",
+    "Rotation": "0",
+    "OriginAnchor": "MiddleCentre",
+    "ParentalAnchor": "MiddleCentre",
+    "Visible": "true",
+    "ClipChildren": "false",
+    "SizePolicy": "None",
+    "Layout": {
+      "Type": "None"
+    },
+    "Drawable": {
+      "Type": "None"
+    }
+  }
+}

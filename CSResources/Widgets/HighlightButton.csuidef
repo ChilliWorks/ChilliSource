@@ -1,0 +1,59 @@
+{
+  "Properties": {
+    "IsDown": "Bool"
+  },
+  "Defaults": {
+    "Type": "HighlightButton",
+    "Name": "HighlightButton",
+    "RelPosition": "0 0",
+    "AbsPosition": "0 0",
+    "RelSize": "0.1 0.05",
+    "AbsSize": "0 0",
+    "PreferredSize": "1 1",
+    "Scale": "1 1",
+    "Colour": "1 1 1 1",
+    "Rotation": "0",
+    "OriginAnchor": "MiddleCentre",
+    "ParentalAnchor": "MiddleCentre",
+    "Visible": "true",
+    "ClipChildren": "false",
+    "SizePolicy": "None",
+    "Layout": {
+      "Type": "None"
+    },
+    "Drawable": {
+      "Type": "None"
+    },
+    "IsDown": "false"
+  },
+  "Behaviour": {
+    "StorageLocation": "Package",
+    "FilePath": "HighlightButton.lua"
+  },
+  "Children": {
+    "TestChild": {
+      "Type": "Widget",
+      "RelSize": "0.5 0.5",
+      "Drawable": {
+        "Type": "Texture",
+        "TextureLocation": "Package",
+        "TexturePath": "GUI/ButtonOff.png"
+      }
+    },
+    "TestChild2": {
+      "Type": "Template",
+      "TemplatePath": "GUI/TestTemplate.csui",
+      "TemplateLocation": "Package"
+    }
+  },
+  "Hierarchy": [
+    {
+      "Name": "TestChild",
+      "Children": [
+        {
+          "Name": "TestChild2"
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 //
-//  PropertyType.h
+//  SizePolicy.cpp
 //  Chilli Source
 //  Created by Scott Downie on 25/07/2014.
 //
@@ -26,46 +26,25 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_PROPERTYTYPE_H_
-#define _CHILLISOURCE_UI_BASE_PROPERTYTYPE_H_
-
-#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/UI/Base/SizePolicy.h>
 
 namespace ChilliSource
 {
-	namespace UI
-	{
+    namespace UI
+    {
         //----------------------------------------------------------------------------------------
-        /// The supported property types for widgets
-        ///
-        /// @author S Downie
         //----------------------------------------------------------------------------------------
-        enum class PropertyType
+        SizePolicy ParseSizePolicy(const std::string& in_policy)
         {
-            k_unknown,
-            k_bool,
-            k_int,
-            k_float,
-            k_string,
-            k_vec2,
-            k_vec3,
-            k_vec4,
-            k_colour,
-            k_alignmentAnchor,
-            k_sizePolicy,
-            k_propertyMap
-        };
-        //----------------------------------------------------------------------------------------
-        /// Convert the string type to internal property type
-        ///
-        /// @author S Downie
-        ///
-        /// @param Type string
-        ///
-        /// @return Property type
-        //----------------------------------------------------------------------------------------
-        PropertyType ParsePropertyType(const std::string& in_type);
-	}
+            if(in_policy == "None") return SizePolicy::k_none;
+            if(in_policy == "UsePreferredSize") return SizePolicy::k_usePreferredSize;
+            if(in_policy == "UseWidthMaintainingAspect") return SizePolicy::k_useWidthMaintainingAspect;
+            if(in_policy == "UseHeightMaintainingAspect") return SizePolicy::k_useHeightMaintainingAspect;
+            if(in_policy == "FitMaintainingAspect") return SizePolicy::k_fitMaintainingAspect;
+            if(in_policy == "FillMaintainingAspect") return SizePolicy::k_fillMaintainingAspect;
+            
+            CS_LOG_FATAL("Cannot parse size policy type: " + in_policy);
+            return SizePolicy::k_none;
+        }
+    }
 }
-
-#endif

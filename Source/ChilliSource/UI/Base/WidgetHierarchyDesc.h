@@ -1,7 +1,7 @@
 //
-//  PropertyType.h
+//  WidgetHierarchyDesc.h
 //  Chilli Source
-//  Created by Scott Downie on 25/07/2014.
+//  Created by Scott Downie on 30/07/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,46 +26,29 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_PROPERTYTYPE_H_
-#define _CHILLISOURCE_UI_BASE_PROPERTYTYPE_H_
+#ifndef _CHILLISOURCE_UI_BASE_WIDGETHIERARCHYDESC_H_
+#define _CHILLISOURCE_UI_BASE_WIDGETHIERARCHYDESC_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/UI/Base/PropertyMap.h>
 
 namespace ChilliSource
 {
-	namespace UI
-	{
-        //----------------------------------------------------------------------------------------
-        /// The supported property types for widgets
+    namespace UI
+    {
+        //----------------------------------------------------
+        /// Holds the description of a widget hierarchy
+        /// including the custom and default properties
         ///
         /// @author S Downie
-        //----------------------------------------------------------------------------------------
-        enum class PropertyType
+        //----------------------------------------------------
+        struct WidgetHierarchyDesc
         {
-            k_unknown,
-            k_bool,
-            k_int,
-            k_float,
-            k_string,
-            k_vec2,
-            k_vec3,
-            k_vec4,
-            k_colour,
-            k_alignmentAnchor,
-            k_sizePolicy,
-            k_propertyMap
+            PropertyMap m_defaultProperties;
+            PropertyMap m_customProperties;
+            std::vector<WidgetHierarchyDesc> m_children;
         };
-        //----------------------------------------------------------------------------------------
-        /// Convert the string type to internal property type
-        ///
-        /// @author S Downie
-        ///
-        /// @param Type string
-        ///
-        /// @return Property type
-        //----------------------------------------------------------------------------------------
-        PropertyType ParsePropertyType(const std::string& in_type);
-	}
+    }
 }
 
 #endif

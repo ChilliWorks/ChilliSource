@@ -29,8 +29,9 @@
 
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/UI/Base/Widget.h>
-#include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
 #include <ChilliSource/UI/Drawable/TextureDrawable.h>
@@ -48,6 +49,9 @@ namespace ChilliSource
         
         namespace
         {
+            const std::string k_widgetKey = "Widget";
+            const std::string k_highlightButtonKey = "HighlightButton";
+            
             //---------------------------------------------------------------------------
             /// Create the layout class based on the given description
             ///
@@ -57,19 +61,20 @@ namespace ChilliSource
             ///
             /// @return Layout or nullptr
             //---------------------------------------------------------------------------
-            ILayoutUPtr CreateLayout(const WidgetDef::LayoutPropertiesDesc& in_desc)
+            ILayoutUPtr CreateLayout(const PropertyMap& in_properties)
             {
-                //TODO: Handle the properties
-                switch(in_desc.m_layoutType)
+                LayoutType type = ParseLayoutType(in_properties.GetProperty<std::string>("Type"));
+                
+                switch(type)
                 {
                     case LayoutType::k_none:
                         return nullptr;
                     case LayoutType::k_grid:
-                        return ILayoutUPtr(new GridLayout());
+                        return ILayoutUPtr(new GridLayout(in_properties));
                     case LayoutType::k_horizontalList:
-                        return ILayoutUPtr(new HListLayout());
+                        return ILayoutUPtr(new HListLayout(in_properties));
                     case LayoutType::k_verticalList:
-                        return ILayoutUPtr(new VListLayout());
+                        return ILayoutUPtr(new VListLayout(in_properties));
                 }
                 
                 return nullptr;
@@ -83,65 +88,123 @@ namespace ChilliSource
             ///
             /// @return Drawable or nullptr
             //---------------------------------------------------------------------------
-            IDrawableUPtr CreateDrawable(const WidgetDef::DrawablePropertiesDesc& in_desc)
+            IDrawableUPtr CreateDrawable(const PropertyMap& in_properties)
             {
-                //TODO: Handle the properties and the 3-patch type
-                switch(in_desc.m_drawableType)
+                DrawableType type = ParseDrawableType(in_properties.GetProperty<std::string>("Type"));
+                
+                switch(type)
                 {
                     case DrawableType::k_none:
                         return nullptr;
                     case DrawableType::k_texture:
-                        return IDrawableUPtr(new TextureDrawable());
+                        return IDrawableUPtr(new TextureDrawable(in_properties));
                     case DrawableType::k_ninePatch:
-                        return IDrawableUPtr(new NinePatchDrawable());
+                        return IDrawableUPtr(new NinePatchDrawable(in_properties));
                     case DrawableType::k_threePatch:
-                        return IDrawableUPtr(new ThreePatchDrawable(ThreePatchDrawable::Type::k_horizontal));
+                        return IDrawableUPtr(new ThreePatchDrawable(in_properties));
                 }
                 
                 return nullptr;
             }
-            //---------------------------------------------------------------------------
-            /// Recursively create the widget hierarchy from the hierarchy desc
-            ///
-            /// @author S Downie
-            ///
-            /// @param Hierarchy desc
-            ///
-            /// @return Widget
-            //---------------------------------------------------------------------------
-            WidgetSPtr CreateRecursive(const WidgetDef::HierarchyDesc& in_hierarchyDesc)
-            {
-                CSUI::WidgetSPtr widget(std::make_shared<CSUI::Widget>(in_hierarchyDesc.m_defaultProperties, in_hierarchyDesc.m_customProperties));
-                
-                widget->SetLayout(CreateLayout(in_hierarchyDesc.m_defaultProperties.m_layoutDesc));
-                widget->SetDrawable(CreateDrawable(in_hierarchyDesc.m_defaultProperties.m_drawableDesc));
-                
-                for(const auto& childHierarchyDesc : in_hierarchyDesc.m_children)
-                {
-                    widget->AddInternalWidget(CreateRecursive(childHierarchyDesc));
-                }
-                
-                return widget;
-            }
         }
         
-        //--------------------------------------------------------
-        //--------------------------------------------------------
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
         WidgetFactoryUPtr WidgetFactory::Create()
         {
             return WidgetFactoryUPtr(new WidgetFactory());
         }
-        //--------------------------------------------------------
-        //--------------------------------------------------------
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
 		bool WidgetFactory::IsA(Core::InterfaceIDType in_interfaceId) const
         {
 			return in_interfaceId == WidgetFactory::InterfaceID;
 		}
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        WidgetSPtr WidgetFactory::Create(const WidgetDefCSPtr& in_desc)
+        void WidgetFactory::OnInit()
         {
-            return CreateRecursive(in_desc->GetHierarchyDesc());
+            auto resPool = Core::Application::Get()->GetResourcePool();
+
+            WidgetDefCSPtr widgetDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Widget.csuidef");
+            RegisterDefinition(widgetDef);
+            
+            WidgetDefCSPtr highlightButtonDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HighlightButton.csuidef");
+            RegisterDefinition(highlightButtonDef);
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        void WidgetFactory::RegisterDefinition(const WidgetDefCSPtr& in_def)
+        {
+            const std::string& nameKey = in_def->GetHierarchyDesc().m_defaultProperties.GetProperty<std::string>("Type");
+            m_widgetDefNameMap.insert(std::make_pair(nameKey, in_def));
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetDefCSPtr WidgetFactory::GetDefinition(const std::string& in_nameKey) const
+        {
+            auto it = m_widgetDefNameMap.find(in_nameKey);
+            CS_ASSERT(it != m_widgetDefNameMap.end(), "No such widget def with name: " + in_nameKey);
+            return it->second;
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetSPtr WidgetFactory::Create(const WidgetDefCSPtr& in_def) const
+        {
+            return CreateRecursive(in_def->GetHierarchyDesc());
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetSPtr WidgetFactory::Create(const WidgetTemplateCSPtr& in_template) const
+        {
+            return nullptr;
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetSPtr WidgetFactory::CreateHighlightButton() const
+        {
+            return Create(m_widgetDefNameMap.find(k_highlightButtonKey)->second);
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetSPtr WidgetFactory::CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc) const
+        {
+            WidgetSPtr widget(std::make_shared<Widget>(in_hierarchyDesc.m_defaultProperties, in_hierarchyDesc.m_customProperties));
+            
+            if(in_hierarchyDesc.m_defaultProperties.HasProperty("Layout") == true)
+            {
+                widget->SetLayout(CreateLayout(in_hierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Layout")));
+            }
+            if(in_hierarchyDesc.m_defaultProperties.HasProperty("Drawable") == true)
+            {
+                widget->SetDrawable(CreateDrawable(in_hierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Drawable")));
+            }
+            
+            for(const auto& childHierarchyDesc : in_hierarchyDesc.m_children)
+            {
+                std::string childType = childHierarchyDesc.m_defaultProperties.GetProperty<std::string>("Type");
+                WidgetDefCSPtr widgetDef = m_widgetDefNameMap.find(childType)->second;
+                WidgetSPtr childWidget = CreateRecursive(widgetDef->GetHierarchyDesc());
+                childWidget->SetDefaultProperties(childHierarchyDesc.m_defaultProperties);
+                childWidget->SetCustomProperties(childHierarchyDesc.m_customProperties);
+                if(childHierarchyDesc.m_defaultProperties.HasProperty("Layout") == true)
+                {
+                    childWidget->SetLayout(CreateLayout(childHierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Layout")));
+                }
+                if(childHierarchyDesc.m_defaultProperties.HasProperty("Drawable") == true)
+                {
+                    childWidget->SetDrawable(CreateDrawable(childHierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Drawable")));
+                }
+                widget->AddInternalWidget(childWidget);
+            }
+            
+            return widget;
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        void WidgetFactory::OnDestroy()
+        {
+            m_widgetDefNameMap.clear();
         }
 	}
 }

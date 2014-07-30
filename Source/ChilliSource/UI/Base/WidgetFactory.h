@@ -31,6 +31,9 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/UI/Base/WidgetDef.h>
+
+#include <unordered_map>
 
 namespace ChilliSource
 {
@@ -57,34 +60,105 @@ namespace ChilliSource
             //---------------------------------------------------------------------------
             bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //---------------------------------------------------------------------------
-            /// Creates a new widget based on the given description. The type of the
-            /// widget is described by its children and properties
+            /// Register the given widget definition so it is accessible via its type name.
+            /// This allows UI files to reference the definition by a readable name
             ///
             /// @author S Downie
             ///
-            /// @param Widget desc resource
+            /// @param Widget def resource
             //---------------------------------------------------------------------------
-            WidgetSPtr Create(const WidgetDefCSPtr& in_desc);
+            void RegisterDefinition(const WidgetDefCSPtr& in_def);
+            //---------------------------------------------------------------------------
+            /// Get the widget definition that is keyed on the given name
+            ///
+            /// @author S Downie
+            ///
+            /// @param Name key
+            ///
+            /// @return Widget def resource
+            //---------------------------------------------------------------------------
+            WidgetDefCSPtr GetDefinition(const std::string& in_nameKey) const;
+            //---------------------------------------------------------------------------
+            /// Creates a new widget based on the given definition. The type of the
+            /// widget is described by its children, behaviour and properties
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget def resource
+            ///
+            /// @return Widget with look and behaviour described by definition
+            //---------------------------------------------------------------------------
+            WidgetSPtr Create(const WidgetDefCSPtr& in_def) const;
+            //---------------------------------------------------------------------------
+            /// Creates a new widget based on the given template. The type of the
+            /// widget is set within the template
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget template resource
+            ///
+            /// @return Widget
+            //---------------------------------------------------------------------------
+            WidgetSPtr Create(const WidgetTemplateCSPtr& in_template) const;
+            //---------------------------------------------------------------------------
+            /// Creates a new widget with the behaviour of a highlight button.
+            /// A highlight button has the most common button behaviour of changing style
+            /// on press and release and notifying listeners of the trigger event.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Widget with look and behaviour of highlight button
+            //---------------------------------------------------------------------------
+            WidgetSPtr CreateHighlightButton() const;
             
         private:
             
             friend class Core::Application;
-            //--------------------------------------------------------
+            //---------------------------------------------------------------------------
             /// Creation method used by application to instantiate
             /// the system
             ///
             /// @author S Downie
             ///
             /// @return Ownership of new factory
-            //--------------------------------------------------------
+            //---------------------------------------------------------------------------
 			static WidgetFactoryUPtr Create();
-            //--------------------------------------------------------
+            //---------------------------------------------------------------------------
             /// Private constructor to enforce the use of factory
             /// method
             ///
             /// @author S Downie
-            //--------------------------------------------------------
+            //---------------------------------------------------------------------------
 			WidgetFactory() = default;
+            //---------------------------------------------------------------------------
+            /// Called when the system is created in order to create the built-in
+            /// widget types
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------------------------
+            void OnInit() override;
+            //---------------------------------------------------------------------------
+            /// Recursively create the widget hierarchy from the hierarchy desc
+            ///
+            /// @author S Downie
+            ///
+            /// @param Hierarchy desc
+            ///
+            /// @return Widget
+            //---------------------------------------------------------------------------
+            WidgetSPtr CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc) const;
+            //---------------------------------------------------------------------------
+            /// Called when the system is destroyed and will release
+            /// any memory held
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------------------------
+            void OnDestroy() override;
+            
+        private:
+            
+            std::unordered_map<std::string, WidgetDefCSPtr> m_widgetDefNameMap;
+            
 		};
 	}
 }

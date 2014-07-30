@@ -26,9 +26,10 @@
 //  THE SOFTWARE.
 //
 
-
 #ifndef _CHILLISOURCE_UI_DRAWABLE_DRAWABLETYPE_H_
 #define _CHILLISOURCE_UI_DRAWABLE_DRAWABLETYPE_H_
+
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {
@@ -46,6 +47,16 @@ namespace ChilliSource
             k_ninePatch,
             k_threePatch
         };
+        //----------------------------------------------------------------------------------------
+        /// Converts a string to a drawable type
+        ///
+        /// @author S Downie
+        ///
+        /// @param String
+        ///
+        /// @return Drawable type
+        //----------------------------------------------------------------------------------------
+        DrawableType ParseDrawableType(const std::string& in_type);
 	}
 }
 

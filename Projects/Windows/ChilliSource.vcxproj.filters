@@ -696,16 +696,39 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.cpp">
       <Filter>ChilliSource\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDescProvider.cpp">
-      <Filter>ChilliSource\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.cpp">
-      <Filter>ChilliSource\UI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyType.cpp">
       <Filter>ChilliSource\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDescProvider.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\ILayout.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutType.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableType.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyMap.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\SizePolicy.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDef.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDefProvider.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.cpp">
       <Filter>ChilliSource\UI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1526,12 +1549,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDescProvider.h">
-      <Filter>ChilliSource\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.h">
-      <Filter>ChilliSource\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
@@ -1554,6 +1571,23 @@
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDescProvider.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyMap.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDef.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDefProvider.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetHierarchyDesc.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
   </ItemGroup>

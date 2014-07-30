@@ -79,6 +79,7 @@
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 
 #include <ChilliSource/UI/Base/WidgetFactory.h>
+#include <ChilliSource/UI/Base/WidgetDefProvider.h>
 
 #include <algorithm>
 #include <ctime>
@@ -412,6 +413,7 @@ namespace ChilliSource
             
             //UI
             m_widgetFactory = CreateSystem<UI::WidgetFactory>();
+            CreateSystem<UI::WidgetDefProvider>();
 
             //Create any platform specific default systems
             m_platformSystem->CreateDefaultSystems(this);

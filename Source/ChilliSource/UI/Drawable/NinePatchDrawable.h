@@ -32,6 +32,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
+#include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 
 namespace ChilliSource
@@ -53,6 +54,33 @@ namespace ChilliSource
         {
         public:
 
+            //----------------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            NinePatchDrawable() = default;
+            //----------------------------------------------------------------------------------------
+            /// Constructor that builds the drawable from key-value properties
+            ///
+            /// Properties:
+            ///
+            ///     - UVs - f32 f32 f32 f32 - U, V, S, T
+            ///     - Insets - f32 f32 f32 f32 - left, right, top, bottom insets
+            ///     - TextureLocation - StorageLocation String - The storage location of the texture
+            ///     - TexturePath - String - File path fo the texture relative to the location
+            ///
+            /// @author S Downie
+            ///
+            /// @param Key-value properties
+            //----------------------------------------------------------------------------------------
+            NinePatchDrawable(const PropertyMap& in_properties);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The list of properties supported by this drawable
+            //----------------------------------------------------------------------------------------
+            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
             //----------------------------------------------------------------------------------------
             /// Set the texture that should be used in subsequent draws
             ///

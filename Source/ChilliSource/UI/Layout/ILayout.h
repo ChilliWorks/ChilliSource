@@ -26,11 +26,11 @@
 //  THE SOFTWARE.
 //
 
-
 #ifndef _CHILLISOURCE_UI_LAYOUT_ILAYOUT_H_
 #define _CHILLISOURCE_UI_LAYOUT_ILAYOUT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/UI/Base/PropertyMap.h>
 
 #include <vector>
 
@@ -53,6 +53,14 @@ namespace ChilliSource
             /// @author S Downie
             //----------------------------------------------------------------------------------------
             ILayout() = default;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Layout type
+            ///
+            /// @return The list of properties supported by the layout of given type
+            //----------------------------------------------------------------------------------------
+            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs(LayoutType in_type);
             //----------------------------------------------------------------------------------------
             /// Create the layout sizes and positions based on the current layout properties and the
             /// owning widget.

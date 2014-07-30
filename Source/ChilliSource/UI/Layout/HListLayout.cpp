@@ -28,18 +28,54 @@
 
 #include <ChilliSource/UI/Layout/HListLayout.h>
 
+#include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Base/Widget.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
+        namespace
+        {
+            std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
+            {
+                {PropertyType::k_string, "Type"},
+                {PropertyType::k_int, "NumCells"},
+                {PropertyType::k_float, "RelSpacing"},
+                {PropertyType::k_float, "AbsSpacing"},
+                {PropertyType::k_vec4, "RelMargins"},
+                {PropertyType::k_vec4, "AbsMargins"}
+            };
+        }
+        
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         HListLayout::HListLayout()
         {
             m_gridLayout.SetNumRows(1);
             m_gridLayout.SetCellOrder(GridLayout::CellOrder::k_colMajor);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        HListLayout::HListLayout(const PropertyMap& in_properties)
+        {
+            m_gridLayout.SetNumRows(1);
+            m_gridLayout.SetCellOrder(GridLayout::CellOrder::k_colMajor);
+            
+            SetNumCells(in_properties.GetPropertyOrDefault("NumCells", 1));
+            SetRelativeSpacing(in_properties.GetPropertyOrDefault("RelSpacing", 0.0f));
+            SetAbsoluteSpacing(in_properties.GetPropertyOrDefault("AbsSpacing", 0.0f));
+            
+            Core::Vector4 relMargins(in_properties.GetPropertyOrDefault("RelMargins", Core::Vector4::k_zero));
+            SetRelativeMargins(relMargins.x, relMargins.y, relMargins.z, relMargins.w);
+            Core::Vector4 absMargins(in_properties.GetPropertyOrDefault("AbsMargins", Core::Vector4::k_zero));
+            SetAbsoluteMargins(absMargins.x, absMargins.y, absMargins.z, absMargins.w);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        std::vector<PropertyMap::PropertyDesc> HListLayout::GetPropertyDescs()
+        {
+            return g_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

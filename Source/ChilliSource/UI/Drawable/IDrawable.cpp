@@ -1,7 +1,7 @@
 //
-//  PropertyType.h
+//  IDrawable.cpp
 //  Chilli Source
-//  Created by Scott Downie on 25/07/2014.
+//  Created by Scott Downie on 18/04/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,46 +26,37 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_PROPERTYTYPE_H_
-#define _CHILLISOURCE_UI_BASE_PROPERTYTYPE_H_
+#include <ChilliSource/UI/Drawable/IDrawable.h>
 
-#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/UI/Drawable/DrawableType.h>
+#include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
+#include <ChilliSource/UI/Drawable/TextureDrawable.h>
+#include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
 
 namespace ChilliSource
 {
-	namespace UI
-	{
+    namespace UI
+    {
         //----------------------------------------------------------------------------------------
-        /// The supported property types for widgets
-        ///
-        /// @author S Downie
         //----------------------------------------------------------------------------------------
-        enum class PropertyType
+        std::vector<PropertyMap::PropertyDesc> IDrawable::GetPropertyDescs(DrawableType in_type)
         {
-            k_unknown,
-            k_bool,
-            k_int,
-            k_float,
-            k_string,
-            k_vec2,
-            k_vec3,
-            k_vec4,
-            k_colour,
-            k_alignmentAnchor,
-            k_sizePolicy,
-            k_propertyMap
-        };
-        //----------------------------------------------------------------------------------------
-        /// Convert the string type to internal property type
-        ///
-        /// @author S Downie
-        ///
-        /// @param Type string
-        ///
-        /// @return Property type
-        //----------------------------------------------------------------------------------------
-        PropertyType ParsePropertyType(const std::string& in_type);
-	}
+            switch(in_type)
+            {
+                case DrawableType::k_none:
+                {
+                    std::vector<PropertyMap::PropertyDesc> propertyDescs = {{PropertyType::k_string, "Type"}};
+                    return propertyDescs;
+                }
+                case DrawableType::k_texture:
+                    return TextureDrawable::GetPropertyDescs();
+                case DrawableType::k_ninePatch:
+                    return NinePatchDrawable::GetPropertyDescs();
+                case DrawableType::k_threePatch:
+                    return ThreePatchDrawable::GetPropertyDescs();
+            }
+            
+            return std::vector<PropertyMap::PropertyDesc>();
+        }
+    }
 }
-
-#endif

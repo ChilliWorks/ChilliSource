@@ -40,37 +40,27 @@ namespace ChilliSource
     {
         namespace
         {
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Type
-            ///
-            /// @return Size of type in bytes
-            //----------------------------------------------------------------------------------------
-            u32 GetTypeSize(PropertyType in_type)
+            std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
             {
-                switch(in_type)
-                {
-                    case PropertyType::k_bool:
-                        return sizeof(bool);
-                    case PropertyType::k_int:
-                        return sizeof(s32);
-                    case PropertyType::k_float:
-                        return sizeof(f32);
-                    case PropertyType::k_string:
-                        return sizeof(std::string);
-                    case PropertyType::k_pointer:
-                        return sizeof(u8*);
-                    case PropertyType::k_vec2:
-                        return sizeof(Core::Vector2);
-                    case PropertyType::k_vec3:
-                        return sizeof(Core::Vector3);
-                    case PropertyType::k_unknown:
-                        return 0;
-                }
-                
-                return 0;
-            }
+                {PropertyType::k_string, "Type"},
+                {PropertyType::k_string, "Name"},
+                {PropertyType::k_vec2, "RelPosition"},
+                {PropertyType::k_vec2, "AbsPosition"},
+                {PropertyType::k_vec2, "RelSize"},
+                {PropertyType::k_vec2, "AbsSize"},
+                {PropertyType::k_vec2, "PreferredSize"},
+                {PropertyType::k_vec2, "Scale"},
+                {PropertyType::k_colour, "Colour"},
+                {PropertyType::k_float, "Rotation"},
+                {PropertyType::k_alignmentAnchor, "OriginAnchor"},
+                {PropertyType::k_alignmentAnchor, "ParentalAnchor"},
+                {PropertyType::k_bool, "Visible"},
+                {PropertyType::k_bool, "ClipChildren"},
+                {PropertyType::k_sizePolicy, "SizePolicy"},
+                {PropertyType::k_propertyMap, "Layout"},
+                {PropertyType::k_propertyMap, "Drawable"}
+            };
+            
             //----------------------------------------------------------------------------------------
             /// Perform a rough check to see if the widget is offscreen
             ///
@@ -208,34 +198,43 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Widget::Widget(const WidgetDef::DefaultPropertiesDesc& in_defaultProperties, const std::vector<WidgetDef::CustomPropertyDesc>& in_customProperties)
-        :
-        m_name(in_defaultProperties.m_name), m_localPosition(in_defaultProperties.m_localPosition), m_localSize(in_defaultProperties.m_localPosition), m_preferredSize(in_defaultProperties.m_preferredSize),
-        m_localScale(in_defaultProperties.m_localScale), m_localColour(in_defaultProperties.m_localColour), m_localRotation(in_defaultProperties.m_localRotation),
-        m_originAnchor(in_defaultProperties.m_originAnchor), m_parentalAnchor(in_defaultProperties.m_parentalAnchor),
-        m_isVisible(in_defaultProperties.m_isVisible), m_isSubviewClippingEnabled(in_defaultProperties.m_isSubviewClippingEnabled)
+        Widget::Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties)
         {
-            SetSizePolicy(in_defaultProperties.m_sizePolicy);
-            
-            u32 currentOffset = 0;
-            for(const auto& customPropertyDesc : in_customProperties)
-            {
-                CS_ASSERT(customPropertyDesc.m_type != PropertyType::k_unknown, "Unsupported property type");
-                
-                PropertyLookup lookup = {customPropertyDesc.m_type, currentOffset};
-                m_blobOffsets.insert(std::make_pair(customPropertyDesc.m_name, lookup));
-                
-                u32 typeSize = GetTypeSize(customPropertyDesc.m_type);
-                currentOffset += typeSize;
-            }
-            
-            //Current offset now also holds the required capacity of the blob
-            if(currentOffset > 0)
-            {
-                m_propertyBlob = new u8[currentOffset];
-            }
+            SetDefaultProperties(in_defaultProperties);
+            SetCustomProperties(in_customProperties);
             
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        std::vector<PropertyMap::PropertyDesc> Widget::GetPropertyDescs()
+        {
+            return g_propertyDescs;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetDefaultProperties(const PropertyMap& in_defaultProperties)
+        {
+            SetName(in_defaultProperties.GetPropertyOrDefault("Name", ""));
+            SetRelativePosition(in_defaultProperties.GetPropertyOrDefault("RelPosition", Core::Vector2::k_zero));
+            SetAbsolutePosition(in_defaultProperties.GetPropertyOrDefault("AbsPosition", Core::Vector2::k_zero));
+            SetRelativeSize(in_defaultProperties.GetPropertyOrDefault("RelSize", Core::Vector2::k_zero));
+            SetAbsoluteSize(in_defaultProperties.GetPropertyOrDefault("AbsSize", Core::Vector2::k_zero));
+            SetDefaultPreferredSize(in_defaultProperties.GetPropertyOrDefault("PreferredSize", Core::Vector2::k_one));
+            ScaleTo(in_defaultProperties.GetPropertyOrDefault("Scale", Core::Vector2::k_one));
+            SetColour(in_defaultProperties.GetPropertyOrDefault("Colour", Core::Colour::k_white));
+            RotateTo(in_defaultProperties.GetPropertyOrDefault("Rotation", 0.0f));
+            SetParentalAnchor(in_defaultProperties.GetPropertyOrDefault("ParentalAnchor", Rendering::AlignmentAnchor::k_middleCentre));
+            SetOriginAnchor(in_defaultProperties.GetPropertyOrDefault("OriginAnchor", Rendering::AlignmentAnchor::k_middleCentre));
+            SetVisible(in_defaultProperties.GetPropertyOrDefault("Visible", true));
+            SetClippingEnabled(in_defaultProperties.GetPropertyOrDefault("ClipChildren", false));
+            SetSizePolicy(in_defaultProperties.GetPropertyOrDefault("SizePolicy", SizePolicy::k_none));
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetCustomProperties(const PropertyMap& in_customProperties)
+        {
+            m_customProperties = in_customProperties;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -996,98 +995,6 @@ namespace ChilliSource
                     child->OnParentTransformChanged();
                 }
             }
-        }
-        //----------------------------------------------------------------------------------------
-        /// This is a specialisation to handle inserting strings into the blob.
-        //----------------------------------------------------------------------------------------
-        template<> void Widget::SetProperty(const std::string& in_name, std::string in_value)
-        {
-            auto entry = m_blobOffsets.find(in_name);
-            CS_ASSERT(entry != m_blobOffsets.end(), "No UI property with name: " + in_name);
-            CS_ASSERT(entry->second.m_type == PropertyType::k_string, "Wrong type for property with name " + in_name);
-            
-            std::string* property = (std::string*)(m_propertyBlob + entry->second.m_offset);
-            *property = in_value;
-        }
-        //----------------------------------------------------------------------------------------
-        /// This is a specialisation to handle inserting strings into the blob.
-        //----------------------------------------------------------------------------------------
-        template<> void Widget::SetProperty(const std::string& in_name, const std::string& in_value)
-        {
-            SetProperty<std::string>(in_name, in_value);
-        }
-        //----------------------------------------------------------------------------------------
-        /// This is a specialisation to handle inserting string literals into the blob
-        //----------------------------------------------------------------------------------------
-        template<> void Widget::SetProperty(const std::string& in_name, const char* in_value)
-        {
-            SetProperty<std::string>(in_name, in_value);
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<bool>() const
-        {
-            return PropertyType::k_bool;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<s32>() const
-        {
-            return PropertyType::k_int;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<std::string>() const
-        {
-            return PropertyType::k_string;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<const std::string&>() const
-        {
-            return PropertyType::k_string;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<const char*>() const
-        {
-            return PropertyType::k_string;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<f32>() const
-        {
-            return PropertyType::k_float;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<Core::Vector2>() const
-        {
-            return PropertyType::k_vec2;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<const Core::Vector2&>() const
-        {
-            return PropertyType::k_vec2;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<Core::Vector3>() const
-        {
-            return PropertyType::k_vec3;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<const Core::Vector3&>() const
-        {
-            return PropertyType::k_vec3;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        Widget::~Widget()
-        {
-            CS_SAFEDELETE_ARRAY(m_propertyBlob);
         }
     }
 }

@@ -26,9 +26,10 @@
 //  THE SOFTWARE.
 //
 
-
 #ifndef _CHILLISOURCE_UI_LAYOUT_LAYOUTTYPE_H_
 #define _CHILLISOURCE_UI_LAYOUT_LAYOUTTYPE_H_
+
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {
@@ -47,6 +48,16 @@ namespace ChilliSource
             k_horizontalList,
             k_verticalList
         };
+        //----------------------------------------------------------------------------------------
+        /// Converts a string to a drawable type
+        ///
+        /// @author S Downie
+        ///
+        /// @param String
+        ///
+        /// @return Drawable type
+        //----------------------------------------------------------------------------------------
+        LayoutType ParseLayoutType(const std::string& in_type);
 	}
 }
 

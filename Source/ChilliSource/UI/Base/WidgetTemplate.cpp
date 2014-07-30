@@ -1,7 +1,7 @@
 //
-//  WidgetDef.cpp
+//  WidgetTemplate.cpp
 //  Chilli Source
-//  Created by Scott Downie on 25/07/2014.
+//  Created by Scott Downie on 30/07/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,34 +26,34 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Base/WidgetDef.h>
+#include <ChilliSource/UI/Base/WidgetTemplate.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
-        CS_DEFINE_NAMEDTYPE(WidgetDef);
+        CS_DEFINE_NAMEDTYPE(WidgetTemplate);
         //-------------------------------------------------------
         //-------------------------------------------------------
-        WidgetDefUPtr WidgetDef::Create()
+        WidgetTemplateUPtr WidgetTemplate::Create()
         {
-            return WidgetDefUPtr(new WidgetDef());
+            return WidgetTemplateUPtr(new WidgetTemplate());
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool WidgetDef::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool WidgetTemplate::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            return in_interfaceId == WidgetDef::InterfaceID;
+            return in_interfaceId == WidgetTemplate::InterfaceID;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void WidgetDef::Build(const WidgetHierarchyDesc& in_desc)
+        void WidgetTemplate::Build(const WidgetHierarchyDesc& in_desc)
         {
             m_desc = in_desc;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        const WidgetHierarchyDesc& WidgetDef::GetHierarchyDesc() const
+        const WidgetHierarchyDesc& WidgetTemplate::GetHierarchyDesc() const
         {
             return m_desc;
         }

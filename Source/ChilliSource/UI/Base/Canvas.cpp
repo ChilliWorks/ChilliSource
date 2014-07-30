@@ -32,6 +32,7 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Event/IConnectableEvent.h>
+#include <ChilliSource/UI/Base/PropertyMap.h>
 
 namespace ChilliSource
 {
@@ -57,7 +58,7 @@ namespace ChilliSource
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
             CS_ASSERT(m_screen != nullptr, "Canvas must have access to screen");
             
-			m_canvas = WidgetUPtr(new Widget(WidgetDef::DefaultPropertiesDesc(), std::vector<WidgetDef::CustomPropertyDesc>()));
+			m_canvas = WidgetUPtr(new Widget(PropertyMap(), PropertyMap()));
             m_canvas->SetName("Canvas");
             m_canvas->SetAbsoluteSize(GetSize());
             m_canvas->SetCanvas(m_canvas.get());

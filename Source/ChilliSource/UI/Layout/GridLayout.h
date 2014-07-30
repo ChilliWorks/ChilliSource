@@ -33,6 +33,7 @@
 #include <ChilliSource/ChilliSource.h>
 
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 
 namespace ChilliSource
@@ -66,7 +67,38 @@ namespace ChilliSource
                 k_colMajor,
                 k_rowMajor
             };
-            
+            //----------------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            GridLayout() = default;
+            //----------------------------------------------------------------------------------------
+            /// Constructor that builds the layout from key-value properties
+            ///
+            /// Properties:
+            ///
+            ///     - NumRows - u32 - Number of columns
+            ///     - NumCols - u32 - Number of rows
+            ///     - RelHSpacing - f32 - Relative spacing horizontally
+            ///     - RelVSpacing - f32 - Relative spacing vertically
+            ///     - AbsHSpacing - f32 - Absolute spacing horizontally
+            ///     - AbsVSpacing - f32 - Absolute spacing vertically
+            ///     - RelMargins - f32 f32 f32 f32 - Relative margins top, right, bottom, left
+            ///     - AbsMargins - f32 f32 f32 f32 - Absolute margins top, right, bottom, left
+            ///     - CellOrder - "ColMajor"/"RowMajor" - Order in which cells are laid out
+            ///
+            /// @author S Downie
+            ///
+            /// @param Key-value properties
+            //----------------------------------------------------------------------------------------
+            GridLayout(const PropertyMap& in_properties);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The list of properties supported by this layout
+            //----------------------------------------------------------------------------------------
+            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///

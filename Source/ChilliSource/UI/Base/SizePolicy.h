@@ -26,9 +26,10 @@
 //  THE SOFTWARE.
 //
 
-
 #ifndef _CHILLISOURCE_UI_BASE_SIZEPOLICY_H_
 #define _CHILLISOURCE_UI_BASE_SIZEPOLICY_H_
+
+#include <ChilliSource/ChilliSource.h>
 
 namespace ChilliSource
 {
@@ -50,6 +51,16 @@ namespace ChilliSource
             k_fillMaintainingAspect,
             k_totalNum
         };
+        //----------------------------------------------------------------------------------------
+        /// Parse the string and return the size policy
+        ///
+        /// @author S Downie
+        ///
+        /// @param String
+        ///
+        /// @return Size policy
+        //----------------------------------------------------------------------------------------
+        SizePolicy ParseSizePolicy(const std::string& in_policy);
 	}
 }
 

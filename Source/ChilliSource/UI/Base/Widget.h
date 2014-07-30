@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
@@ -41,7 +42,6 @@
 
 #include <functional>
 #include <mutex>
-#include <unordered_map>
 #include <vector>
 
 namespace ChilliSource
@@ -81,12 +81,49 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// Constructor that builds the widget from the given definition.
             ///
+            /// Default properties exposed to UI files:
+            ///
+            ///     - Name - String - Identifying name
+            ///     - RelPosition - f32 f32 - Position of local anchor relative to parent anchor and parent size
+            ///     - AbsPosition - f32 f32 - Absolute position of local anchor relative to parent anchor
+            ///     - RelSize - f32 f32 - Size relative to the parent size
+            ///     - AbsSize - f32 f32 - Absolute size
+            ///     - PreferredSize - f32 f32 - Absolute preferred size
+            ///     - Scale - f32 f32 - Scale
+            ///     - Rotation - f32 - Rotation in radians
+            ///     - Colour - f32 f32 f32 f32 - Colour
+            ///     - Visible - "true"/"false" - Visiblity flag
+            ///     - ClipChildren - "true"/"false" - Whether children that exceed bounds are clipped
+            ///     - OriginAnchor - "TopLeft"/"TopCentre"/"TopRight"/"MiddleLeft"/"MiddleCentre"/"MiddleRight"/"BottomLeft"/"BottomCentre"/"BottomRight" - Origin anchor
+            ///     - ParentalAnchor - "TopLeft"/"TopCentre"/"TopRight"/"MiddleLeft"/"MiddleCentre"/"MiddleRight"/"BottomLeft"/"BottomCentre"/"BottomRight" - Parent anchor
+            ///     - SizePolicy - "None"/"UsePreferredSize"/"UseWidthMaintainingAspect"/"UseHeightMaintainingAspect"/"FitMaintainingAspect"/"FillMaintainingAspect" - Size policy
+            ///     - Drawable - Object - See *Drawable.h
+            ///     - Layout - Object - See *Layout.h
+            ///
             /// @author S Downie
             ///
             /// @param Default property values
-            /// @param Custom property definitions and values
+            /// @param Custom property values
             //----------------------------------------------------------------------------------------
-            Widget(const WidgetDef::DefaultPropertiesDesc& in_defaultProperties, const std::vector<WidgetDef::CustomPropertyDesc>& in_customProperties);
+            Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The list of properties supported by widget
+            //----------------------------------------------------------------------------------------
+            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Default property values
+            //----------------------------------------------------------------------------------------
+            void SetDefaultProperties(const PropertyMap& in_defaultProperties);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Custom property values
+            //----------------------------------------------------------------------------------------
+            void SetCustomProperties(const PropertyMap& in_customProperties);
             //----------------------------------------------------------------------------------------
             /// Set the drawable that handles how to render the widget. If this is null then the
             /// widget will not be visible. The widget takes ownership of the drawable.
@@ -536,12 +573,6 @@ namespace ChilliSource
             /// @param The layout that changed
             //----------------------------------------------------------------------------------------
             void OnLayoutChanged(const ILayout* in_layout);
-            //----------------------------------------------------------------------------------------
-            /// Destructor
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            ~Widget();
             
         private:
             friend class Canvas;
@@ -561,25 +592,6 @@ namespace ChilliSource
             /// @param Parent
             //----------------------------------------------------------------------------------------
             void SetParent(Widget* in_parent);
-            //----------------------------------------------------------------------------------------
-            /// Holds the type of the property and the offset into the blob
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            struct PropertyLookup
-            {
-                PropertyType m_type;
-                u32 m_offset;
-            };
-            //----------------------------------------------------------------------------------------
-            /// Converts the object type to proprty type and throws compiler error for unsupported
-            /// types
-            ///
-            /// @author S Downie
-            ///
-            /// @return The internal enum property type of the given object type
-            //----------------------------------------------------------------------------------------
-            template<typename TType> PropertyType GetType() const;
             //----------------------------------------------------------------------------------------
             /// Calculate the transform matrix of the object based on the local scale, rotation and
             /// position
@@ -639,6 +651,8 @@ namespace ChilliSource
             Core::Vector2 CalculateChildFinalSize(const Widget* in_child);
         private:
             
+            PropertyMap m_customProperties;
+            
             Core::UnifiedVector2 m_localPosition;
             Core::UnifiedVector2 m_localSize;
             Core::Vector2 m_preferredSize;
@@ -656,9 +670,6 @@ namespace ChilliSource
             std::vector<WidgetSPtr> m_children;
             
             std::string m_name;
-            
-            std::unordered_map<std::string, PropertyLookup> m_blobOffsets;
-            u8* m_propertyBlob = nullptr;
             
             IDrawableUPtr m_drawable;
             ILayoutUPtr m_layout;
@@ -686,111 +697,14 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         template<typename TType> void Widget::SetProperty(const std::string& in_name, TType in_value)
         {
-            auto entry = m_blobOffsets.find(in_name);
-            CS_ASSERT(entry != m_blobOffsets.end(), "No UI property with name: " + in_name);
-            CS_ASSERT(entry->second.m_type == GetType<TType>(), "Wrong type for property with name " + in_name);
-            
-            TType* property = (TType*)(m_propertyBlob + entry->second.m_offset);
-            *property = std::move(in_value);
+            m_customProperties.SetProperty(in_name, in_value);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         template<typename TType> TType Widget::GetProperty(const std::string& in_name) const
         {
-            auto entry = m_blobOffsets.find(in_name);
-            CS_ASSERT(entry != m_blobOffsets.end(), "No UI property with name: " + in_name);
-            CS_ASSERT(entry->second.m_type == GetType<TType>(), "Wrong type for property with name " + in_name);
-            
-            TType* property = (TType*)(m_propertyBlob + entry->second.m_offset);
-            return *property;
+            return m_customProperties.GetProperty<TType>(in_name);
         }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<typename TType> PropertyType Widget::GetType() const
-        {
-            static_assert(std::is_pointer<TType>::value, "Property type not supported");
-            return PropertyType::k_pointer;
-        }
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for bool
-        ///
-        /// @author S Downie
-        ///
-        /// @return Bool prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<bool>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for int
-        ///
-        /// @author S Downie
-        ///
-        /// @return Int prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<s32>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for string
-        ///
-        /// @author S Downie
-        ///
-        /// @return String prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<std::string>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for string
-        ///
-        /// @author S Downie
-        ///
-        /// @return String prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<const std::string&>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for string
-        ///
-        /// @author S Downie
-        ///
-        /// @return String prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<const char*>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for float
-        ///
-        /// @author S Downie
-        ///
-        /// @return Float prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<f32>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for string
-        ///
-        /// @author S Downie
-        ///
-        /// @return Vec2 prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<Core::Vector2>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for string
-        ///
-        /// @author S Downie
-        ///
-        /// @return Vec2 prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<const Core::Vector2&>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for string
-        ///
-        /// @author S Downie
-        ///
-        /// @return Vec3 prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<Core::Vector3>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for string
-        ///
-        /// @author S Downie
-        ///
-        /// @return Vec3 prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType Widget::GetType<const Core::Vector3&>() const;
     }
 }
 

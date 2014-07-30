@@ -28,6 +28,9 @@
 
 #include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
@@ -38,6 +41,16 @@ namespace ChilliSource
     {
         namespace
         {
+            std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
+            {
+                {PropertyType::k_string, "Type"},
+                {PropertyType::k_string, "Direction"},
+                {PropertyType::k_vec4, "UVs"},
+                {PropertyType::k_vec2, "Insets"},
+                {PropertyType::k_string, "TextureLocation"},
+                {PropertyType::k_string, "TexturePath"}
+            };
+        
             //----------------------------------------------------------------------------------------
             /// Identifier for each patch in the 3 patch. Can be used as index look-ups into
             /// arrays of UVs, positions, etc.
@@ -213,21 +226,65 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        ThreePatchDrawable::ThreePatchDrawable(Type in_type)
+        ThreePatchDrawable::ThreePatchDrawable(Direction in_direction)
         {
-            switch (in_type)
+            switch (in_direction)
             {
-                case Type::k_horizontal:
+                case Direction::k_horizontal:
                     m_uvCalculationDelegate = CalculateThreePatchUVsHorizontal;
                     m_sizeCalculationDelegate = CalculateThreePatchSizesHorizontal;
                     m_positionCalculationDelegate = CalculateThreePatchPositionsHorizontal;
                     break;
-                case Type::k_vertical:
+                case Direction::k_vertical:
                     m_uvCalculationDelegate = CalculateThreePatchUVsVertical;
                     m_sizeCalculationDelegate = CalculateThreePatchSizesVertical;
                     m_positionCalculationDelegate = CalculateThreePatchPositionsVertical;
                     break;
             }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        ThreePatchDrawable::ThreePatchDrawable(const PropertyMap& in_properties)
+        {
+            std::string direction(in_properties.GetPropertyOrDefault("Direction", "Horizontal"));
+            
+            if(direction == "Horizontal")
+            {
+                m_uvCalculationDelegate = CalculateThreePatchUVsHorizontal;
+                m_sizeCalculationDelegate = CalculateThreePatchSizesHorizontal;
+                m_positionCalculationDelegate = CalculateThreePatchPositionsHorizontal;
+            }
+            else if(direction == "Vertical")
+            {
+                m_uvCalculationDelegate = CalculateThreePatchUVsVertical;
+                m_sizeCalculationDelegate = CalculateThreePatchSizesVertical;
+                m_positionCalculationDelegate = CalculateThreePatchPositionsVertical;
+            }
+            else
+            {
+                CS_LOG_FATAL("ThreePatchDrawable: Unknown type: " + direction);
+            }
+            
+            Core::Vector4 uvs(in_properties.GetPropertyOrDefault("UVs", Core::Vector4(0.0f, 0.0f, 1.0f, 1.0f)));
+            SetUVs(Rendering::UVs(uvs.x, uvs.y, uvs.z, uvs.w));
+            
+            Core::Vector2 insets(in_properties.GetPropertyOrDefault("Insets", Core::Vector2(0.01f, 0.01f)));
+            SetInsets(insets.x, insets.y);
+            
+            std::string location(in_properties.GetPropertyOrDefault("TextureLocation", ""));
+            std::string path(in_properties.GetPropertyOrDefault("TexturePath", ""));
+            
+            if(location.empty() == false && path.empty() == false)
+            {
+                auto resPool = Core::Application::Get()->GetResourcePool();
+                m_texture = resPool->LoadResource<Rendering::Texture>(Core::ParseStorageLocation(location), path);
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        std::vector<PropertyMap::PropertyDesc> ThreePatchDrawable::GetPropertyDescs()
+        {
+            return g_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -270,7 +327,6 @@ namespace ChilliSource
             
             for(u32 i=0; i<k_numPatches; ++i)
             {
-                //if(i == (u32)Patch::k_leftOrBottom || i == (u32)Patch::k_rightOrTop) continue;
                 Core::Matrix3 patchTransform = Core::Matrix3::CreateTranslation(positions[i]);
                 in_renderer->DrawBox(patchTransform * in_transform, sizes[i], Core::Vector2::k_zero, m_texture, uvs[i], in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
             }

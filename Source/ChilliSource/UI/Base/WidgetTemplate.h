@@ -1,7 +1,7 @@
 //
-//  WidgetDef.h
+//  WidgetTemplate.h
 //  Chilli Source
-//  Created by Scott Downie on 25/07/2014.
+//  Created by Scott Downie on 30/07/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_WIDGETDEF_H_
-#define _CHILLISOURCE_UI_BASE_WIDGETDEF_H_
+#ifndef _CHILLISOURCE_UI_BASE_WIDGETTEMPLATE_H_
+#define _CHILLISOURCE_UI_BASE_WIDGETTEMPLATE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
@@ -38,15 +38,15 @@ namespace ChilliSource
     namespace UI
     {
         //-------------------------------------------------------------
-        /// A resource that holds the description for defining new
-        /// widget types
+        /// A resource that holds the description for creating new
+        /// widget instances
         ///
         /// @author S Downie
         //-------------------------------------------------------------
-        class WidgetDef final : public Core::Resource
+        class WidgetTemplate final : public Core::Resource
         {
         public:
-            CS_DECLARE_NAMEDTYPE(WidgetDef);
+            CS_DECLARE_NAMEDTYPE(WidgetTemplate);
             
             //-------------------------------------------------------
             /// Is the object of the given interface type.
@@ -84,13 +84,13 @@ namespace ChilliSource
             ///
             /// @return New backend with ownership transferred
             //-------------------------------------------------------
-            static WidgetDefUPtr Create();
+            static WidgetTemplateUPtr Create();
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            WidgetDef() = default;
+            WidgetTemplate() = default;
             
         private:
             

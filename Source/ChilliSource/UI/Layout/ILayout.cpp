@@ -1,7 +1,7 @@
 //
-//  PropertyType.h
+//  ILayout.cpp
 //  Chilli Source
-//  Created by Scott Downie on 25/07/2014.
+//  Created by Scott Downie on 18/04/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,46 +26,37 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_PROPERTYTYPE_H_
-#define _CHILLISOURCE_UI_BASE_PROPERTYTYPE_H_
+#include <ChilliSource/UI/Layout/ILayout.h>
 
-#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/UI/Layout/GridLayout.h>
+#include <ChilliSource/UI/Layout/HListLayout.h>
+#include <ChilliSource/UI/Layout/LayoutType.h>
+#include <ChilliSource/UI/Layout/VListLayout.h>
 
 namespace ChilliSource
 {
-	namespace UI
-	{
+    namespace UI
+    {
         //----------------------------------------------------------------------------------------
-        /// The supported property types for widgets
-        ///
-        /// @author S Downie
         //----------------------------------------------------------------------------------------
-        enum class PropertyType
+        std::vector<PropertyMap::PropertyDesc> ILayout::GetPropertyDescs(LayoutType in_type)
         {
-            k_unknown,
-            k_bool,
-            k_int,
-            k_float,
-            k_string,
-            k_vec2,
-            k_vec3,
-            k_vec4,
-            k_colour,
-            k_alignmentAnchor,
-            k_sizePolicy,
-            k_propertyMap
-        };
-        //----------------------------------------------------------------------------------------
-        /// Convert the string type to internal property type
-        ///
-        /// @author S Downie
-        ///
-        /// @param Type string
-        ///
-        /// @return Property type
-        //----------------------------------------------------------------------------------------
-        PropertyType ParsePropertyType(const std::string& in_type);
-	}
+            switch(in_type)
+            {
+                case LayoutType::k_none:
+                {
+                    std::vector<PropertyMap::PropertyDesc> propertyDescs = {{PropertyType::k_string, "Type"}};
+                    return propertyDescs;
+                }
+                case LayoutType::k_grid:
+                    return GridLayout::GetPropertyDescs();
+                case LayoutType::k_verticalList:
+                    return VListLayout::GetPropertyDescs();
+                case LayoutType::k_horizontalList:
+                    return HListLayout::GetPropertyDescs();
+            }
+            
+            return std::vector<PropertyMap::PropertyDesc>();
+        }
+    }
 }
-
-#endif

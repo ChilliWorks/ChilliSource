@@ -28,12 +28,66 @@
 
 #include <ChilliSource/UI/Layout/GridLayout.h>
 
+#include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Base/Widget.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
+        namespace
+        {
+            std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
+            {
+                {PropertyType::k_string, "Type"},
+                {PropertyType::k_int, "NumRows"},
+                {PropertyType::k_int, "NumCols"},
+                {PropertyType::k_float, "RelHSpacing"},
+                {PropertyType::k_float, "AbsHSpacing"},
+                {PropertyType::k_float, "RelVSpacing"},
+                {PropertyType::k_float, "AbsVSpacing"},
+                {PropertyType::k_vec4, "RelMargins"},
+                {PropertyType::k_vec4, "AbsMargins"},
+                {PropertyType::k_string, "CellOrder"}
+            };
+        }
+        
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        GridLayout::GridLayout(const PropertyMap& in_properties)
+        {
+            SetNumRows(in_properties.GetPropertyOrDefault("NumRows", 1));
+            SetNumCols(in_properties.GetPropertyOrDefault("NumCols", 1));
+            SetRelativeHSpacing(in_properties.GetPropertyOrDefault("RelHSpacing", 0.0f));
+            SetAbsoluteHSpacing(in_properties.GetPropertyOrDefault("AbsHSpacing", 0.0f));
+            SetRelativeVSpacing(in_properties.GetPropertyOrDefault("RelVSpacing", 0.0f));
+            SetAbsoluteVSpacing(in_properties.GetPropertyOrDefault("AbsVSpacing", 0.0f));
+            
+            Core::Vector4 relMargins(in_properties.GetPropertyOrDefault("RelMargins", Core::Vector4::k_zero));
+            SetRelativeMargins(relMargins.x, relMargins.y, relMargins.z, relMargins.w);
+            Core::Vector4 absMargins(in_properties.GetPropertyOrDefault("AbsMargins", Core::Vector4::k_zero));
+            SetAbsoluteMargins(absMargins.x, absMargins.y, absMargins.z, absMargins.w);
+            
+            std::string cellOrder(in_properties.GetPropertyOrDefault("CellOrder", "ColMajor"));
+            if(cellOrder == "ColMajor")
+            {
+                SetCellOrder(CellOrder::k_colMajor);
+            }
+            else if(cellOrder == "RowMajor")
+            {
+                SetCellOrder(CellOrder::k_rowMajor);
+            }
+            else
+            {
+                CS_LOG_FATAL("GridLayout: Unknown cell order: " + cellOrder);
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        std::vector<PropertyMap::PropertyDesc> GridLayout::GetPropertyDescs()
+        {
+            return g_propertyDescs;
+        }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void GridLayout::SetNumRows(u32 in_numRos)

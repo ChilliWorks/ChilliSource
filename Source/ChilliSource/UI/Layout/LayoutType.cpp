@@ -1,5 +1,5 @@
 //
-//  PropertyType.h
+//  LayoutType.cpp
 //  Chilli Source
 //  Created by Scott Downie on 25/07/2014.
 //
@@ -26,46 +26,23 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_PROPERTYTYPE_H_
-#define _CHILLISOURCE_UI_BASE_PROPERTYTYPE_H_
-
-#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/UI/Layout/LayoutType.h>
 
 namespace ChilliSource
 {
-	namespace UI
-	{
+    namespace UI
+    {
         //----------------------------------------------------------------------------------------
-        /// The supported property types for widgets
-        ///
-        /// @author S Downie
         //----------------------------------------------------------------------------------------
-        enum class PropertyType
+        LayoutType ParseLayoutType(const std::string& in_type)
         {
-            k_unknown,
-            k_bool,
-            k_int,
-            k_float,
-            k_string,
-            k_vec2,
-            k_vec3,
-            k_vec4,
-            k_colour,
-            k_alignmentAnchor,
-            k_sizePolicy,
-            k_propertyMap
-        };
-        //----------------------------------------------------------------------------------------
-        /// Convert the string type to internal property type
-        ///
-        /// @author S Downie
-        ///
-        /// @param Type string
-        ///
-        /// @return Property type
-        //----------------------------------------------------------------------------------------
-        PropertyType ParsePropertyType(const std::string& in_type);
-	}
+            if(in_type == "None") return LayoutType::k_none;
+            if(in_type == "Grid") return LayoutType::k_grid;
+            if(in_type == "HList") return LayoutType::k_horizontalList;
+            if(in_type == "VList") return LayoutType::k_verticalList;
+            
+            CS_LOG_FATAL("Cannot parse layout type: " + in_type);
+            return LayoutType::k_none;
+        }
+    }
 }
-
-#endif

@@ -1,7 +1,7 @@
 //
-//  WidgetDefProvider.h
+//  WidgetTemplateProvider.h
 //  Chilli Source
-//  Created by Scott Downie on 25/07/2014.
+//  Created by Scott Downie on 30/07/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,11 +26,13 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_WIDGETDEFPROVIDER_H_
-#define _CHILLISOURCE_UI_BASE_WIDGETDEFPROVIDER_H_
+#ifndef _CHILLISOURCE_UI_BASE_WIDGETTEMPLATEPROVIDER_H_
+#define _CHILLISOURCE_UI_BASE_WIDGETTEMPLATEPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
+
+#include <json/forwards.h>
 
 namespace ChilliSource
 {
@@ -42,10 +44,10 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //-------------------------------------------------------------
-        class WidgetDefProvider final : public Core::ResourceProvider
+        class WidgetTemplateProvider final : public Core::ResourceProvider
         {
         public:
-            CS_DECLARE_NAMEDTYPE(WidgetDefProvider);
+            CS_DECLARE_NAMEDTYPE(WidgetTemplateProvider);
 
             //-------------------------------------------------------
             /// Is the object of the given interface type.
@@ -101,6 +103,16 @@ namespace ChilliSource
             /// @param [Out] The output resource.
             //----------------------------------------------------
 			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+            //-------------------------------------------------------
+            /// From the given JSON value parse the values of the property
+            /// types into the given container
+            ///
+            /// @author S Downie
+            ///
+            /// @param Json template
+            /// @param [Out] Hierarchy desc
+            //-------------------------------------------------------
+            static void ParseTemplate(const Json::Value& in_template, WidgetHierarchyDesc& out_hierarchyDesc);
         private:
             
             friend class Core::Application;
@@ -111,7 +123,7 @@ namespace ChilliSource
             ///
             /// @return New backend with ownership transferred
             //-------------------------------------------------------
-            static WidgetDefProviderUPtr Create();
+            static WidgetTemplateProviderUPtr Create();
         };
     }
 }

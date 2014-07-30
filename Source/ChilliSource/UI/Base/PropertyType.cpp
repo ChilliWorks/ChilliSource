@@ -34,16 +34,21 @@ namespace ChilliSource
     {
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        PropertyType ParseType(const std::string& in_type)
+        PropertyType ParsePropertyType(const std::string& in_type)
         {
             if(in_type == "Int") return PropertyType::k_int;
             if(in_type == "Bool") return PropertyType::k_bool;
             if(in_type == "Float") return PropertyType::k_float;
             if(in_type == "String") return PropertyType::k_string;
-            if(in_type == "Pointer") return PropertyType::k_pointer;
             if(in_type == "Vec2") return PropertyType::k_vec2;
             if(in_type == "Vec3") return PropertyType::k_vec3;
+            if(in_type == "Vec4") return PropertyType::k_vec4;
+            if(in_type == "SizePolicy") return PropertyType::k_sizePolicy;
+            if(in_type == "AlignmentAnchor") return PropertyType::k_alignmentAnchor;
+            if(in_type == "Colour") return PropertyType::k_colour;
+            if(in_type == "PropertyMap") return PropertyType::k_propertyMap;
             
+            CS_LOG_FATAL("Cannot parse property type: " + in_type);
             return PropertyType::k_unknown;
         }
     }
