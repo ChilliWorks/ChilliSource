@@ -32,6 +32,8 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/UI/Base/Widget.h>
+#include <ChilliSource/UI/Base/WidgetDef.h>
+#include <ChilliSource/UI/Base/WidgetTemplate.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
 #include <ChilliSource/UI/Drawable/TextureDrawable.h>
@@ -136,8 +138,9 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         void WidgetFactory::RegisterDefinition(const WidgetDefCSPtr& in_def)
         {
-            const std::string& nameKey = in_def->GetHierarchyDesc().m_defaultProperties.GetProperty<std::string>("Type");
-            m_widgetDefNameMap.insert(std::make_pair(nameKey, in_def));
+            auto name = in_def->GetHierarchyDesc().m_defaultProperties.GetProperty<std::string>("Name");
+            auto typeKey = in_def->GetHierarchyDesc().m_defaultProperties.GetProperty<std::string>("Type");
+            m_widgetDefNameMap.insert(std::make_pair(typeKey, in_def));
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
@@ -157,7 +160,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         WidgetSPtr WidgetFactory::Create(const WidgetTemplateCSPtr& in_template) const
         {
-            return nullptr;
+            return CreateRecursive(in_template->GetHierarchyDesc());
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
@@ -173,7 +176,7 @@ namespace ChilliSource
             
             if(in_hierarchyDesc.m_defaultProperties.HasProperty("Layout") == true)
             {
-                widget->SetLayout(CreateLayout(in_hierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Layout")));
+                widget->SetInternalLayout(CreateLayout(in_hierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Layout")));
             }
             if(in_hierarchyDesc.m_defaultProperties.HasProperty("Drawable") == true)
             {
@@ -182,19 +185,7 @@ namespace ChilliSource
             
             for(const auto& childHierarchyDesc : in_hierarchyDesc.m_children)
             {
-                std::string childType = childHierarchyDesc.m_defaultProperties.GetProperty<std::string>("Type");
-                WidgetDefCSPtr widgetDef = m_widgetDefNameMap.find(childType)->second;
-                WidgetSPtr childWidget = CreateRecursive(widgetDef->GetHierarchyDesc());
-                childWidget->SetDefaultProperties(childHierarchyDesc.m_defaultProperties);
-                childWidget->SetCustomProperties(childHierarchyDesc.m_customProperties);
-                if(childHierarchyDesc.m_defaultProperties.HasProperty("Layout") == true)
-                {
-                    childWidget->SetLayout(CreateLayout(childHierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Layout")));
-                }
-                if(childHierarchyDesc.m_defaultProperties.HasProperty("Drawable") == true)
-                {
-                    childWidget->SetDrawable(CreateDrawable(childHierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Drawable")));
-                }
+                WidgetSPtr childWidget = CreateRecursive(childHierarchyDesc);
                 widget->AddInternalWidget(childWidget);
             }
             

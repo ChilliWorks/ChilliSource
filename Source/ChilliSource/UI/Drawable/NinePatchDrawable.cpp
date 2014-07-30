@@ -44,11 +44,11 @@ namespace ChilliSource
         {
             std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
             {
-                {PropertyType::k_string, "Type"},
-                {PropertyType::k_vec4, "UVs"},
-                {PropertyType::k_vec4, "Insets"},
-                {PropertyType::k_string, "TextureLocation"},
-                {PropertyType::k_string, "TexturePath"}
+                {PropertyType::k_string, "Type", "NinePatch"},
+                {PropertyType::k_vec4, "UVs", "0 0 1 1"},
+                {PropertyType::k_vec4, "Insets", "0.01 0.01 0.01 0.01"},
+                {PropertyType::k_string, "TextureLocation", "Package"},
+                {PropertyType::k_string, "TexturePath", ""}
             };
             
             const u32 k_numPatches = 9;
@@ -249,14 +249,14 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         NinePatchDrawable::NinePatchDrawable(const PropertyMap& in_properties)
         {
-            Core::Vector4 uvs(in_properties.GetPropertyOrDefault("UVs", Core::Vector4(0.0f, 0.0f, 1.0f, 1.0f)));
+            Core::Vector4 uvs(in_properties.GetProperty<Core::Vector4>("UVs"));
             SetUVs(Rendering::UVs(uvs.x, uvs.y, uvs.z, uvs.w));
             
-            Core::Vector4 insets(in_properties.GetPropertyOrDefault("Insets", Core::Vector4(0.01f, 0.01f, 0.01f, 0.01f)));
+            Core::Vector4 insets(in_properties.GetProperty<Core::Vector4>("Insets"));
             SetInsets(insets.x, insets.y, insets.z, insets.w);
             
-            std::string location(in_properties.GetPropertyOrDefault("TextureLocation", ""));
-            std::string path(in_properties.GetPropertyOrDefault("TexturePath", ""));
+            std::string location(in_properties.GetProperty<std::string>("TextureLocation"));
+            std::string path(in_properties.GetProperty<std::string>("TexturePath"));
             
             if(location.empty() == false && path.empty() == false)
             {

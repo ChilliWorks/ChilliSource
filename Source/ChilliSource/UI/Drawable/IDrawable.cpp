@@ -45,7 +45,7 @@ namespace ChilliSource
             {
                 case DrawableType::k_none:
                 {
-                    std::vector<PropertyMap::PropertyDesc> propertyDescs = {{PropertyType::k_string, "Type"}};
+                    std::vector<PropertyMap::PropertyDesc> propertyDescs = {{PropertyType::k_string, "Type", "None"}};
                     return propertyDescs;
                 }
                 case DrawableType::k_texture:

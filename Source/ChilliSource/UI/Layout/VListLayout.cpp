@@ -39,12 +39,12 @@ namespace ChilliSource
         {
             std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
             {
-                {PropertyType::k_string, "Type"},
-                {PropertyType::k_int, "NumCells"},
-                {PropertyType::k_float, "RelSpacing"},
-                {PropertyType::k_float, "AbsSpacing"},
-                {PropertyType::k_vec4, "RelMargins"},
-                {PropertyType::k_vec4, "AbsMargins"}
+                {PropertyType::k_string, "Type", "VList"},
+                {PropertyType::k_int, "NumCells", "1"},
+                {PropertyType::k_float, "RelSpacing", "0"},
+                {PropertyType::k_float, "AbsSpacing", "0"},
+                {PropertyType::k_vec4, "RelMargins", "0"},
+                {PropertyType::k_vec4, "AbsMargins", "0"}
             };
         }
         
@@ -62,13 +62,13 @@ namespace ChilliSource
             m_gridLayout.SetNumCols(1);
             m_gridLayout.SetCellOrder(GridLayout::CellOrder::k_rowMajor);
             
-            SetNumCells(in_properties.GetPropertyOrDefault("NumCells", 1));
-            SetRelativeSpacing(in_properties.GetPropertyOrDefault("RelSpacing", 0.0f));
-            SetAbsoluteSpacing(in_properties.GetPropertyOrDefault("AbsSpacing", 0.0f));
+            SetNumCells(in_properties.GetProperty<s32>("NumCells"));
+            SetRelativeSpacing(in_properties.GetProperty<f32>("RelSpacing"));
+            SetAbsoluteSpacing(in_properties.GetProperty<f32>("AbsSpacing"));
             
-            Core::Vector4 relMargins(in_properties.GetPropertyOrDefault("RelMargins", Core::Vector4::k_zero));
+            Core::Vector4 relMargins(in_properties.GetProperty<Core::Vector4>("RelMargins"));
             SetRelativeMargins(relMargins.x, relMargins.y, relMargins.z, relMargins.w);
-            Core::Vector4 absMargins(in_properties.GetPropertyOrDefault("AbsMargins", Core::Vector4::k_zero));
+            Core::Vector4 absMargins(in_properties.GetProperty<Core::Vector4>("AbsMargins"));
             SetAbsoluteMargins(absMargins.x, absMargins.y, absMargins.z, absMargins.w);
         }
         //----------------------------------------------------------------------------------------

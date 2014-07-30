@@ -45,7 +45,7 @@ namespace ChilliSource
             {
                 case LayoutType::k_none:
                 {
-                    std::vector<PropertyMap::PropertyDesc> propertyDescs = {{PropertyType::k_string, "Type"}};
+                    std::vector<PropertyMap::PropertyDesc> propertyDescs = {{PropertyType::k_string, "Type", "None"}};
                     return propertyDescs;
                 }
                 case LayoutType::k_grid:

@@ -67,21 +67,15 @@ namespace ChilliSource
             PropertyMap ParseDrawableValues(const Json::Value& in_drawable)
             {
                 DrawableType type = ParseDrawableType(in_drawable["Type"].asString());
-                std::vector<PropertyMap::PropertyDesc> supportedDescs = IDrawable::GetPropertyDescs(type);
-                std::vector<PropertyMap::PropertyDesc> usedDescs;
+                auto supportedProperties = IDrawable::GetPropertyDescs(type);
+                PropertyMap result(supportedProperties);
                 
-                for(const auto& propDesc : supportedDescs)
+                for(const auto& propDesc : supportedProperties)
                 {
                     if(in_drawable.isMember(propDesc.m_name) == true)
                     {
-                        usedDescs.push_back(propDesc);
+                        result.SetProperty(propDesc.m_type, propDesc.m_name, in_drawable[propDesc.m_name].asString());
                     }
-                }
-                
-                PropertyMap result(usedDescs);
-                for(const auto& propDesc : usedDescs)
-                {
-                    result.SetProperty(propDesc.m_type, propDesc.m_name, in_drawable[propDesc.m_name].asString());
                 }
                 
                 return result;
@@ -99,21 +93,15 @@ namespace ChilliSource
             PropertyMap ParseLayoutValues(const Json::Value& in_layout)
             {
                 LayoutType type = ParseLayoutType(in_layout["Type"].asString());
-                std::vector<PropertyMap::PropertyDesc> supportedDescs = ILayout::GetPropertyDescs(type);
-                std::vector<PropertyMap::PropertyDesc> usedDescs;
+                auto supportedProperties = ILayout::GetPropertyDescs(type);
+                PropertyMap result(supportedProperties);
                 
-                for(const auto& propDesc : supportedDescs)
+                for(const auto& propDesc : supportedProperties)
                 {
                     if(in_layout.isMember(propDesc.m_name) == true)
                     {
-                        usedDescs.push_back(propDesc);
+                        result.SetProperty(propDesc.m_type, propDesc.m_name, in_layout[propDesc.m_name].asString());
                     }
-                }
-                
-                PropertyMap result(usedDescs);
-                for(const auto& propDesc : usedDescs)
-                {
-                    result.SetProperty(propDesc.m_type, propDesc.m_name, in_layout[propDesc.m_name].asString());
                 }
                 
                 return result;
@@ -248,7 +236,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    CS_LOG_FATAL("Property with does not exist: " + std::string(it.memberName()));
+                    CS_LOG_FATAL("Property with name does not exist: " + std::string(it.memberName()));
                 }
             }
             

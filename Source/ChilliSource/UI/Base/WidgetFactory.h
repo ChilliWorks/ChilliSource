@@ -31,7 +31,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/UI/Base/WidgetDef.h>
 
 #include <unordered_map>
 
@@ -158,7 +157,6 @@ namespace ChilliSource
         private:
             
             std::unordered_map<std::string, WidgetDefCSPtr> m_widgetDefNameMap;
-            
 		};
 	}
 }

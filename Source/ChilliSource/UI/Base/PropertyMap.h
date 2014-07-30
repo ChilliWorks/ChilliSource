@@ -61,6 +61,7 @@ namespace ChilliSource
             {
                 PropertyType m_type;
                 std::string m_name;
+                std::string m_value;
             };
             //----------------------------------------------------------------------------------------
             /// Constructor - Note using this constructor will not initialise the map and needs
@@ -76,7 +77,7 @@ namespace ChilliSource
             ///
             /// @param List of the key names and types
             //----------------------------------------------------------------------------------------
-            PropertyMap(const std::vector<PropertyDesc>& in_customPropertyDefs);
+            PropertyMap(const std::vector<PropertyDesc>& in_propertyDefs);
             //----------------------------------------------------------------------------------------
             /// Move constructor
             ///
@@ -120,7 +121,7 @@ namespace ChilliSource
             ///
             /// @param List of the key names and types
             //----------------------------------------------------------------------------------------
-            void AllocateKeys(const std::vector<PropertyDesc>& in_customPropertyDefs);
+            void AllocateKeys(const std::vector<PropertyDesc>& in_propertyDefs);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -181,6 +182,12 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             template<typename TType> TType GetPropertyOrDefault(const std::string& in_name, TType in_default) const;
             //----------------------------------------------------------------------------------------
+            /// Remove all the properties and keys
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            void Clear();
+            //----------------------------------------------------------------------------------------
             /// Destructor
             ///
             /// @author S Downie
@@ -197,7 +204,7 @@ namespace ChilliSource
             struct PropertyLookup
             {
                 PropertyType m_type;
-                u32 m_offset;
+                void* m_value;
             };
             //----------------------------------------------------------------------------------------
             /// Converts the object type to proprty type and throws compiler error for unsupported
@@ -209,9 +216,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             template<typename TType> PropertyType GetType() const;
             
-            std::unordered_map<u32, PropertyLookup> m_blobOffsets;
-            u8* m_propertyBlob = nullptr;
-            u32 m_blobSize = 0;
+            std::unordered_map<u32, PropertyLookup> m_properties;
         };
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -219,11 +224,11 @@ namespace ChilliSource
         {
             u32 hashKey = Core::HashCRC32::GenerateHashCode(in_name);
             
-            auto entry = m_blobOffsets.find(hashKey);
-            CS_ASSERT(entry != m_blobOffsets.end(), "No UI property with name: " + in_name);
+            auto entry = m_properties.find(hashKey);
+            CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
             CS_ASSERT(entry->second.m_type == GetType<TType>(), "Wrong type for property with name " + in_name);
             
-            TType* property = (TType*)(m_propertyBlob + entry->second.m_offset);
+            TType* property = (TType*)entry->second.m_value;
             *property = std::move(in_value);
         }
         //----------------------------------------------------------------------------------------
@@ -232,11 +237,11 @@ namespace ChilliSource
         {
             u32 hashKey = Core::HashCRC32::GenerateHashCode(in_name);
             
-            auto entry = m_blobOffsets.find(hashKey);
-            CS_ASSERT(entry != m_blobOffsets.end(), "No UI property with name: " + in_name);
+            auto entry = m_properties.find(hashKey);
+            CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
             CS_ASSERT(entry->second.m_type == GetType<TType>(), "Wrong type for property with name " + in_name);
             
-            TType* property = (TType*)(m_propertyBlob + entry->second.m_offset);
+            TType* property = (TType*)entry->second.m_value;
             return *property;
         }
         //----------------------------------------------------------------------------------------
@@ -245,15 +250,15 @@ namespace ChilliSource
         {
             u32 hashKey = Core::HashCRC32::GenerateHashCode(in_name);
             
-            auto entry = m_blobOffsets.find(hashKey);
-            if(entry == m_blobOffsets.end())
+            auto entry = m_properties.find(hashKey);
+            if(entry == m_properties.end())
             {
                 return in_default;
             }
             
             CS_ASSERT(entry->second.m_type == GetType<TType>(), "Wrong type for property with name " + in_name);
             
-            TType* property = (TType*)(m_propertyBlob + entry->second.m_offset);
+            TType* property = (TType*)entry->second.m_value;
             return *property;
         }
         //----------------------------------------------------------------------------------------

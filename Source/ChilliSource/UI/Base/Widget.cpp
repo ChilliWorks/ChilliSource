@@ -42,23 +42,23 @@ namespace ChilliSource
         {
             std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
             {
-                {PropertyType::k_string, "Type"},
-                {PropertyType::k_string, "Name"},
-                {PropertyType::k_vec2, "RelPosition"},
-                {PropertyType::k_vec2, "AbsPosition"},
-                {PropertyType::k_vec2, "RelSize"},
-                {PropertyType::k_vec2, "AbsSize"},
-                {PropertyType::k_vec2, "PreferredSize"},
-                {PropertyType::k_vec2, "Scale"},
-                {PropertyType::k_colour, "Colour"},
-                {PropertyType::k_float, "Rotation"},
-                {PropertyType::k_alignmentAnchor, "OriginAnchor"},
-                {PropertyType::k_alignmentAnchor, "ParentalAnchor"},
-                {PropertyType::k_bool, "Visible"},
-                {PropertyType::k_bool, "ClipChildren"},
-                {PropertyType::k_sizePolicy, "SizePolicy"},
-                {PropertyType::k_propertyMap, "Layout"},
-                {PropertyType::k_propertyMap, "Drawable"}
+                {PropertyType::k_string, "Type", ""},
+                {PropertyType::k_string, "Name", ""},
+                {PropertyType::k_vec2, "RelPosition", "0 0"},
+                {PropertyType::k_vec2, "AbsPosition", "0 0"},
+                {PropertyType::k_vec2, "RelSize", "0 0"},
+                {PropertyType::k_vec2, "AbsSize", "0 0"},
+                {PropertyType::k_vec2, "PreferredSize", "1 1"},
+                {PropertyType::k_vec2, "Scale", "1 1"},
+                {PropertyType::k_colour, "Colour", "1 1 1 1"},
+                {PropertyType::k_float, "Rotation", "0"},
+                {PropertyType::k_alignmentAnchor, "OriginAnchor", "MiddleCentre"},
+                {PropertyType::k_alignmentAnchor, "ParentalAnchor", "MiddleCentre"},
+                {PropertyType::k_bool, "Visible", "true"},
+                {PropertyType::k_bool, "ClipChildren", "false"},
+                {PropertyType::k_sizePolicy, "SizePolicy", "None"},
+                {PropertyType::k_propertyMap, "Layout", "{\"Type\":\"None\"}"},
+                {PropertyType::k_propertyMap, "Drawable", "{\"Type\":\"None\"}"}
             };
             
             //----------------------------------------------------------------------------------------
@@ -215,20 +215,20 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::SetDefaultProperties(const PropertyMap& in_defaultProperties)
         {
-            SetName(in_defaultProperties.GetPropertyOrDefault("Name", ""));
-            SetRelativePosition(in_defaultProperties.GetPropertyOrDefault("RelPosition", Core::Vector2::k_zero));
-            SetAbsolutePosition(in_defaultProperties.GetPropertyOrDefault("AbsPosition", Core::Vector2::k_zero));
-            SetRelativeSize(in_defaultProperties.GetPropertyOrDefault("RelSize", Core::Vector2::k_zero));
-            SetAbsoluteSize(in_defaultProperties.GetPropertyOrDefault("AbsSize", Core::Vector2::k_zero));
-            SetDefaultPreferredSize(in_defaultProperties.GetPropertyOrDefault("PreferredSize", Core::Vector2::k_one));
-            ScaleTo(in_defaultProperties.GetPropertyOrDefault("Scale", Core::Vector2::k_one));
-            SetColour(in_defaultProperties.GetPropertyOrDefault("Colour", Core::Colour::k_white));
-            RotateTo(in_defaultProperties.GetPropertyOrDefault("Rotation", 0.0f));
-            SetParentalAnchor(in_defaultProperties.GetPropertyOrDefault("ParentalAnchor", Rendering::AlignmentAnchor::k_middleCentre));
-            SetOriginAnchor(in_defaultProperties.GetPropertyOrDefault("OriginAnchor", Rendering::AlignmentAnchor::k_middleCentre));
-            SetVisible(in_defaultProperties.GetPropertyOrDefault("Visible", true));
-            SetClippingEnabled(in_defaultProperties.GetPropertyOrDefault("ClipChildren", false));
-            SetSizePolicy(in_defaultProperties.GetPropertyOrDefault("SizePolicy", SizePolicy::k_none));
+            SetName(in_defaultProperties.GetProperty<std::string>("Name"));
+            SetRelativePosition(in_defaultProperties.GetProperty<Core::Vector2>("RelPosition"));
+            SetAbsolutePosition(in_defaultProperties.GetProperty<Core::Vector2>("AbsPosition"));
+            SetRelativeSize(in_defaultProperties.GetProperty<Core::Vector2>("RelSize"));
+            SetAbsoluteSize(in_defaultProperties.GetProperty<Core::Vector2>("AbsSize"));
+            SetDefaultPreferredSize(in_defaultProperties.GetProperty<Core::Vector2>("PreferredSize"));
+            ScaleTo(in_defaultProperties.GetProperty<Core::Vector2>("Scale"));
+            SetColour(in_defaultProperties.GetProperty<Core::Colour>("Colour"));
+            RotateTo(in_defaultProperties.GetProperty<f32>("Rotation"));
+            SetParentalAnchor(in_defaultProperties.GetProperty<Rendering::AlignmentAnchor>("ParentalAnchor"));
+            SetOriginAnchor(in_defaultProperties.GetProperty<Rendering::AlignmentAnchor>("OriginAnchor"));
+            SetVisible(in_defaultProperties.GetProperty<bool>("Visible"));
+            SetClippingEnabled(in_defaultProperties.GetProperty<bool>("ClipChildren"));
+            SetSizePolicy(in_defaultProperties.GetProperty<SizePolicy>("SizePolicy"));
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

@@ -39,16 +39,16 @@ namespace ChilliSource
         {
             std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
             {
-                {PropertyType::k_string, "Type"},
-                {PropertyType::k_int, "NumRows"},
-                {PropertyType::k_int, "NumCols"},
-                {PropertyType::k_float, "RelHSpacing"},
-                {PropertyType::k_float, "AbsHSpacing"},
-                {PropertyType::k_float, "RelVSpacing"},
-                {PropertyType::k_float, "AbsVSpacing"},
-                {PropertyType::k_vec4, "RelMargins"},
-                {PropertyType::k_vec4, "AbsMargins"},
-                {PropertyType::k_string, "CellOrder"}
+                {PropertyType::k_string, "Type", "Grid"},
+                {PropertyType::k_int, "NumRows", "1"},
+                {PropertyType::k_int, "NumCols", "1"},
+                {PropertyType::k_float, "RelHSpacing", "0"},
+                {PropertyType::k_float, "AbsHSpacing", "0"},
+                {PropertyType::k_float, "RelVSpacing", "0"},
+                {PropertyType::k_float, "AbsVSpacing", "0"},
+                {PropertyType::k_vec4, "RelMargins", "0 0 0 0"},
+                {PropertyType::k_vec4, "AbsMargins", "0 0 0 0"},
+                {PropertyType::k_string, "CellOrder", "ColMajor"}
             };
         }
         
@@ -56,19 +56,19 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         GridLayout::GridLayout(const PropertyMap& in_properties)
         {
-            SetNumRows(in_properties.GetPropertyOrDefault("NumRows", 1));
-            SetNumCols(in_properties.GetPropertyOrDefault("NumCols", 1));
-            SetRelativeHSpacing(in_properties.GetPropertyOrDefault("RelHSpacing", 0.0f));
-            SetAbsoluteHSpacing(in_properties.GetPropertyOrDefault("AbsHSpacing", 0.0f));
-            SetRelativeVSpacing(in_properties.GetPropertyOrDefault("RelVSpacing", 0.0f));
-            SetAbsoluteVSpacing(in_properties.GetPropertyOrDefault("AbsVSpacing", 0.0f));
+            SetNumRows(in_properties.GetProperty<s32>("NumRows"));
+            SetNumCols(in_properties.GetProperty<s32>("NumCols"));
+            SetRelativeHSpacing(in_properties.GetProperty<f32>("RelHSpacing"));
+            SetAbsoluteHSpacing(in_properties.GetProperty<f32>("AbsHSpacing"));
+            SetRelativeVSpacing(in_properties.GetProperty<f32>("RelVSpacing"));
+            SetAbsoluteVSpacing(in_properties.GetProperty<f32>("AbsVSpacing"));
             
-            Core::Vector4 relMargins(in_properties.GetPropertyOrDefault("RelMargins", Core::Vector4::k_zero));
+            Core::Vector4 relMargins(in_properties.GetProperty<Core::Vector4>("RelMargins"));
             SetRelativeMargins(relMargins.x, relMargins.y, relMargins.z, relMargins.w);
-            Core::Vector4 absMargins(in_properties.GetPropertyOrDefault("AbsMargins", Core::Vector4::k_zero));
+            Core::Vector4 absMargins(in_properties.GetProperty<Core::Vector4>("AbsMargins"));
             SetAbsoluteMargins(absMargins.x, absMargins.y, absMargins.z, absMargins.w);
             
-            std::string cellOrder(in_properties.GetPropertyOrDefault("CellOrder", "ColMajor"));
+            std::string cellOrder(in_properties.GetProperty<std::string>("CellOrder"));
             if(cellOrder == "ColMajor")
             {
                 SetCellOrder(CellOrder::k_colMajor);

@@ -80,6 +80,7 @@
 
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 #include <ChilliSource/UI/Base/WidgetDefProvider.h>
+#include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
 
 #include <algorithm>
 #include <ctime>
@@ -414,6 +415,7 @@ namespace ChilliSource
             //UI
             m_widgetFactory = CreateSystem<UI::WidgetFactory>();
             CreateSystem<UI::WidgetDefProvider>();
+            CreateSystem<UI::WidgetTemplateProvider>();
 
             //Create any platform specific default systems
             m_platformSystem->CreateDefaultSystems(this);

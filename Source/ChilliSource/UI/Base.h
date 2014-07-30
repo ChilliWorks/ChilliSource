@@ -38,6 +38,8 @@
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Base/WidgetDefProvider.h>
+#include <ChilliSource/UI/Base/WidgetTemplate.h>
+#include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 
 #endif

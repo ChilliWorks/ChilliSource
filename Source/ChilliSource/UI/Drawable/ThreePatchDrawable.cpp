@@ -43,12 +43,12 @@ namespace ChilliSource
         {
             std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
             {
-                {PropertyType::k_string, "Type"},
-                {PropertyType::k_string, "Direction"},
-                {PropertyType::k_vec4, "UVs"},
-                {PropertyType::k_vec2, "Insets"},
-                {PropertyType::k_string, "TextureLocation"},
-                {PropertyType::k_string, "TexturePath"}
+                {PropertyType::k_string, "Type", "ThreePatch"},
+                {PropertyType::k_string, "Direction", "Horizontal"},
+                {PropertyType::k_vec4, "UVs", "0 0 1 1"},
+                {PropertyType::k_vec2, "Insets", "0.01 0.01"},
+                {PropertyType::k_string, "TextureLocation", "Package"},
+                {PropertyType::k_string, "TexturePath", ""}
             };
         
             //----------------------------------------------------------------------------------------
@@ -246,7 +246,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         ThreePatchDrawable::ThreePatchDrawable(const PropertyMap& in_properties)
         {
-            std::string direction(in_properties.GetPropertyOrDefault("Direction", "Horizontal"));
+            std::string direction(in_properties.GetProperty<std::string>("Direction"));
             
             if(direction == "Horizontal")
             {
@@ -265,14 +265,14 @@ namespace ChilliSource
                 CS_LOG_FATAL("ThreePatchDrawable: Unknown type: " + direction);
             }
             
-            Core::Vector4 uvs(in_properties.GetPropertyOrDefault("UVs", Core::Vector4(0.0f, 0.0f, 1.0f, 1.0f)));
+            Core::Vector4 uvs(in_properties.GetProperty<Core::Vector4>("UVs"));
             SetUVs(Rendering::UVs(uvs.x, uvs.y, uvs.z, uvs.w));
             
-            Core::Vector2 insets(in_properties.GetPropertyOrDefault("Insets", Core::Vector2(0.01f, 0.01f)));
+            Core::Vector2 insets(in_properties.GetProperty<Core::Vector2>("Insets"));
             SetInsets(insets.x, insets.y);
             
-            std::string location(in_properties.GetPropertyOrDefault("TextureLocation", ""));
-            std::string path(in_properties.GetPropertyOrDefault("TexturePath", ""));
+            std::string location(in_properties.GetProperty<std::string>("TextureLocation"));
+            std::string path(in_properties.GetProperty<std::string>("TexturePath"));
             
             if(location.empty() == false && path.empty() == false)
             {
