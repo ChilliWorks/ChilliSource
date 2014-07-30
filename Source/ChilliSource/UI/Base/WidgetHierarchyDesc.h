@@ -44,10 +44,22 @@ namespace ChilliSource
         //----------------------------------------------------
         struct WidgetHierarchyDesc
         {
+            //----------------------------------------------------
+            /// Whether it is a private internal child or a public external child
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            enum class Access
+            {
+                k_internal,
+                k_external
+            };
+            
             std::string m_type;
             PropertyMap m_defaultProperties;
             PropertyMap m_customProperties;
             std::vector<WidgetHierarchyDesc> m_children;
+            Access m_access;
         };
     }
 }

@@ -174,7 +174,15 @@ namespace ChilliSource
             
             if(in_hierarchyDesc.m_defaultProperties.HasProperty("Layout") == true)
             {
-                widget->SetInternalLayout(CreateLayout(in_hierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Layout")));
+                switch (in_hierarchyDesc.m_access)
+                {
+                    case WidgetHierarchyDesc::Access::k_internal:
+                        widget->SetInternalLayout(CreateLayout(in_hierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Layout")));
+                        break;
+                    case WidgetHierarchyDesc::Access::k_external:
+                        widget->SetLayout(CreateLayout(in_hierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Layout")));
+                        break;
+                }
             }
             if(in_hierarchyDesc.m_defaultProperties.HasProperty("Drawable") == true)
             {
@@ -184,7 +192,15 @@ namespace ChilliSource
             for(const auto& childHierarchyDesc : in_hierarchyDesc.m_children)
             {
                 WidgetSPtr childWidget = CreateRecursive(childHierarchyDesc);
-                widget->AddInternalWidget(childWidget);
+                switch (childHierarchyDesc.m_access)
+                {
+                    case WidgetHierarchyDesc::Access::k_internal:
+                        widget->AddInternalWidget(childWidget);
+                        break;
+                    case WidgetHierarchyDesc::Access::k_external:
+                        widget->AddWidget(childWidget);
+                        break;
+                }
             }
             
             return widget;

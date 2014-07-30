@@ -151,7 +151,8 @@ namespace ChilliSource
             {
                 if(strcmp(it.memberName(), "Type") == 0)
                 {
-                    out_hierarchyDesc.m_type = it.memberName();
+                    CS_ASSERT((*it).isString(), "Value can only be specified as string: " + std::string(it.memberName()));
+                    out_hierarchyDesc.m_type = (*it).asString();
                 }
                 else if(out_hierarchyDesc.m_defaultProperties.HasProperty(it.memberName()) == true)
                 {
@@ -188,6 +189,8 @@ namespace ChilliSource
                     CS_LOG_FATAL("Property with name does not exist: " + std::string(it.memberName()));
                 }
             }
+            
+            out_hierarchyDesc.m_access = WidgetHierarchyDesc::Access::k_external;
             
             const Json::Value& hierarchy = in_template["Hierarchy"];
             const Json::Value& children = in_template["Children"];

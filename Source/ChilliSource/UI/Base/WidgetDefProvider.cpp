@@ -85,6 +85,7 @@ namespace ChilliSource
                     WidgetHierarchyDesc childDesc;
                     WidgetTemplateProvider::ParseTemplate(widget, childDesc);
                     childDesc.m_defaultProperties.SetProperty("Name", name);
+                    childDesc.m_access = WidgetHierarchyDesc::Access::k_internal;
                     
                     const Json::Value& children = hierarchyItem["Children"];
                     if(children.isNull() == false)
@@ -174,6 +175,7 @@ namespace ChilliSource
                 WidgetDef* widgetDef = (WidgetDef*)out_resource.get();
                 
                 WidgetHierarchyDesc hierarchyDesc;
+                hierarchyDesc.m_access = WidgetHierarchyDesc::Access::k_internal;
                 
                 CS_ASSERT(root.isMember("Type"), "Widget def must have Type");
                 hierarchyDesc.m_type = root["Type"].asString();
