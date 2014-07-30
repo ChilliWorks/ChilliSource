@@ -138,9 +138,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         void WidgetFactory::RegisterDefinition(const WidgetDefCSPtr& in_def)
         {
-            auto name = in_def->GetHierarchyDesc().m_defaultProperties.GetProperty<std::string>("Name");
-            auto typeKey = in_def->GetHierarchyDesc().m_defaultProperties.GetProperty<std::string>("Type");
-            m_widgetDefNameMap.insert(std::make_pair(typeKey, in_def));
+            m_widgetDefNameMap.insert(std::make_pair(in_def->GetHierarchyDesc().m_type, in_def));
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------

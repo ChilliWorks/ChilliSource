@@ -38,12 +38,9 @@
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Base/WidgetHierarchyDesc.h>
+#include <ChilliSource/UI/Base/WidgetParserUtils.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
 #include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
-#include <ChilliSource/UI/Drawable/IDrawable.h>
-#include <ChilliSource/UI/Drawable/DrawableType.h>
-#include <ChilliSource/UI/Layout/ILayout.h>
-#include <ChilliSource/UI/Layout/LayoutType.h>
 
 #include <json/json.h>
 
@@ -120,58 +117,6 @@ namespace ChilliSource
                 out_customProperties.AllocateKeys(descs);
             }
             //-------------------------------------------------------
-            /// From the given JSON value parse the values of the drawable
-            /// types into a property map
-            ///
-            /// @author S Downie
-            ///
-            /// @param Json drawable
-            ///
-            /// @return Property values
-            //-------------------------------------------------------
-            PropertyMap ParseDrawableDefaultValues(const Json::Value& in_drawable)
-            {
-                DrawableType type = ParseDrawableType(in_drawable["Type"].asString());
-                auto supportedProperties = IDrawable::GetPropertyDescs(type);
-                PropertyMap result(supportedProperties);
-                
-                for(const auto& propDesc : supportedProperties)
-                {
-                    if(in_drawable.isMember(propDesc.m_name) == true)
-                    {
-                        result.SetProperty(propDesc.m_type, propDesc.m_name, in_drawable[propDesc.m_name].asString());
-                    }
-                }
-                
-                return result;
-            }
-            //-------------------------------------------------------
-            /// From the given JSON value parse the values of the layout
-            /// types into a property map
-            ///
-            /// @author S Downie
-            ///
-            /// @param Json layout
-            ///
-            /// @return Property values
-            //-------------------------------------------------------
-            PropertyMap ParseLayoutDefaultValues(const Json::Value& in_layout)
-            {
-                LayoutType type = ParseLayoutType(in_layout["Type"].asString());
-                auto supportedProperties = ILayout::GetPropertyDescs(type);
-                PropertyMap result(supportedProperties);
-                
-                for(const auto& propDesc : supportedProperties)
-                {
-                    if(in_layout.isMember(propDesc.m_name) == true)
-                    {
-                        result.SetProperty(propDesc.m_type, propDesc.m_name, in_layout[propDesc.m_name].asString());
-                    }
-                }
-                
-                return result;
-            }
-            //-------------------------------------------------------
             //-------------------------------------------------------
             void ParseDefaultValues(const Json::Value& in_defaults, PropertyMap& out_defaultProperties, PropertyMap& out_customProperties)
             {
@@ -185,13 +130,13 @@ namespace ChilliSource
                         {
                             //Special case for drawable
                             CS_ASSERT((*it).isObject(), "Value can only be specified as object: " + std::string(it.memberName()));
-                            out_defaultProperties.SetProperty(it.memberName(), ParseDrawableDefaultValues(*it));
+                            out_defaultProperties.SetProperty(it.memberName(), WidgetParserUtils::ParseDrawableValues(*it));
                         }
                         else if(strcmp(it.memberName(), "Layout") == 0)
                         {
                             //Special case for drawable
                             CS_ASSERT((*it).isObject(), "Value can only be specified as object: " + std::string(it.memberName()));
-                            out_defaultProperties.SetProperty(it.memberName(), ParseLayoutDefaultValues(*it));
+                            out_defaultProperties.SetProperty(it.memberName(), WidgetParserUtils::ParseLayoutValues(*it));
                         }
                         else
                         {
@@ -229,6 +174,9 @@ namespace ChilliSource
                 WidgetDef* widgetDef = (WidgetDef*)out_resource.get();
                 
                 WidgetHierarchyDesc hierarchyDesc;
+                
+                CS_ASSERT(root.isMember("Type"), "Widget def must have Type");
+                hierarchyDesc.m_type = root["Type"].asString();
             
                 const Json::Value& hierarchy = root["Hierarchy"];
                 const Json::Value& children = root["Children"];

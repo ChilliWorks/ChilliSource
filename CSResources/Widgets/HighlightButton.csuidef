@@ -1,11 +1,10 @@
 {
+  "Type": "HighlightButton",
   "Properties": {
     "IsDown": "Bool"
   },
   "Defaults": {
-    "Type": "HighlightButton",
     "Name": "HighlightButton",
-    "RelSize": "0.1 0.05",
     "IsDown": "false"
   },
   "Behaviour": {

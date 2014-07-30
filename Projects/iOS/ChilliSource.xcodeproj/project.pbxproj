@@ -21,6 +21,7 @@
 		81496BAE1982A607004E79F2 /* PropertyType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496BAD1982A607004E79F2 /* PropertyType.cpp */; };
 		816708191988DD3C00A1DE32 /* WidgetTemplate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 816708151988DD3C00A1DE32 /* WidgetTemplate.cpp */; };
 		8167081A1988DD3C00A1DE32 /* WidgetTemplateProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 816708171988DD3C00A1DE32 /* WidgetTemplateProvider.cpp */; };
+		8167081E198941A500A1DE32 /* WidgetParserUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8167081C198941A500A1DE32 /* WidgetParserUtils.cpp */; };
 		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
 		81AA8BB31987B68700E559F6 /* ILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AA8BB21987B68700E559F6 /* ILayout.cpp */; };
 		81AA8BB51987B82200E559F6 /* IDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AA8BB41987B82200E559F6 /* IDrawable.cpp */; };
@@ -381,6 +382,8 @@
 		816708171988DD3C00A1DE32 /* WidgetTemplateProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetTemplateProvider.cpp; sourceTree = "<group>"; };
 		816708181988DD3C00A1DE32 /* WidgetTemplateProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetTemplateProvider.h; sourceTree = "<group>"; };
 		8167081B1988F3DD00A1DE32 /* WidgetHierarchyDesc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WidgetHierarchyDesc.h; sourceTree = "<group>"; };
+		8167081C198941A500A1DE32 /* WidgetParserUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetParserUtils.cpp; sourceTree = "<group>"; };
+		8167081D198941A500A1DE32 /* WidgetParserUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetParserUtils.h; sourceTree = "<group>"; };
 		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		81AA8BB21987B68700E559F6 /* ILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILayout.cpp; sourceTree = "<group>"; };
 		81AA8BB41987B82200E559F6 /* IDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IDrawable.cpp; sourceTree = "<group>"; };
@@ -989,11 +992,13 @@
 				81496BA21982569C004E79F2 /* WidgetDefProvider.h */,
 				81496BA9198293E7004E79F2 /* WidgetFactory.cpp */,
 				81496BAA198293E7004E79F2 /* WidgetFactory.h */,
+				8167081B1988F3DD00A1DE32 /* WidgetHierarchyDesc.h */,
+				8167081C198941A500A1DE32 /* WidgetParserUtils.cpp */,
+				8167081D198941A500A1DE32 /* WidgetParserUtils.h */,
 				816708151988DD3C00A1DE32 /* WidgetTemplate.cpp */,
 				816708161988DD3C00A1DE32 /* WidgetTemplate.h */,
 				816708171988DD3C00A1DE32 /* WidgetTemplateProvider.cpp */,
 				816708181988DD3C00A1DE32 /* WidgetTemplateProvider.h */,
-				8167081B1988F3DD00A1DE32 /* WidgetHierarchyDesc.h */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -2562,6 +2567,7 @@
 				81D8B6B61962E0F70010DA84 /* FacebookAuthenticationSystem.cpp in Sources */,
 				81D8B42C1962E0EC0010DA84 /* Resource.cpp in Sources */,
 				81496BA019814B05004E79F2 /* ThreePatchDrawable.cpp in Sources */,
+				8167081E198941A500A1DE32 /* WidgetParserUtils.cpp in Sources */,
 				81D8B46F1962E0EC0010DA84 /* RendererSortPredicates.cpp in Sources */,
 				81D8B4211962E0EC0010DA84 /* Shapes.cpp in Sources */,
 				81D8B4741962E0EC0010DA84 /* PerspectiveCameraComponent.cpp in Sources */,

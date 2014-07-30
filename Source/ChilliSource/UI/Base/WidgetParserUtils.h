@@ -1,7 +1,7 @@
 //
-//  WidgetHierarchyDesc.h
+//  WidgetParserUtils.h
 //  Chilli Source
-//  Created by Scott Downie on 30/07/2014.
+//  Created by Scott Downie on 29/07/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,30 +26,44 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_WIDGETHIERARCHYDESC_H_
-#define _CHILLISOURCE_UI_BASE_WIDGETHIERARCHYDESC_H_
+#ifndef _CHILLISOURCE_UI_BASE_WIDGETPARSERUTILS_H_
+#define _CHILLISOURCE_UI_BASE_WIDGETPARSERUTILS_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 
+#include <json/forwards.h>
+
 namespace ChilliSource
 {
-    namespace UI
-    {
-        //----------------------------------------------------
-        /// Holds the description of a widget hierarchy
-        /// including the custom and default properties
-        ///
-        /// @author S Downie
-        //----------------------------------------------------
-        struct WidgetHierarchyDesc
+	namespace UI
+	{
+        namespace WidgetParserUtils
         {
-            std::string m_type;
-            PropertyMap m_defaultProperties;
-            PropertyMap m_customProperties;
-            std::vector<WidgetHierarchyDesc> m_children;
-        };
-    }
+            //-------------------------------------------------------
+            /// From the given JSON value parse the values of the drawable
+            /// types into a property map
+            ///
+            /// @author S Downie
+            ///
+            /// @param Json drawable
+            ///
+            /// @return Property values
+            //-------------------------------------------------------
+            PropertyMap ParseDrawableValues(const Json::Value& in_drawable);
+            //-------------------------------------------------------
+            /// From the given JSON value parse the values of the layout
+            /// types into a property map
+            ///
+            /// @author S Downie
+            ///
+            /// @param Json layout
+            ///
+            /// @return Property values
+            //-------------------------------------------------------
+            PropertyMap ParseLayoutValues(const Json::Value& in_layout);
+        }
+	}
 }
 
 #endif

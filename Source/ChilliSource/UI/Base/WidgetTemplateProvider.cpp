@@ -38,11 +38,8 @@
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 #include <ChilliSource/UI/Base/WidgetHierarchyDesc.h>
+#include <ChilliSource/UI/Base/WidgetParserUtils.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
-#include <ChilliSource/UI/Drawable/IDrawable.h>
-#include <ChilliSource/UI/Drawable/DrawableType.h>
-#include <ChilliSource/UI/Layout/ILayout.h>
-#include <ChilliSource/UI/Layout/LayoutType.h>
 
 #include <json/json.h>
 
@@ -54,58 +51,6 @@ namespace ChilliSource
         {
             const std::string k_extension("csui");
             
-            //-------------------------------------------------------
-            /// From the given JSON value parse the values of the drawable
-            /// types into a property map
-            ///
-            /// @author S Downie
-            ///
-            /// @param Json drawable
-            ///
-            /// @return Property values
-            //-------------------------------------------------------
-            PropertyMap ParseDrawableValues(const Json::Value& in_drawable)
-            {
-                DrawableType type = ParseDrawableType(in_drawable["Type"].asString());
-                auto supportedProperties = IDrawable::GetPropertyDescs(type);
-                PropertyMap result(supportedProperties);
-                
-                for(const auto& propDesc : supportedProperties)
-                {
-                    if(in_drawable.isMember(propDesc.m_name) == true)
-                    {
-                        result.SetProperty(propDesc.m_type, propDesc.m_name, in_drawable[propDesc.m_name].asString());
-                    }
-                }
-                
-                return result;
-            }
-            //-------------------------------------------------------
-            /// From the given JSON value parse the values of the layout
-            /// types into a property map
-            ///
-            /// @author S Downie
-            ///
-            /// @param Json layout
-            ///
-            /// @return Property values
-            //-------------------------------------------------------
-            PropertyMap ParseLayoutValues(const Json::Value& in_layout)
-            {
-                LayoutType type = ParseLayoutType(in_layout["Type"].asString());
-                auto supportedProperties = ILayout::GetPropertyDescs(type);
-                PropertyMap result(supportedProperties);
-                
-                for(const auto& propDesc : supportedProperties)
-                {
-                    if(in_layout.isMember(propDesc.m_name) == true)
-                    {
-                        result.SetProperty(propDesc.m_type, propDesc.m_name, in_layout[propDesc.m_name].asString());
-                    }
-                }
-                
-                return result;
-            }
             //-------------------------------------------------------
             /// Performs the heavy lifting for loading a UI
             /// widget description from file
@@ -204,19 +149,23 @@ namespace ChilliSource
             
             for(auto it = in_template.begin(); it != in_template.end(); ++it)
             {
-                if(out_hierarchyDesc.m_defaultProperties.HasProperty(it.memberName()) == true)
+                if(strcmp(it.memberName(), "Type") == 0)
+                {
+                    out_hierarchyDesc.m_type = it.memberName();
+                }
+                else if(out_hierarchyDesc.m_defaultProperties.HasProperty(it.memberName()) == true)
                 {
                     if(strcmp(it.memberName(), "Drawable") == 0)
                     {
                         //Special case for drawable
                         CS_ASSERT((*it).isObject(), "Value can only be specified as object: " + std::string(it.memberName()));
-                        out_hierarchyDesc.m_defaultProperties.SetProperty(it.memberName(), ParseDrawableValues(*it));
+                        out_hierarchyDesc.m_defaultProperties.SetProperty(it.memberName(), WidgetParserUtils::ParseDrawableValues(*it));
                     }
                     else if(strcmp(it.memberName(), "Layout") == 0)
                     {
                         //Special case for drawable
                         CS_ASSERT((*it).isObject(), "Value can only be specified as object: " + std::string(it.memberName()));
-                        out_hierarchyDesc.m_defaultProperties.SetProperty(it.memberName(), ParseLayoutValues(*it));
+                        out_hierarchyDesc.m_defaultProperties.SetProperty(it.memberName(), WidgetParserUtils::ParseLayoutValues(*it));
                     }
                     else
                     {
