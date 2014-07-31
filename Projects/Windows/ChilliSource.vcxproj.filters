@@ -702,8 +702,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.cpp">
       <Filter>ChilliSource\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDescProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\ILayout.cpp">
       <Filter>ChilliSource\UI</Filter>
     </ClCompile>
@@ -729,6 +727,12 @@
       <Filter>ChilliSource\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetParserUtils.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.cpp">
       <Filter>ChilliSource\UI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1573,8 +1577,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDescProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyMap.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
@@ -1588,6 +1590,12 @@
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetParserUtils.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
   </ItemGroup>

@@ -78,9 +78,9 @@ namespace ChilliSource
                         return new SizePolicy();
                     case PropertyType::k_unknown:
                         return nullptr;
-                        
-                    return nullptr;
                 }
+
+				return nullptr;
             }
             //----------------------------------------------------------------------------------------
             /// @author S Downie
