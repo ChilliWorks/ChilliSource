@@ -69,14 +69,13 @@ namespace ChilliSource
             SetAbsoluteMargins(absMargins.x, absMargins.y, absMargins.z, absMargins.w);
             
             std::string cellOrder(in_properties.GetProperty<std::string>("CellOrder"));
-            std::string lowerCase = cellOrder;
-            Core::StringUtils::ToLowerCase(lowerCase);
+            Core::StringUtils::ToLowerCase(cellOrder);
             
-            if(lowerCase == "colmajor")
+            if(cellOrder == "colmajor")
             {
                 SetCellOrder(CellOrder::k_colMajor);
             }
-            else if(lowerCase == "rowmajor")
+            else if(cellOrder == "rowmajor")
             {
                 SetCellOrder(CellOrder::k_rowMajor);
             }

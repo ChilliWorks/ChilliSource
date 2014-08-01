@@ -247,14 +247,15 @@ namespace ChilliSource
         ThreePatchDrawable::ThreePatchDrawable(const PropertyMap& in_properties)
         {
             std::string direction(in_properties.GetProperty<std::string>("Direction"));
+            Core::StringUtils::ToLowerCase(direction);
             
-            if(direction == "Horizontal")
+            if(direction == "horizontal")
             {
                 m_uvCalculationDelegate = CalculateThreePatchUVsHorizontal;
                 m_sizeCalculationDelegate = CalculateThreePatchSizesHorizontal;
                 m_positionCalculationDelegate = CalculateThreePatchPositionsHorizontal;
             }
-            else if(direction == "Vertical")
+            else if(direction == "vertical")
             {
                 m_uvCalculationDelegate = CalculateThreePatchUVsVertical;
                 m_sizeCalculationDelegate = CalculateThreePatchSizesVertical;
