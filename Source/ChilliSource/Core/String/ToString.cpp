@@ -236,6 +236,8 @@ namespace ChilliSource
                     return "Cache";
                 case StorageLocation::k_DLC:
                     return "DLC";
+                case StorageLocation::k_chilliSource:
+                    return "ChilliSource";
                 default:
                     return "";
             }
