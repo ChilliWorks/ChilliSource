@@ -73,9 +73,9 @@ namespace ChilliSource
                         return nullptr;
                     case LayoutType::k_grid:
                         return ILayoutUPtr(new GridLayout(in_properties));
-                    case LayoutType::k_horizontalList:
+                    case LayoutType::k_hList:
                         return ILayoutUPtr(new HListLayout(in_properties));
-                    case LayoutType::k_verticalList:
+                    case LayoutType::k_vList:
                         return ILayoutUPtr(new VListLayout(in_properties));
                 }
                 
@@ -127,12 +127,14 @@ namespace ChilliSource
         void WidgetFactory::OnInit()
         {
             auto resPool = Core::Application::Get()->GetResourcePool();
-
-            WidgetDefCSPtr widgetDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Widget.csuidef");
-            RegisterDefinition(widgetDef);
+            auto fileSystem = Core::Application::Get()->GetFileSystem();
+            auto widgetDefPaths = fileSystem->GetFilePathsWithExtension(Core::StorageLocation::k_chilliSource, "Widgets", true, "csuidef");
             
-            WidgetDefCSPtr highlightButtonDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HighlightButton.csuidef");
-            RegisterDefinition(highlightButtonDef);
+            for(const auto& path : widgetDefPaths)
+            {
+                WidgetDefCSPtr widgetDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/" + path);
+                RegisterDefinition(widgetDef);
+            }
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
@@ -150,27 +152,33 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        WidgetSPtr WidgetFactory::Create(const WidgetDefCSPtr& in_def) const
+        WidgetUPtr WidgetFactory::Create(const WidgetDefCSPtr& in_def) const
         {
             return CreateRecursive(in_def->GetHierarchyDesc());
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        WidgetSPtr WidgetFactory::Create(const WidgetTemplateCSPtr& in_template) const
+        WidgetUPtr WidgetFactory::Create(const WidgetTemplateCSPtr& in_template) const
         {
             return CreateRecursive(in_template->GetHierarchyDesc());
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        WidgetSPtr WidgetFactory::CreateHighlightButton() const
+        WidgetUPtr WidgetFactory::CreateHighlightButton() const
         {
             return Create(m_widgetDefNameMap.find(k_highlightButtonKey)->second);
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        WidgetSPtr WidgetFactory::CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc) const
+        WidgetUPtr WidgetFactory::CreateWidget() const
         {
-            WidgetSPtr widget(std::make_shared<Widget>(in_hierarchyDesc.m_defaultProperties, in_hierarchyDesc.m_customProperties));
+            return Create(m_widgetDefNameMap.find(k_widgetKey)->second);
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetUPtr WidgetFactory::CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc) const
+        {
+            WidgetUPtr widget(new Widget(in_hierarchyDesc.m_defaultProperties, in_hierarchyDesc.m_customProperties));
             
             if(in_hierarchyDesc.m_defaultProperties.HasProperty("Layout") == true)
             {

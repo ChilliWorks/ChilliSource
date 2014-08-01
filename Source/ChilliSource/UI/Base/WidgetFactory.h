@@ -87,7 +87,7 @@ namespace ChilliSource
             ///
             /// @return Widget with look and behaviour described by definition
             //---------------------------------------------------------------------------
-            WidgetSPtr Create(const WidgetDefCSPtr& in_def) const;
+            WidgetUPtr Create(const WidgetDefCSPtr& in_def) const;
             //---------------------------------------------------------------------------
             /// Creates a new widget based on the given template. The type of the
             /// widget is set within the template
@@ -98,7 +98,15 @@ namespace ChilliSource
             ///
             /// @return Widget
             //---------------------------------------------------------------------------
-            WidgetSPtr Create(const WidgetTemplateCSPtr& in_template) const;
+            WidgetUPtr Create(const WidgetTemplateCSPtr& in_template) const;
+            //---------------------------------------------------------------------------
+            /// Creates a new widget with the behaviour of a standard widget.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Widget with look and behaviour of a standard widget
+            //---------------------------------------------------------------------------
+            WidgetUPtr CreateWidget() const;
             //---------------------------------------------------------------------------
             /// Creates a new widget with the behaviour of a highlight button.
             /// A highlight button has the most common button behaviour of changing style
@@ -108,7 +116,7 @@ namespace ChilliSource
             ///
             /// @return Widget with look and behaviour of highlight button
             //---------------------------------------------------------------------------
-            WidgetSPtr CreateHighlightButton() const;
+            WidgetUPtr CreateHighlightButton() const;
             
         private:
             
@@ -145,7 +153,7 @@ namespace ChilliSource
             ///
             /// @return Widget
             //---------------------------------------------------------------------------
-            WidgetSPtr CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc) const;
+            WidgetUPtr CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc) const;
             //---------------------------------------------------------------------------
             /// Called when the system is destroyed and will release
             /// any memory held

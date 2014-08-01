@@ -28,6 +28,8 @@
 
 #include <ChilliSource/UI/Layout/LayoutType.h>
 
+#include <ChilliSource/Core/String/StringUtils.h>
+
 namespace ChilliSource
 {
     namespace UI
@@ -36,10 +38,13 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         LayoutType ParseLayoutType(const std::string& in_type)
         {
-            if(in_type == "None") return LayoutType::k_none;
-            if(in_type == "Grid") return LayoutType::k_grid;
-            if(in_type == "HList") return LayoutType::k_horizontalList;
-            if(in_type == "VList") return LayoutType::k_verticalList;
+            std::string lowerCase = in_type;
+            Core::StringUtils::ToLowerCase(lowerCase);
+            
+            if(lowerCase == "none") return LayoutType::k_none;
+            if(lowerCase == "grid") return LayoutType::k_grid;
+            if(lowerCase == "hlist") return LayoutType::k_hList;
+            if(lowerCase == "vlist") return LayoutType::k_vList;
             
             CS_LOG_FATAL("Cannot parse layout type: " + in_type);
             return LayoutType::k_none;

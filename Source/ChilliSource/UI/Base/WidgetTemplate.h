@@ -39,7 +39,10 @@ namespace ChilliSource
     {
         //-------------------------------------------------------------
         /// A resource that holds the description for creating new
-        /// widget instances
+        /// widget instances. A widget template is used to create
+        /// instances of mutable UI i.e. screens. Widgets created
+        /// from templates are fully defined usually with drawables,
+        /// sizes, positions, etc and are ready for adding to the canvas.
         ///
         /// @author S Downie
         //-------------------------------------------------------------

@@ -45,8 +45,8 @@ namespace ChilliSource
         {
             k_none,
             k_grid,
-            k_horizontalList,
-            k_verticalList
+            k_hList,
+            k_vList
         };
         //----------------------------------------------------------------------------------------
         /// Converts a string to a drawable type

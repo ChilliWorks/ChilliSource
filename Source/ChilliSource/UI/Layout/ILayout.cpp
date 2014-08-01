@@ -50,9 +50,9 @@ namespace ChilliSource
                 }
                 case LayoutType::k_grid:
                     return GridLayout::GetPropertyDescs();
-                case LayoutType::k_verticalList:
+                case LayoutType::k_vList:
                     return VListLayout::GetPropertyDescs();
-                case LayoutType::k_horizontalList:
+                case LayoutType::k_hList:
                     return HListLayout::GetPropertyDescs();
             }
             

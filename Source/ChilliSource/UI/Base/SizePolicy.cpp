@@ -28,6 +28,8 @@
 
 #include <ChilliSource/UI/Base/SizePolicy.h>
 
+#include <ChilliSource/Core/String/StringUtils.h>
+
 namespace ChilliSource
 {
     namespace UI
@@ -36,12 +38,15 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         SizePolicy ParseSizePolicy(const std::string& in_policy)
         {
-            if(in_policy == "None") return SizePolicy::k_none;
-            if(in_policy == "UsePreferredSize") return SizePolicy::k_usePreferredSize;
-            if(in_policy == "UseWidthMaintainingAspect") return SizePolicy::k_useWidthMaintainingAspect;
-            if(in_policy == "UseHeightMaintainingAspect") return SizePolicy::k_useHeightMaintainingAspect;
-            if(in_policy == "FitMaintainingAspect") return SizePolicy::k_fitMaintainingAspect;
-            if(in_policy == "FillMaintainingAspect") return SizePolicy::k_fillMaintainingAspect;
+            std::string lowerCase = in_policy;
+            Core::StringUtils::ToLowerCase(lowerCase);
+            
+            if(lowerCase == "none") return SizePolicy::k_none;
+            if(lowerCase == "usepreferredsize") return SizePolicy::k_usePreferredSize;
+            if(lowerCase == "usewidthmaintainingaspect") return SizePolicy::k_useWidthMaintainingAspect;
+            if(lowerCase == "useheightmaintainingaspect") return SizePolicy::k_useHeightMaintainingAspect;
+            if(lowerCase == "fitmaintainingaspect") return SizePolicy::k_fitMaintainingAspect;
+            if(lowerCase == "fillmaintainingaspect") return SizePolicy::k_fillMaintainingAspect;
             
             CS_LOG_FATAL("Cannot parse size policy type: " + in_policy);
             return SizePolicy::k_none;

@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
 
 #include <unordered_map>
@@ -222,7 +223,9 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         template<typename TType> void PropertyMap::SetProperty(const std::string& in_name, TType in_value)
         {
-            u32 hashKey = Core::HashCRC32::GenerateHashCode(in_name);
+            std::string lowerCaseName = in_name;
+            Core::StringUtils::ToLowerCase(lowerCaseName);
+            u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
             
             auto entry = m_properties.find(hashKey);
             CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
@@ -235,7 +238,9 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         template<typename TType> TType PropertyMap::GetProperty(const std::string& in_name) const
         {
-            u32 hashKey = Core::HashCRC32::GenerateHashCode(in_name);
+            std::string lowerCaseName = in_name;
+            Core::StringUtils::ToLowerCase(lowerCaseName);
+            u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
             
             auto entry = m_properties.find(hashKey);
             CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
@@ -248,7 +253,9 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         template<typename TType> TType PropertyMap::GetPropertyOrDefault(const std::string& in_name, TType in_default) const
         {
-            u32 hashKey = Core::HashCRC32::GenerateHashCode(in_name);
+            std::string lowerCaseName = in_name;
+            Core::StringUtils::ToLowerCase(lowerCaseName);
+            u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
             
             auto entry = m_properties.find(hashKey);
             if(entry == m_properties.end())

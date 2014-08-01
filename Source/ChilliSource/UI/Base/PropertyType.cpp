@@ -28,6 +28,8 @@
 
 #include <ChilliSource/UI/Base/PropertyType.h>
 
+#include <ChilliSource/Core/String/StringUtils.h>
+
 namespace ChilliSource
 {
     namespace UI
@@ -36,17 +38,20 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         PropertyType ParsePropertyType(const std::string& in_type)
         {
-            if(in_type == "Int") return PropertyType::k_int;
-            if(in_type == "Bool") return PropertyType::k_bool;
-            if(in_type == "Float") return PropertyType::k_float;
-            if(in_type == "String") return PropertyType::k_string;
-            if(in_type == "Vec2") return PropertyType::k_vec2;
-            if(in_type == "Vec3") return PropertyType::k_vec3;
-            if(in_type == "Vec4") return PropertyType::k_vec4;
-            if(in_type == "SizePolicy") return PropertyType::k_sizePolicy;
-            if(in_type == "AlignmentAnchor") return PropertyType::k_alignmentAnchor;
-            if(in_type == "Colour") return PropertyType::k_colour;
-            if(in_type == "PropertyMap") return PropertyType::k_propertyMap;
+            std::string lowerCase = in_type;
+            Core::StringUtils::ToLowerCase(lowerCase);
+            
+            if(lowerCase == "int") return PropertyType::k_int;
+            if(lowerCase == "bool") return PropertyType::k_bool;
+            if(lowerCase == "float") return PropertyType::k_float;
+            if(lowerCase == "string") return PropertyType::k_string;
+            if(lowerCase == "vec2") return PropertyType::k_vec2;
+            if(lowerCase == "vec3") return PropertyType::k_vec3;
+            if(lowerCase == "vec4") return PropertyType::k_vec4;
+            if(lowerCase == "sizepolicy") return PropertyType::k_sizePolicy;
+            if(lowerCase == "alignmentanchor") return PropertyType::k_alignmentAnchor;
+            if(lowerCase == "colour") return PropertyType::k_colour;
+            if(lowerCase == "propertymap") return PropertyType::k_propertyMap;
             
             CS_LOG_FATAL("Cannot parse property type: " + in_type);
             return PropertyType::k_unknown;

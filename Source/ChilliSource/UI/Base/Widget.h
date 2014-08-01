@@ -113,18 +113,6 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
             //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Default property values
-            //----------------------------------------------------------------------------------------
-            void SetDefaultProperties(const PropertyMap& in_defaultProperties);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Custom property values
-            //----------------------------------------------------------------------------------------
-            void SetCustomProperties(const PropertyMap& in_customProperties);
-            //----------------------------------------------------------------------------------------
             /// Set the drawable that handles how to render the widget. If this is null then the
             /// widget will not be visible. The widget takes ownership of the drawable.
             ///
@@ -143,16 +131,6 @@ namespace ChilliSource
             /// @param Layout
             //----------------------------------------------------------------------------------------
             void SetLayout(ILayoutUPtr in_layout);
-            //----------------------------------------------------------------------------------------
-            /// Set the layout that handles how to layout the widget's internal subviews. If this is null then the
-            /// subviews will retain their current size and position. Otherwise the size and position may
-            /// be manipulatd by the layout
-            ///
-            /// @author S Downie
-            ///
-            /// @param Layout
-            //----------------------------------------------------------------------------------------
-            void SetInternalLayout(ILayoutUPtr in_layout);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -411,20 +389,6 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void RemoveWidget(Widget* in_widget);
             //----------------------------------------------------------------------------------------
-            /// Adds a widget as a child of this widget. The widget will be rendered as part of this
-            /// hierarchy and any relative coordinates will now be in relation to this widget.
-            ///
-            /// This widget is effectively a private implementation detail and is not affected by the
-            /// layout and is not returned when querying for widgets
-            ///
-            /// NOTE: Will assert if the widget already has a parent
-            ///
-            /// @author S Downie
-            ///
-            /// @param Widget to add
-            //----------------------------------------------------------------------------------------
-            void AddInternalWidget(const WidgetSPtr& in_widget);
-            //----------------------------------------------------------------------------------------
             /// Remove the widget from the child list of its parent. It will no longer be rendered and may
             /// be destroyed if the parent holds the last reference
             ///
@@ -576,6 +540,7 @@ namespace ChilliSource
             
         private:
             friend class Canvas;
+            friend class WidgetFactory;
             //----------------------------------------------------------------------------------------
             /// Set the pointer to the canvas
             ///
@@ -592,6 +557,42 @@ namespace ChilliSource
             /// @param Parent
             //----------------------------------------------------------------------------------------
             void SetParent(Widget* in_parent);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Default property values
+            //----------------------------------------------------------------------------------------
+            void SetDefaultProperties(const PropertyMap& in_defaultProperties);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Custom property values
+            //----------------------------------------------------------------------------------------
+            void SetCustomProperties(const PropertyMap& in_customProperties);
+            //----------------------------------------------------------------------------------------
+            /// Adds a widget as a child of this widget. The widget will be rendered as part of this
+            /// hierarchy and any relative coordinates will now be in relation to this widget.
+            ///
+            /// This widget is effectively a private implementation detail and is not affected by the
+            /// layout and is not returned when querying for widgets
+            ///
+            /// NOTE: Will assert if the widget already has a parent
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget to add
+            //----------------------------------------------------------------------------------------
+            void AddInternalWidget(const WidgetSPtr& in_widget);
+            //----------------------------------------------------------------------------------------
+            /// Set the layout that handles how to layout the widget's internal subviews. If this is null then the
+            /// subviews will retain their current size and position. Otherwise the size and position may
+            /// be manipulatd by the layout
+            ///
+            /// @author S Downie
+            ///
+            /// @param Layout
+            //----------------------------------------------------------------------------------------
+            void SetInternalLayout(ILayoutUPtr in_layout);
             //----------------------------------------------------------------------------------------
             /// Calculate the transform matrix of the object based on the local scale, rotation and
             /// position

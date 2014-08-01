@@ -39,7 +39,12 @@ namespace ChilliSource
     {
         //-------------------------------------------------------------
         /// A resource that holds the description for defining new
-        /// widget types
+        /// widget types. Widgets created from defines have provate implementation
+        /// details such as child widgets and are supposed to be treated as
+        /// as single widget rather than as a screen. Widgets created from
+        /// defines rarely have any properties set only their behaviour and
+        /// hiearchy is fixed and there they require positioning and drawables
+        /// etc before they can be added to the canvas.
         ///
         /// @author S Downie
         //-------------------------------------------------------------

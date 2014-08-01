@@ -315,17 +315,22 @@ namespace ChilliSource
             {
                 CS_ASSERT(propertyDef.m_type != PropertyType::k_unknown, "Unsupported property type for property: " + propertyDef.m_name);
                 
-                u32 hashId = Core::HashCRC32::GenerateHashCode(propertyDef.m_name);
+                std::string lowerCaseName = propertyDef.m_name;
+                Core::StringUtils::ToLowerCase(lowerCaseName);
+                
+                u32 hashId = Core::HashCRC32::GenerateHashCode(lowerCaseName);
                 PropertyLookup lookup = {propertyDef.m_type, New(propertyDef.m_type)};
                 m_properties.insert(std::make_pair(hashId, lookup));
-                SetProperty(propertyDef.m_type, propertyDef.m_name, propertyDef.m_value);
+                SetProperty(propertyDef.m_type, lowerCaseName, propertyDef.m_value);
             }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         bool PropertyMap::HasProperty(const std::string& in_name) const
         {
-            u32 hashKey = Core::HashCRC32::GenerateHashCode(in_name);
+            std::string lowerCaseName = in_name;
+            Core::StringUtils::ToLowerCase(lowerCaseName);
+            u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
             
             return m_properties.find(hashKey) != m_properties.end();
         }
@@ -333,7 +338,9 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         PropertyType PropertyMap::GetType(const std::string& in_name) const
         {
-            u32 hashKey = Core::HashCRC32::GenerateHashCode(in_name);
+            std::string lowerCaseName = in_name;
+            Core::StringUtils::ToLowerCase(lowerCaseName);
+            u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
             
             auto entry = m_properties.find(hashKey);
             CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
@@ -344,7 +351,9 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         template<> void PropertyMap::SetProperty(const std::string& in_name, std::string in_value)
         {
-            u32 hashKey = Core::HashCRC32::GenerateHashCode(in_name);
+            std::string lowerCaseName = in_name;
+            Core::StringUtils::ToLowerCase(lowerCaseName);
+            u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
             
             auto entry = m_properties.find(hashKey);
             CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);

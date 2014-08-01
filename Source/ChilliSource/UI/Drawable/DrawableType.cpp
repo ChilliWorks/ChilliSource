@@ -28,6 +28,8 @@
 
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 
+#include <ChilliSource/Core/String/StringUtils.h>
+
 namespace ChilliSource
 {
     namespace UI
@@ -36,10 +38,13 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         DrawableType ParseDrawableType(const std::string& in_type)
         {
-            if(in_type == "None") return DrawableType::k_none;
-            if(in_type == "Texture") return DrawableType::k_texture;
-            if(in_type == "NinePatch") return DrawableType::k_ninePatch;
-            if(in_type == "ThreePatch") return DrawableType::k_threePatch;
+            std::string lowerCase = in_type;
+            Core::StringUtils::ToLowerCase(lowerCase);
+            
+            if(lowerCase == "none") return DrawableType::k_none;
+            if(lowerCase == "texture") return DrawableType::k_texture;
+            if(lowerCase == "ninepatch") return DrawableType::k_ninePatch;
+            if(lowerCase == "threepatch") return DrawableType::k_threePatch;
             
             CS_LOG_FATAL("Cannot parse drawable type: " + in_type);
             return DrawableType::k_none;
