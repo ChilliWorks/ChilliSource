@@ -275,6 +275,36 @@ namespace ChilliSource
             static_assert(std::is_pointer<TType>::value, "Property type not supported");
             return PropertyType::k_unknown;
         }
+		//----------------------------------------------------------------------------------------
+		/// Specialisation to store property value for const char* as a std::string
+        ///
+        /// @author S Downie
+        ///
+        /// @param Property name
+        /// @param Property value
+		//----------------------------------------------------------------------------------------
+		template<> void PropertyMap::SetProperty(const std::string& in_name, const char* in_value);
+		//----------------------------------------------------------------------------------------
+		/// Specialisation to return property value for const char* which is stored as a std::string
+        ///
+        /// @author S Downie
+        ///
+        /// @param Property name
+        ///
+        /// @return Property value
+		//----------------------------------------------------------------------------------------
+		template<> const char* PropertyMap::GetProperty(const std::string& in_name) const;
+		//----------------------------------------------------------------------------------------
+		/// Specialisation to return property value for const char* which is stored as a std::string
+        ///
+        /// @author S Downie
+        ///
+        /// @param Property name
+        /// @param Default value
+        ///
+        /// @return Property value or default if name not found
+		//----------------------------------------------------------------------------------------
+		template<> const char* PropertyMap::GetPropertyOrDefault(const std::string& in_name, const char* in_default) const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for bool
         ///

@@ -120,7 +120,10 @@ namespace ChilliSource
                 for(auto it = in_properties.begin(); it != in_properties.end(); ++it)
                 {
                     CS_ASSERT((*it).isString() == true, "WidgetDefProvider: Properties values in file must be strings: " + std::string(it.memberName()));
-                    descs.push_back({ParsePropertyType((*it).asString()), it.memberName()});
+					PropertyMap::PropertyDesc desc;
+					desc.m_type = ParsePropertyType((*it).asString());
+					desc.m_name = it.memberName();
+					descs.push_back(desc);
                 }
                 
                 out_customProperties.AllocateKeys(descs);

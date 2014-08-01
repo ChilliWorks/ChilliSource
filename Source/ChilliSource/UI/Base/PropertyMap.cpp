@@ -347,44 +347,18 @@ namespace ChilliSource
             return entry->second.m_type;
         }
         //----------------------------------------------------------------------------------------
-        /// This is a specialisation to handle inserting strings into the blob.
-        //----------------------------------------------------------------------------------------
-        template<> void PropertyMap::SetProperty(const std::string& in_name, std::string in_value)
-        {
-            std::string lowerCaseName = in_name;
-            Core::StringUtils::ToLowerCase(lowerCaseName);
-            u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
-            
-            auto entry = m_properties.find(hashKey);
-            CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
-            CS_ASSERT(entry->second.m_type == PropertyType::k_string, "Wrong type for property with name " + in_name);
-            
-            std::string* property = (std::string*)entry->second.m_value;
-            *property = std::move(in_value);
-        }
-        //----------------------------------------------------------------------------------------
-        /// This is a specialisation to handle inserting strings into the blob.
-        //----------------------------------------------------------------------------------------
-        template<> void PropertyMap::SetProperty(const std::string& in_name, const std::string& in_value)
-        {
-            SetProperty<std::string>(in_name, in_value);
-        }
-        //----------------------------------------------------------------------------------------
-        /// This is a specialisation to handle inserting string literals into the blob
         //----------------------------------------------------------------------------------------
         template<> void PropertyMap::SetProperty(const std::string& in_name, const char* in_value)
         {
             SetProperty<std::string>(in_name, in_value);
         }
         //----------------------------------------------------------------------------------------
-        /// This is a specialisation to handle retrieving strings from the blob.
         //----------------------------------------------------------------------------------------
         template<> const char* PropertyMap::GetProperty(const std::string& in_name) const
         {
             return GetProperty<std::string>(in_name).c_str();
         }
         //----------------------------------------------------------------------------------------
-        /// This is a specialisation to handle retrieving strings from the blob.
         //----------------------------------------------------------------------------------------
         template<> const char* PropertyMap::GetPropertyOrDefault(const std::string& in_name, const char* in_default) const
         {
