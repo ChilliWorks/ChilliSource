@@ -70,7 +70,7 @@ namespace ChilliSource
                 WidgetTemplate* widgetTemplate = (WidgetTemplate*)out_resource.get();
                 
                 WidgetHierarchyDesc hierarchyDesc;
-                WidgetTemplateProvider::ParseTemplate(root, hierarchyDesc);
+                WidgetTemplateProvider::ParseTemplate(root, in_storageLocation, in_filepath, hierarchyDesc);
                 
                 widgetTemplate->Build(hierarchyDesc);
                 
@@ -122,7 +122,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void WidgetTemplateProvider::ParseTemplate(const Json::Value& in_template, WidgetHierarchyDesc& out_hierarchyDesc)
+        void WidgetTemplateProvider::ParseTemplate(const Json::Value& in_template, Core::StorageLocation in_templateLocation, const std::string& in_templatePath, WidgetHierarchyDesc& out_hierarchyDesc)
         {
             CS_ASSERT(in_template.isMember("Type") == true, "Widget template must have type");
             std::string type = in_template["Type"].asString();
@@ -130,13 +130,23 @@ namespace ChilliSource
             if(type == "Template")
             {
                 //This type is a special case in which the property values are read from a separate template file
-                CS_ASSERT(in_template.isMember("TemplateLocation"), "Link to template file must have TemplateLocation");
                 CS_ASSERT(in_template.isMember("TemplatePath"), "Link to template file must have TemplatePath");
                 
-                Core::StorageLocation location = Core::ParseStorageLocation(in_template["TemplateLocation"].asString());
+                bool relativePath = in_template.isMember("TemplateLocation") == false;
+                Core::StorageLocation location = in_templateLocation;
+                std::string path = in_template["TemplatePath"].asString();
+                
+                if(relativePath == false)
+                {
+                    location = Core::ParseStorageLocation(in_template["TemplateLocation"].asString());
+                }
+                else
+                {
+                    path = in_templatePath + path;
+                }
                 
                 auto resPool = Core::Application::Get()->GetResourcePool();
-                WidgetTemplateCSPtr widgetTemplate = resPool->LoadResource<WidgetTemplate>(location, in_template["TemplatePath"].asString());
+                WidgetTemplateCSPtr widgetTemplate = resPool->LoadResource<WidgetTemplate>(location, path);
                 out_hierarchyDesc = widgetTemplate->GetHierarchyDesc();
             }
             else
@@ -160,7 +170,7 @@ namespace ChilliSource
                     {
                         //Special case for drawable
                         CS_ASSERT((*it).isObject(), "Value can only be specified as object: " + std::string(it.memberName()));
-                        out_hierarchyDesc.m_defaultProperties.SetProperty(it.memberName(), WidgetParserUtils::ParseDrawableValues(*it));
+                        out_hierarchyDesc.m_defaultProperties.SetProperty(it.memberName(), WidgetParserUtils::ParseDrawableValues(*it, in_templateLocation, in_templatePath));
                     }
                     else if(strcmp(it.memberName(), "Layout") == 0)
                     {
@@ -203,7 +213,7 @@ namespace ChilliSource
                     const Json::Value& widget = children[name];
                     
                     WidgetHierarchyDesc childDesc;
-                    ParseTemplate(widget, childDesc);
+                    ParseTemplate(widget, in_templateLocation, in_templatePath, childDesc);
                     out_hierarchyDesc.m_children.push_back(childDesc);
                 }
             }

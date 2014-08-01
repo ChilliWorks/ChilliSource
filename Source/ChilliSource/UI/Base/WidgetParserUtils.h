@@ -42,15 +42,19 @@ namespace ChilliSource
         {
             //-------------------------------------------------------
             /// From the given JSON value parse the values of the drawable
-            /// types into a property map
+            /// types into a property map. Drawables can be specified
+            /// with a relative path and this needs conversion to an
+            /// absolute path
             ///
             /// @author S Downie
             ///
             /// @param Json drawable
+            /// @param Absolute storage location
+            /// @param Absolute file path (no file name)
             ///
             /// @return Property values
             //-------------------------------------------------------
-            PropertyMap ParseDrawableValues(const Json::Value& in_drawable);
+            PropertyMap ParseDrawableValues(const Json::Value& in_drawable, Core::StorageLocation in_location, const std::string& in_absPath);
             //-------------------------------------------------------
             /// From the given JSON value parse the values of the layout
             /// types into a property map

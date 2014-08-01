@@ -43,17 +43,31 @@ namespace ChilliSource
         {
             //-------------------------------------------------------
             //-------------------------------------------------------
-            PropertyMap ParseDrawableValues(const Json::Value& in_drawable)
+            PropertyMap ParseDrawableValues(const Json::Value& in_drawable, Core::StorageLocation in_location, const std::string& in_absPath)
             {
                 DrawableType type = ParseDrawableType(in_drawable["Type"].asString());
                 auto supportedProperties = IDrawable::GetPropertyDescs(type);
                 PropertyMap result(supportedProperties);
                 
+                bool relativePath = in_drawable.isMember("TextureLocation") == false;
+                
+                if(relativePath == true)
+                {
+                    result.SetProperty(PropertyType::k_string, "TextureLocation", Core::ToString(in_location));
+                }
+                
                 for(const auto& propDesc : supportedProperties)
                 {
                     if(in_drawable.isMember(propDesc.m_name) == true)
                     {
-                        result.SetProperty(propDesc.m_type, propDesc.m_name, in_drawable[propDesc.m_name].asString());
+                        std::string value = in_drawable[propDesc.m_name].asString();
+                        
+                        if(propDesc.m_name == "TexturePath" && relativePath == true)
+                        {
+                            value = in_absPath + value;
+                        }
+                        
+                        result.SetProperty(propDesc.m_type, propDesc.m_name, value);
                     }
                 }
                 

@@ -54,27 +54,35 @@ namespace ChilliSource
             
             //-------------------------------------------------------
             /// From the given JSON value parse the values of the property
-            /// types into the given container
+            /// types into the given container. Some of the properties
+            /// require conversion from relative to absolute paths
+            /// hence the definition path info.
             ///
             /// @author S Downie
             ///
             /// @param Json defaults
+            /// @param Definition location
+            /// @param Defintion path (no file name)
             /// @param [Out] Default property values
             /// @param [Out] Custom property values
             //-------------------------------------------------------
-            void ParseDefaultValues(const Json::Value& in_defaults, PropertyMap& out_defaultProperties, PropertyMap& out_customProperties);
+            void ParseDefaultValues(const Json::Value& in_defaults, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, PropertyMap& out_defaultProperties, PropertyMap& out_customProperties);
 
             //-------------------------------------------------------
             /// From the given JSON value parse the hierarchy and
-            /// create definitions for all child widgets
+            /// create definitions for all child widgets. Some of the properties
+            /// require conversion from relative to absolute paths
+            /// hence the definition path info.
             ///
             /// @author S Downie
             ///
             /// @param Json hierarchy
             /// @param Json widgets
+            /// @param Definition location
+            /// @param Defintion path (no file name)
             /// @param [Out] Children descriptions
             //-------------------------------------------------------
-            void ParseChildWidgets(const Json::Value& in_hierarchy, const Json::Value& in_widgets, std::vector<WidgetHierarchyDesc>& out_children)
+            void ParseChildWidgets(const Json::Value& in_hierarchy, const Json::Value& in_widgets, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, std::vector<WidgetHierarchyDesc>& out_children)
             {
                 for(u32 i=0; i<in_hierarchy.size(); ++i)
                 {
@@ -83,14 +91,14 @@ namespace ChilliSource
                     const Json::Value& widget = in_widgets[name];
                     
                     WidgetHierarchyDesc childDesc;
-                    WidgetTemplateProvider::ParseTemplate(widget, childDesc);
+                    WidgetTemplateProvider::ParseTemplate(widget, in_definitionLocation, in_definitionPath, childDesc);
                     childDesc.m_defaultProperties.SetProperty("Name", name);
                     childDesc.m_access = WidgetHierarchyDesc::Access::k_internal;
                     
                     const Json::Value& children = hierarchyItem["Children"];
                     if(children.isNull() == false)
                     {
-                        ParseChildWidgets(children, in_widgets, childDesc.m_children);
+                        ParseChildWidgets(children, in_widgets, in_definitionLocation, in_definitionPath, childDesc.m_children);
                     }
                     
                     out_children.push_back(childDesc);
@@ -119,7 +127,7 @@ namespace ChilliSource
             }
             //-------------------------------------------------------
             //-------------------------------------------------------
-            void ParseDefaultValues(const Json::Value& in_defaults, PropertyMap& out_defaultProperties, PropertyMap& out_customProperties)
+            void ParseDefaultValues(const Json::Value& in_defaults, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, PropertyMap& out_defaultProperties, PropertyMap& out_customProperties)
             {
                 out_defaultProperties.AllocateKeys(Widget::GetPropertyDescs());
         
@@ -131,7 +139,7 @@ namespace ChilliSource
                         {
                             //Special case for drawable
                             CS_ASSERT((*it).isObject(), "Value can only be specified as object: " + std::string(it.memberName()));
-                            out_defaultProperties.SetProperty(it.memberName(), WidgetParserUtils::ParseDrawableValues(*it));
+                            out_defaultProperties.SetProperty(it.memberName(), WidgetParserUtils::ParseDrawableValues(*it, in_definitionLocation, in_definitionPath));
                         }
                         else if(strcmp(it.memberName(), "Layout") == 0)
                         {
@@ -179,12 +187,16 @@ namespace ChilliSource
                 
                 CS_ASSERT(root.isMember("Type"), "Widget def must have Type");
                 hierarchyDesc.m_type = root["Type"].asString();
+                
+                std::string definitionFileName;
+                std::string pathToDefinition;
+                Core::StringUtils::SplitFilename(in_filepath, definitionFileName, pathToDefinition);
             
                 const Json::Value& hierarchy = root["Hierarchy"];
                 const Json::Value& children = root["Children"];
                 if(hierarchy.isNull() == false && hierarchy.isArray() == true && children.isNull() == false)
                 {
-                    ParseChildWidgets(hierarchy, children, hierarchyDesc.m_children);
+                    ParseChildWidgets(hierarchy, children, in_storageLocation, pathToDefinition, hierarchyDesc.m_children);
                 }
                 
                 const Json::Value& customProperties = root["Properties"];
@@ -196,7 +208,7 @@ namespace ChilliSource
                 const Json::Value& defaults = root["Defaults"];
                 if(defaults.isNull() == false)
                 {
-                    ParseDefaultValues(defaults, hierarchyDesc.m_defaultProperties, hierarchyDesc.m_customProperties);
+                    ParseDefaultValues(defaults, in_storageLocation, pathToDefinition, hierarchyDesc.m_defaultProperties, hierarchyDesc.m_customProperties);
                 }
                 
                 widgetDef->Build(hierarchyDesc);
