@@ -30,6 +30,7 @@
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
@@ -127,14 +128,15 @@ namespace ChilliSource
         void WidgetFactory::OnInit()
         {
             auto resPool = Core::Application::Get()->GetResourcePool();
-            auto fileSystem = Core::Application::Get()->GetFileSystem();
-            auto widgetDefPaths = fileSystem->GetFilePathsWithExtension(Core::StorageLocation::k_chilliSource, "Widgets", true, "csuidef");
+
+            WidgetDefCSPtr widgetDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Widget.csuidef");
+            RegisterDefinition(widgetDef);
             
-            for(const auto& path : widgetDefPaths)
-            {
-                WidgetDefCSPtr widgetDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/" + path);
-                RegisterDefinition(widgetDef);
-            }
+            WidgetDefCSPtr highlightButtonDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HighlightButton.csuidef");
+            RegisterDefinition(highlightButtonDef);
+            
+            WidgetDefCSPtr horizontalSliderDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HorizontalSliderBar.csuidef");
+            RegisterDefinition(horizontalSliderDef);
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
@@ -210,6 +212,114 @@ namespace ChilliSource
                         break;
                 }
             }
+            
+            //Hook up any links to our childrens properties
+            std::unordered_map<std::string, std::pair<void*, void*>> defaultPropertyLinks;
+            std::unordered_map<std::string, std::pair<Widget*, std::string>> customPropertyLinks;
+            
+            for(const auto& link : in_hierarchyDesc.m_links)
+            {
+                Widget* childWidget = widget->GetInternalWidget(link.m_widgetName);
+                if(childWidget == nullptr)
+                {
+                    childWidget = widget->GetWidget(link.m_widgetName);
+                }
+                CS_ASSERT(childWidget != nullptr, "Cannot link to missing widget: " + link.m_widgetName);
+                
+                std::string lowerCasePropName(link.m_propertyName);
+                Core::StringUtils::ToLowerCase(lowerCasePropName);
+
+                if(lowerCasePropName == "name")
+                {
+                    auto setter = new std::function<void(const std::string&)>(Core::MakeDelegate(childWidget, &Widget::SetName));
+                    auto getter = new std::function<const std::string&()>(Core::MakeDelegate(childWidget, &Widget::GetName));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else if(lowerCasePropName == "relposition")
+                {
+                    auto setter = new std::function<void(const Core::Vector2&)>(Core::MakeDelegate(childWidget, &Widget::SetRelativePosition));
+                    auto getter = new std::function<Core::Vector2()>(Core::MakeDelegate(childWidget, &Widget::GetRelativePosition));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else if(lowerCasePropName == "absposition")
+                {
+                    auto setter = new std::function<void(const Core::Vector2&)>(Core::MakeDelegate(childWidget, &Widget::SetAbsolutePosition));
+                    auto getter = new std::function<Core::Vector2()>(Core::MakeDelegate(childWidget, &Widget::GetAbsolutePosition));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else if(lowerCasePropName == "relsize")
+                {
+                    auto setter = new std::function<void(const Core::Vector2&)>(Core::MakeDelegate(childWidget, &Widget::SetRelativeSize));
+                    auto getter = new std::function<Core::Vector2()>(Core::MakeDelegate(childWidget, &Widget::GetRelativeSize));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else if(lowerCasePropName == "abssize")
+                {
+                    auto setter = new std::function<void(const Core::Vector2&)>(Core::MakeDelegate(childWidget, &Widget::SetAbsoluteSize));
+                    auto getter = new std::function<Core::Vector2()>(Core::MakeDelegate(childWidget, &Widget::GetAbsoluteSize));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else if(lowerCasePropName == "preferredsize")
+                {
+                    auto setter = new std::function<void(const Core::Vector2&)>(Core::MakeDelegate(childWidget, &Widget::SetDefaultPreferredSize));
+                    auto getter = new std::function<Core::Vector2()>(Core::MakeDelegate(childWidget, &Widget::GetPreferredSize));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else if(lowerCasePropName == "scale")
+                {
+                    auto setter = new std::function<void(const Core::Vector2&)>(Core::MakeDelegate(childWidget, &Widget::ScaleTo));
+                    auto getter = new std::function<Core::Vector2()>(Core::MakeDelegate(childWidget, &Widget::GetLocalScale));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else if(lowerCasePropName == "colour")
+                {
+                    auto setter = new std::function<void(const Core::Colour&)>(Core::MakeDelegate(childWidget, &Widget::SetColour));
+                    auto getter = new std::function<Core::Colour()>(Core::MakeDelegate(childWidget, &Widget::GetLocalColour));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else if(lowerCasePropName == "rotation")
+                {
+                    auto setter = new std::function<void(f32)>(Core::MakeDelegate(childWidget, &Widget::RotateTo));
+                    auto getter = new std::function<f32()>(Core::MakeDelegate(childWidget, &Widget::GetLocalRotation));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else if(lowerCasePropName == "originanchor")
+                {
+                    auto setter = new std::function<void(Rendering::AlignmentAnchor)>(Core::MakeDelegate(childWidget, &Widget::SetOriginAnchor));
+                    auto getter = new std::function<Rendering::AlignmentAnchor()>(Core::MakeDelegate(childWidget, &Widget::GetOriginAnchor));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else if(lowerCasePropName == "parentalanchor")
+                {
+                    auto setter = new std::function<void(Rendering::AlignmentAnchor)>(Core::MakeDelegate(childWidget, &Widget::SetParentalAnchor));
+                    auto getter = new std::function<Rendering::AlignmentAnchor()>(Core::MakeDelegate(childWidget, &Widget::GetParentalAnchor));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else if(lowerCasePropName == "visible")
+                {
+                    auto setter = new std::function<void(bool)>(Core::MakeDelegate(childWidget, &Widget::SetVisible));
+                    auto getter = new std::function<bool()>(Core::MakeDelegate(childWidget, &Widget::IsVisible));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else if(lowerCasePropName == "clipchildren")
+                {
+                    auto setter = new std::function<void(bool)>(Core::MakeDelegate(childWidget, &Widget::SetClippingEnabled));
+                    auto getter = new std::function<bool()>(Core::MakeDelegate(childWidget, &Widget::IsClippingEnabled));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else if(lowerCasePropName == "sizepolicy")
+                {
+                    auto setter = new std::function<void(SizePolicy)>(Core::MakeDelegate(childWidget, &Widget::SetSizePolicy));
+                    auto getter = new std::function<SizePolicy()>(Core::MakeDelegate(childWidget, &Widget::GetSizePolicy));
+                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                }
+                else
+                {
+                    customPropertyLinks.emplace(link.m_linkName, std::make_pair(childWidget, link.m_propertyName));
+                }
+            }
+            
+            widget->SetPropertyLinks(std::move(defaultPropertyLinks), std::move(customPropertyLinks));
             
             return widget;
         }

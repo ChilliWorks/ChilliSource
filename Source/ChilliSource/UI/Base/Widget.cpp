@@ -40,7 +40,7 @@ namespace ChilliSource
     {
         namespace
         {
-            std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
+            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
             {
                 {PropertyType::k_string, "Type", ""},
                 {PropertyType::k_string, "Name", ""},
@@ -209,7 +209,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         std::vector<PropertyMap::PropertyDesc> Widget::GetPropertyDescs()
         {
-            return g_propertyDescs;
+            return k_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -235,6 +235,13 @@ namespace ChilliSource
         void Widget::SetCustomProperties(const PropertyMap& in_customProperties)
         {
             m_customProperties = in_customProperties;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetPropertyLinks(std::unordered_map<std::string, std::pair<void*, void*>>&& in_defaultLinks, std::unordered_map<std::string, std::pair<Widget*, std::string>>&& in_customLinks)
+        {
+            m_defaultPropertyLinks = std::move(in_defaultLinks);
+            m_customPropertyLinks = std::move(in_customLinks);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -284,15 +291,6 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetRelativeSize(f32 in_width, f32 in_height)
-        {
-            m_localSize.vRelative.x = in_width;
-            m_localSize.vRelative.y = in_height;
-            
-            InvalidateTransformCache();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
         void Widget::SetRelativeSize(const Core::Vector2& in_size)
         {
             m_localSize.vRelative = in_size;
@@ -301,12 +299,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetAbsoluteSize(f32 in_width, f32 in_height)
+        Core::Vector2 Widget::GetRelativeSize() const
         {
-            m_localSize.vAbsolute.x = in_width;
-            m_localSize.vAbsolute.y = in_height;
-            
-            InvalidateTransformCache();
+            return m_localSize.vRelative;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -315,6 +310,12 @@ namespace ChilliSource
             m_localSize.vAbsolute = in_size;
             
             InvalidateTransformCache();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector2 Widget::GetAbsoluteSize() const
+        {
+            return m_localSize.vAbsolute;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -330,18 +331,16 @@ namespace ChilliSource
         {
             CS_ASSERT(in_policy != SizePolicy::k_totalNum, "k_totalNum is not a size policy");
             
-            InvalidateTransformCache();
+            m_sizePolicy = in_policy;
+            m_sizePolicyDelegate = SizePolicyFuncs::k_sizePolicyFuncs[(u32)m_sizePolicy];
             
-            m_sizePolicyDelegate = SizePolicyFuncs::k_sizePolicyFuncs[(u32)in_policy];
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetRelativePosition(f32 in_x, f32 in_y)
+        SizePolicy Widget::GetSizePolicy() const
         {
-            m_localPosition.vRelative.x = in_x;
-            m_localPosition.vRelative.y = in_y;
-            
-            InvalidateTransformCache();
+            return m_sizePolicy;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -353,12 +352,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetAbsolutePosition(f32 in_x, f32 in_y)
+        Core::Vector2 Widget::GetRelativePosition() const
         {
-            m_localPosition.vAbsolute.x = in_x;
-            m_localPosition.vAbsolute.y = in_y;
-            
-            InvalidateTransformCache();
+            return m_localPosition.vRelative;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -367,6 +363,12 @@ namespace ChilliSource
             m_localPosition.vAbsolute = in_pos;
             
             InvalidateTransformCache();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector2 Widget::GetAbsolutePosition() const
+        {
+            return m_localPosition.vAbsolute;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -420,6 +422,12 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        f32 Widget::GetLocalRotation() const
+        {
+            return m_localRotation;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         void Widget::ScaleBy(const Core::Vector2& in_scale)
         {
             m_localScale *= in_scale;
@@ -445,12 +453,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::ScaleTo(f32 in_x, f32 in_y)
+        Core::Vector2 Widget::GetLocalScale() const
         {
-            m_localScale.x = in_x;
-            m_localScale.y = in_y;
-            
-            InvalidateTransformCache();
+            return m_localScale;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -462,6 +467,12 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        Rendering::AlignmentAnchor Widget::GetParentalAnchor() const
+        {
+            return m_parentalAnchor;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         void Widget::SetOriginAnchor(Rendering::AlignmentAnchor in_anchor)
         {
             m_originAnchor = in_anchor;
@@ -470,9 +481,21 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        Rendering::AlignmentAnchor Widget::GetOriginAnchor() const
+        {
+            return m_originAnchor;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         void Widget::SetColour(const Core::Colour& in_colour)
         {
             m_localColour = in_colour;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Colour Widget::GetLocalColour() const
+        {
+            return m_localColour;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -491,6 +514,12 @@ namespace ChilliSource
         void Widget::SetClippingEnabled(bool in_enabled)
         {
             m_isSubviewClippingEnabled = in_enabled;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        bool Widget::IsClippingEnabled() const
+        {
+            return m_isSubviewClippingEnabled;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -540,6 +569,20 @@ namespace ChilliSource
         Widget* Widget::GetWidget(const std::string& in_name)
         {
             for(auto& child : m_children)
+            {
+                if(child->m_name == in_name)
+                {
+                    return child.get();
+                }
+            }
+            
+            return nullptr;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Widget* Widget::GetInternalWidget(const std::string& in_name)
+        {
+            for(auto& child : m_internalChildren)
             {
                 if(child->m_name == in_name)
                 {

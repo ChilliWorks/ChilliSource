@@ -149,28 +149,15 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Percentage width of parent (0.0 - 1.0)
-            /// @param Percentage height of parent (0.0 - 1.0)
-            //----------------------------------------------------------------------------------------
-            void SetRelativeSize(f32 in_width, f32 in_height);
-            //----------------------------------------------------------------------------------------
-            /// Set the percentage size of the widget relative to its parent size i.e. 0.5, 0.5 will
-            /// make the widget half the width of the parent and half the height
-            ///
-            /// @author S Downie
-            ///
             /// @param Percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
             //----------------------------------------------------------------------------------------
             void SetRelativeSize(const Core::Vector2& in_size);
             //----------------------------------------------------------------------------------------
-            /// Set the size of the widget in pixels
-            ///
             /// @author S Downie
             ///
-            /// @param Width in pixels
-            /// @param Height in pixels
+            /// @return Percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
             //----------------------------------------------------------------------------------------
-            void SetAbsoluteSize(f32 in_width, f32 in_height);
+            Core::Vector2 GetRelativeSize() const;
             //----------------------------------------------------------------------------------------
             /// Set the size of the widget in pixels
             ///
@@ -179,6 +166,12 @@ namespace ChilliSource
             /// @param Size in pixels
             //----------------------------------------------------------------------------------------
             void SetAbsoluteSize(const Core::Vector2& in_size);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Size in pixels
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetAbsoluteSize() const;
             //----------------------------------------------------------------------------------------
             /// The default preferred size is used in cases when there is no drawable to query for its
             /// preferred size. The preferred size is used to maintain aspect ratio depending on the
@@ -199,15 +192,11 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetSizePolicy(SizePolicy in_policy);
             //----------------------------------------------------------------------------------------
-            /// Set the position of the widget relative to its parent size and anchor point i.e.
-            /// if the anchor is bottom left then 0.5, 0.5 will place it in the middle of the parent
-            ///
             /// @author S Downie
             ///
-            /// @param Offset X as percentage width of parent (0.0 - 1.0)
-            /// @param Offset Y as percentage height of parent (0.0 - 1.0)
+            /// @return Size policy
             //----------------------------------------------------------------------------------------
-            void SetRelativePosition(f32 in_x, f32 in_y);
+            SizePolicy GetSizePolicy() const;
             //----------------------------------------------------------------------------------------
             /// Set the position of the widget relative to its parent size and anchor point i.e.
             /// if the anchor is bottom left then 0.5, 0.5 will place it in the middle of the parent
@@ -218,22 +207,25 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetRelativePosition(const Core::Vector2& in_pos);
             //----------------------------------------------------------------------------------------
-            /// Set the position of the widget from the parental anchor in pixels
-            ///
             /// @author S Downie
             ///
-            /// @param X in pixels
-            /// @param Y in pixels
+            /// @return Offset as percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
             //----------------------------------------------------------------------------------------
-            void SetAbsolutePosition(f32 in_x, f32 in_y);
+            Core::Vector2 GetRelativePosition() const;
             //----------------------------------------------------------------------------------------
             /// Set the position of the widget from the parental anchor in pixels
             ///
             /// @author S Downie
             ///
-            /// @param Position in pixels
+            /// @param Position in pixels from parent anchor
             //----------------------------------------------------------------------------------------
             void SetAbsolutePosition(const Core::Vector2& in_pos);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Position in pixels from parent anchor
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetAbsolutePosition() const;
             //----------------------------------------------------------------------------------------
             /// Move the position of the widget from the parental anchor by the given percentages
             /// of the parent height and width
@@ -287,6 +279,12 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void RotateTo(f32 in_angleRads);
             //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Rotation in radians without any parent rotation applied
+            //----------------------------------------------------------------------------------------
+            f32 GetLocalRotation() const;
+            //----------------------------------------------------------------------------------------
             /// Scale the widgets current size about its origin by the given scaler
             ///
             /// @author S Downie
@@ -312,14 +310,11 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void ScaleBy(f32 in_x, f32 in_y);
             //----------------------------------------------------------------------------------------
-            /// Scale the widgets current size about its origin to the given scaler
-            ///
             /// @author S Downie
             ///
-            /// @param Scaler x
-            /// @param Scaler y
+            /// @return Local scale X Y
             //----------------------------------------------------------------------------------------
-            void ScaleTo(f32 in_x, f32 in_y);
+            Core::Vector2 GetLocalScale() const;
             //----------------------------------------------------------------------------------------
             /// Set the alignment anchor of the widget to its parent i.e. if the anchor is middle
             /// centre then the origin of the widget will be at the middle centre of the parent
@@ -330,6 +325,12 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetParentalAnchor(Rendering::AlignmentAnchor in_anchor);
             //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Alignment anchor
+            //----------------------------------------------------------------------------------------
+            Rendering::AlignmentAnchor GetParentalAnchor() const;
+            //----------------------------------------------------------------------------------------
             /// Set the alignment anchor that is to be the widgets origin i.e. it's pivot point
             ///
             /// @author S Downie
@@ -337,6 +338,12 @@ namespace ChilliSource
             /// @param Alignment anchor
             //----------------------------------------------------------------------------------------
             void SetOriginAnchor(Rendering::AlignmentAnchor in_anchor);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Alignment anchor
+            //----------------------------------------------------------------------------------------
+            Rendering::AlignmentAnchor GetOriginAnchor() const;
             //----------------------------------------------------------------------------------------
             /// Set the colour that is multiplied into the widget. Widgets inherit their parent's
             /// colour.
@@ -346,6 +353,12 @@ namespace ChilliSource
             /// @param Colour
             //----------------------------------------------------------------------------------------
             void SetColour(const Core::Colour& in_colour);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Local colour
+            //----------------------------------------------------------------------------------------
+            Core::Colour GetLocalColour() const;
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -366,6 +379,12 @@ namespace ChilliSource
             /// @param Set whether the widget will clip pixels that exceed its bounds
             //----------------------------------------------------------------------------------------
             void SetClippingEnabled(bool in_enabled);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Set whether the widget will clip pixels that exceed its bounds
+            //----------------------------------------------------------------------------------------
+            bool IsClippingEnabled() const;
             //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
@@ -570,6 +589,16 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetCustomProperties(const PropertyMap& in_customProperties);
             //----------------------------------------------------------------------------------------
+            /// Set up the links so that this widget can access the properties of another via the
+            /// SetProperty and GetProperty
+            ///
+            /// @author S Downie
+            ///
+            /// @param Links to default properties of the specified widget
+            /// @param Links to custom properties of the specified widget
+            //----------------------------------------------------------------------------------------
+            void SetPropertyLinks(std::unordered_map<std::string, std::pair<void*, void*>>&& in_defaultLinks, std::unordered_map<std::string, std::pair<Widget*, std::string>>&& in_customLinks);
+            //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
             ///
@@ -583,6 +612,12 @@ namespace ChilliSource
             /// @param Widget to add
             //----------------------------------------------------------------------------------------
             void AddInternalWidget(const WidgetSPtr& in_widget);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The first internal child widget with the given name. Note: this is not recursive
+            //----------------------------------------------------------------------------------------
+            Widget* GetInternalWidget(const std::string& in_name);
             //----------------------------------------------------------------------------------------
             /// Set the layout that handles how to layout the widget's internal subviews. If this is null then the
             /// subviews will retain their current size and position. Otherwise the size and position may
@@ -650,9 +685,12 @@ namespace ChilliSource
             /// @return Screen space size
             //----------------------------------------------------------------------------------------
             Core::Vector2 CalculateChildFinalSize(const Widget* in_child);
+
         private:
             
             PropertyMap m_customProperties;
+            std::unordered_map<std::string, std::pair<void*, void*>> m_defaultPropertyLinks;
+            std::unordered_map<std::string, std::pair<Widget*, std::string>> m_customPropertyLinks;
             
             Core::UnifiedVector2 m_localPosition;
             Core::UnifiedVector2 m_localSize;
@@ -665,6 +703,7 @@ namespace ChilliSource
             mutable Core::Matrix3 m_cachedFinalTransform;
             mutable Core::Vector2 m_cachedFinalSize;
             
+            SizePolicy m_sizePolicy;
             SizePolicyDelegate m_sizePolicyDelegate;
             
             std::vector<WidgetSPtr> m_internalChildren;
@@ -698,12 +737,40 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         template<typename TType> void Widget::SetProperty(const std::string& in_name, TType in_value)
         {
+            auto itDefault = m_defaultPropertyLinks.find(in_name);
+            if(itDefault != m_defaultPropertyLinks.end())
+            {
+                std::function<void(TType)>* setter = (std::function<void(TType)>*)itDefault->second.first;
+                (*setter)(in_value);
+                return;
+            }
+            
+            auto itCustom = m_customPropertyLinks.find(in_name);
+            if(itCustom != m_customPropertyLinks.end())
+            {
+                itCustom->second.first->SetProperty<TType>(itCustom->second.second, in_value);
+                return;
+            }
+            
             m_customProperties.SetProperty(in_name, in_value);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         template<typename TType> TType Widget::GetProperty(const std::string& in_name) const
         {
+            auto itDefault = m_defaultPropertyLinks.find(in_name);
+            if(itDefault != m_defaultPropertyLinks.end())
+            {
+                std::function<TType()>* getter = (std::function<TType()>*)itDefault->second.second;
+                return (*getter)();
+            }
+            
+            auto itCustom = m_customPropertyLinks.find(in_name);
+            if(itCustom != m_customPropertyLinks.end())
+            {
+                return itCustom->second.first->GetProperty<TType>(itCustom->second.second);
+            }
+            
             return m_customProperties.GetProperty<TType>(in_name);
         }
     }
