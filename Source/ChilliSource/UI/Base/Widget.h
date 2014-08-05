@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/UI/Base/PropertyAccessor.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
@@ -142,7 +143,7 @@ namespace ChilliSource
             ///
             /// @return Name of widget
             //----------------------------------------------------------------------------------------
-            const std::string& GetName() const;
+            std::string GetName() const;
             //----------------------------------------------------------------------------------------
             /// Set the percentage size of the widget relative to its parent size i.e. 0.5, 0.5 will
             /// make the widget half the width of the parent and half the height
@@ -597,7 +598,7 @@ namespace ChilliSource
             /// @param Links to default properties of the specified widget
             /// @param Links to custom properties of the specified widget
             //----------------------------------------------------------------------------------------
-            void SetPropertyLinks(std::unordered_map<std::string, std::pair<void*, void*>>&& in_defaultLinks, std::unordered_map<std::string, std::pair<Widget*, std::string>>&& in_customLinks);
+            void SetPropertyLinks(std::unordered_map<std::string, IPropertyAccessorUPtr>&& in_defaultLinks, std::unordered_map<std::string, std::pair<Widget*, std::string>>&& in_customLinks);
             //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
@@ -689,7 +690,7 @@ namespace ChilliSource
         private:
             
             PropertyMap m_customProperties;
-            std::unordered_map<std::string, std::pair<void*, void*>> m_defaultPropertyLinks;
+            std::unordered_map<std::string, IPropertyAccessorUPtr> m_defaultPropertyLinks;
             std::unordered_map<std::string, std::pair<Widget*, std::string>> m_customPropertyLinks;
             
             Core::UnifiedVector2 m_localPosition;
@@ -759,8 +760,8 @@ namespace ChilliSource
             auto itDefault = m_defaultPropertyLinks.find(in_name);
             if(itDefault != m_defaultPropertyLinks.end())
             {
-                std::function<void(TType)>* setter = (std::function<void(TType)>*)itDefault->second.first;
-                (*setter)(in_value);
+                PropertyAccessor<TType>* accessor = (PropertyAccessor<TType>*)(itDefault->second.get());
+                accessor->Set(in_value);
                 return;
             }
             
@@ -780,8 +781,8 @@ namespace ChilliSource
             auto itDefault = m_defaultPropertyLinks.find(in_name);
             if(itDefault != m_defaultPropertyLinks.end())
             {
-                std::function<TType()>* getter = (std::function<TType()>*)itDefault->second.second;
-                return (*getter)();
+                PropertyAccessor<TType>* accessor = (PropertyAccessor<TType>*)(itDefault->second.get());
+                return accessor->Get();
             }
             
             auto itCustom = m_customPropertyLinks.find(in_name);

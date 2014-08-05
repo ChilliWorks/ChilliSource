@@ -32,6 +32,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/UI/Base/PropertyAccessor.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
@@ -214,9 +215,12 @@ namespace ChilliSource
                 }
             }
             
+
+            
             //Hook up any links to our childrens properties
-            std::unordered_map<std::string, std::pair<void*, void*>> defaultPropertyLinks;
+            std::unordered_map<std::string, IPropertyAccessorUPtr> defaultPropertyLinks;
             std::unordered_map<std::string, std::pair<Widget*, std::string>> customPropertyLinks;
+            
             
             for(const auto& link : in_hierarchyDesc.m_links)
             {
@@ -232,87 +236,59 @@ namespace ChilliSource
 
                 if(lowerCasePropName == "name")
                 {
-                    auto setter = new std::function<void(const std::string&)>(std::bind(&Widget::SetName, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<const std::string&()>(std::bind(&Widget::GetName, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<std::string>(Core::MakeDelegate(childWidget, &Widget::SetName), Core::MakeDelegate(childWidget, &Widget::GetName))));
                 }
                 else if(lowerCasePropName == "relposition")
                 {
-                    auto setter = new std::function<void(const Core::Vector2&)>(std::bind(&Widget::SetRelativePosition, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<Core::Vector2()>(std::bind(&Widget::GetRelativePosition, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetRelativePosition), Core::MakeDelegate(childWidget, &Widget::GetRelativePosition))));
                 }
                 else if(lowerCasePropName == "absposition")
                 {
-                    auto setter = new std::function<void(const Core::Vector2&)>(std::bind(&Widget::SetAbsolutePosition, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<Core::Vector2()>(std::bind(&Widget::GetAbsolutePosition, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetAbsolutePosition), Core::MakeDelegate(childWidget, &Widget::GetAbsolutePosition))));
                 }
                 else if(lowerCasePropName == "relsize")
                 {
-                    auto setter = new std::function<void(const Core::Vector2&)>(std::bind(&Widget::SetRelativeSize, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<Core::Vector2()>(std::bind(&Widget::GetRelativeSize, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetRelativeSize), Core::MakeDelegate(childWidget, &Widget::GetRelativeSize))));
                 }
                 else if(lowerCasePropName == "abssize")
                 {
-                    auto setter = new std::function<void(const Core::Vector2&)>(std::bind(&Widget::SetAbsoluteSize, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<Core::Vector2()>(std::bind(&Widget::GetAbsoluteSize, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetAbsoluteSize), Core::MakeDelegate(childWidget, &Widget::GetAbsoluteSize))));
                 }
                 else if(lowerCasePropName == "preferredsize")
                 {
-                    auto setter = new std::function<void(const Core::Vector2&)>(std::bind(&Widget::SetDefaultPreferredSize, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<Core::Vector2()>(std::bind(&Widget::GetPreferredSize, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetDefaultPreferredSize), Core::MakeDelegate(childWidget, &Widget::GetPreferredSize))));
                 }
                 else if(lowerCasePropName == "scale")
                 {
-                    auto setter = new std::function<void(const Core::Vector2&)>(std::bind(&Widget::ScaleTo, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<Core::Vector2()>(std::bind(&Widget::GetLocalScale, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::ScaleTo), Core::MakeDelegate(childWidget, &Widget::GetLocalScale))));
                 }
                 else if(lowerCasePropName == "colour")
                 {
-                    auto setter = new std::function<void(const Core::Colour&)>(std::bind(&Widget::SetColour, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<Core::Colour()>(std::bind(&Widget::GetLocalColour, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Colour>(Core::MakeDelegate(childWidget, &Widget::SetColour), Core::MakeDelegate(childWidget, &Widget::GetLocalColour))));
                 }
                 else if(lowerCasePropName == "rotation")
                 {
-                    auto setter = new std::function<void(f32)>(std::bind(&Widget::RotateTo, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<f32()>(std::bind(&Widget::GetLocalRotation, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<f32>(Core::MakeDelegate(childWidget, &Widget::RotateTo), Core::MakeDelegate(childWidget, &Widget::GetLocalRotation))));
                 }
                 else if(lowerCasePropName == "originanchor")
                 {
-                    auto setter = new std::function<void(Rendering::AlignmentAnchor)>(std::bind(&Widget::SetOriginAnchor, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<Rendering::AlignmentAnchor()>(std::bind(&Widget::GetOriginAnchor, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Rendering::AlignmentAnchor>(Core::MakeDelegate(childWidget, &Widget::SetOriginAnchor), Core::MakeDelegate(childWidget, &Widget::GetOriginAnchor))));
                 }
                 else if(lowerCasePropName == "parentalanchor")
                 {
-                    auto setter = new std::function<void(Rendering::AlignmentAnchor)>(std::bind(&Widget::SetParentalAnchor, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<Rendering::AlignmentAnchor()>(std::bind(&Widget::GetParentalAnchor, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Rendering::AlignmentAnchor>(Core::MakeDelegate(childWidget, &Widget::SetParentalAnchor), Core::MakeDelegate(childWidget, &Widget::GetParentalAnchor))));
                 }
                 else if(lowerCasePropName == "visible")
                 {
-                    auto setter = new std::function<void(bool)>(std::bind(&Widget::SetVisible, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<bool()>(std::bind(&Widget::IsVisible, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(childWidget, &Widget::SetVisible), Core::MakeDelegate(childWidget, &Widget::IsVisible))));
                 }
                 else if(lowerCasePropName == "clipchildren")
                 {
-                    auto setter = new std::function<void(bool)>(std::bind(&Widget::SetClippingEnabled, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<bool()>(std::bind(&Widget::IsClippingEnabled, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(childWidget, &Widget::SetClippingEnabled), Core::MakeDelegate(childWidget, &Widget::IsClippingEnabled))));
                 }
                 else if(lowerCasePropName == "sizepolicy")
                 {
-                    auto setter = new std::function<void(SizePolicy)>(std::bind(&Widget::SetSizePolicy, childWidget, std::placeholders::_1));
-                    auto getter = new std::function<SizePolicy()>(std::bind(&Widget::GetSizePolicy, childWidget));
-                    defaultPropertyLinks.emplace(link.m_linkName, std::make_pair((void*)setter, (void*)getter));
+                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<SizePolicy>(Core::MakeDelegate(childWidget, &Widget::SetSizePolicy), Core::MakeDelegate(childWidget, &Widget::GetSizePolicy))));
                 }
                 else
                 {

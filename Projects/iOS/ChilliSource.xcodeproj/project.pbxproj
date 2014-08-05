@@ -290,6 +290,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8110E2D1199111E700EC96CA /* PropertyAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyAccessor.h; sourceTree = "<group>"; };
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
 		81496B811980F1AE004E79F2 /* Canvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas.cpp; sourceTree = "<group>"; };
 		81496B821980F1AE004E79F2 /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canvas.h; sourceTree = "<group>"; };
@@ -978,6 +979,7 @@
 			children = (
 				81496B811980F1AE004E79F2 /* Canvas.cpp */,
 				81496B821980F1AE004E79F2 /* Canvas.h */,
+				8110E2D1199111E700EC96CA /* PropertyAccessor.h */,
 				81E3E37819878E6B0002A9FD /* PropertyMap.cpp */,
 				81E3E37919878E6B0002A9FD /* PropertyMap.h */,
 				81496BAD1982A607004E79F2 /* PropertyType.cpp */,

@@ -464,6 +464,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Social\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Canvas.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyAccessor.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyMap.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyType.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\SizePolicy.h" />

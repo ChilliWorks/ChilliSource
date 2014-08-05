@@ -238,7 +238,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetPropertyLinks(std::unordered_map<std::string, std::pair<void*, void*>>&& in_defaultLinks, std::unordered_map<std::string, std::pair<Widget*, std::string>>&& in_customLinks)
+        void Widget::SetPropertyLinks(std::unordered_map<std::string, IPropertyAccessorUPtr>&& in_defaultLinks, std::unordered_map<std::string, std::pair<Widget*, std::string>>&& in_customLinks)
         {
             m_defaultPropertyLinks = std::move(in_defaultLinks);
             m_customPropertyLinks = std::move(in_customLinks);
@@ -285,7 +285,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        const std::string& Widget::GetName() const
+        std::string Widget::GetName() const
         {
             return m_name;
         }

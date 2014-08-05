@@ -1598,5 +1598,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyAccessor.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
