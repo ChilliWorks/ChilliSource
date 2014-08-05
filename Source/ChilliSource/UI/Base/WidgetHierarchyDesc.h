@@ -54,11 +54,23 @@ namespace ChilliSource
                 k_internal,
                 k_external
             };
+            //----------------------------------------------------
+            /// Describes a proxy to a property of another widget
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            struct WidgetPropertyLink
+            {
+                std::string m_linkName;
+                std::string m_widgetName;
+                std::string m_propertyName;
+            };
             
             std::string m_type;
             PropertyMap m_defaultProperties;
             PropertyMap m_customProperties;
             std::vector<WidgetHierarchyDesc> m_children;
+            std::vector<WidgetPropertyLink> m_links;
             Access m_access;
         };
     }
