@@ -168,6 +168,26 @@ namespace ChilliSource
                 }
             }
             //-------------------------------------------------------
+            /// Parses and builds the links for a parent property
+            /// that directly affects a child property
+            ///
+            /// @author S Downie
+            ///
+            /// @param JSON object containing all exposed properties
+            /// @param [Out] Links
+            //-------------------------------------------------------
+            void ParseLinkedChildProperties(const Json::Value& in_properties, std::vector<WidgetHierarchyDesc::WidgetPropertyLink>& out_links)
+            {
+                for(auto it = in_properties.begin(); it != in_properties.end(); ++it)
+                {
+                    WidgetHierarchyDesc::WidgetPropertyLink link;
+                    link.m_linkName = it.memberName();
+                    link.m_widgetName = (*it)["Child"].asString();
+                    link.m_propertyName = (*it)["Property"].asString();
+                    out_links.push_back(link);
+                }
+            }
+            //-------------------------------------------------------
             /// Performs the heavy lifting for loading a UI
             /// widget description from file
             ///
@@ -212,6 +232,12 @@ namespace ChilliSource
                 if(defaults.isNull() == false)
                 {
                     ParseDefaultValues(defaults, in_storageLocation, pathToDefinition, hierarchyDesc.m_defaultProperties, hierarchyDesc.m_customProperties);
+                }
+                
+                const Json::Value& childProperties = root["ChildProperties"];
+                if(childProperties.isNull() == false)
+                {
+                    ParseLinkedChildProperties(childProperties, hierarchyDesc.m_links);
                 }
                 
                 widgetDef->Build(hierarchyDesc);
