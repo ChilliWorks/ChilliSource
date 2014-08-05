@@ -37,7 +37,7 @@ namespace ChilliSource
     {
         namespace
         {
-            std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
+            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
             {
                 {PropertyType::k_string, "Type", "HList"},
                 {PropertyType::k_int, "NumCells", "1"},
@@ -75,7 +75,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         std::vector<PropertyMap::PropertyDesc> HListLayout::GetPropertyDescs()
         {
-            return g_propertyDescs;
+            return k_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

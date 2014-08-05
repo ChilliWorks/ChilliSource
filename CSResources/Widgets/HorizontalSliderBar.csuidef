@@ -1,0 +1,29 @@
+{
+  "Type": "HorizontalSliderBar",
+  "Properties": {
+    "SliderFraction": "Float"
+  },
+  "Defaults": {
+    "Name": "HorizontalSliderBar",
+    "SliderFraction": "0"
+  },
+  "ChildProperties": {
+    "SliderRelSize": {
+      "Child": "Slider",
+      "Property": "RelSize"
+    }
+  },
+  "Children": {
+    "Slider": {
+      "Type": "Widget",
+      "RelSize": "0.1 1.1",
+      "SizePolicy": "UseHeightMaintainingAspect",
+      "ParentalAnchor": "MiddleLeft"
+    }
+  },
+  "Hierarchy": [
+    {
+      "Name": "Slider"
+    }
+  ]
+}

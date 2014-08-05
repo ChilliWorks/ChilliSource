@@ -40,7 +40,7 @@ namespace ChilliSource
     {
         namespace
         {
-            std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
+            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
             {
                 {PropertyType::k_string, "Type", "Texture"},
                 {PropertyType::k_vec4, "UVs", "0 0 1 1"},
@@ -69,7 +69,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         std::vector<PropertyMap::PropertyDesc> TextureDrawable::GetPropertyDescs()
         {
-            return g_propertyDescs;
+            return k_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

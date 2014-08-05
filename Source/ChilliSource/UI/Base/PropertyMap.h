@@ -231,7 +231,8 @@ namespace ChilliSource
             CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
             CS_ASSERT(entry->second.m_type == GetType<TType>(), "Wrong type for property with name " + in_name);
             
-            TType* property = (TType*)entry->second.m_value;
+            typedef typename std::remove_reference<TType>::type TValueType;
+            TValueType* property = (TValueType*)entry->second.m_value;
             *property = std::move(in_value);
         }
         //----------------------------------------------------------------------------------------
@@ -246,7 +247,8 @@ namespace ChilliSource
             CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
             CS_ASSERT(entry->second.m_type == GetType<TType>(), "Wrong type for property with name " + in_name);
             
-            TType* property = (TType*)entry->second.m_value;
+            typedef typename std::remove_reference<TType>::type TValueType;
+            TValueType* property = (TValueType*)entry->second.m_value;
             return *property;
         }
         //----------------------------------------------------------------------------------------

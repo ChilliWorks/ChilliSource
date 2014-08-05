@@ -37,7 +37,7 @@ namespace ChilliSource
     {
         namespace
         {
-            std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
+            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
             {
                 {PropertyType::k_string, "Type", "Grid"},
                 {PropertyType::k_int, "NumRows", "1"},
@@ -88,7 +88,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         std::vector<PropertyMap::PropertyDesc> GridLayout::GetPropertyDescs()
         {
-            return g_propertyDescs;
+            return k_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

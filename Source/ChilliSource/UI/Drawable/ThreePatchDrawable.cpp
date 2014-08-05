@@ -41,7 +41,7 @@ namespace ChilliSource
     {
         namespace
         {
-            std::vector<PropertyMap::PropertyDesc> g_propertyDescs =
+            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
             {
                 {PropertyType::k_string, "Type", "ThreePatch"},
                 {PropertyType::k_string, "Direction", "Horizontal"},
@@ -285,7 +285,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         std::vector<PropertyMap::PropertyDesc> ThreePatchDrawable::GetPropertyDescs()
         {
-            return g_propertyDescs;
+            return k_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
