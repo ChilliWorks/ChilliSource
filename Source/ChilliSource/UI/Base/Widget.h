@@ -734,6 +734,25 @@ namespace ChilliSource
             Core::Screen* m_screen;
         };
         //----------------------------------------------------------------------------------------
+		/// Specialisation to store property value for const char* as a std::string
+        ///
+        /// @author S Downie
+        ///
+        /// @param Property name
+        /// @param Property value
+		//----------------------------------------------------------------------------------------
+		template<> void Widget::SetProperty(const std::string& in_name, const char* in_value);
+		//----------------------------------------------------------------------------------------
+		/// Specialisation to return property value for const char* which is stored as a std::string
+        ///
+        /// @author S Downie
+        ///
+        /// @param Property name
+        ///
+        /// @return Property value
+		//----------------------------------------------------------------------------------------
+		template<> const char* Widget::GetProperty(const std::string& in_name) const;
+        //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         template<typename TType> void Widget::SetProperty(const std::string& in_name, TType in_value)
         {

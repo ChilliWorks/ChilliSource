@@ -1039,5 +1039,17 @@ namespace ChilliSource
                 }
             }
         }
+        //----------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------
+		template<> void Widget::SetProperty(const std::string& in_name, const char* in_value)
+        {
+            SetProperty<std::string>(in_name, in_value);
+        }
+		//----------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------
+		template<> const char* Widget::GetProperty(const std::string& in_name) const
+        {
+            return GetProperty<std::string>(in_name).c_str();
+        }
     }
 }
