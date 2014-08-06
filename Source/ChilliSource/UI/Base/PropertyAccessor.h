@@ -73,7 +73,7 @@ namespace ChilliSource
             /// @param Setter function
             /// @param Getter function
             //-----------------------------------------------------
-            PropertyAccessor(const std::function<void(TPropType)>& in_setter, const std::function<TPropType()>& in_getter)
+            PropertyAccessor(std::function<void(TPropType)>&& in_setter, std::function<TPropType()>&& in_getter)
             : m_setter(in_setter), m_getter(in_getter)
             {
                 
@@ -96,7 +96,7 @@ namespace ChilliSource
             ///
             /// @param Value
             //-----------------------------------------------------
-            void Set(const TPropType& in_value)
+            void Set(TPropType in_value)
             {
                 m_setter(in_value);
             }

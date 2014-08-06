@@ -151,7 +151,16 @@ namespace ChilliSource
             /// @param Name
             /// @param Value
             //----------------------------------------------------------------------------------------
-            template<typename TType> void SetProperty(const std::string& in_name, TType in_value);
+            template<typename TType> void SetProperty(const std::string& in_name, TType&& in_value);
+            //----------------------------------------------------------------------------------------
+            /// Specialisation to store property value for const char* as a std::string
+            ///
+            /// @author S Downie
+            ///
+            /// @param Property name
+            /// @param Property value
+            //----------------------------------------------------------------------------------------
+            void SetProperty(const std::string& in_name, const char* in_value);
             //----------------------------------------------------------------------------------------
             /// Get the value of the property with the given name. If no property exists
             /// with the name then it will assert.
@@ -164,13 +173,15 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             template<typename TType> TType GetProperty(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
+            /// Specialisation to return property value for const char* which is stored as a std::string
+            ///
             /// @author S Downie
             ///
             /// @param Property name
             ///
-            /// @return The type of the property with the given name
+            /// @return Property value
             //----------------------------------------------------------------------------------------
-            PropertyType GetType(const std::string& in_name) const;
+            const char* GetProperty(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
             /// Get the value of the property with the given name. If no property exists
             /// with the name then the default value will be returned
@@ -181,7 +192,26 @@ namespace ChilliSource
             ///
             /// @return Value (or default)
             //----------------------------------------------------------------------------------------
-            template<typename TType> TType GetPropertyOrDefault(const std::string& in_name, TType in_default) const;
+            template<typename TType> TType GetPropertyOrDefault(const std::string& in_name, TType&& in_default) const;
+            //----------------------------------------------------------------------------------------
+            /// Specialisation to return property value for const char* which is stored as a std::string
+            ///
+            /// @author S Downie
+            ///
+            /// @param Property name
+            /// @param Default value
+            ///
+            /// @return Property value or default if name not found
+            //----------------------------------------------------------------------------------------
+            const char* GetPropertyOrDefault(const std::string& in_name, const char* in_default) const;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Property name
+            ///
+            /// @return The type of the property with the given name
+            //----------------------------------------------------------------------------------------
+            PropertyType GetType(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
             /// Remove all the properties and keys
             ///
@@ -221,40 +251,44 @@ namespace ChilliSource
         };
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<typename TType> void PropertyMap::SetProperty(const std::string& in_name, TType in_value)
+        template<typename TType> void PropertyMap::SetProperty(const std::string& in_name, TType&& in_value)
         {
+            typedef typename std::decay<TType>::type TValueType;
+            
             std::string lowerCaseName = in_name;
             Core::StringUtils::ToLowerCase(lowerCaseName);
             u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
             
             auto entry = m_properties.find(hashKey);
             CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
-            CS_ASSERT(entry->second.m_type == GetType<TType>(), "Wrong type for property with name " + in_name);
+            CS_ASSERT(entry->second.m_type == GetType<TValueType>(), "Wrong type for property with name " + in_name);
             
-            typedef typename std::remove_reference<TType>::type TValueType;
             TValueType* property = (TValueType*)entry->second.m_value;
-            *property = std::move(in_value);
+            *property = std::forward<TType>(in_value);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         template<typename TType> TType PropertyMap::GetProperty(const std::string& in_name) const
         {
+            typedef typename std::decay<TType>::type TValueType;
+            
             std::string lowerCaseName = in_name;
             Core::StringUtils::ToLowerCase(lowerCaseName);
             u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
             
             auto entry = m_properties.find(hashKey);
             CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
-            CS_ASSERT(entry->second.m_type == GetType<TType>(), "Wrong type for property with name " + in_name);
+            CS_ASSERT(entry->second.m_type == GetType<TValueType>(), "Wrong type for property with name " + in_name);
             
-            typedef typename std::remove_reference<TType>::type TValueType;
             TValueType* property = (TValueType*)entry->second.m_value;
             return *property;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<typename TType> TType PropertyMap::GetPropertyOrDefault(const std::string& in_name, TType in_default) const
+        template<typename TType> TType PropertyMap::GetPropertyOrDefault(const std::string& in_name, TType&& in_default) const
         {
+            typedef typename std::decay<TType>::type TValueType;
+            
             std::string lowerCaseName = in_name;
             Core::StringUtils::ToLowerCase(lowerCaseName);
             u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
@@ -265,9 +299,9 @@ namespace ChilliSource
                 return in_default;
             }
             
-            CS_ASSERT(entry->second.m_type == GetType<TType>(), "Wrong type for property with name " + in_name);
+            CS_ASSERT(entry->second.m_type == GetType<TValueType>(), "Wrong type for property with name " + in_name);
             
-            TType* property = (TType*)entry->second.m_value;
+            TValueType* property = (TValueType*)entry->second.m_value;
             return *property;
         }
         //----------------------------------------------------------------------------------------
@@ -277,36 +311,6 @@ namespace ChilliSource
             static_assert(std::is_pointer<TType>::value, "Property type not supported");
             return PropertyType::k_unknown;
         }
-		//----------------------------------------------------------------------------------------
-		/// Specialisation to store property value for const char* as a std::string
-        ///
-        /// @author S Downie
-        ///
-        /// @param Property name
-        /// @param Property value
-		//----------------------------------------------------------------------------------------
-		template<> void PropertyMap::SetProperty(const std::string& in_name, const char* in_value);
-		//----------------------------------------------------------------------------------------
-		/// Specialisation to return property value for const char* which is stored as a std::string
-        ///
-        /// @author S Downie
-        ///
-        /// @param Property name
-        ///
-        /// @return Property value
-		//----------------------------------------------------------------------------------------
-		template<> const char* PropertyMap::GetProperty(const std::string& in_name) const;
-		//----------------------------------------------------------------------------------------
-		/// Specialisation to return property value for const char* which is stored as a std::string
-        ///
-        /// @author S Downie
-        ///
-        /// @param Property name
-        /// @param Default value
-        ///
-        /// @return Property value or default if name not found
-		//----------------------------------------------------------------------------------------
-		template<> const char* PropertyMap::GetPropertyOrDefault(const std::string& in_name, const char* in_default) const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for bool
         ///
@@ -338,14 +342,6 @@ namespace ChilliSource
         ///
         /// @return String prop type
         //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<const std::string&>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for string
-        ///
-        /// @author S Downie
-        ///
-        /// @return String prop type
-        //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<const char*>() const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for float
@@ -364,14 +360,6 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<Core::Vector2>() const;
         //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for vec2
-        ///
-        /// @author S Downie
-        ///
-        /// @return Vec2 prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<const Core::Vector2&>() const;
-        //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for vec3
         ///
         /// @author S Downie
@@ -379,14 +367,6 @@ namespace ChilliSource
         /// @return Vec3 prop type
         //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<Core::Vector3>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for vec3
-        ///
-        /// @author S Downie
-        ///
-        /// @return Vec3 prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<const Core::Vector3&>() const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for vec4
         ///
@@ -396,14 +376,6 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<Core::Vector4>() const;
         //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for vec4
-        ///
-        /// @author S Downie
-        ///
-        /// @return Vec4 prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<const Core::Vector4&>() const;
-        //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for colour
         ///
         /// @author S Downie
@@ -411,14 +383,6 @@ namespace ChilliSource
         /// @return Colour prop type
         //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<Core::Colour>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for colour
-        ///
-        /// @author S Downie
-        ///
-        /// @return Colour prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<const Core::Colour&>() const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for anchors
         ///
@@ -443,14 +407,6 @@ namespace ChilliSource
         /// @return Property map prop type
         //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<PropertyMap>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for property maps
-        ///
-        /// @author S Downie
-        ///
-        /// @return Property map prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<const PropertyMap&>() const;
 	}
 }
 

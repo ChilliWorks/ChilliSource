@@ -285,7 +285,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        std::string Widget::GetName() const
+        const std::string& Widget::GetName() const
         {
             return m_name;
         }
@@ -1041,13 +1041,13 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
-		template<> void Widget::SetProperty(const std::string& in_name, const char* in_value)
+		void Widget::SetProperty(const std::string& in_name, const char* in_value)
         {
             SetProperty<std::string>(in_name, in_value);
         }
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
-		template<> const char* Widget::GetProperty(const std::string& in_name) const
+		const char* Widget::GetProperty(const std::string& in_name) const
         {
             return GetProperty<std::string>(in_name).c_str();
         }

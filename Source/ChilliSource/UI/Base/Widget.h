@@ -143,7 +143,7 @@ namespace ChilliSource
             ///
             /// @return Name of widget
             //----------------------------------------------------------------------------------------
-            std::string GetName() const;
+            const std::string& GetName() const;
             //----------------------------------------------------------------------------------------
             /// Set the percentage size of the widget relative to its parent size i.e. 0.5, 0.5 will
             /// make the widget half the width of the parent and half the height
@@ -529,7 +529,16 @@ namespace ChilliSource
             /// @param Name
             /// @param Value
             //----------------------------------------------------------------------------------------
-            template<typename TType> void SetProperty(const std::string& in_name, TType in_value);
+            template<typename TType> void SetProperty(const std::string& in_name, TType&& in_value);
+            //----------------------------------------------------------------------------------------
+            /// Specialisation to store property value for const char* as a std::string
+            ///
+            /// @author S Downie
+            ///
+            /// @param Property name
+            /// @param Property value
+            //----------------------------------------------------------------------------------------
+            void SetProperty(const std::string& in_name, const char* in_value);
             //----------------------------------------------------------------------------------------
             /// Get the value of the property with the given name. If no property exists
             /// with the name then it will assert.
@@ -541,6 +550,16 @@ namespace ChilliSource
             /// @return Value
             //----------------------------------------------------------------------------------------
             template<typename TType> TType GetProperty(const std::string& in_name) const;
+            //----------------------------------------------------------------------------------------
+            /// Specialisation to return property value for const char* which is stored as a std::string
+            ///
+            /// @author S Downie
+            ///
+            /// @param Property name
+            ///
+            /// @return Property value
+            //----------------------------------------------------------------------------------------
+            const char* GetProperty(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
             /// Draw the view using the currently set drawable. Tell any subviews to draw.
             ///
@@ -735,44 +754,27 @@ namespace ChilliSource
             Core::Screen* m_screen;
         };
         //----------------------------------------------------------------------------------------
-		/// Specialisation to store property value for const char* as a std::string
-        ///
-        /// @author S Downie
-        ///
-        /// @param Property name
-        /// @param Property value
-		//----------------------------------------------------------------------------------------
-		template<> void Widget::SetProperty(const std::string& in_name, const char* in_value);
-		//----------------------------------------------------------------------------------------
-		/// Specialisation to return property value for const char* which is stored as a std::string
-        ///
-        /// @author S Downie
-        ///
-        /// @param Property name
-        ///
-        /// @return Property value
-		//----------------------------------------------------------------------------------------
-		template<> const char* Widget::GetProperty(const std::string& in_name) const;
         //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<typename TType> void Widget::SetProperty(const std::string& in_name, TType in_value)
+        template<typename TType> void Widget::SetProperty(const std::string& in_name, TType&& in_value)
         {
+            typedef typename std::decay<TType>::type TValueType;
+            
             auto itDefault = m_defaultPropertyLinks.find(in_name);
             if(itDefault != m_defaultPropertyLinks.end())
             {
-                PropertyAccessor<TType>* accessor = (PropertyAccessor<TType>*)(itDefault->second.get());
-                accessor->Set(in_value);
+                PropertyAccessor<TValueType>* accessor = (PropertyAccessor<TValueType>*)(itDefault->second.get());
+                accessor->Set(std::forward<TType>(in_value));
                 return;
             }
             
             auto itCustom = m_customPropertyLinks.find(in_name);
             if(itCustom != m_customPropertyLinks.end())
             {
-                itCustom->second.first->SetProperty<TType>(itCustom->second.second, in_value);
+                itCustom->second.first->SetProperty<TType>(itCustom->second.second, std::forward<TType>(in_value));
                 return;
             }
             
-            m_customProperties.SetProperty(in_name, in_value);
+            m_customProperties.SetProperty(in_name, std::forward<TType>(in_value));
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

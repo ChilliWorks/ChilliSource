@@ -348,19 +348,19 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> void PropertyMap::SetProperty(const std::string& in_name, const char* in_value)
+        void PropertyMap::SetProperty(const std::string& in_name, const char* in_value)
         {
             SetProperty<std::string>(in_name, in_value);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> const char* PropertyMap::GetProperty(const std::string& in_name) const
+        const char* PropertyMap::GetProperty(const std::string& in_name) const
         {
             return GetProperty<std::string>(in_name).c_str();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> const char* PropertyMap::GetPropertyOrDefault(const std::string& in_name, const char* in_default) const
+        const char* PropertyMap::GetPropertyOrDefault(const std::string& in_name, const char* in_default) const
         {
             return GetPropertyOrDefault<std::string>(in_name, in_default).c_str();
         }
@@ -446,12 +446,6 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<const std::string&>() const
-        {
-            return PropertyType::k_string;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<const char*>() const
         {
             return PropertyType::k_string;
@@ -470,19 +464,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<const Core::Vector2&>() const
-        {
-            return PropertyType::k_vec2;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<Core::Vector3>() const
-        {
-            return PropertyType::k_vec3;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<const Core::Vector3&>() const
         {
             return PropertyType::k_vec3;
         }
@@ -494,19 +476,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<const Core::Vector4&>() const
-        {
-            return PropertyType::k_vec4;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<Core::Colour>() const
-        {
-            return PropertyType::k_colour;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<const Core::Colour&>() const
         {
             return PropertyType::k_colour;
         }
@@ -525,12 +495,6 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<PropertyMap>() const
-        {
-            return PropertyType::k_propertyMap;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<const PropertyMap&>() const
         {
             return PropertyType::k_propertyMap;
         }
