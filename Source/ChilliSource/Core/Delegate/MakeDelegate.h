@@ -79,7 +79,7 @@ namespace ChilliSource
         template <typename TDelegate, typename TSender, typename TReturnType, typename... TArgTypes>
         std::function<TReturnType(TArgTypes...)> MakeDelegate(TSender* in_sender, TReturnType (TDelegate::*in_func)(TArgTypes...))
         {
-            return [=](TArgTypes... in_args) { return (in_sender->*in_func)(in_args...); };
+            return [=](TArgTypes... in_args) -> TReturnType { return (in_sender->*in_func)(in_args...); };
         }
         //------------------------------------------------------------------
         /// Constructs a delegate to a const member function with a signature
@@ -95,7 +95,7 @@ namespace ChilliSource
         template <typename TDelegate, typename TSender, typename TReturnType, typename... TArgTypes>
         std::function<TReturnType(TArgTypes...)> MakeDelegate(TSender* in_sender, TReturnType (TDelegate::*in_func)(TArgTypes...) const)
         {
-            return [=](TArgTypes... in_args) { return (in_sender->*in_func)(in_args...); };
+            return [=](TArgTypes... in_args) -> TReturnType { return (in_sender->*in_func)(in_args...); };
         }
 	}
 }
