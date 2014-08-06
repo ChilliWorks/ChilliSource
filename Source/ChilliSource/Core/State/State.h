@@ -102,7 +102,7 @@ namespace ChilliSource
             ///
             /// @return New system owned by state
             //----------------------------------------------------
-            template <typename TSystem, typename... TArgs> TSystem* CreateSystem(TArgs... in_args);
+            template <typename TSystem, typename... TArgs> TSystem* CreateSystem(TArgs&&... in_args);
             
         private:
 
@@ -293,11 +293,11 @@ namespace ChilliSource
         
         //----------------------------------------------------
         //----------------------------------------------------
-        template <typename TSystem, typename... TArgs> TSystem* State::CreateSystem(TArgs... in_args)
+        template <typename TSystem, typename... TArgs> TSystem* State::CreateSystem(TArgs&&... in_args)
         {
             CS_ASSERT(m_canAddSystems == true, "Cannot add systems outwith the creation phase");
             
-            std::unique_ptr<TSystem> newSystem = TSystem::Create(in_args...);
+            std::unique_ptr<TSystem> newSystem = TSystem::Create(std::forward<TArgs>(in_args)...);
 			TSystem* output = newSystem.get();
 			if (newSystem != nullptr)
 			{

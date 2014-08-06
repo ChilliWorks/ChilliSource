@@ -133,7 +133,7 @@ namespace ChilliSource
             ///
             /// @param Arguments to pass to the connection delegate
             //-------------------------------------------------------------
-            template <typename... TArgTypes> void NotifyConnections(TArgTypes... in_args)
+            template <typename... TArgTypes> void NotifyConnections(TArgTypes&&... in_args)
             {
                 m_isNotifying = true;
                 
@@ -144,7 +144,7 @@ namespace ChilliSource
                 {
                     if(m_connections[i].m_connection != nullptr)
                     {
-                        m_connections[i].m_delegate(in_args...);
+                        m_connections[i].m_delegate(std::forward<TArgTypes>(in_args)...);
                     }
                 }
                 
