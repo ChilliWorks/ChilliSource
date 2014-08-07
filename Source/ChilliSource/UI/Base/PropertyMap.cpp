@@ -48,34 +48,34 @@ namespace ChilliSource
             ///
             /// @param Type
             ///
-            /// @return New memory of given type as void*
+            /// @return New property of given type
             //----------------------------------------------------------------------------------------
-            void* New(PropertyType in_type)
+            PropertyMap::IPropertyUPtr CreateProperty(PropertyType in_type)
             {
                 switch(in_type)
                 {
                     case PropertyType::k_bool:
-                        return new bool();
+                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<bool>());
                     case PropertyType::k_float:
-                        return new f32();
+                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<f32>());
                     case PropertyType::k_int:
-                        return new s32();
+                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<s32>());
                     case PropertyType::k_string:
-                        return new std::string("");
+                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<std::string>());
                     case PropertyType::k_vec2:
-                        return new Core::Vector2();
+                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::Vector2>());
                     case PropertyType::k_vec3:
-                        return new Core::Vector3();
+                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::Vector3>());
                     case PropertyType::k_vec4:
-                        return new Core::Vector4();
+                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::Vector4>());
                     case PropertyType::k_colour:
-                        return new Core::Colour();
+                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::Colour>());
                     case PropertyType::k_alignmentAnchor:
-                        return new Rendering::AlignmentAnchor();
+                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Rendering::AlignmentAnchor>());
                     case PropertyType::k_propertyMap:
-                        return new PropertyMap();
+                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<PropertyMap>());
                     case PropertyType::k_sizePolicy:
-                        return new SizePolicy();
+                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<SizePolicy>());
                     case PropertyType::k_unknown:
                         return nullptr;
                 }
@@ -89,167 +89,85 @@ namespace ChilliSource
             /// @param Source
             /// @param Destination
             //----------------------------------------------------------------------------------------
-            void Copy(PropertyType in_type, const void* in_src, void* in_dst)
+            void CopyProperty(PropertyType in_type, const PropertyMap::IProperty* in_src, PropertyMap::IProperty* in_dst)
             {
                 switch(in_type)
                 {
                     case PropertyType::k_bool:
                     {
-                        const bool* src = (const bool*)in_src;
-                        bool* dst = (bool*)in_dst;
-                        *dst = *src;
+                        const PropertyMap::Property<bool>* src = (const PropertyMap::Property<bool>*)in_src;
+                        PropertyMap::Property<bool>* dst = (PropertyMap::Property<bool>*)in_dst;
+                        dst->m_value = src->m_value;
                         break;
                     }
                     case PropertyType::k_float:
                     {
-                        const f32* src = (const f32*)in_src;
-                        f32* dst = (f32*)in_dst;
-                        *dst = *src;
+                        const PropertyMap::Property<f32>* src = (const PropertyMap::Property<f32>*)in_src;
+                        PropertyMap::Property<f32>* dst = (PropertyMap::Property<f32>*)in_dst;
+                        dst->m_value = src->m_value;
                         break;
                     }
                     case PropertyType::k_int:
                     {
-                        const s32* src = (const s32*)in_src;
-                        s32* dst = (s32*)in_dst;
-                        *dst = *src;
+                        const PropertyMap::Property<s32>* src = (const PropertyMap::Property<s32>*)in_src;
+                        PropertyMap::Property<s32>* dst = (PropertyMap::Property<s32>*)in_dst;
+                        dst->m_value = src->m_value;
                         break;
                     }
                     case PropertyType::k_string:
                     {
-                        const std::string* src = (const std::string*)in_src;
-                        std::string* dst = (std::string*)in_dst;
-                        *dst = *src;
+                        const PropertyMap::Property<std::string>* src = (const PropertyMap::Property<std::string>*)in_src;
+                        PropertyMap::Property<std::string>* dst = (PropertyMap::Property<std::string>*)in_dst;
+                        dst->m_value = src->m_value;
                         break;
                     }
                     case PropertyType::k_vec2:
                     {
-                        const Core::Vector2* src = (const Core::Vector2*)in_src;
-                        Core::Vector2* dst = (Core::Vector2*)in_dst;
-                        *dst = *src;
+                        const PropertyMap::Property<Core::Vector2>* src = (const PropertyMap::Property<Core::Vector2>*)in_src;
+                        PropertyMap::Property<Core::Vector2>* dst = (PropertyMap::Property<Core::Vector2>*)in_dst;
+                        dst->m_value = src->m_value;
                         break;
                     }
                     case PropertyType::k_vec3:
                     {
-                        const Core::Vector3* src = (const Core::Vector3*)in_src;
-                        Core::Vector3* dst = (Core::Vector3*)in_dst;
-                        *dst = *src;
+                        const PropertyMap::Property<Core::Vector3>* src = (const PropertyMap::Property<Core::Vector3>*)in_src;
+                        PropertyMap::Property<Core::Vector3>* dst = (PropertyMap::Property<Core::Vector3>*)in_dst;
+                        dst->m_value = src->m_value;
                         break;
                     }
                     case PropertyType::k_vec4:
                     {
-                        const Core::Vector4* src = (const Core::Vector4*)in_src;
-                        Core::Vector4* dst = (Core::Vector4*)in_dst;
-                        *dst = *src;
+                        const PropertyMap::Property<Core::Vector4>* src = (const PropertyMap::Property<Core::Vector4>*)in_src;
+                        PropertyMap::Property<Core::Vector4>* dst = (PropertyMap::Property<Core::Vector4>*)in_dst;
+                        dst->m_value = src->m_value;
                         break;
                     }
                     case PropertyType::k_colour:
                     {
-                        const Core::Colour* src = (const Core::Colour*)in_src;
-                        Core::Colour* dst = (Core::Colour*)in_dst;
-                        *dst = *src;
+                        const PropertyMap::Property<Core::Colour>* src = (const PropertyMap::Property<Core::Colour>*)in_src;
+                        PropertyMap::Property<Core::Colour>* dst = (PropertyMap::Property<Core::Colour>*)in_dst;
+                        dst->m_value = src->m_value;
                         break;
                     }
                     case PropertyType::k_alignmentAnchor:
                     {
-                        const Rendering::AlignmentAnchor* src = (const Rendering::AlignmentAnchor*)in_src;
-                        Rendering::AlignmentAnchor* dst = (Rendering::AlignmentAnchor*)in_dst;
-                        *dst = *src;
+                        const PropertyMap::Property<Rendering::AlignmentAnchor>* src = (const PropertyMap::Property<Rendering::AlignmentAnchor>*)in_src;
+                        PropertyMap::Property<Rendering::AlignmentAnchor>* dst = (PropertyMap::Property<Rendering::AlignmentAnchor>*)in_dst;
+                        dst->m_value = src->m_value;
                         break;
                     }
                     case PropertyType::k_propertyMap:
                     {
-                        const PropertyMap* src = (const PropertyMap*)in_src;
-                        PropertyMap* dst = (PropertyMap*)in_dst;
-                        *dst = *src;
+                        const PropertyMap::Property<PropertyMap>* src = (const PropertyMap::Property<PropertyMap>*)in_src;
+                        PropertyMap::Property<PropertyMap>* dst = (PropertyMap::Property<PropertyMap>*)in_dst;
+                        dst->m_value = src->m_value;
                         break;
                     }
                     case PropertyType::k_sizePolicy:
                     {
-                        const SizePolicy* src = (const SizePolicy*)in_src;
-                        SizePolicy* dst = (SizePolicy*)in_dst;
-                        *dst = *src;
-                        break;
-                    }
-                    case PropertyType::k_unknown:
-                    {
-                        break;
-                    }
-                }
-            }
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Type
-            /// @param Pointer to delete
-            //----------------------------------------------------------------------------------------
-            void Delete(PropertyType in_type, void* in_memory)
-            {
-                switch(in_type)
-                {
-                    case PropertyType::k_bool:
-                    {
-                        bool* memory = (bool*)in_memory;
-                        delete memory;
-                        break;
-                    }
-                    case PropertyType::k_float:
-                    {
-                        f32* memory = (f32*)in_memory;
-                        delete memory;
-                        break;
-                    }
-                    case PropertyType::k_int:
-                    {
-                        s32* memory = (s32*)in_memory;
-                        delete memory;
-                        break;
-                    }
-                    case PropertyType::k_string:
-                    {
-                        std::string* memory = (std::string*)in_memory;
-                        delete memory;
-                        break;
-                    }
-                    case PropertyType::k_vec2:
-                    {
-                        Core::Vector2* memory = (Core::Vector2*)in_memory;
-                        delete memory;
-                        break;
-                    }
-                    case PropertyType::k_vec3:
-                    {
-                        Core::Vector3* memory = (Core::Vector3*)in_memory;
-                        delete memory;
-                        break;
-                    }
-                    case PropertyType::k_vec4:
-                    {
-                        Core::Vector4* memory = (Core::Vector4*)in_memory;
-                        delete memory;
-                        break;
-                    }
-                    case PropertyType::k_colour:
-                    {
-                        Core::Colour* memory = (Core::Colour*)in_memory;
-                        delete memory;
-                        break;
-                    }
-                    case PropertyType::k_alignmentAnchor:
-                    {
-                        Rendering::AlignmentAnchor* memory = (Rendering::AlignmentAnchor*)in_memory;
-                        delete memory;
-                        break;
-                    }
-                    case PropertyType::k_propertyMap:
-                    {
-                        PropertyMap* memory = (PropertyMap*)in_memory;
-                        delete memory;
-                        break;
-                    }
-                    case PropertyType::k_sizePolicy:
-                    {
-                        SizePolicy* memory = (SizePolicy*)in_memory;
-                        delete memory;
+                        const PropertyMap::Property<SizePolicy>* src = (const PropertyMap::Property<SizePolicy>*)in_src;
+                        PropertyMap::Property<SizePolicy>* dst = (PropertyMap::Property<SizePolicy>*)in_dst;
+                        dst->m_value = src->m_value;
                         break;
                     }
                     case PropertyType::k_unknown:
@@ -278,9 +196,9 @@ namespace ChilliSource
         {
             for(auto& pair : in_copy.m_properties)
             {
-                PropertyLookup lookup = {pair.second.m_type, New(pair.second.m_type)};
-                Copy(pair.second.m_type, pair.second.m_value, lookup.m_value);
-                m_properties.insert(std::make_pair(pair.first, lookup));
+                PropertyLookup lookup = {pair.second.m_type, CreateProperty(pair.second.m_type)};
+                CopyProperty(pair.second.m_type, pair.second.m_property.get(), lookup.m_property.get());
+                m_properties.insert(std::make_pair(pair.first, std::move(lookup)));
             }
         }
         //----------------------------------------------------------------------------------------
@@ -298,9 +216,9 @@ namespace ChilliSource
         {
             for(auto& pair : in_copy.m_properties)
             {
-                PropertyLookup lookup = {pair.second.m_type, New(pair.second.m_type)};
-                Copy(pair.second.m_type, pair.second.m_value, lookup.m_value);
-                m_properties.insert(std::make_pair(pair.first, lookup));
+                PropertyLookup lookup = {pair.second.m_type, CreateProperty(pair.second.m_type)};
+                CopyProperty(pair.second.m_type, pair.second.m_property.get(), lookup.m_property.get());
+                m_properties.insert(std::make_pair(pair.first, std::move(lookup)));
             }
             
             return *this;
@@ -309,7 +227,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void PropertyMap::AllocateKeys(const std::vector<PropertyDesc>& in_propertyDefs)
         {
-            Clear();
+            m_properties.clear();
             
             for(const auto& propertyDef : in_propertyDefs)
             {
@@ -319,8 +237,8 @@ namespace ChilliSource
                 Core::StringUtils::ToLowerCase(lowerCaseName);
                 
                 u32 hashId = Core::HashCRC32::GenerateHashCode(lowerCaseName);
-                PropertyLookup lookup = {propertyDef.m_type, New(propertyDef.m_type)};
-                m_properties.insert(std::make_pair(hashId, lookup));
+                PropertyLookup lookup = {propertyDef.m_type, CreateProperty(propertyDef.m_type)};
+                m_properties.insert(std::make_pair(hashId, std::move(lookup)));
                 SetProperty(propertyDef.m_type, lowerCaseName, propertyDef.m_value);
             }
         }
@@ -497,23 +415,6 @@ namespace ChilliSource
         template<> PropertyType PropertyMap::GetType<PropertyMap>() const
         {
             return PropertyType::k_propertyMap;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void PropertyMap::Clear()
-        {
-            for(auto& pair : m_properties)
-            {
-                Delete(pair.second.m_type, pair.second.m_value);
-            }
-            
-            m_properties.clear();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        PropertyMap::~PropertyMap()
-        {
-            Clear();
         }
     }
 }

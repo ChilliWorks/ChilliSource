@@ -53,6 +53,25 @@ namespace ChilliSource
         {
         public:
             
+            //-----------------------------------------------------
+            /// Classes that implement simple type stripping
+            /// by interfacing a concrete template type that holds
+            /// the value
+            ///
+            /// @author S Downie
+            //-----------------------------------------------------
+            struct IProperty
+            {
+                virtual ~IProperty(){}
+            };
+            //-----------------------------------------------------
+            //-----------------------------------------------------
+            template <typename TType> struct Property : public IProperty
+            {
+                TType m_value;
+            };
+            
+            using IPropertyUPtr = std::unique_ptr<IProperty>;
             //----------------------------------------------------
             /// Holds the definition of a custom property.
             ///
@@ -212,18 +231,6 @@ namespace ChilliSource
             /// @return The type of the property with the given name
             //----------------------------------------------------------------------------------------
             PropertyType GetType(const std::string& in_name) const;
-            //----------------------------------------------------------------------------------------
-            /// Remove all the properties and keys
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            void Clear();
-            //----------------------------------------------------------------------------------------
-            /// Destructor
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            ~PropertyMap();
             
         private:
             
@@ -235,7 +242,7 @@ namespace ChilliSource
             struct PropertyLookup
             {
                 PropertyType m_type;
-                void* m_value;
+                IPropertyUPtr m_property;
             };
             //----------------------------------------------------------------------------------------
             /// Converts the object type to proprty type and throws compiler error for unsupported
@@ -263,8 +270,8 @@ namespace ChilliSource
             CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
             CS_ASSERT(entry->second.m_type == GetType<TValueType>(), "Wrong type for property with name " + in_name);
             
-            TValueType* property = (TValueType*)entry->second.m_value;
-            *property = std::forward<TType>(in_value);
+            Property<TValueType>* property = (Property<TValueType>*)entry->second.m_property.get();
+            property->m_value = std::forward<TType>(in_value);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -280,8 +287,8 @@ namespace ChilliSource
             CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
             CS_ASSERT(entry->second.m_type == GetType<TValueType>(), "Wrong type for property with name " + in_name);
             
-            TValueType* property = (TValueType*)entry->second.m_value;
-            return *property;
+            Property<TValueType>* property = (Property<TValueType>*)entry->second.m_property.get();
+            return property->m_value;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -301,8 +308,8 @@ namespace ChilliSource
             
             CS_ASSERT(entry->second.m_type == GetType<TValueType>(), "Wrong type for property with name " + in_name);
             
-            TValueType* property = (TValueType*)entry->second.m_value;
-            return *property;
+            Property<TValueType>* property = (Property<TValueType>*)entry->second.m_property.get();
+            return property->m_value;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
