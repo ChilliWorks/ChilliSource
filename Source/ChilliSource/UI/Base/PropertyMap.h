@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
 
+#include <cassert>
 #include <unordered_map>
 #include <vector>
 
@@ -63,11 +64,34 @@ namespace ChilliSource
             struct IProperty
             {
                 virtual ~IProperty(){}
+                //-----------------------------------------------------
+                /// Allows copying of polymorphic type
+                ///
+                /// @author S Downie
+                ///
+                /// @param Property to copy
+                //-----------------------------------------------------
+                virtual void CopyFrom(const IProperty* in_toCopy) = 0;
             };
             //-----------------------------------------------------
             //-----------------------------------------------------
             template <typename TType> struct Property : public IProperty
             {
+                //-----------------------------------------------------
+                /// Copies the value of one property type of TType to
+                /// this property of type TType. Copying across TTypes
+                /// will cause the cast to assert.
+                ///
+                /// @author S Downie
+                ///
+                /// @param Property to copy
+                //-----------------------------------------------------
+                void CopyFrom(const IProperty* in_toCopy) override
+                {
+                    const Property* toCopy = CS_SMARTCAST(const Property*, in_toCopy);
+                    m_value = toCopy->m_value;
+                }
+                
                 TType m_value;
             };
             

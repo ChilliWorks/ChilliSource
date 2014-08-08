@@ -82,100 +82,6 @@ namespace ChilliSource
 
 				return nullptr;
             }
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Type
-            /// @param Source
-            /// @param Destination
-            //----------------------------------------------------------------------------------------
-            void CopyProperty(PropertyType in_type, const PropertyMap::IProperty* in_src, PropertyMap::IProperty* in_dst)
-            {
-                switch(in_type)
-                {
-                    case PropertyType::k_bool:
-                    {
-                        const PropertyMap::Property<bool>* src = (const PropertyMap::Property<bool>*)in_src;
-                        PropertyMap::Property<bool>* dst = (PropertyMap::Property<bool>*)in_dst;
-                        dst->m_value = src->m_value;
-                        break;
-                    }
-                    case PropertyType::k_float:
-                    {
-                        const PropertyMap::Property<f32>* src = (const PropertyMap::Property<f32>*)in_src;
-                        PropertyMap::Property<f32>* dst = (PropertyMap::Property<f32>*)in_dst;
-                        dst->m_value = src->m_value;
-                        break;
-                    }
-                    case PropertyType::k_int:
-                    {
-                        const PropertyMap::Property<s32>* src = (const PropertyMap::Property<s32>*)in_src;
-                        PropertyMap::Property<s32>* dst = (PropertyMap::Property<s32>*)in_dst;
-                        dst->m_value = src->m_value;
-                        break;
-                    }
-                    case PropertyType::k_string:
-                    {
-                        const PropertyMap::Property<std::string>* src = (const PropertyMap::Property<std::string>*)in_src;
-                        PropertyMap::Property<std::string>* dst = (PropertyMap::Property<std::string>*)in_dst;
-                        dst->m_value = src->m_value;
-                        break;
-                    }
-                    case PropertyType::k_vec2:
-                    {
-                        const PropertyMap::Property<Core::Vector2>* src = (const PropertyMap::Property<Core::Vector2>*)in_src;
-                        PropertyMap::Property<Core::Vector2>* dst = (PropertyMap::Property<Core::Vector2>*)in_dst;
-                        dst->m_value = src->m_value;
-                        break;
-                    }
-                    case PropertyType::k_vec3:
-                    {
-                        const PropertyMap::Property<Core::Vector3>* src = (const PropertyMap::Property<Core::Vector3>*)in_src;
-                        PropertyMap::Property<Core::Vector3>* dst = (PropertyMap::Property<Core::Vector3>*)in_dst;
-                        dst->m_value = src->m_value;
-                        break;
-                    }
-                    case PropertyType::k_vec4:
-                    {
-                        const PropertyMap::Property<Core::Vector4>* src = (const PropertyMap::Property<Core::Vector4>*)in_src;
-                        PropertyMap::Property<Core::Vector4>* dst = (PropertyMap::Property<Core::Vector4>*)in_dst;
-                        dst->m_value = src->m_value;
-                        break;
-                    }
-                    case PropertyType::k_colour:
-                    {
-                        const PropertyMap::Property<Core::Colour>* src = (const PropertyMap::Property<Core::Colour>*)in_src;
-                        PropertyMap::Property<Core::Colour>* dst = (PropertyMap::Property<Core::Colour>*)in_dst;
-                        dst->m_value = src->m_value;
-                        break;
-                    }
-                    case PropertyType::k_alignmentAnchor:
-                    {
-                        const PropertyMap::Property<Rendering::AlignmentAnchor>* src = (const PropertyMap::Property<Rendering::AlignmentAnchor>*)in_src;
-                        PropertyMap::Property<Rendering::AlignmentAnchor>* dst = (PropertyMap::Property<Rendering::AlignmentAnchor>*)in_dst;
-                        dst->m_value = src->m_value;
-                        break;
-                    }
-                    case PropertyType::k_propertyMap:
-                    {
-                        const PropertyMap::Property<PropertyMap>* src = (const PropertyMap::Property<PropertyMap>*)in_src;
-                        PropertyMap::Property<PropertyMap>* dst = (PropertyMap::Property<PropertyMap>*)in_dst;
-                        dst->m_value = src->m_value;
-                        break;
-                    }
-                    case PropertyType::k_sizePolicy:
-                    {
-                        const PropertyMap::Property<SizePolicy>* src = (const PropertyMap::Property<SizePolicy>*)in_src;
-                        PropertyMap::Property<SizePolicy>* dst = (PropertyMap::Property<SizePolicy>*)in_dst;
-                        dst->m_value = src->m_value;
-                        break;
-                    }
-                    case PropertyType::k_unknown:
-                    {
-                        break;
-                    }
-                }
-            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -199,7 +105,7 @@ namespace ChilliSource
                 PropertyLookup lookup;
                 lookup.m_type = pair.second.m_type;
                 lookup.m_property = CreateProperty(pair.second.m_type);
-                CopyProperty(pair.second.m_type, pair.second.m_property.get(), lookup.m_property.get());
+                lookup.m_property->CopyFrom(pair.second.m_property.get());
                 m_properties.insert(std::make_pair(pair.first, std::move(lookup)));
             }
         }
@@ -221,7 +127,7 @@ namespace ChilliSource
                 PropertyLookup lookup;
                 lookup.m_type = pair.second.m_type;
                 lookup.m_property = CreateProperty(pair.second.m_type);
-                CopyProperty(pair.second.m_type, pair.second.m_property.get(), lookup.m_property.get());
+                lookup.m_property->CopyFrom(pair.second.m_property.get());
                 m_properties.insert(std::make_pair(pair.first, std::move(lookup)));
             }
             
