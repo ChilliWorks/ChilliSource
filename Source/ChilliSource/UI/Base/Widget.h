@@ -41,6 +41,7 @@
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 
+#include <cassert>
 #include <functional>
 #include <mutex>
 #include <vector>
@@ -757,12 +758,10 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         template<typename TType> void Widget::SetProperty(const std::string& in_name, TType&& in_value)
         {
-            typedef typename std::decay<TType>::type TValueType;
-            
             auto itDefault = m_defaultPropertyLinks.find(in_name);
             if(itDefault != m_defaultPropertyLinks.end())
             {
-                PropertyAccessor<TValueType>* accessor = (PropertyAccessor<TValueType>*)(itDefault->second.get());
+                auto accessor = CS_SMARTCAST(PropertyAccessor<TType>*, itDefault->second.get());
                 accessor->Set(std::forward<TType>(in_value));
                 return;
             }
@@ -783,7 +782,7 @@ namespace ChilliSource
             auto itDefault = m_defaultPropertyLinks.find(in_name);
             if(itDefault != m_defaultPropertyLinks.end())
             {
-                PropertyAccessor<TType>* accessor = (PropertyAccessor<TType>*)(itDefault->second.get());
+                auto accessor = CS_SMARTCAST(PropertyAccessor<TType>*, itDefault->second.get());
                 return accessor->Get();
             }
             

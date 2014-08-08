@@ -196,7 +196,9 @@ namespace ChilliSource
         {
             for(auto& pair : in_copy.m_properties)
             {
-                PropertyLookup lookup = {pair.second.m_type, CreateProperty(pair.second.m_type)};
+                PropertyLookup lookup;
+                lookup.m_type = pair.second.m_type;
+                lookup.m_property = CreateProperty(pair.second.m_type);
                 CopyProperty(pair.second.m_type, pair.second.m_property.get(), lookup.m_property.get());
                 m_properties.insert(std::make_pair(pair.first, std::move(lookup)));
             }
@@ -216,7 +218,9 @@ namespace ChilliSource
         {
             for(auto& pair : in_copy.m_properties)
             {
-                PropertyLookup lookup = {pair.second.m_type, CreateProperty(pair.second.m_type)};
+                PropertyLookup lookup;
+                lookup.m_type = pair.second.m_type;
+                lookup.m_property = CreateProperty(pair.second.m_type);
                 CopyProperty(pair.second.m_type, pair.second.m_property.get(), lookup.m_property.get());
                 m_properties.insert(std::make_pair(pair.first, std::move(lookup)));
             }
@@ -237,7 +241,9 @@ namespace ChilliSource
                 Core::StringUtils::ToLowerCase(lowerCaseName);
                 
                 u32 hashId = Core::HashCRC32::GenerateHashCode(lowerCaseName);
-                PropertyLookup lookup = {propertyDef.m_type, CreateProperty(propertyDef.m_type)};
+                PropertyLookup lookup;
+                lookup.m_type = propertyDef.m_type;
+                lookup.m_property = CreateProperty(propertyDef.m_type);
                 m_properties.insert(std::make_pair(hashId, std::move(lookup)));
                 SetProperty(propertyDef.m_type, lowerCaseName, propertyDef.m_value);
             }

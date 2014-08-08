@@ -241,6 +241,26 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             struct PropertyLookup
             {
+                //----------------------------------------------------------------------------------------
+                /// Constructor
+                ///
+                /// @author S Downie
+                //----------------------------------------------------------------------------------------
+                PropertyLookup() = default;
+                //----------------------------------------------------------------------------------------
+                /// Move Constructor
+                ///
+                /// @author S Downie
+                ///
+                /// @param Object to move into this
+                //----------------------------------------------------------------------------------------
+                PropertyLookup(PropertyLookup&& in_move)
+                : m_type(in_move.m_type), m_property(std::move(in_move.m_property))
+                {
+                    in_move.m_type = PropertyType::k_unknown;
+                }
+
+                
                 PropertyType m_type;
                 IPropertyUPtr m_property;
             };
