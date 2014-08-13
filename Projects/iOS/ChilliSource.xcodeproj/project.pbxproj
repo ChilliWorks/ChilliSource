@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8133F0B4199B9DAC004AAB40 /* LuaSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0B2199B9DAC004AAB40 /* LuaSystem.cpp */; };
+		8133F0B9199BA4D6004AAB40 /* LuaScript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0B7199BA4D6004AAB40 /* LuaScript.cpp */; };
+		8133F0BC199BABDF004AAB40 /* LuaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0BB199BABDF004AAB40 /* LuaUtils.cpp */; };
 		81496B921980F1AE004E79F2 /* Canvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B811980F1AE004E79F2 /* Canvas.cpp */; };
 		81496B931980F1AE004E79F2 /* Widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B831980F1AE004E79F2 /* Widget.cpp */; };
 		81496B941980F1AE004E79F2 /* TextureDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B871980F1AE004E79F2 /* TextureDrawable.cpp */; };
@@ -291,6 +294,14 @@
 
 /* Begin PBXFileReference section */
 		8110E2D1199111E700EC96CA /* PropertyAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyAccessor.h; sourceTree = "<group>"; };
+		8133F0B2199B9DAC004AAB40 /* LuaSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaSystem.cpp; sourceTree = "<group>"; };
+		8133F0B3199B9DAC004AAB40 /* LuaSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LuaSystem.h; sourceTree = "<group>"; };
+		8133F0B5199B9E8E004AAB40 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
+		8133F0B6199BA4CF004AAB40 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
+		8133F0B7199BA4D6004AAB40 /* LuaScript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaScript.cpp; sourceTree = "<group>"; };
+		8133F0B8199BA4D6004AAB40 /* LuaScript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LuaScript.h; sourceTree = "<group>"; };
+		8133F0BA199BA777004AAB40 /* LuaUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LuaUtils.h; sourceTree = "<group>"; };
+		8133F0BB199BABDF004AAB40 /* LuaUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaUtils.cpp; sourceTree = "<group>"; };
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
 		81496B811980F1AE004E79F2 /* Canvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas.cpp; sourceTree = "<group>"; };
 		81496B821980F1AE004E79F2 /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canvas.h; sourceTree = "<group>"; };
@@ -960,6 +971,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8133F0B0199B9DAC004AAB40 /* Lua */ = {
+			isa = PBXGroup;
+			children = (
+				8133F0B1199B9DAC004AAB40 /* Base */,
+				8133F0B6199BA4CF004AAB40 /* Base.h */,
+				8133F0B5199B9E8E004AAB40 /* ForwardDeclarations.h */,
+			);
+			path = Lua;
+			sourceTree = "<group>";
+		};
+		8133F0B1199B9DAC004AAB40 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				8133F0B7199BA4D6004AAB40 /* LuaScript.cpp */,
+				8133F0B8199BA4D6004AAB40 /* LuaScript.h */,
+				8133F0B2199B9DAC004AAB40 /* LuaSystem.cpp */,
+				8133F0B3199B9DAC004AAB40 /* LuaSystem.h */,
+				8133F0BB199BABDF004AAB40 /* LuaUtils.cpp */,
+				8133F0BA199BA777004AAB40 /* LuaUtils.h */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
 		81496B7F1980F1AE004E79F2 /* UI */ = {
 			isa = PBXGroup;
 			children = (
@@ -1135,6 +1169,7 @@
 				81D8B2EC1962E0EB0010DA84 /* Debugging */,
 				81D8B2F31962E0EB0010DA84 /* GUI */,
 				81D8B3321962E0EC0010DA84 /* Input */,
+				8133F0B0199B9DAC004AAB40 /* Lua */,
 				81D8B3431962E0EC0010DA84 /* Networking */,
 				81D8B3521962E0EC0010DA84 /* Rendering */,
 				81D8B3E41962E0EC0010DA84 /* Social */,
@@ -2593,6 +2628,7 @@
 				81D8B4311962E0EC0010DA84 /* StateManager.cpp in Sources */,
 				81D8B40E1962E0EC0010DA84 /* DialogueBoxSystem.cpp in Sources */,
 				81D8B4551962E0EC0010DA84 /* HorizontalEndcappedProgressBar.cpp in Sources */,
+				8133F0B4199B9DAC004AAB40 /* LuaSystem.cpp in Sources */,
 				81D8B4161962E0EC0010DA84 /* TaggedFilePathResolver.cpp in Sources */,
 				81D8B6CE1962E0F70010DA84 /* ContextRestorer.cpp in Sources */,
 				81496B951980F1AE004E79F2 /* GridLayout.cpp in Sources */,
@@ -2671,6 +2707,7 @@
 				81D8B47F1962E0EC0010DA84 /* CSAnimProvider.cpp in Sources */,
 				81D8B6A01962E0F70010DA84 /* Screen.mm in Sources */,
 				81D8B4A51962E0EC0010DA84 /* FacebookPostSystem.cpp in Sources */,
+				8133F0B9199BA4D6004AAB40 /* LuaScript.cpp in Sources */,
 				81D8B69F1962E0F70010DA84 /* PlatformSystem.mm in Sources */,
 				81D8B4571962E0EC0010DA84 /* ProgressBar.cpp in Sources */,
 				81D8B4201962E0EC0010DA84 /* ShapeIntersection.cpp in Sources */,
@@ -2744,6 +2781,7 @@
 				81D8B4231962E0EC0010DA84 /* UnifiedCoordinates.cpp in Sources */,
 				81D8B4901962E0EC0010DA84 /* ParticleEmitterFactory.cpp in Sources */,
 				81D8B6D11962E0F70010DA84 /* RenderCapabilities.cpp in Sources */,
+				8133F0BC199BABDF004AAB40 /* LuaUtils.cpp in Sources */,
 				81D8B4981962E0EC0010DA84 /* SpriteBatch.cpp in Sources */,
 				81D8B4411962E0EC0010DA84 /* GUIView.cpp in Sources */,
 				81D8B6D21962E0F70010DA84 /* RenderSystem.cpp in Sources */,

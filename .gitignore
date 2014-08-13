@@ -27,3 +27,6 @@ Projects/Tools/CSFontMaker/obj
 Thumbs.db
 *.user
 Projects/Libraries/SFML/build
+Projects/Libraries/CSBase/build
+Projects/Libraries/CSBase/obj
+Projects/Libraries/CSBase/bin

@@ -58,6 +58,8 @@
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
 
+#include <ChilliSource/Lua/Base/LuaSystem.h>
+
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
@@ -392,6 +394,9 @@ namespace ChilliSource
             m_pointerSystem = CreateSystem<Input::PointerSystem>();
             CreateSystem<Input::DeviceButtonSystem>();
             CreateSystem<Input::TextEntry>();
+            
+            //Lua
+            CreateSystem<Lua::LuaSystem>();
             
             //Rendering
             Rendering::RenderCapabilities* renderCapabilities = CreateSystem<Rendering::RenderCapabilities>();

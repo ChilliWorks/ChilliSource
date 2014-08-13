@@ -62,6 +62,7 @@ typedef u64                 TimeIntervalMs;
 #include <ChilliSource/Debugging/ForwardDeclarations.h>
 #include <ChilliSource/Input/ForwardDeclarations.h>
 #include <ChilliSource/GUI/ForwardDeclarations.h>
+#include <ChilliSource/Lua/ForwardDeclarations.h>
 #include <ChilliSource/Networking/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Social/ForwardDeclarations.h>
@@ -84,6 +85,7 @@ namespace ChilliSource
     namespace Debugging{}
     namespace Input{}
     namespace GUI{}
+    namespace Lua{}
     namespace Networking{}
     namespace Rendering{}
     namespace Social{}
@@ -96,6 +98,7 @@ namespace CSCore = ChilliSource::Core;
 namespace CSDebugging = ChilliSource::Debugging;
 namespace CSInput = ChilliSource::Input;
 namespace CSGUI = ChilliSource::GUI;
+namespace CSLua = ChilliSource::Lua;
 namespace CSNetworking = ChilliSource::Networking;
 namespace CSRendering = ChilliSource::Rendering;
 namespace CSSocial = ChilliSource::Social;

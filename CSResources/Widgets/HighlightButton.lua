@@ -1,0 +1,30 @@
+isDown = false
+
+function onPointerDown()
+    io.write("HighlightButton: Pointer down\n")
+    isDown = true
+end
+
+function onPointerMoved()
+    io.write("HighlightButton: Pointer moved\n")
+end
+
+function onPointerUp()
+    io.write("HighlightButton: Pointer up\n")
+    if(isDown == true) then
+        isDown = false
+        io.write("HighlightButton: Button Pressed\n")
+    end
+end
+
+function square(x, y)
+	return x * x, y * y
+end
+
+function printOut(msg)
+	io.write(msg.."\n")
+end
+
+function getType()
+	return "HighlightButton"
+end
