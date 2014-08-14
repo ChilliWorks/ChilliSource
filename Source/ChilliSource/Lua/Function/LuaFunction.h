@@ -58,18 +58,18 @@ namespace ChilliSource
             /// @param Function to register with Lua
             //--------------------------------------------------------
             LuaFunction(lua_State* in_luaVM, const char* in_functionName, const FuncType& in_function)
-            : m_luaVM(in_luaVM), m_name(in_functionName), m_function(in_function)
+            : m_function(in_function)
             {
                 //Register this function pointer with Lua VM so we can call into it from
                 //the routing function
-                lua_pushlightuserdata(m_luaVM, (void*)this);
+                lua_pushlightuserdata(in_luaVM, (void*)this);
                 
                 //Register the routing function as it has the signature required by Lua
                 //and can route back to us
-                lua_pushcclosure(m_luaVM, RouteToFunction, 1);
+                lua_pushcclosure(in_luaVM, RouteToFunction, 1);
                 
                 //Bind the function to the given name
-                lua_setglobal(m_luaVM, m_name);
+                lua_setglobal(in_luaVM, in_functionName);
             }
             //--------------------------------------------------------
             /// Calls the stored function with the parameters from
@@ -85,26 +85,14 @@ namespace ChilliSource
             s32 Execute(lua_State* in_luaVM) override
             {
                 //Pull the arguments from the Lua stack and call the function, pushing the result back to the Lua stack
-                LuaUtils::PushAllToVM(m_luaVM, LuaUtils::LiftToParamPack(m_function, LuaUtils::ReadAllFromVM<TArgs...>(m_luaVM)));
+                LuaUtils::PushAllToVM(in_luaVM, LuaUtils::LiftToParamPack(m_function, LuaUtils::ReadAllFromVM<TArgs...>(in_luaVM)));
 
                 return TNumResults;
-            }
-            //--------------------------------------------------------
-            /// Destructor unbinds the function from lua
-            ///
-            /// @author S Downie
-            //--------------------------------------------------------
-            ~LuaFunction()
-            {
-                lua_pushnil(m_luaVM);
-                lua_setglobal(m_luaVM, m_name);
             }
             
         private:
             
             FuncType m_function;
-            lua_State* m_luaVM;
-            const char* m_name;
         };
         //--------------------------------------------------------
         /// Stores a standard function specialised for void return
@@ -127,18 +115,18 @@ namespace ChilliSource
             /// @param Function to register with Lua
             //--------------------------------------------------------
             LuaFunction(lua_State* in_luaVM, const char* in_functionName, const FuncType& in_function)
-            : m_luaVM(in_luaVM), m_name(in_functionName), m_function(in_function)
+            : m_function(in_function)
             {
                 //Register this function pointer with Lua VM so we can call into it from
                 //the routing function
-                lua_pushlightuserdata(m_luaVM, (void*)this);
+                lua_pushlightuserdata(in_luaVM, (void*)this);
                 
                 //Register the routing function as it has the signature required by Lua
                 //and can route back to us
-                lua_pushcclosure(m_luaVM, RouteToFunction, 1);
+                lua_pushcclosure(in_luaVM, RouteToFunction, 1);
                 
                 //Bind the function to the given name
-                lua_setglobal(m_luaVM, m_name);
+                lua_setglobal(in_luaVM, in_functionName);
             }
             //--------------------------------------------------------
             /// Calls the stored function with the parameters from
@@ -154,25 +142,13 @@ namespace ChilliSource
             s32 Execute(lua_State* in_luaVM) override
             {
                 //Pull the arguments from the Lua stack and call the function
-                LuaUtils::LiftToParamPack(m_function, LuaUtils::ReadAllFromVM<TArgs...>(m_luaVM));
+                LuaUtils::LiftToParamPack(m_function, LuaUtils::ReadAllFromVM<TArgs...>(in_luaVM));
                 return 0;
-            }
-            //--------------------------------------------------------
-            /// Destructor unbinds the function from lua
-            ///
-            /// @author S Downie
-            //--------------------------------------------------------
-            ~LuaFunction()
-            {
-                lua_pushnil(m_luaVM);
-                lua_setglobal(m_luaVM, m_name);
             }
             
         private:
             
             FuncType m_function;
-            lua_State* m_luaVM;
-            const char* m_name;
         };
     }
 }
