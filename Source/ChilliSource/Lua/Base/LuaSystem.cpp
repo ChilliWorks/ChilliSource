@@ -71,12 +71,6 @@ namespace ChilliSource
                 CS_LOG_FATAL("Error loading LUA file: " + std::string(lua_tostring(luaVM, -1)));
             }
             
-            auto runResult = lua_pcall(luaVM, 0, 0, 0);
-            if(runResult != 0)
-            {
-                CS_LOG_FATAL("Error running LUA file: " + std::string(lua_tostring(luaVM, -1)));
-            }
-            
             LuaScriptSPtr script(LuaScript::Create(luaVM));
             return script;
         }

@@ -30,7 +30,12 @@
 #define _CHILLISOURCE_LUA_BASE_LUASCRIPT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Lua/Base/LuaUtils.h>
+#include <ChilliSource/Lua/Function/LuaFunction.h>
+#include <ChilliSource/Lua/Function/LuaClassFunction.h>
+
+#include <vector>
 
 namespace ChilliSource
 {
@@ -46,6 +51,67 @@ namespace ChilliSource
 		{
 		public:
             
+            //----------------------------------------------------
+            /// Register C++ function to be called in the Lua
+            /// script. This must be performed prior to calling
+            /// run or the script will error
+            ///
+            /// @author S Downie
+            ///
+            /// @param Function name as called by Lua
+            /// @param Function
+            //----------------------------------------------------
+            template <typename TResult, typename...TArgs> void RegisterFunction(const char* in_functionName, typename LuaFunction<1, TResult, TArgs...>::FuncType&& in_function)
+            {
+                m_functions.push_back(ILuaFunctionUPtr(new LuaFunction<LuaUtils::NumValues<TResult>::value, TResult, TArgs...>(m_luaVM, in_functionName, in_function)));
+            }
+            //----------------------------------------------------
+            /// Register free function to be called in the Lua
+            /// script. This must be performed prior to calling
+            /// run or the script will error
+            ///
+            /// @author S Downie
+            ///
+            /// @param Function name as called by Lua
+            /// @param Function
+            //----------------------------------------------------
+            template <typename TResult, typename...TArgs> void RegisterFunction(const char* in_functionName, TResult (*in_function)(TArgs...))
+            {
+                m_functions.push_back(ILuaFunctionUPtr(new LuaFunction<LuaUtils::NumValues<TResult>::value, TResult, TArgs...>(m_luaVM, in_functionName, Core::MakeDelegate(in_function))));
+            }
+            //----------------------------------------------------
+            /// Register a class instance and its functions to be
+            /// called in the Lua script.
+            /// This must be performed prior to calling run or the script will error
+            ///
+            /// @author S Downie
+            ///
+            /// @param Class name as accessed in Lua
+            /// @param Instance of class to call into
+            /// @param Function
+            //----------------------------------------------------
+            template <typename TObject, typename...TFunctions>
+            void RegisterClass(const char* in_objectName, TObject* in_object, const char* in_functionName, TFunctions&&...in_functions)
+            {
+                std::string tableName(in_objectName + std::string("Table"));
+                luaL_newmetatable(m_luaVM, tableName.c_str());
+
+                RegisterClassFunctions(in_objectName, in_object, in_functionName, std::forward<TFunctions>(in_functions)...);
+                
+                lua_pushvalue(m_luaVM, -1);
+                lua_setfield(m_luaVM, -1, "__index");
+                lua_setglobal(m_luaVM, in_objectName);
+            }
+            //----------------------------------------------------
+            /// This function must be called after registering
+            /// any CS objects, functions or data but before
+            /// calling any functions. This causes lua to run the
+            /// script and as a requirement of that all functions
+            /// must exist.
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void Run();
             //----------------------------------------------------
             /// Call the lua function on this script that
             /// has the given signature. Lua has the ability
@@ -102,9 +168,56 @@ namespace ChilliSource
             /// @param Lua VM
             //-------------------------------------------------------
             LuaScript(lua_State* in_luaVM);
+            //----------------------------------------------------
+            /// Register C++ function to be called in the Lua
+            /// script. This must be performed prior to calling
+            /// run or the script will error
+            ///
+            /// @author S Downie
+            ///
+            /// @param Instance name as called by Lua
+            /// @param Instance of class to call into
+            /// @param Function name as called by Lua
+            /// @param Function
+            //----------------------------------------------------
+            template <typename TClass, typename TResult, typename...TArgs> void RegisterClassFunction(const char* in_className, TClass* in_object, const char* in_functionName, TResult (TClass::*in_function)(TArgs...))
+            {
+                m_functions.push_back(ILuaFunctionUPtr(new LuaClassFunction<LuaUtils::NumValues<TResult>::value, TResult, TArgs...>(m_luaVM, in_functionName, Core::MakeDelegate(in_object, in_function))));
+            }
+            //----------------------------------------------------
+            /// Specialised to terminate recursion of registering
+            /// functions
+            ///
+            /// @author S Downie
+            ///
+            /// @param Instance name as called by Lua
+            /// @param Instance of class to call into name as called by Lua
+            //----------------------------------------------------
+            template <typename TObject> void RegisterClassFunctions(const char* in_objectName, TObject* in_object){}
+            //----------------------------------------------------
+            /// Register a class instance and its functions to be
+            /// called in the Lua script.
+            /// This must be performed prior to calling run or the script will error
+            /// This function recursively registers each class function
+            ///
+            /// @author S Downie
+            ///
+            /// @param Instance name as accessed in Lua
+            /// @param Instance of class to call into
+            /// @param Function name as called by Lua
+            /// @param Function
+            /// @param Functions
+            //----------------------------------------------------
+            template <typename TObject, typename TFunction, typename...TFunctions>
+            void RegisterClassFunctions(const char* in_objectName, TObject* in_object, const char* in_functionName, TFunction&& in_function, TFunctions&&...in_functions)
+            {
+                RegisterClassFunction(in_objectName, in_object, in_functionName, in_function);
+                RegisterClassFunctions(in_objectName, in_object, in_functions...);
+            }
             
         private:
             
+            std::vector<ILuaFunctionUPtr> m_functions;
             lua_State* m_luaVM = nullptr;
 		};
 	}

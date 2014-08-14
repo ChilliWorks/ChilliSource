@@ -1,7 +1,7 @@
 //
-//  ForwardDeclarations.h
+//  Function.h
 //  Chilli Source
-//  Created by Scott Downie 13/08/2014.
+//  Created by Scott Downie 14/08/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,29 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_LUA_FORWARDDECLARATIONS_H_
-#define _CHILLISOURCE_LUA_FORWARDDECLARATIONS_H_
+#ifndef _CHILLISOURCE_LUA_FUNCTION_H_
+#define _CHILLISOURCE_LUA_FUNCTION_H_
 
-#include <ChilliSource/Core/Base/StandardMacros.h>
-
-#include <memory>
-
-struct lua_State;
-
-namespace ChilliSource 
-{
-	namespace Lua
-    {
-        //--------------------------------------------------
-        /// Base
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(LuaScript);
-        CS_FORWARDDECLARE_CLASS(LuaSystem);
-        //--------------------------------------------------
-        /// Function
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(ILuaFunction);
-	}
-}
+#include <ChilliSource/Lua/Function/ILuaFunction.h>
+#include <ChilliSource/Lua/Function/LuaFunction.h>
+#include <ChilliSource/Lua/Function/LuaClassFunction.h>
 
 #endif

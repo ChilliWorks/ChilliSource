@@ -10,6 +10,7 @@
 		8133F0B4199B9DAC004AAB40 /* LuaSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0B2199B9DAC004AAB40 /* LuaSystem.cpp */; };
 		8133F0B9199BA4D6004AAB40 /* LuaScript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0B7199BA4D6004AAB40 /* LuaScript.cpp */; };
 		8133F0BC199BABDF004AAB40 /* LuaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0BB199BABDF004AAB40 /* LuaUtils.cpp */; };
+		8133F0CB199CEE73004AAB40 /* ILuaFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0C4199CEE73004AAB40 /* ILuaFunction.cpp */; };
 		81496B921980F1AE004E79F2 /* Canvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B811980F1AE004E79F2 /* Canvas.cpp */; };
 		81496B931980F1AE004E79F2 /* Widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B831980F1AE004E79F2 /* Widget.cpp */; };
 		81496B941980F1AE004E79F2 /* TextureDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B871980F1AE004E79F2 /* TextureDrawable.cpp */; };
@@ -302,6 +303,11 @@
 		8133F0B8199BA4D6004AAB40 /* LuaScript.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LuaScript.h; sourceTree = "<group>"; };
 		8133F0BA199BA777004AAB40 /* LuaUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LuaUtils.h; sourceTree = "<group>"; };
 		8133F0BB199BABDF004AAB40 /* LuaUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaUtils.cpp; sourceTree = "<group>"; };
+		8133F0C4199CEE73004AAB40 /* ILuaFunction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILuaFunction.cpp; sourceTree = "<group>"; };
+		8133F0C5199CEE73004AAB40 /* ILuaFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILuaFunction.h; sourceTree = "<group>"; };
+		8133F0C7199CEE73004AAB40 /* LuaClassFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LuaClassFunction.h; sourceTree = "<group>"; };
+		8133F0C9199CEE73004AAB40 /* LuaFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LuaFunction.h; sourceTree = "<group>"; };
+		8133F0CA199CEE73004AAB40 /* Function.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Function.h; sourceTree = "<group>"; };
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
 		81496B811980F1AE004E79F2 /* Canvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas.cpp; sourceTree = "<group>"; };
 		81496B821980F1AE004E79F2 /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canvas.h; sourceTree = "<group>"; };
@@ -977,6 +983,8 @@
 				8133F0B1199B9DAC004AAB40 /* Base */,
 				8133F0B6199BA4CF004AAB40 /* Base.h */,
 				8133F0B5199B9E8E004AAB40 /* ForwardDeclarations.h */,
+				8133F0C3199CEE73004AAB40 /* Function */,
+				8133F0CA199CEE73004AAB40 /* Function.h */,
 			);
 			path = Lua;
 			sourceTree = "<group>";
@@ -992,6 +1000,17 @@
 				8133F0BA199BA777004AAB40 /* LuaUtils.h */,
 			);
 			path = Base;
+			sourceTree = "<group>";
+		};
+		8133F0C3199CEE73004AAB40 /* Function */ = {
+			isa = PBXGroup;
+			children = (
+				8133F0C4199CEE73004AAB40 /* ILuaFunction.cpp */,
+				8133F0C5199CEE73004AAB40 /* ILuaFunction.h */,
+				8133F0C7199CEE73004AAB40 /* LuaClassFunction.h */,
+				8133F0C9199CEE73004AAB40 /* LuaFunction.h */,
+			);
+			path = Function;
 			sourceTree = "<group>";
 		};
 		81496B7F1980F1AE004E79F2 /* UI */ = {
@@ -2698,6 +2717,7 @@
 				81D8B44E1962E0EC0010DA84 /* ImageView.cpp in Sources */,
 				81D8B4611962E0EC0010DA84 /* ContentManagementSystem.cpp in Sources */,
 				81D8B4031962E0EC0010DA84 /* PlatformSystem.cpp in Sources */,
+				8133F0CB199CEE73004AAB40 /* ILuaFunction.cpp in Sources */,
 				81D8B4521962E0EC0010DA84 /* FormattedLabel.cpp in Sources */,
 				81D8B4421962E0EC0010DA84 /* GUIViewFactory.cpp in Sources */,
 				81D8B4021962E0EC0010DA84 /* Logging.cpp in Sources */,

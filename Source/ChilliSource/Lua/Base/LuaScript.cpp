@@ -47,8 +47,21 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
+        void LuaScript::Run()
+        {
+            auto runResult = lua_pcall(m_luaVM, 0, 0, 0);
+            if(runResult != 0)
+            {
+                CS_LOG_FATAL("Error compiling LUA file: " + std::string(lua_tostring(m_luaVM, -1)));
+            }
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
         LuaScript::~LuaScript()
         {
+            //Functions must be cleared before the VM is destroyed
+            //as they unbind themselves from the Lua VM.
+            m_functions.clear();
             lua_close(m_luaVM);
         }
 	}

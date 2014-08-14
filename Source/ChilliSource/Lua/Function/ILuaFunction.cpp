@@ -1,7 +1,7 @@
 //
-//  ForwardDeclarations.h
+//  ILuaFunction.cpp
 //  Chilli Source
-//  Created by Scott Downie 13/08/2014.
+//  Created by Scott Downie on 14/08/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,29 +26,18 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_LUA_FORWARDDECLARATIONS_H_
-#define _CHILLISOURCE_LUA_FORWARDDECLARATIONS_H_
+#include <ChilliSource/Lua/Function/ILuaFunction.h>
 
-#include <ChilliSource/Core/Base/StandardMacros.h>
-
-#include <memory>
-
-struct lua_State;
-
-namespace ChilliSource 
+namespace ChilliSource
 {
-	namespace Lua
+    namespace Lua
     {
-        //--------------------------------------------------
-        /// Base
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(LuaScript);
-        CS_FORWARDDECLARE_CLASS(LuaSystem);
-        //--------------------------------------------------
-        /// Function
-        //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(ILuaFunction);
-	}
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        s32 RouteToFunction(lua_State* in_luaVM)
+        {
+            ILuaFunction* function = (ILuaFunction*)lua_touserdata(in_luaVM, lua_upvalueindex(1));
+            return function->Execute(in_luaVM);
+        }
+    }
 }
-
-#endif

@@ -269,6 +269,127 @@ namespace ChilliSource
             {
                 return Popper<sizeof...(TResults), TResults...>::PopRecursive(in_vm);
             }
+            //---------------------------------------------------------
+            /// Holds a list of indices accessible at template
+            /// compile time
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------
+            template <size_t... TIndices> struct Indices {};
+            //---------------------------------------------------------
+            /// Builds a list of indices accessible at template
+            /// compile time
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------
+            template <size_t TIndex, size_t... TIndices> struct IndicesBuilder : IndicesBuilder<TIndex-1, TIndex-1, TIndices...> {};
+            //---------------------------------------------------------
+            /// Holds the type of given index
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------
+            template <size_t... TIndices> struct IndicesBuilder<0, TIndices...>
+            {
+                using type = Indices<TIndices...>;
+            };
+            //---------------------------------------------------------
+            /// Unpack the arguments in the tuple at each given index
+            /// and call the given function
+            ///
+            /// @author S Downie
+            ///
+            /// @param Function
+            /// @param Arguments stored as tuple
+            /// @param Indices to unpack
+            ///
+            /// @return Result of executing function
+            //---------------------------------------------------------
+            template <typename TResult, typename... TArgs, size_t... TIndex>
+            TResult LiftToParamPack(const std::function<TResult(TArgs...)>& in_function, const std::tuple<TArgs...>& in_args, Indices<TIndex...>)
+            {
+                return in_function(std::get<TIndex>(in_args)...);
+            }
+            //---------------------------------------------------------
+            /// Call the given function with each element of the
+            /// tuple as a unique argument. This requires template
+            /// magic to lift each value from the tuple into a param
+            /// pack in order to match the signature of the function
+            ///
+            /// @author S Downie
+            ///
+            /// @param Function
+            /// @param Arguments stored as tuple
+            ///
+            /// @return Result of executing function
+            //---------------------------------------------------------
+            template <typename TResult, typename... TArgs>
+            TResult LiftToParamPack(const std::function<TResult(TArgs...)>& in_function, const std::tuple<TArgs...>& in_args)
+            {
+                return LiftToParamPack(in_function, in_args, typename IndicesBuilder<sizeof...(TArgs)>::type());
+            }
+            //---------------------------------------------------------
+            /// Holds the number of values of the template param.
+            /// (Specialised for 1)
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------
+            template <typename TValue> struct NumValues
+            {
+                static const u32 value = 1;
+            };
+            //---------------------------------------------------------
+            /// Holds the number of values of the template param.
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------
+            template <typename... TValues> struct NumValues<std::tuple<TValues...>>
+            {
+                static const u32 value = sizeof...(TValues);
+            };
+            //---------------------------------------------------------
+            /// Holds the number of values of the template param.
+            /// (Specialised for void)
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------
+            template <> struct NumValues<void>
+            {
+                static const u32 value = 0;
+            };
+            //---------------------------------------------------------
+            /// Helper function for reading all the values from the
+            /// Lua VM stack into a tuple or void.
+            ///
+            /// NOTE: The results are built in reverse order with the
+            /// top of the stack the last element in the tuple
+            ///
+            /// @author S Downie
+            ///
+            /// @param Lua VM
+            ///
+            /// @return Tuple or void depending on num results
+            //---------------------------------------------------------
+            template <typename... TResults, size_t... TIndex> std::tuple<TResults...> ReadAllFromVM(lua_State* in_luaVM, Indices<TIndex...>)
+            {
+                return std::tuple<TResults...>{ReadValueFromVM<TResults>(in_luaVM, TIndex + 1)...};
+            }
+            //---------------------------------------------------------
+            /// Helper function for reading all the values from the
+            /// Lua VM stack into a tuple or void.
+            ///
+            /// NOTE: The results are built in reverse order with the
+            /// top of the stack the last element in the tuple
+            ///
+            /// @author S Downie
+            ///
+            /// @param Lua VM
+            ///
+            /// @return Tuple or void depending on num results
+            //---------------------------------------------------------
+            template <typename... TResults> std::tuple<TResults...> ReadAllFromVM(lua_State* in_luaVM)
+            {
+                return ReadAllFromVM<TResults...>(in_luaVM, typename IndicesBuilder<sizeof...(TResults)>::type());
+            }
         }
     }
 }
