@@ -119,6 +119,15 @@ namespace ChilliSource
             //---------------------------------------------------------
             template <> const char* ReadValueFromVM(lua_State* in_vm, s32 in_index);
             //---------------------------------------------------------
+            /// Specialised function for pushing no values to the
+            /// Lua stack.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Lua VM
+            //---------------------------------------------------------
+            void PushAllToVM(lua_State* in_vm);
+            //---------------------------------------------------------
             /// Helper function for pushing values of different types
             /// to the Lua stack using template recursion
             ///
@@ -133,15 +142,6 @@ namespace ChilliSource
                 PushValueToVM(in_vm, std::forward<TValue>(in_value));
                 PushAllToVM(in_vm, std::forward<TValues>(in_restValues)...);
             }
-            //---------------------------------------------------------
-            /// Specialised function for pushing no values to the
-            /// Lua stack.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Lua VM
-            //---------------------------------------------------------
-            void PushAllToVM(lua_State* in_vm);
             //---------------------------------------------------------
             /// Performs recursive popping of the Lua VM stack
             /// into a tuple
