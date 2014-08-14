@@ -55,31 +55,31 @@ namespace ChilliSource
             /// @param Lua VM
             /// @param Value
             //---------------------------------------------------------
-            template <typename TArg> void PushValueToVM(lua_State* in_vm, TArg in_arg)
+            template <typename TArg> void PushValueToVM(lua_State* in_vm, TArg&& in_arg)
             {
                 static_assert(std::is_pointer<TArg>::value, "Lua type not supported");
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> void PushValueToVM(lua_State* in_vm, bool in_arg);
+            void PushValueToVM(lua_State* in_vm, bool&& in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> void PushValueToVM(lua_State* in_vm, s32 in_arg);
+            void PushValueToVM(lua_State* in_vm, s32&& in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> void PushValueToVM(lua_State* in_vm, u32 in_arg);
+            void PushValueToVM(lua_State* in_vm, u32&& in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> void PushValueToVM(lua_State* in_vm, f32 in_arg);
+            void PushValueToVM(lua_State* in_vm, f32&& in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> void PushValueToVM(lua_State* in_vm, f64 in_arg);
+            void PushValueToVM(lua_State* in_vm, f64&& in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> void PushValueToVM(lua_State* in_vm, std::string in_arg);
+            void PushValueToVM(lua_State* in_vm, std::string&& in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> void PushValueToVM(lua_State* in_vm, const char* in_arg);
+            void PushValueToVM(lua_State* in_vm, const char* in_arg);
             //---------------------------------------------------------
             /// Pop the value from the index of the Lua VM stack. This is specialised
             /// for each supported value type and will assert if

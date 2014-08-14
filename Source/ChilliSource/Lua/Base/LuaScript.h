@@ -64,7 +64,7 @@ namespace ChilliSource
             {
                 lua_getglobal(m_luaVM, in_functionName);
                 
-                LuaUtils::PushAllToVM(m_luaVM, in_args...);
+                LuaUtils::PushAllToVM(m_luaVM, std::forward<TArgs>(in_args)...);
                 
                 auto funcResult = lua_pcall(m_luaVM, sizeof...(TArgs), sizeof...(TResults), 0);
                 if(funcResult != 0)
