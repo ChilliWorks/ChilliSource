@@ -61,6 +61,9 @@
     <Filter Include="ChilliSource\UI">
       <UniqueIdentifier>{fcf07979-fe2f-41bb-9674-6a253c967d79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ChilliSource\Lua">
+      <UniqueIdentifier>{e64a1552-d936-4214-b8cd-4b10dd8ff3d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.cpp">
@@ -734,6 +737,18 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.cpp">
       <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Lua\Function\ILuaFunction.cpp">
+      <Filter>ChilliSource\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Lua\Base\LuaScript.cpp">
+      <Filter>ChilliSource\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Lua\Base\LuaSystem.cpp">
+      <Filter>ChilliSource\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Lua\Base\LuaUtils.cpp">
+      <Filter>ChilliSource\Lua</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1600,6 +1615,33 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyAccessor.h">
       <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Lua\Base.h">
+      <Filter>ChilliSource\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Lua\ForwardDeclarations.h">
+      <Filter>ChilliSource\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Lua\Function.h">
+      <Filter>ChilliSource\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Lua\Function\ILuaFunction.h">
+      <Filter>ChilliSource\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Lua\Function\LuaClassFunction.h">
+      <Filter>ChilliSource\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Lua\Function\LuaFunction.h">
+      <Filter>ChilliSource\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Lua\Base\LuaScript.h">
+      <Filter>ChilliSource\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Lua\Base\LuaSystem.h">
+      <Filter>ChilliSource\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Lua\Base\LuaUtils.h">
+      <Filter>ChilliSource\Lua</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

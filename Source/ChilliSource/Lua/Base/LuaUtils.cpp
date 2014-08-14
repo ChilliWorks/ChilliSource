@@ -109,9 +109,9 @@ namespace ChilliSource
             template <> f32 ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
-                return luaL_checknumber(in_vm, in_index);
+                return (f32)luaL_checknumber(in_vm, in_index);
 #else
-                return lua_tonumber(in_vm, in_index);
+                return (f32)lua_tonumber(in_vm, in_index);
 #endif
             }
             //---------------------------------------------------------

@@ -37,6 +37,7 @@ extern "C"
 #include <lua/lauxlib.h>
 }
 
+#include <functional>
 #include <tuple>
 
 namespace ChilliSource
