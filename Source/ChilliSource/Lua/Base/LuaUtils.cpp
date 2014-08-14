@@ -79,85 +79,70 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> bool PopValueFromVM(lua_State* in_vm)
+            template <> bool ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
                 //No luaL_checkboolean. Don't know why.
-                bool result = lua_toboolean(in_vm, -1);
-                
-                lua_pop(in_vm, 1);
-                return result;
+                return lua_toboolean(in_vm, in_index);
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> s32 PopValueFromVM(lua_State* in_vm)
+            template <> s32 ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
-                s32 result = luaL_checkinteger(in_vm, -1);
+                return luaL_checkinteger(in_vm, in_index);
 #else
-                s32 result = lua_tointeger(in_vm, -1);
+                return lua_tointeger(in_vm, in_index);
 #endif
-                lua_pop(in_vm, 1);
-                return result;
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> u32 PopValueFromVM(lua_State* in_vm)
+            template <> u32 ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
-                u32 result = luaL_checkunsigned(in_vm, -1);
+                return luaL_checkunsigned(in_vm, in_index);
 #else
-                u32 result = lua_tounsigned(in_vm, -1);
+                return lua_tounsigned(in_vm, in_index);
 #endif
-                lua_pop(in_vm, 1);
-                return result;
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> f32 PopValueFromVM(lua_State* in_vm)
+            template <> f32 ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
-                f32 result = luaL_checknumber(in_vm, -1);
+                return luaL_checknumber(in_vm, in_index);
 #else
-                f32 result = lua_tonumber(in_vm, -1);
+                return lua_tonumber(in_vm, in_index);
 #endif
-                lua_pop(in_vm, 1);
-                return result;
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> f64 PopValueFromVM(lua_State* in_vm)
+            template <> f64 ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
-                f64 result = luaL_checknumber(in_vm, -1);
+                return luaL_checknumber(in_vm, in_index);
 #else
-                f64 result = lua_tonumber(in_vm, -1);
+                return lua_tonumber(in_vm, in_index);
 #endif
-                lua_pop(in_vm, 1);
-                return result;
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> std::string PopValueFromVM(lua_State* in_vm)
+            template <> std::string ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
-                std::string result = luaL_checkstring(in_vm, -1);
+                return luaL_checkstring(in_vm, in_index);
 #else
-                std::string result = lua_tostring(in_vm, -1);
+                return lua_tostring(in_vm, in_index);
 #endif
-                lua_pop(in_vm, 1);
-                return result;
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> const char* PopValueFromVM(lua_State* in_vm)
+            template <> const char* ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
-                const char* result = luaL_checkstring(in_vm, -1);
+                return luaL_checkstring(in_vm, in_index);
 #else
-                const char* result = lua_tostring(in_vm, -1);
+                return lua_tostring(in_vm, in_index);
 #endif
-                lua_pop(in_vm, 1);
-                return result;
             }
         }
     }

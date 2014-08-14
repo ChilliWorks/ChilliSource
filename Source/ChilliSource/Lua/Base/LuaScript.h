@@ -59,7 +59,8 @@ namespace ChilliSource
             ///
             /// @return Results
             //----------------------------------------------------
-            template <typename... TResults, typename... TArgs> std::tuple<TResults...> CallFunction(const char* in_functionName, TArgs&&... in_args)
+            template <typename... TResults, typename... TArgs>
+            typename LuaUtils::Popper<sizeof...(TResults), TResults...>::type CallFunction(const char* in_functionName, TArgs&&... in_args)
             {
                 lua_getglobal(m_luaVM, in_functionName);
                 
@@ -71,7 +72,7 @@ namespace ChilliSource
                     CS_LOG_FATAL("Error calling Lua function " + std::string(in_functionName) + ": " + std::string(lua_tostring(m_luaVM, -1)));
                 }
                 
-                return std::make_tuple(LuaUtils::PopValueFromVM<TResults>(m_luaVM)...);
+                return LuaUtils::PopAllFromVM<TResults...>(m_luaVM);
             }
             //-------------------------------------------------------
             /// Destructor

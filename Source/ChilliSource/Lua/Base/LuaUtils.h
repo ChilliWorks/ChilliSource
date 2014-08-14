@@ -81,42 +81,43 @@ namespace ChilliSource
             //---------------------------------------------------------
             template <> void PushValueToVM(lua_State* in_vm, const char* in_arg);
             //---------------------------------------------------------
-            /// Pop the value from the top of the Lua VM stack. This is specialised
+            /// Pop the value from the index of the Lua VM stack. This is specialised
             /// for each supported value type and will assert if
             /// unsupported type is used.
             ///
             /// @author S Downie
             ///
             /// @param Lua VM
+            /// @param Index in the stack
             ///
             /// @return Value
             //---------------------------------------------------------
-            template <typename TResult> TResult PopValueFromVM(lua_State* in_vm)
+            template <typename TResult> TResult ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
                 static_assert(std::is_pointer<TResult>::value, "Lua type not supported");
                 return TResult();
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> bool PopValueFromVM(lua_State* in_vm);
+            template <> bool ReadValueFromVM(lua_State* in_vm, s32 in_index);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> s32 PopValueFromVM(lua_State* in_vm);
+            template <> s32 ReadValueFromVM(lua_State* in_vm, s32 in_index);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> u32 PopValueFromVM(lua_State* in_vm);
+            template <> u32 ReadValueFromVM(lua_State* in_vm, s32 in_index);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> f32 PopValueFromVM(lua_State* in_vm);
+            template <> f32 ReadValueFromVM(lua_State* in_vm, s32 in_index);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> f64 PopValueFromVM(lua_State* in_vm);
+            template <> f64 ReadValueFromVM(lua_State* in_vm, s32 in_index);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> std::string PopValueFromVM(lua_State* in_vm);
+            template <> std::string ReadValueFromVM(lua_State* in_vm, s32 in_index);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> const char* PopValueFromVM(lua_State* in_vm);
+            template <> const char* ReadValueFromVM(lua_State* in_vm, s32 in_index);
             //---------------------------------------------------------
             /// Template container for a tuple Index
             ///
@@ -165,6 +166,107 @@ namespace ChilliSource
             template <typename TTupleType> void PushAllToVM(lua_State* in_vm, const TTupleType& tuple)
             {
                 PushAllToVM(in_vm, tuple, TupleIndex<std::tuple_size<TTupleType>::value>());
+            }
+            //---------------------------------------------------------
+            /// Performs recursive popping of the Lua VM stack
+            /// into a tuple
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------
+            template <size_t, typename... TResults> struct Popper
+            {
+                using type = std::tuple<TResults...>;
+                
+                //---------------------------------------------------------
+                /// Creates a tuple that contains a single element
+                /// of template type with the value of the given index
+                /// in the Lua stack
+                ///
+                /// @author S Downie
+                ///
+                /// @param Lua VM
+                /// @param Index in Lua stack
+                ///
+                /// @return Tuple
+                //---------------------------------------------------------
+                template <typename TElementType> static std::tuple<TElementType> ReadValue(lua_State* in_vm, s32 in_index)
+                {
+                    return std::make_tuple(ReadValueFromVM<TElementType>(in_vm, in_index));
+                }
+                //---------------------------------------------------------
+                /// Creates a tuple from the values starting at the
+                /// given index in the Lua stack.
+                ///
+                /// @author S Downie
+                ///
+                /// @param Lua VM
+                /// @param Index in Lua stack to start from
+                ///
+                /// @return Tuple
+                //---------------------------------------------------------
+                template <typename TElementType1, typename TElementType2, typename... TElementTypeRest>
+                static std::tuple<TElementType1, TElementType2, TElementTypeRest...> ReadValue(lua_State* in_vm, s32 in_index)
+                {
+                    std::tuple<TElementType1> head = std::make_tuple(ReadValueFromVM<TElementType1>(in_vm, in_index));
+                    return std::tuple_cat(head, ReadValue<TElementType2, TElementTypeRest...>(in_vm, in_index + 1));
+                }
+                //---------------------------------------------------------
+                /// Entry function that builds a tuple from
+                /// the contents of the VM stack. The results
+                /// are built in reverse order with the top of the
+                /// stack the last element in the tuple
+                ///
+                /// @author S Downie
+                ///
+                /// @param Lua VM
+                ///
+                /// @return Tuple
+                //---------------------------------------------------------
+                static type PopRecursive(lua_State* in_vm)
+                {
+                    auto ret = ReadValue<TResults...>(in_vm, 1);
+                    lua_pop(in_vm, sizeof...(TResults));
+                    return ret;
+                }
+            };
+            //---------------------------------------------------------
+            /// Special case for zero results which will specify void
+            /// return type
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------
+            template <typename... TResults> struct Popper<0, TResults...>
+            {
+                using type = void;
+                
+                //---------------------------------------------------------
+                /// Special case for no return results which peforms
+                /// no action
+                ///
+                /// @author S Downie
+                ///
+                /// @param Lua VM
+                ///
+                /// @return Void
+                //---------------------------------------------------------
+                static type PopRecursive(lua_State* in_vm) {}
+            };
+            //---------------------------------------------------------
+            /// Helper function for popping all the values from the
+            /// Lua VM stack into a tuple or void.
+            ///
+            /// NOTE: The results are built in reverse order with the
+            /// top of the stack the last element in the tuple
+            ///
+            /// @author S Downie
+            ///
+            /// @param Lua VM
+            ///
+            /// @return Tuple or void depending on num results
+            //---------------------------------------------------------
+            template <typename... TResults> typename Popper<sizeof...(TResults), TResults...>::type PopAllFromVM(lua_State* in_vm)
+            {
+                return Popper<sizeof...(TResults), TResults...>::PopRecursive(in_vm);
             }
         }
     }
