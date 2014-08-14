@@ -28,22 +28,38 @@
 
 #include <ChilliSource/Lua/Base/LuaScript.h>
 
+#include <ChilliSource/Core/Base/Utils.h>
+
+extern "C"
+{
+#include <lua/lualib.h>
+}
+
 namespace ChilliSource
 {
 	namespace Lua
 	{
         //----------------------------------------------------
         //----------------------------------------------------
-        LuaScriptUPtr LuaScript::Create(lua_State* in_luaVM)
+        LuaScriptUPtr LuaScript::Create(Core::StorageLocation in_location, const std::string& in_filePath)
         {
-            return LuaScriptUPtr(new LuaScript(in_luaVM));
+            return LuaScriptUPtr(new LuaScript(in_location, in_filePath));
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        LuaScript::LuaScript(lua_State* in_luaVM)
-        : m_luaVM(in_luaVM)
+        LuaScript::LuaScript(Core::StorageLocation in_location, const std::string& in_filePath)
         {
+            std::string luaContents;
+            Core::Utils::FileToString(in_location, in_filePath, luaContents);
             
+            m_luaVM = luaL_newstate();
+            luaL_openlibs(m_luaVM);
+            
+            auto loadResult = luaL_loadstring(m_luaVM, luaContents.c_str());
+            if(loadResult != 0)
+            {
+                CS_LOG_FATAL("Error loading LUA file: " + std::string(lua_tostring(m_luaVM, -1)));
+            }
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

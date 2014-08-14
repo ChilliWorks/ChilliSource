@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8133F0B4199B9DAC004AAB40 /* LuaSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0B2199B9DAC004AAB40 /* LuaSystem.cpp */; };
 		8133F0B9199BA4D6004AAB40 /* LuaScript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0B7199BA4D6004AAB40 /* LuaScript.cpp */; };
 		8133F0BC199BABDF004AAB40 /* LuaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0BB199BABDF004AAB40 /* LuaUtils.cpp */; };
 		8133F0CB199CEE73004AAB40 /* ILuaFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0C4199CEE73004AAB40 /* ILuaFunction.cpp */; };
@@ -295,8 +294,6 @@
 
 /* Begin PBXFileReference section */
 		8110E2D1199111E700EC96CA /* PropertyAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyAccessor.h; sourceTree = "<group>"; };
-		8133F0B2199B9DAC004AAB40 /* LuaSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaSystem.cpp; sourceTree = "<group>"; };
-		8133F0B3199B9DAC004AAB40 /* LuaSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LuaSystem.h; sourceTree = "<group>"; };
 		8133F0B5199B9E8E004AAB40 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
 		8133F0B6199BA4CF004AAB40 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		8133F0B7199BA4D6004AAB40 /* LuaScript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaScript.cpp; sourceTree = "<group>"; };
@@ -994,8 +991,6 @@
 			children = (
 				8133F0B7199BA4D6004AAB40 /* LuaScript.cpp */,
 				8133F0B8199BA4D6004AAB40 /* LuaScript.h */,
-				8133F0B2199B9DAC004AAB40 /* LuaSystem.cpp */,
-				8133F0B3199B9DAC004AAB40 /* LuaSystem.h */,
 				8133F0BB199BABDF004AAB40 /* LuaUtils.cpp */,
 				8133F0BA199BA777004AAB40 /* LuaUtils.h */,
 			);
@@ -2647,7 +2642,6 @@
 				81D8B4311962E0EC0010DA84 /* StateManager.cpp in Sources */,
 				81D8B40E1962E0EC0010DA84 /* DialogueBoxSystem.cpp in Sources */,
 				81D8B4551962E0EC0010DA84 /* HorizontalEndcappedProgressBar.cpp in Sources */,
-				8133F0B4199B9DAC004AAB40 /* LuaSystem.cpp in Sources */,
 				81D8B4161962E0EC0010DA84 /* TaggedFilePathResolver.cpp in Sources */,
 				81D8B6CE1962E0F70010DA84 /* ContextRestorer.cpp in Sources */,
 				81496B951980F1AE004E79F2 /* GridLayout.cpp in Sources */,

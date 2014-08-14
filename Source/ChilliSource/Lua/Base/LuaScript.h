@@ -52,6 +52,17 @@ namespace ChilliSource
 		public:
             
             //----------------------------------------------------
+			/// Creates a new lua script from the given lua file.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Location
+            /// @param File path
+            ///
+            /// @return The new instance.
+			//----------------------------------------------------
+            static LuaScriptUPtr Create(Core::StorageLocation in_location, const std::string& in_filePath);
+            //----------------------------------------------------
             /// Register C++ function to be called in the Lua
             /// script. This must be performed prior to calling
             /// run or the script will error
@@ -148,26 +159,16 @@ namespace ChilliSource
             ~LuaScript();
             
         private:
-            friend class LuaSystem;
-            
-            //----------------------------------------------------
-			/// Creates a new instance of this system.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Lua VM
-            ///
-            /// @return The new instance.
-			//----------------------------------------------------
-            static LuaScriptUPtr Create(lua_State* in_luaVM);
+
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
             ///
-            /// @param Lua VM
+            /// @param Location
+            /// @param File path
             //-------------------------------------------------------
-            LuaScript(lua_State* in_luaVM);
+            LuaScript(Core::StorageLocation in_location, const std::string& in_filePath);
             //----------------------------------------------------
             /// Register C++ function to be called in the Lua
             /// script. This must be performed prior to calling
