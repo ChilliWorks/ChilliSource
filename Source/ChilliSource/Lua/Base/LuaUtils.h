@@ -205,6 +205,32 @@ namespace ChilliSource
                 }
             };
             //---------------------------------------------------------
+            /// Special case for one results which will specify one
+            /// return type
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------
+            template <typename TResult> struct Popper<1, TResult>
+            {
+                using type = TResult;
+                
+                //---------------------------------------------------------
+                /// Special case for single return result
+                ///
+                /// @author S Downie
+                ///
+                /// @param Lua VM
+                ///
+                /// @return Single type
+                //---------------------------------------------------------
+                static type PopRecursive(lua_State* in_vm)
+                {
+                    auto ret = ReadValueFromVM<TResult>(in_vm, -1);
+                    lua_pop(in_vm, 1);
+                    return ret;
+                }
+            };
+            //---------------------------------------------------------
             /// Special case for zero results which will specify void
             /// return type
             ///
