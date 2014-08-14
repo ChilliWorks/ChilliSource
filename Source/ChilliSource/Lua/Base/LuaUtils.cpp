@@ -144,6 +144,11 @@ namespace ChilliSource
                 return lua_tostring(in_vm, in_index);
 #endif
             }
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            void PushAllToVM(lua_State* in_vm)
+            {
+            }
         }
     }
 }

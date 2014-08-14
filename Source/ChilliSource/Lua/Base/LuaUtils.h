@@ -119,54 +119,29 @@ namespace ChilliSource
             //---------------------------------------------------------
             template <> const char* ReadValueFromVM(lua_State* in_vm, s32 in_index);
             //---------------------------------------------------------
-            /// Template container for a tuple Index
-            ///
-            /// @author S Downie
-            //---------------------------------------------------------
-            template <size_t> struct TupleIndex { };
-            //---------------------------------------------------------
-            /// Specialised function to terminate recursion when
-            /// index is zero.
+            /// Helper function for pushing values of different types
+            /// to the Lua stack using template recursion
             ///
             /// @author S Downie
             ///
             /// @param Lua VM
-            /// @param Tuple
-            /// @param Index 0
+            /// @param Value
+            /// @param Rest of values
             //---------------------------------------------------------
-            template <typename TTupleType> void PushAllToVM(lua_State* in_vm, const TTupleType& tuple, TupleIndex<0>)
+            template <typename TValue, typename... TValues> void PushAllToVM(lua_State* in_vm, TValue&& in_value, TValues&&... in_restValues)
             {
-                
+                PushValueToVM(in_vm, std::forward<TValue>(in_value));
+                PushAllToVM(in_vm, std::forward<TValues>(in_restValues)...);
             }
             //---------------------------------------------------------
-            /// Helper function for iterating the tuple and pushing
-            /// all values to the Lua VM using recursion and starting
-            /// at the given index
+            /// Specialised function for pushing no values to the
+            /// Lua stack.
             ///
             /// @author S Downie
             ///
             /// @param Lua VM
-            /// @param Tuple
-            /// @param Index to push from
             //---------------------------------------------------------
-            template <typename TTupleType, size_t N> void PushAllToVM(lua_State* in_vm, const TTupleType& tuple, TupleIndex<N>)
-            {
-                PushAllToVM(in_vm, tuple, TupleIndex<N-1>());
-                PushValueToVM(in_vm, std::get<N-1>(tuple));
-            }
-            //---------------------------------------------------------
-            /// Helper function for iterating the tuple and pushing
-            /// all values to the Lua VM using recursion.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Lua VM
-            /// @param Tuple
-            //---------------------------------------------------------
-            template <typename TTupleType> void PushAllToVM(lua_State* in_vm, const TTupleType& tuple)
-            {
-                PushAllToVM(in_vm, tuple, TupleIndex<std::tuple_size<TTupleType>::value>());
-            }
+            void PushAllToVM(lua_State* in_vm);
             //---------------------------------------------------------
             /// Performs recursive popping of the Lua VM stack
             /// into a tuple
