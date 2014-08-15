@@ -63,6 +63,18 @@ namespace ChilliSource
             static const Colour k_pink;
             
             //-----------------------------------------------------------
+            /// Clamp the given colour between the min and max values
+            ///
+            /// @author S Downie
+            ///
+            /// @param Value to clamp
+            /// @param Min
+            /// @param Max
+            ///
+            /// @return Clamped colour
+            //-----------------------------------------------------------
+            static Colour Clamp(const Colour& in_value, const Colour& in_min = k_black, const Colour& in_max = k_white);
+            //-----------------------------------------------------------
             /// Constructor
             ///
             /// @author S Downie
