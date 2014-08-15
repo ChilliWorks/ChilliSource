@@ -62,19 +62,19 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, bool&& in_arg);
+            void PushValueToVM(lua_State* in_vm, bool in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, s32&& in_arg);
+            void PushValueToVM(lua_State* in_vm, s32 in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, u32&& in_arg);
+            void PushValueToVM(lua_State* in_vm, u32 in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, f32&& in_arg);
+            void PushValueToVM(lua_State* in_vm, f32 in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, f64&& in_arg);
+            void PushValueToVM(lua_State* in_vm, f64 in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
             void PushValueToVM(lua_State* in_vm, std::string&& in_arg);

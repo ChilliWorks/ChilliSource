@@ -240,7 +240,27 @@ namespace ChilliSource
                     ParseLinkedChildProperties(childProperties, hierarchyDesc.m_links);
                 }
                 
-                widgetDef->Build(hierarchyDesc);
+                std::string luaContents;
+                const Json::Value& behaviour = root["Behaviour"];
+                if(behaviour.isNull() == false)
+                {
+                    bool relativePath = behaviour.isMember("Location") == false;
+                    Core::StorageLocation behaviourLocation = in_storageLocation;
+                    std::string behaviourPath = behaviour["FilePath"].asString();
+                    
+                    if(relativePath == false)
+                    {
+                        behaviourLocation = Core::ParseStorageLocation(behaviour["Location"].asString());
+                    }
+                    else
+                    {
+                        behaviourPath = pathToDefinition + behaviourPath;
+                    }
+                    
+                    Core::Utils::FileToString(behaviourLocation, behaviourPath, luaContents);
+                }
+                
+                widgetDef->Build(hierarchyDesc, luaContents);
                 
                 out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
                 if(in_delegate != nullptr)

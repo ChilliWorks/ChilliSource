@@ -158,13 +158,14 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         WidgetUPtr WidgetFactory::Create(const WidgetDefCSPtr& in_def) const
         {
-            return CreateRecursive(in_def->GetHierarchyDesc());
+            return CreateRecursive(in_def->GetHierarchyDesc(), in_def->GetBehaviourScript());
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
         WidgetUPtr WidgetFactory::Create(const WidgetTemplateCSPtr& in_template) const
         {
-            return CreateRecursive(in_template->GetHierarchyDesc());
+            auto def = m_widgetDefNameMap.find(in_template->GetHierarchyDesc().m_type)->second;
+            return CreateRecursive(in_template->GetHierarchyDesc(), def->GetBehaviourScript());
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
@@ -180,9 +181,9 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        WidgetUPtr WidgetFactory::CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc) const
+        WidgetUPtr WidgetFactory::CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc, const std::string& in_behaviourScript) const
         {
-            WidgetUPtr widget(new Widget(in_hierarchyDesc.m_defaultProperties, in_hierarchyDesc.m_customProperties));
+            WidgetUPtr widget(new Widget(in_hierarchyDesc.m_defaultProperties, in_hierarchyDesc.m_customProperties, in_behaviourScript));
             
             if(in_hierarchyDesc.m_defaultProperties.HasProperty("Layout") == true)
             {
@@ -203,7 +204,8 @@ namespace ChilliSource
             
             for(const auto& childHierarchyDesc : in_hierarchyDesc.m_children)
             {
-                WidgetSPtr childWidget = CreateRecursive(childHierarchyDesc);
+                auto def = m_widgetDefNameMap.find(childHierarchyDesc.m_type)->second;
+                WidgetSPtr childWidget = CreateRecursive(childHierarchyDesc, def->GetBehaviourScript());
                 switch (childHierarchyDesc.m_access)
                 {
                     case WidgetHierarchyDesc::Access::k_internal:
@@ -215,12 +217,9 @@ namespace ChilliSource
                 }
             }
             
-
-            
             //Hook up any links to our childrens properties
             std::unordered_map<std::string, IPropertyAccessorUPtr> defaultPropertyLinks;
             std::unordered_map<std::string, std::pair<Widget*, std::string>> customPropertyLinks;
-            
             
             for(const auto& link : in_hierarchyDesc.m_links)
             {

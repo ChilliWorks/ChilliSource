@@ -47,15 +47,22 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void WidgetDef::Build(const WidgetHierarchyDesc& in_desc)
+        void WidgetDef::Build(const WidgetHierarchyDesc& in_desc, const std::string& in_behaviourScript)
         {
             m_desc = in_desc;
+            m_behaviourScript = in_behaviourScript;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
         const WidgetHierarchyDesc& WidgetDef::GetHierarchyDesc() const
         {
             return m_desc;
+        }
+        //-------------------------------------------------------t
+        //-------------------------------------------------------
+        const std::string& WidgetDef::GetBehaviourScript() const
+        {
+            return m_behaviourScript;
         }
     }
 }

@@ -80,6 +80,39 @@ namespace ChilliSource
                     CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 }
             }
+            //-------------------------------------------------------
+            /// Convenience method for setting a property in a prop
+            /// map from JSON. This will handle the special cases
+            /// of object types layout and drawable
+            ///
+            /// @author S Downie
+            ///
+            /// @param Property name
+            /// @param JSON to parse and assign into map
+            /// @param Location of file for relative pathing
+            /// @param Base path of file for relative pathing
+            /// @param [Out] Property map to assign to
+            //-------------------------------------------------------
+            void SetProperty(const std::string& in_propName, const Json::Value& in_json, Core::StorageLocation in_templateLocation, const std::string& in_templatePath, PropertyMap& in_propMap)
+            {
+                if(in_propName == "Drawable")
+                {
+                    //Special case for drawable
+                    CS_ASSERT(in_json.isObject(), "Value can only be specified as object: " + in_propName);
+                    in_propMap.SetProperty(in_propName, WidgetParserUtils::ParseDrawableValues(in_json, in_templateLocation, in_templatePath));
+                }
+                else if(in_propName == "Layout")
+                {
+                    //Special case for drawable
+                    CS_ASSERT(in_json.isObject(), "Value can only be specified as object: " + in_propName);
+                    in_propMap.SetProperty(in_propName, WidgetParserUtils::ParseLayoutValues(in_json));
+                }
+                else
+                {
+                    CS_ASSERT(in_json.isString(), "Value can only be specified as string: " + in_propName);
+                    in_propMap.SetProperty(in_propMap.GetType(in_propName), in_propName, in_json.asString());
+                }
+            }
         }
         
         CS_DEFINE_NAMEDTYPE(WidgetTemplateProvider);
@@ -159,44 +192,59 @@ namespace ChilliSource
             
             for(auto it = in_template.begin(); it != in_template.end(); ++it)
             {
-                if(strcmp(it.memberName(), "Type") == 0)
+                std::string propertyName = it.memberName();
+                
+                if(propertyName == "Type")
                 {
                     CS_ASSERT((*it).isString(), "Value can only be specified as string: " + std::string(it.memberName()));
-                    out_hierarchyDesc.m_type = (*it).asString();
+                    if(type != "Template")
+                    {
+                        out_hierarchyDesc.m_type = (*it).asString();
+                    }
                 }
                 else if(out_hierarchyDesc.m_defaultProperties.HasProperty(it.memberName()) == true)
                 {
-                    if(strcmp(it.memberName(), "Drawable") == 0)
-                    {
-                        //Special case for drawable
-                        CS_ASSERT((*it).isObject(), "Value can only be specified as object: " + std::string(it.memberName()));
-                        out_hierarchyDesc.m_defaultProperties.SetProperty(it.memberName(), WidgetParserUtils::ParseDrawableValues(*it, in_templateLocation, in_templatePath));
-                    }
-                    else if(strcmp(it.memberName(), "Layout") == 0)
-                    {
-                        //Special case for drawable
-                        CS_ASSERT((*it).isObject(), "Value can only be specified as object: " + std::string(it.memberName()));
-                        out_hierarchyDesc.m_defaultProperties.SetProperty(it.memberName(), WidgetParserUtils::ParseLayoutValues(*it));
-                    }
-                    else
-                    {
-                        CS_ASSERT((*it).isString(), "Value can only be specified as string: " + std::string(it.memberName()));
-                        out_hierarchyDesc.m_defaultProperties.SetProperty(out_hierarchyDesc.m_defaultProperties.GetType(it.memberName()), it.memberName(), (*it).asString());
-                    }
+                    SetProperty(propertyName, *it, in_templateLocation, in_templatePath, out_hierarchyDesc.m_defaultProperties);
                 }
                 else if(out_hierarchyDesc.m_customProperties.HasProperty(it.memberName()) == true)
                 {
-                    CS_ASSERT((*it).isString(), "Value can only be specified as string: " + std::string(it.memberName()));
-                    out_hierarchyDesc.m_customProperties.SetProperty(out_hierarchyDesc.m_customProperties.GetType(it.memberName()), it.memberName(), (*it).asString());
+                    SetProperty(propertyName, *it, in_templateLocation, in_templatePath, out_hierarchyDesc.m_customProperties);
                 }
-                else if(strcmp(it.memberName(), "TemplateLocation") == 0 || strcmp(it.memberName(), "TemplatePath") == 0 || strcmp(it.memberName(), "Children") == 0 || strcmp(it.memberName(), "Hierarchy") == 0)
+                else if(propertyName == "TemplateLocation" || propertyName == "TemplatePath" || propertyName == "Children" || propertyName == "Hierarchy")
                 {
                     //Ignore these as they are handled elsewhere but we do not want them to be included
                     //in the custom properties list
                 }
                 else
                 {
-                    CS_LOG_FATAL("Property with name does not exist: " + std::string(it.memberName()));
+                    auto itLink = std::find_if(out_hierarchyDesc.m_links.begin(), out_hierarchyDesc.m_links.end(), [propertyName](const WidgetHierarchyDesc::WidgetPropertyLink& in_link)
+                    {
+                        return in_link.m_linkName == propertyName;
+                    });
+                    
+                    if(itLink != out_hierarchyDesc.m_links.end())
+                    {
+                        for(auto& child : out_hierarchyDesc.m_children)
+                        {
+                            if(child.m_defaultProperties.GetProperty<std::string>("Name") == itLink->m_widgetName)
+                            {
+                                if(child.m_defaultProperties.HasProperty(itLink->m_propertyName) == true)
+                                {
+                                    SetProperty(itLink->m_propertyName, *it, in_templateLocation, in_templatePath, child.m_defaultProperties);
+                                    break;
+                                }
+                                if(child.m_customProperties.HasProperty(itLink->m_propertyName) == true)
+                                {
+                                    SetProperty(itLink->m_propertyName, *it, in_templateLocation, in_templatePath, child.m_customProperties);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        CS_LOG_FATAL("Property with name does not exist: " + std::string(propertyName));
+                    }
                 }
             }
             

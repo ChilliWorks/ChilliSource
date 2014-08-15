@@ -43,19 +43,25 @@ namespace ChilliSource
         //----------------------------------------------------
         LuaScriptUPtr LuaScript::Create(Core::StorageLocation in_location, const std::string& in_filePath)
         {
-            return LuaScriptUPtr(new LuaScript(in_location, in_filePath));
+            std::string luaContents;
+            Core::Utils::FileToString(in_location, in_filePath, luaContents);
+    
+            return LuaScriptUPtr(new LuaScript(luaContents));
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        LuaScriptUPtr LuaScript::Create(const std::string& in_lua)
+        {
+            return LuaScriptUPtr(new LuaScript(in_lua));
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        LuaScript::LuaScript(Core::StorageLocation in_location, const std::string& in_filePath)
+        LuaScript::LuaScript(const std::string& in_lua)
         {
-            std::string luaContents;
-            Core::Utils::FileToString(in_location, in_filePath, luaContents);
-            
             m_luaVM = luaL_newstate();
             luaL_openlibs(m_luaVM);
             
-            auto loadResult = luaL_loadstring(m_luaVM, luaContents.c_str());
+            auto loadResult = luaL_loadstring(m_luaVM, in_lua.c_str());
             if(loadResult != 0)
             {
                 CS_LOG_FATAL("Error loading LUA file: " + std::string(lua_tostring(m_luaVM, -1)));

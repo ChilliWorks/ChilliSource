@@ -58,7 +58,7 @@ namespace ChilliSource
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
             CS_ASSERT(m_screen != nullptr, "Canvas must have access to screen");
             
-			m_canvas = WidgetUPtr(new Widget(PropertyMap(Widget::GetPropertyDescs()), PropertyMap()));
+			m_canvas = WidgetUPtr(new Widget(PropertyMap(Widget::GetPropertyDescs()), PropertyMap(), ""));
             m_canvas->SetName("Canvas");
             m_canvas->SetAbsoluteSize(GetSize());
             m_canvas->SetCanvas(m_canvas.get());
@@ -78,6 +78,12 @@ namespace ChilliSource
         const Core::Vector2& Canvas::GetSize() const
         {
             return m_screen->GetResolution();
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void Canvas::OnUpdate(f32 in_timeSinceLastUpdate)
+        {
+            m_canvas->Update(in_timeSinceLastUpdate);
         }
         //----------------------------------------------------
         //----------------------------------------------------

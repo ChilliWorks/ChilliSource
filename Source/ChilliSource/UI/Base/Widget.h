@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/Lua/Base/LuaScript.h>
 #include <ChilliSource/UI/Base/PropertyAccessor.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
@@ -106,8 +107,9 @@ namespace ChilliSource
             ///
             /// @param Default property values
             /// @param Custom property values
+            /// @param Lua
             //----------------------------------------------------------------------------------------
-            Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties);
+            Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties, const std::string& in_behaviourScript);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -562,6 +564,14 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             const char* GetProperty(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
+            /// Update this widget and any sub widgets
+            ///
+            /// @author S Downie
+            ///
+            /// @param Time in seconds since last update
+            //----------------------------------------------------------------------------------------
+            void Update(f32 in_timeSinceLastUpdate);
+            //----------------------------------------------------------------------------------------
             /// Draw the view using the currently set drawable. Tell any subviews to draw.
             ///
             /// @author S Downie
@@ -735,6 +745,8 @@ namespace ChilliSource
             IDrawableUPtr m_drawable;
             ILayoutUPtr m_layout;
             ILayoutUPtr m_internalLayout;
+            
+            Lua::LuaScriptUPtr m_behaviourScript;
             
             Widget* m_parent = nullptr;
             const Widget* m_canvas = nullptr;

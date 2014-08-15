@@ -121,6 +121,14 @@ namespace ChilliSource
             //-------------------------------------------------------
             void OnInit() override;
             //-------------------------------------------------------
+            /// Called every frame that the canvas is active
+            ///
+            /// @author S Downie
+            ///
+            /// @param Time in seconds since last update
+            //-------------------------------------------------------
+            void OnUpdate(f32 in_timeSinceLastUpdate) override;
+            //-------------------------------------------------------
             /// Called when the system is destroyed to destroy the
             /// canvas widget
             ///

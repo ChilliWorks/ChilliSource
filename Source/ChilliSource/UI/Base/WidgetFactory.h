@@ -150,10 +150,11 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Hierarchy desc
+            /// @param Behaviour script
             ///
             /// @return Widget
             //---------------------------------------------------------------------------
-            WidgetUPtr CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc) const;
+            WidgetUPtr CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc, const std::string& in_behaviourScript) const;
             //---------------------------------------------------------------------------
             /// Called when the system is destroyed and will release
             /// any memory held

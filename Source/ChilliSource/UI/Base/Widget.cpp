@@ -198,12 +198,31 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Widget::Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties)
+        Widget::Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties, const std::string& in_behaviourScript)
         {
             SetDefaultProperties(in_defaultProperties);
             SetCustomProperties(in_customProperties);
             
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            
+            if(in_behaviourScript.empty() == false)
+            {
+                m_behaviourScript = Lua::LuaScript::Create(in_behaviourScript);
+                m_behaviourScript->RegisterClass("widget", this,
+                                                 "setName",  &Widget::SetName,
+                                                 "rotateTo", &Widget::RotateTo,
+                                                 "rotateBy", &Widget::RotateBy,
+                                                 "getLocalRotation", &Widget::GetLocalRotation,
+                                                 "getFinalRotation", &Widget::GetFinalRotation,
+                                                 "setVisible", &Widget::SetVisible,
+                                                 "setClippingEnabled", &Widget::SetClippingEnabled,
+                                                 "bringToFront", &Widget::BringToFront,
+                                                 "bringForward", &Widget::BringForward,
+                                                 "sendToBack", &Widget::SendToBack,
+                                                 "sendBackward", &Widget::SendBackward
+                                                 );
+                m_behaviourScript->Run();
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -691,6 +710,25 @@ namespace ChilliSource
             m_parent = in_parent;
             
             InvalidateTransformCache();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::Update(f32 in_timeSinceLastUpdate)
+        {
+            if(m_behaviourScript != nullptr)
+            {
+                m_behaviourScript->CallFunction("onUpdate", in_timeSinceLastUpdate);
+            }
+            
+            for(auto& child : m_internalChildren)
+            {
+                child->Update(in_timeSinceLastUpdate);
+            }
+            
+            for(auto& child : m_children)
+            {
+                child->Update(in_timeSinceLastUpdate);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

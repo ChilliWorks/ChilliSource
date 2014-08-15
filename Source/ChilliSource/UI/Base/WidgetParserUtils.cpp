@@ -49,25 +49,28 @@ namespace ChilliSource
                 auto supportedProperties = IDrawable::GetPropertyDescs(type);
                 PropertyMap result(supportedProperties);
                 
-                bool relativePath = in_drawable.isMember("TextureLocation") == false;
-                
-                if(relativePath == true)
+                if(type != DrawableType::k_none)
                 {
-                    result.SetProperty(PropertyType::k_string, "TextureLocation", Core::ToString(in_location));
-                }
-                
-                for(const auto& propDesc : supportedProperties)
-                {
-                    if(in_drawable.isMember(propDesc.m_name) == true)
+                    bool relativePath = in_drawable.isMember("TextureLocation") == false;
+                    
+                    if(relativePath == true)
                     {
-                        std::string value = in_drawable[propDesc.m_name].asString();
-                        
-                        if(propDesc.m_name == "TexturePath" && relativePath == true)
+                        result.SetProperty(PropertyType::k_string, "TextureLocation", Core::ToString(in_location));
+                    }
+                    
+                    for(const auto& propDesc : supportedProperties)
+                    {
+                        if(in_drawable.isMember(propDesc.m_name) == true)
                         {
-                            value = in_absPath + value;
+                            std::string value = in_drawable[propDesc.m_name].asString();
+                            
+                            if(propDesc.m_name == "TexturePath" && relativePath == true)
+                            {
+                                value = in_absPath + value;
+                            }
+                            
+                            result.SetProperty(propDesc.m_type, propDesc.m_name, value);
                         }
-                        
-                        result.SetProperty(propDesc.m_type, propDesc.m_name, value);
                     }
                 }
                 
