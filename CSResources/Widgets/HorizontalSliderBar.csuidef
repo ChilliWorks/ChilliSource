@@ -11,12 +11,22 @@
     "SliderRelSize": {
       "Child": "Slider",
       "Property": "RelSize"
+    },
+    "SliderDrawable": {
+      "Child": "Slider",
+      "Property": "Drawable"
     }
+  },
+  "Behaviour": {
+    "FilePath": "HorizontalSliderBar.lua"
   },
   "Children": {
     "Slider": {
       "Type": "Widget",
       "RelSize": "0.1 1.1",
+      "Drawable": {
+        "Type": "None"
+      },
       "SizePolicy": "UseHeightMaintainingAspect",
       "ParentalAnchor": "MiddleLeft"
     }
