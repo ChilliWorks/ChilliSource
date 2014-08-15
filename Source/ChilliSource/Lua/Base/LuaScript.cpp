@@ -74,7 +74,7 @@ namespace ChilliSource
             auto runResult = lua_pcall(m_luaVM, 0, 0, 0);
             if(runResult != 0)
             {
-                CS_LOG_FATAL("Error compiling LUA file: " + std::string(lua_tostring(m_luaVM, -1)));
+                CS_LOG_FATAL("Error running LUA file: " + std::string(lua_tostring(m_luaVM, -1)));
             }
         }
         //-------------------------------------------------------

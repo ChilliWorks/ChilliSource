@@ -161,7 +161,7 @@ namespace ChilliSource
             ///
             /// @return Percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetRelativeSize() const;
+            Core::Vector2 GetLocalRelativeSize() const;
             //----------------------------------------------------------------------------------------
             /// Set the size of the widget in pixels
             ///
@@ -175,7 +175,7 @@ namespace ChilliSource
             ///
             /// @return Size in pixels
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetAbsoluteSize() const;
+            Core::Vector2 GetLocalAbsoluteSize() const;
             //----------------------------------------------------------------------------------------
             /// The default preferred size is used in cases when there is no drawable to query for its
             /// preferred size. The preferred size is used to maintain aspect ratio depending on the
@@ -215,7 +215,7 @@ namespace ChilliSource
             ///
             /// @return Offset as percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetRelativePosition() const;
+            Core::Vector2 GetLocalRelativePosition() const;
             //----------------------------------------------------------------------------------------
             /// Set the position of the widget from the parental anchor in pixels
             ///
@@ -229,17 +229,7 @@ namespace ChilliSource
             ///
             /// @param Position in pixels from parent anchor
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetAbsolutePosition() const;
-            //----------------------------------------------------------------------------------------
-            /// Move the position of the widget from the parental anchor by the given percentages
-            /// of the parent height and width
-            ///
-            /// @author S Downie
-            ///
-            /// @param Offset X as percentage width of parent (0.0 - 1.0)
-            /// @param Offset Y as percentage height of parent (0.0 - 1.0)
-            //----------------------------------------------------------------------------------------
-            void RelativeMoveBy(f32 in_x, f32 in_y);
+            Core::Vector2 GetLocalAbsolutePosition() const;
             //----------------------------------------------------------------------------------------
             /// Move the position of the widget from the parental anchor by the given percentages
             /// of the parent height and width
@@ -249,15 +239,6 @@ namespace ChilliSource
             /// @param Offset as percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
             //----------------------------------------------------------------------------------------
             void RelativeMoveBy(const Core::Vector2& in_translate);
-            //----------------------------------------------------------------------------------------
-            /// Move the position of the widget from the parental anchor by the given pixels
-            ///
-            /// @author S Downie
-            ///
-            /// @param X in pixels
-            /// @param Y in pixels
-            //----------------------------------------------------------------------------------------
-            void AbsoluteMoveBy(f32 in_x, f32 in_y);
             //----------------------------------------------------------------------------------------
             /// Move the position of the widget from the parental anchor by the given pixels
             ///
@@ -304,15 +285,6 @@ namespace ChilliSource
             /// @param Scaler width and height
             //----------------------------------------------------------------------------------------
             void ScaleTo(const Core::Vector2& in_scale);
-            //----------------------------------------------------------------------------------------
-            /// Scale the widgets current size about its origin by the given scaler
-            ///
-            /// @author S Downie
-            ///
-            /// @param Scaler x
-            /// @param Scaler y
-            //----------------------------------------------------------------------------------------
-            void ScaleBy(f32 in_x, f32 in_y);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///

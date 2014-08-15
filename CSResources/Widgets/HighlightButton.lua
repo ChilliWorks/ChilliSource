@@ -17,14 +17,12 @@ function onPointerUp()
     end
 end
 
-function square(x, y)
-	return x * x, y * y
-end
+rotateDir = 1
+function onUpdate(timeSinceLastUpdate)
+	rotation = Widget.getFinalRotation()
 
-function printOut(msg)
-	io.write(msg.."\n")
-end
-
-function getType()
-	return "HighlightButton"
+	if rotation > 3.141 or rotation < -3.141 then
+		rotateDir = -rotateDir
+	end
+    Widget.rotateBy(timeSinceLastUpdate * rotateDir)
 end

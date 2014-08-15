@@ -105,10 +105,13 @@ namespace ChilliSource
             /// called in the Lua script.
             /// This must be performed prior to calling run or the script will error
             ///
+            /// Usage: RegisterClass("className", this, "funcA", &MyClass::FuncA, "funcB", &MyClass::FuncB, etc)
+            ///
             /// @author S Downie
             ///
             /// @param Class name as accessed in Lua
             /// @param Instance of class to call into
+            /// @param Name of function
             /// @param Function
             //----------------------------------------------------
             template <typename TObject, typename...TFunctions>
@@ -117,11 +120,35 @@ namespace ChilliSource
                 std::string tableName(in_objectName + std::string("Table"));
                 luaL_newmetatable(m_luaVM, tableName.c_str());
 
-                RegisterClassFunctions(in_objectName, in_object, in_functionName, std::forward<TFunctions>(in_functions)...);
+                RegisterClassFunctions(in_object, in_functionName, std::forward<TFunctions>(in_functions)...);
                 
                 lua_pushvalue(m_luaVM, -1);
                 lua_setfield(m_luaVM, -1, "__index");
                 lua_setglobal(m_luaVM, in_objectName);
+            }
+            //----------------------------------------------------
+            /// Register an enum type that can be accessed in the
+            /// lua script
+            ///
+            /// Usage: RegisterEnum("enumName", "a", MyEnum::A, "b", MyEnum::B, etc)
+            ///
+            /// @author S Downie
+            ///
+            /// @param Enum name as accessed in Lua
+            /// @param Name of type
+            /// @param List of types
+            //----------------------------------------------------
+            template <typename...TTypes>
+            void RegisterEnum(const char* in_enumName, const char* in_typeName, TTypes&&...in_types)
+            {
+                std::string tableName(in_enumName + std::string("Table"));
+                luaL_newmetatable(m_luaVM, tableName.c_str());
+                
+                RegisterEnumTypes(in_typeName, std::forward<TTypes>(in_types)...);
+                
+                lua_pushvalue(m_luaVM, -1);
+                lua_setfield(m_luaVM, -1, "__index");
+                lua_setglobal(m_luaVM, in_enumName);
             }
             //----------------------------------------------------
             /// This function must be called after registering
@@ -185,12 +212,11 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Instance name as called by Lua
             /// @param Instance of class to call into
             /// @param Function name as called by Lua
             /// @param Function
             //----------------------------------------------------
-            template <typename TClass, typename TResult, typename...TArgs> void RegisterClassFunction(const char* in_className, TClass* in_object, const char* in_functionName, TResult (TClass::*in_function)(TArgs...))
+            template <typename TClass, typename TResult, typename...TArgs> void RegisterClassFunction(TClass* in_object, const char* in_functionName, TResult (TClass::*in_function)(TArgs...))
             {
                 m_functions.push_back(ILuaFunctionUPtr(new LuaClassFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_functionName, Core::MakeDelegate(in_object, in_function))));
             }
@@ -201,12 +227,11 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Instance name as called by Lua
             /// @param Instance of class to call into
             /// @param Function name as called by Lua
             /// @param Function
             //----------------------------------------------------
-            template <typename TClass, typename TResult, typename...TArgs> void RegisterClassFunction(const char* in_className, TClass* in_object, const char* in_functionName, TResult (TClass::*in_function)(TArgs...) const)
+            template <typename TClass, typename TResult, typename...TArgs> void RegisterClassFunction(TClass* in_object, const char* in_functionName, TResult (TClass::*in_function)(TArgs...) const)
             {
                 m_functions.push_back(ILuaFunctionUPtr(new LuaClassFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_functionName, Core::MakeDelegate(in_object, in_function))));
             }
@@ -216,10 +241,9 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Instance name as called by Lua
             /// @param Instance of class to call into name as called by Lua
             //----------------------------------------------------
-            template <typename TObject> void RegisterClassFunctions(const char* in_objectName, TObject* in_object){}
+            template <typename TObject> void RegisterClassFunctions(TObject* in_object){}
             //----------------------------------------------------
             /// Register a class instance and its functions to be
             /// called in the Lua script.
@@ -228,17 +252,54 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Instance name as accessed in Lua
             /// @param Instance of class to call into
             /// @param Function name as called by Lua
             /// @param Function
-            /// @param Functions
+            /// @param Remaining functions
             //----------------------------------------------------
             template <typename TObject, typename TFunction, typename...TFunctions>
-            void RegisterClassFunctions(const char* in_objectName, TObject* in_object, const char* in_functionName, TFunction&& in_function, TFunctions&&...in_functions)
+            void RegisterClassFunctions(TObject* in_object, const char* in_functionName, TFunction&& in_function, TFunctions&&...in_functions)
             {
-                RegisterClassFunction(in_objectName, in_object, in_functionName, in_function);
-                RegisterClassFunctions(in_objectName, in_object, in_functions...);
+                RegisterClassFunction(in_object, in_functionName, in_function);
+                RegisterClassFunctions(in_object, in_functions...);
+            }
+            //----------------------------------------------------
+            /// Register C++ enums to be accessed in the Lua
+            /// script. This must be performed prior to calling
+            /// run or the script will error
+            ///
+            /// @author S Downie
+            ///
+            /// @param Type name as called by Lua
+            /// @param Type
+            //----------------------------------------------------
+            template <typename TType> void RegisterEnumType(const char* in_typeName, TType&& in_type)
+            {
+                LuaUtils::PushValueToVM(m_luaVM, (s32)in_type);
+                lua_setfield(m_luaVM, -2, in_typeName);
+            }
+            //----------------------------------------------------
+            /// Specialised to terminate recursion of registering
+            /// enums
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            void RegisterEnumTypes(){}
+            //----------------------------------------------------
+            /// Register C++ enums to be accessed in the Lua
+            /// script. This must be performed prior to calling
+            /// run or the script will error
+            ///
+            /// @author S Downie
+            ///
+            /// @param Type name as called by Lua
+            /// @param Type
+            /// @param Remainging types
+            //----------------------------------------------------
+            template <typename TType, typename... TTypes> void RegisterEnumTypes(const char* in_typeName, TType&& in_type, TTypes&&...in_types)
+            {
+                RegisterEnumType(in_typeName, in_type);
+                RegisterEnumTypes(in_types...);
             }
             
         private:

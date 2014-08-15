@@ -208,19 +208,68 @@ namespace ChilliSource
             if(in_behaviourScript.empty() == false)
             {
                 m_behaviourScript = Lua::LuaScript::Create(in_behaviourScript);
-                m_behaviourScript->RegisterClass("widget", this,
-                                                 "setName",  &Widget::SetName,
+                
+                m_behaviourScript->RegisterEnum("SizePolicy",
+                                                "none", SizePolicy::k_none,
+                                                "usePreferredSize", SizePolicy::k_usePreferredSize,
+                                                "fillMaintainingAspect", SizePolicy::k_fillMaintainingAspect,
+                                                "fitMaintainingAspect", SizePolicy::k_fitMaintainingAspect,
+                                                "useWidthMaintainingAspect", SizePolicy::k_useWidthMaintainingAspect,
+                                                "useHeightMaintainingAspect", SizePolicy::k_useHeightMaintainingAspect
+                                                );
+                
+                m_behaviourScript->RegisterEnum("Anchor",
+                                                "topLeft", Rendering::AlignmentAnchor::k_topLeft,
+                                                "topRight", Rendering::AlignmentAnchor::k_topRight,
+                                                "topCentre", Rendering::AlignmentAnchor::k_topCentre,
+                                                "middleLeft", Rendering::AlignmentAnchor::k_middleLeft,
+                                                "middleRight", Rendering::AlignmentAnchor::k_middleRight,
+                                                "middleCentre", Rendering::AlignmentAnchor::k_middleCentre,
+                                                "bottomLeft", Rendering::AlignmentAnchor::k_bottomLeft,
+                                                "bottomRight", Rendering::AlignmentAnchor::k_bottomRight,
+                                                "bottomCentre", Rendering::AlignmentAnchor::k_bottomCentre
+                                                );
+                
+                m_behaviourScript->RegisterClass("Widget", this,
+                                                 "setName", &Widget::SetName,
+                                                 "setRelativePosition", &Widget::SetRelativePosition,
+                                                 "setAbsolutePosition", &Widget::SetAbsolutePosition,
+                                                 "setRelativeSize", &Widget::SetRelativeSize,
+                                                 "setAbsoluteSize", &Widget::SetAbsoluteSize,
+                                                 "relativeMoveBy", &Widget::RelativeMoveBy,
+                                                 "absoluteMoveBy", &Widget::AbsoluteMoveBy,
+                                                 "getLocalAbsolutePosition", &Widget::GetLocalAbsolutePosition,
+                                                 "getLocalRelativePosition", &Widget::GetLocalRelativePosition,
+                                                 "getFinalPosition", &Widget::GetFinalPosition,
+                                                 "scaleBy", &Widget::ScaleBy,
+                                                 "scaleTo", &Widget::ScaleTo,
+                                                 "getLocalScale", &Widget::GetLocalScale,
+                                                 "getFinalScale", &Widget::GetFinalScale,
                                                  "rotateTo", &Widget::RotateTo,
                                                  "rotateBy", &Widget::RotateBy,
                                                  "getLocalRotation", &Widget::GetLocalRotation,
                                                  "getFinalRotation", &Widget::GetFinalRotation,
+                                                 "setColour", &Widget::SetColour,
+                                                 "getLocalColour", &Widget::GetLocalColour,
+                                                 "getFinalColour", &Widget::GetFinalColour,
                                                  "setVisible", &Widget::SetVisible,
-                                                 "setClippingEnabled", &Widget::SetClippingEnabled,
+                                                 "isVisible", &Widget::IsVisible,
                                                  "bringToFront", &Widget::BringToFront,
                                                  "bringForward", &Widget::BringForward,
                                                  "sendToBack", &Widget::SendToBack,
-                                                 "sendBackward", &Widget::SendBackward
+                                                 "sendBackward", &Widget::SendBackward,
+                                                 "setSizePolicy", &Widget::SetSizePolicy,
+                                                 "getSizePolicy", &Widget::GetSizePolicy,
+                                                 "setOriginAnchor", &Widget::SetOriginAnchor,
+                                                 "getOriginAnchor", &Widget::GetOriginAnchor,
+                                                 "setParentalAnchor", &Widget::SetParentalAnchor,
+                                                 "getParentalAnchor", &Widget::GetParentalAnchor
                                                  );
+                
+                m_behaviourScript->RegisterClass("Screen", m_screen,
+                                                 "getResolution", &Core::Screen::GetResolution
+                                                 );
+                
                 m_behaviourScript->Run();
             }
         }
@@ -318,7 +367,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Vector2 Widget::GetRelativeSize() const
+        Core::Vector2 Widget::GetLocalRelativeSize() const
         {
             return m_localSize.vRelative;
         }
@@ -332,7 +381,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Vector2 Widget::GetAbsoluteSize() const
+        Core::Vector2 Widget::GetLocalAbsoluteSize() const
         {
             return m_localSize.vAbsolute;
         }
@@ -371,7 +420,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Vector2 Widget::GetRelativePosition() const
+        Core::Vector2 Widget::GetLocalRelativePosition() const
         {
             return m_localPosition.vRelative;
         }
@@ -385,33 +434,15 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Vector2 Widget::GetAbsolutePosition() const
+        Core::Vector2 Widget::GetLocalAbsolutePosition() const
         {
             return m_localPosition.vAbsolute;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::RelativeMoveBy(f32 in_x, f32 in_y)
-        {
-            m_localPosition.vRelative.x = in_x;
-            m_localPosition.vRelative.y = in_y;
-            
-            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::RelativeMoveBy(const Core::Vector2& in_translate)
         {
             m_localPosition.vRelative += in_translate;
-            
-            InvalidateTransformCache();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::AbsoluteMoveBy(f32 in_x, f32 in_y)
-        {
-            m_localPosition.vAbsolute.x += in_x;
-            m_localPosition.vAbsolute.y += in_y;
             
             InvalidateTransformCache();
         }
@@ -450,15 +481,6 @@ namespace ChilliSource
         void Widget::ScaleBy(const Core::Vector2& in_scale)
         {
             m_localScale *= in_scale;
-            
-            InvalidateTransformCache();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::ScaleBy(f32 in_x, f32 in_y)
-        {
-            m_localScale.x *= in_x;
-            m_localScale.y *= in_y;
             
             InvalidateTransformCache();
         }
@@ -508,7 +530,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::SetColour(const Core::Colour& in_colour)
         {
-            m_localColour = in_colour;
+            m_localColour = Core::Colour::Clamp(in_colour);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

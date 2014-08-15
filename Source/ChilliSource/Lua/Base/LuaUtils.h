@@ -47,6 +47,45 @@ namespace ChilliSource
         namespace LuaUtils
         {
             //---------------------------------------------------------
+            /// Holds the number of Lua values for each type
+            ///
+            /// @author S Downie
+            //---------------------------------------------------------
+            template <typename TResult> struct NumValues
+            {
+                static const u32 value = 1;
+            };
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> struct NumValues<void>
+            {
+                static const u32 value = 0;
+            };
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> struct NumValues<Core::Vector2>
+            {
+                static const u32 value = 2;
+            };
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> struct NumValues<Core::Vector3>
+            {
+                static const u32 value = 3;
+            };
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> struct NumValues<Core::Vector4>
+            {
+                static const u32 value = 4;
+            };
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> struct NumValues<Core::Colour>
+            {
+                static const u32 value = 4;
+            };
+            //---------------------------------------------------------
             /// Push the value to the Lua VM stack. This is specialised
             /// for each supported value type and will assert if
             /// unsupported type is used.
@@ -56,7 +95,7 @@ namespace ChilliSource
             /// @param Lua VM
             /// @param Value
             //---------------------------------------------------------
-            template <typename TArg> void PushValueToVM(lua_State* in_vm, TArg&& in_arg)
+            template <typename TArg> void PushValueToVM(lua_State* in_vm, TArg&& in_arg, typename std::enable_if<!std::is_enum<TArg>::value>::type* = 0)
             {
                 static_assert(std::is_pointer<TArg>::value, "Lua type not supported");
             }
@@ -77,12 +116,30 @@ namespace ChilliSource
             void PushValueToVM(lua_State* in_vm, f64 in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
+            void PushValueToVM(lua_State* in_vm, Core::Vector2&& in_arg);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            void PushValueToVM(lua_State* in_vm, Core::Vector3&& in_arg);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            void PushValueToVM(lua_State* in_vm, Core::Vector4&& in_arg);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            void PushValueToVM(lua_State* in_vm, Core::Colour&& in_arg);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
             void PushValueToVM(lua_State* in_vm, std::string&& in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
             void PushValueToVM(lua_State* in_vm, const char* in_arg);
             //---------------------------------------------------------
-            /// Pop the value from the index of the Lua VM stack. This is specialised
+            //---------------------------------------------------------
+            template <typename TArg> void PushValueToVM(lua_State* in_vm, TArg&& in_arg, typename std::enable_if<std::is_enum<TArg>::value>::type* = 0)
+            {
+                lua_pushinteger(in_vm, (s32)in_arg);
+            }
+            //---------------------------------------------------------
+            /// Read the value from the index of the Lua VM stack. This is specialised
             /// for each supported value type and will assert if
             /// unsupported type is used.
             ///
@@ -93,32 +150,67 @@ namespace ChilliSource
             ///
             /// @return Value
             //---------------------------------------------------------
-            template <typename TResult> TResult ReadValueFromVM(lua_State* in_vm, s32 in_index)
+            template <typename TResult> TResult ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<TResult>::value>::type* = 0)
             {
                 static_assert(std::is_pointer<TResult>::value, "Lua type not supported");
                 return TResult();
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> bool ReadValueFromVM(lua_State* in_vm, s32 in_index);
+            template <> bool ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<bool>::value>::type*);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> s32 ReadValueFromVM(lua_State* in_vm, s32 in_index);
+            template <> s32 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<s32>::value>::type*);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> u32 ReadValueFromVM(lua_State* in_vm, s32 in_index);
+            template <> u32 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<u32>::value>::type*);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> f32 ReadValueFromVM(lua_State* in_vm, s32 in_index);
+            template <> f32 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<f32>::value>::type*);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> f64 ReadValueFromVM(lua_State* in_vm, s32 in_index);
+            template <> f64 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<f64>::value>::type*);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> std::string ReadValueFromVM(lua_State* in_vm, s32 in_index);
+            template <> Core::Vector2 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<Core::Vector2>::value>::type*);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> const char* ReadValueFromVM(lua_State* in_vm, s32 in_index);
+            template <> Core::Vector3 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<Core::Vector3>::value>::type*);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> Core::Vector4 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<Core::Vector4>::value>::type*);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> Core::Colour ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<Core::Colour>::value>::type*);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> std::string ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<std::string>::value>::type*);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> const char* ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<const char*>::value>::type*);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <typename TResult> TResult ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<std::is_enum<TResult>::value>::type* = 0)
+            {
+                return (TResult)ReadValueFromVM<s32>(in_vm, in_index);
+            }
+            //---------------------------------------------------------
+            /// Pop the value from the index of the Lua VM stack and
+            /// return it. This may pop multiple values based on the type.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Lua VM
+            /// @param Index in the stack
+            ///
+            /// @return Value
+            //---------------------------------------------------------
+            template <typename TResult> TResult PopValueFromVM(lua_State* in_vm, s32 in_index)
+            {
+                auto result  = ReadValueFromVM<TResult>(in_vm, in_index);
+                lua_pop(in_vm, NumValues<TResult>::value);
+                return result;
+            }
             //---------------------------------------------------------
             /// Specialised function for pushing no values to the
             /// Lua stack.
@@ -181,9 +273,9 @@ namespace ChilliSource
                 /// @return Tuple
                 //---------------------------------------------------------
                 template <typename TElementType1, typename TElementType2, typename... TElementTypeRest>
-                static std::tuple<TElementType1, TElementType2, TElementTypeRest...> ReadValue(lua_State* in_vm, s32 in_index)
+                static std::tuple<TElementType1, TElementType2, TElementTypeRest...> PopValue(lua_State* in_vm, s32 in_index)
                 {
-                    std::tuple<TElementType1> head = std::make_tuple(ReadValueFromVM<TElementType1>(in_vm, in_index));
+                    std::tuple<TElementType1> head = std::make_tuple(PopValueFromVM<TElementType1>(in_vm, in_index));
                     return std::tuple_cat(head, ReadValue<TElementType2, TElementTypeRest...>(in_vm, in_index + 1));
                 }
                 //---------------------------------------------------------
@@ -200,7 +292,7 @@ namespace ChilliSource
                 //---------------------------------------------------------
                 static type PopRecursive(lua_State* in_vm)
                 {
-                    auto ret = ReadValue<TResults...>(in_vm, 1);
+                    auto ret = PopValue<TResults...>(in_vm, 1);
                     lua_pop(in_vm, sizeof...(TResults));
                     return ret;
                 }
@@ -226,8 +318,7 @@ namespace ChilliSource
                 //---------------------------------------------------------
                 static type PopRecursive(lua_State* in_vm)
                 {
-                    auto ret = ReadValueFromVM<TResult>(in_vm, -1);
-                    lua_pop(in_vm, 1);
+                    auto ret = PopValueFromVM<TResult>(in_vm, -1);
                     return ret;
                 }
             };
@@ -328,35 +419,6 @@ namespace ChilliSource
             {
                 return LiftToParamPack(in_function, in_args, typename IndicesBuilder<sizeof...(TArgs)>::type());
             }
-            //---------------------------------------------------------
-            /// Holds the number of values of the template param.
-            /// (Specialised for 1)
-            ///
-            /// @author S Downie
-            //---------------------------------------------------------
-            template <typename TValue> struct NumValues
-            {
-                static const u32 value = 1;
-            };
-            //---------------------------------------------------------
-            /// Holds the number of values of the template param.
-            ///
-            /// @author S Downie
-            //---------------------------------------------------------
-            template <typename... TValues> struct NumValues<std::tuple<TValues...>>
-            {
-                static const u32 value = sizeof...(TValues);
-            };
-            //---------------------------------------------------------
-            /// Holds the number of values of the template param.
-            /// (Specialised for void)
-            ///
-            /// @author S Downie
-            //---------------------------------------------------------
-            template <> struct NumValues<void>
-            {
-                static const u32 value = 0;
-            };
             //---------------------------------------------------------
             /// Helper function for reading all the values from the
             /// Lua VM stack into a tuple or void.
