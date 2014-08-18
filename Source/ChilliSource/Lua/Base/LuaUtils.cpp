@@ -116,14 +116,14 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> bool ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<bool>::value>::type*)
+            template <> bool ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
                 //No luaL_checkboolean. Don't know why.
                 return lua_toboolean(in_vm, in_index);
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> s32 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<s32>::value>::type*)
+            template <> s32 ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
                 return luaL_checkinteger(in_vm, in_index);
@@ -133,7 +133,7 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> u32 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<u32>::value>::type*)
+            template <> u32 ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
                 return luaL_checkunsigned(in_vm, in_index);
@@ -143,7 +143,7 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> f32 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<f32>::value>::type*)
+            template <> f32 ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
                 return (f32)luaL_checknumber(in_vm, in_index);
@@ -153,7 +153,7 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> f64 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<f64>::value>::type*)
+            template <> f64 ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
                 return luaL_checknumber(in_vm, in_index);
@@ -163,7 +163,7 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> Core::Vector2 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<Core::Vector2>::value>::type*)
+            template <> Core::Vector2 ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
                 f32 x = (f32)luaL_checknumber(in_vm, in_index);
@@ -177,7 +177,7 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> Core::Vector3 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<Core::Vector3>::value>::type*)
+            template <> Core::Vector3 ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
                 f32 x = (f32)luaL_checknumber(in_vm, in_index);
@@ -193,7 +193,7 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> Core::Vector4 ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<Core::Vector4>::value>::type*)
+            template <> Core::Vector4 ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
                 f32 x = (f32)luaL_checknumber(in_vm, in_index);
@@ -211,7 +211,7 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> Core::Colour ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<Core::Colour>::value>::type*)
+            template <> Core::Colour ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
                 f32 r = (f32)luaL_checknumber(in_vm, in_index);
@@ -229,7 +229,7 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> std::string ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<std::string>::value>::type*)
+            template <> std::string ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
                 return luaL_checkstring(in_vm, in_index);
@@ -239,7 +239,7 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            template <> const char* ReadValueFromVM(lua_State* in_vm, s32 in_index, typename std::enable_if<!std::is_enum<const char*>::value>::type*)
+            template <> const char* ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
 #ifdef CS_ENABLE_DEBUG
                 return luaL_checkstring(in_vm, in_index);
