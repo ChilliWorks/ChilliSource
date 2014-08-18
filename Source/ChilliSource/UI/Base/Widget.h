@@ -107,9 +107,8 @@ namespace ChilliSource
             ///
             /// @param Default property values
             /// @param Custom property values
-            /// @param Lua
             //----------------------------------------------------------------------------------------
-            Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties, const std::string& in_behaviourScript);
+            Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -401,6 +400,12 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
+            /// @return The first internal child widget with the given name. Note: this is not recursive
+            //----------------------------------------------------------------------------------------
+            Widget* GetInternalWidget(const std::string& in_name);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
             /// @return Parent widget of this widget or null
             //----------------------------------------------------------------------------------------
             Widget* GetParent();
@@ -602,6 +607,14 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetPropertyLinks(std::unordered_map<std::string, IPropertyAccessorUPtr>&& in_defaultLinks, std::unordered_map<std::string, std::pair<Widget*, std::string>>&& in_customLinks);
             //----------------------------------------------------------------------------------------
+            /// Sets the Lua script that controls the behaviour of this widget
+            ///
+            /// @author S Downie
+            ///
+            /// @param Lua script
+            //----------------------------------------------------------------------------------------
+            void SetBehaviourScript(const std::string& in_behaviourScript);
+            //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
             ///
@@ -615,12 +628,6 @@ namespace ChilliSource
             /// @param Widget to add
             //----------------------------------------------------------------------------------------
             void AddInternalWidget(const WidgetSPtr& in_widget);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The first internal child widget with the given name. Note: this is not recursive
-            //----------------------------------------------------------------------------------------
-            Widget* GetInternalWidget(const std::string& in_name);
             //----------------------------------------------------------------------------------------
             /// Set the layout that handles how to layout the widget's internal subviews. If this is null then the
             /// subviews will retain their current size and position. Otherwise the size and position may

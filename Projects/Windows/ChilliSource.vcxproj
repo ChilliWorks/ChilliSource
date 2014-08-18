@@ -194,6 +194,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDefProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetParserUtils.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetProxy.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableType.cpp" />
@@ -485,6 +486,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetHierarchyDesc.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetParserUtils.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetProxy.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable.h" />

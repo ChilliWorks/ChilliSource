@@ -19,10 +19,10 @@ end
 
 rotateDir = 1
 function onUpdate(timeSinceLastUpdate)
-	rotation = Widget.getFinalRotation()
+	rotation = Widget.getFinalRotation(thisWidget)
 
 	if rotation > 3.141 or rotation < -3.141 then
 		rotateDir = -rotateDir
 	end
-    Widget.rotateBy(timeSinceLastUpdate * rotateDir)
+    Widget.rotateBy(thisWidget, timeSinceLastUpdate * rotateDir)
 end

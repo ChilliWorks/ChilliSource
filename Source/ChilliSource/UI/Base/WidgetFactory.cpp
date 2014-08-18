@@ -183,7 +183,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         WidgetUPtr WidgetFactory::CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc, const std::string& in_behaviourScript) const
         {
-            WidgetUPtr widget(new Widget(in_hierarchyDesc.m_defaultProperties, in_hierarchyDesc.m_customProperties, in_behaviourScript));
+            WidgetUPtr widget(new Widget(in_hierarchyDesc.m_defaultProperties, in_hierarchyDesc.m_customProperties));
             
             if(in_hierarchyDesc.m_defaultProperties.HasProperty("Layout") == true)
             {
@@ -296,6 +296,7 @@ namespace ChilliSource
             }
             
             widget->SetPropertyLinks(std::move(defaultPropertyLinks), std::move(customPropertyLinks));
+            widget->SetBehaviourScript(in_behaviourScript);
             
             return widget;
         }

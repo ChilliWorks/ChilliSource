@@ -747,6 +747,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Lua\Base\LuaUtils.cpp">
       <Filter>ChilliSource\Lua</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetProxy.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
@@ -1636,6 +1639,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Lua\Base\LuaUtils.h">
       <Filter>ChilliSource\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetProxy.h">
+      <Filter>ChilliSource\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

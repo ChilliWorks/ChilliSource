@@ -33,6 +33,7 @@
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+#include <ChilliSource/UI/Base/WidgetProxy.h>
 
 namespace ChilliSource
 {
@@ -198,80 +199,12 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Widget::Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties, const std::string& in_behaviourScript)
+        Widget::Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties)
         {
             SetDefaultProperties(in_defaultProperties);
             SetCustomProperties(in_customProperties);
             
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
-            
-            if(in_behaviourScript.empty() == false)
-            {
-                m_behaviourScript = Lua::LuaScript::Create(in_behaviourScript);
-                
-                m_behaviourScript->RegisterEnum("SizePolicy",
-                                                "none", SizePolicy::k_none,
-                                                "usePreferredSize", SizePolicy::k_usePreferredSize,
-                                                "fillMaintainingAspect", SizePolicy::k_fillMaintainingAspect,
-                                                "fitMaintainingAspect", SizePolicy::k_fitMaintainingAspect,
-                                                "useWidthMaintainingAspect", SizePolicy::k_useWidthMaintainingAspect,
-                                                "useHeightMaintainingAspect", SizePolicy::k_useHeightMaintainingAspect
-                                                );
-                
-                m_behaviourScript->RegisterEnum("Anchor",
-                                                "topLeft", Rendering::AlignmentAnchor::k_topLeft,
-                                                "topRight", Rendering::AlignmentAnchor::k_topRight,
-                                                "topCentre", Rendering::AlignmentAnchor::k_topCentre,
-                                                "middleLeft", Rendering::AlignmentAnchor::k_middleLeft,
-                                                "middleRight", Rendering::AlignmentAnchor::k_middleRight,
-                                                "middleCentre", Rendering::AlignmentAnchor::k_middleCentre,
-                                                "bottomLeft", Rendering::AlignmentAnchor::k_bottomLeft,
-                                                "bottomRight", Rendering::AlignmentAnchor::k_bottomRight,
-                                                "bottomCentre", Rendering::AlignmentAnchor::k_bottomCentre
-                                                );
-                
-                m_behaviourScript->RegisterClass("Widget", this,
-                                                 "setName", &Widget::SetName,
-                                                 "setRelativePosition", &Widget::SetRelativePosition,
-                                                 "setAbsolutePosition", &Widget::SetAbsolutePosition,
-                                                 "setRelativeSize", &Widget::SetRelativeSize,
-                                                 "setAbsoluteSize", &Widget::SetAbsoluteSize,
-                                                 "relativeMoveBy", &Widget::RelativeMoveBy,
-                                                 "absoluteMoveBy", &Widget::AbsoluteMoveBy,
-                                                 "getLocalAbsolutePosition", &Widget::GetLocalAbsolutePosition,
-                                                 "getLocalRelativePosition", &Widget::GetLocalRelativePosition,
-                                                 "getFinalPosition", &Widget::GetFinalPosition,
-                                                 "scaleBy", &Widget::ScaleBy,
-                                                 "scaleTo", &Widget::ScaleTo,
-                                                 "getLocalScale", &Widget::GetLocalScale,
-                                                 "getFinalScale", &Widget::GetFinalScale,
-                                                 "rotateTo", &Widget::RotateTo,
-                                                 "rotateBy", &Widget::RotateBy,
-                                                 "getLocalRotation", &Widget::GetLocalRotation,
-                                                 "getFinalRotation", &Widget::GetFinalRotation,
-                                                 "setColour", &Widget::SetColour,
-                                                 "getLocalColour", &Widget::GetLocalColour,
-                                                 "getFinalColour", &Widget::GetFinalColour,
-                                                 "setVisible", &Widget::SetVisible,
-                                                 "isVisible", &Widget::IsVisible,
-                                                 "bringToFront", &Widget::BringToFront,
-                                                 "bringForward", &Widget::BringForward,
-                                                 "sendToBack", &Widget::SendToBack,
-                                                 "sendBackward", &Widget::SendBackward,
-                                                 "setSizePolicy", &Widget::SetSizePolicy,
-                                                 "getSizePolicy", &Widget::GetSizePolicy,
-                                                 "setOriginAnchor", &Widget::SetOriginAnchor,
-                                                 "getOriginAnchor", &Widget::GetOriginAnchor,
-                                                 "setParentalAnchor", &Widget::SetParentalAnchor,
-                                                 "getParentalAnchor", &Widget::GetParentalAnchor
-                                                 );
-                
-                m_behaviourScript->RegisterClass("Screen", m_screen,
-                                                 "getResolution", &Core::Screen::GetResolution
-                                                 );
-                
-                m_behaviourScript->Run();
-            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -310,6 +243,81 @@ namespace ChilliSource
         {
             m_defaultPropertyLinks = std::move(in_defaultLinks);
             m_customPropertyLinks = std::move(in_customLinks);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetBehaviourScript(const std::string& in_behaviourScript)
+        {
+            if(in_behaviourScript.empty() == false)
+            {
+                m_behaviourScript = Lua::LuaScript::Create(in_behaviourScript);
+                
+                m_behaviourScript->RegisterEnum("SizePolicy",
+                                                "none", SizePolicy::k_none,
+                                                "usePreferredSize", SizePolicy::k_usePreferredSize,
+                                                "fillMaintainingAspect", SizePolicy::k_fillMaintainingAspect,
+                                                "fitMaintainingAspect", SizePolicy::k_fitMaintainingAspect,
+                                                "useWidthMaintainingAspect", SizePolicy::k_useWidthMaintainingAspect,
+                                                "useHeightMaintainingAspect", SizePolicy::k_useHeightMaintainingAspect
+                                                );
+                
+                m_behaviourScript->RegisterEnum("Anchor",
+                                                "topLeft", Rendering::AlignmentAnchor::k_topLeft,
+                                                "topRight", Rendering::AlignmentAnchor::k_topRight,
+                                                "topCentre", Rendering::AlignmentAnchor::k_topCentre,
+                                                "middleLeft", Rendering::AlignmentAnchor::k_middleLeft,
+                                                "middleRight", Rendering::AlignmentAnchor::k_middleRight,
+                                                "middleCentre", Rendering::AlignmentAnchor::k_middleCentre,
+                                                "bottomLeft", Rendering::AlignmentAnchor::k_bottomLeft,
+                                                "bottomRight", Rendering::AlignmentAnchor::k_bottomRight,
+                                                "bottomCentre", Rendering::AlignmentAnchor::k_bottomCentre
+                                                );
+                
+                m_behaviourScript->RegisterStaticClass("Widget",
+                                                       "setName", &WidgetProxy::SetName,
+                                                       "setRelativePosition", &WidgetProxy::SetRelativePosition,
+                                                       "setAbsolutePosition", &WidgetProxy::SetAbsolutePosition,
+                                                       "setRelativeSize", &WidgetProxy::SetRelativeSize,
+                                                       "setAbsoluteSize", &WidgetProxy::SetAbsoluteSize,
+                                                       "relativeMoveBy", &WidgetProxy::RelativeMoveBy,
+                                                       "absoluteMoveBy", &WidgetProxy::AbsoluteMoveBy,
+                                                       "getLocalAbsolutePosition", &WidgetProxy::GetLocalAbsolutePosition,
+                                                       "getLocalRelativePosition", &WidgetProxy::GetLocalRelativePosition,
+                                                       "getFinalPosition", &WidgetProxy::GetFinalPosition,
+                                                       "scaleBy", &WidgetProxy::ScaleBy,
+                                                       "scaleTo", &WidgetProxy::ScaleTo,
+                                                       "getLocalScale", &WidgetProxy::GetLocalScale,
+                                                       "getFinalScale", &WidgetProxy::GetFinalScale,
+                                                       "rotateTo", &WidgetProxy::RotateTo,
+                                                       "rotateBy", &WidgetProxy::RotateBy,
+                                                       "getLocalRotation", &WidgetProxy::GetLocalRotation,
+                                                       "getFinalRotation", &WidgetProxy::GetFinalRotation,
+                                                       "setColour", &WidgetProxy::SetColour,
+                                                       "getLocalColour", &WidgetProxy::GetLocalColour,
+                                                       "getFinalColour", &WidgetProxy::GetFinalColour,
+                                                       "setVisible", &WidgetProxy::SetVisible,
+                                                       "isVisible", &WidgetProxy::IsVisible,
+                                                       "bringToFront", &WidgetProxy::BringToFront,
+                                                       "bringForward", &WidgetProxy::BringForward,
+                                                       "sendToBack", &WidgetProxy::SendToBack,
+                                                       "sendBackward", &WidgetProxy::SendBackward,
+                                                       "setSizePolicy", &WidgetProxy::SetSizePolicy,
+                                                       "getSizePolicy", &WidgetProxy::GetSizePolicy,
+                                                       "setOriginAnchor", &WidgetProxy::SetOriginAnchor,
+                                                       "getOriginAnchor", &WidgetProxy::GetOriginAnchor,
+                                                       "setParentalAnchor", &WidgetProxy::SetParentalAnchor,
+                                                       "getParentalAnchor", &WidgetProxy::GetParentalAnchor,
+                                                       "getInternalWidget", &WidgetProxy::GetInternalWidget
+                                                       );
+                
+                m_behaviourScript->RegisterVariable("thisWidget", this);
+                
+                m_behaviourScript->RegisterClass("Screen", m_screen,
+                                                 "getResolution", &Core::Screen::GetResolution
+                                                 );
+                
+                m_behaviourScript->Run();
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

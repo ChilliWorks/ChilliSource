@@ -278,6 +278,7 @@
 		81E3E3751986B0CA0002A9FD /* DrawableType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E3E3741986B0CA0002A9FD /* DrawableType.cpp */; };
 		81E3E3771986B3E60002A9FD /* LayoutType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E3E3761986B3E60002A9FD /* LayoutType.cpp */; };
 		81E3E37A19878E6B0002A9FD /* PropertyMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E3E37819878E6B0002A9FD /* PropertyMap.cpp */; };
+		81E4CCBF19A23DC70079DC15 /* WidgetProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E4CCBD19A23DC70079DC15 /* WidgetProxy.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -935,6 +936,8 @@
 		81E3E3761986B3E60002A9FD /* LayoutType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutType.cpp; sourceTree = "<group>"; };
 		81E3E37819878E6B0002A9FD /* PropertyMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyMap.cpp; sourceTree = "<group>"; };
 		81E3E37919878E6B0002A9FD /* PropertyMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyMap.h; sourceTree = "<group>"; };
+		81E4CCBD19A23DC70079DC15 /* WidgetProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetProxy.cpp; sourceTree = "<group>"; };
+		81E4CCBE19A23DC70079DC15 /* WidgetProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetProxy.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1045,6 +1048,8 @@
 				8167081B1988F3DD00A1DE32 /* WidgetHierarchyDesc.h */,
 				8167081C198941A500A1DE32 /* WidgetParserUtils.cpp */,
 				8167081D198941A500A1DE32 /* WidgetParserUtils.h */,
+				81E4CCBD19A23DC70079DC15 /* WidgetProxy.cpp */,
+				81E4CCBE19A23DC70079DC15 /* WidgetProxy.h */,
 				816708151988DD3C00A1DE32 /* WidgetTemplate.cpp */,
 				816708161988DD3C00A1DE32 /* WidgetTemplate.h */,
 				816708171988DD3C00A1DE32 /* WidgetTemplateProvider.cpp */,
@@ -2662,6 +2667,7 @@
 				81D8B69E1962E0F70010DA84 /* Device.mm in Sources */,
 				81496B9F19814B05004E79F2 /* NinePatchDrawable.cpp in Sources */,
 				81D8B4321962E0EC0010DA84 /* StringParser.cpp in Sources */,
+				81E4CCBF19A23DC70079DC15 /* WidgetProxy.cpp in Sources */,
 				81D8B4A71962E0EC0010DA84 /* Subtitles.cpp in Sources */,
 				81D8B40F1962E0EC0010DA84 /* Component.cpp in Sources */,
 				81D8B44D1962E0EC0010DA84 /* HorizontalStretchableImage.cpp in Sources */,

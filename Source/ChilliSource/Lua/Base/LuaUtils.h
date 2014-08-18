@@ -117,6 +117,7 @@ namespace ChilliSource
             template <typename TArg> void PushValueToVM(lua_State* in_vm, TArg&& in_arg)
             {
                 static_assert(std::is_pointer<TArg>::value, "Lua type not supported");
+                lua_pushlightuserdata(in_vm, (void*)in_arg);
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
@@ -167,7 +168,7 @@ namespace ChilliSource
             template <typename TResult> TResult ReadValueFromVM(lua_State* in_vm, s32 in_index)
             {
                 static_assert(std::is_pointer<TResult>::value, "Lua type not supported");
-                return TResult();
+                return (TResult)lua_topointer(in_vm, in_index);
             }
             //---------------------------------------------------------
             //---------------------------------------------------------

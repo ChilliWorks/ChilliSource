@@ -1,5 +1,7 @@
 screenWidth, screenHeight = Screen.getResolution()
 
+sliderWidget = Widget.getInternalWidget(thisWidget, "Slider")
+
 function onPointerDown()
     io.write("HorizontalSliderBar: Pointer down\n")
 end
@@ -16,13 +18,13 @@ end
 
 moveDir = -1
 function onUpdate(in_timeSinceLastUpdate)
-    x, y = Widget.getLocalAbsolutePosition();
+    x, y = Widget.getLocalAbsolutePosition(sliderWidget);
     
     if x > screenWidth * 0.5 or x < -screenWidth * 0.5 then
         moveDir = -moveDir;
     end
 
-    Widget.absoluteMoveBy(in_timeSinceLastUpdate * 100 * moveDir, 0)
+    Widget.absoluteMoveBy(sliderWidget, in_timeSinceLastUpdate * 100 * moveDir, 0)
 end
 
 
