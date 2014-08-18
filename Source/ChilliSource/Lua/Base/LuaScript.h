@@ -187,7 +187,7 @@ namespace ChilliSource
             template <typename TVariable>
             void RegisterVariable(const char* in_name, TVariable* in_variable)
             {
-                LuaUtils::PushValueToVM(m_luaVM, static_cast<typename std::decay<TVariable*>::type>(in_variable));
+                LuaUtils::PushValueToVM(m_luaVM, std::forward<TVariable*>(in_variable));
                 lua_setglobal(m_luaVM, in_name);
             }
             //----------------------------------------------------
