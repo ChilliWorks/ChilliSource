@@ -214,7 +214,7 @@ static void buffreplace (LexState *ls, char from, char to) {
 */
 static void trydecpoint (LexState *ls, SemInfo *seminfo) {
   char old = ls->decpoint;
-  ls->decpoint = getlocaledecpoint();
+  //ls->decpoint = getlocaledecpoint();
   buffreplace(ls, old, ls->decpoint);  /* try new decimal separator */
   if (!buff2d(ls->buff, &seminfo->r)) {
     /* format error with correct decimal point: no more options */
