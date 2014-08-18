@@ -38,6 +38,49 @@ namespace ChilliSource
         {
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
+            void RegisterWithLuaScript(Lua::LuaScript* in_script)
+            {
+                in_script->RegisterStaticClass("Widget",
+                                               "setName", &WidgetProxy::SetName,
+                                               "setRelativePosition", &WidgetProxy::SetRelativePosition,
+                                               "setAbsolutePosition", &WidgetProxy::SetAbsolutePosition,
+                                               "setRelativeSize", &WidgetProxy::SetRelativeSize,
+                                               "setAbsoluteSize", &WidgetProxy::SetAbsoluteSize,
+                                               "relativeMoveBy", &WidgetProxy::RelativeMoveBy,
+                                               "absoluteMoveBy", &WidgetProxy::AbsoluteMoveBy,
+                                               "getLocalAbsolutePosition", &WidgetProxy::GetLocalAbsolutePosition,
+                                               "getLocalRelativePosition", &WidgetProxy::GetLocalRelativePosition,
+                                               "getFinalPosition", &WidgetProxy::GetFinalPosition,
+                                               "scaleBy", &WidgetProxy::ScaleBy,
+                                               "scaleTo", &WidgetProxy::ScaleTo,
+                                               "getLocalScale", &WidgetProxy::GetLocalScale,
+                                               "getFinalScale", &WidgetProxy::GetFinalScale,
+                                               "rotateTo", &WidgetProxy::RotateTo,
+                                               "rotateBy", &WidgetProxy::RotateBy,
+                                               "getLocalRotation", &WidgetProxy::GetLocalRotation,
+                                               "getFinalRotation", &WidgetProxy::GetFinalRotation,
+                                               "setColour", &WidgetProxy::SetColour,
+                                               "getLocalColour", &WidgetProxy::GetLocalColour,
+                                               "getFinalColour", &WidgetProxy::GetFinalColour,
+                                               "setVisible", &WidgetProxy::SetVisible,
+                                               "isVisible", &WidgetProxy::IsVisible,
+                                               "bringToFront", &WidgetProxy::BringToFront,
+                                               "bringForward", &WidgetProxy::BringForward,
+                                               "sendToBack", &WidgetProxy::SendToBack,
+                                               "sendBackward", &WidgetProxy::SendBackward,
+                                               "setSizePolicy", &WidgetProxy::SetSizePolicy,
+                                               "getSizePolicy", &WidgetProxy::GetSizePolicy,
+                                               "setOriginAnchor", &WidgetProxy::SetOriginAnchor,
+                                               "getOriginAnchor", &WidgetProxy::GetOriginAnchor,
+                                               "setParentalAnchor", &WidgetProxy::SetParentalAnchor,
+                                               "getParentalAnchor", &WidgetProxy::GetParentalAnchor,
+                                               "getInternalWidget", &WidgetProxy::GetInternalWidget,
+                                               "getWidget", &WidgetProxy::GetWidget,
+                                               "getDrawable", &WidgetProxy::GetDrawable
+                                               );
+            }
+            //----------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------
             void SetName(Widget* in_widget, const std::string& in_name)
             {
                 in_widget->SetName(in_name);
@@ -47,6 +90,12 @@ namespace ChilliSource
             const std::string& GetName(Widget* in_widget)
             {
                 return in_widget->GetName();
+            }
+            //----------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------
+            IDrawable* GetDrawable(Widget* in_widget)
+            {
+                return in_widget->GetDrawable();
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------

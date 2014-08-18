@@ -34,6 +34,9 @@
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/UI/Base/WidgetProxy.h>
+#include <ChilliSource/UI/Drawable/NinePatchDrawableProxy.h>
+#include <ChilliSource/UI/Drawable/TextureDrawableProxy.h>
+#include <ChilliSource/UI/Drawable/ThreePatchDrawableProxy.h>
 
 namespace ChilliSource
 {
@@ -273,45 +276,13 @@ namespace ChilliSource
                                                 "bottomCentre", Rendering::AlignmentAnchor::k_bottomCentre
                                                 );
                 
-                m_behaviourScript->RegisterStaticClass("Widget",
-                                                       "setName", &WidgetProxy::SetName,
-                                                       "setRelativePosition", &WidgetProxy::SetRelativePosition,
-                                                       "setAbsolutePosition", &WidgetProxy::SetAbsolutePosition,
-                                                       "setRelativeSize", &WidgetProxy::SetRelativeSize,
-                                                       "setAbsoluteSize", &WidgetProxy::SetAbsoluteSize,
-                                                       "relativeMoveBy", &WidgetProxy::RelativeMoveBy,
-                                                       "absoluteMoveBy", &WidgetProxy::AbsoluteMoveBy,
-                                                       "getLocalAbsolutePosition", &WidgetProxy::GetLocalAbsolutePosition,
-                                                       "getLocalRelativePosition", &WidgetProxy::GetLocalRelativePosition,
-                                                       "getFinalPosition", &WidgetProxy::GetFinalPosition,
-                                                       "scaleBy", &WidgetProxy::ScaleBy,
-                                                       "scaleTo", &WidgetProxy::ScaleTo,
-                                                       "getLocalScale", &WidgetProxy::GetLocalScale,
-                                                       "getFinalScale", &WidgetProxy::GetFinalScale,
-                                                       "rotateTo", &WidgetProxy::RotateTo,
-                                                       "rotateBy", &WidgetProxy::RotateBy,
-                                                       "getLocalRotation", &WidgetProxy::GetLocalRotation,
-                                                       "getFinalRotation", &WidgetProxy::GetFinalRotation,
-                                                       "setColour", &WidgetProxy::SetColour,
-                                                       "getLocalColour", &WidgetProxy::GetLocalColour,
-                                                       "getFinalColour", &WidgetProxy::GetFinalColour,
-                                                       "setVisible", &WidgetProxy::SetVisible,
-                                                       "isVisible", &WidgetProxy::IsVisible,
-                                                       "bringToFront", &WidgetProxy::BringToFront,
-                                                       "bringForward", &WidgetProxy::BringForward,
-                                                       "sendToBack", &WidgetProxy::SendToBack,
-                                                       "sendBackward", &WidgetProxy::SendBackward,
-                                                       "setSizePolicy", &WidgetProxy::SetSizePolicy,
-                                                       "getSizePolicy", &WidgetProxy::GetSizePolicy,
-                                                       "setOriginAnchor", &WidgetProxy::SetOriginAnchor,
-                                                       "getOriginAnchor", &WidgetProxy::GetOriginAnchor,
-                                                       "setParentalAnchor", &WidgetProxy::SetParentalAnchor,
-                                                       "getParentalAnchor", &WidgetProxy::GetParentalAnchor,
-                                                       "getInternalWidget", &WidgetProxy::GetInternalWidget
-                                                       );
+                WidgetProxy::RegisterWithLuaScript(m_behaviourScript.get());
+                TextureDrawableProxy::RegisterWithLuaScript(m_behaviourScript.get());
+                NinePatchDrawableProxy::RegisterWithLuaScript(m_behaviourScript.get());
+                ThreePatchDrawableProxy::RegisterWithLuaScript(m_behaviourScript.get());
                 
                 m_behaviourScript->RegisterVariable("thisWidget", this);
-                
+
                 m_behaviourScript->RegisterClass("Screen", m_screen,
                                                  "getResolution", &Core::Screen::GetResolution
                                                  );
@@ -326,6 +297,12 @@ namespace ChilliSource
             m_drawable = std::move(in_drawable);
             
             InvalidateTransformCache();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        IDrawable* Widget::GetDrawable() const
+        {
+            return m_drawable.get();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

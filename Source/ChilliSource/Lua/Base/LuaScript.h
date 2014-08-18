@@ -47,7 +47,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
 		//-----------------------------------------------------------
-		class LuaScript
+		class LuaScript final
 		{
 		public:
             

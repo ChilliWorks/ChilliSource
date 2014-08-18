@@ -43,7 +43,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //--------------------------------------------------------
-        template <s32 TNumResults, typename TResult, typename...TArgs>  class LuaClassFunction : public ILuaFunction
+        template <s32 TNumResults, typename TResult, typename...TArgs>  class LuaClassFunction final : public ILuaFunction
         {
         public:
             using FuncType = std::function<TResult(TArgs...)>;

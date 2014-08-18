@@ -42,7 +42,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //--------------------------------------------------------
-        template <s32 TNumResults, typename TResult, typename...TArgs> class LuaFunction : public ILuaFunction
+        template <s32 TNumResults, typename TResult, typename...TArgs> class LuaFunction final : public ILuaFunction
         {
         public:
             

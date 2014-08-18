@@ -750,6 +750,15 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetProxy.cpp">
       <Filter>ChilliSource\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableProxy.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\TextureDrawableProxy.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableProxy.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
@@ -1641,6 +1650,15 @@
       <Filter>ChilliSource\Lua</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetProxy.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableProxy.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\TextureDrawableProxy.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableProxy.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
   </ItemGroup>

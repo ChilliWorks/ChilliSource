@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/UI/Drawable/DrawableType.h>
 
 #include <array>
 
@@ -269,6 +270,12 @@ namespace ChilliSource
         std::vector<PropertyMap::PropertyDesc> NinePatchDrawable::GetPropertyDescs()
         {
             return k_propertyDescs;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        DrawableType NinePatchDrawable::GetType() const
+        {
+            return DrawableType::k_ninePatch;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

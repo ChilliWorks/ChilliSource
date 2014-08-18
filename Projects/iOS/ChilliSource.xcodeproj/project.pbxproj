@@ -279,6 +279,9 @@
 		81E3E3771986B3E60002A9FD /* LayoutType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E3E3761986B3E60002A9FD /* LayoutType.cpp */; };
 		81E3E37A19878E6B0002A9FD /* PropertyMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E3E37819878E6B0002A9FD /* PropertyMap.cpp */; };
 		81E4CCBF19A23DC70079DC15 /* WidgetProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E4CCBD19A23DC70079DC15 /* WidgetProxy.cpp */; };
+		81E4CCC619A24ACD0079DC15 /* NinePatchDrawableProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E4CCC019A24ACD0079DC15 /* NinePatchDrawableProxy.cpp */; };
+		81E4CCC719A24ACD0079DC15 /* TextureDrawableProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E4CCC219A24ACD0079DC15 /* TextureDrawableProxy.cpp */; };
+		81E4CCC819A24ACD0079DC15 /* ThreePatchDrawableProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E4CCC419A24ACD0079DC15 /* ThreePatchDrawableProxy.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -938,6 +941,12 @@
 		81E3E37919878E6B0002A9FD /* PropertyMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyMap.h; sourceTree = "<group>"; };
 		81E4CCBD19A23DC70079DC15 /* WidgetProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetProxy.cpp; sourceTree = "<group>"; };
 		81E4CCBE19A23DC70079DC15 /* WidgetProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetProxy.h; sourceTree = "<group>"; };
+		81E4CCC019A24ACD0079DC15 /* NinePatchDrawableProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NinePatchDrawableProxy.cpp; sourceTree = "<group>"; };
+		81E4CCC119A24ACD0079DC15 /* NinePatchDrawableProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NinePatchDrawableProxy.h; sourceTree = "<group>"; };
+		81E4CCC219A24ACD0079DC15 /* TextureDrawableProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureDrawableProxy.cpp; sourceTree = "<group>"; };
+		81E4CCC319A24ACD0079DC15 /* TextureDrawableProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureDrawableProxy.h; sourceTree = "<group>"; };
+		81E4CCC419A24ACD0079DC15 /* ThreePatchDrawableProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreePatchDrawableProxy.cpp; sourceTree = "<group>"; };
+		81E4CCC519A24ACD0079DC15 /* ThreePatchDrawableProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreePatchDrawableProxy.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1067,10 +1076,16 @@
 				81496B861980F1AE004E79F2 /* IDrawable.h */,
 				81496B9B19814B05004E79F2 /* NinePatchDrawable.cpp */,
 				81496B9C19814B05004E79F2 /* NinePatchDrawable.h */,
+				81E4CCC019A24ACD0079DC15 /* NinePatchDrawableProxy.cpp */,
+				81E4CCC119A24ACD0079DC15 /* NinePatchDrawableProxy.h */,
 				81496B871980F1AE004E79F2 /* TextureDrawable.cpp */,
 				81496B881980F1AE004E79F2 /* TextureDrawable.h */,
+				81E4CCC219A24ACD0079DC15 /* TextureDrawableProxy.cpp */,
+				81E4CCC319A24ACD0079DC15 /* TextureDrawableProxy.h */,
 				81496B9D19814B05004E79F2 /* ThreePatchDrawable.cpp */,
 				81496B9E19814B05004E79F2 /* ThreePatchDrawable.h */,
+				81E4CCC419A24ACD0079DC15 /* ThreePatchDrawableProxy.cpp */,
+				81E4CCC519A24ACD0079DC15 /* ThreePatchDrawableProxy.h */,
 			);
 			path = Drawable;
 			sourceTree = "<group>";
@@ -2657,6 +2672,7 @@
 				81D8B4001962E0EC0010DA84 /* ColourUtils.cpp in Sources */,
 				81D8B6B81962E0F70010DA84 /* FacebookUtils.mm in Sources */,
 				81D8B6BE1962E0F70010DA84 /* WebViewDelegate.mm in Sources */,
+				81E4CCC819A24ACD0079DC15 /* ThreePatchDrawableProxy.cpp in Sources */,
 				81D8B4A01962E0EC0010DA84 /* TextureProvider.cpp in Sources */,
 				81D8B4A21962E0EC0010DA84 /* UVs.cpp in Sources */,
 				81D8B42D1962E0EC0010DA84 /* ResourcePool.cpp in Sources */,
@@ -2756,6 +2772,7 @@
 				81D8B44A1962E0EC0010DA84 /* HorizontalList.cpp in Sources */,
 				81D8B4561962E0EC0010DA84 /* HorizontalProgressBar.cpp in Sources */,
 				81D8B4101962E0EC0010DA84 /* Entity.cpp in Sources */,
+				81E4CCC619A24ACD0079DC15 /* NinePatchDrawableProxy.cpp in Sources */,
 				81D8B4661962E0EC0010DA84 /* AspectRatioUtils.cpp in Sources */,
 				81D8B4821962E0EC0010DA84 /* MeshDescriptor.cpp in Sources */,
 				81D8B4751962E0EC0010DA84 /* Font.cpp in Sources */,
@@ -2799,6 +2816,7 @@
 				81D8B6B01962E0F70010DA84 /* HttpRequestSystem.cpp in Sources */,
 				81D8B6D51962E0F70010DA84 /* Shader.cpp in Sources */,
 				81D8B4231962E0EC0010DA84 /* UnifiedCoordinates.cpp in Sources */,
+				81E4CCC719A24ACD0079DC15 /* TextureDrawableProxy.cpp in Sources */,
 				81D8B4901962E0EC0010DA84 /* ParticleEmitterFactory.cpp in Sources */,
 				81D8B6D11962E0F70010DA84 /* RenderCapabilities.cpp in Sources */,
 				8133F0BC199BABDF004AAB40 /* LuaUtils.cpp in Sources */,

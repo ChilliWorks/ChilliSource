@@ -45,10 +45,19 @@ namespace ChilliSource
         namespace WidgetProxy
         {
             //----------------------------------------------------------------------------------------
+            /// Register all the proxy functions with the given Lua script
+            ///
+            /// @author S Downie
+            ///
+            /// @param Lua script
+            //----------------------------------------------------------------------------------------
+            void RegisterWithLuaScript(Lua::LuaScript* in_script);
+            //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
             /// @author S Downie
             ///
+            /// @param Widget on which to operate
             /// @param Name of widget
             //----------------------------------------------------------------------------------------
             void SetName(Widget* in_widget, const std::string& in_name);
@@ -57,9 +66,21 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
+            /// @param Widget on which to operate
+            ///
             /// @return Name of widget
             //----------------------------------------------------------------------------------------
             const std::string& GetName(Widget* in_widget);
+            //----------------------------------------------------------------------------------------
+            /// Proxy function to allow calling on an instance from Lua script
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget on which to operate
+            ///
+            /// @return Drawable or null
+            //----------------------------------------------------------------------------------------
+            IDrawable* GetDrawable(Widget* in_widget);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
@@ -67,6 +88,8 @@ namespace ChilliSource
             /// make the widget half the width of the parent and half the height
             ///
             /// @author S Downie
+            ///
+            /// @param Widget on which to operate
             ///
             /// @param Percentage size of parent (0.0 - 1.0, 0.0 - 1.0)
             //----------------------------------------------------------------------------------------

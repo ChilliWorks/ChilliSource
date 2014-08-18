@@ -32,6 +32,7 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 namespace ChilliSource
 {
@@ -101,6 +102,15 @@ namespace ChilliSource
                 lua_pushnumber(in_vm, in_arg.g);
                 lua_pushnumber(in_vm, in_arg.b);
                 lua_pushnumber(in_vm, in_arg.a);
+            }
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            void PushValueToVM(lua_State* in_vm, Rendering::UVs&& in_arg)
+            {
+                lua_pushnumber(in_vm, in_arg.m_u);
+                lua_pushnumber(in_vm, in_arg.m_v);
+                lua_pushnumber(in_vm, in_arg.m_s);
+                lua_pushnumber(in_vm, in_arg.m_t);
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
@@ -226,6 +236,24 @@ namespace ChilliSource
 #endif
                 
                 return Core::Colour(r, g, b, a);
+            }
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> Rendering::UVs ReadValueFromVM(lua_State* in_vm, s32 in_index)
+            {
+#ifdef CS_ENABLE_DEBUG
+                f32 u = (f32)luaL_checknumber(in_vm, in_index);
+                f32 v = (f32)luaL_checknumber(in_vm, in_index+1);
+                f32 s = (f32)luaL_checknumber(in_vm, in_index+2);
+                f32 t = (f32)luaL_checknumber(in_vm, in_index+3);
+#else
+                f32 u = (f32)lua_tonumber(in_vm, in_index);
+                f32 v = (f32)lua_tonumber(in_vm, in_index+1);
+                f32 s = (f32)lua_tonumber(in_vm, in_index+2);
+                f32 t = (f32)lua_tonumber(in_vm, in_index+3);
+#endif
+                
+                return Rendering::UVs(u, v, s, t);
             }
             //---------------------------------------------------------
             //---------------------------------------------------------

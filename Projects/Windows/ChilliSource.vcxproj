@@ -200,8 +200,11 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableType.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableProxy.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\TextureDrawable.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\TextureDrawableProxy.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableProxy.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\ILayout.cpp" />
@@ -493,8 +496,11 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableType.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableProxy.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\TextureDrawable.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\TextureDrawableProxy.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableProxy.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.h" />

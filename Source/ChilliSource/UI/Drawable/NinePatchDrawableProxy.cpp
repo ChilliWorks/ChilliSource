@@ -1,7 +1,7 @@
 //
-//  IDrawble.h
+//  NinePatchDrawableProxy.cpp
 //  Chilli Source
-//  Created by Scott Downie on 17/04/2014.
+//  Created by Scott Downie on 18/08/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,72 +26,60 @@
 //  THE SOFTWARE.
 //
 
+#include <ChilliSource/UI/Drawable/NinePatchDrawableProxy.h>
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_IDRAWABLE_H_
-#define _CHILLISOURCE_UI_DRAWABLE_IDRAWABLE_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Lua/Base/LuaScript.h>
+#include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
-        //----------------------------------------------------------------------------------------
-        /// Interface for rendering widgets
-        ///
-        /// @author S Downie
-        //----------------------------------------------------------------------------------------
-        class IDrawable
+        namespace NinePatchDrawableProxy
         {
-        public:
-            CS_DECLARE_NOCOPY(IDrawable);
             //----------------------------------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
             //----------------------------------------------------------------------------------------
-            IDrawable() = default;
+            void RegisterWithLuaScript(Lua::LuaScript* in_script)
+            {
+                in_script->RegisterStaticClass("NinePatchDrawable",
+                                               "getType", NinePatchDrawableProxy::GetType,
+                                               //"setTexture", NinePatchDrawableProxy::SetTexture,
+                                               "setUVs", NinePatchDrawableProxy::SetUVs,
+                                               "setInsets", NinePatchDrawableProxy::SetInsets,
+                                               "getPreferredSize", NinePatchDrawableProxy::GetPreferredSize
+                                               );
+            }
             //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Drawable type
-            ///
-            /// @return The list of properties supported by the drawable of given type
             //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs(DrawableType in_type);
+            DrawableType GetType(NinePatchDrawable* in_drawable)
+            {
+                return in_drawable->GetType();
+            }
             //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The type of this drawable instance
             //----------------------------------------------------------------------------------------
-            virtual DrawableType GetType() const = 0;
+            void SetTexture(NinePatchDrawable* in_drawable, const Rendering::TextureCSPtr& in_texture)
+            {
+                in_drawable->SetTexture(in_texture);
+            }
             //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The preferred size that the drawable wishes to de drawn at. This is usually
-            /// based on an underlying image
             //----------------------------------------------------------------------------------------
-            virtual Core::Vector2 GetPreferredSize() const = 0;
+            void SetUVs(NinePatchDrawable* in_drawable, const Rendering::UVs& in_UVs)
+            {
+                in_drawable->SetUVs(in_UVs);
+            }
             //----------------------------------------------------------------------------------------
-            /// Render the widget using the canvas renderer
-            ///
-            /// @author S Downie
-            ///
-            /// @param Renderer
-            /// @param Absolute screen space transform
-            /// @param Asbolute screen size
-            /// @param Absolute colour
             //----------------------------------------------------------------------------------------
-            virtual void Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) = 0;
+            void SetInsets(NinePatchDrawable* in_drawable, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
+            {
+                in_drawable->SetInsets(in_left, in_right, in_top, in_bottom);
+            }
             //----------------------------------------------------------------------------------------
-            /// Virtual destructor
-            ///
-            /// @author S Downie
             //----------------------------------------------------------------------------------------
-            virtual ~IDrawable(){};
-        };
+            Core::Vector2 GetPreferredSize(NinePatchDrawable* in_drawable)
+            {
+                return in_drawable->GetPreferredSize();
+            }
+        }
     }
 }
-
-#endif

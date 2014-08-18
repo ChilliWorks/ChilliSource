@@ -125,6 +125,12 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetDrawable(IDrawableUPtr in_drawable);
             //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Drawable or null
+            //----------------------------------------------------------------------------------------
+            IDrawable* GetDrawable() const;
+            //----------------------------------------------------------------------------------------
             /// Set the layout that handles how to layout the widget's subviews. If this is null then the
             /// subviews will retain their current size and position. Otherwise the size and position may
             /// be manipulatd by the layout

@@ -34,6 +34,7 @@
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/UI/Drawable/DrawableType.h>
 
 namespace ChilliSource
 {
@@ -286,6 +287,12 @@ namespace ChilliSource
         std::vector<PropertyMap::PropertyDesc> ThreePatchDrawable::GetPropertyDescs()
         {
             return k_propertyDescs;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        DrawableType ThreePatchDrawable::GetType() const
+        {
+            return DrawableType::k_threePatch;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

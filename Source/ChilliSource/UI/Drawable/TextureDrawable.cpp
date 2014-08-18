@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/UI/Drawable/DrawableType.h>
 
 namespace ChilliSource
 {
@@ -70,6 +71,12 @@ namespace ChilliSource
         std::vector<PropertyMap::PropertyDesc> TextureDrawable::GetPropertyDescs()
         {
             return k_propertyDescs;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        DrawableType TextureDrawable::GetType() const
+        {
+            return DrawableType::k_texture;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

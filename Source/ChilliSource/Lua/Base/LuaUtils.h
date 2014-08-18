@@ -105,6 +105,12 @@ namespace ChilliSource
                 static const u32 value = 4;
             };
             //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> struct NumValues<Rendering::UVs>
+            {
+                static const u32 value = 4;
+            };
+            //---------------------------------------------------------
             /// Push the value to the Lua VM stack. This is specialised
             /// for each supported value type and will assert if
             /// unsupported type is used.
@@ -146,6 +152,9 @@ namespace ChilliSource
             //---------------------------------------------------------
             //---------------------------------------------------------
             void PushValueToVM(lua_State* in_vm, Core::Colour&& in_arg);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            void PushValueToVM(lua_State* in_vm, Rendering::UVs&& in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
             void PushValueToVM(lua_State* in_vm, std::string&& in_arg);
@@ -197,6 +206,9 @@ namespace ChilliSource
             //---------------------------------------------------------
             //---------------------------------------------------------
             template <> Core::Colour ReadValueFromVM(lua_State* in_vm, s32 in_index);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> Rendering::UVs ReadValueFromVM(lua_State* in_vm, s32 in_index);
             //---------------------------------------------------------
             //---------------------------------------------------------
             template <> std::string ReadValueFromVM(lua_State* in_vm, s32 in_index);

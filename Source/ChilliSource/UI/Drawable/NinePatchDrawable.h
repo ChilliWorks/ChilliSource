@@ -82,6 +82,12 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
             //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The type of this drawable instance
+            //----------------------------------------------------------------------------------------
+            DrawableType GetType() const override;
+            //----------------------------------------------------------------------------------------
             /// Set the texture that should be used in subsequent draws
             ///
             /// @author S Downie
