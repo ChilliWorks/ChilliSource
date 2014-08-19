@@ -1,5 +1,12 @@
 isDown = false
 
+function onAddedToCanvas()
+    drawable = Widget.getDrawable(thisWidget)
+    highlightLocation = Widget.getStorageLocationProperty(thisWidget, "HighlightTextureLocation")
+    highlightPath = Widget.getStringProperty(thisWidget, "HighlightTexturePath")
+    TextureDrawable.setTexture(drawable, highlightLocation, highlightPath)
+end
+
 function onPointerDown()
     io.write("HighlightButton: Pointer down\n")
     isDown = true
@@ -26,8 +33,7 @@ function onUpdate(timeSinceLastUpdate)
 	end
     Widget.rotateBy(thisWidget, timeSinceLastUpdate * rotateDir)
 
-    drawable = Widget.getDrawable(thisWidget)
-    highlightLocation = Widget.getStorageLocationProperty(thisWidget, "HighlightTextureLocation")
-    highlightPath = Widget.getStringProperty(thisWidget, "HighlightTexturePath")
-    TextureDrawable.setTexture(drawable, highlightLocation, highlightPath)
+end
+
+function onRemovedFromCanvas()
 end

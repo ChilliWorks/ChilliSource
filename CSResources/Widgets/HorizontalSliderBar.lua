@@ -1,4 +1,7 @@
-sliderWidget = Widget.getInternalWidget(thisWidget, "Slider")
+
+function onAddedToCanvas()
+    sliderWidget = Widget.getInternalWidget(thisWidget, "Slider")
+end
 
 function onPointerDown()
     io.write("HorizontalSliderBar: Pointer down\n")
@@ -21,8 +24,11 @@ function onUpdate(in_timeSinceLastUpdate)
     if x > 1.0  or x <= 0.0 then
         moveDir = -moveDir;
     end
-    
+
     Widget.relativeMoveBy(sliderWidget, in_timeSinceLastUpdate * 0.1 * moveDir, 0)
+end
+
+function onRemovedFromCanvas()
 end
 
 

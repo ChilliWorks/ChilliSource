@@ -709,6 +709,18 @@ namespace ChilliSource
             {
                 child->SetCanvas(m_canvas);
             }
+            
+            if(m_behaviourScript != nullptr)
+            {
+                if(m_canvas != nullptr)
+                {
+                    m_behaviourScript->CallFunction("onAddedToCanvas");
+                }
+                else
+                {
+                    m_behaviourScript->CallFunction("onRemovedFromCanvas");
+                }
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
