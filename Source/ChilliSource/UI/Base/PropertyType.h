@@ -53,6 +53,7 @@ namespace ChilliSource
             k_colour,
             k_alignmentAnchor,
             k_sizePolicy,
+            k_storageLocation,
             k_propertyMap
         };
         //----------------------------------------------------------------------------------------
@@ -65,6 +66,16 @@ namespace ChilliSource
         /// @return Property type
         //----------------------------------------------------------------------------------------
         PropertyType ParsePropertyType(const std::string& in_type);
+        //----------------------------------------------------------------------------------------
+        /// Return a default value encoded as a string for the given type
+        ///
+        /// @author S Downie
+        ///
+        /// @param Type
+        ///
+        /// @return Default
+        //----------------------------------------------------------------------------------------
+        const std::string& GetDefaultPropertyTypeValue(PropertyType in_type);
 	}
 }
 

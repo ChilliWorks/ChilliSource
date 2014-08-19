@@ -76,6 +76,8 @@ namespace ChilliSource
                         return PropertyMap::IPropertyUPtr(new PropertyMap::Property<PropertyMap>());
                     case PropertyType::k_sizePolicy:
                         return PropertyMap::IPropertyUPtr(new PropertyMap::Property<SizePolicy>());
+                    case PropertyType::k_storageLocation:
+                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::StorageLocation>());
                     case PropertyType::k_unknown:
                         return nullptr;
                 }
@@ -230,6 +232,9 @@ namespace ChilliSource
                 case PropertyType::k_sizePolicy:
                     SetProperty(in_name, ParseSizePolicy(in_value));
                     break;
+                case PropertyType::k_storageLocation:
+                    SetProperty(in_name, Core::ParseStorageLocation(in_value));
+                    break;
                 case PropertyType::k_propertyMap:
                 {
                     Json::Reader reader;
@@ -321,6 +326,12 @@ namespace ChilliSource
         template<> PropertyType PropertyMap::GetType<SizePolicy>() const
         {
             return PropertyType::k_sizePolicy;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<Core::StorageLocation>() const
+        {
+            return PropertyType::k_storageLocation;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

@@ -123,6 +123,7 @@ namespace ChilliSource
 					PropertyMap::PropertyDesc desc;
 					desc.m_type = ParsePropertyType((*it).asString());
 					desc.m_name = it.memberName();
+                    desc.m_value = GetDefaultPropertyTypeValue(desc.m_type);
 					descs.push_back(desc);
                 }
                 

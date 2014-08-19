@@ -34,6 +34,25 @@ namespace ChilliSource
 {
     namespace UI
     {
+        namespace
+        {
+            const std::string k_defaultValues[] =
+            {
+                "",
+                "false",
+                "0",
+                "0.0",
+                "",
+                "0 0",
+                "0 0 0",
+                "0 0 0 0",
+                "1 1 1 1",
+                "MiddleCentre",
+                "None",
+                "None",
+                "{}"
+            };
+        }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         PropertyType ParsePropertyType(const std::string& in_type)
@@ -49,12 +68,19 @@ namespace ChilliSource
             if(lowerCase == "vec3") return PropertyType::k_vec3;
             if(lowerCase == "vec4") return PropertyType::k_vec4;
             if(lowerCase == "sizepolicy") return PropertyType::k_sizePolicy;
+            if(lowerCase == "storagelocation") return PropertyType::k_storageLocation;
             if(lowerCase == "alignmentanchor") return PropertyType::k_alignmentAnchor;
             if(lowerCase == "colour") return PropertyType::k_colour;
             if(lowerCase == "propertymap") return PropertyType::k_propertyMap;
             
             CS_LOG_FATAL("Cannot parse property type: " + in_type);
             return PropertyType::k_unknown;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const std::string& GetDefaultPropertyTypeValue(PropertyType in_type)
+        {
+            return k_defaultValues[(u32)in_type];
         }
     }
 }

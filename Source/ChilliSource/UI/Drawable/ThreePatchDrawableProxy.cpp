@@ -29,7 +29,10 @@
 #include <ChilliSource/UI/Drawable/ThreePatchDrawableProxy.h>
 
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Lua/Base/LuaScript.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
 
 namespace ChilliSource
@@ -44,7 +47,7 @@ namespace ChilliSource
             {
                 in_script->RegisterStaticClass("ThreePatchDrawable",
                                                "getType", ThreePatchDrawableProxy::GetType,
-                                               //"setTexture", ThreePatchDrawableProxy::SetTexture,
+                                               "setTexture", ThreePatchDrawableProxy::SetTexture,
                                                "setUVs", ThreePatchDrawableProxy::SetUVs,
                                                "setInsets", ThreePatchDrawableProxy::SetInsets,
                                                "getPreferredSize", ThreePatchDrawableProxy::GetPreferredSize
@@ -58,9 +61,10 @@ namespace ChilliSource
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
-            void SetTexture(ThreePatchDrawable* in_drawable, const Rendering::TextureCSPtr& in_texture)
+            void SetTexture(ThreePatchDrawable* in_drawable, Core::StorageLocation in_location, const std::string& in_path)
             {
-                in_drawable->SetTexture(in_texture);
+                auto resourcePool = Core::Application::Get()->GetResourcePool();
+                in_drawable->SetTexture(resourcePool->LoadResource<Rendering::Texture>(in_location, in_path));
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------

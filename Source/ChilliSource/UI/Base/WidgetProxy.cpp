@@ -28,7 +28,10 @@
 
 #include <ChilliSource/UI/Base/WidgetProxy.h>
 
-#include <ChilliSource/UI/Base/Widget.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Vector4.h>
+#include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 
 namespace ChilliSource
 {
@@ -76,7 +79,29 @@ namespace ChilliSource
                                                "getParentalAnchor", &WidgetProxy::GetParentalAnchor,
                                                "getInternalWidget", &WidgetProxy::GetInternalWidget,
                                                "getWidget", &WidgetProxy::GetWidget,
-                                               "getDrawable", &WidgetProxy::GetDrawable
+                                               "getDrawable", &WidgetProxy::GetDrawable,
+                                               "getBoolProperty", &WidgetProxy::GetProperty<bool>,
+                                               "getIntProperty", &WidgetProxy::GetProperty<s32>,
+                                               "getFloatProperty", &WidgetProxy::GetProperty<f32>,
+                                               "getStringProperty", &WidgetProxy::GetProperty<std::string>,
+                                               "getVec2Property", &WidgetProxy::GetProperty<Core::Vector2>,
+                                               "getVec3Property", &WidgetProxy::GetProperty<Core::Vector3>,
+                                               "getVec4Property", &WidgetProxy::GetProperty<Core::Vector4>,
+                                               "getColourProperty", &WidgetProxy::GetProperty<Core::Colour>,
+                                               "getAlignmentAnchorProperty", &WidgetProxy::GetProperty<Rendering::AlignmentAnchor>,
+                                               "getSizePolicyProperty", &WidgetProxy::GetProperty<SizePolicy>,
+                                               "getStorageLocationProperty", &WidgetProxy::GetProperty<Core::StorageLocation>,
+                                               "setBoolProperty", &WidgetProxy::SetProperty<bool>,
+                                               "setIntProperty", &WidgetProxy::SetProperty<s32>,
+                                               "setFloatProperty", &WidgetProxy::SetProperty<f32>,
+                                               "setStringProperty", &WidgetProxy::SetProperty<std::string>,
+                                               "setVec2Property", &WidgetProxy::SetProperty<Core::Vector2>,
+                                               "setVec3Property", &WidgetProxy::SetProperty<Core::Vector3>,
+                                               "setVec4Property", &WidgetProxy::SetProperty<Core::Vector4>,
+                                               "setColourProperty", &WidgetProxy::SetProperty<Core::Colour>,
+                                               "setAlignmentAnchorProperty", &WidgetProxy::SetProperty<Rendering::AlignmentAnchor>,
+                                               "setSizePolicyProperty", &WidgetProxy::SetProperty<SizePolicy>,
+                                               "setStorageLocationProperty", &WidgetProxy::SetProperty<Core::StorageLocation>
                                                );
             }
             //----------------------------------------------------------------------------------------

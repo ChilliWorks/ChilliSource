@@ -1,5 +1,3 @@
-screenWidth, screenHeight = Screen.getResolution()
-
 sliderWidget = Widget.getInternalWidget(thisWidget, "Slider")
 
 function onPointerDown()
@@ -18,13 +16,13 @@ end
 
 moveDir = -1
 function onUpdate(in_timeSinceLastUpdate)
-    x, y = Widget.getLocalAbsolutePosition(sliderWidget);
+    x, y = Widget.getLocalRelativePosition(sliderWidget);
     
-    if x > screenWidth * 0.5 or x < -screenWidth * 0.5 then
+    if x > 1.0  or x <= 0.0 then
         moveDir = -moveDir;
     end
-
-    Widget.absoluteMoveBy(sliderWidget, in_timeSinceLastUpdate * 100 * moveDir, 0)
+    
+    Widget.relativeMoveBy(sliderWidget, in_timeSinceLastUpdate * 0.1 * moveDir, 0)
 end
 
 

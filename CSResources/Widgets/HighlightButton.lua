@@ -25,4 +25,9 @@ function onUpdate(timeSinceLastUpdate)
 		rotateDir = -rotateDir
 	end
     Widget.rotateBy(thisWidget, timeSinceLastUpdate * rotateDir)
+
+    drawable = Widget.getDrawable(thisWidget)
+    highlightLocation = Widget.getStorageLocationProperty(thisWidget, "HighlightTextureLocation")
+    highlightPath = Widget.getStringProperty(thisWidget, "HighlightTexturePath")
+    TextureDrawable.setTexture(drawable, highlightLocation, highlightPath)
 end

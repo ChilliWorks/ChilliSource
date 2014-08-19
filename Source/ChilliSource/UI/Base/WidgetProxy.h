@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_UI_BASE_WIDGETPROXY_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/UI/Base/Widget.h>
 
 namespace ChilliSource
 {
@@ -527,6 +528,39 @@ namespace ChilliSource
             /// @return Final colour
             //----------------------------------------------------------------------------------------
             Core::Colour GetFinalColour(Widget* in_widget);
+            //----------------------------------------------------------------------------------------
+            /// Proxy function to allow calling on an instance from Lua script
+            ///
+            /// Set the value of the property with the given name. If no property exists
+            /// with the name then it will assert.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget on which to operate
+            /// @param Name
+            /// @param Value
+            //----------------------------------------------------------------------------------------
+            template<typename TProperty> void SetProperty(Widget* in_widget, const std::string& in_name, TProperty&& in_value)
+            {
+                return in_widget->SetProperty<TProperty>(in_name, std::forward<TProperty>(in_value));
+            }
+            //----------------------------------------------------------------------------------------
+            /// Proxy function to allow calling on an instance from Lua script
+            ///
+            /// Get the value of the property with the given name. If no property exists
+            /// with the name then it will assert.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget on which to operate
+            /// @param Name
+            ///
+            /// @return Value
+            //----------------------------------------------------------------------------------------
+            template <typename TProperty> TProperty GetProperty(Widget* in_widget, const std::string& in_propertyName)
+            {
+                return in_widget->GetProperty<TProperty>(in_propertyName);
+            }
         }
     }
 }

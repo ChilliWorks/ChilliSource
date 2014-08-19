@@ -451,6 +451,14 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<SizePolicy>() const;
         //----------------------------------------------------------------------------------------
+        /// Specialisation to return property type for storage location
+        ///
+        /// @author S Downie
+        ///
+        /// @return Storage location prop type
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<Core::StorageLocation>() const;
+        //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for property maps
         ///
         /// @author S Downie

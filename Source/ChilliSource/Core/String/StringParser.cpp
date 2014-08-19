@@ -282,6 +282,10 @@ namespace ChilliSource
             {
                 return StorageLocation::k_chilliSource;
             }
+            else if(lowerCase == "none")
+            {
+                return StorageLocation::k_none;
+            }
 			
             CS_ASSERT(false, "Invalid storage location.");
 			CS_LOG_ERROR("String Parser: Invalid storage location.");

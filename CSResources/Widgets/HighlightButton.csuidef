@@ -1,11 +1,17 @@
 {
   "Type": "HighlightButton",
   "Properties": {
-    "IsDown": "Bool"
+    "NormalTextureLocation": "StorageLocation",
+    "NormalTexturePath": "String",
+    "HighlightTextureLocation": "StorageLocation",
+    "HighlightTexturePath": "String"
   },
   "Defaults": {
     "Name": "HighlightButton",
-    "IsDown": "false"
+    "NormalTextureLocation": "None",
+    "NormalTexturePath": "",
+    "HighlightTextureLocation": "None",
+    "HighlightTexturePath": ""
   },
   "Behaviour": {
     "StorageLocation": "Package",

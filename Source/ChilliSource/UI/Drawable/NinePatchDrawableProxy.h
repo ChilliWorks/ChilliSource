@@ -72,9 +72,10 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Widget on which to operate
-            /// @param Texture
+            /// @param Location of texture
+            /// @param Path of texture
             //----------------------------------------------------------------------------------------
-            void SetTexture(NinePatchDrawable* in_drawable, const Rendering::TextureCSPtr& in_texture);
+            void SetTexture(NinePatchDrawable* in_drawable, Core::StorageLocation in_location, const std::string& in_path);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
