@@ -28,6 +28,7 @@
 
 #include <ChilliSource/UI/Base/WidgetProxy.h>
 
+#include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4.h>
