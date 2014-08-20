@@ -293,7 +293,7 @@ namespace ChilliSource
                 template <typename TElementType1, typename TElementType2, typename... TElementTypeRest>
                 static std::tuple<TElementType1, TElementType2, TElementTypeRest...> PopValue(lua_State* in_vm, s32 in_index)
                 {
-                    std::tuple<TElementType1> head = std::make_tuple(PopValueFromVM<TElementType1>(in_vm, in_index));
+                    std::tuple<TElementType1> head = std::make_tuple(ReadValueFromVM<TElementType1>(in_vm, in_index));
                     return std::tuple_cat(head, ReadValue<TElementType2, TElementTypeRest...>(in_vm, in_index + 1));
                 }
                 //---------------------------------------------------------
