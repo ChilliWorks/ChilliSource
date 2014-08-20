@@ -6,7 +6,6 @@ end
 
 moveDir = -1
 function onUpdate(in_timeSinceLastUpdate)
-    io.write("HorizontalSliderBar: onUpdate\n")
     x, y = Widget.getLocalRelativePosition(sliderWidget);
     
     if x > 1.0  or x <= 0.0 then
