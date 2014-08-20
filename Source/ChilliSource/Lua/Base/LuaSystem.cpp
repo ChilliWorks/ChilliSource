@@ -60,7 +60,7 @@ namespace ChilliSource
         void LuaSystem::OnInit()
         {
             //TODO: Open the Lua VM here when we know how to have multiple environments in
-            //a single Lua state
+            //a single Lua state.
         }
         //----------------------------------------------------
         //----------------------------------------------------
