@@ -114,6 +114,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\PointerSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntry.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Lua\Base\LuaScript.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Lua\Base\LuaSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Lua\Base\LuaUtils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Lua\Function\ILuaFunction.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\ContentDownload\ContentManagementSystem.cpp" />
@@ -389,6 +390,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntry.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Lua\Base.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Lua\Base\LuaScript.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Lua\Base\LuaSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Lua\Base\LuaUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Lua\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Lua\Function.h" />

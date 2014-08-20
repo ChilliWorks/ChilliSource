@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_LUA_BASE_H_
 
 #include <ChilliSource/Lua/Base/LuaScript.h>
+#include <ChilliSource/Lua/Base/LuaSystem.h>
 #include <ChilliSource/Lua/Base/LuaUtils.h>
 
 #endif

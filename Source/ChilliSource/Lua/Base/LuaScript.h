@@ -52,27 +52,6 @@ namespace ChilliSource
 		public:
             
             //----------------------------------------------------
-			/// Creates a new lua script from the given lua file.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Location
-            /// @param File path
-            ///
-            /// @return The new instance.
-			//----------------------------------------------------
-            static LuaScriptUPtr Create(Core::StorageLocation in_location, const std::string& in_filePath);
-            //----------------------------------------------------
-			/// Creates a new lua script from the given lua.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Lua script
-            ///
-            /// @return The new instance.
-			//----------------------------------------------------
-            static LuaScriptUPtr Create(const std::string& in_lua);
-            //----------------------------------------------------
             /// Register C++ function to be called in the Lua
             /// script. This must be performed prior to calling
             /// run or the script will error
@@ -119,8 +98,9 @@ namespace ChilliSource
             {
                 std::string tableName(in_objectName + std::string("Table"));
                 luaL_newmetatable(m_luaVM, tableName.c_str());
+                m_tables.push_back(in_objectName);
 
-                RegisterClassFunctions(in_object, in_functionName, std::forward<TFunctions>(in_functions)...);
+                RegisterClassFunctions(tableName.c_str(), in_object, in_functionName, std::forward<TFunctions>(in_functions)...);
                 
                 lua_pushvalue(m_luaVM, -1);
                 lua_setfield(m_luaVM, -1, "__index");
@@ -144,8 +124,9 @@ namespace ChilliSource
             {
                 std::string tableName(in_objectName + std::string("Table"));
                 luaL_newmetatable(m_luaVM, tableName.c_str());
+                m_tables.push_back(in_objectName);
                 
-                RegisterClassStaticFunctions(in_functionName, std::forward<TFunctions>(in_functions)...);
+                RegisterClassStaticFunctions(tableName.c_str(), in_functionName, std::forward<TFunctions>(in_functions)...);
                 
                 lua_pushvalue(m_luaVM, -1);
                 lua_setfield(m_luaVM, -1, "__index");
@@ -168,6 +149,7 @@ namespace ChilliSource
             {
                 std::string tableName(in_enumName + std::string("Table"));
                 luaL_newmetatable(m_luaVM, tableName.c_str());
+                m_tables.push_back(in_enumName);
                 
                 RegisterEnumTypes(in_typeName, std::forward<TTypes>(in_types)...);
                 
@@ -189,6 +171,7 @@ namespace ChilliSource
             {
                 LuaUtils::PushValueToVM(m_luaVM, std::forward<TVariable*>(in_variable));
                 lua_setglobal(m_luaVM, in_name);
+                m_variables.push_back(in_name);
             }
             //----------------------------------------------------
             /// This function must be called after registering
@@ -237,14 +220,27 @@ namespace ChilliSource
             
         private:
 
+            friend class LuaSystem;
+            //----------------------------------------------------
+			/// Creates a new lua script from the given lua.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Lua VM
+            /// @param Lua script
+            ///
+            /// @return The new instance.
+			//----------------------------------------------------
+            static LuaScriptUPtr Create(lua_State* in_vm, const std::string& in_lua);
             //-------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
             ///
+            /// @param Lua VM
             /// @param Lua
             //-------------------------------------------------------
-            LuaScript(const std::string& in_lua);
+            LuaScript(lua_State* in_vm, const std::string& in_lua);
             //----------------------------------------------------
             /// Register C++ function to be called in the Lua
             /// script. This must be performed prior to calling
@@ -252,13 +248,14 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
+            /// @param Table name
             /// @param Instance of class to call into
             /// @param Function name as called by Lua
             /// @param Function
             //----------------------------------------------------
-            template <typename TClass, typename TResult, typename...TArgs> void RegisterClassFunction(TClass* in_object, const char* in_functionName, TResult (TClass::*in_function)(TArgs...))
+            template <typename TClass, typename TResult, typename...TArgs> void RegisterClassFunction(const char* in_tableName, TClass* in_object, const char* in_functionName, TResult (TClass::*in_function)(TArgs...))
             {
-                m_functions.push_back(ILuaFunctionUPtr(new LuaClassFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_functionName, Core::MakeDelegate(in_object, in_function))));
+                m_functions.push_back(ILuaFunctionUPtr(new LuaClassFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_tableName, in_functionName, Core::MakeDelegate(in_object, in_function))));
             }
             //----------------------------------------------------
             /// Register C++ const function to be called in the Lua
@@ -267,13 +264,14 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
+            /// @param Table name
             /// @param Instance of class to call into
             /// @param Function name as called by Lua
             /// @param Function
             //----------------------------------------------------
-            template <typename TClass, typename TResult, typename...TArgs> void RegisterClassFunction(TClass* in_object, const char* in_functionName, TResult (TClass::*in_function)(TArgs...) const)
+            template <typename TClass, typename TResult, typename...TArgs> void RegisterClassFunction(const char* in_tableName, TClass* in_object, const char* in_functionName, TResult (TClass::*in_function)(TArgs...) const)
             {
-                m_functions.push_back(ILuaFunctionUPtr(new LuaClassFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_functionName, Core::MakeDelegate(in_object, in_function))));
+                m_functions.push_back(ILuaFunctionUPtr(new LuaClassFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_tableName, in_functionName, Core::MakeDelegate(in_object, in_function))));
             }
             //----------------------------------------------------
             /// Specialised to terminate recursion of registering
@@ -281,9 +279,10 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
+            /// @param Table name
             /// @param Instance of class to call into name as called by Lua
             //----------------------------------------------------
-            template <typename TObject> void RegisterClassFunctions(TObject* in_object){}
+            template <typename TObject> void RegisterClassFunctions(const char* in_tableName, TObject* in_object){}
             //----------------------------------------------------
             /// Register a class instance and its functions to be
             /// called in the Lua script.
@@ -292,16 +291,17 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
+            /// @param Table name
             /// @param Instance of class to call into
             /// @param Function name as called by Lua
             /// @param Function
             /// @param Remaining functions
             //----------------------------------------------------
             template <typename TObject, typename TFunction, typename...TFunctions>
-            void RegisterClassFunctions(TObject* in_object, const char* in_functionName, TFunction&& in_function, TFunctions&&...in_functions)
+            void RegisterClassFunctions(const char* in_tableName, TObject* in_object, const char* in_functionName, TFunction&& in_function, TFunctions&&...in_functions)
             {
-                RegisterClassFunction(in_object, in_functionName, in_function);
-                RegisterClassFunctions(in_object, in_functions...);
+                RegisterClassFunction(in_tableName, in_object, in_functionName, in_function);
+                RegisterClassFunctions(in_tableName, in_object, in_functions...);
             }
             //----------------------------------------------------
             /// Register C++ static function to be called in the Lua
@@ -310,20 +310,23 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
+            /// @param Table name
             /// @param Function name as called by Lua
             /// @param Function
             //----------------------------------------------------
-            template <typename TResult, typename...TArgs> void RegisterClassStaticFunction(const char* in_functionName, TResult (*in_function)(TArgs...))
+            template <typename TResult, typename...TArgs> void RegisterClassStaticFunction(const char* in_tableName, const char* in_functionName, TResult (*in_function)(TArgs...))
             {
-                m_functions.push_back(ILuaFunctionUPtr(new LuaClassFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_functionName, Core::MakeDelegate(in_function))));
+                m_functions.push_back(ILuaFunctionUPtr(new LuaClassFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_tableName, in_functionName, Core::MakeDelegate(in_function))));
             }
             //----------------------------------------------------
             /// Specialised to terminate recursion of registering
             /// functions
             ///
             /// @author S Downie
+            ///
+            /// @param Table name
             //----------------------------------------------------
-            void RegisterClassStaticFunctions(){}
+            void RegisterClassStaticFunctions(const char* in_tableName){}
             //----------------------------------------------------
             /// Register a class and its static functions to be
             /// called in the Lua script.
@@ -332,15 +335,16 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
+            /// @param Table name
             /// @param Function name as called by Lua
             /// @param Function
             /// @param Remaining functions
             //----------------------------------------------------
             template <typename TFunction, typename...TFunctions>
-            void RegisterClassStaticFunctions(const char* in_functionName, TFunction&& in_function, TFunctions&&...in_functions)
+            void RegisterClassStaticFunctions(const char* in_tableName, const char* in_functionName, TFunction&& in_function, TFunctions&&...in_functions)
             {
-                RegisterClassStaticFunction(in_functionName, in_function);
-                RegisterClassStaticFunctions(in_functions...);
+                RegisterClassStaticFunction(in_tableName, in_functionName, in_function);
+                RegisterClassStaticFunctions(in_tableName, in_functions...);
             }
             //----------------------------------------------------
             /// Register C++ enums to be accessed in the Lua
@@ -384,6 +388,8 @@ namespace ChilliSource
         private:
             
             std::vector<ILuaFunctionUPtr> m_functions;
+            std::vector<std::string> m_tables;
+            std::vector<std::string> m_variables;
             lua_State* m_luaVM = nullptr;
 		};
 	}

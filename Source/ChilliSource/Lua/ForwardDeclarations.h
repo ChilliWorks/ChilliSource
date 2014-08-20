@@ -43,6 +43,7 @@ namespace ChilliSource
         /// Base
         //--------------------------------------------------
         CS_FORWARDDECLARE_CLASS(LuaScript);
+        CS_FORWARDDECLARE_CLASS(LuaSystem);
         //--------------------------------------------------
         /// Function
         //--------------------------------------------------

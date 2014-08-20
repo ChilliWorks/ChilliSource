@@ -1,24 +1,12 @@
 
 function onAddedToCanvas()
+    io.write("HorizontalSliderBar: onAddedToCanvas\n")
     sliderWidget = Widget.getInternalWidget(thisWidget, "Slider")
-end
-
-function onPointerDown()
-    io.write("HorizontalSliderBar: Pointer down\n")
-end
-
-function onPointerMoved()
-    io.write("HorizontalSliderBar: Pointer moved\n")
-    --absoluteMoveBy(10, 10)
-    --slider.absoluteMoveBy(currX - prevX, 0)
-end
-
-function onPointerUp()
-    io.write("HorizontalSliderBar: Pointer up\n")
 end
 
 moveDir = -1
 function onUpdate(in_timeSinceLastUpdate)
+    io.write("HorizontalSliderBar: onUpdate\n")
     x, y = Widget.getLocalRelativePosition(sliderWidget);
     
     if x > 1.0  or x <= 0.0 then
@@ -29,6 +17,7 @@ function onUpdate(in_timeSinceLastUpdate)
 end
 
 function onRemovedFromCanvas()
+    io.write("HorizontalSliderBar: onRemovedFromCanvas\n")
 end
 
 

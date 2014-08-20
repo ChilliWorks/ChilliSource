@@ -58,7 +58,7 @@ namespace ChilliSource
             /// @param Function to register with Lua
             //--------------------------------------------------------
             LuaFunction(lua_State* in_luaVM, const char* in_functionName, const FuncType& in_function)
-            : m_function(in_function)
+            : m_luaVM(in_luaVM), m_functionName(in_functionName), m_function(in_function)
             {
                 //Register this function pointer with Lua VM so we can call into it from
                 //the routing function
@@ -89,10 +89,22 @@ namespace ChilliSource
 
                 return TNumResults;
             }
+            //--------------------------------------------------------
+            /// Destructor
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------
+            ~LuaFunction()
+            {
+                lua_pushnil(m_luaVM);
+                lua_setglobal(m_luaVM, m_functionName.c_str());
+            }
             
         private:
             
             FuncType m_function;
+            lua_State* m_luaVM;
+            std::string m_functionName;
         };
         //--------------------------------------------------------
         /// Stores a standard function specialised for void return
@@ -115,7 +127,7 @@ namespace ChilliSource
             /// @param Function to register with Lua
             //--------------------------------------------------------
             LuaFunction(lua_State* in_luaVM, const char* in_functionName, const FuncType& in_function)
-            : m_function(in_function)
+            : m_luaVM(in_luaVM), m_functionName(in_functionName), m_function(in_function)
             {
                 //Register this function pointer with Lua VM so we can call into it from
                 //the routing function
@@ -145,10 +157,22 @@ namespace ChilliSource
                 LuaUtils::LiftToParamPack(m_function, LuaUtils::ReadAllFromVM<TArgs...>(in_luaVM));
                 return 0;
             }
-            
+            //--------------------------------------------------------
+            /// Destructor
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------
+            ~LuaFunction()
+            {
+                lua_pushnil(m_luaVM);
+                lua_setglobal(m_luaVM, m_functionName.c_str());
+            }
+    
         private:
-            
+    
             FuncType m_function;
+            lua_State* m_luaVM;
+            std::string m_functionName;
         };
     }
 }

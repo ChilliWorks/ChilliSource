@@ -28,8 +28,6 @@
 
 #include <ChilliSource/Lua/Base/LuaScript.h>
 
-#include <ChilliSource/Core/Base/Utils.h>
-
 extern "C"
 {
 #include <lua/lualib.h>
@@ -41,26 +39,15 @@ namespace ChilliSource
 	{
         //----------------------------------------------------
         //----------------------------------------------------
-        LuaScriptUPtr LuaScript::Create(Core::StorageLocation in_location, const std::string& in_filePath)
+        LuaScriptUPtr LuaScript::Create(lua_State* in_vm, const std::string& in_lua)
         {
-            std::string luaContents;
-            Core::Utils::FileToString(in_location, in_filePath, luaContents);
-    
-            return LuaScriptUPtr(new LuaScript(luaContents));
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        LuaScriptUPtr LuaScript::Create(const std::string& in_lua)
-        {
-            return LuaScriptUPtr(new LuaScript(in_lua));
+            return LuaScriptUPtr(new LuaScript(in_vm, in_lua));
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        LuaScript::LuaScript(const std::string& in_lua)
+        LuaScript::LuaScript(lua_State* in_vm, const std::string& in_lua)
+        : m_luaVM(in_vm)
         {
-            m_luaVM = luaL_newstate();
-            luaL_openlibs(m_luaVM);
-            
             auto loadResult = luaL_loadstring(m_luaVM, in_lua.c_str());
             if(loadResult != 0)
             {
@@ -81,9 +68,23 @@ namespace ChilliSource
         //-------------------------------------------------------
         LuaScript::~LuaScript()
         {
-            //Functions must be cleared before the VM is destroyed
-            //as they unbind themselves from the Lua VM.
+            //Functions must be cleared before the tables are destroyed
             m_functions.clear();
+            
+            for(const auto& tableName : m_tables)
+            {
+                lua_pushnil(m_luaVM);
+                lua_setglobal(m_luaVM, tableName.c_str());
+            }
+            
+            for(const auto& varName : m_variables)
+            {
+                lua_pushnil(m_luaVM);
+                lua_setglobal(m_luaVM, varName.c_str());
+            }
+            
+            //TODO: Remove this when we know how to have multiple environments in
+            //a single Lua state
             lua_close(m_luaVM);
         }
 	}

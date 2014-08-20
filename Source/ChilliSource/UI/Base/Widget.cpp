@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Lua/Base/LuaSystem.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
@@ -253,7 +254,8 @@ namespace ChilliSource
         {
             if(in_behaviourScript.empty() == false)
             {
-                m_behaviourScript = Lua::LuaScript::Create(in_behaviourScript);
+                auto luaSystem = Core::Application::Get()->GetSystem<Lua::LuaSystem>();
+                m_behaviourScript = luaSystem->CreateScript(in_behaviourScript);
                 
                 m_behaviourScript->RegisterEnum("SizePolicy",
                                                 "none", SizePolicy::k_none,
@@ -567,6 +569,7 @@ namespace ChilliSource
             {
                 if(it->get() == in_widget)
                 {
+                    (*it)->SetCanvas(nullptr);
                     m_children.erase(it);
                     return;
                 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8132AB1D19A48CA400101323 /* LuaSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8132AB1C19A48CA400101323 /* LuaSystem.cpp */; };
 		8133F0B9199BA4D6004AAB40 /* LuaScript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0B7199BA4D6004AAB40 /* LuaScript.cpp */; };
 		8133F0BC199BABDF004AAB40 /* LuaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0BB199BABDF004AAB40 /* LuaUtils.cpp */; };
 		8133F0CB199CEE73004AAB40 /* ILuaFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8133F0C4199CEE73004AAB40 /* ILuaFunction.cpp */; };
@@ -298,6 +299,8 @@
 
 /* Begin PBXFileReference section */
 		8110E2D1199111E700EC96CA /* PropertyAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyAccessor.h; sourceTree = "<group>"; };
+		8132AB1B19A48C8F00101323 /* LuaSystem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LuaSystem.h; sourceTree = "<group>"; };
+		8132AB1C19A48CA400101323 /* LuaSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaSystem.cpp; sourceTree = "<group>"; };
 		8133F0B5199B9E8E004AAB40 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
 		8133F0B6199BA4CF004AAB40 /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		8133F0B7199BA4D6004AAB40 /* LuaScript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaScript.cpp; sourceTree = "<group>"; };
@@ -1003,6 +1006,8 @@
 			children = (
 				8133F0B7199BA4D6004AAB40 /* LuaScript.cpp */,
 				8133F0B8199BA4D6004AAB40 /* LuaScript.h */,
+				8132AB1C19A48CA400101323 /* LuaSystem.cpp */,
+				8132AB1B19A48C8F00101323 /* LuaSystem.h */,
 				8133F0BB199BABDF004AAB40 /* LuaUtils.cpp */,
 				8133F0BA199BA777004AAB40 /* LuaUtils.h */,
 			);
@@ -2707,6 +2712,7 @@
 				81D8B6A41962E0F70010DA84 /* PNGImageProvider.cpp in Sources */,
 				81D8B4971962E0EC0010DA84 /* DynamicSpriteBatcher.cpp in Sources */,
 				81D8B6A91962E0F70010DA84 /* Accelerometer.mm in Sources */,
+				8132AB1D19A48CA400101323 /* LuaSystem.cpp in Sources */,
 				81D8B6A31962E0F70010DA84 /* FileSystem.mm in Sources */,
 				81D8B6D01962E0F70010DA84 /* MeshBuffer.cpp in Sources */,
 				81D8B47E1962E0EC0010DA84 /* AnimatedMeshComponent.cpp in Sources */,
