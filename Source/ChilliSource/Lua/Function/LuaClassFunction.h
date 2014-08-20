@@ -97,9 +97,10 @@ namespace ChilliSource
             //--------------------------------------------------------
             ~LuaClassFunction()
             {
-                luaL_getmetatable(m_luaVM, m_tableName.c_str());
-                lua_pushnil(m_luaVM);
-                lua_setfield(m_luaVM, -2, m_functionName.c_str());
+                //TODO: Add back in when we have a single VM instead of one per script
+//                luaL_getmetatable(m_luaVM, m_tableName.c_str());
+//                lua_pushnil(m_luaVM);
+//                lua_setfield(m_luaVM, -2, m_functionName.c_str());
             }
         
         private:
@@ -169,9 +170,10 @@ namespace ChilliSource
             //--------------------------------------------------------
             ~LuaClassFunction()
             {
-                luaL_getmetatable(m_luaVM, m_tableName.c_str());
-                lua_pushnil(m_luaVM);
-                lua_setfield(m_luaVM, -2, m_functionName.c_str());
+                //TODO: Add back in when we have a single VM instead of one per script
+//                luaL_getmetatable(m_luaVM, m_tableName.c_str());
+//                lua_pushnil(m_luaVM);
+//                lua_setfield(m_luaVM, -2, m_functionName.c_str());
             }
     
         private:
