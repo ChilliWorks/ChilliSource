@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Lua/Base/LuaUtils.h>
+#include <ChilliSource/Scripting/Lua/LuaUtils.h>
 
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
@@ -36,7 +36,7 @@
 
 namespace ChilliSource
 {
-    namespace Lua
+    namespace Scripting
     {
         namespace LuaUtils
         {

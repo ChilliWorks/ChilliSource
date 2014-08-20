@@ -70,9 +70,9 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Hierarchy desc
-            /// @param Lua script for widget behaviour
+            /// @param Lua source for widget behaviour
             //-------------------------------------------------------
-            void Build(const WidgetHierarchyDesc& in_desc, const std::string& in_behaviourScript);
+            void Build(const WidgetHierarchyDesc& in_desc, const Scripting::LuaSourceCSPtr& in_behaviourSource);
             //-------------------------------------------------------
             /// @author S Downie
             ///
@@ -82,9 +82,9 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return Lua script for widget behaviour
+            /// @return Lua source for widget behaviour
             //-------------------------------------------------------
-            const std::string& GetBehaviourScript() const;
+            const Scripting::LuaSourceCSPtr& GetBehaviourSource() const;
             
         private:
             
@@ -108,7 +108,7 @@ namespace ChilliSource
             
             WidgetHierarchyDesc m_desc;
             
-            std::string m_behaviourScript;
+            Scripting::LuaSourceCSPtr m_behaviourSource;
         };
     }
 }

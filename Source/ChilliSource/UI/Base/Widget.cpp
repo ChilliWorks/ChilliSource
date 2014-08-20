@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Lua/Base/LuaSystem.h>
+#include <ChilliSource/Scripting/Lua/LuaSystem.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
@@ -250,12 +250,12 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetBehaviourScript(const std::string& in_behaviourScript)
+        void Widget::SetBehaviourScript(const Scripting::LuaSourceCSPtr& in_behaviourSource)
         {
-            if(in_behaviourScript.empty() == false)
+            if(in_behaviourSource != nullptr)
             {
-                auto luaSystem = Core::Application::Get()->GetSystem<Lua::LuaSystem>();
-                m_behaviourScript = luaSystem->CreateScript(in_behaviourScript);
+                auto luaSystem = Core::Application::Get()->GetSystem<Scripting::LuaSystem>();
+                m_behaviourScript = luaSystem->CreateScript(in_behaviourSource);
                 
                 m_behaviourScript->RegisterEnum("SizePolicy",
                                                 "none", SizePolicy::k_none,

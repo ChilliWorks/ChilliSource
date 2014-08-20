@@ -26,16 +26,12 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_LUA_BASE_LUAUTILS_H_
-#define _CHILLISOURCE_LUA_BASE_LUAUTILS_H_
+#ifndef _CHILLISOURCE_SCRIPTING_LUA_LUAUTILS_H_
+#define _CHILLISOURCE_SCRIPTING_LUA_LUAUTILS_H_
 
 #include <ChilliSource/ChilliSource.h>
 
-extern "C"
-{
-#include <lua/lua.h>
-#include <lua/lauxlib.h>
-}
+#include <ChilliSource/Scripting/Lua/LuaLibIncludes.h>
 
 #include <functional>
 #include <tuple>
@@ -43,7 +39,7 @@ extern "C"
 
 namespace ChilliSource
 {
-    namespace Lua
+    namespace Scripting
     {
         namespace LuaUtils
         {
@@ -262,8 +258,9 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //---------------------------------------------------------
-            template <size_t, typename... TResults> struct Popper
+            template <size_t, typename... TResults> class StackPopper
             {
+            public:
                 using type = std::tuple<TResults...>;
                 
                 //---------------------------------------------------------
@@ -324,8 +321,9 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //---------------------------------------------------------
-            template <typename TResult> struct Popper<1, TResult>
+            template <typename TResult> class StackPopper<1, TResult>
             {
+            public:
                 using type = TResult;
                 
                 //---------------------------------------------------------
@@ -349,8 +347,9 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //---------------------------------------------------------
-            template <typename... TResults> struct Popper<0, TResults...>
+            template <typename... TResults> class StackPopper<0, TResults...>
             {
+            public:
                 using type = void;
                 
                 //---------------------------------------------------------
@@ -378,9 +377,9 @@ namespace ChilliSource
             ///
             /// @return Tuple or void depending on num results
             //---------------------------------------------------------
-            template <typename... TResults> typename Popper<sizeof...(TResults), TResults...>::type PopAllFromVM(lua_State* in_vm)
+            template <typename... TResults> typename StackPopper<sizeof...(TResults), TResults...>::type PopAllFromVM(lua_State* in_vm)
             {
-                return Popper<sizeof...(TResults), TResults...>::PopRecursive(in_vm);
+                return StackPopper<sizeof...(TResults), TResults...>::PopRecursive(in_vm);
             }
             //---------------------------------------------------------
             /// Holds a list of indices accessible at template

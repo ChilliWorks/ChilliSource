@@ -158,14 +158,14 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         WidgetUPtr WidgetFactory::Create(const WidgetDefCSPtr& in_def) const
         {
-            return CreateRecursive(in_def->GetHierarchyDesc(), in_def->GetBehaviourScript());
+            return CreateRecursive(in_def->GetHierarchyDesc(), in_def->GetBehaviourSource());
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
         WidgetUPtr WidgetFactory::Create(const WidgetTemplateCSPtr& in_template) const
         {
             auto def = m_widgetDefNameMap.find(in_template->GetHierarchyDesc().m_type)->second;
-            return CreateRecursive(in_template->GetHierarchyDesc(), def->GetBehaviourScript());
+            return CreateRecursive(in_template->GetHierarchyDesc(), def->GetBehaviourSource());
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
@@ -181,7 +181,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        WidgetUPtr WidgetFactory::CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc, const std::string& in_behaviourScript) const
+        WidgetUPtr WidgetFactory::CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc, const Scripting::LuaSourceCSPtr& in_behaviourSource) const
         {
             WidgetUPtr widget(new Widget(in_hierarchyDesc.m_defaultProperties, in_hierarchyDesc.m_customProperties));
             
@@ -205,7 +205,7 @@ namespace ChilliSource
             for(const auto& childHierarchyDesc : in_hierarchyDesc.m_children)
             {
                 auto def = m_widgetDefNameMap.find(childHierarchyDesc.m_type)->second;
-                WidgetSPtr childWidget = CreateRecursive(childHierarchyDesc, def->GetBehaviourScript());
+                WidgetSPtr childWidget = CreateRecursive(childHierarchyDesc, def->GetBehaviourSource());
                 switch (childHierarchyDesc.m_access)
                 {
                     case WidgetHierarchyDesc::Access::k_internal:
@@ -296,7 +296,7 @@ namespace ChilliSource
             }
             
             widget->SetPropertyLinks(std::move(defaultPropertyLinks), std::move(customPropertyLinks));
-            widget->SetBehaviourScript(in_behaviourScript);
+            widget->SetBehaviourScript(in_behaviourSource);
             
             return widget;
         }

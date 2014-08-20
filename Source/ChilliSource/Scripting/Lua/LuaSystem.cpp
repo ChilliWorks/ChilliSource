@@ -26,21 +26,14 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Lua/Base/LuaSystem.h>
+#include <ChilliSource/Scripting/Lua/LuaSystem.h>
 
-#include <ChilliSource/Core/Base/Utils.h>
-#include <ChilliSource/Lua/Base/LuaScript.h>
-
-extern "C"
-{
-#include <lua/lua.h>
-#include <lua/lauxlib.h>
-#include <lua/lualib.h>
-}
+#include <ChilliSource/Scripting/Lua/LuaLibIncludes.h>
+#include <ChilliSource/Scripting/Lua/LuaScript.h>
 
 namespace ChilliSource
 {
-	namespace Lua
+	namespace Scripting
 	{
         CS_DEFINE_NAMEDTYPE(LuaSystem);
         //----------------------------------------------------
@@ -64,24 +57,12 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        LuaScriptUPtr LuaSystem::LoadScript(Core::StorageLocation in_location, const std::string& in_filePath)
-        {
-            std::string luaContents;
-            Core::Utils::FileToString(in_location, in_filePath, luaContents);
-            
-            auto luaVM = luaL_newstate();
-            luaL_openlibs(luaVM);
-            
-            return LuaScript::Create(luaVM, luaContents);
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        LuaScriptUPtr LuaSystem::CreateScript(const std::string& in_luaCode)
+        LuaScriptUPtr LuaSystem::CreateScript(const LuaSourceCSPtr& in_luaSource)
         {
             auto luaVM = luaL_newstate();
             luaL_openlibs(luaVM);
             
-            return LuaScript::Create(luaVM, in_luaCode);
+            return LuaScript::Create(luaVM, in_luaSource);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------

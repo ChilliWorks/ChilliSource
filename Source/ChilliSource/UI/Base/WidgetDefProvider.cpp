@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Scripting/Lua/LuaSource.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/Widget.h>
@@ -241,8 +242,9 @@ namespace ChilliSource
                     ParseLinkedChildProperties(childProperties, hierarchyDesc.m_links);
                 }
                 
-                std::string luaContents;
                 const Json::Value& behaviour = root["Behaviour"];
+                
+                Scripting::LuaSourceCSPtr luaSource;
                 if(behaviour.isNull() == false)
                 {
                     bool relativePath = behaviour.isMember("Location") == false;
@@ -258,10 +260,10 @@ namespace ChilliSource
                         behaviourPath = pathToDefinition + behaviourPath;
                     }
                     
-                    Core::Utils::FileToString(behaviourLocation, behaviourPath, luaContents);
+                    luaSource = Core::Application::Get()->GetResourcePool()->LoadResource<Scripting::LuaSource>(behaviourLocation, behaviourPath);
                 }
                 
-                widgetDef->Build(hierarchyDesc, luaContents);
+                widgetDef->Build(hierarchyDesc, luaSource);
                 
                 out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
                 if(in_delegate != nullptr)

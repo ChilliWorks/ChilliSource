@@ -26,20 +26,16 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_LUA_FUNCTION_ILUAFUNCTION_H_
-#define _CHILLISOURCE_LUA_FUNCTION_ILUAFUNCTION_H_
+#ifndef _CHILLISOURCE_SCRIPTING_LUA_FUNCTION_ILUAFUNCTION_H_
+#define _CHILLISOURCE_SCRIPTING_LUA_FUNCTION_ILUAFUNCTION_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Lua/Base/LuaUtils.h>
-
-extern "C"
-{
-#include <lua/lua.h>
-}
+#include <ChilliSource/Scripting/Lua/LuaLibIncludes.h>
+#include <ChilliSource/Scripting/Lua/LuaUtils.h>
 
 namespace ChilliSource
 {
-    namespace Lua
+    namespace Scripting
     {
         //--------------------------------------------------------
         /// Lua can only call functions that match this signature

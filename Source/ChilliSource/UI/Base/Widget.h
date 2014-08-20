@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
-#include <ChilliSource/Lua/Base/LuaScript.h>
+#include <ChilliSource/Scripting/Lua/LuaScript.h>
 #include <ChilliSource/UI/Base/PropertyAccessor.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
@@ -617,9 +617,9 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Lua script
+            /// @param Lua script source
             //----------------------------------------------------------------------------------------
-            void SetBehaviourScript(const std::string& in_behaviourScript);
+            void SetBehaviourScript(const Scripting::LuaSourceCSPtr& in_behaviourSource);
             //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
@@ -731,7 +731,7 @@ namespace ChilliSource
             ILayoutUPtr m_layout;
             ILayoutUPtr m_internalLayout;
             
-            Lua::LuaScriptUPtr m_behaviourScript;
+            Scripting::LuaScriptUPtr m_behaviourScript;
             
             Widget* m_parent = nullptr;
             const Widget* m_canvas = nullptr;

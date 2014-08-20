@@ -42,7 +42,7 @@ namespace ChilliSource
         {
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
-            void RegisterWithLuaScript(Lua::LuaScript* in_script)
+            void RegisterWithLuaScript(Scripting::LuaScript* in_script)
             {
                 in_script->RegisterStaticClass("Widget",
                                                "setName", &WidgetProxy::SetName,

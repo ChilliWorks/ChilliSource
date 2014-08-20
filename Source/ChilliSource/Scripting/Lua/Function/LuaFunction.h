@@ -1,5 +1,5 @@
 //
-//  LuaClassFunction.h
+//  LuaFunction.h
 //  Chilli Source
 //  Created by Scott Downie on 14/08/2014.
 //
@@ -26,26 +26,26 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_LUA_FUNCTION_LUACLASSFUNCTION_H_
-#define _CHILLISOURCE_LUA_FUNCTION_LUACLASSFUNCTION_H_
+#ifndef _CHILLISOURCE_SCRIPTING_LUA_FUNCTION_LUAFUNCTION_H_
+#define _CHILLISOURCE_SCRIPTING_LUA_FUNCTION_LUAFUNCTION_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Lua/Function/ILuaFunction.h>
-
+#include <ChilliSource/Scripting/Lua/Function/ILuaFunction.h>
 
 namespace ChilliSource
 {
-    namespace Lua
+    namespace Scripting
     {
         //--------------------------------------------------------
-        /// Stores a member function of a class and registers it
+        /// Stores a function and registers it
         /// to be accessed in Lua
         ///
         /// @author S Downie
         //--------------------------------------------------------
-        template <s32 TNumResults, typename TResult, typename...TArgs>  class LuaClassFunction final : public ILuaFunction
+        template <s32 TNumResults, typename TResult, typename...TArgs> class LuaFunction final : public ILuaFunction
         {
         public:
+            
             using FuncType = std::function<TResult(TArgs...)>;
             
             //--------------------------------------------------------
@@ -54,12 +54,11 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Lua VM
-            /// @param Table to register function against
             /// @param Name to register function against
             /// @param Function to register with Lua
             //--------------------------------------------------------
-            LuaClassFunction(lua_State* in_luaVM, const char* in_tableName, const char* in_functionName, const FuncType& in_function)
-            : m_luaVM(in_luaVM), m_tableName(in_tableName), m_functionName(in_functionName), m_function(in_function)
+            LuaFunction(lua_State* in_luaVM, const std::string& in_functionName, const FuncType& in_function)
+            : m_luaVM(in_luaVM), m_functionName(in_functionName), m_function(in_function)
             {
                 //Register this function pointer with Lua VM so we can call into it from
                 //the routing function
@@ -70,7 +69,7 @@ namespace ChilliSource
                 lua_pushcclosure(in_luaVM, RouteToFunction, 1);
                 
                 //Bind the function to the given name
-                lua_setfield(in_luaVM, -2, in_functionName);
+                lua_setglobal(in_luaVM, in_functionName.c_str());
             }
             //--------------------------------------------------------
             /// Calls the stored function with the parameters from
@@ -87,7 +86,7 @@ namespace ChilliSource
             {
                 //Pull the arguments from the Lua stack and call the function, pushing the result back to the Lua stack
                 LuaUtils::PushAllToVM(in_luaVM, LuaUtils::LiftToParamPack(m_function, LuaUtils::ReadAllFromVM<TArgs...>(in_luaVM)));
-                
+
                 return TNumResults;
             }
             //--------------------------------------------------------
@@ -95,30 +94,27 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //--------------------------------------------------------
-            ~LuaClassFunction()
+            ~LuaFunction()
             {
-                //TODO: Add back in when we have a single VM instead of one per script
-//                luaL_getmetatable(m_luaVM, m_tableName.c_str());
-//                lua_pushnil(m_luaVM);
-//                lua_setfield(m_luaVM, -2, m_functionName.c_str());
+                lua_pushnil(m_luaVM);
+                lua_setglobal(m_luaVM, m_functionName.c_str());
             }
-        
+            
         private:
-        
+            
             FuncType m_function;
             lua_State* m_luaVM;
-            std::string m_tableName;
             std::string m_functionName;
         };
         //--------------------------------------------------------
-        /// Stores a member function of a class and registers it
-        /// to be accessed in Lua (Specialised for void return)
+        /// Stores a standard function specialised for void return
         ///
         /// @author S Downie
         //--------------------------------------------------------
-        template <typename...TArgs>  class LuaClassFunction<0, void, TArgs...> : public ILuaFunction
+        template <typename...TArgs> class LuaFunction<0, void, TArgs...> : public ILuaFunction
         {
         public:
+            
             using FuncType = std::function<void(TArgs...)>;
             
             //--------------------------------------------------------
@@ -127,12 +123,11 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Lua VM
-            /// @param Table to register function against
             /// @param Name to register function against
             /// @param Function to register with Lua
             //--------------------------------------------------------
-            LuaClassFunction(lua_State* in_luaVM, const char* in_tableName, const char* in_functionName, const FuncType& in_function)
-            : m_luaVM(in_luaVM), m_tableName(in_tableName), m_functionName(in_functionName), m_function(in_function)
+            LuaFunction(lua_State* in_luaVM, const std::string& in_functionName, const FuncType& in_function)
+            : m_luaVM(in_luaVM), m_functionName(in_functionName), m_function(in_function)
             {
                 //Register this function pointer with Lua VM so we can call into it from
                 //the routing function
@@ -143,7 +138,7 @@ namespace ChilliSource
                 lua_pushcclosure(in_luaVM, RouteToFunction, 1);
                 
                 //Bind the function to the given name
-                lua_setfield(in_luaVM, -2, in_functionName);
+                lua_setglobal(in_luaVM, in_functionName.c_str());
             }
             //--------------------------------------------------------
             /// Calls the stored function with the parameters from
@@ -158,9 +153,8 @@ namespace ChilliSource
             //--------------------------------------------------------
             s32 Execute(lua_State* in_luaVM) override
             {
-                //Pull the arguments from the Lua stack and call the function.
+                //Pull the arguments from the Lua stack and call the function
                 LuaUtils::LiftToParamPack(m_function, LuaUtils::ReadAllFromVM<TArgs...>(in_luaVM));
-                
                 return 0;
             }
             //--------------------------------------------------------
@@ -168,19 +162,16 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //--------------------------------------------------------
-            ~LuaClassFunction()
+            ~LuaFunction()
             {
-                //TODO: Add back in when we have a single VM instead of one per script
-//                luaL_getmetatable(m_luaVM, m_tableName.c_str());
-//                lua_pushnil(m_luaVM);
-//                lua_setfield(m_luaVM, -2, m_functionName.c_str());
+                lua_pushnil(m_luaVM);
+                lua_setglobal(m_luaVM, m_functionName.c_str());
             }
     
         private:
     
             FuncType m_function;
             lua_State* m_luaVM;
-            std::string m_tableName;
             std::string m_functionName;
         };
     }

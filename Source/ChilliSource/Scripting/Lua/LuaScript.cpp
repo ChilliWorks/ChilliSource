@@ -26,29 +26,28 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Lua/Base/LuaScript.h>
+#include <ChilliSource/Scripting/Lua/LuaScript.h>
 
-extern "C"
-{
-#include <lua/lualib.h>
-}
+#include <ChilliSource/Scripting/Lua/LuaLibIncludes.h>
+#include <ChilliSource/Scripting/Lua/LuaSource.h>
+
 
 namespace ChilliSource
 {
-	namespace Lua
+	namespace Scripting
 	{
         //----------------------------------------------------
         //----------------------------------------------------
-        LuaScriptUPtr LuaScript::Create(lua_State* in_vm, const std::string& in_lua)
+        LuaScriptUPtr LuaScript::Create(lua_State* in_vm, const LuaSourceCSPtr& in_luaSource)
         {
-            return LuaScriptUPtr(new LuaScript(in_vm, in_lua));
+            return LuaScriptUPtr(new LuaScript(in_vm, in_luaSource));
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        LuaScript::LuaScript(lua_State* in_vm, const std::string& in_lua)
-        : m_luaVM(in_vm)
+        LuaScript::LuaScript(lua_State* in_vm, const LuaSourceCSPtr& in_luaSource)
+        : m_luaVM(in_vm), m_source(in_luaSource)
         {
-            auto loadResult = luaL_loadstring(m_luaVM, in_lua.c_str());
+            auto loadResult = luaL_loadstring(m_luaVM, m_source->GetSource().c_str());
             if(loadResult != 0)
             {
                 CS_LOG_FATAL("Error loading LUA file: " + std::string(lua_tostring(m_luaVM, -1)));

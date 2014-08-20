@@ -1,7 +1,7 @@
 //
-//  ILuaFunction.cpp
+//  Lua.h
 //  Chilli Source
-//  Created by Scott Downie on 14/08/2014.
+//  Created by Scott Downie 13/08/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,18 +26,13 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Lua/Function/ILuaFunction.h>
+#ifndef _CHILLISOURCE_SCRIPTING_LUA_H_
+#define _CHILLISOURCE_SCRIPTING_LUA_H_
 
-namespace ChilliSource
-{
-    namespace Lua
-    {
-        //--------------------------------------------------------
-        //--------------------------------------------------------
-        s32 RouteToFunction(lua_State* in_luaVM)
-        {
-            ILuaFunction* function = (ILuaFunction*)lua_touserdata(in_luaVM, lua_upvalueindex(1));
-            return function->Execute(in_luaVM);
-        }
-    }
-}
+#include <ChilliSource/Scripting/Lua/LuaScript.h>
+#include <ChilliSource/Scripting/Lua/LuaSource.h>
+#include <ChilliSource/Scripting/Lua/LuaSourceProvider.h>
+#include <ChilliSource/Scripting/Lua/LuaSystem.h>
+#include <ChilliSource/Scripting/Lua/LuaUtils.h>
+
+#endif

@@ -52,7 +52,7 @@ namespace ChilliSource
             ///
             /// @param Lua script
             //----------------------------------------------------------------------------------------
-            void RegisterWithLuaScript(Lua::LuaScript* in_script);
+            void RegisterWithLuaScript(Scripting::LuaScript* in_script);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///

@@ -26,22 +26,22 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_LUA_BASE_LUASYSTEM_H_
-#define _CHILLISOURCE_LUA_BASE_LUASYSTEM_H_
+#ifndef _CHILLISOURCE_SCRIPTING_LUA_LUASYSTEM_H_
+#define _CHILLISOURCE_SCRIPTING_LUA_LUASYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 namespace ChilliSource
 {
-	namespace Lua
+	namespace Scripting
 	{
 		//-----------------------------------------------------------
         /// The system is used to create Lua scripts.
         ///
         /// @author S Downie
 		//-----------------------------------------------------------
-		class LuaSystem : public Core::AppSystem
+		class LuaSystem final : public Core::AppSystem
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(LuaSystem);
@@ -55,27 +55,15 @@ namespace ChilliSource
             //----------------------------------------------------
             bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------
-            /// Loads the lua script at the given
-            /// path
+            /// Creates the lua script instance from the given source code
             ///
             /// @author S Downie
             ///
-            /// @param Storage location
-            /// @param File path
+            /// @param Lua source
             ///
             /// @return Script
             //----------------------------------------------------
-            LuaScriptUPtr LoadScript(Core::StorageLocation in_location, const std::string& in_filePath);
-            //----------------------------------------------------
-            /// Creates the lua script from the given code
-            ///
-            /// @author S Downie
-            ///
-            /// @param Lua code
-            ///
-            /// @return Script
-            //----------------------------------------------------
-            LuaScriptUPtr CreateScript(const std::string& in_luaCode);
+            LuaScriptUPtr CreateScript(const LuaSourceCSPtr& in_luaSource);
             
         private:
             friend class Core::Application;

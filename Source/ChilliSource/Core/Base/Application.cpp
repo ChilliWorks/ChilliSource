@@ -58,8 +58,6 @@
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
 
-#include <ChilliSource/Lua/Base/LuaSystem.h>
-
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/Renderer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
@@ -79,6 +77,9 @@
 #include <ChilliSource/Rendering/Texture/CubemapProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
+
+#include <ChilliSource/Scripting/Lua/LuaSourceProvider.h>
+#include <ChilliSource/Scripting/Lua/LuaSystem.h>
 
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 #include <ChilliSource/UI/Base/WidgetDefProvider.h>
@@ -395,9 +396,6 @@ namespace ChilliSource
             CreateSystem<Input::DeviceButtonSystem>();
             CreateSystem<Input::TextEntry>();
             
-            //Lua
-            CreateSystem<Lua::LuaSystem>();
-            
             //Rendering
             Rendering::RenderCapabilities* renderCapabilities = CreateSystem<Rendering::RenderCapabilities>();
             m_renderSystem = CreateSystem<Rendering::RenderSystem>(renderCapabilities);
@@ -410,6 +408,10 @@ namespace ChilliSource
             CreateSystem<Rendering::CubemapProvider>();
             CreateSystem<Rendering::FontProvider>();
             CreateSystem<Rendering::RenderComponentFactory>();
+            
+            //Scripting
+            CreateSystem<Scripting::LuaSystem>();
+            CreateSystem<Scripting::LuaSourceProvider>();
             
             //Particles
             CreateSystem<Rendering::ParticleSystem>();

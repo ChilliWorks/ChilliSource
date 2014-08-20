@@ -1,5 +1,5 @@
 //
-//  Base.h
+//  ForwardDeclarations.h
 //  Chilli Source
 //  Created by Scott Downie 13/08/2014.
 //
@@ -26,11 +26,28 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_LUA_BASE_H_
-#define _CHILLISOURCE_LUA_BASE_H_
+#ifndef _CHILLISOURCE_SCRIPTING_FORWARDDECLARATIONS_H_
+#define _CHILLISOURCE_SCRIPTING_FORWARDDECLARATIONS_H_
 
-#include <ChilliSource/Lua/Base/LuaScript.h>
-#include <ChilliSource/Lua/Base/LuaSystem.h>
-#include <ChilliSource/Lua/Base/LuaUtils.h>
+#include <ChilliSource/Core/Base/StandardMacros.h>
+
+#include <memory>
+
+struct lua_State;
+
+namespace ChilliSource 
+{
+	namespace Scripting
+    {
+        //--------------------------------------------------
+        /// Lua
+        //--------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(LuaScript);
+        CS_FORWARDDECLARE_CLASS(LuaSource);
+        CS_FORWARDDECLARE_CLASS(LuaSourceProvider);
+        CS_FORWARDDECLARE_CLASS(LuaSystem);
+        CS_FORWARDDECLARE_CLASS(ILuaFunction);
+	}
+}
 
 #endif
