@@ -29,7 +29,6 @@
 #include <ChilliSource/Scripting/Lua/LuaScript.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Scripting/Lua/LuaLibIncludes.h>
@@ -79,7 +78,7 @@ namespace ChilliSource
         {
             //All scripts have access to the import function which allows them to load
             //other lua scripts
-            RegisterFunction<void, const std::string&, const std::string&>("import", Core::MakeDelegate(this, &LuaScript::Import));
+            RegisterFunction("import", this, &LuaScript::Import);
             
             auto runResult = lua_pcall(m_luaVM, 0, 0, 0);
             if(runResult != 0)

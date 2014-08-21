@@ -52,20 +52,6 @@ namespace ChilliSource
 		public:
             
             //----------------------------------------------------
-            /// Register C++ function to be called in the Lua
-            /// script. This must be performed prior to calling
-            /// run or the script will error
-            ///
-            /// @author S Downie
-            ///
-            /// @param Function name as called by Lua
-            /// @param Function
-            //----------------------------------------------------
-            template <typename TResult, typename...TArgs> void RegisterFunction(const std::string& in_functionName, typename LuaFunction<1, TResult, TArgs...>::FuncType&& in_function)
-            {
-                m_functions.push_back(ILuaFunctionUPtr(new LuaFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_functionName, in_function)));
-            }
-            //----------------------------------------------------
             /// Register free function to be called in the Lua
             /// script. This must be performed prior to calling
             /// run or the script will error
@@ -78,6 +64,21 @@ namespace ChilliSource
             template <typename TResult, typename...TArgs> void RegisterFunction(const std::string& in_functionName, TResult (*in_function)(TArgs...))
             {
                 m_functions.push_back(ILuaFunctionUPtr(new LuaFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_functionName, Core::MakeDelegate(in_function))));
+            }
+            //----------------------------------------------------
+            /// Register free function to be called in the Lua
+            /// script. This must be performed prior to calling
+            /// run or the script will error
+            ///
+            /// @author S Downie
+            ///
+            /// @param Function name as called by Lua
+            /// @param Object to bind function to
+            /// @param Function
+            //----------------------------------------------------
+            template <typename TClass, typename TResult, typename...TArgs> void RegisterFunction(const std::string& in_functionName, TClass* in_object, TResult (TClass::*in_function)(TArgs...))
+            {
+                m_functions.push_back(ILuaFunctionUPtr(new LuaFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_functionName, Core::MakeDelegate(in_object, in_function))));
             }
             //----------------------------------------------------
             /// Register a class instance and its functions to be
