@@ -244,7 +244,6 @@ namespace ChilliSource
                 
                 const Json::Value& behaviour = root["Behaviour"];
                 
-                Scripting::LuaSourceCSPtr luaSource;
                 if(behaviour.isNull() == false)
                 {
                     bool relativePath = behaviour.isMember("Location") == false;
@@ -260,15 +259,32 @@ namespace ChilliSource
                         behaviourPath = pathToDefinition + behaviourPath;
                     }
                     
-                    luaSource = Core::Application::Get()->GetResourcePool()->LoadResource<Scripting::LuaSource>(behaviourLocation, behaviourPath);
+                    if(in_delegate == nullptr)
+                    {
+                        auto luaSource = Core::Application::Get()->GetResourcePool()->LoadResource<Scripting::LuaSource>(behaviourLocation, behaviourPath);
+                        out_resource->SetLoadState(luaSource->GetLoadState());
+                        widgetDef->Build(hierarchyDesc, luaSource);
+                    }
+                    else
+                    {
+                        Core::Application::Get()->GetResourcePool()->LoadResourceAsync<Scripting::LuaSource>(behaviourLocation, behaviourPath, [=](const Core::ResourceCSPtr& in_resource)
+                        {
+                            auto luaSource = std::static_pointer_cast<const Scripting::LuaSource>(in_resource);
+                            out_resource->SetLoadState(luaSource->GetLoadState());
+                            widgetDef->Build(hierarchyDesc, luaSource);
+                            CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                        });
+                    }
                 }
-                
-                widgetDef->Build(hierarchyDesc, luaSource);
-                
-                out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
-                if(in_delegate != nullptr)
+                else
                 {
-                    CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    widgetDef->Build(hierarchyDesc, nullptr);
+                    
+                    out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
+                    if(in_delegate != nullptr)
+                    {
+                        CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    }
                 }
             }
         }

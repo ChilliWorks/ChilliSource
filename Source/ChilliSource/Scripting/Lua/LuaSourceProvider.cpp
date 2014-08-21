@@ -101,7 +101,7 @@ namespace ChilliSource
             
             if(in_delegate != nullptr)
             {
-                in_delegate(out_resource);
+                CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
             }
         }
 	}
