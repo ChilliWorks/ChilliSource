@@ -28,9 +28,12 @@
 
 #include <ChilliSource/Scripting/Lua/LuaScript.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Scripting/Lua/LuaLibIncludes.h>
 #include <ChilliSource/Scripting/Lua/LuaSource.h>
-
 
 namespace ChilliSource
 {
@@ -55,8 +58,29 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
+        void LuaScript::Import(const std::string& in_location, const std::string& in_path)
+        {
+            auto source = Core::Application::Get()->GetResourcePool()->LoadResource<LuaSource>(Core::ParseStorageLocation(in_location), in_path);
+            
+            auto loadResult = luaL_loadstring(m_luaVM, source->GetSource().c_str());
+            if(loadResult != 0)
+            {
+                CS_LOG_FATAL("Error loading LUA file: " + std::string(lua_tostring(m_luaVM, -1)));
+            }
+            auto runResult = lua_pcall(m_luaVM, 0, 0, 0);
+            if(runResult != 0)
+            {
+                CS_LOG_FATAL("Error running LUA file: " + std::string(lua_tostring(m_luaVM, -1)));
+            }
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
         void LuaScript::Run()
         {
+            //All scripts have access to the import function which allows them to load
+            //other lua scripts
+            RegisterFunction<void, const std::string&, const std::string&>("import", Core::MakeDelegate(this, &LuaScript::Import));
+            
             auto runResult = lua_pcall(m_luaVM, 0, 0, 0);
             if(runResult != 0)
             {

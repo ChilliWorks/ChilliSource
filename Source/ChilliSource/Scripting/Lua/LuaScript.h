@@ -384,6 +384,16 @@ namespace ChilliSource
                 RegisterEnumType(in_typeName, in_type);
                 RegisterEnumTypes(in_types...);
             }
+            //-------------------------------------------------------
+            /// Imports the given lua script into the global table
+            /// for the current VM
+            ///
+            /// @author S Downie
+            ///
+            /// @param Location as string
+            /// @param Path from location
+            //-------------------------------------------------------
+            void Import(const std::string& in_location, const std::string& in_path);
             
         private:
             
