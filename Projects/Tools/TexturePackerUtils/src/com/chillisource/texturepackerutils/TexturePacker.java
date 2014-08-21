@@ -118,6 +118,8 @@ public class TexturePacker
 	boolean cropImages = true;	// When true we crop transparencies in the image
 	PlacementHeuristic eBestPlacement = PlacementHeuristic.BOTTOMRIGHT;
 	
+	boolean m_ignoreFatalAsserts = false;
+	
 	public TexturePacker setOuterPadding(int in_padding)
 	{
 		numPixelsPadding = in_padding;
@@ -197,6 +199,19 @@ public class TexturePacker
 		divisibleBy = in_divBy;
 		return this;
 	}
+	/**
+	 * Set to ignore cases that would usually lead to a fatal assert when packing, used to test if atlasOptions will result in a valid
+	 * Spritesheet 
+	 * 
+	 * @author HMcLaughlin
+	 * @param in_ignore - Whether to ignore or not
+	 * @return this instance
+	 */
+	public TexturePacker setIgnoreFatalAsserts(boolean in_ignore)
+	{
+		m_ignoreFatalAsserts = in_ignore;
+		return this;
+	}
 	
 	/**
 	 * Packs the given images into a single image
@@ -204,12 +219,13 @@ public class TexturePacker
 	 * @author S Downie
 	 * 
 	 * @param List of files to pack
+	 * @param out_errorInfo - Info object to be populated if an error occurs, can be null
 	 * 
 	 * @return Packed image data
 	 * 
 	 * @throws IOException 
 	 */
-	public PackedTexture pack(ArrayList<File> in_imageFiles) throws IOException
+	public PackedTexture pack(ArrayList<File> in_imageFiles, PackerError out_errorInfo) throws IOException
 	{
 		//as extruding, "extrudes" into the padding, we need to make sure we have at least enough padding for extruding.
 		if (extrude > 0 && numPixelsPadding < extrude)
@@ -290,6 +306,12 @@ public class TexturePacker
 			minAreaWidth = maxWidth;
 			minAreaHeight = maxHeight;
 
+			if(out_errorInfo != null)
+			{
+				out_errorInfo.m_requiredWidth = minAreaWidth;
+				out_errorInfo.m_requiredHeight = minAreaHeight;
+			}
+			
 			Logging.logVerbose("Minimum area required is "+minAreaWidth+"x"+minAreaHeight);
 		}
 		else
@@ -298,9 +320,13 @@ public class TexturePacker
 			maxHeight = -1;
 		}
 
-		if (!layoutSpritesForSheet(sortedOrder))
+		if (!layoutSpritesForSheet(sortedOrder, out_errorInfo))
 		{
-			Logging.logFatal("Images will not fit in any of the allowed output sizes.");
+			if(!m_ignoreFatalAsserts)
+			{
+				Logging.logFatal("Images will not fit in any of the allowed output sizes.");
+			}
+			
 			return null;
 		}
 
@@ -875,13 +901,15 @@ public class TexturePacker
 	}
 
 	/**
-	Layout all sprites
-	@param List of sprite indices in best order to try placement
-	@returns if it was possible to fit all sprites
-	 */
-	private boolean layoutSpritesForSheet(int[] sortedOrder)
+	* Layout all sprites
+	* 
+	* @param in_sortedOrder - List of sprite indices in best order to try placement
+	* @param out_errorInfo - error struct to store any error information, can be null
+	* @returns if it was possible to fit all sprites
+	*/
+	private boolean layoutSpritesForSheet(int[] in_sortedOrder, PackerError out_errorInfo)
 	{
-		placedSpriteRects = new Rectangle[sortedOrder.length];
+		placedSpriteRects = new Rectangle[in_sortedOrder.length];
 
 		combinedImageHeight = nextAllowedHeight(guessOutputHeight());
 		combinedImageWidth = nextAllowedWidth(guessOutputWidth());
@@ -891,10 +919,20 @@ public class TexturePacker
 
 		for (int nSprite = 0; nSprite < numSourceImages; nSprite++)
 		{
-			if(TryToLayoutSprite(nSprite, sortedOrder) ==false)
+			if(TryToLayoutSprite(nSprite, in_sortedOrder) ==false)
 			{
-				int originalID = sortedOrder[nSprite];
-				Logging.logFatal("Could not fit sprite:" + sourceImageFiles[originalID].getName() );
+				int originalID = in_sortedOrder[nSprite];
+				
+				if(out_errorInfo != null)
+				{
+					out_errorInfo.m_fileCausedOverflow = sourceImageFiles[originalID].getAbsolutePath();
+				}
+				
+				if(!m_ignoreFatalAsserts)
+				{
+					Logging.logFatal("Could not fit sprite:" + sourceImageFiles[originalID].getAbsolutePath());
+				}
+				
 				return false;
 			}
 			numPlacedImages++;
