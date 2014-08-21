@@ -1,4 +1,8 @@
 
+--Caching the functions locally means we don't have to peform a lookup for each call
+local rotateWidgetBy = Widget.rotateBy
+local getWidgetRotation = Widget.getFinalRotation
+
 -----------------------------------------------------
 -- Called when the widget is added to the canvas
 --
@@ -21,12 +25,12 @@ rotateDir = 1
 -- @param Time in seconds since last update
 -----------------------------------------------------
 function onUpdate(timeSinceLastUpdate)
-	rotation = Widget.getFinalRotation(thisWidget)
+	rotation = getWidgetRotation(thisWidget)
 
 	if rotation > 3.141 or rotation < -3.141 then
 		rotateDir = -rotateDir
 	end
-    Widget.rotateBy(thisWidget, timeSinceLastUpdate * rotateDir)
+    rotateWidgetBy(thisWidget, timeSinceLastUpdate * rotateDir)
 
 end
 -----------------------------------------------------
