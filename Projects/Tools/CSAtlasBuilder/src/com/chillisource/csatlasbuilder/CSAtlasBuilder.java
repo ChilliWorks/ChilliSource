@@ -35,6 +35,7 @@ import javax.imageio.*;
 import com.chillisource.pngtocsimage.PNGToCSImage;
 import com.chillisource.pngtocsimage.PNGToCSImageOptions;
 import com.chillisource.texturepackerutils.PackedTexture;
+import com.chillisource.texturepackerutils.PackerInfo;
 import com.chillisource.texturepackerutils.TexturePacker;
 import com.chillisource.toolutils.LittleEndianOutputStream;
 import com.chillisource.toolutils.FileUtils;
@@ -52,10 +53,13 @@ public class CSAtlasBuilder
 {
 	private static final String k_versionString = "2.13";
 	private static final short k_versionNum = 3;
-
-	AtlasBuilderOptions m_options = null;
-	File m_rootDirectory = null; // Root directory from which files are read,set from
-
+	private static final String k_atlasExtension = ".csatlas";
+	private static final String k_atlasIdExtension = ".csatlasid";
+	
+	private AtlasBuilderOptions m_options = null;
+	private File m_rootDirectory = null; // Root directory from which files are read,set from
+	private String m_outputFilePathWithoutExtension;
+	
 	/**
 	 * @author R Henning
 	 * 
@@ -63,13 +67,24 @@ public class CSAtlasBuilder
 	 * 
 	 * @return Whether or not the run was successful.
 	 */
-	public boolean run(AtlasBuilderOptions in_options) throws Exception
+	public boolean buildAtlas(AtlasBuilderOptions in_options) throws Exception
 	{
-		Logging.logVerbose("TextureAtlasTool version "+k_versionString);
+		Logging.logVerbose("TextureAtlasTool version " + k_versionString);
 		Logging.logVerbose("-----------------------");
 
 		m_options = in_options;
-
+		
+		String extension = StringUtils.getExtension(m_options.m_outputFilePath);
+		
+		//Check for a valid extension, i.e. either csatlas/csatlasid/csimage
+		if(!extension.equals(k_atlasExtension) || !extension.equals(k_atlasIdExtension) || !extension.equals(".csimage"))
+		{
+			Logging.logFatal("Output filepath (" + m_options.m_outputFilePath +  ") has wrong extension type, valid output extensions are " + k_atlasExtension + ", " + k_atlasIdExtension + " and .csimage");
+		}
+		
+		//Remove the extension from the outputpath
+		m_outputFilePathWithoutExtension = StringUtils.removeExtension(m_options.m_outputFilePath);
+		
 		Logging.logVerbose("input dir name is:\"" + m_options.m_inputDirectoryPath + "\"");
 
 		ArrayList<File> filesToProcess = new ArrayList<File>();
@@ -78,6 +93,10 @@ public class CSAtlasBuilder
 		if (m_options.m_fileList.length() > 0)
 		{
 			loadFilesFromOrderingFile(filesToProcess);
+		}
+		else if(m_options.m_imageFileToIDNameMap.size() > 0)
+		{
+			filesToProcess = new ArrayList<File>(m_options.m_imageFileToIDNameMap.keySet());
 		}
 		else
 		{
@@ -99,7 +118,7 @@ public class CSAtlasBuilder
 		.setOuterPadding(m_options.m_padding)
 		.enableCropping(m_options.m_crop);
 		
-		PackedTexture result = packer.pack(filesToProcess);
+		PackedTexture result = packer.pack(filesToProcess, null);
 		if(result == null)
 		{
 			return false;
@@ -109,14 +128,69 @@ public class CSAtlasBuilder
 		// It's output time!
 		///////////////////////////////////////////////////////
 		// Write our combined png file
-		File F = new File(StringUtils.removeExtension(m_options.m_outputFilePath) + ".png");
+		File F = new File(m_outputFilePathWithoutExtension + ".png");
 		ImageIO.write(result.getPackedTexture(), "png", F);
 
 		writeBinaryFile(result);
-		writeStringIDs(result);
+		writeStringIDs(result, m_options.m_imageFileToIDNameMap);
 		convertToCSImage();
 
 		Logging.logVerbose("Goodbye!\n");
+
+		return true;
+	}
+	/**
+	 * Checks if images specified with options will fit in the sprite sheet dimensions, will populate the error params if not
+	 * @param in_options - Atlas Options
+	 * @param out_errorInfo - Error Info
+	 * @return If the options can fit
+	 * @throws Exception
+	 */
+	public boolean checkCanFit(AtlasBuilderOptions in_options, PackerInfo out_errorInfo) throws Exception
+	{
+		Logging.logVerbose("TextureAtlasTool version " + k_versionString);
+		Logging.logVerbose("-----------------------");
+
+		m_options = in_options;
+
+		ArrayList<File> filesToProcess = new ArrayList<File>();
+
+		m_rootDirectory = new File(m_options.m_inputDirectoryPath);
+		
+		if (m_options.m_fileList.length() > 0)
+		{
+			loadFilesFromOrderingFile(filesToProcess);
+		}
+		else if(m_options.m_imageFileToIDNameMap.size() > 0)
+		{
+			filesToProcess = new ArrayList<File>(m_options.m_imageFileToIDNameMap.keySet());
+		}
+		else
+		{
+			addImageFilesInDirectory(m_rootDirectory, true, filesToProcess);
+		}
+		
+		TexturePacker packer = new TexturePacker();
+		packer
+		.setDivisibleBy(m_options.m_divisibleBy)
+		.setExtrusion(m_options.m_extrude)
+		.setFixedHeight(m_options.m_fixedHeight)
+		.setFixedWidth(m_options.m_fixedWidth)
+		.setMaxHeight(m_options.m_maxHeight)
+		.setMaxWidth(m_options.m_maxWidth)
+		.setValidHeights(m_options.m_validHeights)
+		.setValidWidths(m_options.m_validWidths)
+		.setHeuristic(m_options.m_packingHeuristic)
+		.setInnerPadding(m_options.m_innerPadding)
+		.setOuterPadding(m_options.m_padding)
+		.enableCropping(m_options.m_crop)
+		.disableFatalLogs();
+		
+		PackedTexture result = packer.pack(filesToProcess, out_errorInfo);
+		if(result == null)
+		{
+			return false;
+		}
 
 		return true;
 	}
@@ -209,8 +283,8 @@ public class CSAtlasBuilder
 		Logging.logVerbose("Converting to CSImage");
 		
 		PNGToCSImageOptions options = new PNGToCSImageOptions();
-		options.strInputFilename = StringUtils.removeExtension(m_options.m_outputFilePath) + ".png";
-		options.strOutputFilename = StringUtils.removeExtension(m_options.m_outputFilePath) + ".csimage";
+		options.strInputFilename = m_outputFilePathWithoutExtension + ".png";
+		options.strOutputFilename = m_outputFilePathWithoutExtension + ".csimage";
 		
 		if (m_options.m_imageCompression.length() > 0)
 		{
@@ -241,7 +315,7 @@ public class CSAtlasBuilder
 			Logging.logFatal("An exception occurred while converting to CSImage:\n" + StringUtils.convertExceptionToString(e));
 		}
 		
-		FileUtils.deleteFile(StringUtils.removeExtension(m_options.m_outputFilePath) + ".png");
+		FileUtils.deleteFile(m_outputFilePathWithoutExtension + ".png");
 	}
 	/**
 	 * @author R Henning
@@ -251,7 +325,7 @@ public class CSAtlasBuilder
 	private void writeBinaryFile(PackedTexture in_packedTexture) throws FileNotFoundException, IOException, Exception
 	{
 		int numImages = in_packedTexture.getNumImages();
-		LittleEndianOutputStream dosBinary = new LittleEndianOutputStream(m_options.m_outputFilePath);
+		LittleEndianOutputStream dosBinary = new LittleEndianOutputStream(m_outputFilePathWithoutExtension + k_atlasExtension);
 		dosBinary.writeShort((short) numImages);
 		dosBinary.writeShort(k_versionNum); // file format revision
 
@@ -291,18 +365,32 @@ public class CSAtlasBuilder
 	/**
 	 * @author R Henning
 	 * 
-	 * @param The packaged texture.
+	 * @param in_packedTexture - The packaged texture.
+	 * @param in_textureToSpriteNameMapper - Optional file to spriteId name map (Can be null)
 	 */
-	private void writeStringIDs(PackedTexture in_packedTexture) throws IOException 
+	private void writeStringIDs(PackedTexture in_packedTexture, Map<File, String> in_imageFileToSpriteIdMapper) throws IOException 
 	{
 		int numImages = in_packedTexture.getNumImages();
 		
-		FileOutputStream outC = new FileOutputStream(m_options.m_outputFilePath + "id");
+		FileOutputStream outC = new FileOutputStream(m_outputFilePathWithoutExtension + k_atlasIdExtension);
 		DataOutputStream dosC = new DataOutputStream(outC);
 
 		for (int i = 0; i < numImages; i++)
 		{
-			String enumName = generateSpriteNameFromFile(in_packedTexture.getOriginalFile(i));
+			String enumName = "";
+			//If the map is not null then we take the sprite id names from it
+			if(in_imageFileToSpriteIdMapper.size() > 0)
+			{
+				assert(in_imageFileToSpriteIdMapper.containsKey(in_packedTexture.getOriginalFile(i))) : "File not contained in name map!";
+				
+				enumName = in_imageFileToSpriteIdMapper.get(in_packedTexture.getOriginalFile(i));
+			}
+			//Else we generate our own
+			else
+			{
+				enumName = generateSpriteNameFromFile(in_packedTexture.getOriginalFile(i));
+			}
+			
 			dosC.writeBytes(enumName);
 			dosC.writeByte('\n');
 		}
