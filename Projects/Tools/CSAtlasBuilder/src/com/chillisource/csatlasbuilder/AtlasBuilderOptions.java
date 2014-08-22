@@ -29,6 +29,7 @@
 package com.chillisource.csatlasbuilder;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.chillisource.texturepackerutils.TexturePacker.PlacementHeuristic;
@@ -38,7 +39,7 @@ public class AtlasBuilderOptions
 	public String m_inputDirectoryPath = "";
 	public String m_outputFilePath = "";
 	public String m_fileList = "";
-	public Map<File, String> m_imageFileToIDNameMap = null;//Available through java library access only
+	public Map<File, String> m_imageFileToIDNameMap = new HashMap<File, String>();//Available through java library access only
 	public int m_fixedWidth = -1;
 	public int m_fixedHeight = -1;
 	public int[] m_validHeights = new int[0];

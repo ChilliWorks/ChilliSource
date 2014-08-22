@@ -302,7 +302,7 @@ public final class Main
 		}
 		
 		CSAtlasBuilder tool = new CSAtlasBuilder();
-		tool.run(options);
+		tool.buildAtlas(options);
 		
 		Logging.finish();
 	}

@@ -35,7 +35,7 @@ import javax.imageio.*;
 import com.chillisource.pngtocsimage.PNGToCSImage;
 import com.chillisource.pngtocsimage.PNGToCSImageOptions;
 import com.chillisource.texturepackerutils.PackedTexture;
-import com.chillisource.texturepackerutils.PackerError;
+import com.chillisource.texturepackerutils.PackerInfo;
 import com.chillisource.texturepackerutils.TexturePacker;
 import com.chillisource.toolutils.LittleEndianOutputStream;
 import com.chillisource.toolutils.FileUtils;
@@ -65,7 +65,7 @@ public class CSAtlasBuilder
 	 * 
 	 * @return Whether or not the run was successful.
 	 */
-	public boolean run(AtlasBuilderOptions in_options) throws Exception
+	public boolean buildAtlas(AtlasBuilderOptions in_options) throws Exception
 	{
 		Logging.logVerbose("TextureAtlasTool version " + k_versionString);
 		Logging.logVerbose("-----------------------");
@@ -84,7 +84,7 @@ public class CSAtlasBuilder
 		{
 			loadFilesFromOrderingFile(filesToProcess);
 		}
-		else if(m_options.m_imageFileToIDNameMap != null)
+		else if(m_options.m_imageFileToIDNameMap.size() > 0)
 		{
 			filesToProcess = new ArrayList<File>(m_options.m_imageFileToIDNameMap.keySet());
 		}
@@ -136,23 +136,22 @@ public class CSAtlasBuilder
 	 * @return If the options can fit
 	 * @throws Exception
 	 */
-	public boolean checkCanFit(AtlasBuilderOptions in_options, PackerError out_errorInfo) throws Exception
+	public boolean checkCanFit(AtlasBuilderOptions in_options, PackerInfo out_errorInfo) throws Exception
 	{
 		Logging.logVerbose("TextureAtlasTool version " + k_versionString);
 		Logging.logVerbose("-----------------------");
 
 		m_options = in_options;
 
-		Logging.logVerbose("input dir name is:\"" + m_options.m_inputDirectoryPath + "\"");
-
 		ArrayList<File> filesToProcess = new ArrayList<File>();
 
 		m_rootDirectory = new File(m_options.m_inputDirectoryPath);
+		
 		if (m_options.m_fileList.length() > 0)
 		{
 			loadFilesFromOrderingFile(filesToProcess);
 		}
-		else if(m_options.m_imageFileToIDNameMap != null)
+		else if(m_options.m_imageFileToIDNameMap.size() > 0)
 		{
 			filesToProcess = new ArrayList<File>(m_options.m_imageFileToIDNameMap.keySet());
 		}
@@ -174,7 +173,8 @@ public class CSAtlasBuilder
 		.setHeuristic(m_options.m_packingHeuristic)
 		.setInnerPadding(m_options.m_innerPadding)
 		.setOuterPadding(m_options.m_padding)
-		.enableCropping(m_options.m_crop);
+		.enableCropping(m_options.m_crop)
+		.disableFatalLogs();
 		
 		PackedTexture result = packer.pack(filesToProcess, out_errorInfo);
 		if(result == null)
@@ -369,7 +369,7 @@ public class CSAtlasBuilder
 		{
 			String enumName = "";
 			//If the map is not null then we take the sprite id names from it
-			if(in_imageFileToSpriteIdMapper != null)
+			if(in_imageFileToSpriteIdMapper.size() > 0)
 			{
 				assert(in_imageFileToSpriteIdMapper.containsKey(in_packedTexture.getOriginalFile(i))) : "File not contained in name map!";
 				

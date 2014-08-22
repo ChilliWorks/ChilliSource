@@ -1,5 +1,5 @@
 /**
- *  Rectangle.java
+ *  PackerInfo.java
  *  Chilli Source
  *  Created by Hugh McLaughlin on 21/08/2014.
  *
@@ -32,7 +32,7 @@ package com.chillisource.texturepackerutils;
  * 
  * @author HMcLaughlin
  */
-public class PackerError
+public final class PackerInfo
 {
 	public String m_fileCausedOverflow;
 	public int m_requiredWidth;

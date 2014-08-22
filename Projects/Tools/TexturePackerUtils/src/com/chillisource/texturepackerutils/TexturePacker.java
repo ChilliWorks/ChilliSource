@@ -118,7 +118,7 @@ public class TexturePacker
 	boolean cropImages = true;	// When true we crop transparencies in the image
 	PlacementHeuristic eBestPlacement = PlacementHeuristic.BOTTOMRIGHT;
 	
-	boolean m_ignoreFatalAsserts = false;
+	boolean m_ignoreFatalLogs = false;
 	
 	public TexturePacker setOuterPadding(int in_padding)
 	{
@@ -207,9 +207,9 @@ public class TexturePacker
 	 * @param in_ignore - Whether to ignore or not
 	 * @return this instance
 	 */
-	public TexturePacker setIgnoreFatalAsserts(boolean in_ignore)
+	public TexturePacker disableFatalLogs()
 	{
-		m_ignoreFatalAsserts = in_ignore;
+		m_ignoreFatalLogs = true;
 		return this;
 	}
 	
@@ -225,7 +225,7 @@ public class TexturePacker
 	 * 
 	 * @throws IOException 
 	 */
-	public PackedTexture pack(ArrayList<File> in_imageFiles, PackerError out_errorInfo) throws IOException
+	public PackedTexture pack(ArrayList<File> in_imageFiles, PackerInfo out_errorInfo) throws IOException
 	{
 		//as extruding, "extrudes" into the padding, we need to make sure we have at least enough padding for extruding.
 		if (extrude > 0 && numPixelsPadding < extrude)
@@ -322,11 +322,7 @@ public class TexturePacker
 
 		if (!layoutSpritesForSheet(sortedOrder, out_errorInfo))
 		{
-			if(!m_ignoreFatalAsserts)
-			{
-				Logging.logFatal("Images will not fit in any of the allowed output sizes.");
-			}
-			
+			logFatalError("Images will not fit in any of the allowed output sizes.");
 			return null;
 		}
 
@@ -394,7 +390,7 @@ public class TexturePacker
 					}
 					else
 					{
-						Logging.logFatal("input out of range:" + (ix + x) + "," + (iy + y));
+						logFatalError("input out of range:" + (ix + x) + "," + (iy + y));
 					}
 
 					if ((ox + x) < combinedImageWidth && (oy + y) < combinedImageHeight)
@@ -403,7 +399,7 @@ public class TexturePacker
 					}
 					else
 					{
-						Logging.logFatal("Pixel out of range:" + (ox + x) + "," + (oy + y));
+						logFatalError("Pixel out of range:" + (ox + x) + "," + (oy + y));
 					}
 				}
 			}
@@ -907,7 +903,7 @@ public class TexturePacker
 	* @param out_errorInfo - error struct to store any error information, can be null
 	* @returns if it was possible to fit all sprites
 	*/
-	private boolean layoutSpritesForSheet(int[] in_sortedOrder, PackerError out_errorInfo)
+	private boolean layoutSpritesForSheet(int[] in_sortedOrder, PackerInfo out_errorInfo)
 	{
 		placedSpriteRects = new Rectangle[in_sortedOrder.length];
 
@@ -928,10 +924,7 @@ public class TexturePacker
 					out_errorInfo.m_fileCausedOverflow = sourceImageFiles[originalID].getAbsolutePath();
 				}
 				
-				if(!m_ignoreFatalAsserts)
-				{
-					Logging.logFatal("Could not fit sprite:" + sourceImageFiles[originalID].getAbsolutePath());
-				}
+				logFatalError("Could not fit sprite:" + sourceImageFiles[originalID].getAbsolutePath());
 				
 				return false;
 			}
@@ -1116,6 +1109,19 @@ public class TexturePacker
 				croppedImageArea[i] = croppedImageWidths[i] * croppedImageHeights[i];
 				Logging.logVerbose(" clipped area:" + minx + "," + maxx + ":" + miny + "," + maxy);
 			}
+		}
+	}
+	/**
+	 * Raises a fatal error if enabled
+	 * 
+	 * @author HMcLaughlin
+	 * @param in_message - Message to show
+	 */
+	private void logFatalError(String in_message)
+	{
+		if(!m_ignoreFatalLogs)
+		{
+			Logging.logError(in_message);
 		}
 	}
 }
