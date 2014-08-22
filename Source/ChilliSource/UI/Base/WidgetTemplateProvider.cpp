@@ -70,7 +70,12 @@ namespace ChilliSource
                 WidgetTemplate* widgetTemplate = (WidgetTemplate*)out_resource.get();
                 
                 WidgetHierarchyDesc hierarchyDesc;
-                WidgetTemplateProvider::ParseTemplate(root, in_storageLocation, in_filepath, hierarchyDesc);
+                
+                std::string definitionFileName;
+                std::string pathToDefinition;
+                Core::StringUtils::SplitFilename(in_filepath, definitionFileName, pathToDefinition);
+                
+                WidgetTemplateProvider::ParseTemplate(root, in_storageLocation, pathToDefinition, hierarchyDesc);
                 
                 widgetTemplate->Build(hierarchyDesc);
                 
