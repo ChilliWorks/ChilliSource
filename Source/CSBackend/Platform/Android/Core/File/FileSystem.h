@@ -326,19 +326,48 @@ namespace CSBackend
 			//--------------------------------------------------------------
 			CSCore::FileStreamUPtr CreateFileStreamInAPK(CSCore::StorageLocation in_location, const std::string& in_filePath, CSCore::FileMode in_fileMode) const;
 			//--------------------------------------------------------------
-			/// Copies a file from the APK to one of the writable storage
+			/// Copies files from one location to another.
+			///
+			/// @author S Downie
+			///
+			/// @param The source storage location.
+			/// @param The source directories.
+			/// @param The destination storage location.
+			/// @param The destination directories.
+			///
+			/// @return Whether or not the files were successfully copied.
+			//--------------------------------------------------------------
+			bool CopyFiles(CSCore::StorageLocation in_sourceStorageLocation, const std::vector<std::string>& in_sourceFilePaths,
+						  CSCore::StorageLocation in_destinationStorageLocation, const std::vector<std::string>& in_destinationFilePaths) const;
+			//--------------------------------------------------------------
+			/// Copies files from one location to another for files that
+			/// are guaranteed to not be in the APK
+			///
+			/// @author S Downie
+			///
+			/// @param The source storage location.
+			/// @param The source directories.
+			/// @param The destination storage location.
+			/// @param The destination directories.
+			///
+			/// @return Whether or not the files were successfully copied.
+			//--------------------------------------------------------------
+			bool CopyNonAPKFiles(CSCore::StorageLocation in_sourceStorageLocation, const std::vector<std::string>& in_sourceFilePaths,
+					CSCore::StorageLocation in_destinationStorageLocation, const std::vector<std::string>& in_destinationFilePaths) const;
+			//--------------------------------------------------------------
+			/// Copies files from the APK to one of the writable storage
 			/// locations.
 			///
 			/// @author Ian Copland
 			///
 			/// @param The package or CS storage location of the source
-			/// @param the source file path in the APK.
+			/// @param the source file paths in the APK.
 			/// @param the destination storage location
-			/// @param the destination file.
+			/// @param the destination files.
 			///
 			/// @return whether or not this has succeeded.
 			//--------------------------------------------------------------
-			bool CopyFileFromAPK(CSCore::StorageLocation in_srcLocation, const std::string& in_sourcefilePath, CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilepath) const;
+			bool CopyFilesFromAPK(CSCore::StorageLocation in_srcLocation, const std::vector<std::string>& in_sourcefilePaths, CSCore::StorageLocation in_destinationStorageLocation, const std::vector<std::string>& in_destinationFilepaths) const;
 			//--------------------------------------------------------------
 			/// returns all files and directories in a directory of the APK.
 			/// Note: Unlike other similar methods, empty directories will

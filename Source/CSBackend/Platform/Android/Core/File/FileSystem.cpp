@@ -472,46 +472,97 @@ namespace CSBackend
 		bool FileSystem::CopyFile(CSCore::StorageLocation in_sourceStorageLocation, const std::string& in_sourceFilePath,
 								  CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const
 		{
+			std::vector<std::string> sourcePaths = {in_sourceFilePath};
+			std::vector<std::string> destPaths = {in_destinationFilePath};
+			return CopyFiles(in_sourceStorageLocation, sourcePaths, in_destinationStorageLocation, destPaths);
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::CopyFiles(CSCore::StorageLocation in_sourceStorageLocation, const std::vector<std::string>& in_sourceFilePaths,
+								  CSCore::StorageLocation in_destinationStorageLocation, const std::vector<std::string>& in_destinationFilePaths) const
+		{
+			CS_ASSERT(in_sourceFilePaths.size() == in_destinationFilePaths.size(), "File System: Mismatch number of source paths and dest paths when copying files");
 			CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
 
 			//check if we're loading from DLC, and insure that the file exists in the dlc cache. if it does not, fall back on package.
 			if (in_sourceStorageLocation == CSCore::StorageLocation::k_package)
 			{
-				std::string filePath = GetAbsolutePathToFile(CSCore::StorageLocation::k_package, in_sourceFilePath);
-				if(filePath.empty())
+				std::vector<std::string> filePaths;
+				filePaths.reserve(in_sourceFilePaths.size());
+				for(const auto& path : in_sourceFilePaths)
 				{
-					CS_LOG_ERROR("File System: Trying to copy file '" + in_sourceFilePath + "' but it does not exist.");
-					return false;
+					filePaths.push_back(GetAbsolutePathToFile(CSCore::StorageLocation::k_package, path));
+					if(filePaths.back().empty())
+					{
+						CS_LOG_ERROR("File System: Trying to copy file '" + path + "' but it does not exist.");
+						return false;
+					}
 				}
 
-				return CopyFileFromAPK(in_sourceStorageLocation, filePath, in_destinationStorageLocation, in_destinationFilePath);
+				return CopyFilesFromAPK(in_sourceStorageLocation, filePaths, in_destinationStorageLocation, in_destinationFilePaths);
 			}
-			else if (in_sourceStorageLocation == CSCore::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_sourceFilePath) == false)
+			else if (in_sourceStorageLocation == CSCore::StorageLocation::k_DLC)
 			{
-				std::string filePath = GetAbsolutePathToFile(CSCore::StorageLocation::k_package, in_sourceFilePath);
-				if(filePath.empty())
+				std::vector<std::string> apkFilePaths;
+				apkFilePaths.reserve(in_sourceFilePaths.size());
+
+				std::vector<std::string> cachedDLCFilePaths;
+				cachedDLCFilePaths.reserve(in_sourceFilePaths.size());
+
+				for(const auto& path : in_sourceFilePaths)
 				{
-					CS_LOG_ERROR("File System: Trying to copy file '" + in_sourceFilePath + "' but it does not exist.");
+					if(DoesFileExistInCachedDLC(path) == false)
+					{
+						apkFilePaths.push_back(GetAbsolutePathToFile(CSCore::StorageLocation::k_package, path));
+						if(apkFilePaths.back().empty())
+						{
+							CS_LOG_ERROR("File System: Trying to copy file '" + path + "' but it does not exist.");
+							return false;
+						}
+					}
+					else
+					{
+						cachedDLCFilePaths.push_back(GetAbsolutePathToFile(in_sourceStorageLocation, path));
+					}
+				}
+
+				if(CopyFilesFromAPK(CSCore::StorageLocation::k_package, apkFilePaths, in_destinationStorageLocation, in_destinationFilePaths) == false)
+				{
 					return false;
 				}
 
-				return CopyFileFromAPK(CSCore::StorageLocation::k_package, filePath, in_destinationStorageLocation, in_destinationFilePath);
+				if(CopyNonAPKFiles(in_sourceStorageLocation, cachedDLCFilePaths, in_destinationStorageLocation, in_destinationFilePaths) == false)
+				{
+					return false;
+				}
+
+				return true;
 			}
 			else
 			{
-				std::string sourceAbsolutePath = GetAbsolutePathToFile(in_sourceStorageLocation, in_sourceFilePath);
-				std::string destinationAbsolutePath = GetAbsolutePathToStorageLocation(in_destinationStorageLocation) + in_destinationFilePath;
+				return CopyNonAPKFiles(in_sourceStorageLocation, in_sourceFilePaths, in_destinationStorageLocation, in_destinationFilePaths);
+			}
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::CopyNonAPKFiles(CSCore::StorageLocation in_sourceStorageLocation, const std::vector<std::string>& in_sourceFilePaths,
+				CSCore::StorageLocation in_destinationStorageLocation, const std::vector<std::string>& in_destinationFilePaths) const
+		{
+			for(u32 i=0; i<in_sourceFilePaths.size(); ++i)
+			{
+				std::string sourceAbsolutePath = GetAbsolutePathToFile(in_sourceStorageLocation, in_sourceFilePaths[i]);
+				std::string destinationAbsolutePath = GetAbsolutePathToStorageLocation(in_destinationStorageLocation) + in_destinationFilePaths[i];
 
 				//check the source file exists
 				if(CSBackend::Android::DoesFileExist(sourceAbsolutePath) == false)
 				{
-					CS_LOG_ERROR("File System: Trying to copy file '" + in_sourceFilePath + "' but it does not exist.");
+					CS_LOG_ERROR("File System: Trying to copy file '" + in_sourceFilePaths[i] + "' but it does not exist.");
 					return false;
 				}
 
 				//get the path to the file
 				std::string path, name;
-				CSCore::StringUtils::SplitFilename(in_destinationFilePath, name, path);
+				CSCore::StringUtils::SplitFilename(in_destinationFilePaths[i], name, path);
 
 				//create the output directory
 				CreateDirectoryPath(in_destinationStorageLocation, path);
@@ -519,8 +570,13 @@ namespace CSBackend
 				//try and copy the file
 				CSBackend::Android::CopyFile(sourceAbsolutePath, destinationAbsolutePath);
 
-				return CSBackend::Android::DoesFileExist(destinationAbsolutePath);
+				if(CSBackend::Android::DoesFileExist(destinationAbsolutePath) == false)
+				{
+					return false;
+				}
 			}
+
+			return true;
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
@@ -541,22 +597,25 @@ namespace CSBackend
 			if (filenames.size() == 0)
 			{
 				CreateDirectoryPath(in_destinationStorageLocation, in_destinationDirectoryPath);
-			}
-			else
-			{
-				//copy each of these files individually
-				std::string sourcePath = CSCore::StringUtils::StandardiseDirectoryPath(in_sourceDirectoryPath);
-				std::string destPath = CSCore::StringUtils::StandardiseDirectoryPath(in_destinationDirectoryPath);
-				for (const std::string& filename : filenames)
-				{
-					if (CopyFile(in_sourceStorageLocation, sourcePath + filename, in_destinationStorageLocation, destPath + filename) == false)
-					{
-						return false;
-					}
-				}
+				return true;
 			}
 
-			return true;
+			std::string sourcePath = CSCore::StringUtils::StandardiseDirectoryPath(in_sourceDirectoryPath);
+			std::string destPath = CSCore::StringUtils::StandardiseDirectoryPath(in_destinationDirectoryPath);
+
+			std::vector<std::string> sourcePaths;
+			sourcePaths.reserve(filenames.size());
+
+			std::vector<std::string> destPaths;
+			destPaths.reserve(filenames.size());
+
+			for (const std::string& filename : filenames)
+			{
+				sourcePaths.push_back(sourcePath + filename);
+				destPaths.push_back(destPath + filename);
+			}
+
+			return CopyFiles(in_sourceStorageLocation, sourcePaths, in_destinationStorageLocation, destPaths);
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
@@ -891,19 +950,25 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool FileSystem::CopyFileFromAPK(CSCore::StorageLocation in_srcLocation, const std::string& in_filePath, CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const
+		bool FileSystem::CopyFilesFromAPK(CSCore::StorageLocation in_srcLocation, const std::vector<std::string>& in_filePaths, CSCore::StorageLocation in_destinationStorageLocation, const std::vector<std::string>& in_destinationFilePaths) const
 		{
 			std::unique_lock<std::mutex> lock(m_minizipMutex);
 
+			unzFile unzip = unzOpen(m_apkPath.c_str());
+			if (unzip == nullptr)
+			{
+				CS_LOG_ERROR("File System: Cannot open APK");
+				return false;
+			}
+
 			bool isSuccess = false;
 
-			APKManifestItem manifestItem;
-			if (TryGetManifestItem(in_srcLocation, CSCore::StringUtils::StandardiseFilePath(in_filePath), manifestItem) == true)
+			for(u32 i=0; i<in_filePaths.size(); ++i)
 			{
-				if (manifestItem.m_isFile == true)
+				APKManifestItem manifestItem;
+				if (TryGetManifestItem(in_srcLocation, CSCore::StringUtils::StandardiseFilePath(in_filePaths[i]), manifestItem) == true)
 				{
-					unzFile unzip = unzOpen(m_apkPath.c_str());
-					if (unzip != nullptr)
+					if (manifestItem.m_isFile == true)
 					{
 						if (unzGoToFilePos(unzip, &manifestItem.m_apkPosition) == UNZ_OK)
 						{
@@ -916,13 +981,13 @@ namespace CSBackend
 								unzGetCurrentFileInfo(unzip, &info, filePathBytes, k_filePathLength, nullptr, 0, nullptr, 0);
 
 								std::string outputDirectoryPath, outputFileName;
-								CSCore::StringUtils::SplitFilename(in_destinationFilePath, outputFileName, outputDirectoryPath);
+								CSCore::StringUtils::SplitFilename(in_destinationFilePaths[i], outputFileName, outputDirectoryPath);
 								if (CreateDirectoryPath(in_destinationStorageLocation, outputDirectoryPath) == true)
 								{
 									char* dataBuffer = new char[info.uncompressed_size];
 									unzReadCurrentFile(unzip, (voidp)dataBuffer, info.uncompressed_size);
 
-									if (WriteFile(in_destinationStorageLocation, in_destinationFilePath, dataBuffer, info.uncompressed_size) == true)
+									if (WriteFile(in_destinationStorageLocation, in_destinationFilePaths[i], dataBuffer, info.uncompressed_size) == true)
 									{
 										isSuccess = true;
 									}
@@ -935,14 +1000,16 @@ namespace CSBackend
 							}
 						}
 					}
-					unzClose(unzip);
+				}
+
+				if (isSuccess == false)
+				{
+					CS_LOG_ERROR("File System: Failed to copy file '" + in_filePaths[i] + "' from APK.");
+					break;
 				}
 			}
 
-			if (isSuccess == false)
-			{
-				CS_LOG_ERROR("File System: Failed to copy file '" + in_filePath + "' from APK.");
-			}
+			unzClose(unzip);
 
 			return isSuccess;
 		}
