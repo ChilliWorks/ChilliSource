@@ -807,7 +807,7 @@ namespace ChilliSource
             Rendering::GetAnchorPoint(m_originAnchor, halfSize, pivotPos);
             
             Core::Matrix3 pivot(Core::Matrix3::CreateTransform(-pivotPos, Core::Vector2::k_one, 0.0f));
-            Core::Matrix3 rotate(Core::Matrix3::CreateTransform(Core::Vector2::k_zero, Core::Vector2::k_one, m_localRotation));
+            Core::Matrix3 rotate(Core::Matrix3::CreateTransform(Core::Vector2::k_zero, Core::Vector2::k_one, -m_localRotation));
             Core::Matrix3 translate(Core::Matrix3::CreateTransform(GetParentSpacePosition() - pivotPos, Core::Vector2::k_one, 0.0f));
             
             m_cachedLocalTransform = pivot * rotate * translate;
@@ -826,7 +826,7 @@ namespace ChilliSource
             
             if(m_canvas == this)
             {
-                m_cachedFinalTransform = Core::Matrix3::CreateTransform(m_localPosition.vAbsolute, Core::Vector2::k_one, m_localRotation);
+                m_cachedFinalTransform = Core::Matrix3::CreateTransform(m_localPosition.vAbsolute, Core::Vector2::k_one, -m_localRotation);
                 
                 m_isParentTransformCacheValid = true;
                 m_isLocalTransformCacheValid = true;
