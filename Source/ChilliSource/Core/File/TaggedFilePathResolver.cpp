@@ -61,7 +61,7 @@ namespace ChilliSource
                 for(const auto& string : in_list)
                 {
                     auto findIndex = string.find(in_text);
-                    if(findIndex == 0 || string[findIndex-1] == '/')
+                    if(findIndex == 0 || (findIndex != std::string::npos && string[findIndex-1] == '/'))
                     {
                         result.push_back(string);
                     }
