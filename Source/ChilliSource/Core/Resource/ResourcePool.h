@@ -389,8 +389,6 @@ namespace ChilliSource
             CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be loaded on the main thread - use LoadResourceAsync");
             CS_ASSERT(in_filePath.empty() == false, "Cannot load resource with no file path");
             
-            std::string deviceFilePath = Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_location, in_filePath);
-            
             std::unique_lock<std::mutex> lock(m_mutex);
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
             
@@ -403,7 +401,7 @@ namespace ChilliSource
             PoolDesc& desc(itDescriptor->second);
             
             //Find a provider that can load this resource
-            ResourceProvider* provider = FindProvider(deviceFilePath, desc);
+			ResourceProvider* provider = FindProvider(in_filePath, desc);
             if(provider == nullptr)
             {
                 return nullptr;
@@ -417,7 +415,7 @@ namespace ChilliSource
             }
             
             //Check descriptor and see if this resource already exists
-            Resource::ResourceId resourceId = GenerateResourceId(in_location, deviceFilePath, options);
+			Resource::ResourceId resourceId = GenerateResourceId(in_location, in_filePath, options);
             
             lock.lock();
             auto itResource = desc.m_cachedResources.find(resourceId);
@@ -430,15 +428,16 @@ namespace ChilliSource
             //Load the resource
             ResourceSPtr resource(TResourceType::Create());
             resource->SetStorageLocation(in_location);
-            resource->SetFilePath(deviceFilePath);
-            resource->SetName(deviceFilePath);
+			resource->SetFilePath(in_filePath);
+			resource->SetName(in_filePath);
             resource->SetOptions(options);
             resource->SetId(resourceId);
 
+			std::string deviceFilePath = Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_location, in_filePath);
             provider->CreateResourceFromFile(in_location, deviceFilePath, options, resource);
             if(resource->GetLoadState() != Resource::LoadState::k_loaded)
             {
-                CS_LOG_ERROR("Failed to create resource for " + deviceFilePath);
+				CS_LOG_ERROR("Failed to create resource for " + in_filePath);
                 return nullptr;
             }
             
@@ -464,9 +463,7 @@ namespace ChilliSource
             CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Resources can only be refreshed on the main thread");
             CS_ASSERT(in_filePath.empty() == false, "Cannot refresh resource with no file path");
             
-            std::string deviceFilePath = Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_location, in_filePath);
-            
-            std::unique_lock<std::mutex> lock(m_mutex);
+			std::unique_lock<std::mutex> lock(m_mutex);
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
             
             if(itDescriptor == m_descriptors.end())
@@ -478,7 +475,7 @@ namespace ChilliSource
             PoolDesc& desc(itDescriptor->second);
             
             //Find a provider that can load this resource
-            ResourceProvider* provider = FindProvider(deviceFilePath, desc);
+			ResourceProvider* provider = FindProvider(in_filePath, desc);
             if(provider == nullptr)
             {
                 return nullptr;
@@ -492,13 +489,13 @@ namespace ChilliSource
             }
             
             //Check descriptor and see if this resource already exists
-            Resource::ResourceId resourceId = GenerateResourceId(in_location, deviceFilePath, options);
+			Resource::ResourceId resourceId = GenerateResourceId(in_location, in_filePath, options);
             
             lock.lock();
             auto itResource = desc.m_cachedResources.find(resourceId);
             if(itResource == desc.m_cachedResources.end())
             {
-                CS_LOG_ERROR("Failed to refresh non-existing resource for " + deviceFilePath);
+				CS_LOG_ERROR("Failed to refresh non-existing resource for " + in_filePath);
                 return nullptr;
             }
             
@@ -508,6 +505,7 @@ namespace ChilliSource
             lock.unlock();
             
             resource->SetLoadState(Resource::LoadState::k_loading);
+			std::string deviceFilePath = Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_location, in_filePath);
             provider->CreateResourceFromFile(in_location, deviceFilePath, options, resource);
             if(resource->GetLoadState() != Resource::LoadState::k_loaded)
             {
@@ -572,8 +570,6 @@ namespace ChilliSource
             CS_ASSERT(in_filePath.empty() == false, "Cannot load resource async with no file path");
             CS_ASSERT(in_delegate != nullptr, "Cannot load resource async with null delegate");
             
-            std::string deviceFilePath = Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_location, in_filePath);
-            
             std::unique_lock<std::mutex> lock(m_mutex);
             auto itDescriptor = m_descriptors.find(TResourceType::InterfaceID);
             
@@ -587,7 +583,7 @@ namespace ChilliSource
             PoolDesc& desc(itDescriptor->second);
             
             //Find a provider that can load this resource
-            ResourceProvider* provider = FindProvider(deviceFilePath, desc);
+			ResourceProvider* provider = FindProvider(in_filePath, desc);
             if(provider == nullptr)
             {
                 in_delegate(nullptr);
@@ -602,7 +598,7 @@ namespace ChilliSource
             }
             
             //Check descriptor and see if this resource already exists
-            Resource::ResourceId resourceId = GenerateResourceId(in_location, deviceFilePath, options);
+			Resource::ResourceId resourceId = GenerateResourceId(in_location, in_filePath, options);
             
             lock.lock();
             auto itResource = desc.m_cachedResources.find(resourceId);
@@ -615,8 +611,8 @@ namespace ChilliSource
             //Load the resource
             ResourceSPtr resource(TResourceType::Create());
             resource->SetStorageLocation(in_location);
-            resource->SetFilePath(deviceFilePath);
-            resource->SetName(deviceFilePath);
+			resource->SetFilePath(in_filePath);
+			resource->SetName(in_filePath);
             resource->SetOptions(options);
             resource->SetId(resourceId);
 
@@ -628,6 +624,8 @@ namespace ChilliSource
             {
                 in_delegate(std::static_pointer_cast<const TResourceType>(in_resource));
             });
+
+			std::string deviceFilePath = Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_location, in_filePath);
             provider->CreateResourceFromFileAsync(in_location, deviceFilePath, options, convertDelegate, resource);
         }
         //-------------------------------------------------------------------------------------
