@@ -54,10 +54,12 @@ public class CSAtlasBuilder
 	private static final String k_versionString = "2.13";
 	private static final short k_versionNum = 3;
 	private static final String k_atlasExtension = ".csatlas";
+	private static final String k_atlasIdExtension = ".csatlasid";
 	
-	AtlasBuilderOptions m_options = null;
-	File m_rootDirectory = null; // Root directory from which files are read,set from
-
+	private AtlasBuilderOptions m_options = null;
+	private File m_rootDirectory = null; // Root directory from which files are read,set from
+	private String m_outputFilePathWithoutExtension;
+	
 	/**
 	 * @author R Henning
 	 * 
@@ -72,8 +74,16 @@ public class CSAtlasBuilder
 
 		m_options = in_options;
 		
+		String extension = StringUtils.getExtension(m_options.m_outputFilePath);
+		
+		//Check for a valid extension, i.e. either csatlas/csatlasid/csimage
+		if(!extension.equals(k_atlasExtension) || !extension.equals(k_atlasIdExtension) || !extension.equals(".csimage"))
+		{
+			Logging.logFatal("Output filepath (" + m_options.m_outputFilePath +  ") has wrong extension type, valid output extensions are " + k_atlasExtension + ", " + k_atlasIdExtension + " and .csimage");
+		}
+		
 		//Remove the extension from the outputpath
-		m_options.m_outputFilePath = StringUtils.removeExtension(m_options.m_outputFilePath);
+		m_outputFilePathWithoutExtension = StringUtils.removeExtension(m_options.m_outputFilePath);
 		
 		Logging.logVerbose("input dir name is:\"" + m_options.m_inputDirectoryPath + "\"");
 
@@ -118,7 +128,7 @@ public class CSAtlasBuilder
 		// It's output time!
 		///////////////////////////////////////////////////////
 		// Write our combined png file
-		File F = new File(m_options.m_outputFilePath + ".png");
+		File F = new File(m_outputFilePathWithoutExtension + ".png");
 		ImageIO.write(result.getPackedTexture(), "png", F);
 
 		writeBinaryFile(result);
@@ -273,8 +283,8 @@ public class CSAtlasBuilder
 		Logging.logVerbose("Converting to CSImage");
 		
 		PNGToCSImageOptions options = new PNGToCSImageOptions();
-		options.strInputFilename = m_options.m_outputFilePath + ".png";
-		options.strOutputFilename = m_options.m_outputFilePath + ".csimage";
+		options.strInputFilename = m_outputFilePathWithoutExtension + ".png";
+		options.strOutputFilename = m_outputFilePathWithoutExtension + ".csimage";
 		
 		if (m_options.m_imageCompression.length() > 0)
 		{
@@ -305,7 +315,7 @@ public class CSAtlasBuilder
 			Logging.logFatal("An exception occurred while converting to CSImage:\n" + StringUtils.convertExceptionToString(e));
 		}
 		
-		FileUtils.deleteFile(m_options.m_outputFilePath + ".png");
+		FileUtils.deleteFile(m_outputFilePathWithoutExtension + ".png");
 	}
 	/**
 	 * @author R Henning
@@ -315,7 +325,7 @@ public class CSAtlasBuilder
 	private void writeBinaryFile(PackedTexture in_packedTexture) throws FileNotFoundException, IOException, Exception
 	{
 		int numImages = in_packedTexture.getNumImages();
-		LittleEndianOutputStream dosBinary = new LittleEndianOutputStream(m_options.m_outputFilePath + k_atlasExtension);
+		LittleEndianOutputStream dosBinary = new LittleEndianOutputStream(m_outputFilePathWithoutExtension + k_atlasExtension);
 		dosBinary.writeShort((short) numImages);
 		dosBinary.writeShort(k_versionNum); // file format revision
 
@@ -362,7 +372,7 @@ public class CSAtlasBuilder
 	{
 		int numImages = in_packedTexture.getNumImages();
 		
-		FileOutputStream outC = new FileOutputStream(m_options.m_outputFilePath + k_atlasExtension + "id");
+		FileOutputStream outC = new FileOutputStream(m_outputFilePathWithoutExtension + k_atlasIdExtension);
 		DataOutputStream dosC = new DataOutputStream(outC);
 
 		for (int i = 0; i < numImages; i++)

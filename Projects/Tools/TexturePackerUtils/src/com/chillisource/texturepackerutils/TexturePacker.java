@@ -913,6 +913,8 @@ public class TexturePacker
 		// Clear our collision grid
 		gridCheck.Clear();
 
+		boolean success = true;
+		
 		for (int nSprite = 0; nSprite < numSourceImages; nSprite++)
 		{
 			if(TryToLayoutSprite(nSprite, in_sortedOrder) ==false)
@@ -921,18 +923,21 @@ public class TexturePacker
 				
 				if(out_errorInfo != null)
 				{
-					out_errorInfo.m_fileCausedOverflow = sourceImageFiles[originalID].getAbsolutePath();
+					//If were populating the error info, we want to know how many of all the images wouldn't fit on this spritesheet
+					out_errorInfo.m_unfittingImages.add(sourceImageFiles[originalID].getAbsolutePath());
+					success = false;
 				}
-				
-				logFatalError("Could not fit sprite:" + sourceImageFiles[originalID].getAbsolutePath());
-				
-				return false;
+				else 
+				{
+					logFatalError("Could not fit sprite:" + sourceImageFiles[originalID].getAbsolutePath());
+					return false;
+				}
 			}
 			numPlacedImages++;
 
 		}
 
-		return true;
+		return success;
 	}
 	/**
 	GetFileHash

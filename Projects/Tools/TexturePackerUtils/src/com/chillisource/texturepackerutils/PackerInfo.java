@@ -27,6 +27,9 @@
  */
 package com.chillisource.texturepackerutils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class to allow the return of some error information 
  * 
@@ -34,7 +37,7 @@ package com.chillisource.texturepackerutils;
  */
 public final class PackerInfo
 {
-	public String m_fileCausedOverflow;
+	public List<String> m_unfittingImages = new ArrayList<String>();//List of images that could not be fit on the 1 spritesheet
 	public int m_requiredWidth;
 	public int m_requiredHeight;
 }
