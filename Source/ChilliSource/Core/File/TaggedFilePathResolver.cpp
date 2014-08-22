@@ -43,8 +43,8 @@ namespace ChilliSource
         namespace
         {
             //--------------------------------------------------------------
-            /// Filter the list of strings based on those that contain
-            /// the given text
+            /// Filter the list of file paths based on those that contain
+            /// the names that start with the given text
             ///
             /// @author S Downie
             ///
@@ -53,14 +53,15 @@ namespace ChilliSource
             ///
             /// @return Filtered list
             //--------------------------------------------------------------
-            std::vector<std::string> FilterContains(const std::vector<std::string>& in_list, const std::string& in_text)
+            std::vector<std::string> FilterFileNameStartsWith(const std::vector<std::string>& in_list, const std::string& in_text)
             {
                 std::vector<std::string> result;
                 result.reserve(in_list.size());
                 
                 for(const auto& string : in_list)
                 {
-                    if(string.find(in_text) != std::string::npos)
+                    auto findIndex = string.find(in_text);
+                    if(findIndex == 0 || string[findIndex-1] == '/')
                     {
                         result.push_back(string);
                     }
@@ -348,7 +349,7 @@ namespace ChilliSource
             std::vector<std::string> pathsContaining = m_fileSystem->GetFilePathsWithExtension(in_location, filePath, false, fileExtension);
             
             //Filter on the filename
-            pathsContaining = FilterContains(pathsContaining, fileName + ".");
+            pathsContaining = FilterFileNameStartsWith(pathsContaining, fileName + ".");
             
             if(pathsContaining.empty() == true)
             {
