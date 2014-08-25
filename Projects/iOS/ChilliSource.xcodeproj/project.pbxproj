@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8132AB4919A4E20900101323 /* ILuaFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8132AB3B19A4E20900101323 /* ILuaFunction.cpp */; };
 		8132AB4B19A4E20900101323 /* LuaScript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8132AB4219A4E20900101323 /* LuaScript.cpp */; };
 		8132AB4C19A4E20900101323 /* LuaSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8132AB4419A4E20900101323 /* LuaSystem.cpp */; };
 		8132AB4D19A4E20900101323 /* LuaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8132AB4619A4E20900101323 /* LuaUtils.cpp */; };
@@ -35,6 +34,9 @@
 		81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D3196C2410000F13DD /* TextEntry.cpp */; };
 		81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D9196C2B31000F13DD /* TextEntry.mm */; };
 		81B1D2DD196C2B31000F13DD /* TextEntryDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2DB196C2B31000F13DD /* TextEntryDelegate.mm */; };
+		81BF89C319A78E70002503CF /* ILuaFunction.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF89C119A78E70002503CF /* ILuaFunction.cpp */; };
+		81BF89C619A795BC002503CF /* LuaFunctionUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF89C519A795BC002503CF /* LuaFunctionUtils.cpp */; };
+		81BF89C919A798A0002503CF /* DrawableProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81BF89C719A798A0002503CF /* DrawableProxy.cpp */; };
 		81D8ACF91962CEDC0010DA84 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8ACF81962CEDC0010DA84 /* Foundation.framework */; };
 		81D8B1E61962D1B90010DA84 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1CF1962D1B90010DA84 /* Accounts.framework */; };
 		81D8B1E71962D1B90010DA84 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1D01962D1B90010DA84 /* AddressBook.framework */; };
@@ -302,9 +304,6 @@
 /* Begin PBXFileReference section */
 		8110E2D1199111E700EC96CA /* PropertyAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyAccessor.h; sourceTree = "<group>"; };
 		8132AB3819A4E20900101323 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
-		8132AB3B19A4E20900101323 /* ILuaFunction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILuaFunction.cpp; sourceTree = "<group>"; };
-		8132AB3C19A4E20900101323 /* ILuaFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILuaFunction.h; sourceTree = "<group>"; };
-		8132AB3D19A4E20900101323 /* LuaClassFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LuaClassFunction.h; sourceTree = "<group>"; };
 		8132AB3E19A4E20900101323 /* LuaFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LuaFunction.h; sourceTree = "<group>"; };
 		8132AB3F19A4E20900101323 /* Function.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Function.h; sourceTree = "<group>"; };
 		8132AB4219A4E20900101323 /* LuaScript.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaScript.cpp; sourceTree = "<group>"; };
@@ -427,6 +426,12 @@
 		81B1D2DB196C2B31000F13DD /* TextEntryDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TextEntryDelegate.mm; sourceTree = "<group>"; };
 		81B1D2DE196D8033000F13DD /* KeyCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyCode.h; sourceTree = "<group>"; };
 		81B1D2DF196D9713000F13DD /* ModifierKeyCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModifierKeyCode.h; sourceTree = "<group>"; };
+		81BF89C119A78E70002503CF /* ILuaFunction.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILuaFunction.cpp; sourceTree = "<group>"; };
+		81BF89C219A78E70002503CF /* ILuaFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILuaFunction.h; sourceTree = "<group>"; };
+		81BF89C419A78FF8002503CF /* LuaFunctionUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LuaFunctionUtils.h; sourceTree = "<group>"; };
+		81BF89C519A795BC002503CF /* LuaFunctionUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LuaFunctionUtils.cpp; sourceTree = "<group>"; };
+		81BF89C719A798A0002503CF /* DrawableProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableProxy.cpp; sourceTree = "<group>"; };
+		81BF89C819A798A0002503CF /* DrawableProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableProxy.h; sourceTree = "<group>"; };
 		81D8ACF51962CEDC0010DA84 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D8ACF81962CEDC0010DA84 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		81D8AD061962CEDC0010DA84 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -1029,10 +1034,11 @@
 		8132AB3A19A4E20900101323 /* Function */ = {
 			isa = PBXGroup;
 			children = (
-				8132AB3B19A4E20900101323 /* ILuaFunction.cpp */,
-				8132AB3C19A4E20900101323 /* ILuaFunction.h */,
-				8132AB3D19A4E20900101323 /* LuaClassFunction.h */,
+				81BF89C119A78E70002503CF /* ILuaFunction.cpp */,
+				81BF89C219A78E70002503CF /* ILuaFunction.h */,
 				8132AB3E19A4E20900101323 /* LuaFunction.h */,
+				81BF89C519A795BC002503CF /* LuaFunctionUtils.cpp */,
+				81BF89C419A78FF8002503CF /* LuaFunctionUtils.h */,
 			);
 			path = Function;
 			sourceTree = "<group>";
@@ -1087,6 +1093,8 @@
 		81496B851980F1AE004E79F2 /* Drawable */ = {
 			isa = PBXGroup;
 			children = (
+				81BF89C719A798A0002503CF /* DrawableProxy.cpp */,
+				81BF89C819A798A0002503CF /* DrawableProxy.h */,
 				81E3E3741986B0CA0002A9FD /* DrawableType.cpp */,
 				81496BB21982BB94004E79F2 /* DrawableType.h */,
 				81AA8BB41987B82200E559F6 /* IDrawable.cpp */,
@@ -2611,6 +2619,7 @@
 				81D8B6B71962E0F70010DA84 /* FacebookPostSystem.cpp in Sources */,
 				81D8B6D31962E0F70010DA84 /* RenderTarget.cpp in Sources */,
 				81D8B6B51962E0F70010DA84 /* FacebookAppDelegate.mm in Sources */,
+				81BF89C319A78E70002503CF /* ILuaFunction.cpp in Sources */,
 				81D8B6A21962E0F70010DA84 /* DialogueBoxSystem.mm in Sources */,
 				81D8B4A81962E0EC0010DA84 /* VideoPlayer.cpp in Sources */,
 				81D8B4A31962E0EC0010DA84 /* EmailComposer.cpp in Sources */,
@@ -2658,6 +2667,7 @@
 				8167081E198941A500A1DE32 /* WidgetParserUtils.cpp in Sources */,
 				81D8B46F1962E0EC0010DA84 /* RendererSortPredicates.cpp in Sources */,
 				81D8B4211962E0EC0010DA84 /* Shapes.cpp in Sources */,
+				81BF89C919A798A0002503CF /* DrawableProxy.cpp in Sources */,
 				81D8B4741962E0EC0010DA84 /* PerspectiveCameraComponent.cpp in Sources */,
 				81D8B45F1962E0EC0010DA84 /* Keyboard.cpp in Sources */,
 				81D8B49B1962E0EC0010DA84 /* CubemapProvider.cpp in Sources */,
@@ -2709,7 +2719,6 @@
 				81D8B43A1962E0EC0010DA84 /* PerformanceTimer.cpp in Sources */,
 				81D8B4081962E0EC0010DA84 /* AESEncrypt.cpp in Sources */,
 				81D8B41D1962E0EC0010DA84 /* LocalisedText.cpp in Sources */,
-				8132AB4919A4E20900101323 /* ILuaFunction.cpp in Sources */,
 				81B1D2DD196C2B31000F13DD /* TextEntryDelegate.mm in Sources */,
 				81D8B6B41962E0F70010DA84 /* EmailComposerDelegate.mm in Sources */,
 				81D8B4461962E0EC0010DA84 /* HighlightButton.cpp in Sources */,
@@ -2802,6 +2811,7 @@
 				81496B931980F1AE004E79F2 /* Widget.cpp in Sources */,
 				81D8B47D1962E0EC0010DA84 /* MaterialProvider.cpp in Sources */,
 				81D8B4701962E0EC0010DA84 /* RenderSystem.cpp in Sources */,
+				81BF89C619A795BC002503CF /* LuaFunctionUtils.cpp in Sources */,
 				81D8B6D41962E0F70010DA84 /* GLSLShaderProvider.cpp in Sources */,
 				81D8B4481962E0EC0010DA84 /* ToggleButton.cpp in Sources */,
 				81D8B49E1962E0EC0010DA84 /* TextureAtlas.cpp in Sources */,

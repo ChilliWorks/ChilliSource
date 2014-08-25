@@ -256,39 +256,7 @@ namespace ChilliSource
             {
                 auto luaSystem = Core::Application::Get()->GetSystem<Scripting::LuaSystem>();
                 m_behaviourScript = luaSystem->CreateScript(in_behaviourSource);
-                
-                m_behaviourScript->RegisterEnum("SizePolicy",
-                                                "none", SizePolicy::k_none,
-                                                "usePreferredSize", SizePolicy::k_usePreferredSize,
-                                                "fillMaintainingAspect", SizePolicy::k_fillMaintainingAspect,
-                                                "fitMaintainingAspect", SizePolicy::k_fitMaintainingAspect,
-                                                "useWidthMaintainingAspect", SizePolicy::k_useWidthMaintainingAspect,
-                                                "useHeightMaintainingAspect", SizePolicy::k_useHeightMaintainingAspect
-                                                );
-                
-                m_behaviourScript->RegisterEnum("Anchor",
-                                                "topLeft", Rendering::AlignmentAnchor::k_topLeft,
-                                                "topRight", Rendering::AlignmentAnchor::k_topRight,
-                                                "topCentre", Rendering::AlignmentAnchor::k_topCentre,
-                                                "middleLeft", Rendering::AlignmentAnchor::k_middleLeft,
-                                                "middleRight", Rendering::AlignmentAnchor::k_middleRight,
-                                                "middleCentre", Rendering::AlignmentAnchor::k_middleCentre,
-                                                "bottomLeft", Rendering::AlignmentAnchor::k_bottomLeft,
-                                                "bottomRight", Rendering::AlignmentAnchor::k_bottomRight,
-                                                "bottomCentre", Rendering::AlignmentAnchor::k_bottomCentre
-                                                );
-                
-                WidgetProxy::RegisterWithLuaScript(m_behaviourScript.get());
-                TextureDrawableProxy::RegisterWithLuaScript(m_behaviourScript.get());
-                NinePatchDrawableProxy::RegisterWithLuaScript(m_behaviourScript.get());
-                ThreePatchDrawableProxy::RegisterWithLuaScript(m_behaviourScript.get());
-                
-                m_behaviourScript->RegisterVariable("thisWidget", this);
-
-                m_behaviourScript->RegisterClass("Screen", m_screen,
-                                                 "getResolution", &Core::Screen::GetResolution
-                                                 );
-                
+                m_behaviourScript->RegisterVariable("this", this);
                 m_behaviourScript->Run();
             }
         }

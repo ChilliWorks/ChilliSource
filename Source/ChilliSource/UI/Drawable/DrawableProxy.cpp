@@ -1,5 +1,5 @@
 //
-//  TextureDrawableProxy.cpp
+//  DrawableProxy.cpp
 //  Chilli Source
 //  Created by Scott Downie on 18/08/2014.
 //
@@ -26,54 +26,37 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Drawable/TextureDrawableProxy.h>
+#include <ChilliSource/UI/Drawable/DrawableProxy.h>
 
-#include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Scripting/Lua/LuaSystem.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
-#include <ChilliSource/UI/Drawable/TextureDrawable.h>
+#include <ChilliSource/UI/Drawable/IDrawable.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
-        namespace TextureDrawableProxy
+        namespace DrawableProxy
         {
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
             void RegisterWithLua(Scripting::LuaSystem* in_system)
             {
                 in_system->RegisterStaticClass("TextureDrawable",
-                                               "getType", TextureDrawableProxy::GetType,
-                                               "setTexture", TextureDrawableProxy::SetTexture,
-                                               "setUVs", TextureDrawableProxy::SetUVs,
-                                               "getPreferredSize", TextureDrawableProxy::GetPreferredSize
+                                               "getType", DrawableProxy::GetType,
+                                               "getPreferredSize", DrawableProxy::GetPreferredSize
                                                );
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
-            DrawableType GetType(TextureDrawable* in_drawable)
+            DrawableType GetType(IDrawable* in_drawable)
             {
                 return in_drawable->GetType();
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
-            void SetTexture(TextureDrawable* in_drawable, Core::StorageLocation in_location, const std::string& in_path)
-            {
-                auto resourcePool = Core::Application::Get()->GetResourcePool();
-                in_drawable->SetTexture(resourcePool->LoadResource<Rendering::Texture>(in_location, in_path));
-            }
-            //----------------------------------------------------------------------------------------
-            //----------------------------------------------------------------------------------------
-            void SetUVs(TextureDrawable* in_drawable, const Rendering::UVs& in_UVs)
-            {
-                in_drawable->SetUVs(in_UVs);
-            }
-            //----------------------------------------------------------------------------------------
-            //----------------------------------------------------------------------------------------
-            Core::Vector2 GetPreferredSize(TextureDrawable* in_drawable)
+            Core::Vector2 GetPreferredSize(IDrawable* in_drawable)
             {
                 return in_drawable->GetPreferredSize();
             }

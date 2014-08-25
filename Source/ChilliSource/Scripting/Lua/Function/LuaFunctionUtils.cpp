@@ -1,7 +1,7 @@
 //
-//  Function.h
+//  LuaFunctionUtils.cpp
 //  Chilli Source
-//  Created by Scott Downie 14/08/2014.
+//  Created by Scott Downie on 14/08/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,10 +26,27 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_SCRIPTING_LUA_FUNCTION_H_
-#define _CHILLISOURCE_SCRIPTING_LUA_FUNCTION_H_
 
-#include <ChilliSource/Lua/Function/ILuaFunction.h>
-#include <ChilliSource/Lua/Function/LuaFunction.h>
+#include <ChilliSource/Scripting/Lua/Function/LuaFunctionUtils.h>
 
-#endif
+namespace ChilliSource
+{
+    namespace Scripting
+    {
+        namespace LuaFunctionUtils
+        {
+            //----------------------------------------------------
+            //----------------------------------------------------
+            void RegisterClassStaticFunctions(lua_State* in_vm, std::vector<ILuaFunctionUPtr>& out_functions)
+            {
+                
+            }
+            //----------------------------------------------------
+            //----------------------------------------------------
+            void RegisterEnumTypes(lua_State* in_vm)
+            {
+                
+            }
+        }
+    }
+}

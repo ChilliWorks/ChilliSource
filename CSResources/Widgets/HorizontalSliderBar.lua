@@ -6,7 +6,7 @@
 -----------------------------------------------------
 function onAddedToCanvas()
     io.write("HorizontalSliderBar: onAddedToCanvas\n")
-    sliderWidget = Widget.getInternalWidget(thisWidget, "Slider")
+    sliderWidget = Widget.getInternalWidget(this, "Slider")
 end
 
 moveDir = -1

@@ -31,7 +31,7 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/Scripting/Lua/LuaScript.h>
+#include <ChilliSource/Scripting/Lua/LuaSystem.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
 
@@ -43,9 +43,9 @@ namespace ChilliSource
         {
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
-            void RegisterWithLuaScript(Scripting::LuaScript* in_script)
+            void RegisterWithLua(Scripting::LuaSystem* in_system)
             {
-                in_script->RegisterStaticClass("NinePatchDrawable",
+                in_system->RegisterStaticClass("NinePatchDrawable",
                                                "getType", NinePatchDrawableProxy::GetType,
                                                "setTexture", NinePatchDrawableProxy::SetTexture,
                                                "setUVs", NinePatchDrawableProxy::SetUVs,

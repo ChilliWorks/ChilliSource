@@ -38,6 +38,8 @@ namespace ChilliSource
 {
 	namespace Scripting
 	{
+        u32 LuaScript::s_environmentCounter = 0;
+        
         //----------------------------------------------------
         //----------------------------------------------------
         LuaScriptUPtr LuaScript::Create(lua_State* in_vm, const LuaSourceCSPtr& in_luaSource)
@@ -54,6 +56,19 @@ namespace ChilliSource
             {
                 CS_LOG_FATAL("Error loading LUA file: " + std::string(lua_tostring(m_luaVM, -1)));
             }
+            
+            m_environment = Core::ToString(s_environmentCounter++) + "ENV";
+            
+            //Set a new metatable environment for this chunk that
+            //inherits the global environment
+            lua_newtable(m_luaVM); //Chunk
+            lua_newtable(m_luaVM); //Global
+            lua_getglobal(m_luaVM, "_G");
+            lua_setfield(m_luaVM, -2, "__index");
+            lua_setmetatable(m_luaVM, -2);
+            lua_pushvalue(m_luaVM, -1);
+            lua_setfield(m_luaVM, LUA_REGISTRYINDEX, m_environment.c_str());
+            lua_setupvalue(m_luaVM, 1, 1);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -78,7 +93,7 @@ namespace ChilliSource
         {
             //All scripts have access to the import function which allows them to load
             //other lua scripts
-            RegisterFunction("import", this, &LuaScript::Import);
+            LuaFunctionUtils::RegisterFunction(m_luaVM, m_environment, m_functions, "import", this, &LuaScript::Import);
             
             auto runResult = lua_pcall(m_luaVM, 0, 0, 0);
             if(runResult != 0)
@@ -90,24 +105,8 @@ namespace ChilliSource
         //-------------------------------------------------------
         LuaScript::~LuaScript()
         {
-            //Functions must be cleared before the tables are destroyed
-            m_functions.clear();
-            
-            for(const auto& tableName : m_tables)
-            {
-                lua_pushnil(m_luaVM);
-                lua_setglobal(m_luaVM, tableName.c_str());
-            }
-            
-            for(const auto& varName : m_variables)
-            {
-                lua_pushnil(m_luaVM);
-                lua_setglobal(m_luaVM, varName.c_str());
-            }
-            
-            //TODO: Remove this when we know how to have multiple environments in
-            //a single Lua state
-            lua_close(m_luaVM);
+            lua_pushnil(m_luaVM);
+            lua_setfield(m_luaVM, LUA_REGISTRYINDEX, m_environment.c_str());
         }
 	}
 }

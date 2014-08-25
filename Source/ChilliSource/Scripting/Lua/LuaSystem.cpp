@@ -28,7 +28,6 @@
 
 #include <ChilliSource/Scripting/Lua/LuaSystem.h>
 
-#include <ChilliSource/Scripting/Lua/LuaLibIncludes.h>
 #include <ChilliSource/Scripting/Lua/LuaScript.h>
 
 namespace ChilliSource
@@ -52,24 +51,21 @@ namespace ChilliSource
         //-------------------------------------------------------
         void LuaSystem::OnInit()
         {
-            //TODO: Open the Lua VM here when we know how to have multiple environments in
-            //a single Lua state.
+            m_luaVM = luaL_newstate();
+            luaL_openlibs(m_luaVM);
         }
         //----------------------------------------------------
         //----------------------------------------------------
         LuaScriptUPtr LuaSystem::CreateScript(const LuaSourceCSPtr& in_luaSource)
         {
-            auto luaVM = luaL_newstate();
-            luaL_openlibs(luaVM);
-            
-            return LuaScript::Create(luaVM, in_luaSource);
+            return LuaScript::Create(m_luaVM, in_luaSource);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
         void LuaSystem::OnDestroy()
         {
-            //TODO: Close the Lua VM here when we know how to have multiple environments in
-            //a single Lua state
+            m_functions.clear();
+            lua_close(m_luaVM);
         }
 	}
 }

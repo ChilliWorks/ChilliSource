@@ -30,10 +30,9 @@
 #define _CHILLISOURCE_SCRIPTING_LUA_LUASCRIPT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Scripting/Lua/LuaUtils.h>
 #include <ChilliSource/Scripting/Lua/Function/LuaFunction.h>
-#include <ChilliSource/Scripting/Lua/Function/LuaClassFunction.h>
+#include <ChilliSource/Scripting/Lua/Function/LuaFunctionUtils.h>
 
 #include <vector>
 
@@ -52,113 +51,6 @@ namespace ChilliSource
 		public:
             
             //----------------------------------------------------
-            /// Register free function to be called in the Lua
-            /// script. This must be performed prior to calling
-            /// run or the script will error
-            ///
-            /// @author S Downie
-            ///
-            /// @param Function name as called by Lua
-            /// @param Function
-            //----------------------------------------------------
-            template <typename TResult, typename...TArgs> void RegisterFunction(const std::string& in_functionName, TResult (*in_function)(TArgs...))
-            {
-                m_functions.push_back(ILuaFunctionUPtr(new LuaFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_functionName, Core::MakeDelegate(in_function))));
-            }
-            //----------------------------------------------------
-            /// Register free function to be called in the Lua
-            /// script. This must be performed prior to calling
-            /// run or the script will error
-            ///
-            /// @author S Downie
-            ///
-            /// @param Function name as called by Lua
-            /// @param Object to bind function to
-            /// @param Function
-            //----------------------------------------------------
-            template <typename TClass, typename TResult, typename...TArgs> void RegisterFunction(const std::string& in_functionName, TClass* in_object, TResult (TClass::*in_function)(TArgs...))
-            {
-                m_functions.push_back(ILuaFunctionUPtr(new LuaFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_functionName, Core::MakeDelegate(in_object, in_function))));
-            }
-            //----------------------------------------------------
-            /// Register a class instance and its functions to be
-            /// called in the Lua script.
-            /// This must be performed prior to calling run or the script will error
-            ///
-            /// Usage: RegisterClass("className", this, "funcA", &MyClass::FuncA, "funcB", &MyClass::FuncB, etc)
-            ///
-            /// @author S Downie
-            ///
-            /// @param Class name as accessed in Lua
-            /// @param Instance of class to call into
-            /// @param Name of function
-            /// @param Functions
-            //----------------------------------------------------
-            template <typename TObject, typename...TFunctions>
-            void RegisterClass(const std::string& in_objectName, TObject* in_object, const std::string& in_functionName, TFunctions&&...in_functions)
-            {
-                std::string tableName(in_objectName + std::string("Table"));
-                luaL_newmetatable(m_luaVM, tableName.c_str());
-                m_tables.push_back(in_objectName);
-
-                RegisterClassFunctions(tableName.c_str(), in_object, in_functionName, std::forward<TFunctions>(in_functions)...);
-                
-                lua_pushvalue(m_luaVM, -1);
-                lua_setfield(m_luaVM, -1, "__index");
-                lua_setglobal(m_luaVM, in_objectName.c_str());
-            }
-            //----------------------------------------------------
-            /// Register a class and its static functions to be
-            /// called in the Lua script.
-            /// This must be performed prior to calling run or the script will error
-            ///
-            /// Usage: RegisterStaticClass("className", "funcA", &MyClass::FuncA, "funcB", &MyClass::FuncB, etc)
-            ///
-            /// @author S Downie
-            ///
-            /// @param Class name as accessed in Lua
-            /// @param Name of function
-            /// @param Functions
-            //----------------------------------------------------
-            template <typename...TFunctions>
-            void RegisterStaticClass(const std::string& in_objectName, const std::string& in_functionName, TFunctions&&...in_functions)
-            {
-                std::string tableName(in_objectName + std::string("Table"));
-                luaL_newmetatable(m_luaVM, tableName.c_str());
-                m_tables.push_back(in_objectName);
-                
-                RegisterClassStaticFunctions(tableName.c_str(), in_functionName, std::forward<TFunctions>(in_functions)...);
-                
-                lua_pushvalue(m_luaVM, -1);
-                lua_setfield(m_luaVM, -1, "__index");
-                lua_setglobal(m_luaVM, in_objectName.c_str());
-            }
-            //----------------------------------------------------
-            /// Register an enum type that can be accessed in the
-            /// lua script
-            ///
-            /// Usage: RegisterEnum("enumName", "a", MyEnum::A, "b", MyEnum::B, etc)
-            ///
-            /// @author S Downie
-            ///
-            /// @param Enum name as accessed in Lua
-            /// @param Name of type
-            /// @param List of types
-            //----------------------------------------------------
-            template <typename...TTypes>
-            void RegisterEnum(const std::string& in_enumName, const std::string& in_typeName, TTypes&&...in_types)
-            {
-                std::string tableName(in_enumName + std::string("Table"));
-                luaL_newmetatable(m_luaVM, tableName.c_str());
-                m_tables.push_back(in_enumName);
-                
-                RegisterEnumTypes(in_typeName, std::forward<TTypes>(in_types)...);
-                
-                lua_pushvalue(m_luaVM, -1);
-                lua_setfield(m_luaVM, -1, "__index");
-                lua_setglobal(m_luaVM, in_enumName.c_str());
-            }
-            //----------------------------------------------------
             /// Register an variable that can be accessed in the
             /// lua script
             ///
@@ -170,9 +62,7 @@ namespace ChilliSource
             template <typename TVariable>
             void RegisterVariable(const std::string& in_name, TVariable* in_variable)
             {
-                LuaUtils::PushValueToVM(m_luaVM, std::forward<TVariable*>(in_variable));
-                lua_setglobal(m_luaVM, in_name.c_str());
-                m_variables.push_back(in_name);
+                LuaFunctionUtils::RegisterVariable(m_luaVM, m_environment, in_name, in_variable);
             }
             //----------------------------------------------------
             /// This function must be called after registering
@@ -200,7 +90,8 @@ namespace ChilliSource
             template <typename... TResults, typename... TArgs>
             typename LuaUtils::StackPopper<sizeof...(TResults), TResults...>::type CallFunction(const std::string& in_functionName, TArgs&&... in_args)
             {
-                lua_getglobal(m_luaVM, in_functionName.c_str());
+                lua_getfield(m_luaVM, LUA_REGISTRYINDEX, m_environment.c_str());
+                lua_getfield(m_luaVM, -1, in_functionName.c_str());
                 
                 LuaUtils::PushAllToVM(m_luaVM, std::forward<TArgs>(in_args)...);
                 
@@ -209,6 +100,19 @@ namespace ChilliSource
                 {
                     CS_LOG_FATAL("Error calling Lua function " + std::string(in_functionName) + ": " + std::string(lua_tostring(m_luaVM, -1)));
                 }
+                
+                //LuaUtils::PopAllFromVM can return void and therefore we cannot assign
+                //the return value of that function to a variable, pop and then return.
+                //Instead we use a simple scoping cheat to return the value and then pop the
+                //environment field.
+                struct ScopedPop
+                {
+                    ScopedPop(lua_State* in_vm):m_vm(in_vm){}
+                    ~ScopedPop(){lua_pop(m_vm, 1);}
+                    
+                    lua_State* m_vm;
+                };
+                ScopedPop popOnReturn(m_luaVM);
                 
                 return LuaUtils::PopAllFromVM<TResults...>(m_luaVM);
             }
@@ -242,149 +146,6 @@ namespace ChilliSource
             /// @param Lua source
             //-------------------------------------------------------
             LuaScript(lua_State* in_vm, const LuaSourceCSPtr& in_luaSource);
-            //----------------------------------------------------
-            /// Register C++ function to be called in the Lua
-            /// script. This must be performed prior to calling
-            /// run or the script will error
-            ///
-            /// @author S Downie
-            ///
-            /// @param Table name
-            /// @param Instance of class to call into
-            /// @param Function name as called by Lua
-            /// @param Function
-            //----------------------------------------------------
-            template <typename TClass, typename TResult, typename...TArgs> void RegisterClassFunction(const std::string& in_tableName, TClass* in_object, const std::string& in_functionName, TResult (TClass::*in_function)(TArgs...))
-            {
-                m_functions.push_back(ILuaFunctionUPtr(new LuaClassFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_tableName, in_functionName, Core::MakeDelegate(in_object, in_function))));
-            }
-            //----------------------------------------------------
-            /// Register C++ const function to be called in the Lua
-            /// script. This must be performed prior to calling
-            /// run or the script will error
-            ///
-            /// @author S Downie
-            ///
-            /// @param Table name
-            /// @param Instance of class to call into
-            /// @param Function name as called by Lua
-            /// @param Function
-            //----------------------------------------------------
-            template <typename TClass, typename TResult, typename...TArgs> void RegisterClassFunction(const std::string& in_tableName, TClass* in_object, const std::string& in_functionName, TResult (TClass::*in_function)(TArgs...) const)
-            {
-                m_functions.push_back(ILuaFunctionUPtr(new LuaClassFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_tableName, in_functionName, Core::MakeDelegate(in_object, in_function))));
-            }
-            //----------------------------------------------------
-            /// Specialised to terminate recursion of registering
-            /// functions
-            ///
-            /// @author S Downie
-            ///
-            /// @param Table name
-            /// @param Instance of class to call into name as called by Lua
-            //----------------------------------------------------
-            template <typename TObject> void RegisterClassFunctions(const std::string& in_tableName, TObject* in_object){}
-            //----------------------------------------------------
-            /// Register a class instance and its functions to be
-            /// called in the Lua script.
-            /// This must be performed prior to calling run or the script will error
-            /// This function recursively registers each class function
-            ///
-            /// @author S Downie
-            ///
-            /// @param Table name
-            /// @param Instance of class to call into
-            /// @param Function name as called by Lua
-            /// @param Function
-            /// @param Remaining functions
-            //----------------------------------------------------
-            template <typename TObject, typename TFunction, typename...TFunctions>
-            void RegisterClassFunctions(const std::string& in_tableName, TObject* in_object, const std::string& in_functionName, TFunction&& in_function, TFunctions&&...in_functions)
-            {
-                RegisterClassFunction(in_tableName, in_object, in_functionName, in_function);
-                RegisterClassFunctions(in_tableName, in_object, in_functions...);
-            }
-            //----------------------------------------------------
-            /// Register C++ static function to be called in the Lua
-            /// script. This must be performed prior to calling
-            /// run or the script will error
-            ///
-            /// @author S Downie
-            ///
-            /// @param Table name
-            /// @param Function name as called by Lua
-            /// @param Function
-            //----------------------------------------------------
-            template <typename TResult, typename...TArgs> void RegisterClassStaticFunction(const std::string& in_tableName, const std::string& in_functionName, TResult (*in_function)(TArgs...))
-            {
-                m_functions.push_back(ILuaFunctionUPtr(new LuaClassFunction<LuaUtils::NumValues<TResult>::value, typename std::decay<TResult>::type, typename std::decay<TArgs>::type...>(m_luaVM, in_tableName, in_functionName, Core::MakeDelegate(in_function))));
-            }
-            //----------------------------------------------------
-            /// Specialised to terminate recursion of registering
-            /// functions
-            ///
-            /// @author S Downie
-            ///
-            /// @param Table name
-            //----------------------------------------------------
-            void RegisterClassStaticFunctions(const std::string& in_tableName){}
-            //----------------------------------------------------
-            /// Register a class and its static functions to be
-            /// called in the Lua script.
-            /// This must be performed prior to calling run or the script will error
-            /// This function recursively registers each class function
-            ///
-            /// @author S Downie
-            ///
-            /// @param Table name
-            /// @param Function name as called by Lua
-            /// @param Function
-            /// @param Remaining functions
-            //----------------------------------------------------
-            template <typename TFunction, typename...TFunctions>
-            void RegisterClassStaticFunctions(const std::string& in_tableName, const std::string& in_functionName, TFunction&& in_function, TFunctions&&...in_functions)
-            {
-                RegisterClassStaticFunction(in_tableName, in_functionName, in_function);
-                RegisterClassStaticFunctions(in_tableName, in_functions...);
-            }
-            //----------------------------------------------------
-            /// Register C++ enums to be accessed in the Lua
-            /// script. This must be performed prior to calling
-            /// run or the script will error
-            ///
-            /// @author S Downie
-            ///
-            /// @param Type name as called by Lua
-            /// @param Type
-            //----------------------------------------------------
-            template <typename TType> void RegisterEnumType(const std::string& in_typeName, TType&& in_type)
-            {
-                LuaUtils::PushValueToVM(m_luaVM, (s32)in_type);
-                lua_setfield(m_luaVM, -2, in_typeName.c_str());
-            }
-            //----------------------------------------------------
-            /// Specialised to terminate recursion of registering
-            /// enums
-            ///
-            /// @author S Downie
-            //----------------------------------------------------
-            void RegisterEnumTypes(){}
-            //----------------------------------------------------
-            /// Register C++ enums to be accessed in the Lua
-            /// script. This must be performed prior to calling
-            /// run or the script will error
-            ///
-            /// @author S Downie
-            ///
-            /// @param Type name as called by Lua
-            /// @param Type
-            /// @param Remainging types
-            //----------------------------------------------------
-            template <typename TType, typename... TTypes> void RegisterEnumTypes(const std::string& in_typeName, TType&& in_type, TTypes&&...in_types)
-            {
-                RegisterEnumType(in_typeName, in_type);
-                RegisterEnumTypes(in_types...);
-            }
             //-------------------------------------------------------
             /// Imports the given lua script into the global table
             /// for the current VM
@@ -399,11 +160,12 @@ namespace ChilliSource
         private:
             
             std::vector<ILuaFunctionUPtr> m_functions;
-            std::vector<std::string> m_tables;
-            std::vector<std::string> m_variables;
+            std::string m_environment;
             lua_State* m_luaVM = nullptr;
             
             LuaSourceCSPtr m_source;
+            
+            static u32 s_environmentCounter;
 		};
 	}
 }

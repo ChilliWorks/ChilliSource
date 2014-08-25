@@ -32,14 +32,20 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Scripting/Lua/LuaSystem.h>
 #include <ChilliSource/UI/Base/PropertyAccessor.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
+#include <ChilliSource/UI/Base/WidgetProxy.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
+#include <ChilliSource/UI/Drawable/DrawableProxy.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
 #include <ChilliSource/UI/Drawable/TextureDrawable.h>
 #include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
+#include <ChilliSource/UI/Drawable/NinePatchDrawableProxy.h>
+#include <ChilliSource/UI/Drawable/TextureDrawableProxy.h>
+#include <ChilliSource/UI/Drawable/ThreePatchDrawableProxy.h>
 #include <ChilliSource/UI/Layout/GridLayout.h>
 #include <ChilliSource/UI/Layout/HListLayout.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>
@@ -139,6 +145,39 @@ namespace ChilliSource
             
             WidgetDefCSPtr horizontalSliderDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HorizontalSliderBar.csuidef");
             RegisterDefinition(horizontalSliderDef);
+            
+            auto luaSystem = Core::Application::Get()->GetSystem<Scripting::LuaSystem>();
+            luaSystem->RegisterEnum("SizePolicy",
+                                    "none", SizePolicy::k_none,
+                                    "usePreferredSize", SizePolicy::k_usePreferredSize,
+                                    "fillMaintainingAspect", SizePolicy::k_fillMaintainingAspect,
+                                    "fitMaintainingAspect", SizePolicy::k_fitMaintainingAspect,
+                                    "useWidthMaintainingAspect", SizePolicy::k_useWidthMaintainingAspect,
+                                    "useHeightMaintainingAspect", SizePolicy::k_useHeightMaintainingAspect
+                                    );
+            
+            luaSystem->RegisterEnum("Anchor",
+                                    "topLeft", Rendering::AlignmentAnchor::k_topLeft,
+                                    "topRight", Rendering::AlignmentAnchor::k_topRight,
+                                    "topCentre", Rendering::AlignmentAnchor::k_topCentre,
+                                    "middleLeft", Rendering::AlignmentAnchor::k_middleLeft,
+                                    "middleRight", Rendering::AlignmentAnchor::k_middleRight,
+                                    "middleCentre", Rendering::AlignmentAnchor::k_middleCentre,
+                                    "bottomLeft", Rendering::AlignmentAnchor::k_bottomLeft,
+                                    "bottomRight", Rendering::AlignmentAnchor::k_bottomRight,
+                                    "bottomCentre", Rendering::AlignmentAnchor::k_bottomCentre
+                                    );
+            
+            WidgetProxy::RegisterWithLua(luaSystem);
+            DrawableProxy::RegisterWithLua(luaSystem);
+            TextureDrawableProxy::RegisterWithLua(luaSystem);
+            NinePatchDrawableProxy::RegisterWithLua(luaSystem);
+            ThreePatchDrawableProxy::RegisterWithLua(luaSystem);
+            
+            luaSystem->RegisterClass("Screen", Core::Application::Get()->GetScreen(),
+                                     "getResolution", &Core::Screen::GetResolution
+                                     );
+
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 //
-//  NinePatchDrawableProxy.h
+//  DrawableProxy.h
 //  Chilli Source
 //  Created by Scott Downie on 18/08/2014.
 //
@@ -27,8 +27,8 @@
 //
 
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_NINEPATCHDRAWABLEPROXY_H_
-#define _CHILLISOURCE_UI_DRAWABLE_NINEPATCHDRAWABLEPROXY_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_DRAWABLEPROXY_H_
+#define _CHILLISOURCE_UI_DRAWABLE_DRAWABLEPROXY_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -37,13 +37,13 @@ namespace ChilliSource
     namespace UI
     {
         //----------------------------------------------------------------------------------------
-        /// Functions from texture drawable that are exposed to Lua as static functions acting
+        /// Functions from base drawable that are exposed to Lua as static functions acting
         /// on the given drawable. This allows Lua to manipulate drawables without owning them
         /// as expensive full data.
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        namespace NinePatchDrawableProxy
+        namespace DrawableProxy
         {
             //----------------------------------------------------------------------------------------
             /// Register all the proxy functions with Lua
@@ -63,48 +63,7 @@ namespace ChilliSource
             ///
             /// @return The type of this drawable instance
             //----------------------------------------------------------------------------------------
-            DrawableType GetType(NinePatchDrawable* in_drawable);
-            //----------------------------------------------------------------------------------------
-            /// Proxy function to allow calling on an instance from Lua script
-            ///
-            /// Set the texture that should be used in subsequent draws
-            ///
-            /// @author S Downie
-            ///
-            /// @param Widget on which to operate
-            /// @param Location of texture
-            /// @param Path of texture
-            //----------------------------------------------------------------------------------------
-            void SetTexture(NinePatchDrawable* in_drawable, Core::StorageLocation in_location, const std::string& in_path);
-            //----------------------------------------------------------------------------------------
-            /// Proxy function to allow calling on an instance from Lua script
-            ///
-            /// Set the UVs that should be used in subsequent draws
-            ///
-            /// @author S Downie
-            ///
-            /// @param Widget on which to operate
-            /// @param Rectangle containing U, V, S, T
-            //----------------------------------------------------------------------------------------
-            void SetUVs(NinePatchDrawable* in_drawable, const Rendering::UVs& in_UVs);
-            //----------------------------------------------------------------------------------------
-            /// Proxy function to allow calling on an instance from Lua script
-            ///
-            /// Set the UV insets that should be used to create the patches. Insets are from the edge
-            /// and therefore no negative numbers need to be specified for right and bottom insets.
-            ///
-            /// NOTE: Insets must compliment each other i.e. left and right cannot sum to more than 1.0
-            /// as they would overlap and insets cannot be zero or less.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Widget on which to operate
-            /// @param Left inset as normalised fraction (0 - 1)
-            /// @param Right inset as normalised fraction (0 - 1)
-            /// @param Top inset as normalised fraction (0 - 1)
-            /// @param Bottom inset as normalised fraction (0 - 1)
-            //----------------------------------------------------------------------------------------
-            void SetInsets(NinePatchDrawable* in_drawable, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom);
+            DrawableType GetType(IDrawable* in_drawable);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
@@ -115,7 +74,7 @@ namespace ChilliSource
             /// @return The preferred size that the drawable wishes to de drawn at based on the
             /// texture size
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetPreferredSize(NinePatchDrawable* in_drawable);
+            Core::Vector2 GetPreferredSize(IDrawable* in_drawable);
         }
     }
 }

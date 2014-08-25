@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
+#include <ChilliSource/Scripting/Lua/LuaSystem.h>
 
 namespace ChilliSource
 {
@@ -42,9 +43,9 @@ namespace ChilliSource
         {
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
-            void RegisterWithLuaScript(Scripting::LuaScript* in_script)
+            void RegisterWithLua(Scripting::LuaSystem* in_system)
             {
-                in_script->RegisterStaticClass("Widget",
+                in_system->RegisterStaticClass("Widget",
                                                "setName", &WidgetProxy::SetName,
                                                "setRelativePosition", &WidgetProxy::SetRelativePosition,
                                                "setAbsolutePosition", &WidgetProxy::SetAbsolutePosition,

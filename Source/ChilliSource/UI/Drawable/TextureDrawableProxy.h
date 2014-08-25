@@ -46,14 +46,14 @@ namespace ChilliSource
         namespace TextureDrawableProxy
         {
             //----------------------------------------------------------------------------------------
-            /// Register all the proxy functions with the given Lua script
+            /// Register all the proxy functions with Lua
             ///
             /// @author S Downie
             ///
             /// @param Widget on which to operate
-            /// @param Lua script
+            /// @param Lua system
             //----------------------------------------------------------------------------------------
-            void RegisterWithLuaScript(Scripting::LuaScript* in_script);
+            void RegisterWithLua(Scripting::LuaSystem* in_system);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
