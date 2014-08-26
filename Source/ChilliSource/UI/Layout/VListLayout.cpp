@@ -43,8 +43,8 @@ namespace ChilliSource
                 {PropertyType::k_int, "NumCells", "1"},
                 {PropertyType::k_float, "RelSpacing", "0"},
                 {PropertyType::k_float, "AbsSpacing", "0"},
-                {PropertyType::k_vec4, "RelMargins", "0"},
-                {PropertyType::k_vec4, "AbsMargins", "0"}
+                {PropertyType::k_vec4, "RelMargins", "0 0 0 0"},
+                {PropertyType::k_vec4, "AbsMargins", "0 0 0 0"}
             };
         }
         
