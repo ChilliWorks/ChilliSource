@@ -76,7 +76,9 @@ namespace ChilliSource
                 Core::StringUtils::SplitFilename(in_filepath, definitionFileName, pathToDefinition);
 
                 Json::Value hierarchy = root["Hierarchy"];
-                WidgetTemplateProvider::ParseTemplate(root, root, hierarchy, in_storageLocation, pathToDefinition, hierarchyDesc);
+                Json::Value children = root["Children"];
+                
+                WidgetTemplateProvider::ParseTemplate(root, children, hierarchy, in_storageLocation, pathToDefinition, hierarchyDesc);
                 
                 widgetTemplate->Build(hierarchyDesc);
                 
@@ -161,7 +163,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void WidgetTemplateProvider::ParseTemplate(const Json::Value& in_template, const Json::Value& in_root, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath, WidgetHierarchyDesc& out_hierarchyDesc)
+        void WidgetTemplateProvider::ParseTemplate(const Json::Value& in_template, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath, WidgetHierarchyDesc& out_hierarchyDesc)
         {
             CS_ASSERT(in_template.isMember("Type") == true, "Widget template must have type");
             std::string type = in_template["Type"].asString();
@@ -256,10 +258,9 @@ namespace ChilliSource
             
             out_hierarchyDesc.m_access = WidgetHierarchyDesc::Access::k_external;
             
-            if(in_hierarchy != NULL)
+            if(!in_hierarchy.isNull())
             {
-                const Json::Value& rootChildren = in_root["Children"];
-                if(in_hierarchy.isNull() == false && in_hierarchy.isArray() == true && rootChildren.isNull() == false)
+                if(in_hierarchy.isNull() == false && in_hierarchy.isArray() == true && in_children.isNull() == false)
                 {
                     for(u32 i=0; i<in_hierarchy.size(); ++i)
                     {
@@ -267,10 +268,10 @@ namespace ChilliSource
                         std::string name = hierarchyItem["Name"].asString();
                         
                         const Json::Value& hierarchyChildren = hierarchyItem["Children"];
-                        const Json::Value& widget = rootChildren[name];
+                        const Json::Value& widget = in_children[name];
                         
                         WidgetHierarchyDesc childDesc;
-                        ParseTemplate(widget, in_root, hierarchyChildren, in_templateLocation, in_templatePath, childDesc);
+                        ParseTemplate(widget, in_children, hierarchyChildren, in_templateLocation, in_templatePath, childDesc);
                         out_hierarchyDesc.m_children.push_back(childDesc);
                     }
                 }
