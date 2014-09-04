@@ -75,7 +75,8 @@ namespace ChilliSource
             //-------------------------------------------------------------
             Event(const Event&) = delete;
             Event& operator= (const Event&) = delete;
-            
+            Event(Event&&) = default;
+            Event& operator= (Event&&) = default;
             //-------------------------------------------------------------
             /// Opens a new connection to the event. While this connection
             /// remains in scope the delegate will be notified of events
