@@ -38,7 +38,6 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void EventConnection::SetOwningEvent(IDisconnectableEvent* in_owningEvent)
         {
-            CS_ASSERT(m_owningEvent == nullptr || in_owningEvent == nullptr, "Connection already has an owning event");
             m_owningEvent = in_owningEvent;
         }
         //----------------------------------------------------------------
@@ -48,6 +47,7 @@ namespace ChilliSource
             if(m_owningEvent != nullptr)
             {
                 m_owningEvent->CloseConnection(this);
+				m_owningEvent = nullptr;
             }
         }
         //----------------------------------------------------------------
