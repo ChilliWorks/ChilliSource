@@ -55,6 +55,7 @@ public class CSAtlasBuilder
 	private static final short k_versionNum = 3;
 	private static final String k_atlasExtension = ".csatlas";
 	private static final String k_atlasIdExtension = ".csatlasid";
+	private static final String k_csImageExtension = ".csimage";
 	
 	private AtlasBuilderOptions m_options = null;
 	private File m_rootDirectory = null; // Root directory from which files are read,set from
@@ -77,9 +78,9 @@ public class CSAtlasBuilder
 		String extension = StringUtils.getExtension(m_options.m_outputFilePath);
 		
 		//Check for a valid extension, i.e. either csatlas/csatlasid/csimage
-		if(!extension.equals(k_atlasExtension) || !extension.equals(k_atlasIdExtension) || !extension.equals(".csimage"))
+		if(!(extension.equals(k_atlasExtension.substring(1)) || extension.equals(k_atlasIdExtension.substring(1)) || extension.equals(k_csImageExtension.substring(1))))
 		{
-			Logging.logFatal("Output filepath (" + m_options.m_outputFilePath +  ") has wrong extension type, valid output extensions are " + k_atlasExtension + ", " + k_atlasIdExtension + " and .csimage");
+			Logging.logFatal("Output filepath (" + m_options.m_outputFilePath +  ") has wrong extension type, valid output extensions are " + k_atlasExtension + ", " + k_atlasIdExtension + " and " + k_csImageExtension);
 		}
 		
 		//Remove the extension from the outputpath
@@ -87,20 +88,22 @@ public class CSAtlasBuilder
 		
 		Logging.logVerbose("input dir name is:\"" + m_options.m_inputDirectoryPath + "\"");
 
-		ArrayList<File> filesToProcess = new ArrayList<File>();
-
 		m_rootDirectory = new File(m_options.m_inputDirectoryPath);
+		
+		List<AtlasImage> atlasImagesToProcess;
+		if (m_options.m_atlasImages.size() > 0)
+		{
+			atlasImagesToProcess = m_options.m_atlasImages;
+		}
 		if (m_options.m_fileList.length() > 0)
 		{
-			loadFilesFromOrderingFile(filesToProcess);
-		}
-		else if(m_options.m_imageFileToIDNameMap.size() > 0)
-		{
-			filesToProcess = new ArrayList<File>(m_options.m_imageFileToIDNameMap.keySet());
+			atlasImagesToProcess = new ArrayList<AtlasImage>();
+			loadFilesFromOrderingFile(atlasImagesToProcess);
 		}
 		else
 		{
-			addImageFilesInDirectory(m_rootDirectory, true, filesToProcess);
+			atlasImagesToProcess = new ArrayList<AtlasImage>();
+			addImageFilesInDirectory(m_rootDirectory, true, atlasImagesToProcess);
 		}
 		
 		TexturePacker packer = new TexturePacker();
@@ -118,6 +121,12 @@ public class CSAtlasBuilder
 		.setOuterPadding(m_options.m_padding)
 		.enableCropping(m_options.m_crop);
 		
+		ArrayList<File> filesToProcess = new ArrayList<File>();
+		for (AtlasImage atlasImage : atlasImagesToProcess)
+		{
+			filesToProcess.add(atlasImage.getSourceImageFile());
+		}
+		
 		PackedTexture result = packer.pack(filesToProcess, null);
 		if(result == null)
 		{
@@ -132,7 +141,7 @@ public class CSAtlasBuilder
 		ImageIO.write(result.getPackedTexture(), "png", F);
 
 		writeBinaryFile(result);
-		writeStringIDs(result, m_options.m_imageFileToIDNameMap);
+		writeStringIDs(result, atlasImagesToProcess);
 		convertToCSImage();
 
 		Logging.logVerbose("Goodbye!\n");
@@ -152,22 +161,22 @@ public class CSAtlasBuilder
 		Logging.logVerbose("-----------------------");
 
 		m_options = in_options;
-
-		ArrayList<File> filesToProcess = new ArrayList<File>();
-
 		m_rootDirectory = new File(m_options.m_inputDirectoryPath);
 		
+		List<AtlasImage> atlasImagesToProcess;
+		if (m_options.m_atlasImages.size() > 0)
+		{
+			atlasImagesToProcess = m_options.m_atlasImages;
+		}
 		if (m_options.m_fileList.length() > 0)
 		{
-			loadFilesFromOrderingFile(filesToProcess);
-		}
-		else if(m_options.m_imageFileToIDNameMap.size() > 0)
-		{
-			filesToProcess = new ArrayList<File>(m_options.m_imageFileToIDNameMap.keySet());
+			atlasImagesToProcess = new ArrayList<AtlasImage>();
+			loadFilesFromOrderingFile(atlasImagesToProcess);
 		}
 		else
 		{
-			addImageFilesInDirectory(m_rootDirectory, true, filesToProcess);
+			atlasImagesToProcess = new ArrayList<AtlasImage>();
+			addImageFilesInDirectory(m_rootDirectory, true, atlasImagesToProcess);
 		}
 		
 		TexturePacker packer = new TexturePacker();
@@ -186,6 +195,12 @@ public class CSAtlasBuilder
 		.enableCropping(m_options.m_crop)
 		.disableFatalLogs();
 		
+		ArrayList<File> filesToProcess = new ArrayList<File>();
+		for (AtlasImage atlasImage : atlasImagesToProcess)
+		{
+			filesToProcess.add(atlasImage.getSourceImageFile());
+		}
+		
 		PackedTexture result = packer.pack(filesToProcess, out_errorInfo);
 		if(result == null)
 		{
@@ -201,7 +216,7 @@ public class CSAtlasBuilder
 	 * @param Whether or not to recurse. Will only recurse one level deep.
 	 * @param [Out] The output list of files.
 	 */
-	private void addImageFilesInDirectory(File in_directory, boolean in_recursiveDirectorySearch, ArrayList<File> out_files)
+	private void addImageFilesInDirectory(File in_directory, boolean in_recursiveDirectorySearch, List<AtlasImage> out_atlasImages)
 	{
 		String[] dirContents = in_directory.list();
 
@@ -211,13 +226,16 @@ public class CSAtlasBuilder
 
 			if (contentFile.isDirectory() && in_recursiveDirectorySearch)
 			{
-				addImageFilesInDirectory(contentFile, false, out_files); // only go one level deep
+				addImageFilesInDirectory(contentFile, false, out_atlasImages); // only go one level deep
 			}
 			else
 			{
 				boolean IsPngFile = dirContents[i].endsWith(".png") || dirContents[i].endsWith(".PNG");
-				if (IsPngFile)
-					out_files.add(contentFile);
+				if (IsPngFile == true)
+				{
+					String atlasImageId = generateSpriteNameFromFile(contentFile);
+					out_atlasImages.add(new AtlasImage(contentFile, atlasImageId));
+				}
 			}
 		}
 	}
@@ -228,12 +246,22 @@ public class CSAtlasBuilder
 	 * 
 	 * @return The output sprite name.
 	 */
-	private String generateSpriteNameFromFile(File in_file) throws IOException
+	private String generateSpriteNameFromFile(File in_file)
 	{
 		//choose the output format for the filenames.
-		String srcFilePath = in_file.getCanonicalPath();
+		String srcFilePath = null;
+		String rootDir = null;
+		try
+		{
+			srcFilePath = in_file.getCanonicalPath();
+			rootDir = m_rootDirectory.getCanonicalPath();
+		}
+		catch (Exception e)
+		{
+			Logging.logFatal(StringUtils.convertExceptionToString(e));
+		}
+		
 		String srcFilePathWithoutExtension = srcFilePath.substring(0, srcFilePath.lastIndexOf("."));
-		String rootDir = m_rootDirectory.getCanonicalPath();
 		int rootDirLength = rootDir.length();
 		String srcFilePathFromRoot = srcFilePathWithoutExtension.substring(rootDirLength, srcFilePathWithoutExtension.length());
 
@@ -252,7 +280,7 @@ public class CSAtlasBuilder
 	 * 
 	 * @param [Out] The list of files.
 	 */
-	private void loadFilesFromOrderingFile(ArrayList<File> files) throws Exception
+	private void loadFilesFromOrderingFile(List<AtlasImage> out_atlasImages) throws Exception
 	{
 		File f = new File(m_options.m_fileList);
 		FileInputStream in = new FileInputStream(f);
@@ -270,7 +298,11 @@ public class CSAtlasBuilder
 		for(String line : lines)
 		{
 			if ((line != null) && (line.length()> 0))
-				files.add(new File(StringUtils.standardiseFilePath(m_options.m_inputDirectoryPath + "/" + line)));
+			{
+				File imageFile = new File(StringUtils.standardiseFilePath(m_options.m_inputDirectoryPath + "/" + line));
+				String atlasImageId = generateSpriteNameFromFile(imageFile);
+				out_atlasImages.add(new AtlasImage(imageFile, atlasImageId));
+			}
 		}
 	}
 	/**
@@ -284,7 +316,7 @@ public class CSAtlasBuilder
 		
 		PNGToCSImageOptions options = new PNGToCSImageOptions();
 		options.strInputFilename = m_outputFilePathWithoutExtension + ".png";
-		options.strOutputFilename = m_outputFilePathWithoutExtension + ".csimage";
+		options.strOutputFilename = m_outputFilePathWithoutExtension + k_csImageExtension;
 		
 		if (m_options.m_imageCompression.length() > 0)
 		{
@@ -366,9 +398,9 @@ public class CSAtlasBuilder
 	 * @author R Henning
 	 * 
 	 * @param in_packedTexture - The packaged texture.
-	 * @param in_textureToSpriteNameMapper - Optional file to spriteId name map (Can be null)
+	 * @param in_textureToSpriteNameMapper - Optional file to spriteId name map 
 	 */
-	private void writeStringIDs(PackedTexture in_packedTexture, Map<File, String> in_imageFileToSpriteIdMapper) throws IOException 
+	private void writeStringIDs(PackedTexture in_packedTexture, List<AtlasImage> in_atlasImages) throws IOException 
 	{
 		int numImages = in_packedTexture.getNumImages();
 		
@@ -377,21 +409,23 @@ public class CSAtlasBuilder
 
 		for (int i = 0; i < numImages; i++)
 		{
-			String enumName = "";
-			//If the map is not null then we take the sprite id names from it
-			if(in_imageFileToSpriteIdMapper.size() > 0)
+			String atlasImageId = "";
+			
+			for (AtlasImage atlasImage : in_atlasImages)
 			{
-				assert(in_imageFileToSpriteIdMapper.containsKey(in_packedTexture.getOriginalFile(i))) : "File not contained in name map!";
-				
-				enumName = in_imageFileToSpriteIdMapper.get(in_packedTexture.getOriginalFile(i));
-			}
-			//Else we generate our own
-			else
-			{
-				enumName = generateSpriteNameFromFile(in_packedTexture.getOriginalFile(i));
+				if (atlasImage.getSourceImageFile().equals(in_packedTexture.getOriginalFile(i)) == true)
+				{
+					atlasImageId = atlasImage.getAtlasImageId();
+					break;
+				}
 			}
 			
-			dosC.writeBytes(enumName);
+			if (atlasImageId.length() == 0)
+			{
+				Logging.logFatal("Couldn't file atlas image Id for image: " + in_packedTexture.getOriginalFile(i).getName());
+			}
+			
+			dosC.writeBytes(atlasImageId);
 			dosC.writeByte('\n');
 		}
 

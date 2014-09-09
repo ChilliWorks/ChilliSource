@@ -1,7 +1,7 @@
 /**
- * AtlasBuilderOptions.java
+ * AtlasImage.java
  * Chilli Source
- * Created by Ian Copland on 26/06/2014.
+ * Created by Ian Copland on 09/09/2014.
  * 
  * The MIT License (MIT)
  * 
@@ -28,32 +28,49 @@
 
 package com.chillisource.csatlasbuilder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 
-import com.chillisource.texturepackerutils.TexturePacker.PlacementHeuristic;
-
-public class AtlasBuilderOptions
+/**
+ * A simple container class for information on a single exportable image
+ * in a texture atlas.
+ * 
+ * @author Ian Copland
+ *
+ */
+public final class AtlasImage
 {
-	public List<AtlasImage> m_atlasImages = new ArrayList<>(); //Available through java library access only.
-	public String m_inputDirectoryPath = "";
-	public String m_outputFilePath = "";
-	public String m_fileList = "";
-	public int m_fixedWidth = -1;
-	public int m_fixedHeight = -1;
-	public int[] m_validHeights = new int[0];
-	public int[] m_validWidths = new int[0];
-	public int m_maxWidth = 2048;
-	public int m_maxHeight = 2048;
-	public int m_divisibleBy = 1;
-	public boolean m_crop = true;
-	public int m_padding = 0;
-	public int m_innerPadding = 0;
-	public int m_extrude = 0;
-	public PlacementHeuristic m_packingHeuristic = PlacementHeuristic.BOTTOMRIGHT;
-	public int m_lineHeight = 0;
-	public String m_imageCompression = "";
-	public String m_imageFormat = "";
-	public boolean m_imageDither = false;
-	public boolean m_imagePremultiplyAlpha = true;
+	private File m_sourceImageFile;
+	private String m_atlasImageId;
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_file - The image file.
+	 * @param in_atlasImageId - The atlas image id.
+	 */
+	public AtlasImage(File in_sourceImageFile, String in_atlasImageId)
+	{
+		m_sourceImageFile = in_sourceImageFile;
+		m_atlasImageId = in_atlasImageId;
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The source image file.
+	 */
+	public File getSourceImageFile()
+	{
+		return m_sourceImageFile;
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The atlas image Id.
+	 */
+	public String getAtlasImageId()
+	{
+		return m_atlasImageId;
+	}
 }
