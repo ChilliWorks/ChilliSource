@@ -95,7 +95,7 @@ public class CSAtlasBuilder
 		{
 			atlasImagesToProcess = m_options.m_atlasImages;
 		}
-		if (m_options.m_fileList.length() > 0)
+		else if (m_options.m_fileList.length() > 0)
 		{
 			atlasImagesToProcess = new ArrayList<AtlasImage>();
 			loadFilesFromOrderingFile(atlasImagesToProcess);
@@ -168,7 +168,7 @@ public class CSAtlasBuilder
 		{
 			atlasImagesToProcess = m_options.m_atlasImages;
 		}
-		if (m_options.m_fileList.length() > 0)
+		else if (m_options.m_fileList.length() > 0)
 		{
 			atlasImagesToProcess = new ArrayList<AtlasImage>();
 			loadFilesFromOrderingFile(atlasImagesToProcess);
