@@ -136,13 +136,13 @@ namespace CSBackend
             /// Called when the screen resolution changes. This will update
             /// the screen resolution and notify listeners that the resolution
             /// has changed. This is for internal use and should not be
-            /// called manually.
+            /// called manually. This will only be called from iOS 8 onwards.
             ///
             /// @author Ian Copland
             ///
             /// @param The screen size in DIPS.
             //------------------------------------------------------------
-            void OnResolutionChanged(CGSize in_size);
+            void OnResolutionChanged(CGSize in_dipsSize);
         private:
             friend CSCore::ScreenUPtr CSCore::Screen::Create();
             //-------------------------------------------------------

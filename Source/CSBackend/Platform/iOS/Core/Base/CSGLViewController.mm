@@ -218,7 +218,8 @@
 //-------------------------------------------------------------
 /// Called by the OS immediately before a view rotation
 /// occurs. This allows use to notify the engine of the orientation
-/// change.
+/// change. This will only get called in iOS versions prior to
+/// 8.0
 ///
 /// @author S Downie
 ///
@@ -227,14 +228,10 @@
 //-------------------------------------------------------------
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)in_toInterfaceOrientation duration:(NSTimeInterval)in_duration
 {
-    //if we are running iOS8 use viewWillTransitionToSize: otherwise use this.
-    if ([self respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)] == false)
+    if(CSCore::Application::Get() != nullptr)
     {
-        if(CSCore::Application::Get() != nullptr)
-        {
-            CSBackend::iOS::Screen* screen = CSCore::Application::Get()->GetSystem<CSBackend::iOS::Screen>();
-            screen->OnOrientationChanged(in_toInterfaceOrientation);
-        }
+        CSBackend::iOS::Screen* screen = CSCore::Application::Get()->GetSystem<CSBackend::iOS::Screen>();
+        screen->OnOrientationChanged(in_toInterfaceOrientation);
     }
 }
 //-------------------------------------------------------------

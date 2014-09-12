@@ -41,17 +41,19 @@ namespace CSBackend
         namespace
         {
             //----------------------------------------------------
+            /// Calculate the resolution of the screen, pre-iOS 8.
+            ///
             /// @author Ian Copland
             ///
             /// @param The orientation of the application.
+            /// @param The size of the screen in DIPS.
+            /// @param The device pixel scale factor.
             ///
             /// @return The iOS device resolution.
             //----------------------------------------------------
-            CSCore::Vector2 CalculateResolution(UIInterfaceOrientation in_orientation)
+            CSCore::Vector2 CalculateResolution(UIInterfaceOrientation in_orientation, CGSize in_dipsSize, f32 in_pixelScaleFactor)
             {
-                CGSize size = [[UIScreen mainScreen] bounds].size;
-                f32 scale = [UIScreen mainScreen].scale;
-                CSCore::Vector2 resolution(size.width * scale, size.height * scale);
+                CSCore::Vector2 resolution(in_dipsSize.width * in_pixelScaleFactor, in_dipsSize.height * in_pixelScaleFactor);
                 
                 if (in_orientation == UIInterfaceOrientationLandscapeLeft || in_orientation == UIInterfaceOrientationLandscapeRight)
                 {
@@ -61,16 +63,19 @@ namespace CSBackend
                 return resolution;
             }
             //----------------------------------------------------
+            /// Calculate the resolution of the screen in iOS 8
+            /// and above.
+            ///
             /// @author Ian Copland
             ///
             /// @param The size of the screen in DIPS.
+            /// @param The device pixel scale factor.
             ///
             /// @return The iOS device resolution.
             //----------------------------------------------------
-            CSCore::Vector2 CalculateResolution(CGSize in_size)
+            CSCore::Vector2 CalculateResolution(CGSize in_dipsSize, f32 in_pixelScaleFactor)
             {
-                f32 scale = [UIScreen mainScreen].scale;
-                CSCore::Vector2 resolution(in_size.width * scale, in_size.height * scale);
+                CSCore::Vector2 resolution(in_dipsSize.width * in_pixelScaleFactor, in_dipsSize.height * in_pixelScaleFactor);
                 return resolution;
             }
         }
@@ -82,13 +87,15 @@ namespace CSBackend
         {
             @autoreleasepool
             {
-                if ([[[CSAppDelegate sharedInstance] viewController] respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)] == true)
+                if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_7_1)
                 {
-                    m_resolution = CalculateResolution([[UIScreen mainScreen] bounds].size);
+                    //get resolution for pre-iOS 8 devices.
+                    m_resolution = CalculateResolution([[CSAppDelegate sharedInstance] viewController].interfaceOrientation, [[UIScreen mainScreen] bounds].size, [UIScreen mainScreen].scale);
                 }
                 else
                 {
-                    m_resolution = CalculateResolution([[CSAppDelegate sharedInstance] viewController].interfaceOrientation);
+                    //get resolution for iOS 8 and higher.
+                    m_resolution = CalculateResolution([[UIScreen mainScreen] bounds].size, [UIScreen mainScreen].scale);
                 }
                 
                 m_densityScale = [UIScreen mainScreen].scale;
@@ -156,14 +163,14 @@ namespace CSBackend
         //------------------------------------------------------------
         void Screen::OnOrientationChanged(UIInterfaceOrientation in_orientation)
         {
-            m_resolution = CalculateResolution(in_orientation);
+            m_resolution = CalculateResolution(in_orientation, [[UIScreen mainScreen] bounds].size, [UIScreen mainScreen].scale);
             m_resolutionChangedEvent.NotifyConnections(m_resolution);
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void Screen::OnSizeChanged(CGSize in_size)
+        void Screen::OnResolutionChanged(CGSize in_dipsSize)
         {
-            m_resolution = CalculateResolution(in_size);
+            m_resolution = CalculateResolution(in_dipsSize, [UIScreen mainScreen].scale);
             m_resolutionChangedEvent.NotifyConnections(m_resolution);
         }
     }
