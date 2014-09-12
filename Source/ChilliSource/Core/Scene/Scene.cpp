@@ -60,7 +60,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         void Scene::ResumeEntities()
         {
-            CS_ASSERT(m_entitiesActive == false, "Received resume entities event while entities are already active.")
+            //CS_ASSERT(m_entitiesActive == false, "Received resume entities event while entities are already active.")
             m_entitiesActive = true;
             
             for(u32 i = 0; i < m_entities.size(); ++i)
@@ -78,7 +78,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void Scene::ForegroundEntities()
 		{
-            CS_ASSERT(m_entitiesForegrounded == false, "Received foreground entities event while entities are already foregrounded.")
+            //CS_ASSERT(m_entitiesForegrounded == false, "Received foreground entities event while entities are already foregrounded.")
             m_entitiesForegrounded = true;
             
             for(u32 i = 0; i<m_entities.size(); ++i)

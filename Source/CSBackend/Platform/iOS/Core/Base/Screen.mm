@@ -28,6 +28,7 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
+#import <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
 #import <CSBackend/Platform/iOS/Core/Base/Screen.h>
 
 #import <Foundation/Foundation.h>
@@ -59,6 +60,19 @@ namespace CSBackend
                 
                 return resolution;
             }
+            //----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The size of the screen in DIPS.
+            ///
+            /// @return The iOS device resolution.
+            //----------------------------------------------------
+            CSCore::Vector2 CalculateResolution(CGSize in_size)
+            {
+                f32 scale = [UIScreen mainScreen].scale;
+                CSCore::Vector2 resolution(in_size.width * scale, in_size.height * scale);
+                return resolution;
+            }
         }
         
         CS_DEFINE_NAMEDTYPE(Screen);
@@ -68,7 +82,15 @@ namespace CSBackend
         {
             @autoreleasepool
             {
-                m_resolution = CalculateResolution([UIApplication sharedApplication].keyWindow.rootViewController.interfaceOrientation);
+                if ([[[CSAppDelegate sharedInstance] viewController] respondsToSelector:@selector(viewWillTransitionToSize:withTransitionCoordinator:)] == true)
+                {
+                    m_resolution = CalculateResolution([[UIScreen mainScreen] bounds].size);
+                }
+                else
+                {
+                    m_resolution = CalculateResolution([[CSAppDelegate sharedInstance] viewController].interfaceOrientation);
+                }
+                
                 m_densityScale = [UIScreen mainScreen].scale;
                 m_invDensityScale = 1.0f / m_densityScale;
             }
@@ -135,6 +157,13 @@ namespace CSBackend
         void Screen::OnOrientationChanged(UIInterfaceOrientation in_orientation)
         {
             m_resolution = CalculateResolution(in_orientation);
+            m_resolutionChangedEvent.NotifyConnections(m_resolution);
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        void Screen::OnSizeChanged(CGSize in_size)
+        {
+            m_resolution = CalculateResolution(in_size);
             m_resolutionChangedEvent.NotifyConnections(m_resolution);
         }
     }
