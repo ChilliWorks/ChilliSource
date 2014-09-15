@@ -66,7 +66,7 @@ namespace ChilliSource
                             
                             if(propDesc.m_name == "TexturePath" && relativePath == true)
                             {
-                                value = in_absPath + value;
+                                value = Core::StringUtils::ResolveParentedDirectories(in_absPath + value);
                             }
                             
                             result.SetProperty(propDesc.m_type, propDesc.m_name, value);

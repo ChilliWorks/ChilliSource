@@ -183,7 +183,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    path = in_templatePath + path;
+                    path = Core::StringUtils::ResolveParentedDirectories(in_templatePath + path);
                 }
                 
                 //Template widgets need to be created as a hierarchy so that we can set properties such as layout

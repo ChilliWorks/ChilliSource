@@ -256,7 +256,7 @@ namespace ChilliSource
                     }
                     else
                     {
-                        behaviourPath = pathToDefinition + behaviourPath;
+                        behaviourPath = Core::StringUtils::ResolveParentedDirectories(pathToDefinition + behaviourPath);
                     }
                     
                     if(in_delegate == nullptr)

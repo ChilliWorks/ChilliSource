@@ -784,6 +784,43 @@ namespace ChilliSource
                 
                 return strResult;
             }
+            //-------------------------------------------------------
+            //-------------------------------------------------------
+            std::string ResolveParentedDirectories(const std::string& in_relPath)
+            {
+                std::string standardRelPath = StandardiseFilePath(in_relPath);
+                
+                std::vector<std::string> relDirs = Split(standardRelPath, "/");
+                
+                for(u32 i=0; i<relDirs.size(); )
+                {
+                    if(relDirs[i] == "..")
+                    {
+                        CS_ASSERT(i > 0, "StringUtils::ResolveParentedDirectories Cannot go up directories beyond the root");
+                        relDirs.erase(relDirs.begin() + i);
+                        relDirs.erase(relDirs.begin() + i - 1);
+                        --i;
+                    }
+                    else
+                    {
+                        ++i;
+                    }
+                }
+
+                std::string absPath;
+                
+                if(relDirs.size() > 0)
+                {
+                    for(u32 i=0; i<relDirs.size()-1; ++i)
+                    {
+                        absPath += relDirs[i] + "/";
+                    }
+                
+                    absPath += relDirs.back();
+                }
+                
+                return absPath;
+            }
         }
 	}
 }

@@ -237,6 +237,26 @@ namespace ChilliSource
             /// @return String hex representation of integer
             //-------------------------------------------------------
             std::string CharToHex(u8 in_dec);
+            //-------------------------------------------------------
+            /// Resolves ".." parented directories in paths relative
+            /// to the root.
+            ///
+            /// NOTE: In CS even absolute paths are relative to the sandboxed
+            /// storage locations and it is forbidden to go "up" beyond the root
+            /// of each storage location.
+            ///
+            /// Examples:
+            ///     "A/B.ext" -> "A/B.ext"
+            ///     "A/../B.ext" -> "B.ext"
+            ///     "A/../../B.ext" -> Assert
+            ///
+            /// @author S Downie
+            ///
+            /// @param File path containing parented links ("..")
+            ///
+            /// @return File path with ".." resolved
+            //-------------------------------------------------------
+            std::string ResolveParentedDirectories(const std::string& in_relPath);
 		};
 	}
 }
