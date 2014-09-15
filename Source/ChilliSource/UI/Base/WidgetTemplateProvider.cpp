@@ -186,9 +186,16 @@ namespace ChilliSource
                     path = in_templatePath + path;
                 }
                 
+                //Template widgets need to be created as a hierarchy so that we can set properties such as layout
+                //on the widget without affecting the contents of the template and vice-versa.
+                auto widgetFactory = Core::Application::Get()->GetWidgetFactory();
+                WidgetDefCSPtr widgetDef = widgetFactory->GetDefinition("Widget");
+                out_hierarchyDesc = widgetDef->GetHierarchyDesc();
+                
                 auto resPool = Core::Application::Get()->GetResourcePool();
                 WidgetTemplateCSPtr widgetTemplate = resPool->LoadResource<WidgetTemplate>(location, path);
-                out_hierarchyDesc = widgetTemplate->GetHierarchyDesc();
+                out_hierarchyDesc.m_children.push_back(widgetTemplate->GetHierarchyDesc());
+                out_hierarchyDesc.m_children.back().m_access = WidgetHierarchyDesc::Access::k_internal;
             }
             else
             {
