@@ -46,7 +46,7 @@ namespace CSBackend
             /// @author Ian Copland
             ///
             /// @param The orientation of the application.
-            /// @param The size of the screen in DIPS.
+            /// @param The size of the screen in portrait DIPS.
             /// @param The device pixel scale factor.
             ///
             /// @return The iOS device resolution.
@@ -89,14 +89,7 @@ namespace CSBackend
             bool ShouldCalculateBasedOnOrientation()
             {
 #ifdef NSFoundationVersionNumber_iOS_7_1
-                if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_7_1)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_7_1);
 #else
                 return true;
 #endif
@@ -186,6 +179,8 @@ namespace CSBackend
         //------------------------------------------------------------
         void Screen::OnOrientationChanged(UIInterfaceOrientation in_orientation)
         {
+            CS_ASSERT(ShouldCalculateBasedOnOrientation() == true, "OnOrientationChanged() should not get called on devices that do not require orientation based calculations.");
+            
             m_resolution = CalculateResolution(in_orientation, [[UIScreen mainScreen] bounds].size, [UIScreen mainScreen].scale);
             m_resolutionChangedEvent.NotifyConnections(m_resolution);
         }
@@ -193,6 +188,8 @@ namespace CSBackend
         //-----------------------------------------------------------
         void Screen::OnResolutionChanged(CGSize in_dipsSize)
         {
+            CS_ASSERT(ShouldCalculateBasedOnOrientation() == false, "OnResolutionChanged() should not get called on devices that require orientation based calculations.");
+            
             m_resolution = CalculateResolution(in_dipsSize, [UIScreen mainScreen].scale);
             m_resolutionChangedEvent.NotifyConnections(m_resolution);
         }
