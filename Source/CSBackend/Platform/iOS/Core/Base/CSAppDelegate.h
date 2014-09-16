@@ -51,6 +51,10 @@
     //ChilliSource lifecycle events
     BOOL isFirstActive;
     
+    //Used to ensure that the Update event is only called
+    //between has become active and will resign active
+    BOOL isActive;
+    
     NSMutableArray* subdelegates;
 }
 //--------------------------------------------------------------------

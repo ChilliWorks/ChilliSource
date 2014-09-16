@@ -78,6 +78,29 @@ namespace CSBackend
                 CSCore::Vector2 resolution(in_dipsSize.width * in_pixelScaleFactor, in_dipsSize.height * in_pixelScaleFactor);
                 return resolution;
             }
+            //----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return Whether or not the resolution should be
+            /// calculated based on the screen orientation. This
+            /// is only the case below iOS 8, and this is
+            /// effectively a check for pre-iOS 8.
+            //----------------------------------------------------
+            bool ShouldCalculateBasedOnOrientation()
+            {
+#ifdef NSFoundationVersionNumber_iOS_7_1
+                if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_7_1)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+#else
+                return true;
+#endif
+            }
         }
         
         CS_DEFINE_NAMEDTYPE(Screen);
@@ -87,15 +110,15 @@ namespace CSBackend
         {
             @autoreleasepool
             {
-                if (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_7_1)
-                {
-                    //get resolution for pre-iOS 8 devices.
-                    m_resolution = CalculateResolution([[CSAppDelegate sharedInstance] viewController].interfaceOrientation, [[UIScreen mainScreen] bounds].size, [UIScreen mainScreen].scale);
-                }
-                else
+                if (ShouldCalculateBasedOnOrientation() == false)
                 {
                     //get resolution for iOS 8 and higher.
                     m_resolution = CalculateResolution([[UIScreen mainScreen] bounds].size, [UIScreen mainScreen].scale);
+                }
+                else
+                {
+                    //get resolution for pre-iOS 8 devices.
+                    m_resolution = CalculateResolution([[CSAppDelegate sharedInstance] viewController].interfaceOrientation, [[UIScreen mainScreen] bounds].size, [UIScreen mainScreen].scale);
                 }
                 
                 m_densityScale = [UIScreen mainScreen].scale;
