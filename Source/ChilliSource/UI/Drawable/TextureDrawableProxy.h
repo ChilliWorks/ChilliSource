@@ -50,7 +50,6 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Widget on which to operate
             /// @param Lua system
             //----------------------------------------------------------------------------------------
             void RegisterWithLua(Scripting::LuaSystem* in_system);
@@ -59,7 +58,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Widget on which to operate
+            /// @param Drawable on which to operate
             ///
             /// @return The type of this drawable instance
             //----------------------------------------------------------------------------------------
@@ -71,7 +70,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Widget on which to operate
+            /// @param Drawable on which to operate
             /// @param Location of texture
             /// @param Path of texture
             //----------------------------------------------------------------------------------------
@@ -83,7 +82,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Widget on which to operate
+            /// @param Drawable on which to operate
             /// @param Rectangle containing U, V, S, T
             //----------------------------------------------------------------------------------------
             void SetUVs(TextureDrawable* in_drawable, const Rendering::UVs& in_UVs);
@@ -92,7 +91,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Widget on which to operate
+            /// @param Drawable on which to operate
             ///
             /// @return The preferred size that the drawable wishes to de drawn at based on the
             /// texture size

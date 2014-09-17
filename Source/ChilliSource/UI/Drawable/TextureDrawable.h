@@ -87,7 +87,7 @@ namespace ChilliSource
             ///
             /// @param Texture
             //----------------------------------------------------------------------------------------
-            void SetTexture(const Rendering::TextureCSPtr& in_texture);
+            void SetTexture(const Rendering::TextureCSPtr& in_texture) override;
             //----------------------------------------------------------------------------------------
             /// Set the UVs that should be used in subsequent draws
             ///

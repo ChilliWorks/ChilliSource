@@ -50,16 +50,27 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Widget on which to operate
             /// @param Lua system
             //----------------------------------------------------------------------------------------
             void RegisterWithLua(Scripting::LuaSystem* in_system);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
+            /// Set the texture that should be used in subsequent draws
+            ///
             /// @author S Downie
             ///
-            /// @param Widget on which to operate
+            /// @param Drawable on which to operate
+            /// @param Location of texture
+            /// @param Path of texture
+            //----------------------------------------------------------------------------------------
+            void SetTexture(IDrawable* in_drawable, Core::StorageLocation in_location, const std::string& in_path);
+            //----------------------------------------------------------------------------------------
+            /// Proxy function to allow calling on an instance from Lua script
+            ///
+            /// @author S Downie
+            ///
+            /// @param Drawable on which to operate
             ///
             /// @return The type of this drawable instance
             //----------------------------------------------------------------------------------------
@@ -69,7 +80,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Widget on which to operate
+            /// @param Drawable on which to operate
             ///
             /// @return The preferred size that the drawable wishes to de drawn at based on the
             /// texture size

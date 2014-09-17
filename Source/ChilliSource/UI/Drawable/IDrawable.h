@@ -74,6 +74,14 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             virtual Core::Vector2 GetPreferredSize() const = 0;
             //----------------------------------------------------------------------------------------
+            /// Set the texture that should be used in subsequent draws
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture
+            //----------------------------------------------------------------------------------------
+            virtual void SetTexture(const Rendering::TextureCSPtr& in_texture) = 0;
+            //----------------------------------------------------------------------------------------
             /// Render the widget using the canvas renderer
             ///
             /// @author S Downie

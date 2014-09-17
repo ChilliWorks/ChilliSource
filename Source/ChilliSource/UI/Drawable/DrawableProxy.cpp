@@ -29,6 +29,8 @@
 #include <ChilliSource/UI/Drawable/DrawableProxy.h>
 
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Scripting/Lua/LuaSystem.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
@@ -43,10 +45,18 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void RegisterWithLua(Scripting::LuaSystem* in_system)
             {
-                in_system->RegisterStaticClass("TextureDrawable",
+                in_system->RegisterStaticClass("Drawable",
+                                               "setTexture", DrawableProxy::SetTexture,
                                                "getType", DrawableProxy::GetType,
                                                "getPreferredSize", DrawableProxy::GetPreferredSize
                                                );
+            }
+            //----------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------
+            void SetTexture(IDrawable* in_drawable, Core::StorageLocation in_location, const std::string& in_path)
+            {
+                auto resourcePool = Core::Application::Get()->GetResourcePool();
+                in_drawable->SetTexture(resourcePool->LoadResource<Rendering::Texture>(in_location, in_path));
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
