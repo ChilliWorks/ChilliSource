@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8113673019C99A2E00D9AEDC /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8113672D19C99A2E00D9AEDC /* Filter.cpp */; };
 		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
 		81B1D2D1196C0167000F13DD /* Pointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2CF196C0167000F13DD /* Pointer.cpp */; };
 		81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D3196C2410000F13DD /* TextEntry.cpp */; };
@@ -269,6 +270,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8113672D19C99A2E00D9AEDC /* Filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Filter.cpp; sourceTree = "<group>"; };
+		8113672E19C99A2E00D9AEDC /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
+		8113672F19C99A2E00D9AEDC /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
 		8158E483196ACB25005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		8158E484196ACB32005FF0A8 /* Container.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Container.h; sourceTree = "<group>"; };
@@ -891,6 +895,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8113672C19C99A2E00D9AEDC /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				8113672D19C99A2E00D9AEDC /* Filter.cpp */,
+				8113672E19C99A2E00D9AEDC /* Filter.h */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
 		81B1D2D2196C2410000F13DD /* TextEntry */ = {
 			isa = PBXGroup;
 			children = (
@@ -1544,6 +1557,8 @@
 			children = (
 				81D8B3331962E0EC0010DA84 /* Accelerometer */,
 				8158E4A3196ADB38005FF0A8 /* Accelerometer.h */,
+				8113672C19C99A2E00D9AEDC /* Base */,
+				8113672F19C99A2E00D9AEDC /* Base.h */,
 				81D8B3361962E0EC0010DA84 /* DeviceButtons */,
 				8158E4A4196ADB43005FF0A8 /* DeviceButtons.h */,
 				81D8B3391962E0EC0010DA84 /* ForwardDeclarations.h */,
@@ -2521,6 +2536,7 @@
 				81D8B44B1962E0EC0010DA84 /* ScrollView.cpp in Sources */,
 				81D8B44C1962E0EC0010DA84 /* VerticalList.cpp in Sources */,
 				81D8B4451962E0EC0010DA84 /* Button.cpp in Sources */,
+				8113673019C99A2E00D9AEDC /* Filter.cpp in Sources */,
 				81D8B41B1962E0EC0010DA84 /* PNGImageProvider.cpp in Sources */,
 				81D8B6A81962E0F70010DA84 /* NSStringUtils.mm in Sources */,
 				81D8B42F1962E0EC0010DA84 /* Scene.cpp in Sources */,
