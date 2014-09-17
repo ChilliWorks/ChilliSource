@@ -75,5 +75,37 @@ namespace ChilliSource
         {
             return m_activatedEvent;
         }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void TapGesture::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
+        {
+            //if there is a tap already in progress
+            for (auto& tapInfo : m_activeTaps)
+            {
+                if (tapInfo.m_pointers.size() < m_numPointers)
+                {
+                    if (in_timestamp - tapInfo.m_startTimestamp <= m_maxTimeForTap)
+                    {
+                        PointerInfo pointerInfo;
+                        pointerInfo.m_initialPosition = in_pointer.GetPosition();
+                        pointerInfo.m_pointerId = in_pointer.GetId();
+                        tapInfo.m_pointers.push_back(pointerInfo);
+                        return;
+                    }
+                }
+            }
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void TapGesture::OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter)
+        {
+            
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void TapGesture::OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
+        {
+            
+        }
     }
 }

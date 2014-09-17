@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/StateSystem.h>
+#include <ChilliSource/Input/Pointer/Pointer.h>
 
 #include <functional>
 #include <mutex>
@@ -68,7 +69,7 @@ namespace ChilliSource
             using CollisionResolutionDelegate = std::function<void(const Gesture*, const Gesture*)>;
             //--------------------------------------------------------
             /// Queries whether or not this implements the interface
-            /// with the given Id.
+            /// with the given Id. This is threadsafe.
             ///
             /// @author Ian Copland
             ///
@@ -79,7 +80,8 @@ namespace ChilliSource
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------------
             /// Adds a gesture to the gesture system. When added to the
-            /// system a gesture will receive input events.
+            /// system a gesture will receive input events. This is
+            /// threadsafe.
             ///
             /// @author Ian Copland
             ///
@@ -89,7 +91,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             /// Removes a gesture from the system. When removed from
             /// the system a gesture will no longer recieve input
-            /// events.
+            /// events. This is threadsafe.
             ///
             /// @author Ian Copland
             ///
@@ -103,7 +105,8 @@ namespace ChilliSource
             /// the same time the delegate will be called. If true
             /// is returned from the delegate the second delegate can
             /// will activate, otherwise only the first will. If no
-            /// delegate is set both will always be allowed.
+            /// delegate is set both will always be allowed. This is
+            /// threadsafe.
             ///
             /// @author Ian Copland
             ///
@@ -126,16 +129,98 @@ namespace ChilliSource
             //--------------------------------------------------------
 			static GestureSystemUPtr Create();
             //--------------------------------------------------------
-            /// Constructor. Declared private to force the use of the
-            /// factory method.
+            /// Default constructor. Declared private to force the use
+            /// of the factory method.
             ///
             /// @author Ian Copland
             //--------------------------------------------------------
-            GestureSystem();
+            GestureSystem() = default;
+            //--------------------------------------------------------
+            /// Process all deferred additions and removals to and
+            /// from the gesture list.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------
+            void ProcessDeferredAddAndRemovals();
+            //--------------------------------------------------------
+            /// Called when the owning state is initialised. This
+            /// registers for the input events.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------
+            void OnInit() override;
+            //--------------------------------------------------------
+            /// Called when a pointer down event is received from the
+            /// pointer system. This will be relayed onto each
+            /// active gesture in this gesture system.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The pointer.
+            /// @param The timestamp of the event.
+            /// @param The press type.
+            /// @param The filter, allowing exclusion from the filtered
+            /// input event.
+            //--------------------------------------------------------
+            void OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter);
+            //--------------------------------------------------------
+            /// Called when a pointer moved event is recieved from the
+            /// pointer system. This will be relayed onto each active
+            /// gesture in this gesture system.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The pointer
+            /// @param The timestamp of the event.
+            /// @param The filter, allowing exclusion from the filtered
+            /// input event.
+            //--------------------------------------------------------
+            void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter);
+            //--------------------------------------------------------
+            /// Called when a pointer up event is recieved from the
+            /// pointer system. This will be relayed onto each active
+            /// gesture in this system.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The pointer
+            /// @param The timestamp of the event.
+            /// @param The press type.
+            /// @param The filter, allowing exclusion from the filtered
+            /// input event.
+            //--------------------------------------------------------
+            void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter);
+            //--------------------------------------------------------
+            /// Called when a pointer scrolled event is recieved from
+            /// the pointer system. This will be relayed onto each
+            /// active gesture in this system.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The pointer
+            /// @param The timestamp of the event.
+            /// @param The scroll vector (x, y delta)
+            /// @param The filter, allowing exclusion from the filtered
+            /// input event.
+            //--------------------------------------------------------
+            void OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta, Filter& in_filter);
+            //--------------------------------------------------------
+            /// Called when the owning state is destroyed. This
+            /// -de-registers all of the input events.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------
+            void OnDestroy() override;
             
             std::recursive_mutex m_mutex;
             bool m_isSendingEvent = false;
-            std::vector<Gesture*> m_registeredGestures;
+            std::vector<std::pair<GestureSPtr, bool>> m_gesturesToAdd;
+            std::vector<std::pair<GestureSPtr, bool>> m_gestures;
+            
+            Core::EventConnectionUPtr m_pointerDownConnection;
+            Core::EventConnectionUPtr m_pointerMovedConnection;
+            Core::EventConnectionUPtr m_pointerUpConnection;
+            Core::EventConnectionUPtr m_pointerScrolledConnection;
         };
     }
 }

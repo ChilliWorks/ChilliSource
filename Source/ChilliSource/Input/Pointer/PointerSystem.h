@@ -327,6 +327,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             void RemoveAllPointers();
         private:
+            friend class GestureSystem;
             //----------------------------------------------------
             /// An enum describing the different types of pointer
             /// event.

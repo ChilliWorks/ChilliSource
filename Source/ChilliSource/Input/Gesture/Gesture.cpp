@@ -33,5 +33,17 @@ namespace ChilliSource
     namespace Input
     {
         CS_DEFINE_NAMEDTYPE(Gesture);
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        GestureSystem* Gesture::GetGestureSystem() const
+        {
+            return m_gestureSystem;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void Gesture::SetGestureSystem(GestureSystem* in_gestureSystem)
+        {
+            m_gestureSystem = in_gestureSystem;
+        }
     }
 }

@@ -121,12 +121,70 @@ namespace ChilliSource
             //----------------------------------------------------
             Core::IConnectableEvent<ActivatedDelegate>& GetActivatedEvent();
         private:
+            //----------------------------------------------------
+            /// Information on the initial state of a single
+            /// pointer within a tap.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------
+            struct PointerInfo final
+            {
+                Core::Vector2 m_initialPosition;
+                Pointer::Id m_pointerId;
+            };
+            //----------------------------------------------------
+            /// Information on a single tap.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------
+            struct TapInfo final
+            {
+                std::vector<PointerInfo> m_pointers;
+                f64 m_startTimestamp;
+            };
+            //--------------------------------------------------------
+            /// Called when a pointer down event occurs.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The pointer.
+            /// @param The timestamp of the event.
+            /// @param The press type.
+            /// @param The filter, allowing exclusion from the filtered
+            /// input event.
+            //--------------------------------------------------------
+            void OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter) override;
+            //--------------------------------------------------------
+            /// Called when a pointer moved event occurs.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The pointer
+            /// @param The timestamp of the event.
+            /// @param The filter, allowing exclusion from the filtered
+            /// input event.
+            //--------------------------------------------------------
+            void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter) override;
+            //--------------------------------------------------------
+            /// Called when a pointer up event occurs.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The pointer
+            /// @param The timestamp of the event.
+            /// @param The press type.
+            /// @param The filter, allowing exclusion from the filtered
+            /// input event.
+            //--------------------------------------------------------
+            void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter) override;
             
             u32 m_numTaps;
             u32 m_numPointers;
             f32 m_maxTimeForTap;
             f32 m_maxTimeBetweenTaps;
             Core::Event<ActivatedDelegate> m_activatedEvent;
+            
+            std::vector<TapInfo> m_activeTaps;
         };
     }
 }
