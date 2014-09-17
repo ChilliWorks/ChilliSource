@@ -1,7 +1,7 @@
 //
-//  Gestures.h
+//  Gesture.h
 //  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
+//  Created by Ian Copland on 17/09/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,11 +26,30 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_INPUT_GESTURES_H_
-#define _CHILLISOURCE_INPUT_GESTURES_H_
+#ifndef _CHILLISOURCE_INPUT_GESTURES_GESTURE_H_
+#define _CHILLISOURCE_INPUT_GESTURES_GESTURE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Input/Gestures/Gestures.h>
+#include <ChilliSource/Core/Base/QueryableInterface.h>
+
+namespace ChilliSource
+{
+    namespace Input
+    {
+        //------------------------------------------------------------
+        /// The base class for all input gestures that can be registered
+        /// with the gesture system.
+        ///
+        /// @author Ian Copland
+        //------------------------------------------------------------
+        class Gesture : public Core::QueryableInterface
+        {
+        public:
+            CS_DECLARE_NAMEDTYPE(Gesture);
+            CS_DECLARE_NOCOPY(Gesture);
+            
+        };
+    }
+}
 
 #endif

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
+		81AAFBAE19C9990D00CD4A14 /* Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBA919C9990D00CD4A14 /* Gesture.cpp */; };
+		81AAFBAF19C9990D00CD4A14 /* GestureSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBAB19C9990D00CD4A14 /* GestureSystem.cpp */; };
 		81B1D2D1196C0167000F13DD /* Pointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2CF196C0167000F13DD /* Pointer.cpp */; };
 		81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D3196C2410000F13DD /* TextEntry.cpp */; };
 		81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D9196C2B31000F13DD /* TextEntry.mm */; };
@@ -133,7 +135,6 @@
 		81D8B45B1962E0EC0010DA84 /* VerticalSliderBar.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3301962E0EC0010DA84 /* VerticalSliderBar.cpp */; };
 		81D8B45C1962E0EC0010DA84 /* Accelerometer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3341962E0EC0010DA84 /* Accelerometer.cpp */; };
 		81D8B45D1962E0EC0010DA84 /* DeviceButtonSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3371962E0EC0010DA84 /* DeviceButtonSystem.cpp */; };
-		81D8B45E1962E0EC0010DA84 /* Gestures.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B33B1962E0EC0010DA84 /* Gestures.cpp */; };
 		81D8B45F1962E0EC0010DA84 /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B33E1962E0EC0010DA84 /* Keyboard.cpp */; };
 		81D8B4601962E0EC0010DA84 /* PointerSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3411962E0EC0010DA84 /* PointerSystem.cpp */; };
 		81D8B4611962E0EC0010DA84 /* ContentManagementSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3451962E0EC0010DA84 /* ContentManagementSystem.cpp */; };
@@ -303,7 +304,6 @@
 		8158E4A2196AD7A4005FF0A8 /* SliderBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SliderBar.h; sourceTree = "<group>"; };
 		8158E4A3196ADB38005FF0A8 /* Accelerometer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Accelerometer.h; sourceTree = "<group>"; };
 		8158E4A4196ADB43005FF0A8 /* DeviceButtons.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DeviceButtons.h; sourceTree = "<group>"; };
-		8158E4A5196ADB4D005FF0A8 /* Gestures.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Gestures.h; sourceTree = "<group>"; };
 		8158E4A6196ADB56005FF0A8 /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
 		8158E4A7196ADB61005FF0A8 /* Pointer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Pointer.h; sourceTree = "<group>"; };
 		8158E4A8196ADD1E005FF0A8 /* ContentDownload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContentDownload.h; sourceTree = "<group>"; };
@@ -324,6 +324,11 @@
 		8158E4B7196AE06B005FF0A8 /* Sprite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
 		8158E4B8196AE074005FF0A8 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		81AAFBA919C9990D00CD4A14 /* Gesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gesture.cpp; sourceTree = "<group>"; };
+		81AAFBAA19C9990D00CD4A14 /* Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gesture.h; sourceTree = "<group>"; };
+		81AAFBAB19C9990D00CD4A14 /* GestureSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GestureSystem.cpp; sourceTree = "<group>"; };
+		81AAFBAC19C9990D00CD4A14 /* GestureSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GestureSystem.h; sourceTree = "<group>"; };
+		81AAFBAD19C9990D00CD4A14 /* Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gesture.h; sourceTree = "<group>"; };
 		81B1D2CF196C0167000F13DD /* Pointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pointer.cpp; sourceTree = "<group>"; };
 		81B1D2D0196C0167000F13DD /* Pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pointer.h; sourceTree = "<group>"; };
 		81B1D2D3196C2410000F13DD /* TextEntry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextEntry.cpp; sourceTree = "<group>"; };
@@ -593,8 +598,6 @@
 		81D8B3371962E0EC0010DA84 /* DeviceButtonSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeviceButtonSystem.cpp; sourceTree = "<group>"; };
 		81D8B3381962E0EC0010DA84 /* DeviceButtonSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceButtonSystem.h; sourceTree = "<group>"; };
 		81D8B3391962E0EC0010DA84 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
-		81D8B33B1962E0EC0010DA84 /* Gestures.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gestures.cpp; sourceTree = "<group>"; };
-		81D8B33C1962E0EC0010DA84 /* Gestures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gestures.h; sourceTree = "<group>"; };
 		81D8B33E1962E0EC0010DA84 /* Keyboard.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
 		81D8B33F1962E0EC0010DA84 /* Keyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
 		81D8B3411962E0EC0010DA84 /* PointerSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PointerSystem.cpp; sourceTree = "<group>"; };
@@ -891,6 +894,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		81AAFBA819C9990D00CD4A14 /* Gesture */ = {
+			isa = PBXGroup;
+			children = (
+				81AAFBA919C9990D00CD4A14 /* Gesture.cpp */,
+				81AAFBAA19C9990D00CD4A14 /* Gesture.h */,
+				81AAFBAB19C9990D00CD4A14 /* GestureSystem.cpp */,
+				81AAFBAC19C9990D00CD4A14 /* GestureSystem.h */,
+			);
+			path = Gesture;
+			sourceTree = "<group>";
+		};
 		81B1D2D2196C2410000F13DD /* TextEntry */ = {
 			isa = PBXGroup;
 			children = (
@@ -1547,8 +1561,8 @@
 				81D8B3361962E0EC0010DA84 /* DeviceButtons */,
 				8158E4A4196ADB43005FF0A8 /* DeviceButtons.h */,
 				81D8B3391962E0EC0010DA84 /* ForwardDeclarations.h */,
-				81D8B33A1962E0EC0010DA84 /* Gestures */,
-				8158E4A5196ADB4D005FF0A8 /* Gestures.h */,
+				81AAFBA819C9990D00CD4A14 /* Gesture */,
+				81AAFBAD19C9990D00CD4A14 /* Gesture.h */,
 				81D8B33D1962E0EC0010DA84 /* Keyboard */,
 				8158E4A6196ADB56005FF0A8 /* Keyboard.h */,
 				81D8B3401962E0EC0010DA84 /* Pointer */,
@@ -1575,15 +1589,6 @@
 				81D8B3381962E0EC0010DA84 /* DeviceButtonSystem.h */,
 			);
 			path = DeviceButtons;
-			sourceTree = "<group>";
-		};
-		81D8B33A1962E0EC0010DA84 /* Gestures */ = {
-			isa = PBXGroup;
-			children = (
-				81D8B33B1962E0EC0010DA84 /* Gestures.cpp */,
-				81D8B33C1962E0EC0010DA84 /* Gestures.h */,
-			);
-			path = Gestures;
 			sourceTree = "<group>";
 		};
 		81D8B33D1962E0EC0010DA84 /* Keyboard */ = {
@@ -2406,6 +2411,7 @@
 				81D8B4711962E0EC0010DA84 /* VertexDeclaration.cpp in Sources */,
 				81D8B6BD1962E0F70010DA84 /* WebView.mm in Sources */,
 				81D8B41A1962E0EC0010DA84 /* ImageFormatConverter.cpp in Sources */,
+				81AAFBAF19C9990D00CD4A14 /* GestureSystem.cpp in Sources */,
 				81D8B43D1962E0EC0010DA84 /* XML.cpp in Sources */,
 				81D8B4111962E0EC0010DA84 /* Transform.cpp in Sources */,
 				81D8B40A1962E0EC0010DA84 /* HashCRC32.cpp in Sources */,
@@ -2501,6 +2507,7 @@
 				81D8B44E1962E0EC0010DA84 /* ImageView.cpp in Sources */,
 				81D8B4611962E0EC0010DA84 /* ContentManagementSystem.cpp in Sources */,
 				81D8B4031962E0EC0010DA84 /* PlatformSystem.cpp in Sources */,
+				81AAFBAE19C9990D00CD4A14 /* Gesture.cpp in Sources */,
 				81D8B4521962E0EC0010DA84 /* FormattedLabel.cpp in Sources */,
 				81D8B4421962E0EC0010DA84 /* GUIViewFactory.cpp in Sources */,
 				81D8B4021962E0EC0010DA84 /* Logging.cpp in Sources */,
@@ -2541,7 +2548,6 @@
 				81D8B6AD1962E0F70010DA84 /* PointerSystem.mm in Sources */,
 				81D8B48D1962E0EC0010DA84 /* CSParticleEffectProvider.cpp in Sources */,
 				81D8B4601962E0EC0010DA84 /* PointerSystem.cpp in Sources */,
-				81D8B45E1962E0EC0010DA84 /* Gestures.cpp in Sources */,
 				81D8B47D1962E0EC0010DA84 /* MaterialProvider.cpp in Sources */,
 				81D8B4701962E0EC0010DA84 /* RenderSystem.cpp in Sources */,
 				81D8B6D41962E0F70010DA84 /* GLSLShaderProvider.cpp in Sources */,
