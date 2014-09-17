@@ -250,90 +250,6 @@ namespace ChilliSource
             //----------------------------------------------------
             virtual ~PointerSystem() {};
             
-            //---These are events used internally by the engine
-            //----------------------------------------------------
-            /// A delegate that is used to receive pointer down
-            /// events. This could be pressing a mouse button or
-            /// touching a touch screen.
-            ///
-            /// @param The pointer.
-            /// @param The timestamp of the event.
-            /// @param The press type.
-            /// @param Filter
-            ///
-            /// @author S Downie
-            //----------------------------------------------------
-            using PointerDownDelegateInternal = std::function<void(const Pointer&, f64, Pointer::InputType, Filter&)>;
-            //----------------------------------------------------
-            /// A delegate that is used to receive pointer moved
-            /// events. This could be dragging a touch on screen
-            /// or moving the mouse cursor.
-            ///
-            /// @param The pointer
-            /// @param The timestamp of the event.
-            /// @param Filter
-            ///
-            /// @author S Downie
-            //----------------------------------------------------
-            using PointerMovedDelegateInternal = std::function<void(const Pointer&, f64, Filter&)>;
-            //----------------------------------------------------
-            /// A delegate that is used to receive pointer up
-            /// events. This could be releasing a mouse button or
-            /// releasing a touch from the touch screen.
-            ///
-            /// @param The pointer
-            /// @param The timestamp of the event.
-            /// @param The press type.
-            /// @param Filter
-            ///
-            /// @author S Downie
-            //----------------------------------------------------
-            using PointerUpDelegateInternal = std::function<void(const Pointer&, f64, Pointer::InputType, Filter&)>;
-            //----------------------------------------------------
-            /// A delegate that is used to receive pointer scroll events
-            /// (i.e. mouse wheel).
-            ///
-            /// @param The pointer
-            /// @param The timestamp of the event.
-            /// @param The scroll vector (x, y delta)
-            /// @param Filter
-            ///
-            /// @author S Downie
-            //----------------------------------------------------
-            using PointerScrollDelegateInternal = std::function<void(const Pointer&, f64, const Core::Vector2&, Filter&)>;
-            //----------------------------------------------------
-            /// Event that is triggered when the pointer is first down.
-            ///
-            /// @author S Downie
-            ///
-            /// @return The pointer down event.
-            //----------------------------------------------------
-            Core::IConnectableEvent<PointerDownDelegateInternal>& GetPointerDownEventInternal();
-            //----------------------------------------------------
-            /// Event that is triggered when the pointer moves.
-            ///
-            /// @author S Downie
-            ///
-            /// @return The pointer moved event.
-            //----------------------------------------------------
-            Core::IConnectableEvent<PointerMovedDelegateInternal>& GetPointerMovedEventInternal();
-            //----------------------------------------------------
-            /// Event that is triggered when the pointer is first up
-            /// having been down.
-            ///
-            /// @author S Downie
-            ///
-            /// @return The pointer up event.
-            //----------------------------------------------------
-            Core::IConnectableEvent<PointerUpDelegateInternal>& GetPointerUpEventInternal();
-            //----------------------------------------------------
-            /// Event that is triggered when the scroll wheel ticks.
-            ///
-            /// @author S Downie
-            ///
-            /// @return The event triggered on scroll change (i.e. mouse wheel scroll).
-            //----------------------------------------------------
-            Core::IConnectableEvent<PointerScrollDelegateInternal>& GetPointerScrollEventInternal();
         protected:
             //----------------------------------------------------
             /// Constructor. Declared protected to force the use
@@ -501,6 +417,90 @@ namespace ChilliSource
             /// @param The unique pointer Id.
             //-----------------------------------------------------
             void RemovePointer(Pointer::Id in_uniqueId);
+            //---These are events used internally by the engine
+            //----------------------------------------------------
+            /// A delegate that is used to receive pointer down
+            /// events. This could be pressing a mouse button or
+            /// touching a touch screen.
+            ///
+            /// @param The pointer.
+            /// @param The timestamp of the event.
+            /// @param The press type.
+            /// @param Filter
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            using PointerDownDelegateInternal = std::function<void(const Pointer&, f64, Pointer::InputType, Filter&)>;
+            //----------------------------------------------------
+            /// A delegate that is used to receive pointer moved
+            /// events. This could be dragging a touch on screen
+            /// or moving the mouse cursor.
+            ///
+            /// @param The pointer
+            /// @param The timestamp of the event.
+            /// @param Filter
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            using PointerMovedDelegateInternal = std::function<void(const Pointer&, f64, Filter&)>;
+            //----------------------------------------------------
+            /// A delegate that is used to receive pointer up
+            /// events. This could be releasing a mouse button or
+            /// releasing a touch from the touch screen.
+            ///
+            /// @param The pointer
+            /// @param The timestamp of the event.
+            /// @param The press type.
+            /// @param Filter
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            using PointerUpDelegateInternal = std::function<void(const Pointer&, f64, Pointer::InputType, Filter&)>;
+            //----------------------------------------------------
+            /// A delegate that is used to receive pointer scroll events
+            /// (i.e. mouse wheel).
+            ///
+            /// @param The pointer
+            /// @param The timestamp of the event.
+            /// @param The scroll vector (x, y delta)
+            /// @param Filter
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            using PointerScrollDelegateInternal = std::function<void(const Pointer&, f64, const Core::Vector2&, Filter&)>;
+            //----------------------------------------------------
+            /// Event that is triggered when the pointer is first down.
+            ///
+            /// @author S Downie
+            ///
+            /// @return The pointer down event.
+            //----------------------------------------------------
+            Core::IConnectableEvent<PointerDownDelegateInternal>& GetPointerDownEventInternal();
+            //----------------------------------------------------
+            /// Event that is triggered when the pointer moves.
+            ///
+            /// @author S Downie
+            ///
+            /// @return The pointer moved event.
+            //----------------------------------------------------
+            Core::IConnectableEvent<PointerMovedDelegateInternal>& GetPointerMovedEventInternal();
+            //----------------------------------------------------
+            /// Event that is triggered when the pointer is first up
+            /// having been down.
+            ///
+            /// @author S Downie
+            ///
+            /// @return The pointer up event.
+            //----------------------------------------------------
+            Core::IConnectableEvent<PointerUpDelegateInternal>& GetPointerUpEventInternal();
+            //----------------------------------------------------
+            /// Event that is triggered when the scroll wheel ticks.
+            ///
+            /// @author S Downie
+            ///
+            /// @return The event triggered on scroll change (i.e. mouse wheel scroll).
+            //----------------------------------------------------
+            Core::IConnectableEvent<PointerScrollDelegateInternal>& GetPointerScrollEventInternal();
             
             Core::Event<PointerDownDelegate> m_pointerDownEvent;
             Core::Event<PointerMovedDelegate> m_pointerMovedEvent;
