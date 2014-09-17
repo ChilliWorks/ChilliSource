@@ -755,11 +755,11 @@ namespace ChilliSource
             {
                 if(m_canvas != nullptr)
                 {
-                    m_behaviourScript->CallFunction("onAddedToCanvas");
+                    m_behaviourScript->CallFunction("onAddedToCanvas", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
                 }
                 else
                 {
-                    m_behaviourScript->CallFunction("onRemovedFromCanvas");
+                    m_behaviourScript->CallFunction("onRemovedFromCanvas", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
                 }
             }
         }
@@ -790,7 +790,7 @@ namespace ChilliSource
         {
             if(m_behaviourScript != nullptr)
             {
-                m_behaviourScript->CallFunction("onUpdate", in_timeSinceLastUpdate);
+                m_behaviourScript->CallFunction("onUpdate", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, in_timeSinceLastUpdate);
             }
             
             for(auto& child : m_internalChildren)
@@ -1181,12 +1181,17 @@ namespace ChilliSource
                 }
             }
             
-            //TODO: Notify Lua
             if(Contains(in_pointer.GetPosition()) == true)
             {
                 //Track the input that is down on the widget as
                 //this will effect how we trigger the release events
                 m_pressedInputIds.insert(in_pointer.GetId());
+                
+                if(m_behaviourScript != nullptr)
+                {
+                    m_behaviourScript->CallFunction("onPressedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                }
+                
                 m_pressedInsideEvent.NotifyConnections(this, in_inputType);
                 
                 if(m_isInputConsumptionEnabled == true)
@@ -1227,22 +1232,40 @@ namespace ChilliSource
             bool containsPrevious = Contains(in_pointer.GetPreviousPosition());
             bool containsCurrent = Contains(in_pointer.GetPosition());
             
-            //TODO: Notify Lua
-            
             if(containsPrevious == false && containsCurrent == true)
             {
+                if(m_behaviourScript != nullptr)
+                {
+                    m_behaviourScript->CallFunction("onMoveEntered", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                }
+                
                 m_moveEnteredEvent.NotifyConnections(this, in_pointer.GetActiveInputs());
             }
             else if(containsPrevious == true && containsCurrent == false)
             {
+                if(m_behaviourScript != nullptr)
+                {
+                    m_behaviourScript->CallFunction("onMoveExited", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                }
+                
                 m_moveExitedEvent.NotifyConnections(this, in_pointer.GetActiveInputs());
             }
             else if(containsPrevious == false && containsCurrent == false)
             {
+                if(m_behaviourScript != nullptr)
+                {
+                    m_behaviourScript->CallFunction("onMovedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                }
+                
                 m_movedOutsideEvent.NotifyConnections(this, in_pointer.GetActiveInputs());
             }
             else // Equivalent to if(containsPrevious == true && containsCurrent == true)
             {
+                if(m_behaviourScript != nullptr)
+                {
+                    m_behaviourScript->CallFunction("onMovedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                }
+                
                 m_movedInsideEvent.NotifyConnections(this, in_pointer.GetActiveInputs());
             }
             
@@ -1280,8 +1303,6 @@ namespace ChilliSource
                 }
             }
             
-            //TODO: Notify Lua
-            
             auto itPressedId = m_pressedInputIds.find(in_pointer.GetId());
             
             if(itPressedId != m_pressedInputIds.end())
@@ -1290,10 +1311,20 @@ namespace ChilliSource
                 
                 if(Contains(in_pointer.GetPosition()) == true)
                 {
+                    if(m_behaviourScript != nullptr)
+                    {
+                        m_behaviourScript->CallFunction("onReleasedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                    }
+                    
                     m_releasedInsideEvent.NotifyConnections(this, in_inputType);
                 }
                 else
                 {
+                    if(m_behaviourScript != nullptr)
+                    {
+                        m_behaviourScript->CallFunction("onReleasedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                    }
+                    
                     m_releasedOutsideEvent.NotifyConnections(this, in_inputType);
                 }
                 

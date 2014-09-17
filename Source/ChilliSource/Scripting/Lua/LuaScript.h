@@ -51,6 +51,17 @@ namespace ChilliSource
 		public:
             
             //----------------------------------------------------
+            /// Describes how execution should behave if an attempt
+            /// is made to call a Lua function that doesn't exist
+            ///
+            /// @author S Downie
+            //----------------------------------------------------
+            enum class FunctionNotFoundPolicy
+            {
+                k_failHard,
+                k_failSilent
+            };
+            //----------------------------------------------------
             /// Register an variable that can be accessed in the
             /// lua script
             ///
@@ -78,7 +89,11 @@ namespace ChilliSource
             /// Call the lua function on this script that
             /// has the given signature. Lua has the ability
             /// to return multiple values and therefore this function
-            /// returns a tuple. Values can be accessed via std::get<idx>.
+            /// returns a tuple for multi returns.
+            /// Values can be accessed via std::get<idx>.
+            ///
+            /// NOTE: As this method expects a return value
+            /// the Lua function must exist!
             ///
             /// @author S Downie
             ///
@@ -115,6 +130,36 @@ namespace ChilliSource
                 ScopedPop popOnReturn(m_luaVM);
                 
                 return LuaUtils::PopAllFromVM<TResults...>(m_luaVM);
+            }
+            //----------------------------------------------------
+            /// Call the lua function on this script that
+            /// has the given signature.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Function name
+            /// @param Policy that indicates how to handle missing functions
+            /// @param Parameters
+            //----------------------------------------------------
+            template <typename... TArgs>
+            void CallFunction(const std::string& in_functionName, FunctionNotFoundPolicy in_notFoundPolicy, TArgs&&... in_args)
+            {
+                lua_getfield(m_luaVM, LUA_REGISTRYINDEX, m_environment.c_str());
+                lua_getfield(m_luaVM, -1, in_functionName.c_str());
+                
+                if(in_notFoundPolicy == FunctionNotFoundPolicy::k_failSilent && lua_topointer(m_luaVM, -1) == nullptr)
+                {
+                    lua_pop(m_luaVM, 2);
+                    return;
+                }
+                
+                LuaUtils::PushAllToVM(m_luaVM, std::forward<TArgs>(in_args)...);
+                
+                auto funcResult = lua_pcall(m_luaVM, sizeof...(TArgs), 0, 0);
+                if(funcResult != 0)
+                {
+                    CS_LOG_FATAL("Error calling Lua function " + std::string(in_functionName) + ": " + std::string(lua_tostring(m_luaVM, -1)));
+                }
             }
             //-------------------------------------------------------
             /// Destructor
