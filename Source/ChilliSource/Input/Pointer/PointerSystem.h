@@ -418,6 +418,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             void RemovePointer(Pointer::Id in_uniqueId);
             //---These are events used internally by the engine
+            friend class UI::Canvas;
             //----------------------------------------------------
             /// A delegate that is used to receive pointer down
             /// events. This could be pressing a mouse button or
