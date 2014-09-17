@@ -32,6 +32,6 @@ namespace ChilliSource
 {
     namespace Input
     {
-        
+        CS_DEFINE_NAMEDTYPE(Gesture);
     }
 }

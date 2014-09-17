@@ -32,6 +32,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/StateSystem.h>
 
+#include <functional>
+#include <mutex>
+
 namespace ChilliSource
 {
     namespace Input
@@ -49,6 +52,21 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(GestureSystem);
             //--------------------------------------------------------
+            /// A delegate which will be called when the activation of
+            /// a gesture collides with another. The delegate should
+            /// return true if the second gesture is allowed to activate
+            /// in addition to the first, false if only the first
+            /// should activate.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The first gesture to activate.
+            /// @param The second gesture to activate.
+            ///
+            /// @return Whether or not the second is allowed to activate.
+            //---------------------------------------------------------
+            using CollisionResolutionDelegate = std::function<void(const Gesture*, const Gesture*)>;
+            //--------------------------------------------------------
             /// Queries whether or not this implements the interface
             /// with the given Id.
             ///
@@ -60,8 +78,32 @@ namespace ChilliSource
             //---------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------------
-            /// Queries whether or not this implements the interface
-            /// with the given Id.
+            /// Adds a gesture to the gesture system. When added to the
+            /// system a gesture will receive input events.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The gesture to add to the system.
+            //---------------------------------------------------------
+			void AddGesture(const GestureSPtr& in_gesture);
+            //--------------------------------------------------------
+            /// Removes a gesture from the system. When removed from
+            /// the system a gesture will no longer recieve input
+            /// events.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The gesture which should be removed from the
+            /// system.
+            //---------------------------------------------------------
+			void RemoveGesture(const Gesture* in_gesture);
+            //--------------------------------------------------------
+            /// Set's a delegate that should be used to handle gesture
+            /// collision resolution. If two gestures are active at
+            /// the same time the delegate will be called. If true
+            /// is returned from the delegate the second delegate can
+            /// will activate, otherwise only the first will. If no
+            /// delegate is set both will always be allowed.
             ///
             /// @author Ian Copland
             ///
@@ -69,7 +111,7 @@ namespace ChilliSource
             ///
             /// @return Whether or not the inteface is implemented.
             //---------------------------------------------------------
-			bool AddGesture();
+			void SetCollisionResolutionDelegate(const CollisionResolutionDelegate& in_delegate);
         private:
 
             friend class Core::State;
@@ -90,6 +132,10 @@ namespace ChilliSource
             /// @author Ian Copland
             //--------------------------------------------------------
             GestureSystem();
+            
+            std::recursive_mutex m_mutex;
+            bool m_isSendingEvent = false;
+            std::vector<Gesture*> m_registeredGestures;
         };
     }
 }

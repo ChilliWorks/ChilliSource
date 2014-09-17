@@ -32,6 +32,41 @@ namespace ChilliSource
 {
     namespace Input
     {
-        
+        CS_DEFINE_NAMEDTYPE(GestureSystem);
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        GestureSystemUPtr GestureSystem::Create()
+        {
+            return GestureSystemUPtr(new GestureSystem());
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        GestureSystem::GestureSystem()
+        {
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        bool GestureSystem::IsA(Core::InterfaceIDType in_interfaceId) const
+        {
+            return (GestureSystem::InterfaceID == in_interfaceId);
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void GestureSystem::AddGesture(const GestureSPtr& in_gesture)
+        {
+            
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void GestureSystem::RemoveGesture(const Gesture* in_gesture)
+        {
+            
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void GestureSystem::SetCollisionResolutionDelegate(const CollisionResolutionDelegate& in_delegate)
+        {
+            
+        }
     }
 }

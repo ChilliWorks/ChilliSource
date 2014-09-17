@@ -47,7 +47,19 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(Gesture);
             CS_DECLARE_NOCOPY(Gesture);
-            
+            //-------------------------------------------------------
+            /// Destructor
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------
+            virtual ~Gesture() {};
+        protected:
+            //-------------------------------------------------------
+            /// Protected default constructor
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------
+            Gesture() = default;
         };
     }
 }
