@@ -32,6 +32,7 @@
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Event/IConnectableEvent.h>
+#include <ChilliSource/Input/Pointer/PointerSystem.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 
 namespace ChilliSource
@@ -63,8 +64,39 @@ namespace ChilliSource
             m_canvas->SetAbsoluteSize(GetSize());
             m_canvas->SetCanvas(m_canvas.get());
             m_canvas->SetAbsolutePosition(GetSize() * 0.5f);
+            m_canvas->SetInputEnabled(true);
+            m_canvas->SetConsumeInputEnabled(false);
             
             m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnScreenResolutionChanged));
+            
+            auto pointerSystem = Core::Application::Get()->GetSystem<Input::PointerSystem>();
+            m_pointerDownConnection = pointerSystem->GetPointerDownEventInternal().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerDown));
+            m_pointerMovedConnection = pointerSystem->GetPointerMovedEventInternal().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerMoved));
+            m_pointerUpConnection = pointerSystem->GetPointerUpEventInternal().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerUp));
+        }
+        //-----------------------------------------------------------
+        /// UI can filter input events to prevent them from being
+        /// forwarded to the external app.
+        //-----------------------------------------------------------
+        void Canvas::OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter)
+        {
+            m_canvas->OnPointerDown(in_pointer, in_timestamp, in_inputType, in_filter);
+        }
+        //-----------------------------------------------------------
+        /// UI can filter input events to prevent them from being
+        /// forwarded to the external app.
+        //-----------------------------------------------------------
+        void Canvas::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Filter& in_filter)
+        {
+            m_canvas->OnPointerMoved(in_pointer, in_timestamp, in_filter);
+        }
+        //-----------------------------------------------------------
+        /// UI can filter input events to prevent them from being
+        /// forwarded to the external app.
+        //-----------------------------------------------------------
+        void Canvas::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter)
+        {
+            m_canvas->OnPointerUp(in_pointer, in_timestamp, in_inputType, in_filter);
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -109,6 +141,9 @@ namespace ChilliSource
         {
             m_canvas.reset();
             m_screenResizedConnection.reset();
+            m_pointerDownConnection.reset();
+            m_pointerMovedConnection.reset();
+            m_pointerUpConnection.reset();
         }
 	}
 }

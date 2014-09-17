@@ -31,8 +31,12 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Event/Event.h>
+#include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
+#include <ChilliSource/Input/Base/Filter.h>
+#include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/Scripting/Lua/LuaScript.h>
 #include <ChilliSource/UI/Base/PropertyAccessor.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
@@ -82,6 +86,24 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             using SizePolicyDelegate = std::function<Core::Vector2(const Core::Vector2&, const Core::Vector2&)>;
             //----------------------------------------------------------------------------------------
+            /// Delegate for standard input events such as pressed and released.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget that the input event occurred on
+            /// @param The input that triggered the event
+            //----------------------------------------------------------------------------------------
+            using InputDelegate = std::function<void(Widget*, Input::Pointer::InputType)>;
+            //----------------------------------------------------------------------------------------
+            /// Delegate for moving input events.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget that the input event occurred on
+            /// @param A set containing the currently active inputs.
+            //----------------------------------------------------------------------------------------
+            using InputMovedDelegate = std::function<void(Widget*, const std::set<Input::Pointer::InputType>&)>;
+            //----------------------------------------------------------------------------------------
             /// Constructor that builds the widget from the given definition.
             ///
             /// Default properties exposed to UI files:
@@ -115,6 +137,68 @@ namespace ChilliSource
             /// @return The list of properties supported by widget
             //----------------------------------------------------------------------------------------
             static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
+            //----------------------------------------------------------------------------------------
+            /// Event triggered when a pointer is pressed inside the widget
+            ///
+            /// @author S Downie
+            ///
+            /// @return Connectable event
+            //----------------------------------------------------------------------------------------
+            Core::IConnectableEvent<InputDelegate>& GetPressedInsideEvent();
+            //----------------------------------------------------------------------------------------
+            /// Event triggered when a pointer is released inside the widget if it was originally pressed
+            /// within the widget.
+            ///
+            /// NOTE: This event is best to use for buttons.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Connectable event
+            //----------------------------------------------------------------------------------------
+            Core::IConnectableEvent<InputDelegate>& GetReleasedInsideEvent();
+            //----------------------------------------------------------------------------------------
+            /// Event triggered when a pointer is released outside the widget if it was originally pressed within
+            /// the widget
+            ///
+            /// @author S Downie
+            ///
+            /// @return Connectable event
+            //----------------------------------------------------------------------------------------
+            Core::IConnectableEvent<InputDelegate>& GetReleasedOutsideEvent();
+            //----------------------------------------------------------------------------------------
+            /// Event triggered when a pointer is moved outwith the widget having previously been
+            /// within it
+            ///
+            /// @author S Downie
+            ///
+            /// @return Connectable event
+            //----------------------------------------------------------------------------------------
+            Core::IConnectableEvent<InputMovedDelegate>& GetMoveExitedEvent();
+            //----------------------------------------------------------------------------------------
+            /// Event triggered when a pointer is moved inside the widget have previously been outwith it
+            ///
+            /// @author S Downie
+            ///
+            /// @return Connectable event
+            //----------------------------------------------------------------------------------------
+            Core::IConnectableEvent<InputMovedDelegate>& GetMoveEnteredEvent();
+            //----------------------------------------------------------------------------------------
+            /// Event triggered when a pointer is moved within the widget
+            ///
+            /// @author S Downie
+            ///
+            /// @return Connectable event
+            //----------------------------------------------------------------------------------------
+            Core::IConnectableEvent<InputMovedDelegate>& GetMovedInsideEvent();
+            //----------------------------------------------------------------------------------------
+            /// Event triggered when a pointer is moved outwith the widget
+            ///
+            /// @author S Downie
+            ///
+            /// @return Connectable event
+            //----------------------------------------------------------------------------------------
+            Core::IConnectableEvent<InputMovedDelegate>& GetMovedOutsideEvent();
+
             //----------------------------------------------------------------------------------------
             /// Set the drawable that handles how to render the widget. If this is null then the
             /// widget will not be visible. The widget takes ownership of the drawable.
@@ -367,6 +451,32 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             bool IsClippingEnabled() const;
             //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Whether the widget should accept and respond to user input
+            //----------------------------------------------------------------------------------------
+            void SetInputEnabled(bool in_input);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Whether the widget accepts and responds to user input
+            //----------------------------------------------------------------------------------------
+            bool IsInputEnabled() const;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Whether the widget consumes user input preventing widgets behind it from
+            /// receiving the input event
+            //----------------------------------------------------------------------------------------
+            void SetConsumeInputEnabled(bool in_consume);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Whether the widget consumes user input preventing widgets behind it from
+            /// receiving the input event
+            //----------------------------------------------------------------------------------------
+            bool IsConsumeInputEnabled() const;
+            //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
             ///
@@ -547,6 +657,17 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             const char* GetProperty(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
+            /// Performs a calculation to check if the given position is within the OOBB
+            /// of the widget
+            ///
+            /// @author S Downie
+            ///
+            /// @param Position to check
+            ///
+            /// @return Whther the widget contains the point
+            //----------------------------------------------------------------------------------------
+            bool Contains(const Core::Vector2& in_point) const;
+            //----------------------------------------------------------------------------------------
             /// Update this widget and any sub widgets
             ///
             /// @author S Downie
@@ -570,6 +691,38 @@ namespace ChilliSource
             /// @param The layout that changed
             //----------------------------------------------------------------------------------------
             void OnLayoutChanged(const ILayout* in_layout);
+            //-----------------------------------------------------------
+            /// Called when the canvas receives cursor/touch input
+            ///
+            /// @author S Downie
+            ///
+            /// @param The pointer
+            /// @param The timestamp.
+            /// @param The press type.
+            /// @param Filter object to check if the event has been filtered or to filter it
+            //-----------------------------------------------------------
+            void OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter);
+            //-----------------------------------------------------------
+            /// Called when the canvas receives cursor/touch move input
+            ///
+            /// @author S Downie
+            ///
+            /// @param The pointer
+            /// @param The timestamp.
+            /// @param Filter object to check if the event has been filtered or to filter it
+            //-----------------------------------------------------------
+            void OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Filter& in_filter);
+            //-----------------------------------------------------------
+            /// Called when the canvas receiving cursor/touch release input
+            ///
+            /// @author S Downie
+            ///
+            /// @param The pointer
+            /// @param The timestamp.
+            /// @param The press type.
+            /// @param Filter object to check if the event has been filtered or to filter it
+            //-----------------------------------------------------------
+            void OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter);
             
         private:
             friend class Canvas;
@@ -708,6 +861,16 @@ namespace ChilliSource
             std::unordered_map<std::string, IPropertyAccessorUPtr> m_defaultPropertyLinks;
             std::unordered_map<std::string, std::pair<Widget*, std::string>> m_customPropertyLinks;
             
+            std::set<Input::Pointer::Id> m_pressedInputIds;
+            
+            Core::Event<InputDelegate> m_pressedInsideEvent;
+            Core::Event<InputDelegate> m_releasedInsideEvent;
+            Core::Event<InputDelegate> m_releasedOutsideEvent;
+            Core::Event<InputMovedDelegate> m_moveExitedEvent;
+            Core::Event<InputMovedDelegate> m_moveEnteredEvent;
+            Core::Event<InputMovedDelegate> m_movedInsideEvent;
+            Core::Event<InputMovedDelegate> m_movedOutsideEvent;
+            
             Core::UnifiedVector2 m_localPosition;
             Core::UnifiedVector2 m_localSize;
             Core::Vector2 m_preferredSize;
@@ -741,6 +904,8 @@ namespace ChilliSource
             
             bool m_isVisible;
             bool m_isSubviewClippingEnabled;
+            bool m_isInputEnabled;
+            bool m_isInputConsumptionEnabled;
             
             mutable bool m_isParentTransformCacheValid = false;
             mutable bool m_isLocalTransformCacheValid = false;

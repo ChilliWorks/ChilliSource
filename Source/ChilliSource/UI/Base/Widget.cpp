@@ -61,6 +61,8 @@ namespace ChilliSource
                 {PropertyType::k_alignmentAnchor, "ParentalAnchor", "MiddleCentre"},
                 {PropertyType::k_bool, "Visible", "true"},
                 {PropertyType::k_bool, "ClipChildren", "false"},
+                {PropertyType::k_bool, "InputEnabled", "false"},
+                {PropertyType::k_bool, "ConsumeInput", "true"},
                 {PropertyType::k_sizePolicy, "SizePolicy", "None"},
                 {PropertyType::k_propertyMap, "Layout", "{\"Type\":\"None\"}"},
                 {PropertyType::k_propertyMap, "Drawable", "{\"Type\":\"None\"}"}
@@ -233,6 +235,8 @@ namespace ChilliSource
             SetOriginAnchor(in_defaultProperties.GetProperty<Rendering::AlignmentAnchor>("OriginAnchor"));
             SetVisible(in_defaultProperties.GetProperty<bool>("Visible"));
             SetClippingEnabled(in_defaultProperties.GetProperty<bool>("ClipChildren"));
+            SetInputEnabled(in_defaultProperties.GetProperty<bool>("InputEnabled"));
+            SetConsumeInputEnabled(in_defaultProperties.GetProperty<bool>("ConsumeInput"));
             SetSizePolicy(in_defaultProperties.GetProperty<SizePolicy>("SizePolicy"));
         }
         //----------------------------------------------------------------------------------------
@@ -259,6 +263,48 @@ namespace ChilliSource
                 m_behaviourScript->RegisterVariable("this", this);
                 m_behaviourScript->Run();
             }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::IConnectableEvent<Widget::InputDelegate>& Widget::GetPressedInsideEvent()
+        {
+            return m_pressedInsideEvent;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::IConnectableEvent<Widget::InputDelegate>& Widget::GetReleasedInsideEvent()
+        {
+            return m_releasedInsideEvent;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::IConnectableEvent<Widget::InputDelegate>& Widget::GetReleasedOutsideEvent()
+        {
+            return m_releasedOutsideEvent;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetMoveExitedEvent()
+        {
+            return m_moveExitedEvent;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetMoveEnteredEvent()
+        {
+            return m_moveEnteredEvent;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetMovedInsideEvent()
+        {
+            return m_movedInsideEvent;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetMovedOutsideEvent()
+        {
+            return m_movedOutsideEvent;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -519,6 +565,30 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        void Widget::SetInputEnabled(bool in_input)
+        {
+            m_isInputEnabled = in_input;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        bool Widget::IsInputEnabled() const
+        {
+            return m_isInputEnabled;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetConsumeInputEnabled(bool in_consume)
+        {
+            m_isInputConsumptionEnabled = in_consume;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        bool Widget::IsConsumeInputEnabled() const
+        {
+            return m_isInputConsumptionEnabled;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         void Widget::AddWidget(const WidgetSPtr& in_widget)
         {
             CS_ASSERT(in_widget->GetParent() == nullptr, "Cannot add a widget as a child of more than 1 parent");
@@ -700,6 +770,19 @@ namespace ChilliSource
             m_parent = in_parent;
             
             InvalidateTransformCache();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        bool Widget::Contains(const Core::Vector2& in_point) const
+        {
+            //Convert the point into our local space allowing us to do an AABB check
+            Core::Vector2 halfSize = GetFinalSize() * 0.5f;
+            
+            Core::Vector2 bottLeft(-halfSize.x, -halfSize.y);
+            Core::Vector2 topRight(halfSize.x, halfSize.y);
+            
+			Core::Vector2 localPoint = in_point * Core::Matrix3::Inverse(GetFinalTransform());
+			return localPoint.x >= bottLeft.x && localPoint.y >= bottLeft.y && localPoint.x <= topRight.x && localPoint.y <= topRight.y;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1064,6 +1147,159 @@ namespace ChilliSource
                 for(auto& child : m_internalChildren)
                 {
                     child->OnParentTransformChanged();
+                }
+            }
+        }
+        //-----------------------------------------------------------
+        /// UI can filter input events to prevent them from being
+        /// forwarded to the external app. Input events are
+        /// notified from the front most child widget to the back most
+        /// and can be consumed.
+        //-----------------------------------------------------------
+        void Widget::OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter)
+        {
+            if(m_isInputEnabled == false)
+                return;
+            
+            for(auto it = m_children.rbegin(); it != m_children.rend(); ++it)
+            {
+                (*it)->OnPointerDown(in_pointer, in_timestamp, in_inputType, in_filter);
+                
+                if(in_filter.IsFiltered() == true)
+                {
+                    return;
+                }
+            }
+            
+            for(auto it = m_internalChildren.rbegin(); it != m_internalChildren.rend(); ++it)
+            {
+                (*it)->OnPointerDown(in_pointer, in_timestamp, in_inputType, in_filter);
+                
+                if(in_filter.IsFiltered() == true)
+                {
+                    return;
+                }
+            }
+            
+            //TODO: Notify Lua
+            if(Contains(in_pointer.GetPosition()) == true)
+            {
+                //Track the input that is down on the widget as
+                //this will effect how we trigger the release events
+                m_pressedInputIds.insert(in_pointer.GetId());
+                m_pressedInsideEvent.NotifyConnections(this, in_inputType);
+                
+                if(m_isInputConsumptionEnabled == true)
+                {
+                    in_filter.SetFiltered();
+                }
+            }
+        }
+        //-----------------------------------------------------------
+        /// UI can filter input events to prevent them from being
+        /// forwarded to the external app.
+        //-----------------------------------------------------------
+        void Widget::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Filter& in_filter)
+        {
+            if(m_isInputEnabled == false)
+                return;
+            
+            for(auto it = m_children.rbegin(); it != m_children.rend(); ++it)
+            {
+                (*it)->OnPointerMoved(in_pointer, in_timestamp, in_filter);
+                
+                if(in_filter.IsFiltered() == true)
+                {
+                    return;
+                }
+            }
+            
+            for(auto it = m_internalChildren.rbegin(); it != m_internalChildren.rend(); ++it)
+            {
+                (*it)->OnPointerMoved(in_pointer, in_timestamp, in_filter);
+                
+                if(in_filter.IsFiltered() == true)
+                {
+                    return;
+                }
+            }
+            
+            bool containsPrevious = Contains(in_pointer.GetPreviousPosition());
+            bool containsCurrent = Contains(in_pointer.GetPosition());
+            
+            //TODO: Notify Lua
+            
+            if(containsPrevious == false && containsCurrent == true)
+            {
+                m_moveEnteredEvent.NotifyConnections(this, in_pointer.GetActiveInputs());
+            }
+            else if(containsPrevious == true && containsCurrent == false)
+            {
+                m_moveExitedEvent.NotifyConnections(this, in_pointer.GetActiveInputs());
+            }
+            else if(containsPrevious == false && containsCurrent == false)
+            {
+                m_movedOutsideEvent.NotifyConnections(this, in_pointer.GetActiveInputs());
+            }
+            else // Equivalent to if(containsPrevious == true && containsCurrent == true)
+            {
+                m_movedInsideEvent.NotifyConnections(this, in_pointer.GetActiveInputs());
+            }
+            
+            if(m_isInputConsumptionEnabled == true)
+            {
+                in_filter.SetFiltered();
+            }
+        }
+        //-----------------------------------------------------------
+        /// UI can filter input events to prevent them from being
+        /// forwarded to the external app.
+        //-----------------------------------------------------------
+        void Widget::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter)
+        {
+            if(m_isInputEnabled == false)
+                return;
+            
+            for(auto it = m_children.rbegin(); it != m_children.rend(); ++it)
+            {
+                (*it)->OnPointerUp(in_pointer, in_timestamp, in_inputType, in_filter);
+                
+                if(in_filter.IsFiltered() == true)
+                {
+                    return;
+                }
+            }
+            
+            for(auto it = m_internalChildren.rbegin(); it != m_internalChildren.rend(); ++it)
+            {
+                (*it)->OnPointerUp(in_pointer, in_timestamp, in_inputType, in_filter);
+                
+                if(in_filter.IsFiltered() == true)
+                {
+                    return;
+                }
+            }
+            
+            //TODO: Notify Lua
+            
+            auto itPressedId = m_pressedInputIds.find(in_pointer.GetId());
+            
+            if(itPressedId != m_pressedInputIds.end())
+            {
+                m_pressedInputIds.erase(itPressedId);
+                
+                if(Contains(in_pointer.GetPosition()) == true)
+                {
+                    m_releasedInsideEvent.NotifyConnections(this, in_inputType);
+                }
+                else
+                {
+                    m_releasedOutsideEvent.NotifyConnections(this, in_inputType);
+                }
+                
+                if(m_isInputConsumptionEnabled == true)
+                {
+                    in_filter.SetFiltered();
                 }
             }
         }
