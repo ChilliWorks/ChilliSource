@@ -397,7 +397,7 @@ namespace ChilliSource
                 m_pointerDownEventInternal.NotifyConnections(copy, in_timestamp, in_inputType, filter);
                 
                 //Notify filtered connections if the input has not been filtered
-                if(filter.IsFiltered() == true)
+                if(filter.IsFiltered() == false)
                 {
                     m_pointerDownEventFiltered.NotifyConnections(copy, in_timestamp, in_inputType);
                 }
@@ -430,7 +430,7 @@ namespace ChilliSource
                 m_pointerMovedEventInternal.NotifyConnections(copy, in_timestamp, filter);
                 
                 //Notify filtered connections if the input has not been filtered
-                if(filter.IsFiltered() == true)
+                if(filter.IsFiltered() == false)
                 {
                     m_pointerMovedEventFiltered.NotifyConnections(copy, in_timestamp);
                 }
@@ -462,7 +462,7 @@ namespace ChilliSource
                 m_pointerUpEventInternal.NotifyConnections(copy, in_timestamp, in_inputType, filter);
                 
                 //Notify filtered connections if the input has not been filtered
-                if(filter.IsFiltered() == true)
+                if(filter.IsFiltered() == false)
                 {
                     m_pointerUpEventFiltered.NotifyConnections(copy, in_timestamp, in_inputType);
                 }
@@ -484,7 +484,19 @@ namespace ChilliSource
             if (pointerIt != m_pointers.end())
             {
                 Pointer copy = *pointerIt;
+
+                //Notify unfiltered connections
                 m_pointerScrolledEvent.NotifyConnections(copy, in_timestamp, in_delta);
+                
+                Filter filter;
+                //Notify internal engine connections which can filter the input
+                m_pointerScrolledEventInternal.NotifyConnections(copy, in_timestamp, in_delta, filter);
+                
+                //Notify filtered connections if the input has not been filtered
+                if(filter.IsFiltered() == false)
+                {
+                    m_pointerScrolledEventFiltered.NotifyConnections(copy, in_timestamp, in_delta);
+                }
             }
             else
             {
