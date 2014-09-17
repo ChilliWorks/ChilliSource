@@ -35,6 +35,7 @@ import javax.imageio.*;
 import com.chillisource.pngtocsimage.PNGToCSImage;
 import com.chillisource.pngtocsimage.PNGToCSImageOptions;
 import com.chillisource.texturepackerutils.PackedTexture;
+import com.chillisource.texturepackerutils.PackerInfo;
 import com.chillisource.texturepackerutils.TexturePacker;
 import com.chillisource.toolutils.LittleEndianOutputStream;
 import com.chillisource.toolutils.FileUtils;
@@ -52,10 +53,14 @@ public class CSAtlasBuilder
 {
 	private static final String k_versionString = "2.13";
 	private static final short k_versionNum = 3;
-
-	AtlasBuilderOptions m_options = null;
-	File m_rootDirectory = null; // Root directory from which files are read,set from
-
+	private static final String k_atlasExtension = ".csatlas";
+	private static final String k_atlasIdExtension = ".csatlasid";
+	private static final String k_csImageExtension = ".csimage";
+	
+	private AtlasBuilderOptions m_options = null;
+	private File m_rootDirectory = null; // Root directory from which files are read,set from
+	private String m_outputFilePathWithoutExtension;
+	
 	/**
 	 * @author R Henning
 	 * 
@@ -63,25 +68,42 @@ public class CSAtlasBuilder
 	 * 
 	 * @return Whether or not the run was successful.
 	 */
-	public boolean run(AtlasBuilderOptions in_options) throws Exception
+	public boolean buildAtlas(AtlasBuilderOptions in_options) throws Exception
 	{
-		Logging.logVerbose("TextureAtlasTool version "+k_versionString);
+		Logging.logVerbose("TextureAtlasTool version " + k_versionString);
 		Logging.logVerbose("-----------------------");
 
 		m_options = in_options;
-
+		
+		String extension = StringUtils.getExtension(m_options.m_outputFilePath);
+		
+		//Check for a valid extension, i.e. either csatlas/csatlasid/csimage
+		if(!(extension.equals(k_atlasExtension.substring(1)) || extension.equals(k_atlasIdExtension.substring(1)) || extension.equals(k_csImageExtension.substring(1))))
+		{
+			Logging.logFatal("Output filepath (" + m_options.m_outputFilePath +  ") has wrong extension type, valid output extensions are " + k_atlasExtension + ", " + k_atlasIdExtension + " and " + k_csImageExtension);
+		}
+		
+		//Remove the extension from the outputpath
+		m_outputFilePathWithoutExtension = StringUtils.removeExtension(m_options.m_outputFilePath);
+		
 		Logging.logVerbose("input dir name is:\"" + m_options.m_inputDirectoryPath + "\"");
 
-		ArrayList<File> filesToProcess = new ArrayList<File>();
-
 		m_rootDirectory = new File(m_options.m_inputDirectoryPath);
-		if (m_options.m_fileList.length() > 0)
+		
+		List<AtlasImage> atlasImagesToProcess;
+		if (m_options.m_atlasImages.size() > 0)
 		{
-			loadFilesFromOrderingFile(filesToProcess);
+			atlasImagesToProcess = m_options.m_atlasImages;
+		}
+		else if (m_options.m_fileList.length() > 0)
+		{
+			atlasImagesToProcess = new ArrayList<AtlasImage>();
+			loadFilesFromOrderingFile(atlasImagesToProcess);
 		}
 		else
 		{
-			addImageFilesInDirectory(m_rootDirectory, true, filesToProcess);
+			atlasImagesToProcess = new ArrayList<AtlasImage>();
+			addImageFilesInDirectory(m_rootDirectory, true, atlasImagesToProcess);
 		}
 		
 		TexturePacker packer = new TexturePacker();
@@ -99,7 +121,13 @@ public class CSAtlasBuilder
 		.setOuterPadding(m_options.m_padding)
 		.enableCropping(m_options.m_crop);
 		
-		PackedTexture result = packer.pack(filesToProcess);
+		ArrayList<File> filesToProcess = new ArrayList<File>();
+		for (AtlasImage atlasImage : atlasImagesToProcess)
+		{
+			filesToProcess.add(atlasImage.getSourceImageFile());
+		}
+		
+		PackedTexture result = packer.pack(filesToProcess, null);
 		if(result == null)
 		{
 			return false;
@@ -109,14 +137,75 @@ public class CSAtlasBuilder
 		// It's output time!
 		///////////////////////////////////////////////////////
 		// Write our combined png file
-		File F = new File(StringUtils.removeExtension(m_options.m_outputFilePath) + ".png");
+		File F = new File(m_outputFilePathWithoutExtension + ".png");
 		ImageIO.write(result.getPackedTexture(), "png", F);
 
 		writeBinaryFile(result);
-		writeStringIDs(result);
+		writeStringIDs(result, atlasImagesToProcess);
 		convertToCSImage();
 
 		Logging.logVerbose("Goodbye!\n");
+
+		return true;
+	}
+	/**
+	 * Checks if images specified with options will fit in the sprite sheet dimensions, will populate the error params if not
+	 * @param in_options - Atlas Options
+	 * @param out_errorInfo - Error Info
+	 * @return If the options can fit
+	 * @throws Exception
+	 */
+	public boolean checkCanFit(AtlasBuilderOptions in_options, PackerInfo out_errorInfo) throws Exception
+	{
+		Logging.logVerbose("TextureAtlasTool version " + k_versionString);
+		Logging.logVerbose("-----------------------");
+
+		m_options = in_options;
+		m_rootDirectory = new File(m_options.m_inputDirectoryPath);
+		
+		List<AtlasImage> atlasImagesToProcess;
+		if (m_options.m_atlasImages.size() > 0)
+		{
+			atlasImagesToProcess = m_options.m_atlasImages;
+		}
+		else if (m_options.m_fileList.length() > 0)
+		{
+			atlasImagesToProcess = new ArrayList<AtlasImage>();
+			loadFilesFromOrderingFile(atlasImagesToProcess);
+		}
+		else
+		{
+			atlasImagesToProcess = new ArrayList<AtlasImage>();
+			addImageFilesInDirectory(m_rootDirectory, true, atlasImagesToProcess);
+		}
+		
+		TexturePacker packer = new TexturePacker();
+		packer
+		.setDivisibleBy(m_options.m_divisibleBy)
+		.setExtrusion(m_options.m_extrude)
+		.setFixedHeight(m_options.m_fixedHeight)
+		.setFixedWidth(m_options.m_fixedWidth)
+		.setMaxHeight(m_options.m_maxHeight)
+		.setMaxWidth(m_options.m_maxWidth)
+		.setValidHeights(m_options.m_validHeights)
+		.setValidWidths(m_options.m_validWidths)
+		.setHeuristic(m_options.m_packingHeuristic)
+		.setInnerPadding(m_options.m_innerPadding)
+		.setOuterPadding(m_options.m_padding)
+		.enableCropping(m_options.m_crop)
+		.disableFatalLogs();
+		
+		ArrayList<File> filesToProcess = new ArrayList<File>();
+		for (AtlasImage atlasImage : atlasImagesToProcess)
+		{
+			filesToProcess.add(atlasImage.getSourceImageFile());
+		}
+		
+		PackedTexture result = packer.pack(filesToProcess, out_errorInfo);
+		if(result == null)
+		{
+			return false;
+		}
 
 		return true;
 	}
@@ -127,7 +216,7 @@ public class CSAtlasBuilder
 	 * @param Whether or not to recurse. Will only recurse one level deep.
 	 * @param [Out] The output list of files.
 	 */
-	private void addImageFilesInDirectory(File in_directory, boolean in_recursiveDirectorySearch, ArrayList<File> out_files)
+	private void addImageFilesInDirectory(File in_directory, boolean in_recursiveDirectorySearch, List<AtlasImage> out_atlasImages)
 	{
 		String[] dirContents = in_directory.list();
 
@@ -137,13 +226,16 @@ public class CSAtlasBuilder
 
 			if (contentFile.isDirectory() && in_recursiveDirectorySearch)
 			{
-				addImageFilesInDirectory(contentFile, false, out_files); // only go one level deep
+				addImageFilesInDirectory(contentFile, false, out_atlasImages); // only go one level deep
 			}
 			else
 			{
 				boolean IsPngFile = dirContents[i].endsWith(".png") || dirContents[i].endsWith(".PNG");
-				if (IsPngFile)
-					out_files.add(contentFile);
+				if (IsPngFile == true)
+				{
+					String atlasImageId = generateSpriteNameFromFile(contentFile);
+					out_atlasImages.add(new AtlasImage(contentFile, atlasImageId));
+				}
 			}
 		}
 	}
@@ -154,12 +246,22 @@ public class CSAtlasBuilder
 	 * 
 	 * @return The output sprite name.
 	 */
-	private String generateSpriteNameFromFile(File in_file) throws IOException
+	private String generateSpriteNameFromFile(File in_file)
 	{
 		//choose the output format for the filenames.
-		String srcFilePath = in_file.getCanonicalPath();
+		String srcFilePath = null;
+		String rootDir = null;
+		try
+		{
+			srcFilePath = in_file.getCanonicalPath();
+			rootDir = m_rootDirectory.getCanonicalPath();
+		}
+		catch (Exception e)
+		{
+			Logging.logFatal(StringUtils.convertExceptionToString(e));
+		}
+		
 		String srcFilePathWithoutExtension = srcFilePath.substring(0, srcFilePath.lastIndexOf("."));
-		String rootDir = m_rootDirectory.getCanonicalPath();
 		int rootDirLength = rootDir.length();
 		String srcFilePathFromRoot = srcFilePathWithoutExtension.substring(rootDirLength, srcFilePathWithoutExtension.length());
 
@@ -178,7 +280,7 @@ public class CSAtlasBuilder
 	 * 
 	 * @param [Out] The list of files.
 	 */
-	private void loadFilesFromOrderingFile(ArrayList<File> files) throws Exception
+	private void loadFilesFromOrderingFile(List<AtlasImage> out_atlasImages) throws Exception
 	{
 		File f = new File(m_options.m_fileList);
 		FileInputStream in = new FileInputStream(f);
@@ -196,7 +298,11 @@ public class CSAtlasBuilder
 		for(String line : lines)
 		{
 			if ((line != null) && (line.length()> 0))
-				files.add(new File(StringUtils.standardiseFilePath(m_options.m_inputDirectoryPath + "/" + line)));
+			{
+				File imageFile = new File(StringUtils.standardiseFilePath(m_options.m_inputDirectoryPath + "/" + line));
+				String atlasImageId = generateSpriteNameFromFile(imageFile);
+				out_atlasImages.add(new AtlasImage(imageFile, atlasImageId));
+			}
 		}
 	}
 	/**
@@ -209,8 +315,8 @@ public class CSAtlasBuilder
 		Logging.logVerbose("Converting to CSImage");
 		
 		PNGToCSImageOptions options = new PNGToCSImageOptions();
-		options.strInputFilename = StringUtils.removeExtension(m_options.m_outputFilePath) + ".png";
-		options.strOutputFilename = StringUtils.removeExtension(m_options.m_outputFilePath) + ".csimage";
+		options.strInputFilename = m_outputFilePathWithoutExtension + ".png";
+		options.strOutputFilename = m_outputFilePathWithoutExtension + k_csImageExtension;
 		
 		if (m_options.m_imageCompression.length() > 0)
 		{
@@ -241,7 +347,7 @@ public class CSAtlasBuilder
 			Logging.logFatal("An exception occurred while converting to CSImage:\n" + StringUtils.convertExceptionToString(e));
 		}
 		
-		FileUtils.deleteFile(StringUtils.removeExtension(m_options.m_outputFilePath) + ".png");
+		FileUtils.deleteFile(m_outputFilePathWithoutExtension + ".png");
 	}
 	/**
 	 * @author R Henning
@@ -251,7 +357,7 @@ public class CSAtlasBuilder
 	private void writeBinaryFile(PackedTexture in_packedTexture) throws FileNotFoundException, IOException, Exception
 	{
 		int numImages = in_packedTexture.getNumImages();
-		LittleEndianOutputStream dosBinary = new LittleEndianOutputStream(m_options.m_outputFilePath);
+		LittleEndianOutputStream dosBinary = new LittleEndianOutputStream(m_outputFilePathWithoutExtension + k_atlasExtension);
 		dosBinary.writeShort((short) numImages);
 		dosBinary.writeShort(k_versionNum); // file format revision
 
@@ -291,19 +397,35 @@ public class CSAtlasBuilder
 	/**
 	 * @author R Henning
 	 * 
-	 * @param The packaged texture.
+	 * @param in_packedTexture - The packaged texture.
+	 * @param in_textureToSpriteNameMapper - Optional file to spriteId name map 
 	 */
-	private void writeStringIDs(PackedTexture in_packedTexture) throws IOException 
+	private void writeStringIDs(PackedTexture in_packedTexture, List<AtlasImage> in_atlasImages) throws IOException 
 	{
 		int numImages = in_packedTexture.getNumImages();
 		
-		FileOutputStream outC = new FileOutputStream(m_options.m_outputFilePath + "id");
+		FileOutputStream outC = new FileOutputStream(m_outputFilePathWithoutExtension + k_atlasIdExtension);
 		DataOutputStream dosC = new DataOutputStream(outC);
 
 		for (int i = 0; i < numImages; i++)
 		{
-			String enumName = generateSpriteNameFromFile(in_packedTexture.getOriginalFile(i));
-			dosC.writeBytes(enumName);
+			String atlasImageId = "";
+			
+			for (AtlasImage atlasImage : in_atlasImages)
+			{
+				if (atlasImage.getSourceImageFile().equals(in_packedTexture.getOriginalFile(i)) == true)
+				{
+					atlasImageId = atlasImage.getAtlasImageId();
+					break;
+				}
+			}
+			
+			if (atlasImageId.length() == 0)
+			{
+				Logging.logFatal("Couldn't file atlas image Id for image: " + in_packedTexture.getOriginalFile(i).getName());
+			}
+			
+			dosC.writeBytes(atlasImageId);
 			dosC.writeByte('\n');
 		}
 

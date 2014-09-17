@@ -43,7 +43,7 @@ SHA1_FILES := $(shell 'python' '$(GET_FILES_SCRIPT)' '-d' 'Source/SHA1' '-p' '..
 #build the ChilliSource library
 include $(CLEAR_VARS)
 LOCAL_MODULE := CSBase
-LOCAL_CXXFLAGS := -O3 -DNDEBUG -fsigned-char -std=c++11 -pthread -fexceptions -frtti $(WARNINGS) $(NO_WARNINGS)
+LOCAL_CXXFLAGS := -O3 -DNDEBUG -fsigned-char -std=c++11 -pthread -fexceptions -frtti
 LOCAL_SRC_FILES := $(AES_FILES) $(BASE64_FILES) $(JSON_FILES) $(LUA_FILES) $(MD5_FILES) $(MINIZIP_FILES) $(PNG_FILES) $(RAPIDXML_FILES) $(SHA1_FILES)
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../Source/
 include $(BUILD_STATIC_LIBRARY)

@@ -28,10 +28,14 @@
 
 package com.chillisource.csatlasbuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.chillisource.texturepackerutils.TexturePacker.PlacementHeuristic;
 
 public class AtlasBuilderOptions
 {
+	public List<AtlasImage> m_atlasImages = new ArrayList<>(); //Available through java library access only.
 	public String m_inputDirectoryPath = "";
 	public String m_outputFilePath = "";
 	public String m_fileList = "";

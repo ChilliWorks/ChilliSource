@@ -107,6 +107,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\GUI\SliderBar\SliderBar.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\GUI\SliderBar\VerticalSliderBar.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Accelerometer\Accelerometer.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Base\Filter.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\DeviceButtons\DeviceButtonSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Gestures\Gestures.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Keyboard\Keyboard.cpp" />
@@ -382,6 +383,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\GUI\SliderBar\SliderBar.h" />
     <ClInclude Include="..\..\Source\ChilliSource\GUI\SliderBar\VerticalSliderBar.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Accelerometer\Accelerometer.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Base.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Base\Filter.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\DeviceButtons\DeviceButtonSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gestures\Gestures.h" />

@@ -184,6 +184,7 @@ CSAppDelegate* singletonInstance = nil;
     
     dispatch_async(dispatch_get_main_queue(), ^
     {
+        isActive = NO;
         csApplication->Suspend();
         [[UIApplication sharedApplication] endBackgroundTask:bgTask];
     });
@@ -198,6 +199,8 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)applicationWillEnterForeground:(UIApplication*)in_application
 {
+    CS_LOG_ERROR("applicationWillEnterForeground");
+    
     //Sometimes iOS steals the context and doesn't return it.
     GLKView* view = (GLKView*)viewControllerInternal.view;
     if([EAGLContext currentContext] != view.context)
@@ -206,6 +209,7 @@ CSAppDelegate* singletonInstance = nil;
     }
     
     csApplication->Resume();
+    isActive = YES;
     
     for(id<UIApplicationDelegate> delegate in subdelegates)
     {
@@ -237,6 +241,7 @@ CSAppDelegate* singletonInstance = nil;
         }
         
         csApplication->Resume();
+        isActive = YES;
     }
     
     csApplication->Foreground();
@@ -271,6 +276,7 @@ CSAppDelegate* singletonInstance = nil;
         
     dispatch_async(dispatch_get_main_queue(), ^
     {
+        isActive = NO;
         csApplication->Suspend();
         [[UIApplication sharedApplication] endBackgroundTask:bgTask];
     });
@@ -287,7 +293,10 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)glkViewControllerUpdate:(GLKViewController*)controller;
 {
-    CSCore::Application::Get()->Update(controller.timeSinceLastUpdate, controller.timeSinceFirstResume);
+    if (isActive == YES)
+    {
+        CSCore::Application::Get()->Update(controller.timeSinceLastUpdate, controller.timeSinceFirstResume);
+    }
 }
 //-------------------------------------------------------------
 /// The main render loop for the application
@@ -299,13 +308,16 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)glkView:(GLKView*)view drawInRect:(CGRect)rect
 {
-    //Sometimes iOS steals the context and doesn't return it.
-    if([EAGLContext currentContext] != view.context)
+    if (isActive == YES)
     {
-        [EAGLContext setCurrentContext:view.context];
+        //Sometimes iOS steals the context and doesn't return it.
+        if([EAGLContext currentContext] != view.context)
+        {
+            [EAGLContext setCurrentContext:view.context];
+        }
+        
+        CSCore::Application::Get()->Render();
     }
-    
-    CSCore::Application::Get()->Render();
 }
 
 #pragma mark -

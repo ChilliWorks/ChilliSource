@@ -54,6 +54,9 @@ namespace ChilliSource
             //----------------------------------------------------------------
             ~EventConnection();
             //----------------------------------------------------------------
+			/// Sets the event this is connected to. This should only be called
+			/// by Event itself, don't call manually.
+			///
             /// @author S Downie
             ///
             /// @param Event that owns the connection

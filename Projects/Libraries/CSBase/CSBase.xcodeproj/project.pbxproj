@@ -50,8 +50,6 @@
 		8133F0A4199A6FD9004AAB40 /* ltable.c in Sources */ = {isa = PBXBuildFile; fileRef = 8133F079199A6FD9004AAB40 /* ltable.c */; };
 		8133F0A5199A6FD9004AAB40 /* ltablib.c in Sources */ = {isa = PBXBuildFile; fileRef = 8133F07B199A6FD9004AAB40 /* ltablib.c */; };
 		8133F0A6199A6FD9004AAB40 /* ltm.c in Sources */ = {isa = PBXBuildFile; fileRef = 8133F07C199A6FD9004AAB40 /* ltm.c */; };
-		8133F0A7199A6FD9004AAB40 /* lua.c in Sources */ = {isa = PBXBuildFile; fileRef = 8133F07E199A6FD9004AAB40 /* lua.c */; };
-		8133F0A8199A6FD9004AAB40 /* luac.c in Sources */ = {isa = PBXBuildFile; fileRef = 8133F080199A6FD9004AAB40 /* luac.c */; };
 		8133F0A9199A6FD9004AAB40 /* lundump.c in Sources */ = {isa = PBXBuildFile; fileRef = 8133F083199A6FD9004AAB40 /* lundump.c */; };
 		8133F0AA199A6FD9004AAB40 /* lvm.c in Sources */ = {isa = PBXBuildFile; fileRef = 8133F085199A6FD9004AAB40 /* lvm.c */; };
 		8133F0AB199A6FD9004AAB40 /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = 8133F087199A6FD9004AAB40 /* lzio.c */; };
@@ -147,9 +145,7 @@
 		8133F07B199A6FD9004AAB40 /* ltablib.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ltablib.c; sourceTree = "<group>"; };
 		8133F07C199A6FD9004AAB40 /* ltm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ltm.c; sourceTree = "<group>"; };
 		8133F07D199A6FD9004AAB40 /* ltm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ltm.h; sourceTree = "<group>"; };
-		8133F07E199A6FD9004AAB40 /* lua.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lua.c; sourceTree = "<group>"; };
 		8133F07F199A6FD9004AAB40 /* lua.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lua.h; sourceTree = "<group>"; };
-		8133F080199A6FD9004AAB40 /* luac.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = luac.c; sourceTree = "<group>"; };
 		8133F081199A6FD9004AAB40 /* luaconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = luaconf.h; sourceTree = "<group>"; };
 		8133F082199A6FD9004AAB40 /* lualib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lualib.h; sourceTree = "<group>"; };
 		8133F083199A6FD9004AAB40 /* lundump.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lundump.c; sourceTree = "<group>"; };
@@ -290,9 +286,7 @@
 				8133F07B199A6FD9004AAB40 /* ltablib.c */,
 				8133F07C199A6FD9004AAB40 /* ltm.c */,
 				8133F07D199A6FD9004AAB40 /* ltm.h */,
-				8133F07E199A6FD9004AAB40 /* lua.c */,
 				8133F07F199A6FD9004AAB40 /* lua.h */,
-				8133F080199A6FD9004AAB40 /* luac.c */,
 				8133F081199A6FD9004AAB40 /* luaconf.h */,
 				8133F082199A6FD9004AAB40 /* lualib.h */,
 				8133F083199A6FD9004AAB40 /* lundump.c */,
@@ -564,7 +558,6 @@
 				8133F097199A6FD9004AAB40 /* linit.c in Sources */,
 				8133F09C199A6FD9004AAB40 /* loadlib.c in Sources */,
 				8133F093199A6FD9004AAB40 /* ldo.c in Sources */,
-				8133F0A7199A6FD9004AAB40 /* lua.c in Sources */,
 				81C80B52194B3D9E009576BE /* pngtrans.c in Sources */,
 				8133F0A9199A6FD9004AAB40 /* lundump.c in Sources */,
 				81C80B4F194B3D9E009576BE /* pngrutil.c in Sources */,
@@ -583,7 +576,6 @@
 				8133F09D199A6FD9004AAB40 /* lobject.c in Sources */,
 				81C80B3F194B3D9E009576BE /* json_reader.cpp in Sources */,
 				81C80B44194B3D9E009576BE /* mztools.cpp in Sources */,
-				8133F0A8199A6FD9004AAB40 /* luac.c in Sources */,
 				8133F0A1199A6FD9004AAB40 /* lstate.c in Sources */,
 				81C80B48194B3D9E009576BE /* pngerror.c in Sources */,
 				8133F0A0199A6FD9004AAB40 /* lparser.c in Sources */,

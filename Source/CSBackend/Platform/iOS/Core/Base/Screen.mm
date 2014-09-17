@@ -28,6 +28,7 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
+#import <CSBackend/Platform/iOS/Core/Base/CSAppDelegate.h>
 #import <CSBackend/Platform/iOS/Core/Base/Screen.h>
 
 #import <Foundation/Foundation.h>
@@ -40,17 +41,19 @@ namespace CSBackend
         namespace
         {
             //----------------------------------------------------
+            /// Calculate the resolution of the screen, pre-iOS 8.
+            ///
             /// @author Ian Copland
             ///
             /// @param The orientation of the application.
+            /// @param The size of the screen in portrait DIPS.
+            /// @param The device pixel scale factor.
             ///
             /// @return The iOS device resolution.
             //----------------------------------------------------
-            CSCore::Vector2 CalculateResolution(UIInterfaceOrientation in_orientation)
+            CSCore::Vector2 CalculateResolution(UIInterfaceOrientation in_orientation, CGSize in_dipsSize, f32 in_pixelScaleFactor)
             {
-                CGSize size = [[UIScreen mainScreen] bounds].size;
-                f32 scale = [UIScreen mainScreen].scale;
-                CSCore::Vector2 resolution(size.width * scale, size.height * scale);
+                CSCore::Vector2 resolution(in_dipsSize.width * in_pixelScaleFactor, in_dipsSize.height * in_pixelScaleFactor);
                 
                 if (in_orientation == UIInterfaceOrientationLandscapeLeft || in_orientation == UIInterfaceOrientationLandscapeRight)
                 {
@@ -58,6 +61,38 @@ namespace CSBackend
                 }
                 
                 return resolution;
+            }
+            //----------------------------------------------------
+            /// Calculate the resolution of the screen in iOS 8
+            /// and above.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The size of the screen in DIPS.
+            /// @param The device pixel scale factor.
+            ///
+            /// @return The iOS device resolution.
+            //----------------------------------------------------
+            CSCore::Vector2 CalculateResolution(CGSize in_dipsSize, f32 in_pixelScaleFactor)
+            {
+                CSCore::Vector2 resolution(in_dipsSize.width * in_pixelScaleFactor, in_dipsSize.height * in_pixelScaleFactor);
+                return resolution;
+            }
+            //----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return Whether or not the resolution should be
+            /// calculated based on the screen orientation. This
+            /// is only the case below iOS 8, and this is
+            /// effectively a check for pre-iOS 8.
+            //----------------------------------------------------
+            bool ShouldCalculateBasedOnOrientation()
+            {
+#ifdef NSFoundationVersionNumber_iOS_7_1
+                return (floor(NSFoundationVersionNumber) <= NSFoundationVersionNumber_iOS_7_1);
+#else
+                return true;
+#endif
             }
         }
         
@@ -68,7 +103,17 @@ namespace CSBackend
         {
             @autoreleasepool
             {
-                m_resolution = CalculateResolution([UIApplication sharedApplication].keyWindow.rootViewController.interfaceOrientation);
+                if (ShouldCalculateBasedOnOrientation() == false)
+                {
+                    //get resolution for iOS 8 and higher.
+                    m_resolution = CalculateResolution([[UIScreen mainScreen] bounds].size, [UIScreen mainScreen].scale);
+                }
+                else
+                {
+                    //get resolution for pre-iOS 8 devices.
+                    m_resolution = CalculateResolution([[CSAppDelegate sharedInstance] viewController].interfaceOrientation, [[UIScreen mainScreen] bounds].size, [UIScreen mainScreen].scale);
+                }
+                
                 m_densityScale = [UIScreen mainScreen].scale;
                 m_invDensityScale = 1.0f / m_densityScale;
             }
@@ -134,7 +179,18 @@ namespace CSBackend
         //------------------------------------------------------------
         void Screen::OnOrientationChanged(UIInterfaceOrientation in_orientation)
         {
-            m_resolution = CalculateResolution(in_orientation);
+            CS_ASSERT(ShouldCalculateBasedOnOrientation() == true, "OnOrientationChanged() should not get called on devices that do not require orientation based calculations.");
+            
+            m_resolution = CalculateResolution(in_orientation, [[UIScreen mainScreen] bounds].size, [UIScreen mainScreen].scale);
+            m_resolutionChangedEvent.NotifyConnections(m_resolution);
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        void Screen::OnResolutionChanged(CGSize in_dipsSize)
+        {
+            CS_ASSERT(ShouldCalculateBasedOnOrientation() == false, "OnResolutionChanged() should not get called on devices that require orientation based calculations.");
+            
+            m_resolution = CalculateResolution(in_dipsSize, [UIScreen mainScreen].scale);
             m_resolutionChangedEvent.NotifyConnections(m_resolution);
         }
     }

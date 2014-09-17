@@ -1,6 +1,11 @@
-// included by json_value.cpp
-// everything is within Json namespace
+// Copyright 2007-2010 Baptiste Lepilleur
+// Distributed under MIT license, or public domain if desired and
+// recognized in your jurisdiction.
+// See file LICENSE for detail or copy at http://jsoncpp.sourceforge.net/LICENSE
 
+// included by json_value.cpp
+
+namespace Json {
 
 // //////////////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////////////
@@ -144,6 +149,7 @@ ValueIteratorBase::copy( const SelfType &other )
 {
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
    current_ = other.current_;
+   isNull_ = other.isNull_;
 #else
    if ( isArray_ )
       iterator_.array_ = other.iterator_.array_;
@@ -290,3 +296,6 @@ ValueIterator::operator =( const SelfType &other )
    copy( other );
    return *this;
 }
+
+} // namespace Json
+// vim: et ts=3 sts=3 sw=3 tw=0

@@ -75,7 +75,50 @@ namespace ChilliSource
             //-------------------------------------------------------------
             Event(const Event&) = delete;
             Event& operator= (const Event&) = delete;
-            
+			//-------------------------------------------------------------
+			/// Although we don't want events to be copyable, we do want
+			/// them to be moveable. Connection references are updated to
+            /// point to the new event.
+			///
+			/// @author Ian Copland
+			/// 
+			/// @param The event to move into this.
+			//-------------------------------------------------------------
+			Event(Event&& in_moveFrom)
+			{
+				CloseAllConnections();
+
+				m_isNotifying = in_moveFrom.m_isNotifying;
+				m_connections = std::move(in_moveFrom.m_connections);
+				for (auto& connectionContainer : m_connections)
+				{
+					connectionContainer.m_connection->SetOwningEvent(this);
+				}
+			}
+			//-------------------------------------------------------------
+			/// Although we don't want events to be copyable, we do want
+			/// them to be moveable. Connection references are updated to
+            /// point to the new event.
+			///
+			/// @author Ian Copland
+			/// 
+			/// @param The event to move into this.
+			///
+			/// @param A reference to this after the move.
+			//-------------------------------------------------------------
+			Event& operator= (Event&& in_moveFrom)
+			{
+				CloseAllConnections();
+
+				m_isNotifying = in_moveFrom.m_isNotifying;
+				m_connections = std::move(in_moveFrom.m_connections);
+				for (auto& connectionContainer : m_connections)
+				{
+					connectionContainer.m_connection->SetOwningEvent(this);
+				}
+
+				return *this;
+			}
             //-------------------------------------------------------------
             /// Opens a new connection to the event. While this connection
             /// remains in scope the delegate will be notified of events
