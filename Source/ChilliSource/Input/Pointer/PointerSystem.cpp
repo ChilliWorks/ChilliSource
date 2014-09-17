@@ -29,6 +29,7 @@
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Input/Base/Filter.h>
 
 #include <thread>
 #include <algorithm>
@@ -107,6 +108,54 @@ namespace ChilliSource
         Core::IConnectableEvent<PointerSystem::PointerScrollDelegate>& PointerSystem::GetPointerScrollEvent()
         {
             return m_pointerScrolledEvent;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Core::IConnectableEvent<PointerSystem::PointerDownDelegate>& PointerSystem::GetPointerDownEventFiltered()
+        {
+            return m_pointerDownEventFiltered;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Core::IConnectableEvent<PointerSystem::PointerMovedDelegate>& PointerSystem::GetPointerMovedEventFiltered()
+        {
+            return m_pointerMovedEventFiltered;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Core::IConnectableEvent<PointerSystem::PointerUpDelegate>& PointerSystem::GetPointerUpEventFiltered()
+        {
+            return m_pointerUpEventFiltered;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Core::IConnectableEvent<PointerSystem::PointerScrollDelegate>& PointerSystem::GetPointerScrollEventFiltered()
+        {
+            return m_pointerScrolledEventFiltered;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Core::IConnectableEvent<PointerSystem::PointerDownDelegateInternal>& PointerSystem::GetPointerDownEventInternal()
+        {
+            return m_pointerDownEventInternal;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Core::IConnectableEvent<PointerSystem::PointerMovedDelegateInternal>& PointerSystem::GetPointerMovedEventInternal()
+        {
+            return m_pointerMovedEventInternal;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Core::IConnectableEvent<PointerSystem::PointerUpDelegateInternal>& PointerSystem::GetPointerUpEventInternal()
+        {
+            return m_pointerUpEventInternal;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Core::IConnectableEvent<PointerSystem::PointerScrollDelegateInternal>& PointerSystem::GetPointerScrollEventInternal()
+        {
+            return m_pointerScrolledEventInternal;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -339,7 +388,19 @@ namespace ChilliSource
             {
                 pointerIt->m_activeInput.insert(in_inputType);
                 Pointer copy = *pointerIt;
+                
+                //Notify unfiltered connections
                 m_pointerDownEvent.NotifyConnections(copy, in_timestamp, in_inputType);
+                
+                Filter filter;
+                //Notify internal engine connections which can filter the input
+                m_pointerDownEventInternal.NotifyConnections(copy, in_timestamp, in_inputType, filter);
+                
+                //Notify filtered connections if the input has not been filtered
+                if(filter.IsFiltered() == false)
+                {
+                    m_pointerDownEventFiltered.NotifyConnections(copy, in_timestamp, in_inputType);
+                }
             }
             else
             {
@@ -360,7 +421,19 @@ namespace ChilliSource
                 pointerIt->m_previousPosition = pointerIt->m_position;
                 pointerIt->m_position = in_newPosition;
                 Pointer copy = *pointerIt;
+
+                //Notify unfiltered connections
                 m_pointerMovedEvent.NotifyConnections(copy, in_timestamp);
+                
+                Filter filter;
+                //Notify internal engine connections which can filter the input
+                m_pointerMovedEventInternal.NotifyConnections(copy, in_timestamp, filter);
+                
+                //Notify filtered connections if the input has not been filtered
+                if(filter.IsFiltered() == false)
+                {
+                    m_pointerMovedEventFiltered.NotifyConnections(copy, in_timestamp);
+                }
             }
             else
             {
@@ -380,7 +453,19 @@ namespace ChilliSource
             {
                 pointerIt->m_activeInput.erase(in_inputType);
                 Pointer copy = *pointerIt;
+   
+                //Notify unfiltered connections
                 m_pointerUpEvent.NotifyConnections(copy, in_timestamp, in_inputType);
+                
+                Filter filter;
+                //Notify internal engine connections which can filter the input
+                m_pointerUpEventInternal.NotifyConnections(copy, in_timestamp, in_inputType, filter);
+                
+                //Notify filtered connections if the input has not been filtered
+                if(filter.IsFiltered() == false)
+                {
+                    m_pointerUpEventFiltered.NotifyConnections(copy, in_timestamp, in_inputType);
+                }
             }
             else
             {
@@ -399,7 +484,19 @@ namespace ChilliSource
             if (pointerIt != m_pointers.end())
             {
                 Pointer copy = *pointerIt;
+
+                //Notify unfiltered connections
                 m_pointerScrolledEvent.NotifyConnections(copy, in_timestamp, in_delta);
+                
+                Filter filter;
+                //Notify internal engine connections which can filter the input
+                m_pointerScrolledEventInternal.NotifyConnections(copy, in_timestamp, in_delta, filter);
+                
+                //Notify filtered connections if the input has not been filtered
+                if(filter.IsFiltered() == false)
+                {
+                    m_pointerScrolledEventFiltered.NotifyConnections(copy, in_timestamp, in_delta);
+                }
             }
             else
             {

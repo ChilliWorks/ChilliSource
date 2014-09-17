@@ -38,6 +38,10 @@ namespace ChilliSource
 	namespace Input 
 	{
         //--------------------------------------------------
+        /// Base
+        //--------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(Filter);
+        //--------------------------------------------------
         /// Accelerometer
         //--------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Accelerometer);
