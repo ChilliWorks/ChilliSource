@@ -242,6 +242,13 @@ namespace CSBackend
         //--------------------------------------------------------
         void LocalNotificationSystem::OnInit()
         {
+            if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)])
+            {
+                //From iOS 8 we need to request permissions to display notifications, to badge the app icon and to play a sound
+                UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+                [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+            }
+            
             CSCore::LocalNotificationSystem::OnInit();
             
             CS_ASSERT(g_localNotificationSystem == nullptr, "Cannot create more than 1 Local Notification System!");
