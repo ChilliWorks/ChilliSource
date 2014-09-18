@@ -15,9 +15,10 @@ local isInputDown = Pointer.isInputDown
 local getFinalPosition = Widget.getFinalPosition
 local getFinalSize = Widget.getFinalSize
 local setRelativePosition = Widget.setRelativePosition
+local setFloatProperty = Widget.setFloatProperty
 
 local sliderWidget = nil
-local sliderFraction = 0.0
+
 -----------------------------------------------------
 -- Called when the widget is added to the canvas
 --
@@ -72,6 +73,7 @@ function updateSlider(in_pointerPositionX)
     barWidth = getFinalSize(this)
     sliderFraction = ((in_pointerPositionX - barPosX)/barWidth) + 0.5;
     setRelativePosition(sliderWidget, sliderFraction, 0.0)
+    setFloatProperty(this, "SliderFraction", sliderFraction)
 end
 
 
