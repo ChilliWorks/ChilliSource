@@ -465,17 +465,15 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param Whether the widget consumes user input preventing widgets behind it from
-            /// receiving the input event
+            /// @param The policy that determines how user input should be consumed
             //----------------------------------------------------------------------------------------
-            void SetConsumeInputEnabled(bool in_consume);
+            void SetInputConsumePolicy(InputConsumePolicy in_policy);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return Whether the widget consumes user input preventing widgets behind it from
-            /// receiving the input event
+            /// @return The policy that determines how user input should be consumed
             //----------------------------------------------------------------------------------------
-            bool IsConsumeInputEnabled() const;
+            InputConsumePolicy GetInputConsumePolicy() const;
             //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
@@ -905,7 +903,7 @@ namespace ChilliSource
             bool m_isVisible;
             bool m_isSubviewClippingEnabled;
             bool m_isInputEnabled;
-            bool m_isInputConsumptionEnabled;
+            InputConsumePolicy m_inputConsumePolicy;
             
             mutable bool m_isParentTransformCacheValid = false;
             mutable bool m_isLocalTransformCacheValid = false;

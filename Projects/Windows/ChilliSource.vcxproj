@@ -181,6 +181,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureResourceOptions.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\Function\ILuaFunction.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\Function\LuaFunctionUtils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\LuaScript.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSource.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSourceProvider.cpp" />
@@ -190,6 +191,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Social\Facebook\FacebookAuthenticationSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Social\Facebook\FacebookPostSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Canvas.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\InputConsumePolicy.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyMap.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyType.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\SizePolicy.cpp" />
@@ -201,6 +203,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetProxy.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableProxy.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableType.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.cpp" />
@@ -477,6 +480,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\Function\ILuaFunction.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\Function\LuaClassFunction.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\Function\LuaFunction.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\Function\LuaFunctionUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaLibIncludes.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaScript.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSource.h" />
@@ -489,6 +493,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Social\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Canvas.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\InputConsumePolicy.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyAccessor.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyMap.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyType.h" />
@@ -503,6 +508,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableProxy.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableType.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.h" />

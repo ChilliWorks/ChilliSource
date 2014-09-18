@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Event/IConnectableEvent.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
+#include <ChilliSource/UI/Base/InputConsumePolicy.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 
 namespace ChilliSource
@@ -65,7 +66,7 @@ namespace ChilliSource
             m_canvas->SetCanvas(m_canvas.get());
             m_canvas->SetAbsolutePosition(GetSize() * 0.5f);
             m_canvas->SetInputEnabled(true);
-            m_canvas->SetConsumeInputEnabled(false);
+            m_canvas->SetInputConsumePolicy(InputConsumePolicy::k_none);
             
             m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnScreenResolutionChanged));
             

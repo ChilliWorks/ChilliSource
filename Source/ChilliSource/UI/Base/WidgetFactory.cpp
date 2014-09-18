@@ -32,6 +32,9 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Input/Pointer/PointerProxy.h>
+#include <ChilliSource/Input/Pointer/PointerSystem.h>
+#include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Scripting/Lua/LuaSystem.h>
 #include <ChilliSource/UI/Base/PropertyAccessor.h>
 #include <ChilliSource/UI/Base/Widget.h>
@@ -50,7 +53,6 @@
 #include <ChilliSource/UI/Layout/HListLayout.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>
 #include <ChilliSource/UI/Layout/VListLayout.h>
-#include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 
 namespace ChilliSource
 {
@@ -168,6 +170,16 @@ namespace ChilliSource
                                     "bottomCentre", Rendering::AlignmentAnchor::k_bottomCentre
                                     );
             
+            luaSystem->RegisterEnum("InputType",
+                                    "None", Input::Pointer::InputType::k_none,
+                                    "Touch", Input::Pointer::InputType::k_touch,
+                                    "LeftMouseButton", Input::Pointer::InputType::k_leftMouseButton,
+                                    "MiddleMouseButton", Input::Pointer::InputType::k_middleMouseButton,
+                                    "RightMouseButton", Input::Pointer::InputType::k_rightMouseButton,
+                                    "Default", Input::PointerSystem::GetDefaultInputType()
+                                    );
+            
+            Input::PointerProxy::RegisterWithLua(luaSystem);
             WidgetProxy::RegisterWithLua(luaSystem);
             DrawableProxy::RegisterWithLua(luaSystem);
             TextureDrawableProxy::RegisterWithLua(luaSystem);

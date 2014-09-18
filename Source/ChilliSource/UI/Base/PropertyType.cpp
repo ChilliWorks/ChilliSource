@@ -38,19 +38,20 @@ namespace ChilliSource
         {
             const std::string k_defaultValues[] =
             {
-                "",
-                "false",
-                "0",
-                "0.0",
-                "",
-                "0 0",
-                "0 0 0",
-                "0 0 0 0",
-                "1 1 1 1",
-                "MiddleCentre",
-                "None",
-                "None",
-                "{}"
+                "",             //k_none
+                "false",        //k_bool
+                "0",            //k_int
+                "0.0",          //k_float
+                "",             //k_string
+                "0 0",          //k_vec2
+                "0 0 0",        //k_vec3
+                "0 0 0 0",      //k_vec4
+                "1 1 1 1",      //k_colour
+                "MiddleCentre", //k_alignmentAnchor
+                "None",         //k_sizePolicy
+                "None",         //k_inputConsumePolicy
+                "None",         //k_storageLocation
+                "{}"            //k_propertyMap
             };
         }
         //----------------------------------------------------------------------------------------
@@ -68,6 +69,7 @@ namespace ChilliSource
             if(lowerCase == "vec3") return PropertyType::k_vec3;
             if(lowerCase == "vec4") return PropertyType::k_vec4;
             if(lowerCase == "sizepolicy") return PropertyType::k_sizePolicy;
+            if(lowerCase == "inputConsumePolicy") return PropertyType::k_inputConsumePolicy;
             if(lowerCase == "storagelocation") return PropertyType::k_storageLocation;
             if(lowerCase == "alignmentanchor") return PropertyType::k_alignmentAnchor;
             if(lowerCase == "colour") return PropertyType::k_colour;

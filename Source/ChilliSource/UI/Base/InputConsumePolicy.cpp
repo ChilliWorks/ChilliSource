@@ -1,7 +1,7 @@
 //
-//  Base.h
+//  InputConsumePolicy.cpp
 //  Chilli Source
-//  Created by Scott Downie on 25/07/2014.
+//  Created by Scott Downie on 17/09/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,21 +26,28 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_UI_BASE_H_
-#define _CHILLISOURCE_UI_BASE_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Base/Canvas.h>
 #include <ChilliSource/UI/Base/InputConsumePolicy.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
-#include <ChilliSource/UI/Base/PropertyType.h>
-#include <ChilliSource/UI/Base/SizePolicy.h>
-#include <ChilliSource/UI/Base/Widget.h>
-#include <ChilliSource/UI/Base/WidgetDef.h>
-#include <ChilliSource/UI/Base/WidgetDefProvider.h>
-#include <ChilliSource/UI/Base/WidgetTemplate.h>
-#include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
-#include <ChilliSource/UI/Base/WidgetFactory.h>
 
-#endif
+#include <ChilliSource/Core/String/StringUtils.h>
+
+namespace ChilliSource
+{
+    namespace UI
+    {
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        InputConsumePolicy ParseInputConsumePolicy(const std::string& in_policy)
+        {
+            std::string lowerCase = in_policy;
+            Core::StringUtils::ToLowerCase(lowerCase);
+            
+            if(lowerCase == "none") return InputConsumePolicy::k_none;
+            if(lowerCase == "all") return InputConsumePolicy::k_all;
+            if(lowerCase == "move") return InputConsumePolicy::k_move;
+            if(lowerCase == "pressRelease") return InputConsumePolicy::k_pressRelease;
+            
+            CS_LOG_FATAL("Cannot parse input consume policy type: " + in_policy);
+            return InputConsumePolicy::k_none;
+        }
+    }
+}

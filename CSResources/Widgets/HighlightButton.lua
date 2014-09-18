@@ -1,42 +1,118 @@
+----------------------------------------------------------------
+-- This is the logic that describes a simple highlight button.
+-- A highlight button will highlight when pressed and unhighlight
+-- when released or input is moved outwith the widget. The button
+-- only responds to the primary input type but multiple pointers
+-- can interact with the button at the same time.
+--
+-- THe highlight can be created either with an additional texture
+-- or simply a colour change.
+--
+-- @author S Downie
+----------------------------------------------------------------
 
 --Caching the functions locally means we don't have to peform a lookup for each call
-local rotateWidgetBy = Widget.rotateBy
-local getWidgetRotation = Widget.getFinalRotation
+local setTexture = Drawable.setTexture
+local getDrawable = Widget.getDrawable
+local getStorageLocationProperty = Widget.getStorageLocationProperty
+local getStringProperty = Widget.getStringProperty
+local getPointerId = Pointer.getId
+
+local activePointerIds = {}
 
 -----------------------------------------------------
--- Called when the widget is added to the canvas
---
--- @author S Downie
------------------------------------------------------
-function onAddedToCanvas()
-    io.write("HighlightButton: onAddedToCanvas\n")
-    drawable = Widget.getDrawable(this)
-    highlightLocation = Widget.getStorageLocationProperty(this, "HighlightTextureLocation")
-    highlightPath = Widget.getStringProperty(this, "HighlightTexturePath")
-    TextureDrawable.setTexture(drawable, highlightLocation, highlightPath)
-end
-
-rotateDir = 1
------------------------------------------------------
--- Called when the widget is updated
+-- Called when the widget recieves an input press
+-- event within its bounds. This will toggle the
+-- highlight.
 --
 -- @author S Downie
 --
--- @param Time in seconds since last update
+-- @param Pointer that triggered the event
+-- @param Timestamp of the input event
+-- @param Input type i.e. touch, left mouse, right mouse, etc.
 -----------------------------------------------------
-function onUpdate(timeSinceLastUpdate)
-	rotation = getWidgetRotation(this)
-
-	if rotation > 3.141 or rotation < -3.141 then
-		rotateDir = -rotateDir
-	end
-    rotateWidgetBy(this, timeSinceLastUpdate * rotateDir)
+function onPressedInside(in_pointer, in_timeStamp, in_inputType)
+    if(in_inputType == InputType.Default) then
+        activePointerIds[getPointerId(in_pointer)] = true
+        drawable = getDrawable(this)
+        highlightLocation = getStorageLocationProperty(this, "HighlightTextureLocation")
+        highlightPath = getStringProperty(this, "HighlightTexturePath")
+        setTexture(drawable, highlightLocation, highlightPath)
+    end
 end
 -----------------------------------------------------
--- Called when the widget is removed from the canvas
+-- Called when the widget recieves an input move
+-- event within its bounds having previously receieved
+-- one outside the bounds. This will toggle back to highlight
+-- state.
 --
 -- @author S Downie
+--
+-- @param Pointer that triggered the event
+-- @param Timestamp of the input event
 -----------------------------------------------------
-function onRemovedFromCanvas()
-    io.write("HighlightButton: onRemovedFromCanvas\n")
+function onMoveEntered(in_pointer, in_timeStamp)
+    if activePointerIds[getPointerId(in_pointer)] then
+        drawable = getDrawable(this)
+        highlightLocation = getStorageLocationProperty(this, "HighlightTextureLocation")
+        highlightPath = getStringProperty(this, "HighlightTexturePath")
+        setTexture(drawable, highlightLocation, highlightPath)
+    end
+end
+-----------------------------------------------------
+-- Called when the widget recieves an input move
+-- event outside its bounds having previously receieved
+-- one inside the bounds. This will toggle back to normal
+-- state.
+--
+-- @author S Downie
+--
+-- @param Pointer that triggered the event
+-- @param Timestamp of the input event
+-----------------------------------------------------
+function onMoveExited(in_pointer, in_timeStamp)
+    if activePointerIds[getPointerId(in_pointer)] then
+        drawable = getDrawable(this)
+        normalLocation = getStorageLocationProperty(this, "NormalTextureLocation")
+        normalPath = getStringProperty(this, "NormalTexturePath")
+        setTexture(drawable, normalLocation, normalPath)
+    end
+end
+-----------------------------------------------------
+-- Called when the widget recieves an input released
+-- event within its bounds having previously receieved
+-- a pressed event. This will toggle back to normal.
+--
+-- @author S Downie
+--
+-- @param Pointer that triggered the event
+-- @param Timestamp of the input event
+-- @param Input type i.e. touch, left mouse, right mouse, etc.
+-----------------------------------------------------
+function onReleasedInside(in_pointer, in_timeStamp, in_inputType)
+    pointerId = getPointerId(in_pointer)
+    if activePointerIds[pointerId] then
+        activePointerIds[pointerId] = nil
+        drawable = getDrawable(this)
+        normalLocation = getStorageLocationProperty(this, "NormalTextureLocation")
+        normalPath = getStringProperty(this, "NormalTexturePath")
+        setTexture(drawable, normalLocation, normalPath)
+    end
+end
+-----------------------------------------------------
+-- Called when the widget recieves an input released
+-- event outside its bounds having previously receieved
+-- a pressed event.
+--
+-- @author S Downie
+--
+-- @param Pointer that triggered the event
+-- @param Timestamp of the input event
+-- @param Input type i.e. touch, left mouse, right mouse, etc.
+-----------------------------------------------------
+function onReleasedOutside(in_pointer, in_timeStamp, in_inputType)
+    pointerId = getPointerId(in_pointer)
+    if activePointerIds[pointerId] then
+        activePointerIds[pointerId] = nil
+    end
 end

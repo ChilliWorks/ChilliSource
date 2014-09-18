@@ -1,7 +1,7 @@
 //
-//  PropertyType.h
+//  InputConsumePolicy.h
 //  Chilli Source
-//  Created by Scott Downie on 25/07/2014.
+//  Created by Scott Downie on 17/09/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_PROPERTYTYPE_H_
-#define _CHILLISOURCE_UI_BASE_PROPERTYTYPE_H_
+#ifndef _CHILLISOURCE_UI_BASE_INPUTCONSUMEPOLICY_H_
+#define _CHILLISOURCE_UI_BASE_INPUTCONSUMEPOLICY_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -36,47 +36,27 @@ namespace ChilliSource
 	namespace UI
 	{
         //----------------------------------------------------------------------------------------
-        /// The supported property types for widgets
+        /// Policy that determines how user input should be consumed.
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        enum class PropertyType
+        enum class InputConsumePolicy
         {
-            k_unknown,
-            k_bool,
-            k_int,
-            k_float,
-            k_string,
-            k_vec2,
-            k_vec3,
-            k_vec4,
-            k_colour,
-            k_alignmentAnchor,
-            k_sizePolicy,
-            k_inputConsumePolicy,
-            k_storageLocation,
-            k_propertyMap
+            k_all,
+            k_none,
+            k_move,
+            k_pressRelease
         };
         //----------------------------------------------------------------------------------------
-        /// Convert the string type to internal property type
+        /// Parse the string and return the consume policy
         ///
         /// @author S Downie
         ///
-        /// @param Type string
+        /// @param String
         ///
-        /// @return Property type
+        /// @return Consume policy
         //----------------------------------------------------------------------------------------
-        PropertyType ParsePropertyType(const std::string& in_type);
-        //----------------------------------------------------------------------------------------
-        /// Return a default value encoded as a string for the given type
-        ///
-        /// @author S Downie
-        ///
-        /// @param Type
-        ///
-        /// @return Default
-        //----------------------------------------------------------------------------------------
-        const std::string& GetDefaultPropertyTypeValue(PropertyType in_type);
+        InputConsumePolicy ParseInputConsumePolicy(const std::string& in_policy);
 	}
 }
 

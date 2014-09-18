@@ -57,9 +57,9 @@ namespace ChilliSource
             //---------------------------------------------------------
             //---------------------------------------------------------
             template <typename TTypeToConvert>
-            struct ConvertIfEnum <TTypeToConvert, typename std::enable_if<std::is_enum<TTypeToConvert>::value == true>::type>
+            struct ConvertIfEnum <TTypeToConvert, typename std::enable_if<std::is_enum<typename std::remove_reference<TTypeToConvert>::type>::value == true>::type>
             {
-                using type = typename std::underlying_type<TTypeToConvert>::type;
+                using type = typename std::underlying_type<typename std::remove_reference<TTypeToConvert>::type>::type;
             };
             //---------------------------------------------------------
             /// Holds the number of Lua values for each type
@@ -132,6 +132,9 @@ namespace ChilliSource
             void PushValueToVM(lua_State* in_vm, u32 in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
+            void PushValueToVM(lua_State* in_vm, u64 in_arg);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
             void PushValueToVM(lua_State* in_vm, f32 in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
@@ -184,6 +187,9 @@ namespace ChilliSource
             //---------------------------------------------------------
             //---------------------------------------------------------
             template <> u32 ReadValueFromVM(lua_State* in_vm, s32 in_index);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> u64 ReadValueFromVM(lua_State* in_vm, s32 in_index);
             //---------------------------------------------------------
             //---------------------------------------------------------
             template <> f32 ReadValueFromVM(lua_State* in_vm, s32 in_index);

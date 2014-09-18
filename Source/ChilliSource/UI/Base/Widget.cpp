@@ -34,6 +34,7 @@
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+#include <ChilliSource/UI/Base/InputConsumePolicy.h>
 #include <ChilliSource/UI/Base/WidgetProxy.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawableProxy.h>
 #include <ChilliSource/UI/Drawable/TextureDrawableProxy.h>
@@ -62,7 +63,7 @@ namespace ChilliSource
                 {PropertyType::k_bool, "Visible", "true"},
                 {PropertyType::k_bool, "ClipChildren", "false"},
                 {PropertyType::k_bool, "InputEnabled", "false"},
-                {PropertyType::k_bool, "ConsumeInput", "true"},
+                {PropertyType::k_inputConsumePolicy, "InputConsumePolicy", "All"},
                 {PropertyType::k_sizePolicy, "SizePolicy", "None"},
                 {PropertyType::k_propertyMap, "Layout", "{\"Type\":\"None\"}"},
                 {PropertyType::k_propertyMap, "Drawable", "{\"Type\":\"None\"}"}
@@ -236,7 +237,7 @@ namespace ChilliSource
             SetVisible(in_defaultProperties.GetProperty<bool>("Visible"));
             SetClippingEnabled(in_defaultProperties.GetProperty<bool>("ClipChildren"));
             SetInputEnabled(in_defaultProperties.GetProperty<bool>("InputEnabled"));
-            SetConsumeInputEnabled(in_defaultProperties.GetProperty<bool>("ConsumeInput"));
+            SetInputConsumePolicy(in_defaultProperties.GetProperty<InputConsumePolicy>("InputConsumePolicy"));
             SetSizePolicy(in_defaultProperties.GetProperty<SizePolicy>("SizePolicy"));
         }
         //----------------------------------------------------------------------------------------
@@ -577,15 +578,15 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetConsumeInputEnabled(bool in_consume)
+        void Widget::SetInputConsumePolicy(InputConsumePolicy in_policy)
         {
-            m_isInputConsumptionEnabled = in_consume;
+            m_inputConsumePolicy = in_policy;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        bool Widget::IsConsumeInputEnabled() const
+        InputConsumePolicy Widget::GetInputConsumePolicy() const
         {
-            return m_isInputConsumptionEnabled;
+            return m_inputConsumePolicy;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1189,12 +1190,12 @@ namespace ChilliSource
                 
                 if(m_behaviourScript != nullptr)
                 {
-                    m_behaviourScript->CallFunction("onPressedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                    m_behaviourScript->CallFunction("onPressedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
                 }
                 
                 m_pressedInsideEvent.NotifyConnections(this, in_inputType);
                 
-                if(m_isInputConsumptionEnabled == true)
+                if(m_inputConsumePolicy == InputConsumePolicy::k_all || m_inputConsumePolicy == InputConsumePolicy::k_pressRelease)
                 {
                     in_filter.SetFiltered();
                 }
@@ -1236,7 +1237,7 @@ namespace ChilliSource
             {
                 if(m_behaviourScript != nullptr)
                 {
-                    m_behaviourScript->CallFunction("onMoveEntered", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                    m_behaviourScript->CallFunction("onMoveEntered", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
                 }
                 
                 m_moveEnteredEvent.NotifyConnections(this, in_pointer.GetActiveInputs());
@@ -1245,7 +1246,7 @@ namespace ChilliSource
             {
                 if(m_behaviourScript != nullptr)
                 {
-                    m_behaviourScript->CallFunction("onMoveExited", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                    m_behaviourScript->CallFunction("onMoveExited", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
                 }
                 
                 m_moveExitedEvent.NotifyConnections(this, in_pointer.GetActiveInputs());
@@ -1254,7 +1255,7 @@ namespace ChilliSource
             {
                 if(m_behaviourScript != nullptr)
                 {
-                    m_behaviourScript->CallFunction("onMovedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                    m_behaviourScript->CallFunction("onMovedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
                 }
                 
                 m_movedOutsideEvent.NotifyConnections(this, in_pointer.GetActiveInputs());
@@ -1263,13 +1264,13 @@ namespace ChilliSource
             {
                 if(m_behaviourScript != nullptr)
                 {
-                    m_behaviourScript->CallFunction("onMovedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                    m_behaviourScript->CallFunction("onMovedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
                 }
                 
                 m_movedInsideEvent.NotifyConnections(this, in_pointer.GetActiveInputs());
             }
             
-            if(m_isInputConsumptionEnabled == true)
+            if(m_inputConsumePolicy == InputConsumePolicy::k_all || m_inputConsumePolicy == InputConsumePolicy::k_move)
             {
                 in_filter.SetFiltered();
             }
@@ -1313,7 +1314,7 @@ namespace ChilliSource
                 {
                     if(m_behaviourScript != nullptr)
                     {
-                        m_behaviourScript->CallFunction("onReleasedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                        m_behaviourScript->CallFunction("onReleasedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
                     }
                     
                     m_releasedInsideEvent.NotifyConnections(this, in_inputType);
@@ -1322,13 +1323,13 @@ namespace ChilliSource
                 {
                     if(m_behaviourScript != nullptr)
                     {
-                        m_behaviourScript->CallFunction("onReleasedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                        m_behaviourScript->CallFunction("onReleasedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
                     }
                     
                     m_releasedOutsideEvent.NotifyConnections(this, in_inputType);
                 }
                 
-                if(m_isInputConsumptionEnabled == true)
+                if(m_inputConsumePolicy == InputConsumePolicy::k_all || m_inputConsumePolicy == InputConsumePolicy::k_pressRelease)
                 {
                     in_filter.SetFiltered();
                 }

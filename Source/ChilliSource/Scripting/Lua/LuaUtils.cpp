@@ -60,6 +60,12 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
+            void PushValueToVM(lua_State* in_vm, u64 in_arg)
+            {
+                lua_pushnumber(in_vm, in_arg);
+            }
+            //---------------------------------------------------------
+            //---------------------------------------------------------
             void PushValueToVM(lua_State* in_vm, f32 in_arg)
             {
                 lua_pushnumber(in_vm, in_arg);
@@ -149,6 +155,16 @@ namespace ChilliSource
                 return luaL_checkunsigned(in_vm, in_index);
 #else
                 return lua_tounsigned(in_vm, in_index);
+#endif
+            }
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            template <> u64 ReadValueFromVM(lua_State* in_vm, s32 in_index)
+            {
+#ifdef CS_ENABLE_DEBUG
+                return (u64)luaL_checknumber(in_vm, in_index);
+#else
+                return (u64)lua_tonumber(in_vm, in_index);
 #endif
             }
             //---------------------------------------------------------

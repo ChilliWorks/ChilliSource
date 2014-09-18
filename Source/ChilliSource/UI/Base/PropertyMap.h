@@ -451,6 +451,14 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<SizePolicy>() const;
         //----------------------------------------------------------------------------------------
+        /// Specialisation to return property type for input consume policy
+        ///
+        /// @author S Downie
+        ///
+        /// @return Input consume policy prop type
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<InputConsumePolicy>() const;
+        //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for storage location
         ///
         /// @author S Downie

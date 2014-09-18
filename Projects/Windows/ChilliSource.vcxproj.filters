@@ -771,6 +771,16 @@
     <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\Function\ILuaFunction.cpp">
       <Filter>ChilliSource\Scripting\Lua</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Base\Filter.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\InputConsumePolicy.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\Function\LuaFunctionUtils.cpp">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableProxy.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
@@ -1684,6 +1694,17 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua.h">
       <Filter>ChilliSource\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Base.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Base\Filter.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\InputConsumePolicy.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\Function\LuaFunctionUtils.h">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableProxy.h">
+      <Filter>ChilliSource\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
