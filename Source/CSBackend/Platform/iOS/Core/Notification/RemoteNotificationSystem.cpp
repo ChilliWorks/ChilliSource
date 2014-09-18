@@ -61,6 +61,17 @@ namespace CSBackend
         }
         //--------------------------------------------------
         //--------------------------------------------------
+        void OnInit()
+        {
+            if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)])
+            {
+                //From iOS 8 we need to request permissions to display notifications, to badge the app icon and to play a sound
+                UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+                [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+            }
+        }
+        //--------------------------------------------------
+        //--------------------------------------------------
         void RemoteNotificationSystem::SetEnabled(bool in_enabled)
         {
             m_enabled = in_enabled;
@@ -70,8 +81,16 @@ namespace CSBackend
         void RemoteNotificationSystem::RequestRemoteToken(const TokenReceivedDelegate& in_delegate)
         {
             m_delegate = in_delegate;
-            UIRemoteNotificationType Types = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert;
-            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:Types];
+            
+            if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerForRemoteNotifications)])
+            {
+                [[UIApplication sharedApplication] registerForRemoteNotifications];
+            }
+            else
+            {
+                UIRemoteNotificationType Types = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert;
+                [[UIApplication sharedApplication] registerForRemoteNotificationTypes:Types];
+            }
         }
         //--------------------------------------------------
         //--------------------------------------------------
