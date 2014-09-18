@@ -11,7 +11,6 @@
 
 --Caching the functions locally means we don't have to peform a lookup for each call
 local getPointerPosition = Pointer.getPosition
-local isInputDown = Pointer.isInputDown
 local getFinalPosition = Widget.getFinalPosition
 local getFinalSize = Widget.getFinalSize
 local setRelativePosition = Widget.setRelativePosition
@@ -54,11 +53,9 @@ end
 -- @param Pointer that triggered the event
 -- @param Timestamp of the input event
 -----------------------------------------------------
-function onMovedInside(in_pointer, in_timeStamp)
-    if isInputDown(in_pointer, InputType.Default) then
-        pointerPosX = getPointerPosition(in_pointer)
-        updateSlider(pointerPosX)
-    end
+function onDraggedInside(in_pointer, in_timeStamp)
+    pointerPosX = getPointerPosition(in_pointer)
+    updateSlider(pointerPosX)
 end
 -----------------------------------------------------
 -- Move the slider to the correct position based

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		8113673519C9A86200D9AEDC /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8113673219C9A86200D9AEDC /* Filter.cpp */; };
-		8113677E19C9E89900D9AEDC /* InputConsumePolicy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8113677C19C9E89900D9AEDC /* InputConsumePolicy.cpp */; };
 		8113678119CAD25400D9AEDC /* PointerProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8113677F19CAD25400D9AEDC /* PointerProxy.cpp */; };
 		8132AB4B19A4E20900101323 /* LuaScript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8132AB4219A4E20900101323 /* LuaScript.cpp */; };
 		8132AB4C19A4E20900101323 /* LuaSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8132AB4419A4E20900101323 /* LuaSystem.cpp */; };
@@ -309,8 +308,6 @@
 		8113673219C9A86200D9AEDC /* Filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Filter.cpp; sourceTree = "<group>"; };
 		8113673319C9A86200D9AEDC /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
 		8113673419C9A86200D9AEDC /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
-		8113677C19C9E89900D9AEDC /* InputConsumePolicy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputConsumePolicy.cpp; sourceTree = "<group>"; };
-		8113677D19C9E89900D9AEDC /* InputConsumePolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputConsumePolicy.h; sourceTree = "<group>"; };
 		8113677F19CAD25400D9AEDC /* PointerProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PointerProxy.cpp; sourceTree = "<group>"; };
 		8113678019CAD25400D9AEDC /* PointerProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointerProxy.h; sourceTree = "<group>"; };
 		8132AB3819A4E20900101323 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
@@ -1081,8 +1078,6 @@
 			children = (
 				81496B811980F1AE004E79F2 /* Canvas.cpp */,
 				81496B821980F1AE004E79F2 /* Canvas.h */,
-				8113677C19C9E89900D9AEDC /* InputConsumePolicy.cpp */,
-				8113677D19C9E89900D9AEDC /* InputConsumePolicy.h */,
 				8110E2D1199111E700EC96CA /* PropertyAccessor.h */,
 				81E3E37819878E6B0002A9FD /* PropertyMap.cpp */,
 				81E3E37919878E6B0002A9FD /* PropertyMap.h */,
@@ -2852,7 +2847,6 @@
 				81D8B4041962E0EC0010DA84 /* Screen.cpp in Sources */,
 				81D8B48B1962E0EC0010DA84 /* ScalerParticleAffector.cpp in Sources */,
 				81D8B4781962E0EC0010DA84 /* DirectionalLightComponent.cpp in Sources */,
-				8113677E19C9E89900D9AEDC /* InputConsumePolicy.cpp in Sources */,
 				81D8B4091962E0EC0010DA84 /* BaseEncoding.cpp in Sources */,
 				81D8B4941962E0EC0010DA84 /* ParticleEffect.cpp in Sources */,
 				81D8B4291962E0EC0010DA84 /* MetaClass.cpp in Sources */,

@@ -112,6 +112,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Input\Gestures\Gestures.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Keyboard\Keyboard.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\Pointer.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\PointerProxy.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\PointerSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntry.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\ContentDownload\ContentManagementSystem.cpp" />
@@ -191,7 +192,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Social\Facebook\FacebookAuthenticationSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Social\Facebook\FacebookPostSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Canvas.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\InputConsumePolicy.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyMap.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyType.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\SizePolicy.cpp" />
@@ -394,6 +394,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\Keyboard\Keyboard.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Keyboard\KeyCode.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Pointer\Pointer.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Pointer\PointerProxy.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Pointer\PointerSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntry.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ContentDownload\ContentManagementSystem.h" />
@@ -493,7 +494,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Social\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Canvas.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\InputConsumePolicy.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyAccessor.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyMap.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyType.h" />

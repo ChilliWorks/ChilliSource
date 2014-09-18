@@ -183,21 +183,23 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::IConnectableEvent<InputMovedDelegate>& GetMoveEnteredEvent();
             //----------------------------------------------------------------------------------------
-            /// Event triggered when a pointer is moved within the widget
+            /// Event triggered when a pointer is moved within the widget if it was originally pressed
+            /// within the widget while one or more of the input buttons are down
             ///
             /// @author S Downie
             ///
             /// @return Connectable event
             //----------------------------------------------------------------------------------------
-            Core::IConnectableEvent<InputMovedDelegate>& GetMovedInsideEvent();
+            Core::IConnectableEvent<InputMovedDelegate>& GetDraggedInsideEvent();
             //----------------------------------------------------------------------------------------
-            /// Event triggered when a pointer is moved outwith the widget
+            /// Event triggered when a pointer is moved outwith the widget if it was originally pressed
+            /// within the widget and while one or more of the input buttons are down
             ///
             /// @author S Downie
             ///
             /// @return Connectable event
             //----------------------------------------------------------------------------------------
-            Core::IConnectableEvent<InputMovedDelegate>& GetMovedOutsideEvent();
+            Core::IConnectableEvent<InputMovedDelegate>& GetDraggedOutsideEvent();
 
             //----------------------------------------------------------------------------------------
             /// Set the drawable that handles how to render the widget. If this is null then the
@@ -463,17 +465,20 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             bool IsInputEnabled() const;
             //----------------------------------------------------------------------------------------
+            /// Set whether this widget consumes input events and prevents them being continuing down the
+            /// event chain. Only press and release events are consumed.
+            ///
             /// @author S Downie
             ///
-            /// @param The policy that determines how user input should be consumed
+            /// @param Whether press and release input events are consumed
             //----------------------------------------------------------------------------------------
-            void SetInputConsumePolicy(InputConsumePolicy in_policy);
+            void SetInputConsumeEnabled(bool in_consume);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return The policy that determines how user input should be consumed
+            /// @return Whether press and release input events are consumed
             //----------------------------------------------------------------------------------------
-            InputConsumePolicy GetInputConsumePolicy() const;
+            bool GetInputConsumeEnabled() const;
             //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
@@ -866,8 +871,8 @@ namespace ChilliSource
             Core::Event<InputDelegate> m_releasedOutsideEvent;
             Core::Event<InputMovedDelegate> m_moveExitedEvent;
             Core::Event<InputMovedDelegate> m_moveEnteredEvent;
-            Core::Event<InputMovedDelegate> m_movedInsideEvent;
-            Core::Event<InputMovedDelegate> m_movedOutsideEvent;
+            Core::Event<InputMovedDelegate> m_draggedInsideEvent;
+            Core::Event<InputMovedDelegate> m_draggedOutsideEvent;
             
             Core::UnifiedVector2 m_localPosition;
             Core::UnifiedVector2 m_localSize;
@@ -903,7 +908,7 @@ namespace ChilliSource
             bool m_isVisible;
             bool m_isSubviewClippingEnabled;
             bool m_isInputEnabled;
-            InputConsumePolicy m_inputConsumePolicy;
+            bool m_isInputConsumeEnabled;
             
             mutable bool m_isParentTransformCacheValid = false;
             mutable bool m_isLocalTransformCacheValid = false;

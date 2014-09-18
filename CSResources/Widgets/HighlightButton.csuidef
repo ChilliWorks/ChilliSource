@@ -10,6 +10,7 @@
   },
   "Defaults": {
     "Name": "HighlightButton",
+    "InputEnabled": "true",
     "NormalTextureLocation": "None",
     "NormalTexturePath": "",
     "HighlightTextureLocation": "None",

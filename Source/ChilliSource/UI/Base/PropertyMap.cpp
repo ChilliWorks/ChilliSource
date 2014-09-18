@@ -32,7 +32,6 @@
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
-#include <ChilliSource/UI/Base/InputConsumePolicy.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
 
@@ -77,8 +76,6 @@ namespace ChilliSource
                         return PropertyMap::IPropertyUPtr(new PropertyMap::Property<PropertyMap>());
                     case PropertyType::k_sizePolicy:
                         return PropertyMap::IPropertyUPtr(new PropertyMap::Property<SizePolicy>());
-                    case PropertyType::k_inputConsumePolicy:
-                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<InputConsumePolicy>());
                     case PropertyType::k_storageLocation:
                         return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::StorageLocation>());
                     case PropertyType::k_unknown:
@@ -235,9 +232,6 @@ namespace ChilliSource
                 case PropertyType::k_sizePolicy:
                     SetProperty(in_name, ParseSizePolicy(in_value));
                     break;
-                case PropertyType::k_inputConsumePolicy:
-                    SetProperty(in_name, ParseInputConsumePolicy(in_value));
-                    break;
                 case PropertyType::k_storageLocation:
                     SetProperty(in_name, Core::ParseStorageLocation(in_value));
                     break;
@@ -332,12 +326,6 @@ namespace ChilliSource
         template<> PropertyType PropertyMap::GetType<SizePolicy>() const
         {
             return PropertyType::k_sizePolicy;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<InputConsumePolicy>() const
-        {
-            return PropertyType::k_inputConsumePolicy;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

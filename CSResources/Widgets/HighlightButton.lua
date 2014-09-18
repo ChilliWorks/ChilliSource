@@ -102,6 +102,7 @@ end
 function onReleasedInside(in_pointer, in_timeStamp, in_inputType)
     pointerId = getPointerId(in_pointer)
     if activePointerIds[pointerId] then
+        activePointerIds[pointerId] = nil
         highlightingPointerIds[pointerId] = nil
         if next(highlightingPointerIds) == nil then
             unhighlight()

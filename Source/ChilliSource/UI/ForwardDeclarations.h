@@ -50,7 +50,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(WidgetTemplate);
         CS_FORWARDDECLARE_CLASS(WidgetTemplateProvider);
         CS_FORWARDDECLARE_STRUCT(WidgetHierarchyDesc);
-        enum class InputConsumePolicy;
         enum class PropertyType;
         enum class SizePolicy;
         //---------------------------------------------------------

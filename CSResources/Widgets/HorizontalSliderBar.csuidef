@@ -5,6 +5,7 @@
   },
   "Defaults": {
     "Name": "HorizontalSliderBar",
+    "InputEnabled": "true",
     "SliderFraction": "0"
   },
   "ChildProperties": {

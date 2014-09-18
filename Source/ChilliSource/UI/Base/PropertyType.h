@@ -53,7 +53,6 @@ namespace ChilliSource
             k_colour,
             k_alignmentAnchor,
             k_sizePolicy,
-            k_inputConsumePolicy,
             k_storageLocation,
             k_propertyMap
         };
