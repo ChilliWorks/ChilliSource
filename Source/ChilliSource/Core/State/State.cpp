@@ -31,6 +31,7 @@
 #include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Core/State/StateManager.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Input/Gesture/GestureSystem.h>
 
 namespace ChilliSource
 {
@@ -49,9 +50,14 @@ namespace ChilliSource
         void State::Init()
         {
             m_canAddSystems = true;
-            //States will always have a scene by default
+            
+            //Create the default systems
             m_scene = CreateSystem<Scene>();
+            CreateSystem<CSInput::GestureSystem>();
+            
+            //create user systems.
             CreateSystems();
+            
             m_canAddSystems = false;
             
             u32 numSystems = m_systems.size();

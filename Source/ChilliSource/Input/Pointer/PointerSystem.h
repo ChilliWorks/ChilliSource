@@ -111,17 +111,6 @@ namespace ChilliSource
             //----------------------------------------------------
             static PointerSystemUPtr Create();
             //----------------------------------------------------
-            /// Returns the default press type for the current platform.
-            /// This should be used where possible rather than
-            /// direct use of the press type to make cross platform
-            /// development easier.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @return the default press type.
-            //----------------------------------------------------
-            static Pointer::InputType GetDefaultInputType();
-            //----------------------------------------------------
             /// Event that is triggered when the pointer is first down.
             ///
             /// @author Ian Copland

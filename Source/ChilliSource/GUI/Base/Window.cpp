@@ -109,7 +109,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void Window::_OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
 		{
-			if (in_inputType == Input::PointerSystem::GetDefaultInputType())
+			if (in_inputType == Input::Pointer::GetDefaultInputType())
             {
                 if (!UserInteraction)
                     return;
@@ -143,7 +143,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void Window::_OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
 		{
-            if (in_pointer.IsInputDown(Input::PointerSystem::GetDefaultInputType()) == true)
+            if (in_pointer.IsInputDown(Input::Pointer::GetDefaultInputType()) == true)
             {
                 if (!UserInteraction)
                     return;
@@ -174,7 +174,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		void Window::_OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
 		{
-            if (in_inputType == Input::PointerSystem::GetDefaultInputType())
+            if (in_inputType == Input::Pointer::GetDefaultInputType())
             {
                 if (!UserInteraction)
                     return;

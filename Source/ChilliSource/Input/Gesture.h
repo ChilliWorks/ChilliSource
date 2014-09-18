@@ -33,5 +33,6 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Input/Gesture/Gesture.h>
 #include <ChilliSource/Input/Gesture/GestureSystem.h>
+#include <ChilliSource/Input/Gesture/TapGesture.h>
 
 #endif

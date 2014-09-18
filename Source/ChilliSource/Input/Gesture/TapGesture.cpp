@@ -28,16 +28,28 @@
 
 #include <ChilliSource/Input/Gesture/TapGesture.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/Screen.h>
+
 namespace ChilliSource
 {
     namespace Input
     {
+        namespace
+        {
+            const f64 k_minTimeBetweenTaps = 0.015;
+        }
+        
         CS_DEFINE_NAMEDTYPE(TapGesture);
         //----------------------------------------------------
         //----------------------------------------------------
-        TapGesture::TapGesture(u32 in_numTaps, u32 in_numPointers, f32 in_maxTimeForTap, f32 in_maxTimeBetweenTaps)
-            : m_numTaps(in_numTaps), m_numPointers(in_numPointers), m_maxTimeForTap(in_maxTimeForTap), m_maxTimeBetweenTaps(in_maxTimeBetweenTaps)
+        TapGesture::TapGesture(u32 in_numTaps, u32 in_numPointers, f32 in_maxTimeForTap, f32 in_maxTimeBetweenTaps, f32 in_tapRadius, Pointer::InputType in_inputType)
+            : m_numTaps(in_numTaps), m_numPointers(in_numPointers), m_maxTimeForTap(in_maxTimeForTap), m_maxTimeBetweenTaps(in_maxTimeBetweenTaps), m_tapRadius(in_tapRadius), m_inputType(in_inputType)
         {
+            Core::Screen* screen = Core::Application::Get()->GetScreen();
+            
+            m_maxTapMoveDistSquared = (m_tapRadius * screen->GetDensityScale()) * (m_tapRadius * screen->GetDensityScale());
+            m_activeTapPointers.reserve(m_numPointers);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -71,27 +83,87 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
+        f32 TapGesture::GetTapRadius() const
+        {
+            return m_tapRadius;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        Pointer::InputType TapGesture::GetInputType() const
+        {
+            return m_inputType;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
         Core::IConnectableEvent<TapGesture::ActivatedDelegate>& TapGesture::GetActivatedEvent()
         {
             return m_activatedEvent;
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
+        void TapGesture::CheckForExpiration(f64 in_timestamp)
+        {
+            //Check whether an active tap has expired
+            if (m_activeTap == true && in_timestamp - m_activeTapStartTimestamp > m_maxTimeForTap)
+            {
+                ResetTap();
+            }
+            
+            if (m_activeTap == false && m_numTaps > 0 && in_timestamp - m_lastTapEndTimestamp > m_maxTimeBetweenTaps)
+            {
+                ResetGesture();
+            }
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void TapGesture::ResetTap()
+        {
+            m_activeTap = false;
+            m_activeTapStartTimestamp = 0.0;
+            m_activeTapPointers.clear();
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void TapGesture::ResetGesture()
+        {
+            ResetTap();
+            m_tapCount = 0;
+            m_lastTapEndTimestamp = 0.0;
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
         void TapGesture::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
         {
-            //if there is a tap already in progress
-            for (auto& tapInfo : m_activeTaps)
+            CheckForExpiration(in_timestamp);
+            
+            if (in_inputType == m_inputType)
             {
-                if (tapInfo.m_pointers.size() < m_numPointers)
+                if (m_activeTap == true)
                 {
-                    if (in_timestamp - tapInfo.m_startTimestamp <= m_maxTimeForTap)
+                    if (m_activeTapPointers.size() < m_numPointers)
                     {
                         PointerInfo pointerInfo;
                         pointerInfo.m_initialPosition = in_pointer.GetPosition();
                         pointerInfo.m_pointerId = in_pointer.GetId();
-                        tapInfo.m_pointers.push_back(pointerInfo);
-                        return;
+                        pointerInfo.m_isDown = true;
+                        m_activeTapPointers.push_back(pointerInfo);
                     }
+                    else
+                    {
+                        ResetTap();
+                    }
+                }
+                else if (in_timestamp - m_lastTapStartTimestamp > k_minTimeBetweenTaps)
+                {
+                    m_activeTap = true;
+                    m_activeTapStartTimestamp = in_timestamp;
+                    m_lastTapStartTimestamp = m_activeTapStartTimestamp;
+                    
+                    PointerInfo pointerInfo;
+                    pointerInfo.m_initialPosition = in_pointer.GetPosition();
+                    pointerInfo.m_pointerId = in_pointer.GetId();
+                    pointerInfo.m_isDown = true;
+                    m_activeTapPointers.push_back(pointerInfo);
                 }
             }
         }
@@ -99,13 +171,76 @@ namespace ChilliSource
         //--------------------------------------------------------
         void TapGesture::OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter)
         {
+            CheckForExpiration(in_timestamp);
             
+            if (m_activeTap == true)
+            {
+                bool shouldReset = false;
+                
+                for (const auto& pointerInfo : m_activeTapPointers)
+                {
+                    if (in_pointer.GetId() == pointerInfo.m_pointerId)
+                    {
+                        const Core::Vector2 displacement = in_pointer.GetPosition() - pointerInfo.m_initialPosition;
+                        if (displacement.LengthSquared() > m_maxTapMoveDistSquared)
+                        {
+                            shouldReset = true;
+                        }
+                        
+                        break;
+                    }
+                }
+                
+                if (shouldReset == true)
+                {
+                    ResetTap();
+                }
+            }
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
         void TapGesture::OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
         {
+            CheckForExpiration(in_timestamp);
             
+            if (in_inputType == m_inputType && m_activeTap == true)
+            {
+                if (m_activeTapPointers.size() == m_numPointers)
+                {
+                    bool tapFinished = true;
+                    
+                    for (auto& pointerInfo : m_activeTapPointers)
+                    {
+                        if (in_pointer.GetId() == pointerInfo.m_pointerId)
+                        {
+                            pointerInfo.m_isDown = false;
+                        }
+                        else if (pointerInfo.m_isDown == true)
+                        {
+                            tapFinished = false;
+                        }
+                    }
+                    
+                    if (tapFinished == true)
+                    {
+                        ResetTap();
+                        m_tapCount++;
+                        m_lastTapEndTimestamp = in_timestamp;
+                        
+                        if (m_tapCount == m_numTaps)
+                        {
+                            ResetGesture();
+                            
+                            //TODO: !? Check for collisions.
+                            m_activatedEvent.NotifyConnections(this);
+                        }
+                    }
+                }
+                else
+                {
+                    ResetTap();
+                }
+            }
         }
     }
 }

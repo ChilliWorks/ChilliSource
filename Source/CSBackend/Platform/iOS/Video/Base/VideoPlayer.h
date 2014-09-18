@@ -30,7 +30,6 @@
 
 #import <ChilliSource/ChilliSource.h>
 #import <CSBackend/Platform/iOS/ForwardDeclarations.h>
-#import <ChilliSource/Input/Gestures/Gestures.h>
 #import <ChilliSource/Video/Base/VideoPlayer.h>
 
 @class MPMoviePlayerController;

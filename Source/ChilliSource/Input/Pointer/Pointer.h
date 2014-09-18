@@ -71,6 +71,17 @@ namespace ChilliSource
                 k_rightMouseButton
             };
             //----------------------------------------------------
+            /// Returns the default press type for the current platform.
+            /// This should be used where possible rather than
+            /// direct use of the press type to make cross platform
+            /// development easier.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return the default press type.
+            //----------------------------------------------------
+            static InputType GetDefaultInputType();
+            //----------------------------------------------------
             /// Constructor
             ///
             /// @author S Downie

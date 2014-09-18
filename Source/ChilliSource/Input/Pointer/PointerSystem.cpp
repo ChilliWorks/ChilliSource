@@ -67,20 +67,6 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        Pointer::InputType PointerSystem::GetDefaultInputType()
-        {
-#if defined CS_TARGETPLATFORM_ANDROID
-            return Pointer::InputType::k_touch;
-#elif defined CS_TARGETPLATFORM_IOS
-            return Pointer::InputType::k_touch;
-#elif defined CS_TARGETPLATFORM_WINDOWS
-            return Pointer::InputType::k_leftMouseButton;
-#else
-            return nullptr;
-#endif
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
         PointerSystem::PointerSystem()
             : m_nextUniqueId(0)
         {

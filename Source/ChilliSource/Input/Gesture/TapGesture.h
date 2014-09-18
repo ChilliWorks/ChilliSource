@@ -71,8 +71,14 @@ namespace ChilliSource
             /// @param The maximum time between each tap before
             /// the tap counter will reset. Defaults to 0.25
             /// seconds.
+            /// @param The maximum distance from the initial
+            /// tap position a pointer can move before it is no
+            /// longer considered a tap. This value will be scaled
+            /// by the density of the screen. Defaults to 20.
+            /// @param The input type this gesture should listen
+            /// for. By default this uses the default input type.
             //----------------------------------------------------
-			TapGesture(u32 in_numTaps = 1, u32 in_numPointers = 1, f32 in_maxTimeForTap = 0.15f, f32 in_maxTimeBetweenTaps = 0.25f);
+			TapGesture(u32 in_numTaps = 1, u32 in_numPointers = 1, f32 in_maxTimeForTap = 0.15f, f32 in_maxTimeBetweenTaps = 0.25f, f32 in_tapRadius = 20.0f, Pointer::InputType in_inputType = Pointer::GetDefaultInputType());
             //----------------------------------------------------
             /// Queries whether or not this implements the gesture
             /// interface with the given Id.
@@ -116,6 +122,20 @@ namespace ChilliSource
             //----------------------------------------------------
             /// @author Ian Copland
             ///
+            /// @return The maximum distance the tap can move
+            /// before it is no longer considered a tap. When used
+            /// this value is scaled by the screen density.
+            //----------------------------------------------------
+            f32 GetTapRadius() const;
+            //----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The input type this gesture will listen for.
+            //----------------------------------------------------
+            Pointer::InputType GetInputType() const;
+            //----------------------------------------------------
+            /// @author Ian Copland
+            ///
             /// @return An event that can be used to list for
             /// ocurrances of the gesture.
             //----------------------------------------------------
@@ -131,17 +151,30 @@ namespace ChilliSource
             {
                 Core::Vector2 m_initialPosition;
                 Pointer::Id m_pointerId;
+                bool m_isDown;
             };
-            //----------------------------------------------------
-            /// Information on a single tap.
+            //--------------------------------------------------------
+            /// Checks the time stamp to see if any active taps have
+            /// expired and resets the tap count if the time since the
+            /// last tap is exceeded.
             ///
             /// @author Ian Copland
-            //----------------------------------------------------
-            struct TapInfo final
-            {
-                std::vector<PointerInfo> m_pointers;
-                f64 m_startTimestamp;
-            };
+            ///
+            /// @param The current timestamp.
+            //--------------------------------------------------------
+            void CheckForExpiration(f64 in_timestamp);
+            //--------------------------------------------------------
+            /// Resets the active tap if there is one.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------
+            void ResetTap();
+            //--------------------------------------------------------
+            /// Resets the gesture if one is active.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------
+            void ResetGesture();
             //--------------------------------------------------------
             /// Called when a pointer down event occurs.
             ///
@@ -182,9 +215,18 @@ namespace ChilliSource
             u32 m_numPointers;
             f32 m_maxTimeForTap;
             f32 m_maxTimeBetweenTaps;
+            f32 m_tapRadius;
+            Pointer::InputType m_inputType;
             Core::Event<ActivatedDelegate> m_activatedEvent;
             
-            std::vector<TapInfo> m_activeTaps;
+            f32 m_maxTapMoveDistSquared = 0.0f;
+            
+            u32 m_tapCount = 0;
+            bool m_activeTap = false;
+            std::vector<PointerInfo> m_activeTapPointers;
+            f64 m_activeTapStartTimestamp = 0.0;
+            f64 m_lastTapStartTimestamp = 0.0;
+            f64 m_lastTapEndTimestamp = 0.0;
         };
     }
 }
