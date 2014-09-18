@@ -85,6 +85,16 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
+            /// @author S Downie
+            ///
+            /// @param Widget on which to operate
+            ///
+            /// @return Layout or null
+            //----------------------------------------------------------------------------------------
+            ILayout* GetLayout(Widget* in_widget);
+            //----------------------------------------------------------------------------------------
+            /// Proxy function to allow calling on an instance from Lua script
+            ///
             /// Set the percentage size of the widget relative to its parent size i.e. 0.5, 0.5 will
             /// make the widget half the width of the parent and half the height
             ///

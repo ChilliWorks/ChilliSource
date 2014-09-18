@@ -85,6 +85,7 @@ namespace ChilliSource
                                                "getInternalWidget", &WidgetProxy::GetInternalWidget,
                                                "getWidget", &WidgetProxy::GetWidget,
                                                "getDrawable", &WidgetProxy::GetDrawable,
+                                               "getLayout", &WidgetProxy::GetLayout,
                                                "getBoolProperty", &WidgetProxy::GetProperty<bool>,
                                                "getIntProperty", &WidgetProxy::GetProperty<s32>,
                                                "getFloatProperty", &WidgetProxy::GetProperty<f32>,
@@ -126,6 +127,12 @@ namespace ChilliSource
             IDrawable* GetDrawable(Widget* in_widget)
             {
                 return in_widget->GetDrawable();
+            }
+            //----------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------
+            ILayout* GetLayout(Widget* in_widget)
+            {
+                return in_widget->GetLayout();
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
