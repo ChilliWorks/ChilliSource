@@ -37,18 +37,21 @@ namespace ChilliSource
     {
         namespace
         {
-            const f64 k_minTimeBetweenTaps = 0.015;
+            const f32 k_minTimeBetweenTaps = 0.015f;
+            const f32 k_maxTimeForTap = 0.15f;
+            const f32 k_maxTimeBetweenTaps = 0.25f;
+            const f32 k_tapRadius = 20.0f;
         }
         
         CS_DEFINE_NAMEDTYPE(TapGesture);
         //----------------------------------------------------
         //----------------------------------------------------
-        TapGesture::TapGesture(u32 in_numTaps, u32 in_numPointers, f32 in_maxTimeForTap, f32 in_maxTimeBetweenTaps, f32 in_tapRadius, Pointer::InputType in_inputType)
-            : m_numTaps(in_numTaps), m_numPointers(in_numPointers), m_maxTimeForTap(in_maxTimeForTap), m_maxTimeBetweenTaps(in_maxTimeBetweenTaps), m_tapRadius(in_tapRadius), m_inputType(in_inputType)
+        TapGesture::TapGesture(u32 in_numTaps, u32 in_numPointers, Pointer::InputType in_inputType)
+            : m_numTaps(in_numTaps), m_numPointers(in_numPointers), m_inputType(in_inputType)
         {
             Core::Screen* screen = Core::Application::Get()->GetScreen();
             
-            m_maxTapMoveDistSquared = (m_tapRadius * screen->GetDensityScale()) * (m_tapRadius * screen->GetDensityScale());
+            m_maxTapMoveDistSquared = (k_tapRadius * screen->GetDensityScale()) * (k_tapRadius * screen->GetDensityScale());
             m_activeTapPointers.reserve(m_numPointers);
         }
         //----------------------------------------------------
@@ -71,24 +74,6 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        f32 TapGesture::GetMaxTimeForTap() const
-        {
-            return m_maxTimeForTap;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        f32 TapGesture::GetMaxTimeBetweenTaps() const
-        {
-            return m_maxTimeBetweenTaps;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        f32 TapGesture::GetTapRadius() const
-        {
-            return m_tapRadius;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
         Pointer::InputType TapGesture::GetInputType() const
         {
             return m_inputType;
@@ -104,12 +89,12 @@ namespace ChilliSource
         void TapGesture::CheckForExpiration(f64 in_timestamp)
         {
             //Check whether an active tap has expired
-            if (m_activeTap == true && in_timestamp - m_activeTapStartTimestamp > m_maxTimeForTap)
+            if (m_activeTap == true && in_timestamp - m_activeTapStartTimestamp > k_maxTimeForTap)
             {
                 ResetTap();
             }
             
-            if (m_activeTap == false && m_numTaps > 0 && in_timestamp - m_lastTapEndTimestamp > m_maxTimeBetweenTaps)
+            if (m_activeTap == false && m_numTaps > 0 && in_timestamp - m_lastTapEndTimestamp > k_maxTimeBetweenTaps)
             {
                 ResetGesture();
             }

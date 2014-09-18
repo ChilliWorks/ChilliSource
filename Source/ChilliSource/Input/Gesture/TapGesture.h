@@ -64,21 +64,11 @@ namespace ChilliSource
             /// @param The number of taps required to activate
             /// this tap gesture. Defaults to 1.
             /// @param The number of pointers that should be
-            /// down per tap.
-            /// @param The maximum time a pointer can be down
-            /// for it to be considered a tap. Defaults to 0.15
-            /// seconds.
-            /// @param The maximum time between each tap before
-            /// the tap counter will reset. Defaults to 0.25
-            /// seconds.
-            /// @param The maximum distance from the initial
-            /// tap position a pointer can move before it is no
-            /// longer considered a tap. This value will be scaled
-            /// by the density of the screen. Defaults to 20.
+            /// down per tap. Defaults to 1.
             /// @param The input type this gesture should listen
-            /// for. By default this uses the default input type.
+            /// for. Defaults to using the default input type.
             //----------------------------------------------------
-			TapGesture(u32 in_numTaps = 1, u32 in_numPointers = 1, f32 in_maxTimeForTap = 0.15f, f32 in_maxTimeBetweenTaps = 0.25f, f32 in_tapRadius = 20.0f, Pointer::InputType in_inputType = Pointer::GetDefaultInputType());
+			TapGesture(u32 in_numTaps = 1, u32 in_numPointers = 1, Pointer::InputType in_inputType = Pointer::GetDefaultInputType());
             //----------------------------------------------------
             /// Queries whether or not this implements the gesture
             /// interface with the given Id.
@@ -105,28 +95,6 @@ namespace ChilliSource
             /// Gesture for each tap.
             //----------------------------------------------------
             u32 GetNumPointers() const;
-            //----------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The maximum time a pointer can be down for
-            /// the gesture to consider it a tap.
-            //----------------------------------------------------
-            f32 GetMaxTimeForTap() const;
-            //----------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The maximum time between taps before the
-            /// tap counter is reset.
-            //----------------------------------------------------
-            f32 GetMaxTimeBetweenTaps() const;
-            //----------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The maximum distance the tap can move
-            /// before it is no longer considered a tap. When used
-            /// this value is scaled by the screen density.
-            //----------------------------------------------------
-            f32 GetTapRadius() const;
             //----------------------------------------------------
             /// @author Ian Copland
             ///
@@ -213,9 +181,6 @@ namespace ChilliSource
             
             u32 m_numTaps;
             u32 m_numPointers;
-            f32 m_maxTimeForTap;
-            f32 m_maxTimeBetweenTaps;
-            f32 m_tapRadius;
             Pointer::InputType m_inputType;
             Core::Event<ActivatedDelegate> m_activatedEvent;
             
