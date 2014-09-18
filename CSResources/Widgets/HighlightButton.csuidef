@@ -4,14 +4,18 @@
     "NormalTextureLocation": "StorageLocation",
     "NormalTexturePath": "String",
     "HighlightTextureLocation": "StorageLocation",
-    "HighlightTexturePath": "String"
+    "HighlightTexturePath": "String",
+    "NormalColour":"Colour",
+    "HighlightColour":"Colour"
   },
   "Defaults": {
     "Name": "HighlightButton",
     "NormalTextureLocation": "None",
     "NormalTexturePath": "",
     "HighlightTextureLocation": "None",
-    "HighlightTexturePath": ""
+    "HighlightTexturePath": "",
+    "NormalColour":"1 1 1 1",
+    "HighlightColour":"0.6 0.6 0.6 0.6"
   },
   "Behaviour": {
     "StorageLocation": "Package",

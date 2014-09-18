@@ -13,13 +13,24 @@
 
 --Caching the functions locally means we don't have to peform a lookup for each call
 local setTexture = Drawable.setTexture
+local setColour = Widget.setColour
 local getDrawable = Widget.getDrawable
 local getStorageLocationProperty = Widget.getStorageLocationProperty
 local getStringProperty = Widget.getStringProperty
+local getColourProperty = Widget.getColourProperty
 local getPointerId = Pointer.getId
 
 local activePointerIds = {}
+local highlightingPointerIds = {}
 
+-----------------------------------------------------
+-- Called when the widget is added to the canvas
+--
+-- @author S Downie
+-----------------------------------------------------
+function onAddedToCanvas()
+    unhighlight()
+end
 -----------------------------------------------------
 -- Called when the widget recieves an input press
 -- event within its bounds. This will toggle the
@@ -32,12 +43,11 @@ local activePointerIds = {}
 -- @param Input type i.e. touch, left mouse, right mouse, etc.
 -----------------------------------------------------
 function onPressedInside(in_pointer, in_timeStamp, in_inputType)
-    if(in_inputType == InputType.Default) then
-        activePointerIds[getPointerId(in_pointer)] = true
-        drawable = getDrawable(this)
-        highlightLocation = getStorageLocationProperty(this, "HighlightTextureLocation")
-        highlightPath = getStringProperty(this, "HighlightTexturePath")
-        setTexture(drawable, highlightLocation, highlightPath)
+    if in_inputType == InputType.Default then
+        pointerId = getPointerId(in_pointer)
+        activePointerIds[pointerId] = true
+        highlightingPointerIds[pointerId] = true
+        highlight()
     end
 end
 -----------------------------------------------------
@@ -52,11 +62,10 @@ end
 -- @param Timestamp of the input event
 -----------------------------------------------------
 function onMoveEntered(in_pointer, in_timeStamp)
-    if activePointerIds[getPointerId(in_pointer)] then
-        drawable = getDrawable(this)
-        highlightLocation = getStorageLocationProperty(this, "HighlightTextureLocation")
-        highlightPath = getStringProperty(this, "HighlightTexturePath")
-        setTexture(drawable, highlightLocation, highlightPath)
+    pointerId = getPointerId(in_pointer)
+    if activePointerIds[pointerId] then
+        highlightingPointerIds[pointerId] = true
+        highlight()
     end
 end
 -----------------------------------------------------
@@ -71,11 +80,12 @@ end
 -- @param Timestamp of the input event
 -----------------------------------------------------
 function onMoveExited(in_pointer, in_timeStamp)
-    if activePointerIds[getPointerId(in_pointer)] then
-        drawable = getDrawable(this)
-        normalLocation = getStorageLocationProperty(this, "NormalTextureLocation")
-        normalPath = getStringProperty(this, "NormalTexturePath")
-        setTexture(drawable, normalLocation, normalPath)
+    pointerId = getPointerId(in_pointer)
+    if activePointerIds[pointerId] then
+        highlightingPointerIds[pointerId] = nil
+        if next(highlightingPointerIds) == nil then
+            unhighlight()
+        end
     end
 end
 -----------------------------------------------------
@@ -92,11 +102,10 @@ end
 function onReleasedInside(in_pointer, in_timeStamp, in_inputType)
     pointerId = getPointerId(in_pointer)
     if activePointerIds[pointerId] then
-        activePointerIds[pointerId] = nil
-        drawable = getDrawable(this)
-        normalLocation = getStorageLocationProperty(this, "NormalTextureLocation")
-        normalPath = getStringProperty(this, "NormalTexturePath")
-        setTexture(drawable, normalLocation, normalPath)
+        highlightingPointerIds[pointerId] = nil
+        if next(highlightingPointerIds) == nil then
+            unhighlight()
+        end
     end
 end
 -----------------------------------------------------
@@ -115,4 +124,36 @@ function onReleasedOutside(in_pointer, in_timeStamp, in_inputType)
     if activePointerIds[pointerId] then
         activePointerIds[pointerId] = nil
     end
+end
+-----------------------------------------------------
+-- Set the view of the button to highlighted
+--
+-- @author S Downie
+-----------------------------------------------------
+function highlight()
+    path = getStringProperty(this, "HighlightTexturePath")
+    if path ~= "" then
+        location = getStorageLocationProperty(this, "HighlightTextureLocation")
+        drawable = getDrawable(this)
+        setTexture(drawable, location, path)
+    end
+
+    r, g, b, a = getColourProperty(this, "HighlightColour")
+    setColour(this, r, g, b, a)
+end
+-----------------------------------------------------
+-- Set the view of the button to not be highlighted
+--
+-- @author S Downie
+-----------------------------------------------------
+function unhighlight()
+    path = getStringProperty(this, "NormalTexturePath")
+    if path ~= "" then
+        location = getStorageLocationProperty(this, "NormalTextureLocation")
+        drawable = getDrawable(this)
+        setTexture(drawable, location, path)
+    end
+
+    r, g, b, a = getColourProperty(this, "NormalColour")
+    setColour(this, r, g, b, a)
 end
