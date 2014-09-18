@@ -50,9 +50,13 @@
 #include <ChilliSource/UI/Drawable/TextureDrawableProxy.h>
 #include <ChilliSource/UI/Drawable/ThreePatchDrawableProxy.h>
 #include <ChilliSource/UI/Layout/GridLayout.h>
+#include <ChilliSource/UI/Layout/GridLayoutProxy.h>
 #include <ChilliSource/UI/Layout/HListLayout.h>
+#include <ChilliSource/UI/Layout/HListLayoutProxy.h>
+#include <ChilliSource/UI/Layout/LayoutProxy.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>
 #include <ChilliSource/UI/Layout/VListLayout.h>
+#include <ChilliSource/UI/Layout/VListLayoutProxy.h>
 
 namespace ChilliSource
 {
@@ -185,6 +189,10 @@ namespace ChilliSource
             TextureDrawableProxy::RegisterWithLua(luaSystem);
             NinePatchDrawableProxy::RegisterWithLua(luaSystem);
             ThreePatchDrawableProxy::RegisterWithLua(luaSystem);
+            LayoutProxy::RegisterWithLua(luaSystem);
+            GridLayoutProxy::RegisterWithLua(luaSystem);
+            HListLayoutProxy::RegisterWithLua(luaSystem);
+            VListLayoutProxy::RegisterWithLua(luaSystem);
             
             luaSystem->RegisterClass("Screen", Core::Application::Get()->GetScreen(),
                                      "getResolution", &Core::Screen::GetResolution

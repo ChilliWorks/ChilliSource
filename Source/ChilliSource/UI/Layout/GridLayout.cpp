@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Base/Widget.h>
+#include <ChilliSource/UI/Layout/LayoutType.h>
 
 namespace ChilliSource
 {
@@ -89,6 +90,12 @@ namespace ChilliSource
         std::vector<PropertyMap::PropertyDesc> GridLayout::GetPropertyDescs()
         {
             return k_propertyDescs;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        LayoutType GridLayout::GetType() const
+        {
+            return LayoutType::k_grid;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 //
-//  ILayout.h
+//  VListLayoutProxy.cpp
 //  Chilli Source
-//  Created by Scott Downie on 18/04/2014.
+//  Created by Scott Downie on 18/09/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,88 +26,66 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_LAYOUT_ILAYOUT_H_
-#define _CHILLISOURCE_UI_LAYOUT_ILAYOUT_H_
+#include <ChilliSource/UI/Layout/VListLayoutProxy.h>
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
-
-#include <vector>
+#include <ChilliSource/Scripting/Lua/LuaSystem.h>
+#include <ChilliSource/UI/Layout/VListLayout.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
-        //----------------------------------------------------------------------------------------
-        /// Interface for laying out widgets. Each widget has its own layout
-        ///
-        /// @author S Downie
-        //----------------------------------------------------------------------------------------
-        class ILayout
+        namespace VListLayoutProxy
         {
-        public:
-            CS_DECLARE_NOCOPY(ILayout);
             //----------------------------------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
             //----------------------------------------------------------------------------------------
-            ILayout() = default;
+            void RegisterWithLua(Scripting::LuaSystem* in_system)
+            {
+                in_system->RegisterStaticClass("VListLayout",
+                                               "getType", VListLayoutProxy::GetType,
+                                               "setNumCells", VListLayoutProxy::SetNumCells,
+                                               "setRelativeMargins", VListLayoutProxy::SetRelativeMargins,
+                                               "setAbsoluteMargins", VListLayoutProxy::SetAbsoluteMargins,
+                                               "setRelativeSpacing", VListLayoutProxy::SetRelativeSpacing,
+                                               "setAbsoluteSpacing", VListLayoutProxy::SetAbsoluteSpacing
+                                               );
+            }
             //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Layout type
-            ///
-            /// @return The list of properties supported by the layout of given type
             //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs(LayoutType in_type);
+            LayoutType GetType(VListLayout* in_layout)
+            {
+                return in_layout->GetType();
+            }
             //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The layout type of this object
             //----------------------------------------------------------------------------------------
-            virtual LayoutType GetType() const = 0;
+            void SetNumCells(VListLayout* in_layout, u32 in_numCells)
+            {
+                in_layout->SetNumCells(in_numCells);
+            }
             //----------------------------------------------------------------------------------------
-            /// Create the layout sizes and positions based on the current layout properties and the
-            /// owning widget.
-            ///
-            /// @author S Downie
             //----------------------------------------------------------------------------------------
-            virtual void BuildLayout() = 0;
+            void SetRelativeMargins(VListLayout* in_layout, f32 in_top, f32 in_right, f32 in_bottom, f32 in_left)
+            {
+                in_layout->SetRelativeMargins(in_top, in_right, in_bottom, in_left);
+            }
             //----------------------------------------------------------------------------------------
-            /// Get the final size of the widget that occupies the space at the given index
-            ///
-            /// @author S Downie
-            ///
-            /// @param Space index
-            ///
-            /// @return Final absolute screen size
             //----------------------------------------------------------------------------------------
-            virtual Core::Vector2 GetSizeForIndex(u32 in_index) const = 0;
+            void SetAbsoluteMargins(VListLayout* in_layout, f32 in_top, f32 in_right, f32 in_bottom, f32 in_left)
+            {
+                in_layout->SetAbsoluteMargins(in_top, in_right, in_bottom, in_left);
+            }
             //----------------------------------------------------------------------------------------
-            /// Get the local position of the widget that occupies the space at the given index
-            ///
-            /// @author S Downie
-            ///
-            /// @param Space index
-            ///
-            /// @return Local position (aligned middle centre of the cell)
             //----------------------------------------------------------------------------------------
-            virtual Core::Vector2 GetPositionForIndex(u32 in_index) const = 0;
+            void SetRelativeSpacing(VListLayout* in_layout, f32 in_spacing)
+            {
+                in_layout->SetRelativeSpacing(in_spacing);
+            }
             //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param The widget that owns and uses this layout
             //----------------------------------------------------------------------------------------
-            virtual void SetWidget(Widget* in_widget) = 0;
-            //----------------------------------------------------------------------------------------
-            /// Virtual destructor
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            virtual ~ILayout(){}
-        };
+            void SetAbsoluteSpacing(VListLayout* in_layout, f32 in_spacing)
+            {
+                in_layout->SetAbsoluteSpacing(in_spacing);
+            }
+        }
     }
 }
-
-#endif

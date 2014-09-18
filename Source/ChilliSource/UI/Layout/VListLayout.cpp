@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Base/Widget.h>
+#include <ChilliSource/UI/Layout/LayoutType.h>
 
 namespace ChilliSource
 {
@@ -76,6 +77,12 @@ namespace ChilliSource
         std::vector<PropertyMap::PropertyDesc> VListLayout::GetPropertyDescs()
         {
             return k_propertyDescs;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        LayoutType VListLayout::GetType() const
+        {
+            return LayoutType::k_vList;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

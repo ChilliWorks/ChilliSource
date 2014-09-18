@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		8113673519C9A86200D9AEDC /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8113673219C9A86200D9AEDC /* Filter.cpp */; };
 		8113678119CAD25400D9AEDC /* PointerProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8113677F19CAD25400D9AEDC /* PointerProxy.cpp */; };
+		811367C419CB162100D9AEDC /* LayoutProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 811367C219CB162100D9AEDC /* LayoutProxy.cpp */; };
+		811367C719CB180200D9AEDC /* GridLayoutProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 811367C519CB180200D9AEDC /* GridLayoutProxy.cpp */; };
+		811367CA19CB1B0B00D9AEDC /* VListLayoutProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 811367C819CB1B0B00D9AEDC /* VListLayoutProxy.cpp */; };
+		811367CD19CB1BA300D9AEDC /* HListLayoutProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 811367CB19CB1BA300D9AEDC /* HListLayoutProxy.cpp */; };
 		8132AB4B19A4E20900101323 /* LuaScript.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8132AB4219A4E20900101323 /* LuaScript.cpp */; };
 		8132AB4C19A4E20900101323 /* LuaSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8132AB4419A4E20900101323 /* LuaSystem.cpp */; };
 		8132AB4D19A4E20900101323 /* LuaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8132AB4619A4E20900101323 /* LuaUtils.cpp */; };
@@ -310,6 +314,14 @@
 		8113673419C9A86200D9AEDC /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		8113677F19CAD25400D9AEDC /* PointerProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PointerProxy.cpp; sourceTree = "<group>"; };
 		8113678019CAD25400D9AEDC /* PointerProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointerProxy.h; sourceTree = "<group>"; };
+		811367C219CB162100D9AEDC /* LayoutProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutProxy.cpp; sourceTree = "<group>"; };
+		811367C319CB162100D9AEDC /* LayoutProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutProxy.h; sourceTree = "<group>"; };
+		811367C519CB180200D9AEDC /* GridLayoutProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridLayoutProxy.cpp; sourceTree = "<group>"; };
+		811367C619CB180200D9AEDC /* GridLayoutProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridLayoutProxy.h; sourceTree = "<group>"; };
+		811367C819CB1B0B00D9AEDC /* VListLayoutProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListLayoutProxy.cpp; sourceTree = "<group>"; };
+		811367C919CB1B0B00D9AEDC /* VListLayoutProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VListLayoutProxy.h; sourceTree = "<group>"; };
+		811367CB19CB1BA300D9AEDC /* HListLayoutProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HListLayoutProxy.cpp; sourceTree = "<group>"; };
+		811367CC19CB1BA300D9AEDC /* HListLayoutProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HListLayoutProxy.h; sourceTree = "<group>"; };
 		8132AB3819A4E20900101323 /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
 		8132AB3E19A4E20900101323 /* LuaFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LuaFunction.h; sourceTree = "<group>"; };
 		8132AB3F19A4E20900101323 /* Function.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Function.h; sourceTree = "<group>"; };
@@ -1136,14 +1148,22 @@
 			children = (
 				81496B8B1980F1AE004E79F2 /* GridLayout.cpp */,
 				81496B8C1980F1AE004E79F2 /* GridLayout.h */,
+				811367C519CB180200D9AEDC /* GridLayoutProxy.cpp */,
+				811367C619CB180200D9AEDC /* GridLayoutProxy.h */,
 				81496B8D1980F1AE004E79F2 /* HListLayout.cpp */,
 				81496B8E1980F1AE004E79F2 /* HListLayout.h */,
+				811367CB19CB1BA300D9AEDC /* HListLayoutProxy.cpp */,
+				811367CC19CB1BA300D9AEDC /* HListLayoutProxy.h */,
 				81AA8BB21987B68700E559F6 /* ILayout.cpp */,
 				81496B8F1980F1AE004E79F2 /* ILayout.h */,
+				811367C219CB162100D9AEDC /* LayoutProxy.cpp */,
+				811367C319CB162100D9AEDC /* LayoutProxy.h */,
 				81E3E3761986B3E60002A9FD /* LayoutType.cpp */,
 				81496BAC1982A1B8004E79F2 /* LayoutType.h */,
 				81496B901980F1AE004E79F2 /* VListLayout.cpp */,
 				81496B911980F1AE004E79F2 /* VListLayout.h */,
+				811367C819CB1B0B00D9AEDC /* VListLayoutProxy.cpp */,
+				811367C919CB1B0B00D9AEDC /* VListLayoutProxy.h */,
 			);
 			path = Layout;
 			sourceTree = "<group>";
@@ -2632,6 +2652,7 @@
 				81D8B6D71962E0F70010DA84 /* Texture.cpp in Sources */,
 				81D8B4121962E0EC0010DA84 /* EventConnection.cpp in Sources */,
 				81D8B4241962E0EC0010DA84 /* AppNotificationSystem.cpp in Sources */,
+				811367C419CB162100D9AEDC /* LayoutProxy.cpp in Sources */,
 				81D8B4431962E0EC0010DA84 /* InputEvents.cpp in Sources */,
 				81D8B4251962E0EC0010DA84 /* LocalNotificationSystem.cpp in Sources */,
 				81D8B4651962E0EC0010DA84 /* AlignmentAnchors.cpp in Sources */,
@@ -2736,6 +2757,7 @@
 				81D8B40F1962E0EC0010DA84 /* Component.cpp in Sources */,
 				81D8B44D1962E0EC0010DA84 /* HorizontalStretchableImage.cpp in Sources */,
 				81D8B40B1962E0EC0010DA84 /* HashMD5.cpp in Sources */,
+				811367C719CB180200D9AEDC /* GridLayoutProxy.cpp in Sources */,
 				81D8B4791962E0EC0010DA84 /* LightComponent.cpp in Sources */,
 				81D8B43A1962E0EC0010DA84 /* PerformanceTimer.cpp in Sources */,
 				81D8B4081962E0EC0010DA84 /* AESEncrypt.cpp in Sources */,
@@ -2744,6 +2766,7 @@
 				81D8B6B41962E0F70010DA84 /* EmailComposerDelegate.mm in Sources */,
 				81D8B4461962E0EC0010DA84 /* HighlightButton.cpp in Sources */,
 				81D8B49D1962E0EC0010DA84 /* Texture.cpp in Sources */,
+				811367CD19CB1BA300D9AEDC /* HListLayoutProxy.cpp in Sources */,
 				8132AB5219A4E3EC00101323 /* LuaSource.cpp in Sources */,
 				81D8B48A1962E0EC0010DA84 /* ParticleAffectorFactory.cpp in Sources */,
 				81D8B6B31962E0F70010DA84 /* EmailComposer.mm in Sources */,
@@ -2774,6 +2797,7 @@
 				81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */,
 				81D8B4881962E0EC0010DA84 /* ColourChangerParticleAffector.cpp in Sources */,
 				81D8B4401962E0EC0010DA84 /* DebugStatsView.cpp in Sources */,
+				811367CA19CB1B0B00D9AEDC /* VListLayoutProxy.cpp in Sources */,
 				81D8B4871962E0EC0010DA84 /* SubMesh.cpp in Sources */,
 				81D8B47A1962E0EC0010DA84 /* PointLightComponent.cpp in Sources */,
 				816708191988DD3C00A1DE32 /* WidgetTemplate.cpp in Sources */,

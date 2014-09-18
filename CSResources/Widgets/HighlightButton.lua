@@ -133,9 +133,9 @@ end
 -----------------------------------------------------
 function highlight()
     path = getStringProperty(this, "HighlightTexturePath")
-    if path ~= "" then
+    drawable = getDrawable(this)
+    if drawable and path ~= "" then
         location = getStorageLocationProperty(this, "HighlightTextureLocation")
-        drawable = getDrawable(this)
         setTexture(drawable, location, path)
     end
 
@@ -149,9 +149,9 @@ end
 -----------------------------------------------------
 function unhighlight()
     path = getStringProperty(this, "NormalTexturePath")
-    if path ~= "" then
+    drawable = getDrawable(this)
+    if drawable and path ~= "" then
         location = getStorageLocationProperty(this, "NormalTextureLocation")
-        drawable = getDrawable(this)
         setTexture(drawable, location, path)
     end
 

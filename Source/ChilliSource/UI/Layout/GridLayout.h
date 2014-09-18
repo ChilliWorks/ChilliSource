@@ -102,6 +102,12 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
+            /// @return The layout type of this object
+            //----------------------------------------------------------------------------------------
+            LayoutType GetType() const override;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
             /// @param The number of rows that make up the grid. The size of each row is based
             /// on the number of rows and the overall layout size, governed by the owning widget
             //----------------------------------------------------------------------------------------

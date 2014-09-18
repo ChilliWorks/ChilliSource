@@ -1,7 +1,7 @@
 //
-//  HListLayout.h
+//  GridLayoutProxy.h
 //  Chilli Source
-//  Created by Scott Downie on 09/06/2014.
+//  Created by Scott Downie on 18/09/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,152 +26,122 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_UI_LAYOUT_HLISTLAYOUT_H_
-#define _CHILLISOURCE_UI_LAYOUT_HLISTLAYOUT_H_
+#ifndef _CHILLISOURCE_UI_LAYOUT_GRIDLAYOUTPROXY_H_
+#define _CHILLISOURCE_UI_LAYOUT_GRIDLAYOUTPROXY_H_
 
 #include <ChilliSource/ChilliSource.h>
-
-#include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
-#include <ChilliSource/UI/Layout/GridLayout.h>
-#include <ChilliSource/UI/Layout/ILayout.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
         //----------------------------------------------------------------------------------------
-        /// Lays out widgets in a horizontal list where each widget has a single column. The columns
-        /// have spacing between them and the entire list has a surrounding margin. The list is
-        /// filled left to right.
-        ///
-        /// The list size is fixed and will not expand
+        /// Functions from grid layout that are exposed to Lua as static functions acting
+        /// on the given drawable. This allows Lua to manipulate layouts without owning them
+        /// as expensive full data.
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        class HListLayout final : public ILayout
+        namespace GridLayoutProxy
         {
-        public:
             //----------------------------------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            HListLayout();
-            //----------------------------------------------------------------------------------------
-            /// Constructor that builds the layout from key-value properties
-            ///
-            /// Properties:
-            ///
-            ///     - NumCells - u32 - Number of cells
-            ///     - RelSpacing - f32 - Relative spacing
-            ///     - AbsSpacing - f32 - Absolute spacing
-            ///     - RelMargins - f32 f32 f32 f32 - Relative margins top, right, bottom, left
-            ///     - AbsMargins - f32 f32 f32 f32 - Absolute margins top, right, bottom, left
+            /// Register all the proxy functions with Lua
             ///
             /// @author S Downie
             ///
-            /// @param Key-value properties
+            /// @param Lua system
             //----------------------------------------------------------------------------------------
-            HListLayout(const PropertyMap& in_properties);
+            void RegisterWithLua(Scripting::LuaSystem* in_system);
+            //----------------------------------------------------------------------------------------
+            /// Proxy function to allow calling on an instance from Lua script
+            ///
+            /// @author S Downie
+            ///
+            /// @param Layout on which to operate
+            ///
+            /// @return The type of this layout instance
+            //----------------------------------------------------------------------------------------
+            LayoutType GetType(GridLayout* in_layout);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return The list of properties supported by this layout
+            /// @param Layout on which to operate
+            /// @param The number of rows that make up the grid. The size of each row is based
+            /// on the number of rows and the overall layout size, governed by the owning widget
             //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The layout type of this object
-            //----------------------------------------------------------------------------------------
-            LayoutType GetType() const override;
+            void SetNumRows(GridLayout* in_layout, u32 in_numRows);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param The number of cells that make up the list. The size of each cell is based
-            /// on the number of cells and the overall layout size, governed by the owning widget
+            /// @param Layout on which to operate
+            /// @param The number of columns that make up the grid. The size of each column is based
+            /// on the number of columns and the overall layout size, governed by the owning widget
             //----------------------------------------------------------------------------------------
-            void SetNumCells(u32 in_numCells);
+            void SetNumCols(GridLayout* in_layout, u32 in_numCols);
             //----------------------------------------------------------------------------------------
             /// Set the relative border size margins for each edge. These are relative to
             /// the overall layout size (i.e owning widget size).
             ///
             /// @author S Downie
             ///
+            /// @param Layout on which to operate
             /// @param Top
             /// @param Right
             /// @param Bottom
             /// @param Left
             //----------------------------------------------------------------------------------------
-            void SetRelativeMargins(f32 in_top, f32 in_right, f32 in_bottom, f32 in_left);
+            void SetRelativeMargins(GridLayout* in_layout, f32 in_top, f32 in_right, f32 in_bottom, f32 in_left);
             //----------------------------------------------------------------------------------------
             /// Set the absolute border size margins for each edge.
             ///
             /// @author S Downie
             ///
+            /// @param Layout on which to operate
             /// @param Top
             /// @param Right
             /// @param Bottom
             /// @param Left
             //----------------------------------------------------------------------------------------
-            void SetAbsoluteMargins(f32 in_top, f32 in_right, f32 in_bottom, f32 in_left);
+            void SetAbsoluteMargins(GridLayout* in_layout, f32 in_top, f32 in_right, f32 in_bottom, f32 in_left);
             //----------------------------------------------------------------------------------------
-            /// Set the relative spacing between items. This is relative to the overall layout size
+            /// Set the relative spacing between items horizontally. This is relative to the overall layout size
             /// (i.e. the owning widget)
             ///
             /// @author S Downie
             ///
+            /// @param Layout on which to operate
             /// @param Spacing
             //----------------------------------------------------------------------------------------
-            void SetRelativeSpacing(f32 in_spacing);
+            void SetRelativeHSpacing(GridLayout* in_layout, f32 in_spacing);
             //----------------------------------------------------------------------------------------
-            /// Set the absolute spacing between items.
+            /// Set the absolute spacing between items horizontally.
             ///
             /// @author S Downie
             ///
+            /// @param Layout on which to operate
             /// @param Spacing
             //----------------------------------------------------------------------------------------
-            void SetAbsoluteSpacing(f32 in_spacing);
+            void SetAbsoluteHSpacing(GridLayout* in_layout, f32 in_spacing);
             //----------------------------------------------------------------------------------------
-            /// Create the list layout sizes and positions based on the current layout properties and the
-            /// owning widget.
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            void BuildLayout() override;
-            //----------------------------------------------------------------------------------------
-            /// Get the final size of the widget that occupies the space at the given index
+            /// Set the relative spacing between items vertically. This is relative to the overall layout size
+            /// (i.e. the owning widget)
             ///
             /// @author S Downie
             ///
-            /// @param Space index
-            ///
-            /// @return Final absolute screen size
+            /// @param Layout on which to operate
+            /// @param Spacing
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetSizeForIndex(u32 in_index) const override;
+            void SetRelativeVSpacing(GridLayout* in_layout, f32 in_spacing);
             //----------------------------------------------------------------------------------------
-            /// Get the local position of the widget that occupies the space at the given index
+            /// Set the absolute spacing between items vertically.
             ///
             /// @author S Downie
             ///
-            /// @param Space index
-            ///
-            /// @return Local position in layout space (aligned middle centre of the cell)
+            /// @param Layout on which to operate
+            /// @param Spacing
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetPositionForIndex(u32 in_index) const override;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param The widget that owns and uses this layout
-            //----------------------------------------------------------------------------------------
-            void SetWidget(Widget* in_widget);
-            
-        private:
-            
-            GridLayout m_gridLayout;
-        };
+            void SetAbsoluteVSpacing(GridLayout* in_layout, f32 in_spacing);
+        }
     }
 }
 

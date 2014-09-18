@@ -84,6 +84,12 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
+            /// @return The layout type of this object
+            //----------------------------------------------------------------------------------------
+            LayoutType GetType() const override;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
             /// @param The number of cells that make up the list. The size of each cell is based
             /// on the number of cells and the overall layout size, governed by the owning widget
             //----------------------------------------------------------------------------------------

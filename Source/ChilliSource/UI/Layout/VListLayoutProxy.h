@@ -1,7 +1,7 @@
 //
-//  ILayout.h
+//  VListLayoutProxy.h
 //  Chilli Source
-//  Created by Scott Downie on 18/04/2014.
+//  Created by Scott Downie on 18/09/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,87 +26,94 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_LAYOUT_ILAYOUT_H_
-#define _CHILLISOURCE_UI_LAYOUT_ILAYOUT_H_
+#ifndef _CHILLISOURCE_UI_LAYOUT_VLISTLAYOUTPROXY_H_
+#define _CHILLISOURCE_UI_LAYOUT_VLISTLAYOUTPROXY_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
-
-#include <vector>
 
 namespace ChilliSource
 {
     namespace UI
     {
         //----------------------------------------------------------------------------------------
-        /// Interface for laying out widgets. Each widget has its own layout
+        /// Functions from vertical list layout that are exposed to Lua as static functions acting
+        /// on the given drawable. This allows Lua to manipulate layouts without owning them
+        /// as expensive full data.
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        class ILayout
+        namespace VListLayoutProxy
         {
-        public:
-            CS_DECLARE_NOCOPY(ILayout);
             //----------------------------------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            ILayout() = default;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Layout type
-            ///
-            /// @return The list of properties supported by the layout of given type
-            //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs(LayoutType in_type);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The layout type of this object
-            //----------------------------------------------------------------------------------------
-            virtual LayoutType GetType() const = 0;
-            //----------------------------------------------------------------------------------------
-            /// Create the layout sizes and positions based on the current layout properties and the
-            /// owning widget.
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            virtual void BuildLayout() = 0;
-            //----------------------------------------------------------------------------------------
-            /// Get the final size of the widget that occupies the space at the given index
+            /// Register all the proxy functions with Lua
             ///
             /// @author S Downie
             ///
-            /// @param Space index
-            ///
-            /// @return Final absolute screen size
+            /// @param Lua system
             //----------------------------------------------------------------------------------------
-            virtual Core::Vector2 GetSizeForIndex(u32 in_index) const = 0;
+            void RegisterWithLua(Scripting::LuaSystem* in_system);
             //----------------------------------------------------------------------------------------
-            /// Get the local position of the widget that occupies the space at the given index
+            /// Proxy function to allow calling on an instance from Lua script
             ///
             /// @author S Downie
             ///
-            /// @param Space index
+            /// @param Layout on which to operate
             ///
-            /// @return Local position (aligned middle centre of the cell)
+            /// @return The type of this layout instance
             //----------------------------------------------------------------------------------------
-            virtual Core::Vector2 GetPositionForIndex(u32 in_index) const = 0;
+            LayoutType GetType(VListLayout* in_layout);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param The widget that owns and uses this layout
+            /// @param Layout on which to operate
+            /// @param The number of cells that make up the list.
             //----------------------------------------------------------------------------------------
-            virtual void SetWidget(Widget* in_widget) = 0;
+            void SetNumCells(VListLayout* in_layout, u32 in_numCells);
             //----------------------------------------------------------------------------------------
-            /// Virtual destructor
+            /// Set the relative border size margins for each edge. These are relative to
+            /// the overall layout size (i.e owning widget size).
             ///
             /// @author S Downie
+            ///
+            /// @param Layout on which to operate
+            /// @param Top
+            /// @param Right
+            /// @param Bottom
+            /// @param Left
             //----------------------------------------------------------------------------------------
-            virtual ~ILayout(){}
-        };
+            void SetRelativeMargins(VListLayout* in_layout, f32 in_top, f32 in_right, f32 in_bottom, f32 in_left);
+            //----------------------------------------------------------------------------------------
+            /// Set the absolute border size margins for each edge.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Layout on which to operate
+            /// @param Top
+            /// @param Right
+            /// @param Bottom
+            /// @param Left
+            //----------------------------------------------------------------------------------------
+            void SetAbsoluteMargins(VListLayout* in_layout, f32 in_top, f32 in_right, f32 in_bottom, f32 in_left);
+            //----------------------------------------------------------------------------------------
+            /// Set the relative spacing between items. This is relative to the overall layout size
+            /// (i.e. the owning widget)
+            ///
+            /// @author S Downie
+            ///
+            /// @param Layout on which to operate
+            /// @param Spacing
+            //----------------------------------------------------------------------------------------
+            void SetRelativeSpacing(VListLayout* in_layout, f32 in_spacing);
+            //----------------------------------------------------------------------------------------
+            /// Set the absolute spacing between items.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Layout on which to operate
+            /// @param Spacing
+            //----------------------------------------------------------------------------------------
+            void SetAbsoluteSpacing(VListLayout* in_layout, f32 in_spacing);
+        }
     }
 }
 
