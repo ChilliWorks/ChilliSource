@@ -17,6 +17,7 @@
 		81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D9196C2B31000F13DD /* TextEntry.mm */; };
 		81B1D2DD196C2B31000F13DD /* TextEntryDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2DB196C2B31000F13DD /* TextEntryDelegate.mm */; };
 		81CF34A119CC297600B9D0B1 /* DragGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CF349F19CC297600B9D0B1 /* DragGesture.cpp */; };
+		81CF34A419CC67AC00B9D0B1 /* HoldGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */; };
 		81D8ACF91962CEDC0010DA84 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8ACF81962CEDC0010DA84 /* Foundation.framework */; };
 		81D8B1E61962D1B90010DA84 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1CF1962D1B90010DA84 /* Accounts.framework */; };
 		81D8B1E71962D1B90010DA84 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1D01962D1B90010DA84 /* AddressBook.framework */; };
@@ -350,6 +351,8 @@
 		81B1D2DF196D9713000F13DD /* ModifierKeyCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModifierKeyCode.h; sourceTree = "<group>"; };
 		81CF349F19CC297600B9D0B1 /* DragGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DragGesture.cpp; sourceTree = "<group>"; };
 		81CF34A019CC297600B9D0B1 /* DragGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragGesture.h; sourceTree = "<group>"; };
+		81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HoldGesture.cpp; sourceTree = "<group>"; };
+		81CF34A319CC67AC00B9D0B1 /* HoldGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HoldGesture.h; sourceTree = "<group>"; };
 		81D8ACF51962CEDC0010DA84 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D8ACF81962CEDC0010DA84 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		81D8AD061962CEDC0010DA84 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -924,6 +927,8 @@
 				81AAFBB919C9C18100CD4A14 /* TapGesture.h */,
 				81CF349F19CC297600B9D0B1 /* DragGesture.cpp */,
 				81CF34A019CC297600B9D0B1 /* DragGesture.h */,
+				81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */,
+				81CF34A319CC67AC00B9D0B1 /* HoldGesture.h */,
 			);
 			path = Gesture;
 			sourceTree = "<group>";
@@ -2486,6 +2491,7 @@
 				81D8B4321962E0EC0010DA84 /* StringParser.cpp in Sources */,
 				81D8B4A71962E0EC0010DA84 /* Subtitles.cpp in Sources */,
 				81D8B40F1962E0EC0010DA84 /* Component.cpp in Sources */,
+				81CF34A419CC67AC00B9D0B1 /* HoldGesture.cpp in Sources */,
 				81D8B44D1962E0EC0010DA84 /* HorizontalStretchableImage.cpp in Sources */,
 				81D8B40B1962E0EC0010DA84 /* HashMD5.cpp in Sources */,
 				81D8B4791962E0EC0010DA84 /* LightComponent.cpp in Sources */,

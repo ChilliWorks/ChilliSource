@@ -1,7 +1,7 @@
 //
-//  TapGesture.h
+//  HoldGesture.h
 //  Chilli Source
-//  Created by Ian Copland on 17/09/2014.
+//  Created by Ian Copland on 19/09/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_INPUT_GESTURE_TAPGESTURE_H_
-#define _CHILLISOURCE_INPUT_GESTURE_TAPGESTURE_H_
+#ifndef _CHILLISOURCE_INPUT_GESTURE_HOLDGESTURE_H_
+#define _CHILLISOURCE_INPUT_GESTURE_HOLDGESTURE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
@@ -40,18 +40,17 @@ namespace ChilliSource
     namespace Input
     {
         //----------------------------------------------------------
-        /// A gesture for receiving tap input events. Allows for
-        /// multi-tap events like double and triple tap, and multi-
-        /// finger events.
+        /// A gesture for receiving hold input events. Allows for
+        /// multi-finger events.
         ///
         /// @author Ian Copland
         //----------------------------------------------------------
-        class TapGesture final : public Gesture
+        class HoldGesture final : public Gesture
         {
         public:
-            CS_DECLARE_NAMEDTYPE(TapGesture);
+            CS_DECLARE_NAMEDTYPE(HoldGesture);
             //----------------------------------------------------
-            /// A delegate called when a tap gesture is activated.
+            /// A delegate called when a hold gesture is activated.
             ///
             /// @author Ian Copland
             ///
@@ -59,21 +58,19 @@ namespace ChilliSource
             /// activated.
             /// @param The position at which the tap occurred.
             //----------------------------------------------------
-            using Delegate = std::function<void(const TapGesture*, const Core::Vector2&)>;
+            using Delegate = std::function<void(const HoldGesture*, const Core::Vector2&)>;
             //----------------------------------------------------
-            /// Constructor. Constructs the tap gesture with the
+            /// Constructor. Constructs the hold gesture with the
             /// given settings.
             ///
             /// @author Ian Copland
             ///
-            /// @param The number of taps required to activate
-            /// this tap gesture. Defaults to 1.
             /// @param The number of pointers that should be
             /// down per tap. Defaults to 1.
             /// @param The input type this gesture should listen
             /// for. Defaults to using the default input type.
             //----------------------------------------------------
-			TapGesture(u32 in_numTaps = 1, u32 in_numPointers = 1, Pointer::InputType in_inputType = Pointer::GetDefaultInputType());
+			HoldGesture(u32 in_numTaps = 1, Pointer::InputType in_inputType = Pointer::GetDefaultInputType());
             //----------------------------------------------------
             /// Queries whether or not this implements the gesture
             /// interface with the given Id.
@@ -86,18 +83,12 @@ namespace ChilliSource
             /// implemented.
             //----------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_gestureInterfaceId) const override;
+
             //----------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return The number of taps required by this Tap
-            /// Gesture before it will activate.
-            //----------------------------------------------------
-            u32 GetNumTaps() const;
-            //----------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The number of pointers required by this Tap
-            /// Gesture for each tap.
+            /// @return The number of pointers required by this
+            /// Gesture.
             //----------------------------------------------------
             u32 GetNumPointers() const;
             //----------------------------------------------------
@@ -112,7 +103,7 @@ namespace ChilliSource
             /// @return An event that can be used to listen for
             /// ocurrances of the gesture.
             //----------------------------------------------------
-            Core::IConnectableEvent<Delegate>& GetTappedEvent();
+            Core::IConnectableEvent<Delegate>& GetHeldEvent();
         private:
             //----------------------------------------------------
             /// Information on the initial state of a single
@@ -127,27 +118,11 @@ namespace ChilliSource
                 bool m_isDown;
             };
             //--------------------------------------------------------
-            /// Checks the time stamp to see if any active taps have
-            /// expired and resets the tap count if the time since the
-            /// last tap is exceeded.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The current timestamp.
-            //--------------------------------------------------------
-            void CheckForExpiration(f64 in_timestamp);
-            //--------------------------------------------------------
-            /// Resets the active tap if there is one.
-            ///
-            /// @author Ian Copland
-            //--------------------------------------------------------
-            void ResetTap();
-            //--------------------------------------------------------
             /// Resets the gesture if one is active.
             ///
             /// @author Ian Copland
             //--------------------------------------------------------
-            void ResetGesture();
+            void Reset();
             //--------------------------------------------------------
             /// Called when a pointer down event occurs.
             ///
@@ -184,21 +159,16 @@ namespace ChilliSource
             //--------------------------------------------------------
             void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter) override;
             
-            u32 m_numTaps;
             u32 m_numPointers;
             Pointer::InputType m_inputType;
-            Core::Event<Delegate> m_tappedEvent;
+            Core::Event<Delegate> m_heldEvent;
             
-            f32 m_maxTapDisplacementSquared = 0.0f;
-            f32 m_maxRepeatTapDisplacementSquared = 0.0f;
+            f32 m_maxDisplacementSquared = 0.0f;
             
             u32 m_tapCount = 0;
             bool m_activeTap = false;
-            std::vector<PointerInfo> m_activeTapPointers;
-            std::vector<PointerInfo> m_firstTapPointers;
-            f64 m_activeTapStartTimestamp = 0.0;
-            f64 m_lastTapStartTimestamp = 0.0;
-            f64 m_lastTapEndTimestamp = 0.0;
+            std::vector<PointerInfo> m_activePointers;
+            f64 m_startTimestamp = 0.0;
         };
     }
 }

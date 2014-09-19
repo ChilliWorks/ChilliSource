@@ -50,8 +50,8 @@ namespace ChilliSource
         TapGesture::TapGesture(u32 in_numTaps, u32 in_numPointers, Pointer::InputType in_inputType)
             : m_numTaps(in_numTaps), m_numPointers(in_numPointers), m_inputType(in_inputType)
         {
-            CS_ASSERT(in_numTaps > 0, "Cannot have a tap gesture which requres 0 taps.");
-            CS_ASSERT(in_numPointers > 0, "Cannot have a tap gesture which requres 0 pointers.");
+            CS_ASSERT(m_numTaps > 0, "Cannot have a tap gesture which requres 0 taps.");
+            CS_ASSERT(m_numPointers > 0, "Cannot have a tap gesture which requres 0 pointers.");
             
             Core::Screen* screen = Core::Application::Get()->GetScreen();
             

@@ -1,7 +1,7 @@
 //
 //  DragGesture.cpp
 //  Chilli Source
-//  Created by Ian Copland on 17/09/2014.
+//  Created by Ian Copland on 19/09/2014.
 //
 //  The MIT License (MIT)
 //
@@ -41,7 +41,7 @@ namespace ChilliSource
         DragGesture::DragGesture(u32 in_numPointers, Pointer::InputType in_inputType)
         : m_numPointers(in_numPointers), m_inputType(in_inputType)
         {
-            CS_ASSERT(in_numPointers > 0, "Cannot have a drag gesture with 0 required pointers.");
+            CS_ASSERT(m_numPointers > 0, "Cannot have a drag gesture with 0 required pointers.");
             
             m_activePointers.reserve(m_numPointers);
         }
