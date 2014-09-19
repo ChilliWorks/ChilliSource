@@ -38,6 +38,7 @@
 @class UIApplication;
 @class UILocalNotification;
 @class NSDictionary;
+@class NSMutableArray;
 
 namespace CSBackend
 {
@@ -179,6 +180,8 @@ namespace CSBackend
             
             bool m_enabled;
             CSCore::Event<CSCore::LocalNotificationSystem::RecievedDelegate> m_receivedEvent;
+            
+            NSMutableArray* m_recentlyAddedNotifications;
         };
     }
 }
