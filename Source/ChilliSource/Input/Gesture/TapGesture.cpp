@@ -50,6 +50,9 @@ namespace ChilliSource
         TapGesture::TapGesture(u32 in_numTaps, u32 in_numPointers, Pointer::InputType in_inputType)
             : m_numTaps(in_numTaps), m_numPointers(in_numPointers), m_inputType(in_inputType)
         {
+            CS_ASSERT(in_numTaps > 0, "Cannot have a tap gesture which requres 0 taps.");
+            CS_ASSERT(in_numPointers > 0, "Cannot have a tap gesture which requres 0 pointers.");
+            
             Core::Screen* screen = Core::Application::Get()->GetScreen();
             
             m_maxTapDisplacementSquared = (k_maxTapDisplacement * screen->GetDensityScale()) * (k_maxTapDisplacement * screen->GetDensityScale());
@@ -82,9 +85,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        Core::IConnectableEvent<TapGesture::ActivatedDelegate>& TapGesture::GetActivatedEvent()
+        Core::IConnectableEvent<TapGesture::Delegate>& TapGesture::GetTappedEvent()
         {
-            return m_activatedEvent;
+            return m_tappedEvent;
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -116,6 +119,7 @@ namespace ChilliSource
             ResetTap();
             m_tapCount = 0;
             m_lastTapEndTimestamp = 0.0;
+            m_firstTapPointers.clear();
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -243,10 +247,17 @@ namespace ChilliSource
                         
                         if (m_tapCount == m_numTaps)
                         {
+                            Core::Vector2 gesturePosition = Core::Vector2::k_zero;
+                            for (auto& pointerInfo : m_firstTapPointers)
+                            {
+                                gesturePosition += pointerInfo.m_initialPosition;
+                            }
+                            gesturePosition /= m_firstTapPointers.size();
+                            
                             ResetGesture();
                             
                             //TODO: !? Check for collisions.
-                            m_activatedEvent.NotifyConnections(this);
+                            m_tappedEvent.NotifyConnections(this, gesturePosition);
                         }
                     }
                 }

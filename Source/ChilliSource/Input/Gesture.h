@@ -31,6 +31,7 @@
 #define _CHILLISOURCE_INPUT_GESTURE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Input/Gesture/DragGesture.h>
 #include <ChilliSource/Input/Gesture/Gesture.h>
 #include <ChilliSource/Input/Gesture/GestureSystem.h>
 #include <ChilliSource/Input/Gesture/TapGesture.h>

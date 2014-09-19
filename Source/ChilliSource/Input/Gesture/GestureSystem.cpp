@@ -202,7 +202,10 @@ namespace ChilliSource
             
             for (const auto& gesturePair : m_gestures)
             {
-                gesturePair.first->OnPointerDown(in_pointer, in_timestamp, in_inputType, in_filter);
+                if (gesturePair.second == false)
+                {
+                    gesturePair.first->OnPointerDown(in_pointer, in_timestamp, in_inputType, in_filter);
+                }
             }
             
             ProcessDeferredAddAndRemovals();
@@ -217,7 +220,10 @@ namespace ChilliSource
             
             for (const auto& gesturePair : m_gestures)
             {
-                gesturePair.first->OnPointerMoved(in_pointer, in_timestamp, in_filter);
+                if (gesturePair.second == false)
+                {
+                    gesturePair.first->OnPointerMoved(in_pointer, in_timestamp, in_filter);
+                }
             }
             
             ProcessDeferredAddAndRemovals();
@@ -232,7 +238,10 @@ namespace ChilliSource
             
             for (const auto& gesturePair : m_gestures)
             {
-                gesturePair.first->OnPointerUp(in_pointer, in_timestamp, in_inputType, in_filter);
+                if (gesturePair.second == false)
+                {
+                    gesturePair.first->OnPointerUp(in_pointer, in_timestamp, in_inputType, in_filter);
+                }
             }
             
             ProcessDeferredAddAndRemovals();
@@ -247,7 +256,10 @@ namespace ChilliSource
             
             for (const auto& gesturePair : m_gestures)
             {
-                gesturePair.first->OnPointerScrolled(in_pointer, in_timestamp, in_delta, in_filter);
+                if (gesturePair.second == false)
+                {
+                    gesturePair.first->OnPointerScrolled(in_pointer, in_timestamp, in_delta, in_filter);
+                }
             }
             
             ProcessDeferredAddAndRemovals();

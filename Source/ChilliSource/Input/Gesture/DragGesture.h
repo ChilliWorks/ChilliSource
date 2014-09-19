@@ -1,7 +1,7 @@
 //
-//  TapGesture.h
+//  DragGesture.h
 //  Chilli Source
-//  Created by Ian Copland on 17/09/2014.
+//  Created by Ian Copland on 19/09/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_INPUT_GESTURE_TAPGESTURE_H_
-#define _CHILLISOURCE_INPUT_GESTURE_TAPGESTURE_H_
+#ifndef _CHILLISOURCE_INPUT_GESTURE_DRAGGESTURE_H_
+#define _CHILLISOURCE_INPUT_GESTURE_DRAGGESTURE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
@@ -40,40 +40,38 @@ namespace ChilliSource
     namespace Input
     {
         //----------------------------------------------------------
-        /// A gesture for receiving tap input events. Allows for
-        /// multi-tap events like double and triple tap, and multi-
-        /// finger events.
+        /// A gesture for receiving drag input events. This incudes
+        /// support for multi-finger events such as a two finger
+        /// drag.
         ///
         /// @author Ian Copland
         //----------------------------------------------------------
-        class TapGesture final : public Gesture
+        class DragGesture final : public Gesture
         {
         public:
-            CS_DECLARE_NAMEDTYPE(TapGesture);
+            CS_DECLARE_NAMEDTYPE(DragGesture);
             //----------------------------------------------------
-            /// A delegate called when a tap gesture is activated.
+            /// A delegate called for any of the drag gesture
+            /// event.
             ///
             /// @author Ian Copland
             ///
-            /// @param A pointer to the tap gesture that was
-            /// activated.
-            /// @param The position at which the tap occurred.
+            /// @param A pointer to the drag gesture.
+            /// @param The position of the event.
             //----------------------------------------------------
-            using Delegate = std::function<void(const TapGesture*, const Core::Vector2&)>;
+            using Delegate = std::function<void(const DragGesture*, const Core::Vector2&)>;
             //----------------------------------------------------
-            /// Constructor. Constructs the tap gesture with the
+            /// Constructor. Constructs the drag gesture with the
             /// given settings.
             ///
             /// @author Ian Copland
             ///
-            /// @param The number of taps required to activate
-            /// this tap gesture. Defaults to 1.
             /// @param The number of pointers that should be
             /// down per tap. Defaults to 1.
             /// @param The input type this gesture should listen
             /// for. Defaults to using the default input type.
             //----------------------------------------------------
-			TapGesture(u32 in_numTaps = 1, u32 in_numPointers = 1, Pointer::InputType in_inputType = Pointer::GetDefaultInputType());
+			DragGesture(u32 in_numPointers = 1, Pointer::InputType in_inputType = Pointer::GetDefaultInputType());
             //----------------------------------------------------
             /// Queries whether or not this implements the gesture
             /// interface with the given Id.
@@ -89,15 +87,8 @@ namespace ChilliSource
             //----------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return The number of taps required by this Tap
-            /// Gesture before it will activate.
-            //----------------------------------------------------
-            u32 GetNumTaps() const;
-            //----------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The number of pointers required by this Tap
-            /// Gesture for each tap.
+            /// @return The number of pointers required by this
+            /// gesture.
             //----------------------------------------------------
             u32 GetNumPointers() const;
             //----------------------------------------------------
@@ -109,45 +100,45 @@ namespace ChilliSource
             //----------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return An event that can be used to list for
-            /// ocurrances of the gesture.
+            /// @return An event that can be used to listen for the
+            /// start of a drag gesture.
             //----------------------------------------------------
-            Core::IConnectableEvent<Delegate>& GetTappedEvent();
+            Core::IConnectableEvent<Delegate>& GetDragStartedEvent();
+            //----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return An event that can be used to list for
+            /// movement events within a drag gesture.
+            //----------------------------------------------------
+            Core::IConnectableEvent<Delegate>& GetDragMovedEvent();
+            //----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return An event that can be used to list for
+            /// the end of a drag gesture.
+            //----------------------------------------------------
+            Core::IConnectableEvent<Delegate>& GetDragEndedEvent();
         private:
             //----------------------------------------------------
-            /// Information on the initial state of a single
-            /// pointer within a tap.
+            /// Information on a single pointer within the gesture.
             ///
             /// @author Ian Copland
             //----------------------------------------------------
-            struct PointerInfo final
+            struct PointerInfo
             {
-                Core::Vector2 m_initialPosition;
                 Pointer::Id m_pointerId;
-                bool m_isDown;
+                Core::Vector2 m_currentPosition;
             };
-            //--------------------------------------------------------
-            /// Checks the time stamp to see if any active taps have
-            /// expired and resets the tap count if the time since the
-            /// last tap is exceeded.
+            //----------------------------------------------------
+            /// Calculates the current position of the gesture.
+            /// This will be the centre position between all pointers
+            /// involved in the gesture.
             ///
             /// @author Ian Copland
             ///
-            /// @param The current timestamp.
-            //--------------------------------------------------------
-            void CheckForExpiration(f64 in_timestamp);
-            //--------------------------------------------------------
-            /// Resets the active tap if there is one.
-            ///
-            /// @author Ian Copland
-            //--------------------------------------------------------
-            void ResetTap();
-            //--------------------------------------------------------
-            /// Resets the gesture if one is active.
-            ///
-            /// @author Ian Copland
-            //--------------------------------------------------------
-            void ResetGesture();
+            /// @return The calculated position.
+            //----------------------------------------------------
+            Core::Vector2 CalculatePosition() const;
             //--------------------------------------------------------
             /// Called when a pointer down event occurs.
             ///
@@ -184,21 +175,13 @@ namespace ChilliSource
             //--------------------------------------------------------
             void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter) override;
             
-            u32 m_numTaps;
             u32 m_numPointers;
             Pointer::InputType m_inputType;
-            Core::Event<Delegate> m_tappedEvent;
-            
-            f32 m_maxTapDisplacementSquared = 0.0f;
-            f32 m_maxRepeatTapDisplacementSquared = 0.0f;
-            
-            u32 m_tapCount = 0;
-            bool m_activeTap = false;
-            std::vector<PointerInfo> m_activeTapPointers;
-            std::vector<PointerInfo> m_firstTapPointers;
-            f64 m_activeTapStartTimestamp = 0.0;
-            f64 m_lastTapStartTimestamp = 0.0;
-            f64 m_lastTapEndTimestamp = 0.0;
+            Core::Event<Delegate> m_dragStartedEvent;
+            Core::Event<Delegate> m_dragMovedEvent;
+            Core::Event<Delegate> m_dragEndedEvent;
+
+            std::vector<PointerInfo> m_activePointers;
         };
     }
 }

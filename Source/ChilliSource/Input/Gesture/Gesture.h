@@ -63,11 +63,25 @@ namespace ChilliSource
             //-------------------------------------------------------
             Gesture() = default;
             //-------------------------------------------------------
+            /// Sets the gesture active. This should be set for any
+            /// gesture that will be active for a sustained time like
+            /// a drag gesture. Instantious gestures such as a tap
+            /// should not. This is used to flag collisions between
+            /// different gestures.
+            ///
             /// @author Ian Copland
             ///
-            /// @return The owning gesture system. Can be null.
+            /// @param Whether or not to set active.
             //-------------------------------------------------------
-            GestureSystem* GetGestureSystem() const;
+            void SetActive(bool in_active);
+            //-------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return Whether or not the gesture is currently
+            /// active. This will never be true for gestures that
+            /// are only active for a instant, such as a tap.
+            //-------------------------------------------------------
+            bool IsActive() const;
             //--------------------------------------------------------
             /// A method that can optionally be implemented by the
             /// implementing class to receive pointer down events.
@@ -134,6 +148,7 @@ namespace ChilliSource
             void SetGestureSystem(GestureSystem* in_gestureSystem);
             
             GestureSystem* m_gestureSystem = nullptr;
+            bool m_active = false;
         };
     }
 }

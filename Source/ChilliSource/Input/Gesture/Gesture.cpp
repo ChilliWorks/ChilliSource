@@ -35,9 +35,15 @@ namespace ChilliSource
         CS_DEFINE_NAMEDTYPE(Gesture);
         //-------------------------------------------------------
         //-------------------------------------------------------
-        GestureSystem* Gesture::GetGestureSystem() const
+        void Gesture::SetActive(bool in_active)
         {
-            return m_gestureSystem;
+            m_active = in_active;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        bool Gesture::IsActive() const
+        {
+            return m_active;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
