@@ -184,11 +184,13 @@ namespace ChilliSource
             Pointer::InputType m_inputType;
             Core::Event<ActivatedDelegate> m_activatedEvent;
             
-            f32 m_maxTapMoveDistSquared = 0.0f;
+            f32 m_maxTapDisplacementSquared = 0.0f;
+            f32 m_maxRepeatTapDisplacementSquared = 0.0f;
             
             u32 m_tapCount = 0;
             bool m_activeTap = false;
             std::vector<PointerInfo> m_activeTapPointers;
+            std::vector<PointerInfo> m_firstTapPointers;
             f64 m_activeTapStartTimestamp = 0.0;
             f64 m_lastTapStartTimestamp = 0.0;
             f64 m_lastTapEndTimestamp = 0.0;

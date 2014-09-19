@@ -40,7 +40,8 @@ namespace ChilliSource
             const f32 k_minTimeBetweenTaps = 0.015f;
             const f32 k_maxTimeForTap = 0.15f;
             const f32 k_maxTimeBetweenTaps = 0.25f;
-            const f32 k_tapRadius = 20.0f;
+            const f32 k_maxTapDisplacement = 20.0f;
+            const f32 k_maxRepeatTapDisplacement = 40.0f;
         }
         
         CS_DEFINE_NAMEDTYPE(TapGesture);
@@ -51,7 +52,8 @@ namespace ChilliSource
         {
             Core::Screen* screen = Core::Application::Get()->GetScreen();
             
-            m_maxTapMoveDistSquared = (k_tapRadius * screen->GetDensityScale()) * (k_tapRadius * screen->GetDensityScale());
+            m_maxTapDisplacementSquared = (k_maxTapDisplacement * screen->GetDensityScale()) * (k_maxTapDisplacement * screen->GetDensityScale());
+            m_maxRepeatTapDisplacementSquared = (k_maxRepeatTapDisplacement * screen->GetDensityScale()) * (k_maxRepeatTapDisplacement * screen->GetDensityScale());
             m_activeTapPointers.reserve(m_numPointers);
         }
         //----------------------------------------------------
@@ -123,32 +125,54 @@ namespace ChilliSource
             
             if (in_inputType == m_inputType)
             {
-                if (m_activeTap == true)
+                bool tapValid = false;
+                
+                if (m_tapCount == 0)
                 {
-                    if (m_activeTapPointers.size() < m_numPointers)
+                    tapValid = true;
+                }
+                else
+                {
+                    for (const auto& pointerInfo : m_firstTapPointers)
                     {
+                        const Core::Vector2 displacement = in_pointer.GetPosition() - pointerInfo.m_initialPosition;
+                        if (displacement.LengthSquared() <= m_maxRepeatTapDisplacementSquared)
+                        {
+                            tapValid = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (tapValid == true)
+                {
+                    if (m_activeTap == true)
+                    {
+                        if (m_activeTapPointers.size() < m_numPointers)
+                        {
+                            PointerInfo pointerInfo;
+                            pointerInfo.m_initialPosition = in_pointer.GetPosition();
+                            pointerInfo.m_pointerId = in_pointer.GetId();
+                            pointerInfo.m_isDown = true;
+                            m_activeTapPointers.push_back(pointerInfo);
+                        }
+                        else
+                        {
+                            ResetTap();
+                        }
+                    }
+                    else if (m_tapCount == 0 || in_timestamp - m_lastTapStartTimestamp > k_minTimeBetweenTaps)
+                    {
+                        m_activeTap = true;
+                        m_activeTapStartTimestamp = in_timestamp;
+                        m_lastTapStartTimestamp = m_activeTapStartTimestamp;
+                        
                         PointerInfo pointerInfo;
                         pointerInfo.m_initialPosition = in_pointer.GetPosition();
                         pointerInfo.m_pointerId = in_pointer.GetId();
                         pointerInfo.m_isDown = true;
                         m_activeTapPointers.push_back(pointerInfo);
                     }
-                    else
-                    {
-                        ResetTap();
-                    }
-                }
-                else if (in_timestamp - m_lastTapStartTimestamp > k_minTimeBetweenTaps)
-                {
-                    m_activeTap = true;
-                    m_activeTapStartTimestamp = in_timestamp;
-                    m_lastTapStartTimestamp = m_activeTapStartTimestamp;
-                    
-                    PointerInfo pointerInfo;
-                    pointerInfo.m_initialPosition = in_pointer.GetPosition();
-                    pointerInfo.m_pointerId = in_pointer.GetId();
-                    pointerInfo.m_isDown = true;
-                    m_activeTapPointers.push_back(pointerInfo);
                 }
             }
         }
@@ -167,7 +191,7 @@ namespace ChilliSource
                     if (in_pointer.GetId() == pointerInfo.m_pointerId)
                     {
                         const Core::Vector2 displacement = in_pointer.GetPosition() - pointerInfo.m_initialPosition;
-                        if (displacement.LengthSquared() > m_maxTapMoveDistSquared)
+                        if (displacement.LengthSquared() > m_maxTapDisplacementSquared)
                         {
                             shouldReset = true;
                         }
@@ -208,6 +232,11 @@ namespace ChilliSource
                     
                     if (tapFinished == true)
                     {
+                        if (m_tapCount == 0)
+                        {
+                            m_firstTapPointers = m_activeTapPointers;
+                        }
+                        
                         ResetTap();
                         m_tapCount++;
                         m_lastTapEndTimestamp = in_timestamp;
