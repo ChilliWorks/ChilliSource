@@ -343,6 +343,12 @@ public class TexturePacker
 			extrudeCombinedImage(outputOrder, outputImage);
 		}
 		
+		for(int i=0; i<numSourceImages; ++i)
+		{
+			placedSpriteRects[outputOrder[i]].x = placedSpriteRects[outputOrder[i]].x + numPixelsPadding;
+			placedSpriteRects[outputOrder[i]].y = placedSpriteRects[outputOrder[i]].y + numPixelsPadding;
+		};
+		
 		PackedTexture pt = new PackedTexture(outputImage, numSourceImages, combinedImageWidth, combinedImageHeight, 
 				originalImageWidths, originalImageHeights, croppedImageWidths, croppedImageHeights,
 				imageOffsetXs, imageOffsetYs,

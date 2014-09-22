@@ -65,7 +65,7 @@ public final class Main
 	private static final String k_paramDisableCropShort = "-dc";
 	private static final String k_paramPadding = "--padding";
 	private static final String k_paramPaddingShort = "-p";
-	private static final String k_paramInnerPadding = "--disablecrop";
+	private static final String k_paramInnerPadding = "--innerpadding";
 	private static final String k_paramInnerPaddingShort = "-ip";
 	private static final String k_paramExtrude = "--extrude";
 	private static final String k_paramExtrudeShort = "-e";

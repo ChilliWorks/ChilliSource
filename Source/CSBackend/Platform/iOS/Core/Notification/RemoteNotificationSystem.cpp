@@ -61,6 +61,19 @@ namespace CSBackend
         }
         //--------------------------------------------------
         //--------------------------------------------------
+        void RemoteNotificationSystem::OnInit()
+        {
+#ifdef __IPHONE_8_0
+            if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)])
+            {
+                //From iOS 8 we need to request permissions to display notifications, to badge the app icon and to play a sound
+                UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+                [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+            }
+#endif
+        }
+        //--------------------------------------------------
+        //--------------------------------------------------
         void RemoteNotificationSystem::SetEnabled(bool in_enabled)
         {
             m_enabled = in_enabled;
@@ -70,8 +83,18 @@ namespace CSBackend
         void RemoteNotificationSystem::RequestRemoteToken(const TokenReceivedDelegate& in_delegate)
         {
             m_delegate = in_delegate;
-            UIRemoteNotificationType Types = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert;
-            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:Types];
+
+#ifdef __IPHONE_8_0
+            if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerForRemoteNotifications)])
+            {
+                [[UIApplication sharedApplication] registerForRemoteNotifications];
+            }
+            else
+#endif
+            {
+                UIRemoteNotificationType Types = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert;
+                [[UIApplication sharedApplication] registerForRemoteNotificationTypes:Types];
+            }
         }
         //--------------------------------------------------
         //--------------------------------------------------

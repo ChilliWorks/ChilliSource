@@ -253,6 +253,8 @@ CSAppDelegate* singletonInstance = nil;
             [delegate applicationDidBecomeActive:in_application];
         }
     }
+    
+    CSBackend::iOS::LocalNotificationSystem::ApplicationDidBecomeActive(in_application);
 }
 //-------------------------------------------------------------
 /// Called when the app is about to terminate. Allowing CS
