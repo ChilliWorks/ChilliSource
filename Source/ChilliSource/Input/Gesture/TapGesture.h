@@ -184,19 +184,19 @@ namespace ChilliSource
             //--------------------------------------------------------
             void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter) override;
             
-            u32 m_numTaps;
-            u32 m_numPointers;
-            Pointer::InputType m_inputType;
+            u32 m_requiredTapCount;
+            u32 m_requiredPointerCount;
+            Pointer::InputType m_requiredInputType;
             Core::Event<Delegate> m_tappedEvent;
             
             f32 m_maxTapDisplacementSquared = 0.0f;
             f32 m_maxRepeatTapDisplacementSquared = 0.0f;
             
             u32 m_tapCount = 0;
-            bool m_activeTap = false;
-            std::vector<PointerInfo> m_activeTapPointers;
-            std::vector<PointerInfo> m_firstTapPointers;
-            f64 m_activeTapStartTimestamp = 0.0;
+            bool m_tapPending = false;
+            std::vector<PointerInfo> m_pendingPointers;
+            std::vector<PointerInfo> m_firstTapPendingPointers;
+            f64 m_currentTapStartTimestamp = 0.0;
             f64 m_lastTapStartTimestamp = 0.0;
             f64 m_lastTapEndTimestamp = 0.0;
         };

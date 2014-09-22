@@ -48,16 +48,16 @@ namespace ChilliSource
         //----------------------------------------------------
         //----------------------------------------------------
         TapGesture::TapGesture(u32 in_numTaps, u32 in_numPointers, Pointer::InputType in_inputType)
-            : m_numTaps(in_numTaps), m_numPointers(in_numPointers), m_inputType(in_inputType)
+            : m_requiredTapCount(in_numTaps), m_requiredPointerCount(in_numPointers), m_requiredInputType(in_inputType)
         {
-            CS_ASSERT(m_numTaps > 0, "Cannot have a tap gesture which requres 0 taps.");
-            CS_ASSERT(m_numPointers > 0, "Cannot have a tap gesture which requres 0 pointers.");
+            CS_ASSERT(m_requiredTapCount > 0, "Cannot have a tap gesture which requres 0 taps.");
+            CS_ASSERT(m_requiredPointerCount > 0, "Cannot have a tap gesture which requres 0 pointers.");
             
             Core::Screen* screen = Core::Application::Get()->GetScreen();
             
             m_maxTapDisplacementSquared = (k_maxTapDisplacement * screen->GetDensityScale()) * (k_maxTapDisplacement * screen->GetDensityScale());
             m_maxRepeatTapDisplacementSquared = (k_maxRepeatTapDisplacement * screen->GetDensityScale()) * (k_maxRepeatTapDisplacement * screen->GetDensityScale());
-            m_activeTapPointers.reserve(m_numPointers);
+            m_pendingPointers.reserve(m_requiredPointerCount);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -69,19 +69,19 @@ namespace ChilliSource
         //----------------------------------------------------
         u32 TapGesture::GetNumTaps() const
         {
-            return m_numTaps;
+            return m_requiredTapCount;
         }
         //----------------------------------------------------
         //----------------------------------------------------
         u32 TapGesture::GetNumPointers() const
         {
-            return m_numPointers;
+            return m_requiredPointerCount;
         }
         //----------------------------------------------------
         //----------------------------------------------------
         Pointer::InputType TapGesture::GetInputType() const
         {
-            return m_inputType;
+            return m_requiredInputType;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -94,12 +94,12 @@ namespace ChilliSource
         void TapGesture::CheckForExpiration(f64 in_timestamp)
         {
             //Check whether an active tap has expired
-            if (m_activeTap == true && in_timestamp - m_activeTapStartTimestamp > k_maxTimeForTap)
+            if (m_tapPending == true && in_timestamp - m_currentTapStartTimestamp > k_maxTimeForTap)
             {
                 ResetTap();
             }
             
-            if (m_activeTap == false && m_numTaps > 0 && in_timestamp - m_lastTapEndTimestamp > k_maxTimeBetweenTaps)
+            if (m_tapPending == false && m_requiredTapCount > 0 && in_timestamp - m_lastTapEndTimestamp > k_maxTimeBetweenTaps)
             {
                 ResetGesture();
             }
@@ -108,9 +108,9 @@ namespace ChilliSource
         //--------------------------------------------------------
         void TapGesture::ResetTap()
         {
-            m_activeTap = false;
-            m_activeTapStartTimestamp = 0.0;
-            m_activeTapPointers.clear();
+            m_tapPending = false;
+            m_currentTapStartTimestamp = 0.0;
+            m_pendingPointers.clear();
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -119,7 +119,7 @@ namespace ChilliSource
             ResetTap();
             m_tapCount = 0;
             m_lastTapEndTimestamp = 0.0;
-            m_firstTapPointers.clear();
+            m_firstTapPendingPointers.clear();
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -127,7 +127,7 @@ namespace ChilliSource
         {
             CheckForExpiration(in_timestamp);
             
-            if (in_inputType == m_inputType)
+            if (in_inputType == m_requiredInputType)
             {
                 bool tapValid = false;
                 
@@ -137,7 +137,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    for (const auto& pointerInfo : m_firstTapPointers)
+                    for (const auto& pointerInfo : m_firstTapPendingPointers)
                     {
                         const Core::Vector2 displacement = in_pointer.GetPosition() - pointerInfo.m_initialPosition;
                         if (displacement.LengthSquared() <= m_maxRepeatTapDisplacementSquared)
@@ -150,15 +150,15 @@ namespace ChilliSource
                 
                 if (tapValid == true)
                 {
-                    if (m_activeTap == true)
+                    if (m_tapPending == true)
                     {
-                        if (m_activeTapPointers.size() < m_numPointers)
+                        if (m_pendingPointers.size() < m_requiredPointerCount)
                         {
                             PointerInfo pointerInfo;
                             pointerInfo.m_initialPosition = in_pointer.GetPosition();
                             pointerInfo.m_pointerId = in_pointer.GetId();
                             pointerInfo.m_isDown = true;
-                            m_activeTapPointers.push_back(pointerInfo);
+                            m_pendingPointers.push_back(pointerInfo);
                         }
                         else
                         {
@@ -167,15 +167,15 @@ namespace ChilliSource
                     }
                     else if (m_tapCount == 0 || in_timestamp - m_lastTapStartTimestamp > k_minTimeBetweenTaps)
                     {
-                        m_activeTap = true;
-                        m_activeTapStartTimestamp = in_timestamp;
-                        m_lastTapStartTimestamp = m_activeTapStartTimestamp;
+                        m_tapPending = true;
+                        m_currentTapStartTimestamp = in_timestamp;
+                        m_lastTapStartTimestamp = m_currentTapStartTimestamp;
                         
                         PointerInfo pointerInfo;
                         pointerInfo.m_initialPosition = in_pointer.GetPosition();
                         pointerInfo.m_pointerId = in_pointer.GetId();
                         pointerInfo.m_isDown = true;
-                        m_activeTapPointers.push_back(pointerInfo);
+                        m_pendingPointers.push_back(pointerInfo);
                     }
                 }
             }
@@ -186,11 +186,11 @@ namespace ChilliSource
         {
             CheckForExpiration(in_timestamp);
             
-            if (m_activeTap == true)
+            if (m_tapPending == true)
             {
                 bool shouldReset = false;
                 
-                for (const auto& pointerInfo : m_activeTapPointers)
+                for (const auto& pointerInfo : m_pendingPointers)
                 {
                     if (in_pointer.GetId() == pointerInfo.m_pointerId)
                     {
@@ -216,13 +216,13 @@ namespace ChilliSource
         {
             CheckForExpiration(in_timestamp);
             
-            if (in_inputType == m_inputType && m_activeTap == true)
+            if (in_inputType == m_requiredInputType && m_tapPending == true)
             {
-                if (m_activeTapPointers.size() == m_numPointers)
+                if (m_pendingPointers.size() == m_requiredPointerCount)
                 {
                     bool tapFinished = true;
                     
-                    for (auto& pointerInfo : m_activeTapPointers)
+                    for (auto& pointerInfo : m_pendingPointers)
                     {
                         if (in_pointer.GetId() == pointerInfo.m_pointerId)
                         {
@@ -238,21 +238,21 @@ namespace ChilliSource
                     {
                         if (m_tapCount == 0)
                         {
-                            m_firstTapPointers = m_activeTapPointers;
+                            m_firstTapPendingPointers = m_pendingPointers;
                         }
                         
                         ResetTap();
                         m_tapCount++;
                         m_lastTapEndTimestamp = in_timestamp;
                         
-                        if (m_tapCount == m_numTaps)
+                        if (m_tapCount == m_requiredTapCount)
                         {
                             Core::Vector2 gesturePosition = Core::Vector2::k_zero;
-                            for (auto& pointerInfo : m_firstTapPointers)
+                            for (auto& pointerInfo : m_firstTapPendingPointers)
                             {
                                 gesturePosition += pointerInfo.m_initialPosition;
                             }
-                            gesturePosition /= m_firstTapPointers.size();
+                            gesturePosition /= m_firstTapPendingPointers.size();
                             
                             ResetGesture();
                             

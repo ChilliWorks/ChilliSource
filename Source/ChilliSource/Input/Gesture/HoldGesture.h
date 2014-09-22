@@ -159,15 +159,14 @@ namespace ChilliSource
             //--------------------------------------------------------
             void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter) override;
             
-            u32 m_numPointers;
-            Pointer::InputType m_inputType;
+            u32 m_requiredPointerCount;
+            Pointer::InputType m_requiredInputType;
             Core::Event<Delegate> m_heldEvent;
             
             f32 m_maxDisplacementSquared = 0.0f;
             
-            u32 m_tapCount = 0;
-            bool m_activeTap = false;
-            std::vector<PointerInfo> m_activePointers;
+            bool m_holdPending = false;
+            std::vector<PointerInfo> m_pendingPointers;
             f64 m_startTimestamp = 0.0;
         };
     }

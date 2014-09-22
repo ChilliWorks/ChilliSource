@@ -38,20 +38,21 @@ namespace ChilliSource
         namespace
         {
             const f32 k_maxDisplacement = 20.0f;
+            const f32 k_maxTimeBetweenPointers = 0.15f;
         }
         
         CS_DEFINE_NAMEDTYPE(HoldGesture);
         //----------------------------------------------------
         //----------------------------------------------------
         HoldGesture::HoldGesture(u32 in_numPointers, Pointer::InputType in_inputType)
-        : m_numPointers(in_numPointers), m_inputType(in_inputType)
+        : m_requiredPointerCount(in_numPointers), m_requiredInputType(in_inputType)
         {
-            CS_ASSERT(m_numPointers > 0, "Cannot have a hold gesture which requres 0 pointers.");
+            CS_ASSERT(m_requiredPointerCount > 0, "Cannot have a hold gesture which requres 0 pointers.");
             
             Core::Screen* screen = Core::Application::Get()->GetScreen();
             
             m_maxDisplacementSquared = (k_maxDisplacement * screen->GetDensityScale()) * (k_maxDisplacement * screen->GetDensityScale());
-            m_activePointers.reserve(m_numPointers);
+            m_pendingPointers.reserve(m_requiredPointerCount);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -63,13 +64,13 @@ namespace ChilliSource
         //----------------------------------------------------
         u32 HoldGesture::GetNumPointers() const
         {
-            return m_numPointers;
+            return m_requiredPointerCount;
         }
         //----------------------------------------------------
         //----------------------------------------------------
         Pointer::InputType HoldGesture::GetInputType() const
         {
-            return m_inputType;
+            return m_requiredInputType;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -87,9 +88,34 @@ namespace ChilliSource
         //--------------------------------------------------------
         void HoldGesture::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
         {
-            if (in_inputType == m_inputType)
+            if (in_inputType == m_requiredInputType)
             {
-                //TODO:
+                if (m_holdPending == true)
+                {
+                    if (m_pendingPointers.size() >= m_requiredPointerCount || in_timestamp - m_startTimestamp > k_maxTimeBetweenPointers)
+                    {
+                        Reset();
+                    }
+                    else
+                    {
+                        PointerInfo pointerInfo;
+                        pointerInfo.m_initialPosition = in_pointer.GetPosition();
+                        pointerInfo.m_pointerId = in_pointer.GetId();
+                        pointerInfo.m_isDown = true;
+                        m_pendingPointers.push_back(pointerInfo);
+                    }
+                }
+                else
+                {
+                    m_holdPending = true;
+                    m_startTimestamp = in_timestamp;
+                    
+                    PointerInfo pointerInfo;
+                    pointerInfo.m_initialPosition = in_pointer.GetPosition();
+                    pointerInfo.m_pointerId = in_pointer.GetId();
+                    pointerInfo.m_isDown = true;
+                    m_pendingPointers.push_back(pointerInfo);
+                }
             }
         }
         //--------------------------------------------------------
