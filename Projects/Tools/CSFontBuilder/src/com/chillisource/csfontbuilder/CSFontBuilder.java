@@ -118,7 +118,7 @@ public class CSFontBuilder
 		.setOuterPadding(k_numPixelsPadding)
 		.enableCropping(true);
 		
-		PackedTexture result = packer.pack(filesToProcess);
+		PackedTexture result = packer.pack(filesToProcess, null);
 		if(result == null)
 		{
 			return false;
