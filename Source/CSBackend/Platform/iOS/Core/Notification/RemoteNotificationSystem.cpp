@@ -61,14 +61,16 @@ namespace CSBackend
         }
         //--------------------------------------------------
         //--------------------------------------------------
-        void OnInit()
+        void RemoteNotificationSystem::OnInit()
         {
+#ifdef __IPHONE_8_0
             if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)])
             {
                 //From iOS 8 we need to request permissions to display notifications, to badge the app icon and to play a sound
                 UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
                 [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
             }
+#endif
         }
         //--------------------------------------------------
         //--------------------------------------------------
@@ -81,12 +83,14 @@ namespace CSBackend
         void RemoteNotificationSystem::RequestRemoteToken(const TokenReceivedDelegate& in_delegate)
         {
             m_delegate = in_delegate;
-            
+
+#ifdef __IPHONE_8_0
             if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerForRemoteNotifications)])
             {
                 [[UIApplication sharedApplication] registerForRemoteNotifications];
             }
             else
+#endif
             {
                 UIRemoteNotificationType Types = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert;
                 [[UIApplication sharedApplication] registerForRemoteNotificationTypes:Types];

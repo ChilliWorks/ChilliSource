@@ -289,12 +289,14 @@ namespace CSBackend
         //--------------------------------------------------------
         void LocalNotificationSystem::OnInit()
         {
+#ifdef __IPHONE_8_0
             if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)])
             {
                 //From iOS 8 we need to request permissions to display notifications, to badge the app icon and to play a sound
                 UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
                 [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
             }
+#endif
             
             CSCore::LocalNotificationSystem::OnInit();
             
