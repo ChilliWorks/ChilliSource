@@ -1463,19 +1463,19 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\Base\Filter.h">
       <Filter>ChilliSource\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVector.h">
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector.h">
       <Filter>ChilliSource\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVectorConstForwardIterator.h">
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_const_forward_iterator.h">
       <Filter>ChilliSource\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVectorConstReverseIterator.h">
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_const_reverse_iterator.h">
       <Filter>ChilliSource\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVectorForwardIterator.h">
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_forward_iterator.h">
       <Filter>ChilliSource\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVectorReverseIterator.h">
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_reverse_iterator.h">
       <Filter>ChilliSource\Core</Filter>
     </ClInclude>
   </ItemGroup>
