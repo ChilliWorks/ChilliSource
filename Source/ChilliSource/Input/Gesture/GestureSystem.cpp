@@ -195,6 +195,24 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
+        void GestureSystem::OnUpdate(f32 in_deltaTime)
+        {
+            std::unique_lock<std::recursive_mutex> lock(m_mutex);
+            m_isSendingEvent = true;
+            
+            for (const auto& gesturePair : m_gestures)
+            {
+                if (gesturePair.second == false)
+                {
+                    gesturePair.first->OnUpdate(in_deltaTime);
+                }
+            }
+            
+            ProcessDeferredAddAndRemovals();
+            m_isSendingEvent = false;
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
         void GestureSystem::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
         {
             std::unique_lock<std::recursive_mutex> lock(m_mutex);

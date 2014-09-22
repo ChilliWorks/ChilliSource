@@ -84,6 +84,15 @@ namespace ChilliSource
             bool IsActive() const;
             //--------------------------------------------------------
             /// A method that can optionally be implemented by the
+            /// implementing class to receive update events.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The delta time since the last update.
+            //--------------------------------------------------------
+            virtual void OnUpdate(f32 in_deltaTime) {};
+            //--------------------------------------------------------
+            /// A method that can optionally be implemented by the
             /// implementing class to receive pointer down events.
             ///
             /// @author Ian Copland

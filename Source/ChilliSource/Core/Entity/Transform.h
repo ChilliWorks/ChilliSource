@@ -71,7 +71,7 @@ namespace ChilliSource
 			/// @param Y Component
 			/// @param Z Component
 			//----------------------------------------------------------------
-			void SetPosition(f32 infX, f32 infY, f32 infZ = 0.0f);
+			void SetPosition(f32 infX, f32 infY, f32 infZ);
 			//----------------------------------------------------------------
 			/// Set Position
 			///
@@ -97,7 +97,7 @@ namespace ChilliSource
 			/// @param Y Component
 			/// @param Z Component
 			//----------------------------------------------------------------
-			void MoveBy(f32 infX, f32 infY, f32 infZ = 0.0f);
+			void MoveBy(f32 infX, f32 infY, f32 infZ);
 			//----------------------------------------------------------------
 			/// Move By
 			///
@@ -203,7 +203,7 @@ namespace ChilliSource
 			/// @param Y Component
 			/// @param Z Component
 			//----------------------------------------------------------------
-			void ScaleBy(f32 inX, f32 inY, f32 inZ = 0.0f);
+			void ScaleBy(f32 inX, f32 inY, f32 inZ);
 			//----------------------------------------------------------------
 			/// Scale By
 			///
@@ -229,7 +229,7 @@ namespace ChilliSource
 			/// @param Y Component
 			/// @param Z Component
 			//----------------------------------------------------------------
-			void ScaleTo(f32 inX, f32 inY, f32 inZ = 0.0f);
+			void ScaleTo(f32 inX, f32 inY, f32 inZ);
 			//----------------------------------------------------------------
 			/// Scale To
 			///

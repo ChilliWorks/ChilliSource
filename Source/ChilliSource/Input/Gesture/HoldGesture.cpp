@@ -37,8 +37,10 @@ namespace ChilliSource
     {
         namespace
         {
+            const f32 k_minTimeBetweenAttempts = 0.015f;
             const f32 k_maxDisplacement = 20.0f;
             const f32 k_maxTimeBetweenPointers = 0.15f;
+            const f32 k_holdTime = 0.75f;
         }
         
         CS_DEFINE_NAMEDTYPE(HoldGesture);
@@ -82,7 +84,33 @@ namespace ChilliSource
         //--------------------------------------------------------
         void HoldGesture::Reset()
         {
-            //TODO:
+            m_holdPending = false;
+            m_currentStartTimestamp = 0.0;
+            m_pendingPointers.clear();
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void HoldGesture::OnUpdate(f32 in_deltaTime)
+        {
+            if (m_holdPending == true && m_pendingPointers.size() == m_requiredPointerCount)
+            {
+                f64 timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
+                if (timestamp - m_currentStartTimestamp > k_holdTime)
+                {
+                    
+                    //TODO: Check if can fire
+                    
+                    Core::Vector2 gesturePosition = Core::Vector2::k_zero;
+                    for (auto& pointerInfo : m_pendingPointers)
+                    {
+                        gesturePosition += pointerInfo.m_initialPosition;
+                    }
+                    gesturePosition /= m_pendingPointers.size();
+                    
+                    m_heldEvent.NotifyConnections(this, gesturePosition);
+                    Reset();
+                }
+            }
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -90,25 +118,18 @@ namespace ChilliSource
         {
             if (in_inputType == m_requiredInputType)
             {
-                if (m_holdPending == true)
+                if (m_holdPending == true && (m_pendingPointers.size() >= m_requiredPointerCount || in_timestamp - m_currentStartTimestamp > k_maxTimeBetweenPointers))
                 {
-                    if (m_pendingPointers.size() >= m_requiredPointerCount || in_timestamp - m_startTimestamp > k_maxTimeBetweenPointers)
-                    {
-                        Reset();
-                    }
-                    else
-                    {
-                        PointerInfo pointerInfo;
-                        pointerInfo.m_initialPosition = in_pointer.GetPosition();
-                        pointerInfo.m_pointerId = in_pointer.GetId();
-                        pointerInfo.m_isDown = true;
-                        m_pendingPointers.push_back(pointerInfo);
-                    }
+                    Reset();
+                    m_lastEndTimestamp = in_timestamp;
                 }
-                else
+                else if (in_timestamp - m_lastEndTimestamp > k_minTimeBetweenAttempts)
                 {
-                    m_holdPending = true;
-                    m_startTimestamp = in_timestamp;
+                    if (m_holdPending == false && m_pendingPointers.size() == 0)
+                    {
+                        m_holdPending = true;
+                        m_currentStartTimestamp = in_timestamp;
+                    }
                     
                     PointerInfo pointerInfo;
                     pointerInfo.m_initialPosition = in_pointer.GetPosition();
@@ -122,13 +143,52 @@ namespace ChilliSource
         //--------------------------------------------------------
         void HoldGesture::OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter)
         {
-            //TODO:
+            if (m_holdPending == true)
+            {
+                bool shouldReset = false;
+                
+                for (const auto& pointerInfo : m_pendingPointers)
+                {
+                    if (in_pointer.GetId() == pointerInfo.m_pointerId)
+                    {
+                        const Core::Vector2 displacement = in_pointer.GetPosition() - pointerInfo.m_initialPosition;
+                        if (displacement.LengthSquared() > m_maxDisplacementSquared)
+                        {
+                            shouldReset = true;
+                        }
+                        
+                        break;
+                    }
+                }
+                
+                if (shouldReset == true)
+                {
+                    Reset();
+                    m_lastEndTimestamp = in_timestamp;
+                }
+            }
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
         void HoldGesture::OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
         {
-            //TODO:
+            if (in_inputType == m_requiredInputType && m_holdPending == true)
+            {
+                bool contains = false;
+                for (auto pointer : m_pendingPointers)
+                {
+                    if (pointer.m_pointerId == in_pointer.GetId())
+                    {
+                        contains = true;
+                    }
+                }
+                
+                if (contains == true)
+                {
+                    Reset();
+                    m_lastEndTimestamp = in_timestamp;
+                }
+            }
         }
     }
 }

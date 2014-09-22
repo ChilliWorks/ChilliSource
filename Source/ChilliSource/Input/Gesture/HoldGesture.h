@@ -124,6 +124,15 @@ namespace ChilliSource
             //--------------------------------------------------------
             void Reset();
             //--------------------------------------------------------
+            /// Updates the hold gestures. Tests to see if the hold
+            /// time has exceeded.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The delta time since the last update.
+            //--------------------------------------------------------
+            void OnUpdate(f32 in_deltaTime) override;
+            //--------------------------------------------------------
             /// Called when a pointer down event occurs.
             ///
             /// @author Ian Copland
@@ -167,7 +176,8 @@ namespace ChilliSource
             
             bool m_holdPending = false;
             std::vector<PointerInfo> m_pendingPointers;
-            f64 m_startTimestamp = 0.0;
+            f64 m_currentStartTimestamp = 0.0;
+            f64 m_lastEndTimestamp = 0.0;
         };
     }
 }

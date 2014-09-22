@@ -150,6 +150,15 @@ namespace ChilliSource
             //--------------------------------------------------------
             void OnInit() override;
             //--------------------------------------------------------
+            /// Called when the owning state is updated. This passes
+            /// the event onto all registered gestures.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The delta time since the last update.
+            //--------------------------------------------------------
+            void OnUpdate(f32 in_deltaTime) override;
+            //--------------------------------------------------------
             /// Called when a pointer down event is received from the
             /// pointer system. This will be relayed onto each
             /// active gesture in this gesture system.
