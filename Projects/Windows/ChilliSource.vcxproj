@@ -233,6 +233,11 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Singleton.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\StandardMacros.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Utils.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVector.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVectorConstForwardIterator.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVectorConstReverseIterator.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVectorForwardIterator.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVectorReverseIterator.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\HashedArray.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ParamDictionary.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ParamDictionarySerialiser.h" />

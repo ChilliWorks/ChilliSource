@@ -1463,5 +1463,20 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\Base\Filter.h">
       <Filter>ChilliSource\Input</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVector.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVectorConstForwardIterator.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVectorConstReverseIterator.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVectorForwardIterator.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ConcurrentVectorReverseIterator.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
