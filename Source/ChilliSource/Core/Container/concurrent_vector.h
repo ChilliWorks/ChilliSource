@@ -1,5 +1,5 @@
 //
-//  ConcurrentVector.h
+//  concurrent_vector.h
 //  Chilli Source
 //  Created by Scott Downie on 19/09/2015.
 //
@@ -26,13 +26,13 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_CONTAINER_CONCURRENTVECTOR_H_
-#define _CHILLISOURCE_CORE_CONTAINER_CONCURRENTVECTOR_H_
+#ifndef _CHILLISOURCE_CORE_CONTAINER_concurrent_vector_H_
+#define _CHILLISOURCE_CORE_CONTAINER_concurrent_vector_H_
 
-#include <ChilliSource/Core/Container/ConcurrentVectorConstForwardIterator.h>
-#include <ChilliSource/Core/Container/ConcurrentVectorConstReverseIterator.h>
-#include <ChilliSource/Core/Container/ConcurrentVectorForwardIterator.h>
-#include <ChilliSource/Core/Container/ConcurrentVectorReverseIterator.h>
+#include <ChilliSource/Core/Container/concurrent_vector_const_forward_iterator.h>
+#include <ChilliSource/Core/Container/concurrent_vector_const_reverse_iterator.h>
+#include <ChilliSource/Core/Container/concurrent_vector_forward_iterator.h>
+#include <ChilliSource/Core/Container/concurrent_vector_reverse_iterator.h>
 
 #include <vector>
 
@@ -50,21 +50,21 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //------------------------------------------------------------------------
-        template <typename TType> class ConcurrentVector
+        template <typename TType> class concurrent_vector
         {
         public:
             
-            using iterator = ConcurrentVectorForwardIterator<TType>;
-            using const_iterator = ConcurrentVectorConstForwardIterator<TType>;
-            using reverse_iterator = ConcurrentVectorReverseIterator<TType>;
-            using const_reverse_iterator = ConcurrentVectorConstReverseIterator<TType>;
+            using iterator = concurrent_vector_forward_iterator<TType>;
+            using const_iterator = concurrent_vector_const_forward_iterator<TType>;
+            using reverse_iterator = concurrent_vector_reverse_iterator<TType>;
+            using const_reverse_iterator = concurrent_vector_const_reverse_iterator<TType>;
             
             //--------------------------------------------------------------------
             /// Constructor default
             ///
             /// @author S Downie
             //--------------------------------------------------------------------
-            ConcurrentVector();
+            concurrent_vector();
             //--------------------------------------------------------------------
             /// Construct from initialiser list
             ///
@@ -72,7 +72,7 @@ namespace ChilliSource
             ///
             /// @param Initialiser list
             //--------------------------------------------------------------------
-            ConcurrentVector(std::initializer_list<TType>&& in_initialObjects);
+            concurrent_vector(std::initializer_list<TType>&& in_initialObjects);
             //--------------------------------------------------------------------
             /// Copy constructor that creates this as a copy of the given vector
             ///
@@ -80,7 +80,7 @@ namespace ChilliSource
             ///
             /// @param Vector to copy
             //--------------------------------------------------------------------
-            ConcurrentVector(const ConcurrentVector& in_toCopy);
+            concurrent_vector(const concurrent_vector& in_toCopy);
             //--------------------------------------------------------------------
             /// Copy assignment that creates this as a copy of the given vector
             ///
@@ -90,7 +90,7 @@ namespace ChilliSource
             ///
             /// @return This as a copy
             //--------------------------------------------------------------------
-            ConcurrentVector& operator=(const ConcurrentVector& in_toCopy);
+            concurrent_vector& operator=(const concurrent_vector& in_toCopy);
             //--------------------------------------------------------------------
             /// Move constructor that transfers ownership from the given vector
             ///
@@ -98,7 +98,7 @@ namespace ChilliSource
             ///
             /// @param Vector to move
             //--------------------------------------------------------------------
-            ConcurrentVector(ConcurrentVector&& in_toMove);
+            concurrent_vector(concurrent_vector&& in_toMove);
             //--------------------------------------------------------------------
             /// Move assignment that transfers ownership from the given vector
             ///
@@ -108,7 +108,7 @@ namespace ChilliSource
             ///
             /// @return Thishaving taken ownership of the given vector
             //--------------------------------------------------------------------
-            ConcurrentVector& operator=(ConcurrentVector&& in_toMove);
+            concurrent_vector& operator=(concurrent_vector&& in_toMove);
             //--------------------------------------------------------------------
             /// Push the object onto the back of the array. Unlike STL this does
             /// not invalidate any iterators
@@ -302,22 +302,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //--------------------------------------------------------------------
-            void GarbageCollect()
-            {
-                for(auto it = m_container.begin(); it != m_container.end(); )
-                {
-                    if(it->second == true)
-                    {
-                        it = m_container.erase(it);
-                    }
-                    else
-                    {
-                        ++it;
-                    }
-                }
-                
-                m_requiresGC = false;
-            }
+            void garbage_collect();
             
         private:
             
@@ -333,14 +318,14 @@ namespace ChilliSource
         
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> ConcurrentVector<TType>::ConcurrentVector()
+        template <typename TType> concurrent_vector<TType>::concurrent_vector()
         : m_lock(m_mutex), m_size(0)
         {
             m_lock.unlock();
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> ConcurrentVector<TType>::ConcurrentVector(std::initializer_list<TType>&& in_initialObjects)
+        template <typename TType> concurrent_vector<TType>::concurrent_vector(std::initializer_list<TType>&& in_initialObjects)
         : m_lock(m_mutex), m_size(0)
         {
             m_lock.unlock();
@@ -354,21 +339,21 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> ConcurrentVector<TType>::ConcurrentVector(const ConcurrentVector& in_toCopy)
+        template <typename TType> concurrent_vector<TType>::concurrent_vector(const concurrent_vector& in_toCopy)
         {
             m_size = in_toCopy.m_size.load();
             m_container = in_toCopy.m_container;
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> ConcurrentVector<TType>& ConcurrentVector<TType>::operator=(const ConcurrentVector<TType>& in_toCopy)
+        template <typename TType> concurrent_vector<TType>& concurrent_vector<TType>::operator=(const concurrent_vector<TType>& in_toCopy)
         {
             m_size = in_toCopy.m_size.load();
             m_container = in_toCopy.m_container;
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> ConcurrentVector<TType>::ConcurrentVector(ConcurrentVector&& in_toMove)
+        template <typename TType> concurrent_vector<TType>::concurrent_vector(concurrent_vector&& in_toMove)
         {
             m_size = in_toMove.m_size.load();
             in_toMove.m_size = 0;
@@ -376,7 +361,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> ConcurrentVector<TType>& ConcurrentVector<TType>::operator=(ConcurrentVector<TType>&& in_toMove)
+        template <typename TType> concurrent_vector<TType>& concurrent_vector<TType>::operator=(concurrent_vector<TType>&& in_toMove)
         {
             m_size = in_toMove.m_size.load();
             in_toMove.m_size = 0;
@@ -384,7 +369,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> void ConcurrentVector<TType>::push_back(TType&& in_object)
+        template <typename TType> void concurrent_vector<TType>::push_back(TType&& in_object)
         {
             std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
             m_container.push_back(std::make_pair(in_object, false));
@@ -392,31 +377,31 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> TType& ConcurrentVector<TType>::front()
+        template <typename TType> TType& concurrent_vector<TType>::front()
         {
             return at(0);
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> const TType& ConcurrentVector<TType>::front() const
+        template <typename TType> const TType& concurrent_vector<TType>::front() const
         {
             return at(0);
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> TType& ConcurrentVector<TType>::back()
+        template <typename TType> TType& concurrent_vector<TType>::back()
         {
             return at(size()-1);
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> const TType& ConcurrentVector<TType>::back() const
+        template <typename TType> const TType& concurrent_vector<TType>::back() const
         {
             return at(size()-1);
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> TType& ConcurrentVector<TType>::at(u32 in_index)
+        template <typename TType> TType& concurrent_vector<TType>::at(u32 in_index)
         {
             std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
             if(m_requiresGC == false)
@@ -425,7 +410,7 @@ namespace ChilliSource
             }
             else
             {
-                auto size = m_container.size();
+                u32 size = m_container.size();
                 s32 count = -1;
                 u32 index = 0;
                 for(u32 i=0; i<size; ++i)
@@ -445,7 +430,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> const TType& ConcurrentVector<TType>::at(u32 in_index) const
+        template <typename TType> const TType& concurrent_vector<TType>::at(u32 in_index) const
         {
             std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
             if(m_requiresGC == false)
@@ -454,7 +439,7 @@ namespace ChilliSource
             }
             else
             {
-                auto size = m_container.size();
+                u32 size = m_container.size();
                 s32 count = -1;
                 u32 index = 0;
                 for(u32 i=0; i<size; ++i)
@@ -474,127 +459,127 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> void ConcurrentVector<TType>::lock()
+        template <typename TType> void concurrent_vector<TType>::lock()
         {
             m_lock.lock();
             m_isLocked = true;
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> void ConcurrentVector<TType>::unlock()
+        template <typename TType> void concurrent_vector<TType>::unlock()
         {
-            GarbageCollect();
+            garbage_collect();
             m_isLocked = false;
             m_lock.unlock();
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> u32 ConcurrentVector<TType>::size() const
+        template <typename TType> u32 concurrent_vector<TType>::size() const
         {
             return m_size;
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> bool ConcurrentVector<TType>::empty() const
+        template <typename TType> bool concurrent_vector<TType>::empty() const
         {
             return m_size == 0;
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> typename ConcurrentVector<TType>::iterator ConcurrentVector<TType>::begin()
+        template <typename TType> typename concurrent_vector<TType>::iterator concurrent_vector<TType>::begin()
         {
             return iterator(m_container, m_mutex);
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> typename ConcurrentVector<TType>::iterator ConcurrentVector<TType>::end()
+        template <typename TType> typename concurrent_vector<TType>::iterator concurrent_vector<TType>::end()
         {
             return iterator(m_container, m_mutex) + size();
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> typename ConcurrentVector<TType>::const_iterator ConcurrentVector<TType>::begin() const
+        template <typename TType> typename concurrent_vector<TType>::const_iterator concurrent_vector<TType>::begin() const
         {
             return const_iterator(m_container, m_mutex);
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> typename ConcurrentVector<TType>::const_iterator ConcurrentVector<TType>::end() const
+        template <typename TType> typename concurrent_vector<TType>::const_iterator concurrent_vector<TType>::end() const
         {
             return const_iterator(m_container, m_mutex) + size();
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> typename ConcurrentVector<TType>::const_iterator ConcurrentVector<TType>::cbegin() const
+        template <typename TType> typename concurrent_vector<TType>::const_iterator concurrent_vector<TType>::cbegin() const
         {
             return const_iterator(m_container, m_mutex);
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> typename ConcurrentVector<TType>::const_iterator ConcurrentVector<TType>::cend() const
+        template <typename TType> typename concurrent_vector<TType>::const_iterator concurrent_vector<TType>::cend() const
         {
             return const_iterator(m_container, m_mutex) + size();
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> typename ConcurrentVector<TType>::reverse_iterator ConcurrentVector<TType>::rbegin()
+        template <typename TType> typename concurrent_vector<TType>::reverse_iterator concurrent_vector<TType>::rbegin()
         {
             return reverse_iterator(m_container, m_mutex);
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> typename ConcurrentVector<TType>::reverse_iterator ConcurrentVector<TType>::rend()
+        template <typename TType> typename concurrent_vector<TType>::reverse_iterator concurrent_vector<TType>::rend()
         {
             return reverse_iterator(m_container, m_mutex) + size();
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> typename ConcurrentVector<TType>::const_reverse_iterator ConcurrentVector<TType>::rbegin() const
+        template <typename TType> typename concurrent_vector<TType>::const_reverse_iterator concurrent_vector<TType>::rbegin() const
         {
             return const_reverse_iterator(m_container, m_mutex);
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> typename ConcurrentVector<TType>::const_reverse_iterator ConcurrentVector<TType>::rend() const
+        template <typename TType> typename concurrent_vector<TType>::const_reverse_iterator concurrent_vector<TType>::rend() const
         {
             return const_reverse_iterator(m_container, m_mutex) + size();
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> typename ConcurrentVector<TType>::const_reverse_iterator ConcurrentVector<TType>::crbegin() const
+        template <typename TType> typename concurrent_vector<TType>::const_reverse_iterator concurrent_vector<TType>::crbegin() const
         {
             return const_reverse_iterator(m_container, m_mutex);
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> typename ConcurrentVector<TType>::const_reverse_iterator ConcurrentVector<TType>::crend() const
+        template <typename TType> typename concurrent_vector<TType>::const_reverse_iterator concurrent_vector<TType>::crend() const
         {
             return const_reverse_iterator(m_container, m_mutex) + size();
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> TType& ConcurrentVector<TType>::operator[](u32 in_index)
+        template <typename TType> TType& concurrent_vector<TType>::operator[](u32 in_index)
         {
             return at(in_index);
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> const TType& ConcurrentVector<TType>::operator[](u32 in_index) const
+        template <typename TType> const TType& concurrent_vector<TType>::operator[](u32 in_index) const
         {
             return at(in_index);
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> template<typename TIter> TIter ConcurrentVector<TType>::erase(const TIter& in_itErase)
+        template <typename TType> template<typename TIter> TIter concurrent_vector<TType>::erase(const TIter& in_itErase)
         {
             std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
             if(m_isLocked == false)
             {
-                m_container.erase(m_container.begin() + in_itErase.GetIndex());
+                m_container.erase(m_container.begin() + in_itErase.get_index());
             }
             else
             {
-                m_container[in_itErase.GetIndex()].second = true;
+                m_container[in_itErase.get_index()].second = true;
                 m_requiresGC = true;
             }
             
@@ -604,7 +589,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> void ConcurrentVector<TType>::clear()
+        template <typename TType> void concurrent_vector<TType>::clear()
         {
             std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
             if(m_isLocked == false)
@@ -623,6 +608,24 @@ namespace ChilliSource
             }
             
             m_size = 0;
+        }
+        //--------------------------------------------------------------------
+        //--------------------------------------------------------------------
+        template <typename TType> void concurrent_vector<TType>::garbage_collect()
+        {
+            for(auto it = m_container.begin(); it != m_container.end(); )
+            {
+                if(it->second == true)
+                {
+                    it = m_container.erase(it);
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+            
+            m_requiresGC = false;
         }
     }
 }
