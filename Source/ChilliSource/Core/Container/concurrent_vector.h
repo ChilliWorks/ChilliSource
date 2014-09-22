@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_CONTAINER_concurrent_vector_H_
-#define _CHILLISOURCE_CORE_CONTAINER_concurrent_vector_H_
+#ifndef _CHILLISOURCE_CORE_CONTAINER_CONCURRENTVECTOR_H_
+#define _CHILLISOURCE_CORE_CONTAINER_CONCURRENTVECTOR_H_
 
 #include <ChilliSource/Core/Container/concurrent_vector_const_forward_iterator.h>
 #include <ChilliSource/Core/Container/concurrent_vector_const_reverse_iterator.h>
@@ -118,6 +118,15 @@ namespace ChilliSource
             /// @param Object to add
             //--------------------------------------------------------------------
             void push_back(TType&& in_object);
+            //--------------------------------------------------------------------
+            /// Push the object onto the back of the array. Unlike STL this does
+            /// not invalidate any iterators
+            ///
+            /// @author S Downie
+            ///
+            /// @param Object to add
+            //--------------------------------------------------------------------
+            void push_back(const TType& in_object);
             //--------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -370,6 +379,14 @@ namespace ChilliSource
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
         template <typename TType> void concurrent_vector<TType>::push_back(TType&& in_object)
+        {
+            std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
+            m_container.push_back(std::make_pair(in_object, false));
+            m_size++;
+        }
+        //--------------------------------------------------------------------
+        //--------------------------------------------------------------------
+        template <typename TType> void concurrent_vector<TType>::push_back(const TType& in_object)
         {
             std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
             m_container.push_back(std::make_pair(in_object, false));
