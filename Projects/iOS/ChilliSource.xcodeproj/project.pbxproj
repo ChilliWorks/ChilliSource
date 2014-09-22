@@ -274,6 +274,8 @@
 		8113672E19C99A2E00D9AEDC /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
 		8113672F19C99A2E00D9AEDC /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
+		8154B74619D0274100F9F5B9 /* concurrent_vector_const_forward_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_const_forward_iterator.h; sourceTree = "<group>"; };
+		8154B74719D0274100F9F5B9 /* concurrent_vector_const_reverse_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_const_reverse_iterator.h; sourceTree = "<group>"; };
 		8158E483196ACB25005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		8158E484196ACB32005FF0A8 /* Container.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Container.h; sourceTree = "<group>"; };
 		8158E485196ACB41005FF0A8 /* Cryptographic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Cryptographic.h; sourceTree = "<group>"; };
@@ -327,6 +329,9 @@
 		8158E4B6196AE05F005FF0A8 /* Shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
 		8158E4B7196AE06B005FF0A8 /* Sprite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
 		8158E4B8196AE074005FF0A8 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
+		816B0C1719CC2E7000520B50 /* concurrent_vector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = concurrent_vector.h; sourceTree = "<group>"; };
+		816B0C1819CC48D300520B50 /* concurrent_vector_forward_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_forward_iterator.h; sourceTree = "<group>"; };
+		816B0C1919CC66E300520B50 /* concurrent_vector_reverse_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_reverse_iterator.h; sourceTree = "<group>"; };
 		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		81B1D2CF196C0167000F13DD /* Pointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pointer.cpp; sourceTree = "<group>"; };
 		81B1D2D0196C0167000F13DD /* Pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pointer.h; sourceTree = "<group>"; };
@@ -1106,6 +1111,11 @@
 		81D8B2461962E0EB0010DA84 /* Container */ = {
 			isa = PBXGroup;
 			children = (
+				816B0C1719CC2E7000520B50 /* concurrent_vector.h */,
+				8154B74619D0274100F9F5B9 /* concurrent_vector_const_forward_iterator.h */,
+				8154B74719D0274100F9F5B9 /* concurrent_vector_const_reverse_iterator.h */,
+				816B0C1819CC48D300520B50 /* concurrent_vector_forward_iterator.h */,
+				816B0C1919CC66E300520B50 /* concurrent_vector_reverse_iterator.h */,
 				81D8B2471962E0EB0010DA84 /* HashedArray.h */,
 				81D8B2481962E0EB0010DA84 /* ParamDictionary.cpp */,
 				81D8B2491962E0EB0010DA84 /* ParamDictionary.h */,
