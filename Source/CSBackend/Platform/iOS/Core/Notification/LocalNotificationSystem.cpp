@@ -72,6 +72,7 @@ namespace CSBackend
         LocalNotificationSystem::LocalNotificationSystem()
         : m_enabled(true)
         {
+            m_recentlyAddedNotifications = [[NSMutableArray alloc] init];
         }
         //--------------------------------------------------------
         //-------------------------------------------------------
@@ -96,6 +97,15 @@ namespace CSBackend
         {
             @autoreleasepool
             {
+                //Clean-up any duplicates from recently added
+                for(UILocalNotification* nsNotification in [[UIApplication sharedApplication] scheduledLocalNotifications])
+                {
+                    if([m_recentlyAddedNotifications containsObject:nsNotification] == YES)
+                    {
+                        [m_recentlyAddedNotifications removeObject:nsNotification];
+                    }
+                }
+                
                 if (m_enabled == true)
                 {
                     //Create the notifications
@@ -145,6 +155,11 @@ namespace CSBackend
                     
                     //Schedule this baby
                     [[UIApplication sharedApplication] scheduleLocalNotification:nsNotification];
+                    
+                    //Unfortunately it seems that scheduling a notification doesn't immediately add it to the notifications list
+                    //and subsequent attempts to cancel or retrieve it may fail. In order to workaround this we need to maintain our
+                    //own list of recently added notifications.
+                    [m_recentlyAddedNotifications addObject:nsNotification];
                 }
             }
         }
@@ -162,7 +177,24 @@ namespace CSBackend
                     CSCore::NotificationSPtr notification = ConvertUILocalNotificationToNotification(nsNotification);
 					out_notifications.push_back(notification);
 				}
+                
+                if([m_recentlyAddedNotifications containsObject:nsNotification] == YES)
+                {
+                    [m_recentlyAddedNotifications removeObject:nsNotification];
+                }
 			}
+            
+            for(UILocalNotification* nsNotification in m_recentlyAddedNotifications)
+            {
+                TimeIntervalSecs triggerTime = (TimeIntervalSecs)[nsNotification.fireDate timeIntervalSince1970];
+                s32 dwDeltaSecs = (s32)(in_time - triggerTime);
+                
+                if(std::abs(dwDeltaSecs) <= in_period)
+                {
+                    CSCore::NotificationSPtr notification = ConvertUILocalNotificationToNotification(nsNotification);
+                    out_notifications.push_back(notification);
+                }
+            }
         }
         //------------------------------------------------
         //------------------------------------------------
@@ -176,7 +208,22 @@ namespace CSBackend
 				{
 					[[UIApplication sharedApplication] cancelLocalNotification:nsNotification];
 				}
+                
+                if([m_recentlyAddedNotifications containsObject:nsNotification] == YES)
+                {
+                    [m_recentlyAddedNotifications removeObject:nsNotification];
+                }
 			}
+            
+            for(UILocalNotification* nsNotification in m_recentlyAddedNotifications)
+            {
+                CSCore::Notification::ID notificationId = [[nsNotification.userInfo objectForKey:@"ID"] unsignedIntValue];
+                
+                if(notificationId == in_id)
+                {
+                    [[UIApplication sharedApplication] cancelLocalNotification:nsNotification];
+                }
+            }
         }
         //------------------------------------------------
         //------------------------------------------------
@@ -242,6 +289,13 @@ namespace CSBackend
         //--------------------------------------------------------
         void LocalNotificationSystem::OnInit()
         {
+            if ([[UIApplication sharedApplication] respondsToSelector:@selector(registerUserNotificationSettings:)])
+            {
+                //From iOS 8 we need to request permissions to display notifications, to badge the app icon and to play a sound
+                UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+                [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+            }
+            
             CSCore::LocalNotificationSystem::OnInit();
             
             CS_ASSERT(g_localNotificationSystem == nullptr, "Cannot create more than 1 Local Notification System!");
@@ -272,6 +326,7 @@ namespace CSBackend
         //----------------------------------------------------------
         LocalNotificationSystem::~LocalNotificationSystem()
         {
+            [m_recentlyAddedNotifications release];
             g_localNotificationSystem = nullptr;
         }
     }

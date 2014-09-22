@@ -127,6 +127,13 @@ namespace CSBackend
             /// @author S Downie
             //----------------------------------------------------------
             RemoteNotificationSystem();
+            //--------------------------------------------------
+            /// Called when the system is initialised to request
+            /// the permissions
+            ///
+            /// @author S Downie
+            //--------------------------------------------------
+            void OnInit() override;
             
             bool m_enabled;
             std::string m_token;
