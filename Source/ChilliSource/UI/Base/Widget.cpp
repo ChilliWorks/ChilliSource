@@ -1167,25 +1167,31 @@ namespace ChilliSource
             if(m_isInputEnabled == false)
                 return;
             
+            m_children.lock();
             for(auto it = m_children.rbegin(); it != m_children.rend(); ++it)
             {
                 (*it)->OnPointerDown(in_pointer, in_timestamp, in_inputType, in_filter);
                 
                 if(in_filter.IsFiltered() == true)
                 {
+                    m_children.unlock();
                     return;
                 }
             }
+            m_children.unlock();
             
+            m_internalChildren.lock();
             for(auto it = m_internalChildren.rbegin(); it != m_internalChildren.rend(); ++it)
             {
                 (*it)->OnPointerDown(in_pointer, in_timestamp, in_inputType, in_filter);
                 
                 if(in_filter.IsFiltered() == true)
                 {
+                    m_internalChildren.unlock();
                     return;
                 }
             }
+            m_internalChildren.unlock();
             
             if(Contains(in_pointer.GetPosition()) == true)
             {
@@ -1215,25 +1221,31 @@ namespace ChilliSource
             if(m_isInputEnabled == false)
                 return;
             
+            m_children.lock();
             for(auto it = m_children.rbegin(); it != m_children.rend(); ++it)
             {
                 (*it)->OnPointerMoved(in_pointer, in_timestamp, in_filter);
                 
                 if(in_filter.IsFiltered() == true)
                 {
+                    m_children.unlock();
                     return;
                 }
             }
+            m_children.unlock();
             
+            m_internalChildren.lock();
             for(auto it = m_internalChildren.rbegin(); it != m_internalChildren.rend(); ++it)
             {
                 (*it)->OnPointerMoved(in_pointer, in_timestamp, in_filter);
                 
                 if(in_filter.IsFiltered() == true)
                 {
+                    m_internalChildren.unlock();
                     return;
                 }
             }
+            m_internalChildren.unlock();
             
             bool containsPrevious = Contains(in_pointer.GetPreviousPosition());
             bool containsCurrent = Contains(in_pointer.GetPosition());
@@ -1292,25 +1304,31 @@ namespace ChilliSource
             if(m_isInputEnabled == false)
                 return;
             
+            m_children.lock();
             for(auto it = m_children.rbegin(); it != m_children.rend(); ++it)
             {
                 (*it)->OnPointerUp(in_pointer, in_timestamp, in_inputType, in_filter);
                 
                 if(in_filter.IsFiltered() == true)
                 {
+                    m_children.unlock();
                     return;
                 }
             }
+            m_children.unlock();
             
+            m_internalChildren.lock();
             for(auto it = m_internalChildren.rbegin(); it != m_internalChildren.rend(); ++it)
             {
                 (*it)->OnPointerUp(in_pointer, in_timestamp, in_inputType, in_filter);
                 
                 if(in_filter.IsFiltered() == true)
                 {
+                    m_internalChildren.unlock();
                     return;
                 }
             }
+            m_internalChildren.unlock();
             
             auto itPressedId = m_pressedInputIds.find(in_pointer.GetId());
             

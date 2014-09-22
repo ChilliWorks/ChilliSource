@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Container/concurrent_vector.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/Math/Matrix3.h>
@@ -49,7 +50,6 @@
 #include <cassert>
 #include <functional>
 #include <mutex>
-#include <vector>
 
 namespace ChilliSource
 {
@@ -894,8 +894,8 @@ namespace ChilliSource
             SizePolicy m_sizePolicy;
             SizePolicyDelegate m_sizePolicyDelegate;
             
-            std::vector<WidgetSPtr> m_internalChildren;
-            std::vector<WidgetSPtr> m_children;
+            Core::concurrent_vector<WidgetSPtr> m_internalChildren;
+            Core::concurrent_vector<WidgetSPtr> m_children;
             
             std::string m_name;
             
