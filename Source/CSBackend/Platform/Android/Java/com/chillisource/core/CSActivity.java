@@ -114,7 +114,7 @@ public class CSActivity extends Activity
     			break;
     		case ConnectionResult.SERVICE_MISSING:
     			//Kindle or unsupported device
-    			//break;
+    			break;
     		case ConnectionResult.SERVICE_DISABLED:
     		case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
     			//Requires update
