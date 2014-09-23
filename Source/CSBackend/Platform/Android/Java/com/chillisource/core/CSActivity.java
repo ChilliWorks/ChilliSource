@@ -51,6 +51,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
  */
 public class CSActivity extends Activity 
 {
+	private static final int k_googlePlayServicesErrorDialogRequestCode = 7564568;
 	private Surface m_surface;
 	private AppConfig m_appConfig;
 	
@@ -116,11 +117,11 @@ public class CSActivity extends Activity
     			break;
     		case ConnectionResult.SERVICE_MISSING:
     			//Kindle or unsupported device
-    			break;
+    			//break;
     		case ConnectionResult.SERVICE_DISABLED:
     		case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
     			//Requires update
-    			GooglePlayServicesUtil.getErrorDialog(gpsAvailableResult, this, 0).show();
+    			GooglePlayServicesUtil.getErrorDialog(gpsAvailableResult, this, k_googlePlayServicesErrorDialogRequestCode).show();
     			break;
     		}
         }
@@ -205,7 +206,15 @@ public class CSActivity extends Activity
 	 */
     @Override protected void onActivityResult(int in_requestCode, int in_resultCode, Intent in_data) 
     {
-    	CSApplication.get().activityResult(in_requestCode, in_resultCode, in_data);
+    	if(in_requestCode != k_googlePlayServicesErrorDialogRequestCode)
+    	{
+    		CSApplication.get().activityResult(in_requestCode, in_resultCode, in_data);
+    	}
+    	else if(in_resultCode == RESULT_CANCELED)
+    	{
+    		//Terminate until downloaded
+    		CSApplication.get().quit();
+    	}
     	super.onActivityResult(in_requestCode, in_resultCode, in_data);
 	}
 	/**
