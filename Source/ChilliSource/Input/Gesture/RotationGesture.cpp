@@ -1,7 +1,7 @@
 //
-//  PinchGesture.cpp
+//  RotationGesture.cpp
 //  Chilli Source
-//  Created by Ian Copland on 22/09/2014.
+//  Created by Ian Copland on 23/09/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,10 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Input/Gesture/PinchGesture.h>
+#include <ChilliSource/Input/Gesture/RotationGesture.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 
 namespace ChilliSource
 {
@@ -41,10 +42,10 @@ namespace ChilliSource
     
     namespace Input
     {
-        CS_DEFINE_NAMEDTYPE(PinchGesture);
+        CS_DEFINE_NAMEDTYPE(RotationGesture);
         //----------------------------------------------------
         //----------------------------------------------------
-        PinchGesture::PinchGesture(Pointer::InputType in_inputType)
+        RotationGesture::RotationGesture(Pointer::InputType in_inputType)
         : m_requiredInputType(in_inputType)
         {
             Core::Screen* screen = Core::Application::Get()->GetScreen();
@@ -54,37 +55,37 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        bool PinchGesture::IsA(Core::InterfaceIDType in_gestureInterfaceId) const
+        bool RotationGesture::IsA(Core::InterfaceIDType in_gestureInterfaceId) const
         {
-            return (Gesture::InterfaceID == in_gestureInterfaceId || PinchGesture::InterfaceID == in_gestureInterfaceId);
+            return (Gesture::InterfaceID == in_gestureInterfaceId || RotationGesture::InterfaceID == in_gestureInterfaceId);
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        Pointer::InputType PinchGesture::GetInputType() const
+        Pointer::InputType RotationGesture::GetInputType() const
         {
             return m_requiredInputType;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        Core::IConnectableEvent<PinchGesture::Delegate>& PinchGesture::GetPinchStartedEvent()
+        Core::IConnectableEvent<RotationGesture::Delegate>& RotationGesture::GetRotationStartedEvent()
         {
-            return m_pinchStartedEvent;
+            return m_rotationStartedEvent;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        Core::IConnectableEvent<PinchGesture::Delegate>& PinchGesture::GetPinchMovedEvent()
+        Core::IConnectableEvent<RotationGesture::Delegate>& RotationGesture::GetRotationMovedEvent()
         {
-            return m_pinchMovedEvent;
+            return m_rotationMovedEvent;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        Core::IConnectableEvent<PinchGesture::Delegate>& PinchGesture::GetPinchEndedEvent()
+        Core::IConnectableEvent<RotationGesture::Delegate>& RotationGesture::GetRotationEndedEvent()
         {
-            return m_pinchEndedEvent;
+            return m_rotationEndedEvent;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        void PinchGesture::TryStart(const Pointer& in_pointer)
+        void RotationGesture::TryStart(const Pointer& in_pointer)
         {
             u32 dragCount = 0;
             u32 existingActive = 0;
@@ -120,30 +121,25 @@ namespace ChilliSource
                 if (IsActive() == false)
                 {
                     SetActive(true);
-                    m_initialDistance = CalculateDistance();
+                    m_initialAngle = CalculateAngle();
                     m_currentPosition = CalculatePosition();
-                    m_currentScale = CalculateScale();
-                    m_pinchStartedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+                    m_currentRotation = CalculateRelativeRotation();
+                    m_rotationStartedEvent.NotifyConnections(this, m_currentPosition, m_currentRotation);
                 }
                 else
                 {
-                    //If we're re-placing a finger for a pinch we want to scale the initial distance such that the scale at the new
+                    //If we're re-placing a finger for a rotation we want to update the initial angle such that the rotation at the new
                     //finger position is the same as it was when the finger was removed.
-                    if (m_currentScale > 0.0f)
-                    {
-                        f32 scaleFactor = CalculateScale() / m_currentScale;
-                        m_initialDistance *= scaleFactor;
-                    }
-                    
+                    m_initialAngle = CalculateAngle() - m_currentRotation;
                     m_currentPosition = CalculatePosition();
-                    m_currentScale = CalculateScale();
-                    m_pinchMovedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+                    m_currentRotation = CalculateRelativeRotation();
+                    m_rotationMovedEvent.NotifyConnections(this, m_currentPosition, m_currentRotation);
                 }
             }
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        Core::Vector2 PinchGesture::CalculatePosition() const
+        Core::Vector2 RotationGesture::CalculatePosition() const
         {
             Core::Vector2 gesturePos = Core::Vector2::k_zero;
             if (m_pendingPointers.size() >= k_requiredPointerCount && IsActive() == true && m_paused == false)
@@ -163,10 +159,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        f32 PinchGesture::CalculateDistance() const
+        f32 RotationGesture::CalculateAngle() const
         {
-            f32 distance = 0.0f;
-            
+            f32 angle = 0.0f;
             if (m_pendingPointers.size() >= k_requiredPointerCount && IsActive() == true && m_paused == false)
             {
                 std::vector<Core::Vector2> positions;
@@ -180,27 +175,44 @@ namespace ChilliSource
                 
                 CS_ASSERT(positions.size() == k_requiredPointerCount, "There are more active pointers than required.");
                 
-                Core::Vector2 displacement = positions[1] - positions[0];
-                distance = displacement.Length();
+                CSCore::Vector2 displacement = positions[1] - positions[0];
+                
+                angle = -Core::Vector2::Angle(CSCore::Vector2::k_unitPositiveY, displacement);
+                
+                while (angle < 0.0f)
+                {
+                    angle += CSCore::MathUtils::k_pi * 2.0f;
+                }
+
+                while (angle >= CSCore::MathUtils::k_pi * 2.0f)
+                {
+                    angle -= CSCore::MathUtils::k_pi * 2.0f;
+                }
             }
             
-            return distance;
+            return angle;
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        f32 PinchGesture::CalculateScale() const
+        f32 RotationGesture::CalculateRelativeRotation() const
         {
-            f32 scale = 0.0f;
-            if (m_initialDistance > 0.0f)
+            f32 angle = CalculateAngle() - m_initialAngle;
+            
+            while (angle < -CSCore::MathUtils::k_pi)
             {
-                scale = CalculateDistance() / m_initialDistance;
+                angle += CSCore::MathUtils::k_pi * 2.0f;
             }
             
-            return scale;
+            while (angle >= CSCore::MathUtils::k_pi)
+            {
+                angle -= CSCore::MathUtils::k_pi * 2.0f;
+            }
+            
+            return angle;
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void PinchGesture::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
+        void RotationGesture::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
         {
             if (in_inputType == m_requiredInputType)
             {
@@ -212,7 +224,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void PinchGesture::OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter)
+        void RotationGesture::OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter)
         {
             if (m_pendingPointers.size() > 0)
             {
@@ -248,15 +260,15 @@ namespace ChilliSource
                     else if (isActive == true)
                     {
                         m_currentPosition = CalculatePosition();
-                        m_currentScale = CalculateScale();
-                        m_pinchMovedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+                        m_currentRotation = CalculateRelativeRotation();
+                        m_rotationMovedEvent.NotifyConnections(this, m_currentPosition, m_currentRotation);
                     }
                 }
             }
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void PinchGesture::OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
+        void RotationGesture::OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
         {
             if (in_inputType == m_requiredInputType)
             {
@@ -284,7 +296,7 @@ namespace ChilliSource
                     {
                         SetActive(false);
                         m_paused = false;
-                        m_pinchEndedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+                        m_rotationEndedEvent.NotifyConnections(this, m_currentPosition, m_currentRotation);
                     }
                 }
             }

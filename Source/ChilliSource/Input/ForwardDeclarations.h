@@ -57,7 +57,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(Gesture);
         CS_FORWARDDECLARE_CLASS(GestureSystem);
         CS_FORWARDDECLARE_CLASS(PinchGesture);
-        CS_FORWARDDECLARE_CLASS(RotateGesture);
+        CS_FORWARDDECLARE_CLASS(RotationGesture);
         CS_FORWARDDECLARE_CLASS(SwipeGesture);
         CS_FORWARDDECLARE_CLASS(TapGesture);
         //--------------------------------------------------

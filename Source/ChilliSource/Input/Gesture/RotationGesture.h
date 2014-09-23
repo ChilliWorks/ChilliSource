@@ -1,7 +1,7 @@
 //
-//  PinchGesture.h
+//  RotationGesture.h
 //  Chilli Source
-//  Created by Ian Copland on 22/09/2014.
+//  Created by Ian Copland on 23/09/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_INPUT_GESTURE_PINCHGESTURE_H_
-#define _CHILLISOURCE_INPUT_GESTURE_PINCHGESTURE_H_
+#ifndef _CHILLISOURCE_INPUT_GESTURE_ROTATIONGESTURE_H_
+#define _CHILLISOURCE_INPUT_GESTURE_ROTATIONGESTURE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
@@ -40,7 +40,7 @@ namespace ChilliSource
     namespace Input
     {
         //----------------------------------------------------------
-        /// A gesture for receiving pinch input events.
+        /// A gesture for receiving rotation input events.
         ///
         /// A pinch gesture will start when at least two pointers
         /// have moved.
@@ -54,10 +54,10 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         //----------------------------------------------------------
-        class PinchGesture final : public Gesture
+        class RotationGesture final : public Gesture
         {
         public:
-            CS_DECLARE_NAMEDTYPE(PinchGesture);
+            CS_DECLARE_NAMEDTYPE(RotationGesture);
             //----------------------------------------------------
             /// A delegate called when a pinch gesture is activated.
             ///
@@ -66,12 +66,12 @@ namespace ChilliSource
             /// @param A pointer to the pinch gesture that was
             /// activated.
             /// @param The centre position of the pinch.
-            /// @param The fraction difference between the initial
-            /// pinch distance to the current.
+            /// @param The clockwise angle of the gesture from the
+            /// initial orientation.
             //----------------------------------------------------
-            using Delegate = std::function<void(const PinchGesture*, const Core::Vector2&, f32)>;
+            using Delegate = std::function<void(const RotationGesture*, const Core::Vector2&, f32)>;
             //----------------------------------------------------
-            /// Constructor. Constructs the pinch gesture with the
+            /// Constructor. Constructs the rotation gesture with the
             /// given settings.
             ///
             /// @author Ian Copland
@@ -79,7 +79,7 @@ namespace ChilliSource
             /// @param The input type this gesture should listen
             /// for. Defaults to using the default input type.
             //----------------------------------------------------
-            PinchGesture(Pointer::InputType in_inputType = Pointer::GetDefaultInputType());
+            RotationGesture(Pointer::InputType in_inputType = Pointer::GetDefaultInputType());
             //----------------------------------------------------
             /// Queries whether or not this implements the gesture
             /// interface with the given Id.
@@ -102,23 +102,23 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @return An event that can be used to listen for
-            /// start of a pinch.
+            /// start of a rotation.
             //----------------------------------------------------
-            Core::IConnectableEvent<Delegate>& GetPinchStartedEvent();
-            //----------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return An event that can be used to listen for
-            /// movement in a pinch
-            //----------------------------------------------------
-            Core::IConnectableEvent<Delegate>& GetPinchMovedEvent();
+            Core::IConnectableEvent<Delegate>& GetRotationStartedEvent();
             //----------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return An event that can be used to listen for
-            /// end of a pinch.
+            /// movement in a rotation.
             //----------------------------------------------------
-            Core::IConnectableEvent<Delegate>& GetPinchEndedEvent();
+            Core::IConnectableEvent<Delegate>& GetRotationMovedEvent();
+            //----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return An event that can be used to listen for
+            /// end of a rotation.
+            //----------------------------------------------------
+            Core::IConnectableEvent<Delegate>& GetRotationEndedEvent();
         private:
             //----------------------------------------------------
             /// Information on a single pointer within the gesture.
@@ -133,13 +133,13 @@ namespace ChilliSource
                 bool m_isDrag = false;
                 bool m_active = false;
             };
-            //--------------------------------------------------------
+            //----------------------------------------------------
             /// Tries to activate or un-pause a pinch gesture.
             ///
             /// @author Ian Copland
             ///
             /// @param The pointer.
-            //--------------------------------------------------------
+            //----------------------------------------------------
             void TryStart(const Pointer& in_pointer);
             //----------------------------------------------------
             /// Calculates the current position of the gesture.
@@ -152,24 +152,23 @@ namespace ChilliSource
             //----------------------------------------------------
             Core::Vector2 CalculatePosition() const;
             //----------------------------------------------------
-            /// Calculates the current distance between the pointers
-            /// in the gesture.
+            /// Calculates the clockwise angle of the gesture.
             ///
             /// @author Ian Copland
             ///
-            /// @return The calculated scale.
+            /// @return The calculated angle.
             //----------------------------------------------------
-            f32 CalculateDistance() const;
+            f32 CalculateAngle() const;
             //----------------------------------------------------
-            /// Calculates the current fraction of the initial
-            /// distance to the current.
+            /// Calculates the clockwise rotation of the gesture
+            /// relative to the initial rotation.
             ///
             /// @author Ian Copland
             ///
-            /// @return The calculated scale.
+            /// @return The calculated rotation angle.
             //----------------------------------------------------
-            f32 CalculateScale() const;
-            //--------------------------------------------------------
+            f32 CalculateRelativeRotation() const;
+            //----------------------------------------------------
             /// Called when a pointer down event occurs.
             ///
             /// @author Ian Copland
@@ -179,9 +178,9 @@ namespace ChilliSource
             /// @param The press type.
             /// @param The filter, allowing exclusion from the filtered
             /// input event.
-            //--------------------------------------------------------
+            //----------------------------------------------------
             void OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter) override;
-            //--------------------------------------------------------
+            //----------------------------------------------------
             /// Called when a pointer moved event occurs.
             ///
             /// @author Ian Copland
@@ -190,9 +189,9 @@ namespace ChilliSource
             /// @param The timestamp of the event.
             /// @param The filter, allowing exclusion from the filtered
             /// input event.
-            //--------------------------------------------------------
+            //----------------------------------------------------
             void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter) override;
-            //--------------------------------------------------------
+            //----------------------------------------------------
             /// Called when a pointer up event occurs.
             ///
             /// @author Ian Copland
@@ -202,20 +201,20 @@ namespace ChilliSource
             /// @param The press type.
             /// @param The filter, allowing exclusion from the filtered
             /// input event.
-            //--------------------------------------------------------
+            //----------------------------------------------------
             void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter) override;
             
             Pointer::InputType m_requiredInputType;
-            Core::Event<Delegate> m_pinchStartedEvent;
-            Core::Event<Delegate> m_pinchMovedEvent;
-            Core::Event<Delegate> m_pinchEndedEvent;
+            Core::Event<Delegate> m_rotationStartedEvent;
+            Core::Event<Delegate> m_rotationMovedEvent;
+            Core::Event<Delegate> m_rotationEndedEvent;
             
             f32 m_minDisplacementSquared = 0.0f;
             
             std::vector<PointerInfo> m_pendingPointers;
-            f32 m_initialDistance = 0.0f;
+            f32 m_initialAngle = 0.0f;
             CSCore::Vector2 m_currentPosition;
-            f32 m_currentScale = 0.0f;
+            f32 m_currentRotation = 0.0f;
             bool m_paused = false;
         };
     }
