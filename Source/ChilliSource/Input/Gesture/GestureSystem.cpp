@@ -151,9 +151,11 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void GestureSystem::SetCollisionResolutionDelegate(const CollisionResolutionDelegate& in_delegate)
+        void GestureSystem::SetConflictResolutionDelegate(const ConflictResolutionDelegate& in_delegate)
         {
-            //TODO: !?
+            std::unique_lock<std::recursive_mutex> lock(m_mutex);
+            
+            m_conflictResolutionDelegate = in_delegate;
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -180,6 +182,47 @@ namespace ChilliSource
                 m_gestures.push_back(gesturePair);
             }
             m_gesturesToAdd.clear();
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        bool GestureSystem::CanActivate(Gesture* in_gesture)
+        {
+            std::unique_lock<std::recursive_mutex> lock(m_mutex);
+            m_isSendingEvent = true;
+            
+            bool canActivate = true;
+            
+            if (m_conflictResolutionDelegate != nullptr)
+            {
+                for (auto& gesture : m_gestures)
+                {
+                    if (gesture.first.get() != in_gesture && gesture.first->IsActive() == true)
+                    {
+                        ConflictResult conflictResult = m_conflictResolutionDelegate(gesture.first.get(), in_gesture);
+                        
+                        switch (conflictResult)
+                        {
+                            case ConflictResult::k_neitherGesture:
+                                gesture.first->Cancel();
+                                canActivate = false;
+                                break;
+                            case ConflictResult::k_existingGesture:
+                                canActivate = false;
+                                break;
+                            case ConflictResult::k_newGesture:
+                                gesture.first->Cancel();
+                                break;
+                            case ConflictResult::k_bothGestures:
+                                break;
+                        }
+                    }
+                }
+            }
+            
+            ProcessDeferredAddAndRemovals();
+            m_isSendingEvent = false;
+            
+            return canActivate;
         }
         //--------------------------------------------------------
         //--------------------------------------------------------

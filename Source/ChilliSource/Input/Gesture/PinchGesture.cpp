@@ -105,6 +105,11 @@ namespace ChilliSource
             
             if (dragCount >= k_requiredPointerCount)
             {
+                if (IsActive() == false && CanActivate() == false)
+                {
+                    return;
+                }
+                
                 u32 activeCount = existingActive;
                 for (auto& pointer : m_pendingPointers)
                 {
@@ -200,6 +205,21 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
+        void PinchGesture::Cancel()
+        {
+            CS_ASSERT(IsActive() == true, "Cannot cancel a gesture that isn't active.");
+            
+            for (auto& pointer : m_pendingPointers)
+            {
+                pointer.m_active = false;
+            }
+            
+            SetActive(false);
+            m_paused = false;
+            m_pinchEndedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
         void PinchGesture::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
         {
             if (in_inputType == m_requiredInputType)
@@ -282,9 +302,7 @@ namespace ChilliSource
                     
                     if (m_pendingPointers.empty() == true && IsActive() == true)
                     {
-                        SetActive(false);
-                        m_paused = false;
-                        m_pinchEndedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+                        Cancel();
                     }
                 }
             }

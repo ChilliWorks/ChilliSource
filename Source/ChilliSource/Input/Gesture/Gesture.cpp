@@ -28,11 +28,24 @@
 
 #include <ChilliSource/Input/Gesture/Gesture.h>
 
+#include <ChilliSource/Input/Gesture/GestureSystem.h>
+
 namespace ChilliSource
 {
     namespace Input
     {
         CS_DEFINE_NAMEDTYPE(Gesture);
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        bool Gesture::CanActivate()
+        {
+            if (m_gestureSystem != nullptr)
+            {
+                return m_gestureSystem->CanActivate(this);
+            }
+            
+            return false;
+        }
         //-------------------------------------------------------
         //-------------------------------------------------------
         void Gesture::SetActive(bool in_active)

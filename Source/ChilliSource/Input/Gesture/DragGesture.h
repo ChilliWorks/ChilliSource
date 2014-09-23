@@ -160,6 +160,15 @@ namespace ChilliSource
             //----------------------------------------------------
             Core::Vector2 CalculatePosition() const;
             //--------------------------------------------------------
+            /// This will be called if the gesture is currently active
+            /// and conflict resolution deduces that it should end.
+            /// This will de-activate the current gesture and set all
+            /// pointers back to inactive.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------
+            void Cancel() override;
+            //--------------------------------------------------------
             /// Called when a pointer down event occurs.
             ///
             /// @author Ian Copland

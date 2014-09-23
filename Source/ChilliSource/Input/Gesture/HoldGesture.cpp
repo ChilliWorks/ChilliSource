@@ -97,9 +97,6 @@ namespace ChilliSource
                 f64 timestamp = ((f64)Core::Application::Get()->GetSystemTimeInMilliseconds()) / 1000.0;
                 if (timestamp - m_currentStartTimestamp > k_holdTime)
                 {
-                    
-                    //TODO: Check if can fire
-                    
                     Core::Vector2 gesturePosition = Core::Vector2::k_zero;
                     for (auto& pointerInfo : m_pendingPointers)
                     {
@@ -107,8 +104,12 @@ namespace ChilliSource
                     }
                     gesturePosition /= m_pendingPointers.size();
                     
-                    m_heldEvent.NotifyConnections(this, gesturePosition);
                     Reset();
+                    
+                    if (CanActivate() == true)
+                    {
+                        m_heldEvent.NotifyConnections(this, gesturePosition);
+                    }
                 }
             }
         }

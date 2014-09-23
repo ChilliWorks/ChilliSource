@@ -53,20 +53,35 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(GestureSystem);
             //--------------------------------------------------------
+            /// An enum describing the possible results from a gesture
+            /// conflict.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------
+            enum class ConflictResult
+            {
+                k_neitherGesture,
+                k_existingGesture,
+                k_newGesture,
+                k_bothGestures
+            };
+            //--------------------------------------------------------
             /// A delegate which will be called when the activation of
-            /// a gesture collides with another. The delegate should
+            /// a gesture conflicts with another. The delegate should
             /// return true if the second gesture is allowed to activate
             /// in addition to the first, false if only the first
             /// should activate.
             ///
             /// @author Ian Copland
             ///
-            /// @param The first gesture to activate.
-            /// @param The second gesture to activate.
+            /// @param The existing gesture that is already active.
+            /// @param The new gesture trying to activate.
             ///
-            /// @return Whether or not the second is allowed to activate.
+            /// @return The result of the collision. The value returned
+            /// should reflect which gestures will be allowed to start
+            /// or continue.
             //---------------------------------------------------------
-            using CollisionResolutionDelegate = std::function<void(const Gesture*, const Gesture*)>;
+            using ConflictResolutionDelegate = std::function<ConflictResult(const Gesture*, const Gesture*)>;
             //--------------------------------------------------------
             /// Queries whether or not this implements the interface
             /// with the given Id. This is threadsafe.
@@ -101,23 +116,21 @@ namespace ChilliSource
 			void RemoveGesture(const Gesture* in_gesture);
             //--------------------------------------------------------
             /// Set's a delegate that should be used to handle gesture
-            /// collision resolution. If two gestures are active at
-            /// the same time the delegate will be called. If true
-            /// is returned from the delegate the second delegate can
-            /// will activate, otherwise only the first will. If no
-            /// delegate is set both will always be allowed. This is
-            /// threadsafe.
+            /// conflict resolution. If two gestures are active at
+            /// the same time the delegate will be called. The conflict
+            /// result enum describes what the result of the conflict
+            /// should be. If no delegate is set both will always be
+            /// allowed. This is threadsafe.
             ///
             /// @author Ian Copland
             ///
-            /// @param The interface Id.
-            ///
-            /// @return Whether or not the inteface is implemented.
+            /// @param The delegate,
             //---------------------------------------------------------
-			void SetCollisionResolutionDelegate(const CollisionResolutionDelegate& in_delegate);
+			void SetConflictResolutionDelegate(const ConflictResolutionDelegate& in_delegate);
         private:
 
             friend class Core::State;
+            friend class Gesture;
             //--------------------------------------------------------
             /// Creates a new instance of this system. This shou
             ///
@@ -142,6 +155,20 @@ namespace ChilliSource
             /// @author Ian Copland
             //--------------------------------------------------------
             void ProcessDeferredAddAndRemovals();
+            //--------------------------------------------------------
+            /// Performs conflict resolution on the gestures and
+            /// returns whether or not the given gesture can be activated.
+            /// Any gestures that are currently active which should end
+            /// on conflict with this gesture will have their Cancel()
+            /// method called.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The gesture to perform conflict detection on.
+            ///
+            /// @param Whether or not the gesture can activate.
+            //--------------------------------------------------------
+            bool CanActivate(Gesture* in_gesture);
             //--------------------------------------------------------
             /// Called when the owning state is initialised. This
             /// registers for the input events.
@@ -225,6 +252,8 @@ namespace ChilliSource
             bool m_isSendingEvent = false;
             std::vector<std::pair<GestureSPtr, bool>> m_gesturesToAdd;
             std::vector<std::pair<GestureSPtr, bool>> m_gestures;
+            
+            ConflictResolutionDelegate m_conflictResolutionDelegate;
             
             Core::EventConnectionUPtr m_pointerDownConnection;
             Core::EventConnectionUPtr m_pointerMovedConnection;

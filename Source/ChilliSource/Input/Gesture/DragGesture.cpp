@@ -112,6 +112,11 @@ namespace ChilliSource
             
             if (dragCount >= m_requiredPointerCount)
             {
+                if (IsActive() == false && CanActivate() == false)
+                {
+                    return;
+                }
+                
                 u32 activeCount = existingActive;
                 for (auto& pointer : m_pendingPointers)
                 {
@@ -156,6 +161,21 @@ namespace ChilliSource
             }
             
             return gesturePos;
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void DragGesture::Cancel()
+        {
+            CS_ASSERT(IsActive() == true, "Cannot cancel a gesture that isn't active.");
+            
+            for (auto& pointer : m_pendingPointers)
+            {
+                pointer.m_active = false;
+            }
+            
+            SetActive(false);
+            m_paused = false;
+            m_dragEndedEvent.NotifyConnections(this, m_currentPosition);
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -240,9 +260,7 @@ namespace ChilliSource
                     
                     if (m_pendingPointers.empty() == true && IsActive() == true)
                     {
-                        SetActive(false);
-                        m_paused = false;
-                        m_dragEndedEvent.NotifyConnections(this, m_currentPosition);
+                        Cancel();
                     }
                 }
             }

@@ -256,8 +256,10 @@ namespace ChilliSource
                             
                             ResetGesture();
                             
-                            //TODO: !? Check for collisions.
-                            m_tappedEvent.NotifyConnections(this, gesturePosition);
+                            if (CanActivate() == true)
+                            {
+                                m_tappedEvent.NotifyConnections(this, gesturePosition);
+                            }
                         }
                     }
                 }

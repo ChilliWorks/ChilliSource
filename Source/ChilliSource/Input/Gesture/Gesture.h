@@ -63,10 +63,21 @@ namespace ChilliSource
             //-------------------------------------------------------
             Gesture() = default;
             //-------------------------------------------------------
+            /// Queries for gesture conficts to see if this can
+            /// activate. If the gesture cannot activate no events
+            /// should be fired. All gestures must call this prior to
+            /// the first event in a gesture instance being called.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param Whether or not to set active.
+            //-------------------------------------------------------
+            bool CanActivate();
+            //-------------------------------------------------------
             /// Sets the gesture active. This should be set for any
             /// gesture that will be active for a sustained time like
             /// a drag gesture. Instantious gestures such as a tap
-            /// should not. This is used to flag collisions between
+            /// should not. This is used to flag conflicts between
             /// different gestures.
             ///
             /// @author Ian Copland
@@ -82,6 +93,16 @@ namespace ChilliSource
             /// are only active for a instant, such as a tap.
             //-------------------------------------------------------
             bool IsActive() const;
+            //--------------------------------------------------------
+            /// This will be called if the gesture is currently active
+            /// and conflict resolution deduces that it should end.
+            /// The gesture should reset itself and fire any "ended"
+            /// events where relevent. Instantious gestures such as
+            /// a tap do not need to implement this.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------
+            virtual void Cancel() {};
             //--------------------------------------------------------
             /// A method that can optionally be implemented by the
             /// implementing class to receive update events.
