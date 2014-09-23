@@ -43,6 +43,11 @@ namespace ChilliSource
         /// A gesture for receiving hold input events. Allows for
         /// multi-finger events.
         ///
+        /// A hold gesture requires that all intended pointers be
+        /// pressed down within a short period of each other. These
+        /// must then stay down in the same position until the hold
+        /// timer elapses.
+        ///
         /// @author Ian Copland
         //----------------------------------------------------------
         class HoldGesture final : public Gesture

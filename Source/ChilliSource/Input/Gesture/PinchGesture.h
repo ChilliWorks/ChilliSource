@@ -40,8 +40,16 @@ namespace ChilliSource
     namespace Input
     {
         //----------------------------------------------------------
-        /// A gesture for receiving pinch input events. Allows for
-        /// multi-finger events.
+        /// A gesture for receiving pinch input events.
+        ///
+        /// A pinch gesture will start when at least two pointers
+        /// have moved.
+        ///
+        /// The gesture will update whenever there are two active
+        /// pointers and one of them moves.
+        ///
+        /// The gesture will end when all pointers have been
+        /// removed.
         ///
         /// @author Ian Copland
         //----------------------------------------------------------
@@ -60,7 +68,7 @@ namespace ChilliSource
             /// @param The fraction difference between the initial
             /// pinch distance to the current.
             //----------------------------------------------------
-            using Delegate = std::function<void(const HoldGesture*, const Core::Vector2&, f32)>;
+            using Delegate = std::function<void(const PinchGesture*, const Core::Vector2&, f32)>;
             //----------------------------------------------------
             /// Constructor. Constructs the hold gesture with the
             /// given settings.
@@ -112,16 +120,26 @@ namespace ChilliSource
             Core::IConnectableEvent<Delegate>& GetPinchEndedEvent();
         private:
             //----------------------------------------------------
-            /// Information on the initial state of a single
-            /// pointer within a tap.
+            /// Information on a single pointer within the gesture.
             ///
             /// @author Ian Copland
             //----------------------------------------------------
             struct PointerInfo final
             {
-                Core::Vector2 m_currentPosition;
                 Pointer::Id m_pointerId;
+                Core::Vector2 m_initialPosition;
+                Core::Vector2 m_currentPosition;
+                bool m_isDrag = false;
+                bool m_active = false;
             };
+            //--------------------------------------------------------
+            /// Tries to activate or un-pause a pinch gesture.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The pointer.
+            //--------------------------------------------------------
+            void TryStart(const Pointer& in_pointer);
             //----------------------------------------------------
             /// Calculates the current position of the gesture.
             /// This will be the centre position between the pointers
@@ -191,8 +209,13 @@ namespace ChilliSource
             Core::Event<Delegate> m_pinchMovedEvent;
             Core::Event<Delegate> m_pinchEndedEvent;
             
+            f32 m_minDisplacementSquared = 0.0f;
+            
             std::vector<PointerInfo> m_pendingPointers;
             f32 m_initialDistance = 0.0f;
+            CSCore::Vector2 m_currentPosition;
+            f32 m_currentScale = 0.0f;
+            bool m_paused = false;
         };
     }
 }

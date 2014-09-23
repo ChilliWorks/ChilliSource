@@ -44,6 +44,10 @@ namespace ChilliSource
         /// multi-tap events like double and triple tap, and multi-
         /// finger events.
         ///
+        /// A tap gesture requires all intended pointers be pressed
+        /// down within a short period of each other, and all released
+        /// prior to the tap timer expiring, without moving.
+        ///
         /// @author Ian Copland
         //----------------------------------------------------------
         class TapGesture final : public Gesture

@@ -35,6 +35,7 @@ namespace ChilliSource
 {
     namespace
     {
+        const f32 k_minDisplacement = 20.0f;
         const u32 k_requiredPointerCount = 2;
     }
     
@@ -46,7 +47,10 @@ namespace ChilliSource
         PinchGesture::PinchGesture(Pointer::InputType in_inputType)
         : m_requiredInputType(in_inputType)
         {
-            m_pendingPointers.reserve(2);
+            Core::Screen* screen = Core::Application::Get()->GetScreen();
+            m_minDisplacementSquared = (k_minDisplacement * screen->GetDensityScale()) * (k_minDisplacement * screen->GetDensityScale());
+            
+            m_pendingPointers.reserve(k_requiredPointerCount);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -80,17 +84,79 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
+        void PinchGesture::TryStart(const Pointer& in_pointer)
+        {
+            u32 dragCount = 0;
+            u32 existingActive = 0;
+            for (const auto& pointer : m_pendingPointers)
+            {
+                if (pointer.m_isDrag == true)
+                {
+                    ++dragCount;
+                }
+                
+                if (pointer.m_active == true)
+                {
+                    ++existingActive;
+                }
+            }
+            
+            CS_ASSERT(existingActive < k_requiredPointerCount, "gesture is already started if current active count is already at the required amount.");
+            
+            if (dragCount >= k_requiredPointerCount)
+            {
+                u32 activeCount = existingActive;
+                for (auto& pointer : m_pendingPointers)
+                {
+                    if (pointer.m_isDrag == true && pointer.m_active == false && activeCount < k_requiredPointerCount)
+                    {
+                        pointer.m_active = true;
+                        ++activeCount;
+                    }
+                }
+                
+                m_paused = false;
+                
+                if (IsActive() == false)
+                {
+                    SetActive(true);
+                    m_initialDistance = CalculateDistance();
+                    m_currentPosition = CalculatePosition();
+                    m_currentScale = CalculateScale();
+                    m_pinchStartedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+                }
+                else
+                {
+                    //If we're re-placing a finger for a pinch we want to scale the initial distance such that the scale at the new
+                    //finger position is the same as it was when the finger was removed.
+                    if (m_currentScale > 0.0f)
+                    {
+                        f32 scaleFactor = CalculateScale() / m_currentScale;
+                        m_initialDistance *= scaleFactor;
+                    }
+                    
+                    m_currentPosition = CalculatePosition();
+                    m_currentScale = CalculateScale();
+                    m_pinchMovedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+                }
+            }
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
         Core::Vector2 PinchGesture::CalculatePosition() const
         {
             Core::Vector2 gesturePos = Core::Vector2::k_zero;
-            if (m_pendingPointers.size() > 0)
+            if (m_pendingPointers.size() >= k_requiredPointerCount && IsActive() == true && m_paused == false)
             {
                 for (const auto& pointer : m_pendingPointers)
                 {
-                    gesturePos += pointer.m_currentPosition;
+                    if (pointer.m_active == true)
+                    {
+                        gesturePos += pointer.m_currentPosition;
+                    }
                 }
                 
-                gesturePos /= f32(m_pendingPointers.size());
+                gesturePos /= k_requiredPointerCount;
             }
             
             return gesturePos;
@@ -99,99 +165,129 @@ namespace ChilliSource
         //----------------------------------------------------
         f32 PinchGesture::CalculateDistance() const
         {
-            //TODO: !?
-//            Core::Vector2 gesturePos = Core::Vector2::k_zero;
-//            if (m_pendingPointers.size() > 0)
-//            {
-//                for (const auto& pointer : m_pendingPointers)
-//                {
-//                    gesturePos += pointer.m_currentPosition;
-//                }
-//                
-//                gesturePos /= f32(m_pendingPointers.size());
-//            }
-//            
-            return 0.0f;
+            f32 distance = 0.0f;
+            
+            if (m_pendingPointers.size() >= k_requiredPointerCount && IsActive() == true && m_paused == false)
+            {
+                std::vector<Core::Vector2> positions;
+                for (const auto& pointer : m_pendingPointers)
+                {
+                    if (pointer.m_active == true)
+                    {
+                        positions.push_back(pointer.m_currentPosition);
+                    }
+                }
+                
+                CS_ASSERT(positions.size() == k_requiredPointerCount, "There are more active pointers than required.");
+                
+                Core::Vector2 displacement = positions[1] - positions[0];
+                distance = displacement.Length();
+            }
+            
+            return distance;
         }
         //----------------------------------------------------
         //----------------------------------------------------
         f32 PinchGesture::CalculateScale() const
         {
-            //TODO: !?
+            f32 scale = 0.0f;
+            if (m_initialDistance > 0.0f)
+            {
+                scale = CalculateDistance() / m_initialDistance;
+            }
             
-            return 0.0f;
+            return scale;
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
         void PinchGesture::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
         {
-//            Core::Vector2 currentGesturePos = CalculatePosition();
-//            f32 currentGestureScale = CalculateScale();
-//            
-//            PointerInfo pointerInfo;
-//            pointerInfo.m_pointerId = in_pointer.GetId();
-//            pointerInfo.m_currentPosition = in_pointer.GetPosition();
-//            m_pendingPointers.push_back(pointerInfo);
-//            
-//            if (IsActive() == true)
-//            {
-//                SetActive(false);
-//                m_pinchEndedEvent.NotifyConnections(this, currentGesturePos, currentGestureScale);
-//            }
+            if (in_inputType == m_requiredInputType)
+            {
+                PointerInfo pointerInfo;
+                pointerInfo.m_pointerId = in_pointer.GetId();
+                pointerInfo.m_currentPosition = in_pointer.GetPosition();
+                m_pendingPointers.push_back(pointerInfo);
+            }
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
         void PinchGesture::OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter)
         {
-//            if (m_pendingPointers.size() > 0)
-//            {
-//                for (auto& pointer : m_pendingPointers)
-//                {
-//                    if (in_pointer.GetId() == pointer.m_pointerId)
-//                    {
-//                        pointer.m_currentPosition = in_pointer.GetPosition();
-//                        break;
-//                    }
-//                }
-//                
-//                if (IsActive() == false && m_pendingPointers.size() == k_requiredPointerCount)
-//                {
-//                    SetActive(true);
-//                    m_initialDistance = CalculateDistance();
-//                    m_pinchStartedEvent.NotifyConnections(this, CalculatePosition(), CalculateScale());
-//                }
-//                else if (IsActive() == true)
-//                {
-//                    m_pinchMovedEvent.NotifyConnections(this, CalculatePosition(), CalculateScale());
-//                }
-//            }
+            if (m_pendingPointers.size() > 0)
+            {
+                bool isPending = false;
+                bool isActive = false;
+                for (auto& pointer : m_pendingPointers)
+                {
+                    if (in_pointer.GetId() == pointer.m_pointerId)
+                    {
+                        pointer.m_currentPosition = in_pointer.GetPosition();
+                        
+                        Core::Vector2 displacement = pointer.m_currentPosition - pointer.m_initialPosition;
+                        if (displacement.LengthSquared() > m_minDisplacementSquared)
+                        {
+                            pointer.m_isDrag = true;
+                        }
+                        
+                        if (pointer.m_active == true)
+                        {
+                            isActive = true;
+                        }
+                        
+                        isPending = true;
+                    }
+                }
+                
+                if (isPending == true)
+                {
+                    if (IsActive() == false || m_paused == true)
+                    {
+                        TryStart(in_pointer);
+                    }
+                    else if (isActive == true)
+                    {
+                        m_currentPosition = CalculatePosition();
+                        m_currentScale = CalculateScale();
+                        m_pinchMovedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+                    }
+                }
+            }
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
         void PinchGesture::OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
         {
-//            if (m_pendingPointers.size() > 0)
-//            {
-//                for (auto pointerIt = m_pendingPointers.begin(); pointerIt != m_pendingPointers.end();)
-//                {
-//                    if (in_pointer.GetId() == pointerIt->m_pointerId)
-//                    {
-//                        if (IsActive() == true)
-//                        {
-//                            Core::Vector2 gesturePos = CalculatePosition();
-//                            f32 gestureScale = CalculateScale();
-//                            SetActive(false);
-//                            m_pinchEndedEvent.NotifyConnections(this, gesturePos, gestureScale);
-//                        }
-//                        pointerIt = m_pendingPointers.erase(pointerIt);
-//                        break;
-//                    }
-//                    else
-//                    {
-//                        ++pointerIt;
-//                    }
-//                }
-//            }
+            if (in_inputType == m_requiredInputType)
+            {
+                if (m_pendingPointers.size() > 0)
+                {
+                    for (auto pointerIt = m_pendingPointers.begin(); pointerIt != m_pendingPointers.end();)
+                    {
+                        if (in_pointer.GetId() == pointerIt->m_pointerId)
+                        {
+                            if (pointerIt->m_active == true)
+                            {
+                                m_paused = true;
+                            }
+                            
+                            pointerIt = m_pendingPointers.erase(pointerIt);
+                            break;
+                        }
+                        else
+                        {
+                            ++pointerIt;
+                        }
+                    }
+                    
+                    if (m_pendingPointers.empty() == true && IsActive() == true)
+                    {
+                        SetActive(false);
+                        m_paused = false;
+                        m_pinchEndedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+                    }
+                }
+            }
         }
     }
 }
