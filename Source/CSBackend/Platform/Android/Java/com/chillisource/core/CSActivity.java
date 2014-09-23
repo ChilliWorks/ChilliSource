@@ -103,6 +103,8 @@ public class CSActivity extends Activity
 
         CSPowerManager.RequestWakeLock(CSPowerManager.LOCK_TYPE.SCREEN_DIM_LOCK);
         
+        CSApplication.get().resume();
+        
         if(m_appConfig.isGooglePlayServicesRequired() == true)
         {
     		//We require Google Play Services so we need to check if they require installing
@@ -119,10 +121,9 @@ public class CSActivity extends Activity
     		case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
     			//Requires update
     			GooglePlayServicesUtil.getErrorDialog(gpsAvailableResult, this, 0).show();
+    			break;
     		}
         }
-        
-        CSApplication.get().resume();
     }
 	/**
 	 * Triggered when the window focus changes (i.e. the activity is no
