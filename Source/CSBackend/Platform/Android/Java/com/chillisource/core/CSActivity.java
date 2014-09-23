@@ -40,6 +40,8 @@ import com.chillisource.networking.HttpRequestNativeInterface;
 import com.chillisource.core.SharedPreferencesNativeInterface;
 import com.chillisource.web.WebViewNativeInterface;
 import com.chillisource.core.CSPowerManager;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 /**
  * The main activity for Chilli Source apps.
@@ -50,6 +52,7 @@ import com.chillisource.core.CSPowerManager;
 public class CSActivity extends Activity 
 {
 	private Surface m_surface;
+	private AppConfig m_appConfig;
 	
 	/**
 	 * Triggered when the activity is first created (i.e. on app launch).
@@ -67,7 +70,9 @@ public class CSActivity extends Activity
         	requestWindowFeature(Window.FEATURE_NO_TITLE);
         	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
-        	m_surface = new Surface(this);
+        	m_appConfig = new AppConfig(this);
+      
+        	m_surface = new Surface(m_appConfig, this);
         	
         	CSApplication.create(this);
       
@@ -97,6 +102,25 @@ public class CSActivity extends Activity
         m_surface.onResume();
 
         CSPowerManager.RequestWakeLock(CSPowerManager.LOCK_TYPE.SCREEN_DIM_LOCK);
+        
+        if(m_appConfig.isGooglePlayServicesRequired() == true)
+        {
+    		//We require Google Play Services so we need to check if they require installing
+    		int gpsAvailableResult = GooglePlayServicesUtil.isGooglePlayServicesAvailable(CSApplication.get().getAppContext());
+    		
+    		switch(gpsAvailableResult)
+    		{
+    		case ConnectionResult.SUCCESS:
+    			break;
+    		case ConnectionResult.SERVICE_MISSING:
+    			//Kindle or unsupported device
+    			//break;
+    		case ConnectionResult.SERVICE_DISABLED:
+    		case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
+    			//Requires update
+    			GooglePlayServicesUtil.getErrorDialog(gpsAvailableResult, this, 0).show();
+    		}
+        }
         
         CSApplication.get().resume();
     }

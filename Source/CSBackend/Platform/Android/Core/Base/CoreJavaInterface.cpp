@@ -33,7 +33,6 @@
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Core/Base/Screen.h>
 #include <CSBackend/Platform/Android/Core/DialogueBox/DialogueBoxSystem.h>
-#include <CSBackend/Platform/Android/Core/File/SharedPreferencesJavaInterface.h>
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceUtils.h>
 #include <CSBackend/Platform/Android/Input/Pointer/TouchInputJavaInterface.h>
@@ -181,7 +180,6 @@ void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject
 	//setup other interfaces
 	CSBackend::Android::TouchInputJavaInterface::SetupJavaInterface(javaVM);
 	CSBackend::Android::HttpRequestJavaInterface::SetupJavaInterface(javaVM);
-	CSBackend::Android::SharedPreferencesJavaInterface::SetupJavaInterface(javaVM);
 	CSBackend::Android::WebViewJavaInterface::SetupJavaInterface(javaVM);
     
 	//run the application
@@ -267,9 +265,7 @@ namespace CSBackend
 			CreateMethodReference("getOSVersion", "()I");
 			CreateMethodReference("getNumberOfCores", "()I");
 			CreateMethodReference("getScreenDensity", "()F");
-			CreateMethodReference("getTelephonyDeviceID", "()Ljava/lang/String;");
-			CreateMethodReference("getMacAddress", "()Ljava/lang/String;");
-			CreateMethodReference("getAndroidID", "()Ljava/lang/String;");
+			CreateMethodReference("getUniqueId", "()Ljava/lang/String;");
 			CreateMethodReference("forceQuit", "()V");
 			CreateMethodReference("getSystemTimeInMilliseconds", "()J");
 			CreateMethodReference("setPreferredFPS", "(I)V");
@@ -477,35 +473,13 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		std::string CoreJavaInterface::GetTelephonyDeviceID()
+		std::string CoreJavaInterface::GetUniqueId()
 		{
-			std::string output = "None";
+			std::string output = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring telephonyDeviceID = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getTelephonyDeviceID")));
-			output = JavaInterfaceUtils::CreateSTDStringFromJString(telephonyDeviceID);
-			env->DeleteLocalRef(telephonyDeviceID);
-			return output;
-		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		std::string CoreJavaInterface::GetMacAddress()
-		{
-			std::string output = "None";
-			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring macAddress = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getMacAddress")));
-			output = JavaInterfaceUtils::CreateSTDStringFromJString(macAddress);
-			env->DeleteLocalRef(macAddress);
-			return output;
-		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		std::string CoreJavaInterface::GetAndroidID()
-		{
-			std::string output = "None";
-			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring androidID = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getAndroidID")));
-			output = JavaInterfaceUtils::CreateSTDStringFromJString(androidID);
-			env->DeleteLocalRef(androidID);
+			jstring adId = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getUniqueId")));
+			output = JavaInterfaceUtils::CreateSTDStringFromJString(adId);
+			env->DeleteLocalRef(adId);
 			return output;
 		}
         //-----------------------------------------------------------------------------------------------------

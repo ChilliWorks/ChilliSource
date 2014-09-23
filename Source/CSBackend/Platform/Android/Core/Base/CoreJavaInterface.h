@@ -193,48 +193,11 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------
 			f32 GetScreenDensity();
 			//--------------------------------------------------------------
-			/// This returns the telephony device ID acquired from the
-			/// CoreNativeInterface Java class.
+			/// @author S Downie
 			///
-			/// This id is not accessable if the device does not contain a
-			/// sim card, or if the sim is unavailable (flight mode). If the
-			/// id is not accessable an empty string will be returned. This
-			/// Should not change on factory reset of a device, but it may
-			/// change if the sim card is changed.
-			///
-			/// @author Ian Copland
-			///
-			/// @return the telephony device ID or an empty string.
+			/// @return String containing the id or empty if none can be obtained
 			//--------------------------------------------------------------
-			std::string GetTelephonyDeviceID();
-			//--------------------------------------------------------------
-			/// This returns the Mac Address acquired from the CoreNativeInterface
-			/// Java class.
-			///
-			/// This may not be available on some devices while wifi is turned
-			/// off. This should not change on factory reset of a device.
-			///
-			/// @author Ian Copland
-			///
-			/// @return the Mac Address or an empty string.
-			//--------------------------------------------------------------
-			std::string GetMacAddress();
-			//--------------------------------------------------------------
-			/// This returns the Android ID as acquired from the
-			/// CoreNativeInterface Java class.
-			///
-			/// This should be unique however a bug in 2.2 has lead to a large
-			/// amount of devices on 2.2 sharing the same ID (9774d56d682e549c).
-			/// This ID is checked for and, if found, is discarded. If the id is
-			/// unavailable or the duplicate ID is found, an empty string
-			/// will be returned. This value may change if the device is
-			/// factory reset.
-			///
-			/// @author Ian Copland
-			///
-			/// @return the unique Android ID or an empty string.
-			//--------------------------------------------------------------
-			std::string GetAndroidID();
+			std::string GetUniqueId();
             //-----------------------------------------------------------------------------------------------------
             /// @author Ian Copland
             ///

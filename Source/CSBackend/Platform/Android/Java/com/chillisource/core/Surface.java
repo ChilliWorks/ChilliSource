@@ -27,7 +27,6 @@
  */
 
 package com.chillisource.core;
-import org.json.JSONObject;
 
 import com.chillisource.input.TouchInputNativeInterface;
 
@@ -48,17 +47,18 @@ public class Surface extends GLSurfaceView
 	 *
 	 * @author Ian Copland
 	 * 
+	 * @param App config
 	 * @param Activity
 	 */
-	public Surface(Activity in_activity) 
+	public Surface(AppConfig in_appConfig, Activity in_activity) 
 	{
 		super(in_activity);
-        
+		
 		//create the context factory
 		setEGLContextFactory(new ContextFactory());
 		
 		//set the config
-		setEGLConfigChooser(createConfigChooser(in_activity));
+		setEGLConfigChooser(createConfigChooser(in_appConfig));
 		
 		//create renderer
 		setRenderer(new com.chillisource.core.Renderer());
@@ -69,13 +69,13 @@ public class Surface extends GLSurfaceView
 	 *
 	 * @author Ian Copland
 	 * 
-	 * @param The activity.
+	 * @param The app config.
 	 * 
 	 * @return The config chooser.
 	 */
-	private ConfigChooser createConfigChooser(Activity in_activity)
+	private ConfigChooser createConfigChooser(AppConfig in_config)
 	{
-		String surfaceFormat = readSurfaceFormat(in_activity);
+		String surfaceFormat = in_config.getSurfaceFormat();
 		
 		if (surfaceFormat.equalsIgnoreCase("rgb565_depth24") == true)
 		{
@@ -98,55 +98,6 @@ public class Surface extends GLSurfaceView
 			Logging.logFatal("Surface: Invalid surface format.");
 			return null;
 		}
-	}
-	/**
-	 * Reads the surface format from the App.config file.
-	 *
-	 * @author Ian Copland
-	 * 
-	 * @param The activity
-	 * 
-	 * @return The config chooser.
-	 */
-	private String readSurfaceFormat(Activity in_activity)
-	{
-		final String k_configFilePath = "AppResources/App.config";
-		
-		String output = "rgb565_depth24";
-		if (FileUtils.doesFileExistAPK(in_activity, k_configFilePath))
-		{
-			byte[] byteContents = FileUtils.readFileAPK(in_activity, k_configFilePath);
-			String stringContents = StringUtils.UTF8ByteArrayToString(byteContents);
-			
-			try
-			{
-				JSONObject jObject = new JSONObject(stringContents);
-				if (jObject.has("PreferredSurfaceFormat") == true)
-				{
-					output = jObject.getString("PreferredSurfaceFormat");
-				}
-				
-				if(jObject.has("Android") == true)
-				{
-					JSONObject android = jObject.getJSONObject("Android");
-					
-					if(android.has("PreferredSurfaceFormat") == true)
-					{
-						output = android.getString("PreferredSurfaceFormat");
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				Logging.logFatal("Could not load App.config!");
-			}
-		}
-		else
-		{
-			Logging.logFatal("App.config does not exist!");
-		}
-		
-		return output;
 	}
 	/**
 	 * Triggered when the surface receives a touch input event

@@ -80,7 +80,7 @@ namespace CSBackend
             m_osVersion = javaInterface->GetOSVersionCode();
             m_locale = javaInterface->GetDefaultLocaleCode();
             m_language = ParseLanguageFromLocale(m_locale);
-            m_udid = m_udidManager.GetUDID();
+            m_udid = javaInterface->GetUniqueId();
             m_numCPUCores = javaInterface->GetNumberOfCores();
         }
         //-------------------------------------------------------
