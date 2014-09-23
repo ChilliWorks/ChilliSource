@@ -44,6 +44,15 @@ namespace ChilliSource
         /// support for multi-finger events such as a two finger
         /// drag.
         ///
+        /// A drag gesture is started when the required pointer
+        /// count is reached.
+        ///
+        /// Drag moved events will be sent when any movement occurs
+        /// with exactly the correct number of pointers on the screen.
+        ///
+        /// A drag will end when all fingers are lifted from the
+        /// screen.
+        ///
         /// @author Ian Copland
         //----------------------------------------------------------
         class DragGesture final : public Gesture
@@ -127,8 +136,19 @@ namespace ChilliSource
             struct PointerInfo
             {
                 Pointer::Id m_pointerId;
+                Core::Vector2 m_initialPosition;
                 Core::Vector2 m_currentPosition;
+                bool m_isDrag = false;
+                bool m_active = false;
             };
+            //--------------------------------------------------------
+            /// Tries to activate or un-pause a drag gesture.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The pointer.
+            //--------------------------------------------------------
+            void TryStart(const Pointer& in_pointer);
             //----------------------------------------------------
             /// Calculates the current position of the gesture.
             /// This will be the centre position between all pointers
@@ -181,7 +201,11 @@ namespace ChilliSource
             Core::Event<Delegate> m_dragMovedEvent;
             Core::Event<Delegate> m_dragEndedEvent;
 
+            f32 m_minDisplacementSquared = 0.0f;
+            
             std::vector<PointerInfo> m_pendingPointers;
+            CSCore::Vector2 m_currentPosition;
+            bool m_paused = false;
         };
     }
 }

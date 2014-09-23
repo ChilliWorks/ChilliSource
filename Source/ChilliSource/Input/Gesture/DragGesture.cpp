@@ -35,6 +35,11 @@ namespace ChilliSource
 {
     namespace Input
     {
+        namespace
+        {
+            const f32 k_minDisplacement = 20.0f;
+        }
+        
         CS_DEFINE_NAMEDTYPE(DragGesture);
         //----------------------------------------------------
         //----------------------------------------------------
@@ -42,6 +47,9 @@ namespace ChilliSource
         : m_requiredPointerCount(in_numPointers), m_requiredInputType(in_inputType)
         {
             CS_ASSERT(m_requiredPointerCount > 0, "Cannot have a drag gesture with 0 required pointers.");
+            
+            Core::Screen* screen = Core::Application::Get()->GetScreen();
+            m_minDisplacementSquared = (k_minDisplacement * screen->GetDensityScale()) * (k_minDisplacement * screen->GetDensityScale());
             
             m_pendingPointers.reserve(m_requiredPointerCount);
         }
@@ -81,19 +89,70 @@ namespace ChilliSource
         {
             return m_dragEndedEvent;
         }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void DragGesture::TryStart(const Pointer& in_pointer)
+        {
+            u32 dragCount = 0;
+            u32 existingActive = 0;
+            for (const auto& pointer : m_pendingPointers)
+            {
+                if (pointer.m_isDrag == true)
+                {
+                    ++dragCount;
+                }
+                
+                if (pointer.m_active == true)
+                {
+                    ++existingActive;
+                }
+            }
+            
+            CS_ASSERT(existingActive < m_requiredPointerCount, "gesture is already started if current active count is already at the required amount.");
+            
+            if (dragCount >= m_requiredPointerCount)
+            {
+                u32 activeCount = existingActive;
+                for (auto& pointer : m_pendingPointers)
+                {
+                    if (pointer.m_isDrag == true && pointer.m_active == false && activeCount < m_requiredPointerCount)
+                    {
+                        pointer.m_active = true;
+                        ++activeCount;
+                    }
+                }
+                
+                m_paused = false;
+                
+                if (IsActive() == false)
+                {
+                    SetActive(true);
+                    m_currentPosition = CalculatePosition();
+                    m_dragStartedEvent.NotifyConnections(this, m_currentPosition);
+                }
+                else
+                {
+                    m_currentPosition = CalculatePosition();
+                    m_dragMovedEvent.NotifyConnections(this, m_currentPosition);
+                }
+            }
+        }
         //----------------------------------------------------
         //----------------------------------------------------
         Core::Vector2 DragGesture::CalculatePosition() const
         {
             Core::Vector2 gesturePos = Core::Vector2::k_zero;
-            if (m_pendingPointers.size() > 0)
+            if (m_pendingPointers.size() >= m_requiredPointerCount && IsActive() == true && m_paused == false)
             {
                 for (const auto& pointer : m_pendingPointers)
                 {
-                    gesturePos += pointer.m_currentPosition;
+                    if (pointer.m_active == true)
+                    {
+                        gesturePos += pointer.m_currentPosition;
+                    }
                 }
                 
-                gesturePos /= f32(m_pendingPointers.size());
+                gesturePos /= m_requiredPointerCount;
             }
             
             return gesturePos;
@@ -102,16 +161,12 @@ namespace ChilliSource
         //--------------------------------------------------------
         void DragGesture::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
         {
-            PointerInfo pointerInfo;
-            pointerInfo.m_pointerId = in_pointer.GetId();
-            pointerInfo.m_currentPosition = in_pointer.GetPosition();
-            m_pendingPointers.push_back(pointerInfo);
-            
-            if (IsActive() == true)
+            if (in_inputType == m_requiredInputType)
             {
-                Core::Vector2 gesturePos = CalculatePosition();
-                SetActive(false);
-                m_dragEndedEvent.NotifyConnections(this, gesturePos);
+                PointerInfo pointerInfo;
+                pointerInfo.m_pointerId = in_pointer.GetId();
+                pointerInfo.m_currentPosition = in_pointer.GetPosition();
+                m_pendingPointers.push_back(pointerInfo);
             }
         }
         //--------------------------------------------------------
@@ -120,23 +175,40 @@ namespace ChilliSource
         {
             if (m_pendingPointers.size() > 0)
             {
+                bool isPending = false;
+                bool isActive = false;
                 for (auto& pointer : m_pendingPointers)
                 {
                     if (in_pointer.GetId() == pointer.m_pointerId)
                     {
                         pointer.m_currentPosition = in_pointer.GetPosition();
-                        break;
+                        
+                        Core::Vector2 displacement = pointer.m_currentPosition - pointer.m_initialPosition;
+                        if (displacement.LengthSquared() > m_minDisplacementSquared)
+                        {
+                            pointer.m_isDrag = true;
+                        }
+                        
+                        if (pointer.m_active == true)
+                        {
+                            isActive = true;
+                        }
+                        
+                        isPending = true;
                     }
                 }
                 
-                if (IsActive() == false && m_pendingPointers.size() == m_requiredPointerCount)
+                if (isPending == true)
                 {
-                    SetActive(true);
-                    m_dragStartedEvent.NotifyConnections(this, CalculatePosition());
-                }
-                else if (IsActive() == true)
-                {
-                    m_dragMovedEvent.NotifyConnections(this, CalculatePosition());
+                    if (IsActive() == false || m_paused == true)
+                    {
+                        TryStart(in_pointer);
+                    }
+                    else if (isActive == true)
+                    {
+                        m_currentPosition = CalculatePosition();
+                        m_dragMovedEvent.NotifyConnections(this, m_currentPosition);
+                    }
                 }
             }
         }
@@ -144,24 +216,33 @@ namespace ChilliSource
         //--------------------------------------------------------
         void DragGesture::OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
         {
-            if (m_pendingPointers.size() > 0)
+            if (in_inputType == m_requiredInputType)
             {
-                for (auto pointerIt = m_pendingPointers.begin(); pointerIt != m_pendingPointers.end();)
+                if (m_pendingPointers.size() > 0)
                 {
-                    if (in_pointer.GetId() == pointerIt->m_pointerId)
+                    for (auto pointerIt = m_pendingPointers.begin(); pointerIt != m_pendingPointers.end();)
                     {
-                        if (IsActive() == true)
+                        if (in_pointer.GetId() == pointerIt->m_pointerId)
                         {
-                            Core::Vector2 gesturePos = CalculatePosition();
-                            SetActive(false);
-                            m_dragEndedEvent.NotifyConnections(this, gesturePos);
+                            if (pointerIt->m_active == true)
+                            {
+                                m_paused = true;
+                            }
+                            
+                            pointerIt = m_pendingPointers.erase(pointerIt);
+                            break;
                         }
-                        pointerIt = m_pendingPointers.erase(pointerIt);
-                        break;
+                        else
+                        {
+                            ++pointerIt;
+                        }
                     }
-                    else
+                    
+                    if (m_pendingPointers.empty() == true && IsActive() == true)
                     {
-                        ++pointerIt;
+                        SetActive(false);
+                        m_paused = false;
+                        m_dragEndedEvent.NotifyConnections(this, m_currentPosition);
                     }
                 }
             }

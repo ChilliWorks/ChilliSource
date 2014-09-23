@@ -1,7 +1,7 @@
 //
-//  HoldGesture.h
+//  PinchGesture.h
 //  Chilli Source
-//  Created by Ian Copland on 19/09/2014.
+//  Created by Ian Copland on 22/09/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_INPUT_GESTURE_HOLDGESTURE_H_
-#define _CHILLISOURCE_INPUT_GESTURE_HOLDGESTURE_H_
+#ifndef _CHILLISOURCE_INPUT_GESTURE_PINCHGESTURE_H_
+#define _CHILLISOURCE_INPUT_GESTURE_PINCHGESTURE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
@@ -40,37 +40,37 @@ namespace ChilliSource
     namespace Input
     {
         //----------------------------------------------------------
-        /// A gesture for receiving hold input events. Allows for
+        /// A gesture for receiving pinch input events. Allows for
         /// multi-finger events.
         ///
         /// @author Ian Copland
         //----------------------------------------------------------
-        class HoldGesture final : public Gesture
+        class PinchGesture final : public Gesture
         {
         public:
             CS_DECLARE_NAMEDTYPE(HoldGesture);
             //----------------------------------------------------
-            /// A delegate called when a hold gesture is activated.
+            /// A delegate called when a pinch gesture is activated.
             ///
             /// @author Ian Copland
             ///
-            /// @param A pointer to the hold gesture that was
+            /// @param A pointer to the pinch gesture that was
             /// activated.
-            /// @param The position at which the tap occurred.
+            /// @param The centre position of the pinch.
+            /// @param The fraction difference between the initial
+            /// pinch distance to the current.
             //----------------------------------------------------
-            using Delegate = std::function<void(const HoldGesture*, const Core::Vector2&)>;
+            using Delegate = std::function<void(const HoldGesture*, const Core::Vector2&, f32)>;
             //----------------------------------------------------
             /// Constructor. Constructs the hold gesture with the
             /// given settings.
             ///
             /// @author Ian Copland
             ///
-            /// @param The number of pointers that should be
-            /// down per tap. Defaults to 1.
             /// @param The input type this gesture should listen
             /// for. Defaults to using the default input type.
             //----------------------------------------------------
-			HoldGesture(u32 in_numTaps = 1, Pointer::InputType in_inputType = Pointer::GetDefaultInputType());
+            PinchGesture(Pointer::InputType in_inputType = Pointer::GetDefaultInputType());
             //----------------------------------------------------
             /// Queries whether or not this implements the gesture
             /// interface with the given Id.
@@ -82,14 +82,7 @@ namespace ChilliSource
             /// @return Whether or not the gesture inteface is
             /// implemented.
             //----------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_gestureInterfaceId) const override;
-            //----------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The number of pointers required by this
-            /// Gesture.
-            //----------------------------------------------------
-            u32 GetNumPointers() const;
+            bool IsA(Core::InterfaceIDType in_gestureInterfaceId) const override;
             //----------------------------------------------------
             /// @author Ian Copland
             ///
@@ -100,9 +93,23 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @return An event that can be used to listen for
-            /// ocurrances of the gesture.
+            /// start of a pinch.
             //----------------------------------------------------
-            Core::IConnectableEvent<Delegate>& GetHeldEvent();
+            Core::IConnectableEvent<Delegate>& GetPinchStartedEvent();
+            //----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return An event that can be used to listen for
+            /// movement in a pinch
+            //----------------------------------------------------
+            Core::IConnectableEvent<Delegate>& GetPinchMovedEvent();
+            //----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return An event that can be used to listen for
+            /// end of a pinch.
+            //----------------------------------------------------
+            Core::IConnectableEvent<Delegate>& GetPinchEndedEvent();
         private:
             //----------------------------------------------------
             /// Information on the initial state of a single
@@ -112,24 +119,37 @@ namespace ChilliSource
             //----------------------------------------------------
             struct PointerInfo final
             {
-                Core::Vector2 m_initialPosition;
+                Core::Vector2 m_currentPosition;
                 Pointer::Id m_pointerId;
             };
-            //--------------------------------------------------------
-            /// Resets the gesture if one is active.
-            ///
-            /// @author Ian Copland
-            //--------------------------------------------------------
-            void Reset();
-            //--------------------------------------------------------
-            /// Updates the hold gestures. Tests to see if the hold
-            /// time has exceeded.
+            //----------------------------------------------------
+            /// Calculates the current position of the gesture.
+            /// This will be the centre position between the pointers
+            /// involved in the gesture.
             ///
             /// @author Ian Copland
             ///
-            /// @param The delta time since the last update.
-            //--------------------------------------------------------
-            void OnUpdate(f32 in_deltaTime) override;
+            /// @return The calculated position.
+            //----------------------------------------------------
+            Core::Vector2 CalculatePosition() const;
+            //----------------------------------------------------
+            /// Calculates the current distance between the pointers
+            /// in the gesture.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return The calculated scale.
+            //----------------------------------------------------
+            f32 CalculateDistance() const;
+            //----------------------------------------------------
+            /// Calculates the current fraction of the initial
+            /// distance to the current.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return The calculated scale.
+            //----------------------------------------------------
+            f32 CalculateScale() const;
             //--------------------------------------------------------
             /// Called when a pointer down event occurs.
             ///
@@ -166,16 +186,13 @@ namespace ChilliSource
             //--------------------------------------------------------
             void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter) override;
             
-            u32 m_requiredPointerCount;
             Pointer::InputType m_requiredInputType;
-            Core::Event<Delegate> m_heldEvent;
+            Core::Event<Delegate> m_pinchStartedEvent;
+            Core::Event<Delegate> m_pinchMovedEvent;
+            Core::Event<Delegate> m_pinchEndedEvent;
             
-            f32 m_maxDisplacementSquared = 0.0f;
-            
-            bool m_holdPending = false;
             std::vector<PointerInfo> m_pendingPointers;
-            f64 m_currentStartTimestamp = 0.0;
-            f64 m_lastEndTimestamp = 0.0;
+            f32 m_initialDistance = 0.0f;
         };
     }
 }

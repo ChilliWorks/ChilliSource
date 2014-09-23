@@ -124,7 +124,7 @@ namespace ChilliSource
             {
                 Core::Vector2 m_initialPosition;
                 Pointer::Id m_pointerId;
-                bool m_isDown;
+                bool m_isDown = false;
             };
             //--------------------------------------------------------
             /// Checks the time stamp to see if any active taps have

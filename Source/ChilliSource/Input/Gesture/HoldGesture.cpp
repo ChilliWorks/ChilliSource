@@ -134,7 +134,6 @@ namespace ChilliSource
                     PointerInfo pointerInfo;
                     pointerInfo.m_initialPosition = in_pointer.GetPosition();
                     pointerInfo.m_pointerId = in_pointer.GetId();
-                    pointerInfo.m_isDown = true;
                     m_pendingPointers.push_back(pointerInfo);
                 }
             }
