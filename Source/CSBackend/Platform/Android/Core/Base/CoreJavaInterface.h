@@ -146,95 +146,10 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------
 			/// @author Ian Copland
 			///
-			/// @return returns the default locale code as acquired from the CoreNativeInterface
-			/// Java class.
-			//--------------------------------------------------------------------------------------
-			std::string GetDefaultLocaleCode();
-			//--------------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return returns the device model as acquired from the CoreNativeInterface
-			/// Java class.
-			//--------------------------------------------------------------------------------------
-			std::string GetDeviceModel();
-			//--------------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return returns the device model type as acquired from the CoreNativeInterface
-			/// Java class.
-			//--------------------------------------------------------------------------------------
-			std::string GetDeviceModelType();
-			//--------------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return returns the device manufacturer as acquired from the CoreNativeInterface
-			/// Java class.
-			//--------------------------------------------------------------------------------------
-			std::string GetDeviceManufacturer();
-			//--------------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return returns the os version number as acquired from the CoreNativeInterface
-			/// Java class.
-			//--------------------------------------------------------------------------------------
-			s32 GetOSVersionCode();
-			//--------------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return returns the number of cores as acquired from the CoreNativeInterface
-			/// Java class.
-			//--------------------------------------------------------------------------------------
-			s32 GetNumberOfCores();
-			//--------------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
 			/// @return returns the screen density as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			f32 GetScreenDensity();
-			//--------------------------------------------------------------
-			/// This returns the telephony device ID acquired from the
-			/// CoreNativeInterface Java class.
-			///
-			/// This id is not accessable if the device does not contain a
-			/// sim card, or if the sim is unavailable (flight mode). If the
-			/// id is not accessable an empty string will be returned. This
-			/// Should not change on factory reset of a device, but it may
-			/// change if the sim card is changed.
-			///
-			/// @author Ian Copland
-			///
-			/// @return the telephony device ID or an empty string.
-			//--------------------------------------------------------------
-			std::string GetTelephonyDeviceID();
-			//--------------------------------------------------------------
-			/// This returns the Mac Address acquired from the CoreNativeInterface
-			/// Java class.
-			///
-			/// This may not be available on some devices while wifi is turned
-			/// off. This should not change on factory reset of a device.
-			///
-			/// @author Ian Copland
-			///
-			/// @return the Mac Address or an empty string.
-			//--------------------------------------------------------------
-			std::string GetMacAddress();
-			//--------------------------------------------------------------
-			/// This returns the Android ID as acquired from the
-			/// CoreNativeInterface Java class.
-			///
-			/// This should be unique however a bug in 2.2 has lead to a large
-			/// amount of devices on 2.2 sharing the same ID (9774d56d682e549c).
-			/// This ID is checked for and, if found, is discarded. If the id is
-			/// unavailable or the duplicate ID is found, an empty string
-			/// will be returned. This value may change if the device is
-			/// factory reset.
-			///
-			/// @author Ian Copland
-			///
-			/// @return the unique Android ID or an empty string.
-			//--------------------------------------------------------------
-			std::string GetAndroidID();
             //-----------------------------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -253,12 +168,6 @@ namespace CSBackend
 			CSCore::Application* m_application;
 			s32 m_screenWidth;
 			s32 m_screenHeight;
-			std::string m_deviceModel;
-			std::string m_deviceModelType;
-			std::string m_deviceManufacturer;
-			std::string m_localeCode;
-			s32 m_OSVersionCode;
-			s32 m_numberOfCores;
 			f32 m_screenDensity;
 			f32 m_physicalScreenSize;
 		};

@@ -40,6 +40,8 @@ import com.chillisource.networking.HttpRequestNativeInterface;
 import com.chillisource.core.SharedPreferencesNativeInterface;
 import com.chillisource.web.WebViewNativeInterface;
 import com.chillisource.core.CSPowerManager;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 /**
  * The main activity for Chilli Source apps.
@@ -49,7 +51,9 @@ import com.chillisource.core.CSPowerManager;
  */
 public class CSActivity extends Activity 
 {
+	private static final int k_googlePlayServicesErrorDialogRequestCode = 7564568;
 	private Surface m_surface;
+	private AppConfig m_appConfig;
 	
 	/**
 	 * Triggered when the activity is first created (i.e. on app launch).
@@ -67,7 +71,9 @@ public class CSActivity extends Activity
         	requestWindowFeature(Window.FEATURE_NO_TITLE);
         	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         
-        	m_surface = new Surface(this);
+        	m_appConfig = new AppConfig(this);
+      
+        	m_surface = new Surface(m_appConfig, this);
         	
         	CSApplication.create(this);
       
@@ -99,6 +105,26 @@ public class CSActivity extends Activity
         CSPowerManager.RequestWakeLock(CSPowerManager.LOCK_TYPE.SCREEN_DIM_LOCK);
         
         CSApplication.get().resume();
+        
+        if(m_appConfig.isGooglePlayServicesRequired() == true)
+        {
+    		//We require Google Play Services so we need to check if they require installing
+    		int gpsAvailableResult = GooglePlayServicesUtil.isGooglePlayServicesAvailable(CSApplication.get().getAppContext());
+    		
+    		switch(gpsAvailableResult)
+    		{
+    		case ConnectionResult.SUCCESS:
+    			break;
+    		case ConnectionResult.SERVICE_MISSING:
+    			//Kindle or unsupported device
+    			break;
+    		case ConnectionResult.SERVICE_DISABLED:
+    		case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
+    			//Requires update
+    			GooglePlayServicesUtil.getErrorDialog(gpsAvailableResult, this, k_googlePlayServicesErrorDialogRequestCode).show();
+    			break;
+    		}
+        }
     }
 	/**
 	 * Triggered when the window focus changes (i.e. the activity is no
@@ -180,7 +206,15 @@ public class CSActivity extends Activity
 	 */
     @Override protected void onActivityResult(int in_requestCode, int in_resultCode, Intent in_data) 
     {
-    	CSApplication.get().activityResult(in_requestCode, in_resultCode, in_data);
+    	if(in_requestCode != k_googlePlayServicesErrorDialogRequestCode)
+    	{
+    		CSApplication.get().activityResult(in_requestCode, in_resultCode, in_data);
+    	}
+    	else if(in_resultCode == RESULT_CANCELED)
+    	{
+    		//Terminate until downloaded
+    		CSApplication.get().quit();
+    	}
     	super.onActivityResult(in_requestCode, in_resultCode, in_data);
 	}
 	/**
