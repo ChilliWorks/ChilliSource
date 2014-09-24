@@ -30,7 +30,7 @@
 
 #include <CSBackend/Platform/Android/Core/Base/Device.h>
 
-#include <CSBackend/Platform/Android/Core/Base/CoreJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/Base/DeviceJavaInterface.h>
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 
 namespace CSBackend
@@ -72,7 +72,8 @@ namespace CSBackend
         Device::Device()
             : m_locale(k_defaultLocale), m_language(k_defaultLanguage)
         {
-        	CoreJavaInterfaceSPtr javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
+        	DeviceJavaInterfaceSPtr javaInterface(new DeviceJavaInterface());
+        	JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(javaInterface);
 
             m_model = javaInterface->GetDeviceModel();
             m_modelType = javaInterface->GetDeviceModelType();

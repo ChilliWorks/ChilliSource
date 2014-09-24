@@ -37,7 +37,7 @@ import android.app.Activity;
  * 
  * @author S Downie
  */
-public class AppConfig 
+public final class AppConfig 
 {
 	private final String k_configFilePath = "AppResources/App.config";
 	
@@ -89,15 +89,15 @@ public class AppConfig
 			
 			try
 			{
-				JSONObject jObject = new JSONObject(stringContents);
-				if (jObject.has("PreferredSurfaceFormat") == true)
+				JSONObject root = new JSONObject(stringContents);
+				if (root.has("PreferredSurfaceFormat") == true)
 				{
-					m_surfaceFormat = jObject.getString("PreferredSurfaceFormat");
+					m_surfaceFormat = root.getString("PreferredSurfaceFormat");
 				}
 				
-				if(jObject.has("Android") == true)
+				if(root.has("Android") == true)
 				{
-					JSONObject android = jObject.getJSONObject("Android");
+					JSONObject android = root.getJSONObject("Android");
 					
 					if(android.has("PreferredSurfaceFormat") == true)
 					{

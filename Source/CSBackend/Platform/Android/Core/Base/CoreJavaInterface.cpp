@@ -247,7 +247,7 @@ namespace CSBackend
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
 		CoreJavaInterface::CoreJavaInterface()
-		: m_application(nullptr), m_screenWidth(0), m_screenHeight(0), m_OSVersionCode(-1), m_numberOfCores(-1), m_screenDensity(-0.1f), m_physicalScreenSize(-0.1f)
+		: m_application(nullptr), m_screenWidth(0), m_screenHeight(0), m_screenDensity(-0.1f), m_physicalScreenSize(-0.1f)
 		{
 			CreateNativeInterface("com/chillisource/core/CoreNativeInterface");
 			CreateMethodReference("getExternalStorageDirectory", "()Ljava/lang/String;");
@@ -258,14 +258,7 @@ namespace CSBackend
 			CreateMethodReference("getAPKDirectory", "()Ljava/lang/String;");
 			CreateMethodReference("getScreenWidth", "()I");
 			CreateMethodReference("getScreenHeight", "()I");
-			CreateMethodReference("getDefaultLocaleCode", "()Ljava/lang/String;");
-			CreateMethodReference("getDeviceModel", "()Ljava/lang/String;");
-			CreateMethodReference("getDeviceManufacturer", "()Ljava/lang/String;");
-			CreateMethodReference("getDeviceModelType", "()Ljava/lang/String;");
-			CreateMethodReference("getOSVersion", "()I");
-			CreateMethodReference("getNumberOfCores", "()I");
 			CreateMethodReference("getScreenDensity", "()F");
-			CreateMethodReference("getUniqueId", "()Ljava/lang/String;");
 			CreateMethodReference("forceQuit", "()V");
 			CreateMethodReference("getSystemTimeInMilliseconds", "()J");
 			CreateMethodReference("setPreferredFPS", "(I)V");
@@ -388,80 +381,6 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
-		std::string CoreJavaInterface::GetDefaultLocaleCode()
-		{
-			if (m_localeCode == "")
-			{
-				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				jstring jstrLocalCode = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getDefaultLocaleCode")));
-				m_localeCode = JavaInterfaceUtils::CreateSTDStringFromJString(jstrLocalCode);
-				env->DeleteLocalRef(jstrLocalCode);
-			}
-			return m_localeCode;
-		}
-		//--------------------------------------------------------------------------------------
-		//--------------------------------------------------------------------------------------
-		std::string CoreJavaInterface::GetDeviceModel()
-		{
-			if (m_deviceModel == "")
-			{
-				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				jstring jstrDeviceModel = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getDeviceModel")));
-				m_deviceModel = JavaInterfaceUtils::CreateSTDStringFromJString(jstrDeviceModel);
-				env->DeleteLocalRef(jstrDeviceModel);
-			}
-			return m_deviceModel;
-		}
-		//--------------------------------------------------------------------------------------
-		//--------------------------------------------------------------------------------------
-		std::string CoreJavaInterface::GetDeviceModelType()
-		{
-			if (m_deviceModelType == "")
-			{
-				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				jstring jstrDeviceModelType = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getDeviceModelType")));
-				m_deviceModelType = JavaInterfaceUtils::CreateSTDStringFromJString(jstrDeviceModelType);
-				env->DeleteLocalRef(jstrDeviceModelType);
-			}
-			return m_deviceModelType;
-		}
-		//--------------------------------------------------------------------------------------
-		//--------------------------------------------------------------------------------------
-		std::string CoreJavaInterface::GetDeviceManufacturer()
-		{
-			if (m_deviceManufacturer == "")
-			{
-				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				jstring jstrDeviceManufacturer = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getDeviceManufacturer")));
-				m_deviceManufacturer = JavaInterfaceUtils::CreateSTDStringFromJString(jstrDeviceManufacturer);
-				env->DeleteLocalRef(jstrDeviceManufacturer);
-			}
-			return m_deviceManufacturer;
-		}
-		//--------------------------------------------------------------------------------------
-		//--------------------------------------------------------------------------------------
-		s32 CoreJavaInterface::GetOSVersionCode()
-		{
-			if (m_OSVersionCode == -1)
-			{
-				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				m_OSVersionCode = env->CallIntMethod(GetJavaObject(), GetMethodID("getOSVersion"));
-			}
-			return m_OSVersionCode;
-		}
-		//--------------------------------------------------------------------------------------
-		//--------------------------------------------------------------------------------------
-		s32 CoreJavaInterface::GetNumberOfCores()
-		{
-			if (m_numberOfCores == -1)
-			{
-				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-				m_numberOfCores = env->CallIntMethod(GetJavaObject(), GetMethodID("getNumberOfCores"));
-			}
-			return m_numberOfCores;
-		}
-		//--------------------------------------------------------------------------------------
-		//--------------------------------------------------------------------------------------
 		f32 CoreJavaInterface::GetScreenDensity()
 		{
 			if (m_screenDensity < 0.0f)
@@ -470,17 +389,6 @@ namespace CSBackend
 				m_screenDensity = env->CallFloatMethod(GetJavaObject(), GetMethodID("getScreenDensity"));
 			}
 			return m_screenDensity;
-		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		std::string CoreJavaInterface::GetUniqueId()
-		{
-			std::string output = "";
-			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring adId = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getUniqueId")));
-			output = JavaInterfaceUtils::CreateSTDStringFromJString(adId);
-			env->DeleteLocalRef(adId);
-			return output;
 		}
         //-----------------------------------------------------------------------------------------------------
         //-----------------------------------------------------------------------------------------------------

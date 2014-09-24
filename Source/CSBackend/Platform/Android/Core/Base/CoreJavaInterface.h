@@ -146,58 +146,10 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------
 			/// @author Ian Copland
 			///
-			/// @return returns the default locale code as acquired from the CoreNativeInterface
-			/// Java class.
-			//--------------------------------------------------------------------------------------
-			std::string GetDefaultLocaleCode();
-			//--------------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return returns the device model as acquired from the CoreNativeInterface
-			/// Java class.
-			//--------------------------------------------------------------------------------------
-			std::string GetDeviceModel();
-			//--------------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return returns the device model type as acquired from the CoreNativeInterface
-			/// Java class.
-			//--------------------------------------------------------------------------------------
-			std::string GetDeviceModelType();
-			//--------------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return returns the device manufacturer as acquired from the CoreNativeInterface
-			/// Java class.
-			//--------------------------------------------------------------------------------------
-			std::string GetDeviceManufacturer();
-			//--------------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return returns the os version number as acquired from the CoreNativeInterface
-			/// Java class.
-			//--------------------------------------------------------------------------------------
-			s32 GetOSVersionCode();
-			//--------------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return returns the number of cores as acquired from the CoreNativeInterface
-			/// Java class.
-			//--------------------------------------------------------------------------------------
-			s32 GetNumberOfCores();
-			//--------------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
 			/// @return returns the screen density as acquired from the CoreNativeInterface
 			/// Java class.
 			//--------------------------------------------------------------------------------------
 			f32 GetScreenDensity();
-			//--------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return String containing the id or empty if none can be obtained
-			//--------------------------------------------------------------
-			std::string GetUniqueId();
             //-----------------------------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -216,12 +168,6 @@ namespace CSBackend
 			CSCore::Application* m_application;
 			s32 m_screenWidth;
 			s32 m_screenHeight;
-			std::string m_deviceModel;
-			std::string m_deviceModelType;
-			std::string m_deviceManufacturer;
-			std::string m_localeCode;
-			s32 m_OSVersionCode;
-			s32 m_numberOfCores;
 			f32 m_screenDensity;
 			f32 m_physicalScreenSize;
 		};
