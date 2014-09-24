@@ -144,7 +144,7 @@ namespace ChilliSource
             MaterialSPtr CreateStaticBlinn(const std::string& in_uniqueId, const TextureCSPtr& in_texture) const;
             //---------------------------------------------------
             /// Creates a new material for static textured models
-            /// that use blinn-phong per pixel lighting and recieved
+            /// that use blinn-phong per pixel lighting and received
             /// shadows.
             ///
             /// @author S Downie

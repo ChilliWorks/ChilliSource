@@ -67,7 +67,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
-            /// @param The recieved button.
+            /// @param The received button.
 			//----------------------------------------------------
             using TriggeredDelegate = std::function<void(DeviceButton)>;
             //----------------------------------------------------

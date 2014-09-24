@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_INPUT_GESTURE_GESTURESYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Container/concurrent_vector.h>
 #include <ChilliSource/Core/System/StateSystem.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 
@@ -114,7 +115,7 @@ namespace ChilliSource
             //---------------------------------------------------------
 			void RemoveGesture(const Gesture* in_gesture);
             //--------------------------------------------------------
-            /// Set's a delegate that should be used to handle gesture
+            /// Sets a delegate that should be used to handle gesture
             /// conflict resolution. If two gestures are active at
             /// the same time the delegate will be called. The conflict
             /// result enum describes what the result of the conflict
@@ -123,7 +124,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
-            /// @param The delegate,
+            /// @param The delegate. Can be null.
             //---------------------------------------------------------
 			void SetConflictResolutionDelegate(const ConflictResolutionDelegate& in_delegate);
         private:
@@ -199,7 +200,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             void OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter);
             //--------------------------------------------------------
-            /// Called when a pointer moved event is recieved from the
+            /// Called when a pointer moved event is received from the
             /// pointer system. This will be relayed onto each active
             /// gesture in this gesture system.
             ///
@@ -212,7 +213,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter);
             //--------------------------------------------------------
-            /// Called when a pointer up event is recieved from the
+            /// Called when a pointer up event is received from the
             /// pointer system. This will be relayed onto each active
             /// gesture in this system.
             ///
@@ -226,7 +227,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter);
             //--------------------------------------------------------
-            /// Called when a pointer scrolled event is recieved from
+            /// Called when a pointer scrolled event is received from
             /// the pointer system. This will be relayed onto each
             /// active gesture in this system.
             ///
@@ -248,9 +249,7 @@ namespace ChilliSource
             void OnDestroy() override;
             
             std::recursive_mutex m_mutex;
-            bool m_isSendingEvent = false;
-            std::vector<std::pair<GestureSPtr, bool>> m_gesturesToAdd;
-            std::vector<std::pair<GestureSPtr, bool>> m_gestures;
+            Core::concurrent_vector<GestureSPtr> m_gestures;
             
             ConflictResolutionDelegate m_conflictResolutionDelegate;
             

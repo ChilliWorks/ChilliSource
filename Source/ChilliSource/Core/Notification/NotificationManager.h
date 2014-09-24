@@ -44,9 +44,9 @@ namespace ChilliSource
         //------------------------------------------------------------
         /// Manages the various different notification systems,
         /// providing a single interface though which different
-        /// notification types can be created and recieved. Notifications
-        /// recieved though this are queued so that only one notification
-        /// can be recieved at a time.
+        /// notification types can be created and received. Notifications
+        /// received though this are queued so that only one notification
+        /// can be received at a time.
         //------------------------------------------------------------
         class NotificationManager final : public AppSystem
         {
@@ -55,7 +55,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Typedefs
             //-----------------------------------------------------
-            using RecievedDelegate = std::function<void(NotificationManager*, const NotificationCSPtr&)>;
+            using ReceivedDelegate = std::function<void(NotificationManager*, const NotificationCSPtr&)>;
             using DismissedDelegate = std::function<void(const NotificationCSPtr&)>;
             //-----------------------------------------------------
             /// Creates a new instance of the system.
@@ -188,7 +188,7 @@ namespace ChilliSource
             /// @return An event which will be fired whenever a
             /// notification is received.
             //----------------------------------------------------
-            IConnectableEvent<RecievedDelegate>& GetRecievedEvent();
+            IConnectableEvent<ReceivedDelegate>& GetReceivedEvent();
             //---------------------------------------------------
             /// @author Ian Copland
             ///
@@ -228,7 +228,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             //------------------------------------------------
-            void OnNotificationRecieved(const NotificationCSPtr& in_notification);
+            void OnNotificationReceived(const NotificationCSPtr& in_notification);
             //------------------------------------------------
             /// Updates the notification queue and fires any
             /// notifications that are ready.
@@ -250,11 +250,11 @@ namespace ChilliSource
             LocalNotificationSystem* m_localNotificationSystem;
             RemoteNotificationSystem* m_remoteNotificationSystem;
             std::deque<NotificationContainer> m_notificationQueue;
-            Event<RecievedDelegate> m_recievedEvent;
+            Event<ReceivedDelegate> m_receivedEvent;
             Event<DismissedDelegate> m_dismissedEvent;
-            EventConnectionUPtr m_appRecievedConnection;
-            EventConnectionUPtr m_localRecievedConnection;
-            EventConnectionUPtr m_remoteRecievedConnection;
+            EventConnectionUPtr m_appReceivedConnection;
+            EventConnectionUPtr m_localReceivedConnection;
+            EventConnectionUPtr m_remoteReceivedConnection;
             f32 m_timeSinceNotification;
         };
     }

@@ -323,21 +323,20 @@ namespace ChilliSource
             
             std::recursive_mutex m_mutex;
             std::unique_lock<std::recursive_mutex> m_lock;
+            s32 m_lockCount = 0;
         };
         
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
         template <typename TType> concurrent_vector<TType>::concurrent_vector()
-        : m_lock(m_mutex), m_size(0)
+        : m_lock(m_mutex, std::defer_lock), m_size(0)
         {
-            m_lock.unlock();
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
         template <typename TType> concurrent_vector<TType>::concurrent_vector(std::initializer_list<TType>&& in_initialObjects)
-        : m_lock(m_mutex), m_size(0)
+        : m_lock(m_mutex, std::defer_lock), m_size(0)
         {
-            m_lock.unlock();
             m_size = in_initialObjects.size();
             m_container.reserve(m_size);
             
@@ -478,16 +477,30 @@ namespace ChilliSource
         //--------------------------------------------------------------------
         template <typename TType> void concurrent_vector<TType>::lock()
         {
-            m_lock.lock();
+            std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
+            
+            if (m_lockCount == 0)
+            {
+                m_lock.lock();
+            }
+            
+            m_lockCount++;
             m_isLocked = true;
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
         template <typename TType> void concurrent_vector<TType>::unlock()
         {
-            garbage_collect();
+            std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
+            
             m_isLocked = false;
-            m_lock.unlock();
+            m_lockCount--;
+            
+            if (m_lockCount == 0)
+            {
+                garbage_collect();
+                m_lock.unlock();
+            }
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
@@ -517,25 +530,25 @@ namespace ChilliSource
         //--------------------------------------------------------------------
         template <typename TType> typename concurrent_vector<TType>::const_iterator concurrent_vector<TType>::begin() const
         {
-            return const_iterator(m_container, m_mutex);
+            return const_iterator(m_container, const_cast<std::recursive_mutex&>(m_mutex));
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
         template <typename TType> typename concurrent_vector<TType>::const_iterator concurrent_vector<TType>::end() const
         {
-            return const_iterator(m_container, m_mutex) + size();
+            return const_iterator(m_container, const_cast<std::recursive_mutex&>(m_mutex)) + size();
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
         template <typename TType> typename concurrent_vector<TType>::const_iterator concurrent_vector<TType>::cbegin() const
         {
-            return const_iterator(m_container, m_mutex);
+            return const_iterator(m_container, const_cast<std::recursive_mutex&>(m_mutex));
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
         template <typename TType> typename concurrent_vector<TType>::const_iterator concurrent_vector<TType>::cend() const
         {
-            return const_iterator(m_container, m_mutex) + size();
+            return const_iterator(m_container, const_cast<std::recursive_mutex&>(m_mutex)) + size();
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
@@ -553,25 +566,25 @@ namespace ChilliSource
         //--------------------------------------------------------------------
         template <typename TType> typename concurrent_vector<TType>::const_reverse_iterator concurrent_vector<TType>::rbegin() const
         {
-            return const_reverse_iterator(m_container, m_mutex);
+            return const_reverse_iterator(m_container, const_cast<std::recursive_mutex&>(m_mutex));
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
         template <typename TType> typename concurrent_vector<TType>::const_reverse_iterator concurrent_vector<TType>::rend() const
         {
-            return const_reverse_iterator(m_container, m_mutex) + size();
+            return const_reverse_iterator(m_container, const_cast<std::recursive_mutex&>(m_mutex)) + size();
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
         template <typename TType> typename concurrent_vector<TType>::const_reverse_iterator concurrent_vector<TType>::crbegin() const
         {
-            return const_reverse_iterator(m_container, m_mutex);
+            return const_reverse_iterator(m_container, const_cast<std::recursive_mutex&>(m_mutex));
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
         template <typename TType> typename concurrent_vector<TType>::const_reverse_iterator concurrent_vector<TType>::crend() const
         {
-            return const_reverse_iterator(m_container, m_mutex) + size();
+            return const_reverse_iterator(m_container, const_cast<std::recursive_mutex&>(m_mutex)) + size();
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------

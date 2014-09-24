@@ -52,7 +52,7 @@ namespace ChilliSource
             /// @param Data structure to iterate over
             /// @param Mutex used to protect the underlying iterable
             //------------------------------------------------------------------------
-            concurrent_vector_const_forward_iterator(std::vector<std::pair<TType, bool>>& in_iterable, std::recursive_mutex& in_iterableMutex)
+            concurrent_vector_const_forward_iterator(const std::vector<std::pair<TType, bool>>& in_iterable, std::recursive_mutex& in_iterableMutex)
             : m_iterable(in_iterable), m_iterableMutex(in_iterableMutex)
             {
                 m_iterableIndex = find_next_occupied_index(0);
@@ -208,7 +208,7 @@ namespace ChilliSource
             /// @param Mutex used to protect the underlying iterable
             /// @param Initial index
             //------------------------------------------------------------------------
-            concurrent_vector_const_forward_iterator(std::vector<std::pair<TType, bool>>& in_iterable, std::recursive_mutex& in_iterableMutex, s32 in_initialIndex)
+            concurrent_vector_const_forward_iterator(const std::vector<std::pair<TType, bool>>& in_iterable, std::recursive_mutex& in_iterableMutex, s32 in_initialIndex)
             : m_iterable(in_iterable), m_iterableMutex(in_iterableMutex), m_iterableIndex(in_initialIndex)
             {
                 
@@ -242,7 +242,7 @@ namespace ChilliSource
         private:
             
             s32 m_iterableIndex = 0;
-            std::vector<std::pair<TType, bool>>& m_iterable;
+            const std::vector<std::pair<TType, bool>>& m_iterable;
             std::recursive_mutex& m_iterableMutex;
         };
     }

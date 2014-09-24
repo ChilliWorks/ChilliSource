@@ -112,9 +112,9 @@ namespace CSBackend
             /// @author Ian Copland
             ///
             /// @return An event that can be used to listen for
-            /// new notifications being recieved.
+            /// new notifications being received.
             //---------------------------------------------------
-            CSCore::IConnectableEvent<CSCore::LocalNotificationSystem::RecievedDelegate>& GetRecievedEvent() override;
+            CSCore::IConnectableEvent<CSCore::LocalNotificationSystem::ReceivedDelegate>& GetReceivedEvent() override;
             //--------------------------------------------------------
             /// Called by the app delegate when the app launches. Used
             /// to pull local notification data from the options
@@ -170,7 +170,7 @@ namespace CSBackend
             ///
             /// @author Ian Copland
             //--------------------------------------------------------
-            void OnNotificationRecieved(const CSCore::NotificationSPtr& in_notification);
+            void OnNotificationReceived(const CSCore::NotificationSPtr& in_notification);
             //--------------------------------------------------------
             /// destroys the local notification system.
             ///
@@ -179,7 +179,7 @@ namespace CSBackend
             void OnDestroy() override;
             
             bool m_enabled;
-            CSCore::Event<CSCore::LocalNotificationSystem::RecievedDelegate> m_receivedEvent;
+            CSCore::Event<CSCore::LocalNotificationSystem::ReceivedDelegate> m_receivedEvent;
             
             NSMutableArray* m_recentlyAddedNotifications;
         };

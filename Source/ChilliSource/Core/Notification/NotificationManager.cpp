@@ -154,9 +154,9 @@ namespace ChilliSource
         }
         //---------------------------------------------------
         //----------------------------------------------------
-        IConnectableEvent<NotificationManager::RecievedDelegate>& NotificationManager::GetRecievedEvent()
+        IConnectableEvent<NotificationManager::ReceivedDelegate>& NotificationManager::GetReceivedEvent()
         {
-            return m_recievedEvent;
+            return m_receivedEvent;
         }
         //---------------------------------------------------
         //----------------------------------------------------
@@ -172,26 +172,26 @@ namespace ChilliSource
             m_appNotificationSystem = Application::Get()->GetSystem<AppNotificationSystem>();
             if (m_appNotificationSystem != nullptr)
             {
-                m_appRecievedConnection = m_appNotificationSystem->GetRecievedEvent().OpenConnection(MakeDelegate(this, &NotificationManager::OnNotificationRecieved));
+                m_appReceivedConnection = m_appNotificationSystem->GetReceivedEvent().OpenConnection(MakeDelegate(this, &NotificationManager::OnNotificationReceived));
             }
             
             //setup the local notification system
             m_localNotificationSystem = Application::Get()->GetSystem<LocalNotificationSystem>();
 			if (m_localNotificationSystem != nullptr)
             {
-                m_localRecievedConnection = m_localNotificationSystem->GetRecievedEvent().OpenConnection(MakeDelegate(this, &NotificationManager::OnNotificationRecieved));
+                m_localReceivedConnection = m_localNotificationSystem->GetReceivedEvent().OpenConnection(MakeDelegate(this, &NotificationManager::OnNotificationReceived));
             }
             
             //setup the remote notification system
             m_remoteNotificationSystem = Application::Get()->GetSystem<RemoteNotificationSystem>();
             if (m_remoteNotificationSystem != nullptr)
             {
-                m_remoteRecievedConnection = m_remoteNotificationSystem->GetRecievedEvent().OpenConnection(MakeDelegate(this, &NotificationManager::OnNotificationRecieved));
+                m_remoteReceivedConnection = m_remoteNotificationSystem->GetReceivedEvent().OpenConnection(MakeDelegate(this, &NotificationManager::OnNotificationReceived));
             }
         }
         //------------------------------------------------
         //------------------------------------------------
-        void NotificationManager::OnNotificationRecieved(const NotificationCSPtr& in_notification)
+        void NotificationManager::OnNotificationReceived(const NotificationCSPtr& in_notification)
         {
             NotificationContainer notificationContainer;
             notificationContainer.m_notification = std::make_shared<Notification>();
@@ -229,7 +229,7 @@ namespace ChilliSource
                 
                 if(m_notificationQueue.empty() == false && m_notificationQueue.front().m_triggered == false)
                 {
-                    m_recievedEvent.NotifyConnections(this, m_notificationQueue.front().m_notification);
+                    m_receivedEvent.NotifyConnections(this, m_notificationQueue.front().m_notification);
                     m_notificationQueue.front().m_triggered = true;
                     m_timeSinceNotification = 0.0f;
                 }
@@ -240,15 +240,15 @@ namespace ChilliSource
         void NotificationManager::OnDestroy()
         {
             //cleanup the app notification system.
-            m_appRecievedConnection.reset();
+            m_appReceivedConnection.reset();
             m_appNotificationSystem = nullptr;
             
             //cleanup the local notification system
-            m_localRecievedConnection.reset();
+            m_localReceivedConnection.reset();
             m_localNotificationSystem = nullptr;
             
             //cleanup the remote notification system
-            m_remoteRecievedConnection.reset();
+            m_remoteReceivedConnection.reset();
             m_remoteNotificationSystem = nullptr;
         }
     }

@@ -97,7 +97,7 @@ namespace ChilliSource
             /// This will be called if the gesture is currently active
             /// and conflict resolution deduces that it should end.
             /// The gesture should reset itself and fire any "ended"
-            /// events where relevent. Instantious gestures such as
+            /// events where relevant. Instantious gestures such as
             /// a tap do not need to implement this.
             ///
             /// @author Ian Copland

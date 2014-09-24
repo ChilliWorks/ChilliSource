@@ -1,5 +1,5 @@
 //
-//  Gestures.h
+//  Gesture.h
 //  Chilli Source
 //  Created by Ian Copland on 07/07/2014.
 //

@@ -173,7 +173,7 @@ namespace CSBackend
         }
         //--------------------------------------------------
         //---------------------------------------------------
-        CSCore::IConnectableEvent<CSCore::RemoteNotificationSystem::NotificationReceivedDelegate>& RemoteNotificationSystem::GetRecievedEvent()
+        CSCore::IConnectableEvent<CSCore::RemoteNotificationSystem::NotificationReceivedDelegate>& RemoteNotificationSystem::GetReceivedEvent()
         {
             return m_receivedEvent;
         }

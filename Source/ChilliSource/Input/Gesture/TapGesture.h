@@ -131,7 +131,7 @@ namespace ChilliSource
                 bool m_isDown = false;
             };
             //--------------------------------------------------------
-            /// Checks the time stamp to see if any active taps have
+            /// Checks the timestamp to see if any active taps have
             /// expired and resets the tap count if the time since the
             /// last tap is exceeded.
             ///

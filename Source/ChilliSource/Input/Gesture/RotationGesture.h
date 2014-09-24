@@ -42,7 +42,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         /// A gesture for receiving rotation input events.
         ///
-        /// A pinch gesture will start when at least two pointers
+        /// A rotation gesture will start when at least two pointers
         /// have moved.
         ///
         /// The gesture will update whenever there are two active
@@ -59,11 +59,11 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(RotationGesture);
             //----------------------------------------------------
-            /// A delegate called when a pinch gesture is activated.
+            /// A delegate called when a rotation gesture is activated.
             ///
             /// @author Ian Copland
             ///
-            /// @param A pointer to the pinch gesture that was
+            /// @param A pointer to the rotation gesture that was
             /// activated.
             /// @param The centre position of the pinch.
             /// @param The clockwise angle of the gesture from the

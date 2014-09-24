@@ -97,9 +97,9 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @return An event that can be used to listen for
-            /// new notifications being recieved.
+            /// new notifications being received.
             //---------------------------------------------------
-            virtual IConnectableEvent<NotificationReceivedDelegate>& GetRecievedEvent() = 0;
+            virtual IConnectableEvent<NotificationReceivedDelegate>& GetReceivedEvent() = 0;
         };
     }
 }

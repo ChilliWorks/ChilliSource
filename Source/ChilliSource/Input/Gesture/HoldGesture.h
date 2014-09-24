@@ -75,7 +75,7 @@ namespace ChilliSource
             /// @param The input type this gesture should listen
             /// for. Defaults to using the default input type.
             //----------------------------------------------------
-			HoldGesture(u32 in_numTaps = 1, Pointer::InputType in_inputType = Pointer::GetDefaultInputType());
+			HoldGesture(u32 in_numPointers = 1, Pointer::InputType in_inputType = Pointer::GetDefaultInputType());
             //----------------------------------------------------
             /// Queries whether or not this implements the gesture
             /// interface with the given Id.
@@ -127,7 +127,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             void Reset();
             //--------------------------------------------------------
-            /// Updates the hold gestures. Tests to see if the hold
+            /// Updates the hold gesture. Tests to see if the hold
             /// time has exceeded.
             ///
             /// @author Ian Copland
