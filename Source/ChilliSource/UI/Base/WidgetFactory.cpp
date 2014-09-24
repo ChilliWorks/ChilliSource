@@ -68,6 +68,7 @@ namespace ChilliSource
         {
             const std::string k_widgetKey = "Widget";
             const std::string k_highlightButtonKey = "HighlightButton";
+            const std::string k_toggleButtonKey = "ToggleButton";
             const std::string k_verticalSliderKey = "VerticalSliderBar";
             const std::string k_horizontalSliderKey = "HorizontalSliderBar";
             
@@ -150,6 +151,9 @@ namespace ChilliSource
             
             WidgetDefCSPtr highlightButtonDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HighlightButton.csuidef");
             RegisterDefinition(highlightButtonDef);
+            
+            WidgetDefCSPtr toggleButtonDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/ToggleButton.csuidef");
+            RegisterDefinition(toggleButtonDef);
             
             WidgetDefCSPtr horizontalSliderDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HorizontalSliderBar.csuidef");
             RegisterDefinition(horizontalSliderDef);
@@ -242,6 +246,12 @@ namespace ChilliSource
         WidgetUPtr WidgetFactory::CreateHighlightButton() const
         {
             return Create(m_widgetDefNameMap.find(k_highlightButtonKey)->second);
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetUPtr WidgetFactory::CreateToggleButton() const
+        {
+            return Create(m_widgetDefNameMap.find(k_toggleButtonKey)->second);
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------

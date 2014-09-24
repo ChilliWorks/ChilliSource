@@ -118,6 +118,16 @@ namespace ChilliSource
             //---------------------------------------------------------------------------
             WidgetUPtr CreateHighlightButton() const;
             //---------------------------------------------------------------------------
+            /// Creates a new widget with the behaviour of a toggle button.
+            /// A toggle button is toggled on or off on press depending on its current
+            /// state.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Widget with look and behaviour of toggle button
+            //---------------------------------------------------------------------------
+            WidgetUPtr CreateToggleButton() const;
+            //---------------------------------------------------------------------------
             /// Creates a new widget with the behaviour of a vertical slider.
             /// The slider can be dragged by the user
             ///
