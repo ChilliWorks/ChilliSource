@@ -53,7 +53,7 @@ namespace ChilliSource
             //--------------------------------------------------
             /// Delegates
             //--------------------------------------------------
-            using RecievedDelegate = std::function<void(const NotificationCSPtr&)>;
+            using ReceivedDelegate = std::function<void(const NotificationCSPtr&)>;
             //-------------------------------------------------------
             /// Create the platform dependent backend
             ///
@@ -118,9 +118,9 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @return An event that can be used to listen for
-            /// new notifications being recieved.
+            /// new notifications being received.
             //---------------------------------------------------
-            virtual IConnectableEvent<RecievedDelegate>& GetRecievedEvent() = 0;
+            virtual IConnectableEvent<ReceivedDelegate>& GetReceivedEvent() = 0;
             //--------------------------------------------------------
             /// Destructor
             //--------------------------------------------------------

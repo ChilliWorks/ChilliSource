@@ -52,12 +52,13 @@ namespace ChilliSource
         //--------------------------------------------------
         /// Gestures
         //--------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(Gesture);
-        CS_FORWARDDECLARE_CLASS(TapGesture);
-        CS_FORWARDDECLARE_CLASS(SwipeGesture);
-        CS_FORWARDDECLARE_CLASS(PinchGesture);
         CS_FORWARDDECLARE_CLASS(DragGesture);
         CS_FORWARDDECLARE_CLASS(HoldGesture);
+        CS_FORWARDDECLARE_CLASS(Gesture);
+        CS_FORWARDDECLARE_CLASS(GestureSystem);
+        CS_FORWARDDECLARE_CLASS(PinchGesture);
+        CS_FORWARDDECLARE_CLASS(RotationGesture);
+        CS_FORWARDDECLARE_CLASS(TapGesture);
         //--------------------------------------------------
         /// Keyboard
         //--------------------------------------------------

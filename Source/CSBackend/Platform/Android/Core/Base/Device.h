@@ -33,7 +33,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
-#include <CSBackend/Platform/Android/Core/Base/UDIDManager.h>
 #include <ChilliSource/Core/Base/Device.h>
 
 namespace CSBackend
@@ -121,7 +120,6 @@ namespace CSBackend
 			//----------------------------------------------------
 			Device();
             
-			UDIDManager m_udidManager;
             std::string m_model;
             std::string m_modelType;
             std::string m_manufacturer;

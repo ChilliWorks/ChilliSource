@@ -624,7 +624,7 @@ namespace ChilliSource
         void Widget::AddInternalWidget(const WidgetSPtr& in_widget)
         {
             CS_ASSERT(in_widget->GetParent() == nullptr, "Cannot add a widget as a child of more than 1 parent");
-            //TODO: Ensure that the vector is not invalidated during iteration
+            
             m_internalChildren.push_back(in_widget);
             in_widget->m_parent = this;
             in_widget->SetCanvas(m_canvas);

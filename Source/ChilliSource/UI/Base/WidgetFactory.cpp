@@ -180,7 +180,7 @@ namespace ChilliSource
                                     "LeftMouseButton", Input::Pointer::InputType::k_leftMouseButton,
                                     "MiddleMouseButton", Input::Pointer::InputType::k_middleMouseButton,
                                     "RightMouseButton", Input::Pointer::InputType::k_rightMouseButton,
-                                    "Default", Input::PointerSystem::GetDefaultInputType()
+                                    "Default", Input::Pointer::GetDefaultInputType()
                                     );
             
             Input::PointerProxy::RegisterWithLua(luaSystem);

@@ -28,19 +28,12 @@
 
 package com.chillisource.core;
 
-import java.util.Locale;
-
 import com.chillisource.core.FileUtils;
 import com.chillisource.core.InterfaceIDType;
 
-import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.wifi.WifiManager;
-import android.os.Build;
-import android.provider.Settings;
-import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 
 /**
@@ -55,6 +48,7 @@ public class CoreNativeInterface extends INativeInterface
 	/// Static Member Data
 	//--------------------------------------------------------------
 	public static InterfaceIDType InterfaceID = new InterfaceIDType("CoreNativeInterface");
+
 	//--------------------------------------------------------------
 	/// Member Data
 	//--------------------------------------------------------------
@@ -261,60 +255,6 @@ public class CoreNativeInterface extends INativeInterface
 	/**
 	 * @author Ian Copland
 	 * 
-	 * @return Locale code of device as a string
-	 */
-	public String getDefaultLocaleCode()
-	{
-		return Locale.getDefault().toString();
-	}
-	/**
-	 * @author Ian Copland
-	 * 
-	 * @return Mode of device as a string
-	 */
-	public String getDeviceModel()
-	{
-		return Build.MODEL.toString();
-	}
-	/**
-	 * @author Ian Copland
-	 * 
-	 * @return Manufacturer of device as a string
-	 */
-	public String getDeviceManufacturer()
-	{
-		return Build.MANUFACTURER.toString();
-	}
-	/**
-	 * @author Ian Copland
-	 * 
-	 * @return Type of device as a string
-	 */
-	public String getDeviceModelType()
-	{
-		return Build.DEVICE.toString();
-	}
-	/**
-	 * @author Ian Copland
-	 * 
-	 * @return OS version as number
-	 */
-	public int getOSVersion()
-	{
-		return Build.VERSION.SDK_INT;
-	}
-	/**
-	 * @author Ian Copland
-	 * 
-	 * @return Num of CPU cores available
-	 */
-	public int getNumberOfCores()
-	{
-		return Runtime.getRuntime().availableProcessors();
-	}
-	/**
-	 * @author Ian Copland
-	 * 
 	 * @return Density of screen in dpi
 	 */
 	public float getScreenDensity()
@@ -322,68 +262,6 @@ public class CoreNativeInterface extends INativeInterface
 		DisplayMetrics metrics = new DisplayMetrics();
 		CSApplication.get().getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		return metrics.density;
-	}
-	/**
-	 * Method accesable from native that returns the Device ID
-	 * That can be acquired from TelephonyManager.getDeviceId().
-	 * This id is not accessable if the device does not contain a
-	 * sim card, or if the sim is unavailable (flight mode). If the 
-	 * id is not accessable an empty string will be returned. This
-	 * Should not change on factory reset of a device, but it may
-	 * change if the sim card is changed.
-	 * 
-	 * @author Ian Copland
-	 *
-	 * @return the telephony device ID or an empty string.
-	*/
-	public String getTelephonyDeviceID()
-	{
-		TelephonyManager phoneManager = (TelephonyManager) CSApplication.get().getActivityContext().getSystemService(Context.TELEPHONY_SERVICE);
-		String strId = phoneManager.getDeviceId();
-		
-		if (strId == null)
-			return "";
-		return strId;
-	}
-	/**
-	 * Returns the mac address of the device. This may not be available
-	 * on some devices while wifi is turned off. This should not change
-	 * on factory reset of a device.
-	 * 
-	 * @author Ian Copland
-	 *
-	 * @return mac address or an empty string.
-	*/
-	public String getMacAddress()
-	{
-		WifiManager wifiManager = (WifiManager)CSApplication.get().getActivityContext().getSystemService(Context.WIFI_SERVICE);
-		String strMacAddress = wifiManager.getConnectionInfo().getMacAddress();
-		
-		if (strMacAddress == null)
-			return "";
-		return strMacAddress;
-	}
-	/**
-	 * Returns the android ID for this device. This should be unique
-	 * however a bug in 2.2 has lead to a large amount of devices
-	 * on 2.2 sharing the same ID (9774d56d682e549c). This ID is 
-	 * checked for and, if found, is discarded. If the id is
-	 * unavailable or the duplicate ID is found, an empty string
-	 * will be returned. This value may change if the device is
-	 * factory reset.
-	 *
-	 * @author Ian Copland
-	 *
-	 * @return the unique Android ID or an empty string.
-	*/
-	public String getAndroidID()
-	{
-		String strID = Settings.Secure.getString(CSApplication.get().getActivityContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-		
-		if (strID == null || strID.equalsIgnoreCase("9774d56d682e549c"))
-			return "";
-
-		return strID;
 	}
 	/**
 	 * @author S Downie

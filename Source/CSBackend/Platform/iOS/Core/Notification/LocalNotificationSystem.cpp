@@ -233,7 +233,7 @@ namespace CSBackend
         }
         //--------------------------------------------------
         //---------------------------------------------------
-        CSCore::IConnectableEvent<CSCore::LocalNotificationSystem::RecievedDelegate>& LocalNotificationSystem::GetRecievedEvent()
+        CSCore::IConnectableEvent<CSCore::LocalNotificationSystem::ReceivedDelegate>& LocalNotificationSystem::GetReceivedEvent()
         {
             return m_receivedEvent;
         }
@@ -250,7 +250,7 @@ namespace CSBackend
                 CSCore::NotificationSPtr notification = ConvertUILocalNotificationToNotification(pLocalNotification);
                 if (g_localNotificationSystem != nullptr)
                 {
-                    g_localNotificationSystem->OnNotificationRecieved(notification);
+                    g_localNotificationSystem->OnNotificationReceived(notification);
                 }
                 else
                 {
@@ -278,7 +278,7 @@ namespace CSBackend
             CSCore::NotificationSPtr notification = ConvertUILocalNotificationToNotification(inpNotification);
             if (g_localNotificationSystem != nullptr)
             {
-                g_localNotificationSystem->OnNotificationRecieved(notification);
+                g_localNotificationSystem->OnNotificationReceived(notification);
             }
             else
             {
@@ -305,7 +305,7 @@ namespace CSBackend
             
             for (const CSCore::NotificationSPtr& notification : g_queuedNotifications)
             {
-                OnNotificationRecieved(notification);
+                OnNotificationReceived(notification);
             }
             
             g_queuedNotifications.clear();
@@ -313,7 +313,7 @@ namespace CSBackend
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void LocalNotificationSystem::OnNotificationRecieved(const CSCore::NotificationSPtr& in_notification)
+        void LocalNotificationSystem::OnNotificationReceived(const CSCore::NotificationSPtr& in_notification)
         {
             m_receivedEvent.NotifyConnections(in_notification);
         }

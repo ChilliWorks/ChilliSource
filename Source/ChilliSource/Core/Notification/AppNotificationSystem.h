@@ -52,7 +52,7 @@ namespace ChilliSource
             //--------------------------------------------------
             /// Delegates
             //--------------------------------------------------
-            using RecievedDelegate = std::function<void(const NotificationCSPtr&)>;
+            using ReceivedDelegate = std::function<void(const NotificationCSPtr&)>;
             //--------------------------------------------------
             /// Creates a new instance of the system.
             ///
@@ -124,9 +124,9 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @return An event that can be used to listen for
-            /// new notifications being recieved.
+            /// new notifications being received.
             //---------------------------------------------------
-            IConnectableEvent<RecievedDelegate>& GetRecievedEvent();
+            IConnectableEvent<ReceivedDelegate>& GetReceivedEvent();
             
         private:
             //--------------------------------------------------
@@ -158,7 +158,7 @@ namespace ChilliSource
             
             bool m_enabled;
             std::vector<NotificationContainer> m_notifications;
-            Event<RecievedDelegate> m_recievedEvent;
+            Event<ReceivedDelegate> m_receivedEvent;
         };
     }
 }

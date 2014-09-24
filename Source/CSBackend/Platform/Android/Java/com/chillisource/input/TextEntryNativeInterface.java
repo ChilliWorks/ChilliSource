@@ -34,6 +34,7 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -77,7 +78,19 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 				m_textEntryView = new EditTextBackEvent(CSApplication.get().getActivityContext());
 				m_textEntryView.setWidth(100);
 				m_textEntryView.setHeight(100);
-				m_textEntryView.setAlpha(0);
+				//Actually setting the alpha doesn't come in til API 11 so we have to animate it to zero
+				int sdk = android.os.Build.VERSION.SDK_INT;
+				if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN)
+				{
+					AlphaAnimation alpha = new AlphaAnimation(0.0f, 0.0f);
+					alpha.setDuration(0);
+					alpha.setFillAfter(true);
+					m_textEntryView.startAnimation(alpha);
+				}
+				else
+				{
+					m_textEntryView.setAlpha(0.0f);
+				}
 				m_textEntryView.addTextChangedListener(finalThis);
 				m_textEntryView.setOnEditorActionListener(finalThis);
 			}

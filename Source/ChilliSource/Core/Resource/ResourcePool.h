@@ -548,7 +548,8 @@ namespace ChilliSource
                     }
                     
                     resource->SetLoadState(Resource::LoadState::k_loading);
-                    provider->CreateResourceFromFile(resource->GetStorageLocation(), resource->GetFilePath(), resource->GetOptions(), resource);
+                    std::string deviceFilePath = Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(resource->GetStorageLocation(), resource->GetFilePath());
+                    provider->CreateResourceFromFile(resource->GetStorageLocation(), deviceFilePath, resource->GetOptions(), resource);
                     if(resource->GetLoadState() != Resource::LoadState::k_loaded)
                     {
                         CS_LOG_ERROR("Failed to refresh resource for " + resource->GetName());

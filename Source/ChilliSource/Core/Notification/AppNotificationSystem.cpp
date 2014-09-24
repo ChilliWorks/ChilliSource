@@ -94,9 +94,9 @@ namespace ChilliSource
         }
         //--------------------------------------------------
         //---------------------------------------------------
-        IConnectableEvent<AppNotificationSystem::RecievedDelegate>& AppNotificationSystem::GetRecievedEvent()
+        IConnectableEvent<AppNotificationSystem::ReceivedDelegate>& AppNotificationSystem::GetReceivedEvent()
         {
-            return m_recievedEvent;
+            return m_receivedEvent;
         }
         //--------------------------------------------------
         //--------------------------------------------------
@@ -108,7 +108,7 @@ namespace ChilliSource
             {
                 if(currentTime >= it->m_triggerTime)
                 {
-                    m_recievedEvent.NotifyConnections(it->m_notification);
+                    m_receivedEvent.NotifyConnections(it->m_notification);
                     it = m_notifications.erase(it);
                 }
                 else
