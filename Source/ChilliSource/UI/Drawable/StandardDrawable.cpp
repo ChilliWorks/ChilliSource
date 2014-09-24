@@ -43,7 +43,7 @@ namespace ChilliSource
         {
             const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyType::k_string, "Type", "Texture"},
+                {PropertyType::k_string, "Type", "Standard"},
                 {PropertyType::k_vec4, "UVs", "0 0 1 1"},
                 {PropertyType::k_string, "TextureLocation", "Package"},
                 {PropertyType::k_string, "TexturePath", ""}
