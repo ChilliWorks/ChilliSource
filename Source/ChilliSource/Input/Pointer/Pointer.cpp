@@ -34,10 +34,23 @@ namespace ChilliSource
     {
         //----------------------------------------------------
         //----------------------------------------------------
+        Pointer::InputType Pointer::GetDefaultInputType()
+        {
+#if defined CS_TARGETPLATFORM_ANDROID
+            return Pointer::InputType::k_touch;
+#elif defined CS_TARGETPLATFORM_IOS
+            return Pointer::InputType::k_touch;
+#elif defined CS_TARGETPLATFORM_WINDOWS
+            return Pointer::InputType::k_leftMouseButton;
+#else
+            return nullptr;
+#endif
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
         Pointer::Pointer(Id in_uniqueId, u32 in_index, const Core::Vector2& in_initialPosition)
         : m_uniqueId(in_uniqueId), m_index(in_index), m_position(in_initialPosition), m_previousPosition(in_initialPosition)
         {
-            
         }
         //----------------------------------------------------
         //----------------------------------------------------

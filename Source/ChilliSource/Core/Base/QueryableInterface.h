@@ -99,6 +99,19 @@ namespace ChilliSource
             //-------------------------------------------------------
 			virtual ~QueryableInterface(){}
             //-------------------------------------------------------
+            /// Queries whether or not this object implements the
+            /// interface given as a template parameter. The interface
+            /// must be a named type, i.e it must make use of the
+            /// CS_DECLARE_NAMEDTYPE() and CS_DEFINE_NAMEDTYPE()
+            /// macros.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return Whether the object implements the given
+            /// interface.
+            //-------------------------------------------------------
+            template <typename TNamedType> bool IsA() const;
+            //-------------------------------------------------------
             /// Query whether the object implements an interface
             /// that has the given ID
             ///
@@ -123,6 +136,12 @@ namespace ChilliSource
             //----------------------------------------------------
             virtual const std::string& GetInterfaceTypeName() const = 0;
 		};
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        template <typename TNamedType> bool QueryableInterface::IsA() const
+        {
+            return IsA(TNamedType::InterfaceID);
+        }
 	}
 }
 
