@@ -105,7 +105,7 @@ namespace ChilliSource
             
             if (dragCount >= k_requiredPointerCount)
             {
-                if (IsActive() == false && CanActivate() == false)
+                if (IsActive() == false && ResolveConflicts() == false)
                 {
                     return;
                 }

@@ -106,7 +106,7 @@ namespace ChilliSource
                     
                     Reset();
                     
-                    if (CanActivate() == true)
+                    if (ResolveConflicts() == true)
                     {
                         m_heldEvent.NotifyConnections(this, gesturePosition);
                     }

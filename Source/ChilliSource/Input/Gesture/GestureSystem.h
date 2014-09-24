@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_INPUT_GESTURES_GESTURESYSTEM_H_
-#define _CHILLISOURCE_INPUT_GESTURES_GESTURESYSTEM_H_
+#ifndef _CHILLISOURCE_INPUT_GESTURE_GESTURESYSTEM_H_
+#define _CHILLISOURCE_INPUT_GESTURE_GESTURESYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/StateSystem.h>
@@ -68,9 +68,8 @@ namespace ChilliSource
             //--------------------------------------------------------
             /// A delegate which will be called when the activation of
             /// a gesture conflicts with another. The delegate should
-            /// return true if the second gesture is allowed to activate
-            /// in addition to the first, false if only the first
-            /// should activate.
+            /// return a Conflict Result decribing which gesture
+            /// should continue/activate.
             ///
             /// @author Ian Copland
             ///
@@ -168,7 +167,7 @@ namespace ChilliSource
             ///
             /// @param Whether or not the gesture can activate.
             //--------------------------------------------------------
-            bool CanActivate(Gesture* in_gesture);
+            bool ResolveConflicts(Gesture* in_gesture);
             //--------------------------------------------------------
             /// Called when the owning state is initialised. This
             /// registers for the input events.

@@ -37,11 +37,11 @@ namespace ChilliSource
         CS_DEFINE_NAMEDTYPE(Gesture);
         //-------------------------------------------------------
         //-------------------------------------------------------
-        bool Gesture::CanActivate()
+        bool Gesture::ResolveConflicts()
         {
             if (m_gestureSystem != nullptr)
             {
-                return m_gestureSystem->CanActivate(this);
+                return m_gestureSystem->ResolveConflicts(this);
             }
             
             return false;

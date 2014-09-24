@@ -185,7 +185,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        bool GestureSystem::CanActivate(Gesture* in_gesture)
+        bool GestureSystem::ResolveConflicts(Gesture* in_gesture)
         {
             std::unique_lock<std::recursive_mutex> lock(m_mutex);
             m_isSendingEvent = true;

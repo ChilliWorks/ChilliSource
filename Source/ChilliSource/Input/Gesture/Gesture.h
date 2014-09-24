@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_INPUT_GESTURES_GESTURE_H_
-#define _CHILLISOURCE_INPUT_GESTURES_GESTURE_H_
+#ifndef _CHILLISOURCE_INPUT_GESTURE_GESTURE_H_
+#define _CHILLISOURCE_INPUT_GESTURE_GESTURE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
@@ -72,7 +72,7 @@ namespace ChilliSource
             ///
             /// @param Whether or not to set active.
             //-------------------------------------------------------
-            bool CanActivate();
+            bool ResolveConflicts();
             //-------------------------------------------------------
             /// Sets the gesture active. This should be set for any
             /// gesture that will be active for a sustained time like
