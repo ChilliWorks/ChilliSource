@@ -117,6 +117,24 @@ namespace ChilliSource
             /// @return Widget with look and behaviour of highlight button
             //---------------------------------------------------------------------------
             WidgetUPtr CreateHighlightButton() const;
+            //---------------------------------------------------------------------------
+            /// Creates a new widget with the behaviour of a vertical slider.
+            /// The slider can be dragged by the user
+            ///
+            /// @author S Downie
+            ///
+            /// @return Widget with look and behaviour of slider
+            //---------------------------------------------------------------------------
+            WidgetUPtr CreateVerticalSlider() const;
+            //---------------------------------------------------------------------------
+            /// Creates a new widget with the behaviour of a horizontal slider.
+            /// The slider can be dragged by the user
+            ///
+            /// @author S Downie
+            ///
+            /// @return Widget with look and behaviour of slider
+            //---------------------------------------------------------------------------
+            WidgetUPtr CreateHorizontalSlider() const;
             
         private:
             

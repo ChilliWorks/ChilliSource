@@ -68,6 +68,8 @@ namespace ChilliSource
         {
             const std::string k_widgetKey = "Widget";
             const std::string k_highlightButtonKey = "HighlightButton";
+            const std::string k_verticalSliderKey = "VerticalSliderBar";
+            const std::string k_horizontalSliderKey = "HorizontalSliderBar";
             
             //---------------------------------------------------------------------------
             /// Create the layout class based on the given description
@@ -152,6 +154,9 @@ namespace ChilliSource
             WidgetDefCSPtr horizontalSliderDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HorizontalSliderBar.csuidef");
             RegisterDefinition(horizontalSliderDef);
             
+            WidgetDefCSPtr verticalSliderDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/VerticalSliderBar.csuidef");
+            RegisterDefinition(verticalSliderDef);
+            
             auto luaSystem = Core::Application::Get()->GetSystem<Scripting::LuaSystem>();
             luaSystem->RegisterEnum("SizePolicy",
                                     "none", SizePolicy::k_none,
@@ -228,15 +233,27 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
+        WidgetUPtr WidgetFactory::CreateWidget() const
+        {
+            return Create(m_widgetDefNameMap.find(k_widgetKey)->second);
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
         WidgetUPtr WidgetFactory::CreateHighlightButton() const
         {
             return Create(m_widgetDefNameMap.find(k_highlightButtonKey)->second);
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        WidgetUPtr WidgetFactory::CreateWidget() const
+        WidgetUPtr WidgetFactory::CreateVerticalSlider() const
         {
-            return Create(m_widgetDefNameMap.find(k_widgetKey)->second);
+            return Create(m_widgetDefNameMap.find(k_verticalSliderKey)->second);
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetUPtr WidgetFactory::CreateHorizontalSlider() const
+        {
+            return Create(m_widgetDefNameMap.find(k_horizontalSliderKey)->second);
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------

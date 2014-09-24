@@ -1,0 +1,40 @@
+{
+  "Type": "VerticalSliderBar",
+  "Properties": {
+    "SliderFraction": "Float"
+  },
+  "Defaults": {
+    "Name": "VerticalSliderBar",
+    "InputEnabled": "true",
+    "SliderFraction": "0"
+  },
+  "ChildProperties": {
+    "SliderRelSize": {
+      "Child": "Slider",
+      "Property": "RelSize"
+    },
+    "SliderDrawable": {
+      "Child": "Slider",
+      "Property": "Drawable"
+    }
+  },
+  "Behaviour": {
+    "FilePath": "VerticalSliderBar.lua"
+  },
+  "Children": {
+    "Slider": {
+      "Type": "Widget",
+      "RelSize": "1.1 0.1",
+      "Drawable": {
+        "Type": "None"
+      },
+      "SizePolicy": "UseWidthMaintainingAspect",
+      "ParentalAnchor": "BottomCentre"
+    }
+  },
+  "Hierarchy": [
+    {
+      "Name": "Slider"
+    }
+  ]
+}
