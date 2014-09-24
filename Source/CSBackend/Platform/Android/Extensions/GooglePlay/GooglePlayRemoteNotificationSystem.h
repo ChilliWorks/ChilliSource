@@ -99,7 +99,7 @@ namespace CSBackend
             /// @return An event that can be used to listen for
             /// new notifications being recieved.
             //---------------------------------------------------
-            CSCore::IConnectableEvent<NotificationReceivedDelegate>& GetRecievedEvent() override;
+            CSCore::IConnectableEvent<NotificationReceivedDelegate>& GetReceivedEvent() override;
             //------------------------------------------------
             /// @author Robert Henning
             ///

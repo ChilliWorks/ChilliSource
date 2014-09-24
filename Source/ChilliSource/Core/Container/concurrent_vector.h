@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/Container/concurrent_vector_forward_iterator.h>
 #include <ChilliSource/Core/Container/concurrent_vector_reverse_iterator.h>
 
+#include <atomic>
 #include <vector>
 
 namespace ChilliSource

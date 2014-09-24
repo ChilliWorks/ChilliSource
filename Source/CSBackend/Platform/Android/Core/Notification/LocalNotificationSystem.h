@@ -114,7 +114,7 @@ namespace CSBackend
             /// @return An event that can be used to listen for
             /// new notifications being recieved.
             //---------------------------------------------------
-            CSCore::IConnectableEvent<RecievedDelegate>& GetRecievedEvent() override;
+            CSCore::IConnectableEvent<ReceivedDelegate>& GetReceivedEvent() override;
 			//-----------------------------------------------------
 			/// Called when game receives a local notification.
 			///
@@ -136,7 +136,7 @@ namespace CSBackend
 
 		private:
             bool m_enabled;
-            CSCore::Event<RecievedDelegate> m_recievedEvent;
+            CSCore::Event<ReceivedDelegate> m_recievedEvent;
 			LocalNotificationJavaInterfaceSPtr m_localNotificationJI;
 		};
 	}
