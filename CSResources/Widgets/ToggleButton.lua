@@ -32,7 +32,7 @@
 -- The button only responds to the primary input type but multiple pointers
 -- can interact with the button at the same time.
 --
--- THe on and off looks can be created either with an additional texture
+-- The on and off looks can be created either with an additional texture
 -- or simply a colour change.
 --
 -- @author S Downie

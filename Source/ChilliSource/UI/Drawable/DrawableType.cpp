@@ -42,7 +42,7 @@ namespace ChilliSource
             Core::StringUtils::ToLowerCase(lowerCase);
             
             if(lowerCase == "none") return DrawableType::k_none;
-            if(lowerCase == "texture") return DrawableType::k_texture;
+            if(lowerCase == "standard") return DrawableType::k_standard;
             if(lowerCase == "ninepatch") return DrawableType::k_ninePatch;
             if(lowerCase == "threepatch") return DrawableType::k_threePatch;
             

@@ -43,7 +43,7 @@ namespace ChilliSource
         enum class DrawableType
         {
             k_none,
-            k_texture,
+            k_standard,
             k_ninePatch,
             k_threePatch
         };

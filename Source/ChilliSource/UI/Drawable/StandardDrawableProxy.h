@@ -1,5 +1,5 @@
 //
-//  TextureDrawableProxy.h
+//  StandardDrawableProxy.h
 //  Chilli Source
 //  Created by Scott Downie on 18/08/2014.
 //
@@ -27,8 +27,8 @@
 //
 
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_TEXTUREDRAWABLEPROXY_H_
-#define _CHILLISOURCE_UI_DRAWABLE_TEXTUREDRAWABLEPROXY_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_STANDARDDRAWABLEPROXY_H_
+#define _CHILLISOURCE_UI_DRAWABLE_STANDARDDRAWABLEPROXY_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -43,7 +43,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        namespace TextureDrawableProxy
+        namespace StandardDrawableProxy
         {
             //----------------------------------------------------------------------------------------
             /// Register all the proxy functions with Lua
@@ -62,7 +62,7 @@ namespace ChilliSource
             ///
             /// @return The type of this drawable instance
             //----------------------------------------------------------------------------------------
-            DrawableType GetType(TextureDrawable* in_drawable);
+            DrawableType GetType(StandardDrawable* in_drawable);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
@@ -74,7 +74,7 @@ namespace ChilliSource
             /// @param Location of texture
             /// @param Path of texture
             //----------------------------------------------------------------------------------------
-            void SetTexture(TextureDrawable* in_drawable, Core::StorageLocation in_location, const std::string& in_path);
+            void SetTexture(StandardDrawable* in_drawable, Core::StorageLocation in_location, const std::string& in_path);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
@@ -85,7 +85,7 @@ namespace ChilliSource
             /// @param Drawable on which to operate
             /// @param Rectangle containing U, V, S, T
             //----------------------------------------------------------------------------------------
-            void SetUVs(TextureDrawable* in_drawable, const Rendering::UVs& in_UVs);
+            void SetUVs(StandardDrawable* in_drawable, const Rendering::UVs& in_UVs);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
@@ -96,7 +96,7 @@ namespace ChilliSource
             /// @return The preferred size that the drawable wishes to de drawn at based on the
             /// texture size
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetPreferredSize(TextureDrawable* in_drawable);
+            Core::Vector2 GetPreferredSize(StandardDrawable* in_drawable);
         }
     }
 }

@@ -44,10 +44,10 @@
 #include <ChilliSource/UI/Drawable/DrawableProxy.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
-#include <ChilliSource/UI/Drawable/TextureDrawable.h>
+#include <ChilliSource/UI/Drawable/StandardDrawable.h>
 #include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawableProxy.h>
-#include <ChilliSource/UI/Drawable/TextureDrawableProxy.h>
+#include <ChilliSource/UI/Drawable/StandardDrawableProxy.h>
 #include <ChilliSource/UI/Drawable/ThreePatchDrawableProxy.h>
 #include <ChilliSource/UI/Layout/GridLayout.h>
 #include <ChilliSource/UI/Layout/GridLayoutProxy.h>
@@ -116,8 +116,8 @@ namespace ChilliSource
                 {
                     case DrawableType::k_none:
                         return nullptr;
-                    case DrawableType::k_texture:
-                        return IDrawableUPtr(new TextureDrawable(in_properties));
+                    case DrawableType::k_standard:
+                        return IDrawableUPtr(new StandardDrawable(in_properties));
                     case DrawableType::k_ninePatch:
                         return IDrawableUPtr(new NinePatchDrawable(in_properties));
                     case DrawableType::k_threePatch:
@@ -195,7 +195,7 @@ namespace ChilliSource
             Input::PointerProxy::RegisterWithLua(luaSystem);
             WidgetProxy::RegisterWithLua(luaSystem);
             DrawableProxy::RegisterWithLua(luaSystem);
-            TextureDrawableProxy::RegisterWithLua(luaSystem);
+            StandardDrawableProxy::RegisterWithLua(luaSystem);
             NinePatchDrawableProxy::RegisterWithLua(luaSystem);
             ThreePatchDrawableProxy::RegisterWithLua(luaSystem);
             LayoutProxy::RegisterWithLua(luaSystem);

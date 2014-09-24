@@ -1,5 +1,5 @@
 //
-//  TextureDrawable.cpp
+//  StandardDrawable.cpp
 //  Chilli Source
 //  Created by Scott Downie on 17/04/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Drawable/TextureDrawable.h>
+#include <ChilliSource/UI/Drawable/StandardDrawable.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
@@ -52,7 +52,7 @@ namespace ChilliSource
         
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        TextureDrawable::TextureDrawable(const PropertyMap& in_properties)
+        StandardDrawable::StandardDrawable(const PropertyMap& in_properties)
         {
             Core::Vector4 uvs(in_properties.GetProperty<Core::Vector4>("UVs"));
             SetUVs(Rendering::UVs(uvs.x, uvs.y, uvs.z, uvs.w));
@@ -68,40 +68,40 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        std::vector<PropertyMap::PropertyDesc> TextureDrawable::GetPropertyDescs()
+        std::vector<PropertyMap::PropertyDesc> StandardDrawable::GetPropertyDescs()
         {
             return k_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        DrawableType TextureDrawable::GetType() const
+        DrawableType StandardDrawable::GetType() const
         {
-            return DrawableType::k_texture;
+            return DrawableType::k_standard;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void TextureDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
+        void StandardDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
         {
             m_texture = in_texture;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void TextureDrawable::SetUVs(const Rendering::UVs& in_UVs)
+        void StandardDrawable::SetUVs(const Rendering::UVs& in_UVs)
         {
             m_UVs = in_UVs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Vector2 TextureDrawable::GetPreferredSize() const
+        Core::Vector2 StandardDrawable::GetPreferredSize() const
         {
-            CS_ASSERT(m_texture != nullptr, "TextureDrawable cannot get preferred size without texture");
+            CS_ASSERT(m_texture != nullptr, "StandardDrawable cannot get preferred size without texture");
             return Core::Vector2((f32)m_texture->GetWidth() * m_UVs.m_s, (f32)m_texture->GetHeight() * m_UVs.m_t);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void TextureDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
+        void StandardDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
         {
-            CS_ASSERT(m_texture != nullptr, "TextureDrawable cannot draw without texture");
+            CS_ASSERT(m_texture != nullptr, "StandardDrawable cannot draw without texture");
             in_renderer->DrawBox(in_transform, in_absSize, Core::Vector2::k_zero, m_texture, m_UVs, in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
         }
     }

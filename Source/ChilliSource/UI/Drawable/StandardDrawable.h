@@ -1,5 +1,5 @@
 //
-//  TextureDrawable.h
+//  StandardDrawable.h
 //  Chilli Source
 //  Created by Scott Downie on 17/04/2014.
 //
@@ -27,8 +27,8 @@
 //
 
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_TEXTUREDRAWABLE_H_
-#define _CHILLISOURCE_UI_DRAWABLE_TEXTUREDRAWABLE_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_STANADARDDRAWABLE_H_
+#define _CHILLISOURCE_UI_DRAWABLE_STANADARDDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
@@ -44,7 +44,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        class TextureDrawable final : public IDrawable
+        class StandardDrawable final : public IDrawable
         {
         public:
 
@@ -53,7 +53,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //----------------------------------------------------------------------------------------
-            TextureDrawable() = default;
+            StandardDrawable() = default;
             //----------------------------------------------------------------------------------------
             /// Constructor that builds the drawable from key-value properties
             ///
@@ -67,7 +67,7 @@ namespace ChilliSource
             ///
             /// @param Key-value properties
             //----------------------------------------------------------------------------------------
-            TextureDrawable(const PropertyMap& in_properties);
+            StandardDrawable(const PropertyMap& in_properties);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///

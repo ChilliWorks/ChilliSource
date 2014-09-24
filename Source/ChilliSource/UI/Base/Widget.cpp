@@ -36,7 +36,7 @@
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/UI/Base/WidgetProxy.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawableProxy.h>
-#include <ChilliSource/UI/Drawable/TextureDrawableProxy.h>
+#include <ChilliSource/UI/Drawable/StandardDrawableProxy.h>
 #include <ChilliSource/UI/Drawable/ThreePatchDrawableProxy.h>
 
 namespace ChilliSource

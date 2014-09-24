@@ -30,7 +30,7 @@
 
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
-#include <ChilliSource/UI/Drawable/TextureDrawable.h>
+#include <ChilliSource/UI/Drawable/StandardDrawable.h>
 #include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
 
 namespace ChilliSource
@@ -48,8 +48,8 @@ namespace ChilliSource
                     std::vector<PropertyMap::PropertyDesc> propertyDescs = {{PropertyType::k_string, "Type", "None"}};
                     return propertyDescs;
                 }
-                case DrawableType::k_texture:
-                    return TextureDrawable::GetPropertyDescs();
+                case DrawableType::k_standard:
+                    return StandardDrawable::GetPropertyDescs();
                 case DrawableType::k_ninePatch:
                     return NinePatchDrawable::GetPropertyDescs();
                 case DrawableType::k_threePatch:
