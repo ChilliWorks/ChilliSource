@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/concurrent_vector.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/System/StateSystem.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 

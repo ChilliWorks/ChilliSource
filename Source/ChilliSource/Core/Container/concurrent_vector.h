@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/Container/concurrent_vector_forward_iterator.h>
 #include <ChilliSource/Core/Container/concurrent_vector_reverse_iterator.h>
 
+#include <atomic>
 #include <vector>
 
 namespace ChilliSource
@@ -612,7 +613,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> typename concurrent_vector<TType>::iterator concurrent_vector<TType>::erase(const concurrent_vector<TType>::iterator& in_itErase)
+		template <typename TType> concurrent_vector_forward_iterator<TType>  concurrent_vector<TType>::erase(const concurrent_vector_forward_iterator<TType>& in_itErase)
         {
             std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
             if(m_isLocked == false)
@@ -630,8 +631,9 @@ namespace ChilliSource
             return in_itErase;
         }
         //--------------------------------------------------------------------
+		/// This uses the 
         //--------------------------------------------------------------------
-        template <typename TType> typename concurrent_vector<TType>::reverse_iterator concurrent_vector<TType>::erase(const concurrent_vector<TType>::reverse_iterator& in_itErase)
+		template <typename TType> concurrent_vector_reverse_iterator<TType> concurrent_vector<TType>::erase(const concurrent_vector_reverse_iterator<TType>& in_itErase)
         {
             std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
             if(m_isLocked == false)

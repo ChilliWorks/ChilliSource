@@ -92,7 +92,7 @@ namespace CSBackend
 		}
         //--------------------------------------------------
         //---------------------------------------------------
-        CSCore::IConnectableEvent<CSCore::RemoteNotificationSystem::NotificationReceivedDelegate>& GooglePlayRemoteNotificationSystem::GetRecievedEvent()
+        CSCore::IConnectableEvent<CSCore::RemoteNotificationSystem::NotificationReceivedDelegate>& GooglePlayRemoteNotificationSystem::GetReceivedEvent()
 		{
         	return m_receivedEvent;
 		}

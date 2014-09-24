@@ -97,7 +97,7 @@ namespace CSBackend
 		}
         //--------------------------------------------------
         //--------------------------------------------------
-		CSCore::IConnectableEvent<CSCore::LocalNotificationSystem::RecievedDelegate>& LocalNotificationSystem::GetRecievedEvent()
+		CSCore::IConnectableEvent<CSCore::LocalNotificationSystem::ReceivedDelegate>& LocalNotificationSystem::GetReceivedEvent()
 		{
         	return m_recievedEvent;
 		}
