@@ -541,6 +541,12 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             const Widget* GetParent() const;
             //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return Whether or not the widget is currently on a canvas.
+            //----------------------------------------------------------------------------------------
+            bool IsOnCanvas() const;
+            //----------------------------------------------------------------------------------------
             /// Bring the subview to the front of its siblings. It will now be rendered on top
             ///
             /// @author S Downie
