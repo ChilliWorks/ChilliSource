@@ -46,7 +46,10 @@ namespace ChilliSource
                 {PropertyType::k_string, "Type", "Standard"},
                 {PropertyType::k_vec4, "UVs", "0 0 1 1"},
                 {PropertyType::k_string, "TextureLocation", "Package"},
-                {PropertyType::k_string, "TexturePath", ""}
+                {PropertyType::k_string, "TexturePath", ""},
+                {PropertyType::k_string, "AtlasLocation", "Package"},
+                {PropertyType::k_string, "AtlasPath", ""},
+                {PropertyType::k_string, "AtlasId", ""}
             };
         }
         
@@ -57,13 +60,23 @@ namespace ChilliSource
             Core::Vector4 uvs(in_properties.GetProperty<Core::Vector4>("UVs"));
             SetUVs(Rendering::UVs(uvs.x, uvs.y, uvs.z, uvs.w));
             
-            std::string location(in_properties.GetProperty<std::string>("TextureLocation"));
-            std::string path(in_properties.GetProperty<std::string>("TexturePath"));
+            std::string textureLocation(in_properties.GetProperty<std::string>("TextureLocation"));
+            std::string texturePath(in_properties.GetProperty<std::string>("TexturePath"));
             
-            if(location.empty() == false && path.empty() == false)
+            if(textureLocation.empty() == false && texturePath.empty() == false)
             {
                 auto resPool = Core::Application::Get()->GetResourcePool();
-                m_texture = resPool->LoadResource<Rendering::Texture>(Core::ParseStorageLocation(location), path);
+                SetTexture(resPool->LoadResource<Rendering::Texture>(Core::ParseStorageLocation(textureLocation), texturePath));
+            }
+            
+            std::string atlasLocation(in_properties.GetProperty<std::string>("AtlasLocation"));
+            std::string atlasPath(in_properties.GetProperty<std::string>("AtlasPath"));
+            
+            if(atlasLocation.empty() == false && atlasPath.empty() == false)
+            {
+                auto resPool = Core::Application::Get()->GetResourcePool();
+                SetTextureAtlas(resPool->LoadResource<Rendering::TextureAtlas>(Core::ParseStorageLocation(atlasLocation), atlasPath));
+                SetTextureAtlasId(in_properties.GetProperty<std::string>("AtlasId"));
             }
         }
         //----------------------------------------------------------------------------------------
@@ -83,6 +96,24 @@ namespace ChilliSource
         void StandardDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
         {
             m_texture = in_texture;
+            m_UVs = Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f);
+            m_preferredSize = Core::Vector2((f32)m_texture->GetWidth() * m_UVs.m_s, (f32)m_texture->GetHeight() * m_UVs.m_t);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void StandardDrawable::SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas)
+        {
+            m_atlas = in_atlas;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void StandardDrawable::SetTextureAtlasId(const std::string& in_atlasId)
+        {
+            CS_ASSERT(m_texture != nullptr &&  m_atlas != nullptr, "StandardDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas and a texture");
+            
+            m_atlasFrame = m_atlas->GetFrame(in_atlasId);
+            m_UVs = m_atlasFrame.m_uvs;
+            m_preferredSize = m_atlasFrame.m_originalSize;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -94,15 +125,29 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         Core::Vector2 StandardDrawable::GetPreferredSize() const
         {
-            CS_ASSERT(m_texture != nullptr, "StandardDrawable cannot get preferred size without texture");
-            return Core::Vector2((f32)m_texture->GetWidth() * m_UVs.m_s, (f32)m_texture->GetHeight() * m_UVs.m_t);
+            return m_preferredSize;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void StandardDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
         {
             CS_ASSERT(m_texture != nullptr, "StandardDrawable cannot draw without texture");
-            in_renderer->DrawBox(in_transform, in_absSize, Core::Vector2::k_zero, m_texture, m_UVs, in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
+            
+            Core::Vector2 offsetTL;
+            Core::Vector2 size = in_absSize;
+            
+            //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space.
+            if(m_atlas != nullptr)
+            {
+                offsetTL.x = (-m_atlasFrame.m_originalSize.x * 0.5f) + (m_atlasFrame.m_croppedSize.x * 0.5f) + m_atlasFrame.m_offset.x;
+                offsetTL.y = (m_atlasFrame.m_originalSize.y * 0.5f) - (m_atlasFrame.m_croppedSize.y * 0.5f) - m_atlasFrame.m_offset.y;
+                
+                //Convert offset from texel space to local atlas space
+                offsetTL = in_absSize/m_atlasFrame.m_originalSize * offsetTL;
+                size = size/m_atlasFrame.m_originalSize * m_atlasFrame.m_croppedSize;
+            }
+            
+            in_renderer->DrawBox(in_transform, size, offsetTL, m_texture, m_UVs, in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
         }
     }
 }

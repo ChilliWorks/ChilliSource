@@ -31,6 +31,8 @@
 #define _CHILLISOURCE_UI_DRAWABLE_STANADARDDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
@@ -89,6 +91,25 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetTexture(const Rendering::TextureCSPtr& in_texture) override;
             //----------------------------------------------------------------------------------------
+            /// Set the texture atlas that should be used in subsequent draws.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture atlas
+            //----------------------------------------------------------------------------------------
+            void SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas) override;
+            //----------------------------------------------------------------------------------------
+            /// Set the texture atlas frame Id that should be used in subsequent draws.
+            ///
+            /// NOTE: An atlas and texture must have been set prior to calling this
+            /// NOTE: This will override the existing UVs
+            ///
+            /// @author S Downie
+            ///
+            /// @param Frame Id
+            //----------------------------------------------------------------------------------------
+            void SetTextureAtlasId(const std::string& in_atlasId) override;
+            //----------------------------------------------------------------------------------------
             /// Set the UVs that should be used in subsequent draws
             ///
             /// @author S Downie
@@ -119,7 +140,10 @@ namespace ChilliSource
         private:
             
             Rendering::TextureCSPtr m_texture;
+            Rendering::TextureAtlasCSPtr m_atlas;
+            Rendering::TextureAtlas::Frame m_atlasFrame;
             Rendering::UVs m_UVs;
+            Core::Vector2 m_preferredSize;
         };
     }
 }

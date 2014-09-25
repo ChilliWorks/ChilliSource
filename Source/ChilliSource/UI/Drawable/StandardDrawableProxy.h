@@ -78,6 +78,31 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
+            /// Set the texture atlas that should be used in subsequent draws
+            ///
+            /// @author S Downie
+            ///
+            /// @param Drawable on which to operate
+            /// @param Location of atlas
+            /// @param Path of atlas
+            //----------------------------------------------------------------------------------------
+            void SetTextureAtlas(StandardDrawable* in_drawable, Core::StorageLocation in_location, const std::string& in_path);
+            //----------------------------------------------------------------------------------------
+            /// Proxy function to allow calling on an instance from Lua script
+            ///
+            /// Set the texture atlas id that should be used in subsequent draws.
+            ///
+            /// NOTE: A texture and an atlas must be set prior to calling this
+            ///
+            /// @author S Downie
+            ///
+            /// @param Drawable on which to operate
+            /// @param Atlas frame Id
+            //----------------------------------------------------------------------------------------
+            void SetTextureAtlasId(StandardDrawable* in_drawable, const std::string& in_id);
+            //----------------------------------------------------------------------------------------
+            /// Proxy function to allow calling on an instance from Lua script
+            ///
             /// Set the UVs that should be used in subsequent draws
             ///
             /// @author S Downie
