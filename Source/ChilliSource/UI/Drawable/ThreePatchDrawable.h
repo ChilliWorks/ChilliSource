@@ -32,6 +32,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
@@ -113,6 +114,25 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetTexture(const Rendering::TextureCSPtr& in_texture) override;
             //----------------------------------------------------------------------------------------
+            /// Set the texture atlas that should be used in subsequent draws.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture atlas
+            //----------------------------------------------------------------------------------------
+            void SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas) override;
+            //----------------------------------------------------------------------------------------
+            /// Set the texture atlas frame Id that should be used in subsequent draws.
+            ///
+            /// NOTE: An atlas and texture must have been set prior to calling this
+            /// NOTE: This will override the existing UVs
+            ///
+            /// @author S Downie
+            ///
+            /// @param Frame Id
+            //----------------------------------------------------------------------------------------
+            void SetTextureAtlasId(const std::string& in_atlasId) override;
+            //----------------------------------------------------------------------------------------
             /// Set the UVs that should be used in subsequent draws
             ///
             /// @author S Downie
@@ -160,26 +180,26 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Widget UVs
+            /// @param Image frame
             /// @param Left inset if horizontal 3-patch bottom inset if vertical 3-patch (as normalised fraction 0 - 1)
             /// @param Right inset if horizontal 3-patch top inset if vertical 3-patch (as normalised fraction 0 - 1)
             ///
             /// @return UVs for each patch
             //----------------------------------------------------------------------------------------
-            using CalculateUVsDelegate = std::function<std::array<Rendering::UVs, k_numPatches>(const Rendering::UVs&, f32, f32)>;
+            using CalculateUVsDelegate = std::function<std::array<Rendering::UVs, k_numPatches>(const Rendering::TextureAtlas::Frame&, f32, f32)>;
             //----------------------------------------------------------------------------------------
             /// Calculates the sizes for each patch.
             ///
             /// @author S Downie
             ///
             /// @param Widget absolute size
-            /// @param Preferred image size
+            /// @param Image frame
             /// @param Left inset if horizontal 3-patch bottom inset if vertical 3-patch (as normalised fraction 0 - 1)
             /// @param Right inset if horizontal 3-patch top inset if vertical 3-patch (as normalised fraction 0 - 1)
             ///
             /// @return Size for each patch
             //----------------------------------------------------------------------------------------
-            using CalculateSizesDelegate = std::function<std::array<Core::Vector2, k_numPatches>(const Core::Vector2&, const Core::Vector2&, f32, f32)>;
+            using CalculateSizesDelegate = std::function<std::array<Core::Vector2, k_numPatches>(const Core::Vector2&, const Rendering::TextureAtlas::Frame&, f32, f32)>;
             //----------------------------------------------------------------------------------------
             /// Calculates the local space positions for each patch.
             ///
@@ -196,7 +216,8 @@ namespace ChilliSource
             CalculatePositionsDelegate m_positionCalculationDelegate;
             
             Rendering::TextureCSPtr m_texture;
-            Rendering::UVs m_UVs;
+            Rendering::TextureAtlasCSPtr m_atlas;
+            Rendering::TextureAtlas::Frame m_atlasFrame;
             
             f32 m_leftOrBottomInset = 0.01f;
             f32 m_rightOrTopInset = 0.01f;
