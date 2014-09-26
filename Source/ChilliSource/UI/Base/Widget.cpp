@@ -826,7 +826,7 @@ namespace ChilliSource
             
             Core::Vector2 finalSize(GetFinalSize());
             
-            if(m_drawable != nullptr && ShouldCull(GetFinalPosition(), finalSize, m_screen->GetResolution()) == false)
+            if(m_drawable != nullptr && ShouldCull(GetFinalPositionCentred(), finalSize, m_screen->GetResolution()) == false)
             {
                 m_drawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
             }
@@ -836,7 +836,7 @@ namespace ChilliSource
                 Core::Vector2 halfSize(finalSize * 0.5f);
                 Core::Vector2 bottomLeftPos;
                 Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, halfSize, bottomLeftPos);
-                bottomLeftPos += GetFinalPosition();
+                bottomLeftPos += GetFinalPositionCentred();
                 
                 in_renderer->PushClipBounds(bottomLeftPos, finalSize);
             }
@@ -871,7 +871,7 @@ namespace ChilliSource
             
             Core::Matrix3 pivot(Core::Matrix3::CreateTransform(-pivotPos, Core::Vector2::k_one, 0.0f));
             Core::Matrix3 rotate(Core::Matrix3::CreateTransform(Core::Vector2::k_zero, Core::Vector2::k_one, -m_localRotation));
-            Core::Matrix3 translate(Core::Matrix3::CreateTransform(GetParentSpacePosition() - pivotPos, Core::Vector2::k_one, 0.0f));
+            Core::Matrix3 translate(Core::Matrix3::CreateTransform(GetParentSpacePositionCentred() - pivotPos, Core::Vector2::k_one, 0.0f));
             
             m_cachedLocalTransform = pivot * rotate * translate;
             
@@ -890,6 +890,7 @@ namespace ChilliSource
             if(m_canvas == this)
             {
                 m_cachedFinalTransform = Core::Matrix3::CreateTransform(m_localPosition.vAbsolute, Core::Vector2::k_one, -m_localRotation);
+                m_cachedFinalPosition = m_localPosition.vAbsolute;
                 
                 m_isParentTransformCacheValid = true;
                 m_isLocalTransformCacheValid = true;
@@ -897,6 +898,7 @@ namespace ChilliSource
             }
             
             m_cachedFinalTransform = GetLocalTransform() * m_parent->GetFinalTransform();
+            m_cachedFinalPosition = GetParentSpacePosition() * m_parent->GetFinalTransform();
             m_isParentTransformCacheValid = true;
             
             return m_cachedFinalTransform;
@@ -904,6 +906,14 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         Core::Vector2 Widget::GetFinalPosition() const
+        {
+            //get the final transform to ensure the final position cache is up to date.
+            GetFinalTransform();
+            return m_cachedFinalPosition;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector2 Widget::GetFinalPositionCentred() const
         {
 			Core::Matrix3 finalTransform(GetFinalTransform());
             return Core::Vector2(finalTransform.m[6], finalTransform.m[7]);
@@ -921,10 +931,6 @@ namespace ChilliSource
             
             const Core::Vector2 parentSize(m_parent->GetFinalSize());
             const Core::Vector2 parentHalfSize(parentSize * 0.5f);
-            
-            //Offset the position by the alignment anchor of the origin
-            Core::Vector2 alignmentOffset;
-            Rendering::Align(m_originAnchor, GetFinalSize() * 0.5f, alignmentOffset);
             
             ILayout* layout = nullptr;
             s32 childIndex = -1;
@@ -961,7 +967,7 @@ namespace ChilliSource
                 //Calculate the position relative to the anchor point
                 Core::Vector2 parentSpacePos = parentAnchorPos + (parentSize * m_localPosition.vRelative) + m_localPosition.vAbsolute;
                 
-                return parentSpacePos + alignmentOffset;
+                return parentSpacePos;
             }
             else
             {
@@ -980,8 +986,19 @@ namespace ChilliSource
                 Core::Vector2 parentSpacePos = parentAnchorPos;
                 Core::Vector2 layoutSpacePos = cellAnchorPos + (cellSize * m_localPosition.vRelative) + m_localPosition.vAbsolute + layout->GetPositionForIndex((u32)childIndex);
                 
-                return parentSpacePos + layoutSpacePos + alignmentOffset;
+                return parentSpacePos + layoutSpacePos;
             }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector2 Widget::GetParentSpacePositionCentred() const
+        {
+            const Core::Vector2 parentSpacePosition = GetParentSpacePosition();
+            
+            Core::Vector2 alignmentOffset;
+            Rendering::Align(m_originAnchor, GetFinalSize() * 0.5f, alignmentOffset);
+            
+            return parentSpacePosition + alignmentOffset;
         }
         //----------------------------------------------------------------------------------------
         /// The final size of the widget is calculated based on the local absolute and the

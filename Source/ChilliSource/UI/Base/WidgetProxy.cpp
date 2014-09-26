@@ -56,6 +56,7 @@ namespace ChilliSource
                                                "getLocalAbsolutePosition", &WidgetProxy::GetLocalAbsolutePosition,
                                                "getLocalRelativePosition", &WidgetProxy::GetLocalRelativePosition,
                                                "getFinalPosition", &WidgetProxy::GetFinalPosition,
+                                               "getFinalPositionCentred", &WidgetProxy::GetFinalPositionCentred,
                                                "getLocalAbsoluteSize", &WidgetProxy::GetLocalAbsoluteSize,
                                                "getLocalRelativeSize", &WidgetProxy::GetLocalRelativeSize,
                                                "getFinalSize", &WidgetProxy::GetFinalSize,
@@ -343,6 +344,12 @@ namespace ChilliSource
             Core::Vector2 GetFinalPosition(Widget* in_widget)
             {
                 return in_widget->GetFinalPosition();
+            }
+            //----------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetFinalPositionCentred(Widget* in_widget)
+            {
+                return in_widget->GetFinalPositionCentred();
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------

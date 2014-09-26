@@ -455,22 +455,40 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SendToBack(Widget* in_widget);
             //----------------------------------------------------------------------------------------
-            /// Proxy function to allow calling on an instance from Lua script
+            /// Proxy function to allow calling on an instance from Lua script.
             ///
-            /// Calculate the screen space position of the object based on the local position, local
-            /// alignment to parent, local alignment to origin and the parents final position.
+            /// Calculate the screen space position of the origin of the object based on the local
+            /// position, local alignment to parent and the parents final position.
             ///
-            /// NOTE: As the relative final position cannot be calculated until
-            /// the widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
-            /// Therefore will assert if the widget is not on the root canvas
+            /// NOTE: As the relative final position cannot be calculated until the widget is part of
+            /// an absolute tree (i.e. one of the widgets up the tree is absolute) Therefore will assert
+            /// if the widget is not on the root canvas
             ///
-            /// @author S Downie
+            /// @author Ian Copland
             ///
             /// @param Widget on which to operate
             ///
             /// @return Screen space position of origin in pixels
             //----------------------------------------------------------------------------------------
             Core::Vector2 GetFinalPosition(Widget* in_widget);
+            //----------------------------------------------------------------------------------------
+            /// Proxy function to allow calling on an instance from Lua script.
+            ///
+            /// Calculate the screen space position of the centre of the object based on the local
+            /// position, local alignment to parent, local alignment to origin and the parents final
+            /// position.
+            ///
+            /// NOTE: As the relative final position cannot be calculated until the widget is part of
+            /// an absolute tree (i.e. one of the widgets up the tree is absolute) Therefore will
+            /// assert if the widget is not on the root canvas
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget on which to operate
+            ///
+            /// @return Screen space position of centre of object in pixels
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetFinalPositionCentred(Widget* in_widget);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///

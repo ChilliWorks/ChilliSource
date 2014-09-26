@@ -572,18 +572,32 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SendToBack();
             //----------------------------------------------------------------------------------------
-            /// Calculate the screen space position of the object based on the local position, local
-            /// alignment to parent, local alignment to origin and the parents final position.
+            /// Calculate the screen space position of the origin of the object object based on the
+            /// local position, local alignment to parent and the parents final position.
             ///
-            /// NOTE: As the relative final position cannot be calculated until
-            /// the widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
-            /// Therefore will assert if the widget is not on the root canvas
+            /// NOTE: As the relative final position cannot be calculated until the widget is part of
+            /// an absolute tree (i.e. one of the widgets up the tree is absolute) Therefore will assert
+            /// if the widget is not on the root canvas
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return Screen space position of the origin in pixels
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetFinalPosition() const;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the screen space position of the centre of the object object based on the
+            /// local position, local alignment to parent, local alignment to origin and the parents
+            /// final position.
+            ///
+            /// NOTE: As the relative final position cannot be calculated until the widget is part of
+            /// an absolute tree (i.e. one of the widgets up the tree is absolute) Therefore will assert
+            /// if the widget is not on the root canvas
             ///
             /// @author S Downie
             ///
-            /// @return Screen space position of origin in pixels
+            /// @return Screen space position of the centre of the object in pixels
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetFinalPosition() const;
+            Core::Vector2 GetFinalPositionCentred() const;
             //----------------------------------------------------------------------------------------
             /// Calculate the screen space size of the object based on the local size and the
             /// parent size.
@@ -822,6 +836,16 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::Matrix3 GetLocalTransform() const;
             //----------------------------------------------------------------------------------------
+            /// Calculate the combinied local position based of the absolute and relative positions and
+            /// the final size of the parent. This should only be called on objects that are attached
+            /// to the scene and will otherwise assert.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return The combinued local position.
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 CalculateCombinedLocalPostion() const;
+            //----------------------------------------------------------------------------------------
             /// Calculate the transform matrix of the object based on the local transform and the
             /// parent transform.
             ///
@@ -831,21 +855,35 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::Matrix3 GetFinalTransform() const;
             //----------------------------------------------------------------------------------------
-            /// Calculate the parent space position of the object based on the local position, local
-            /// alignment to parent and local alignment to origin. This method exists to create
-            /// a position in pixels that can be used to create the local transform matrix. The local
-            /// transform matrix is multiplied with the parent tranform to get the final transform
-            /// and this method prevents double transformation by the parent.
+            /// Calculate the parent space position of the origin of the object based on the local
+            /// position and local alignment to parent. This method exists to create a position in
+            /// pixels that can be used to calculate the final position of the widget.
             ///
-            /// NOTE: As the position is relative the final position cannot be calculated until
-            /// the widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
+            /// NOTE: As the position is relative the final position cannot be calculated until the
+            /// widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
             /// Therefore will assert if the widget is not on the root canvas
             ///
             /// @author S Downie
             ///
-            /// @return Position of origin in pixels in parent space
+            /// @return Position of centre of object in pixels in parent space
             //----------------------------------------------------------------------------------------
             Core::Vector2 GetParentSpacePosition() const;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the parent space position of the centre of the object based on the local
+            /// position, local alignment to parent and local alignment to origin. This method exists
+            /// to create a position in pixels that can be used to create the local transform matrix.
+            /// The local transform matrix is multiplied with the parent tranform to get the final
+            /// transform and this method prevents double transformation by the parent.
+            ///
+            /// NOTE: As the position is relative the final position cannot be calculated until the
+            /// widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
+            /// Therefore will assert if the widget is not on the root canvas
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return Position of centre of object in pixels in parent space
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetParentSpacePositionCentred() const;
             //----------------------------------------------------------------------------------------
             /// Called when the out transform changes forcing this to update its caches
             ///
@@ -895,6 +933,7 @@ namespace ChilliSource
             
             mutable Core::Matrix3 m_cachedLocalTransform;
             mutable Core::Matrix3 m_cachedFinalTransform;
+            mutable Core::Vector2 m_cachedFinalPosition;
             mutable Core::Vector2 m_cachedFinalSize;
             
             SizePolicy m_sizePolicy;

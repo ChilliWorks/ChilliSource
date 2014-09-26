@@ -155,6 +155,18 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			static TType Angle(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b);
             //-----------------------------------------------------
+            /// Returns a vector that is the result of rotating the
+            /// given vector by the given angle.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The vector.
+            /// @param The angle to rotate through in radians.
+            ///
+            /// @return The new vector after rotation.
+            //-----------------------------------------------------
+            static GenericVector2<TType> Rotate(GenericVector2<TType> in_a, TType in_angle);
+            //-----------------------------------------------------
             /// calculates the result of transforming the vector by
             /// the given regular transform matrix. This is more
             /// efficient than standard matrix multiplication but
@@ -259,6 +271,14 @@ namespace ChilliSource
 			/// @param The interpolation factor.
 			//-----------------------------------------------------
 			void Lerp(const GenericVector2<TType>& in_b, f32 in_t);
+            //-----------------------------------------------------
+            /// Rotates this vector by the given angle.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The angle to rotate though in radians.
+            //-----------------------------------------------------
+            void Rotate(TType in_angle);
             //-----------------------------------------------------
             /// Sets this vector to the result of transforming by
             /// the given regular transform matrix. This is more
@@ -543,6 +563,13 @@ namespace ChilliSource
 		}
         //-----------------------------------------------------
         //-----------------------------------------------------
+        template <typename TType> GenericVector2<TType> GenericVector2<TType>::Rotate(GenericVector2<TType> in_a, TType in_angle)
+        {
+            in_a.Rotate(in_angle);
+            return in_a;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
         template <typename TType> GenericVector2<TType> GenericVector2<TType>::Transform2x3(const GenericVector2<TType>& in_a, const GenericMatrix3<TType>& in_transform)
         {
             GenericVector2<TType> c;
@@ -634,6 +661,16 @@ namespace ChilliSource
         {
             f32 t = std::min(std::max(in_t, 0.0f), 1.0f);
 			*this = (*this + t * (in_b - *this));
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> void GenericVector2<TType>::Rotate(TType in_angle)
+        {
+            GenericVector2<TType> b = *this;
+            TType sinA = (TType)std::sin(in_angle);
+            TType cosA = (TType)std::cos(in_angle);
+            x =  b.x * cosA + b.y * sinA;
+            y = -b.x * sinA + b.y * cosA;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
