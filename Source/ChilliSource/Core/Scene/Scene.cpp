@@ -199,17 +199,20 @@ namespace ChilliSource
 			{
                 Entity* ent = m_entities[i].get();
                 
-                if (m_entitiesActive == true)
+                if (ent->GetParent() == nullptr)
                 {
-                    if (m_entitiesForegrounded == true)
+                    if (m_entitiesActive == true)
                     {
-                        ent->OnBackground();
+                        if (m_entitiesForegrounded == true)
+                        {
+                            ent->OnBackground();
+                        }
+                        ent->OnSuspend();
                     }
-                    ent->OnSuspend();
+                    
+                    ent->OnRemovedFromScene();
+                    ent->SetScene(nullptr);
                 }
-                
-                ent->OnRemovedFromScene();
-                ent->SetScene(nullptr);
 			}
             
             m_entities.clear();
