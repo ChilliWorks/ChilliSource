@@ -353,6 +353,11 @@ namespace ChilliSource
         void ThreePatchDrawable::SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas)
         {
             m_atlas = in_atlas;
+            
+            if(m_atlas == nullptr)
+            {
+                m_atlasFrame.m_uvs = Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -390,21 +395,21 @@ namespace ChilliSource
         {
             CS_ASSERT(m_texture != nullptr, "ThreePatchDrawable cannot draw without texture");
             
+            //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offseting the patches.
             Core::Vector2 size = in_absSize/m_atlasFrame.m_originalSize * m_atlasFrame.m_croppedSize;
             auto uvs = m_uvCalculationDelegate(m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
             auto sizes = m_sizeCalculationDelegate(size, m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
             auto positions = m_positionCalculationDelegate(sizes);
             
+            Core::Vector2 offsetTL
+            (
+                (-m_atlasFrame.m_originalSize.x * 0.5f) + (m_atlasFrame.m_croppedSize.x * 0.5f) + m_atlasFrame.m_offset.x,
+                (m_atlasFrame.m_originalSize.y * 0.5f) - (m_atlasFrame.m_croppedSize.y * 0.5f) - m_atlasFrame.m_offset.y
+            );
+            offsetTL = in_absSize/m_atlasFrame.m_originalSize * offsetTL;
+            
             for(u32 i=0; i<k_numPatches; ++i)
             {
-                //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space.
-                Core::Vector2 offsetTL
-                (
-                    (-m_atlasFrame.m_originalSize.x * 0.5f) + (m_atlasFrame.m_croppedSize.x * 0.5f) + m_atlasFrame.m_offset.x,
-                    (m_atlasFrame.m_originalSize.y * 0.5f) - (m_atlasFrame.m_croppedSize.y * 0.5f) - m_atlasFrame.m_offset.y
-                );
-                offsetTL = in_absSize/m_atlasFrame.m_originalSize * offsetTL;
-                
                 Core::Matrix3 patchTransform = Core::Matrix3::CreateTranslation(positions[i]);
                 in_renderer->DrawBox(patchTransform * in_transform, sizes[i], offsetTL, m_texture, uvs[i], in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
             }
