@@ -96,14 +96,21 @@ namespace ChilliSource
         void StandardDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
         {
             m_texture = in_texture;
-            m_UVs = Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f);
-            m_preferredSize = Core::Vector2((f32)m_texture->GetWidth() * m_UVs.m_s, (f32)m_texture->GetHeight() * m_UVs.m_t);
+            Core::Vector2 texSize((f32)m_texture->GetWidth() * m_atlasFrame.m_uvs.m_s, (f32)m_texture->GetHeight() * m_atlasFrame.m_uvs.m_t);
+            m_atlasFrame.m_croppedSize = texSize;
+            m_atlasFrame.m_originalSize = texSize;
+            m_atlasFrame.m_offset = Core::Vector2::k_zero;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void StandardDrawable::SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas)
         {
             m_atlas = in_atlas;
+            
+            if(m_atlas == nullptr)
+            {
+                m_atlasFrame.m_uvs = Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -112,20 +119,18 @@ namespace ChilliSource
             CS_ASSERT(m_texture != nullptr &&  m_atlas != nullptr, "StandardDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas and a texture");
             
             m_atlasFrame = m_atlas->GetFrame(in_atlasId);
-            m_UVs = m_atlasFrame.m_uvs;
-            m_preferredSize = m_atlasFrame.m_originalSize;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void StandardDrawable::SetUVs(const Rendering::UVs& in_UVs)
         {
-            m_UVs = in_UVs;
+            m_atlasFrame.m_uvs = in_UVs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         Core::Vector2 StandardDrawable::GetPreferredSize() const
         {
-            return m_preferredSize;
+            return m_atlasFrame.m_originalSize;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -133,21 +138,16 @@ namespace ChilliSource
         {
             CS_ASSERT(m_texture != nullptr, "StandardDrawable cannot draw without texture");
             
-            Core::Vector2 offsetTL;
-            Core::Vector2 size = in_absSize;
+            //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offseting the box.
+            Core::Vector2 offsetTL
+            (
+                (-m_atlasFrame.m_originalSize.x * 0.5f) + (m_atlasFrame.m_croppedSize.x * 0.5f) + m_atlasFrame.m_offset.x,
+                (m_atlasFrame.m_originalSize.y * 0.5f) - (m_atlasFrame.m_croppedSize.y * 0.5f) - m_atlasFrame.m_offset.y
+            );
+            offsetTL = in_absSize/m_atlasFrame.m_originalSize * offsetTL;
+            Core::Vector2 size = in_absSize/m_atlasFrame.m_originalSize * m_atlasFrame.m_croppedSize;
             
-            //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space.
-            if(m_atlas != nullptr)
-            {
-                offsetTL.x = (-m_atlasFrame.m_originalSize.x * 0.5f) + (m_atlasFrame.m_croppedSize.x * 0.5f) + m_atlasFrame.m_offset.x;
-                offsetTL.y = (m_atlasFrame.m_originalSize.y * 0.5f) - (m_atlasFrame.m_croppedSize.y * 0.5f) - m_atlasFrame.m_offset.y;
-                
-                //Convert offset from texel space to local atlas space
-                offsetTL = in_absSize/m_atlasFrame.m_originalSize * offsetTL;
-                size = size/m_atlasFrame.m_originalSize * m_atlasFrame.m_croppedSize;
-            }
-            
-            in_renderer->DrawBox(in_transform, size, offsetTL, m_texture, m_UVs, in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
+            in_renderer->DrawBox(in_transform, size, offsetTL, m_texture, m_atlasFrame.m_uvs, in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
         }
     }
 }

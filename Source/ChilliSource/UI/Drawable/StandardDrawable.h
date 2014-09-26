@@ -142,8 +142,6 @@ namespace ChilliSource
             Rendering::TextureCSPtr m_texture;
             Rendering::TextureAtlasCSPtr m_atlas;
             Rendering::TextureAtlas::Frame m_atlasFrame;
-            Rendering::UVs m_UVs;
-            Core::Vector2 m_preferredSize;
         };
     }
 }
