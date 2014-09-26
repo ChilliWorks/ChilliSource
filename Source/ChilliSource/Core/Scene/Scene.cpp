@@ -146,6 +146,7 @@ namespace ChilliSource
 		{
             CS_ASSERT(in_entity != nullptr, "Cannot add a null entity");
             CS_ASSERT(in_entity->GetScene() == nullptr, "Cannot add an entity with pre-exisitng scene");
+            CS_ASSERT((in_entity->GetParent() == nullptr || in_entity->GetParent()->GetScene() == this), "Cannot add an entity to a different scene than it's parent.");
             
 			m_entities.push_back(in_entity);
 
@@ -160,36 +161,6 @@ namespace ChilliSource
                     in_entity->OnForeground();
                 }
             }
-		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		void Scene::Remove(Entity* in_entity)
-		{
-            CS_ASSERT(in_entity != nullptr, "Cannot remove a null entity");
-            CS_ASSERT(in_entity->GetScene() == this, "Cannot add an entity without a pre-exisitng scene");
-
-            SharedEntityList::iterator it = std::find_if(m_entities.begin(), m_entities.end(), [in_entity](const EntitySPtr& in_entityInList)
-            {
-                return in_entityInList.get() == in_entity;
-            });
-            
-			if(it != m_entities.end())
-			{
-                if (m_entitiesActive == true)
-                {
-                    if (m_entitiesForegrounded == true)
-                    {
-                        in_entity->OnBackground();
-                    }
-                    in_entity->OnSuspend();
-                }
-                
-                in_entity->OnRemovedFromScene();
-                in_entity->SetScene(nullptr);
-                
-                it->swap(m_entities.back());
-                m_entities.pop_back();
-			}
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -263,6 +234,37 @@ namespace ChilliSource
         GUI::Window* Scene::GetWindow()
         {
             return m_rootWindow.get();
+        }
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        void Scene::Remove(Entity* in_entity)
+        {
+            CS_ASSERT(in_entity != nullptr, "Cannot remove a null entity");
+            CS_ASSERT(in_entity->GetScene() == this, "Cannot add an entity without a pre-exisitng scene");
+            CS_ASSERT((in_entity->GetParent() == nullptr || in_entity->GetParent()->GetScene() == this), "Cannot remove an entity from a different scene than it's parent.");
+            
+            SharedEntityList::iterator it = std::find_if(m_entities.begin(), m_entities.end(), [in_entity](const EntitySPtr& in_entityInList)
+            {
+                return in_entityInList.get() == in_entity;
+            });
+            
+            if(it != m_entities.end())
+            {
+                if (m_entitiesActive == true)
+                {
+                    if (m_entitiesForegrounded == true)
+                    {
+                        in_entity->OnBackground();
+                    }
+                    in_entity->OnSuspend();
+                }
+                
+                in_entity->OnRemovedFromScene();
+                in_entity->SetScene(nullptr);
+                
+                it->swap(m_entities.back());
+                m_entities.pop_back();
+            }
         }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------

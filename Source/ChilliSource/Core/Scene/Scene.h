@@ -88,14 +88,6 @@ namespace ChilliSource
 			//-------------------------------------------------------
 			void Add(const EntitySPtr& in_entity);
             //-------------------------------------------------------
-			/// Remove the entity from the scene
-            ///
-            /// @author S Downie
-			///
-			/// @param Entity
-			//-------------------------------------------------------
-			void Remove(Entity* inpEntity);
-            //-------------------------------------------------------
 			/// Remove all the entities from the scene
             ///
             /// @author S Downie
@@ -248,13 +240,22 @@ namespace ChilliSource
 			GUI::Window* GetWindow();
             
         private:
+            friend class Entity;
             
             //-------------------------------------------------------
             /// Private to enforce use of factory method
             ///
             /// @author S Downie
             //-------------------------------------------------------
-			Scene();
+            Scene();
+            //-------------------------------------------------------
+            /// Remove the entity from the scene
+            ///
+            /// @author S Downie
+            ///
+            /// @param Entity
+            //-------------------------------------------------------
+            void Remove(Entity* inpEntity);
             
 		private:
 			
