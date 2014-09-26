@@ -836,16 +836,6 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::Matrix3 GetLocalTransform() const;
             //----------------------------------------------------------------------------------------
-            /// Calculate the combinied local position based of the absolute and relative positions and
-            /// the final size of the parent. This should only be called on objects that are attached
-            /// to the scene and will otherwise assert.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @return The combinued local position.
-            //----------------------------------------------------------------------------------------
-            Core::Vector2 CalculateCombinedLocalPostion() const;
-            //----------------------------------------------------------------------------------------
             /// Calculate the transform matrix of the object based on the local transform and the
             /// parent transform.
             ///
