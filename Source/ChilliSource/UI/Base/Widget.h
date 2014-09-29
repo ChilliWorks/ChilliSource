@@ -612,6 +612,20 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::Vector2 GetFinalSize() const;
             //----------------------------------------------------------------------------------------
+            /// Returns the size of the rectange this widget will be position and sized relative to.
+            /// This will either be the size of the parent or the size of the cell within the parents
+            /// layout.
+            ///
+            /// NOTE: As the relative compoenent of the final size cannot be calculated until the
+            /// widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute).
+            /// Therefore will assert if the widget is not on the root canvas
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return The screen space layout size in pixels.
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetFinalLayoutSize() const;
+            //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @return The preferred size of the widget based on the current drawable or the
@@ -897,6 +911,16 @@ namespace ChilliSource
             /// @return Screen space size
             //----------------------------------------------------------------------------------------
             Core::Vector2 CalculateChildFinalSize(const Widget* in_child);
+            //----------------------------------------------------------------------------------------
+            /// Calculate the final screen space size of the layout for the given child.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The child widget.
+            ///
+            /// @return The screen space layout size.
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 CalculateChildFinalLayoutSize(const Widget* in_child);
 
         private:
             
