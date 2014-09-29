@@ -132,13 +132,15 @@ namespace ChilliSource
                 if (IsActive() == false)
                 {
                     SetActive(true);
-                    m_currentPosition = CalculatePosition();
-                    m_dragStartedEvent.NotifyConnections(this, m_currentPosition);
+                    m_currentDragInfo.m_position = CalculatePosition();
+                    m_currentDragInfo.m_displacement = Core::Vector2::k_zero;
+                    m_currentDragInfo.m_delta = Core::Vector2::k_zero;
+                    m_dragStartedEvent.NotifyConnections(this, m_currentDragInfo);
                 }
                 else
                 {
-                    m_currentPosition = CalculatePosition();
-                    m_dragMovedEvent.NotifyConnections(this, m_currentPosition);
+                    m_currentDragInfo.m_position = CalculatePosition();
+                    m_dragMovedEvent.NotifyConnections(this, m_currentDragInfo);
                 }
             }
         }
@@ -175,7 +177,12 @@ namespace ChilliSource
             
             SetActive(false);
             m_paused = false;
-            m_dragEndedEvent.NotifyConnections(this, m_currentPosition);
+            
+            m_currentDragInfo.m_delta = Core::Vector2::k_zero;
+            m_dragEndedEvent.NotifyConnections(this, m_currentDragInfo);
+            
+            m_currentDragInfo.m_displacement = Core::Vector2::k_zero;
+            m_currentDragInfo.m_position = Core::Vector2::k_zero;
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -226,8 +233,11 @@ namespace ChilliSource
                     }
                     else if (isActive == true)
                     {
-                        m_currentPosition = CalculatePosition();
-                        m_dragMovedEvent.NotifyConnections(this, m_currentPosition);
+                        Core::Vector2 newPosition = CalculatePosition();
+                        m_currentDragInfo.m_delta = newPosition - m_currentDragInfo.m_position;
+                        m_currentDragInfo.m_displacement += m_currentDragInfo.m_delta;
+                        m_currentDragInfo.m_position = newPosition;
+                        m_dragMovedEvent.NotifyConnections(this, m_currentDragInfo);
                     }
                 }
             }

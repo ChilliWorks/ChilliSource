@@ -60,15 +60,26 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(DragGesture);
             //----------------------------------------------------
+            /// A container for information on a single drag event.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------
+            struct DragInfo final
+            {
+                Core::Vector2 m_position;        //The screen space location of the gesture.
+                Core::Vector2 m_displacement;   //The displacement since the gesture started. Displacement caused by the currently tracked pointer changing is ignored.
+                Core::Vector2 m_delta;          //The change in displacement since the last event. Displacement caused by the currently tracked pointer changing is ignored.
+            };
+            //----------------------------------------------------
             /// A delegate called for any of the drag gesture
             /// event.
             ///
             /// @author Ian Copland
             ///
             /// @param A pointer to the drag gesture.
-            /// @param The position of the event.
+            /// @param Information on the drag.
             //----------------------------------------------------
-            using Delegate = std::function<void(const DragGesture*, const Core::Vector2&)>;
+            using Delegate = std::function<void(const DragGesture*, const DragInfo&)>;
             //----------------------------------------------------
             /// Constructor. Constructs the drag gesture with the
             /// given settings.
@@ -213,7 +224,7 @@ namespace ChilliSource
             f32 m_minDisplacementSquared = 0.0f;
             
             std::vector<PointerInfo> m_pendingPointers;
-            CSCore::Vector2 m_currentPosition;
+            DragInfo m_currentDragInfo;
             bool m_paused = false;
         };
     }
