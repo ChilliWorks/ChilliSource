@@ -40,6 +40,8 @@
 
 --Caching the functions locally means we don't have to peform a lookup for each call
 local setTexture = Drawable.setTexture
+local setTextureAtlas = Drawable.setTextureAtlas
+local setTextureAtlasId = Drawable.setTextureAtlasId
 local setColour = Widget.setColour
 local getDrawable = Widget.getDrawable
 local getStorageLocationProperty = Widget.getStorageLocationProperty
@@ -196,11 +198,20 @@ end
 -- @author S Downie
 -----------------------------------------------------
 function on()
-    path = getStringProperty(this, "OnTexturePath")
     drawable = getDrawable(this)
-    if drawable and path ~= "" then
-        location = getStorageLocationProperty(this, "OnTextureLocation")
-        setTexture(drawable, location, path)
+    if drawable then
+        path = getStringProperty(this, "OnTexturePath")
+        if path ~= "" then
+            location = getStorageLocationProperty(this, "OnTextureLocation")
+            setTexture(drawable, location, path)
+        end
+        path = getStringProperty(this, "OnAtlasPath")
+        if path ~= "" then
+            location = getStorageLocationProperty(this, "OnAtlasLocation")
+            setTextureAtlas(drawable, location, path)
+            id = getStringProperty(this, "OnAtlasId")
+            setTextureAtlasId(drawable, id)
+        end
     end
 
     r, g, b, a = getColourProperty(this, "OnColour")
@@ -215,11 +226,20 @@ end
 -- @author S Downie
 -----------------------------------------------------
 function off()
-    path = getStringProperty(this, "OffTexturePath")
     drawable = getDrawable(this)
-    if drawable and path ~= "" then
-        location = getStorageLocationProperty(this, "OffTextureLocation")
-        setTexture(drawable, location, path)
+    if drawable then
+        path = getStringProperty(this, "OffTexturePath")
+        if path ~= "" then
+            location = getStorageLocationProperty(this, "OffTextureLocation")
+            setTexture(drawable, location, path)
+        end
+        path = getStringProperty(this, "OffAtlasPath")
+        if path ~= "" then
+            location = getStorageLocationProperty(this, "OffAtlasLocation")
+            setTextureAtlas(drawable, location, path)
+            id = getStringProperty(this, "OffAtlasId")
+            setTextureAtlasId(drawable, id)
+        end
     end
 
     r, g, b, a = getColourProperty(this, "OffColour")
@@ -235,11 +255,20 @@ end
 -- @author S Downie
 -----------------------------------------------------
 function highlightOn()
-    path = getStringProperty(this, "OnHighlightTexturePath")
     drawable = getDrawable(this)
-    if drawable and path ~= "" then
-        location = getStorageLocationProperty(this, "OnHighlightTextureLocation")
-        setTexture(drawable, location, path)
+    if drawable then
+        path = getStringProperty(this, "OnHighlightTexturePath")
+        if path ~= "" then
+            location = getStorageLocationProperty(this, "OnHighlightTextureLocation")
+            setTexture(drawable, location, path)
+        end
+        path = getStringProperty(this, "OnHighlightAtlasPath")
+        if path ~= "" then
+            location = getStorageLocationProperty(this, "OnHighlightAtlasLocation")
+            setTextureAtlas(drawable, location, path)
+            id = getStringProperty(this, "OnHighlightAtlasId")
+            setTextureAtlasId(drawable, id)
+        end
     end
 
     r, g, b, a = getColourProperty(this, "OnHighlightColour")
@@ -252,11 +281,20 @@ end
 -- @author S Downie
 -----------------------------------------------------
 function highlightOff()
-    path = getStringProperty(this, "OffHighlightTexturePath")
     drawable = getDrawable(this)
-    if drawable and path ~= "" then
-        location = getStorageLocationProperty(this, "OffHighlightTextureLocation")
-        setTexture(drawable, location, path)
+    if drawable then
+        path = getStringProperty(this, "OffHighlightTexturePath")
+        if path ~= "" then
+            location = getStorageLocationProperty(this, "OffHighlightTextureLocation")
+            setTexture(drawable, location, path)
+        end
+        path = getStringProperty(this, "OffHighlightAtlasPath")
+        if path ~= "" then
+            location = getStorageLocationProperty(this, "OffHighlightAtlasLocation")
+            setTextureAtlas(drawable, location, path)
+            id = getStringProperty(this, "OffHighlightAtlasId")
+            setTextureAtlasId(drawable, id)
+        end
     end
 
     r, g, b, a = getColourProperty(this, "OffHighlightColour")

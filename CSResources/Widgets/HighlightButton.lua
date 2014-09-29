@@ -41,6 +41,8 @@
 
 --Caching the functions locally means we don't have to peform a lookup for each call
 local setTexture = Drawable.setTexture
+local setTextureAtlas = Drawable.setTextureAtlas
+local setTextureAtlasId = Drawable.setTextureAtlasId
 local setColour = Widget.setColour
 local getDrawable = Widget.getDrawable
 local getStorageLocationProperty = Widget.getStorageLocationProperty
@@ -160,11 +162,20 @@ end
 -- @author S Downie
 -----------------------------------------------------
 function highlight()
-    path = getStringProperty(this, "HighlightTexturePath")
     drawable = getDrawable(this)
-    if drawable and path ~= "" then
-        location = getStorageLocationProperty(this, "HighlightTextureLocation")
-        setTexture(drawable, location, path)
+    if drawable then
+        path = getStringProperty(this, "HighlightTexturePath")
+        if path ~= "" then
+            location = getStorageLocationProperty(this, "HighlightTextureLocation")
+            setTexture(drawable, location, path)
+        end
+        path = getStringProperty(this, "HighlightAtlasPath")
+        if path ~= "" then
+            location = getStorageLocationProperty(this, "HighlightAtlasLocation")
+            setTextureAtlas(drawable, location, path)
+            id = getStringProperty(this, "HighlightAtlasId")
+            setTextureAtlasId(drawable, id)
+        end
     end
 
     r, g, b, a = getColourProperty(this, "HighlightColour")
@@ -176,11 +187,20 @@ end
 -- @author S Downie
 -----------------------------------------------------
 function unhighlight()
-    path = getStringProperty(this, "NormalTexturePath")
     drawable = getDrawable(this)
-    if drawable and path ~= "" then
-        location = getStorageLocationProperty(this, "NormalTextureLocation")
-        setTexture(drawable, location, path)
+    if drawable then
+        path = getStringProperty(this, "NormalTexturePath")
+        if path ~= "" then
+            location = getStorageLocationProperty(this, "NormalTextureLocation")
+            setTexture(drawable, location, path)
+        end
+        path = getStringProperty(this, "NormalAtlasPath")
+        if path ~= "" then
+            location = getStorageLocationProperty(this, "NormalAtlasLocation")
+            setTextureAtlas(drawable, location, path)
+            id = getStringProperty(this, "NormalAtlasId")
+            setTextureAtlasId(drawable, id)
+        end
     end
 
     r, g, b, a = getColourProperty(this, "NormalColour")
