@@ -65,7 +65,7 @@ namespace ChilliSource
             //----------------------------------------------------
             struct PinchInfo final
             {
-                Core::Vector2 m_position;   //The screen space location of the gesture.
+                Core::Vector2 m_position;   //The screen space location of the gesture. This is the centroid of the two active pointers.
                 f32 m_scale = 0.0f;         //The fraction difference between the initial pinch distance to the current. Change caused by the currently tracked pointer changing is ignored.
             };
             //----------------------------------------------------

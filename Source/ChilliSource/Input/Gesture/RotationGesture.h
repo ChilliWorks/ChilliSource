@@ -66,7 +66,7 @@ namespace ChilliSource
             //----------------------------------------------------
             struct RotationInfo final
             {
-                Core::Vector2 m_position;   //The screen space location of the gesture.
+                Core::Vector2 m_position;   //The screen space location of the gesture. This is the centroid of the two active pointers.
                 f32 m_rotation = 0.0f;      //The clockwise angle of the gesture from the initial orientation. Change caused by the currently tracked pointer changing is ignored.
                 f32 m_rotationDelta = 0.0f; //The change in the rotation since the last event. Change caused by the currently tracked pointer changing is ignored.
             };
