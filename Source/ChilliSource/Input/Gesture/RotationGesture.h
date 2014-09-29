@@ -59,17 +59,27 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(RotationGesture);
             //----------------------------------------------------
+            /// A container for information on a single rotation
+            /// event.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------
+            struct RotationInfo final
+            {
+                Core::Vector2 m_position;   //The screen space location of the gesture. This is the centroid of the two active pointers.
+                f32 m_rotation = 0.0f;      //The clockwise angle of the gesture from the initial orientation. Change caused by the currently tracked pointer changing is ignored.
+                f32 m_rotationDelta = 0.0f; //The change in the rotation since the last event. Change caused by the currently tracked pointer changing is ignored.
+            };
+            //----------------------------------------------------
             /// A delegate called when a rotation gesture is activated.
             ///
             /// @author Ian Copland
             ///
             /// @param A pointer to the rotation gesture that was
             /// activated.
-            /// @param The centre position of the pinch.
-            /// @param The clockwise angle of the gesture from the
-            /// initial orientation.
+            /// @param Information on the rotation.
             //----------------------------------------------------
-            using Delegate = std::function<void(const RotationGesture*, const Core::Vector2&, f32)>;
+            using Delegate = std::function<void(const RotationGesture*, const RotationInfo&)>;
             //----------------------------------------------------
             /// Constructor. Constructs the rotation gesture with the
             /// given settings.
@@ -222,8 +232,7 @@ namespace ChilliSource
             
             std::vector<PointerInfo> m_pendingPointers;
             f32 m_initialAngle = 0.0f;
-            CSCore::Vector2 m_currentPosition;
-            f32 m_currentRotation = 0.0f;
+            RotationInfo m_currentRotationInfo;
             bool m_paused = false;
         };
     }

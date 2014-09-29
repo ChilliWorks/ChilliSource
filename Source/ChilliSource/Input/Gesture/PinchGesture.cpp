@@ -126,23 +126,23 @@ namespace ChilliSource
                 {
                     SetActive(true);
                     m_initialDistance = CalculateDistance();
-                    m_currentPosition = CalculatePosition();
-                    m_currentScale = CalculateScale();
-                    m_pinchStartedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+                    m_currentPinchInfo.m_position = CalculatePosition();
+                    m_currentPinchInfo.m_scale = CalculateScale();
+                    m_pinchStartedEvent.NotifyConnections(this, m_currentPinchInfo);
                 }
                 else
                 {
                     //If we're re-placing a finger for a pinch we want to scale the initial distance such that the scale at the new
                     //finger position is the same as it was when the finger was removed.
-                    if (m_currentScale > 0.0f)
+                    if (m_currentPinchInfo.m_scale > 0.0f)
                     {
-                        f32 scaleFactor = CalculateScale() / m_currentScale;
+                        f32 scaleFactor = CalculateScale() / m_currentPinchInfo.m_scale;
                         m_initialDistance *= scaleFactor;
                     }
                     
-                    m_currentPosition = CalculatePosition();
-                    m_currentScale = CalculateScale();
-                    m_pinchMovedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+                    m_currentPinchInfo.m_position = CalculatePosition();
+                    m_currentPinchInfo.m_scale = CalculateScale();
+                    m_pinchMovedEvent.NotifyConnections(this, m_currentPinchInfo);
                 }
             }
         }
@@ -216,7 +216,10 @@ namespace ChilliSource
             
             SetActive(false);
             m_paused = false;
-            m_pinchEndedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+            
+            m_pinchEndedEvent.NotifyConnections(this, m_currentPinchInfo);
+            m_currentPinchInfo.m_position = Core::Vector2::k_zero;
+            m_currentPinchInfo.m_scale = 0.0f;
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -267,9 +270,9 @@ namespace ChilliSource
                     }
                     else if (isActive == true)
                     {
-                        m_currentPosition = CalculatePosition();
-                        m_currentScale = CalculateScale();
-                        m_pinchMovedEvent.NotifyConnections(this, m_currentPosition, m_currentScale);
+                        m_currentPinchInfo.m_position = CalculatePosition();
+                        m_currentPinchInfo.m_scale = CalculateScale();
+                        m_pinchMovedEvent.NotifyConnections(this, m_currentPinchInfo);
                     }
                 }
             }

@@ -59,17 +59,25 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(PinchGesture);
             //----------------------------------------------------
+            /// A container for information on a single pinch event.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------
+            struct PinchInfo final
+            {
+                Core::Vector2 m_position;   //The screen space location of the gesture. This is the centroid of the two active pointers.
+                f32 m_scale = 0.0f;         //The fraction difference between the initial pinch distance to the current. Change caused by the currently tracked pointer changing is ignored.
+            };
+            //----------------------------------------------------
             /// A delegate called when a pinch gesture is activated.
             ///
             /// @author Ian Copland
             ///
             /// @param A pointer to the pinch gesture that was
             /// activated.
-            /// @param The centre position of the pinch.
-            /// @param The fraction difference between the initial
-            /// pinch distance to the current.
+            /// @param Information on the pinch gesture.
             //----------------------------------------------------
-            using Delegate = std::function<void(const PinchGesture*, const Core::Vector2&, f32)>;
+            using Delegate = std::function<void(const PinchGesture*, const PinchInfo&)>;
             //----------------------------------------------------
             /// Constructor. Constructs the pinch gesture with the
             /// given settings.
@@ -223,8 +231,7 @@ namespace ChilliSource
             
             std::vector<PointerInfo> m_pendingPointers;
             f32 m_initialDistance = 0.0f;
-            CSCore::Vector2 m_currentPosition;
-            f32 m_currentScale = 0.0f;
+            PinchInfo m_currentPinchInfo;
             bool m_paused = false;
         };
     }

@@ -127,18 +127,20 @@ namespace ChilliSource
                 {
                     SetActive(true);
                     m_initialAngle = CalculateAngle();
-                    m_currentPosition = CalculatePosition();
-                    m_currentRotation = CalculateRelativeRotation();
-                    m_rotationStartedEvent.NotifyConnections(this, m_currentPosition, m_currentRotation);
+                    m_currentRotationInfo.m_position = CalculatePosition();
+                    m_currentRotationInfo.m_rotation = CalculateRelativeRotation();
+                    m_currentRotationInfo.m_rotationDelta = 0.0f;
+                    m_rotationStartedEvent.NotifyConnections(this, m_currentRotationInfo);
                 }
                 else
                 {
                     //If we're re-placing a finger for a rotation we want to update the initial angle such that the rotation at the new
                     //finger position is the same as it was when the finger was removed.
-                    m_initialAngle = CalculateAngle() - m_currentRotation;
-                    m_currentPosition = CalculatePosition();
-                    m_currentRotation = CalculateRelativeRotation();
-                    m_rotationMovedEvent.NotifyConnections(this, m_currentPosition, m_currentRotation);
+                    m_initialAngle = CalculateAngle() - m_currentRotationInfo.m_rotation;
+                    m_currentRotationInfo.m_position = CalculatePosition();
+                    m_currentRotationInfo.m_rotation = CalculateRelativeRotation();
+                    m_currentRotationInfo.m_rotationDelta = 0.0f;
+                    m_rotationMovedEvent.NotifyConnections(this, m_currentRotationInfo);
                 }
             }
         }
@@ -228,7 +230,11 @@ namespace ChilliSource
             
             SetActive(false);
             m_paused = false;
-            m_rotationEndedEvent.NotifyConnections(this, m_currentPosition, m_currentRotation);
+            
+            m_currentRotationInfo.m_rotationDelta = 0.0f;
+            m_rotationEndedEvent.NotifyConnections(this, m_currentRotationInfo);
+            m_currentRotationInfo.m_position = Core::Vector2::k_zero;
+            m_currentRotationInfo.m_rotation = 0.0f;
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -279,9 +285,11 @@ namespace ChilliSource
                     }
                     else if (isActive == true)
                     {
-                        m_currentPosition = CalculatePosition();
-                        m_currentRotation = CalculateRelativeRotation();
-                        m_rotationMovedEvent.NotifyConnections(this, m_currentPosition, m_currentRotation);
+                        m_currentRotationInfo.m_position = CalculatePosition();
+                        f32 newRotation = CalculateRelativeRotation();
+                        m_currentRotationInfo.m_rotationDelta = newRotation - m_currentRotationInfo.m_rotation;
+                        m_currentRotationInfo.m_rotation = newRotation;
+                        m_rotationMovedEvent.NotifyConnections(this, m_currentRotationInfo);
                     }
                 }
             }
