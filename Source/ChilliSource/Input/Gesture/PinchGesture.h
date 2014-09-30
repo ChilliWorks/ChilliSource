@@ -194,10 +194,8 @@ namespace ChilliSource
             /// @param The pointer.
             /// @param The timestamp of the event.
             /// @param The press type.
-            /// @param The filter, allowing exclusion from the filtered
-            /// input event.
             //--------------------------------------------------------
-            void OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter) override;
+            void OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType) override;
             //--------------------------------------------------------
             /// Called when a pointer moved event occurs.
             ///
@@ -205,10 +203,8 @@ namespace ChilliSource
             ///
             /// @param The pointer
             /// @param The timestamp of the event.
-            /// @param The filter, allowing exclusion from the filtered
-            /// input event.
             //--------------------------------------------------------
-            void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter) override;
+            void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp) override;
             //--------------------------------------------------------
             /// Called when a pointer up event occurs.
             ///
@@ -217,10 +213,8 @@ namespace ChilliSource
             /// @param The pointer
             /// @param The timestamp of the event.
             /// @param The press type.
-            /// @param The filter, allowing exclusion from the filtered
-            /// input event.
             //--------------------------------------------------------
-            void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter) override;
+            void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType) override;
             
             Pointer::InputType m_requiredInputType;
             Core::Event<Delegate> m_pinchStartedEvent;

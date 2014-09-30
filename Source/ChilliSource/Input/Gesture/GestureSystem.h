@@ -209,10 +209,8 @@ namespace ChilliSource
             ///
             /// @param The pointer
             /// @param The timestamp of the event.
-            /// @param The filter, allowing exclusion from the filtered
-            /// input event.
             //--------------------------------------------------------
-            void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter);
+            void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp);
             //--------------------------------------------------------
             /// Called when a pointer up event is received from the
             /// pointer system. This will be relayed onto each active
@@ -223,10 +221,8 @@ namespace ChilliSource
             /// @param The pointer
             /// @param The timestamp of the event.
             /// @param The press type.
-            /// @param The filter, allowing exclusion from the filtered
-            /// input event.
             //--------------------------------------------------------
-            void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter);
+            void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType);
             //--------------------------------------------------------
             /// Called when a pointer scrolled event is received from
             /// the pointer system. This will be relayed onto each
@@ -253,7 +249,7 @@ namespace ChilliSource
             Core::concurrent_vector<GestureSPtr> m_gestures;
             
             ConflictResolutionDelegate m_conflictResolutionDelegate;
-            
+
             Core::EventConnectionUPtr m_pointerDownConnection;
             Core::EventConnectionUPtr m_pointerMovedConnection;
             Core::EventConnectionUPtr m_pointerUpConnection;

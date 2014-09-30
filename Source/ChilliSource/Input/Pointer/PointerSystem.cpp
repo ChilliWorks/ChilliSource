@@ -103,12 +103,6 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        Core::IConnectableEvent<PointerSystem::PointerMovedDelegate>& PointerSystem::GetPointerMovedEventFiltered()
-        {
-            return m_pointerMovedEventFiltered;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
         Core::IConnectableEvent<PointerSystem::PointerUpDelegate>& PointerSystem::GetPointerUpEventFiltered()
         {
             return m_pointerUpEventFiltered;
@@ -124,18 +118,6 @@ namespace ChilliSource
         Core::IConnectableEvent<PointerSystem::PointerDownDelegateInternal>& PointerSystem::GetPointerDownEventInternal()
         {
             return m_pointerDownEventInternal;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        Core::IConnectableEvent<PointerSystem::PointerMovedDelegateInternal>& PointerSystem::GetPointerMovedEventInternal()
-        {
-            return m_pointerMovedEventInternal;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        Core::IConnectableEvent<PointerSystem::PointerUpDelegateInternal>& PointerSystem::GetPointerUpEventInternal()
-        {
-            return m_pointerUpEventInternal;
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -360,6 +342,10 @@ namespace ChilliSource
             
             Pointer pointer(in_uniqueId, index, in_initialPosition);
             m_pointers.push_back(pointer);
+            
+            //create the filtered input set.
+            CS_ASSERT(m_filteredPointerInput.find(pointer.m_uniqueId) == m_filteredPointerInput.end(), "Filtered input already exists!");
+            m_filteredPointerInput.emplace(pointer.m_uniqueId, std::set<Pointer::InputType>());
         }
         //----------------------------------------------------
         //-----------------------------------------------------
@@ -387,6 +373,15 @@ namespace ChilliSource
                 {
                     m_pointerDownEventFiltered.NotifyConnections(copy, in_timestamp, in_inputType);
                 }
+                else
+                {
+                    //update the filtered input set.
+                    auto filteredInputSetIt = m_filteredPointerInput.find(in_uniqueId);
+                    CS_ASSERT(filteredInputSetIt != m_filteredPointerInput.end(), "Filtered input doesn't exist!");
+                    CS_ASSERT(filteredInputSetIt->second.find(in_inputType) == filteredInputSetIt->second.end(), "Input already filtered!");
+                    
+                    filteredInputSetIt->second.insert(in_inputType);
+                }
             }
             else
             {
@@ -408,18 +403,8 @@ namespace ChilliSource
                 pointerIt->m_position = in_newPosition;
                 Pointer copy = *pointerIt;
 
-                //Notify unfiltered connections
+                //Notify all connections
                 m_pointerMovedEvent.NotifyConnections(copy, in_timestamp);
-                
-                Filter filter;
-                //Notify internal engine connections which can filter the input
-                m_pointerMovedEventInternal.NotifyConnections(copy, in_timestamp, filter);
-                
-                //Notify filtered connections if the input has not been filtered
-                if(filter.IsFiltered() == false)
-                {
-                    m_pointerMovedEventFiltered.NotifyConnections(copy, in_timestamp);
-                }
             }
             else
             {
@@ -443,14 +428,18 @@ namespace ChilliSource
                 //Notify unfiltered connections
                 m_pointerUpEvent.NotifyConnections(copy, in_timestamp, in_inputType);
                 
-                Filter filter;
-                //Notify internal engine connections which can filter the input
-                m_pointerUpEventInternal.NotifyConnections(copy, in_timestamp, in_inputType, filter);
-                
                 //Notify filtered connections if the input has not been filtered
-                if(filter.IsFiltered() == false)
+                auto filteredInputSetIt = m_filteredPointerInput.find(in_uniqueId);
+                CS_ASSERT(filteredInputSetIt != m_filteredPointerInput.end(), "Filtered input doesn't exist!");
+
+                auto filteredInputIt = filteredInputSetIt->second.find(in_inputType);
+                if(filteredInputIt == filteredInputSetIt->second.end())
                 {
                     m_pointerUpEventFiltered.NotifyConnections(copy, in_timestamp, in_inputType);
+                }
+                else
+                {
+                    filteredInputSetIt->second.erase(filteredInputIt);
                 }
             }
             else
@@ -493,6 +482,13 @@ namespace ChilliSource
         //-----------------------------------------------------
         void PointerSystem::RemovePointer(Pointer::Id in_uniqueId)
         {
+            //remove the filtered input set.
+            auto filteredInputIt = m_filteredPointerInput.find(in_uniqueId);
+            CS_ASSERT(filteredInputIt != m_filteredPointerInput.end(), "Filtered input doesn't exist!");
+            
+            m_filteredPointerInput.erase(filteredInputIt);
+            
+            //remove the pointer.
             auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
             {
                 return (in_uniqueId == in_pointer.GetId());
