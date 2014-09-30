@@ -1,0 +1,39 @@
+{
+  "Type": "VerticalProgressBar",
+  "Properties": {
+    "Progress": "Float"
+  },
+  "Defaults": {
+    "Name": "VerticalProgressBar",
+    "Progress": "0"
+  },
+  "ChildProperties": {
+    "BarRelSize": {
+      "Child": "Bar",
+      "Property": "RelSize"
+    },
+    "BarDrawable": {
+      "Child": "Bar",
+      "Property": "Drawable"
+    }
+  },
+  "Behaviour": {
+    "FilePath": "VerticalProgressBar.lua"
+  },
+  "Children": {
+    "Bar": {
+      "Type": "Widget",
+      "RelSize": "1.0 0.0",
+      "Drawable": {
+        "Type": "None"
+      },
+      "ParentalAnchor": "BottomCentre",
+      "OriginAnchor": "BottomCentre"
+    }
+  },
+  "Hierarchy": [
+    {
+      "Name": "Bar"
+    }
+  ]
+}
