@@ -138,7 +138,7 @@ namespace ChilliSource
         {
             CS_ASSERT(m_texture != nullptr, "StandardDrawable cannot draw without texture");
             
-            //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offseting the box.
+            //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offsetting the box.
             Core::Vector2 offsetTL
             (
                 (-m_atlasFrame.m_originalSize.x * 0.5f) + (m_atlasFrame.m_croppedSize.x * 0.5f) + m_atlasFrame.m_offset.x,

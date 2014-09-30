@@ -395,7 +395,7 @@ namespace ChilliSource
         {
             CS_ASSERT(m_texture != nullptr, "ThreePatchDrawable cannot draw without texture");
             
-            //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offseting the patches.
+            //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offsetting the patches.
             Core::Vector2 size = in_absSize/m_atlasFrame.m_originalSize * m_atlasFrame.m_croppedSize;
             auto uvs = m_uvCalculationDelegate(m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
             auto sizes = m_sizeCalculationDelegate(size, m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
