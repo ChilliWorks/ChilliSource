@@ -78,14 +78,14 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, Core::Vector2&& in_arg)
+            void PushValueToVM(lua_State* in_vm, Core::Vector2 in_arg)
             {
                 lua_pushnumber(in_vm, in_arg.x);
                 lua_pushnumber(in_vm, in_arg.y);
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, Core::Vector3&& in_arg)
+            void PushValueToVM(lua_State* in_vm, Core::Vector3 in_arg)
             {
                 lua_pushnumber(in_vm, in_arg.x);
                 lua_pushnumber(in_vm, in_arg.y);
@@ -93,7 +93,7 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, Core::Vector4&& in_arg)
+            void PushValueToVM(lua_State* in_vm, Core::Vector4 in_arg)
             {
                 lua_pushnumber(in_vm, in_arg.x);
                 lua_pushnumber(in_vm, in_arg.y);
@@ -102,7 +102,7 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, Core::Colour&& in_arg)
+            void PushValueToVM(lua_State* in_vm, Core::Colour in_arg)
             {
                 lua_pushnumber(in_vm, in_arg.r);
                 lua_pushnumber(in_vm, in_arg.g);
@@ -111,7 +111,7 @@ namespace ChilliSource
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, Rendering::UVs&& in_arg)
+            void PushValueToVM(lua_State* in_vm, Rendering::UVs in_arg)
             {
                 lua_pushnumber(in_vm, in_arg.m_u);
                 lua_pushnumber(in_vm, in_arg.m_v);
@@ -121,6 +121,12 @@ namespace ChilliSource
             //---------------------------------------------------------
             //---------------------------------------------------------
             void PushValueToVM(lua_State* in_vm, std::string&& in_arg)
+            {
+                lua_pushstring(in_vm, in_arg.c_str());
+            }
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            void PushValueToVM(lua_State* in_vm, const std::string& in_arg)
             {
                 lua_pushstring(in_vm, in_arg.c_str());
             }

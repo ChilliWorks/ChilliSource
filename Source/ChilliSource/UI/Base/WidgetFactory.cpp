@@ -69,8 +69,10 @@ namespace ChilliSource
             const std::string k_widgetKey = "Widget";
             const std::string k_highlightButtonKey = "HighlightButton";
             const std::string k_toggleButtonKey = "ToggleButton";
-            const std::string k_verticalSliderKey = "VerticalSliderBar";
-            const std::string k_horizontalSliderKey = "HorizontalSliderBar";
+            const std::string k_verticalSliderKey = "VerticalSlider";
+            const std::string k_horizontalSliderKey = "HorizontalSlider";
+            const std::string k_horizontalProgressBarKey = "HorizontalProgressBar";
+            const std::string k_verticalProgressBarKey = "VerticalProgressBar";
             
             //---------------------------------------------------------------------------
             /// Create the layout class based on the given description
@@ -155,11 +157,17 @@ namespace ChilliSource
             WidgetDefCSPtr toggleButtonDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/ToggleButton.csuidef");
             RegisterDefinition(toggleButtonDef);
             
-            WidgetDefCSPtr horizontalSliderDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HorizontalSliderBar.csuidef");
+            WidgetDefCSPtr horizontalSliderDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HorizontalSlider.csuidef");
             RegisterDefinition(horizontalSliderDef);
             
-            WidgetDefCSPtr verticalSliderDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/VerticalSliderBar.csuidef");
+            WidgetDefCSPtr verticalSliderDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/VerticalSlider.csuidef");
             RegisterDefinition(verticalSliderDef);
+
+            WidgetDefCSPtr horizontalProgressDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HorizontalProgressBar.csuidef");
+            RegisterDefinition(horizontalProgressDef);
+            
+//            WidgetDefCSPtr verticalProgressDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/VerticalProgressBar.csuidef");
+//            RegisterDefinition(verticalProgressDef);
             
             auto luaSystem = Core::Application::Get()->GetSystem<Scripting::LuaSystem>();
             luaSystem->RegisterEnum("SizePolicy",
@@ -264,6 +272,18 @@ namespace ChilliSource
         WidgetUPtr WidgetFactory::CreateHorizontalSlider() const
         {
             return Create(m_widgetDefNameMap.find(k_horizontalSliderKey)->second);
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetUPtr WidgetFactory::CreateHorizontalProgressBar() const
+        {
+            return Create(m_widgetDefNameMap.find(k_horizontalProgressBarKey)->second);
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetUPtr WidgetFactory::CreateVerticalProgressBar() const
+        {
+            return Create(m_widgetDefNameMap.find(k_verticalProgressBarKey)->second);
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------

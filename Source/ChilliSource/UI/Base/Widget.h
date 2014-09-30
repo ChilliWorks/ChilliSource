@@ -945,6 +945,11 @@ namespace ChilliSource
             }
             
             m_customProperties.SetProperty(in_name, std::forward<TType>(in_value));
+            
+            if(m_behaviourScript != nullptr)
+            {
+                m_behaviourScript->CallFunction("onPropertyChanged", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, in_name, std::forward<TType>(in_value));
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

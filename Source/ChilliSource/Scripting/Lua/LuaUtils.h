@@ -141,22 +141,25 @@ namespace ChilliSource
             void PushValueToVM(lua_State* in_vm, f64 in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, Core::Vector2&& in_arg);
+            void PushValueToVM(lua_State* in_vm, Core::Vector2 in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, Core::Vector3&& in_arg);
+            void PushValueToVM(lua_State* in_vm, Core::Vector3 in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, Core::Vector4&& in_arg);
+            void PushValueToVM(lua_State* in_vm, Core::Vector4 in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, Core::Colour&& in_arg);
+            void PushValueToVM(lua_State* in_vm, Core::Colour in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
-            void PushValueToVM(lua_State* in_vm, Rendering::UVs&& in_arg);
+            void PushValueToVM(lua_State* in_vm, Rendering::UVs in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
             void PushValueToVM(lua_State* in_vm, std::string&& in_arg);
+            //---------------------------------------------------------
+            //---------------------------------------------------------
+            void PushValueToVM(lua_State* in_vm, const std::string& in_arg);
             //---------------------------------------------------------
             //---------------------------------------------------------
             void PushValueToVM(lua_State* in_vm, const char* in_arg);

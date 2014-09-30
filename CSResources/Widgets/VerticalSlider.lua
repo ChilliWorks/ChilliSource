@@ -1,5 +1,5 @@
 --
---  HorizontalSliderBar.lua
+--  VerticalSlider.lua
 --  Chilli Source
 --  Created by Scott Downie on 30/08/2014.
 --
@@ -27,10 +27,10 @@
 --
 
 -------------------------------------------------------------
--- This is the logic that describes a horizontal slider bar.
+-- This is the logic that describes a vertical slider bar.
 -- The slider bar consists of 2 widgets the bar and the slider.
 -- The slider runs on a rail that goes from from the start
--- of the bar to the end of the bar and moves only horizontally.
+-- of the bar to the end of the bar and moves only vertically.
 -- The slider responds to user dragging input and will respond to multiple
 -- pointers but only to the primary input type
 --
@@ -67,8 +67,8 @@ end
 -----------------------------------------------------
 function onPressedInside(in_pointer, in_timeStamp, in_inputType)
     if in_inputType == InputType.Default then
-        pointerPosX = getPointerPosition(in_pointer)
-        updateSlider(pointerPosX)
+        pointerPosX, pointerPosY = getPointerPosition(in_pointer)
+        updateSlider(pointerPosY)
     end
 end
 -----------------------------------------------------
@@ -82,8 +82,8 @@ end
 -- @param Timestamp of the input event
 -----------------------------------------------------
 function onDraggedInside(in_pointer, in_timeStamp)
-    pointerPosX = getPointerPosition(in_pointer)
-    updateSlider(pointerPosX)
+    pointerPosX, pointerPosY = getPointerPosition(in_pointer)
+    updateSlider(pointerPosY)
 end
 -----------------------------------------------------
 -- Move the slider to the correct position based
@@ -91,13 +91,13 @@ end
 --
 -- @author S Downie
 --
--- @param Pointer input position X
+-- @param Pointer input position Y
 -----------------------------------------------------
-function updateSlider(in_pointerPositionX)
-    barPosX = getFinalPosition(this)
-    barWidth = getFinalSize(this)
-    sliderFraction = ((in_pointerPositionX - barPosX)/barWidth) + 0.5;
-    setRelativePosition(sliderWidget, sliderFraction, 0.0)
+function updateSlider(in_pointerPositionY)
+    barPosX, barPosY = getFinalPosition(this)
+    barWidth, barHeight = getFinalSize(this)
+    sliderFraction = ((in_pointerPositionY - barPosY)/barHeight) + 0.5;
+    setRelativePosition(sliderWidget, 0.0, sliderFraction)
     setFloatProperty(this, "SliderFraction", sliderFraction)
 end
 
