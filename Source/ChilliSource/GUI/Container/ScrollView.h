@@ -76,8 +76,6 @@ namespace ChilliSource
             ///
             /// @param The pointer.
             /// @param The timestamp
-            ///
-            /// @return Whether touch has been consumed
             //-----------------------------------------------------------
             void OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp) override;
 			//-----------------------------------------------------------

@@ -1780,8 +1780,11 @@ namespace ChilliSource
                     (*it)->OnPointerMoved(in_pointer, in_timestamp);
                 }
                 
-                mInputEvents.OnPointerMoved(this, in_pointer);
-                m_pointerMovedEvent.NotifyConnections(in_pointer, in_timestamp);
+                //Only send the moved event if the event is inside the view.
+                if (mInputEvents.OnPointerMoved(this, in_pointer) == true)
+                {
+                    m_pointerMovedEvent.NotifyConnections(in_pointer, in_timestamp);
+                }
             }
             
             mSubviewsCopy.clear();

@@ -119,7 +119,7 @@ namespace ChilliSource
             ///
             /// @return Whether the view contains the touch
             //-----------------------------------------------------------
-            void OnPointerMoved(GUIView* in_view, const Input::Pointer& in_pointer);
+            bool OnPointerMoved(GUIView* in_view, const Input::Pointer& in_pointer);
             //-----------------------------------------------------------
             /// Called when the window stops receiving cursor/touch input
             ///
