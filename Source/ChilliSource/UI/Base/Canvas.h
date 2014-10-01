@@ -159,9 +159,8 @@ namespace ChilliSource
             ///
             /// @param The pointer
             /// @param The timestamp.
-            /// @param Filter object to check if the event has been filtered or to filter it
             //-----------------------------------------------------------
-            void OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Filter& in_filter);
+            void OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp);
             //-----------------------------------------------------------
             /// Called when the canvas receiving cursor/touch release input
             ///
@@ -170,9 +169,8 @@ namespace ChilliSource
             /// @param The pointer
             /// @param The timestamp.
             /// @param The press type.
-            /// @param Filter object to check if the event has been filtered or to filter it
             //-----------------------------------------------------------
-            void OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter);
+            void OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType);
             
         private:
             

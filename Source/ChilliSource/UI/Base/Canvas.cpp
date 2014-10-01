@@ -71,8 +71,8 @@ namespace ChilliSource
             
             auto pointerSystem = Core::Application::Get()->GetSystem<Input::PointerSystem>();
             m_pointerDownConnection = pointerSystem->GetPointerDownEventInternal().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerDown));
-            m_pointerMovedConnection = pointerSystem->GetPointerMovedEventInternal().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerMoved));
-            m_pointerUpConnection = pointerSystem->GetPointerUpEventInternal().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerUp));
+            m_pointerMovedConnection = pointerSystem->GetPointerMovedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerMoved));
+            m_pointerUpConnection = pointerSystem->GetPointerUpEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerUp));
         }
         //-----------------------------------------------------------
         /// UI can filter input events to prevent them from being
@@ -83,20 +83,16 @@ namespace ChilliSource
             m_canvas->OnPointerDown(in_pointer, in_timestamp, in_inputType, in_filter);
         }
         //-----------------------------------------------------------
-        /// UI can filter input events to prevent them from being
-        /// forwarded to the external app.
         //-----------------------------------------------------------
-        void Canvas::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Filter& in_filter)
+        void Canvas::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
         {
-            m_canvas->OnPointerMoved(in_pointer, in_timestamp, in_filter);
+            m_canvas->OnPointerMoved(in_pointer, in_timestamp);
         }
         //-----------------------------------------------------------
-        /// UI can filter input events to prevent them from being
-        /// forwarded to the external app.
         //-----------------------------------------------------------
-        void Canvas::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter)
+        void Canvas::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
         {
-            m_canvas->OnPointerUp(in_pointer, in_timestamp, in_inputType, in_filter);
+            m_canvas->OnPointerUp(in_pointer, in_timestamp, in_inputType);
         }
         //--------------------------------------------------------
         //--------------------------------------------------------

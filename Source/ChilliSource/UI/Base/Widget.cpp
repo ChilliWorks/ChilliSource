@@ -1259,7 +1259,7 @@ namespace ChilliSource
         /// UI can filter input events to prevent them from being
         /// forwarded to the external app.
         //-----------------------------------------------------------
-        void Widget::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Filter& in_filter)
+        void Widget::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
         {
             if(m_isInputEnabled == false)
                 return;
@@ -1267,26 +1267,14 @@ namespace ChilliSource
             m_children.lock();
             for(auto it = m_children.rbegin(); it != m_children.rend(); ++it)
             {
-                (*it)->OnPointerMoved(in_pointer, in_timestamp, in_filter);
-                
-                if(in_filter.IsFiltered() == true)
-                {
-                    m_children.unlock();
-                    return;
-                }
+                (*it)->OnPointerMoved(in_pointer, in_timestamp);
             }
             m_children.unlock();
             
             m_internalChildren.lock();
             for(auto it = m_internalChildren.rbegin(); it != m_internalChildren.rend(); ++it)
             {
-                (*it)->OnPointerMoved(in_pointer, in_timestamp, in_filter);
-                
-                if(in_filter.IsFiltered() == true)
-                {
-                    m_internalChildren.unlock();
-                    return;
-                }
+                (*it)->OnPointerMoved(in_pointer, in_timestamp);
             }
             m_internalChildren.unlock();
             
@@ -1342,7 +1330,7 @@ namespace ChilliSource
         /// UI can filter input events to prevent them from being
         /// forwarded to the external app.
         //-----------------------------------------------------------
-        void Widget::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter)
+        void Widget::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
         {
             if(m_isInputEnabled == false)
                 return;
@@ -1350,26 +1338,14 @@ namespace ChilliSource
             m_children.lock();
             for(auto it = m_children.rbegin(); it != m_children.rend(); ++it)
             {
-                (*it)->OnPointerUp(in_pointer, in_timestamp, in_inputType, in_filter);
-                
-                if(in_filter.IsFiltered() == true)
-                {
-                    m_children.unlock();
-                    return;
-                }
+                (*it)->OnPointerUp(in_pointer, in_timestamp, in_inputType);
             }
             m_children.unlock();
             
             m_internalChildren.lock();
             for(auto it = m_internalChildren.rbegin(); it != m_internalChildren.rend(); ++it)
             {
-                (*it)->OnPointerUp(in_pointer, in_timestamp, in_inputType, in_filter);
-                
-                if(in_filter.IsFiltered() == true)
-                {
-                    m_internalChildren.unlock();
-                    return;
-                }
+                (*it)->OnPointerUp(in_pointer, in_timestamp, in_inputType);
             }
             m_internalChildren.unlock();
             
@@ -1396,11 +1372,6 @@ namespace ChilliSource
                     }
                     
                     m_releasedOutsideEvent.NotifyConnections(this, in_inputType);
-                }
-                
-                if(m_isInputConsumeEnabled == true)
-                {
-                    in_filter.SetFiltered();
                 }
             }
         }

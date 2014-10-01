@@ -34,7 +34,7 @@
 #include <ChilliSource/Input/Gesture/Gesture.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
-#define CS_ENABLE_LEGACYGESTURECONSUMPTION
+//#define CS_ENABLE_LEGACYGESTURECONSUMPTION
 #ifdef CS_ENABLE_LEGACYGESTURECONSUMPTION
 #include <ChilliSource/Core/State.h>
 #include <ChilliSource/GUI/Base/Window.h>
