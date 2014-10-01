@@ -64,15 +64,6 @@ namespace ChilliSource
 			mutable u32 mudwCacheValidaters;
 			
 		public:
-            
-			enum class TouchType
-			{
-                k_began = (1 << 0),
-                k_moved = (1 << 1),
-                k_all = k_began | k_moved
-			};
-
-		public:
 
 			DECLARE_META_CLASS(GUIView)
 
@@ -375,19 +366,17 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Enable Touch Consumption
 			///
-			/// @param Override to force a view to consome or route
-			/// touches
-			/// @param The type of touch concerned (BEGAN, MOVED or ALL)
+            /// @param Whether or not this view should consume touch
+            /// began events.
 			//-----------------------------------------------------
-			void EnableTouchConsumption(bool inbEnabled, TouchType ineTouch = TouchType::k_all);
+			void EnableTouchConsumption(bool in_enabled);
 			//-----------------------------------------------------
 			/// Is Touch Consumption Enabled
 			///
-			/// @param The type of touch concerned (BEGAN, MOVED or ALL)
-			/// @return Override to force a view to consome or route
-			/// touches
+            /// @return Whether or not this view will consume touch
+            /// began events.
 			//-----------------------------------------------------
-			bool IsTouchConsumptionEnabled(TouchType ineTouch = TouchType::k_all) const;
+			bool IsTouchConsumptionEnabled() const;
 			//-----------------------------------------------------
 			/// Enable Inherited Scale
 			///
@@ -982,8 +971,6 @@ namespace ChilliSource
 			Window* mpRootWindow;
 
 			bool mbIsBeingDragged;
-			
-			u8 ConsumesTouches;
 
 			//---Properties
 			DECLARE_PROPERTY_A(std::string, Name, SetName, GetName);
@@ -1005,6 +992,7 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(bool, Visible, SetVisible, IsVisible);
 			DECLARE_PROPERTY_A(bool, Movable, SetMovable, IsMovable);
 			DECLARE_PROPERTY_A(bool, UserInteraction, EnableUserInteraction, IsUserInteractionEnabled);
+            DECLARE_PROPERTY_A(bool, ConsumesTouches, EnableTouchConsumption, IsTouchConsumptionEnabled);
 			DECLARE_PROPERTY_A(bool, AcceptTouchesOutsideOfBounds, EnableAcceptTouchesOutsideOfBounds, IsAcceptTouchesOutsideOfBoundsEnabled);
 			DECLARE_PROPERTY_A(bool, InheritOpacity, EnableInheritedOpacity, IsInheritedOpacityEnabled);
 			DECLARE_PROPERTY_A(Core::Colour, Colour, SetColour, GetColour);
