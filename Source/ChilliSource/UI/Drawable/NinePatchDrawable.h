@@ -36,6 +36,8 @@
 #include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 
+#include <array>
+
 namespace ChilliSource
 {
     namespace UI
@@ -55,6 +57,8 @@ namespace ChilliSource
         {
         public:
 
+            static const u32 k_numPatches = 9;
+            
             //----------------------------------------------------------------------------------------
             /// Constructor
             ///
@@ -164,10 +168,18 @@ namespace ChilliSource
             Rendering::TextureAtlasCSPtr m_atlas;
             Rendering::TextureAtlas::Frame m_atlasFrame;
             
+            std::array<Rendering::UVs, k_numPatches> m_cachedUvs;
+            std::array<Core::Vector2, k_numPatches> m_cachedSizes;
+            std::array<Core::Vector2, k_numPatches> m_cachedPositions;
+            Core::Vector2 m_cachedOffsetTL;
+            Core::Vector2 m_cachedWidgetSize;
+            
             f32 m_leftInset = 0.01f;
             f32 m_rightInset = 0.01f;
             f32 m_topInset = 0.01f;
             f32 m_bottomInset = 0.01f;
+            
+            bool m_isPatchCatchValid = false;
         };
     }
 }

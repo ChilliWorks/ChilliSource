@@ -37,8 +37,6 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 
-#include <array>
-
 namespace ChilliSource
 {
     namespace UI
@@ -56,8 +54,6 @@ namespace ChilliSource
                 {PropertyType::k_string, "AtlasPath", ""},
                 {PropertyType::k_string, "AtlasId", ""}
             };
-            
-            const u32 k_numPatches = 9;
             
             //----------------------------------------------------------------------------------------
             /// Identifier for each patch in the 9 patch. Can be used as index look-ups into
@@ -90,9 +86,9 @@ namespace ChilliSource
             ///
             /// @return UVs for the 9 patches
             //----------------------------------------------------------------------------------------
-            std::array<Rendering::UVs, k_numPatches> CalculateNinePatchUVs(const Rendering::TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
+            std::array<Rendering::UVs, NinePatchDrawable::k_numPatches> CalculateNinePatchUVs(const Rendering::TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
             {
-                std::array<Rendering::UVs, k_numPatches> result;
+                std::array<Rendering::UVs, NinePatchDrawable::k_numPatches> result;
                 
                 f32 uvWidth = (in_frame.m_originalSize.x/in_frame.m_croppedSize.x) * in_frame.m_uvs.m_s;
                 
@@ -196,9 +192,9 @@ namespace ChilliSource
             ///
             /// @return Sizes for the 9 patches
             //----------------------------------------------------------------------------------------
-            std::array<Core::Vector2, k_numPatches> CalculateNinePatchSizes(const Core::Vector2& in_widgetSize, const Rendering::TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
+            std::array<Core::Vector2, NinePatchDrawable::k_numPatches> CalculateNinePatchSizes(const Core::Vector2& in_widgetSize, const Rendering::TextureAtlas::Frame& in_frame, f32 in_left, f32 in_right, f32 in_top, f32 in_bottom)
             {
-                std::array<Core::Vector2, k_numPatches> result;
+                std::array<Core::Vector2, NinePatchDrawable::k_numPatches> result;
                 
                 f32 widthImageLeft = in_frame.m_originalSize.x * in_left;
                 f32 widthVisibleLeft = Core::MathUtils::Clamp(-in_frame.m_offset.x + widthImageLeft, 0.0f, in_frame.m_croppedSize.x);
@@ -272,9 +268,9 @@ namespace ChilliSource
             ///
             /// @return Sizes for the 9 patches
             //----------------------------------------------------------------------------------------
-            std::array<Core::Vector2, k_numPatches> CalculateNinePatchPositions(const Core::Vector2& in_widgetSize, const std::array<Core::Vector2, k_numPatches>& in_sizes)
+            std::array<Core::Vector2, NinePatchDrawable::k_numPatches> CalculateNinePatchPositions(const Core::Vector2& in_widgetSize, const std::array<Core::Vector2, NinePatchDrawable::k_numPatches>& in_sizes)
             {
-                std::array<Core::Vector2, k_numPatches> result;
+                std::array<Core::Vector2, NinePatchDrawable::k_numPatches> result;
                 
                 Core::Vector2 halfWidgetSize = in_widgetSize * 0.5f;
                 Core::Vector2 halfMiddleCentre = in_sizes[(u32)Patch::k_middleCentre] * 0.5f;
@@ -441,6 +437,8 @@ namespace ChilliSource
             m_atlasFrame.m_croppedSize = texSize;
             m_atlasFrame.m_originalSize = texSize;
             m_atlasFrame.m_offset = Core::Vector2::k_zero;
+            
+            m_isPatchCatchValid = false;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -452,6 +450,8 @@ namespace ChilliSource
             {
                 m_atlasFrame.m_uvs = Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f);
             }
+            
+            m_isPatchCatchValid = false;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -460,12 +460,16 @@ namespace ChilliSource
             CS_ASSERT(m_texture != nullptr &&  m_atlas != nullptr, "ThreePatchDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas and a texture");
             
             m_atlasFrame = m_atlas->GetFrame(in_atlasId);
+            
+            m_isPatchCatchValid = false;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void NinePatchDrawable::SetUVs(const Rendering::UVs& in_UVs)
         {
             m_atlasFrame.m_uvs = in_UVs;
+            
+            m_isPatchCatchValid = false;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -479,6 +483,8 @@ namespace ChilliSource
             m_rightInset = in_right;
             m_topInset = in_top;
             m_bottomInset = in_bottom;
+            
+            m_isPatchCatchValid = false;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -492,16 +498,27 @@ namespace ChilliSource
         {
             CS_ASSERT(m_texture != nullptr, "NinePatchDrawable cannot draw without texture");
             
-            //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offsetting the patches.
-            auto uvs = CalculateNinePatchUVs(m_atlasFrame, m_leftInset, m_rightInset, m_topInset, m_bottomInset);
-            auto sizes = CalculateNinePatchSizes(in_absSize, m_atlasFrame, m_leftInset, m_rightInset, m_topInset, m_bottomInset);
-            auto positions = CalculateNinePatchPositions(in_absSize, sizes);
-            auto offsetTL = CalculatePatchesOffset(in_absSize, m_atlasFrame, m_leftInset, m_rightInset, m_topInset, m_bottomInset);
+            if(m_cachedWidgetSize != in_absSize)
+            {
+                m_isPatchCatchValid = false;
+                m_cachedWidgetSize = in_absSize;
+            }
+            
+            if(m_isPatchCatchValid == false)
+            {
+                //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offsetting the patches.
+                m_cachedUvs = CalculateNinePatchUVs(m_atlasFrame, m_leftInset, m_rightInset, m_topInset, m_bottomInset);
+                m_cachedSizes = CalculateNinePatchSizes(in_absSize, m_atlasFrame, m_leftInset, m_rightInset, m_topInset, m_bottomInset);
+                m_cachedPositions = CalculateNinePatchPositions(in_absSize, m_cachedSizes);
+                m_cachedOffsetTL = CalculatePatchesOffset(in_absSize, m_atlasFrame, m_leftInset, m_rightInset, m_topInset, m_bottomInset);
+                
+                m_isPatchCatchValid = true;
+            }
             
             for(u32 i=0; i<k_numPatches; ++i)
             {
-                Core::Matrix3 patchTransform = Core::Matrix3::CreateTranslation(positions[i]);
-                in_renderer->DrawBox(patchTransform * in_transform, sizes[i], offsetTL, m_texture, uvs[i], in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
+                Core::Matrix3 patchTransform = Core::Matrix3::CreateTranslation(m_cachedPositions[i]);
+                in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
             }
         }
     }
