@@ -124,7 +124,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool InputEvents::OnPointerMoved(GUIView* in_view, const Input::Pointer& in_pointer)
+        void InputEvents::OnPointerMoved(GUIView* in_view, const Input::Pointer& in_pointer)
         {
             auto it = std::find(mOpenTouches.begin(), mOpenTouches.end(), in_pointer.GetId());
             
@@ -147,8 +147,6 @@ namespace ChilliSource
                 //Event: Moved outside
                 mTouchMoveExit.NotifyConnections(in_view, in_pointer);
             }
-            
-            return bContains;
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------

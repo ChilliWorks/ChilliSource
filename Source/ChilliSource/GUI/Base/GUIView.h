@@ -851,10 +851,8 @@ namespace ChilliSource
             ///
 			/// @param Touch data
             /// @param The timestamp
-            ///
-			/// @return Whether touch has been consumed
 			//-----------------------------------------------------------
-			virtual bool OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp);
+			virtual void OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp);
 			//-----------------------------------------------------------
 			/// Called when the window stops receiving cursor/touch input
 			///

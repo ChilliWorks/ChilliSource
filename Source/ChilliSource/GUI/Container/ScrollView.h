@@ -79,7 +79,7 @@ namespace ChilliSource
             ///
             /// @return Whether touch has been consumed
             //-----------------------------------------------------------
-            bool OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp) override;
+            void OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp) override;
 			//-----------------------------------------------------------
 			/// Called when the window receives cursor/touch input
             ///
