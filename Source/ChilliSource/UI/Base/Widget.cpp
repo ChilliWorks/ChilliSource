@@ -1039,13 +1039,13 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Vector2 Widget::GetFinalLayoutSize() const
+        Core::Vector2 Widget::GetRelativeReferenceSize() const
         {
             CS_ASSERT(m_canvas != nullptr, "Cannot get the absolute size of widget without attaching it to the canvas");
             
             if(m_parent != nullptr)
             {
-                return m_parent->CalculateChildFinalLayoutSize(this);
+                return m_parent->CalculateChildRelativeReferenceSize(this);
             }
             else
             {
@@ -1056,11 +1056,11 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         Core::Vector2 Widget::CalculateChildFinalSize(const Widget* in_child)
         {
-            return ((CalculateChildFinalLayoutSize(in_child) * in_child->m_localSize.vRelative) + in_child->m_localSize.vAbsolute);
+            return ((CalculateChildRelativeReferenceSize(in_child) * in_child->m_localSize.vRelative) + in_child->m_localSize.vAbsolute);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Vector2 Widget::CalculateChildFinalLayoutSize(const Widget* in_child)
+        Core::Vector2 Widget::CalculateChildRelativeReferenceSize(const Widget* in_child)
         {
             ILayout* layout = nullptr;
             s32 childIndex = -1;

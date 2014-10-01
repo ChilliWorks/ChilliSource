@@ -612,19 +612,20 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::Vector2 GetFinalSize() const;
             //----------------------------------------------------------------------------------------
-            /// Returns the size of the rectange this widget will be position and sized relative to.
+            /// Returns the size of the rectange this widget will be positioned and sized relative to.
             /// This will either be the size of the parent or the size of the cell within the parents
             /// layout.
             ///
-            /// NOTE: As the relative compoenent of the final size cannot be calculated until the
+            /// NOTE: As the relative component of the final size cannot be calculated until the
             /// widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute).
-            /// Therefore will assert if the widget is not on the root canvas
+            /// Therefore will assert if the widget is not on the root canvas.
             ///
             /// @author Ian Copland
             ///
-            /// @return The screen space layout size in pixels.
+            /// @return The screen space size that relative positions and size are relative to.
+            /// This is in pixels.
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetFinalLayoutSize() const;
+            Core::Vector2 GetRelativeReferenceSize() const;
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -920,7 +921,7 @@ namespace ChilliSource
             ///
             /// @return The screen space layout size.
             //----------------------------------------------------------------------------------------
-            Core::Vector2 CalculateChildFinalLayoutSize(const Widget* in_child);
+            Core::Vector2 CalculateChildRelativeReferenceSize(const Widget* in_child);
 
         private:
             
