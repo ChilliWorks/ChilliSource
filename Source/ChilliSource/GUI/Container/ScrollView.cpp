@@ -318,7 +318,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool ScrollView::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
+        void ScrollView::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
         {
             if(UserInteraction && Visible && mbTouchActive && (Contains(in_pointer.GetPosition()) == true || IsAcceptTouchesOutsideOfBoundsEnabled() == true))
             {
@@ -340,8 +340,6 @@ namespace ChilliSource
 				
 				GUIView::OnPointerMoved(in_pointer, in_timestamp);
             }
-            
-            return false;
         }
 		//-----------------------------------------------------------
         //-----------------------------------------------------------

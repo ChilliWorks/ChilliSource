@@ -209,10 +209,8 @@ namespace ChilliSource
             ///
             /// @param The pointer
             /// @param The timestamp of the event.
-            /// @param The filter, allowing exclusion from the filtered
-            /// input event.
             //--------------------------------------------------------
-            void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter);
+            void OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp);
             //--------------------------------------------------------
             /// Called when a pointer up event is received from the
             /// pointer system. This will be relayed onto each active
@@ -223,10 +221,8 @@ namespace ChilliSource
             /// @param The pointer
             /// @param The timestamp of the event.
             /// @param The press type.
-            /// @param The filter, allowing exclusion from the filtered
-            /// input event.
             //--------------------------------------------------------
-            void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter);
+            void OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType);
             //--------------------------------------------------------
             /// Called when a pointer scrolled event is received from
             /// the pointer system. This will be relayed onto each
@@ -241,6 +237,19 @@ namespace ChilliSource
             /// input event.
             //--------------------------------------------------------
             void OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta, Filter& in_filter);
+            //-------------------------------------------------------
+            /// A proxy method for calling GestureSystem::OnPointerDown()
+            /// using the old GUI consumption model. This simply relays
+            /// on the information to the new method with a unfiltered
+            /// filter.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The pointer.
+            /// @param The timestamp of the event.
+            /// @param The press type.
+            //--------------------------------------------------------
+            void OnPointerDownLegacy(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType);
             //--------------------------------------------------------
             /// Called when the owning state is destroyed. This
             /// -de-registers all of the input events.
@@ -253,7 +262,7 @@ namespace ChilliSource
             Core::concurrent_vector<GestureSPtr> m_gestures;
             
             ConflictResolutionDelegate m_conflictResolutionDelegate;
-            
+
             Core::EventConnectionUPtr m_pointerDownConnection;
             Core::EventConnectionUPtr m_pointerMovedConnection;
             Core::EventConnectionUPtr m_pointerUpConnection;

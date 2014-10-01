@@ -30,8 +30,15 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Input/Base/Filter.h>
 #include <ChilliSource/Input/Gesture/Gesture.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
+
+#define CS_ENABLE_LEGACYGESTURECONSUMPTION
+#ifdef CS_ENABLE_LEGACYGESTURECONSUMPTION
+#include <ChilliSource/Core/State.h>
+#include <ChilliSource/GUI/Base/Window.h>
+#endif
 
 namespace ChilliSource
 {
@@ -165,10 +172,17 @@ namespace ChilliSource
             Input::PointerSystem* pointerSystem = Core::Application::Get()->GetSystem<Input::PointerSystem>();
             CS_ASSERT(pointerSystem != nullptr, "Gesture system missing required system: Pointer System");
             
+#ifdef CS_ENABLE_LEGACYGESTURECONSUMPTION
+            CSGUI::Window* window = GetState()->GetScene()->GetWindow();
+            m_pointerDownConnection = window->GetPointerDownEvent().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerDownLegacy));
+            m_pointerMovedConnection = window->GetPointerMovedEvent().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerMoved));
+            m_pointerUpConnection = window->GetPointerUpEvent().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerUp));
+#else
             m_pointerDownConnection = pointerSystem->GetPointerDownEventInternal().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerDown));
-            m_pointerMovedConnection = pointerSystem->GetPointerMovedEventInternal().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerMoved));
-            m_pointerUpConnection = pointerSystem->GetPointerUpEventInternal().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerUp));
+            m_pointerMovedConnection = pointerSystem->GetPointerMovedEvent().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerMoved));
+            m_pointerUpConnection = pointerSystem->GetPointerUpEvent().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerUp));
             m_pointerScrolledConnection = pointerSystem->GetPointerScrollEventInternal().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerScrolled));
+#endif
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -188,40 +202,43 @@ namespace ChilliSource
         //--------------------------------------------------------
         void GestureSystem::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
         {
-            std::unique_lock<std::recursive_mutex> lock(m_mutex);
-            m_gestures.lock();
-            
-            for (const auto& gesture : m_gestures)
+            if (in_filter.IsFiltered() == false)
             {
-                gesture->OnPointerDown(in_pointer, in_timestamp, in_inputType, in_filter);
+                std::unique_lock<std::recursive_mutex> lock(m_mutex);
+                m_gestures.lock();
+                
+                for (const auto& gesture : m_gestures)
+                {
+                    gesture->OnPointerDown(in_pointer, in_timestamp, in_inputType);
+                }
+                
+                m_gestures.unlock();
             }
-            
-            m_gestures.unlock();
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void GestureSystem::OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp, Filter& in_filter)
+        void GestureSystem::OnPointerMoved(const Pointer& in_pointer, f64 in_timestamp)
         {
             std::unique_lock<std::recursive_mutex> lock(m_mutex);
             m_gestures.lock();
             
             for (const auto& gesture : m_gestures)
             {
-                gesture->OnPointerMoved(in_pointer, in_timestamp, in_filter);
+                gesture->OnPointerMoved(in_pointer, in_timestamp);
             }
             
             m_gestures.unlock();
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void GestureSystem::OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType, Filter& in_filter)
+        void GestureSystem::OnPointerUp(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType)
         {
             std::unique_lock<std::recursive_mutex> lock(m_mutex);
             m_gestures.lock();
             
             for (const auto& gesture : m_gestures)
             {
-                gesture->OnPointerUp(in_pointer, in_timestamp, in_inputType, in_filter);
+                gesture->OnPointerUp(in_pointer, in_timestamp, in_inputType);
             }
             
             m_gestures.unlock();
@@ -230,15 +247,25 @@ namespace ChilliSource
         //--------------------------------------------------------
         void GestureSystem::OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta, Filter& in_filter)
         {
-            std::unique_lock<std::recursive_mutex> lock(m_mutex);
-            m_gestures.lock();
-            
-            for (const auto& gesture : m_gestures)
+            if (in_filter.IsFiltered() == false)
             {
-                gesture->OnPointerScrolled(in_pointer, in_timestamp, in_delta, in_filter);
+                std::unique_lock<std::recursive_mutex> lock(m_mutex);
+                m_gestures.lock();
+                
+                for (const auto& gesture : m_gestures)
+                {
+                    gesture->OnPointerScrolled(in_pointer, in_timestamp, in_delta);
+                }
+                
+                m_gestures.unlock();
             }
-            
-            m_gestures.unlock();
+        }
+        //-------------------------------------------------------
+        //--------------------------------------------------------
+        void GestureSystem::OnPointerDownLegacy(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType)
+        {
+            Filter filter;
+            OnPointerDown(in_pointer, in_timestamp, in_inputType, filter);
         }
         //--------------------------------------------------------
         //--------------------------------------------------------

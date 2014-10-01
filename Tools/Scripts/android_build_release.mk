@@ -27,5 +27,5 @@
 #
 
 #call the android build with release target flags setup.
-CS_CXXFLAGS_TARGET := -O3 -DNDEBUG
+CS_CXXFLAGS_TARGET := -O3 -DNDEBUG -DCS_LOGLEVEL_WARNING
 include ../../ChilliSource/Tools/Scripts/android_build.mk

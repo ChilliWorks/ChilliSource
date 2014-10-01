@@ -155,17 +155,9 @@ namespace ChilliSource
                 //We need to notify any subviews they get first dibs
                 for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
-                    if((*it)->OnPointerMoved(in_pointer, in_timestamp))
-                    {
-                        //This means the touch has been consumed
-                        //and we should not notify anyone else
-                        mSubviewsCopy.clear();
-                        return;
-                    }
+                    (*it)->OnPointerMoved(in_pointer, in_timestamp);
                 }
                 
-                //If the touch has not been consumed we then notify
-                //the outside world
                 mSubviewsCopy.clear();
                 m_pointerMovedEvent.NotifyConnections(in_pointer, in_timestamp);
             }
@@ -189,8 +181,6 @@ namespace ChilliSource
                     (*it)->OnPointerUp(in_pointer, in_timestamp, in_inputType);
                 }
                 
-                //If the touch has not been consumed we then notify
-                //the outside world
                 mSubviewsCopy.clear();
                 m_pointerUpEvent.NotifyConnections(in_pointer, in_timestamp, in_inputType);
             }
@@ -203,9 +193,8 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool Window::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
+        void Window::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
         {
-            return false;
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------

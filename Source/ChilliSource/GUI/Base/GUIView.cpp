@@ -77,7 +77,7 @@ namespace ChilliSource
         //-----------------------------------------------------
         GUIView::GUIView() : mpParentView(nullptr), mpRootWindow(nullptr), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
         Rotation(0.0f), Opacity(1.0f), LocalAlignment(Rendering::AlignmentAnchor::k_middleCentre), ParentalAlignment(Rendering::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
-        Scale(Core::Vector2::k_one), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
+        Scale(Core::Vector2::k_one), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches(true),
         AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
         {
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
@@ -92,7 +92,7 @@ namespace ChilliSource
         GUIView::GUIView(const Core::ParamDictionary& insParams) 
 		: mpParentView(nullptr), mpRootWindow(nullptr), mbIsBeingDragged(false), mudwCacheValidaters(0), UnifiedPosition(0.5f, 0.5f, 0.0f, 0.0f), UnifiedSize(1.0f, 1.0f, 0.0f, 0.0f),
         Rotation(0.0f), Opacity(1.0f), LocalAlignment(Rendering::AlignmentAnchor::k_middleCentre), ParentalAlignment(Rendering::AlignmentAnchor::k_bottomLeft), AlignedWithParent(false),
-        Scale(Core::Vector2::k_one), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches((u8)TouchType::k_all),
+        Scale(Core::Vector2::k_one), ClipSubviews(false), InheritColour(true), Visible(true), Movable(false), UserInteraction(true), ConsumesTouches(true),
         AcceptTouchesOutsideOfBounds(false), InheritOpacity(true), RotatedWithParent(true), InheritScale(false), ClipOffScreen(true)
         {
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
@@ -188,16 +188,6 @@ namespace ChilliSource
             if(insParams.TryGetValue("ConsumesTouches", strValue))
             {
 				EnableTouchConsumption(Core::ParseBool(strValue));
-            }
-            //---Enable touch consumption
-            if(insParams.TryGetValue("ConsumesTouchesBegan", strValue))
-            {
-				EnableTouchConsumption(Core::ParseBool(strValue), TouchType::k_began);
-            }
-            //---Enable touch consumption
-            if(insParams.TryGetValue("ConsumesTouchesMoved", strValue))
-            {
-				EnableTouchConsumption(Core::ParseBool(strValue), TouchType::k_moved);
             }
             //---Accept Touches Outside of Bounds
             if(insParams.TryGetValue("AcceptTouchesOutsideOfBounds", strValue))
@@ -1015,34 +1005,16 @@ namespace ChilliSource
 			return Movable;
 		}
 		//-----------------------------------------------------
-		/// Enable Touch Consumption
-		///
-		/// @param Override to force a view to consome or route touches
-		/// @param The type of touch concerned (BEGAN, MOVED or ALL)
         //-----------------------------------------------------
-        void GUIView::EnableTouchConsumption(bool inbEnabled, TouchType ineType)
+        void GUIView::EnableTouchConsumption(bool in_enabled)
         {
-			if(inbEnabled)
-			{
-				
-				ConsumesTouches |= (u32)ineType;
-			}
-			else
-			{
-				
-				ConsumesTouches &= ~(u32)ineType;
-			}
+            ConsumesTouches = in_enabled;
 		}
 		//-----------------------------------------------------
-		/// Is Touch Consumption Enabled
-		///
-		/// @param The type of touch concerned (BEGAN, MOVED or ALL)
-		/// @return Override to force a view to consome or route
-		/// touches
 		//-----------------------------------------------------
-		bool GUIView::IsTouchConsumptionEnabled(TouchType ineType) const
+		bool GUIView::IsTouchConsumptionEnabled() const
 		{
-			return ((u32)ineType & ConsumesTouches) != 0;
+            return ConsumesTouches;
 		}
         //-----------------------------------------------------
         /// Enable Inherited Scale
@@ -1742,7 +1714,7 @@ namespace ChilliSource
                     m_pointerDownEvent.NotifyConnections(in_pointer, in_timestamp, in_inputType);
                     
 					//We consume this touch as it is within us
-					if(IsTouchConsumptionEnabled(TouchType::k_began) && bContains)
+					if(IsTouchConsumptionEnabled() && bContains)
 					{
                         mSubviewsCopy.clear();
 						return true;
@@ -1757,7 +1729,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool GUIView::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
+        void GUIView::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
         {
             if(UserInteraction)
             {
@@ -1777,29 +1749,17 @@ namespace ChilliSource
 
                 for(GUIView::Subviews::reverse_iterator it = mSubviewsCopy.rbegin(); it != mSubviewsCopy.rend(); ++it)
                 {
-                    if((*it)->OnPointerMoved(in_pointer, in_timestamp))
-                    {
-                        mSubviewsCopy.clear();
-                        return true;
-                    }
+                    (*it)->OnPointerMoved(in_pointer, in_timestamp);
                 }
                 
-                //Check for input events
-                //If we contain this touch we can consume it
-                if(mInputEvents.OnPointerMoved(this, in_pointer))
+                //Only send the moved event if the event is inside the view.
+                if (mInputEvents.OnPointerMoved(this, in_pointer) == true)
                 {
                     m_pointerMovedEvent.NotifyConnections(in_pointer, in_timestamp);
-                    if(IsTouchConsumptionEnabled(TouchType::k_moved))
-                    {
-                        mSubviewsCopy.clear();
-                        return true;
-                    }
                 }
             }
             
-            //We have no user interaction enabled
             mSubviewsCopy.clear();
-            return false;
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------

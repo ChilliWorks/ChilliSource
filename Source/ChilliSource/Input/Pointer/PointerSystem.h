@@ -38,6 +38,7 @@
 #include <mutex>
 #include <queue>
 #include <set>
+#include <unordered_map>
 
 namespace ChilliSource
 {
@@ -154,16 +155,6 @@ namespace ChilliSource
             //----------------------------------------------------
             Core::IConnectableEvent<PointerDownDelegate>& GetPointerDownEventFiltered();
             //----------------------------------------------------
-            /// Event that is triggered when the pointer moves.
-            /// NOTE: Filtered events are not always triggered as they
-            /// can be consumed by internal systems such as UI.
-            ///
-            /// @author S Downie
-            ///
-            /// @return The pointer moved event.
-            //----------------------------------------------------
-            Core::IConnectableEvent<PointerMovedDelegate>& GetPointerMovedEventFiltered();
-            //----------------------------------------------------
             /// Event that is triggered when the pointer is first up
             /// having been down.
             /// NOTE: Filtered events are not always triggered as they
@@ -181,7 +172,8 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @return The event triggered on scroll change (i.e. mouse wheel scroll).
+            /// @return The event triggered on scroll change (i.e.
+            /// mouse wheel scroll).
             //----------------------------------------------------
             Core::IConnectableEvent<PointerScrollDelegate>& GetPointerScrollEventFiltered();
             //----------------------------------------------------
@@ -414,6 +406,15 @@ namespace ChilliSource
             /// events. This could be pressing a mouse button or
             /// touching a touch screen.
             ///
+            /// Systems listening to this should check whether
+            /// the event has already been filtered prior to
+            /// performing any action.
+            ///
+            /// Additionally, systems using this should also check
+            /// whether they received this event, unfiltered, prior
+            /// to performing any action from a pointer moved or
+            /// pointer up event.
+            ///
             /// @param The pointer.
             /// @param The timestamp of the event.
             /// @param The press type.
@@ -423,33 +424,8 @@ namespace ChilliSource
             //----------------------------------------------------
             using PointerDownDelegateInternal = std::function<void(const Pointer&, f64, Pointer::InputType, Filter&)>;
             //----------------------------------------------------
-            /// A delegate that is used to receive pointer moved
-            /// events. This could be dragging a touch on screen
-            /// or moving the mouse cursor.
-            ///
-            /// @param The pointer
-            /// @param The timestamp of the event.
-            /// @param Filter
-            ///
-            /// @author S Downie
-            //----------------------------------------------------
-            using PointerMovedDelegateInternal = std::function<void(const Pointer&, f64, Filter&)>;
-            //----------------------------------------------------
-            /// A delegate that is used to receive pointer up
-            /// events. This could be releasing a mouse button or
-            /// releasing a touch from the touch screen.
-            ///
-            /// @param The pointer
-            /// @param The timestamp of the event.
-            /// @param The press type.
-            /// @param Filter
-            ///
-            /// @author S Downie
-            //----------------------------------------------------
-            using PointerUpDelegateInternal = std::function<void(const Pointer&, f64, Pointer::InputType, Filter&)>;
-            //----------------------------------------------------
-            /// A delegate that is used to receive pointer scroll events
-            /// (i.e. mouse wheel).
+            /// A delegate that is used to receive pointer scroll
+            /// events (i.e. mouse wheel).
             ///
             /// @param The pointer
             /// @param The timestamp of the event.
@@ -468,28 +444,12 @@ namespace ChilliSource
             //----------------------------------------------------
             Core::IConnectableEvent<PointerDownDelegateInternal>& GetPointerDownEventInternal();
             //----------------------------------------------------
-            /// Event that is triggered when the pointer moves.
-            ///
-            /// @author S Downie
-            ///
-            /// @return The pointer moved event.
-            //----------------------------------------------------
-            Core::IConnectableEvent<PointerMovedDelegateInternal>& GetPointerMovedEventInternal();
-            //----------------------------------------------------
-            /// Event that is triggered when the pointer is first up
-            /// having been down.
-            ///
-            /// @author S Downie
-            ///
-            /// @return The pointer up event.
-            //----------------------------------------------------
-            Core::IConnectableEvent<PointerUpDelegateInternal>& GetPointerUpEventInternal();
-            //----------------------------------------------------
             /// Event that is triggered when the scroll wheel ticks.
             ///
             /// @author S Downie
             ///
-            /// @return The event triggered on scroll change (i.e. mouse wheel scroll).
+            /// @return The event triggered on scroll change (i.e.
+            /// mouse wheel scroll).
             //----------------------------------------------------
             Core::IConnectableEvent<PointerScrollDelegateInternal>& GetPointerScrollEventInternal();
             
@@ -499,19 +459,18 @@ namespace ChilliSource
             Core::Event<PointerScrollDelegate> m_pointerScrolledEvent;
             
             Core::Event<PointerDownDelegate> m_pointerDownEventFiltered;
-            Core::Event<PointerMovedDelegate> m_pointerMovedEventFiltered;
             Core::Event<PointerUpDelegate> m_pointerUpEventFiltered;
             Core::Event<PointerScrollDelegate> m_pointerScrolledEventFiltered;
             
             Core::Event<PointerDownDelegateInternal> m_pointerDownEventInternal;
-            Core::Event<PointerMovedDelegateInternal> m_pointerMovedEventInternal;
-            Core::Event<PointerUpDelegateInternal> m_pointerUpEventInternal;
             Core::Event<PointerScrollDelegateInternal> m_pointerScrolledEventInternal;
             
             std::mutex m_mutex;
             std::vector<Pointer> m_pointers;
             std::queue<PointerEvent> m_eventQueue;
             Pointer::Id m_nextUniqueId;
+            
+            std::unordered_map<Pointer::Id, std::set<Pointer::InputType>> m_filteredPointerInput;
         };
     }
 }
