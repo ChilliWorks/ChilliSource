@@ -237,6 +237,19 @@ namespace ChilliSource
             /// input event.
             //--------------------------------------------------------
             void OnPointerScrolled(const Pointer& in_pointer, f64 in_timestamp, const Core::Vector2& in_delta, Filter& in_filter);
+            //-------------------------------------------------------
+            /// A proxy method for calling GestureSystem::OnPointerDown()
+            /// using the old GUI consumption model. This simply relays
+            /// on the information to the new method with a unfiltered
+            /// filter.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The pointer.
+            /// @param The timestamp of the event.
+            /// @param The press type.
+            //--------------------------------------------------------
+            void OnPointerDownLegacy(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType);
             //--------------------------------------------------------
             /// Called when the owning state is destroyed. This
             /// -de-registers all of the input events.
