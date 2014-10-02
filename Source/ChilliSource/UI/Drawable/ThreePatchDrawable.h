@@ -235,8 +235,16 @@ namespace ChilliSource
             Rendering::TextureAtlasCSPtr m_atlas;
             Rendering::TextureAtlas::Frame m_atlasFrame;
             
+            std::array<Rendering::UVs, k_numPatches> m_cachedUvs;
+            std::array<Core::Vector2, k_numPatches> m_cachedSizes;
+            std::array<Core::Vector2, k_numPatches> m_cachedPositions;
+            Core::Vector2 m_cachedOffsetTL;
+            Core::Vector2 m_cachedWidgetSize;
+            
             f32 m_leftOrBottomInset = 0.01f;
             f32 m_rightOrTopInset = 0.01f;
+            
+            bool m_isPatchCatchValid = false;
         };
     }
 }

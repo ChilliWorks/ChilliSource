@@ -538,6 +538,8 @@ namespace ChilliSource
             m_atlasFrame.m_croppedSize = texSize;
             m_atlasFrame.m_originalSize = texSize;
             m_atlasFrame.m_offset = Core::Vector2::k_zero;
+            
+            m_isPatchCatchValid = false;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -549,6 +551,8 @@ namespace ChilliSource
             {
                 m_atlasFrame.m_uvs = Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f);
             }
+            
+            m_isPatchCatchValid = false;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -557,12 +561,16 @@ namespace ChilliSource
             CS_ASSERT(m_texture != nullptr &&  m_atlas != nullptr, "ThreePatchDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas and a texture");
             
             m_atlasFrame = m_atlas->GetFrame(in_atlasId);
+            
+            m_isPatchCatchValid = false;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void ThreePatchDrawable::SetUVs(const Rendering::UVs& in_UVs)
         {
             m_atlasFrame.m_uvs = in_UVs;
+            
+            m_isPatchCatchValid = false;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -573,6 +581,8 @@ namespace ChilliSource
             
             m_leftOrBottomInset = in_leftOrBottom;
             m_rightOrTopInset = in_rightOrTop;
+            
+            m_isPatchCatchValid = false;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -586,16 +596,25 @@ namespace ChilliSource
         {
             CS_ASSERT(m_texture != nullptr, "ThreePatchDrawable cannot draw without texture");
             
-            //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offsetting the patches.
-            auto uvs = m_uvCalculationDelegate(m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
-            auto sizes = m_sizeCalculationDelegate(in_absSize, m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
-            auto positions = m_positionCalculationDelegate(in_absSize, sizes);
-            auto offsetTL = m_offsetCalculationDelegate(in_absSize, m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
+            if(m_cachedWidgetSize != in_absSize)
+            {
+                m_isPatchCatchValid = false;
+                m_cachedWidgetSize = in_absSize;
+            }
+            
+            if(m_isPatchCatchValid == false)
+            {
+                //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offsetting the patches.
+                m_cachedUvs = m_uvCalculationDelegate(m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
+                m_cachedSizes = m_sizeCalculationDelegate(in_absSize, m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
+                m_cachedPositions = m_positionCalculationDelegate(in_absSize, m_cachedSizes);
+                m_cachedOffsetTL = m_offsetCalculationDelegate(in_absSize, m_atlasFrame, m_leftOrBottomInset, m_rightOrTopInset);
+            }
 
             for(u32 i=0; i<k_numPatches; ++i)
             {
-                Core::Matrix3 patchTransform = Core::Matrix3::CreateTranslation(positions[i]);
-                in_renderer->DrawBox(patchTransform * in_transform, sizes[i], offsetTL, m_texture, uvs[i], in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
+                Core::Matrix3 patchTransform = Core::Matrix3::CreateTranslation(m_cachedPositions[i]);
+                in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
             }
         }
     }
