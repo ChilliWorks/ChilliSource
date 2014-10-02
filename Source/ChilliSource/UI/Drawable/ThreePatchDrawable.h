@@ -205,15 +205,31 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
+            /// @param Widget absolute size
             /// @param Patch sizes
             ///
             /// @return Positions for each patch
             //----------------------------------------------------------------------------------------
-            using CalculatePositionsDelegate = std::function<std::array<Core::Vector2, k_numPatches>(const std::array<Core::Vector2, k_numPatches>&)>;
+            using CalculatePositionsDelegate = std::function<std::array<Core::Vector2, k_numPatches>(const Core::Vector2&, const std::array<Core::Vector2, k_numPatches>&)>;
+            //----------------------------------------------------------------------------------------
+            /// Calculate the offset for the patches that will position them as if they still had
+            /// their cropped space
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget absolute size
+            /// @param Image frame
+            /// @param Left inset if horizontal 3-patch bottom inset if vertical 3-patch (as normalised fraction 0 - 1)
+            /// @param Right inset if horizontal 3-patch top inset if vertical 3-patch (as normalised fraction 0 - 1)
+            ///
+            /// @return Offset from top left
+            //----------------------------------------------------------------------------------------
+            using CalculateOffsetDelegate = std::function<Core::Vector2(const Core::Vector2&, const Rendering::TextureAtlas::Frame&, f32, f32)>;
             
             CalculateUVsDelegate m_uvCalculationDelegate;
             CalculateSizesDelegate m_sizeCalculationDelegate;
             CalculatePositionsDelegate m_positionCalculationDelegate;
+            CalculateOffsetDelegate m_offsetCalculationDelegate;
             
             Rendering::TextureCSPtr m_texture;
             Rendering::TextureAtlasCSPtr m_atlas;
