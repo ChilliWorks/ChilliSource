@@ -92,8 +92,7 @@ namespace ChilliSource
                     const Json::Value& widget = in_widgets[name];
                     
                     WidgetHierarchyDesc childDesc;
-                    WidgetTemplateProvider::ParseTemplate(widget, Json::nullValue, in_hierarchy, in_definitionLocation, in_definitionPath, childDesc);
-                    childDesc.m_defaultProperties.SetProperty("Name", name);
+                    WidgetTemplateProvider::ParseTemplate(widget, name, Json::nullValue, in_hierarchy, in_definitionLocation, in_definitionPath, childDesc);
                     childDesc.m_access = WidgetHierarchyDesc::Access::k_internal;
                     
                     const Json::Value& children = hierarchyItem["Children"];

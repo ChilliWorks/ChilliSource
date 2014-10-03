@@ -112,13 +112,14 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Json template
+            /// @param Name of instance
             /// @param Json widget children
             /// @param Json hierarchy
             /// @param Template location
             /// @param Template path (no file name)
             /// @param [Out] Hierarchy desc
             //-------------------------------------------------------
-            static void ParseTemplate(const Json::Value& in_template, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath, WidgetHierarchyDesc& out_hierarchyDesc);
+            static void ParseTemplate(const Json::Value& in_template, const std::string& in_name, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath, WidgetHierarchyDesc& out_hierarchyDesc);
         private:
             
             friend class Core::Application;

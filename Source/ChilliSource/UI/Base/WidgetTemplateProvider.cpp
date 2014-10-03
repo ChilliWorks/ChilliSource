@@ -78,7 +78,7 @@ namespace ChilliSource
                 Json::Value hierarchy = root["Hierarchy"];
                 Json::Value children = root["Children"];
                 
-                WidgetTemplateProvider::ParseTemplate(root, children, hierarchy, in_storageLocation, pathToDefinition, hierarchyDesc);
+                WidgetTemplateProvider::ParseTemplate(root, "", children, hierarchy, in_storageLocation, pathToDefinition, hierarchyDesc);
                 
                 widgetTemplate->Build(hierarchyDesc);
                 
@@ -163,7 +163,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void WidgetTemplateProvider::ParseTemplate(const Json::Value& in_template, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath, WidgetHierarchyDesc& out_hierarchyDesc)
+        void WidgetTemplateProvider::ParseTemplate(const Json::Value& in_template, const std::string& in_name, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath, WidgetHierarchyDesc& out_hierarchyDesc)
         {
             CS_ASSERT(in_template.isMember("Type") == true, "Widget template must have type");
             std::string type = in_template["Type"].asString();
@@ -204,6 +204,7 @@ namespace ChilliSource
                 out_hierarchyDesc = widgetDef->GetHierarchyDesc();
             }
             
+            out_hierarchyDesc.m_defaultProperties.SetProperty("Name", in_name);
             
             for(auto it = in_template.begin(); it != in_template.end(); ++it)
             {
@@ -278,7 +279,7 @@ namespace ChilliSource
                         const Json::Value& widget = in_children[name];
                         
                         WidgetHierarchyDesc childDesc;
-                        ParseTemplate(widget, in_children, hierarchyChildren, in_templateLocation, in_templatePath, childDesc);
+                        ParseTemplate(widget, name, in_children, hierarchyChildren, in_templateLocation, in_templatePath, childDesc);
                         out_hierarchyDesc.m_children.push_back(childDesc);
                     }
                 }
