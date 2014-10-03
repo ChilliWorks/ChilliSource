@@ -3,7 +3,11 @@
 Version 1.1.0, 2014-09-26:  
  	- Replaced the gesture system.
  	- UDIDs on Android are now generated from the Google Play Services Advertising Id when building for Google Play. This requires the inclusion of the Goole Play Services library in all Android projects.
-	- Scene::Remove() is no longer public, entities must be removed from the scene using RemoveFromParent(). 
+ 	- Adding accessor to Tween for getting the parametric T value
+ 	- The GUI System no longer allows consumption of moved events.
+ 	- The Pointer System no longer has a filtered version of OnPointerMoved() as this event cannot be filtered.
+ 	- The engine is no longer built with CS_ENABLE_DEBUGSTATS enabled in debug mode. App projects should also remove this flag.
+	- Scene::Remove() is no longer public, entities must be removed from the scene using RemoveFromParent().
 	- Attempting to add a widget to the scene with a parent which is not in the scene will result in an assert. 
 	- Fixed bug in TexturePacker algorithm which caused padding to break for atlases and fonts.
  	- Fixed iOS 8 issues with Push and Local Notifications. 
