@@ -50,6 +50,7 @@ namespace ChilliSource
                                                "setTexture", DrawableProxy::SetTexture,
                                                "setTextureAtlas", DrawableProxy::SetTextureAtlas,
                                                "setTextureAtlasId", DrawableProxy::SetTextureAtlasId,
+                                               "setUVs", DrawableProxy::SetUVs,
                                                "getType", DrawableProxy::GetType,
                                                "getPreferredSize", DrawableProxy::GetPreferredSize
                                                );
@@ -73,6 +74,12 @@ namespace ChilliSource
             void SetTextureAtlasId(IDrawable* in_drawable, const std::string& in_id)
             {
                 in_drawable->SetTextureAtlasId(in_id);
+            }
+            //----------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------
+            void SetUVs(IDrawable* in_drawable, const Rendering::UVs& in_UVs)
+            {
+                in_drawable->SetUVs(in_UVs);
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------

@@ -101,8 +101,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// Set the texture atlas frame Id that should be used in subsequent draws.
             ///
-            /// NOTE: An atlas and texture must have been set prior to calling this
-            /// NOTE: This will override the existing UVs
+            /// NOTE: An atlas must have been set prior to calling this
             ///
             /// @author S Downie
             ///
@@ -110,13 +109,14 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetTextureAtlasId(const std::string& in_atlasId) override;
             //----------------------------------------------------------------------------------------
-            /// Set the UVs that should be used in subsequent draws
+            /// Set the UVs that should be used in subsequent draws. UVs are relative to the
+            /// frame and not the overall atlas
             ///
             /// @author S Downie
             ///
             /// @param Rectangle containing U, V, S, T
             //----------------------------------------------------------------------------------------
-            void SetUVs(const Rendering::UVs& in_UVs);
+            void SetUVs(const Rendering::UVs& in_UVs) override;
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -142,6 +142,8 @@ namespace ChilliSource
             Rendering::TextureCSPtr m_texture;
             Rendering::TextureAtlasCSPtr m_atlas;
             Rendering::TextureAtlas::Frame m_atlasFrame;
+            Rendering::UVs m_uvs;
+            std::string m_atlasId;
         };
     }
 }

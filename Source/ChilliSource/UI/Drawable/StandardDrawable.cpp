@@ -34,6 +34,7 @@
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
+#include <ChilliSource/UI/Drawable/DrawableUtils.h>
 
 namespace ChilliSource
 {
@@ -96,35 +97,39 @@ namespace ChilliSource
         void StandardDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
         {
             m_texture = in_texture;
-            Core::Vector2 texSize((f32)m_texture->GetWidth() * m_atlasFrame.m_uvs.m_s, (f32)m_texture->GetHeight() * m_atlasFrame.m_uvs.m_t);
-            m_atlasFrame.m_croppedSize = texSize;
-            m_atlasFrame.m_originalSize = texSize;
-            m_atlasFrame.m_offset = Core::Vector2::k_zero;
+            
+            if(m_atlas == nullptr || m_atlasId.empty() == true)
+            {
+                m_atlasFrame = DrawableUtils::GetFrameForTexture(m_texture.get(), m_uvs);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void StandardDrawable::SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas)
         {
             m_atlas = in_atlas;
-            
-            if(m_atlas == nullptr)
-            {
-                m_atlasFrame.m_uvs = Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f);
-            }
+            m_atlasFrame = DrawableUtils::GetFrameForTexture(m_texture.get(), m_uvs);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void StandardDrawable::SetTextureAtlasId(const std::string& in_atlasId)
         {
-            CS_ASSERT(m_texture != nullptr &&  m_atlas != nullptr, "StandardDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas and a texture");
+            CS_ASSERT(m_atlas != nullptr, "StandardDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas");
             
+            m_atlasId = in_atlasId;
             m_atlasFrame = m_atlas->GetFrame(in_atlasId);
+            
+            //Apply the relative UV offsets
+            m_atlasFrame.m_uvs.m_u += (m_uvs.m_u * m_atlasFrame.m_uvs.m_s);
+            m_atlasFrame.m_uvs.m_v += (m_uvs.m_v * m_atlasFrame.m_uvs.m_t);
+            m_atlasFrame.m_uvs.m_s *= m_uvs.m_s;
+            m_atlasFrame.m_uvs.m_t *= m_uvs.m_t;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void StandardDrawable::SetUVs(const Rendering::UVs& in_UVs)
         {
-            m_atlasFrame.m_uvs = in_UVs;
+            m_uvs = in_UVs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

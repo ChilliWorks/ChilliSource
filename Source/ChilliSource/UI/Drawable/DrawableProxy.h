@@ -82,7 +82,7 @@ namespace ChilliSource
             ///
             /// Set the texture atlas id that should be used in subsequent draws.
             ///
-            /// NOTE: A texture and an atlas must be set prior to calling this
+            /// NOTE: An atlas must be set prior to calling this
             ///
             /// @author S Downie
             ///
@@ -90,6 +90,18 @@ namespace ChilliSource
             /// @param Atlas frame Id
             //----------------------------------------------------------------------------------------
             void SetTextureAtlasId(IDrawable* in_drawable, const std::string& in_id);
+            //----------------------------------------------------------------------------------------
+            /// Proxy function to allow calling on an instance from Lua script
+            ///
+            /// Set the UVs that should be used in subsequent draws. UVs are relative to the
+            /// frame and not the overall atlas
+            ///
+            /// @author S Downie
+            ///
+            /// @param Drawable on which to operate
+            /// @param Rectangle containing U, V, S, T
+            //----------------------------------------------------------------------------------------
+            void SetUVs(IDrawable* in_drawable, const Rendering::UVs& in_UVs);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///

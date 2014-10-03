@@ -92,7 +92,7 @@ namespace ChilliSource
             ///
             /// Set the texture atlas id that should be used in subsequent draws.
             ///
-            /// NOTE: A texture and an atlas must be set prior to calling this
+            /// NOTE: An atlas must be set prior to calling this
             ///
             /// @author S Downie
             ///
@@ -103,7 +103,8 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
-            /// Set the UVs that should be used in subsequent draws
+            /// Set the UVs that should be used in subsequent draws. UVs are relative to the
+            /// frame and not the overall atlas
             ///
             /// @author S Downie
             ///

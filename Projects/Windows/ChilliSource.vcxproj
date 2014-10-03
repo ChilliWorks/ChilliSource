@@ -211,6 +211,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableProxy.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableType.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableUtils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableProxy.cpp" />
@@ -527,6 +528,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableProxy.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableType.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableProxy.h" />
