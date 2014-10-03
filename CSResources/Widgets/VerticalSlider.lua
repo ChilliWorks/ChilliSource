@@ -42,7 +42,7 @@ local getPointerPosition = Pointer.getPosition
 local getFinalPosition = Widget.getFinalPosition
 local getFinalSize = Widget.getFinalSize
 local setRelativePosition = Widget.setRelativePosition
-local setFloatProperty = Widget.setFloatProperty
+local setFloatCustomProperty = Widget.setFloatCustomProperty
 
 local sliderWidget = nil
 
@@ -98,7 +98,7 @@ function updateSlider(in_pointerPositionY)
     barWidth, barHeight = getFinalSize(this)
     sliderFraction = ((in_pointerPositionY - barPosY)/barHeight) + 0.5;
     setRelativePosition(sliderWidget, 0.0, sliderFraction)
-    setFloatProperty(this, "SliderFraction", sliderFraction)
+    setFloatCustomProperty(this, "SliderFraction", sliderFraction)
 end
 
 

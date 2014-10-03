@@ -44,11 +44,11 @@ local setTextureAtlas = Drawable.setTextureAtlas
 local setTextureAtlasId = Drawable.setTextureAtlasId
 local setColour = Widget.setColour
 local getDrawable = Widget.getDrawable
-local getStorageLocationProperty = Widget.getStorageLocationProperty
-local getStringProperty = Widget.getStringProperty
-local getColourProperty = Widget.getColourProperty
+local getStorageLocationCustomProperty = Widget.getStorageLocationCustomProperty
+local getStringCustomProperty = Widget.getStringCustomProperty
+local getColourCustomProperty = Widget.getColourCustomProperty
 local getPointerId = Pointer.getId
-local setBoolProperty = Widget.setBoolProperty
+local setBoolCustomProperty = Widget.setBoolCustomProperty
 
 local activePointerIds = {}
 local highlightingPointerIds = {}
@@ -200,25 +200,25 @@ end
 function on()
     drawable = getDrawable(this)
     if drawable then
-        path = getStringProperty(this, "OnTexturePath")
+        path = getStringCustomProperty(this, "OnTexturePath")
         if path ~= "" then
-            location = getStorageLocationProperty(this, "OnTextureLocation")
+            location = getStorageLocationCustomProperty(this, "OnTextureLocation")
             setTexture(drawable, location, path)
         end
-        path = getStringProperty(this, "OnAtlasPath")
+        path = getStringCustomProperty(this, "OnAtlasPath")
         if path ~= "" then
-            location = getStorageLocationProperty(this, "OnAtlasLocation")
+            location = getStorageLocationCustomProperty(this, "OnAtlasLocation")
             setTextureAtlas(drawable, location, path)
-            id = getStringProperty(this, "OnAtlasId")
+            id = getStringCustomProperty(this, "OnAtlasId")
             setTextureAtlasId(drawable, id)
         end
     end
 
-    r, g, b, a = getColourProperty(this, "OnColour")
+    r, g, b, a = getColourCustomProperty(this, "OnColour")
     setColour(this, r, g, b, a)
 
     isToggledOn = true
-    setBoolProperty(this, "isToggledOn", isToggledOn)
+    setBoolCustomProperty(this, "isToggledOn", isToggledOn)
 end
 -----------------------------------------------------
 -- Set the view of the button to off
@@ -228,25 +228,25 @@ end
 function off()
     drawable = getDrawable(this)
     if drawable then
-        path = getStringProperty(this, "OffTexturePath")
+        path = getStringCustomProperty(this, "OffTexturePath")
         if path ~= "" then
-            location = getStorageLocationProperty(this, "OffTextureLocation")
+            location = getStorageLocationCustomProperty(this, "OffTextureLocation")
             setTexture(drawable, location, path)
         end
-        path = getStringProperty(this, "OffAtlasPath")
+        path = getStringCustomProperty(this, "OffAtlasPath")
         if path ~= "" then
-            location = getStorageLocationProperty(this, "OffAtlasLocation")
+            location = getStorageLocationCustomProperty(this, "OffAtlasLocation")
             setTextureAtlas(drawable, location, path)
-            id = getStringProperty(this, "OffAtlasId")
+            id = getStringCustomProperty(this, "OffAtlasId")
             setTextureAtlasId(drawable, id)
         end
     end
 
-    r, g, b, a = getColourProperty(this, "OffColour")
+    r, g, b, a = getColourCustomProperty(this, "OffColour")
     setColour(this, r, g, b, a)
 
     isToggledOn = false
-    setBoolProperty(this, "isToggledOn", isToggledOn)
+    setBoolCustomProperty(this, "isToggledOn", isToggledOn)
 end
 -----------------------------------------------------
 -- Set the view of the button to be highlighted for the 
@@ -257,21 +257,21 @@ end
 function highlightOn()
     drawable = getDrawable(this)
     if drawable then
-        path = getStringProperty(this, "OnHighlightTexturePath")
+        path = getStringCustomProperty(this, "OnHighlightTexturePath")
         if path ~= "" then
-            location = getStorageLocationProperty(this, "OnHighlightTextureLocation")
+            location = getStorageLocationCustomProperty(this, "OnHighlightTextureLocation")
             setTexture(drawable, location, path)
         end
-        path = getStringProperty(this, "OnHighlightAtlasPath")
+        path = getStringCustomProperty(this, "OnHighlightAtlasPath")
         if path ~= "" then
-            location = getStorageLocationProperty(this, "OnHighlightAtlasLocation")
+            location = getStorageLocationCustomProperty(this, "OnHighlightAtlasLocation")
             setTextureAtlas(drawable, location, path)
-            id = getStringProperty(this, "OnHighlightAtlasId")
+            id = getStringCustomProperty(this, "OnHighlightAtlasId")
             setTextureAtlasId(drawable, id)
         end
     end
 
-    r, g, b, a = getColourProperty(this, "OnHighlightColour")
+    r, g, b, a = getColourCustomProperty(this, "OnHighlightColour")
     setColour(this, r, g, b, a)
 end
 -----------------------------------------------------
@@ -283,20 +283,20 @@ end
 function highlightOff()
     drawable = getDrawable(this)
     if drawable then
-        path = getStringProperty(this, "OffHighlightTexturePath")
+        path = getStringCustomProperty(this, "OffHighlightTexturePath")
         if path ~= "" then
-            location = getStorageLocationProperty(this, "OffHighlightTextureLocation")
+            location = getStorageLocationCustomProperty(this, "OffHighlightTextureLocation")
             setTexture(drawable, location, path)
         end
-        path = getStringProperty(this, "OffHighlightAtlasPath")
+        path = getStringCustomProperty(this, "OffHighlightAtlasPath")
         if path ~= "" then
-            location = getStorageLocationProperty(this, "OffHighlightAtlasLocation")
+            location = getStorageLocationCustomProperty(this, "OffHighlightAtlasLocation")
             setTextureAtlas(drawable, location, path)
-            id = getStringProperty(this, "OffHighlightAtlasId")
+            id = getStringCustomProperty(this, "OffHighlightAtlasId")
             setTextureAtlasId(drawable, id)
         end
     end
 
-    r, g, b, a = getColourProperty(this, "OffHighlightColour")
+    r, g, b, a = getColourCustomProperty(this, "OffHighlightColour")
     setColour(this, r, g, b, a)
 end

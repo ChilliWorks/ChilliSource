@@ -1363,15 +1363,15 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
-		void Widget::SetProperty(const std::string& in_name, const char* in_value)
+		void Widget::SetCustomProperty(const std::string& in_name, const char* in_value)
         {
-            SetProperty<std::string>(in_name, in_value);
+            SetCustomProperty<std::string>(in_name, in_value);
         }
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
-		const char* Widget::GetProperty(const std::string& in_name) const
+		const char* Widget::GetCustomProperty(const std::string& in_name) const
         {
-            return GetProperty<std::string>(in_name).c_str();
+            return GetCustomProperty<std::string>(in_name).c_str();
         }
     }
 }
