@@ -370,7 +370,7 @@ public final class Main
 	private static void printHelpText()
 	{
 		Logging.setLoggingLevel(LoggingLevel.k_verbose);
-		Logging.logVerbose("Usage: java -jar CSFontBuilder.jar " + k_paramInput + " <directory path> " + k_paramOutput + " <file path> [" + k_paramFileList + " <file path>] " +
+		Logging.logVerbose("Usage: java -jar CSAtlasBuilder.jar " + k_paramInput + " <directory path> " + k_paramOutput + " <file path> [" + k_paramFileList + " <file path>] " +
 				"[" + k_paramFixedWidth + " <width>] [" + k_paramFixedHeight + " <height>] [" + k_paramValidWidths + " <w1,w2,w3...>] [" + k_paramValidHeights + " <h1,h2,h3...>] " +
 				"[" + k_paramMaxWidth + " <width>] [" + k_paramMaxHeight + " <height>] [" + k_paramDivisibleBy + "<number>] [" + k_paramDisableCrop + "] [" + k_paramPadding + " <padding>] " +
 				"[" + k_paramInnerPadding + " <padding>] [" + k_paramExtrude + " <extrude>] [" + k_paramPlacementHeuristic + " <heuristic>] [" + k_paramImageCompression + " <compression>] " +
