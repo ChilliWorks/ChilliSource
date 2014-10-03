@@ -34,6 +34,7 @@
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
+#include <ChilliSource/UI/Drawable/DrawableUtils.h>
 
 namespace ChilliSource
 {
@@ -46,7 +47,10 @@ namespace ChilliSource
                 {PropertyType::k_string, "Type", "Standard"},
                 {PropertyType::k_vec4, "UVs", "0 0 1 1"},
                 {PropertyType::k_string, "TextureLocation", "Package"},
-                {PropertyType::k_string, "TexturePath", ""}
+                {PropertyType::k_string, "TexturePath", ""},
+                {PropertyType::k_string, "AtlasLocation", "Package"},
+                {PropertyType::k_string, "AtlasPath", ""},
+                {PropertyType::k_string, "AtlasId", ""}
             };
         }
         
@@ -57,13 +61,23 @@ namespace ChilliSource
             Core::Vector4 uvs(in_properties.GetProperty<Core::Vector4>("UVs"));
             SetUVs(Rendering::UVs(uvs.x, uvs.y, uvs.z, uvs.w));
             
-            std::string location(in_properties.GetProperty<std::string>("TextureLocation"));
-            std::string path(in_properties.GetProperty<std::string>("TexturePath"));
+            std::string textureLocation(in_properties.GetProperty<std::string>("TextureLocation"));
+            std::string texturePath(in_properties.GetProperty<std::string>("TexturePath"));
             
-            if(location.empty() == false && path.empty() == false)
+            if(textureLocation.empty() == false && texturePath.empty() == false)
             {
                 auto resPool = Core::Application::Get()->GetResourcePool();
-                m_texture = resPool->LoadResource<Rendering::Texture>(Core::ParseStorageLocation(location), path);
+                SetTexture(resPool->LoadResource<Rendering::Texture>(Core::ParseStorageLocation(textureLocation), texturePath));
+            }
+            
+            std::string atlasLocation(in_properties.GetProperty<std::string>("AtlasLocation"));
+            std::string atlasPath(in_properties.GetProperty<std::string>("AtlasPath"));
+            
+            if(atlasLocation.empty() == false && atlasPath.empty() == false)
+            {
+                auto resPool = Core::Application::Get()->GetResourcePool();
+                SetTextureAtlas(resPool->LoadResource<Rendering::TextureAtlas>(Core::ParseStorageLocation(atlasLocation), atlasPath));
+                SetTextureAtlasId(in_properties.GetProperty<std::string>("AtlasId"));
             }
         }
         //----------------------------------------------------------------------------------------
@@ -83,26 +97,62 @@ namespace ChilliSource
         void StandardDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
         {
             m_texture = in_texture;
+            
+            if(m_atlas == nullptr || m_atlasId.empty() == true)
+            {
+                m_atlasFrame = DrawableUtils::GetFrameForTexture(m_texture.get(), m_uvs);
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void StandardDrawable::SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas)
+        {
+            m_atlas = in_atlas;
+            m_atlasFrame = DrawableUtils::GetFrameForTexture(m_texture.get(), m_uvs);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void StandardDrawable::SetTextureAtlasId(const std::string& in_atlasId)
+        {
+            CS_ASSERT(m_atlas != nullptr, "StandardDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas");
+            
+            m_atlasId = in_atlasId;
+            m_atlasFrame = m_atlas->GetFrame(in_atlasId);
+            
+            //Apply the relative UV offsets
+            m_atlasFrame.m_uvs.m_u += (m_uvs.m_u * m_atlasFrame.m_uvs.m_s);
+            m_atlasFrame.m_uvs.m_v += (m_uvs.m_v * m_atlasFrame.m_uvs.m_t);
+            m_atlasFrame.m_uvs.m_s *= m_uvs.m_s;
+            m_atlasFrame.m_uvs.m_t *= m_uvs.m_t;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void StandardDrawable::SetUVs(const Rendering::UVs& in_UVs)
         {
-            m_UVs = in_UVs;
+            m_uvs = in_UVs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         Core::Vector2 StandardDrawable::GetPreferredSize() const
         {
-            CS_ASSERT(m_texture != nullptr, "StandardDrawable cannot get preferred size without texture");
-            return Core::Vector2((f32)m_texture->GetWidth() * m_UVs.m_s, (f32)m_texture->GetHeight() * m_UVs.m_t);
+            return m_atlasFrame.m_originalSize;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void StandardDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
         {
             CS_ASSERT(m_texture != nullptr, "StandardDrawable cannot draw without texture");
-            in_renderer->DrawBox(in_transform, in_absSize, Core::Vector2::k_zero, m_texture, m_UVs, in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
+            
+            //When textures are packed into an atlas their alpha space is cropped. This functionality restores the alpha space by resizing and offsetting the box.
+            Core::Vector2 offsetTL
+            (
+                (-m_atlasFrame.m_originalSize.x * 0.5f) + (m_atlasFrame.m_croppedSize.x * 0.5f) + m_atlasFrame.m_offset.x,
+                (m_atlasFrame.m_originalSize.y * 0.5f) - (m_atlasFrame.m_croppedSize.y * 0.5f) - m_atlasFrame.m_offset.y
+            );
+            offsetTL = in_absSize/m_atlasFrame.m_originalSize * offsetTL;
+            Core::Vector2 size = in_absSize/m_atlasFrame.m_originalSize * m_atlasFrame.m_croppedSize;
+            
+            in_renderer->DrawBox(in_transform, size, offsetTL, m_texture, m_atlasFrame.m_uvs, in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
         }
     }
 }

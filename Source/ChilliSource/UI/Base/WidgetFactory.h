@@ -145,6 +145,26 @@ namespace ChilliSource
             /// @return Widget with look and behaviour of slider
             //---------------------------------------------------------------------------
             WidgetUPtr CreateHorizontalSlider() const;
+            //---------------------------------------------------------------------------
+            /// Creates a new widget with the behaviour of a horizontal progress bar.
+            /// A progress bar has an internal bar that stretches to fill
+            /// the background based on the current progress.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Widget with look and behaviour of progress bar
+            //---------------------------------------------------------------------------
+            WidgetUPtr CreateHorizontalProgressBar() const;
+            //---------------------------------------------------------------------------
+            /// Creates a new widget with the behaviour of a vertical progress bar.
+            /// A progress bar has an internal bar that stretches to fill
+            /// the background based on the current progress.
+            ///
+            /// @author S Downie
+            ///
+            /// @return Widget with look and behaviour of progress bar
+            //---------------------------------------------------------------------------
+            WidgetUPtr CreateVerticalProgressBar() const;
             
         private:
             

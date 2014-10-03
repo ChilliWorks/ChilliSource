@@ -799,6 +799,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Input\Gesture\TapGesture.cpp">
       <Filter>ChilliSource\Input</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableUtils.cpp">
+      <Filter>ChilliSource\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
@@ -1756,6 +1759,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\TapGesture.h">
       <Filter>ChilliSource\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableUtils.h">
+      <Filter>ChilliSource\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

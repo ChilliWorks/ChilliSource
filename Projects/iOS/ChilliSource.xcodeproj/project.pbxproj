@@ -25,6 +25,7 @@
 		8132AB4D19A4E20900101323 /* LuaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8132AB4619A4E20900101323 /* LuaUtils.cpp */; };
 		8132AB5219A4E3EC00101323 /* LuaSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8132AB4E19A4E3EC00101323 /* LuaSource.cpp */; };
 		8132AB5319A4E3EC00101323 /* LuaSourceProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8132AB5019A4E3EC00101323 /* LuaSourceProvider.cpp */; };
+		813FE9C119DEBFBD0021F7CD /* DrawableUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 813FE9BF19DEBFBD0021F7CD /* DrawableUtils.cpp */; };
 		81496B921980F1AE004E79F2 /* Canvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B811980F1AE004E79F2 /* Canvas.cpp */; };
 		81496B931980F1AE004E79F2 /* Widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B831980F1AE004E79F2 /* Widget.cpp */; };
 		81496B941980F1AE004E79F2 /* StandardDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81496B871980F1AE004E79F2 /* StandardDrawable.cpp */; };
@@ -359,6 +360,8 @@
 		8132AB5119A4E3EC00101323 /* LuaSourceProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LuaSourceProvider.h; sourceTree = "<group>"; };
 		8132AB5519A4F4E000101323 /* LuaLibIncludes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LuaLibIncludes.h; sourceTree = "<group>"; };
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
+		813FE9BF19DEBFBD0021F7CD /* DrawableUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableUtils.cpp; sourceTree = "<group>"; };
+		813FE9C019DEBFBD0021F7CD /* DrawableUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableUtils.h; sourceTree = "<group>"; };
 		81496B811980F1AE004E79F2 /* Canvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas.cpp; sourceTree = "<group>"; };
 		81496B821980F1AE004E79F2 /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canvas.h; sourceTree = "<group>"; };
 		81496B831980F1AE004E79F2 /* Widget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Widget.cpp; sourceTree = "<group>"; };
@@ -1183,6 +1186,8 @@
 				81496B9E19814B05004E79F2 /* ThreePatchDrawable.h */,
 				81E4CCC419A24ACD0079DC15 /* ThreePatchDrawableProxy.cpp */,
 				81E4CCC519A24ACD0079DC15 /* ThreePatchDrawableProxy.h */,
+				813FE9BF19DEBFBD0021F7CD /* DrawableUtils.cpp */,
+				813FE9C019DEBFBD0021F7CD /* DrawableUtils.h */,
 			);
 			path = Drawable;
 			sourceTree = "<group>";
@@ -2690,6 +2695,7 @@
 				81D8B6B21962E0F70010DA84 /* StoreKitIAPSystem.mm in Sources */,
 				81E3E3771986B3E60002A9FD /* LayoutType.cpp in Sources */,
 				81D8B6D71962E0F70010DA84 /* Texture.cpp in Sources */,
+				813FE9C119DEBFBD0021F7CD /* DrawableUtils.cpp in Sources */,
 				81D8B4121962E0EC0010DA84 /* EventConnection.cpp in Sources */,
 				81D8B4241962E0EC0010DA84 /* AppNotificationSystem.cpp in Sources */,
 				8109AB3719D2E043004BFDB4 /* Gesture.cpp in Sources */,

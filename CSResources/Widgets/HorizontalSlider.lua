@@ -1,5 +1,5 @@
 --
---  HorizontalSliderBar.lua
+--  HorizontalSlider.lua
 --  Chilli Source
 --  Created by Scott Downie on 30/08/2014.
 --
@@ -42,7 +42,7 @@ local getPointerPosition = Pointer.getPosition
 local getFinalPosition = Widget.getFinalPosition
 local getFinalSize = Widget.getFinalSize
 local setRelativePosition = Widget.setRelativePosition
-local setFloatProperty = Widget.setFloatProperty
+local setFloatCustomProperty = Widget.setFloatCustomProperty
 
 local sliderWidget = nil
 
@@ -98,7 +98,7 @@ function updateSlider(in_pointerPositionX)
     barWidth = getFinalSize(this)
     sliderFraction = ((in_pointerPositionX - barPosX)/barWidth) + 0.5;
     setRelativePosition(sliderWidget, sliderFraction, 0.0)
-    setFloatProperty(this, "SliderFraction", sliderFraction)
+    setFloatCustomProperty(this, "SliderFraction", sliderFraction)
 end
 
 

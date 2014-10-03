@@ -51,11 +51,18 @@ namespace ChilliSource
                 
                 if(type != DrawableType::k_none)
                 {
-                    bool relativePath = in_drawable.isMember("TextureLocation") == false;
+                    bool relativeTexturePath = in_drawable.isMember("TextureLocation") == false;
+                    bool hasAtlas = in_drawable.isMember("AtlasPath") == true;
+                    bool relativeAtlasPath = hasAtlas == true && in_drawable.isMember("AtlasLocation") == false;
                     
-                    if(relativePath == true)
+                    if(relativeTexturePath == true)
                     {
                         result.SetProperty(PropertyType::k_string, "TextureLocation", Core::ToString(in_location));
+                    }
+                    
+                    if(relativeAtlasPath == true)
+                    {
+                        result.SetProperty(PropertyType::k_string, "AtlasLocation", Core::ToString(in_location));
                     }
                     
                     for(const auto& propDesc : supportedProperties)
@@ -64,7 +71,11 @@ namespace ChilliSource
                         {
                             std::string value = in_drawable[propDesc.m_name].asString();
                             
-                            if(propDesc.m_name == "TexturePath" && relativePath == true)
+                            if(propDesc.m_name == "TexturePath" && relativeTexturePath == true)
+                            {
+                                value = Core::StringUtils::ResolveParentedDirectories(in_absPath + value);
+                            }
+                            else if(propDesc.m_name == "AtlasPath" && relativeAtlasPath == true)
                             {
                                 value = Core::StringUtils::ResolveParentedDirectories(in_absPath + value);
                             }

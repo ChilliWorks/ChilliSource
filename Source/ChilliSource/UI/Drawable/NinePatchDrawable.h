@@ -31,9 +31,12 @@
 #define _CHILLISOURCE_UI_DRAWABLE_NINEPATCHDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
+
+#include <array>
 
 namespace ChilliSource
 {
@@ -54,6 +57,8 @@ namespace ChilliSource
         {
         public:
 
+            static const u32 k_numPatches = 9;
+            
             //----------------------------------------------------------------------------------------
             /// Constructor
             ///
@@ -96,13 +101,32 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetTexture(const Rendering::TextureCSPtr& in_texture) override;
             //----------------------------------------------------------------------------------------
-            /// Set the UVs that should be used in subsequent draws
+            /// Set the texture atlas that should be used in subsequent draws.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture atlas
+            //----------------------------------------------------------------------------------------
+            void SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas) override;
+            //----------------------------------------------------------------------------------------
+            /// Set the texture atlas frame Id that should be used in subsequent draws.
+            ///
+            /// NOTE: An atlas must have been set prior to calling this
+            ///
+            /// @author S Downie
+            ///
+            /// @param Frame Id
+            //----------------------------------------------------------------------------------------
+            void SetTextureAtlasId(const std::string& in_atlasId) override;
+            //----------------------------------------------------------------------------------------
+            /// Set the UVs that should be used in subsequent draws. UVs are relative to the
+            /// frame and not the overall atlas
             ///
             /// @author S Downie
             ///
             /// @param Rectangle containing U, V, S, T
             //----------------------------------------------------------------------------------------
-            void SetUVs(const Rendering::UVs& in_UVs);
+            void SetUVs(const Rendering::UVs& in_UVs) override;
             //----------------------------------------------------------------------------------------
             /// Set the UV insets that should be used to create the patches. Insets are from the edge
             /// and therefore no negative numbers need to be specified for right and bottom insets.
@@ -141,12 +165,23 @@ namespace ChilliSource
         private:
             
             Rendering::TextureCSPtr m_texture;
-            Rendering::UVs m_UVs;
+            Rendering::TextureAtlasCSPtr m_atlas;
+            Rendering::TextureAtlas::Frame m_atlasFrame;
+            Rendering::UVs m_uvs;
+            std::string m_atlasId;
+            
+            std::array<Rendering::UVs, k_numPatches> m_cachedUvs;
+            std::array<Core::Vector2, k_numPatches> m_cachedSizes;
+            std::array<Core::Vector2, k_numPatches> m_cachedPositions;
+            Core::Vector2 m_cachedOffsetTL;
+            Core::Vector2 m_cachedWidgetSize;
             
             f32 m_leftInset = 0.01f;
             f32 m_rightInset = 0.01f;
             f32 m_topInset = 0.01f;
             f32 m_bottomInset = 0.01f;
+            
+            bool m_isPatchCatchValid = false;
         };
     }
 }

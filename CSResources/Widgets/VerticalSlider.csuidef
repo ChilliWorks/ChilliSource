@@ -1,10 +1,10 @@
 {
-  "Type": "VerticalSliderBar",
+  "Type": "VerticalSlider",
   "Properties": {
     "SliderFraction": "Float"
   },
   "Defaults": {
-    "Name": "VerticalSliderBar",
+    "Name": "VerticalSlider",
     "InputEnabled": "true",
     "SliderFraction": "0"
   },
@@ -19,7 +19,7 @@
     }
   },
   "Behaviour": {
-    "FilePath": "VerticalSliderBar.lua"
+    "FilePath": "VerticalSlider.lua"
   },
   "Children": {
     "Slider": {

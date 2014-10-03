@@ -669,7 +669,7 @@ namespace ChilliSource
             /// @param Name
             /// @param Value
             //----------------------------------------------------------------------------------------
-            template<typename TType> void SetProperty(const std::string& in_name, TType&& in_value);
+            template<typename TType> void SetCustomProperty(const std::string& in_name, TType&& in_value);
             //----------------------------------------------------------------------------------------
             /// Specialisation to store property value for const char* as a std::string
             ///
@@ -678,7 +678,7 @@ namespace ChilliSource
             /// @param Property name
             /// @param Property value
             //----------------------------------------------------------------------------------------
-            void SetProperty(const std::string& in_name, const char* in_value);
+            void SetCustomProperty(const std::string& in_name, const char* in_value);
             //----------------------------------------------------------------------------------------
             /// Get the value of the property with the given name. If no property exists
             /// with the name then it will assert.
@@ -689,7 +689,7 @@ namespace ChilliSource
             ///
             /// @return Value
             //----------------------------------------------------------------------------------------
-            template<typename TType> TType GetProperty(const std::string& in_name) const;
+            template<typename TType> TType GetCustomProperty(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
             /// Specialisation to return property value for const char* which is stored as a std::string
             ///
@@ -699,7 +699,7 @@ namespace ChilliSource
             ///
             /// @return Property value
             //----------------------------------------------------------------------------------------
-            const char* GetProperty(const std::string& in_name) const;
+            const char* GetCustomProperty(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
             /// Performs a calculation to check if the given position is within the OOBB
             /// of the widget
@@ -985,7 +985,7 @@ namespace ChilliSource
         };
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<typename TType> void Widget::SetProperty(const std::string& in_name, TType&& in_value)
+        template<typename TType> void Widget::SetCustomProperty(const std::string& in_name, TType&& in_value)
         {
             auto itDefault = m_defaultPropertyLinks.find(in_name);
             if(itDefault != m_defaultPropertyLinks.end())
@@ -998,15 +998,20 @@ namespace ChilliSource
             auto itCustom = m_customPropertyLinks.find(in_name);
             if(itCustom != m_customPropertyLinks.end())
             {
-                itCustom->second.first->SetProperty<TType>(itCustom->second.second, std::forward<TType>(in_value));
+                itCustom->second.first->SetCustomProperty<TType>(itCustom->second.second, std::forward<TType>(in_value));
                 return;
             }
             
             m_customProperties.SetProperty(in_name, std::forward<TType>(in_value));
+            
+            if(m_behaviourScript != nullptr)
+            {
+                m_behaviourScript->CallFunction("onCustomPropertyChanged", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, in_name, std::forward<TType>(in_value));
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<typename TType> TType Widget::GetProperty(const std::string& in_name) const
+        template<typename TType> TType Widget::GetCustomProperty(const std::string& in_name) const
         {
             auto itDefault = m_defaultPropertyLinks.find(in_name);
             if(itDefault != m_defaultPropertyLinks.end())
@@ -1018,7 +1023,7 @@ namespace ChilliSource
             auto itCustom = m_customPropertyLinks.find(in_name);
             if(itCustom != m_customPropertyLinks.end())
             {
-                return itCustom->second.first->GetProperty<TType>(itCustom->second.second);
+                return itCustom->second.first->GetCustomProperty<TType>(itCustom->second.second);
             }
             
             return m_customProperties.GetProperty<TType>(in_name);

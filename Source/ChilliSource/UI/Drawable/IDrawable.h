@@ -82,6 +82,35 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             virtual void SetTexture(const Rendering::TextureCSPtr& in_texture) = 0;
             //----------------------------------------------------------------------------------------
+            /// Set the texture atlas that should be used in subsequent draws. This will
+            /// potentially affect the UVs of a drawable.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Texture atlas
+            //----------------------------------------------------------------------------------------
+            virtual void SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas) = 0;
+            //----------------------------------------------------------------------------------------
+            /// Set the texture atlas frame Id that should be used in subsequent draws. This will
+            /// potentially affect the UVs of a drawable.
+            ///
+            /// NOTE: An atlas must have been set prior to calling this
+            ///
+            /// @author S Downie
+            ///
+            /// @param Frame Id
+            //----------------------------------------------------------------------------------------
+            virtual void SetTextureAtlasId(const std::string& in_atlasId) = 0;
+            //----------------------------------------------------------------------------------------
+            /// Set the UVs that should be used in subsequent draws. UVs are relative to the
+            /// frame and not the overall atlas
+            ///
+            /// @author S Downie
+            ///
+            /// @param Rectangle containing U, V, S, T
+            //----------------------------------------------------------------------------------------
+            virtual void SetUVs(const Rendering::UVs& in_UVs) = 0;
+            //----------------------------------------------------------------------------------------
             /// Render the widget using the canvas renderer
             ///
             /// @author S Downie

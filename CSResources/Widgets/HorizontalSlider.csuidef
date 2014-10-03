@@ -1,10 +1,10 @@
 {
-  "Type": "HorizontalSliderBar",
+  "Type": "HorizontalSlider",
   "Properties": {
     "SliderFraction": "Float"
   },
   "Defaults": {
-    "Name": "HorizontalSliderBar",
+    "Name": "HorizontalSlider",
     "InputEnabled": "true",
     "SliderFraction": "0"
   },
@@ -19,7 +19,7 @@
     }
   },
   "Behaviour": {
-    "FilePath": "HorizontalSliderBar.lua"
+    "FilePath": "HorizontalSlider.lua"
   },
   "Children": {
     "Slider": {

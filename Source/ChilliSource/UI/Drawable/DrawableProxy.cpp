@@ -31,6 +31,7 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Scripting/Lua/LuaSystem.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
@@ -47,6 +48,9 @@ namespace ChilliSource
             {
                 in_system->RegisterStaticClass("Drawable",
                                                "setTexture", DrawableProxy::SetTexture,
+                                               "setTextureAtlas", DrawableProxy::SetTextureAtlas,
+                                               "setTextureAtlasId", DrawableProxy::SetTextureAtlasId,
+                                               "setUVs", DrawableProxy::SetUVs,
                                                "getType", DrawableProxy::GetType,
                                                "getPreferredSize", DrawableProxy::GetPreferredSize
                                                );
@@ -57,6 +61,25 @@ namespace ChilliSource
             {
                 auto resourcePool = Core::Application::Get()->GetResourcePool();
                 in_drawable->SetTexture(resourcePool->LoadResource<Rendering::Texture>(in_location, in_path));
+            }
+            //----------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------
+            void SetTextureAtlas(IDrawable* in_drawable, Core::StorageLocation in_location, const std::string& in_path)
+            {
+                auto resourcePool = Core::Application::Get()->GetResourcePool();
+                in_drawable->SetTextureAtlas(resourcePool->LoadResource<Rendering::TextureAtlas>(in_location, in_path));
+            }
+            //----------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------
+            void SetTextureAtlasId(IDrawable* in_drawable, const std::string& in_id)
+            {
+                in_drawable->SetTextureAtlasId(in_id);
+            }
+            //----------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------
+            void SetUVs(IDrawable* in_drawable, const Rendering::UVs& in_UVs)
+            {
+                in_drawable->SetUVs(in_UVs);
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------

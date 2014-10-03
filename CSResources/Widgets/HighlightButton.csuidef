@@ -5,8 +5,14 @@
     "NormalTexturePath": "String",
     "HighlightTextureLocation": "StorageLocation",
     "HighlightTexturePath": "String",
-    "NormalColour":"Colour",
-    "HighlightColour":"Colour"
+    "NormalColour": "Colour",
+    "HighlightColour": "Colour",
+    "NormalAtlasLocation": "StorageLocation",
+    "NormalAtlasPath": "String",
+    "HighlightAtlasLocation": "StorageLocation",
+    "HighlightAtlasPath": "String",
+    "NormalAtlasId": "String",
+    "HighlightAtlasId": "String"
   },
   "Defaults": {
     "Name": "HighlightButton",
@@ -15,11 +21,16 @@
     "NormalTexturePath": "",
     "HighlightTextureLocation": "None",
     "HighlightTexturePath": "",
-    "NormalColour":"1 1 1 1",
-    "HighlightColour":"0.6 0.6 0.6 0.6"
+    "NormalColour": "1 1 1 1",
+    "HighlightColour": "0.6 0.6 0.6 0.6",
+    "NormalAtlasLocation": "None",
+    "NormalAtlasPath": "",
+    "HighlightAtlasLocation": "None",
+    "HighlightAtlasPath": "",
+    "NormalAtlasId": "",
+    "HighlightAtlasId": ""
   },
   "Behaviour": {
-    "StorageLocation": "Package",
     "FilePath": "HighlightButton.lua"
   }
 }

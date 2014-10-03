@@ -568,9 +568,9 @@ namespace ChilliSource
             /// @param Name
             /// @param Value
             //----------------------------------------------------------------------------------------
-            template<typename TProperty> void SetProperty(Widget* in_widget, const std::string& in_name, TProperty&& in_value)
+            template<typename TProperty> void SetCustomProperty(Widget* in_widget, const std::string& in_name, TProperty&& in_value)
             {
-                return in_widget->SetProperty<TProperty>(in_name, std::forward<TProperty>(in_value));
+                return in_widget->SetCustomProperty<TProperty>(in_name, std::forward<TProperty>(in_value));
             }
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
@@ -585,9 +585,9 @@ namespace ChilliSource
             ///
             /// @return Value
             //----------------------------------------------------------------------------------------
-            template <typename TProperty> TProperty GetProperty(Widget* in_widget, const std::string& in_propertyName)
+            template <typename TProperty> TProperty GetCustomProperty(Widget* in_widget, const std::string& in_propertyName)
             {
-                return in_widget->GetProperty<TProperty>(in_propertyName);
+                return in_widget->GetCustomProperty<TProperty>(in_propertyName);
             }
         }
     }
