@@ -455,7 +455,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void NinePatchDrawable::SetTextureAtlasId(const std::string& in_atlasId)
         {
-            CS_ASSERT(m_atlas != nullptr, "StandardDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas");
+            CS_ASSERT(m_atlas != nullptr, "NinePatchDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas");
             
             m_atlasId = in_atlasId;
             m_atlasFrame = m_atlas->GetFrame(in_atlasId);
