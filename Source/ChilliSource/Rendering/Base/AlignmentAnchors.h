@@ -37,7 +37,11 @@ namespace ChilliSource
 {
     namespace Rendering
     {
-        //---Anchor points for view alignment
+        //---------------------------------------------------------------
+        /// Anchor points for view alignment.
+        ///
+        /// @author S Downie
+        //---------------------------------------------------------------
         enum class AlignmentAnchor
         {
             k_topLeft,
@@ -50,43 +54,33 @@ namespace ChilliSource
             k_bottomRight,
             k_bottomCentre
         };
-        
-        //--------------------------------------------------------------
-        /// Align
-        ///
+        //---------------------------------------------------------------
         /// Calculate the alignment anchor point based on the anchor
         /// and the size
         ///
-        /// @param Anchor type 
-        /// @param Half size
-        /// @param Out anchor point
-        //---------------------------------------------------------------
-        void Align(AlignmentAnchor ineAlignment, const Core::Vector2& invHalfSize, Core::Vector2& outvAlignmentPoint);
-        //---------------------------------------------------------------
-        /// Alignment Anchor From String
+        /// @author S Downie
         ///
-        /// @param String
+        /// @param Anchor type
+        /// @param Half size
+        ///
+        /// @return The anchor point.
+        //---------------------------------------------------------------
+        Core::Vector2 GetAnchorPoint(AlignmentAnchor in_alignment, const Core::Vector2& in_halfSize);
+        //---------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param The string to parse.
+        ///
         /// @return Alignment anchor type corresponding to given string
         //---------------------------------------------------------------
-        AlignmentAnchor ParseAlignmentAnchor(const std::string& instrString);
+        AlignmentAnchor ParseAlignmentAnchor(const std::string& in_string);
         //---------------------------------------------------------------
-        /// String From Alignment Anchor
+        /// @author S Downie
         ///
         /// @param Alignment Anchor
         /// @return String.
         //---------------------------------------------------------------
-        std::string StringFromAlignmentAnchor(AlignmentAnchor ineAlignmentAnchor);
-        //--------------------------------------------------------------
-        /// Get Anchor Point
-        ///
-        /// Calculate the alignment anchor point based on the anchor
-        /// and the size
-        ///
-        /// @param Anchor type 
-        /// @param Half size
-        /// @param Out anchor point
-        //---------------------------------------------------------------
-        void GetAnchorPoint(AlignmentAnchor ineAlignment, const Core::Vector2& invHalfSize, Core::Vector2& outvAlignmentPoint);
+        std::string StringFromAlignmentAnchor(AlignmentAnchor in_alignmentAnchor);
     }
 }
 

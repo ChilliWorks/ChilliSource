@@ -404,19 +404,59 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Rendering::AlignmentAnchor GetParentalAnchor() const;
             //----------------------------------------------------------------------------------------
-            /// Set the alignment anchor that is to be the widgets origin i.e. it's pivot point
+            /// Sets the anchor to which the widget's origin position is aligned. The widgets origin
+            /// is the position which the object is rendered and at the position arround which it will
+            /// be rotated.
             ///
             /// @author S Downie
             ///
-            /// @param Alignment anchor
+            /// @param The alignment anchor
             //----------------------------------------------------------------------------------------
             void SetOriginAnchor(Rendering::AlignmentAnchor in_anchor);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return Alignment anchor
+            /// @return The anchor to which the widget's origin position is aligned. The widgets origin
+            /// is the position which the object is rendered and at the position arround which it will
+            /// be rotated.
             //----------------------------------------------------------------------------------------
             Rendering::AlignmentAnchor GetOriginAnchor() const;
+            //----------------------------------------------------------------------------------------
+            /// Sets the widget origin's absolute position. The widgets origin is the position which
+            /// the object is rendered and at the position arround which it will  be rotated. This
+            /// position is relative to the Origin Anchor.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The origin's absolute position.
+            //----------------------------------------------------------------------------------------
+            void SetOriginAbsolutePosition(const Core::Vector2& in_position);
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The widget's origin absolute position. The widgets origin is the position which
+            /// the object is rendered and at the position arround which it will  be rotated. This
+            /// position is relative to the Origin Anchor.
+            //----------------------------------------------------------------------------------------
+            const Core::Vector2& GetOriginAbsolutePosition() const;
+            //----------------------------------------------------------------------------------------
+            /// Sets the widget origin's relative position. The widgets origin is the position which
+            /// the object is rendered and at the position arround which it will  be rotated. This
+            /// position is relative to the Origin Anchor.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The origin's relative position.
+            //----------------------------------------------------------------------------------------
+            void SetOriginRelativePosition(const Core::Vector2& in_position);
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The widget's origin relative position. The widgets origin is the position which
+            /// the object is rendered and at the position arround which it will  be rotated. This
+            /// position is relative to the Origin Anchor.
+            //----------------------------------------------------------------------------------------
+            const Core::Vector2& GetOriginRelativePosition() const;
             //----------------------------------------------------------------------------------------
             /// Set the colour that is multiplied into the widget. Widgets inherit their parent's
             /// colour.
@@ -712,6 +752,19 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             bool Contains(const Core::Vector2& in_point) const;
             //----------------------------------------------------------------------------------------
+            /// Converts the input screen space point to local space relative to the given alignment
+            /// anchor. As this requires the final transform of the widget this will assert if the
+            /// widget is not on the canvas.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The position to convert to local space. This must be in screen space.
+            /// @param The anchor to align it to.
+            ///
+            /// @return The local space position relative to the given anchor.
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 ToLocalSpace(const Core::Vector2& in_point, Rendering::AlignmentAnchor in_alignmentAnchor) const;
+            //----------------------------------------------------------------------------------------
             /// Update this widget and any sub widgets
             ///
             /// @author S Downie
@@ -858,35 +911,37 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::Matrix3 GetFinalTransform() const;
             //----------------------------------------------------------------------------------------
-            /// Calculate the parent space position of the origin of the object based on the local
-            /// position and local alignment to parent. This method exists to create a position in
-            /// pixels that can be used to calculate the final position of the widget.
+            /// Calculates the position on the widget's origin in Local Render space, combining the
+            /// relative and absolute components of the local position. Local Render space is relative
+            /// to the centre of the parent. This takes into account the parents final size, the
+            /// parental anchor and the absolute and relative position.
             ///
-            /// NOTE: As the position is relative the final position cannot be calculated until the
-            /// widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
-            /// Therefore will assert if the widget is not on the root canvas
+            /// NOTE: As the position takes into account the size of the parent, this cannot be
+            /// calculated until the widget is part of an absolute tree, i.e. one of the widgets up
+            /// the tree is absolute. Therefore this will assert if the widget is not on the root
+            /// canvas.
             ///
             /// @author S Downie
             ///
-            /// @return Position of centre of object in pixels in parent space
+            /// @return The position in local render space. This is in pixels.
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetParentSpacePosition() const;
+            Core::Vector2 GetLocalRenderSpaceCombinedPosition() const;
             //----------------------------------------------------------------------------------------
-            /// Calculate the parent space position of the centre of the object based on the local
-            /// position, local alignment to parent and local alignment to origin. This method exists
-            /// to create a position in pixels that can be used to create the local transform matrix.
-            /// The local transform matrix is multiplied with the parent tranform to get the final
-            /// transform and this method prevents double transformation by the parent.
+            /// Calculates the local position of the origin, combining the relative and absolute
+            /// components of the origin position. This is relative to the origin anchor point. This
+            /// takes into account the final size of the parent and the relative and absolute origin
+            /// position.
             ///
-            /// NOTE: As the position is relative the final position cannot be calculated until the
-            /// widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute)
-            /// Therefore will assert if the widget is not on the root canvas
+            /// NOTE: As part of the origin's position is relative the combined local space position
+            /// cannot be calculated until the widget is part of an absolute tree, i.e. one of the
+            /// widgets up the tree is absolute. Therefore this will assert if the widget is not on
+            /// the rootcanvas.
             ///
             /// @author Ian Copland
             ///
-            /// @return Position of centre of object in pixels in parent space
+            /// @return Position of the origin anchor in local space. This is in pixels.
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetParentSpacePositionCentred() const;
+            Core::Vector2 GetLocalOriginCombinedPosition() const;
             //----------------------------------------------------------------------------------------
             /// Called when the out transform changes forcing this to update its caches
             ///
@@ -900,26 +955,30 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void OnParentTransformChanged();
             //----------------------------------------------------------------------------------------
-            /// Calculate the final screen space size of the given child based on the widget
-            /// and the layout
+            /// Calculates the reference size of the given child widget. This will be either the size
+            /// of the cell in the layout the child is in, or the size of this if there is no layout.
             ///
-            /// @author S Downie
-            ///
-            /// @param Child
-            ///
-            /// @return Screen space size
-            //----------------------------------------------------------------------------------------
-            Core::Vector2 CalculateChildFinalSize(const Widget* in_child);
-            //----------------------------------------------------------------------------------------
-            /// Calculate the final screen space size of the layout for the given child.
+            /// As this takes into account the final size, this must be part of an absolute hierarchy,
+            /// i.e it must be in the canvas widget's hierarchy. If not, this will assert.
             ///
             /// @author Ian Copland
             ///
             /// @param The child widget.
             ///
-            /// @return The screen space layout size.
+            /// @return The reference size in absolute screen space pixels.
             //----------------------------------------------------------------------------------------
-            Core::Vector2 CalculateChildRelativeReferenceSize(const Widget* in_child);
+            Core::Vector2 CalculateRelativeReferenceSizeForChild(const Widget* in_child);
+            //----------------------------------------------------------------------------------------
+            /// Returns the layout and index into that layout for the given children.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The child widget.
+            ///
+            /// @return A pair containing the layout and index. The layout can be null if the the child
+            /// is not in a layout.
+            //----------------------------------------------------------------------------------------
+            std::pair<ILayout*, s32> GetLayoutForChild(const Widget* in_child);
 
         private:
             
@@ -966,8 +1025,9 @@ namespace ChilliSource
             Widget* m_parent = nullptr;
             const Widget* m_canvas = nullptr;
             
-            Rendering::AlignmentAnchor m_originAnchor;
             Rendering::AlignmentAnchor m_parentalAnchor;
+            Rendering::AlignmentAnchor m_originAnchor;
+            Core::UnifiedVector2 m_originPosition;
             
             bool m_isVisible;
             bool m_isSubviewClippingEnabled;

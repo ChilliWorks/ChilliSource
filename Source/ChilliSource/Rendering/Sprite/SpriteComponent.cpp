@@ -185,13 +185,11 @@ namespace ChilliSource
                 Core::Vector2 transformedSize = GetSize();
                 
                 // Realign the origin
-                Core::Vector2 vHalfSize(transformedSize.x * 0.5f, transformedSize.y * 0.5f);
-                Core::Vector2 vAlignedPos;
-                Align(m_originAlignment, vHalfSize, vAlignedPos);
+                Core::Vector2 anchorPoint = GetAnchorPoint(m_originAlignment, transformedSize * 0.5f);
                 
 				// Rebuild the box
 				mBoundingBox.SetSize(Core::Vector3(transformedSize, 0.0f));
-				mBoundingBox.SetOrigin(GetEntity()->GetTransform().GetWorldPosition() + Core::Vector3(vAlignedPos, 0.0f));
+				mBoundingBox.SetOrigin(GetEntity()->GetTransform().GetWorldPosition() - Core::Vector3(anchorPoint, 0.0f));
 			}
 			return mBoundingBox;
 		}
@@ -212,12 +210,10 @@ namespace ChilliSource
                 Core::Vector2 transformedSize = GetSize();
                 
                 // Realign the origin
-                Core::Vector2 vHalfSize(transformedSize.x * 0.5f, transformedSize.y * 0.5f);
-                Core::Vector2 vAlignedPos;
-                Align(m_originAlignment, vHalfSize, vAlignedPos);
+                Core::Vector2 anchorPoint = GetAnchorPoint(m_originAlignment, transformedSize * 0.5f);
                 
 				// Rebuild the box
-                mOBBoundingBox.SetOrigin(Core::Vector3(vAlignedPos, 0.0f));
+                mOBBoundingBox.SetOrigin(Core::Vector3(-anchorPoint, 0.0f));
 				mOBBoundingBox.SetSize(Core::Vector3(transformedSize, 0.0f));
 				mOBBoundingBox.SetTransform(GetEntity()->GetTransform().GetWorldTransform());
 			}
@@ -240,11 +236,9 @@ namespace ChilliSource
                 Core::Vector2 transformedSize = GetSize();
                 
                 // Realign the origin
-                Core::Vector2 vHalfSize(transformedSize.x * 0.5f, transformedSize.y * 0.5f);
-                Core::Vector2 vAlignedPos;
-                Align(m_originAlignment, vHalfSize, vAlignedPos);
+                Core::Vector2 anchorPoint = GetAnchorPoint(m_originAlignment, transformedSize * 0.5f);
                 
-				mBoundingSphere.vOrigin = GetEntity()->GetTransform().GetWorldPosition() + Core::Vector3(vAlignedPos, 0.0f);
+				mBoundingSphere.vOrigin = GetEntity()->GetTransform().GetWorldPosition() - Core::Vector3(anchorPoint, 0.0f);
 				mBoundingSphere.fRadius = std::sqrt((transformedSize.x * transformedSize.x) + (transformedSize.y * transformedSize.y)) * 0.5f;
 			}
 			return mBoundingSphere;
@@ -507,8 +501,7 @@ namespace ChilliSource
             const Core::Matrix4& worldTransform = GetEntity()->GetTransform().GetWorldTransform();
             
 			Core::Vector2 vHalfSize(transformedSize.x * 0.5f, transformedSize.y * 0.5f);
-			Core::Vector2 vAlignedPos;
-            Align(m_originAlignment, vHalfSize, vAlignedPos);
+			Core::Vector2 vAlignedPos = GetAnchorPoint(m_originAlignment, vHalfSize);
             
             Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
             Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);

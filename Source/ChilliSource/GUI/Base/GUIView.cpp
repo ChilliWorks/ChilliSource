@@ -1427,12 +1427,8 @@ namespace ChilliSource
 				}
 				
 				//Take into account local alignment which will offset the absolute point from our centre point
-				Core::Vector2 vAlignment;
-				Rendering::Align(LocalAlignment, GetAbsoluteSize() * 0.5f, vAlignment);
-				mvAbsolutePosition += vAlignment;
-				
-				//BUG:
-				//BITMASK_SET(mudwCacheValidaters, (u32)TransformCache::k_absPos);
+				Core::Vector2 anchorPoint = Rendering::GetAnchorPoint(LocalAlignment, GetAbsoluteSize() * 0.5f);
+				mvAbsolutePosition -= anchorPoint;
 			}
             
             return mvAbsolutePosition;
@@ -1484,35 +1480,16 @@ namespace ChilliSource
             }
         }
         //-----------------------------------------------------
-        /// Get Absolute Anchor Point
-        ///
-        /// @param Anchor point type
-        /// @return Anchor point value as absolute
         //-----------------------------------------------------
         Core::Vector2 GUIView::GetAbsoluteAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const
         {
-			Core::Vector2 vSize = GetAbsoluteSize();
-			Core::Vector2 vHalfSize(vSize.x * 0.5f, vSize.y * 0.5f);
-			Core::Vector2 vPos;
-			Rendering::GetAnchorPoint(ineAlignment, vHalfSize, vPos);
-
-            return vPos;
+            return Rendering::GetAnchorPoint(ineAlignment, 0.5f * GetAbsoluteSize());
         }
         //-----------------------------------------------------
-        /// Get Absolute Screen Space Anchor Point
-        ///
-        /// @param Anchor point type
-        /// @return Anchor point value as absolute
         //-----------------------------------------------------
         Core::Vector2 GUIView::GetAbsoluteScreenSpaceAnchorPoint(Rendering::AlignmentAnchor ineAlignment) const
         {
-			Core::Vector2 vSize = GetAbsoluteSize();
-			Core::Vector2 vHalfSize(vSize.x * 0.5f, vSize.y * 0.5f);
-			Core::Vector2 vPos;
-		
-			Rendering::GetAnchorPoint(ineAlignment, vHalfSize, vPos);
-				
-			return vPos + GetAbsoluteScreenSpacePosition();
+			return GetAbsoluteScreenSpacePosition() + Rendering::GetAnchorPoint(ineAlignment, 0.5f * GetAbsoluteSize());
         }
         //-----------------------------------------------------
         //-----------------------------------------------------

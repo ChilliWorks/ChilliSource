@@ -86,12 +86,10 @@ namespace ChilliSource
                 halfSize.x = std::max(halfSize.x, halfSize.y);
                 halfSize.y = std::max(halfSize.y, halfSize.y);
                 
-                Core::Vector2 bottomLeft;
-                Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, halfSize, bottomLeft);
+                Core::Vector2 bottomLeft = Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, halfSize);
                 bottomLeft += in_absPos;
                 
-                Core::Vector2 topRight;
-                Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_topRight, halfSize, topRight);
+                Core::Vector2 topRight = Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_topRight, halfSize);
                 topRight += in_absPos;
                 
                 return (topRight.y < 0 || bottomLeft.y > in_canvasSize.y || topRight.x < 0 || bottomLeft.x > in_canvasSize.x);
@@ -535,6 +533,34 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        void Widget::SetOriginAbsolutePosition(const Core::Vector2& in_position)
+        {
+            m_originPosition.vAbsolute = in_position;
+            
+            InvalidateTransformCache();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const Core::Vector2& Widget::GetOriginAbsolutePosition() const
+        {
+            return m_originPosition.vAbsolute;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetOriginRelativePosition(const Core::Vector2& in_position)
+        {
+            m_originPosition.vRelative = in_position;
+            
+            InvalidateTransformCache();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const Core::Vector2& Widget::GetOriginRelativePosition() const
+        {
+            return m_originPosition.vRelative;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         void Widget::SetColour(const Core::Colour& in_colour)
         {
             m_localColour = Core::Colour::Clamp(in_colour);
@@ -793,8 +819,16 @@ namespace ChilliSource
             Core::Vector2 bottLeft(-halfSize.x, -halfSize.y);
             Core::Vector2 topRight(halfSize.x, halfSize.y);
             
-			Core::Vector2 localPoint = in_point * Core::Matrix3::Inverse(GetFinalTransform());
+            Core::Vector2 localPoint = ToLocalSpace(in_point, Rendering::AlignmentAnchor::k_middleCentre);
 			return localPoint.x >= bottLeft.x && localPoint.y >= bottLeft.y && localPoint.x <= topRight.x && localPoint.y <= topRight.y;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector2 Widget::ToLocalSpace(const Core::Vector2& in_point, Rendering::AlignmentAnchor in_alignmentAnchor) const
+        {
+            Core::Vector2 localPointCentreRelative = in_point * Core::Matrix3::Inverse(GetFinalTransform());
+            Core::Vector2 localPointAligned = localPointCentreRelative - Rendering::GetAnchorPoint(in_alignmentAnchor, GetFinalSize());
+            return localPointAligned;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -805,15 +839,19 @@ namespace ChilliSource
                 m_behaviourScript->CallFunction("onUpdate", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, in_timeSinceLastUpdate);
             }
             
+            m_internalChildren.lock();
             for(auto& child : m_internalChildren)
             {
                 child->Update(in_timeSinceLastUpdate);
             }
+            m_internalChildren.unlock();
             
+            m_children.lock();
             for(auto& child : m_children)
             {
                 child->Update(in_timeSinceLastUpdate);
             }
+            m_children.unlock();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -833,23 +871,25 @@ namespace ChilliSource
             
             if(m_isSubviewClippingEnabled == true)
             {
-                Core::Vector2 halfSize(finalSize * 0.5f);
-                Core::Vector2 bottomLeftPos;
-                Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, halfSize, bottomLeftPos);
+                Core::Vector2 bottomLeftPos = Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, finalSize * 0.5f);
                 bottomLeftPos += GetFinalPositionCentred();
                 
                 in_renderer->PushClipBounds(bottomLeftPos, finalSize);
             }
             
+            m_internalChildren.lock();
             for(auto& child : m_internalChildren)
             {
                 child->Draw(in_renderer);
             }
+            m_internalChildren.unlock();
             
+            m_children.lock();
             for(auto& child : m_children)
             {
                 child->Draw(in_renderer);
             }
+            m_children.unlock();
             
             if(m_isSubviewClippingEnabled == true)
             {
@@ -865,13 +905,12 @@ namespace ChilliSource
                 return m_cachedLocalTransform;
             }
             
-            Core::Vector2 halfSize(GetFinalSize() * 0.5f);
-            Core::Vector2 pivotPos;
-            Rendering::GetAnchorPoint(m_originAnchor, halfSize, pivotPos);
+            Core::Vector2 anchorPoint = GetLocalOriginCombinedPosition();
+            const Core::Vector2 renderSpacePositionCentred = GetLocalRenderSpaceCombinedPosition() - anchorPoint;
             
-            Core::Matrix3 pivot(Core::Matrix3::CreateTransform(-pivotPos, Core::Vector2::k_one, 0.0f));
+            Core::Matrix3 pivot(Core::Matrix3::CreateTransform(-anchorPoint, Core::Vector2::k_one, 0.0f));
             Core::Matrix3 rotate(Core::Matrix3::CreateTransform(Core::Vector2::k_zero, Core::Vector2::k_one, -m_localRotation));
-            Core::Matrix3 translate(Core::Matrix3::CreateTransform(GetParentSpacePositionCentred() - pivotPos, Core::Vector2::k_one, 0.0f));
+            Core::Matrix3 translate(Core::Matrix3::CreateTransform(renderSpacePositionCentred - anchorPoint, Core::Vector2::k_one, 0.0f));
             
             m_cachedLocalTransform = pivot * rotate * translate;
             
@@ -898,7 +937,7 @@ namespace ChilliSource
             }
             
             m_cachedFinalTransform = GetLocalTransform() * m_parent->GetFinalTransform();
-            m_cachedFinalPosition = GetParentSpacePosition() * m_parent->GetFinalTransform();
+            m_cachedFinalPosition = GetLocalRenderSpaceCombinedPosition() * m_parent->GetFinalTransform();
             m_isParentTransformCacheValid = true;
             
             return m_cachedFinalTransform;
@@ -924,81 +963,48 @@ namespace ChilliSource
         /// position is relative to the final parent position and cannot be calculated until
         /// there is an absolute reference point in the widget hierarchy.
         //----------------------------------------------------------------------------------------
-        Core::Vector2 Widget::GetParentSpacePosition() const
+        Core::Vector2 Widget::GetLocalRenderSpaceCombinedPosition() const
         {
-            CS_ASSERT(m_canvas != nullptr, "Cannot get the absolute position of widget without attaching it to the canvas");
-            CS_ASSERT(m_parent != nullptr, "Cannot get the absolute position of widget without a parent");
+            CS_ASSERT(m_canvas != nullptr, "Cannot get the local render space combined position of widget without attaching it to the canvas.");
+            CS_ASSERT(m_parent != nullptr, "Cannot get the local render space combined position of widget without a parent.");
             
             const Core::Vector2 parentSize(m_parent->GetFinalSize());
             const Core::Vector2 parentHalfSize(parentSize * 0.5f);
             
-            ILayout* layout = nullptr;
-            s32 childIndex = -1;
+            auto layoutPair = m_parent->GetLayoutForChild(this);
             
-            for(u32 i=0; i<m_parent->m_children.size(); ++i)
+            if(layoutPair.first == nullptr)
             {
-                if(m_parent->m_children[i].get() == this)
-                {
-                    childIndex = (s32)i;
-                    layout = m_parent->m_layout.get();
-                    break;
-                }
-            }
-            
-            if(layout == nullptr)
-            {
-                for(u32 i=0; i<m_parent->m_internalChildren.size(); ++i)
-                {
-                    if(m_parent->m_internalChildren[i].get() == this)
-                    {
-                        childIndex = (s32)i;
-                        layout = m_parent->m_internalLayout.get();
-                        break;
-                    }
-                }
-            }
-            
-            if(layout == nullptr)
-            {
-                //Get the anchor point to which the widget is aligned in parent space
-                Core::Vector2 parentAnchorPos;
-                Rendering::GetAnchorPoint(m_parentalAnchor, parentHalfSize, parentAnchorPos);
+                //Get the anchor point to which the widget is aligned
+                Core::Vector2 parentAnchorPos = Rendering::GetAnchorPoint(m_parentalAnchor, parentHalfSize);
                 
                 //Calculate the position relative to the anchor point
-                Core::Vector2 parentSpacePos = parentAnchorPos + (parentSize * m_localPosition.vRelative) + m_localPosition.vAbsolute;
-                
-                return parentSpacePos;
+                Core::Vector2 localRenderSpacePos = parentAnchorPos + (parentSize * m_localPosition.vRelative) + m_localPosition.vAbsolute;
+                return localRenderSpacePos;
             }
             else
             {
-                CS_ASSERT(childIndex >= 0, "Cannot find child");
+                CS_ASSERT(layoutPair.second >= 0, "Cannot find child");
                 
                 //The parental anchor pertains to the cell when using a layout rather than the parent widget
-                Core::Vector2 parentAnchorPos;
-                Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, parentHalfSize, parentAnchorPos);
+                Core::Vector2 parentAnchorPos = Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, parentHalfSize);
+                Core::Vector2 cellSize(layoutPair.first->GetSizeForIndex((u32)layoutPair.second));
+                Core::Vector2 cellAnchorPos = Rendering::GetAnchorPoint(m_parentalAnchor, cellSize * 0.5f);
                 
-                Core::Vector2 cellSize(layout->GetSizeForIndex((u32)childIndex));
-                Core::Vector2 cellHalfSize(cellSize * 0.5f);
-                Core::Vector2 cellAnchorPos;
-                Rendering::GetAnchorPoint(m_parentalAnchor, cellHalfSize, cellAnchorPos);
+                //Transform into local render space then layout/cell space
+                Core::Vector2 localRenderSpacePos = parentAnchorPos;
+                Core::Vector2 layoutSpacePos = cellAnchorPos + (cellSize * m_localPosition.vRelative) + m_localPosition.vAbsolute + layoutPair.first->GetPositionForIndex((u32)layoutPair.second);
                 
-                //Transform into parent space then layout/cell space
-                Core::Vector2 parentSpacePos = parentAnchorPos;
-                Core::Vector2 layoutSpacePos = cellAnchorPos + (cellSize * m_localPosition.vRelative) + m_localPosition.vAbsolute + layout->GetPositionForIndex((u32)childIndex);
-                
-                return parentSpacePos + layoutSpacePos;
+                return localRenderSpacePos + layoutSpacePos;
             }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Vector2 Widget::GetParentSpacePositionCentred() const
+        Core::Vector2 Widget::GetLocalOriginCombinedPosition() const
         {
-            const Core::Vector2 parentSpacePosition = GetParentSpacePosition();
-            
-            Core::Vector2 alignmentOffset;
-            Rendering::Align(m_originAnchor, GetFinalSize() * 0.5f, alignmentOffset);
-            
-            return parentSpacePosition + alignmentOffset;
+            CSCore::Vector2 originAnchorPos = Rendering::GetAnchorPoint(m_originAnchor, GetFinalSize() * 0.5f);
+            CSCore::Vector2 originPos = originAnchorPos + (GetRelativeReferenceSize() * m_originPosition.vRelative) + m_originPosition.vAbsolute;
+            return originPos;
         }
         //----------------------------------------------------------------------------------------
         /// The final size of the widget is calculated based on the local absolute and the
@@ -1019,7 +1025,7 @@ namespace ChilliSource
             
             if(m_parent != nullptr)
             {
-                finalSize = m_parent->CalculateChildFinalSize(this);
+                finalSize = (m_parent->CalculateRelativeReferenceSizeForChild(this) * m_localSize.vRelative) + m_localSize.vAbsolute;
             }
             else
             {
@@ -1045,7 +1051,7 @@ namespace ChilliSource
             
             if(m_parent != nullptr)
             {
-                return m_parent->CalculateChildRelativeReferenceSize(this);
+                return m_parent->CalculateRelativeReferenceSizeForChild(this);
             }
             else
             {
@@ -1054,13 +1060,21 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Vector2 Widget::CalculateChildFinalSize(const Widget* in_child)
+        Core::Vector2 Widget::CalculateRelativeReferenceSizeForChild(const Widget* in_child)
         {
-            return ((CalculateChildRelativeReferenceSize(in_child) * in_child->m_localSize.vRelative) + in_child->m_localSize.vAbsolute);
+            auto layoutPair = GetLayoutForChild(in_child);
+            
+            if(layoutPair.first == nullptr)
+            {
+                return (GetFinalSize());
+            }
+            
+            CS_ASSERT(layoutPair.second >= 0, "Cannot find child");
+            return layoutPair.first->GetSizeForIndex((u32)layoutPair.second);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Vector2 Widget::CalculateChildRelativeReferenceSize(const Widget* in_child)
+        std::pair<ILayout*, s32> Widget::GetLayoutForChild(const Widget* in_child)
         {
             ILayout* layout = nullptr;
             s32 childIndex = -1;
@@ -1088,13 +1102,7 @@ namespace ChilliSource
                 }
             }
             
-            if(layout == nullptr)
-            {
-                return (GetFinalSize());
-            }
-            
-            CS_ASSERT(childIndex >= 0, "Cannot find child");
-            return layout->GetSizeForIndex((u32)childIndex);
+            return std::make_pair(layout, childIndex);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

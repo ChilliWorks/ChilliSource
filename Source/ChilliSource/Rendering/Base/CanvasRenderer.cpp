@@ -365,10 +365,9 @@ namespace ChilliSource
                 out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.y = in_UVs.m_v + in_UVs.m_t;
 
                 Core::Vector2 vHalfSize(in_size.x * 0.5f, in_size.y * 0.5f);
-                Core::Vector2 vAlignedPos;
-                Align(in_alignment, vHalfSize, vAlignedPos);
+                Core::Vector2 anchorPoint = GetAnchorPoint(in_alignment, vHalfSize);
 
-                Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
+                Core::Vector4 vCentrePos(-anchorPoint.x, -anchorPoint.y, 0, 0);
                 Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
                 
                 Core::Vector4 offsetTL(in_offset.x, in_offset.y, 0.0f, 0.0f);
