@@ -39,12 +39,13 @@
 
 --Caching the functions locally means we don't have to peform a lookup for each call
 local getPointerPosition = Pointer.getPosition
-local getFinalPosition = Widget.getFinalPosition
+local getFinalPositionOfCentre = Widget.getFinalPositionOfCentre
 local getFinalSize = Widget.getFinalSize
 local setRelativePosition = Widget.setRelativePosition
 local setFloatCustomProperty = Widget.setFloatCustomProperty
 
 local sliderWidget = nil
+local isDragging = false
 
 -----------------------------------------------------
 -- Called when the widget is added to the canvas
@@ -67,6 +68,7 @@ end
 -----------------------------------------------------
 function onPressedInside(in_pointer, in_timeStamp, in_inputType)
     if in_inputType == InputType.Default then
+        isDragging = true
         pointerPosX, pointerPosY = getPointerPosition(in_pointer)
         updateSlider(pointerPosY)
     end
@@ -74,7 +76,7 @@ end
 -----------------------------------------------------
 -- Called when the widget receives an input move event
 -- within its bounds. This causes the slider to move
--- provided the primary input is down.
+-- if the slider is in the moving state.
 --
 -- @author S Downie
 --
@@ -82,8 +84,64 @@ end
 -- @param Timestamp of the input event
 -----------------------------------------------------
 function onDraggedInside(in_pointer, in_timeStamp)
-    pointerPosX, pointerPosY = getPointerPosition(in_pointer)
-    updateSlider(pointerPosY)
+    if isDragging == true then
+        pointerPosX, pointerPosY = getPointerPosition(in_pointer)
+        updateSlider(pointerPosY)
+    end
+end
+-----------------------------------------------------
+-- Called when the widget receives an input move event
+-- outside its bounds. This causes the slider to move
+-- if the slider is in the moving state.
+--
+-- @author Ian Copland
+--
+-- @param Pointer that triggered the event
+-- @param Timestamp of the input event
+-----------------------------------------------------
+function onDraggedOutside(in_pointer, in_timeStamp)
+    if isDragging == true then
+        pointerPosX, pointerPosY = getPointerPosition(in_pointer)
+        updateSlider(pointerPosY)
+    end
+end
+-----------------------------------------------------
+-- Called when a pointer up event occurs inside the
+-- the widget. This will listen for default input
+-- type releases and stop the slider moving.
+--
+-- @author Ian Copland
+--
+-- @param Pointer that triggered the event
+-- @param Timestamp of the input event
+-- @param Input type i.e. touch, left mouse, right 
+-- mouse, etc.
+-----------------------------------------------------
+function onReleasedInside(in_pointer, in_timeStamp, in_inputType)
+    if in_inputType == InputType.Default then
+        pointerPosX, pointerPosY = getPointerPosition(in_pointer)
+        updateSlider(pointerPosY)
+        isDragging = false
+    end
+end
+-----------------------------------------------------
+-- Called when a pointer up event occurs outside the
+-- the widget. This will listen for default input
+-- type releases and stop the slider moving.
+--
+-- @author Ian Copland
+--
+-- @param Pointer that triggered the event
+-- @param Timestamp of the input event
+-- @param Input type i.e. touch, left mouse, right 
+-- mouse, etc.
+-----------------------------------------------------
+function onReleasedOutside(in_pointer, in_timeStamp, in_inputType)
+    if in_inputType == InputType.Default then
+        pointerPosX, pointerPosY = getPointerPosition(in_pointer)
+        updateSlider(pointerPosY)
+        isDragging = false
+    end
 end
 -----------------------------------------------------
 -- Move the slider to the correct position based
@@ -94,11 +152,20 @@ end
 -- @param Pointer input position Y
 -----------------------------------------------------
 function updateSlider(in_pointerPositionY)
-    barPosX, barPosY = getFinalPosition(this)
+    sliderWidth, sliderHeight = getFinalSize(sliderWidget)
     barWidth, barHeight = getFinalSize(this)
-    sliderFraction = ((in_pointerPositionY - barPosY)/barHeight) + 0.5;
-    setRelativePosition(sliderWidget, 0.0, sliderFraction)
+    barPosX, barPosY = getFinalPositionOfCentre(this)
+    barBottomY = barPosY - 0.5 * barHeight
+
+    --calculate the new slider fraction 
+    slideRange =  math.max(barHeight - sliderHeight, 0.0)
+    pointerPositionOnBar = math.max((in_pointerPositionY - barBottomY - 0.5 * sliderHeight), 0.0)
+    sliderFraction = math.max(math.min((pointerPositionOnBar / slideRange), 1.0), 0.0)
     setFloatCustomProperty(this, "SliderFraction", sliderFraction)
+
+    --convert the slider fraction to a relative position for the slider
+    sliderPosition = sliderFraction * (slideRange / barHeight);
+    setRelativePosition(sliderWidget, 0.0, sliderPosition)
 end
 
 

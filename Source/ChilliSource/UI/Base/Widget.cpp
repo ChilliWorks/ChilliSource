@@ -1260,7 +1260,16 @@ namespace ChilliSource
             {
                 //Track the input that is down on the widget as
                 //this will effect how we trigger the release events
-                m_pressedInputIds.insert(in_pointer.GetId());
+				auto it = m_pressedInput.find(in_pointer.GetId());
+				if (it != m_pressedInput.end())
+				{
+					it->second.insert(in_inputType);
+				}
+				else
+				{
+					std::set<Input::Pointer::InputType> inputTypeSet = { in_inputType };
+					m_pressedInput.emplace(in_pointer.GetId(), inputTypeSet);
+				}
                 
                 if(m_behaviourScript != nullptr)
                 {
@@ -1321,8 +1330,8 @@ namespace ChilliSource
             }
             else if(containsPrevious == false && containsCurrent == false)
             {
-                auto itPressedId = m_pressedInputIds.find(in_pointer.GetId());
-                if(itPressedId != m_pressedInputIds.end() && in_pointer.GetActiveInputs().empty() == false)
+                auto itPressedInput = m_pressedInput.find(in_pointer.GetId());
+				if (itPressedInput != m_pressedInput.end())
                 {
                     if(m_behaviourScript != nullptr)
                     {
@@ -1334,8 +1343,8 @@ namespace ChilliSource
             }
             else // Equivalent to if(containsPrevious == true && containsCurrent == true)
             {
-                auto itPressedId = m_pressedInputIds.find(in_pointer.GetId());
-                if(itPressedId != m_pressedInputIds.end() && in_pointer.GetActiveInputs().empty() == false)
+				auto itPressedInput = m_pressedInput.find(in_pointer.GetId());
+				if (itPressedInput != m_pressedInput.end())
                 {
                     if(m_behaviourScript != nullptr)
                     {
@@ -1369,30 +1378,37 @@ namespace ChilliSource
             }
             m_internalChildren.unlock();
             
-            auto itPressedId = m_pressedInputIds.find(in_pointer.GetId());
-            
-            if(itPressedId != m_pressedInputIds.end())
+            auto itPressedInput = m_pressedInput.find(in_pointer.GetId());
+			if (itPressedInput != m_pressedInput.end())
             {
-                m_pressedInputIds.erase(itPressedId);
-                
-                if(Contains(in_pointer.GetPosition()) == true)
-                {
-                    if(m_behaviourScript != nullptr)
-                    {
-                        m_behaviourScript->CallFunction("onReleasedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
-                    }
+				auto itPressedInputType = itPressedInput->second.find(in_inputType);
+				if (itPressedInputType != itPressedInput->second.end())
+				{
+					itPressedInput->second.erase(itPressedInputType);
+					if (itPressedInput->second.empty() == true)
+					{
+						m_pressedInput.erase(itPressedInput);
+					}
+
+					if(Contains(in_pointer.GetPosition()) == true)
+					{
+						if(m_behaviourScript != nullptr)
+						{
+							m_behaviourScript->CallFunction("onReleasedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
+						}
                     
-                    m_releasedInsideEvent.NotifyConnections(this, in_inputType);
-                }
-                else
-                {
-                    if(m_behaviourScript != nullptr)
-                    {
-                        m_behaviourScript->CallFunction("onReleasedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
-                    }
+						m_releasedInsideEvent.NotifyConnections(this, in_inputType);
+					}
+					else
+					{
+						if(m_behaviourScript != nullptr)
+						{
+							m_behaviourScript->CallFunction("onReleasedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
+						}
                     
-                    m_releasedOutsideEvent.NotifyConnections(this, in_inputType);
-                }
+						m_releasedOutsideEvent.NotifyConnections(this, in_inputType);
+					}
+				}
             }
         }
     }

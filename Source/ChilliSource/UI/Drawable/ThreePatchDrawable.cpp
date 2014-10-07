@@ -276,9 +276,9 @@ namespace ChilliSource
                 f32 heightImageBottom = in_frame.m_originalSize.y * in_bottom;
                 f32 heightVisibleBottom = Core::MathUtils::Clamp(offsetBottom + heightImageBottom, 0.0f, in_frame.m_croppedSize.y);
                 
-                f32 heightImageCentre = in_frame.m_originalSize.x * (1.0f - in_bottom - in_top);
+                f32 heightImageCentre = in_frame.m_originalSize.y * (1.0f - in_bottom - in_top);
                 f32 heightVisibleCentre = Core::MathUtils::Clamp(heightImageCentre - (in_frame.m_offset.y + heightVisibleTop - heightImageTop), 0.0f, in_frame.m_croppedSize.y);
-                f32 heightStretched = in_widgetSize.x - heightVisibleTop - heightVisibleBottom;
+                f32 heightStretched = in_widgetSize.y - heightVisibleTop - heightVisibleBottom;
                 f32 heightWidgetCentre = heightVisibleCentre * (heightStretched/heightImageCentre);
                 
                 result[(u32)Patch::k_rightOrTop].y = heightVisibleTop;

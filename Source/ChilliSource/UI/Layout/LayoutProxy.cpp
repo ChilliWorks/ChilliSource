@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Scripting/Lua/LuaSystem.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
+#include <ChilliSource/UI/Layout/LayoutType.h>
 
 namespace ChilliSource
 {

@@ -29,7 +29,8 @@
         "Type": "None"
       },
       "SizePolicy": "UseWidthMaintainingAspect",
-      "ParentalAnchor": "BottomCentre"
+      "ParentalAnchor": "BottomCentre",
+      "OriginAnchor": "BottomCentre"
     }
   },
   "Hierarchy": [

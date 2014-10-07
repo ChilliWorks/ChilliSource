@@ -985,7 +985,7 @@ namespace ChilliSource
             std::unordered_map<std::string, IPropertyAccessorUPtr> m_defaultPropertyLinks;
             std::unordered_map<std::string, std::pair<Widget*, std::string>> m_customPropertyLinks;
             
-            std::set<Input::Pointer::Id> m_pressedInputIds;
+            std::unordered_map<Input::Pointer::Id, std::set<Input::Pointer::InputType>> m_pressedInput;
             
             Core::Event<InputDelegate> m_pressedInsideEvent;
             Core::Event<InputDelegate> m_releasedInsideEvent;

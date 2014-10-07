@@ -519,6 +519,8 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
+            /// @param The widget on which to operate.
+            ///
             /// @return The screen space size that relative positions and size are relative to.
             /// This is in pixels.
             //----------------------------------------------------------------------------------------
@@ -582,6 +584,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
+            /// @param The widget on which to operate.
             /// @param The position to convert to local space. This must be in screen space.
             /// @param The anchor to align it to.
             ///
