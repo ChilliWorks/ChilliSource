@@ -765,22 +765,6 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::Vector2 ToLocalSpace(const Core::Vector2& in_point, Rendering::AlignmentAnchor in_alignmentAnchor) const;
             //----------------------------------------------------------------------------------------
-            /// Update this widget and any sub widgets
-            ///
-            /// @author S Downie
-            ///
-            /// @param Time in seconds since last update
-            //----------------------------------------------------------------------------------------
-            void Update(f32 in_timeSinceLastUpdate);
-            //----------------------------------------------------------------------------------------
-            /// Draw the view using the currently set drawable. Tell any subviews to draw.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Canvas renderer
-            //----------------------------------------------------------------------------------------
-            void Draw(Rendering::CanvasRenderer* in_renderer);
-            //----------------------------------------------------------------------------------------
             /// Called when the layout changes forcing this to update its children
             ///
             /// @author S Downie
@@ -788,37 +772,6 @@ namespace ChilliSource
             /// @param The layout that changed
             //----------------------------------------------------------------------------------------
             void OnLayoutChanged(const ILayout* in_layout);
-            //-----------------------------------------------------------
-            /// Called when the canvas receives cursor/touch input
-            ///
-            /// @author S Downie
-            ///
-            /// @param The pointer
-            /// @param The timestamp.
-            /// @param The press type.
-            /// @param Filter object to check if the event has been filtered or to filter it
-            //-----------------------------------------------------------
-            void OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter);
-            //-----------------------------------------------------------
-            /// Called when the canvas receives cursor/touch move input
-            ///
-            /// @author S Downie
-            ///
-            /// @param The pointer
-            /// @param The timestamp.
-            //-----------------------------------------------------------
-            void OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp);
-            //-----------------------------------------------------------
-            /// Called when the canvas receiving cursor/touch release input
-            ///
-            /// @author S Downie
-            ///
-            /// @param The pointer
-            /// @param The timestamp.
-            /// @param The press type.
-            //-----------------------------------------------------------
-            void OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType);
-            
         private:
             friend class Canvas;
             friend class WidgetFactory;
@@ -943,18 +896,6 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::Vector2 GetLocalOriginCombinedPosition() const;
             //----------------------------------------------------------------------------------------
-            /// Called when the out transform changes forcing this to update its caches
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            void InvalidateTransformCache();
-            //----------------------------------------------------------------------------------------
-            /// Called when the parent transform changes forcing this to update its caches
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            void OnParentTransformChanged();
-            //----------------------------------------------------------------------------------------
             /// Calculates the reference size of the given child widget. This will be either the size
             /// of the cell in the layout the child is in, or the size of this if there is no layout.
             ///
@@ -979,7 +920,65 @@ namespace ChilliSource
             /// is not in a layout.
             //----------------------------------------------------------------------------------------
             std::pair<ILayout*, s32> GetLayoutForChild(const Widget* in_child);
-
+            //----------------------------------------------------------------------------------------
+            /// Called when the out transform changes forcing this to update its caches
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            void InvalidateTransformCache();
+            //----------------------------------------------------------------------------------------
+            /// Called when the parent transform changes forcing this to update its caches
+            ///
+            /// @author S Downie
+            //----------------------------------------------------------------------------------------
+            void OnParentTransformChanged();
+            //----------------------------------------------------------------------------------------
+            /// Update this widget and any sub widgets
+            ///
+            /// @author S Downie
+            ///
+            /// @param Time in seconds since last update
+            //----------------------------------------------------------------------------------------
+            void Update(f32 in_timeSinceLastUpdate);
+            //----------------------------------------------------------------------------------------
+            /// Draw the view using the currently set drawable. Tell any subviews to draw.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Canvas renderer
+            //----------------------------------------------------------------------------------------
+            void Draw(Rendering::CanvasRenderer* in_renderer);
+            //-----------------------------------------------------------
+            /// Called when the canvas receives cursor/touch input
+            ///
+            /// @author S Downie
+            ///
+            /// @param The pointer
+            /// @param The timestamp.
+            /// @param The press type.
+            /// @param Filter object to check if the event has been filtered or to filter it
+            //-----------------------------------------------------------
+            void OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter);
+            //-----------------------------------------------------------
+            /// Called when the canvas receives cursor/touch move input
+            ///
+            /// @author S Downie
+            ///
+            /// @param The pointer
+            /// @param The timestamp.
+            //-----------------------------------------------------------
+            void OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp);
+            //-----------------------------------------------------------
+            /// Called when the canvas receiving cursor/touch release input
+            ///
+            /// @author S Downie
+            ///
+            /// @param The pointer
+            /// @param The timestamp.
+            /// @param The press type.
+            //-----------------------------------------------------------
+            void OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType);
+            
         private:
             
             PropertyMap m_customProperties;

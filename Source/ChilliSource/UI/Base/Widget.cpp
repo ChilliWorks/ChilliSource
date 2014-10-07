@@ -811,6 +811,18 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        void Widget::SetCustomProperty(const std::string& in_name, const char* in_value)
+        {
+            SetCustomProperty<std::string>(in_name, in_value);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const char* Widget::GetCustomProperty(const std::string& in_name) const
+        {
+            return GetCustomProperty<std::string>(in_name).c_str();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         bool Widget::Contains(const Core::Vector2& in_point) const
         {
             //Convert the point into our local space allowing us to do an AABB check
@@ -829,72 +841,6 @@ namespace ChilliSource
             Core::Vector2 localPointCentreRelative = in_point * Core::Matrix3::Inverse(GetFinalTransform());
             Core::Vector2 localPointAligned = localPointCentreRelative - Rendering::GetAnchorPoint(in_alignmentAnchor, GetFinalSize());
             return localPointAligned;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::Update(f32 in_timeSinceLastUpdate)
-        {
-            if(m_behaviourScript != nullptr)
-            {
-                m_behaviourScript->CallFunction("onUpdate", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, in_timeSinceLastUpdate);
-            }
-            
-            m_internalChildren.lock();
-            for(auto& child : m_internalChildren)
-            {
-                child->Update(in_timeSinceLastUpdate);
-            }
-            m_internalChildren.unlock();
-            
-            m_children.lock();
-            for(auto& child : m_children)
-            {
-                child->Update(in_timeSinceLastUpdate);
-            }
-            m_children.unlock();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::Draw(Rendering::CanvasRenderer* in_renderer)
-        {
-            if(m_isVisible == false)
-            {
-                return;
-            }
-            
-            Core::Vector2 finalSize(GetFinalSize());
-            
-            if(m_drawable != nullptr && ShouldCull(GetFinalPositionOfCentre(), finalSize, m_screen->GetResolution()) == false)
-            {
-                m_drawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
-            }
-            
-            if(m_isSubviewClippingEnabled == true)
-            {
-                Core::Vector2 bottomLeftPos = Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, finalSize * 0.5f);
-                bottomLeftPos += GetFinalPositionOfCentre();
-                
-                in_renderer->PushClipBounds(bottomLeftPos, finalSize);
-            }
-            
-            m_internalChildren.lock();
-            for(auto& child : m_internalChildren)
-            {
-                child->Draw(in_renderer);
-            }
-            m_internalChildren.unlock();
-            
-            m_children.lock();
-            for(auto& child : m_children)
-            {
-                child->Draw(in_renderer);
-            }
-            m_children.unlock();
-            
-            if(m_isSubviewClippingEnabled == true)
-            {
-                in_renderer->PopClipBounds();
-            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1060,6 +1006,51 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        Core::Vector2 Widget::GetPreferredSize() const
+        {
+            if(m_drawable != nullptr)
+            {
+                return m_drawable->GetPreferredSize();
+            }
+            
+            return m_preferredSize;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        f32 Widget::GetFinalRotation() const
+        {
+            if(m_parent != nullptr)
+            {
+                return m_localRotation + m_parent->GetFinalRotation();
+            }
+            
+            return m_localRotation;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector2 Widget::GetFinalScale() const
+        {
+            if(m_parent != nullptr)
+            {
+                return m_localScale * m_parent->GetFinalScale();
+            }
+            
+            return m_localScale;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Colour Widget::GetFinalColour() const
+        {
+            //TODO: Do we implement the inherit colour option?
+            if(m_parent != nullptr)
+            {
+                return m_localColour * m_parent->GetFinalColour();
+            }
+            
+            return m_localColour;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         Core::Vector2 Widget::CalculateRelativeReferenceSizeForChild(const Widget* in_child)
         {
             auto layoutPair = GetLayoutForChild(in_child);
@@ -1106,51 +1097,6 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Vector2 Widget::GetPreferredSize() const
-        {
-            if(m_drawable != nullptr)
-            {
-                return m_drawable->GetPreferredSize();
-            }
-            
-            return m_preferredSize;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        f32 Widget::GetFinalRotation() const
-        {
-            if(m_parent != nullptr)
-            {
-                return m_localRotation + m_parent->GetFinalRotation();
-            }
-            
-            return m_localRotation;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        Core::Vector2 Widget::GetFinalScale() const
-        {
-            if(m_parent != nullptr)
-            {
-                return m_localScale * m_parent->GetFinalScale();
-            }
-            
-            return m_localScale;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        Core::Colour Widget::GetFinalColour() const
-        {
-            //TODO: Do we implement the inherit colour option?
-            if(m_parent != nullptr)
-            {
-                return m_localColour * m_parent->GetFinalColour();
-            }
-            
-            return m_localColour;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
         void Widget::InvalidateTransformCache()
         {
             m_isLocalTransformCacheValid = false;
@@ -1187,6 +1133,72 @@ namespace ChilliSource
             m_isParentSizeCacheValid = false;
             
             InvalidateTransformCache();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::Update(f32 in_timeSinceLastUpdate)
+        {
+            if(m_behaviourScript != nullptr)
+            {
+                m_behaviourScript->CallFunction("onUpdate", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, in_timeSinceLastUpdate);
+            }
+            
+            m_internalChildren.lock();
+            for(auto& child : m_internalChildren)
+            {
+                child->Update(in_timeSinceLastUpdate);
+            }
+            m_internalChildren.unlock();
+            
+            m_children.lock();
+            for(auto& child : m_children)
+            {
+                child->Update(in_timeSinceLastUpdate);
+            }
+            m_children.unlock();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::Draw(Rendering::CanvasRenderer* in_renderer)
+        {
+            if(m_isVisible == false)
+            {
+                return;
+            }
+            
+            Core::Vector2 finalSize(GetFinalSize());
+            
+            if(m_drawable != nullptr && ShouldCull(GetFinalPositionOfCentre(), finalSize, m_screen->GetResolution()) == false)
+            {
+                m_drawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
+            }
+            
+            if(m_isSubviewClippingEnabled == true)
+            {
+                Core::Vector2 bottomLeftPos = Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, finalSize * 0.5f);
+                bottomLeftPos += GetFinalPositionOfCentre();
+                
+                in_renderer->PushClipBounds(bottomLeftPos, finalSize);
+            }
+            
+            m_internalChildren.lock();
+            for(auto& child : m_internalChildren)
+            {
+                child->Draw(in_renderer);
+            }
+            m_internalChildren.unlock();
+            
+            m_children.lock();
+            for(auto& child : m_children)
+            {
+                child->Draw(in_renderer);
+            }
+            m_children.unlock();
+            
+            if(m_isSubviewClippingEnabled == true)
+            {
+                in_renderer->PopClipBounds();
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1382,18 +1394,6 @@ namespace ChilliSource
                     m_releasedOutsideEvent.NotifyConnections(this, in_inputType);
                 }
             }
-        }
-        //----------------------------------------------------------------------------------------
-		//----------------------------------------------------------------------------------------
-		void Widget::SetCustomProperty(const std::string& in_name, const char* in_value)
-        {
-            SetCustomProperty<std::string>(in_name, in_value);
-        }
-		//----------------------------------------------------------------------------------------
-		//----------------------------------------------------------------------------------------
-		const char* Widget::GetCustomProperty(const std::string& in_name) const
-        {
-            return GetCustomProperty<std::string>(in_name).c_str();
         }
     }
 }
