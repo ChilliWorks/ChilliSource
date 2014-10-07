@@ -637,7 +637,7 @@ namespace ChilliSource
             ///
             /// @return Screen space position of the centre of the object in pixels
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetFinalPositionCentred() const;
+            Core::Vector2 GetFinalPositionOfCentre() const;
             //----------------------------------------------------------------------------------------
             /// Calculate the screen space size of the object based on the local size and the
             /// parent size.

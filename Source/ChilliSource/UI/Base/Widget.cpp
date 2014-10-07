@@ -864,7 +864,7 @@ namespace ChilliSource
             
             Core::Vector2 finalSize(GetFinalSize());
             
-            if(m_drawable != nullptr && ShouldCull(GetFinalPositionCentred(), finalSize, m_screen->GetResolution()) == false)
+            if(m_drawable != nullptr && ShouldCull(GetFinalPositionOfCentre(), finalSize, m_screen->GetResolution()) == false)
             {
                 m_drawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
             }
@@ -872,7 +872,7 @@ namespace ChilliSource
             if(m_isSubviewClippingEnabled == true)
             {
                 Core::Vector2 bottomLeftPos = Rendering::GetAnchorPoint(Rendering::AlignmentAnchor::k_bottomLeft, finalSize * 0.5f);
-                bottomLeftPos += GetFinalPositionCentred();
+                bottomLeftPos += GetFinalPositionOfCentre();
                 
                 in_renderer->PushClipBounds(bottomLeftPos, finalSize);
             }
@@ -952,7 +952,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Core::Vector2 Widget::GetFinalPositionCentred() const
+        Core::Vector2 Widget::GetFinalPositionOfCentre() const
         {
 			Core::Matrix3 finalTransform(GetFinalTransform());
             return Core::Vector2(finalTransform.m[6], finalTransform.m[7]);

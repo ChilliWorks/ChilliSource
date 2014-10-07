@@ -56,10 +56,12 @@ namespace ChilliSource
                                                "getLocalAbsolutePosition", &WidgetProxy::GetLocalAbsolutePosition,
                                                "getLocalRelativePosition", &WidgetProxy::GetLocalRelativePosition,
                                                "getFinalPosition", &WidgetProxy::GetFinalPosition,
-                                               "getFinalPositionCentred", &WidgetProxy::GetFinalPositionCentred,
+                                               "getFinalPositionOfCentre", &WidgetProxy::GetFinalPositionOfCentre,
                                                "getLocalAbsoluteSize", &WidgetProxy::GetLocalAbsoluteSize,
                                                "getLocalRelativeSize", &WidgetProxy::GetLocalRelativeSize,
                                                "getFinalSize", &WidgetProxy::GetFinalSize,
+                                               "getRelativeReferenceSize", &WidgetProxy::GetRelativeReferenceSize,
+                                               "getPreferredSize", &WidgetProxy::GetPreferredSize,
                                                "scaleBy", &WidgetProxy::ScaleBy,
                                                "scaleTo", &WidgetProxy::ScaleTo,
                                                "getLocalScale", &WidgetProxy::GetLocalScale,
@@ -87,6 +89,7 @@ namespace ChilliSource
                                                "getWidget", &WidgetProxy::GetWidget,
                                                "getDrawable", &WidgetProxy::GetDrawable,
                                                "getLayout", &WidgetProxy::GetLayout,
+                                               "toLocalSpace", &WidgetProxy::ToLocalSpace,
                                                "getBoolCustomProperty", &WidgetProxy::GetCustomProperty<bool>,
                                                "getIntCustomProperty", &WidgetProxy::GetCustomProperty<s32>,
                                                "getFloatCustomProperty", &WidgetProxy::GetCustomProperty<f32>,
@@ -347,15 +350,21 @@ namespace ChilliSource
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetFinalPositionCentred(Widget* in_widget)
+            Core::Vector2 GetFinalPositionOfCentre(Widget* in_widget)
             {
-                return in_widget->GetFinalPositionCentred();
+                return in_widget->GetFinalPositionOfCentre();
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
             Core::Vector2 GetFinalSize(Widget* in_widget)
             {
                 return in_widget->GetFinalSize();
+            }
+            //----------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetRelativeReferenceSize(const Widget* in_widget)
+            {
+                return in_widget->GetRelativeReferenceSize();
             }
             //----------------------------------------------------------------------------------------
             //----------------------------------------------------------------------------------------
@@ -380,6 +389,12 @@ namespace ChilliSource
             Core::Colour GetFinalColour(Widget* in_widget)
             {
                 return in_widget->GetFinalColour();
+            }
+            //----------------------------------------------------------------------------------------
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 ToLocalSpace(const Widget* in_widget, const Core::Vector2& in_point, Rendering::AlignmentAnchor in_alignmentAnchor)
+            {
+                return in_widget->ToLocalSpace(in_point, in_alignmentAnchor);
             }
         }
     }

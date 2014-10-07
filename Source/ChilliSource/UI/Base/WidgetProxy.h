@@ -488,7 +488,7 @@ namespace ChilliSource
             ///
             /// @return Screen space position of centre of object in pixels
             //----------------------------------------------------------------------------------------
-            Core::Vector2 GetFinalPositionCentred(Widget* in_widget);
+            Core::Vector2 GetFinalPositionOfCentre(Widget* in_widget);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
@@ -506,6 +506,23 @@ namespace ChilliSource
             /// @return Screen space size in pixels
             //----------------------------------------------------------------------------------------
             Core::Vector2 GetFinalSize(Widget* in_widget);
+            //----------------------------------------------------------------------------------------
+            /// Proxy function to allow calling on an instance from Lua script.
+            ///
+            /// Returns the size of the rectange this widget will be positioned and sized relative to.
+            /// This will either be the size of the parent or the size of the cell within the parents
+            /// layout.
+            ///
+            /// NOTE: As the relative component of the final size cannot be calculated until the
+            /// widget is part of an absolute tree (i.e. one of the widgets up the tree is absolute).
+            /// Therefore will assert if the widget is not on the root canvas.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return The screen space size that relative positions and size are relative to.
+            /// This is in pixels.
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 GetRelativeReferenceSize(const Widget* in_widget);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
@@ -556,6 +573,21 @@ namespace ChilliSource
             /// @return Final colour
             //----------------------------------------------------------------------------------------
             Core::Colour GetFinalColour(Widget* in_widget);
+            //----------------------------------------------------------------------------------------
+            /// Proxy function to allow calling on an instance from Lua script
+            ///
+            /// Converts the input screen space point to local space relative to the given alignment
+            /// anchor. As this requires the final transform of the widget this will assert if the
+            /// widget is not on the canvas.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The position to convert to local space. This must be in screen space.
+            /// @param The anchor to align it to.
+            ///
+            /// @return The local space position relative to the given anchor.
+            //----------------------------------------------------------------------------------------
+            Core::Vector2 ToLocalSpace(const Widget* in_widget, const Core::Vector2& in_point, Rendering::AlignmentAnchor in_alignmentAnchor);
             //----------------------------------------------------------------------------------------
             /// Proxy function to allow calling on an instance from Lua script
             ///
