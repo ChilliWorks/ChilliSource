@@ -44,17 +44,21 @@ namespace ChilliSource
         namespace DrawableUtils
         {
             //----------------------------------------------------------------------------
-            /// Creates a texture atlas frame for a whole texture taking into account
-            /// the relative UVs
+            /// Creates the texture atlas frame from the given atlas, atlas id, and UVs.
+            /// If there is no atlas or atlas id, the frame will be calculated from the
+            /// texture and the UVs. If there is also no texture, a zero sized frame
+            /// will be created.
             ///
-            /// @author S Downie
+            /// @author Ian Copland
             ///
-            /// @param Texture
-            /// @param UVs
+            /// @param The texture. Can be null.
+            /// @param The texture atlas. Can be null.
+            /// @param The atlas Id string. Can be null.
+            /// @param The virtual UVs.
             ///
             /// @return Atlas frame
             //----------------------------------------------------------------------------
-            Rendering::TextureAtlas::Frame GetFrameForTexture(const Rendering::Texture* in_texture, const Rendering::UVs& in_relativeUVs);
+            Rendering::TextureAtlas::Frame BuildFrame(const Rendering::Texture* in_texture, const Rendering::TextureAtlas* in_textureAtlas, const std::string& in_atlasId, const Rendering::UVs& in_virtualUVs);
         }
     }
 }

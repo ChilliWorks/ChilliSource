@@ -98,17 +98,16 @@ namespace ChilliSource
         {
             m_texture = in_texture;
             
-            if(m_atlas == nullptr || m_atlasId.empty() == true)
-            {
-                m_atlasFrame = DrawableUtils::GetFrameForTexture(m_texture.get(), m_uvs);
-            }
+            m_atlasFrame = DrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void StandardDrawable::SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas)
         {
             m_atlas = in_atlas;
-            m_atlasFrame = DrawableUtils::GetFrameForTexture(m_texture.get(), m_uvs);
+            m_atlasId = "";
+            
+            m_atlasFrame = DrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -117,19 +116,16 @@ namespace ChilliSource
             CS_ASSERT(m_atlas != nullptr, "StandardDrawable::SetTextureAtlasId: Atlas Id cannot be set without first setting an atlas");
             
             m_atlasId = in_atlasId;
-            m_atlasFrame = m_atlas->GetFrame(in_atlasId);
             
-            //Apply the relative UV offsets
-            m_atlasFrame.m_uvs.m_u += (m_uvs.m_u * m_atlasFrame.m_uvs.m_s);
-            m_atlasFrame.m_uvs.m_v += (m_uvs.m_v * m_atlasFrame.m_uvs.m_t);
-            m_atlasFrame.m_uvs.m_s *= m_uvs.m_s;
-            m_atlasFrame.m_uvs.m_t *= m_uvs.m_t;
+            m_atlasFrame = DrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void StandardDrawable::SetUVs(const Rendering::UVs& in_UVs)
         {
             m_uvs = in_UVs;
+            
+            m_atlasFrame = DrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

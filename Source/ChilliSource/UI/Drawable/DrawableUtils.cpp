@@ -39,23 +39,34 @@ namespace ChilliSource
         {
             //----------------------------------------------------------------------------
             //----------------------------------------------------------------------------
-            Rendering::TextureAtlas::Frame GetFrameForTexture(const Rendering::Texture* in_texture, const Rendering::UVs& in_relativeUVs)
+            Rendering::TextureAtlas::Frame BuildFrame(const Rendering::Texture* in_texture, const Rendering::TextureAtlas* in_textureAtlas, const std::string& in_atlasId, const Rendering::UVs& in_virtualUVs)
             {
-                Rendering::TextureAtlas::Frame result;
+                Rendering::TextureAtlas::Frame outputFrame;
                 
-                Core::Vector2 texSize;
-                if(in_texture != nullptr)
+                if (in_textureAtlas != nullptr && in_atlasId.empty() == false)
                 {
-                    texSize.x = (f32)in_texture->GetWidth() * in_relativeUVs.m_s;
-                    texSize.y = (f32)in_texture->GetHeight() * in_relativeUVs.m_t;
+                    outputFrame = in_textureAtlas->GetFrame(in_atlasId);
+                    outputFrame.m_uvs.m_u += (in_virtualUVs.m_u * outputFrame.m_uvs.m_s);
+                    outputFrame.m_uvs.m_v += (in_virtualUVs.m_v * outputFrame.m_uvs.m_t);
+                    outputFrame.m_uvs.m_s *= in_virtualUVs.m_s;
+                    outputFrame.m_uvs.m_t *= in_virtualUVs.m_t;
+                }
+                else
+                {
+                    Core::Vector2 texSize;
+                    if(in_texture != nullptr)
+                    {
+                        texSize.x = (f32)in_texture->GetWidth() * in_virtualUVs.m_s;
+                        texSize.y = (f32)in_texture->GetHeight() * in_virtualUVs.m_t;
+                    }
+                    
+                    outputFrame.m_croppedSize = texSize;
+                    outputFrame.m_originalSize = texSize;
+                    outputFrame.m_uvs = in_virtualUVs;
+                    outputFrame.m_offset = Core::Vector2::k_zero;
                 }
                 
-                result.m_croppedSize = texSize;
-                result.m_originalSize = texSize;
-                result.m_uvs = in_relativeUVs;
-                result.m_offset = Core::Vector2::k_zero;
-                
-                return result;
+                return outputFrame;
             }
         }
     }

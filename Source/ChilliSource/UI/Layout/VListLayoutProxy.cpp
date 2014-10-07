@@ -29,8 +29,8 @@
 #include <ChilliSource/UI/Layout/VListLayoutProxy.h>
 
 #include <ChilliSource/Scripting/Lua/LuaSystem.h>
-#include <ChilliSource/UI/Layout/VListLayout.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>
+#include <ChilliSource/UI/Layout/VListLayout.h>
 
 namespace ChilliSource
 {
