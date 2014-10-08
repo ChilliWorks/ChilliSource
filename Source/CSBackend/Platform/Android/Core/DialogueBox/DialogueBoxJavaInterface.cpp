@@ -42,8 +42,8 @@
 //-------------------------------------------------
 extern "C"
 {
-	void Java_com_chillisource_core_DialogueBoxNativeInterface_onDialogueConfirmPressed(JNIEnv* in_env, jobject in_this, s32 in_id);
-	void Java_com_chillisource_core_DialogueBoxNativeInterface_onDialogueCancelPressed(JNIEnv* in_env, jobject in_this, s32 in_id);
+	void Java_com_chilliworks_chillisource_core_DialogueBoxNativeInterface_onDialogueConfirmPressed(JNIEnv* in_env, jobject in_this, s32 in_id);
+	void Java_com_chilliworks_chillisource_core_DialogueBoxNativeInterface_onDialogueCancelPressed(JNIEnv* in_env, jobject in_this, s32 in_id);
 }
 
 //-------------------------------------------------
@@ -57,7 +57,7 @@ extern "C"
 /// @param The java object calling the function
 /// @param Dialog ID
 //-------------------------------------------------
-void Java_com_chillisource_core_DialogueBoxNativeInterface_onDialogueConfirmPressed(JNIEnv* in_env, jobject in_this, s32 in_id)
+void Java_com_chilliworks_chillisource_core_DialogueBoxNativeInterface_onDialogueConfirmPressed(JNIEnv* in_env, jobject in_this, s32 in_id)
 {
 	CSBackend::Android::DialogueBoxSystem* dialogueBoxSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::DialogueBoxSystem>();
 	if (dialogueBoxSystem != nullptr)
@@ -76,7 +76,7 @@ void Java_com_chillisource_core_DialogueBoxNativeInterface_onDialogueConfirmPres
 /// @param The java object calling the function
 /// @param Dialog ID
 //------------------------------------------------
-void Java_com_chillisource_core_DialogueBoxNativeInterface_onDialogueCancelPressed(JNIEnv* in_env, jobject in_this, s32 in_id)
+void Java_com_chilliworks_chillisource_core_DialogueBoxNativeInterface_onDialogueCancelPressed(JNIEnv* in_env, jobject in_this, s32 in_id)
 {
 	CSBackend::Android::DialogueBoxSystem* dialogueBoxSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::DialogueBoxSystem>();
 	if (dialogueBoxSystem != nullptr)
@@ -95,7 +95,7 @@ namespace CSBackend
 		//--------------------------------------------------
 		DialogueBoxJavaInterface::DialogueBoxJavaInterface()
 		{
-			CreateNativeInterface("com/chillisource/core/DialogueBoxNativeInterface");
+			CreateNativeInterface("com/chilliworks/chillisource/core/DialogueBoxNativeInterface");
 			CreateMethodReference("makeToast", "(Ljava/lang/String;)V");
 			CreateMethodReference("showSystemConfirmDialogue", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 			CreateMethodReference("showSystemDialogue", "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");

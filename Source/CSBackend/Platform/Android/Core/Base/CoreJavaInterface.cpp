@@ -53,7 +53,7 @@ extern "C"
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_core_CoreNativeInterface_create(JNIEnv* in_env, jobject in_this);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_create(JNIEnv* in_env, jobject in_this);
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is launched.
 	///
@@ -62,7 +62,7 @@ extern "C"
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject in_this);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject in_this);
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is resumed.
 	///
@@ -71,7 +71,7 @@ extern "C"
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_core_CoreNativeInterface_resume(JNIEnv* in_env, jobject in_this);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_resume(JNIEnv* in_env, jobject in_this);
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is pushed
 	/// to the foreground
@@ -81,7 +81,7 @@ extern "C"
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_core_CoreNativeInterface_foreground(JNIEnv* in_env, jobject in_this);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_foreground(JNIEnv* in_env, jobject in_this);
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is pushed
 	/// to the background
@@ -91,7 +91,7 @@ extern "C"
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_core_CoreNativeInterface_background(JNIEnv* in_env, jobject in_this);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_background(JNIEnv* in_env, jobject in_this);
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is suspended
 	///
@@ -100,7 +100,7 @@ extern "C"
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_core_CoreNativeInterface_suspend(JNIEnv* in_env, jobject in_this);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_suspend(JNIEnv* in_env, jobject in_this);
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is destroyed
 	///
@@ -109,7 +109,7 @@ extern "C"
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_core_CoreNativeInterface_destroy(JNIEnv* in_env, jobject in_this);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroy(JNIEnv* in_env, jobject in_this);
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is updated
 	///
@@ -120,7 +120,7 @@ extern "C"
 	/// @param the delta time.
 	/// @param Elapsed app time
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobject in_this, f32 in_deltaTime, s64 in_elapsedTime);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobject in_this, f32 in_deltaTime, s64 in_elapsedTime);
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is almost
 	/// Out of memory.
@@ -130,7 +130,7 @@ extern "C"
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* in_env, jobject in_this);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* in_env, jobject in_this);
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the resolution changes.
 	///
@@ -141,7 +141,7 @@ extern "C"
 	/// @param The new width.
 	/// @param The new height.
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_core_CoreNativeInterface_onResolutionChanged(JNIEnv* in_env, jobject in_this, s32 in_width, s32 in_height);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_onResolutionChanged(JNIEnv* in_env, jobject in_this, s32 in_width, s32 in_height);
 	//--------------------------------------------------------------------------------------
 	/// Application Did Receive Launching URL
 	///
@@ -150,11 +150,11 @@ extern "C"
 	/// @param jobject - the java object calling the function
 	/// @param URL
 	//--------------------------------------------------------------------------------------
-    void Java_com_chillisource_core_CoreNativeInterface_applicationDidReceiveLaunchingURL(JNIEnv* in_env, jobject in_this, jstring in_url);
+    void Java_com_chilliworks_chillisource_core_CoreNativeInterface_applicationDidReceiveLaunchingURL(JNIEnv* in_env, jobject in_this, jstring in_url);
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_create(JNIEnv* in_env, jobject in_this)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_create(JNIEnv* in_env, jobject in_this)
 {
 	//get the java VM and init the Java Interface Manager
 	JavaVM* javaVM;
@@ -167,7 +167,7 @@ void Java_com_chillisource_core_CoreNativeInterface_create(JNIEnv* in_env, jobje
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject in_this)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject in_this)
 {
 	//get the java VM and init the Java Interface Manager
 	JavaVM* javaVM;
@@ -187,37 +187,37 @@ void Java_com_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_resume(JNIEnv* in_env, jobject in_this)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_resume(JNIEnv* in_env, jobject in_this)
 {
 	CSCore::Application::Get()->Resume();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_foreground(JNIEnv* in_env, jobject in_this)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_foreground(JNIEnv* in_env, jobject in_this)
 {
 	CSCore::Application::Get()->Foreground();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_background(JNIEnv* in_env, jobject in_this)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_background(JNIEnv* in_env, jobject in_this)
 {
 	CSCore::Application::Get()->Background();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_suspend(JNIEnv* in_env, jobject in_this)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_suspend(JNIEnv* in_env, jobject in_this)
 {
 	CSCore::Application::Get()->Suspend();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_destroy(JNIEnv* in_env, jobject in_this)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroy(JNIEnv* in_env, jobject in_this)
 {
 	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>()->DestroyApplication();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobject in_this, f32 in_deltaTime, s64 in_elaspedTime)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobject in_this, f32 in_deltaTime, s64 in_elaspedTime)
 {
 	//Create the message with the time between frames
 	CSCore::Application::Get()->Update(in_deltaTime, (u64)in_elaspedTime);
@@ -225,13 +225,13 @@ void Java_com_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobje
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* in_env, jobject in_this)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_memoryWarning(JNIEnv* in_env, jobject in_this)
 {
 	CSCore::Application::Get()->ApplicationMemoryWarning();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_core_CoreNativeInterface_onResolutionChanged(JNIEnv* in_env, jobject in_this, s32 in_width, s32 in_height)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_onResolutionChanged(JNIEnv* in_env, jobject in_this, s32 in_width, s32 in_height)
 {
 	CSBackend::Android::Screen* screen = CSCore::Application::Get()->GetSystem<CSBackend::Android::Screen>();
 	CS_ASSERT(screen != nullptr, "Cannot find required system: Screen.");
@@ -249,7 +249,7 @@ namespace CSBackend
 		CoreJavaInterface::CoreJavaInterface()
 		: m_application(nullptr), m_screenWidth(0), m_screenHeight(0), m_screenDensity(-0.1f), m_physicalScreenSize(-0.1f)
 		{
-			CreateNativeInterface("com/chillisource/core/CoreNativeInterface");
+			CreateNativeInterface("com/chilliworks/chillisource/core/CoreNativeInterface");
 			CreateMethodReference("getExternalStorageDirectory", "()Ljava/lang/String;");
 			CreateMethodReference("getApplicationName", "()Ljava/lang/String;");
 			CreateMethodReference("getApplicationVersionCode", "()I");

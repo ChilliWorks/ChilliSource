@@ -36,7 +36,7 @@
 //function definitions
 extern "C"
 {
-	void Java_com_chillisource_social_EmailComposerNativeInterface_OnEmailClosed(JNIEnv* inpEnv, jobject inpThis, s32 indwResultCode);
+	void Java_com_chilliworks_chillisource_social_EmailComposerNativeInterface_OnEmailClosed(JNIEnv* inpEnv, jobject inpThis, s32 indwResultCode);
 }
 //--------------------------------------------------------------------------------------
 /// On Email Closed
@@ -48,7 +48,7 @@ extern "C"
 /// @param the java object calling the function.
 /// @param The result code.
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_social_EmailComposerNativeInterface_OnEmailClosed(JNIEnv* inpEnv, jobject inpThis, s32 indwResultCode)
+void Java_com_chilliworks_chillisource_social_EmailComposerNativeInterface_OnEmailClosed(JNIEnv* inpEnv, jobject inpThis, s32 indwResultCode)
 {
 	CSBackend::Android::EmailComposerJavaInterfaceSPtr pJavaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::EmailComposerJavaInterface>();
 	if (pJavaInterface != nullptr)
@@ -96,7 +96,7 @@ namespace CSBackend
 		//--------------------------------------------------------------
 		EmailComposerJavaInterface::EmailComposerJavaInterface()
 		{
-			CreateNativeInterface("com/chillisource/social/EmailComposerNativeInterface");
+			CreateNativeInterface("com/chilliworks/chillisource/social/EmailComposerNativeInterface");
 			CreateMethodReference("Present", "([Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V");
 		}
 		//--------------------------------------------------------------

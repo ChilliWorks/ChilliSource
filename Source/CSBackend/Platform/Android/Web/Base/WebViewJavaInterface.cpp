@@ -35,7 +35,7 @@
 //function definitions
 extern "C"
 {
-	void Java_com_chillisource_web_WebViewNativeInterface_OnWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex);
+	void Java_com_chilliworks_chillisource_web_WebViewNativeInterface_OnWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex);
 }
 //--------------------------------------------------------------------------------------
 /// On Update Text
@@ -48,7 +48,7 @@ extern "C"
 /// @param the updated keyboard text
 /// @return whether or not the text was accepted.
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_web_WebViewNativeInterface_OnWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex)
+void Java_com_chilliworks_chillisource_web_WebViewNativeInterface_OnWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex)
 {
 	CSBackend::Android::WebView::OnWebViewDismissed(inudwIndex);
 }
@@ -61,10 +61,10 @@ namespace CSBackend
 		{
 			mspJavaVM = inpJavaVM;
 
-			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","Present", "(ILjava/lang/String;IIF)V");
-			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","PresentFromFile", "(ILjava/lang/String;IILjava/lang/String;Ljava/lang/String;F)V");
-			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","PresentInExternalBrowser", "(Ljava/lang/String;)V");
-			InitCallableStaticMethod("com/chillisource/web/WebViewNativeInterface","Dismiss", "(I)V");
+			InitCallableStaticMethod("com/chilliworks/chillisource/web/WebViewNativeInterface","Present", "(ILjava/lang/String;IIF)V");
+			InitCallableStaticMethod("com/chilliworks/chillisource/web/WebViewNativeInterface","PresentFromFile", "(ILjava/lang/String;IILjava/lang/String;Ljava/lang/String;F)V");
+			InitCallableStaticMethod("com/chilliworks/chillisource/web/WebViewNativeInterface","PresentInExternalBrowser", "(Ljava/lang/String;)V");
+			InitCallableStaticMethod("com/chilliworks/chillisource/web/WebViewNativeInterface","Dismiss", "(I)V");
 		}
 		void WebViewJavaInterface::Present(u32 inudwIndex, const std::string& instrURL, const CSCore::Vector2& invSize, f32 in_dismissButtonRelativeSize)
 		{

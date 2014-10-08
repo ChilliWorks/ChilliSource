@@ -47,7 +47,7 @@ extern "C"
 	/// @param the x coordinate
 	/// @param the y coordinate
 	//-------------------------------------------------------
-	void Java_com_chillisource_input_TouchInputNativeInterface_TouchDown(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y);
+	void Java_com_chilliworks_chillisource_input_TouchInputNativeInterface_TouchDown(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y);
 	//-------------------------------------------------------
 	/// Interface function called from java. This is called
 	/// when a touch has moved.
@@ -60,7 +60,7 @@ extern "C"
 	/// @param the x coordinate
 	/// @param the y coordinate
 	//-------------------------------------------------------
-	void Java_com_chillisource_input_TouchInputNativeInterface_TouchMoved(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y);
+	void Java_com_chilliworks_chillisource_input_TouchInputNativeInterface_TouchMoved(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y);
 	//-------------------------------------------------------
 	/// Interface function called from java. This is called
 	/// when a touch has finished.
@@ -73,11 +73,11 @@ extern "C"
 	/// @param the x coordinate
 	/// @param the y coordinate
 	//-------------------------------------------------------
-	void Java_com_chillisource_input_TouchInputNativeInterface_TouchUp(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y);
+	void Java_com_chilliworks_chillisource_input_TouchInputNativeInterface_TouchUp(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y);
 }
 //-------------------------------------------------------
 //-------------------------------------------------------
-void Java_com_chillisource_input_TouchInputNativeInterface_TouchDown(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y)
+void Java_com_chilliworks_chillisource_input_TouchInputNativeInterface_TouchDown(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y)
 {
 	CSBackend::Android::PointerSystem* pointerSystem = CSBackend::Android::TouchInputJavaInterface::GetPointerSystem();
 	CS_ASSERT(pointerSystem, "Touch Input Java Interface: No pointer system!");
@@ -85,7 +85,7 @@ void Java_com_chillisource_input_TouchInputNativeInterface_TouchDown(JNIEnv* in_
 }
 //-------------------------------------------------------
 //-------------------------------------------------------
-void Java_com_chillisource_input_TouchInputNativeInterface_TouchMoved(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y)
+void Java_com_chilliworks_chillisource_input_TouchInputNativeInterface_TouchMoved(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y)
 {
 	CSBackend::Android::PointerSystem* pointerSystem = CSBackend::Android::TouchInputJavaInterface::GetPointerSystem();
 	CS_ASSERT(pointerSystem, "Touch Input Java Interface: No pointer system!");
@@ -93,7 +93,7 @@ void Java_com_chillisource_input_TouchInputNativeInterface_TouchMoved(JNIEnv* in
 }
 //-------------------------------------------------------
 //-------------------------------------------------------
-void Java_com_chillisource_input_TouchInputNativeInterface_TouchUp(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y)
+void Java_com_chilliworks_chillisource_input_TouchInputNativeInterface_TouchUp(JNIEnv* in_environment, jobject in_this, s32 in_systemId, f32 in_x, f32 in_y)
 {
 	CSBackend::Android::PointerSystem* pointerSystem = CSBackend::Android::TouchInputJavaInterface::GetPointerSystem();
 	CS_ASSERT(pointerSystem, "Touch Input Java Interface: No pointer system!");

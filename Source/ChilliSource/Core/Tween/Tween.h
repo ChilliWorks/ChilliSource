@@ -182,6 +182,12 @@ namespace ChilliSource
 			/// @param Normalised T (0 - 1)
 			//-----------------------------------------------------------------------
 			void SetT(f32 in_t);
+            //-----------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Normalised T (0 - 1)
+            //-----------------------------------------------------------------------
+            f32 GetT() const;
 			//-----------------------------------------------------------------------
 			/// Uses the set interpolation function to calculate an interpolated
 			/// value from the current normalised T
@@ -449,6 +455,12 @@ namespace ChilliSource
 			m_currentTime = in_t * m_duration;
 			m_currentT = in_t;
 		}
+        //-----------------------------------------------------------------------
+        //-----------------------------------------------------------------------
+        template <typename TInterpFunc> f32 Tween<TInterpFunc>::GetT() const
+        {
+            return m_currentT;
+        }
 	}
 }
 

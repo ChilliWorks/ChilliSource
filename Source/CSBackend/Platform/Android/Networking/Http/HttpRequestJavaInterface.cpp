@@ -43,9 +43,9 @@ namespace CSBackend
 			mspJavaVM = in_javaVM;
 
 			//Setup Java calls
-			InitCallableStaticMethod("com/chillisource/networking/HttpRequestNativeInterface","HttpRequestWithHeaders", "(Ljava/lang/String;Z[Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;[I[Ljava/lang/String;[I[I)[B");
-			InitCallableStaticMethod("com/chillisource/networking/HttpRequestNativeInterface","IsConnected", "()Z");
-			InitCallableStaticMethod("com/chillisource/networking/HttpRequestNativeInterface","setConnectionTimeout", "(I)V");
+			InitCallableStaticMethod("com/chilliworks/chillisource/networking/HttpRequestNativeInterface","HttpRequestWithHeaders", "(Ljava/lang/String;Z[Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;[I[Ljava/lang/String;[I[I)[B");
+			InitCallableStaticMethod("com/chilliworks/chillisource/networking/HttpRequestNativeInterface","IsConnected", "()Z");
+			InitCallableStaticMethod("com/chilliworks/chillisource/networking/HttpRequestNativeInterface","setConnectionTimeout", "(I)V");
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------

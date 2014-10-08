@@ -45,7 +45,7 @@ namespace CSBackend
 		DeviceJavaInterface::DeviceJavaInterface()
 		: m_OSVersionCode(-1), m_numberOfCores(-1)
 		{
-			CreateNativeInterface("com/chillisource/core/DeviceNativeInterface");
+			CreateNativeInterface("com/chilliworks/chillisource/core/DeviceNativeInterface");
 			CreateMethodReference("getDefaultLocaleCode", "()Ljava/lang/String;");
 			CreateMethodReference("getDeviceModel", "()Ljava/lang/String;");
 			CreateMethodReference("getDeviceManufacturer", "()Ljava/lang/String;");

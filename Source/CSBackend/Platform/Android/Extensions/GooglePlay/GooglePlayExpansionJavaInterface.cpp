@@ -42,15 +42,15 @@ CSBackend::Android::GooglePlayExpansionSystem* g_expansionSystem = nullptr;
 
 extern "C"
 {
-	void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedInProgress(JNIEnv* inpEnv, jobject inpThis);
-	void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedComplete(JNIEnv* inpEnv, jobject inpThis);
-	void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedFailed(JNIEnv* inpEnv, jobject inpThis);
-	void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedFailedNoStorage(JNIEnv* inpEnv, jobject inpThis);
-	void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedPaused(JNIEnv* inpEnv, jobject inpThis);
-	void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedPausedNoWiFi(JNIEnv* inpEnv, jobject inpThis);
+	void Java_com_chilliworks_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedInProgress(JNIEnv* inpEnv, jobject inpThis);
+	void Java_com_chilliworks_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedComplete(JNIEnv* inpEnv, jobject inpThis);
+	void Java_com_chilliworks_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedFailed(JNIEnv* inpEnv, jobject inpThis);
+	void Java_com_chilliworks_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedFailedNoStorage(JNIEnv* inpEnv, jobject inpThis);
+	void Java_com_chilliworks_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedPaused(JNIEnv* inpEnv, jobject inpThis);
+	void Java_com_chilliworks_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedPausedNoWiFi(JNIEnv* inpEnv, jobject inpThis);
 }
 
-void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedInProgress(JNIEnv* inpEnv, jobject inpThis)
+void Java_com_chilliworks_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedInProgress(JNIEnv* inpEnv, jobject inpThis)
 {
 	if(g_expansionSystem)
 	{
@@ -58,7 +58,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 	}
 }
 
-void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedComplete(JNIEnv* inpEnv, jobject inpThis)
+void Java_com_chilliworks_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedComplete(JNIEnv* inpEnv, jobject inpThis)
 {
 	if(g_expansionSystem)
 	{
@@ -66,7 +66,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 	}
 }
 
-void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedFailed(JNIEnv* inpEnv, jobject inpThis)
+void Java_com_chilliworks_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedFailed(JNIEnv* inpEnv, jobject inpThis)
 {
 	if(g_expansionSystem)
 	{
@@ -74,7 +74,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 	}
 }
 
-void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedFailedNoStorage(JNIEnv* inpEnv, jobject inpThis)
+void Java_com_chilliworks_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedFailedNoStorage(JNIEnv* inpEnv, jobject inpThis)
 {
 	if(g_expansionSystem)
 	{
@@ -82,7 +82,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 	}
 }
 
-void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedPaused(JNIEnv* inpEnv, jobject inpThis)
+void Java_com_chilliworks_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedPaused(JNIEnv* inpEnv, jobject inpThis)
 {
 	if(g_expansionSystem)
 	{
@@ -90,7 +90,7 @@ void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownl
 	}
 }
 
-void Java_com_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedPausedNoWiFi(JNIEnv* inpEnv, jobject inpThis)
+void Java_com_chilliworks_chillisource_googleplay_ExpansionDownloaderNativeInterface_OnDownloadStateChangedPausedNoWiFi(JNIEnv* inpEnv, jobject inpThis)
 {
 	if(g_expansionSystem)
 	{
@@ -106,7 +106,7 @@ namespace CSBackend
 
 		GooglePlayExpansionJavaInterface::GooglePlayExpansionJavaInterface()
 		{
-			CreateNativeInterface("com/chillisource/googleplay/ExpansionDownloaderNativeInterface");
+			CreateNativeInterface("com/chilliworks/chillisource/googleplay/ExpansionDownloaderNativeInterface");
 
 			CreateMethodReference("Init", "()V");
 			CreateMethodReference("Download", "()V");

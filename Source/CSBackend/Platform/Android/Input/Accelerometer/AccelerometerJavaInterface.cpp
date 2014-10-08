@@ -42,7 +42,7 @@
 //------------------------------------------
 extern "C"
 {
-	void Java_com_chillisource_input_AccelerometerNativeInterface_UpdateAcceleration(JNIEnv* inpEnv, jobject inThis, f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ);
+	void Java_com_chilliworks_chillisource_input_AccelerometerNativeInterface_UpdateAcceleration(JNIEnv* inpEnv, jobject inThis, f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ);
 }
 //-------------------------------------------
 /// Update Acceleration
@@ -56,7 +56,7 @@ extern "C"
 /// @param The Y component of the acceleration.
 /// @param The Z component of the acceleration.
 //-------------------------------------------
-void Java_com_chillisource_input_AccelerometerNativeInterface_UpdateAcceleration(JNIEnv* inpEnv, jobject inThis, f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ)
+void Java_com_chilliworks_chillisource_input_AccelerometerNativeInterface_UpdateAcceleration(JNIEnv* inpEnv, jobject inThis, f32 infAccelerationX, f32 infAccelerationY, f32 infAccelerationZ)
 {
 	CSBackend::Android::AccelerometerJavaInterfaceSPtr pAccelerometerJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::AccelerometerJavaInterface>();
 	if (nullptr != pAccelerometerJI)
@@ -76,7 +76,7 @@ namespace CSBackend
 		AccelerometerJavaInterface::AccelerometerJavaInterface()
 			: mbListening(false)
 		{
-			CreateNativeInterface("com/chillisource/input/AccelerometerNativeInterface");
+			CreateNativeInterface("com/chilliworks/chillisource/input/AccelerometerNativeInterface");
 			CreateMethodReference("IsAvailable", "()Z");
 			CreateMethodReference("StartListening", "()V");
 			CreateMethodReference("StopListening", "()V");

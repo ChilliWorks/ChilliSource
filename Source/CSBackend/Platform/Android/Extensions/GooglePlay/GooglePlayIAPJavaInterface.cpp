@@ -58,7 +58,7 @@ extern "C"
 	/// @param Array of product Descriptions
 	/// @param Array of product Prices
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices);
+	void Java_com_chilliworks_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices);
 	//--------------------------------------------------------------------------------------
 	/// Called by Java when the transaction status updates
 	///
@@ -71,7 +71,7 @@ extern "C"
 	/// @param Transaction ID
 	/// @param Receipt
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint in_result, jstring in_productId, jstring in_transactionId, jstring instrReceipt);
+	void Java_com_chilliworks_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint in_result, jstring in_productId, jstring in_transactionId, jstring instrReceipt);
 	//--------------------------------------------------------------------------------------
 	/// Called by Java when the transaction close result returns
 	///
@@ -81,12 +81,12 @@ extern "C"
 	/// @param Transaction ID
 	/// @param Success or failure
 	//--------------------------------------------------------------------------------------
-	void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId, jboolean in_success);
+	void Java_com_chilliworks_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId, jboolean in_success);
 }
 
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices)
+void Java_com_chilliworks_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices)
 {
 	CSBackend::Android::GooglePlayIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::GooglePlayIAPJavaInterface>();
 	if (javaInterface != nullptr)
@@ -118,7 +118,7 @@ void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnProdu
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint in_result, jstring in_productId, jstring in_transactionId, jstring in_receipt)
+void Java_com_chilliworks_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint in_result, jstring in_productId, jstring in_transactionId, jstring in_receipt)
 {
 	CSBackend::Android::GooglePlayIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::GooglePlayIAPJavaInterface>();
 	if (javaInterface != nullptr)
@@ -133,7 +133,7 @@ void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTrans
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId, jboolean in_success)
+void Java_com_chilliworks_chillisource_googleplay_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId, jboolean in_success)
 {
 	CSBackend::Android::GooglePlayIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::GooglePlayIAPJavaInterface>();
 	if (javaInterface != nullptr)
@@ -193,7 +193,7 @@ namespace CSBackend
 		//--------------------------------------------------------------
 		GooglePlayIAPJavaInterface::GooglePlayIAPJavaInterface(const std::string& in_publicKey)
 		{
-			CreateNativeInterface("com/chillisource/googleplay/GooglePlayIAPNativeInterface");
+			CreateNativeInterface("com/chilliworks/chillisource/googleplay/GooglePlayIAPNativeInterface");
 			CreateMethodReference("Init", "(Ljava/lang/String;)V");
 			CreateMethodReference("IsPurchasingEnabled", "()Z");
 			CreateMethodReference("RequestProductDescriptions", "([Ljava/lang/String;)V");
