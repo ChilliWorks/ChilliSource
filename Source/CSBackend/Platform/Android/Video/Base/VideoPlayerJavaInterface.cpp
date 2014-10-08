@@ -43,8 +43,8 @@
 //------------------------------------------
 extern "C"
 {
-	void Java_com_chillisource_video_VideoPlayerNativeInterface_OnVideoComplete(JNIEnv* inpEnv, jobject inThis);
-	void Java_com_chillisource_video_VideoPlayerNativeInterface_OnUpdateSubtitles(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chilliworks_chillisource_video_VideoPlayerNativeInterface_OnVideoComplete(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chilliworks_chillisource_video_VideoPlayerNativeInterface_OnUpdateSubtitles(JNIEnv* inpEnv, jobject inThis);
 }
 //-------------------------------------------
 /// On Video Complete
@@ -54,7 +54,7 @@ extern "C"
 /// @param The jni environment.
 /// @param The java object calling the function.
 //-------------------------------------------
-void Java_com_chillisource_video_VideoPlayerNativeInterface_OnVideoComplete(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chilliworks_chillisource_video_VideoPlayerNativeInterface_OnVideoComplete(JNIEnv* inpEnv, jobject inThis)
 {
 	CSBackend::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::VideoPlayerJavaInterface>();
 
@@ -73,7 +73,7 @@ void Java_com_chillisource_video_VideoPlayerNativeInterface_OnVideoComplete(JNIE
 /// @param The jni environment.
 /// @param The java object calling the function.
 //-------------------------------------------
-void Java_com_chillisource_video_VideoPlayerNativeInterface_OnUpdateSubtitles(JNIEnv* inpEnv, jobject inThis)
+void Java_com_chilliworks_chillisource_video_VideoPlayerNativeInterface_OnUpdateSubtitles(JNIEnv* inpEnv, jobject inThis)
 {
 	CSBackend::Android::VideoPlayerJavaInterfaceSPtr pVideoPJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::VideoPlayerJavaInterface>();
 	if (pVideoPJI != nullptr)
@@ -92,7 +92,7 @@ namespace CSBackend
 		//--------------------------------------------------------------------------------------
 		VideoPlayerJavaInterface::VideoPlayerJavaInterface()
 		{
-			CreateNativeInterface("com/chillisource/video/VideoPlayerNativeInterface");
+			CreateNativeInterface("com/chilliworks/chillisource/video/VideoPlayerNativeInterface");
 			CreateMethodReference("Present", "(ZLjava/lang/String;ZZFFFF)V");
 			CreateMethodReference("GetTime", "()F");
 			CreateMethodReference("CreateSubtitle", "(Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;FFFF)J");

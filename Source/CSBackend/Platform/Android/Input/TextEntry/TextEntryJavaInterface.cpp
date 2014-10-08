@@ -51,7 +51,7 @@ extern "C"
 	/// @param The java object calling the function.
 	/// @param The new contents of the text buffer.
 	//-----------------------------------------------
-	void Java_com_chillisource_input_TextEntryNativeInterface_nativeOnTextChanged(JNIEnv* in_env, jobject in_this, jstring in_text);
+	void Java_com_chilliworks_chillisource_input_TextEntryNativeInterface_nativeOnTextChanged(JNIEnv* in_env, jobject in_this, jstring in_text);
 	//-----------------------------------------------
 	/// Native On Keyboard Dismissed
 	///
@@ -60,11 +60,11 @@ extern "C"
 	/// @param The jni environment.
 	/// @param The java object calling the function.
 	//-----------------------------------------------
-	void Java_com_chillisource_input_TextEntryNativeInterface_nativeOnKeyboardDismissed(JNIEnv* inpEnv, jobject inThis);
+	void Java_com_chilliworks_chillisource_input_TextEntryNativeInterface_nativeOnKeyboardDismissed(JNIEnv* inpEnv, jobject inThis);
 }
 //-----------------------------------------------
 //-----------------------------------------------
-void Java_com_chillisource_input_TextEntryNativeInterface_nativeOnTextChanged(JNIEnv* in_env, jobject in_this, jstring in_text)
+void Java_com_chilliworks_chillisource_input_TextEntryNativeInterface_nativeOnTextChanged(JNIEnv* in_env, jobject in_this, jstring in_text)
 {
 	CSBackend::Android::TextEntryJavaInterfaceSPtr textEntryJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::TextEntryJavaInterface>();
 	if (textEntryJI != nullptr)
@@ -77,7 +77,7 @@ void Java_com_chillisource_input_TextEntryNativeInterface_nativeOnTextChanged(JN
 }
 //-----------------------------------------------
 //-----------------------------------------------
-void Java_com_chillisource_input_TextEntryNativeInterface_nativeOnKeyboardDismissed(JNIEnv* in_env, jobject in_this)
+void Java_com_chilliworks_chillisource_input_TextEntryNativeInterface_nativeOnKeyboardDismissed(JNIEnv* in_env, jobject in_this)
 {
 	CSBackend::Android::TextEntryJavaInterfaceSPtr textEntryJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::TextEntryJavaInterface>();
 	if (textEntryJI != nullptr)
@@ -151,7 +151,7 @@ namespace CSBackend
 		//-----------------------------------------------
 		TextEntryJavaInterface::TextEntryJavaInterface()
 		{
-			CreateNativeInterface("com/chillisource/input/TextEntryNativeInterface");
+			CreateNativeInterface("com/chilliworks/chillisource/input/TextEntryNativeInterface");
 			CreateMethodReference("activate", "()V");
 			CreateMethodReference("deactivate", "()V");
 			CreateMethodReference("setKeyboardType", "(I)V");

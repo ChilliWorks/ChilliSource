@@ -50,11 +50,11 @@ extern "C"
 	/// @param The java object calling the function.
 	/// @param An integer representing the button pressed.
 	//-----------------------------------------------------
-	void Java_com_chillisource_input_DeviceButtonNativeInterface_onTriggered(JNIEnv* in_env, jobject in_this, s32 in_buttonPressed);
+	void Java_com_chilliworks_chillisource_input_DeviceButtonNativeInterface_onTriggered(JNIEnv* in_env, jobject in_this, s32 in_buttonPressed);
 }
 //-----------------------------------------------
 //-----------------------------------------------
-void Java_com_chillisource_input_DeviceButtonNativeInterface_onTriggered(JNIEnv* in_env, jobject in_this, s32 in_buttonPressed)
+void Java_com_chilliworks_chillisource_input_DeviceButtonNativeInterface_onTriggered(JNIEnv* in_env, jobject in_this, s32 in_buttonPressed)
 {
 	CSBackend::Android::DeviceButtonJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::DeviceButtonJavaInterface>();
 	if (javaInterface != nullptr)
@@ -73,7 +73,7 @@ namespace CSBackend
 		//-----------------------------------------------
 		DeviceButtonJavaInterface::DeviceButtonJavaInterface()
 		{
-			CreateNativeInterface("com/chillisource/input/DeviceButtonNativeInterface");
+			CreateNativeInterface("com/chilliworks/chillisource/input/DeviceButtonNativeInterface");
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------

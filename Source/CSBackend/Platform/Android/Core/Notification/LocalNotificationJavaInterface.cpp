@@ -42,10 +42,10 @@
 
 extern "C"
 {
-	void Java_com_chillisource_core_LocalNotificationNativeInterface_nativeOnNotificationReceived(JNIEnv* in_environment, jobject in_this, s32 in_id, jobjectArray in_keys, jobjectArray in_values, s32 in_priority);
+	void Java_com_chilliworks_chillisource_core_LocalNotificationNativeInterface_nativeOnNotificationReceived(JNIEnv* in_environment, jobject in_this, s32 in_id, jobjectArray in_keys, jobjectArray in_values, s32 in_priority);
 }
 
-void Java_com_chillisource_core_LocalNotificationNativeInterface_nativeOnNotificationReceived(JNIEnv* in_environment, jobject in_this, s32 in_id, jobjectArray in_keys, jobjectArray in_values, s32 in_priority)
+void Java_com_chilliworks_chillisource_core_LocalNotificationNativeInterface_nativeOnNotificationReceived(JNIEnv* in_environment, jobject in_this, s32 in_id, jobjectArray in_keys, jobjectArray in_values, s32 in_priority)
 {
 	CSCore::ParamDictionary params;
 
@@ -85,9 +85,9 @@ namespace CSBackend
 		//--------------------------------------------------------
 		LocalNotificationJavaInterface::LocalNotificationJavaInterface()
 		{
-			CreateNativeInterface("com/chillisource/core/LocalNotificationNativeInterface");
+			CreateNativeInterface("com/chilliworks/chillisource/core/LocalNotificationNativeInterface");
 			CreateMethodReference("scheduleNotificationForTime", "(I[Ljava/lang/String;[Ljava/lang/String;JI)V");
-			CreateMethodReference("getNotifications", "()[Lcom/chillisource/core/LocalNotification;");
+			CreateMethodReference("getNotifications", "()[Lcom/chilliworks/chillisource/core/LocalNotification;");
 			CreateMethodReference("cancelByID","(I)V");
 			CreateMethodReference("cancelAll","()V");
 		}
