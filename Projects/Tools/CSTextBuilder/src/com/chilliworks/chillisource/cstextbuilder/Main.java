@@ -118,7 +118,8 @@ public class Main
 	private static void printHelpText()
 	{
 		Logging.setLoggingLevel(LoggingLevel.k_verbose);
-		Logging.logVerbose("Usage: java -jar TextExtractor.jar --input <file path> --output <file path> --langauge <lanauage code> [" + Logging.k_paramLoggingLevel + " <level>] [--help]");
+		Logging.logVerbose("Usage: java -jar CSTextBuilder.jar " + k_paramInput + " <file path> " + k_paramOutput + " <file path> " + k_paramLanguage + " <language code> [" + 
+				Logging.k_paramLoggingLevel + " <level>] [" + k_paramHelp + "]");
 		Logging.logVerbose("Parameters:");
 		Logging.logVerbose(" " + k_paramInput + "(" + k_paramInputShort + "): The file path to the source .xls file.");
 		Logging.logVerbose(" " + k_paramOutput + "(" + k_paramOutputShort + "): The output file path.");
