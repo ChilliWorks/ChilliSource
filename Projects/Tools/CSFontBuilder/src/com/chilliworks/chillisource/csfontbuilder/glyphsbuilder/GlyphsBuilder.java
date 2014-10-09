@@ -1,7 +1,7 @@
 /**
- * FontBuilderOptions.java
+ * GlyphsBuilder.java
  * Chilli Source
- * Created by Ian Copland on 26/06/2014.
+ * Created by Ian Copland on 09/10/2014.
  * 
  * The MIT License (MIT)
  * 
@@ -26,25 +26,34 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.csfontbuilder;
+package com.chilliworks.chillisource.csfontbuilder.glyphsbuilder;
 
-import com.chilliworks.chillisource.texturepackerutils.TexturePacker.PlacementHeuristic;
-
-public class FontBuilderOptions
+import com.chilliworks.chillisource.toolutils.Logging;
+ 
+/**
+ * A static class containing methods for converting a vector font (TTF or OTF) to
+ * bitmap font glyphs with kerning info.
+ * 
+ * @author Ian Copland
+ */
+public final class GlyphsBuilder
 {
-	public String m_inputDirectoryPath = "";
-	public String m_outputFilePath = "";
-	public int m_fixedWidth = -1;
-	public int m_fixedHeight = -1;
-	public int[] m_validHeights = new int[0];
-	public int[] m_validWidths = new int[0];
-	public int m_maxWidth = 2048;
-	public int m_maxHeight = 2048;
-	public int m_divisibleBy = 1;
-	public PlacementHeuristic m_packingHeuristic = PlacementHeuristic.BOTTOMRIGHT;
-	public int m_lineHeight = 0;
-	public String m_imageCompression = "";
-	public String m_imageFormat = "";
-	public boolean m_imageDither = false;
-	public boolean m_imagePremultiplyAlpha = true;
+	/**
+	 * Converts the font described in the input options to bitmap font glyphs. Also
+	 * outputs kerning info for the glyphs.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_options - The builder options.
+	 * 
+	 * @return Whether or not the builder succeeded.
+	 */
+	public static boolean build(GlyphsBuilderOptions in_options)
+	{
+		Logging.logVerbose("Building glyphs with parameters: ");
+		Logging.logVerbose("  Input file path: " + in_options.m_inputFilePath);
+		Logging.logVerbose("  Output directory path: " + in_options.m_outputDirectoryPath);
+		
+		return true;
+	}
 }
