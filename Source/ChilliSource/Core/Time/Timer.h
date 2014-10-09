@@ -108,12 +108,12 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
+            /// @param Seconds after which connection is notified
 			/// @param Delegate
-			/// @param Seconds after which connection is notified
             ///
             /// @return Scoped connection
 			//----------------------------------------------------
-			EventConnectionUPtr OpenConnection(Delegate in_delegate, f32 in_periodSecs);
+			EventConnectionUPtr OpenConnection(f32 in_periodSecs, Delegate in_delegate);
             //-------------------------------------------------------------
             /// Close connection to the event. The connection will
             /// no longer be notified of the event

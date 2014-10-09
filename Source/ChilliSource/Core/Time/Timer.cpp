@@ -70,7 +70,7 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-        EventConnectionUPtr Timer::OpenConnection(Delegate in_delegate, f32 in_periodSecs)
+        EventConnectionUPtr Timer::OpenConnection(f32 in_periodSecs, Delegate in_delegate)
         {
             EventConnectionUPtr connection(new EventConnection());
             connection->SetOwningEvent(this);
