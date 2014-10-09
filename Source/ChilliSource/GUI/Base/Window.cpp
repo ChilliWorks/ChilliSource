@@ -43,11 +43,9 @@ namespace ChilliSource
 	namespace GUI
 	{
 		//-----------------------------------------------
-		/// Constructor
-		///
-		/// Creates the window with an absolute size
 		//-----------------------------------------------
-		Window::Window():mbListeningForTouches(false)
+		Window::Window()
+            : mbListeningForTouches(false)
 		{
 			//We are the root window of the view hierarchy
 			//Each hierarchy can only have on window
@@ -64,18 +62,21 @@ namespace ChilliSource
             
 			//Register for screen rotation events
 			m_screenResizedConnection = GetScreen()->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate(this, &Window::OnScreenResolutionChanged));
-		}
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
         void Window::StartListeningForPointerInput()
         {
             if(m_pointerSystem && !mbListeningForTouches)
 			{
-				m_pointerDownConnection = m_pointerSystem->GetPointerDownEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnPointerDown));
+				m_pointerDownConnection = m_pointerSystem->GetPointerDownEventFiltered().OpenConnection(Core::MakeDelegate(this, &Window::_OnPointerDown));
 				m_pointerMovedConnection = m_pointerSystem->GetPointerMovedEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnPointerMoved));
-				m_pointerUpConnection = m_pointerSystem->GetPointerUpEvent().OpenConnection(Core::MakeDelegate(this, &Window::_OnPointerUp));
+				m_pointerUpConnection = m_pointerSystem->GetPointerUpEventFiltered().OpenConnection(Core::MakeDelegate(this, &Window::_OnPointerUp));
                 mbListeningForTouches=true;
 			}
         }
-        
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
         void Window::StopListeningForPointerInput()
         {
         	//send up event for all currently active pointers
