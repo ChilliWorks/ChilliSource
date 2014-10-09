@@ -615,7 +615,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        bool Widget::GetInputConsumeEnabled() const
+        bool Widget::IsInputConsumeEnabled() const
         {
             return m_isInputConsumeEnabled;
         }

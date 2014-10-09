@@ -524,7 +524,7 @@ namespace ChilliSource
             ///
             /// @return Whether press and release input events are consumed
             //----------------------------------------------------------------------------------------
-            bool GetInputConsumeEnabled() const;
+            bool IsInputConsumeEnabled() const;
             //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
