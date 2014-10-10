@@ -73,7 +73,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        void StateManager::OnResume()
+        void StateManager::ResumeStates()
         {
             if(!m_states.empty())
 			{
@@ -82,7 +82,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        void StateManager::OnForeground()
+        void StateManager::ForegroundStates()
         {
             if(!m_states.empty())
 			{
@@ -91,7 +91,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        void StateManager::OnUpdate(f32 in_timeSinceLastUpdate)
+        void StateManager::UpdateStates(f32 in_timeSinceLastUpdate)
         {
             while(!m_operations.empty())
 			{
@@ -260,7 +260,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        void StateManager::OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate)
+        void StateManager::FixedUpdateStates(f32 in_fixedTimeSinceLastUpdate)
         {
             if(!m_states.empty())
 			{
@@ -269,7 +269,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        void StateManager::OnBackground()
+        void StateManager::BackgroundStates()
         {
             if(!m_states.empty())
 			{
@@ -278,7 +278,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        void StateManager::OnSuspend()
+        void StateManager::SuspendStates()
         {
             if(!m_states.empty())
 			{
@@ -302,7 +302,7 @@ namespace ChilliSource
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
-        void StateManager::OnMemoryWarning()
+        void StateManager::MemoryWarningStates()
         {
             for(std::vector<StateSPtr>::const_iterator it = m_states.begin(); it != m_states.end(); ++it)
             {

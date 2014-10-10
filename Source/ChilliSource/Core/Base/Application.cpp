@@ -256,15 +256,17 @@ namespace ChilliSource
 				m_pointerSystem->ProcessQueuedInput();
 			}
             
-            while((m_updateIntervalRemainder >= Application::GetUpdateInterval()) || m_isFirstFrame)
+            while((m_updateIntervalRemainder >= GetUpdateInterval()) || m_isFirstFrame)
             {
-                m_updateIntervalRemainder -=  Application::GetUpdateInterval();
+                m_updateIntervalRemainder -=  GetUpdateInterval();
                 
                 //update all of the application systems
                 for (const AppSystemUPtr& system : m_systems)
                 {
-                    system->OnFixedUpdate(Application::GetUpdateInterval());
+                    system->OnFixedUpdate(GetUpdateInterval());
                 }
+                
+                m_stateManager->FixedUpdateStates(GetUpdateInterval());
                 
                 m_isFirstFrame = false;
             }
@@ -300,6 +302,8 @@ namespace ChilliSource
             {
                 system->OnMemoryWarning();
             }
+            
+            m_stateManager->MemoryWarningStates();
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -310,6 +314,8 @@ namespace ChilliSource
 				m_shouldNotifyConnectionsForegroundEvent = false;
                 return;
             }
+            
+            m_stateManager->BackgroundStates();
             
             for (const AppSystemUPtr& system : m_systems)
             {
@@ -330,6 +336,8 @@ namespace ChilliSource
             
 			m_isSuspending = true;
             
+            m_stateManager->SuspendStates();
+            
             //suspend all application systems in reverse order.
             for (std::vector<AppSystemUPtr>::const_reverse_iterator it = m_systems.rbegin(); it != m_systems.rend(); ++it)
             {
@@ -345,10 +353,10 @@ namespace ChilliSource
         void Application::Destroy()
         {
 			m_taskScheduler->Destroy();
+            
+            OnDestroy();
 
             m_stateManager->DestroyStates();
-
-            OnDestroy();
 
             //suspend all application systems in reverse order.
             for (std::vector<AppSystemUPtr>::const_reverse_iterator it = m_systems.rbegin(); it != m_systems.rend(); ++it)
@@ -465,6 +473,8 @@ namespace ChilliSource
             {
                 system->OnUpdate(in_deltaTime);
             }
+            
+            m_stateManager->UpdateStates(in_deltaTime);
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -481,6 +491,8 @@ namespace ChilliSource
             {
                 system->OnResume();
             }
+            
+            m_stateManager->ResumeStates();
 			
 			CS_LOG_VERBOSE("App Finished Resuming...");
 		}
@@ -492,6 +504,8 @@ namespace ChilliSource
             {
                 system->OnForeground();
             }
+            
+            m_stateManager->ForegroundStates();
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
