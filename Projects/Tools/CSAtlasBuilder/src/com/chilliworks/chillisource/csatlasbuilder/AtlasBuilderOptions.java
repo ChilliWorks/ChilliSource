@@ -45,13 +45,12 @@ public class AtlasBuilderOptions
 	public int[] m_validWidths = new int[0];
 	public int m_maxWidth = 2048;
 	public int m_maxHeight = 2048;
-	public int m_divisibleBy = 1;
+	public int m_divisibleBy = 4;
 	public boolean m_crop = true;
-	public int m_padding = 0;
+	public int m_padding = 1;
 	public int m_innerPadding = 0;
-	public int m_extrude = 0;
+	public int m_extrude = 1;
 	public PlacementHeuristic m_packingHeuristic = PlacementHeuristic.BOTTOMRIGHT;
-	public int m_lineHeight = 0;
 	public String m_imageCompression = "";
 	public String m_imageFormat = "";
 	public boolean m_imageDither = false;
