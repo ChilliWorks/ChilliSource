@@ -2,6 +2,7 @@
 
 Version 1.1.1, 2014-10-10:
 	- All App Systems now correctly receive life cycle events prior to States.
+	- Simplified the command line interface for the ColladaToCSModel and ColladaToCSAnim tools and re-added the ability to change coordinate system handedness.
 	- Updated the package name in all java code from com.chillisource.* to com.chilliworks.chillisource.*
 	- Fixed a bug in Colour::Clamp() where by default alpha was clamping between 1 and 1 rather than 0 and 1.
 	- Swapped the parameters in Timer::OpenConnection() to be more lambda friendly.
