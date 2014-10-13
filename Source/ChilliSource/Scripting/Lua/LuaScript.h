@@ -160,6 +160,8 @@ namespace ChilliSource
                 {
                     CS_LOG_FATAL("Error calling Lua function " + std::string(in_functionName) + ": " + std::string(lua_tostring(m_luaVM, -1)));
                 }
+                
+                lua_pop(m_luaVM, 1);
             }
             //-------------------------------------------------------
             /// Destructor
