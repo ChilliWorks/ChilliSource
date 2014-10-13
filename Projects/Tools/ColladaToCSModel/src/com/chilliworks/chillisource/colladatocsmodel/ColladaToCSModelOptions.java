@@ -1,5 +1,5 @@
 /**
- * CSModelConversionParameters.java
+ * ColladaToCSModelOptions.java
  * Chilli Source
  * Created by Ian Copland on 15/01/2013.
  * 
@@ -28,34 +28,25 @@
 
 package com.chilliworks.chillisource.colladatocsmodel;
 
-public class CSModelConversionParameters 
+/**
+ * A container for the input options for the Collada To CSModel tool.
+ * 
+ * @author Ian Copland
+ */
+public final class ColladaToCSModelOptions 
 {
-	public String mstrInputFilepath;
-	public String mstrOutputFilepath;
-	public boolean mbHasAnimationData;
-	public boolean mbVertexHasPosition;
-	public boolean mbVertexHasTexCoords;
-	public boolean mbVertexHasNormal;
-	public boolean mbVertexHasColour;
-	public boolean mbVertexHasWeights;
-	public boolean mbVertexHasJointIndices;
-	public boolean mbSwapYAndZ;
-	public boolean mbFlipVerticalTexCoords;
-	public boolean mbCombineMeshes;
+	public String m_inputFilePath = "";
+	public String m_outputFilePath = "";
+	public boolean m_animated = false;
+	public boolean m_swapHandedness = false;
+	public boolean m_swapYAndZ = false;
+	public boolean m_flipVerticalTexCoords = true;
+	public boolean m_combineMeshes = true;
 	
-	public CSModelConversionParameters()
-	{
-		mstrInputFilepath 		= new String();
-		mstrOutputFilepath 		= new String();
-		mbHasAnimationData 		= false;
-		mbVertexHasPosition 	= false;
-		mbVertexHasTexCoords 	= false;
-		mbVertexHasNormal 		= false;
-		mbVertexHasColour 		= false;
-		mbVertexHasWeights 		= false;
-		mbVertexHasJointIndices = false;
-		mbSwapYAndZ 			= false;
-		mbFlipVerticalTexCoords = false;
-		mbCombineMeshes			= false;
-	}
+	public boolean m_vertexHasPosition = false;
+	public boolean m_vertexHasTexCoords = false;
+	public boolean m_vertexHasNormal = false;
+	public boolean m_vertexHasColour = false;
+	public boolean m_vertexHasWeights = false;
+	public boolean m_vertexHasJointIndices = false;
 }

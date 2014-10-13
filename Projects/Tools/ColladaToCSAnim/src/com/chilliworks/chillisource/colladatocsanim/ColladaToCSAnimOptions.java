@@ -1,5 +1,5 @@
 /**
- * CSAnimConversionParameters.java
+ * ColladaToCSAnimOptions.java
  * Chilli Source
  * Created by Ian Copland on 16/01/2013.
  * 
@@ -28,18 +28,15 @@
 
 package com.chilliworks.chillisource.colladatocsanim;
 
-public class CSAnimConversionParameters 
+/**
+ * A container for the options for the Collada To CSAnim tool.
+ * 
+ * @author Ian Copland
+ */
+public final class ColladaToCSAnimOptions 
 {
-	public String mstrInputFilepath;
-	public String mstrOutputFilepath;
-	public boolean mbSwapYAndZ;
-	public boolean mbFlipVerticalTexCoords;
-	
-	public CSAnimConversionParameters()
-	{
-		mstrInputFilepath 		= new String();
-		mstrOutputFilepath 		= new String();
-		mbSwapYAndZ 		= false;
-		mbFlipVerticalTexCoords = false;
-	}
+	public String m_inputFilePath = new String();
+	public String m_outputFilePath = new String();
+	public boolean m_swapHandedness = false;
+	public boolean m_swapYAndZ = false;
 }

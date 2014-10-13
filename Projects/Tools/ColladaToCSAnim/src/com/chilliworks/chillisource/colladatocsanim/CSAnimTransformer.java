@@ -32,39 +32,75 @@ import com.chilliworks.chillisource.colladatocsanim.csanim.*;
 import com.chilliworks.chillisource.toolutils.Quaternion;
 import com.chilliworks.chillisource.toolutils.Vector3;
 
-public class CSAnimTransformer 
+/**
+ * Performs transformations on the output model data, such as coordinate system
+ * conversions.
+ * 
+ * @author Ian Copland
+ *
+ */
+public final class CSAnimTransformer 
 {
-	
 	/**
-	 * Constructor
+	 * This applies all transformations requested in the input parameters, such as
+	 * swapping the handedness of the output coordinate system.
+	 *
+	 * @author Ian Copland
+	 * 
+	 * @param in_conversionParams - The tools input parameters.
+	 * @param in_anim - The animation to apply transformations to.
 	 */
-	public CSAnimTransformer()
+	public static void transform(ColladaToCSAnimOptions in_conversionParams, CSAnim in_anim)
 	{
-		
-	}
-	
-	/**
-	 * This modifies the data in the MoModel to the desired output. for example, changing from Z as up to Y as up.
-	 * @param inConversionParams
-	 * @param inMoModel
-	 */
-	public void Modify(CSAnimConversionParameters inConversionParams, CSAnim inMoModel)
-	{
-		if (inConversionParams.mbSwapYAndZ == true)
+		if (in_conversionParams.m_swapHandedness == true)
 		{
-			SwapYAndZ(inMoModel);
+			swapHandedness(in_anim);
+		}
+		
+		if (in_conversionParams.m_swapYAndZ == true)
+		{
+			swapYAndZ(in_anim);
 		}
 	}
-	
 	/**
-	 * Switches the x and y in the transform, such that Y is now the up axis.
+	 * Swaps the X and Y component of all data in the output animation. This allows conversion
+	 * between different coordinate systems.
+	 * 
+	 * @author Ian Copland
+	 * 
 	 * @param inMoModel
 	 */
-	private void SwapYAndZ(CSAnim inAnim)
+	private static void swapHandedness(CSAnim in_anim)
 	{
-		for (int i = 0; i < inAnim.mFrames.size(); i++)
+		for (int i = 0; i < in_anim.mFrames.size(); i++)
 		{
-			CSAnimFrame frame = inAnim.mFrames.get(i);
+			CSAnimFrame frame = in_anim.mFrames.get(i);
+			
+			for (int j = 0; j < frame.mNodeTranslations.size(); j++)
+			{
+				Vector3 translation = frame.mNodeTranslations.get(j);
+				Quaternion orientation = frame.mNodeOrienations.get(j);
+				
+				translation.y = -translation.y;
+				
+				orientation.y = -orientation.y;
+				orientation.w = -orientation.w;
+			}
+		}
+	}
+	/**
+	 * Swaps the X and Y component of all data in the output animation. This allows conversion
+	 * between different coordinate systems.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param inMoModel
+	 */
+	private static void swapYAndZ(CSAnim in_anim)
+	{
+		for (int i = 0; i < in_anim.mFrames.size(); i++)
+		{
+			CSAnimFrame frame = in_anim.mFrames.get(i);
 			
 			for (int j = 0; j < frame.mNodeTranslations.size(); j++)
 			{
