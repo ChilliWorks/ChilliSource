@@ -32,75 +32,83 @@ import com.chilliworks.chillisource.toolutils.Logging;
 import com.chilliworks.chillisource.toolutils.StringUtils;
 import com.chilliworks.chillisource.toolutils.Logging.LoggingLevel;
 
-public class Main 
+/**
+ * The entry point into the application.
+ * 
+ * @author Ian Copland
+ */
+public final class Main 
 {
-	private static final String PARAM_NAME_INPUT 					= "--input";
-	private static final String PARAM_NAME_OUTPUT 					= "--output";
-	private static final String PARAM_NAME_TRANSFORMS				= "--transforms";
-	private static final String PARAM_NAME_HELP						= "--help";
-	private static final String PARAM_NAME_INPUT_SHORT 				= "-i";
-	private static final String PARAM_NAME_OUTPUT_SHORT 			= "-o";
-	private static final String PARAM_NAME_TRANSFORMS_SHORT			= "-t";
-	private static final String PARAM_NAME_HELP_SHORT				= "-h";
-	private static final char TRANSFORM_SWAPYANDZ					= 'y';
-	
+	private static final String k_paramNameInput = "--input";
+	private static final String k_paramNameOutput = "--output";
+	private static final String k_paramNameSwapHandedness = "--swaphandedness";
+	private static final String k_paramNameSwapYAndZ = "--swapyandz";
+	private static final String k_paramNameHelp = "--help";
+	private static final String k_shortParamNameInput = "-i";
+	private static final String k_shortParamNameOutput = "-o";
+	private static final String k_shortParamNameSwapHandedness = "-sh";
+	private static final String k_shortParamNameSwapYAndZ = "-sy";
+	private static final String k_shortParamNameHelp = "-h";
+
 	/**
-	 * Private members
-	 */
-	
-	/**Main
 	 * Entry point for the application.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param The input arguments.
 	 */
-	public static void main(String[] inastrArgs) throws Exception 
+	public static void main(String[] in_args) throws Exception 
 	{
 		//setup the logger.
-		String[] arguments = Logging.start(inastrArgs);
+		String[] arguments = Logging.start(in_args);
 		
 		//check the number of arguments make sense.
 		if (arguments.length == 0)
 		{
-			PrintHelpText();
+			printHelpText();
 			return;
 		}
 		
 		//gather up commands
-		CSAnimConversionParameters params = new CSAnimConversionParameters();
+		ColladaToCSAnimOptions params = new ColladaToCSAnimOptions();
 		for (int i = 0; i < arguments.length; ++i)
 		{
 			//input
-			if (arguments[i].equalsIgnoreCase(PARAM_NAME_INPUT) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_INPUT_SHORT) == true)
+			if (arguments[i].equalsIgnoreCase(k_paramNameInput) == true || arguments[i].equalsIgnoreCase(k_shortParamNameInput) == true)
 			{
 				if (i+1 < arguments.length)
-					params.mstrInputFilepath = StringUtils.standardiseFilePath(arguments[i+1]);
+					params.m_inputFilePath = StringUtils.standardiseFilePath(arguments[i+1]);
 				else
 					Logging.logFatal("No input file provided!");
 				i++;
 			}
 			
 			//output
-			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_OUTPUT) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_OUTPUT_SHORT) == true)
+			else if (arguments[i].equalsIgnoreCase(k_paramNameOutput) == true || arguments[i].equalsIgnoreCase(k_shortParamNameOutput) == true)
 			{
 				if (i+1 < arguments.length)
-					params.mstrOutputFilepath = StringUtils.standardiseFilePath(arguments[i+1]);
+					params.m_outputFilePath = StringUtils.standardiseFilePath(arguments[i+1]);
 				else
 					Logging.logFatal("No output file provided!");
 				i++;
 			}
 			
-			//transforms
-			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_TRANSFORMS) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_TRANSFORMS_SHORT) == true)
+			//swap handedness
+			else if (arguments[i].equalsIgnoreCase(k_paramNameSwapHandedness) == true || arguments[i].equalsIgnoreCase(k_shortParamNameSwapHandedness) == true)
 			{
-				if (i+1 < arguments.length)
-					ParseTransforms(params, arguments[i+1]);
-				else
-					Logging.logFatal("No transforms provided!");
-				i++;
+				params.m_swapHandedness = true;
+			}
+			
+			//swap y and z
+			else if (arguments[i].equalsIgnoreCase(k_paramNameSwapYAndZ) == true || arguments[i].equalsIgnoreCase(k_shortParamNameSwapYAndZ) == true)
+			{
+				params.m_swapYAndZ = true;
 			}
 			
 			//help
-			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_HELP) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_HELP_SHORT) == true)
+			else if (arguments[i].equalsIgnoreCase(k_paramNameHelp) == true || arguments[i].equalsIgnoreCase(k_shortParamNameHelp) == true)
 			{
-				PrintHelpText();
+				printHelpText();
 				return;
 			}
 			
@@ -111,49 +119,32 @@ public class Main
 			}
 		}
 		
-		if (params.mstrInputFilepath.length() == 0 || params.mstrOutputFilepath.length() == 0)
+		if (params.m_inputFilePath.length() == 0 || params.m_outputFilePath.length() == 0)
 		{
 			Logging.logFatal("Must provide an input and output file path.");
 		}
 		
-		CSAnimConverterTool converterTool = new CSAnimConverterTool();
-		converterTool.Convert(params);
+		ColladaToCSAnim.Convert(params);
 		
 		Logging.finish();
 	}
-	//-------------------------------------------------------------------
-	/// Parse Transforms
-	///
-	/// Parses a string of modifications.
-	///
-	/// @param the conversion params.
-	/// @param the string to parse.
-	//-------------------------------------------------------------------
-	static void ParseTransforms(CSAnimConversionParameters inParams, String instrModifications)
-	{
-		for (int i = 0; i < instrModifications.length(); ++i)
-		{
-			if (instrModifications.charAt(i) == TRANSFORM_SWAPYANDZ)
-				inParams.mbSwapYAndZ = true;
-		}
-	}
-	//-------------------------------------------------------------------
-	/// Print Help Text
-	///
-	/// Prints out instructions on how to use this tool.
-	//-------------------------------------------------------------------
-	public static void PrintHelpText()
+	/**
+	 * Prints out instructions on how to use this tool. This will print regardless
+	 * of the logging level.
+	 * 
+	 * @author Ian Copland
+	 */
+	public static void printHelpText()
 	{
 		Logging.setLoggingLevel(LoggingLevel.k_verbose);
-		Logging.logVerbose("Usage: java -jar ColladaToCSAnim.jar " + PARAM_NAME_INPUT + " <file path> " + PARAM_NAME_OUTPUT + " <file path> [" + PARAM_NAME_TRANSFORMS + " <transforms>] [" + PARAM_NAME_HELP + "] [" + Logging.k_paramLoggingLevel + " <level>]");
+		Logging.logVerbose("Usage: java -jar ColladaToCSAnim.jar " + k_paramNameInput + " <file path> " + k_paramNameOutput + " <file path> [" + k_paramNameSwapHandedness + " <transforms>] [" + k_paramNameHelp + "] [" + Logging.k_paramLoggingLevel + " <level>]");
 		Logging.logVerbose("Parameters:");
-		Logging.logVerbose(" " + PARAM_NAME_INPUT + "(" + PARAM_NAME_INPUT_SHORT + "): The input filename.");
-		Logging.logVerbose(" " + PARAM_NAME_OUTPUT + "(" + PARAM_NAME_OUTPUT_SHORT + "): The output filename.");
-		Logging.logVerbose(" " + PARAM_NAME_TRANSFORMS + "(" + PARAM_NAME_TRANSFORMS_SHORT + "): [Optional] A list of alterations to the output data.");
+		Logging.logVerbose(" " + k_paramNameInput + "(" + k_shortParamNameInput + "): The input filename.");
+		Logging.logVerbose(" " + k_paramNameOutput + "(" + k_shortParamNameOutput + "): The output filename.");
+		Logging.logVerbose(" " + k_paramNameSwapHandedness + "(" + k_shortParamNameSwapHandedness + "): [Optional] Swaps the handedness of the output coordinate system.");
+		Logging.logVerbose(" " + k_paramNameSwapYAndZ + "(" + k_shortParamNameSwapYAndZ + "): [Optional] Swaps the Y and Z of the output coordinate system.");
 		Logging.logVerbose(" " + Logging.k_paramLoggingLevel + "(" + Logging.k_paramLoggingLevelShort + "): [Optional] The level of messages to log.");
-		Logging.logVerbose(" " + PARAM_NAME_HELP + "(" + PARAM_NAME_HELP_SHORT + "): [Optional] Display this help message.");
-		Logging.logVerbose("Transforms:");
-		Logging.logVerbose(" " + TRANSFORM_SWAPYANDZ + ": Z and Y coordinates of output data will be swapped.");
+		Logging.logVerbose(" " + k_paramNameHelp + "(" + k_shortParamNameHelp + "): [Optional] Display this help message.");
 		Logging.logVerbose("Logging Levels:");
 		Logging.logVerbose(" " + Logging.k_loggingLevelNone + ": No logging.");
 		Logging.logVerbose(" " + Logging.k_loggingLevelFatal + ": Only log fatal errors.");

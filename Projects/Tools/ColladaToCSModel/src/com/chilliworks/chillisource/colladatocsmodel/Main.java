@@ -31,87 +31,87 @@ package com.chilliworks.chillisource.colladatocsmodel;
 import com.chilliworks.chillisource.toolutils.*;
 import com.chilliworks.chillisource.toolutils.Logging.LoggingLevel;
 
-public class Main 
+/**
+ * Provides the entry point into the application.
+ * 
+ * @author Ian Copland
+ */
+public final class Main 
 {
-	//-------------------------------------------------------------------
-	/// Constants
-	//-------------------------------------------------------------------
-	private static final String PARAM_NAME_INPUT 					= "--input";
-	private static final String PARAM_NAME_OUTPUT 					= "--output";
-	private static final String PARAM_NAME_FEATURES					= "--features";
-	private static final String PARAM_NAME_VERTEXDECLARATION		= "--vertexdeclaration";
-	private static final String PARAM_NAME_TRANSFORMS				= "--transforms";
-	private static final String PARAM_NAME_HELP						= "--help";
-	private static final String PARAM_NAME_INPUT_SHORT 				= "-i";
-	private static final String PARAM_NAME_OUTPUT_SHORT				= "-o";
-	private static final String PARAM_NAME_FEATURES_SHORT			= "-f";
-	private static final String PARAM_NAME_VERTEXDECLARATION_SHORT	= "-v";
-	private static final String PARAM_NAME_TRANSFORMS_SHORT			= "-t";
-	private static final String PARAM_NAME_HELP_SHORT				= "-h";
-	private static final char FEATURE_HASANIMATIONDATA				= 'a';
-	private static final char VERTEX_ELEMENT_POSITION				= 'p';
-	private static final char VERTEX_ELEMENT_TEXCOORD				= 't';
-	private static final char VERTEX_ELEMENT_NORMAL					= 'n';
-	private static final char VERTEX_ELEMENT_COLOUR					= 'c';
-	private static final char VERTEX_ELEMENT_WEIGHTS				= 'w';
-	private static final char VERTEX_ELEMENT_JOINT_INDICES			= 'j';
-	private static final char MODIFICATION_SWAPYANDZ				= 'y';
-	private static final char MODIFICATION_FLIPYTEXCOORDS			= 'f';
-	private static final char MODIFICATION_COMBINEMESHES			= 'c';
-	//-------------------------------------------------------------------
-	/// Main
-	///
-	/// Entry point into the application.
-	//-------------------------------------------------------------------
-	public static void main(String[] inastrArgs) throws Exception 
+	private static final String k_paramNameInput = "--input";
+	private static final String k_paramNameOutput = "--output";
+	private static final String k_paramNameVertexFormat = "--vertexformat";
+	private static final String k_paramNameAnimated = "--animated";
+	private static final String k_paramNameSwapHandedness = "--swaphandedness";
+	private static final String k_paramNameSwapYAndZ = "--swapyandz";
+	private static final String k_paramNameDisableMeshBatch = "--disablemeshbatch";
+	private static final String k_paramNameDisabletTexCoordFlip = "--disabletexcoordflip";
+	private static final String k_paramNameHelp = "-help";
+	private static final String k_shortParamNameInput = "-i";
+	private static final String k_shortParamNameOutput = "-o";
+	private static final String k_shortParamNameVertexFormat = "-vf";
+	private static final String k_shortParamNameAnimated = "-a";
+	private static final String k_shortParamNameSwapHandedness = "-sh";
+	private static final String k_shortParamNameSwapYAndZ = "-sy";
+	private static final String k_shortParamNameDisableMeshBatch = "-dmb";
+	private static final String k_shortParamNameDisabletTexCoordFlip = "-dtf";
+	private static final String k_shortParamNameHelp = "-h";
+	private static final char k_vertexElementPosition = 'p';
+	private static final char k_vertexElementTexCoord = 't';
+	private static final char k_vertexElementNormal = 'n';
+	private static final char k_vertexElementColour = 'c';
+	private static final char k_vertexElementWeights = 'w';
+	private static final char k_vertexElementJoints = 'j';
+	
+	/**
+	 * The entry point into the application.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_args - The input arguments.
+	 */
+	public static void main(String[] in_args) throws Exception 
 	{
 		//setup the logger.
-		String[] arguments = Logging.start(inastrArgs);
+		String[] arguments = Logging.start(in_args);
 		
 		//check the number of arguments make sense.
 		if (arguments.length == 0)
 		{
-			PrintHelpText();
+			printHelpText();
 			return;
 		}
 		
 		//gather up commands
-		CSModelConversionParameters params = new CSModelConversionParameters();
+		boolean vertexDeclarationProvided = false;
+		ColladaToCSModelOptions params = new ColladaToCSModelOptions();
 		for (int i = 0; i < arguments.length; ++i)
 		{
 			//input
-			if (arguments[i].equalsIgnoreCase(PARAM_NAME_INPUT) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_INPUT_SHORT) == true)
+			if (arguments[i].equalsIgnoreCase(k_paramNameInput) == true || arguments[i].equalsIgnoreCase(k_shortParamNameInput) == true)
 			{
 				if (i+1 < arguments.length)
-					params.mstrInputFilepath = StringUtils.standardiseFilePath(arguments[i+1]);
+					params.m_inputFilePath = StringUtils.standardiseFilePath(arguments[i+1]);
 				else
 					Logging.logFatal("No input file provided!");
 				i++;
 			}
 			
 			//output
-			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_OUTPUT) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_OUTPUT_SHORT) == true)
+			else if (arguments[i].equalsIgnoreCase(k_paramNameOutput) == true || arguments[i].equalsIgnoreCase(k_shortParamNameOutput) == true)
 			{
 				if (i+1 < arguments.length)
-					params.mstrOutputFilepath = StringUtils.standardiseFilePath(arguments[i+1]);
+					params.m_outputFilePath = StringUtils.standardiseFilePath(arguments[i+1]);
 				else
 					Logging.logFatal("No output file provided!");
 				i++;
 			}
 			
-			//features
-			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_FEATURES) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_FEATURES_SHORT) == true)
-			{
-				if (i+1 < arguments.length)
-					ParseFeatures(params, arguments[i+1]);
-				else
-					Logging.logFatal("No features provided!");
-				i++;
-			}
-			
 			//vertex declaration
-			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_VERTEXDECLARATION) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_VERTEXDECLARATION_SHORT) == true)
+			else if (arguments[i].equalsIgnoreCase(k_paramNameVertexFormat) == true || arguments[i].equalsIgnoreCase(k_shortParamNameVertexFormat) == true)
 			{
+				vertexDeclarationProvided = true;
+				
 				if (i+1 < arguments.length)
 					ParseVertexDeclaration(params, arguments[i+1]);
 				else
@@ -119,20 +119,40 @@ public class Main
 				i++;
 			}
 			
-			//modifications
-			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_TRANSFORMS) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_TRANSFORMS_SHORT) == true)
+			//animated
+			else if (arguments[i].equalsIgnoreCase(k_paramNameAnimated) == true || arguments[i].equalsIgnoreCase(k_shortParamNameAnimated) == true)
 			{
-				if (i+1 < arguments.length)
-					ParseModifications(params, arguments[i+1]);
-				else
-					Logging.logFatal("No modifications provided!");
-				i++;
+				params.m_animated = true;
+			}
+			
+			//animated
+			else if (arguments[i].equalsIgnoreCase(k_paramNameSwapHandedness) == true || arguments[i].equalsIgnoreCase(k_shortParamNameSwapHandedness) == true)
+			{
+				params.m_swapHandedness = true;
+			}
+			
+			//animated
+			else if (arguments[i].equalsIgnoreCase(k_paramNameSwapYAndZ) == true || arguments[i].equalsIgnoreCase(k_shortParamNameSwapYAndZ) == true)
+			{
+				params.m_swapYAndZ = true;
+			}
+			
+			//animated
+			else if (arguments[i].equalsIgnoreCase(k_paramNameDisableMeshBatch) == true || arguments[i].equalsIgnoreCase(k_shortParamNameDisableMeshBatch) == true)
+			{
+				params.m_combineMeshes = false;
+			}
+			
+			//animated
+			else if (arguments[i].equalsIgnoreCase(k_paramNameDisabletTexCoordFlip) == true || arguments[i].equalsIgnoreCase(k_shortParamNameDisabletTexCoordFlip) == true)
+			{
+				params.m_flipVerticalTexCoords = false;
 			}
 			
 			//help
-			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_HELP) == true || arguments[i].equalsIgnoreCase(PARAM_NAME_HELP_SHORT) == true)
+			else if (arguments[i].equalsIgnoreCase(k_paramNameHelp) == true || arguments[i].equalsIgnoreCase(k_shortParamNameHelp) == true)
 			{
-				PrintHelpText();
+				printHelpText();
 				return;
 			}
 			
@@ -143,29 +163,17 @@ public class Main
 			}
 		}
 		
+		if (vertexDeclarationProvided == false)
+		{
+			applyDefaultVertexFormat(params);
+		}
+		
 		//check for weird combinations of parameters
 		ParamsChecker.CheckParameters(params);
 		
-		CSModelConverterTool converterTool = new CSModelConverterTool();
-		converterTool.Convert(params);
+		ColladaToCSModel.convert(params);
 		
 		Logging.finish();
-	}
-	//-------------------------------------------------------------------
-	/// Parse Features
-	///
-	/// Parses a string of features.
-	///
-	/// @param the conversion params.
-	/// @param the string to parse.
-	//-------------------------------------------------------------------
-	static void ParseFeatures(CSModelConversionParameters inParams, String instrFeatures)
-	{
-		for (int i = 0; i < instrFeatures.length(); ++i)
-		{
-			if (instrFeatures.charAt(i) == FEATURE_HASANIMATIONDATA)
-				inParams.mbHasAnimationData = true;
-		}
 	}
 	//-------------------------------------------------------------------
 	/// Parse Vertex Declaration
@@ -175,74 +183,77 @@ public class Main
 	/// @param the conversion params.
 	/// @param the string to parse.
 	//-------------------------------------------------------------------
-	static void ParseVertexDeclaration(CSModelConversionParameters inParams, String instrVertexDecl)
+	static void ParseVertexDeclaration(ColladaToCSModelOptions inParams, String instrVertexDecl)
 	{
 		for (int i = 0; i < instrVertexDecl.length(); ++i)
 		{
-			if (instrVertexDecl.charAt(i) == VERTEX_ELEMENT_POSITION)
-				inParams.mbVertexHasPosition = true;
-			if (instrVertexDecl.charAt(i) == VERTEX_ELEMENT_NORMAL)
-				inParams.mbVertexHasNormal = true;
-			if (instrVertexDecl.charAt(i) == VERTEX_ELEMENT_TEXCOORD)
-				inParams.mbVertexHasTexCoords = true;
-			if (instrVertexDecl.charAt(i) == VERTEX_ELEMENT_COLOUR)
-				inParams.mbVertexHasColour = true;
-			if (instrVertexDecl.charAt(i) == VERTEX_ELEMENT_WEIGHTS)
-				inParams.mbVertexHasWeights = true;
-			if (instrVertexDecl.charAt(i) == VERTEX_ELEMENT_JOINT_INDICES)
-				inParams.mbVertexHasJointIndices = true;
+			if (instrVertexDecl.charAt(i) == k_vertexElementPosition)
+				inParams.m_vertexHasPosition = true;
+			if (instrVertexDecl.charAt(i) == k_vertexElementNormal)
+				inParams.m_vertexHasNormal = true;
+			if (instrVertexDecl.charAt(i) == k_vertexElementTexCoord)
+				inParams.m_vertexHasTexCoords = true;
+			if (instrVertexDecl.charAt(i) == k_vertexElementColour)
+				inParams.m_vertexHasColour = true;
+			if (instrVertexDecl.charAt(i) == k_vertexElementWeights)
+				inParams.m_vertexHasWeights = true;
+			if (instrVertexDecl.charAt(i) == k_vertexElementJoints)
+				inParams.m_vertexHasJointIndices = true;
 		}
 	}
-	//-------------------------------------------------------------------
-	/// Parse Modifications
-	///
-	/// Parses a string of modifications.
-	///
-	/// @param the conversion params.
-	/// @param the string to parse.
-	//-------------------------------------------------------------------
-	static void ParseModifications(CSModelConversionParameters inParams, String instrModifications)
+	/**
+	 * Applies the default vertex format. This always includes position, tex coordinates
+	 * and normals. For animated models this also includes weights and joints.
+	 * 
+	 * @param Ian Copland
+	 * 
+	 * @param in_options - The options to apply the default to.
+	 */
+	static void applyDefaultVertexFormat(ColladaToCSModelOptions in_options)
 	{
-		for (int i = 0; i < instrModifications.length(); ++i)
+		in_options.m_vertexHasPosition = true;
+		in_options.m_vertexHasTexCoords = true;
+		in_options.m_vertexHasNormal = true;
+		in_options.m_vertexHasColour = false;
+		
+		if (in_options.m_animated == true)
 		{
-			if (instrModifications.charAt(i) == MODIFICATION_SWAPYANDZ)
-				inParams.mbSwapYAndZ = true;
-			if (instrModifications.charAt(i) == MODIFICATION_FLIPYTEXCOORDS)
-				inParams.mbFlipVerticalTexCoords = true;
-			if (instrModifications.charAt(i) == MODIFICATION_COMBINEMESHES)
-				inParams.mbCombineMeshes = true;
+			in_options.m_vertexHasJointIndices = true;
+			in_options.m_vertexHasWeights = true;
+		}
+		else
+		{
+			in_options.m_vertexHasJointIndices = false;
+			in_options.m_vertexHasWeights = false;
 		}
 	}
-	//-------------------------------------------------------------------
-	/// Print Help Text
-	///
-	/// Prints out instructions on how to use this tool.
-	//-------------------------------------------------------------------
-	public static void PrintHelpText()
+	/**
+	 * Prints the help text. This will print regardless of logging level.
+	 * 
+	 * @param Ian Copland
+	 */
+	public static void printHelpText()
 	{
 		Logging.setLoggingLevel(LoggingLevel.k_verbose);
-		Logging.logVerbose("Usage: java -jar ColladaToCSModel.jar " + PARAM_NAME_INPUT + " <file path> " + PARAM_NAME_OUTPUT + " <file path> [" + PARAM_NAME_FEATURES + " <features>] [" + PARAM_NAME_VERTEXDECLARATION + " <vertex declaration>] [" + PARAM_NAME_TRANSFORMS + " <transforms>] [" + PARAM_NAME_HELP + "] [" + Logging.k_paramLoggingLevel + " <level>]");
+		Logging.logVerbose("Usage: java -jar ColladaToCSModel.jar " + k_paramNameInput + " <file path> " + k_paramNameOutput + " <file path> [" + k_paramNameVertexFormat + " <vertex declaration>] [" + k_paramNameAnimated + "] [" + k_paramNameSwapHandedness + "] [" + k_paramNameSwapYAndZ + "] [" + k_paramNameDisableMeshBatch + "] [" + k_paramNameDisabletTexCoordFlip + "] [" + k_paramNameHelp + "] [" + Logging.k_paramLoggingLevel + " <level>]");
 		Logging.logVerbose("Parameters:");
-		Logging.logVerbose(" " + PARAM_NAME_INPUT + "(" + PARAM_NAME_INPUT_SHORT + "): The input filename.");
-		Logging.logVerbose(" " + PARAM_NAME_OUTPUT + "(" + PARAM_NAME_OUTPUT_SHORT + "): The output filename.");
-		Logging.logVerbose(" " + PARAM_NAME_FEATURES + "(" + PARAM_NAME_FEATURES_SHORT + "): [Optional] A list of features that the output model will have.");
-		Logging.logVerbose(" " + PARAM_NAME_VERTEXDECLARATION + "(" + PARAM_NAME_VERTEXDECLARATION_SHORT + "): [Optional] A list of elements that a vertex in this model will contain.");
-		Logging.logVerbose(" " + PARAM_NAME_TRANSFORMS + "(" + PARAM_NAME_TRANSFORMS_SHORT + "): [Optional] A list of alterations to the output data.");
+		Logging.logVerbose(" " + k_paramNameInput + "(" + k_shortParamNameInput + "): The input filename.");
+		Logging.logVerbose(" " + k_paramNameOutput + "(" + k_shortParamNameOutput + "): The output filename.");
+		Logging.logVerbose(" " + k_paramNameVertexFormat + "(" + k_shortParamNameVertexFormat + "): [Optional] A list of elements that a vertex in this model will contain.");
+		Logging.logVerbose(" " + k_paramNameAnimated + "(" + k_shortParamNameAnimated + "): [Optional] Enables outputting of animation data.");
+		Logging.logVerbose(" " + k_paramNameSwapHandedness + "(" + k_shortParamNameSwapHandedness + "): [Optional] Enables transforming the output data to swap the coordinate system handedness.");
+		Logging.logVerbose(" " + k_paramNameSwapYAndZ + "(" + k_shortParamNameSwapYAndZ + "): [Optional] Enables transforming the output data to swap the Y and Z coordinates.");
+		Logging.logVerbose(" " + k_paramNameDisableMeshBatch + "(" + k_shortParamNameDisableMeshBatch + "): [Optional] Disables batching meshes with the same material together.");
+		Logging.logVerbose(" " + k_paramNameDisabletTexCoordFlip + "(" + k_shortParamNameDisabletTexCoordFlip + "): [Optional] Disables flipping the Y component of the texture coordinates.");
 		Logging.logVerbose(" " + Logging.k_paramLoggingLevel + "(" + Logging.k_paramLoggingLevelShort + "): [Optional] The level of messages to log.");
-		Logging.logVerbose(" " + PARAM_NAME_HELP + "(" + PARAM_NAME_HELP_SHORT + "): [Optional] Display this help message.");
-		Logging.logVerbose("Features:");
-		Logging.logVerbose(" " + FEATURE_HASANIMATIONDATA + ": The model will be outputed containing animation data.");
+		Logging.logVerbose(" " + k_paramNameHelp + "(" + k_shortParamNameHelp + "): [Optional] Display this help message.");
 		Logging.logVerbose("Vertex Elements:");
-		Logging.logVerbose(" " + VERTEX_ELEMENT_POSITION + ": A vertex will contain a position.");
-		Logging.logVerbose(" " + VERTEX_ELEMENT_TEXCOORD + ": A vertex will contain texture coordinates.");
-		Logging.logVerbose(" " + VERTEX_ELEMENT_NORMAL + ": A vertex will contain a normal.");
-		Logging.logVerbose(" " + VERTEX_ELEMENT_COLOUR + ": A vertex will contain a colour.");
-		Logging.logVerbose(" " + VERTEX_ELEMENT_WEIGHTS + ": A vertex will contain weights.");
-		Logging.logVerbose(" " + VERTEX_ELEMENT_JOINT_INDICES + ": A vertex will contain joint indices.");
-		Logging.logVerbose("Transforms:");
-		Logging.logVerbose(" " + MODIFICATION_SWAPYANDZ + ": Z and Y coordinates of output data will be swapped.");
-		Logging.logVerbose(" " + MODIFICATION_FLIPYTEXCOORDS + ": Texture coordinates will be flipped in the y axis.");
-		Logging.logVerbose(" " + MODIFICATION_COMBINEMESHES + ": Combines all meshes that use the same material into 1 mesh. Note: This doesn't work for animated models.");
+		Logging.logVerbose(" " + k_vertexElementPosition + ": A vertex will contain a position.");
+		Logging.logVerbose(" " + k_vertexElementTexCoord + ": A vertex will contain texture coordinates.");
+		Logging.logVerbose(" " + k_vertexElementNormal + ": A vertex will contain a normal.");
+		Logging.logVerbose(" " + k_vertexElementColour + ": A vertex will contain a colour.");
+		Logging.logVerbose(" " + k_vertexElementWeights + ": A vertex will contain weights.");
+		Logging.logVerbose(" " + k_vertexElementJoints + ": A vertex will contain joint indices.");
 		Logging.logVerbose("Logging Levels:");
 		Logging.logVerbose(" " + Logging.k_loggingLevelNone + ": No logging.");
 		Logging.logVerbose(" " + Logging.k_loggingLevelFatal + ": Only log fatal errors.");

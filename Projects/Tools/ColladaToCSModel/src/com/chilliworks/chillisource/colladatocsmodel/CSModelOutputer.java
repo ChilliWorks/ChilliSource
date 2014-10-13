@@ -71,7 +71,7 @@ public class CSModelOutputer
 	///
 	/// Outputs the given MoModel data to file.
 	//-------------------------------------------------------------------
-	public boolean Output(CSModelConversionParameters inConversionParams, CSModel inMoModel) throws Exception
+	public boolean Output(ColladaToCSModelOptions inConversionParams, CSModel inMoModel) throws Exception
 	{
 		boolean bSuccess = true;
 		
@@ -80,12 +80,12 @@ public class CSModelOutputer
 		//try and open a new file stream. if this fails, throw a fatal error.
 		try
 		{
-			mStream = new LittleEndianOutputStream(inConversionParams.mstrOutputFilepath);
+			mStream = new LittleEndianOutputStream(inConversionParams.m_outputFilePath);
 		}
 		catch (Exception e)
 		{
 			mStream.close();
-			Logging.logFatal("Failed to open output file: " + inConversionParams.mstrOutputFilepath);
+			Logging.logFatal("Failed to open output file: " + inConversionParams.m_outputFilePath);
 		}
 		
 		//output the file
@@ -116,7 +116,7 @@ public class CSModelOutputer
 		catch (Exception e)
 		{
 			mStream.close();
-			Logging.logFatal("Failed to write to file: " + inConversionParams.mstrOutputFilepath);
+			Logging.logFatal("Failed to write to file: " + inConversionParams.m_outputFilePath);
 		}
 		
 		//close the filestream
@@ -148,11 +148,11 @@ public class CSModelOutputer
 	/// Calculates the number of features to be outputed from the 
 	/// conversion parameters
 	//-------------------------------------------------------------------
-	private int GetNumFeatures(CSModelConversionParameters inConversionParams)
+	private int GetNumFeatures(ColladaToCSModelOptions inConversionParams)
 	{
 		int dwNumFeatures = 0;
 		
-		if (inConversionParams.mbHasAnimationData == true) 
+		if (inConversionParams.m_animated == true) 
 			dwNumFeatures++;
 		
 		return dwNumFeatures;
@@ -163,21 +163,21 @@ public class CSModelOutputer
 	/// Calculates the number of vertex elements to be outputed from the 
 	/// conversion parameters
 	//-------------------------------------------------------------------
-	private int GetNumVertexElements(CSModelConversionParameters inConversionParams)
+	private int GetNumVertexElements(ColladaToCSModelOptions inConversionParams)
 	{
 		int dwNumVertexElements = 0;
 		
-		if (inConversionParams.mbVertexHasPosition == true) 
+		if (inConversionParams.m_vertexHasPosition == true) 
 			dwNumVertexElements++;
-		if (inConversionParams.mbVertexHasNormal == true)
+		if (inConversionParams.m_vertexHasNormal == true)
 			dwNumVertexElements++;
-		if (inConversionParams.mbVertexHasTexCoords == true)
+		if (inConversionParams.m_vertexHasTexCoords == true)
 			dwNumVertexElements++;
-		if (inConversionParams.mbVertexHasColour == true) 
+		if (inConversionParams.m_vertexHasColour == true) 
 			dwNumVertexElements++;
-		if (inConversionParams.mbVertexHasWeights == true) 
+		if (inConversionParams.m_vertexHasWeights == true) 
 			dwNumVertexElements++;
-		if (inConversionParams.mbVertexHasJointIndices == true) 
+		if (inConversionParams.m_vertexHasJointIndices == true) 
 			dwNumVertexElements++;
 		
 		return dwNumVertexElements;
@@ -187,7 +187,7 @@ public class CSModelOutputer
 	///
 	/// Writes the file format header.
 	//-------------------------------------------------------------------
-	private boolean WriteGlobalHeader(CSModelConversionParameters inConversionParams, CSModel inMoModel) throws Exception
+	private boolean WriteGlobalHeader(ColladaToCSModelOptions inConversionParams, CSModel inMoModel) throws Exception
 	{
 		//write the endianess check value and version number
 		mStream.writeUnsignedInt(kdwEndiannessCheckValue);
@@ -195,22 +195,22 @@ public class CSModelOutputer
 		
 		//output the feature declaration
 		mStream.writeByte((byte)GetNumFeatures(inConversionParams));
-		if (inConversionParams.mbHasAnimationData == true) 
+		if (inConversionParams.m_animated == true) 
 			mStream.writeByte((byte)kdwFeatureHasAnimationData);
 		
 		//output the Vertex Description
 		mStream.writeByte((byte)GetNumVertexElements(inConversionParams));
-		if (inConversionParams.mbVertexHasPosition == true)
+		if (inConversionParams.m_vertexHasPosition == true)
 			mStream.writeByte((byte)kdwVertexPosition);
-		if (inConversionParams.mbVertexHasNormal == true)
+		if (inConversionParams.m_vertexHasNormal == true)
 			mStream.writeByte((byte)kdwVertexNormal);
-		if (inConversionParams.mbVertexHasTexCoords == true) 
+		if (inConversionParams.m_vertexHasTexCoords == true) 
 			mStream.writeByte((byte)kdwVertexTexCoord);
-		if (inConversionParams.mbVertexHasColour == true) 
+		if (inConversionParams.m_vertexHasColour == true) 
 			mStream.writeByte((byte)kdwVertexColour);
-		if (inConversionParams.mbVertexHasWeights == true) 
+		if (inConversionParams.m_vertexHasWeights == true) 
 			mStream.writeByte((byte)kdwVertexWeight);
-		if (inConversionParams.mbVertexHasJointIndices == true) 
+		if (inConversionParams.m_vertexHasJointIndices == true) 
 			mStream.writeByte((byte)kdwVertexJointIndex);
 		
 		//index declaration
@@ -227,7 +227,7 @@ public class CSModelOutputer
 		//output meshes!
 		mStream.writeUnsignedShort(inMoModel.mMeshTable.size());
 		
-		if (inConversionParams.mbHasAnimationData == true)
+		if (inConversionParams.m_animated == true)
 		{
 			mStream.writeShort((short)inMoModel.mSkeleton.mNodeList.size());
 			mStream.writeByte((byte)SkeletonBuilder.GetNumberOfJoints(inMoModel));
@@ -240,9 +240,9 @@ public class CSModelOutputer
 	///
 	/// Writes the skeleton data to file.
 	//-------------------------------------------------------------------
-	private boolean WriteSkeleton(CSModelConversionParameters inConversionParams, CSModel inMoModel) throws Exception
+	private boolean WriteSkeleton(ColladaToCSModelOptions inConversionParams, CSModel inMoModel) throws Exception
 	{
-		if (inConversionParams.mbHasAnimationData == true)
+		if (inConversionParams.m_animated == true)
 		{
 			for (int i = 0; i < inMoModel.mSkeleton.mNodeList.size(); i++)
 			{
@@ -276,7 +276,7 @@ public class CSModelOutputer
 	///
 	/// Writes the mesh header data to file.
 	//-------------------------------------------------------------------
-	private boolean WriteMeshHeader(CSModelConversionParameters inConversionParams, CSModelMesh inMoModelMesh) throws Exception
+	private boolean WriteMeshHeader(ColladaToCSModelOptions inConversionParams, CSModelMesh inMoModelMesh) throws Exception
 	{
 		//write the mesh name
 		mStream.writeNullTerminatedAsciiString(inMoModelMesh.mstrName);
@@ -308,7 +308,7 @@ public class CSModelOutputer
 	///
 	/// Writes the mesh body data to file.
 	//-------------------------------------------------------------------
-	private boolean WriteMeshBody(CSModelConversionParameters inConversionParams, CSModelMesh inMoStaticMesh) throws Exception
+	private boolean WriteMeshBody(ColladaToCSModelOptions inConversionParams, CSModelMesh inMoStaticMesh) throws Exception
 	{
 		boolean bSuccess = true;
 		
@@ -327,9 +327,9 @@ public class CSModelOutputer
 	///
 	/// Writes the inverse bind matrices if they need to be.
 	//-------------------------------------------------------------------
-	private boolean WriteInverseBindMatrices(CSModelConversionParameters inConversionParams, CSModelMesh inMoStaticMesh) throws Exception
+	private boolean WriteInverseBindMatrices(ColladaToCSModelOptions inConversionParams, CSModelMesh inMoStaticMesh) throws Exception
 	{
-		if (inConversionParams.mbHasAnimationData == true)
+		if (inConversionParams.m_animated == true)
 		{
 			if (inMoStaticMesh.maInverseBindMatrices != null)
 			{
@@ -350,7 +350,7 @@ public class CSModelOutputer
 	///
 	/// Writes the vertices to the output stream
 	//-------------------------------------------------------------------
-	private boolean WriteVertices(CSModelConversionParameters inConversionParams, CSModelMesh inMoStaticMesh) throws Exception
+	private boolean WriteVertices(ColladaToCSModelOptions inConversionParams, CSModelMesh inMoStaticMesh) throws Exception
 	{
 		LinkedList<CSModelVertex> vertexList = inMoStaticMesh.mVertexList;
 		
@@ -359,7 +359,7 @@ public class CSModelOutputer
 			CSModelVertex vertex = vertexList.get(i);
 			
 			//write the position data
-			if (inConversionParams.mbVertexHasPosition == true)
+			if (inConversionParams.m_vertexHasPosition == true)
 			{
 				mStream.writeFloat(vertex.mvPosition.x);
 				mStream.writeFloat(vertex.mvPosition.y);
@@ -369,7 +369,7 @@ public class CSModelOutputer
 			
 			
 			//write the normal data if its in the format
-			if (inConversionParams.mbVertexHasNormal == true)
+			if (inConversionParams.m_vertexHasNormal == true)
 			{
 				mStream.writeFloat(vertex.mvNormal.x);
 				mStream.writeFloat(vertex.mvNormal.y);
@@ -377,14 +377,14 @@ public class CSModelOutputer
 			}
 			
 			//write the tex coord data if its in the format
-			if (inConversionParams.mbVertexHasTexCoords == true)
+			if (inConversionParams.m_vertexHasTexCoords == true)
 			{
 				mStream.writeFloat(vertex.mvTextureCoordinate.x);
 				mStream.writeFloat(vertex.mvTextureCoordinate.y);
 			}
 			
 			//write the colour data if its in the format
-			if (inConversionParams.mbVertexHasColour == true)
+			if (inConversionParams.m_vertexHasColour == true)
 			{
 				mStream.writeByte((byte)vertex.mvVertexColour.x);
 				mStream.writeByte((byte)vertex.mvVertexColour.y);
@@ -393,7 +393,7 @@ public class CSModelOutputer
 			}
 			
 			//write the vertex weight if its in the format
-			if (inConversionParams.mbVertexHasWeights == true)
+			if (inConversionParams.m_vertexHasWeights == true)
 			{
 				mStream.writeFloat(vertex.mvWeights.x);
 				mStream.writeFloat(vertex.mvWeights.y);
@@ -402,7 +402,7 @@ public class CSModelOutputer
 			}
 			
 			//write the joint indices if its in the format
-			if (inConversionParams.mbVertexHasJointIndices == true)
+			if (inConversionParams.m_vertexHasJointIndices == true)
 			{
 				mStream.writeByte((byte)vertex.mvJointIndices.x);
 				mStream.writeByte((byte)vertex.mvJointIndices.y);
@@ -418,7 +418,7 @@ public class CSModelOutputer
 	///
 	/// Writes the indices to the output stream
 	//-------------------------------------------------------------------
-	private boolean WriteIndices(CSModelConversionParameters inConversionParams, CSModelMesh inMoStaticMesh) throws Exception
+	private boolean WriteIndices(ColladaToCSModelOptions inConversionParams, CSModelMesh inMoStaticMesh) throws Exception
 	{
 		if (inMoStaticMesh.mIndexList.size() > 0)
 		{

@@ -1,5 +1,5 @@
 /**
- * CSModelConverterTool.java
+ * ColladaToCSModel.java
  * Chilli Source
  * Created by Ian Copland on 15/01/2013.
  * 
@@ -40,21 +40,23 @@ import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModel;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModelMesh;
 import com.chilliworks.chillisource.toolutils.*;
 
-public class CSModelConverterTool 
+/**
+ * Provides methods for converting a Collada model file to CSModel.
+ * 
+ * @author Ian Copland
+ */
+public final class ColladaToCSModel 
 {
-	//-------------------------------------------------------------------
-	/// Constructor
-	//-------------------------------------------------------------------
-	public CSModelConverterTool()
-	{
-	}
-	//-------------------------------------------------------------------
-	/// Convert
-	///
-	/// Converts a Collada file to a momodel file based on the given
-	/// parameters.
-	//-------------------------------------------------------------------
-	public void Convert(CSModelConversionParameters inParams) throws Exception
+	/**
+	 * Converts from a Collada model file to CSModel.
+	 * 
+	 * author Ian Copland
+	 * 
+	 * @param in_options - The options.
+	 * 
+	 * @throws Exception
+	 */
+	public static void convert(ColladaToCSModelOptions inParams) throws Exception
 	{
 		Collada colladaData = new Collada();
 		try
@@ -67,11 +69,11 @@ public class CSModelConverterTool
 			SAXParser saxParser = factory.newSAXParser();
 			
 			//start reading the collada file
-			saxParser.parse(inParams.mstrInputFilepath, handler);
+			saxParser.parse(inParams.m_inputFilePath, handler);
 		}
 		catch (FileNotFoundException e)
 		{
-			Logging.logFatal("Could not find file: " + inParams.mstrInputFilepath);
+			Logging.logFatal("Could not find file: " + inParams.m_inputFilePath);
 		}
 		catch (Exception e)
 		{
@@ -93,11 +95,10 @@ public class CSModelConverterTool
 		ModelChecker.CheckModel(model);
 		
 		//Modify the data to the intended output format
-		CSModelTransformer modifier = new CSModelTransformer(); 
-		modifier.Modify(inParams, model);
+		CSModelTransformer.transform(inParams, model);
 			
 		//output info on the mo model mesh
-		OutputInfoOnMoModel(model);
+		outputInfoOnMoModel(model);
 
 		//output MoStatic file
 		CSModelOutputer outputer = new CSModelOutputer();
@@ -105,28 +106,30 @@ public class CSModelConverterTool
 		if (outputer.Output(inParams, model) == true)
 		{
 			//output info on output
-			OutputInfoOnOutput(inParams);
+			outputInfoOnOutput(inParams);
 		}
 		else
 		{
 			Logging.logError("Output failed!");
 		}
 	}
-	//-------------------------------------------------------------------
-	/// Output Info On MoModel
-	///
-	/// Prints info on the output MoModel mesh.
-	//-------------------------------------------------------------------
-	private void OutputInfoOnMoModel(CSModel inModel)
+	/**
+	 * Prints information on the output mesh.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_options - The options.
+	 */
+	private static void outputInfoOnMoModel(CSModel in_options)
 	{
 		Logging.logVerbose("MoModel Model Generated.");
-		Logging.logVerbose(" Min Boundary: (" + inModel.mvMin.x + ", " + inModel.mvMin.y + ", " + inModel.mvMin.z + ")");
-		Logging.logVerbose(" Max Boundary: (" + inModel.mvMax.x + ", " + inModel.mvMax.y + ", " + inModel.mvMax.z + ")");
+		Logging.logVerbose(" Min Boundary: (" + in_options.mvMin.x + ", " + in_options.mvMin.y + ", " + in_options.mvMin.z + ")");
+		Logging.logVerbose(" Max Boundary: (" + in_options.mvMax.x + ", " + in_options.mvMax.y + ", " + in_options.mvMax.z + ")");
 		Logging.logVerbose(" Skeleton");
-		Logging.logVerbose("  Num Skeleton Nodes: " + inModel.mSkeleton.mNodeList.size());
-		Logging.logVerbose("   Number of which are Joints: " + SkeletonBuilder.GetNumberOfJoints(inModel));
-		Logging.logVerbose(" Number of Meshes: " + inModel.mMeshTable.size());
-		for (CSModelMesh mesh: inModel.mMeshTable.values())
+		Logging.logVerbose("  Num Skeleton Nodes: " + in_options.mSkeleton.mNodeList.size());
+		Logging.logVerbose("   Number of which are Joints: " + SkeletonBuilder.GetNumberOfJoints(in_options));
+		Logging.logVerbose(" Number of Meshes: " + in_options.mMeshTable.size());
+		for (CSModelMesh mesh: in_options.mMeshTable.values())
 		{
 			Logging.logVerbose(" Mesh " + mesh.mstrName);
 			Logging.logVerbose("  Number of Vertices: " + mesh.mVertexList.size());
@@ -142,26 +145,28 @@ public class CSModelConverterTool
 			Logging.logVerbose("   Shininess: " + mesh.mMaterial.mfShininess);
 		}
 	}
-	//-------------------------------------------------------------------
-	/// Output Info On Output
-	///
-	/// Output data on the outputted file.
-	//-------------------------------------------------------------------
-	private void OutputInfoOnOutput(CSModelConversionParameters inParams)
+	/**
+	 * Prints information on the output file.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_options - The options.
+	 */
+	private static void outputInfoOnOutput(ColladaToCSModelOptions in_options)
 	{
-		Logging.logVerbose("Successfully created " + inParams.mstrOutputFilepath);
+		Logging.logVerbose("Successfully created " + in_options.m_outputFilePath);
 		Logging.logVerbose(" Features");
-		Logging.logVerbose("  Has Animation Data: " + Boolean.toString(inParams.mbHasAnimationData));
+		Logging.logVerbose("  Has Animation Data: " + Boolean.toString(in_options.m_animated));
 		Logging.logVerbose(" Vertex Declaration");
-		Logging.logVerbose("  Position: " + Boolean.toString(inParams.mbVertexHasPosition));
-		Logging.logVerbose("  Normal: " + Boolean.toString(inParams.mbVertexHasNormal));
-		Logging.logVerbose("  Texture Coordinates: " + Boolean.toString(inParams.mbVertexHasTexCoords));
-		Logging.logVerbose("  Colour: " + Boolean.toString(inParams.mbVertexHasColour));
-		Logging.logVerbose("  Weights: " + Boolean.toString(inParams.mbVertexHasWeights));
-		Logging.logVerbose("  Joint Indices: " + Boolean.toString(inParams.mbVertexHasJointIndices));
+		Logging.logVerbose("  Position: " + Boolean.toString(in_options.m_vertexHasPosition));
+		Logging.logVerbose("  Normal: " + Boolean.toString(in_options.m_vertexHasNormal));
+		Logging.logVerbose("  Texture Coordinates: " + Boolean.toString(in_options.m_vertexHasTexCoords));
+		Logging.logVerbose("  Colour: " + Boolean.toString(in_options.m_vertexHasColour));
+		Logging.logVerbose("  Weights: " + Boolean.toString(in_options.m_vertexHasWeights));
+		Logging.logVerbose("  Joint Indices: " + Boolean.toString(in_options.m_vertexHasJointIndices));
 		Logging.logVerbose(" Transforms");
-		Logging.logVerbose("  Flip vertical texture coordinates: " + Boolean.toString(inParams.mbFlipVerticalTexCoords));
-		Logging.logVerbose("  Swap Y and Z: " + Boolean.toString(inParams.mbSwapYAndZ));
+		Logging.logVerbose("  Flip vertical texture coordinates: " + Boolean.toString(in_options.m_flipVerticalTexCoords));
+		Logging.logVerbose("  Swap Y and Z: " + Boolean.toString(in_options.m_swapYAndZ));
 		Logging.logVerbose(" ");
 	}
 }

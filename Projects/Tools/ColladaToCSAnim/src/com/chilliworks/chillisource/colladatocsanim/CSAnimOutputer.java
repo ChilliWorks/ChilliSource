@@ -58,14 +58,14 @@ public class CSAnimOutputer
 	/**
 	 * Output
 	 */
-	public boolean Output(CSAnimConversionParameters inConversionParams, CSAnim inMoModel) throws Exception
+	public boolean Output(ColladaToCSAnimOptions inConversionParams, CSAnim inMoModel) throws Exception
 	{
 		boolean bSuccess = true;
 		
 		//try and open a new file stream. if this fails, throw a fatal error.
 		try
 		{	
-			mStream = new LittleEndianOutputStream(inConversionParams.mstrOutputFilepath);
+			mStream = new LittleEndianOutputStream(inConversionParams.m_outputFilePath);
 		}
 		catch (Exception e)
 		{
@@ -73,7 +73,7 @@ public class CSAnimOutputer
 			{
 				mStream.close();
 			}
-			Logging.logFatal("Failed to open output file: " + inConversionParams.mstrOutputFilepath);
+			Logging.logFatal("Failed to open output file: " + inConversionParams.m_outputFilePath);
 		}
 		
 		//output the file
@@ -89,7 +89,7 @@ public class CSAnimOutputer
 		catch (Exception e)
 		{
 			mStream.close();
-			Logging.logFatal("Failed to write to file: " + inConversionParams.mstrOutputFilepath);
+			Logging.logFatal("Failed to write to file: " + inConversionParams.m_outputFilePath);
 		}
 		
 		//close the filestream
@@ -104,7 +104,7 @@ public class CSAnimOutputer
 	 * @param inAnim
 	 * @return
 	 */
-	public boolean WriteHeader(CSAnimConversionParameters inConversionParams, CSAnim inAnim) throws Exception
+	public boolean WriteHeader(ColladaToCSAnimOptions inConversionParams, CSAnim inAnim) throws Exception
 	{
 		//write endianness check and version number
 		mStream.writeUnsignedInt(ENDIANESS_CHECK_VALUE);
@@ -129,7 +129,7 @@ public class CSAnimOutputer
 	 * @param inAnim
 	 * @return
 	 */
-	public boolean WriteBody(CSAnimConversionParameters inConversionParams, CSAnim inAnim) throws Exception
+	public boolean WriteBody(ColladaToCSAnimOptions inConversionParams, CSAnim inAnim) throws Exception
 	{
 		//loop through each joint in each frame
 		for (int i = 0; i < inAnim.mFrames.size(); i++)
