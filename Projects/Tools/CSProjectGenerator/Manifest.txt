@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: com.chilliworks.chillisource.csprojectgenerator.Main
+Class-Path: zip4j_1.3.2.jar
+
