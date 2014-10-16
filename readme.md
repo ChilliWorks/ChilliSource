@@ -5,7 +5,7 @@ Chilli Source is an open source, cross-platform game engine designed for indie d
 
 Links
 -----
-* Chilli Works [website](http://chilli-works.com/)
+* Chilli Works [Website](http://chilli-works.com/)
 * Chilli Source [Documentation](http://chilli-source.chilli-works.com/docs/)
 * Chilli Source [Samples Repository](https://github.com/ChilliWorks/CSSamples)
 
@@ -13,7 +13,7 @@ Getting Started
 ---------------
 The [Project Setup](http://chilli-source.chilli-works.com/docs/) tutorial provides a good starting point for working with Chilli Source. It demonstrates how to create and build a new project. Also check out the other tutorials for more information.
 
-If you encounter any bugs please report them using Github Issues. If you have any development questions post them on [Stack Overflow](http://http://stackoverflow.com/)--we will be checking it as much as we can. Chilli Source doesn't have a Tag yet so make sure you mention Chilli Source in the title.
+If you encounter any bugs please report them using Github Issues. If you have any development questions post them on [Stack Overflow](http://stackoverflow.com/)--we will be checking it as much as we can. Chilli Source doesn't have a Tag yet so make sure you mention Chilli Source in the title.
 
 Contribution
 ------------
