@@ -1,5 +1,8 @@
 === Chilli Source Change Log ===
 
+Version 1.1.2 2014-10-16:
+	- Added CSProjectGenerator, a tool for generating new Chilli Source project.
+
 Version 1.1.1, 2014-10-10:
 	- All App Systems now correctly receive life cycle events prior to States.
 	- Simplified the command line interface for the ColladaToCSModel and ColladaToCSAnim tools and re-added the ability to change coordinate system handedness.
