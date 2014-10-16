@@ -114,9 +114,9 @@ public final class Main
 			}
 		}
 		
-		if (options.m_projectName.length() == 0 || options.m_packageName.length() ==0 || options.m_outputDirectory.length() == 0)
+		if (options.m_projectName.length() == 0 || options.m_packageName.length() ==0)
 		{
-			Logging.logFatal("Must provide project name, package name and output directory.");
+			Logging.logFatal("Must provide project name, package name.");
 		}
 		
 		CSProjectGenerator.generate(options);
@@ -137,7 +137,7 @@ public final class Main
 		Logging.logVerbose("Parameters:");
 		Logging.logVerbose(" " + k_paramProjectName + "(" + k_shortParamProjectName + "): The file path to the user manifest.");
 		Logging.logVerbose(" " + k_paramPackageName + "(" + k_shortParamPackageName + "): The file path to the template manifest.");
-		Logging.logVerbose(" " + k_paramOutputDirectory + "(" + k_shortParamOutputDirectory + "): The file path to the output AndroidManifest.xml.");
+		Logging.logVerbose(" " + k_paramOutputDirectory + "(" + k_shortParamOutputDirectory + "): [Optional] The file path to the output the project. By default the project is created in the present working directory.");
 		Logging.logVerbose(" " + Logging.k_paramLoggingLevel + "(" + Logging.k_paramLoggingLevelShort + "): [Optional] The level of messages to log.");
 		Logging.logVerbose(" " + k_paramHelp + "(" + k_shortParamHelp + "): [Optional] Display this help message.");
 		Logging.logVerbose("Logging Levels:");

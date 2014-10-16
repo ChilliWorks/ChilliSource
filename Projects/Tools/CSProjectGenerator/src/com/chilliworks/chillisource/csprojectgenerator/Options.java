@@ -37,5 +37,5 @@ public final class Options
 {
 	String m_projectName = "";
 	String m_packageName = "";
-	String m_outputDirectory = "";
+	String m_outputDirectory = "./";
 }

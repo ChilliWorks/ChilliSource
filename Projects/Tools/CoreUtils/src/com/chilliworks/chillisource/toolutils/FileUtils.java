@@ -228,6 +228,68 @@ public class FileUtils
 		return true;
 	}
 	/**
+	 * Renames a file. If the file already exists this will fail.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_currentFilePath - The file path to the file which should be renamed.
+	 * @param in_newFilePath - The new file path.
+	 * 
+	 * @return whether or not this was successful.
+	 */
+	public static boolean renameFile(String in_currentFilePath, String in_newFilePath)
+	{
+		File currentFile = new File(in_currentFilePath);
+		if (currentFile.exists() == false || currentFile.isFile() == false)
+		{
+			return false;
+		}
+		
+		File newFile = new File(in_newFilePath);
+		if (newFile.exists() == true)
+		{
+			return false;
+		}
+		
+		if (currentFile.renameTo(newFile) == false)
+		{
+			return false;
+		}
+	    
+		return true;
+	}
+	/**
+	 * Renames a directory. If the directory already exists this will fail.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_currentDirectoryPath - The directory path to the directory which should be renamed.
+	 * @param in_newDirectoryPath - The new directory path.
+	 * 
+	 * @return whether or not this was successful.
+	 */
+	public static boolean renameDirectory(String in_currentDirectoryPath, String in_newDirectoryPath)
+	{
+		File currentDirectory = new File(in_currentDirectoryPath);
+		if (currentDirectory.exists() == false || currentDirectory.isDirectory() == false)
+		{
+			return false;
+		}
+		
+		File newDirectory = new File(in_newDirectoryPath);
+		if (newDirectory.exists() == true)
+		{
+			return false;
+		}
+		
+		if (currentDirectory.renameTo(newDirectory) == false)
+		{
+			return false;
+		}
+	    
+		return true;
+	}
+	/**
 	 * Deletes a file.
 	 * 
 	 * @author I Copland

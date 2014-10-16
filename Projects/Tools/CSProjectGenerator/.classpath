@@ -3,6 +3,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CoreUtils"/>
-	<classpathentry kind="lib" path="lib/zip4j_1.3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
