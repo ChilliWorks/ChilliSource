@@ -228,7 +228,8 @@ public class FileUtils
 		return true;
 	}
 	/**
-	 * Renames a file. If the file already exists this will fail.
+	 * Renames a file. If a file or directory already exists at the new location, this will 
+	 * fail.
 	 * 
 	 * @author Ian Copland
 	 * 
@@ -259,7 +260,7 @@ public class FileUtils
 		return true;
 	}
 	/**
-	 * Renames a directory. If the directory already exists this will fail.
+	 * Renames a directory. If a file or directory already exists at the new location, this will fail.
 	 * 
 	 * @author Ian Copland
 	 * 
