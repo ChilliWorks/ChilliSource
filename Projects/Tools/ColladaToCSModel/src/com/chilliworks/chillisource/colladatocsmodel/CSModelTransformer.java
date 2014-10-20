@@ -28,58 +28,122 @@
 
 package com.chilliworks.chillisource.colladatocsmodel;
 
+import java.util.LinkedList;
+
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModel;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModelMesh;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModelVertex;
+import com.chilliworks.chillisource.toolutils.Matrix4;
 
-public class CSModelTransformer 
+public final class CSModelTransformer 
 {
-	//-------------------------------------------------------------------
-	/// Constructor
-	//-------------------------------------------------------------------
-	public CSModelTransformer()
+	/**
+	 * Applies all transforms specified in the input options.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_options - The options.
+	 * @param in_model - The model.
+	 */
+	public static void transform(ColladaToCSModelOptions in_options, CSModel in_model)
 	{
-	}
-	//-------------------------------------------------------------------
-	/// Modify
-	///
-	/// This modifies the data in the MoModel to the desired output. For 
-	/// example, changing from Z as up to Y as up.
-	//-------------------------------------------------------------------
-	public void Modify(CSModelConversionParameters inConversionParams, CSModel inMoModel)
-	{
-		if (inConversionParams.mbSwapYAndZ == true)
+		if (in_options.m_swapHandedness == true)
 		{
-			SwapYAndZ(inMoModel);
+			swapHandedness(in_model);
 		}
 		
-		if (inConversionParams.mbFlipVerticalTexCoords == true)
+		if (in_options.m_swapYAndZ == true)
 		{
-			FlipVerticalTexCoords(inMoModel);
+			swapYAndZ(in_model);
+		}
+		
+		if (in_options.m_flipVerticalTexCoords == true)
+		{
+			flipVerticalTexCoords(in_model);
 		}
 	}
-	//-------------------------------------------------------------------
-	/// Swap Y And Z
-	///
-	/// Swaps y and z for all data in the model. This is needed to
-	/// convert from 3DS Max space to chilli source space.
-	//-------------------------------------------------------------------
-	private void SwapYAndZ(CSModel inMoModel)
+	/**
+	 * Swaps the handedness of the output model data.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_model - The model.
+	 */
+	private static void swapHandedness(CSModel in_model)
+	{
+		//overall bounds
+		float temp = in_model.mvMin.y;
+		in_model.mvMin.y = -in_model.mvMax.y;
+		in_model.mvMax.y = -temp;
+		
+		//each mesh bounds, positions and normals
+		for (CSModelMesh mesh: in_model.mMeshTable.values())
+		{
+			//bounds
+			temp = mesh.mvMin.y;
+			mesh.mvMin.y = -mesh.mvMax.y;
+			mesh.mvMax.y = -temp;
+			
+			//position and normal
+			for (CSModelVertex vert: mesh.mVertexList)
+			{
+				vert.mvPosition.y = -vert.mvPosition.y;
+				vert.mvNormal.y = -vert.mvNormal.y;
+			}
+			
+			//Mirror inverse bind matrices
+			if (mesh.maInverseBindMatrices != null)
+			{
+				for (int i = 0; i < mesh.maInverseBindMatrices.length; i++)
+				{
+					Matrix4 invertY = new Matrix4(
+							1.0f, 0.0f, 0.0f, 0.0f,
+							0.0f,-1.0f, 0.0f, 0.0f,
+							0.0f, 0.0f, 1.0f, 0.0f,
+							0.0f, 0.0f, 0.0f, 1.0f);
+					mesh.maInverseBindMatrices[i] = Matrix4.multiply(Matrix4.multiply(invertY.inverse(), mesh.maInverseBindMatrices[i]), invertY);
+				}
+			}
+		}
+		
+		//each mesh bounds, positions and normals
+		for (CSModelMesh mesh: in_model.mMeshTable.values())
+		{
+			//indices
+			LinkedList<Integer> newIndices = new LinkedList<Integer>();
+			for (int i = 0; i < mesh.mIndexList.size() / 3; i++)
+			{
+				newIndices.add(mesh.mIndexList.get(i * 3 + 0));
+				newIndices.add(mesh.mIndexList.get(i * 3 + 2));
+				newIndices.add(mesh.mIndexList.get(i * 3 + 1));
+			}
+			mesh.mIndexList = newIndices;
+		}
+	}
+	/**
+	 * Swaps y and z for all data in the model. This is needed to convert 
+	 * from 3DS Max space to chilli source space.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_model - The model.
+	 */
+	private static void swapYAndZ(CSModel in_model)
 	{
 		float temp = 0.0f;
 		
 		//overall bounds
-		temp = inMoModel.mvMin.z;
-		inMoModel.mvMin.z = inMoModel.mvMin.y;
-		inMoModel.mvMin.y = temp;
+		temp = in_model.mvMin.z;
+		in_model.mvMin.z = in_model.mvMin.y;
+		in_model.mvMin.y = temp;
 		
-		temp = inMoModel.mvMax.z;
-		inMoModel.mvMax.z = inMoModel.mvMax.y;
-		inMoModel.mvMax.y = temp;
+		temp = in_model.mvMax.z;
+		in_model.mvMax.z = in_model.mvMax.y;
+		in_model.mvMax.y = temp;
 		
 		
 		//each mesh bounds, positions and normals
-		for (CSModelMesh mesh: inMoModel.mMeshTable.values())
+		for (CSModelMesh mesh: in_model.mMeshTable.values())
 		{
 			//bounds
 			temp = mesh.mvMin.z;
@@ -112,16 +176,17 @@ public class CSModelTransformer
 			}
 		}
 	}
-	//-------------------------------------------------------------------
-	/// Flip Vertical Tex Coords
-	///
-	/// Inverts the y component of the texture coordinates. This is
-	/// because 3DS Max uses the opposite coordinate system to what
-	/// chilli source uses.
-	//-------------------------------------------------------------------
-	private void FlipVerticalTexCoords(CSModel inMoModel)
+	/**
+	 * Inverts the y component of the texture coordinates. This is because 3DS Max 
+	 * uses the opposite coordinate system to what chilli source uses.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_model - The model.
+	 */
+	private static void flipVerticalTexCoords(CSModel in_model)
 	{
-		for (CSModelMesh mesh: inMoModel.mMeshTable.values())
+		for (CSModelMesh mesh: in_model.mMeshTable.values())
 		{
 			for (CSModelVertex vert: mesh.mVertexList)
 			{

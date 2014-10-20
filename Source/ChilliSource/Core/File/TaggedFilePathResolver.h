@@ -168,7 +168,16 @@ namespace ChilliSource
             /// filesystem, the tags, the device and the priority (i.e. Textures/MyImage.high.png)
             //--------------------------------------------------------------
             std::string ResolveFilePath(StorageLocation in_location, const std::string& in_basePath) const;
-
+            //--------------------------------------------------------------
+            /// Returns the active tag for the given Tag Group.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The tag group for which to get the active tag.
+            ///
+            /// @return The active tag.
+            //--------------------------------------------------------------
+            std::string GetActiveTag(TagGroup in_tagGroup) const;
         private:
             
             friend class Application;

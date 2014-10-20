@@ -1,11 +1,11 @@
 /**
- * CSAnimConversionParameters.java
+ * Options.java
  * Chilli Source
- * Created by Ian Copland on 16/01/2013.
+ * Created by Ian Copland on 15/10/2014.
  * 
  * The MIT License (MIT)
  * 
- * Copyright (c) 2013 Tag Games Limited
+ * Copyright (c) 2014 Tag Games Limited
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,20 +26,16 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.colladatocsanim;
+package com.chilliworks.chillisource.csprojectgenerator;
 
-public class CSAnimConversionParameters 
+/**
+ * A container for options for the project generator.
+ * 
+ * @author Ian Copland
+ */
+public final class Options
 {
-	public String mstrInputFilepath;
-	public String mstrOutputFilepath;
-	public boolean mbSwapYAndZ;
-	public boolean mbFlipVerticalTexCoords;
-	
-	public CSAnimConversionParameters()
-	{
-		mstrInputFilepath 		= new String();
-		mstrOutputFilepath 		= new String();
-		mbSwapYAndZ 		= false;
-		mbFlipVerticalTexCoords = false;
-	}
+	String m_projectName = "";
+	String m_packageName = "";
+	String m_outputDirectory = "./";
 }

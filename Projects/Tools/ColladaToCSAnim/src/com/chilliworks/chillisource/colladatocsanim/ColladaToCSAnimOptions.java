@@ -1,7 +1,7 @@
 /**
- * CSModelConversionParameters.java
+ * ColladaToCSAnimOptions.java
  * Chilli Source
- * Created by Ian Copland on 15/01/2013.
+ * Created by Ian Copland on 16/01/2013.
  * 
  * The MIT License (MIT)
  * 
@@ -26,36 +26,17 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.colladatocsmodel;
+package com.chilliworks.chillisource.colladatocsanim;
 
-public class CSModelConversionParameters 
+/**
+ * A container for the options for the Collada To CSAnim tool.
+ * 
+ * @author Ian Copland
+ */
+public final class ColladaToCSAnimOptions 
 {
-	public String mstrInputFilepath;
-	public String mstrOutputFilepath;
-	public boolean mbHasAnimationData;
-	public boolean mbVertexHasPosition;
-	public boolean mbVertexHasTexCoords;
-	public boolean mbVertexHasNormal;
-	public boolean mbVertexHasColour;
-	public boolean mbVertexHasWeights;
-	public boolean mbVertexHasJointIndices;
-	public boolean mbSwapYAndZ;
-	public boolean mbFlipVerticalTexCoords;
-	public boolean mbCombineMeshes;
-	
-	public CSModelConversionParameters()
-	{
-		mstrInputFilepath 		= new String();
-		mstrOutputFilepath 		= new String();
-		mbHasAnimationData 		= false;
-		mbVertexHasPosition 	= false;
-		mbVertexHasTexCoords 	= false;
-		mbVertexHasNormal 		= false;
-		mbVertexHasColour 		= false;
-		mbVertexHasWeights 		= false;
-		mbVertexHasJointIndices = false;
-		mbSwapYAndZ 			= false;
-		mbFlipVerticalTexCoords = false;
-		mbCombineMeshes			= false;
-	}
+	public String m_inputFilePath = new String();
+	public String m_outputFilePath = new String();
+	public boolean m_swapHandedness = false;
+	public boolean m_swapYAndZ = false;
 }

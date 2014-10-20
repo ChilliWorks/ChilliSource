@@ -162,7 +162,8 @@ namespace ChilliSource
 			void Change(const StateSPtr& in_state);
             
 		private:
-
+            friend class Application;
+            
             //---------------------------------------------------------
             /// Private to enforce use of factory method
             ///
@@ -175,14 +176,14 @@ namespace ChilliSource
             ///
             /// @author S Downie
 			//---------------------------------------------------------
-			void OnResume() override;
+			void ResumeStates();
             //---------------------------------------------------------
             /// Triggered by the application when the system is
             /// pushed to the foreground. Forwards to states.
             ///
             /// @author S Downie
 			//---------------------------------------------------------
-			void OnForeground() override;
+			void ForegroundStates();
             //---------------------------------------------------------
 			/// Updates the current state with the time
 			/// since last update
@@ -191,7 +192,7 @@ namespace ChilliSource
 			///
 			/// @param Time since last update in seconds
 			//---------------------------------------------------------
-			void OnUpdate(f32 in_timeSinceLastUpdate) override;
+			void UpdateStates(f32 in_timeSinceLastUpdate);
             //---------------------------------------------------------
 			/// Updates the current state with the time
 			/// since last update. This is called at a fixed interval
@@ -200,21 +201,21 @@ namespace ChilliSource
 			///
 			/// @param Fixed time since last update in seconds
 			//---------------------------------------------------------
-			void OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate) override;
+			void FixedUpdateStates(f32 in_fixedTimeSinceLastUpdate);
             //---------------------------------------------------------
             /// Triggered by the application when the system is
             /// pushed to the background. Forwards to states.
             ///
             /// @author S Downie
 			//---------------------------------------------------------
-			void OnBackground() override;
+			void BackgroundStates();
             //---------------------------------------------------------
             /// Triggered by the application when the app is suspended.
             /// Forwards to states.
             ///
             /// @author S Downie
 			//---------------------------------------------------------
-			void OnSuspend() override;
+			void SuspendStates();
             //---------------------------------------------------------
             /// Triggered by the application when the system is
             /// about to be destroyed to ensure systems exist when
@@ -229,7 +230,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
 			//---------------------------------------------------------
-			void OnMemoryWarning() override;
+			void MemoryWarningStates();
             //---------------------------------------------------------
             /// Pop Hierarchy
             ///
@@ -273,8 +274,6 @@ namespace ChilliSource
 			std::list<StateOperation> m_operations;
             
             bool m_isStartState;
-			
-			friend class Application;
 		};
 	}
 }

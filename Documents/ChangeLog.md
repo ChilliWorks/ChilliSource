@@ -1,5 +1,19 @@
 === Chilli Source Change Log ===
 
+Version 1.1.3 2013-10-20:
+	- Project generator will now error if the output directory is inside Chilli Source. This was causing recursive file copy issues when copying Chilli Source to the project directory.
+
+Version 1.1.2 2014-10-16:
+	- Added CSProjectGenerator, a tool for generating new Chilli Source project.
+
+Version 1.1.1, 2014-10-10:
+	- All App Systems now correctly receive life cycle events prior to States.
+	- Simplified the command line interface for the ColladaToCSModel and ColladaToCSAnim tools and re-added the ability to change coordinate system handedness.
+	- Updated the package name in all java code from com.chillisource.* to com.chilliworks.chillisource.*
+	- Fixed a bug in Colour::Clamp() where by default alpha was clamping between 1 and 1 rather than 0 and 1.
+	- Swapped the parameters in Timer::OpenConnection() to be more lambda friendly.
+	- Fixed typos in the documentation for the CSAtlas Builder.
+
 Version 1.1.0, 2014-09-26:  
  	- Replaced the gesture system.
  	- UDIDs on Android are now generated from the Google Play Services Advertising Id when building for Google Play. This requires the inclusion of the Goole Play Services library in all Android projects.

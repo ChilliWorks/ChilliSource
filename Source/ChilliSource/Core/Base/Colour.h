@@ -73,7 +73,7 @@ namespace ChilliSource
             ///
             /// @return Clamped colour
             //-----------------------------------------------------------
-            static Colour Clamp(const Colour& in_value, const Colour& in_min = k_black, const Colour& in_max = k_white);
+            static Colour Clamp(const Colour& in_value, const Colour& in_min = k_transparent, const Colour& in_max = k_white);
             //-----------------------------------------------------------
             /// Constructor
             ///

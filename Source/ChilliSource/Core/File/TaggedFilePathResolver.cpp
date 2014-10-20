@@ -386,5 +386,21 @@ namespace ChilliSource
 
             return finalPaths.empty() == false ? filePath + finalPaths[0] : "";
         }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        std::string TaggedFilePathResolver::GetActiveTag(TagGroup in_tagGroup) const
+        {
+            std::string output = m_activeTags[static_cast<u32>(in_tagGroup)];
+            
+            if (output.empty() == false)
+            {
+                if (output[0] == '.')
+                {
+                    output = output.substr(1);
+                }
+            }
+            
+            return output;
+        }
     }
 }

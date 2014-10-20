@@ -1,5 +1,5 @@
 /**
- * CSAnimConverterTool.java
+ * ColladaToCSAnim.java
  * Chilli Source
  * Created by Ian Copland on 16/01/2013.
  * 
@@ -39,14 +39,22 @@ import com.chilliworks.chillisource.colladaparserutils.colladadata.*;
 import com.chilliworks.chillisource.colladatocsanim.csanim.*;
 import com.chilliworks.chillisource.toolutils.Logging;
 
-public class CSAnimConverterTool 
+/**
+ * A collection of methods for converting from Collada file format to
+ * CSAnim format.
+ * 
+ * @author Ian Copland
+ */
+public final class ColladaToCSAnim 
 {
-	public CSAnimConverterTool()
-	{
-		
-	}
-	
-	public void Convert(CSAnimConversionParameters inParams) throws Exception
+	/**
+	 * Converts a collada file to CSAnim.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_options - The conversion options.
+	 */
+	public static void Convert(ColladaToCSAnimOptions in_options) throws Exception
 	{
 		Collada colladaData = new Collada();
 		try
@@ -59,11 +67,11 @@ public class CSAnimConverterTool
 			SAXParser saxParser = factory.newSAXParser();
 			
 			//start reading the collada file
-			saxParser.parse(inParams.mstrInputFilepath, handler);
+			saxParser.parse(in_options.m_inputFilePath, handler);
 		}
 		catch (FileNotFoundException e)
 		{
-			Logging.logFatal("Could not find file: " + inParams.mstrInputFilepath);
+			Logging.logFatal("Could not find file: " + in_options.m_inputFilePath);
 		}
 		catch (Exception e)
 		{
@@ -91,19 +99,18 @@ public class CSAnimConverterTool
 		converter.ConvertToMoAnimFormat(nodes, colladaData, anim);
 		
 		//Modify the data to the intended output format
-		CSAnimTransformer modifier = new CSAnimTransformer(); 
-		modifier.Modify(inParams, anim);
+		CSAnimTransformer.transform(in_options, anim);
 			
 		//output info on the MoAnim
-		OutputInfoOnMoAnim(anim);
+		outputInfoOnMoAnim(anim);
 
 		//output MoStatic file
 		CSAnimOutputer outputer = new CSAnimOutputer();
 		
-		if (outputer.Output(inParams, anim) == true)
+		if (outputer.Output(in_options, anim) == true)
 		{
 			//output info on output
-			OutputInfoOnOutput(inParams);
+			outputInfoOnOutput(in_options);
 		}
 		else
 		{
@@ -112,27 +119,34 @@ public class CSAnimConverterTool
 	}
 	
 	/**
-	 * Prints info on the output MoStatic mesh.
-	 * @param inMeshList
+	 * Prints info on the output animation data.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_animation - The animation.
 	 */
-	private void OutputInfoOnMoAnim(CSAnim inModel)
+	private static void outputInfoOnMoAnim(CSAnim in_animation)
 	{
 		Logging.logVerbose("MoAnim Data Generated");
-		Logging.logVerbose(" Frame rate: " + inModel.mfFrameRate);
-		Logging.logVerbose(" Number of frames: " + inModel.mFrames.size());
+		Logging.logVerbose(" Frame rate: " + in_animation.mfFrameRate);
+		Logging.logVerbose(" Number of frames: " + in_animation.mFrames.size());
 		Logging.logVerbose(" Skeleton");
-		Logging.logVerbose("  Skeleton Nodes: " + inModel.mSkeleton.mNodeList.size());
+		Logging.logVerbose("  Skeleton Nodes: " + in_animation.mSkeleton.mNodeList.size());
 	}
 	
 	/**
-	 * output data on the outputted file
-	 * @param inParams
+	 * output data on the output file.
+	 *
+	 * @author Ian Copland
+	 * 
+	 * @param in_options - The output options.
 	 */
-	private void OutputInfoOnOutput(CSAnimConversionParameters inParams)
+	private static void outputInfoOnOutput(ColladaToCSAnimOptions in_options)
 	{
-		Logging.logVerbose("Successfully created " + inParams.mstrOutputFilepath);
+		Logging.logVerbose("Successfully created " + in_options.m_outputFilePath);
 		Logging.logVerbose(" Transforms");
-		Logging.logVerbose("  Swap Y and Z: " + Boolean.toString(inParams.mbSwapYAndZ));
+		Logging.logVerbose("  Swap Handedness: " + Boolean.toString(in_options.m_swapHandedness));
+		Logging.logVerbose("  Swap Y and Z: " + Boolean.toString(in_options.m_swapYAndZ));
 		Logging.logVerbose(" ");
 	}
 }

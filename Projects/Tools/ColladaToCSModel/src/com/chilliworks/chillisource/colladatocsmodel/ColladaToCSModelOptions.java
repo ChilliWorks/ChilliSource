@@ -1,11 +1,11 @@
 /**
- * AtlasBuilderOptions.java
+ * ColladaToCSModelOptions.java
  * Chilli Source
- * Created by Ian Copland on 26/06/2014.
+ * Created by Ian Copland on 15/01/2013.
  * 
  * The MIT License (MIT)
  * 
- * Copyright (c) 2014 Tag Games Limited
+ * Copyright (c) 2013 Tag Games Limited
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,33 +26,27 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.csatlasbuilder;
+package com.chilliworks.chillisource.colladatocsmodel;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.chilliworks.chillisource.texturepackerutils.TexturePacker.PlacementHeuristic;
-
-public class AtlasBuilderOptions
+/**
+ * A container for the input options for the Collada To CSModel tool.
+ * 
+ * @author Ian Copland
+ */
+public final class ColladaToCSModelOptions 
 {
-	public List<AtlasImage> m_atlasImages = new ArrayList<AtlasImage>(); //Available through java library access only.
-	public String m_inputDirectoryPath = "";
+	public String m_inputFilePath = "";
 	public String m_outputFilePath = "";
-	public String m_fileList = "";
-	public int m_fixedWidth = -1;
-	public int m_fixedHeight = -1;
-	public int[] m_validHeights = new int[0];
-	public int[] m_validWidths = new int[0];
-	public int m_maxWidth = 2048;
-	public int m_maxHeight = 2048;
-	public int m_divisibleBy = 4;
-	public boolean m_crop = true;
-	public int m_padding = 1;
-	public int m_innerPadding = 0;
-	public int m_extrude = 1;
-	public PlacementHeuristic m_packingHeuristic = PlacementHeuristic.BOTTOMRIGHT;
-	public String m_imageCompression = "";
-	public String m_imageFormat = "";
-	public boolean m_imageDither = false;
-	public boolean m_imagePremultiplyAlpha = true;
+	public boolean m_animated = false;
+	public boolean m_swapHandedness = false;
+	public boolean m_swapYAndZ = false;
+	public boolean m_flipVerticalTexCoords = true;
+	public boolean m_combineMeshes = true;
+	
+	public boolean m_vertexHasPosition = false;
+	public boolean m_vertexHasTexCoords = false;
+	public boolean m_vertexHasNormal = false;
+	public boolean m_vertexHasColour = false;
+	public boolean m_vertexHasWeights = false;
+	public boolean m_vertexHasJointIndices = false;
 }

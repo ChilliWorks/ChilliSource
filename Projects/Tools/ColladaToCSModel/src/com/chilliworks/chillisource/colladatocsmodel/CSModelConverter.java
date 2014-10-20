@@ -56,7 +56,7 @@ public class CSModelConverter
 	/// Private Member Data
 	//-------------------------------------------------------------------
 	Stack<Matrix4> mMatrixStack;
-	CSModelConversionParameters mConversionParams;
+	ColladaToCSModelOptions mConversionParams;
 	UserPropertiesParser mPropertiesParser;
 	//-------------------------------------------------------------------
 	/// Constructor
@@ -73,7 +73,7 @@ public class CSModelConverter
 	/// Converts the input collections of data from the Collada file into 
 	/// something usable for outputting in MoModel format.
 	//-------------------------------------------------------------------
-	public CSModel ConvertToMoModelFormat(LinkedList<String> inNodesToExport, Collada inCollada, CSModelConversionParameters inParams)
+	public CSModel ConvertToMoModelFormat(LinkedList<String> inNodesToExport, Collada inCollada, ColladaToCSModelOptions inParams)
 	{
 		mConversionParams = inParams;
 		CSModel model = new CSModel();
@@ -307,7 +307,7 @@ public class CSModelConverter
 				
 				//if the "Combine Meshes" transform is being used, then combine all meshes that use the same material.
 				CSModelMesh mesh = null;
-				if (material != null && mConversionParams.mbCombineMeshes == true)
+				if (material != null && mConversionParams.m_combineMeshes == true)
 				{
 					//get the mesh name
 					String meshName = triangles.mstrMaterial;
