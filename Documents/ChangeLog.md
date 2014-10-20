@@ -1,5 +1,8 @@
 === Chilli Source Change Log ===
 
+Version 1.1.3 2013-10-20:
+	- Project generator will now error if the output directory is inside Chilli Source. This was causing recursive file copy issues when copying Chilli Source to the project directory.
+
 Version 1.1.2 2014-10-16:
 	- Added CSProjectGenerator, a tool for generating new Chilli Source project.
 
