@@ -31,6 +31,8 @@ package com.chilliworks.chillisource.csprojectgenerator;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.util.LinkedList;
 
@@ -51,7 +53,7 @@ public final class CSProjectGenerator
 	private static final String k_projectZipFilePath = "CSProjectGenerator/" + k_templateProjectName + ".zip";
 	private static final String k_csSourceDirectoryPath = "../";
 	private static final String k_csDestinationDirectoryPath = "ChilliSource/";
-	private static final String k_tempDirectory = "_temp/";
+	private static final String k_tempDirectory = "_temp-csprojectgenerator/";
 	
 	/**
 	 * Generates a new Chilli Source project using the given options.
@@ -63,11 +65,11 @@ public final class CSProjectGenerator
 	public static void generate(Options in_options)
 	{
 		validateOptions(in_options);
-		unzipProject();
+		unzipProject(in_options);
 		updateProjectFiles(in_options);
-		copyChilliSource();
+		copyChilliSource(in_options);
 		copyToOutput(in_options);
-		cleanupTemp();
+		cleanupTemp(in_options);
 	}
 	/**
 	 * Confirms that the given options are valid.
@@ -78,46 +80,74 @@ public final class CSProjectGenerator
 	 */
 	private static void validateOptions(Options in_options)
 	{
+		//check that the project name is valid.
 		if (in_options.m_projectName.matches("[a-zA-Z0-9]+") == false)
 		{
 			Logging.logFatal("Project name can only contain: a-z, A-Z or 0-9.");
 		}
 		
+		//check that that package name is valid
 		if (in_options.m_packageName.matches("[a-z.]+") == false)
 		{
 			Logging.logFatal("Package name can only contain: a-z and '.'");
 		}
 		
-		String outputProjectDirectory = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + in_options.m_projectName);
-		if (new File(outputProjectDirectory).exists() == true)
+		//confirm that the project path doesn't already exist.
+		String outputProjectDirectoryPathName = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + in_options.m_projectName);
+		File outputProjectDirectory = new File(outputProjectDirectoryPathName);
+		if (outputProjectDirectory.exists() == true)
 		{
-			Logging.logFatal("Output project directory '" + outputProjectDirectory + "' already exists!");
+			Logging.logFatal("Output project directory '" + outputProjectDirectoryPathName + "' already exists!");
+		}
+		
+		//ensure the output path is not inside Chilli Source as this will break copying of files.
+		try
+		{
+			String outputProjectDirectoryPathNameAbs = outputProjectDirectory.getCanonicalPath();
+			String csDirectoryPathName = StringUtils.standardiseDirectoryPath(getJarDirectoryPath(in_options) + k_csSourceDirectoryPath); 
+			String csDirectoryPathNameAbs = new File(csDirectoryPathName).getCanonicalPath();
+		
+			Path outputProjectDirectoryPath = Paths.get(outputProjectDirectoryPathNameAbs);
+			Path csDirectoryPath = Paths.get(csDirectoryPathNameAbs);
+
+			if (outputProjectDirectoryPath.startsWith(csDirectoryPath) == true)
+			{
+				Logging.logFatal("Output project directory '" + outputProjectDirectoryPathName + "' cannot be located inside Chilli Source.");
+			}
+		}
+		catch (Exception e)
+		{
+			Logging.logVerbose(StringUtils.convertExceptionToString(e));
+			Logging.logFatal("Failed to validate output directory path.");
 		}
 	}
 	/**
 	 * unzips the project to the temp directory.
 	 * 
 	 * @author Ian Copland
+	 *
+	 * @param in_options - The options with which to create the new project.
 	 */
-	private static void unzipProject()
+	private static void unzipProject(Options in_options)
 	{
 		try 
 		{
 			Logging.logVerbose("Unzipping project to temporary directory.");
 			
-			if (new File(k_tempDirectory).exists() == true)
+			String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
+			if (new File(tempDirectoryPath).exists() == true)
 			{
 				Logging.logFatal("Temp directory already exists.");
 			}
 			
-			String pathToZip = getJarDirectoryPath() + k_projectZipFilePath;
-			ZipUtils.extract(pathToZip, k_tempDirectory);
+			String pathToZip = getJarDirectoryPath(in_options) + k_projectZipFilePath;
+			ZipUtils.extract(pathToZip, tempDirectoryPath);
 	    } 
 		catch (IOException e) 
 	    {
 			Logging.logVerbose(StringUtils.convertExceptionToString(e));
 			
-			cleanupTemp();
+			cleanupTemp(in_options);
 	        Logging.logFatal("Could not open project zip file: " + k_projectZipFilePath);
 	    }
 	}
@@ -126,9 +156,11 @@ public final class CSProjectGenerator
 	 * 
 	 * @author S Downie
 	 * 
+	 * @param in_options - The options with which to create the new project.
+	 * 
 	 * @return Directory path to jar folder
 	 */
-	private static String getJarDirectoryPath()
+	private static String getJarDirectoryPath(Options in_options)
 	{
 		String jarDir = "";
 		
@@ -143,7 +175,7 @@ public final class CSProjectGenerator
 		{
 			Logging.logVerbose(StringUtils.convertExceptionToString(e));
 			
-			cleanupTemp();
+			cleanupTemp(in_options);
 			Logging.logFatal("Could not get jar directory path.");
 		}
 		 
@@ -212,7 +244,8 @@ public final class CSProjectGenerator
 	 */
 	private static void updateFileContents(Options in_options, String[] in_filePaths)
 	{
-		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(k_tempDirectory + k_templateProjectName);
+		String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
+		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(tempDirectoryPath + k_templateProjectName);
 		
 		for (String filePath : in_filePaths)
 		{
@@ -222,7 +255,7 @@ public final class CSProjectGenerator
 			String fileContents = FileUtils.readFile(fullFilePath);
 			if (fileContents == null || fileContents.length() == 0)
 			{
-				cleanupTemp();
+				cleanupTemp(in_options);
 				Logging.logFatal("Could not read file: " + filePath);
 			}
 			
@@ -231,7 +264,7 @@ public final class CSProjectGenerator
 			
 			if (FileUtils.writeFile(fullFilePath, fileContents) == false)
 			{
-				cleanupTemp();
+				cleanupTemp(in_options);
 				Logging.logFatal("Could not write file: " + filePath);
 			}
 		}
@@ -248,7 +281,8 @@ public final class CSProjectGenerator
 	 */
 	private static void updateFileNames(Options in_options, String[] in_filePaths)
 	{
-		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(k_tempDirectory + k_templateProjectName);
+		String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
+		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(tempDirectoryPath + k_templateProjectName);
 		
 		for (String currentFilePath : in_filePaths)
 		{
@@ -262,7 +296,7 @@ public final class CSProjectGenerator
 			
 			if (FileUtils.renameFile(currentFullFilePath, newFullFilePath) == false)
 			{
-				cleanupTemp();
+				cleanupTemp(in_options);
 				Logging.logFatal("Failed to rename file: " + currentFilePath);
 			}
 		}
@@ -279,7 +313,8 @@ public final class CSProjectGenerator
 	 */
 	private static void updateDirectoryNames(Options in_options, String[] in_directoryPaths)
 	{
-		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(k_tempDirectory + k_templateProjectName);
+		String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
+		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(tempDirectoryPath + k_templateProjectName);
 		
 		for (String currentDirectoryPath : in_directoryPaths)
 		{
@@ -293,7 +328,7 @@ public final class CSProjectGenerator
 			
 			if (FileUtils.renameDirectory(currentFullDirectoryPath, newFullDirectoryPath) == false)
 			{
-				cleanupTemp();
+				cleanupTemp(in_options);
 				Logging.logFatal("Failed to rename directory: " + newFullDirectoryPath);
 			}
 		}
@@ -302,17 +337,20 @@ public final class CSProjectGenerator
 	 * Copies Chilli Source into the project directory.
 	 * 
 	 * @author Ian Copland
+	 * 
+	 * @param in_options - The options with which to create the new project.
 	 */
-	private static void copyChilliSource()
+	private static void copyChilliSource(Options in_options)
 	{
-		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(k_tempDirectory + k_templateProjectName);
-		String csSourcePath = StringUtils.standardiseDirectoryPath(getJarDirectoryPath() + k_csSourceDirectoryPath); 
+		String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
+		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(tempDirectoryPath + k_templateProjectName);
+		String csSourcePath = StringUtils.standardiseDirectoryPath(getJarDirectoryPath(in_options) + k_csSourceDirectoryPath); 
 		String csDestinationPath = StringUtils.standardiseDirectoryPath(tempProjectDirectory + k_csDestinationDirectoryPath);
 		
 		Logging.logVerbose("Copying Chilli Source into the project.");
 		if (FileUtils.copyDirectory(csSourcePath, csDestinationPath, new LinkedList<String>()) == false)
 		{
-			cleanupTemp();
+			cleanupTemp(in_options);
 			Logging.logFatal("Could not copy Chilli Source into project.");
 		}
 	}
@@ -325,13 +363,14 @@ public final class CSProjectGenerator
 	 */
 	private static void copyToOutput(Options in_options)
 	{
-		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(k_tempDirectory + k_templateProjectName);
+		String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
+		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(tempDirectoryPath + k_templateProjectName);
 		String outputProjectDirectory = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + in_options.m_projectName);
 		
 		Logging.logVerbose("Copying project to output directory: " + outputProjectDirectory);
 		if (FileUtils.copyDirectory(tempProjectDirectory, outputProjectDirectory, new LinkedList<String>()) == false)
 		{
-			cleanupTemp();
+			cleanupTemp(in_options);
 			Logging.logFatal("Could not copy to output directory: " + outputProjectDirectory);
 		}
 	}
@@ -339,10 +378,13 @@ public final class CSProjectGenerator
 	 * Cleans up the temporary directory.
 	 *
 	 * @author Ian Copland
+	 * 
+	 * @param in_options - The options with which to create the new project.
 	 */
-	private static void cleanupTemp()
+	private static void cleanupTemp(Options in_options)
 	{
 		Logging.logVerbose("Deleting temp directory.");
-		FileUtils.deleteDirectory(k_tempDirectory);
+		String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
+		FileUtils.deleteDirectory(tempDirectoryPath);
 	}
 }
