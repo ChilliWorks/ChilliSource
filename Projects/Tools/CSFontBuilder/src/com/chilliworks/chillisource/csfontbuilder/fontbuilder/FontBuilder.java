@@ -27,8 +27,6 @@
  */
 
 package com.chilliworks.chillisource.csfontbuilder.fontbuilder;
-
-import com.chilliworks.chillisource.toolutils.Logging;
  
 /**
  * A static class containing methods for building CSFont bitmap fonts from
@@ -49,9 +47,6 @@ public final class FontBuilder
 	 */
 	public static boolean build(FontBuilderOptions in_options)
 	{
-		Logging.logVerbose("Building with parameters: ");
-		Logging.logVerbose("  Input file path: " + in_options.m_inputFilePath);
-		Logging.logVerbose("  Output file path: " + in_options.m_outputFilePath);
 		
 		return true;
 	}

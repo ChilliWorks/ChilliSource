@@ -1,7 +1,7 @@
 /**
- * GlyphsBuilder.java
+ * GlyphsWriter.java
  * Chilli Source
- * Created by Ian Copland on 09/10/2014.
+ * Created by Ian Copland on 21/10/2014.
  * 
  * The MIT License (MIT)
  * 
@@ -29,43 +29,56 @@
 package com.chilliworks.chillisource.csfontbuilder.glyphsbuilder;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import com.chilliworks.chillisource.toolutils.Logging;
- 
+import com.chilliworks.chillisource.toolutils.StringUtils;
+
 /**
- * A static class containing methods for converting a vector font (TTF or OTF) to
- * bitmap font glyphs with kerning info.
+ * Provides a series of methods for writing bitmap font glyphs to file.
  * 
  * @author Ian Copland
  */
-public final class GlyphsBuilder
+public final class GlyphsWriter
 {
 	/**
-	 * Converts the font described in the input options to bitmap font glyphs. Also
-	 * outputs kerning info for the glyphs.
+	 * Saves the given glyphs to the output directory.
 	 * 
 	 * @author Ian Copland
 	 * 
-	 * @param in_options - The builder options.
+	 * @param in_characters - The characters to output.
+	 * @param in_glyphImages - The array of glyph images that should be saved to disk.
+	 * @param in_outputDirectoryPath - The path to the output directory.
 	 * 
-	 * @return Whether or not the builder succeeded.
+	 * @return Whether or not this was successful.
 	 */
-	public static boolean build(GlyphsBuilderOptions in_options)
+	public static boolean write(String in_characters, BufferedImage[] in_glyphImages, String in_outputDirectoryPath)
 	{
-		BufferedImage[] glyphImages = GlyphsRenderer.render(in_options);
-		if (glyphImages == null)
-		{
-			Logging.logFatal("Failed to render glyphs for font: " + in_options.m_fontName);
-			return false;
-		}
+		assert (in_glyphImages.length == in_characters.length()) : "The character and glyph count is not the same.";
 		
-		if (GlyphsWriter.write(in_options.m_characters, glyphImages, in_options.m_outputDirectoryPath) == false)
+		try 
 		{
-			Logging.logFatal("Failed to save glyphs to directory: " + in_options.m_outputDirectoryPath);
+			for (int i = 0; i < in_glyphImages.length; ++i)
+			{
+				BufferedImage glyphImage = in_glyphImages[i];
+				char character = in_characters.charAt(i);
+				String characterString = Integer.toHexString((int)character);
+				String upperCharacterString = characterString.toUpperCase();
+				
+			    File outputfile = new File(in_outputDirectoryPath + upperCharacterString + ".png");
+			    ImageIO.write(glyphImage, "png", outputfile);
+			}
+		} 
+		catch (IOException e) 
+		{
+			Logging.logVerbose(StringUtils.convertExceptionToString(e));
+			Logging.logFatal("Failed to save glyphs to directory: " + in_outputDirectoryPath);
 			return false;
 		}
 		
 		return true;
-	}	
-
+	}
 }

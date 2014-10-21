@@ -37,11 +37,11 @@ import com.chilliworks.chillisource.toolutils.Colour;
  */
 public final class FontBuilderOptions
 {
-	public String m_inputFilePath = "";
+	public String m_fontName = "";
 	public String m_outputFilePath = "";
 	
 	//bitmap glyph creation
-	public Colour m_colour = Colour.k_white;
+	public Colour m_colour = Colour.WHITE;
 	public boolean m_outline = false;
 	public boolean m_dropShadow = false;
 	public int m_fontPointSize = 12;

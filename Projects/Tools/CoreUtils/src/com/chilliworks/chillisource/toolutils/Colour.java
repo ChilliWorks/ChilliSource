@@ -36,14 +36,49 @@ package com.chilliworks.chillisource.toolutils;
  */
 public final class Colour
 {
-	public static Colour k_white = new Colour(1.0f, 1.0f, 1.0f, 1.0f);
-	public static Colour k_black = new Colour(0.0f, 0.0f, 0.0f, 1.0f);
+	public final static Colour WHITE = new Colour(1.0, 1.0, 1.0, 1.0);
+	public final static Colour BLACK = new Colour(0.0, 0.0, 0.0, 1.0);
 	
-	private final float m_r;
-	private final float m_g;
-	private final float m_b;
-	private final float m_a;
+	private final double m_r;
+	private final double m_g;
+	private final double m_b;
+	private final double m_a;
 	
+	/**
+	 * Parses a colour from a string. colour values should be given in
+	 * the range 0.0 - 1.0 and each component should be separated by
+	 * a comma. For example: 0.8, 1.0, 0.1, 1.0.
+	 * 
+	 * @author Ian Copland
+	 *
+	 * @param in_colourString - The colour string
+	 */
+	public static Colour parseColour(String in_colourString)
+	{
+		String[] components = in_colourString.split(",");
+		if (components.length == 3 || components.length == 4)
+		{
+			double r = Float.parseFloat(components[0].trim());
+			double g = Float.parseFloat(components[1].trim());
+			double b = Float.parseFloat(components[2].trim());
+			double a = 1.0;
+			if (components.length == 4)
+			{
+				a = Float.parseFloat(components[3].trim());
+			}
+			
+			r = Math.max(Math.min(r, 1.0), 0.0);
+			g = Math.max(Math.min(g, 1.0), 0.0);
+			b = Math.max(Math.min(b, 1.0), 0.0);
+			a = Math.max(Math.min(a, 1.0), 0.0);
+			
+			return new Colour(r, g, b, a);
+		}
+		else
+		{
+			return Colour.WHITE;
+		}
+	}
 	/**
 	 * Constructs a new colour with the given RGBA values.
 	 * 
@@ -51,13 +86,15 @@ public final class Colour
 	 *
 	 * @param in_r - The red colour value.
 	 * @param in_g - The green colour value.
+	 * @param in_b - The blue colour value.
+	 * @param in_a - The alpha value.
 	 */
-	public Colour(float in_r, float in_g, float in_b, float in_a)
+	public Colour(double in_r, double in_g, double in_b, double in_a)
 	{
-		assert (in_r >= 0.0f && in_r <= 1.0f) : "Colour: red value must be in the range 0.0-1.0.";
-		assert (in_g >= 0.0f && in_g <= 1.0f) : "Colour: green value must be in the range 0.0-1.0.";
-		assert (in_b >= 0.0f && in_b <= 1.0f) : "Colour: blue value must be in the range 0.0-1.0.";
-		assert (in_a >= 0.0f && in_a <= 1.0f) : "Colour: alpha value must be in the range 0.0-1.0.";
+		assert (in_r >= 0.0 && in_r <= 1.0) : "Colour: red value must be in the range 0.0-1.0.";
+		assert (in_g >= 0.0 && in_g <= 1.0) : "Colour: green value must be in the range 0.0-1.0.";
+		assert (in_b >= 0.0 && in_b <= 1.0) : "Colour: blue value must be in the range 0.0-1.0.";
+		assert (in_a >= 0.0 && in_a <= 1.0) : "Colour: alpha value must be in the range 0.0-1.0.";
 		
 		m_r = in_r;
 		m_g = in_g;
@@ -69,7 +106,7 @@ public final class Colour
 	 *
 	 * @return The red colour value.
 	 */
-	public float getR()
+	public double getR()
 	{
 		return m_r;
 	}
@@ -78,7 +115,7 @@ public final class Colour
 	 *
 	 * @return The green colour value.
 	 */
-	public float getG()
+	public double getG()
 	{
 		return m_g;
 	}	
@@ -87,7 +124,7 @@ public final class Colour
 	 *
 	 * @return The blue colour value.
 	 */
-	public float getB()
+	public double getB()
 	{
 		return m_b;
 	}
@@ -96,7 +133,7 @@ public final class Colour
 	 *
 	 * @return The alpha value.
 	 */
-	public float getA()
+	public double getA()
 	{
 		return m_a;
 	}
@@ -128,7 +165,7 @@ public final class Colour
 	    }
 	    
 	    Colour colour = (Colour)in_object;
-	    return (Float.compare(m_r, colour.m_r) == 0 && Float.compare(m_g, colour.m_g) == 0 && Float.compare(m_b, colour.m_b) == 0 && Float.compare(m_a, colour.m_a) == 0);
+	    return (Double.compare(m_r, colour.m_r) == 0 && Double.compare(m_g, colour.m_g) == 0 && Double.compare(m_b, colour.m_b) == 0 && Double.compare(m_a, colour.m_a) == 0);
 	}
 	/**
 

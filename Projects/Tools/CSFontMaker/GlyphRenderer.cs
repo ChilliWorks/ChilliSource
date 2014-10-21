@@ -148,7 +148,7 @@ namespace CSFontMaker
                    }
                    else if (DrawOutline)
                    {
-                       ApplyGraphicsQualityOptions(canvas, false); //AA with outlines is a blurry mess.
+                       ApplyGraphicsQualityOptions(canvas, true); //AA with outlines is a blurry mess.
                        for (int nPixelThickness = 1; nPixelThickness <= OutlineThickness; nPixelThickness++)
                        {
                            PointF [] points = new PointF[8]{
