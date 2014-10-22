@@ -36,7 +36,6 @@ import javax.imageio.ImageIO;
 
 import org.json.JSONObject;
 
-import com.chilliworks.chillisource.csfontbuilder.Glyphs;
 import com.chilliworks.chillisource.toolutils.FileUtils;
 import com.chilliworks.chillisource.toolutils.Logging;
 import com.chilliworks.chillisource.toolutils.StringUtils;

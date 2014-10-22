@@ -28,7 +28,6 @@
 
 package com.chilliworks.chillisource.csfontbuilder.glyphsbuilder;
 
-import com.chilliworks.chillisource.csfontbuilder.Glyphs;
 import com.chilliworks.chillisource.toolutils.Logging;
  
 /**

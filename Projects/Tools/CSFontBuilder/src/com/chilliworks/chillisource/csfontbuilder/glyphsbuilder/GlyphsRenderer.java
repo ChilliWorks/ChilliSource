@@ -41,7 +41,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 
-import com.chilliworks.chillisource.csfontbuilder.Glyphs;
 import com.chilliworks.chillisource.toolutils.Colour;
 import com.chilliworks.chillisource.toolutils.Integer2;
 

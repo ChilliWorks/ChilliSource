@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.csfontbuilder;
+package com.chilliworks.chillisource.csfontbuilder.glyphsbuilder;
 
 import java.awt.image.BufferedImage;
 
