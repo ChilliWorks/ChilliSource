@@ -28,14 +28,15 @@
 
 package com.chilliworks.chillisource.csfontbuilder;
 
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder.FontFromGlyphsBuilder;
+import com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder.FontFromGlyphsBuilderOptions;
+import com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder.FontFromGlyphsBuilderOptionsParser;
 import com.chilliworks.chillisource.csfontbuilder.glyphsbuilder.GlyphsBuilder;
 import com.chilliworks.chillisource.csfontbuilder.glyphsbuilder.GlyphsBuilderOptions;
-import com.chilliworks.chillisource.toolutils.Colour;
-import com.chilliworks.chillisource.toolutils.Integer2;
+import com.chilliworks.chillisource.csfontbuilder.glyphsbuilder.GlyphsBuilderOptionsParser;
 import com.chilliworks.chillisource.toolutils.Logging;
 import com.chilliworks.chillisource.toolutils.StringUtils;
 import com.chilliworks.chillisource.toolutils.Logging.LoggingLevel;
@@ -49,45 +50,18 @@ import com.chilliworks.chillisource.toolutils.Logging.LoggingLevel;
 public final class Main
 {
 	private static final String PARAM_MODE = "--mode";
-	private static final String PARAM_OUTPUT = "--output";
-	private static final String PARAM_CHARACTERS = "--characters";
-	private static final String PARAM_FONT_NAME = "--fontname";
-	private static final String PARAM_FONT_STYLE = "--fontstyle";
-	private static final String PARAM_FONT_SIZE = "--fontsize";
-	private static final String PARAM_FONT_COLOUR = "--fontcolour";
-	private static final String PARAM_ENABLE_DROP_SHADOW = "--enabledropshadow";
-	private static final String PARAM_DROP_SHADOW_COLOUR = "--dropshadowcolour";
-	private static final String PARAM_DROP_SHADOW_OFFSET = "--dropshadowoffset";
-	private static final String PARAM_ENABLE_OUTLINE = "--enableoutline";
-	private static final String PARAM_OUTLINE_COLOUR = "--outlinecolour";
-	private static final String PARAM_OUTLINE_SIZE = "--outlinesize";
-	private static final String PARAM_ENABLE_GLOW = "--enableglow";
-	private static final String PARAM_GLOW_COLOUR = "--glowcolour";
-	private static final String PARAM_GLOW_SIZE = "--glowsize";
 	private static final String PARAM_HELP = "--help";
+	private static final String PARAM_INPUT = "--input";
+	private static final String PARAM_OUTPUT = "--output";
+	
 	private static final String SHORT_PARAM_MODE = "-m";
-	private static final String SHORT_PARAM_OUTPUT = "-o";
-	private static final String SHORT_PARAM_CHARACTERS = "-ch";
-	private static final String SHORT_PARAM_FONT_NAME = "-fn";
-	private static final String SHORT_PARAM_FONT_STYLE = "-fst";
-	private static final String SHORT_PARAM_FONT_SIZE = "-fsi";
-	private static final String SHORT_PARAM_FONT_COLOUR = "-fc";
-	private static final String SHORT_PARAM_ENABLE_DROP_SHADOW = "-eds";
-	private static final String SHORT_PARAM_DROP_SHADOW_COLOUR = "-dsc";
-	private static final String SHORT_PARAM_DROP_SHADOW_OFFSET = "-dso";
-	private static final String SHORT_PARAM_ENABLE_OUTLINE = "-eo";
-	private static final String SHORT_PARAM_OUTLINE_COLOUR = "-oc";
-	private static final String SHORT_PARAM_OUTLINE_SIZE = "-os";
-	private static final String SHORT_PARAM_ENABLE_GLOW = "-eg";
-	private static final String SHORT_PARAM_GLOW_COLOUR = "-gc";
-	private static final String SHORT_PARAM_GLOW_SIZE = "-gs";
 	private static final String SHORT_PARAM_HELP = "-h";
+	private static final String SHORT_PARAM_INPUT = "-i";
+	private static final String SHORT_PARAM_OUTPUT = "-o";
+
 	private static final String MODE_FONT = "font";
 	private static final String MODE_GLYPHS = "glyphs";
 	private static final String MODE_FONT_FROM_GLYPHS = "fontfromglyphs";
-	private static final String FONT_STYLE_PLAIN = "plain";
-	private static final String FONT_STYLE_BOLD = "bold";
-	private static final String FONT_STYLE_ITALIC = "italic";
 	
 	/**
 	 * An enum describing the possible modes that the tool can be run in.
@@ -178,156 +152,36 @@ public final class Main
 	 */
 	private static void processGlyphsMode(String[] in_arguments)
 	{
-		//read the base arguments
 		GlyphsBuilderOptions options = new GlyphsBuilderOptions();
-		for (int i = 0; i < in_arguments.length; ++i)
+		String[] remainingArguments = GlyphsBuilderOptionsParser.parse(in_arguments, options);
+		
+		String outputDirectoryPath = "";
+		
+		for (int i = 0; i < remainingArguments.length; ++i)
 		{
 			//output
-			if (in_arguments[i].equalsIgnoreCase(PARAM_OUTPUT) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_OUTPUT) == true)
+			if (remainingArguments[i].equalsIgnoreCase(PARAM_OUTPUT) == true || remainingArguments[i].equalsIgnoreCase(SHORT_PARAM_OUTPUT) == true)
 			{
-				if (i+1 < in_arguments.length)
-					options.m_outputDirectoryPath = StringUtils.standardiseDirectoryPath(in_arguments[i+1]);
+				if (i+1 < remainingArguments.length)
+					outputDirectoryPath = StringUtils.standardiseDirectoryPath(remainingArguments[i+1]);
 				else
 					Logging.logFatal("No output directory path provided!");
-				i++;
-			}
-			
-			//characters
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_CHARACTERS) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_CHARACTERS) == true)
-			{
-				if (i+1 < in_arguments.length)
-					options.m_characters = in_arguments[i+1];
-				else
-					Logging.logFatal("No character list provided.");
-				i++;
-			}
-			
-			//font name
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_FONT_NAME) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_FONT_NAME) == true)
-			{
-				if (i+1 < in_arguments.length)
-					options.m_fontName = in_arguments[i+1];
-				else
-					Logging.logFatal("No font name provided!");
-				i++;
-			}
-			
-			//font style
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_FONT_STYLE) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_FONT_STYLE) == true)
-			{
-				if (i+1 < in_arguments.length)
-					options.m_fontStyle = parseFontStyle(in_arguments[i+1]);
-				else
-					Logging.logFatal("No font style provided!");
-				i++;
-			}
-			
-			//font size
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_FONT_SIZE) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_FONT_SIZE) == true)
-			{
-				if (i+1 < in_arguments.length)
-					options.m_fontSize = Integer.parseInt(in_arguments[i+1]);
-				else
-					Logging.logFatal("No font size provided!");
-				i++;
-			}
-			
-			//font colour
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_FONT_COLOUR) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_FONT_COLOUR) == true)
-			{
-				if (i+1 < in_arguments.length)
-					options.m_fontColour = Colour.parseColour(in_arguments[i+1]);
-				else
-					Logging.logFatal("No font colour provided!");
-				i++;
-			}
-			
-			//drop shadow
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_ENABLE_DROP_SHADOW) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_ENABLE_DROP_SHADOW) == true)
-			{
-				options.m_enableDropShadow = true;
-			}
-			
-			//drop shadow colour
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_DROP_SHADOW_COLOUR) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_DROP_SHADOW_COLOUR) == true)
-			{
-				if (i+1 < in_arguments.length)
-					options.m_dropShadowColour = Colour.parseColour(in_arguments[i+1]);
-				else
-					Logging.logFatal("No drop shadow colour provided!");
-				i++;
-			}
-			
-			//drop shadow offset
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_DROP_SHADOW_OFFSET) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_DROP_SHADOW_OFFSET) == true)
-			{
-				if (i+1 < in_arguments.length)
-					options.m_dropShadowOffset = Integer2.parseInt2(in_arguments[i+1]);
-				else
-					Logging.logFatal("No drop shadow offset provided!");
-				i++;
-			}
-			
-			//outline
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_ENABLE_OUTLINE) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_ENABLE_OUTLINE) == true)
-			{
-				options.m_enableOutline = true;
-			}
-			
-			//outline colour
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_OUTLINE_COLOUR) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_OUTLINE_COLOUR) == true)
-			{
-				if (i+1 < in_arguments.length)
-					options.m_outlineColour = Colour.parseColour(in_arguments[i+1]);
-				else
-					Logging.logFatal("No outline colour provided!");
-				i++;
-			}
-			
-			//outline size
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_OUTLINE_SIZE) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_OUTLINE_SIZE) == true)
-			{
-				if (i+1 < in_arguments.length)
-					options.m_outlineSize = Integer.parseInt(in_arguments[i+1]);
-				else
-					Logging.logFatal("No outline size provided!");
-				i++;
-			}
-			
-			//glow
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_ENABLE_GLOW) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_ENABLE_GLOW) == true)
-			{
-				options.m_enableGlow = true;
-			}
-			
-			//glow colour
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_GLOW_COLOUR) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_GLOW_COLOUR) == true)
-			{
-				if (i+1 < in_arguments.length)
-					options.m_glowColour = Colour.parseColour(in_arguments[i+1]);
-				else
-					Logging.logFatal("No glow colour provided!");
-				i++;
-			}
-			
-			//glow size
-			else if (in_arguments[i].equalsIgnoreCase(PARAM_GLOW_SIZE) == true || in_arguments[i].equalsIgnoreCase(SHORT_PARAM_GLOW_SIZE) == true)
-			{
-				if (i+1 < in_arguments.length)
-					options.m_glowSize = Integer.parseInt(in_arguments[i+1]);
-				else
-					Logging.logFatal("No glow size provided!");
 				i++;
 			}
 			
 			//Error
 			else
 			{
-				Logging.logFatal("Invalid parameter for 'Glyphs' mode: " + in_arguments[i]);
+				Logging.logFatal("Invalid parameter for 'Glyphs' mode: " + remainingArguments[i]);
 			}
 		}
 		
-		GlyphsBuilder.build(options);
+		if (outputDirectoryPath.length() == 0)
+		{
+			Logging.logFatal("An output directory path must be specfied.");
+		}
+		
+		GlyphsBuilder.build(outputDirectoryPath, options);
 	}
 	/**
 	 * Processes the font from glyphs mode arguments and passes them onto the tool.
@@ -338,8 +192,42 @@ public final class Main
 	 */
 	private static void processFontFromGlyphsMode(String[] in_arguments)
 	{
-		//TODO: !? 
-		Logging.logFatal("Unimplemented: void processFontFromGlyphsMode(String[] in_arguments)");
+		FontFromGlyphsBuilderOptions options = new FontFromGlyphsBuilderOptions();
+		String[] remainingArguments = FontFromGlyphsBuilderOptionsParser.parse(in_arguments, options);
+		
+		String inputDirectoryPath = "";
+		String outputFilePath = "";
+		
+		for (int i = 0; i < remainingArguments.length; ++i)
+		{
+			//input
+			if (remainingArguments[i].equalsIgnoreCase(PARAM_INPUT) == true || remainingArguments[i].equalsIgnoreCase(SHORT_PARAM_INPUT) == true)
+			{
+				if (i+1 < remainingArguments.length)
+					inputDirectoryPath = StringUtils.standardiseDirectoryPath(remainingArguments[i+1]);
+				else
+					Logging.logFatal("No input directory path provided!");
+				i++;
+			}
+			
+			//output
+			else if (remainingArguments[i].equalsIgnoreCase(PARAM_OUTPUT) == true || remainingArguments[i].equalsIgnoreCase(SHORT_PARAM_OUTPUT) == true)
+			{
+				if (i+1 < remainingArguments.length)
+					outputFilePath = StringUtils.standardiseFilePath(remainingArguments[i+1]);
+				else
+					Logging.logFatal("No output file path provided!");
+				i++;
+			}
+			
+			//Error
+			else
+			{
+				Logging.logFatal("Invalid parameter for 'Glyphs' mode: " + remainingArguments[i]);
+			}
+		}
+		
+		FontFromGlyphsBuilder.build(inputDirectoryPath, outputFilePath, options);
 	}
 	/**
 	 * Strips the base arguments from the argument list.
@@ -401,35 +289,6 @@ public final class Main
 		}
 	}
 	/**
-	 * Parses a font style from string.
-	 *
-	 * @author Ian Copland
-	 * 
-	 * @param The string to parse.
-	 * 
-	 * @return The font style the string is describing.
-	 */
-	private static int parseFontStyle(String in_stringToParse)
-	{
-		if (in_stringToParse.equalsIgnoreCase(FONT_STYLE_PLAIN) == true)
-		{
-			return Font.PLAIN;
-		}
-		else if (in_stringToParse.equalsIgnoreCase(FONT_STYLE_BOLD) == true)
-		{
-			return Font.BOLD;
-		}
-		else if (in_stringToParse.equalsIgnoreCase(FONT_STYLE_ITALIC) == true)
-		{
-			return Font.ITALIC;
-		}
-		else
-		{
-			Logging.logFatal("Invalid font style provided: " + in_stringToParse);
-			return Font.PLAIN;
-		}
-	}
-	/**
 	 * Outputs help test for this tool. This will be displayed regardless of 
 	 * the current logging level.
 	 *
@@ -438,44 +297,106 @@ public final class Main
 	private static void printHelpText()
 	{
 		Logging.setLoggingLevel(LoggingLevel.k_verbose);
-		Logging.logVerbose("Usage: java -jar CFontBuilder.jar [" + Logging.k_paramLoggingLevel + " <level>] [" + PARAM_HELP + "]");
+		Logging.logVerbose("Usage: java -jar CFontBuilder.jar [" + Logging.k_paramLoggingLevel + " <level>] [" + PARAM_HELP + "] [" + PARAM_MODE + " <mode>] <mode specific parameters>");
+		Logging.logVerbose(" ");
 		Logging.logVerbose("Base Parameters:");
-		Logging.logVerbose("  " + PARAM_MODE + "(" + SHORT_PARAM_MODE + "): The mode the tool is run in. This defaults to Font mode.");
-		Logging.logVerbose("  " + Logging.k_paramLoggingLevel + "(" + Logging.k_paramLoggingLevelShort + "): [Optional] The level of messages to log.");
-		Logging.logVerbose("  " + PARAM_HELP + "(" + SHORT_PARAM_HELP + "): [Optional] Display this help message.");
-		Logging.logVerbose(" Modes:");
-		Logging.logVerbose("  " + MODE_FONT + ": Creates a CSFont file from the input ttf or oft font file.");
-		Logging.logVerbose("  " + MODE_GLYPHS + ": Creates bitmap glyphs from the input ttf or oft font file.");
-		Logging.logVerbose("  " + MODE_FONT_FROM_GLYPHS + ": Creates a CSFont file from the input bitmap glyphs.");
-		Logging.logVerbose(" Logging Levels:");
-		Logging.logVerbose("  " + Logging.k_loggingLevelNone + ": No logging.");
-		Logging.logVerbose("  " + Logging.k_loggingLevelFatal + ": Only log fatal errors.");
-		Logging.logVerbose("  " + Logging.k_loggingLevelError + ": Only log errors.");
-		Logging.logVerbose("  " + Logging.k_loggingLevelWarning + ": Log errors and warnings.");
-		Logging.logVerbose("  " + Logging.k_loggingLevelVerbose + ": Log all messages.");
+		Logging.logVerbose(" " + PARAM_MODE + "(" + SHORT_PARAM_MODE + "): The mode the tool is run in. This defaults to Font mode.");
+		Logging.logVerbose(" " + Logging.k_paramLoggingLevel + "(" + Logging.k_paramLoggingLevelShort + "): [Optional] The level of messages to log.");
+		Logging.logVerbose(" " + PARAM_HELP + "(" + SHORT_PARAM_HELP + "): [Optional] Display this help message.");
+		Logging.logVerbose(" ");
 		Logging.logVerbose("Font Mode Parameters:");
-		Logging.logVerbose(" TODO ");
+		Logging.logVerbose(" " + PARAM_OUTPUT + "(" + SHORT_PARAM_OUTPUT + "): The output file path of the CSFont file.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_CHARACTERS + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_CHARACTERS + "): [Optional] The list of characters that glyphs should be created for. Defaults to the full character set for english, french, italian, german and spanish.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_FONT_NAME + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_FONT_NAME + "): [Optional] The name of the system font that should be used to create the bitmap glyphs. Defaults to Arial.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_FONT_STYLE + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_FONT_STYLE + "): [Optional] The font style that should be used. Defaults to Plain.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_FONT_SIZE + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_FONT_SIZE + "): [Optional] The point size of the output glyphs. Defaults to 12.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_FONT_COLOUR + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_FONT_COLOUR + "): [Optional] The colour of the output glyphs. Defaults to white.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_ENABLE_DROP_SHADOW + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_ENABLE_DROP_SHADOW + "): [Optional] Enables outputting the glyphs with a drop shadow.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_DROP_SHADOW_COLOUR + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_DROP_SHADOW_COLOUR + "): [Optional] Sets the colour of the drop shadow. Does nothing if a drop shadow is not enabled. Defaults to grey.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_DROP_SHADOW_OFFSET + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_DROP_SHADOW_OFFSET + "): [Optional] Sets the offset of the drop shadow. Does nothing if a drop shadow is not enabled. Defaults to (2, 2).");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_ENABLE_OUTLINE + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_ENABLE_OUTLINE + "): [Optional] Enables outputting the glyphs with an outline.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_OUTLINE_COLOUR + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_OUTLINE_COLOUR + "): [Optional] Sets the colour of the outline. Does nothing if an outline is not enabled. Defaults to black.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_OUTLINE_SIZE + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_OUTLINE_SIZE + "): [Optional] Sets the size of the outline. Does nothing if an outline is not enabled. Defaults to 1.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_ENABLE_GLOW + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_ENABLE_GLOW + "): [Optional] Enables outputting the glyphs with a glow.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_GLOW_COLOUR + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_GLOW_COLOUR + "): [Optional] Sets the colour of the glow. Does nothing if a glow is not enabled. Defaults to white.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_GLOW_SIZE + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_GLOW_SIZE + "): [Optional] Sets the size of the glow. Does nothing if a glow is not enabled. Defaults to 3.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_FIXED_WIDTH + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_FIXED_WIDTH + "): [Optional] Forces the output font image to have the given width.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_FIXED_HEIGHT + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_FIXED_HEIGHT + "): [Optional] Forces the output font image to have the given height.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_VALID_WIDTHS + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_VALID_WIDTHS + "): [Optional] A comma separated list of valid output widths.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_VALID_HEIGHTS + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_VALID_HEIGHTS + "): [Optional] A comma separated list of valid output heights.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_MAX_WIDTH + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_MAX_WIDTH + "): [Optional] The maximum possible width for the output font image.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_MAX_HEIGHT + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_MAX_HEIGHT + "): [Optional] The maximum possible height for the output font image.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_DIVISIBLE_BY + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_DIVISIBLE_BY + "): [Optional] The output image will dimensions divisible by the given value.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_PLACEMENT_HEURISTIC + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_PLACEMENT_HEURISTIC + "): [Optional] The heuristic to use when packing characters.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_IMAGE_COMPRESSION + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_IMAGE_COMPRESSION + "): [Optional] The compression used for the output font image.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_IMAGE_FORMAT + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_IMAGE_FORMAT + "): [Optional] The format of the output font image.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_IMAGE_FORMAT + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_IMAGE_FORMAT + "): [Optional] If set the output font image will be dithered.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_DISABLE_PREMULTIPLIED_ALPHA + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_DISABLE_PREMULTIPLIED_ALPHA + "): [Optional] If set the output font image will not have it's alpha premultiplied.");
+		Logging.logVerbose(" ");
 		Logging.logVerbose("Glyphs Mode Parameters:");
-		Logging.logVerbose("  " + PARAM_OUTPUT + "(" + SHORT_PARAM_OUTPUT + "): The output directory where the bitmap glyphs should be placed.");
-		Logging.logVerbose("  " + PARAM_CHARACTERS + "(" + SHORT_PARAM_CHARACTERS + "): [Optional] The list of characters that glyphs should be created for. Defaults to the full character set for english, french, italian, german and spanish.");
-		Logging.logVerbose("  " + PARAM_FONT_NAME + "(" + SHORT_PARAM_FONT_NAME + "): [Optional] The name of the system font that should be used to create the bitmap glyphs. Defaults to Arial.");
-		Logging.logVerbose("  " + PARAM_FONT_NAME + "(" + SHORT_PARAM_FONT_NAME + "): [Optional] The font style that should be used. Defaults to Plain.");
-		Logging.logVerbose("  " + PARAM_FONT_SIZE + "(" + SHORT_PARAM_FONT_SIZE + "): [Optional] The point size of the output glyphs. Defaults to 12.");
-		Logging.logVerbose("  " + PARAM_FONT_COLOUR + "(" + SHORT_PARAM_FONT_COLOUR + "): [Optional] The colour of the output glyphs. Defaults to white.");
-		Logging.logVerbose("  " + PARAM_ENABLE_DROP_SHADOW + "(" + SHORT_PARAM_ENABLE_DROP_SHADOW + "): [Optional] Enables outputting the glyphs with a drop shadow.");
-		Logging.logVerbose("  " + PARAM_DROP_SHADOW_COLOUR + "(" + SHORT_PARAM_DROP_SHADOW_COLOUR + "): [Optional] Sets the colour of the drop shadow. Does nothing if a drop shadow is not enabled. Defaults to grey.");
-		Logging.logVerbose("  " + PARAM_DROP_SHADOW_OFFSET + "(" + SHORT_PARAM_DROP_SHADOW_OFFSET + "): [Optional] Sets the offset of the drop shadow. Does nothing if a drop shadow is not enabled. Defaults to (2, 2).");
-		Logging.logVerbose("  " + PARAM_ENABLE_OUTLINE + "(" + SHORT_PARAM_ENABLE_OUTLINE + "): [Optional] Enables outputting the glyphs with an outline.");
-		Logging.logVerbose("  " + PARAM_OUTLINE_COLOUR + "(" + SHORT_PARAM_OUTLINE_COLOUR + "): [Optional] Sets the colour of the outline. Does nothing if an outline is not enabled. Defaults to black.");
-		Logging.logVerbose("  " + PARAM_OUTLINE_SIZE + "(" + SHORT_PARAM_OUTLINE_SIZE + "): [Optional] Sets the size of the outline. Does nothing if an outline is not enabled. Defaults to 1.");
-		Logging.logVerbose("  " + PARAM_ENABLE_GLOW + "(" + SHORT_PARAM_ENABLE_GLOW + "): [Optional] Enables outputting the glyphs with a glow.");
-		Logging.logVerbose("  " + PARAM_GLOW_COLOUR + "(" + SHORT_PARAM_GLOW_COLOUR + "): [Optional] Sets the colour of the glow. Does nothing if a glow is not enabled. Defaults to white.");
-		Logging.logVerbose("  " + PARAM_GLOW_SIZE + "(" + SHORT_PARAM_GLOW_SIZE + "): [Optional] Sets the size of the glow. Does nothing if a glow is not enabled. Defaults to 3.");
-		Logging.logVerbose(" Font Styles:");
-		Logging.logVerbose("  " + FONT_STYLE_PLAIN + ": The regular style for the font.");
-		Logging.logVerbose("  " + FONT_STYLE_BOLD + ": The bold style for the font.");
-		Logging.logVerbose("  " + FONT_STYLE_ITALIC + ": The italic style for the font.");
+		Logging.logVerbose(" " + PARAM_OUTPUT + "(" + SHORT_PARAM_OUTPUT + "): The output directory where the bitmap glyphs should be placed.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_CHARACTERS + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_CHARACTERS + "): [Optional] The list of characters that glyphs should be created for. Defaults to the full character set for english, french, italian, german and spanish.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_FONT_NAME + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_FONT_NAME + "): [Optional] The name of the system font that should be used to create the bitmap glyphs. Defaults to Arial.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_FONT_STYLE + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_FONT_STYLE + "): [Optional] The font style that should be used. Defaults to Plain.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_FONT_SIZE + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_FONT_SIZE + "): [Optional] The point size of the output glyphs. Defaults to 12.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_FONT_COLOUR + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_FONT_COLOUR + "): [Optional] The colour of the output glyphs. Defaults to white.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_ENABLE_DROP_SHADOW + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_ENABLE_DROP_SHADOW + "): [Optional] Enables outputting the glyphs with a drop shadow.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_DROP_SHADOW_COLOUR + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_DROP_SHADOW_COLOUR + "): [Optional] Sets the colour of the drop shadow. Does nothing if a drop shadow is not enabled. Defaults to grey.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_DROP_SHADOW_OFFSET + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_DROP_SHADOW_OFFSET + "): [Optional] Sets the offset of the drop shadow. Does nothing if a drop shadow is not enabled. Defaults to (2, 2).");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_ENABLE_OUTLINE + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_ENABLE_OUTLINE + "): [Optional] Enables outputting the glyphs with an outline.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_OUTLINE_COLOUR + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_OUTLINE_COLOUR + "): [Optional] Sets the colour of the outline. Does nothing if an outline is not enabled. Defaults to black.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_OUTLINE_SIZE + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_OUTLINE_SIZE + "): [Optional] Sets the size of the outline. Does nothing if an outline is not enabled. Defaults to 1.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_ENABLE_GLOW + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_ENABLE_GLOW + "): [Optional] Enables outputting the glyphs with a glow.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_GLOW_COLOUR + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_GLOW_COLOUR + "): [Optional] Sets the colour of the glow. Does nothing if a glow is not enabled. Defaults to white.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.PARAM_GLOW_SIZE + "(" + GlyphsBuilderOptionsParser.SHORT_PARAM_GLOW_SIZE + "): [Optional] Sets the size of the glow. Does nothing if a glow is not enabled. Defaults to 3.");
+		Logging.logVerbose(" ");
 		Logging.logVerbose("Font From Glyphs Mode Parameters:");
-		Logging.logVerbose(" TODO ");
+		Logging.logVerbose(" " + PARAM_INPUT + "(" + SHORT_PARAM_INPUT + "): The input directory path containing the bitmap glyphs and the FontInfo.csfontinfo file.");
+		Logging.logVerbose(" " + PARAM_OUTPUT + "(" + SHORT_PARAM_OUTPUT + "): The output file path of the CSFont file.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_FIXED_WIDTH + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_FIXED_WIDTH + "): [Optional] Forces the output font image to have the given width.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_FIXED_HEIGHT + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_FIXED_HEIGHT + "): [Optional] Forces the output font image to have the given height.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_VALID_WIDTHS + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_VALID_WIDTHS + "): [Optional] A comma separated list of valid output widths.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_VALID_HEIGHTS + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_VALID_HEIGHTS + "): [Optional] A comma separated list of valid output heights.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_MAX_WIDTH + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_MAX_WIDTH + "): [Optional] The maximum possible width for the output font image.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_MAX_HEIGHT + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_MAX_HEIGHT + "): [Optional] The maximum possible height for the output font image.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_DIVISIBLE_BY + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_DIVISIBLE_BY + "): [Optional] The output image will dimensions divisible by the given value.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_PLACEMENT_HEURISTIC + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_PLACEMENT_HEURISTIC + "): [Optional] The heuristic to use when packing characters.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_IMAGE_COMPRESSION + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_IMAGE_COMPRESSION + "): [Optional] The compression used for the output font image.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_IMAGE_FORMAT + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_IMAGE_FORMAT + "): [Optional] The format of the output font image.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_IMAGE_FORMAT + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_IMAGE_FORMAT + "): [Optional] If set the output font image will be dithered.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_DISABLE_PREMULTIPLIED_ALPHA + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_DISABLE_PREMULTIPLIED_ALPHA + "): [Optional] If set the output font image will not have it's alpha premultiplied.");
+		Logging.logVerbose(" ");
+		Logging.logVerbose("Modes:");
+		Logging.logVerbose(" " + MODE_FONT + ": Creates a CSFont file from the input ttf or oft font file.");
+		Logging.logVerbose(" " + MODE_GLYPHS + ": Creates bitmap glyphs from the input ttf or oft font file.");
+		Logging.logVerbose(" " + MODE_FONT_FROM_GLYPHS + ": Creates a CSFont file from the input bitmap glyphs.");
+		Logging.logVerbose(" ");
+		Logging.logVerbose("Logging Levels:");
+		Logging.logVerbose(" " + Logging.k_loggingLevelNone + ": No logging.");
+		Logging.logVerbose(" " + Logging.k_loggingLevelFatal + ": Only log fatal errors.");
+		Logging.logVerbose(" " + Logging.k_loggingLevelError + ": Only log errors.");
+		Logging.logVerbose(" " + Logging.k_loggingLevelWarning + ": Log errors and warnings.");
+		Logging.logVerbose(" " + Logging.k_loggingLevelVerbose + ": Log all messages.");
+		Logging.logVerbose(" ");
+		Logging.logVerbose("Font Styles:");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.FONT_STYLE_PLAIN + ": The regular style for the font.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.FONT_STYLE_BOLD + ": The bold style for the font.");
+		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.FONT_STYLE_ITALIC + ": The italic style for the font.");
+		Logging.logVerbose(" ");
+		Logging.logVerbose("Placement Heuristics:");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PLACEMENT_HEURISTIC_TOP_LEFT + ": Place top left.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PLACEMENT_HEURISTIC_BOTTOM_RIGHT + ": Place bottom right.");
+		Logging.logVerbose(" ");
+		Logging.logVerbose("Image Formats:");
+		Logging.logVerbose(" L8");
+		Logging.logVerbose(" LA88");
+		Logging.logVerbose(" RGB565");
+		Logging.logVerbose(" RGBA4444");
+		Logging.logVerbose(" RGB888");
+		Logging.logVerbose(" RGBA8888");
+		Logging.logVerbose(" ");
+		Logging.logVerbose("Compression Types:");
+		Logging.logVerbose(" None");
+		Logging.logVerbose(" Default");
 	}
 }

@@ -3,5 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CoreUtils"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/PNGToCSImage"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/TexturePackerUtils"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

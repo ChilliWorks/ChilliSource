@@ -41,11 +41,9 @@ public final class FontBuilder
 	 * 
 	 * @author Ian Copland
 	 * 
-	 * @param in_options - The builder options.
-	 * 
 	 * @return Whether or not the builder succeeded.
 	 */
-	public static boolean build(FontBuilderOptions in_options)
+	public static boolean build()
 	{
 		
 		return true;

@@ -27,8 +27,6 @@
  */
 
 package com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder;
-
-import com.chilliworks.chillisource.toolutils.Logging;
  
 /**
  * A static class that provides methods for building a CSFont bitmap font
@@ -44,15 +42,16 @@ public final class FontFromGlyphsBuilder
 	 * 
 	 * @author Ian Copland
 	 * 
+	 * @param in_inputDirectoryPath - The input directory path containing the
+	 * glyphs.
+	 * @param in_outputFilePath - The output file path for the CSFont file.
 	 * @param in_options - The builder options.
 	 * 
 	 * @return Whether or not the builder succeeded.
 	 */
-	public static boolean build(FontFromGlyphsBuilderOptions in_options)
+	public static boolean build(String in_inputDirectoryPath, String in_outputFilePath, FontFromGlyphsBuilderOptions in_options)
 	{
-		Logging.logVerbose("Building font from glyphs with parameters: ");
-		Logging.logVerbose("  Input directory path: " + in_options.m_inputDirectionPath);
-		Logging.logVerbose("  Output file path: " + in_options.m_outputFilePath);
+		//TODO: Implement!
 		
 		return true;
 	}

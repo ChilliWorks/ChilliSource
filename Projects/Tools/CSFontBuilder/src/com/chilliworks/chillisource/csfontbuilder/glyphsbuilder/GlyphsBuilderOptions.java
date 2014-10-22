@@ -40,11 +40,8 @@ import com.chilliworks.chillisource.toolutils.Integer2;
  */
 public final class GlyphsBuilderOptions
 {
-	public final static String k_defaultCharacters = "!$%&,-.0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz¡£¥©®¿ÀÌÍßàáãäçèéêíóõöùúü–’“”…₩€元";
-
-	public String m_outputDirectoryPath = "";
-	public String m_characters = k_defaultCharacters;
-	public String m_fontName = "";
+	public String m_characters = "!$%&,-.0123456789:;?@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz¡£¥©®¿ÀÌÍßàáãäçèéêíóõöùúü–’“”…₩€元";
+	public String m_fontName = "Arial";
 	public int m_fontStyle = Font.PLAIN;
 	public int m_fontSize = 12;
 	public Colour m_fontColour = Colour.WHITE;

@@ -28,6 +28,8 @@
 
 package com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder;
 
+import com.chilliworks.chillisource.texturepackerutils.TexturePacker.PlacementHeuristic;
+
 /**
  * A container for the input options for the Font From Glyphs Builder.
  *  
@@ -35,6 +37,16 @@ package com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder;
  */
 public final class FontFromGlyphsBuilderOptions
 {
-	public String m_inputDirectionPath = "";
-	public String m_outputFilePath = "";
+	public int m_fixedWidth = -1;
+	public int m_fixedHeight = -1;
+	public int[] m_validHeights = new int[0];
+	public int[] m_validWidths = new int[0];
+	public int m_maxWidth = 2048;
+	public int m_maxHeight = 2048;
+	public int m_divisibleBy = 4;
+	public PlacementHeuristic m_packingHeuristic = PlacementHeuristic.BOTTOMRIGHT;
+	public String m_imageCompression = "";
+	public String m_imageFormat = "";
+	public boolean m_imageDither = false;
+	public boolean m_imagePremultiplyAlpha = true;
 }

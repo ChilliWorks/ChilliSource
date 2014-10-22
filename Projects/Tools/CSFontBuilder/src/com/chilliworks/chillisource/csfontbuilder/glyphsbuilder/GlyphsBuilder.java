@@ -45,11 +45,12 @@ public final class GlyphsBuilder
 	 * 
 	 * @author Ian Copland
 	 * 
+	 * @param in_outputDirectoryPath - The output directory for the glyphs.
 	 * @param in_options - The builder options.
 	 * 
 	 * @return Whether or not the builder succeeded.
 	 */
-	public static boolean build(GlyphsBuilderOptions in_options)
+	public static boolean build(String in_outputDirectoryPath, GlyphsBuilderOptions in_options)
 	{
 		Glyphs glyphs = GlyphsRenderer.render(in_options);
 		if (glyphs == null)
@@ -58,9 +59,9 @@ public final class GlyphsBuilder
 			return false;
 		}
 		
-		if (GlyphsWriter.write(glyphs, in_options.m_outputDirectoryPath) == false)
+		if (GlyphsWriter.write(glyphs, in_outputDirectoryPath) == false)
 		{
-			Logging.logFatal("Failed to save glyphs to directory: " + in_options.m_outputDirectoryPath);
+			Logging.logFatal("Failed to save glyphs to directory: " + in_outputDirectoryPath);
 			return false;
 		}
 		
