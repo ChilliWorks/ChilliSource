@@ -28,8 +28,7 @@
 
 package com.chilliworks.chillisource.csfontbuilder.glyphsbuilder;
 
-import java.awt.image.BufferedImage;
-
+import com.chilliworks.chillisource.csfontbuilder.Glyphs;
 import com.chilliworks.chillisource.toolutils.Logging;
  
 /**
@@ -52,14 +51,14 @@ public final class GlyphsBuilder
 	 */
 	public static boolean build(GlyphsBuilderOptions in_options)
 	{
-		BufferedImage[] glyphImages = GlyphsRenderer.render(in_options);
-		if (glyphImages == null)
+		Glyphs glyphs = GlyphsRenderer.render(in_options);
+		if (glyphs == null)
 		{
 			Logging.logFatal("Failed to render glyphs for font: " + in_options.m_fontName);
 			return false;
 		}
 		
-		if (GlyphsWriter.write(in_options.m_characters, glyphImages, in_options.m_outputDirectoryPath) == false)
+		if (GlyphsWriter.write(glyphs, in_options.m_outputDirectoryPath) == false)
 		{
 			Logging.logFatal("Failed to save glyphs to directory: " + in_options.m_outputDirectoryPath);
 			return false;

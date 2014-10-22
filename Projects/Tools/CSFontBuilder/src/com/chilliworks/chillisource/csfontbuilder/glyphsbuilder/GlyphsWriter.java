@@ -34,6 +34,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.json.JSONObject;
+
+import com.chilliworks.chillisource.csfontbuilder.Glyphs;
+import com.chilliworks.chillisource.toolutils.FileUtils;
 import com.chilliworks.chillisource.toolutils.Logging;
 import com.chilliworks.chillisource.toolutils.StringUtils;
 
@@ -44,27 +48,52 @@ import com.chilliworks.chillisource.toolutils.StringUtils;
  */
 public final class GlyphsWriter
 {
+	private static final String FONT_INFO_FILE_PATH = "FontInfo.csfontinfo";
+	
 	/**
-	 * Saves the given glyphs to the output directory.
+	 * Saves the given glyphs to the output directory. This will write the bitmap images
+	 * and a JSON file containing the information on the glyphs, such as font size,
+	 * line height and the descent.
 	 * 
 	 * @author Ian Copland
 	 * 
-	 * @param in_characters - The characters to output.
-	 * @param in_glyphImages - The array of glyph images that should be saved to disk.
+	 * @param in_glyphs - The glyphs that should be written to disk.
 	 * @param in_outputDirectoryPath - The path to the output directory.
 	 * 
 	 * @return Whether or not this was successful.
 	 */
-	public static boolean write(String in_characters, BufferedImage[] in_glyphImages, String in_outputDirectoryPath)
+	public static boolean write(Glyphs in_glyphs, String in_outputDirectoryPath)
 	{
-		assert (in_glyphImages.length == in_characters.length()) : "The character and glyph count is not the same.";
+		if (writeBitmapGlyphs(in_glyphs, in_outputDirectoryPath) == false)
+		{
+			return false;
+		}
 		
+		if (writeFontInfo(in_glyphs, in_outputDirectoryPath) == false)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	/**
+	 * Saves the output bitmap glyphs to the given directory.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_glyphs - The glyphs that should be written to disk.
+	 * @param in_outputDirectoryPath - The path to the output directory.
+	 * 
+	 * @return Whether or not this was successful.
+	 */
+	private static boolean writeBitmapGlyphs(Glyphs in_glyphs, String in_outputDirectoryPath)
+	{
 		try 
 		{
-			for (int i = 0; i < in_glyphImages.length; ++i)
+			for (int i = 0; i < in_glyphs.getNumGlyphs(); ++i)
 			{
-				BufferedImage glyphImage = in_glyphImages[i];
-				char character = in_characters.charAt(i);
+				char character = in_glyphs.getCharacters()[i];
+				BufferedImage glyphImage = in_glyphs.getImages()[i];
 				String characterString = Integer.toHexString((int)character);
 				String upperCharacterString = characterString.toUpperCase();
 				
@@ -80,5 +109,27 @@ public final class GlyphsWriter
 		}
 		
 		return true;
+	}
+	/**
+	 * Writes the font into for the given glyphs to the given directory.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_glyphs - The glyphs whose info should be written to disk.
+	 * @param in_outputDirectoryPath - The path to the output directory.
+	 * 
+	 * @return Whether or not this was successful.
+	 */
+	private static boolean writeFontInfo(Glyphs in_glyphs, String in_outputDirectoryPath)
+	{
+		JSONObject jsonRoot = new JSONObject();
+		jsonRoot.put("FontSize", in_glyphs.getFontSize());
+		jsonRoot.put("LineHeight", in_glyphs.getLineHeight());
+		jsonRoot.put("Descent", in_glyphs.getDescent());
+		jsonRoot.put("EffectPadding", in_glyphs.getEffectPadding().toString());
+		String jsonString = jsonRoot.toString(2);
+		
+		String outputFilePath = StringUtils.standardiseFilePath(in_outputDirectoryPath + FONT_INFO_FILE_PATH);
+		return FileUtils.writeFile(outputFilePath, jsonString);
 	}
 }

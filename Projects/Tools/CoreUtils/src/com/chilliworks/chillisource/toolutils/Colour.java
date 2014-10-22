@@ -175,6 +175,6 @@ public final class Colour
 	 */
 	public String toString()
 	{
-		return "(" + m_r + ", " + m_g + ", " + m_b + "," + m_a + ")";
+		return "" + m_r + ", " + m_g + ", " + m_b + "," + m_a;
 	}
 }

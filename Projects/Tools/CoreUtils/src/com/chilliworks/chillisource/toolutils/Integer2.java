@@ -206,6 +206,6 @@ public final class Integer2
 	 */
 	public String toString()
 	{
-		return "(" + m_x + ", " + m_y + ")";
+		return "" + m_x + ", " + m_y;
 	}
 }
