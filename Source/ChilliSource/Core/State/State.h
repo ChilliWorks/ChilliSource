@@ -80,7 +80,7 @@ namespace ChilliSource
             ///
             /// @return System of type TNamedType
             //----------------------------------------------------
-            template <typename TNamedType> TNamedType* GetSystem();
+            template <typename TNamedType> TNamedType* GetSystem() const;
             //----------------------------------------------------
             /// Searches the state systems and returns all systems
             /// that implements the named interface
@@ -89,7 +89,7 @@ namespace ChilliSource
             ///
             /// @return Vector of systems of type TNamedType
             //----------------------------------------------------
-            template <typename TNamedType> void GetSystems(std::vector<TNamedType*>& out_systems);
+            template <typename TNamedType> std::vector<TNamedType*> GetSystems() const;
             //------------------------------------------
             /// @author S Downie
 			///
@@ -317,7 +317,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        template <typename TNamedType> TNamedType* State::GetSystem()
+        template <typename TNamedType> TNamedType* State::GetSystem() const
         {
             for (std::vector<StateSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
             {
@@ -332,15 +332,18 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        template <typename TNamedType> void State::GetSystems(std::vector<TNamedType*>& out_systems)
+        template <typename TNamedType> std::vector<TNamedType*> State::GetSystems() const
         {
-            for (std::vector<StateSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+            std::vector<TNamedType*> systems;
+            for (const auto& stateSystem : m_systems)
             {
-                if ((*it)->IsA(TNamedType::InterfaceID))
+                if (stateSystem->IsA(TNamedType::InterfaceID))
                 {
-                    out_systems.push_back(static_cast<TNamedType*>(it->get()));
+                    systems.push_back(static_cast<TNamedType*>(stateSystem.get()));
                 }
             }
+            
+            return systems;
         }
 	}
 }
