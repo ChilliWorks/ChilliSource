@@ -55,6 +55,8 @@ namespace ChilliSource
             virtual ~StateSystem() {};
         protected:
             friend class State;
+            friend class SubState;  //This is needed for internal development
+                                    //of the sub-state system.
             
             //------------------------------------------------
             /// Default constructor.
