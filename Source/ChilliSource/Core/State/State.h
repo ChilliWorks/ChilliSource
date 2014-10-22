@@ -81,6 +81,15 @@ namespace ChilliSource
             /// @return System of type TNamedType
             //----------------------------------------------------
             template <typename TNamedType> TNamedType* GetSystem();
+            //----------------------------------------------------
+            /// Searches the state systems and returns all systems
+            /// that implements the named interface
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @return Vector of systems of type TNamedType
+            //----------------------------------------------------
+            template <typename TNamedType> void GetSystems(std::vector<TNamedType*>& out_systems);
             //------------------------------------------
             /// @author S Downie
 			///
@@ -320,6 +329,18 @@ namespace ChilliSource
             
             CS_LOG_WARNING("State cannot find implementing systems");
             return nullptr;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        template <typename TNamedType> void State::GetSystems(std::vector<TNamedType*>& out_systems)
+        {
+            for (std::vector<StateSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+            {
+                if ((*it)->IsA(TNamedType::InterfaceID))
+                {
+                    out_systems.push_back(static_cast<TNamedType*>(it->get()));
+                }
+            }
         }
 	}
 }
