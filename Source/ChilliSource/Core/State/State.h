@@ -80,7 +80,16 @@ namespace ChilliSource
             ///
             /// @return System of type TNamedType
             //----------------------------------------------------
-            template <typename TNamedType> TNamedType* GetSystem();
+            template <typename TNamedType> TNamedType* GetSystem() const;
+            //----------------------------------------------------
+            /// Searches the state systems and returns all systems
+            /// that implements the named interface
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @return Vector of systems of type TNamedType
+            //----------------------------------------------------
+            template <typename TNamedType> std::vector<TNamedType*> GetSystems() const;
             //------------------------------------------
             /// @author S Downie
 			///
@@ -308,7 +317,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        template <typename TNamedType> TNamedType* State::GetSystem()
+        template <typename TNamedType> TNamedType* State::GetSystem() const
         {
             for (std::vector<StateSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
             {
@@ -320,6 +329,21 @@ namespace ChilliSource
             
             CS_LOG_WARNING("State cannot find implementing systems");
             return nullptr;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        template <typename TNamedType> std::vector<TNamedType*> State::GetSystems() const
+        {
+            std::vector<TNamedType*> systems;
+            for (const auto& stateSystem : m_systems)
+            {
+                if (stateSystem->IsA(TNamedType::InterfaceID))
+                {
+                    systems.push_back(static_cast<TNamedType*>(stateSystem.get()));
+                }
+            }
+            
+            return systems;
         }
 	}
 }
