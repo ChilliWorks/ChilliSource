@@ -54,48 +54,75 @@ namespace ChilliSource
 		{
 		public:
             CS_DECLARE_NOCOPY(State);
-            //--------------------------------------------
+            //----------------------------------------------------
             /// Constructor
             ///
             /// @author S Downie
-            //--------------------------------------------
+            //----------------------------------------------------
 			State();
-            //--------------------------------------------
+            //----------------------------------------------------
             /// Destructor
             ///
             /// @author S Downie
-            //--------------------------------------------
+            //----------------------------------------------------
 			virtual ~State(){}
-            //------------------------------------------
-			/// @author S Downie
-			///
-			/// @return States scene
-			//------------------------------------------
-			Scene* GetScene();
+            //----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return A pointer to the scene.
+            //----------------------------------------------------
+            Scene* GetScene();
+            //----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the scene.
+            //----------------------------------------------------
+            const Scene* GetScene() const;
             //----------------------------------------------------
             /// Searches the state systems and returns the first
             /// one that implements the named interface
             ///
             /// @author S Downie
             ///
-            /// @return System of type TNamedType
+            /// @return A pointer to the system of type TNamedType
             //----------------------------------------------------
-            template <typename TNamedType> TNamedType* GetSystem() const;
+            template <typename TNamedType> TNamedType* GetSystem();
+            //----------------------------------------------------
+            /// Searches the state systems and returns the first
+            /// one that implements the named interface
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the system of type
+            /// TNamedType
+            //----------------------------------------------------
+            template <typename TNamedType> const TNamedType* GetSystem() const;
             //----------------------------------------------------
             /// Searches the state systems and returns all systems
             /// that implements the named interface
             ///
             /// @author HMcLaughlin
             ///
-            /// @return Vector of systems of type TNamedType
+            /// @return A vector of pointers to the systems of type
+            /// TNamedType
             //----------------------------------------------------
-            template <typename TNamedType> std::vector<TNamedType*> GetSystems() const;
-            //------------------------------------------
+            template <typename TNamedType> std::vector<TNamedType*> GetSystems();
+            //----------------------------------------------------
+            /// Searches the state systems and returns all systems
+            /// that implements the named interface
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return A vector of const pointers to the systems
+            /// of type TNamedType
+            //----------------------------------------------------
+            template <typename TNamedType> std::vector<const TNamedType*> GetSystems() const;
+            //----------------------------------------------------
             /// @author S Downie
 			///
-            /// @return Whether the state is the top of
-            /// the hierarchy
-            //-----------------------------------------
+            /// @return Whether the state is the top of the
+            /// hierarchy
+            //----------------------------------------------------
 			bool IsActiveState() const;
             
         protected:
@@ -317,7 +344,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        template <typename TNamedType> TNamedType* State::GetSystem() const
+        template <typename TNamedType> TNamedType* State::GetSystem()
         {
             for (std::vector<StateSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
             {
@@ -332,9 +359,39 @@ namespace ChilliSource
         }
         //----------------------------------------------------
         //----------------------------------------------------
-        template <typename TNamedType> std::vector<TNamedType*> State::GetSystems() const
+        template <typename TNamedType> const TNamedType* State::GetSystem() const
+        {
+            for (std::vector<StateSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+            {
+                if ((*it)->IsA(TNamedType::InterfaceID))
+                {
+                    return static_cast<TNamedType*>(it->get());
+                }
+            }
+            
+            CS_LOG_WARNING("State cannot find implementing systems");
+            return nullptr;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        template <typename TNamedType> std::vector<TNamedType*> State::GetSystems()
         {
             std::vector<TNamedType*> systems;
+            for (const auto& stateSystem : m_systems)
+            {
+                if (stateSystem->IsA(TNamedType::InterfaceID))
+                {
+                    systems.push_back(static_cast<TNamedType*>(stateSystem.get()));
+                }
+            }
+            
+            return systems;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        template <typename TNamedType> std::vector<const TNamedType*> State::GetSystems() const
+        {
+            std::vector<const TNamedType*> systems;
             for (const auto& stateSystem : m_systems)
             {
                 if (stateSystem->IsA(TNamedType::InterfaceID))

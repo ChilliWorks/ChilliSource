@@ -518,6 +518,7 @@ namespace ChilliSource
 #include <ChilliSource/Core/Math/Quaternion.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 
+#include <algorithm>
 #include <cmath>
 
 namespace ChilliSource

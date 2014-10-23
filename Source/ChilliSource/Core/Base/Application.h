@@ -90,25 +90,45 @@ namespace ChilliSource
  			//----------------------------------------------------
             template <typename TSystem, typename... TArgs> TSystem* CreateSystem(TArgs&&... in_args);
             //----------------------------------------------------
+            /// Looks for a system that implements the queryable
+            /// interface provided as a template parameter.
+            ///
+            /// @author I Copland
+            ///
+            /// @return A pointer to the first system found that
+            /// implements the named interface.
+            //----------------------------------------------------
+            template <typename TNamedType> TNamedType* GetSystem();
+            //----------------------------------------------------
 			/// Looks for a system that implements the queryable
             /// interface provided as a template parameter.
             ///
             /// @author I Copland
             ///
-			/// @return The first system found that implements
-            /// the named interface.
+			/// @return A const pointer to the first system found
+            /// that implements the named interface.
 			//----------------------------------------------------
-			template <typename TNamedType> TNamedType* GetSystem();
+			template <typename TNamedType> const TNamedType* GetSystem() const;
+            //-----------------------------------------------------
+            /// Looks for all systems that implement the given
+            /// queryable interface provided as a template parameter.
+            ///
+            /// @author I Copland
+            ///
+            /// @return A list pointers to the systems that
+            /// implement the given interface.
+            //-----------------------------------------------------
+            template <typename TNamedType> std::vector<TNamedType*> GetSystems();
 			//-----------------------------------------------------
-			/// Looks for a all systems that implement the given
+			/// Looks for all systems that implement the given
             /// queryable interface provided as a template parameter.
 			///
             /// @author I Copland
             ///
-			/// @param [Out] The list of systems that implement the
-            /// queryable interface.
+			/// @return A list const pointers to the systems that
+            /// implement the given interface.
 			//-----------------------------------------------------
-            template <typename TNamedType> void GetSystems(std::vector<TNamedType*> & out_systems);
+            template <typename TNamedType> std::vector<const TNamedType*> GetSystems() const;
 			//-----------------------------------------------------
             /// Returns the version number of the application on
             /// the current platform as a string.
@@ -117,7 +137,7 @@ namespace ChilliSource
             ///
 			/// @return The version string.
 			//-----------------------------------------------------
-			std::string GetAppVersion();
+			std::string GetAppVersion() const;
 			//-----------------------------------------------------
 			/// Returns the elapsed time since the application
             /// started running in seconds.
@@ -126,7 +146,7 @@ namespace ChilliSource
             ///
 			/// @return The time in seconds.
 			//-----------------------------------------------------
-			TimeIntervalSecs GetAppElapsedTime();
+			TimeIntervalSecs GetAppElapsedTime() const;
             //-----------------------------------------------------
             /// Returns the system clock time in seconds since epoch.
             ///
@@ -134,7 +154,7 @@ namespace ChilliSource
             ///
             /// @return The time in seconds.
             //-----------------------------------------------------
-            TimeIntervalSecs GetSystemTime();
+            TimeIntervalSecs GetSystemTime() const;
 			//-----------------------------------------------------
             /// Return the system clock time in milliseconds since
             /// epoch.
@@ -143,7 +163,7 @@ namespace ChilliSource
             ///
             /// @return The time in milliseconds.
             //-----------------------------------------------------
-            TimeIntervalSecs GetSystemTimeInMilliseconds();
+            TimeIntervalSecs GetSystemTimeInMilliseconds() const;
 			//-----------------------------------------------------
 			/// Set the time between update calls to adjust the
             /// frame rate.
@@ -160,7 +180,7 @@ namespace ChilliSource
 			///
 			/// @return Time between update calls
 			//-----------------------------------------------------
-			f32 GetUpdateInterval();
+			f32 GetUpdateInterval() const;
 			//-----------------------------------------------------
 			/// Returns the maximum amount of time to be processed
             /// a single update frame.
@@ -169,7 +189,7 @@ namespace ChilliSource
 			///
 			/// @return Max time to be processed in a single frame.
 			//-----------------------------------------------------
-			f32 GetUpdateIntervalMax();
+			f32 GetUpdateIntervalMax() const;
             //-----------------------------------------------------
 			/// Sets a multiplier for slowing or speeding up the
             /// delta time passed to each system and state.
@@ -185,86 +205,139 @@ namespace ChilliSource
             /// @author S Downie.
             //-----------------------------------------------------
             void Quit();
-			//-----------------------------------------------------
-			/// Returns a pointer to the state manager.
-            ///
-            /// @author S Downie.
-			///
-			/// @return Handle to application state manager
-			//-----------------------------------------------------
-            StateManager* GetStateManager() const;
-			//-----------------------------------------------------
-			/// Returns a pointer to the renderer.
-            ///
-            /// @author S Downie.
-			///
-			/// @return Handle application renderer
-			//-----------------------------------------------------
-            Rendering::Renderer* GetRenderer() const;
-			//-----------------------------------------------------
-			/// Returns a pointer to the render system.
-            ///
-            /// @author S Downie.
-			///
-			/// @return Handle to platfrom specific render system
-			//-----------------------------------------------------
-            Rendering::RenderSystem* GetRenderSystem() const;
-			//-----------------------------------------------------
-			/// Returns a pointer to the file system.
-            ///
-            /// @author I Copland
-			///
-			/// @return Pointer to the file system
-			//-----------------------------------------------------
-            FileSystem* GetFileSystem() const;
             //-----------------------------------------------------
-			/// Returns a pointer to the system that resolves path
+            /// @author S Downie
+            ///
+            /// @return A pointer to the state manager.
+            //-----------------------------------------------------
+            StateManager* GetStateManager();
+            //-----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the state manager.
+            //-----------------------------------------------------
+            const StateManager* GetStateManager() const;
+            //-----------------------------------------------------
+            /// @author S Downie.
+            ///
+            /// @return A pointer to the renderer.
+            //-----------------------------------------------------
+            Rendering::Renderer* GetRenderer();
+            //-----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the renderer.
+            //-----------------------------------------------------
+            const Rendering::Renderer* GetRenderer() const;
+            //-----------------------------------------------------
+            /// @author S Downie.
+            ///
+            /// @return A pointer to the platfrom specific render
+            /// system
+            //-----------------------------------------------------
+            Rendering::RenderSystem* GetRenderSystem();
+            //-----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the platfrom specific
+            /// render system
+            //-----------------------------------------------------
+            const Rendering::RenderSystem* GetRenderSystem() const;
+            //-----------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @return A pointer to the file system.
+            //-----------------------------------------------------
+            FileSystem* GetFileSystem();
+            //-----------------------------------------------------
+            /// @author I Copland
+            ///
+            /// @return A const pointer to the file system.
+            //-----------------------------------------------------
+            const FileSystem* GetFileSystem() const;
+            //-----------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return A pointer to the system that resolves path
             /// based on the device config
+            //-----------------------------------------------------
+            TaggedFilePathResolver* GetTaggedFilePathResolver();
+            //-----------------------------------------------------
+            /// @author Ian Copland
             ///
-            /// @author S Downie
-			///
-			/// @return Pointer to the path resolver
-			//-----------------------------------------------------
-            TaggedFilePathResolver* GetTaggedFilePathResolver() const;
-			//-----------------------------------------------------
-			/// Returns a pointer to the task scheduler.
-			///
-			/// @author S Downie
-			///
-			/// @return Pointer to the task scheduler
-			//-----------------------------------------------------
-            TaskScheduler* GetTaskScheduler() const;
+            /// @return A const pointer to the system that resolves
+            /// path based on the device config
             //-----------------------------------------------------
-			/// Returns a pointer to the resource pool system.
+            const TaggedFilePathResolver* GetTaggedFilePathResolver() const;
+            //-----------------------------------------------------
+            /// @author S Downie
             ///
+            /// @return A pointer to the task scheduler.
+            //-----------------------------------------------------
+            TaskScheduler* GetTaskScheduler();
+            //-----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the task scheduler.
+            //-----------------------------------------------------
+            const TaskScheduler* GetTaskScheduler() const;
+            //-----------------------------------------------------
             /// @author S Downie
-			///
-			/// @return Pointer to the resource pool
-			//-----------------------------------------------------
-            ResourcePool* GetResourcePool() const;
+            ///
+            /// @return A pointer to the resource pool system.
             //-----------------------------------------------------
-            /// @author I Copland
-			///
-			/// @return A pointer to the App Config.
-			//-----------------------------------------------------
-            AppConfig* GetAppConfig() const;
+            ResourcePool* GetResourcePool();
             //-----------------------------------------------------
-            /// @author I Copland
-			///
-			/// @return A pointer to the screen system.
-			//-----------------------------------------------------
-            Screen* GetScreen() const;
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the resource pool system.
+            //-----------------------------------------------------
+            const ResourcePool* GetResourcePool() const;
+            //-----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A pointer to the App Config.
+            //-----------------------------------------------------
+            AppConfig* GetAppConfig();
+            //-----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the App Config.
+            //-----------------------------------------------------
+            const AppConfig* GetAppConfig() const;
+            //-----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A pointer to the screen system.
+            //-----------------------------------------------------
+            Screen* GetScreen();
+            //-----------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the screen system.
+            //-----------------------------------------------------
+            const Screen* GetScreen() const;
 #ifdef CS_ENABLE_DEBUGSTATS
             //-----------------------------------------------------
-			/// Returns a pointer to the debug stats system. This
+            /// Returns a pointer to the debug stats system. This
             /// is only available when the debug stats proprocessor
             /// flag CS_ENABLE_DEBUGSTATS is defined.
             ///
             /// @author I Copland
-			///
-			/// @return Pointer to the debug stats system.
-			//-----------------------------------------------------
-            Debugging::DebugStats* GetDebugStats() const;
+            ///
+            /// @return Pointer to the debug stats system.
+            //-----------------------------------------------------
+            Debugging::DebugStats* GetDebugStats();
+            //-----------------------------------------------------
+            /// Returns a const pointer to the debug stats system.
+            /// This is only available when the debug stats
+            /// proprocessor flag CS_ENABLE_DEBUGSTATS is defined.
+            ///
+            /// @author I Copland
+            ///
+            /// @return A const pointer to the debug stats system.
+            //-----------------------------------------------------
+            const Debugging::DebugStats* GetDebugStats() const;
 #endif
             //----------------------------------------------------
 			/// Initialises the application and kicks off the update
@@ -470,6 +543,21 @@ namespace ChilliSource
         template <typename TNamedType> TNamedType* Application::GetSystem()
         {
             for (std::vector<AppSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+            {
+                if ((*it)->IsA(TNamedType::InterfaceID))
+                {
+                    return static_cast<TNamedType*>((*it).get());
+                }
+            }
+            
+            CS_LOG_WARNING("Application cannot find system: " + TNamedType::TypeName);
+            return nullptr;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        template <typename TNamedType> const TNamedType* Application::GetSystem() const
+        {
+            for (std::vector<AppSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
 			{
 				if ((*it)->IsA(TNamedType::InterfaceID))
 				{
@@ -482,15 +570,35 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        template <typename TNamedType> void Application::GetSystems(std::vector<TNamedType*>& out_systems)
+        template <typename TNamedType> std::vector<TNamedType*> Application::GetSystems()
         {
+            std::vector<TNamedType*> output;
+            
             for (size_t systemIndex = 0; systemIndex < m_systems.size(); systemIndex++)
             {
                 if (m_systems[systemIndex]->IsA(TNamedType::InterfaceID))
                 {
-                    out_systems.push_back(static_cast<TNamedType*>(m_systems[systemIndex].get()));
+                    output.push_back(static_cast<TNamedType*>(m_systems[systemIndex].get()));
                 }
             }
+            
+            return output;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TNamedType> std::vector<const TNamedType*> Application::GetSystems() const
+        {
+            std::vector<const TNamedType*> output;
+            
+            for (size_t systemIndex = 0; systemIndex < m_systems.size(); systemIndex++)
+            {
+                if (m_systems[systemIndex]->IsA(TNamedType::InterfaceID))
+                {
+                    output.push_back(static_cast<TNamedType*>(m_systems[systemIndex].get()));
+                }
+            }
+            
+            return output;
         }
 	}
 }

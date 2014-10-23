@@ -448,6 +448,7 @@ namespace ChilliSource
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 
+#include <algorithm>
 #include <cmath>
 
 namespace ChilliSource

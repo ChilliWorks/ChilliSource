@@ -450,6 +450,7 @@ namespace ChilliSource
 //----------------------------------------------------
 #include <ChilliSource/Core/Math/Matrix3.h>
 
+#include <algorithm>
 #include <cmath>
 
 namespace ChilliSource
