@@ -1,7 +1,7 @@
 /**
- * Pair.java
+ * Tuple3.java
  * Chilli Source
- * Created by Ian Copland on 08/10/2014.
+ * Created by Ian Copland on 23/10/2014.
  * 
  * The MIT License (MIT)
  * 
@@ -29,31 +29,35 @@
 package com.chilliworks.chillisource.toolutils;
 
 /**
- * A simple pair, or 2-tuple class similar to std::pair<x,y> in C++. Typical use
+ * A simple 3-tuple class similar to std::tuple<x, y, z> in C++. Typical use
  * case for this is private methods that return multiple values.
  * 
  * @author Ian Copland
  *
  * @param <TFirst> The type of the first value.
  * @param <TSecond> The type of the second value.
+ * @param <TThird> The type of the third value.
  */
-public final class Pair<TFirst, TSecond>
+public final class Tuple3<TFirst, TSecond, TThird>
 {
 	private final TFirst m_first;
 	private final TSecond m_second;
+	private final TThird m_third;
 	
 	/**
-	 * Constructor. Creates the pair from the two given values.
+	 * Constructor. Creates the tuple from the given values.
 	 * 
 	 * @author Ian Copland
 	 *
 	 * @param in_first - The first value.
 	 * @param in_second - The second value.
+	 * @param in_third - The third value.
 	 */
-	public Pair(TFirst in_first, TSecond in_second)
+	public Tuple3(TFirst in_first, TSecond in_second, TThird in_third)
 	{
 		m_first = in_first;
 		m_second = in_second;
+		m_third = in_third;
 	}
 	/**
 	 * @author Ian Copland
@@ -76,11 +80,20 @@ public final class Pair<TFirst, TSecond>
 	/**
 	 * @author Ian Copland
 	 *
-	 * @return The pair as a string.
+	 * @return The third value.
+	 */
+	public TThird getThird()
+	{
+		return m_third;
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return The tuple as a string.
 	 */
 	@Override public String toString() 
 	{
-        return "[" + m_first + "," + m_second + "]";
+        return "[" + m_first + "," + m_second + "," + m_third + "," + "]";
     }
 	/**
 	 * Compares equality with the given object.
@@ -101,14 +114,15 @@ public final class Pair<TFirst, TSecond>
             return false;
         }
         
-        if ((in_object instanceof Pair<?, ?>) == false)
+        if ((in_object instanceof Tuple3<?, ?, ?>) == false)
         {
             return false;
         }
         
-        Pair<?, ?> pair = (Pair<?, ?>)in_object;
-        boolean firstEquals = ((m_first == null && pair.m_first == null) || (m_first != null && m_first.equals(pair.m_first) == true));
-        boolean secondEquals = ((m_second == null && pair.m_second == null) || (m_second != null && m_second.equals(pair.m_second) == true));
-        return (firstEquals == true && secondEquals == true);
+        Tuple3<?, ?, ?> tuple = (Tuple3<?, ?, ?>)in_object;
+        boolean firstEquals = ((m_first == null && tuple.m_first == null) || (m_first != null && m_first.equals(tuple.m_first) == true));
+        boolean secondEquals = ((m_second == null && tuple.m_second == null) || (m_second != null && m_second.equals(tuple.m_second) == true));
+        boolean thirdEquals = ((m_third == null && tuple.m_third == null) || (m_third != null && m_third.equals(tuple.m_third) == true));
+        return (firstEquals == true && secondEquals == true && thirdEquals == true);
     }
 }

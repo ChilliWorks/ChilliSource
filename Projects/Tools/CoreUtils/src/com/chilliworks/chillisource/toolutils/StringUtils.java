@@ -30,35 +30,38 @@ package com.chilliworks.chillisource.toolutils;
 
 import java.nio.charset.Charset;
 
+/**
+ * A collection of convenience methods for working with Strings.
+ * 
+ * @author Ian Copland
+ */
 public class StringUtils 
 {
-	//-------------------------------------------------------
-	/// Constants
-	//-------------------------------------------------------
 	private static final Charset kUTF8Charset = Charset.forName("UTF-8");
-	//-------------------------------------------------------
-	/// String To UTF8 Bytes
-	///
-	/// Converts a string in UTF-16 format to a UTF8 byte array. 
-	///
-	/// @param The string to convert.
-	/// @return The output byte array in UTF-8 format.
-	//-------------------------------------------------------
-	public static byte[] stringToUTF8Bytes(final String instrString)
+	
+	/**
+	 * Converts a string in UTF-16 format to a UTF8 byte array.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_string - The string to convert.
+	 * 
+	 * @return The output byte array in UTF-8 format. 
+	 */
+	public static byte[] stringToUTF8Bytes(String in_string)
 	{
-		return instrString.getBytes(kUTF8Charset);
+		return in_string.getBytes(kUTF8Charset);
 	}
-	//-------------------------------------------------------
-	/// UTF8 Bytes To String
-	///
-	/// Converts UTF-8 byte array to a string in UTF-16 format.
-	///
-	/// @param The byte array to convert.
-	/// @return The output string.
-	//-------------------------------------------------------
-	public static String utf8BytesToString(final byte[] inabyUTF8)
+	/**
+	 * Converts UTF-8 byte array to a string in UTF-16 format.
+	 * 
+	 * @param in_utf8Bytes - The byte array to convert.
+	 * 
+	 * @return The output string.
+	 */
+	public static String utf8BytesToString(final byte[] in_utf8Bytes)
 	{
-		return new String(inabyUTF8, kUTF8Charset);
+		return new String(in_utf8Bytes, kUTF8Charset);
 	}
 	/**
 	 * Standardised the path to a file.
@@ -98,82 +101,107 @@ public class StringUtils
 		}
 		return standardisedPath;
 	}
-	//-------------------------------------------------
-	/// Get Extension
-	///
-	/// returns the extension of a filepath string
-	///
-	/// @param the directory
-	/// @output the standardised path.
-	//-------------------------------------------------
-	public static String getExtension(String instrFilepath)
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @param in_filePath - The file path.
+	 * 
+	 * @return The extension of a file path string.
+	 */
+	public static String getExtension(String in_filePath)
 	{
-		int dwIndex = instrFilepath.lastIndexOf(".");
+		int dwIndex = in_filePath.lastIndexOf(".");
 		if (dwIndex != -1)
-			return instrFilepath.substring(dwIndex + 1);
+			return in_filePath.substring(dwIndex + 1);
 		return "";
 	}
-	//-------------------------------------------------
-	/// Remove Extension
-	///
-	/// removes the extension of a filepath string
-	///
-	/// @param the directory
-	/// @output the standardised path.
-	//-------------------------------------------------
-	public static String removeExtension(String instrFilepath)
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @param in_filePath - The file path.
+	 * 
+	 * @return The file path without the extension.
+	 */
+	public static String removeExtension(String in_filePath)
 	{
-		int dwIndex = instrFilepath.lastIndexOf(".");
-		if (dwIndex != -1)
-			return instrFilepath.substring(0, dwIndex);
-		return instrFilepath;
+		int index = in_filePath.lastIndexOf(".");
+		
+		if (index != -1)
+		{
+			return in_filePath.substring(0, index);
+		}
+		
+		return in_filePath;
 	}
-	//-------------------------------------------------
-	/// Get Directory
-	///
-	/// removes the filename from a filepath.
-	///
-	/// @param the filepath
-	/// @output the standardised directory path.
-	//-------------------------------------------------
-	public static String getDirectory(String instrFilepath)
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @param in_filePath - The file path.
+	 * 
+	 * @return The directory path part of the given file name.
+	 * This will be standardised.
+	 */
+	public static String getDirectory(String in_filePath)
 	{
-		String strStandardisedFilepath = StringUtils.standardiseFilePath(instrFilepath);
-		int dwIndex = strStandardisedFilepath.lastIndexOf("/");
-		if (dwIndex != -1)
-			return strStandardisedFilepath.substring(0, dwIndex + 1);
+		String standardisedFilePath = StringUtils.standardiseFilePath(in_filePath);
+		int index = standardisedFilePath.lastIndexOf("/");
+		
+		if (index != -1)
+		{
+			return standardisedFilePath.substring(0, index + 1);
+		}
+		
 		return "";
 	}
-	//-------------------------------------------------
-	/// Remove Whitespace
-	///
-	/// Removes all spaces, line returns and tabs from
-	/// the given string.
-	///
-	/// @param the string
-	/// @output the string with no whitespace
-	//-------------------------------------------------
-	public static String removeWhitespace(String instrFilepath)
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @param in_filePath - The file path.
+	 * 
+	 * @return The file name part of the file path.
+	 */
+	public static String getFileName(String in_filePath)
 	{
-		String strOutput = new String(instrFilepath);
+		String standardisedFilePath = StringUtils.standardiseFilePath(in_filePath);
+		int index = standardisedFilePath.lastIndexOf("/");
+		
+		if (index != -1)
+		{
+			return standardisedFilePath.substring(index + 1);
+		}
+		
+		return "";
+	}
+	/**
+	 * Removes all spaces, line returns and tabs from the given string.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_string - The input string with whitespace.
+	 * 
+	 * @return The input string minus whitespace.
+	 */
+	public static String removeWhitespace(String in_string)
+	{
+		String strOutput = new String(in_string);
 		strOutput = strOutput.replace(" ", "");
 		strOutput = strOutput.replace("\n", "");
 		strOutput = strOutput.replace("\r", "");
 		strOutput = strOutput.replace("\t", "");
 		return strOutput;
 	}
-	//-------------------------------------------------
-	/// Convert Exception To String
-	///
-	/// Returns the contents of a stack trace as a string.
-	///
-	/// @param the exception
-	/// @output the string.
-	//-------------------------------------------------
-	public static String convertExceptionToString(Exception inException)
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @param in_exception - The exception.
+	 * 
+	 * @return The contents of the exception in string form. This includes the
+	 * stack trace.
+	 */
+	public static String convertExceptionToString(Exception in_exception)
 	{
-		String strOutput = inException.getLocalizedMessage();
-		for (StackTraceElement element: inException.getStackTrace())
+		String strOutput = in_exception.getLocalizedMessage();
+		for (StackTraceElement element: in_exception.getStackTrace())
 		{
 			strOutput += "\n" + element.toString();
 		}

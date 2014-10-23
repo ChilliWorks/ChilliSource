@@ -27,6 +27,8 @@
  */
 
 package com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder;
+
+import com.chilliworks.chillisource.toolutils.Logging;
  
 /**
  * A static class that provides methods for building a CSFont bitmap font
@@ -51,7 +53,14 @@ public final class FontFromGlyphsBuilder
 	 */
 	public static boolean build(String in_inputDirectoryPath, String in_outputFilePath, FontFromGlyphsBuilderOptions in_options)
 	{
-		//TODO: Implement!
+		Glyphs glyphs = GlyphsReader.read(in_inputDirectoryPath);
+		if (glyphs == null)
+		{
+			Logging.logFatal("Could not read glyphs from directory: " + in_inputDirectoryPath);
+			return false;
+		}
+		
+		//TODO:
 		
 		return true;
 	}

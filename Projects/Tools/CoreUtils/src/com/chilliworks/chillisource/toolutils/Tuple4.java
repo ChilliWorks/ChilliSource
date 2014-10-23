@@ -1,7 +1,7 @@
 /**
- * Pair.java
+ * Tuple4.java
  * Chilli Source
- * Created by Ian Copland on 08/10/2014.
+ * Created by Ian Copland on 23/10/2014.
  * 
  * The MIT License (MIT)
  * 
@@ -29,31 +29,39 @@
 package com.chilliworks.chillisource.toolutils;
 
 /**
- * A simple pair, or 2-tuple class similar to std::pair<x,y> in C++. Typical use
+ * A simple 4-tuple class similar to std::tuple<x, y, z, w> in C++. Typical use
  * case for this is private methods that return multiple values.
  * 
  * @author Ian Copland
  *
  * @param <TFirst> The type of the first value.
  * @param <TSecond> The type of the second value.
+ * @param <TThird> The type of the third value.
+ * @param <TFourth> The type of the fourth value.
  */
-public final class Pair<TFirst, TSecond>
+public final class Tuple4<TFirst, TSecond, TThird, TFourth>
 {
 	private final TFirst m_first;
 	private final TSecond m_second;
+	private final TThird m_third;
+	private final TFourth m_fourth;
 	
 	/**
-	 * Constructor. Creates the pair from the two given values.
+	 * Constructor. Creates the tuple from the given values.
 	 * 
 	 * @author Ian Copland
 	 *
 	 * @param in_first - The first value.
 	 * @param in_second - The second value.
+	 * @param in_third - The third value.
+	 * @param in_fouth - The fourth value.
 	 */
-	public Pair(TFirst in_first, TSecond in_second)
+	public Tuple4(TFirst in_first, TSecond in_second, TThird in_third, TFourth in_fourth)
 	{
 		m_first = in_first;
 		m_second = in_second;
+		m_third = in_third;
+		m_fourth = in_fourth;
 	}
 	/**
 	 * @author Ian Copland
@@ -76,11 +84,29 @@ public final class Pair<TFirst, TSecond>
 	/**
 	 * @author Ian Copland
 	 *
-	 * @return The pair as a string.
+	 * @return The third value.
+	 */
+	public TThird getThird()
+	{
+		return m_third;
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return The fourth value.
+	 */
+	public TFourth getFourth()
+	{
+		return m_fourth;
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return The tuple as a string.
 	 */
 	@Override public String toString() 
 	{
-        return "[" + m_first + "," + m_second + "]";
+        return "[" + m_first + "," + m_second + "," + m_third + "," + m_fourth + "]";
     }
 	/**
 	 * Compares equality with the given object.
@@ -101,14 +127,16 @@ public final class Pair<TFirst, TSecond>
             return false;
         }
         
-        if ((in_object instanceof Pair<?, ?>) == false)
+        if ((in_object instanceof Tuple4<?, ?, ?, ?>) == false)
         {
             return false;
         }
         
-        Pair<?, ?> pair = (Pair<?, ?>)in_object;
-        boolean firstEquals = ((m_first == null && pair.m_first == null) || (m_first != null && m_first.equals(pair.m_first) == true));
-        boolean secondEquals = ((m_second == null && pair.m_second == null) || (m_second != null && m_second.equals(pair.m_second) == true));
-        return (firstEquals == true && secondEquals == true);
+        Tuple4<?, ?, ?, ?> tuple = (Tuple4<?, ?, ?, ?>)in_object;
+        boolean firstEquals = ((m_first == null && tuple.m_first == null) || (m_first != null && m_first.equals(tuple.m_first) == true));
+        boolean secondEquals = ((m_second == null && tuple.m_second == null) || (m_second != null && m_second.equals(tuple.m_second) == true));
+        boolean thirdEquals = ((m_third == null && tuple.m_third == null) || (m_third != null && m_third.equals(tuple.m_third) == true));
+        boolean fourthEquals = ((m_fourth == null && tuple.m_fourth == null) || (m_fourth != null && m_fourth.equals(tuple.m_fourth) == true));
+        return (firstEquals == true && secondEquals == true && thirdEquals == true && fourthEquals == true);
     }
 }

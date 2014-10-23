@@ -32,6 +32,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
+import com.chilliworks.chillisource.toolutils.FileUtils;
+import com.chilliworks.chillisource.toolutils.Integer2;
+import com.chilliworks.chillisource.toolutils.Logging;
+import com.chilliworks.chillisource.toolutils.StringUtils;
+import com.chilliworks.chillisource.toolutils.Tuple4;
+
 /**
  * Provides a series of methods for reading bitmap font glyphs to file.
  * 
@@ -61,7 +69,13 @@ public final class GlyphsReader
 			return null;
 		}
 		
-		return new Glyphs(glyphCharacters, glyphFilePaths, 0, 0, 0, null);
+		Tuple4<Integer, Integer, Integer, Integer2> fontInfo = readFontInfo(in_inputDirectoryPath);
+		if (fontInfo == null)
+		{
+			return null;
+		}
+		
+		return new Glyphs(glyphCharacters, glyphFilePaths, fontInfo.getFirst(), fontInfo.getSecond(), fontInfo.getThird(), fontInfo.getFourth());
 	}
 	/**
 	 * Retrieves the path to all files in the given directory.
@@ -73,7 +87,7 @@ public final class GlyphsReader
 	 * @return The array of file paths. The path will include the input
 	 * directory path. 
 	 */
-	public static String[] findImageFilesInDirectory(String in_directoryPath)
+	private static String[] findImageFilesInDirectory(String in_directoryPath)
 	{
 		File directory = new File(in_directoryPath);
 		if (directory.exists() == false)
@@ -107,12 +121,56 @@ public final class GlyphsReader
 	 * @return The array of characters. Will return null if parsing the characters
 	 * failed.
 	 */
-	public static char[] getCharacterForFilePaths(String[] in_glyphFilePaths)
+	private static char[] getCharacterForFilePaths(String[] in_glyphFilePaths)
 	{
 		char[] characters = new char[in_glyphFilePaths.length];
 		
-		//TODO: Continue here.
+		for (int i = 0; i < in_glyphFilePaths.length; ++i)
+		{
+			String glyphFilePath = in_glyphFilePaths[i];
+			String glyphFileName = StringUtils.getFileName(glyphFilePath);
+			String glyphFileRoot = StringUtils.removeExtension(glyphFileName);
+			characters[i] = (char) Integer.parseInt(glyphFileRoot, 16);
+		}
 		
 		return characters;
+	}
+	/**
+	 * Reads the font info json file from the given directory. 
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_inputDirectoryPath - The directory path that contains the 
+	 * font info file.
+	 * 
+	 * @return A 4-tuple containing the font size, line height, decent and
+	 * effect padding of the font.
+	 */
+	private static Tuple4<Integer, Integer, Integer, Integer2> readFontInfo(String in_inputDirectoryPath)
+	{
+		try
+		{
+			String filePath = in_inputDirectoryPath + FONT_INFO_FILE_PATH;
+			String fileContents = FileUtils.readFile(filePath);
+			if (fileContents.length() == 0)
+			{
+				return null;
+			}
+			
+			JSONObject json = new JSONObject(fileContents);
+			
+			int fontSize = json.getInt("FontSize");
+			int lineHeight = json.getInt("LineHeight");
+			int descent = json.getInt("Descent");
+			Integer2 effectPadding = Integer2.parseInt2(json.getString("EffectPadding"));
+			
+			return new Tuple4<Integer, Integer, Integer, Integer2>(fontSize, lineHeight, descent, effectPadding);
+		}
+		catch (Exception e)
+		{
+			Logging.logVerbose(StringUtils.convertExceptionToString(e));
+		}
+		
+		return null;
 	}
 }
