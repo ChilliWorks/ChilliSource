@@ -170,15 +170,27 @@ namespace ChilliSource
                 m_systems[i]->OnMemoryWarning();
             }
         }
-		//------------------------------------------
-		//------------------------------------------
-		Scene* State::GetScene() const
-		{
-			return m_scene;
-		}
         //------------------------------------------
         //------------------------------------------
-        UI::Canvas* State::GetUICanvas() const
+        Scene* State::GetScene()
+        {
+            return m_scene;
+        }
+        //------------------------------------------
+        //------------------------------------------
+        const Scene* State::GetScene() const
+        {
+            return m_scene;
+        }
+        //------------------------------------------
+        //------------------------------------------
+        UI::Canvas* State::GetUICanvas()
+        {
+            return m_canvas;
+        }
+        //------------------------------------------
+        //------------------------------------------
+        const UI::Canvas* State::GetUICanvas() const
         {
             return m_canvas;
         }

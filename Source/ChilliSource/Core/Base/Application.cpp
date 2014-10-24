@@ -115,25 +115,25 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		std::string Application::GetAppVersion()
+		std::string Application::GetAppVersion() const
 		{
 			return m_platformSystem->GetAppVersion();
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		TimeIntervalSecs Application::GetAppElapsedTime()
+		TimeIntervalSecs Application::GetAppElapsedTime() const
 		{
 			return m_currentAppTime;
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-        TimeIntervalSecs Application::GetSystemTime()
+        TimeIntervalSecs Application::GetSystemTime() const
         {
             return time(0);
         }
         //----------------------------------------------------
         //----------------------------------------------------
-		TimeIntervalMs Application::GetSystemTimeInMilliseconds()
+		TimeIntervalMs Application::GetSystemTimeInMilliseconds() const
 		{
 			return m_platformSystem->GetSystemTimeMS();
 		}
@@ -145,13 +145,13 @@ namespace ChilliSource
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		f32 Application::GetUpdateInterval()
+		f32 Application::GetUpdateInterval() const
 		{
 			return m_updateInterval;
 		}
         //----------------------------------------------------
         //----------------------------------------------------
-		f32 Application::GetUpdateIntervalMax()
+		f32 Application::GetUpdateIntervalMax() const
 		{
 			return k_updateIntervalMax;
 		}
@@ -509,68 +509,134 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        StateManager* Application::GetStateManager() const
+        StateManager* Application::GetStateManager()
         {
             return m_stateManager;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        Rendering::Renderer* Application::GetRenderer() const
+        const StateManager* Application::GetStateManager() const
+        {
+            return m_stateManager;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        Rendering::Renderer* Application::GetRenderer()
         {
             return m_renderer;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        Rendering::RenderSystem* Application::GetRenderSystem() const
+        const Rendering::Renderer* Application::GetRenderer() const
+        {
+            return m_renderer;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        Rendering::RenderSystem* Application::GetRenderSystem()
         {
             return m_renderSystem;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        FileSystem* Application::GetFileSystem() const
+        const Rendering::RenderSystem* Application::GetRenderSystem() const
+        {
+            return m_renderSystem;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        FileSystem* Application::GetFileSystem()
         {
             return m_fileSystem;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        TaggedFilePathResolver* Application::GetTaggedFilePathResolver() const
+        const FileSystem* Application::GetFileSystem() const
+        {
+            return m_fileSystem;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        TaggedFilePathResolver* Application::GetTaggedFilePathResolver()
         {
             return m_taggedPathResolver;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        TaskScheduler* Application::GetTaskScheduler() const
+        const TaggedFilePathResolver* Application::GetTaggedFilePathResolver() const
+        {
+            return m_taggedPathResolver;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        TaskScheduler* Application::GetTaskScheduler()
         {
             return m_taskScheduler;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        ResourcePool* Application::GetResourcePool() const
+        const TaskScheduler* Application::GetTaskScheduler() const
+        {
+            return m_taskScheduler;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        ResourcePool* Application::GetResourcePool()
         {
             return m_resourcePool;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        AppConfig* Application::GetAppConfig() const
+        const ResourcePool* Application::GetResourcePool() const
+        {
+            return m_resourcePool;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        AppConfig* Application::GetAppConfig()
         {
             return m_appConfig;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        Screen* Application::GetScreen() const
+        const AppConfig* Application::GetAppConfig() const
+        {
+            return m_appConfig;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        Screen* Application::GetScreen()
         {
             return m_screen;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
-        UI::WidgetFactory* Application::GetWidgetFactory() const
+        const Screen* Application::GetScreen() const
+        {
+            return m_screen;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        UI::WidgetFactory* Application::GetWidgetFactory()
+        {
+            return m_widgetFactory;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        const UI::WidgetFactory* Application::GetWidgetFactory() const
         {
             return m_widgetFactory;
         }
 #ifdef CS_ENABLE_DEBUGSTATS
         //-----------------------------------------------------
         //-----------------------------------------------------
-        Debugging::DebugStats* Application::GetDebugStats() const
+        Debugging::DebugStats* Application::GetDebugStats()
+        {
+            return m_debugStats;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        const Debugging::DebugStats* Application::GetDebugStats() const
         {
             return m_debugStats;
         }

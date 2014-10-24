@@ -58,8 +58,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         void TextureProvider::PostCreate()
         {
-            std::vector<Core::ResourceProvider*> resourceProviders;
-            Core::Application::Get()->GetSystems(resourceProviders);
+            auto resourceProviders = Core::Application::Get()->GetSystems<Core::ResourceProvider>();
             
             for(u32 i=0; i<resourceProviders.size(); ++i)
             {
