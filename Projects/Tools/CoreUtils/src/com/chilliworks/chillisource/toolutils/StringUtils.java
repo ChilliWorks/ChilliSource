@@ -167,10 +167,10 @@ public class StringUtils
 		
 		if (index != -1)
 		{
-			return standardisedFilePath.substring(index + 1);
+			standardisedFilePath = standardisedFilePath.substring(index + 1);
 		}
 		
-		return "";
+		return standardisedFilePath;
 	}
 	/**
 	 * Removes all spaces, line returns and tabs from the given string.

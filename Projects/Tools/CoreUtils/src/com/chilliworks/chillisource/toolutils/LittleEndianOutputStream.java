@@ -31,6 +31,11 @@ package com.chilliworks.chillisource.toolutils;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 
+/**
+ * This is deprecated! Use LittleEndianWriterUtils instead.
+ * 
+ * @author Ian Copland
+ */
 public class LittleEndianOutputStream 
 {
 	//-------------------------------------------------------

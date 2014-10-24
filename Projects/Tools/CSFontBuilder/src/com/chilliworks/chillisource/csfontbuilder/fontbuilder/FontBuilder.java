@@ -27,6 +27,17 @@
  */
 
 package com.chilliworks.chillisource.csfontbuilder.fontbuilder;
+
+import java.io.File;
+import java.util.Random;
+
+import com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder.FontFromGlyphsBuilder;
+import com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder.FontFromGlyphsBuilderOptions;
+import com.chilliworks.chillisource.csfontbuilder.glyphsbuilder.GlyphsBuilder;
+import com.chilliworks.chillisource.csfontbuilder.glyphsbuilder.GlyphsBuilderOptions;
+import com.chilliworks.chillisource.toolutils.CSException;
+import com.chilliworks.chillisource.toolutils.FileUtils;
+import com.chilliworks.chillisource.toolutils.StringUtils;
  
 /**
  * A static class containing methods for building CSFont bitmap fonts from
@@ -36,16 +47,79 @@ package com.chilliworks.chillisource.csfontbuilder.fontbuilder;
  */
 public final class FontBuilder
 {
+	private static final String TEMP_DIRECTORY_PATH_PREFIX = "_temp-glyphs-";
+	
 	/**
 	 * Builds a CSFont from a TTF or OTF vector font with the given options.
 	 * 
 	 * @author Ian Copland
 	 * 
-	 * @return Whether or not the builder succeeded.
+	 * @param in_outputFilePath - The output csfont file path.
+	 * @param in_glyphBuilderOptions - The glyphs builder options.
+	 * @param in_fontFromGlyphsBuilderOptions - The font from glyphs builder options.
+	 * 
+	 * @throws CSException - An exception which provides a message describing 
+	 * the error which has occurred.
 	 */
-	public static boolean build()
+	public static void build(String in_outputFilePath, GlyphsBuilderOptions in_glyphBuilderOptions, FontFromGlyphsBuilderOptions in_fontFromGlyphsBuilderOptions) throws CSException
 	{
+		String randomHex = Long.toHexString(new Random().nextLong());
+		String outputDirectoryPath = StringUtils.getDirectory(in_outputFilePath);
+		String tempDirectoryPath = outputDirectoryPath + TEMP_DIRECTORY_PATH_PREFIX + randomHex + "/";
 		
-		return true;
+		createTempDirectory(tempDirectoryPath);
+		
+		try
+		{
+			GlyphsBuilder.build(tempDirectoryPath, in_glyphBuilderOptions);
+			FontFromGlyphsBuilder.build(tempDirectoryPath, in_outputFilePath, in_fontFromGlyphsBuilderOptions);
+		}
+		catch (CSException e)
+		{
+			throw new CSException(e.getMessage(), e);
+		}
+		finally
+		{
+			deleteTempDirectory(tempDirectoryPath);
+		}
+	}
+	/**
+	 * Creates the temporary directory to create the output files in.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_tempDirectoryPath - The temporary directory path.
+	 * 
+	 * @throws CSException - An exception which provides a message 
+	 * describing the error which has occurred.
+	 */
+	private static void createTempDirectory(String in_tempDirectoryPath) throws CSException
+	{
+		if (new File(in_tempDirectoryPath).exists() == true)
+		{
+			throw new CSException("Could not create temp directory: " + in_tempDirectoryPath);
+		}
+		
+		if (FileUtils.createDirectory(in_tempDirectoryPath) == false)
+		{
+			throw new CSException("Could not create temp directory: " + in_tempDirectoryPath);
+		}
+	}
+	/**
+	 * Deletes the temporary directory and it's contents.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_tempDirectoryPath - The temporary directory path.
+	 * 
+	 * @throws CSException - An exception which provides a message 
+	 * describing the error which has occurred.
+	 */
+	private static void deleteTempDirectory(String in_tempDirectoryPath) throws CSException
+	{
+		if (FileUtils.deleteDirectory(in_tempDirectoryPath) == false)
+		{
+			throw new CSException("Could not delete temp directory: " + in_tempDirectoryPath);
+		}
 	}
 }

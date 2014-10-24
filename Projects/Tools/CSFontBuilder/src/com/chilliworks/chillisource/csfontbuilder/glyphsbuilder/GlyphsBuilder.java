@@ -28,7 +28,7 @@
 
 package com.chilliworks.chillisource.csfontbuilder.glyphsbuilder;
 
-import com.chilliworks.chillisource.toolutils.Logging;
+import com.chilliworks.chillisource.toolutils.CSException;
  
 /**
  * A static class containing methods for converting a vector font (TTF or OTF) to
@@ -47,24 +47,13 @@ public final class GlyphsBuilder
 	 * @param in_outputDirectoryPath - The output directory for the glyphs.
 	 * @param in_options - The builder options.
 	 * 
-	 * @return Whether or not the builder succeeded.
+	 * @throws CSException - An exception which provides a message describing the 
+	 * error which has occurred.
 	 */
-	public static boolean build(String in_outputDirectoryPath, GlyphsBuilderOptions in_options)
+	public static void build(String in_outputDirectoryPath, GlyphsBuilderOptions in_options) throws CSException
 	{
 		Glyphs glyphs = GlyphsRenderer.render(in_options);
-		if (glyphs == null)
-		{
-			Logging.logFatal("Failed to render glyphs for font: " + in_options.m_fontName);
-			return false;
-		}
-		
-		if (GlyphsWriter.write(glyphs, in_outputDirectoryPath) == false)
-		{
-			Logging.logFatal("Failed to save glyphs to directory: " + in_outputDirectoryPath);
-			return false;
-		}
-		
-		return true;
+		GlyphsWriter.write(glyphs, in_outputDirectoryPath);
 	}	
 
 }

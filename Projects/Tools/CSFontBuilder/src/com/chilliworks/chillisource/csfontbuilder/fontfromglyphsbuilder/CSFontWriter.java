@@ -1,0 +1,401 @@
+/**
+ * CSFontWriter.java
+ * Chilli Source
+ * Created by Ian Copland on 21/10/2014.
+ * 
+ * The MIT License (MIT)
+ * 
+ * Copyright (c) 2014 Tag Games Limited
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+package com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder;
+
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Random;
+
+import javax.imageio.ImageIO;
+
+import com.chilliworks.chillisource.pngtocsimage.PNGToCSImage;
+import com.chilliworks.chillisource.pngtocsimage.PNGToCSImageOptions;
+import com.chilliworks.chillisource.texturepackerutils.PackedTexture;
+import com.chilliworks.chillisource.toolutils.CSException;
+import com.chilliworks.chillisource.toolutils.FileUtils;
+import com.chilliworks.chillisource.toolutils.LittleEndianWriterUtils;
+import com.chilliworks.chillisource.toolutils.Logging;
+import com.chilliworks.chillisource.toolutils.StringUtils;
+
+/**
+ * A container for a series of methods used to write a CSFont to disk. This
+ * includes writing the CSFont binary file and the packed glyph image as
+ * a CSImage file.
+ * 
+ * @author Ian Copland
+ */
+public final class CSFontWriter
+{
+	private static final String TEMP_DIRECTORY_PATH_PREFIX = "_temp-csfont-";
+	private static final String EXTENSION_CSFONT = ".csfont";
+	private static final String EXTENSION_CSIMAGE = ".csimage";
+	private static final int CSFONT_FILE_VERSION_NUMBER = 2;
+	
+	/**
+	 * Writes the CSFont binary file and the pack bitmap glyph CSImage file
+	 * to disk using the given options.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_outputFilePath - The file path of the output CSFont binary
+	 * file. The CSImage file will have the same path but with the csimage
+	 * extension.
+	 * @param in_options - The output options.
+	 * @param in_glyphs - The glyphs which are to be outputted.
+	 * @param in_packedBitmapFont - The packed bitmap font data.
+	 * 
+	 * @throws CSException - An exception which provides a message describing 
+	 * the error which has occurred.
+	 */
+	public static void write(String in_outputFilePath, FontFromGlyphsBuilderOptions in_options, Glyphs in_glyphs, PackedTexture in_packedBitmapFont) throws CSException
+	{
+		if ((in_outputFilePath.toLowerCase().endsWith(EXTENSION_CSFONT) || in_outputFilePath.toLowerCase().endsWith(EXTENSION_CSFONT)) == false)
+		{
+			throw new CSException(in_outputFilePath + " has the wrong extension. Extension must be " + EXTENSION_CSFONT + " or " + EXTENSION_CSIMAGE + ".");
+		}
+		
+		String randomHex = Long.toHexString(new Random().nextLong());
+		String outputFileRoot = StringUtils.removeExtension(StringUtils.getFileName(in_outputFilePath));
+		String outputDirectoryPath = StringUtils.getDirectory(in_outputFilePath);
+		String tempDirectoryPath = outputDirectoryPath + TEMP_DIRECTORY_PATH_PREFIX + randomHex + "/";
+		String tempPNGImageFilePath = tempDirectoryPath + outputFileRoot + ".png";
+		String tempCSImageFilePath = tempDirectoryPath + outputFileRoot + EXTENSION_CSIMAGE;
+		String tempCSFontFilePath = tempDirectoryPath + outputFileRoot + EXTENSION_CSFONT;
+		String outputCSImageFilePath = outputDirectoryPath + outputFileRoot + EXTENSION_CSIMAGE;
+		String outputCSFontFilePath = outputDirectoryPath + outputFileRoot + EXTENSION_CSFONT;
+		
+		createTempDirectory(tempDirectoryPath);
+		
+		try
+		{
+			createBitmapFontPNG(tempPNGImageFilePath, in_packedBitmapFont);
+			convertBitmapFontToCSImage(tempPNGImageFilePath, tempCSImageFilePath, in_options);
+			createCSFont(tempCSFontFilePath, in_glyphs, in_packedBitmapFont);
+			copyToOutput(tempCSImageFilePath, tempCSFontFilePath, outputCSImageFilePath, outputCSFontFilePath);
+		}
+		catch (CSException e)
+		{
+			throw new CSException(e.getMessage(), e);
+		}
+		finally
+		{
+			deleteTempDirectory(tempDirectoryPath);
+		}
+	}	
+	/**
+	 * Creates the temporary directory to create the output files in.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_tempDirectoryPath - The temporary directory path.
+	 * 
+	 * @throws CSException - An exception which provides a message 
+	 * describing the error which has occurred.
+	 */
+	private static void createTempDirectory(String in_tempDirectoryPath) throws CSException
+	{
+		if (new File(in_tempDirectoryPath).exists() == true)
+		{
+			throw new CSException("Could not create temporary directory: " + in_tempDirectoryPath);
+		}
+		
+		if (FileUtils.createDirectory(in_tempDirectoryPath) == false)
+		{
+			throw new CSException("Could not create temporary directory: " + in_tempDirectoryPath);
+		}
+	}
+	/**
+	 * Writes the packed bitmap font image to disk as a PNG. This can later be 
+	 * converted to CS Image.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_outputFilePath - The output file path for the PNG bitmap font image.
+	 * @param in_packedBitmapFont - The packed bitmap font data.
+	 * 
+	 * @throws CSException - An exception which provides a message describing the 
+	 * error which has occurred.
+	 */
+	private static void createBitmapFontPNG(String in_outputFilePath, PackedTexture in_packedBitmapFont) throws CSException
+	{
+		try
+		{
+			File imageFile = new File(in_outputFilePath);
+			ImageIO.write(in_packedBitmapFont.getPackedTexture(), "png", imageFile);
+		}
+		catch (Exception e)
+		{
+			Logging.logVerbose(StringUtils.convertExceptionToString(e));
+			throw new CSException("Could not create the temporary bitmap font PNG file: " + in_outputFilePath, e);
+		}
+	}
+	/**
+	 * Converts the packed bitmap font image from PNG format to CSImage. 
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_inputFilePath - The PNG image file path.
+	 * @param in_outputFilePath - The CSImage file path.
+	 * @param in_options - The options with which to create the CSImage file.
+	 * 
+	 * @throws CSException - An exception which provides a message describing 
+	 * the error which has occurred.
+	 */
+	private static void convertBitmapFontToCSImage(String in_inputFilePath, String in_outputFilePath, FontFromGlyphsBuilderOptions in_options) throws CSException
+	{
+		try
+		{
+			PNGToCSImageOptions pngToCSImgeOptions = new PNGToCSImageOptions();
+			pngToCSImgeOptions.strInputFilename = in_inputFilePath;
+			pngToCSImgeOptions.strOutputFilename = in_outputFilePath;
+			
+			if (in_options.m_imageCompression.length() > 0)
+			{
+				pngToCSImgeOptions.eCompressionType = PNGToCSImage.convertStringToCompressionFormat(in_options.m_imageCompression);
+			}
+			
+			if (in_options.m_imageFormat.length() > 0)
+			{
+				pngToCSImgeOptions.eConversionType = PNGToCSImage.convertStringToConversionFormat(in_options.m_imageFormat);
+			}
+			
+			if (in_options.m_imageDither == true)
+			{
+				pngToCSImgeOptions.bDither = true;
+			}
+			
+			if (in_options.m_imagePremultiplyAlpha == false)
+			{
+				pngToCSImgeOptions.bPremultiply = false;
+			}
+			
+			PNGToCSImage.run(pngToCSImgeOptions);
+		}
+		catch (Exception e)
+		{
+			Logging.logVerbose(StringUtils.convertExceptionToString(e));
+			throw new CSException("Could not convert the temp PNG to CSImage: " + in_outputFilePath, e);
+		}
+	}
+	/**
+	 * Creates the CSFont binary file from the glyphs data and the packged image
+	 * data.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_outputFilePath - The output file path of the CSFont file.
+	 * @param in_glyphs - The input glyphs data.
+	 * @param in_packedBitmapFont - The input packed bitmap font data.
+	 * 
+	 * @throws CSException - An exception which provides a message describing
+	 * the error which has occurred.
+	 */
+	private static void createCSFont(String in_outputFilePath, Glyphs in_glyphs, PackedTexture in_packedBitmapFont) throws CSException
+	{
+		try (DataOutputStream stream = new DataOutputStream(new FileOutputStream(in_outputFilePath)))
+		{
+			writeStandardHeader(stream, in_glyphs, in_packedBitmapFont);
+			writeINFOChunk(stream, in_glyphs, in_packedBitmapFont);
+			writeGLPHChunk(stream, in_packedBitmapFont);
+		}
+		catch (IOException e)
+		{
+			Logging.logVerbose(StringUtils.convertExceptionToString(e));
+			throw new CSException("Could not create the CSFont file: " + in_outputFilePath, e);
+		}
+	}
+	/**
+	 * Writes the Chilli Source standard file header to the given stream. This
+	 * contains information such as the file Id, version number and the file chunk
+	 * table.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_stream - The stream to write the header to.
+	 * @param in_glyphs - The input glyphs data.
+	 * @param in_packedBitmapFont - The input packed bitmap font data.
+	 * 
+	 * @throws IOException - Any exception thrown by the output stream.
+	 */
+	private static void writeStandardHeader(DataOutputStream in_stream, Glyphs in_glyphs, PackedTexture in_packedBitmapFont) throws IOException
+	{
+		//write the chilli source Id
+		LittleEndianWriterUtils.writeUTF8String(in_stream, "CSCS");
+		
+		//write the endianness check flag
+		LittleEndianWriterUtils.writeInt32(in_stream, 9999);
+				
+		//write the file type identifier. This is 1 for CSFont files.
+		LittleEndianWriterUtils.writeInt32(in_stream, 1);
+		
+		//write the CSFont version number.
+		LittleEndianWriterUtils.writeInt32(in_stream, CSFONT_FILE_VERSION_NUMBER);
+		
+		//write the number of chunk table entries. This will be constant for now as there are always 2 entries: Font Info and Glyph Data.
+		final int NUM_ENTRIES = 2;
+		LittleEndianWriterUtils.writeInt32(in_stream, NUM_ENTRIES);
+		
+		//calcualte the sizes of the chunks
+		final int GLOBAL_HEADER_SIZE = 5 * 4; //5x 4byte values
+		final int CHUNK_TABLE_ENTRY_SIZE = 3 * 4; //3x 4byte values
+		final int CHUNK_TABLE_SIZE = NUM_ENTRIES * CHUNK_TABLE_ENTRY_SIZE;
+		final int INFO_CHUNK_OFFSET = GLOBAL_HEADER_SIZE + CHUNK_TABLE_ENTRY_SIZE + CHUNK_TABLE_SIZE;
+		final int INFO_CHUNK_SIZE = 7 * 4; //7x 4byte values
+		final int GLPH_CHUNK_OFFSET = GLOBAL_HEADER_SIZE + CHUNK_TABLE_ENTRY_SIZE + CHUNK_TABLE_SIZE + INFO_CHUNK_SIZE;
+		final int glphChunkSize = calculateGLPHChunkSize(in_packedBitmapFont);
+		
+		//write the INFO chunk entry.
+		LittleEndianWriterUtils.writeUTF8String(in_stream, "INFO");
+		LittleEndianWriterUtils.writeInt32(in_stream, INFO_CHUNK_OFFSET);
+		LittleEndianWriterUtils.writeInt32(in_stream, INFO_CHUNK_SIZE);
+		
+		//write the GLPH chunk entry.
+		LittleEndianWriterUtils.writeUTF8String(in_stream, "GLPH");
+		LittleEndianWriterUtils.writeInt32(in_stream, GLPH_CHUNK_OFFSET);
+		LittleEndianWriterUtils.writeInt32(in_stream, glphChunkSize);
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The size of the the GLPH chunk.
+	 */
+	private static int calculateGLPHChunkSize(PackedTexture in_packedBitmapFont)
+	{
+		final int GLPH_ENTRY_SIZE = 8 * 2; //8x 2byte values.
+		return in_packedBitmapFont.getNumImages() * GLPH_ENTRY_SIZE;
+	}
+	/**
+	 * Writes the INFO chunk to the output stream. The INFO chunk contains information
+	 * relating to the original font such as the point size and data global to all glyphs
+	 * such as the padding added for effects such as the drop shadow or glow.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_stream - The stream to write the header to.
+	 * @param in_glyphs - The input glyphs data.
+	 * @param in_packedBitmapFont - The input packed bitmap font data.
+	 * 
+	 * @return Whether or not this was successful.
+	 * 
+	 * @throws IOException - Any exception thrown by the output stream.
+	 */
+	private static void writeINFOChunk(DataOutputStream in_stream, Glyphs in_glyphs, PackedTexture in_packedBitmapFont) throws IOException
+	{
+		//write the original font information.
+		LittleEndianWriterUtils.writeInt32(in_stream, in_glyphs.getFontSize());
+		LittleEndianWriterUtils.writeInt32(in_stream, in_glyphs.getLineHeight());
+		LittleEndianWriterUtils.writeInt32(in_stream, in_glyphs.getDescent());
+		
+		//write info on the bitmap font image
+		LittleEndianWriterUtils.writeInt32(in_stream, in_packedBitmapFont.getPackedWidth());
+		LittleEndianWriterUtils.writeInt32(in_stream, in_packedBitmapFont.getPackedHeight());
+		LittleEndianWriterUtils.writeInt32(in_stream, in_glyphs.getEffectPadding().getX());
+		LittleEndianWriterUtils.writeInt32(in_stream, in_glyphs.getEffectPadding().getY());
+	}
+	/**
+	 * Writes the GLPH chunk to the output stream. The GLPH chunk contains all of the
+	 * data for each glyph.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_stream - The stream to write the header to.
+	 * @param in_packedBitmapFont - The input packed bitmap font data.
+	 * 
+	 * @return Whether or not this was successful.
+	 * 
+	 * @throws IOException - Any exception thrown by the output stream.
+	 */
+	private static void writeGLPHChunk(DataOutputStream in_stream, PackedTexture in_packedBitmapFont) throws IOException
+	{
+		for (int i = 0; i < in_packedBitmapFont.getNumImages(); ++i)
+		{
+			short originX = (short)in_packedBitmapFont.getOriginX(i);
+			short originY = (short)in_packedBitmapFont.getOriginY(i);
+			short width =  (short)in_packedBitmapFont.getCroppedWidth(i);
+			short height = (short)in_packedBitmapFont.getCroppedHeight(i);
+			short offsetX = (short)in_packedBitmapFont.getOffsetX(i);
+			short offsetY = (short)in_packedBitmapFont.getOffsetY(i);
+			short originalWidth = (short)in_packedBitmapFont.getOriginalWidth(i);
+			short originalHeight = (short)in_packedBitmapFont.getOriginalHeight(i);
+			
+			LittleEndianWriterUtils.writeInt16(in_stream, originX);
+			LittleEndianWriterUtils.writeInt16(in_stream, originY);
+			LittleEndianWriterUtils.writeInt16(in_stream, width);
+			LittleEndianWriterUtils.writeInt16(in_stream, height);
+			LittleEndianWriterUtils.writeInt16(in_stream, offsetX);
+			LittleEndianWriterUtils.writeInt16(in_stream, offsetY);
+			LittleEndianWriterUtils.writeInt16(in_stream, originalWidth);
+			LittleEndianWriterUtils.writeInt16(in_stream, originalHeight);
+		}
+	}
+	/**
+	 * Copies the output files from the temp directory to the output.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_sourceCSImageFilePath - The source CSImage file path.
+	 * @param in_sourceCSFontFilePath - The source CSFont file path.
+	 * @param in_destCSImageFilePath - The destination CSImage file path.
+	 * @param in_destCSFontFilePath - The destination CSFont file path.
+	 * 
+	 * @throws CSException - An exception which provides a message 
+	 * describing the error which has occurred.
+	 */
+	private static void copyToOutput(String in_sourceCSImageFilePath, String in_sourceCSFontFilePath, String in_destCSImageFilePath, String in_destCSFontFilePath) throws CSException
+	{
+		if (FileUtils.copyFile(in_sourceCSImageFilePath, in_destCSImageFilePath) == false)
+		{
+			throw new CSException("Could not copy to output directory: " + in_destCSImageFilePath);
+		}
+		
+		if (FileUtils.copyFile(in_sourceCSFontFilePath, in_destCSFontFilePath) == false)
+		{
+			throw new CSException("Could not copy to output directory: " + in_destCSFontFilePath);
+		}
+	}
+	/**
+	 * Deletes the temporary directory and it's contents.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_tempDirectoryPath - The temporary directory path.
+	 * 
+	 * @throws CSException - An exception which provides a message 
+	 * describing the error which has occurred.
+	 */
+	private static void deleteTempDirectory(String in_tempDirectoryPath) throws CSException
+	{
+		if (FileUtils.deleteDirectory(in_tempDirectoryPath) == false)
+		{
+			throw new CSException("Could not delete temporary directory: " + in_tempDirectoryPath);
+		}
+	}
+}

@@ -34,6 +34,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import com.chilliworks.chillisource.toolutils.CSException;
 import com.chilliworks.chillisource.toolutils.FileUtils;
 import com.chilliworks.chillisource.toolutils.Integer2;
 import com.chilliworks.chillisource.toolutils.Logging;
@@ -58,23 +59,16 @@ public final class GlyphsReader
 	 * @param in_inputDirectoryPath - The input directory containing the
 	 * bitmap glyphs and font info file.
 	 * 
-	 * @return The glyphs container. This will be null if the read failed.
+	 * @return The glyphs container. This will never be null.
+	 * 
+	 * @throws CSException - An exception which provides a message describing
+	 * the error which has occurred.
 	 */
-	public static Glyphs read(String in_inputDirectoryPath)
+	public static Glyphs read(String in_inputDirectoryPath) throws CSException
 	{
 		String[] glyphFilePaths = findImageFilesInDirectory(in_inputDirectoryPath);
 		char[] glyphCharacters = getCharacterForFilePaths(glyphFilePaths);
-		if (glyphCharacters == null)
-		{
-			return null;
-		}
-		
 		Tuple4<Integer, Integer, Integer, Integer2> fontInfo = readFontInfo(in_inputDirectoryPath);
-		if (fontInfo == null)
-		{
-			return null;
-		}
-		
 		return new Glyphs(glyphCharacters, glyphFilePaths, fontInfo.getFirst(), fontInfo.getSecond(), fontInfo.getThird(), fontInfo.getFourth());
 	}
 	/**
@@ -85,14 +79,17 @@ public final class GlyphsReader
 	 * @param in_directoryPath - The directory to search for images in.
 	 * 
 	 * @return The array of file paths. The path will include the input
-	 * directory path. 
+	 * directory path. This will never be null.
+	 * 
+	 * @throws CSException - An exception which provides a message describing
+	 * the error which has occurred.
 	 */
-	private static String[] findImageFilesInDirectory(String in_directoryPath)
+	private static String[] findImageFilesInDirectory(String in_directoryPath) throws CSException
 	{
 		File directory = new File(in_directoryPath);
 		if (directory.exists() == false)
 		{
-			return null;
+			throw new CSException("Glyphs directory doesn't exist: " + in_directoryPath);
 		}
 		
 		List<String> imageFilePaths = new ArrayList<>();
@@ -118,8 +115,7 @@ public final class GlyphsReader
 	 * 
 	 * @param in_glyphFilePaths - The file paths of all the glyph images.
 	 * 
-	 * @return The array of characters. Will return null if parsing the characters
-	 * failed.
+	 * @return The array of characters. This will never be null.
 	 */
 	private static char[] getCharacterForFilePaths(String[] in_glyphFilePaths)
 	{
@@ -144,13 +140,17 @@ public final class GlyphsReader
 	 * font info file.
 	 * 
 	 * @return A 4-tuple containing the font size, line height, decent and
-	 * effect padding of the font.
+	 * effect padding of the font. This will never be null.
+	 * 
+	 * @throws CSException - An exception which provides a message describing
+	 * the error which has occurred.
 	 */
-	private static Tuple4<Integer, Integer, Integer, Integer2> readFontInfo(String in_inputDirectoryPath)
+	private static Tuple4<Integer, Integer, Integer, Integer2> readFontInfo(String in_inputDirectoryPath) throws CSException
 	{
+		String filePath = in_inputDirectoryPath + FONT_INFO_FILE_PATH;
+		
 		try
 		{
-			String filePath = in_inputDirectoryPath + FONT_INFO_FILE_PATH;
 			String fileContents = FileUtils.readFile(filePath);
 			if (fileContents.length() == 0)
 			{
@@ -169,8 +169,7 @@ public final class GlyphsReader
 		catch (Exception e)
 		{
 			Logging.logVerbose(StringUtils.convertExceptionToString(e));
+			throw new CSException("Could not read the font info file: " + filePath, e);
 		}
-		
-		return null;
 	}
 }

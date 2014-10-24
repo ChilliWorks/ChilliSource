@@ -60,7 +60,7 @@ public final class GlyphsRenderer
 	 * 
 	 * @param in_options - The options for the gylph builder.
 	 * 
-	 * @return The glyph bitmap images. This will be null if this failed.
+	 * @return The glyph bitmap images. This will never be null.
 	 */
 	public static Glyphs render(GlyphsBuilderOptions in_options)
 	{

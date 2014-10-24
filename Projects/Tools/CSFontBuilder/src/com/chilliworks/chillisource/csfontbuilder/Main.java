@@ -31,12 +31,14 @@ package com.chilliworks.chillisource.csfontbuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.chilliworks.chillisource.csfontbuilder.fontbuilder.FontBuilder;
 import com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder.FontFromGlyphsBuilder;
 import com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder.FontFromGlyphsBuilderOptions;
 import com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder.FontFromGlyphsBuilderOptionsParser;
 import com.chilliworks.chillisource.csfontbuilder.glyphsbuilder.GlyphsBuilder;
 import com.chilliworks.chillisource.csfontbuilder.glyphsbuilder.GlyphsBuilderOptions;
 import com.chilliworks.chillisource.csfontbuilder.glyphsbuilder.GlyphsBuilderOptionsParser;
+import com.chilliworks.chillisource.toolutils.CSException;
 import com.chilliworks.chillisource.toolutils.Logging;
 import com.chilliworks.chillisource.toolutils.StringUtils;
 import com.chilliworks.chillisource.toolutils.Logging.LoggingLevel;
@@ -140,8 +142,47 @@ public final class Main
 	 */
 	private static void processFontMode(String[] in_arguments)
 	{
-		//TODO: !? 
-		Logging.logFatal("Unimplemented: void processFontMode(String[] in_arguments)");
+		GlyphsBuilderOptions glyphsBuilderOptions = new GlyphsBuilderOptions();
+		String[] remainingArguments = GlyphsBuilderOptionsParser.parse(in_arguments, glyphsBuilderOptions);
+		
+		FontFromGlyphsBuilderOptions fontFromGlyphsBuilderOptions = new FontFromGlyphsBuilderOptions();
+		remainingArguments = FontFromGlyphsBuilderOptionsParser.parse(remainingArguments, fontFromGlyphsBuilderOptions);
+		
+		String outputFilePath = "";
+		
+		for (int i = 0; i < remainingArguments.length; ++i)
+		{
+			//output
+			if (remainingArguments[i].equalsIgnoreCase(PARAM_OUTPUT) == true || remainingArguments[i].equalsIgnoreCase(SHORT_PARAM_OUTPUT) == true)
+			{
+				if (i+1 < remainingArguments.length)
+					outputFilePath = StringUtils.standardiseFilePath(remainingArguments[i+1]);
+				else
+					Logging.logFatal("No output directory path provided!");
+				i++;
+			}
+			
+			//Error
+			else
+			{
+				Logging.logFatal("Invalid parameter for 'Font' mode: " + remainingArguments[i]);
+			}
+		}
+		
+		if (outputFilePath.length() == 0)
+		{
+			Logging.logFatal("An output directory path must be specfied.");
+		}
+		
+		try
+		{
+			FontBuilder.build(outputFilePath, glyphsBuilderOptions, fontFromGlyphsBuilderOptions);
+		}
+		catch (CSException e)
+		{
+			Logging.logVerbose(StringUtils.convertExceptionToString(e));
+			Logging.logFatal(e.getMessage());
+		}
 	}
 	/**
 	 * Processes the glyphs mode arguments and passes them onto the tool.
@@ -181,7 +222,15 @@ public final class Main
 			Logging.logFatal("An output directory path must be specfied.");
 		}
 		
-		GlyphsBuilder.build(outputDirectoryPath, options);
+		try
+		{
+			GlyphsBuilder.build(outputDirectoryPath, options);
+		}
+		catch (CSException e)
+		{
+			Logging.logVerbose(StringUtils.convertExceptionToString(e));
+			Logging.logFatal(e.getMessage());
+		}
 	}
 	/**
 	 * Processes the font from glyphs mode arguments and passes them onto the tool.
@@ -227,7 +276,15 @@ public final class Main
 			}
 		}
 		
-		FontFromGlyphsBuilder.build(inputDirectoryPath, outputFilePath, options);
+		try
+		{
+			FontFromGlyphsBuilder.build(inputDirectoryPath, outputFilePath, options);
+		}
+		catch (CSException e)
+		{
+			Logging.logVerbose(StringUtils.convertExceptionToString(e));
+			Logging.logFatal(e.getMessage());
+		}
 	}
 	/**
 	 * Strips the base arguments from the argument list.

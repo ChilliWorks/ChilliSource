@@ -36,6 +36,7 @@ import javax.imageio.ImageIO;
 
 import org.json.JSONObject;
 
+import com.chilliworks.chillisource.toolutils.CSException;
 import com.chilliworks.chillisource.toolutils.FileUtils;
 import com.chilliworks.chillisource.toolutils.Logging;
 import com.chilliworks.chillisource.toolutils.StringUtils;
@@ -59,21 +60,13 @@ public final class GlyphsWriter
 	 * @param in_glyphs - The glyphs that should be written to disk.
 	 * @param in_outputDirectoryPath - The path to the output directory.
 	 * 
-	 * @return Whether or not this was successful.
+	 * @throws CSException - An exception which provides a message describing the error 
+	 * which has occurred.
 	 */
-	public static boolean write(Glyphs in_glyphs, String in_outputDirectoryPath)
+	public static void write(Glyphs in_glyphs, String in_outputDirectoryPath) throws CSException
 	{
-		if (writeBitmapGlyphs(in_glyphs, in_outputDirectoryPath) == false)
-		{
-			return false;
-		}
-		
-		if (writeFontInfo(in_glyphs, in_outputDirectoryPath) == false)
-		{
-			return false;
-		}
-		
-		return true;
+		writeBitmapGlyphs(in_glyphs, in_outputDirectoryPath);
+		writeFontInfo(in_glyphs, in_outputDirectoryPath);
 	}
 	/**
 	 * Saves the output bitmap glyphs to the given directory.
@@ -83,9 +76,10 @@ public final class GlyphsWriter
 	 * @param in_glyphs - The glyphs that should be written to disk.
 	 * @param in_outputDirectoryPath - The path to the output directory.
 	 * 
-	 * @return Whether or not this was successful.
+	 * @throws CSException - An exception which provides a message describing the error 
+	 * which has occurred.
 	 */
-	private static boolean writeBitmapGlyphs(Glyphs in_glyphs, String in_outputDirectoryPath)
+	private static void writeBitmapGlyphs(Glyphs in_glyphs, String in_outputDirectoryPath) throws CSException
 	{
 		try 
 		{
@@ -103,11 +97,8 @@ public final class GlyphsWriter
 		catch (IOException e) 
 		{
 			Logging.logVerbose(StringUtils.convertExceptionToString(e));
-			Logging.logFatal("Failed to save glyphs to directory: " + in_outputDirectoryPath);
-			return false;
+			throw new CSException("Failed to save glyphs to directory: " + in_outputDirectoryPath, e);
 		}
-		
-		return true;
 	}
 	/**
 	 * Writes the font into for the given glyphs to the given directory.
@@ -117,9 +108,10 @@ public final class GlyphsWriter
 	 * @param in_glyphs - The glyphs whose info should be written to disk.
 	 * @param in_outputDirectoryPath - The path to the output directory.
 	 * 
-	 * @return Whether or not this was successful.
+	 * @throws CSException - An exception which provides a message describing
+	 * the error which has occurred.
 	 */
-	private static boolean writeFontInfo(Glyphs in_glyphs, String in_outputDirectoryPath)
+	private static void writeFontInfo(Glyphs in_glyphs, String in_outputDirectoryPath) throws CSException
 	{
 		JSONObject jsonRoot = new JSONObject();
 		jsonRoot.put("FontSize", in_glyphs.getFontSize());
@@ -129,6 +121,9 @@ public final class GlyphsWriter
 		String jsonString = jsonRoot.toString(2);
 		
 		String outputFilePath = StringUtils.standardiseFilePath(in_outputDirectoryPath + FONT_INFO_FILE_PATH);
-		return FileUtils.writeFile(outputFilePath, jsonString);
+		if (FileUtils.writeFile(outputFilePath, jsonString) == false)
+		{
+			throw new CSException("Failed to write the font info file: " + outputFilePath);
+		}
 	}
 }
