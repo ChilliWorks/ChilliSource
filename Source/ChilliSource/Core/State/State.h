@@ -346,11 +346,11 @@ namespace ChilliSource
         //----------------------------------------------------
         template <typename TNamedType> TNamedType* State::GetSystem()
         {
-            for (std::vector<StateSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+            for (const auto& system : m_systems)
             {
-                if ((*it)->IsA(TNamedType::InterfaceID))
+                if (system->IsA<TNamedType>() == true)
                 {
-                    return static_cast<TNamedType*>(it->get());
+                    return static_cast<TNamedType*>(system.get());
                 }
             }
             
@@ -361,11 +361,11 @@ namespace ChilliSource
         //----------------------------------------------------
         template <typename TNamedType> const TNamedType* State::GetSystem() const
         {
-            for (std::vector<StateSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+            for (const auto& system : m_systems)
             {
-                if ((*it)->IsA(TNamedType::InterfaceID))
+                if (system->IsA<TNamedType>() == true)
                 {
-                    return static_cast<TNamedType*>(it->get());
+                    return static_cast<TNamedType*>(system.get());
                 }
             }
             
@@ -377,6 +377,7 @@ namespace ChilliSource
         template <typename TNamedType> std::vector<TNamedType*> State::GetSystems()
         {
             std::vector<TNamedType*> systems;
+            
             for (const auto& stateSystem : m_systems)
             {
                 if (stateSystem->IsA(TNamedType::InterfaceID))
@@ -392,6 +393,7 @@ namespace ChilliSource
         template <typename TNamedType> std::vector<const TNamedType*> State::GetSystems() const
         {
             std::vector<const TNamedType*> systems;
+            
             for (const auto& stateSystem : m_systems)
             {
                 if (stateSystem->IsA(TNamedType::InterfaceID))

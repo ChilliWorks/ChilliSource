@@ -115,7 +115,7 @@ namespace ChilliSource
             ///
             /// @author I Copland
             ///
-            /// @return A list pointers to the systems that
+            /// @return A list of pointers to the systems that
             /// implement the given interface.
             //-----------------------------------------------------
             template <typename TNamedType> std::vector<TNamedType*> GetSystems();
@@ -125,7 +125,7 @@ namespace ChilliSource
 			///
             /// @author I Copland
             ///
-			/// @return A list const pointers to the systems that
+			/// @return A list of const pointers to the systems that
             /// implement the given interface.
 			//-----------------------------------------------------
             template <typename TNamedType> std::vector<const TNamedType*> GetSystems() const;
@@ -232,14 +232,14 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// @author S Downie.
             ///
-            /// @return A pointer to the platfrom specific render
+            /// @return A pointer to the platform specific render
             /// system
             //-----------------------------------------------------
             Rendering::RenderSystem* GetRenderSystem();
             //-----------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return A const pointer to the platfrom specific
+            /// @return A const pointer to the platform specific
             /// render system
             //-----------------------------------------------------
             const Rendering::RenderSystem* GetRenderSystem() const;
@@ -320,7 +320,7 @@ namespace ChilliSource
 #ifdef CS_ENABLE_DEBUGSTATS
             //-----------------------------------------------------
             /// Returns a pointer to the debug stats system. This
-            /// is only available when the debug stats proprocessor
+            /// is only available when the debug stats preprocessor
             /// flag CS_ENABLE_DEBUGSTATS is defined.
             ///
             /// @author I Copland
@@ -331,7 +331,7 @@ namespace ChilliSource
             //-----------------------------------------------------
             /// Returns a const pointer to the debug stats system.
             /// This is only available when the debug stats
-            /// proprocessor flag CS_ENABLE_DEBUGSTATS is defined.
+            /// preprocessor flag CS_ENABLE_DEBUGSTATS is defined.
             ///
             /// @author I Copland
             ///
@@ -542,11 +542,11 @@ namespace ChilliSource
         //----------------------------------------------------
         template <typename TNamedType> TNamedType* Application::GetSystem()
         {
-            for (std::vector<AppSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
+            for (const auto& system : m_systems)
             {
-                if ((*it)->IsA(TNamedType::InterfaceID))
+                if (system->IsA<TNamedType>() == true)
                 {
-                    return static_cast<TNamedType*>((*it).get());
+                    return static_cast<TNamedType*>(system.get());
                 }
             }
             
@@ -557,13 +557,13 @@ namespace ChilliSource
         //----------------------------------------------------
         template <typename TNamedType> const TNamedType* Application::GetSystem() const
         {
-            for (std::vector<AppSystemUPtr>::const_iterator it = m_systems.begin(); it != m_systems.end(); ++it)
-			{
-				if ((*it)->IsA(TNamedType::InterfaceID))
-				{
-					return static_cast<TNamedType*>((*it).get());
-				}
-			}
+            for (const auto& system : m_systems)
+            {
+                if (system->IsA<TNamedType>() == true)
+                {
+                    return static_cast<TNamedType*>(system.get());
+                }
+            }
 			
 			CS_LOG_WARNING("Application cannot find system: " + TNamedType::TypeName);
 			return nullptr;
@@ -574,11 +574,11 @@ namespace ChilliSource
         {
             std::vector<TNamedType*> output;
             
-            for (size_t systemIndex = 0; systemIndex < m_systems.size(); systemIndex++)
+            for (const auto& system : m_systems)
             {
-                if (m_systems[systemIndex]->IsA(TNamedType::InterfaceID))
+                if (system->IsA<TNamedType>() == true)
                 {
-                    output.push_back(static_cast<TNamedType*>(m_systems[systemIndex].get()));
+                    output.push_back(static_cast<TNamedType*>(system.get()));
                 }
             }
             
@@ -590,11 +590,11 @@ namespace ChilliSource
         {
             std::vector<const TNamedType*> output;
             
-            for (size_t systemIndex = 0; systemIndex < m_systems.size(); systemIndex++)
+            for (const auto& system : m_systems)
             {
-                if (m_systems[systemIndex]->IsA(TNamedType::InterfaceID))
+                if (system->IsA<TNamedType>() == true)
                 {
-                    output.push_back(static_cast<TNamedType*>(m_systems[systemIndex].get()));
+                    output.push_back(static_cast<TNamedType*>(system.get()));
                 }
             }
             

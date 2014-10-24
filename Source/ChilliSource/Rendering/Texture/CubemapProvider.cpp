@@ -192,7 +192,7 @@ namespace ChilliSource
             const u32 k_numFaces = 6;
             const std::string k_faces[k_numFaces] = {"Right", "Left", "Top", "Bottom", "Front", "Back"};
             
-			//MSVC does not support moving arrays of unique_ptr at this time and therfore we have
+			//MSVC does not support moving arrays of unique_ptr at this time and therefore we have
 			//to create a shared pointer in order to pass it into the lambda
 			auto imageDataContainer = std::make_shared<std::array<Texture::TextureDataUPtr, k_numFaces>>();
             std::array<Texture::Descriptor, k_numFaces> descs;
@@ -222,7 +222,6 @@ namespace ChilliSource
                     }
                     return;
                 }
-                
                 
 				(*imageDataContainer)[i] = image->MoveData();
                 
