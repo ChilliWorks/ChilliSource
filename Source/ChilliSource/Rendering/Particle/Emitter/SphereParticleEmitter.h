@@ -68,11 +68,10 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			///
-			/// @param The entity the effect is attached to.
 			/// @param The particle emitter definition.
 			/// @param The particle array.
 			//----------------------------------------------------------------
-			SphereParticleEmitter(const Core::Entity* in_entity, const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
+			SphereParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
 
 			const SphereParticleEmitterDef* m_sphereParticleEmitterDef = nullptr;
 		};

@@ -125,9 +125,13 @@ namespace ChilliSource
 			/// @param The particle draw data array.
 			/// @param The playback time.
 			/// @param The delta time.
+			/// @param The entity's world position.
+			/// @param The entity's world scale.
+			/// @param The entity's world orientation.
 			//----------------------------------------------------------------
 			void ParticleUpdateTask(ParticleEffectCSPtr in_particleEffect, ParticleEmitterSPtr in_particleEmitter, std::vector<ParticleAffectorSPtr> in_particleAffectors, 
-				std::shared_ptr<Core::dynamic_array<Particle>> in_particleArray, std::shared_ptr<Core::concurrent_dynamic_array<ParticleDrawData>> in_particleDrawDataArray, f32 in_playbackTime, f32 in_deltaTime)
+				std::shared_ptr<Core::dynamic_array<Particle>> in_particleArray, std::shared_ptr<Core::concurrent_dynamic_array<ParticleDrawData>> in_particleDrawDataArray, f32 in_playbackTime, 
+				f32 in_deltaTime, Core::Vector3 in_entityPosition, Core::Vector3 in_entityScale, Core::Quaternion& in_entityOrientation)
 			{
 				CS_ASSERT(in_particleEffect != nullptr, "Cannot update particles with null particle effect.");
 				CS_ASSERT(in_particleArray != nullptr, "Cannot update particles with null particle array.");
@@ -157,7 +161,7 @@ namespace ChilliSource
 
 				if (in_particleEmitter != nullptr)
 				{
-					in_particleEmitter->TryEmit(in_playbackTime);
+					in_particleEmitter->TryEmit(in_playbackTime, in_entityPosition, in_entityScale, in_entityOrientation);
 				}
 
 				CommitParticleChanges(in_particleArray, in_particleDrawDataArray);
@@ -304,7 +308,7 @@ namespace ChilliSource
 				m_drawable = m_particleEffect->GetDrawableDef()->CreateInstance(GetEntity(), m_particleDrawDataArray.get());
 				CS_ASSERT(m_drawable != nullptr, "Failed to create particle drawable.");
 
-				m_emitter = m_particleEffect->GetEmitterDef()->CreateInstance(GetEntity(), m_particleArray.get());
+				m_emitter = m_particleEffect->GetEmitterDef()->CreateInstance(m_particleArray.get());
 				CS_ASSERT(m_emitter != nullptr, "Failed to create particle emitter.");
 
 				//TODO: Create affectors.
@@ -374,7 +378,8 @@ namespace ChilliSource
 					}
 
 					//TODO: ensure there isn't already an instance of the task active.
-					Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, emitter, m_affectors, m_particleArray, m_particleDrawDataArray, m_playbackTimer, in_deltaTime));
+					Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, emitter, m_affectors, m_particleArray, m_particleDrawDataArray, 
+						m_playbackTimer, in_deltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation()));
 				}
 			}
 		}

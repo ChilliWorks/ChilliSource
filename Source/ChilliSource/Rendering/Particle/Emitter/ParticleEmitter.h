@@ -59,11 +59,10 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			///
-			/// @param The entity the effect is attached to.
 			/// @param The particle emitter definition.
 			/// @param The particle array.
 			//----------------------------------------------------------------
-			ParticleEmitter(const Core::Entity* in_entity, const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
+			ParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
 			//----------------------------------------------------------------
 			/// Tries to emit new particles if required. This will be called 
 			/// as part of a background task.
@@ -71,8 +70,11 @@ namespace ChilliSource
 			/// @author Ian Copland
 			/// 
 			/// @param The current playback time of the particle effect.
+			/// @param The current world space position of the emitter.
+			/// @param The current world space scale of the emitter.
+			/// @param The current world space orientation of the emitter.
 			//----------------------------------------------------------------
-			void TryEmit(f32 in_playbackTime);
+			void TryEmit(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation);
 			//----------------------------------------------------------------
 			/// Destructor.
 			///
@@ -105,33 +107,38 @@ namespace ChilliSource
 			/// @author Ian Copland
 			/// 
 			/// @param The current playback time of the particle effect.
+			/// @param The current world space position of the emitter.
+			/// @param The current world space scale of the emitter.
+			/// @param The current world space orientation of the emitter.
 			//----------------------------------------------------------------
-			void TryEmitStream(f32 in_playbackTime);
+			void TryEmitStream(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation);
 			//----------------------------------------------------------------
 			/// Tries to emit new particles in burst mode.
 			///
 			/// @author Ian Copland
 			/// 
 			/// @param The current playback time of the particle effect.
+			/// @param The current world space position of the emitter.
+			/// @param The current world space scale of the emitter.
+			/// @param The current world space orientation of the emitter.
 			//----------------------------------------------------------------
-			void TryEmitBurst(f32 in_playbackTime);
+			void TryEmitBurst(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation);
 			//----------------------------------------------------------------
 			/// Emits a new particle if the next particle in the list is free
 			/// to be emitted. 
 			///
 			/// @author Ian Copland
 			/// 
+			/// @param The playback time of emission.
 			/// @param The world space position of the emitter at the time
-			/// of emitter.
+			/// of emission.
 			/// @param The world space scale of the emitter at the time
 			/// of emission.
 			/// @param The world orientation of the emitter at the time of
 			/// emission.
-			/// @param The playback time of emission.
 			//----------------------------------------------------------------
-			void Emit(const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation, f32 in_emissionTime);
+			void Emit(f32 in_emissionTime, const Core::Vector3& in_emissionPosition, const Core::Vector3& in_emissionScale, const Core::Quaternion& in_emissionOrientation);
 
-			const Core::Entity* m_entity = nullptr;
 			const ParticleEmitterDef* m_emitterDef = nullptr;
 			Core::dynamic_array<Particle>* m_particleArray = nullptr;
 
@@ -140,6 +147,7 @@ namespace ChilliSource
 			Core::Vector3 m_emissionScale;
 			Core::Quaternion m_emissionOrientation;
 			f32 m_emissionTime = 0.0f;
+			bool m_hasEmitted = false;
 			u32 m_nextParticleIndex = 0;
 		};
 	}

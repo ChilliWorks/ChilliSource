@@ -283,7 +283,7 @@ namespace ChilliSource
 			{
 				const auto& particle = particleDataArray[i];
 
-				if (particle.m_isActive == true && particle.m_colour.a > 0.0f)
+				if (particle.m_isActive == true && particle.m_colour != Core::Colour::k_transparent)
 				{
 					auto worldPosition = particle.m_position * entityWorldTransform;
 					auto worldScale = particle.m_scale * particleScaleFactor;
@@ -315,7 +315,7 @@ namespace ChilliSource
 			{
 				const auto& particle = particleDataArray[i];
 
-				if (particle.m_isActive == true && particle.m_colour.a > 0.0f)
+				if (particle.m_isActive == true && particle.m_colour.a != Core::Colour::k_transparent)
 				{
 					//rotate locally in the XY plane before rotating to face the camera.
 					auto worldOrientation = Core::Quaternion(Core::Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;

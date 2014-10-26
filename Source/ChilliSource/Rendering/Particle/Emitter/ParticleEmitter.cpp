@@ -44,41 +44,42 @@ namespace ChilliSource
 	{
 		//----------------------------------------------
 		//----------------------------------------------
-		ParticleEmitter::ParticleEmitter(const Core::Entity* in_entity, const ParticleEmitterDef* in_emitterDef, Core::dynamic_array<Particle>* in_particleArray)
-			: m_entity(in_entity), m_emitterDef(in_emitterDef), m_particleArray(in_particleArray)
+		ParticleEmitter::ParticleEmitter(const ParticleEmitterDef* in_emitterDef, Core::dynamic_array<Particle>* in_particleArray)
+			: m_emitterDef(in_emitterDef), m_particleArray(in_particleArray)
 		{
-			CS_ASSERT(m_entity != nullptr, "Cannot create particle emitter with null entity.");
 			CS_ASSERT(m_emitterDef != nullptr, "Cannot create particle emitter with null emitter def.");
 			CS_ASSERT(m_particleArray != nullptr, "Cannot create particle emitter with null particle array.");
 		}
 		//----------------------------------------------
 		//----------------------------------------------
-		void ParticleEmitter::TryEmit(f32 in_playbackTime)
+		void ParticleEmitter::TryEmit(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation)
 		{
 			CS_ASSERT(in_playbackTime >= 0.0f, "Playback time cannot be below zero.");
 
 			//If this is the first emission, then setup the correct entity positions.
 			if (m_firstEmission == true)
 			{
-				m_emissionPosition = m_entity->GetTransform().GetWorldPosition();
-				m_emissionScale = m_entity->GetTransform().GetWorldScale();
-				m_emissionOrientation = m_entity->GetTransform().GetWorldOrientation();
+				m_emissionPosition = in_emitterPosition;
+				m_emissionScale = in_emitterScale;
+				m_emissionOrientation = in_emitterOrientation;
+				m_firstEmission = false;
 			}
 
 			//wrap the emission timer if required.
 			while (m_emissionTime > in_playbackTime)
 			{
 				m_emissionTime -= m_emitterDef->GetParticleEffect()->GetDuration();
+				m_hasEmitted = false;
 			}
 
 			//emit based on emission mode.
 			switch (m_emitterDef->GetEmissionMode())
 			{
 			case ParticleEmitterDef::EmissionMode::k_stream:
-				TryEmitStream(in_playbackTime);
+				TryEmitStream(in_playbackTime, in_emitterPosition, in_emitterScale, in_emitterOrientation);
 				break;
 			case ParticleEmitterDef::EmissionMode::k_burst:
-				TryEmitBurst(in_playbackTime);
+				TryEmitBurst(in_playbackTime, in_emitterPosition, in_emitterScale, in_emitterOrientation);
 				break;
 			}
 		}
@@ -90,7 +91,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void ParticleEmitter::TryEmitStream(f32 in_playbackTime)
+		void ParticleEmitter::TryEmitStream(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation)
 		{
 			const ParticleEffect* particleEffect = m_emitterDef->GetParticleEffect();
 
@@ -109,20 +110,19 @@ namespace ChilliSource
 			{
 				m_emissionTime = nextEmissionTime;
 				f32 t = (m_emissionTime - prevEmissionTime) / (in_playbackTime - prevEmissionTime);
-				m_emissionPosition = Core::Vector3::Lerp(prevEntityPosition, m_entity->GetTransform().GetWorldPosition(), t);
-				m_emissionScale = Core::Vector3::Lerp(prevEntityScale, m_entity->GetTransform().GetWorldScale(), t);
-				m_emissionOrientation = Core::Quaternion::Slerp(prevOrientation, m_entity->GetTransform().GetWorldOrientation(), t);
+				m_emissionPosition = Core::Vector3::Lerp(prevEntityPosition, in_emitterPosition, t);
+				m_emissionScale = Core::Vector3::Lerp(prevEntityScale, in_emitterScale, t);
+				m_emissionOrientation = Core::Quaternion::Slerp(prevOrientation, in_emitterOrientation, t);
 
 				const f32 normalisedPlaybackTime = m_emissionTime / particleEffect->GetDuration();
 				u32 particlesPerEmission = m_emitterDef->GetParticlesPerEmissionProperty()->GenerateValue(normalisedPlaybackTime);
 				for (u32 i = 0; i < particlesPerEmission; ++i)
 				{
 					f32 chanceOfEmission = m_emitterDef->GetEmissionChanceProperty()->GenerateValue(normalisedPlaybackTime);
-
 					f32 random = Core::Random::GenerateReal<f32>();
 					if (random <= chanceOfEmission)
 					{
-						Emit(m_emissionPosition, m_emissionScale, m_emissionOrientation, m_emissionTime);
+						Emit(m_emissionTime, m_emissionPosition, m_emissionScale, m_emissionOrientation);
 					}
 				}
 
@@ -131,13 +131,34 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void ParticleEmitter::TryEmitBurst(f32 in_playbackTime)
+		void ParticleEmitter::TryEmitBurst(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation)
 		{
-			//TODO:
+			m_emissionTime = in_playbackTime;
+
+			if (m_hasEmitted == false)
+			{
+				m_emissionPosition = in_emitterPosition;
+				m_emissionScale = in_emitterScale;
+				m_emissionOrientation = in_emitterOrientation;
+
+				const f32 normalisedPlaybackTime = 0.0f;
+				u32 particlesPerEmission = m_emitterDef->GetParticlesPerEmissionProperty()->GenerateValue(normalisedPlaybackTime);
+				for (u32 i = 0; i < particlesPerEmission; ++i)
+				{
+					f32 chanceOfEmission = m_emitterDef->GetEmissionChanceProperty()->GenerateValue(normalisedPlaybackTime);
+					f32 random = Core::Random::GenerateReal<f32>();
+					if (random <= chanceOfEmission)
+					{
+						Emit(m_emissionTime, m_emissionPosition, m_emissionScale, m_emissionOrientation);
+					}
+				}
+
+				m_hasEmitted = true;
+			}
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void ParticleEmitter::Emit(const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation, f32 in_emissionTime)
+		void ParticleEmitter::Emit(f32 in_emissionTime, const Core::Vector3& in_emissionPosition, const Core::Vector3& in_emissionScale, const Core::Quaternion& in_emissionOrientation)
 		{
 			const ParticleEffect* particleEffect = m_emitterDef->GetParticleEffect();
 
@@ -164,24 +185,41 @@ namespace ChilliSource
 				//apply these in the correct simulation space.
 				switch (particleEffect->GetSimulationSpace())
 				{
-				case ParticleEffect::SimulationSpace::k_world:
-					//TODO:
-					break;
-				case ParticleEffect::SimulationSpace::k_local:
-					particle.m_position = localPosition;
-					particle.m_scale = localScale;
-					particle.m_rotation = localRotation;
-					particle.m_velocity = localDirection * localSpeed;
-					break;
-				default:
-					CS_LOG_FATAL("Invalid simulation space.");
-					break;
+					case ParticleEffect::SimulationSpace::k_world:
+					{
+						//transform the position into world space.
+						const Core::Matrix4 worldTransform = Core::Matrix4::CreateTransform(in_emissionPosition, in_emissionScale, in_emissionOrientation);
+						particle.m_position = localPosition * worldTransform;
+
+						//we can't directly apply the emission scale to the particles as this would look strange as
+						//the camera moved around an emitting entity with a non-uniform scale, so this works out a uniform
+						//scale from the average of the components.
+						f32 particleScaleFactor = (in_emissionScale.x + in_emissionScale.y + in_emissionScale.z) / 3.0f;
+						particle.m_scale = localScale * particleScaleFactor;
+
+						//transform the velocity into world space.
+						particle.m_velocity = Core::Vector3::Rotate(((localDirection * localSpeed) * in_emissionScale), in_emissionOrientation);
+						break;
+					}
+					case ParticleEffect::SimulationSpace::k_local:
+					{
+						particle.m_position = localPosition;
+						particle.m_scale = localScale;
+						particle.m_velocity = localDirection * localSpeed;
+						break;
+					}
+					default:
+					{
+						CS_LOG_FATAL("Invalid simulation space.");
+						break;
+					}
 				}
 
 				//apply the remaining properties.
 				particle.m_lifetime = particleEffect->GetLifetimeProperty()->GenerateValue(normalisedPlaybackTime);
 				particle.m_energy = particle.m_lifetime;
 				particle.m_colour = particleEffect->GetInitialColourProperty()->GenerateValue(normalisedPlaybackTime);
+				particle.m_rotation = localRotation;
 				particle.m_angularVelocity = particleEffect->GetInitialAngularVelocityProperty()->GenerateValue(normalisedPlaybackTime);
 				particle.m_isActive = true;
 

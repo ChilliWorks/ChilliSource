@@ -124,13 +124,12 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland.
 			///
-			/// @param The entity that owns the effect.
 			/// @param The particle effect.
 			/// @param The particle array.
 			///
 			/// @return the instance.
 			//----------------------------------------------------------------
-			virtual ParticleEmitterUPtr CreateInstance(const Core::Entity* in_entity, Core::dynamic_array<Particle>* in_particleArray) const = 0;
+			virtual ParticleEmitterUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const = 0;
 			//----------------------------------------------------------------
 			/// @author Ian Copland
 			///

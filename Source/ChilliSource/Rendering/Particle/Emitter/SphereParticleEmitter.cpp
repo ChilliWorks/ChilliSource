@@ -38,8 +38,8 @@ namespace ChilliSource
 	{
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		SphereParticleEmitter::SphereParticleEmitter(const Core::Entity* in_entity, const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray)
-			: ParticleEmitter(in_entity, in_particleEmitter, in_particleArray)
+		SphereParticleEmitter::SphereParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray)
+			: ParticleEmitter(in_particleEmitter, in_particleArray)
 		{
 			//Only the sphere emitter def can create this, so this is safe.
 			m_sphereParticleEmitterDef = static_cast<const SphereParticleEmitterDef*>(in_particleEmitter);

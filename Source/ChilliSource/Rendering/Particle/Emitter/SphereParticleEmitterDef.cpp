@@ -60,9 +60,9 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		ParticleEmitterUPtr SphereParticleEmitterDef::CreateInstance(const Core::Entity* in_entity, Core::dynamic_array<Particle>* in_particleArray) const
+		ParticleEmitterUPtr SphereParticleEmitterDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
 		{
-			return ParticleEmitterUPtr(new SphereParticleEmitter(in_entity, this, in_particleArray));
+			return ParticleEmitterUPtr(new SphereParticleEmitter(this, in_particleArray));
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
