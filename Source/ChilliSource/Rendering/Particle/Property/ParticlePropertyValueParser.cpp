@@ -46,79 +46,79 @@ namespace ChilliSource
 			//--------------------------------------------------
 			template <> bool Parse(const std::string& in_value)
 			{
-				return CSCore::ParseBool(in_value);
+				return Core::ParseBool(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
 			template <> u32 Parse(const std::string& in_value)
 			{
-				return CSCore::ParseU32(in_value);
+				return Core::ParseU32(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
 			template <> s32 Parse(const std::string& in_value)
 			{
-				return CSCore::ParseS32(in_value);
+				return Core::ParseS32(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
 			template <> u64 Parse(const std::string& in_value)
 			{
-				return CSCore::ParseU64(in_value);
+				return Core::ParseU64(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
 			template <> s64 Parse(const std::string& in_value)
 			{
-				return CSCore::ParseS64(in_value);
+				return Core::ParseS64(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
 			template <> f32 Parse(const std::string& in_value)
 			{
-				return CSCore::ParseF32(in_value);
+				return Core::ParseF32(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> CSCore::Vector2 Parse(const std::string& in_value)
+			template <> Core::Vector2 Parse(const std::string& in_value)
 			{
-				return CSCore::ParseVector2(in_value);
+				return Core::ParseVector2(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> CSCore::Vector3 Parse(const std::string& in_value)
+			template <> Core::Vector3 Parse(const std::string& in_value)
 			{
-				return CSCore::ParseVector3(in_value);
+				return Core::ParseVector3(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> CSCore::Vector4 Parse(const std::string& in_value)
+			template <> Core::Vector4 Parse(const std::string& in_value)
 			{
-				return CSCore::ParseVector4(in_value);
+				return Core::ParseVector4(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> CSCore::Matrix3 Parse(const std::string& in_value)
+			template <> Core::Matrix3 Parse(const std::string& in_value)
 			{
-				return CSCore::ParseMatrix3(in_value);
+				return Core::ParseMatrix3(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> CSCore::Matrix4 Parse(const std::string& in_value)
+			template <> Core::Matrix4 Parse(const std::string& in_value)
 			{
-				return CSCore::ParseMatrix4(in_value);
+				return Core::ParseMatrix4(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> CSCore::Quaternion Parse(const std::string& in_value)
+			template <> Core::Quaternion Parse(const std::string& in_value)
 			{
-				return CSCore::ParseQuaternion(in_value);
+				return Core::ParseQuaternion(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> CSCore::Colour Parse(const std::string& in_value)
+			template <> Core::Colour Parse(const std::string& in_value)
 			{
-				return CSCore::ParseColour(in_value);
+				return Core::ParseColour(in_value);
 			}
 		}
 	}

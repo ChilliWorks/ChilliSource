@@ -29,7 +29,7 @@
 #ifndef _CHILLISOURCE_RENDERING_PARTICLE_EMITTER_SPHEREPARTICLEEMITTERDEF_H_
 #define _CHILLISOURCE_RENDERING_PARTICLE_EMITTER_SPHEREPARTICLEEMITTERDEF_H_
 
-#include <ChilliSource/Rendering/Particle/ForwardDeclarations.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDef.h>
 
 namespace ChilliSource
@@ -126,7 +126,7 @@ namespace ChilliSource
 			/// will be loaded as a background task. Once complete, this
 			/// delegate will be called.
 			//----------------------------------------------------------------
-			SphereParticleEmitterDef(const CSCore::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate = nullptr);
+			SphereParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate = nullptr);
 			//----------------------------------------------------------------
 			/// Allows querying of whether or not this implements the interface
 			/// described by the given Id.
@@ -137,7 +137,7 @@ namespace ChilliSource
 			///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------------------
 			/// Creates a new instance of a Sphere Particle Emitter.
 			///
@@ -148,7 +148,7 @@ namespace ChilliSource
 			///
 			/// @return the instance.
 			//----------------------------------------------------------------
-			ParticleEmitterUPtr CreateInstance(const CSCore::Entity* in_entity, Core::dynamic_array<Particle>* in_particleArray) const override;
+			ParticleEmitterUPtr CreateInstance(const Core::Entity* in_entity, Core::dynamic_array<Particle>* in_particleArray) const override;
 			//----------------------------------------------------------------
 			/// @author Ian Copland.
 			///

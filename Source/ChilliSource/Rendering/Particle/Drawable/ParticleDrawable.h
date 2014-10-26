@@ -60,7 +60,7 @@ namespace ChilliSource
 			/// @param The particle drawable definition.
 			/// @param The concurrent particle draw data array.
 			//----------------------------------------------------------------
-			ParticleDrawable(const CSCore::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray);
+			ParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray);
 			//----------------------------------------------------------------
 			/// Renders all active particles in the effect. 
 			///
@@ -72,7 +72,7 @@ namespace ChilliSource
 			///
 			/// @param The camera component used to render.
 			//----------------------------------------------------------------
-			virtual void Draw(const CSRendering::CameraComponent* in_camera) = 0;
+			virtual void Draw(const CameraComponent* in_camera) = 0;
 			//----------------------------------------------------------------
 			/// Destructor
 			///
@@ -86,7 +86,7 @@ namespace ChilliSource
 			/// @return The entity the owning particle component is attached 
 			/// to. This should never be null.
 			//----------------------------------------------------------------
-			const CSCore::Entity* GetEntity() const;
+			const Core::Entity* GetEntity() const;
 			//----------------------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -100,7 +100,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			const Core::concurrent_dynamic_array<ParticleDrawData>& GetParticleDrawDataArray() const;
 		private:
-			const CSCore::Entity* m_entity = nullptr;
+			const Core::Entity* m_entity = nullptr;
 			const ParticleDrawableDef* m_drawableDef = nullptr;
 			const Core::concurrent_dynamic_array<ParticleDrawData>* m_particleDrawDataArray = nullptr;
 		};

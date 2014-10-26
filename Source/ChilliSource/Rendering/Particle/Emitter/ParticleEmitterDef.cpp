@@ -56,10 +56,10 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		ParticleEmitterDef::ParticleEmitterDef(const CSCore::ParamDictionary& in_params)
+		ParticleEmitterDef::ParticleEmitterDef(const Core::ParamDictionary& in_params)
 		{
 			//TODO: !?
-			CS_LOG_FATAL("Unimplemented: ParticleEmitterDef::ParticleEmitterDef(const CSCore::ParamDictionary& in_params)");
+			CS_LOG_FATAL("Unimplemented: ParticleEmitterDef::ParticleEmitterDef(const Core::ParamDictionary& in_params)");
 
 			if (m_emissionMode == EmissionMode::k_burst)
 			{

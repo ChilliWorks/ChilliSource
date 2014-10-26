@@ -145,7 +145,7 @@ namespace ChilliSource
 			///
 			/// @return The parsed value.
 			//----------------------------------------------------------------
-			template <> CSCore::Vector2 Parse(const std::string& in_value);
+			template <> Core::Vector2 Parse(const std::string& in_value);
 			//----------------------------------------------------------------
 			/// Specialisation for parsing Vector3 values.
 			///
@@ -155,7 +155,7 @@ namespace ChilliSource
 			///
 			/// @return The parsed value.
 			//----------------------------------------------------------------
-			template <> CSCore::Vector3 Parse(const std::string& in_value);
+			template <> Core::Vector3 Parse(const std::string& in_value);
 			//----------------------------------------------------------------
 			/// Specialisation for parsing Vector4 values.
 			///
@@ -165,7 +165,7 @@ namespace ChilliSource
 			///
 			/// @return The parsed value.
 			//----------------------------------------------------------------
-			template <> CSCore::Vector4 Parse(const std::string& in_value);
+			template <> Core::Vector4 Parse(const std::string& in_value);
 			//----------------------------------------------------------------
 			/// Specialisation for parsing Matrix3 values.
 			///
@@ -175,7 +175,7 @@ namespace ChilliSource
 			///
 			/// @return The parsed value.
 			//----------------------------------------------------------------
-			template <> CSCore::Matrix3 Parse(const std::string& in_value);
+			template <> Core::Matrix3 Parse(const std::string& in_value);
 			//----------------------------------------------------------------
 			/// Specialisation for parsing Matrix4 values.
 			///
@@ -185,7 +185,7 @@ namespace ChilliSource
 			///
 			/// @return The parsed value.
 			//----------------------------------------------------------------
-			template <> CSCore::Matrix4 Parse(const std::string& in_value);
+			template <> Core::Matrix4 Parse(const std::string& in_value);
 			//----------------------------------------------------------------
 			/// Specialisation for parsing Quaternion values.
 			///
@@ -195,7 +195,7 @@ namespace ChilliSource
 			///
 			/// @return The parsed value.
 			//----------------------------------------------------------------
-			template <> CSCore::Quaternion Parse(const std::string& in_value);
+			template <> Core::Quaternion Parse(const std::string& in_value);
 			//----------------------------------------------------------------
 			/// Specialisation for parsing Colour values.
 			///
@@ -205,7 +205,7 @@ namespace ChilliSource
 			///
 			/// @return The parsed value.
 			//----------------------------------------------------------------
-			template <> CSCore::Colour Parse(const std::string& in_value);
+			template <> Core::Colour Parse(const std::string& in_value);
 		};
 	}
 }

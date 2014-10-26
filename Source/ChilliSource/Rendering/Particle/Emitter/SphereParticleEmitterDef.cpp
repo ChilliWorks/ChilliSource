@@ -46,21 +46,21 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		SphereParticleEmitterDef::SphereParticleEmitterDef(const CSCore::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)
+		SphereParticleEmitterDef::SphereParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)
 			: ParticleEmitterDef(in_params)
 		{
 			//TODO: !?
-			CS_LOG_FATAL("Unimplemented: SphereParticleEmitterDef::SphereParticleEmitterDef(const CSCore::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)");
+			CS_LOG_FATAL("Unimplemented: SphereParticleEmitterDef::SphereParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)");
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool SphereParticleEmitterDef::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool SphereParticleEmitterDef::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
 			return (SphereParticleEmitterDef::InterfaceID == in_interfaceId);
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		ParticleEmitterUPtr SphereParticleEmitterDef::CreateInstance(const CSCore::Entity* in_entity, Core::dynamic_array<Particle>* in_particleArray) const
+		ParticleEmitterUPtr SphereParticleEmitterDef::CreateInstance(const Core::Entity* in_entity, Core::dynamic_array<Particle>* in_particleArray) const
 		{
 			return ParticleEmitterUPtr(new SphereParticleEmitter(in_entity, this, in_particleArray));
 		}

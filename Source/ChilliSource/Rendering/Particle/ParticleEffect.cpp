@@ -46,7 +46,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		bool ParticleEffect::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool ParticleEffect::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
 			return (ParticleEffect::InterfaceID == in_interfaceId);
 		}
@@ -76,7 +76,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		const ParticleProperty<CSCore::Vector2>* ParticleEffect::GetInitialScaleProperty() const
+		const ParticleProperty<Core::Vector2>* ParticleEffect::GetInitialScaleProperty() const
 		{
 			return m_initialScaleProperty.get();
 		}
@@ -88,7 +88,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		const ParticleProperty<CSCore::Colour>* ParticleEffect::GetInitialColourProperty() const
+		const ParticleProperty<Core::Colour>* ParticleEffect::GetInitialColourProperty() const
 		{
 			return m_initialColourProperty.get();
 		}
@@ -157,7 +157,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void ParticleEffect::SetInitialScaleProperty(ParticlePropertyUPtr<CSCore::Vector2> in_initialScaleProperty)
+		void ParticleEffect::SetInitialScaleProperty(ParticlePropertyUPtr<Core::Vector2> in_initialScaleProperty)
 		{
 			CS_ASSERT(m_initialScaleProperty == nullptr, "Cannot change initial scale property in a Particle Effect.");
 
@@ -173,7 +173,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void ParticleEffect::SetInitialColourProperty(ParticlePropertyUPtr<CSCore::Colour> in_initialColourProperty)
+		void ParticleEffect::SetInitialColourProperty(ParticlePropertyUPtr<Core::Colour> in_initialColourProperty)
 		{
 			CS_ASSERT(m_initialColourProperty == nullptr, "Cannot change initial colour property in a Particle Effect.");
 

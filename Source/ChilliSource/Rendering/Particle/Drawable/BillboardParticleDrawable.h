@@ -54,7 +54,7 @@ namespace ChilliSource
 			///
 			/// @param The camera component used to render.
 			//----------------------------------------------------------------
-			void Draw(const CSRendering::CameraComponent* in_camera) override;
+			void Draw(const CameraComponent* in_camera) override;
 		private:
 			friend class BillboardParticleDrawableDef;
 			//----------------------------------------------------------------
@@ -65,9 +65,9 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			struct BillboardData
 			{
-				CSRendering::UVs m_uvs;
-				CSCore::Vector2 m_bottomLeft;
-				CSCore::Vector2 m_topRight;
+				UVs m_uvs;
+				Core::Vector2 m_bottomLeft;
+				Core::Vector2 m_topRight;
 			};
 			//----------------------------------------------------------------
 			/// Constructor.
@@ -78,7 +78,7 @@ namespace ChilliSource
 			/// @param The particle drawable definition.
 			/// @param The concurrent particle draw data array.
 			//----------------------------------------------------------------
-			BillboardParticleDrawable(const CSCore::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, const concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray);
+			BillboardParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray);
 			//----------------------------------------------------------------
 			/// Builds the billboard image data from the provided texture
 			/// or texture atlas.
@@ -100,7 +100,7 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			//----------------------------------------------------------------
-			void DrawLocalSpace(const CSRendering::CameraComponent* in_camera) const;
+			void DrawLocalSpace(const CameraComponent* in_camera) const;
 			//----------------------------------------------------------------
 			/// Draws the particles without taking into account the world
 			/// space transform of the owning entity as the particles are
@@ -108,7 +108,7 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			//----------------------------------------------------------------
-			void DrawWorldSpace(const CSRendering::CameraComponent* in_camera) const;
+			void DrawWorldSpace(const CameraComponent* in_camera) const;
 
 			const BillboardParticleDrawableDef* m_billboardDrawableDef;
 			std::unique_ptr <Core::dynamic_array<BillboardData>> m_billboards;

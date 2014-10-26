@@ -50,7 +50,7 @@ namespace ChilliSource
 		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
-		class ParticleDrawableDef : public CSCore::QueryableInterface
+		class ParticleDrawableDef : public Core::QueryableInterface
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(ParticleDrawableDef);
@@ -81,7 +81,7 @@ namespace ChilliSource
 			///
 			/// @return the instance.
 			//----------------------------------------------------------------
-			virtual ParticleDrawableUPtr CreateInstance(const CSCore::Entity* in_entity, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray) const = 0;
+			virtual ParticleDrawableUPtr CreateInstance(const Core::Entity* in_entity, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray) const = 0;
 			//----------------------------------------------------------------
 			/// @author Ian Copland
 			///

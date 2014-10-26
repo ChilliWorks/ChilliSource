@@ -55,7 +55,7 @@ namespace ChilliSource
 		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
-		class ParticleEffect final : public CSCore::Resource
+		class ParticleEffect final : public Core::Resource
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(ParticleEffect);
@@ -80,7 +80,7 @@ namespace ChilliSource
 			///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -112,7 +112,7 @@ namespace ChilliSource
 			/// @return The property used to generate the initial scale of a 
 			/// new particle.
 			//----------------------------------------------------------------
-			const ParticleProperty<CSCore::Vector2>* GetInitialScaleProperty() const;
+			const ParticleProperty<Core::Vector2>* GetInitialScaleProperty() const;
 			//----------------------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -126,7 +126,7 @@ namespace ChilliSource
 			/// @return The property used to generate the initial colour of 
 			/// a new paricle.
 			//----------------------------------------------------------------
-			const ParticleProperty<CSCore::Colour>* GetInitialColourProperty() const;
+			const ParticleProperty<Core::Colour>* GetInitialColourProperty() const;
 			//----------------------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -201,7 +201,7 @@ namespace ChilliSource
 			///
 			/// @return The property
 			//----------------------------------------------------------------
-			void SetInitialScaleProperty(ParticlePropertyUPtr<CSCore::Vector2> in_initialScaleProperty);
+			void SetInitialScaleProperty(ParticlePropertyUPtr<Core::Vector2> in_initialScaleProperty);
 			//----------------------------------------------------------------
 			/// Sets the property used to generate the initial rotation of a 
 			/// new particle.
@@ -219,7 +219,7 @@ namespace ChilliSource
 			///
 			/// @return The property
 			//----------------------------------------------------------------
-			void SetInitialColourProperty(ParticlePropertyUPtr<CSCore::Colour> in_initialColourProperty);
+			void SetInitialColourProperty(ParticlePropertyUPtr<Core::Colour> in_initialColourProperty);
 			//----------------------------------------------------------------
 			/// Sets the property used to generate the initial speed of a new 
 			/// particle. The initial direction of motion is described by the 
@@ -270,7 +270,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			virtual ~ParticleEffect();
 		private:
-			friend class CSCore::ResourcePool;
+			friend class Core::ResourcePool;
 			//----------------------------------------------------------------
 			/// Factory method to create an new instance of an empty material 
 			/// resource. Only called by the resource pool.
@@ -290,9 +290,9 @@ namespace ChilliSource
 			SimulationSpace m_simulationSpace = SimulationSpace::k_local;
 
 			ParticlePropertyUPtr<f32> m_lifetimeProperty;
-			ParticlePropertyUPtr<CSCore::Vector2> m_initialScaleProperty;
+			ParticlePropertyUPtr<Core::Vector2> m_initialScaleProperty;
 			ParticlePropertyUPtr<f32> m_initialRotationProperty;
-			ParticlePropertyUPtr<CSCore::Colour> m_initialColourProperty;
+			ParticlePropertyUPtr<Core::Colour> m_initialColourProperty;
 			ParticlePropertyUPtr<f32> m_initialSpeedProperty;
 			ParticlePropertyUPtr<f32> m_initialAngularVelocityProperty;
 

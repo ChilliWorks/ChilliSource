@@ -33,13 +33,11 @@
 
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 
-#include <unordered_map>
-
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-		class ParticleAffectorDef : public CSCore::QueryableInterface
+		class ParticleAffectorDef : public Core::QueryableInterface
 		{
 		};
 	}

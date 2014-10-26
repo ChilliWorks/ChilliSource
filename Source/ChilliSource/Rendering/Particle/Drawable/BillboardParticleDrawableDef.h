@@ -93,7 +93,7 @@ namespace ChilliSource
 			/// when the rendered image has a different aspect ratio to the 
 			/// given size.
 			//----------------------------------------------------------------
-			BillboardParticleDrawableDef(const CSRendering::MaterialCSPtr& in_material, const CSCore::Vector2& in_particleSize, SizePolicy in_sizePolicy);
+			BillboardParticleDrawableDef(const MaterialCSPtr& in_material, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy);
 			//----------------------------------------------------------------
 			/// Constructor for creating a billboard particle drawable defintion
 			/// which uses a texture atlas and multiple atlas Ids.
@@ -109,7 +109,7 @@ namespace ChilliSource
 			/// when the rendered image has a different aspect ratio to the 
 			/// given size.
 			//----------------------------------------------------------------
-			BillboardParticleDrawableDef(const CSRendering::MaterialCSPtr& in_material, const CSRendering::TextureAtlasCSPtr& in_textureAtlas, const std::string& in_atlasId, const CSCore::Vector2& in_particleSize, SizePolicy in_sizePolicy);
+			BillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_atlasId, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy);
 			//----------------------------------------------------------------
 			/// Constructor for creating a billboard particle drawable 
 			/// defintion which uses a texture atlas and multiple atlas Ids.
@@ -127,7 +127,7 @@ namespace ChilliSource
 			/// when the rendered image has a different aspect ratio to the 
 			/// given size.
 			//----------------------------------------------------------------
-			BillboardParticleDrawableDef(const CSRendering::MaterialCSPtr& in_material, const CSRendering::TextureAtlasCSPtr& in_textureAtlas, const std::vector<std::string>& in_atlasIds, ImageSelectionType in_imageSelectionType, const CSCore::Vector2& in_particleSize, SizePolicy in_sizePolicy);
+			BillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::vector<std::string>& in_atlasIds, ImageSelectionType in_imageSelectionType, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy);
 			//----------------------------------------------------------------
 			/// Constructor. Loads the params for the drawable def from the 
 			/// given param dictionary. If the async delegate is not null, then
@@ -162,7 +162,7 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			//----------------------------------------------------------------
-			BillboardParticleDrawableDef(const CSCore::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate = nullptr);
+			BillboardParticleDrawableDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate = nullptr);
 			//----------------------------------------------------------------
 			/// Allows querying of whether or not this implements the interface 
 			/// described by the given Id.
@@ -173,7 +173,7 @@ namespace ChilliSource
 			///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------------------
 			/// Creates an instance of the particle drawable described by this.
 			///
@@ -184,13 +184,13 @@ namespace ChilliSource
 			///
 			/// @return the instance.
 			//----------------------------------------------------------------
-			ParticleDrawableUPtr CreateInstance(const CSCore::Entity* in_entity, const concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray) const override;
+			ParticleDrawableUPtr CreateInstance(const Core::Entity* in_entity, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray) const override;
 			//----------------------------------------------------------------
 			/// @author Ian Copland.
 			///
 			/// @return The material that will be used to render the particles.
 			//----------------------------------------------------------------
-			const CSRendering::MaterialCSPtr& GetMaterial() const;
+			const MaterialCSPtr& GetMaterial() const;
 			//----------------------------------------------------------------
 			/// @author Ian Copland.
 			///
@@ -198,7 +198,7 @@ namespace ChilliSource
 			/// particles. If this is null then the particles will be rendered
 			/// using the whole texture.
 			//----------------------------------------------------------------
-			const CSRendering::TextureAtlasCSPtr& GetTextureAltas() const;
+			const TextureAtlasCSPtr& GetTextureAltas() const;
 			//----------------------------------------------------------------
 			/// @author Ian Copland.
 			///
@@ -219,7 +219,7 @@ namespace ChilliSource
 			///
 			/// @return The particle size.
 			//----------------------------------------------------------------
-			const CSCore::Vector2& GetParticleSize() const;
+			const Core::Vector2& GetParticleSize() const;
 			//----------------------------------------------------------------
 			/// @author Ian Copland.
 			///
@@ -229,11 +229,11 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			SizePolicy GetSizePolicy() const;
 		private:
-			CSRendering::MaterialCSPtr m_material;
-			CSRendering::TextureAtlasCSPtr m_textureAtlas;
+			MaterialCSPtr m_material;
+			TextureAtlasCSPtr m_textureAtlas;
 			std::vector<std::string> m_atlasIds;
 			ImageSelectionType m_imageSelectionType = ImageSelectionType::k_cycle;
-			CSCore::Vector2 m_particleSize;
+			Core::Vector2 m_particleSize;
 			SizePolicy m_sizePolicy;
 		};
 	}

@@ -50,11 +50,11 @@ namespace ChilliSource
 			bool m_isActive = false;
 			f32 m_lifetime = 0.0f;
 			f32 m_energy = 0.0f;
-			CSCore::Vector3 m_position;
-			CSCore::Vector2 m_scale = CSCore::Vector2(1.0f, 1.0f);
+			Core::Vector3 m_position;
+			Core::Vector2 m_scale = Core::Vector2(1.0f, 1.0f);
 			f32 m_rotation = 0.0f;
-			CSCore::Colour m_colour = CSCore::Colour::k_white;
-			CSCore::Vector3 m_velocity;
+			Core::Colour m_colour = Core::Colour::k_white;
+			Core::Vector3 m_velocity;
 			f32 m_angularVelocity = 0.0f;
 		};
 	}

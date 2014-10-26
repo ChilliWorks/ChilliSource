@@ -47,7 +47,7 @@
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDef.h>
 
 //////////////TODO: !? REMOVE ME
-#include <ICParticles/Drawable/BillboardParticleDrawableDef.h>
+#include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawableDef.h>
 //////////////
 
 namespace ChilliSource
@@ -89,7 +89,7 @@ namespace ChilliSource
 			/// @param The playback time.
 			/// @param The delta time.
 			//----------------------------------------------------------------
-			void CommitParticleChanges(const std::shared_ptr<dynamic_array<Particle>>& in_particleArray, const std::shared_ptr<concurrent_dynamic_array<ParticleDrawData>>& in_particleDrawDataArray)
+			void CommitParticleChanges(const std::shared_ptr<Core::dynamic_array<Particle>>& in_particleArray, const std::shared_ptr<Core::concurrent_dynamic_array<ParticleDrawData>>& in_particleDrawDataArray)
 			{
 				CS_ASSERT(in_particleArray->size() == in_particleDrawDataArray->size(), "Particle arrays must be the same size.");
 
@@ -127,7 +127,7 @@ namespace ChilliSource
 			/// @param The delta time.
 			//----------------------------------------------------------------
 			void ParticleUpdateTask(ParticleEffectCSPtr in_particleEffect, ParticleEmitterSPtr in_particleEmitter, std::vector<ParticleAffectorSPtr> in_particleAffectors, 
-				std::shared_ptr<dynamic_array<Particle>> in_particleArray, std::shared_ptr<concurrent_dynamic_array<ParticleDrawData>> in_particleDrawDataArray, f32 in_playbackTime, f32 in_deltaTime)
+				std::shared_ptr<Core::dynamic_array<Particle>> in_particleArray, std::shared_ptr<Core::concurrent_dynamic_array<ParticleDrawData>> in_particleDrawDataArray, f32 in_playbackTime, f32 in_deltaTime)
 			{
 				CS_ASSERT(in_particleEffect != nullptr, "Cannot update particles with null particle effect.");
 				CS_ASSERT(in_particleArray != nullptr, "Cannot update particles with null particle array.");
@@ -172,7 +172,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		bool ParticleEffectComponent::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool ParticleEffectComponent::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
 			return (RenderComponent::InterfaceID == in_interfaceId || ParticleEffectComponent::InterfaceID == in_interfaceId);
 		}
@@ -180,7 +180,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		ParticleEffectCSPtr ParticleEffectComponent::GetParticleEffect() const
 		{
-			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
 
 			return m_particleEffect;
 		}
@@ -188,7 +188,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		ParticleEffectComponent::PlaybackType ParticleEffectComponent::GetPlaybackType() const
 		{
-			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
 
 			return m_playbackType;
 		}
@@ -196,7 +196,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		bool ParticleEffectComponent::IsPlaying() const
 		{
-			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
 
 			return m_isPlaying;
 		}
@@ -204,7 +204,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		bool ParticleEffectComponent::IsEmitting() const
 		{
-			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
 
 			return m_isEmitting;
 		}
@@ -212,7 +212,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void ParticleEffectComponent::SetParticleEffect(const ParticleEffectCSPtr& in_particleEffect)
 		{
-			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Particle Effect type must be set on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Particle Effect type must be set on the main thread.");
 
 			m_particleEffect = in_particleEffect;
 
@@ -227,7 +227,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void ParticleEffectComponent::SetPlaybackType(PlaybackType in_playbackType)
 		{
-			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Play back type must be set on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Play back type must be set on the main thread.");
 
 			m_playbackType = in_playbackType;
 		}
@@ -235,7 +235,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void ParticleEffectComponent::Play()
 		{
-			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop must be called on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop must be called on the main thread.");
 
 			if (m_isPlaying == false)
 			{
@@ -248,7 +248,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void ParticleEffectComponent::Stop()
 		{
-			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop must be called on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop must be called on the main thread.");
 
 			if (m_isPlaying == true)
 			{
@@ -264,7 +264,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void ParticleEffectComponent::StopEmitting()
 		{
-			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop Emitting must be called on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop Emitting must be called on the main thread.");
 
 			if (m_isEmitting == true)
 			{
@@ -274,17 +274,17 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		CSCore::IConnectableEvent<ParticleEffectComponent::Delegate>& ParticleEffectComponent::GetFinishedEvent()
+		Core::IConnectableEvent<ParticleEffectComponent::Delegate>& ParticleEffectComponent::GetFinishedEvent()
 		{
-			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Finished Event on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Finished Event on the main thread.");
 
 			return m_finishedEvent;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		CSCore::IConnectableEvent<ParticleEffectComponent::Delegate>& ParticleEffectComponent::GetFinishedEmittingEvent()
+		Core::IConnectableEvent<ParticleEffectComponent::Delegate>& ParticleEffectComponent::GetFinishedEmittingEvent()
 		{
-			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Finished Emitting Event on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Finished Emitting Event on the main thread.");
 
 			return m_finishedEmittingEvent;
 		}
@@ -298,8 +298,8 @@ namespace ChilliSource
 			{
 				ValidateParticleEffect(m_particleEffect);
 
-				m_particleArray = std::make_shared<dynamic_array<Particle>>(m_particleEffect->GetMaxParticles()); 
-				m_particleDrawDataArray = std::make_shared<concurrent_dynamic_array<ParticleDrawData>>(m_particleEffect->GetMaxParticles());
+				m_particleArray = std::make_shared<Core::dynamic_array<Particle>>(m_particleEffect->GetMaxParticles());
+				m_particleDrawDataArray = std::make_shared<Core::concurrent_dynamic_array<ParticleDrawData>>(m_particleEffect->GetMaxParticles());
 
 				m_drawable = m_particleEffect->GetDrawableDef()->CreateInstance(GetEntity(), m_particleDrawDataArray.get());
 				CS_ASSERT(m_drawable != nullptr, "Failed to create particle drawable.");
@@ -310,10 +310,10 @@ namespace ChilliSource
 				//TODO: Create affectors.
 
 				//TODO: Handle more properly
-				mBoundingBox = CSCore::AABB(CSCore::Vector3(0.0f, 0.0f, 0.0f), CSCore::Vector3(1.0f, 1.0f, 1.0f));
-				mOBBoundingBox = CSCore::OOBB(CSCore::Vector3(0.0f, 0.0f, 0.0f), CSCore::Vector3(1.0f, 1.0f, 1.0f));
-				mOBBoundingBox.SetTransform(CSCore::Matrix4::k_identity);
-				mBoundingSphere = CSCore::Sphere(CSCore::Vector3(0.0f, 0.0f, 0.0f), 1.0f);
+				mBoundingBox = Core::AABB(Core::Vector3(0.0f, 0.0f, 0.0f), Core::Vector3(1.0f, 1.0f, 1.0f));
+				mOBBoundingBox = Core::OOBB(Core::Vector3(0.0f, 0.0f, 0.0f), Core::Vector3(1.0f, 1.0f, 1.0f));
+				mOBBoundingBox.SetTransform(Core::Matrix4::k_identity);
+				mBoundingSphere = Core::Sphere(Core::Vector3(0.0f, 0.0f, 0.0f), 1.0f);
 				mpMaterial = static_cast<const BillboardParticleDrawableDef*>(m_particleEffect->GetDrawableDef())->GetMaterial();
 			}
 		}
@@ -374,13 +374,13 @@ namespace ChilliSource
 					}
 
 					//TODO: ensure there isn't already an instance of the task active.
-					CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, emitter, m_affectors, m_particleArray, m_particleDrawDataArray, m_playbackTimer, in_deltaTime));
+					Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, emitter, m_affectors, m_particleArray, m_particleDrawDataArray, m_playbackTimer, in_deltaTime));
 				}
 			}
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void ParticleEffectComponent::Render(CSRendering::RenderSystem* in_renderSystem, CSRendering::CameraComponent* in_camera, CSRendering::ShaderPass in_shaderPass)
+		void ParticleEffectComponent::Render(RenderSystem* in_renderSystem, CameraComponent* in_camera, ShaderPass in_shaderPass)
 		{
 			if (m_particleEffect != nullptr && m_isPlaying == true)
 			{

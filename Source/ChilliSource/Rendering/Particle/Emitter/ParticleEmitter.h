@@ -63,7 +63,7 @@ namespace ChilliSource
 			/// @param The particle emitter definition.
 			/// @param The particle array.
 			//----------------------------------------------------------------
-			ParticleEmitter(const CSCore::Entity* in_entity, const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
+			ParticleEmitter(const Core::Entity* in_entity, const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
 			//----------------------------------------------------------------
 			/// Tries to emit new particles if required. This will be called 
 			/// as part of a background task.
@@ -97,7 +97,7 @@ namespace ChilliSource
 			/// @param [Out] The generated position in local space.
 			/// @param [Out] The generate direction in local space.
 			//----------------------------------------------------------------
-			virtual void GenerateEmission(f32 in_emissionTime, CSCore::Vector3& out_position, CSCore::Vector3& out_direction) = 0;
+			virtual void GenerateEmission(f32 in_emissionTime, Core::Vector3& out_position, Core::Vector3& out_direction) = 0;
 		private:
 			//----------------------------------------------------------------
 			/// Tries to emit new particles in stream mode.
@@ -129,16 +129,16 @@ namespace ChilliSource
 			/// emission.
 			/// @param The playback time of emission.
 			//----------------------------------------------------------------
-			void Emit(const CSCore::Vector3& in_emitterPosition, const CSCore::Vector3& in_emitterScale, const CSCore::Quaternion& in_emitterOrientation, f32 in_emissionTime);
+			void Emit(const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation, f32 in_emissionTime);
 
-			const CSCore::Entity* m_entity = nullptr;
+			const Core::Entity* m_entity = nullptr;
 			const ParticleEmitterDef* m_emitterDef = nullptr;
 			Core::dynamic_array<Particle>* m_particleArray = nullptr;
 
 			bool m_firstEmission = true;
-			CSCore::Vector3 m_emissionPosition;
-			CSCore::Vector3 m_emissionScale;
-			CSCore::Quaternion m_emissionOrientation;
+			Core::Vector3 m_emissionPosition;
+			Core::Vector3 m_emissionScale;
+			Core::Quaternion m_emissionOrientation;
 			f32 m_emissionTime = 0.0f;
 			u32 m_nextParticleIndex = 0;
 		};

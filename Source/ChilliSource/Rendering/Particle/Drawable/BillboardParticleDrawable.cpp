@@ -31,6 +31,7 @@
 #include <ChilliSource/Core/Container/concurrent_dynamic_array.h>
 #include <ChilliSource/Core/Container/dynamic_array.h>
 #include <ChilliSource/Core/Math/Random.h>
+#include <ChilliSource/Rendering/Particle/ParticleDrawData.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
 #include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawableDef.h>
 
@@ -66,7 +67,7 @@ namespace ChilliSource
 			///
 			/// @param The billboard size.
 			//-----------------------------------------------------------------------------
-			CSCore::Vector2 CalcBillboardSize(const CSCore::Vector2& in_particleSize, const CSCore::Vector2& in_imageSize, BillboardParticleDrawableDef::SizePolicy in_sizePolicy)
+			Core::Vector2 CalcBillboardSize(const Core::Vector2& in_particleSize, const Core::Vector2& in_imageSize, BillboardParticleDrawableDef::SizePolicy in_sizePolicy)
 			{
 				switch (in_sizePolicy)
 				{
@@ -75,16 +76,16 @@ namespace ChilliSource
 				case BillboardParticleDrawableDef::SizePolicy::k_usePreferredSize:
 					return in_imageSize;
 				case BillboardParticleDrawableDef::SizePolicy::k_useWidthMaintainingAspect:
-					return CSRendering::AspectRatioUtils::KeepOriginalWidthAdaptHeight(in_particleSize, in_imageSize.x / in_imageSize.y);
+					return AspectRatioUtils::KeepOriginalWidthAdaptHeight(in_particleSize, in_imageSize.x / in_imageSize.y);
 				case BillboardParticleDrawableDef::SizePolicy::k_useHeightMaintainingAspect:
-					return CSRendering::AspectRatioUtils::KeepOriginalHeightAdaptWidth(in_particleSize, in_imageSize.x / in_imageSize.y);
+					return AspectRatioUtils::KeepOriginalHeightAdaptWidth(in_particleSize, in_imageSize.x / in_imageSize.y);
 				case BillboardParticleDrawableDef::SizePolicy::k_fitMaintainingAspect:
-					return CSRendering::AspectRatioUtils::FitOriginal(in_particleSize, in_imageSize.x / in_imageSize.y);
+					return AspectRatioUtils::FitOriginal(in_particleSize, in_imageSize.x / in_imageSize.y);
 				case BillboardParticleDrawableDef::SizePolicy::k_fillMaintainingAspect:
-					return CSRendering::AspectRatioUtils::FillOriginal(in_particleSize, in_imageSize.x / in_imageSize.y);
+					return AspectRatioUtils::FillOriginal(in_particleSize, in_imageSize.x / in_imageSize.y);
 				default:
 					CS_LOG_FATAL("Invalid size policy.");
-					return CSCore::Vector2::k_zero;
+					return Core::Vector2::k_zero;
 				}
 			}
 			//-----------------------------------------------------------------------------
@@ -103,46 +104,46 @@ namespace ChilliSource
 			///
 			/// @param The sprite data.
 			//-----------------------------------------------------------------------------
-			CSRendering::SpriteBatch::SpriteData BuildSpriteData(const CSRendering::MaterialCSPtr& in_material, const CSRendering::UVs& in_uvs, const CSCore::Vector2& in_localBL,
-				const CSCore::Vector2& in_localTR, const CSCore::Vector3& in_worldPosition, const CSCore::Vector2& in_worldScale, const CSCore::Quaternion& in_worldOrientation,
-				const CSCore::Colour& in_colour)
+			SpriteBatch::SpriteData BuildSpriteData(const MaterialCSPtr& in_material, const UVs& in_uvs, const Core::Vector2& in_localBL,
+				const Core::Vector2& in_localTR, const Core::Vector3& in_worldPosition, const Core::Vector2& in_worldScale, const Core::Quaternion& in_worldOrientation,
+				const Core::Colour& in_colour)
 			{
-				CSRendering::SpriteBatch::SpriteData spriteData;
+				SpriteBatch::SpriteData spriteData;
 				spriteData.pMaterial = in_material;
 
 				//set the sprite colour
-				CSCore::ByteColour colour = CSCore::ColourUtils::ColourToByteColour(in_colour);
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_topLeft].Col = colour;
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_bottomLeft].Col = colour;
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_topRight].Col = colour;
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_bottomRight].Col = colour;
+				Core::ByteColour colour = Core::ColourUtils::ColourToByteColour(in_colour);
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].Col = colour;
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].Col = colour;
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].Col = colour;
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].Col = colour;
 
 				//set the UVs.
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_topLeft].vTex.x = in_uvs.m_u;
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_topLeft].vTex.y = in_uvs.m_v;
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_bottomLeft].vTex.x = in_uvs.m_u;
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_bottomLeft].vTex.y = in_uvs.m_v + in_uvs.m_t;
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_topRight].vTex.x = in_uvs.m_u + in_uvs.m_s;
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_topRight].vTex.y = in_uvs.m_v;
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_bottomRight].vTex.x = in_uvs.m_u + in_uvs.m_s;
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_bottomRight].vTex.y = in_uvs.m_v + in_uvs.m_t;
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.x = in_uvs.m_u;
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vTex.y = in_uvs.m_v;
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.x = in_uvs.m_u;
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vTex.y = in_uvs.m_v + in_uvs.m_t;
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.x = in_uvs.m_u + in_uvs.m_s;
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.y = in_uvs.m_v;
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.x = in_uvs.m_u + in_uvs.m_s;
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.y = in_uvs.m_v + in_uvs.m_t;
 
 				//Build the vertex data.
-				CSCore::Vector3 localTopLeft(in_localBL.x * in_worldScale.x, in_localTR.y * in_worldScale.y, 0.0f);
-				CSCore::Vector3 worldTopLeft = in_worldPosition + CSCore::Vector3::Rotate(localTopLeft, in_worldOrientation);
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_topLeft].vPos = CSCore::Vector4(worldTopLeft, 1.0f);
+				Core::Vector3 localTopLeft(in_localBL.x * in_worldScale.x, in_localTR.y * in_worldScale.y, 0.0f);
+				Core::Vector3 worldTopLeft = in_worldPosition + Core::Vector3::Rotate(localTopLeft, in_worldOrientation);
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos = Core::Vector4(worldTopLeft, 1.0f);
 
-				CSCore::Vector3 localTopRight(in_localTR.x * in_worldScale.x, in_localTR.y * in_worldScale.y, 0.0f);
-				CSCore::Vector3 worldTopRight = in_worldPosition + CSCore::Vector3::Rotate(localTopRight, in_worldOrientation);
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_topRight].vPos = CSCore::Vector4(worldTopRight, 1.0f);
+				Core::Vector3 localTopRight(in_localTR.x * in_worldScale.x, in_localTR.y * in_worldScale.y, 0.0f);
+				Core::Vector3 worldTopRight = in_worldPosition + Core::Vector3::Rotate(localTopRight, in_worldOrientation);
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos = Core::Vector4(worldTopRight, 1.0f);
 
-				CSCore::Vector3 localBottomLeft(in_localBL.x * in_worldScale.x, in_localBL.y * in_worldScale.y, 0.0f);
-				CSCore::Vector3 worldBottomLeft = in_worldPosition + CSCore::Vector3::Rotate(localBottomLeft, in_worldOrientation);
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_bottomLeft].vPos = CSCore::Vector4(worldBottomLeft, 1.0f);
+				Core::Vector3 localBottomLeft(in_localBL.x * in_worldScale.x, in_localBL.y * in_worldScale.y, 0.0f);
+				Core::Vector3 worldBottomLeft = in_worldPosition + Core::Vector3::Rotate(localBottomLeft, in_worldOrientation);
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos = Core::Vector4(worldBottomLeft, 1.0f);
 
-				CSCore::Vector3 localBottomRight(in_localTR.x * in_worldScale.x, in_localBL.y * in_worldScale.y, 0.0f);
-				CSCore::Vector3 worldBottomRight = in_worldPosition + CSCore::Vector3::Rotate(localBottomRight, in_worldOrientation);
-				spriteData.sVerts[(u32)CSRendering::SpriteBatch::Verts::k_bottomRight].vPos = CSCore::Vector4(worldBottomRight, 1.0f);
+				Core::Vector3 localBottomRight(in_localTR.x * in_worldScale.x, in_localBL.y * in_worldScale.y, 0.0f);
+				Core::Vector3 worldBottomRight = in_worldPosition + Core::Vector3::Rotate(localBottomRight, in_worldOrientation);
+				spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos = Core::Vector4(worldBottomRight, 1.0f);
 
 				return spriteData;
 			}
@@ -150,8 +151,8 @@ namespace ChilliSource
 
 		//----------------------------------------------
 		//----------------------------------------------
-		BillboardParticleDrawable::BillboardParticleDrawable(const CSCore::Entity* in_entity, const ParticleDrawableDef* in_drawableDef,
-			const concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray)
+		BillboardParticleDrawable::BillboardParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef,
+			const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray)
 			: ParticleDrawable(in_entity, in_drawableDef, in_particleDrawDataArray), m_billboardDrawableDef(static_cast<const BillboardParticleDrawableDef*>(in_drawableDef)),
 			m_particleBillboardIndices(in_drawableDef->GetParticleEffect()->GetMaxParticles())
 		{
@@ -160,7 +161,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------
 		//----------------------------------------------
-		void BillboardParticleDrawable::Draw(const CSRendering::CameraComponent* in_camera)
+		void BillboardParticleDrawable::Draw(const CameraComponent* in_camera)
 		{
 			switch (GetDrawableDef()->GetParticleEffect()->GetSimulationSpace())
 			{
@@ -183,7 +184,7 @@ namespace ChilliSource
 
 			if (textureAtlas != nullptr && atlasIds.empty() == false)
 			{
-				m_billboards = std::unique_ptr<dynamic_array<BillboardData>>(new dynamic_array<BillboardData>(m_billboardDrawableDef->GetAtlasIds().size()));
+				m_billboards = std::unique_ptr<Core::dynamic_array<BillboardData>>(new Core::dynamic_array<BillboardData>(m_billboardDrawableDef->GetAtlasIds().size()));
 				for (u32 i = 0; i < m_billboards->size(); ++i)
 				{
 					const auto& frame = textureAtlas->GetFrame(m_billboardDrawableDef->GetAtlasIds()[i]);
@@ -195,7 +196,7 @@ namespace ChilliSource
 					f32 bottom = (-0.5f * frame.m_originalSize.y + (frame.m_originalSize.y - frame.m_offset.y - frame.m_croppedSize.y)) / frame.m_originalSize.y;
 
 					//Get the billboard size. This is determined by the size policy.
-					CSCore::Vector2 billboardSize = CalcBillboardSize(m_billboardDrawableDef->GetParticleSize(), frame.m_originalSize, m_billboardDrawableDef->GetSizePolicy());
+					Core::Vector2 billboardSize = CalcBillboardSize(m_billboardDrawableDef->GetParticleSize(), frame.m_originalSize, m_billboardDrawableDef->GetSizePolicy());
 
 					//scale the normalised bounds up to the billboard size.
 					BillboardData& billboardData = m_billboards->at(i);
@@ -212,9 +213,9 @@ namespace ChilliSource
 				auto texture = m_billboardDrawableDef->GetMaterial()->GetTexture();
 				CS_ASSERT(texture != nullptr, "Particle effect material cannot have no texture.");
 
-				m_billboards = std::unique_ptr<dynamic_array<BillboardData>>(new dynamic_array<BillboardData>(1));
+				m_billboards = std::unique_ptr<Core::dynamic_array<BillboardData>>(new Core::dynamic_array<BillboardData>(1));
 
-				CSCore::Vector2 billboardSize = CalcBillboardSize(m_billboardDrawableDef->GetParticleSize(), CSCore::Vector2(f32(texture->GetWidth()), f32(texture->GetHeight())),
+				Core::Vector2 billboardSize = CalcBillboardSize(m_billboardDrawableDef->GetParticleSize(), Core::Vector2(f32(texture->GetWidth()), f32(texture->GetHeight())),
 					m_billboardDrawableDef->GetSizePolicy());
 
 				BillboardData& billboardData = m_billboards->at(0);
@@ -235,32 +236,32 @@ namespace ChilliSource
 		{
 			switch (m_billboardDrawableDef->GetImageSelectionType())
 			{
-			case BillboardParticleDrawableDef::ImageSelectionType::k_cycle:
-			{
-																			  for (u32 i = 0; i < m_particleBillboardIndices.size(); ++i)
-																			  {
-																				  m_particleBillboardIndices[i] = i % m_billboards->size();
-																			  }
-																			  break;
-			}
-			case BillboardParticleDrawableDef::ImageSelectionType::k_random:
-			{
-																			   for (u32 i = 0; i < m_particleBillboardIndices.size(); ++i)
-																			   {
-																				   m_particleBillboardIndices[i] = Random::GenerateInt<u32>(0, m_billboards->size() - 1);
-																			   }
-																			   break;
-			}
-			default:
-			{
-					   CS_LOG_FATAL("Invalid image selection type.");
-					   break;
-			}
+				case BillboardParticleDrawableDef::ImageSelectionType::k_cycle:
+				{
+					for (u32 i = 0; i < m_particleBillboardIndices.size(); ++i)
+					{
+						m_particleBillboardIndices[i] = i % m_billboards->size();
+					}
+					break;
+				}
+				case BillboardParticleDrawableDef::ImageSelectionType::k_random:
+				{
+					for (u32 i = 0; i < m_particleBillboardIndices.size(); ++i)
+					{
+						m_particleBillboardIndices[i] = Core::Random::GenerateInt<u32>(0, m_billboards->size() - 1);
+					}
+					break;
+				}
+				default:
+				{
+					CS_LOG_FATAL("Invalid image selection type.");
+					break;
+				}
 			}
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void BillboardParticleDrawable::DrawLocalSpace(const CSRendering::CameraComponent* in_camera) const
+		void BillboardParticleDrawable::DrawLocalSpace(const CameraComponent* in_camera) const
 		{
 			const auto& material = m_billboardDrawableDef->GetMaterial();
 			const auto& particleSize = m_billboardDrawableDef->GetParticleSize();
@@ -288,20 +289,20 @@ namespace ChilliSource
 					auto worldScale = particle.m_scale * particleScaleFactor;
 
 					//rotate locally in the XY plane before rotating to face the camera.
-					auto worldOrientation = CSCore::Quaternion(CSCore::Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;
+					auto worldOrientation = Core::Quaternion(Core::Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;
 
 					const auto& billboardData = m_billboards->at(m_particleBillboardIndices[i]);
 					auto spriteData = BuildSpriteData(material, billboardData.m_uvs, billboardData.m_bottomLeft, billboardData.m_topRight, worldPosition, worldScale, worldOrientation,
 						particle.m_colour);
 
-					CSCore::Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
+					Core::Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
 				}
 			}
 			particleDataArray.unlock();
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void BillboardParticleDrawable::DrawWorldSpace(const CSRendering::CameraComponent* in_camera) const
+		void BillboardParticleDrawable::DrawWorldSpace(const CameraComponent* in_camera) const
 		{
 			const auto& material = m_billboardDrawableDef->GetMaterial();
 			const auto& particleDataArray = GetParticleDrawDataArray();
@@ -317,13 +318,13 @@ namespace ChilliSource
 				if (particle.m_isActive == true && particle.m_colour.a > 0.0f)
 				{
 					//rotate locally in the XY plane before rotating to face the camera.
-					auto worldOrientation = CSCore::Quaternion(CSCore::Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;
+					auto worldOrientation = Core::Quaternion(Core::Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;
 
 					const auto& billboardData = m_billboards->at(m_particleBillboardIndices[i]);
 					auto spriteData = BuildSpriteData(material, billboardData.m_uvs, billboardData.m_bottomLeft, billboardData.m_topRight, particle.m_position, particle.m_scale,
 						worldOrientation, particle.m_colour);
 
-					CSCore::Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
+					Core::Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
 				}
 			}
 			particleDataArray.unlock();

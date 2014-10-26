@@ -38,14 +38,14 @@ namespace ChilliSource
 		CS_DEFINE_NAMEDTYPE(BillboardParticleDrawableDef);
 		//--------------------------------------------------
 		//--------------------------------------------------
-		BillboardParticleDrawableDef::BillboardParticleDrawableDef(const CSRendering::MaterialCSPtr& in_material, const CSCore::Vector2& in_particleSize, SizePolicy in_sizePolicy)
+		BillboardParticleDrawableDef::BillboardParticleDrawableDef(const MaterialCSPtr& in_material, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy)
 			: m_material(in_material), m_particleSize(in_particleSize), m_sizePolicy(in_sizePolicy)
 		{
 			CS_ASSERT(m_material != nullptr, "Cannot create a Billboard Particle Drawable Def with a null material.");
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		BillboardParticleDrawableDef::BillboardParticleDrawableDef(const CSRendering::MaterialCSPtr& in_material, const CSRendering::TextureAtlasCSPtr& in_textureAtlas, const std::string& in_atlasId, const CSCore::Vector2& in_particleSize, SizePolicy in_sizePolicy)
+		BillboardParticleDrawableDef::BillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_atlasId, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy)
 			: m_material(in_material), m_textureAtlas(in_textureAtlas), m_particleSize(in_particleSize), m_sizePolicy(in_sizePolicy)
 		{
 			CS_ASSERT(m_material != nullptr, "Cannot create a Billboard Particle Drawable Def with a null material.");
@@ -55,7 +55,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		BillboardParticleDrawableDef::BillboardParticleDrawableDef(const CSRendering::MaterialCSPtr& in_material, const CSRendering::TextureAtlasCSPtr& in_textureAtlas, const std::vector<std::string>& in_atlasIds, ImageSelectionType in_imageSelectionType, const CSCore::Vector2& in_particleSize, SizePolicy in_sizePolicy)
+		BillboardParticleDrawableDef::BillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::vector<std::string>& in_atlasIds, ImageSelectionType in_imageSelectionType, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy)
 			: m_material(in_material), m_textureAtlas(in_textureAtlas), m_atlasIds(in_atlasIds), m_imageSelectionType(in_imageSelectionType), m_particleSize(in_particleSize), m_sizePolicy(in_sizePolicy)
 		{
 			CS_ASSERT(m_material != nullptr, "Cannot create a Billboard Particle Drawable Def with a null material.");
@@ -63,32 +63,32 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		BillboardParticleDrawableDef::BillboardParticleDrawableDef(const CSCore::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate)
+		BillboardParticleDrawableDef::BillboardParticleDrawableDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate)
 		{
 			//TODO: !?
-			CS_LOG_FATAL("Unimplemented: BillboardParticleDrawableDef::BillboardParticleDrawableDef(const CSCore::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate)");
+			CS_LOG_FATAL("Unimplemented: BillboardParticleDrawableDef::BillboardParticleDrawableDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate)");
 		}
 		//--------------------------------------------------
 		//-------------------------------------------------
-		bool BillboardParticleDrawableDef::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool BillboardParticleDrawableDef::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
 			return (BillboardParticleDrawableDef::InterfaceID == in_interfaceId);
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		ParticleDrawableUPtr BillboardParticleDrawableDef::CreateInstance(const CSCore::Entity* in_entity, const concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray) const
+		ParticleDrawableUPtr BillboardParticleDrawableDef::CreateInstance(const Core::Entity* in_entity, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray) const
 		{
 			return ParticleDrawableUPtr(new BillboardParticleDrawable(in_entity, this, in_particleDrawDataArray));
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		const CSRendering::MaterialCSPtr& BillboardParticleDrawableDef::GetMaterial() const
+		const MaterialCSPtr& BillboardParticleDrawableDef::GetMaterial() const
 		{
 			return m_material;
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		const CSRendering::TextureAtlasCSPtr& BillboardParticleDrawableDef::GetTextureAltas() const
+		const TextureAtlasCSPtr& BillboardParticleDrawableDef::GetTextureAltas() const
 		{
 			return m_textureAtlas;
 		}
@@ -106,7 +106,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		const CSCore::Vector2& BillboardParticleDrawableDef::GetParticleSize() const
+		const Core::Vector2& BillboardParticleDrawableDef::GetParticleSize() const
 		{
 			return m_particleSize;
 		}

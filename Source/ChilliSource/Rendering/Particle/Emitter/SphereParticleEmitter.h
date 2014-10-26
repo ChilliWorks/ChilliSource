@@ -60,7 +60,7 @@ namespace ChilliSource
 			/// @param [Out] The generated position in local space.
 			/// @param [Out] The generate direction in local space.
 			//----------------------------------------------------------------
-			void GenerateEmission(f32 in_emissionTime, CSCore::Vector3& out_position, CSCore::Vector3& out_direction) override;
+			void GenerateEmission(f32 in_emissionTime, Core::Vector3& out_position, Core::Vector3& out_direction) override;
 		private:
 			friend class SphereParticleEmitterDef;
 			//----------------------------------------------------------------
@@ -72,7 +72,7 @@ namespace ChilliSource
 			/// @param The particle emitter definition.
 			/// @param The particle array.
 			//----------------------------------------------------------------
-			SphereParticleEmitter(const CSCore::Entity* in_entity, const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
+			SphereParticleEmitter(const Core::Entity* in_entity, const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
 
 			const SphereParticleEmitterDef* m_sphereParticleEmitterDef = nullptr;
 		};

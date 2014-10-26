@@ -49,10 +49,10 @@ namespace ChilliSource
 		struct ParticleDrawData final
 		{
 			bool m_isActive = false;
-			CSCore::Vector3 m_position;
-			CSCore::Vector2 m_scale = CSCore::Vector2(1.0f, 1.0f);
+			Core::Vector3 m_position;
+			Core::Vector2 m_scale = Core::Vector2(1.0f, 1.0f);
 			f32 m_rotation = 0.0f;
-			CSCore::Colour m_colour = CSCore::Colour::k_white;
+			Core::Colour m_colour = Core::Colour::k_white;
 		};
 	}
 }

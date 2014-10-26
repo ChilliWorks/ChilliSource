@@ -48,7 +48,7 @@ namespace ChilliSource
 		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
-		class ParticleEffectComponent final : public CSRendering::RenderComponent
+		class ParticleEffectComponent final : public RenderComponent
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(ParticleEffectComponent);
@@ -97,7 +97,7 @@ namespace ChilliSource
 			///
 			/// @return Whether or not the interface is implemented.
 			//----------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------------------
 			/// Returns the current particle effect. 
 			///
@@ -214,7 +214,7 @@ namespace ChilliSource
 			///
 			/// @return The event.
 			//----------------------------------------------------------------
-			CSCore::IConnectableEvent<Delegate>& GetFinishedEvent();
+			Core::IConnectableEvent<Delegate>& GetFinishedEvent();
 			//----------------------------------------------------------------
 			/// Returns an event will be fired when the particle effect 
 			/// finishes emitting. Particles may still be alive when this event
@@ -227,7 +227,7 @@ namespace ChilliSource
 			///
 			/// @return The event.
 			//----------------------------------------------------------------
-			CSCore::IConnectableEvent<Delegate>& GetFinishedEmittingEvent();
+			Core::IConnectableEvent<Delegate>& GetFinishedEmittingEvent();
 			//----------------------------------------------------------------
 			/// Destructor
 			///
@@ -279,7 +279,7 @@ namespace ChilliSource
 			/// @param The active camera component.
 			/// @param The current shader pass.
 			//----------------------------------------------------------------
-			void Render(CSRendering::RenderSystem* in_renderSystem, CSRendering::CameraComponent* in_camera, CSRendering::ShaderPass in_shaderPass) override;
+			void Render(RenderSystem* in_renderSystem, CameraComponent* in_camera, ShaderPass in_shaderPass) override;
 			//----------------------------------------------------------------
 			/// Called when the component should render to the shadow map. 
 			/// Particles will never render to the shadow map so this does 
@@ -292,7 +292,7 @@ namespace ChilliSource
 			/// @param The material to render static shadows with.
 			/// @param The material to render skinned shadows with.
 			//----------------------------------------------------------------
-			void RenderShadowMap(CSRendering::RenderSystem* in_renderSystem, CSRendering::CameraComponent* in_camera, const CSRendering::MaterialCSPtr& in_staticShadowMat, const CSRendering::MaterialCSPtr& in_animShadowMat) override {};
+			void RenderShadowMap(RenderSystem* in_renderSystem, CameraComponent* in_camera, const MaterialCSPtr& in_staticShadowMat, const MaterialCSPtr& in_animShadowMat) override {};
 			//----------------------------------------------------------------
 			/// Called either when this is removed from an entity that is 
 			/// attached to the scene or when an entity this is attached to is 
@@ -320,8 +320,8 @@ namespace ChilliSource
 			bool m_isPlaying = false;
 			bool m_isEmitting = false;
 			f32 m_playbackTimer = 0.0f;
-			CSCore::Event<Delegate> m_finishedEvent;
-			CSCore::Event<Delegate> m_finishedEmittingEvent;
+			Core::Event<Delegate> m_finishedEvent;
+			Core::Event<Delegate> m_finishedEmittingEvent;
 		};
 	}
 }

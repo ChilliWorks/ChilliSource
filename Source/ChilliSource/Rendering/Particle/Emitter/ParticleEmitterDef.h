@@ -52,7 +52,7 @@ namespace ChilliSource
 		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
-		class ParticleEmitterDef : public CSCore::QueryableInterface
+		class ParticleEmitterDef : public Core::QueryableInterface
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(ParticleEmitterDef);
@@ -118,7 +118,7 @@ namespace ChilliSource
 			/// @param Map containing the setup parameters for the particle 
 			/// emitter.
 			//----------------------------------------------------------------
-			ParticleEmitterDef(const CSCore::ParamDictionary& in_params);
+			ParticleEmitterDef(const Core::ParamDictionary& in_params);
 			//----------------------------------------------------------------
 			/// Creates an instance of the particle emitter described by this.
 			///
@@ -130,7 +130,7 @@ namespace ChilliSource
 			///
 			/// @return the instance.
 			//----------------------------------------------------------------
-			virtual ParticleEmitterUPtr CreateInstance(const CSCore::Entity* in_entity, Core::dynamic_array<Particle>* in_particleArray) const = 0;
+			virtual ParticleEmitterUPtr CreateInstance(const Core::Entity* in_entity, Core::dynamic_array<Particle>* in_particleArray) const = 0;
 			//----------------------------------------------------------------
 			/// @author Ian Copland
 			///

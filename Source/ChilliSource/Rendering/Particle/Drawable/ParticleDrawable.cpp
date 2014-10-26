@@ -34,13 +34,13 @@ namespace ChilliSource
 	{
 		//----------------------------------------------
 		//----------------------------------------------
-		ParticleDrawable::ParticleDrawable(const CSCore::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray)
+		ParticleDrawable::ParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray)
 			: m_entity(in_entity), m_drawableDef(in_drawableDef), m_particleDrawDataArray(in_particleDrawDataArray)
 		{
 		}
 		//----------------------------------------------
 		//----------------------------------------------
-		const CSCore::Entity* ParticleDrawable::GetEntity() const
+		const Core::Entity* ParticleDrawable::GetEntity() const
 		{
 			return m_entity;
 		}
