@@ -51,6 +51,7 @@
 #include <ChilliSource/Rendering/Particle/Emitter/SphereParticleEmitterDef.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticlePropertyValueParser.h>
+#include <ChilliSource/Rendering/Particle/Property/RandomParticleProperty.h>
 #include <ChilliSource/Rendering/Particle/Property/StaticParticleProperty.h>
 
 #endif

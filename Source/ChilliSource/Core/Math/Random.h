@@ -49,7 +49,10 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			/// Generates a psuedo-random integer number in the given range. 
 			/// By default this will return a value between the numeric limits
-			/// of the type. This is thread-safe.
+			/// of the type. This will only work for integer types, i.e u32,
+			/// s64 and s8.
+			///
+			/// This is thread-safe.
 			///
 			/// @author Ian Copland
 			///
@@ -61,7 +64,10 @@ namespace ChilliSource
 			template <typename TType> TType GenerateInt(TType in_min = std::numeric_limits<TType>::min(), TType in_max = std::numeric_limits<TType>::max());
 			//----------------------------------------------------------------
 			/// Generates a psuedo-random real number in the given range. By
-			/// default the range is between 0.0 and 1.0. This is thread safe.
+			/// default the range is between 0.0 and 1.0. This will only work
+			/// for real types, i.e f32 and f64.
+			///
+			/// This is thread safe.
 			///
 			/// @author Ian Copland
 			///
@@ -70,10 +76,12 @@ namespace ChilliSource
 			///
 			/// @return A value within the range.
 			//----------------------------------------------------------------
-			template <typename TType> TType GenerateReal(TType in_min = 0, TType in_max = 1);
+			template <typename TType> TType GenerateReal(TType in_min = TType(0), TType in_max = TType(1));
 			//----------------------------------------------------------------
 			/// Generates a psuedo-random direction vector in 2 dimensions with
-			/// uniform distribution. This is thread-safe.
+			/// uniform distribution. 
+			///
+			/// This is thread-safe.
 			///
 			/// @author Ian Copland
 			///
@@ -82,7 +90,9 @@ namespace ChilliSource
 			template <typename TType> GenericVector2<TType> GenerateDirection2D();
 			//----------------------------------------------------------------
 			/// Generates a psuedo-random direction vector in 3 dimensions with
-			/// uniform distribution. This is thread-safe.
+			/// uniform distribution. 
+			///
+			/// This is thread-safe.
 			///
 			/// @author Ian Copland
 			///
@@ -91,13 +101,41 @@ namespace ChilliSource
 			template <typename TType> GenericVector3<TType> GenerateDirection3D();
 			//----------------------------------------------------------------
 			/// Generates a psuedo-random direction vector in 4 dimensions with
-			/// uniform distribution. This is thread-safe.
+			/// uniform distribution. 
+			///
+			/// This is thread-safe.
 			///
 			/// @author Ian Copland
 			///
 			/// @return A direction vector.
 			//----------------------------------------------------------------
 			template <typename TType> GenericVector4<TType> GenerateDirection4D();
+			//----------------------------------------------------------------
+			/// Generates a psuedo-random direction vector in 4 dimensions with
+			/// uniform distribution. 
+			///
+			/// This is thread-safe.
+			///
+			/// @author Ian Copland
+			///
+			/// @return A direction vector.
+			//----------------------------------------------------------------
+			template <typename TType> GenericVector4<TType> GenerateDirection4D();
+			//----------------------------------------------------------------
+			/// Generates a psuedo-random value between the two given values. 
+			/// This will work for any type that can be reasonably be multiplied 
+			/// by a real number.
+			///
+			/// This is thread-safe.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The first value.
+			/// @param The second value.
+			///
+			/// @return A direction vector.
+			//----------------------------------------------------------------
+			template <typename TType> TType GenerateInRange(TType in_first, TType in_second);
 			//----------------------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -152,6 +190,12 @@ namespace ChilliSource
 				GenericVector4<TType> vector(distribution(rng), distribution(rng), distribution(rng), distribution(rng));
 				vector.Normalise();
 				return vector;
+			}
+			//----------------------------------------------------------------
+			//----------------------------------------------------------------
+			template <typename TType> TType GenerateInRange(TType in_first, TType in_second)
+			{
+				return in_first + (in_second - in_first) * GenerateReal<f32>();
 			}
 		}
 	}

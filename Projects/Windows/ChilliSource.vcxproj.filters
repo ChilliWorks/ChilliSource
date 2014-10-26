@@ -1625,5 +1625,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\CSParticleEffectProvider.h">
       <Filter>ChilliSource\Rendering\Particle</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomParticleProperty.h">
+      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -463,6 +463,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffectComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticleProperty.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyValueParser.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomParticleProperty.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\StaticParticleProperty.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\Shader.h" />
