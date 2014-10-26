@@ -1,7 +1,7 @@
 //
-//  Container.h
+//  ParticleDrawableDef.cpp
 //  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
+//  Created by Ian Copland on 13/10/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,16 +26,24 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_CONTAINER_H_
-#define _CHILLISOURCE_CORE_CONTAINER_H_
+#include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDef.h>
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Container/HashedArray.h>
-#include <ChilliSource/Core/Container/concurrent_dynamic_array.h>
-#include <ChilliSource/Core/Container/concurrent_vector.h>
-#include <ChilliSource/Core/Container/dynamic_array.h>
-#include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
-#include <ChilliSource/Core/Container/WorkerQueue.h>
-
-#endif
+namespace ChilliSource
+{
+	namespace Rendering
+	{
+		CS_DEFINE_NAMEDTYPE(ParticleDrawableDef);
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		const ParticleEffect* ParticleDrawableDef::GetParticleEffect() const
+		{
+			return m_particleEffect;
+		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		void ParticleDrawableDef::SetParticleEffect(const ParticleEffect* in_particleEffect)
+		{
+			m_particleEffect = in_particleEffect;
+		}
+	}
+}

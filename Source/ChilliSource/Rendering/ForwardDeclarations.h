@@ -104,24 +104,30 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(StaticMeshComponent);
         CS_FORWARDDECLARE_CLASS(SubMesh);
         //------------------------------------------------------------
-        /// Particles
+        /// Particle
         //------------------------------------------------------------
-        CS_FORWARDDECLARE_STRUCT(Particle);
-        CS_FORWARDDECLARE_CLASS(ParticleEffect);
-        CS_FORWARDDECLARE_CLASS(CSParticleEffectProvider);
-        CS_FORWARDDECLARE_CLASS(ParticleComponent);
-        CS_FORWARDDECLARE_CLASS(ParticleSystem);
-        CS_FORWARDDECLARE_CLASS(ColourChangerParticleAffector);
-        CS_FORWARDDECLARE_CLASS(LinearForceParticleAffector);
-        CS_FORWARDDECLARE_CLASS(ParticleAffector);
-        CS_FORWARDDECLARE_CLASS(ParticleAffectorFactory);
-        CS_FORWARDDECLARE_CLASS(ScalerParticleAffector);
-        CS_FORWARDDECLARE_CLASS(SpinnerParticleAffector);
-        CS_FORWARDDECLARE_CLASS(ConeParticleEmitter);
-        CS_FORWARDDECLARE_CLASS(ParticleEmitter);
-        CS_FORWARDDECLARE_CLASS(ParticleEmitterFactory);
-        CS_FORWARDDECLARE_CLASS(PointParticleEmitter);
-        CS_FORWARDDECLARE_CLASS(RingParticleEmitter);
+		CS_FORWARDDECLARE_CLASS(BillboardParticleDrawable);
+		CS_FORWARDDECLARE_CLASS(BillboardParticleDrawableDef);
+		CS_FORWARDDECLARE_CLASS(ParticleEffect);
+		CS_FORWARDDECLARE_CLASS(ICParticleEffectProvider);
+		CS_FORWARDDECLARE_CLASS(ParticleEffectComponent);
+		CS_FORWARDDECLARE_STRUCT(Particle);
+		CS_FORWARDDECLARE_STRUCT(ParticleDrawData);
+		CS_FORWARDDECLARE_CLASS(ParticleDrawable);
+		CS_FORWARDDECLARE_CLASS(ParticleDrawableDef);
+		CS_FORWARDDECLARE_CLASS(ParticleDrawableDefFactory);
+		CS_FORWARDDECLARE_CLASS(ParticleEmitter);
+		CS_FORWARDDECLARE_CLASS(ParticleEmitterDef);
+		CS_FORWARDDECLARE_CLASS(ParticleEmitterDefFactory);
+		CS_FORWARDDECLARE_CLASS(ParticleAffector);
+		CS_FORWARDDECLARE_CLASS(ParticleAffectorDef);
+		CS_FORWARDDECLARE_CLASS(ParticleAffectorDefFactory);
+		CS_FORWARDDECLARE_CLASS(SphereParticleEmitter);
+		CS_FORWARDDECLARE_CLASS(SphereParticleEmitterDef);
+		template <typename TPropertyType> class ParticleProperty;
+		template <typename TPropertyType> using ParticlePropertyUPtr = std::unique_ptr<ParticleProperty<TPropertyType>>;
+		template <typename TPropertyType> using ParticlePropertyCUPtr = std::unique_ptr<const ParticleProperty<TPropertyType>>;
+		template <typename TPropertyType> class StaticParticleProperty;
         //------------------------------------------------------------
         /// Shader
         //------------------------------------------------------------

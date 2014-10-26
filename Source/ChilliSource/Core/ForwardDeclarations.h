@@ -56,7 +56,9 @@ namespace ChilliSource
         template <typename TType> class ObjectPool;
         CS_FORWARDDECLARE_CLASS(ParamDictionary);
         template <typename T> class WorkerQueue;
-        template <typename TType> class concurrent_vector;
+		template <typename TType> class concurrent_vector;
+		template <typename TType> class concurrent_dynamic_array;
+		template <typename TType> class dynamic_array;
         //---------------------------------------------------------
         /// Delegate
         //---------------------------------------------------------

@@ -1,7 +1,7 @@
 //
-//  Container.h
+//  Particle.h
 //  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
+//  Created by Ian Copland on 07/10/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,16 +26,38 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_CONTAINER_H_
-#define _CHILLISOURCE_CORE_CONTAINER_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLE_PARTICLE_H_
+#define _CHILLISOURCE_RENDERING_PARTICLE_PARTICLE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Container/HashedArray.h>
-#include <ChilliSource/Core/Container/concurrent_dynamic_array.h>
-#include <ChilliSource/Core/Container/concurrent_vector.h>
-#include <ChilliSource/Core/Container/dynamic_array.h>
-#include <ChilliSource/Core/Container/ParamDictionary.h>
-#include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
-#include <ChilliSource/Core/Container/WorkerQueue.h>
+
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Base/Colour.h>
+
+namespace ChilliSource
+{
+	namespace Rendering
+	{
+		//-----------------------------------------------------------------------
+		/// A struct containing the properties for a single particle.
+		///
+		/// @author Ian Copland
+		//-----------------------------------------------------------------------
+		struct Particle final
+		{
+			bool m_isActive = false;
+			f32 m_lifetime = 0.0f;
+			f32 m_energy = 0.0f;
+			CSCore::Vector3 m_position;
+			CSCore::Vector2 m_scale = CSCore::Vector2(1.0f, 1.0f);
+			f32 m_rotation = 0.0f;
+			CSCore::Colour m_colour = CSCore::Colour::k_white;
+			CSCore::Vector3 m_velocity;
+			f32 m_angularVelocity = 0.0f;
+		};
+	}
+}
 
 #endif
