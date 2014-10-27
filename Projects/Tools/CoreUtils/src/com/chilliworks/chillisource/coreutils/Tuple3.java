@@ -1,5 +1,5 @@
 /**
- * Tuple4.java
+ * Tuple3.java
  * Chilli Source
  * Created by Ian Copland on 23/10/2014.
  * 
@@ -26,10 +26,10 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.toolutils;
+package com.chilliworks.chillisource.coreutils;
 
 /**
- * A simple 4-tuple class similar to std::tuple<x, y, z, w> in C++. Typical use
+ * A simple 3-tuple class similar to std::tuple<x, y, z> in C++. Typical use
  * case for this is private methods that return multiple values.
  * 
  * @author Ian Copland
@@ -37,14 +37,12 @@ package com.chilliworks.chillisource.toolutils;
  * @param <TFirst> The type of the first value.
  * @param <TSecond> The type of the second value.
  * @param <TThird> The type of the third value.
- * @param <TFourth> The type of the fourth value.
  */
-public final class Tuple4<TFirst, TSecond, TThird, TFourth>
+public final class Tuple3<TFirst, TSecond, TThird>
 {
 	private final TFirst m_first;
 	private final TSecond m_second;
 	private final TThird m_third;
-	private final TFourth m_fourth;
 	
 	/**
 	 * Constructor. Creates the tuple from the given values.
@@ -54,14 +52,12 @@ public final class Tuple4<TFirst, TSecond, TThird, TFourth>
 	 * @param in_first - The first value.
 	 * @param in_second - The second value.
 	 * @param in_third - The third value.
-	 * @param in_fouth - The fourth value.
 	 */
-	public Tuple4(TFirst in_first, TSecond in_second, TThird in_third, TFourth in_fourth)
+	public Tuple3(TFirst in_first, TSecond in_second, TThird in_third)
 	{
 		m_first = in_first;
 		m_second = in_second;
 		m_third = in_third;
-		m_fourth = in_fourth;
 	}
 	/**
 	 * @author Ian Copland
@@ -93,20 +89,11 @@ public final class Tuple4<TFirst, TSecond, TThird, TFourth>
 	/**
 	 * @author Ian Copland
 	 *
-	 * @return The fourth value.
-	 */
-	public TFourth getFourth()
-	{
-		return m_fourth;
-	}
-	/**
-	 * @author Ian Copland
-	 *
 	 * @return The tuple as a string.
 	 */
 	@Override public String toString() 
 	{
-        return "[" + m_first + "," + m_second + "," + m_third + "," + m_fourth + "]";
+        return "[" + m_first + "," + m_second + "," + m_third + "," + "]";
     }
 	/**
 	 * Compares equality with the given object.
@@ -127,16 +114,15 @@ public final class Tuple4<TFirst, TSecond, TThird, TFourth>
             return false;
         }
         
-        if ((in_object instanceof Tuple4<?, ?, ?, ?>) == false)
+        if ((in_object instanceof Tuple3<?, ?, ?>) == false)
         {
             return false;
         }
         
-        Tuple4<?, ?, ?, ?> tuple = (Tuple4<?, ?, ?, ?>)in_object;
+        Tuple3<?, ?, ?> tuple = (Tuple3<?, ?, ?>)in_object;
         boolean firstEquals = ((m_first == null && tuple.m_first == null) || (m_first != null && m_first.equals(tuple.m_first) == true));
         boolean secondEquals = ((m_second == null && tuple.m_second == null) || (m_second != null && m_second.equals(tuple.m_second) == true));
         boolean thirdEquals = ((m_third == null && tuple.m_third == null) || (m_third != null && m_third.equals(tuple.m_third) == true));
-        boolean fourthEquals = ((m_fourth == null && tuple.m_fourth == null) || (m_fourth != null && m_fourth.equals(tuple.m_fourth) == true));
-        return (firstEquals == true && secondEquals == true && thirdEquals == true && fourthEquals == true);
+        return (firstEquals == true && secondEquals == true && thirdEquals == true);
     }
 }

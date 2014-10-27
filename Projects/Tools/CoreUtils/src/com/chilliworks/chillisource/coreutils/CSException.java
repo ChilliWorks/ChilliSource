@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.toolutils;
+package com.chilliworks.chillisource.coreutils;
 
 /**
  * A general Exception class that provides an error string. This is used for

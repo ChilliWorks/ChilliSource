@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.toolutils;
+package com.chilliworks.chillisource.coreutils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,22 +46,22 @@ public class Logging
 	 */
 	public enum LoggingLevel
 	{
-		k_none,
-		k_fatal,
-		k_error,
-		k_warning,
-		k_verbose
+		NONE,
+		FATAL,
+		ERROR,
+		WARNING,
+		VERBOSE
 	}
 
-	public static String k_paramLoggingLevel = "--logginglevel";
-	public static String k_paramLoggingLevelShort = "-ll";
-	public static String k_loggingLevelNone = "none";
-	public static String k_loggingLevelFatal = "fatal";
-	public static String k_loggingLevelError = "error";
-	public static String k_loggingLevelWarning = "warning";
-	public static String k_loggingLevelVerbose = "verbose";
+	public static String PARAM_LOGGING_LEVEL = "--logginglevel";
+	public static String SHORT_PARAM_LOGGING_LEVEL = "-ll";
+	public static String LOGGING_LEVEL_NONE = "none";
+	public static String LOGGING_LEVEL_FATAL = "fatal";
+	public static String LOGGING_LEVEL_ERROR = "error";
+	public static String LOGGING_LEVEL_WARNING = "warning";
+	public static String LOGGING_LEVEL_VERBOSE = "verbose";
 
-	private static LoggingLevel m_loggingLevel = LoggingLevel.k_warning;
+	private static LoggingLevel m_loggingLevel = LoggingLevel.WARNING;
 	private static int m_numWarnings = 0;
 	private static int m_numErrors = 0;
 	private static boolean m_active = false;
@@ -86,21 +86,21 @@ public class Logging
 			
 			for (int i = 0; i < in_args.length; ++i)
 			{
-				if (in_args[i].equalsIgnoreCase(k_paramLoggingLevel) == true || in_args[i].equalsIgnoreCase(k_paramLoggingLevelShort) == true)
+				if (in_args[i].equalsIgnoreCase(PARAM_LOGGING_LEVEL) == true || in_args[i].equalsIgnoreCase(SHORT_PARAM_LOGGING_LEVEL) == true)
 				{
 					if (i+1 < in_args.length)
 					{
 						String strLoggingLevel = in_args[i+1];
-						if (strLoggingLevel.equalsIgnoreCase(k_loggingLevelNone) == true) 			
-							Logging.setLoggingLevel(LoggingLevel.k_none);
-						else if (strLoggingLevel.equalsIgnoreCase(k_loggingLevelFatal) == true) 	
-							Logging.setLoggingLevel(LoggingLevel.k_fatal); 
-						else if (strLoggingLevel.equalsIgnoreCase(k_loggingLevelError) == true) 	
-							Logging.setLoggingLevel(LoggingLevel.k_error); 
-						else if (strLoggingLevel.equalsIgnoreCase(k_loggingLevelWarning) == true) 	
-							Logging.setLoggingLevel(LoggingLevel.k_warning); 
-						else if (strLoggingLevel.equalsIgnoreCase(k_loggingLevelVerbose) == true) 	
-							Logging.setLoggingLevel(LoggingLevel.k_verbose);
+						if (strLoggingLevel.equalsIgnoreCase(LOGGING_LEVEL_NONE) == true) 			
+							Logging.setLoggingLevel(LoggingLevel.NONE);
+						else if (strLoggingLevel.equalsIgnoreCase(LOGGING_LEVEL_FATAL) == true) 	
+							Logging.setLoggingLevel(LoggingLevel.FATAL); 
+						else if (strLoggingLevel.equalsIgnoreCase(LOGGING_LEVEL_ERROR) == true) 	
+							Logging.setLoggingLevel(LoggingLevel.ERROR); 
+						else if (strLoggingLevel.equalsIgnoreCase(LOGGING_LEVEL_WARNING) == true) 	
+							Logging.setLoggingLevel(LoggingLevel.WARNING); 
+						else if (strLoggingLevel.equalsIgnoreCase(LOGGING_LEVEL_VERBOSE) == true) 	
+							Logging.setLoggingLevel(LoggingLevel.VERBOSE);
 						else
 							Logging.logFatal("Invalid Logging Level parameter provided.");
 					}
@@ -150,7 +150,7 @@ public class Logging
 	 */
 	public static void logVerbose(String in_message)
 	{
-		if (m_active == true && m_loggingLevel.ordinal() >= LoggingLevel.k_verbose.ordinal())
+		if (m_active == true && m_loggingLevel.ordinal() >= LoggingLevel.VERBOSE.ordinal())
 		{
 			printStandard(in_message);
 		}
@@ -165,7 +165,7 @@ public class Logging
 	 */
 	public static void logWarning(String in_message)
 	{
-		if (m_active == true && m_loggingLevel.ordinal() >= LoggingLevel.k_warning.ordinal())
+		if (m_active == true && m_loggingLevel.ordinal() >= LoggingLevel.WARNING.ordinal())
 		{
 			printError("WARNING: " + in_message);
 			++m_numWarnings;
@@ -181,7 +181,7 @@ public class Logging
 	 */
 	public static void logError(String in_message)
 	{
-		if (m_active == true && m_loggingLevel.ordinal() >= LoggingLevel.k_error.ordinal())
+		if (m_active == true && m_loggingLevel.ordinal() >= LoggingLevel.ERROR.ordinal())
 		{
 			printError("ERROR: " + in_message);
 			++m_numErrors;
@@ -199,7 +199,7 @@ public class Logging
 	{
 		if (m_active == true)
 		{
-			if (m_loggingLevel.ordinal() >= LoggingLevel.k_error.ordinal())
+			if (m_loggingLevel.ordinal() >= LoggingLevel.ERROR.ordinal())
 			{
 				printError("FATAL: " + in_message);
 				++m_numErrors;
@@ -217,9 +217,9 @@ public class Logging
 	 */
 	public static void finish()
 	{
-		if (m_active == true && m_loggingLevel.ordinal() >= LoggingLevel.k_fatal.ordinal())
+		if (m_active == true && m_loggingLevel.ordinal() >= LoggingLevel.FATAL.ordinal())
 		{
-			if (m_numWarnings > 0 || m_numErrors > 0 || m_loggingLevel.ordinal() >= LoggingLevel.k_verbose.ordinal())
+			if (m_numWarnings > 0 || m_numErrors > 0 || m_loggingLevel.ordinal() >= LoggingLevel.VERBOSE.ordinal())
 			{
 				printStandard(Integer.toString(m_numWarnings) + " Warnings found.");
 				printStandard(Integer.toString(m_numErrors) + " Errors found.");

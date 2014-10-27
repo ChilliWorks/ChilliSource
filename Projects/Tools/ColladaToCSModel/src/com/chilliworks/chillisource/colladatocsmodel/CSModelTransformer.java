@@ -33,9 +33,9 @@ import java.util.LinkedList;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModel;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModelMesh;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModelVertex;
-import com.chilliworks.chillisource.toolutils.Matrix4;
-import com.chilliworks.chillisource.toolutils.Vector2;
-import com.chilliworks.chillisource.toolutils.Vector3;
+import com.chilliworks.chillisource.coreutils.Matrix4;
+import com.chilliworks.chillisource.coreutils.Vector2;
+import com.chilliworks.chillisource.coreutils.Vector3;
 
 public final class CSModelTransformer 
 {

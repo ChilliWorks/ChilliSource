@@ -31,13 +31,13 @@ package com.chilliworks.chillisource.csfontbuilder.fontbuilder;
 import java.io.File;
 import java.util.Random;
 
+import com.chilliworks.chillisource.coreutils.CSException;
+import com.chilliworks.chillisource.coreutils.FileUtils;
+import com.chilliworks.chillisource.coreutils.StringUtils;
 import com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder.FontFromGlyphsBuilder;
 import com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder.FontFromGlyphsBuilderOptions;
 import com.chilliworks.chillisource.csfontbuilder.glyphsbuilder.GlyphsBuilder;
 import com.chilliworks.chillisource.csfontbuilder.glyphsbuilder.GlyphsBuilderOptions;
-import com.chilliworks.chillisource.toolutils.CSException;
-import com.chilliworks.chillisource.toolutils.FileUtils;
-import com.chilliworks.chillisource.toolutils.StringUtils;
  
 /**
  * A static class containing methods for building CSFont bitmap fonts from

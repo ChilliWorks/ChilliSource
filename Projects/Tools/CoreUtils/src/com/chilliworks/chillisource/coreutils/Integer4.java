@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.toolutils;
+package com.chilliworks.chillisource.coreutils;
 
 /**
  * An integer vector class. This is immutable after creation meaning it can

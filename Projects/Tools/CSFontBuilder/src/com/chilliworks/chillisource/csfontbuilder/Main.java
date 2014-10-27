@@ -31,6 +31,10 @@ package com.chilliworks.chillisource.csfontbuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.chilliworks.chillisource.coreutils.CSException;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.StringUtils;
+import com.chilliworks.chillisource.coreutils.Logging.LoggingLevel;
 import com.chilliworks.chillisource.csfontbuilder.fontbuilder.FontBuilder;
 import com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder.FontFromGlyphsBuilder;
 import com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder.FontFromGlyphsBuilderOptions;
@@ -38,10 +42,6 @@ import com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder.FontFrom
 import com.chilliworks.chillisource.csfontbuilder.glyphsbuilder.GlyphsBuilder;
 import com.chilliworks.chillisource.csfontbuilder.glyphsbuilder.GlyphsBuilderOptions;
 import com.chilliworks.chillisource.csfontbuilder.glyphsbuilder.GlyphsBuilderOptionsParser;
-import com.chilliworks.chillisource.toolutils.CSException;
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.StringUtils;
-import com.chilliworks.chillisource.toolutils.Logging.LoggingLevel;
 
 /**
  * Handles the entry point into the application. This manages the parsing of the input parameters and
@@ -353,12 +353,12 @@ public final class Main
 	 */
 	private static void printHelpText()
 	{
-		Logging.setLoggingLevel(LoggingLevel.k_verbose);
-		Logging.logVerbose("Usage: java -jar CFontBuilder.jar [" + Logging.k_paramLoggingLevel + " <level>] [" + PARAM_HELP + "] [" + PARAM_MODE + " <mode>] <mode specific parameters>");
+		Logging.setLoggingLevel(LoggingLevel.VERBOSE);
+		Logging.logVerbose("Usage: java -jar CFontBuilder.jar [" + Logging.PARAM_LOGGING_LEVEL + " <level>] [" + PARAM_HELP + "] [" + PARAM_MODE + " <mode>] <mode specific parameters>");
 		Logging.logVerbose(" ");
 		Logging.logVerbose("Base Parameters:");
 		Logging.logVerbose(" " + PARAM_MODE + "(" + SHORT_PARAM_MODE + "): The mode the tool is run in. This defaults to Font mode.");
-		Logging.logVerbose(" " + Logging.k_paramLoggingLevel + "(" + Logging.k_paramLoggingLevelShort + "): [Optional] The level of messages to log.");
+		Logging.logVerbose(" " + Logging.PARAM_LOGGING_LEVEL + "(" + Logging.SHORT_PARAM_LOGGING_LEVEL + "): [Optional] The level of messages to log.");
 		Logging.logVerbose(" " + PARAM_HELP + "(" + SHORT_PARAM_HELP + "): [Optional] Display this help message.");
 		Logging.logVerbose(" ");
 		Logging.logVerbose("Font Mode Parameters:");
@@ -429,11 +429,11 @@ public final class Main
 		Logging.logVerbose(" " + MODE_FONT_FROM_GLYPHS + ": Creates a CSFont file from the input bitmap glyphs.");
 		Logging.logVerbose(" ");
 		Logging.logVerbose("Logging Levels:");
-		Logging.logVerbose(" " + Logging.k_loggingLevelNone + ": No logging.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelFatal + ": Only log fatal errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelError + ": Only log errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelWarning + ": Log errors and warnings.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelVerbose + ": Log all messages.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_NONE + ": No logging.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_FATAL + ": Only log fatal errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_ERROR + ": Only log errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_WARNING + ": Log errors and warnings.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_VERBOSE + ": Log all messages.");
 		Logging.logVerbose(" ");
 		Logging.logVerbose("Font Styles:");
 		Logging.logVerbose(" " + GlyphsBuilderOptionsParser.FONT_STYLE_PLAIN + ": The regular style for the font.");

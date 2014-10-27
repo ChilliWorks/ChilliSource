@@ -36,10 +36,10 @@ import javax.imageio.ImageIO;
 
 import org.json.JSONObject;
 
-import com.chilliworks.chillisource.toolutils.CSException;
-import com.chilliworks.chillisource.toolutils.FileUtils;
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.StringUtils;
+import com.chilliworks.chillisource.coreutils.CSException;
+import com.chilliworks.chillisource.coreutils.FileUtils;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.StringUtils;
 
 /**
  * Provides a series of methods for writing bitmap font glyphs to file.

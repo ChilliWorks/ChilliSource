@@ -38,7 +38,7 @@ import com.chilliworks.chillisource.colladaparserutils.ColladaParser;
 import com.chilliworks.chillisource.colladaparserutils.colladadata.*;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModel;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModelMesh;
-import com.chilliworks.chillisource.toolutils.*;
+import com.chilliworks.chillisource.coreutils.*;
 
 /**
  * Provides methods for converting a Collada model file to CSModel.

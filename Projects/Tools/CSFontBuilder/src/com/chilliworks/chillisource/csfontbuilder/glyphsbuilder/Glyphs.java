@@ -30,7 +30,7 @@ package com.chilliworks.chillisource.csfontbuilder.glyphsbuilder;
 
 import java.awt.image.BufferedImage;
 
-import com.chilliworks.chillisource.toolutils.Integer2;
+import com.chilliworks.chillisource.coreutils.Integer2;
 
 /**
  * A container for information on a collection of glyphs. This is immutable after

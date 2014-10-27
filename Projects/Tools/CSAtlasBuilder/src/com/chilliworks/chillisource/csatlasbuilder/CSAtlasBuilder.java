@@ -32,15 +32,15 @@ import java.io.*;
 
 import javax.imageio.*;
 
+import com.chilliworks.chillisource.coreutils.FileUtils;
+import com.chilliworks.chillisource.coreutils.LittleEndianWriterUtils;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.StringUtils;
 import com.chilliworks.chillisource.pngtocsimage.PNGToCSImage;
 import com.chilliworks.chillisource.pngtocsimage.PNGToCSImageOptions;
 import com.chilliworks.chillisource.texturepackerutils.PackedTexture;
 import com.chilliworks.chillisource.texturepackerutils.PackerInfo;
 import com.chilliworks.chillisource.texturepackerutils.TexturePacker;
-import com.chilliworks.chillisource.toolutils.FileUtils;
-import com.chilliworks.chillisource.toolutils.LittleEndianWriterUtils;
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.StringUtils;
 
 import java.util.*;
 

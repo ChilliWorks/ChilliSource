@@ -32,11 +32,11 @@ import java.util.LinkedList;
 
 import com.chilliworks.chillisource.colladaparserutils.colladadata.*;
 import com.chilliworks.chillisource.colladatocsanim.csanim.*;
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.Matrix4;
-import com.chilliworks.chillisource.toolutils.Quaternion;
-import com.chilliworks.chillisource.toolutils.Tuple3;
-import com.chilliworks.chillisource.toolutils.Vector3;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.Matrix4;
+import com.chilliworks.chillisource.coreutils.Quaternion;
+import com.chilliworks.chillisource.coreutils.Tuple3;
+import com.chilliworks.chillisource.coreutils.Vector3;
 
 public class CSAnimConverter 
 {

@@ -30,8 +30,8 @@ package com.chilliworks.chillisource.colladatocsmodel.csmodel;
 
 import java.util.LinkedList;
 
-import com.chilliworks.chillisource.toolutils.Matrix4;
-import com.chilliworks.chillisource.toolutils.Vector3;
+import com.chilliworks.chillisource.coreutils.Matrix4;
+import com.chilliworks.chillisource.coreutils.Vector3;
 
 public class CSModelMesh 
 {

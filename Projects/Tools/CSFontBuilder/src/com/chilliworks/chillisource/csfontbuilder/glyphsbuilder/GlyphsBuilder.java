@@ -28,7 +28,7 @@
 
 package com.chilliworks.chillisource.csfontbuilder.glyphsbuilder;
 
-import com.chilliworks.chillisource.toolutils.CSException;
+import com.chilliworks.chillisource.coreutils.CSException;
  
 /**
  * A static class containing methods for converting a vector font (TTF or OTF) to

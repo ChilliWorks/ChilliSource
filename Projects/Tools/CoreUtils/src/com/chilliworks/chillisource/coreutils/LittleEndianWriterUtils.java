@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.toolutils;
+package com.chilliworks.chillisource.coreutils;
 
 import java.io.DataOutputStream;
 import java.io.IOException;

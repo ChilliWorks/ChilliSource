@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.toolutils;
+package com.chilliworks.chillisource.coreutils;
 
 /**
  * A simple pair, or 2-tuple class similar to std::pair<x,y> in C++. Typical use

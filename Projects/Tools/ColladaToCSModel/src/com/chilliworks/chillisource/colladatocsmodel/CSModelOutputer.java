@@ -33,7 +33,7 @@ import java.io.FileOutputStream;
 import java.util.LinkedList;
 
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.*;
-import com.chilliworks.chillisource.toolutils.*;
+import com.chilliworks.chillisource.coreutils.*;
 
 
 public class CSModelOutputer 

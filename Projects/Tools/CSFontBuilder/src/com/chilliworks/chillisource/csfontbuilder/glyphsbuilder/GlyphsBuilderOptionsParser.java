@@ -32,9 +32,9 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.chilliworks.chillisource.toolutils.Colour;
-import com.chilliworks.chillisource.toolutils.Integer2;
-import com.chilliworks.chillisource.toolutils.Logging;
+import com.chilliworks.chillisource.coreutils.Colour;
+import com.chilliworks.chillisource.coreutils.Integer2;
+import com.chilliworks.chillisource.coreutils.Logging;
 
 /**
  * A container for methods relating to parsing glyphs builder options.

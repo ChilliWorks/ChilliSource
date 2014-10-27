@@ -28,8 +28,8 @@
 
 package com.chilliworks.chillisource.pngalphapremultiplier;
 
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.Logging.LoggingLevel;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.Logging.LoggingLevel;
 
 public class Main 
 {
@@ -110,18 +110,18 @@ public class Main
 	//------------------------------------------------------
 	private static void PrintHelpText()
 	{
-		Logging.setLoggingLevel(LoggingLevel.k_verbose);
+		Logging.setLoggingLevel(LoggingLevel.VERBOSE);
 		Logging.logVerbose("Usage: java -jar PNGAlphaPremultiplier.jar --input <filepath> --output <filepath> [--logginglevel <level>] [--displayerrors <errordisplay>] [--help]");
 		Logging.logVerbose("Parameters:");
 		Logging.logVerbose(" --input(-i): The input filepath.");
 		Logging.logVerbose(" --output(-o): The output filepath.");
-		Logging.logVerbose(" " + Logging.k_paramLoggingLevel + "(" + Logging.k_paramLoggingLevelShort + "): Sets the logging level.");
+		Logging.logVerbose(" " + Logging.PARAM_LOGGING_LEVEL + "(" + Logging.SHORT_PARAM_LOGGING_LEVEL + "): Sets the logging level.");
 		Logging.logVerbose(" --help(-h): Displays this help message.");
 		Logging.logVerbose("Logging Levels:");
-		Logging.logVerbose(" " + Logging.k_loggingLevelNone + ": No logging.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelFatal + ": Only log fatal errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelError + ": Only log errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelWarning + ": Log errors and warnings.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelVerbose + ": Log all messages.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_NONE + ": No logging.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_FATAL + ": Only log fatal errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_ERROR + ": Only log errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_WARNING + ": Log errors and warnings.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_VERBOSE + ": Log all messages.");
 	}
 }

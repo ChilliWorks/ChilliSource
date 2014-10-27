@@ -28,7 +28,7 @@
 
 package com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder;
 
-import com.chilliworks.chillisource.toolutils.Integer2;
+import com.chilliworks.chillisource.coreutils.Integer2;
 
 /**
  * A container for the glyphs that will used to generated a bitmap font.

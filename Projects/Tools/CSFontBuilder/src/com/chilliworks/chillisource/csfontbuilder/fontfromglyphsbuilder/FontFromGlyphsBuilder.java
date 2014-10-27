@@ -31,11 +31,11 @@ package com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder;
 import java.io.File;
 import java.util.ArrayList;
 
+import com.chilliworks.chillisource.coreutils.CSException;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.StringUtils;
 import com.chilliworks.chillisource.texturepackerutils.PackedTexture;
 import com.chilliworks.chillisource.texturepackerutils.TexturePacker;
-import com.chilliworks.chillisource.toolutils.CSException;
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.StringUtils;
  
 /**
  * A static class that provides methods for building a CSFont bitmap font

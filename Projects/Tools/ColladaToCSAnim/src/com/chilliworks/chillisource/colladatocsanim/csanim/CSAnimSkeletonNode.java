@@ -28,7 +28,7 @@
 
 package com.chilliworks.chillisource.colladatocsanim.csanim;
 
-import com.chilliworks.chillisource.toolutils.Matrix4;
+import com.chilliworks.chillisource.coreutils.Matrix4;
 
 public class CSAnimSkeletonNode 
 {

@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.toolutils;
+package com.chilliworks.chillisource.coreutils;
 
 import java.nio.charset.Charset;
 
@@ -37,7 +37,7 @@ import java.nio.charset.Charset;
  */
 public class StringUtils 
 {
-	private static final Charset kUTF8Charset = Charset.forName("UTF-8");
+	private static final Charset UTF8_CHARSET = Charset.forName("UTF-8");
 	
 	/**
 	 * Converts a string in UTF-16 format to a UTF8 byte array.
@@ -50,7 +50,7 @@ public class StringUtils
 	 */
 	public static byte[] stringToUTF8Bytes(String in_string)
 	{
-		return in_string.getBytes(kUTF8Charset);
+		return in_string.getBytes(UTF8_CHARSET);
 	}
 	/**
 	 * Converts UTF-8 byte array to a string in UTF-16 format.
@@ -61,7 +61,7 @@ public class StringUtils
 	 */
 	public static String utf8BytesToString(final byte[] in_utf8Bytes)
 	{
-		return new String(in_utf8Bytes, kUTF8Charset);
+		return new String(in_utf8Bytes, UTF8_CHARSET);
 	}
 	/**
 	 * Standardised the path to a file.

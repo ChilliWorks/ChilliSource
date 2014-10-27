@@ -41,8 +41,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 
-import com.chilliworks.chillisource.toolutils.Colour;
-import com.chilliworks.chillisource.toolutils.Integer2;
+import com.chilliworks.chillisource.coreutils.Colour;
+import com.chilliworks.chillisource.coreutils.Integer2;
 
 /**
  * A collection of methods for creating a series of bitmap images containing

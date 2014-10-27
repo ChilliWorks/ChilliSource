@@ -1,5 +1,5 @@
 /**
- * Tuple3.java
+ * Tuple5.java
  * Chilli Source
  * Created by Ian Copland on 23/10/2014.
  * 
@@ -26,10 +26,10 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.toolutils;
+package com.chilliworks.chillisource.coreutils;
 
 /**
- * A simple 3-tuple class similar to std::tuple<x, y, z> in C++. Typical use
+ * A simple 5-tuple class similar to std::tuple<x, y, z, w, v> in C++. Typical use
  * case for this is private methods that return multiple values.
  * 
  * @author Ian Copland
@@ -37,12 +37,16 @@ package com.chilliworks.chillisource.toolutils;
  * @param <TFirst> The type of the first value.
  * @param <TSecond> The type of the second value.
  * @param <TThird> The type of the third value.
+ * @param <TFourth> The type of the fourth value.
+ * @param <TFifth> The type of the fifth value.
  */
-public final class Tuple3<TFirst, TSecond, TThird>
+public final class Tuple5<TFirst, TSecond, TThird, TFourth, TFifth>
 {
 	private final TFirst m_first;
 	private final TSecond m_second;
 	private final TThird m_third;
+	private final TFourth m_fourth;
+	private final TFifth m_fifth;
 	
 	/**
 	 * Constructor. Creates the tuple from the given values.
@@ -52,12 +56,16 @@ public final class Tuple3<TFirst, TSecond, TThird>
 	 * @param in_first - The first value.
 	 * @param in_second - The second value.
 	 * @param in_third - The third value.
+	 * @param in_fouth - The fourth value.
+	 * @param in_fifth - The fifth value.
 	 */
-	public Tuple3(TFirst in_first, TSecond in_second, TThird in_third)
+	public Tuple5(TFirst in_first, TSecond in_second, TThird in_third, TFourth in_fourth, TFifth in_fifth)
 	{
 		m_first = in_first;
 		m_second = in_second;
 		m_third = in_third;
+		m_fourth = in_fourth;
+		m_fifth = in_fifth;
 	}
 	/**
 	 * @author Ian Copland
@@ -89,11 +97,29 @@ public final class Tuple3<TFirst, TSecond, TThird>
 	/**
 	 * @author Ian Copland
 	 *
+	 * @return The fourth value.
+	 */
+	public TFourth getFourth()
+	{
+		return m_fourth;
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return The fourth value.
+	 */
+	public TFifth getFifth()
+	{
+		return m_fifth;
+	}
+	/**
+	 * @author Ian Copland
+	 *
 	 * @return The tuple as a string.
 	 */
 	@Override public String toString() 
 	{
-        return "[" + m_first + "," + m_second + "," + m_third + "," + "]";
+        return "[" + m_first + "," + m_second + "," + m_third + "," + m_fourth + "," + m_fifth + "]";
     }
 	/**
 	 * Compares equality with the given object.
@@ -114,15 +140,17 @@ public final class Tuple3<TFirst, TSecond, TThird>
             return false;
         }
         
-        if ((in_object instanceof Tuple3<?, ?, ?>) == false)
+        if ((in_object instanceof Tuple5<?, ?, ?, ?, ?>) == false)
         {
             return false;
         }
         
-        Tuple3<?, ?, ?> tuple = (Tuple3<?, ?, ?>)in_object;
+        Tuple5<?, ?, ?, ?, ?> tuple = (Tuple5<?, ?, ?, ?, ?>)in_object;
         boolean firstEquals = ((m_first == null && tuple.m_first == null) || (m_first != null && m_first.equals(tuple.m_first) == true));
         boolean secondEquals = ((m_second == null && tuple.m_second == null) || (m_second != null && m_second.equals(tuple.m_second) == true));
         boolean thirdEquals = ((m_third == null && tuple.m_third == null) || (m_third != null && m_third.equals(tuple.m_third) == true));
-        return (firstEquals == true && secondEquals == true && thirdEquals == true);
+        boolean fourthEquals = ((m_fourth == null && tuple.m_fourth == null) || (m_fourth != null && m_fourth.equals(tuple.m_fourth) == true));
+        boolean fifthEquals = ((m_fifth == null && tuple.m_fifth == null) || (m_fifth != null && m_fifth.equals(tuple.m_fifth) == true));
+        return (firstEquals == true && secondEquals == true && thirdEquals == true && fourthEquals == true && fifthEquals == true);
     }
 }

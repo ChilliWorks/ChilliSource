@@ -28,7 +28,7 @@
 
 package com.chilliworks.chillisource.colladatocsmodel.csmodel;
 
-import com.chilliworks.chillisource.toolutils.Vector4;
+import com.chilliworks.chillisource.coreutils.Vector4;
 
 public class CSModelMaterial 
 {

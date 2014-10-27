@@ -32,10 +32,10 @@ import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 
 import com.chilliworks.chillisource.colladatocsanim.csanim.*;
-import com.chilliworks.chillisource.toolutils.LittleEndianWriterUtils;
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.Quaternion;
-import com.chilliworks.chillisource.toolutils.Vector3;
+import com.chilliworks.chillisource.coreutils.LittleEndianWriterUtils;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.Quaternion;
+import com.chilliworks.chillisource.coreutils.Vector3;
 
 public class CSAnimOutputer 
 {

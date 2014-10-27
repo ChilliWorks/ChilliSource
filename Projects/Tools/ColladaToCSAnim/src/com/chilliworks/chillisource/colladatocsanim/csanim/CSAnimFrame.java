@@ -30,8 +30,8 @@ package com.chilliworks.chillisource.colladatocsanim.csanim;
 
 import java.util.LinkedList;
 
-import com.chilliworks.chillisource.toolutils.Quaternion;
-import com.chilliworks.chillisource.toolutils.Vector3;
+import com.chilliworks.chillisource.coreutils.Quaternion;
+import com.chilliworks.chillisource.coreutils.Vector3;
 
 public class CSAnimFrame 
 {

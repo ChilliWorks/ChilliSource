@@ -34,12 +34,12 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import com.chilliworks.chillisource.toolutils.CSException;
-import com.chilliworks.chillisource.toolutils.FileUtils;
-import com.chilliworks.chillisource.toolutils.Integer2;
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.StringUtils;
-import com.chilliworks.chillisource.toolutils.Tuple4;
+import com.chilliworks.chillisource.coreutils.CSException;
+import com.chilliworks.chillisource.coreutils.FileUtils;
+import com.chilliworks.chillisource.coreutils.Integer2;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.StringUtils;
+import com.chilliworks.chillisource.coreutils.Tuple4;
 
 /**
  * Provides a series of methods for reading bitmap font glyphs to file.

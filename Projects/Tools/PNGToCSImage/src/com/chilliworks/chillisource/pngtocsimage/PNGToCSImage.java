@@ -37,7 +37,7 @@ import java.util.zip.Deflater;
 
 import javax.imageio.ImageIO;
 
-import com.chilliworks.chillisource.toolutils.Logging;
+import com.chilliworks.chillisource.coreutils.Logging;
 
 //============================================================================
 /// PNG To MoImage

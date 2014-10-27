@@ -30,8 +30,8 @@ package com.chilliworks.chillisource.csfontbuilder.glyphsbuilder;
 
 import java.awt.Font;
 
-import com.chilliworks.chillisource.toolutils.Colour;
-import com.chilliworks.chillisource.toolutils.Integer2;
+import com.chilliworks.chillisource.coreutils.Colour;
+import com.chilliworks.chillisource.coreutils.Integer2;
 
 /**
  * A container for the input options for the Glyphs Builder.

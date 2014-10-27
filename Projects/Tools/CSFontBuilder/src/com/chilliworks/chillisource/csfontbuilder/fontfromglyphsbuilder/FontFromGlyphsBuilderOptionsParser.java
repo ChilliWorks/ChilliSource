@@ -31,9 +31,9 @@ package com.chilliworks.chillisource.csfontbuilder.fontfromglyphsbuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.StringUtils;
 import com.chilliworks.chillisource.texturepackerutils.TexturePacker.PlacementHeuristic;
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.StringUtils;
 
 /**
  * A container for methods relating to parsing font from glyphs builder 

@@ -29,8 +29,8 @@
 package com.chilliworks.chillisource.colladatocsanim;
 
 import com.chilliworks.chillisource.colladatocsanim.csanim.*;
-import com.chilliworks.chillisource.toolutils.Quaternion;
-import com.chilliworks.chillisource.toolutils.Vector3;
+import com.chilliworks.chillisource.coreutils.Quaternion;
+import com.chilliworks.chillisource.coreutils.Vector3;
 
 /**
  * Performs transformations on the output model data, such as coordinate system

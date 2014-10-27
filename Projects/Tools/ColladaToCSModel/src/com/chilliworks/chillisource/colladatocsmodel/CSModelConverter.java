@@ -35,7 +35,7 @@ import java.util.Stack;
 import com.chilliworks.chillisource.colladaparserutils.colladadata.*;
 import com.chilliworks.chillisource.colladaparserutils.colladadata.ColladaGeometry.COLLADA_GEOMETRY_TYPE;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.*;
-import com.chilliworks.chillisource.toolutils.*;
+import com.chilliworks.chillisource.coreutils.*;
 
 public class CSModelConverter 
 {
