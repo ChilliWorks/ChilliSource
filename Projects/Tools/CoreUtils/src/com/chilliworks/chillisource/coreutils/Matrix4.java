@@ -92,8 +92,8 @@ public final class Matrix4
 		double sinA = Math.sin(in_angle);
 		
 		return new Matrix4(1.0, 0.0, 0.0, 0.0,
-				0.0, cosA, -sinA, 0.0,
-				0.0, sinA, cosA, 0.0,
+				0.0, cosA, sinA, 0.0,
+				0.0, -sinA, cosA, 0.0,
 				0.0, 0.0, 0.0, 1.0);
 	}
 	/**
@@ -111,9 +111,9 @@ public final class Matrix4
 		double cosA = Math.cos(in_angle);
 		double sinA = Math.sin(in_angle);
 		
-		return new Matrix4(cosA, 0.0, sinA, 0.0,
+		return new Matrix4(cosA, 0.0, -sinA, 0.0,
 				0.0, 1.0, 0.0, 0.0,
-				-sinA, 0.0, cosA, 0.0,
+				sinA, 0.0, cosA, 0.0,
 				0.0, 0.0, 0.0, 1.0);
 	}
 	/**
@@ -131,8 +131,8 @@ public final class Matrix4
 		double cosA = Math.cos(in_angle);
 		double sinA = Math.sin(in_angle);
 		
-		return new Matrix4(cosA, -sinA, 0.0, 0.0,
-				sinA, cosA, 0.0, 0.0,
+		return new Matrix4(cosA, sinA, 0.0, 0.0,
+				-sinA, cosA, 0.0, 0.0,
 				0.0, 0.0, 1.0, 0.0,
 				0.0, 0.0, 0.0, 1.0);
 	}
