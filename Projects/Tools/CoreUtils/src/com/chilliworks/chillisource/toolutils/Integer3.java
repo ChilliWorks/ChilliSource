@@ -1,7 +1,7 @@
 /**
- * Integer2.java
+ * Integer3.java
  * Chilli Source
- * Created by Ian Copland on 09/10/2014.
+ * Created by Ian Copland on 27/10/2014.
  * 
  * The MIT License (MIT)
  * 
@@ -34,121 +34,123 @@ package com.chilliworks.chillisource.toolutils;
  * 
  * @author Ian Copland
  */
-public final class Integer2
+public final class Integer3
 {
-	public static final Integer2 ZERO = new Integer2(0, 0);
-	public static final Integer2 ONE = new Integer2(1, 1);
+	public static final Integer3 ZERO = new Integer3(0, 0, 0);
+	public static final Integer3 ONE = new Integer3(1, 1, 1);
 	
 	private final int m_x;
 	private final int m_y;
+	private final int m_z;
 	
 	/**
-	 * Returns the addition of the two provided Integer2s.
+	 * Returns the addition of the two provided Integer3s.
 	 * 
 	 * @author Ian Copland
 	 *
-	 * @param in_a - the first Integer2.
-	 * @param in_b - the second Integer2.
+	 * @param in_a - the first Integer3.
+	 * @param in_b - the second Integer3.
 	 * 
 	 * @return The result of the addition.
 	 */
-	public static Integer2 add(Integer2 in_a, Integer2 in_b)
+	public static Integer3 add(Integer3 in_a, Integer3 in_b)
 	{
-		return new Integer2(in_a.getX() + in_b.getX(), in_a.getY() + in_b.getY());
+		return new Integer3(in_a.getX() + in_b.getX(), in_a.getY() + in_b.getY(), in_a.getZ() + in_b.getZ());
 	}
 	/**
-	 * Returns the subtraction of the two provided Integer2s.
+	 * Returns the subtraction of the two provided Integer3s.
 	 * 
 	 * @author Ian Copland
 	 *
-	 * @param in_a - the first Integer2.
-	 * @param in_b - the second Integer2.
+	 * @param in_a - the first Integer3.
+	 * @param in_b - the second Integer3.
 	 * 
 	 * @return The result of the subtraction.
 	 */
-	public static Integer2 subtract(Integer2 in_a, Integer2 in_b)
+	public static Integer3 subtract(Integer3 in_a, Integer3 in_b)
 	{
-		return new Integer2(in_a.getX() - in_b.getX(), in_a.getY() - in_b.getY());
+		return new Integer3(in_a.getX() - in_b.getX(), in_a.getY() - in_b.getY(), in_a.getZ() - in_b.getZ());
 	}
 	/**
-	 * Returns the result of multiplying all components of the Integer2 by
+	 * Returns the result of multiplying all components of the Integer3 by
 	 * the scalar.
 	 * 
 	 * @author Ian Copland
 	 *
-	 * @param in_a - the Integer2.
+	 * @param in_a - the Integer3.
 	 * @param in_b - the scalar.
 	 * 
 	 * @return The result of the multiplication.
 	 */
-	public static Integer2 multiply(Integer2 in_a, int in_b)
+	public static Integer3 multiply(Integer3 in_a, int in_b)
 	{
-		return new Integer2(in_a.getX() * in_b, in_a.getY() * in_b);
+		return new Integer3(in_a.getX() * in_b, in_a.getY() * in_b, in_a.getZ() * in_b);
 	}
 	/**
-	 * Returns the result of multiplying the two Interger2's together.
+	 * Returns the result of multiplying the two Interger3's together.
 	 * 
 	 * @author Ian Copland
 	 *
-	 * @param in_a - the first Integer2.
-	 * @param in_b - the second Integer2.
+	 * @param in_a - the first Integer3.
+	 * @param in_b - the second Integer3.
 	 * 
 	 * @return The result of the multiplication.
 	 */
-	public static Integer2 multiply(Integer2 in_a, Integer2 in_b)
+	public static Integer3 multiply(Integer3 in_a, Integer3 in_b)
 	{
-		return new Integer2(in_a.getX() * in_b.getX(), in_a.getY() * in_b.getY());
+		return new Integer3(in_a.getX() * in_b.getX(), in_a.getY() * in_b.getY(), in_a.getZ() * in_b.getZ());
 	}
 	/**
-	 * Takes the min value for each component from the two Integer2s.
+	 * Takes the min value for each component from the two Integer3s.
 	 * 
 	 * @author Ian Copland
 	 *
-	 * @param in_a - the first Integer2.
-	 * @param in_b - the second Integer2.
+	 * @param in_a - the first Integer3.
+	 * @param in_b - the second Integer3.
 	 * 
 	 * @return The min value.
 	 */
-	public static Integer2 min(Integer2 in_a, Integer2 in_b)
+	public static Integer3 min(Integer3 in_a, Integer3 in_b)
 	{
-		return new Integer2(Math.min(in_a.getX(), in_b.getX()), Math.min(in_a.getY(), in_b.getY()));
+		return new Integer3(Math.min(in_a.getX(), in_b.getX()), Math.min(in_a.getY(), in_b.getY()), Math.min(in_a.getZ(), in_b.getZ()));
 	}
 	/**
-	 * Takes the max value for each component from the two Integer2s.
+	 * Takes the max value for each component from the two Integer3s.
 	 * 
 	 * @author Ian Copland
 	 *
-	 * @param in_a - the first Integer2.
-	 * @param in_b - the second Integer2.
+	 * @param in_a - the first Integer3.
+	 * @param in_b - the second Integer3.
 	 * 
 	 * @return The max value.
 	 */
-	public static Integer2 max(Integer2 in_a, Integer2 in_b)
+	public static Integer3 max(Integer3 in_a, Integer3 in_b)
 	{
-		return new Integer2(Math.max(in_a.getX(), in_b.getX()), Math.max(in_a.getY(), in_b.getY()));
+		return new Integer3(Math.max(in_a.getX(), in_b.getX()), Math.max(in_a.getY(), in_b.getY()), Math.max(in_a.getZ(), in_b.getZ()));
 	}
 	/**
-	 * Parses an Integer2 from a string. Integer2 values should be provided 
+	 * Parses an Integer3 from a string. Integer3 values should be provided 
 	 * as integers and each component should be separated by a comma. For 
-	 * example:  2, 600.
+	 * example:  2, 600, -7.
 	 * 
 	 * @author Ian Copland
 	 *
-	 * @param in_int2String - The Integer2 string.
+	 * @param in_int3String - The Integer3 string.
 	 */
-	public static Integer2 parseInt2(String in_int2String)
+	public static Integer3 parseInt3(String in_int3String)
 	{
-		String[] components = in_int2String.split(",");
-		if (components.length == 2)
+		String[] components = in_int3String.split(",");
+		if (components.length == 3)
 		{
 			int x = Integer.parseInt(components[0].trim());
 			int y = Integer.parseInt(components[1].trim());
+			int z = Integer.parseInt(components[2].trim());
 			
-			return new Integer2(x, y);
+			return new Integer3(x, y, z);
 		}
 		else
 		{
-			return Integer2.ZERO;
+			return Integer3.ZERO;
 		}
 	}
 	/**
@@ -158,11 +160,13 @@ public final class Integer2
 	 * 
 	 * @param in_x - The x value.
 	 * @param in_y - The y value.
+	 * @param in_z - The z value.
 	 */
-	public Integer2(int in_x, int in_y)
+	public Integer3(int in_x, int in_y, int in_z)
 	{
 		m_x = in_x;
 		m_y = in_y;
+		m_z = in_z;
 	}
 	/**
 	 * @author Ian Copland
@@ -181,6 +185,15 @@ public final class Integer2
 	public int getY()
 	{
 		return m_y;
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The z component.
+	 */
+	public int getZ()
+	{
+		return m_z;
 	}
 	/**
 	 * Returns whether or not this object is equal in value to the given
@@ -204,13 +217,13 @@ public final class Integer2
 	    	return false;
 	    }
 	    	
-	    if ((in_object instanceof Integer2) == false)
+	    if ((in_object instanceof Integer3) == false)
 	    {
 	    	return false;
 	    }
 	    
-	    Integer2 integer2 = (Integer2)in_object;
-	    return (m_x == integer2.m_x && m_y == integer2.m_y);
+	    Integer3 integer3 = (Integer3)in_object;
+	    return (m_x == integer3.m_x && m_y == integer3.m_y && m_z == integer3.m_z);
 	}
 	/**
 
@@ -220,6 +233,6 @@ public final class Integer2
 	 */
 	public String toString()
 	{
-		return "" + m_x + ", " + m_y;
+		return "" + m_x + ", " + m_y + ", " + m_z;
 	}
 }

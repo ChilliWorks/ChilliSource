@@ -123,8 +123,8 @@ public final class ColladaToCSModel
 	private static void outputInfoOnMoModel(CSModel in_options)
 	{
 		Logging.logVerbose("MoModel Model Generated.");
-		Logging.logVerbose(" Min Boundary: (" + in_options.mvMin.x + ", " + in_options.mvMin.y + ", " + in_options.mvMin.z + ")");
-		Logging.logVerbose(" Max Boundary: (" + in_options.mvMax.x + ", " + in_options.mvMax.y + ", " + in_options.mvMax.z + ")");
+		Logging.logVerbose(" Min Boundary: (" + in_options.mvMin.getX() + ", " + in_options.mvMin.getY() + ", " + in_options.mvMin.getZ() + ")");
+		Logging.logVerbose(" Max Boundary: (" + in_options.mvMax.getX() + ", " + in_options.mvMax.getY() + ", " + in_options.mvMax.getZ() + ")");
 		Logging.logVerbose(" Skeleton");
 		Logging.logVerbose("  Num Skeleton Nodes: " + in_options.mSkeleton.mNodeList.size());
 		Logging.logVerbose("   Number of which are Joints: " + SkeletonBuilder.GetNumberOfJoints(in_options));
@@ -135,13 +135,13 @@ public final class ColladaToCSModel
 			Logging.logVerbose("  Number of Vertices: " + mesh.mVertexList.size());
 			Logging.logVerbose("  Number of Indices: " + mesh.mIndexList.size());
 			Logging.logVerbose("  Texture: " + mesh.mstrTextureName);
-			Logging.logVerbose("  Min Boundary: (" + mesh.mvMin.x + ", " + mesh.mvMin.y + ", " + mesh.mvMin.z + ")");
-			Logging.logVerbose("  Max Boundary: (" + mesh.mvMax.x + ", " + mesh.mvMax.y + ", " + mesh.mvMax.z + ")");
+			Logging.logVerbose("  Min Boundary: (" + mesh.mvMin.getX() + ", " + mesh.mvMin.getY() + ", " + mesh.mvMin.getZ() + ")");
+			Logging.logVerbose("  Max Boundary: (" + mesh.mvMax.getX() + ", " + mesh.mvMax.getY() + ", " + mesh.mvMax.getZ() + ")");
 			Logging.logVerbose("  Material");
-			Logging.logVerbose("   Emissive: (" + mesh.mMaterial.mvEmissive.x + ", " + mesh.mMaterial.mvEmissive.y + ", " + mesh.mMaterial.mvEmissive.z + ", " + mesh.mMaterial.mvEmissive.w + ")");
-			Logging.logVerbose("   Ambient: (" + mesh.mMaterial.mvAmbient.x + ", " + mesh.mMaterial.mvAmbient.y + ", " + mesh.mMaterial.mvAmbient.z + ", " + mesh.mMaterial.mvAmbient.w + ")");
-			Logging.logVerbose("   Diffuse: (" + mesh.mMaterial.mvDiffuse.x + ", " + mesh.mMaterial.mvDiffuse.y + ", " + mesh.mMaterial.mvDiffuse.z + ", " + mesh.mMaterial.mvDiffuse.w + ")");
-			Logging.logVerbose("   Specular: (" + mesh.mMaterial.mvSpecular.x + ", " + mesh.mMaterial.mvSpecular.y + ", " + mesh.mMaterial.mvSpecular.z + ", " + mesh.mMaterial.mvSpecular.w + ")");
+			Logging.logVerbose("   Emissive: (" + mesh.mMaterial.mvEmissive.getX() + ", " + mesh.mMaterial.mvEmissive.getY() + ", " + mesh.mMaterial.mvEmissive.getZ() + ", " + mesh.mMaterial.mvEmissive.getW() + ")");
+			Logging.logVerbose("   Ambient: (" + mesh.mMaterial.mvAmbient.getX() + ", " + mesh.mMaterial.mvAmbient.getY() + ", " + mesh.mMaterial.mvAmbient.getZ() + ", " + mesh.mMaterial.mvAmbient.getW() + ")");
+			Logging.logVerbose("   Diffuse: (" + mesh.mMaterial.mvDiffuse.getX() + ", " + mesh.mMaterial.mvDiffuse.getY() + ", " + mesh.mMaterial.mvDiffuse.getZ() + ", " + mesh.mMaterial.mvDiffuse.getW() + ")");
+			Logging.logVerbose("   Specular: (" + mesh.mMaterial.mvSpecular.getX() + ", " + mesh.mMaterial.mvSpecular.getY() + ", " + mesh.mMaterial.mvSpecular.getZ() + ", " + mesh.mMaterial.mvSpecular.getW() + ")");
 			Logging.logVerbose("   Shininess: " + mesh.mMaterial.mfShininess);
 		}
 	}

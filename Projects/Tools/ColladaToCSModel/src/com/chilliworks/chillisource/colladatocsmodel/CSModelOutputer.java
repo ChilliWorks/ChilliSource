@@ -28,6 +28,8 @@
 
 package com.chilliworks.chillisource.colladatocsmodel;
 
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.util.LinkedList;
 
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.*;
@@ -58,7 +60,7 @@ public class CSModelOutputer
 	//-------------------------------------------------------------------
 	/// Private Member Data
 	//-------------------------------------------------------------------
-	LittleEndianOutputStream mStream;
+	DataOutputStream mStream;
 	int mdwSizeOfIndices;
 	//-------------------------------------------------------------------
 	/// Constructor
@@ -80,7 +82,7 @@ public class CSModelOutputer
 		//try and open a new file stream. if this fails, throw a fatal error.
 		try
 		{
-			mStream = new LittleEndianOutputStream(inConversionParams.m_outputFilePath);
+			mStream = new DataOutputStream(new FileOutputStream(inConversionParams.m_outputFilePath));
 		}
 		catch (Exception e)
 		{
@@ -190,13 +192,15 @@ public class CSModelOutputer
 	private boolean WriteGlobalHeader(ColladaToCSModelOptions inConversionParams, CSModel inMoModel) throws Exception
 	{
 		//write the endianess check value and version number
-		mStream.writeUnsignedInt(kdwEndiannessCheckValue);
-		mStream.writeUnsignedInt(kdwVersionNumber);
+		LittleEndianWriterUtils.writeUInt32(mStream, kdwEndiannessCheckValue);
+		LittleEndianWriterUtils.writeUInt32(mStream, kdwVersionNumber);
 		
 		//output the feature declaration
 		mStream.writeByte((byte)GetNumFeatures(inConversionParams));
 		if (inConversionParams.m_animated == true) 
+		{
 			mStream.writeByte((byte)kdwFeatureHasAnimationData);
+		}
 		
 		//output the Vertex Description
 		mStream.writeByte((byte)GetNumVertexElements(inConversionParams));
@@ -217,19 +221,19 @@ public class CSModelOutputer
 		mStream.writeByte((byte)mdwSizeOfIndices);
 		
 		//output the bounding box data
-		mStream.writeFloat(inMoModel.mvMin.x);
-		mStream.writeFloat(inMoModel.mvMin.y);
-		mStream.writeFloat(inMoModel.mvMin.z);
-		mStream.writeFloat(inMoModel.mvMax.x);
-		mStream.writeFloat(inMoModel.mvMax.y);
-		mStream.writeFloat(inMoModel.mvMax.z);
+		LittleEndianWriterUtils.writeFloat32(mStream, (float)inMoModel.mvMin.getX());
+		LittleEndianWriterUtils.writeFloat32(mStream, (float)inMoModel.mvMin.getY());
+		LittleEndianWriterUtils.writeFloat32(mStream, (float)inMoModel.mvMin.getZ());
+		LittleEndianWriterUtils.writeFloat32(mStream, (float)inMoModel.mvMax.getX());
+		LittleEndianWriterUtils.writeFloat32(mStream, (float)inMoModel.mvMax.getY());
+		LittleEndianWriterUtils.writeFloat32(mStream, (float)inMoModel.mvMax.getZ());
 		
 		//output meshes!
-		mStream.writeUnsignedShort(inMoModel.mMeshTable.size());
+		LittleEndianWriterUtils.writeUInt16(mStream, inMoModel.mMeshTable.size());
 		
 		if (inConversionParams.m_animated == true)
 		{
-			mStream.writeShort((short)inMoModel.mSkeleton.mNodeList.size());
+			LittleEndianWriterUtils.writeInt16(mStream, (short)inMoModel.mSkeleton.mNodeList.size());
 			mStream.writeByte((byte)SkeletonBuilder.GetNumberOfJoints(inMoModel));
 		}
 		
@@ -249,10 +253,10 @@ public class CSModelOutputer
 				CSModelSkeletonNode node = inMoModel.mSkeleton.mNodeList.get(i);
 				
 				//write joint name
-				mStream.writeNullTerminatedAsciiString(node.mstrName);
+				StringWriterUtils.writeUTF8StringNullTerminated(mStream, node.mstrName);
 				
 				//write parent index
-				mStream.writeShort((short)node.mdwParentNodeIndex);
+				LittleEndianWriterUtils.writeInt16(mStream, (short)node.mdwParentNodeIndex);
 				
 				//write the note type
 				if (node.mbIsJoint == false)
@@ -279,27 +283,27 @@ public class CSModelOutputer
 	private boolean WriteMeshHeader(ColladaToCSModelOptions inConversionParams, CSModelMesh inMoModelMesh) throws Exception
 	{
 		//write the mesh name
-		mStream.writeNullTerminatedAsciiString(inMoModelMesh.mstrName);
+		StringWriterUtils.writeUTF8StringNullTerminated(mStream, inMoModelMesh.mstrName);
 		
 		//write the number of verts and indices
 		if (mdwSizeOfIndices == 2)
 		{
-			mStream.writeUnsignedShort(inMoModelMesh.mVertexList.size());
-			mStream.writeUnsignedShort(inMoModelMesh.mIndexList.size() / 3);
+			LittleEndianWriterUtils.writeUInt16(mStream, inMoModelMesh.mVertexList.size());
+			LittleEndianWriterUtils.writeUInt16(mStream, inMoModelMesh.mIndexList.size() / 3);
 		}
 		else
 		{
-			mStream.writeUnsignedInt((long)inMoModelMesh.mVertexList.size());
-			mStream.writeUnsignedInt((long)inMoModelMesh.mIndexList.size() / 3);
+			LittleEndianWriterUtils.writeUInt32(mStream, (long)inMoModelMesh.mVertexList.size());
+			LittleEndianWriterUtils.writeUInt32(mStream, (long)inMoModelMesh.mIndexList.size() / 3);
 		}
 		
 		//write the bounds
-		mStream.writeFloat(inMoModelMesh.mvMin.x);
-		mStream.writeFloat(inMoModelMesh.mvMin.y);
-		mStream.writeFloat(inMoModelMesh.mvMin.z);
-		mStream.writeFloat(inMoModelMesh.mvMax.x);
-		mStream.writeFloat(inMoModelMesh.mvMax.y);
-		mStream.writeFloat(inMoModelMesh.mvMax.z);
+		LittleEndianWriterUtils.writeFloat32(mStream, (float)inMoModelMesh.mvMin.getX());
+		LittleEndianWriterUtils.writeFloat32(mStream, (float)inMoModelMesh.mvMin.getY());
+		LittleEndianWriterUtils.writeFloat32(mStream, (float)inMoModelMesh.mvMin.getZ());
+		LittleEndianWriterUtils.writeFloat32(mStream, (float)inMoModelMesh.mvMax.getX());
+		LittleEndianWriterUtils.writeFloat32(mStream, (float)inMoModelMesh.mvMax.getY());
+		LittleEndianWriterUtils.writeFloat32(mStream, (float)inMoModelMesh.mvMax.getZ());
 		
 		return true;
 	}
@@ -337,7 +341,7 @@ public class CSModelOutputer
 				{
 					for (int j = 0; j < 16; j++)
 					{
-						mStream.writeFloat(inMoStaticMesh.maInverseBindMatrices[i].mafData[j]);
+						LittleEndianWriterUtils.writeFloat32(mStream, (float)inMoStaticMesh.maInverseBindMatrices[i].get(j));
 					}
 				}
 			}
@@ -361,53 +365,52 @@ public class CSModelOutputer
 			//write the position data
 			if (inConversionParams.m_vertexHasPosition == true)
 			{
-				mStream.writeFloat(vertex.mvPosition.x);
-				mStream.writeFloat(vertex.mvPosition.y);
-				mStream.writeFloat(vertex.mvPosition.z);
-				mStream.writeFloat(1.0f);
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvPosition.getX());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvPosition.getY());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvPosition.getZ());
+				LittleEndianWriterUtils.writeFloat32(mStream, 1.0f);
 			}
-			
 			
 			//write the normal data if its in the format
 			if (inConversionParams.m_vertexHasNormal == true)
 			{
-				mStream.writeFloat(vertex.mvNormal.x);
-				mStream.writeFloat(vertex.mvNormal.y);
-				mStream.writeFloat(vertex.mvNormal.z);
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvNormal.getX());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvNormal.getY());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvNormal.getZ());
 			}
 			
 			//write the tex coord data if its in the format
 			if (inConversionParams.m_vertexHasTexCoords == true)
 			{
-				mStream.writeFloat(vertex.mvTextureCoordinate.x);
-				mStream.writeFloat(vertex.mvTextureCoordinate.y);
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvTextureCoordinate.getX());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvTextureCoordinate.getY());
 			}
 			
 			//write the colour data if its in the format
 			if (inConversionParams.m_vertexHasColour == true)
 			{
-				mStream.writeByte((byte)vertex.mvVertexColour.x);
-				mStream.writeByte((byte)vertex.mvVertexColour.y);
-				mStream.writeByte((byte)vertex.mvVertexColour.z);
-				mStream.writeByte((byte)vertex.mvVertexColour.w);
+				mStream.writeByte((byte)vertex.mvVertexColour.getX());
+				mStream.writeByte((byte)vertex.mvVertexColour.getY());
+				mStream.writeByte((byte)vertex.mvVertexColour.getZ());
+				mStream.writeByte((byte)vertex.mvVertexColour.getW());
 			}
 			
 			//write the vertex weight if its in the format
 			if (inConversionParams.m_vertexHasWeights == true)
 			{
-				mStream.writeFloat(vertex.mvWeights.x);
-				mStream.writeFloat(vertex.mvWeights.y);
-				mStream.writeFloat(vertex.mvWeights.z);
-				mStream.writeFloat(vertex.mvWeights.w);
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvWeights.getX());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvWeights.getY());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvWeights.getZ());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)vertex.mvWeights.getW());
 			}
 			
 			//write the joint indices if its in the format
 			if (inConversionParams.m_vertexHasJointIndices == true)
 			{
-				mStream.writeByte((byte)vertex.mvJointIndices.x);
-				mStream.writeByte((byte)vertex.mvJointIndices.y);
-				mStream.writeByte((byte)vertex.mvJointIndices.z);
-				mStream.writeByte((byte)vertex.mvJointIndices.w);
+				mStream.writeByte((byte)vertex.mvJointIndices.getX());
+				mStream.writeByte((byte)vertex.mvJointIndices.getY());
+				mStream.writeByte((byte)vertex.mvJointIndices.getZ());
+				mStream.writeByte((byte)vertex.mvJointIndices.getW());
 			}
 		}
 		
@@ -428,18 +431,18 @@ public class CSModelOutputer
 			{
 				for (int i = 0; i < indexList.size() / 3; i++)
 				{
-					mStream.writeUnsignedShort(indexList.get(i * 3 + 0));
-					mStream.writeUnsignedShort(indexList.get(i * 3 + 1));
-					mStream.writeUnsignedShort(indexList.get(i * 3 + 2));
+					LittleEndianWriterUtils.writeUInt16(mStream, indexList.get(i * 3 + 0));
+					LittleEndianWriterUtils.writeUInt16(mStream, indexList.get(i * 3 + 1));
+					LittleEndianWriterUtils.writeUInt16(mStream, indexList.get(i * 3 + 2));
 				}
 			}
 			else
 			{
 				for (int i = 0; i < indexList.size() / 3; i++)
 				{
-					mStream.writeUnsignedInt((long)indexList.get(i * 3 + 0));
-					mStream.writeUnsignedInt((long)indexList.get(i * 3 + 1));
-					mStream.writeUnsignedInt((long)indexList.get(i * 3 + 2));
+					LittleEndianWriterUtils.writeUInt32(mStream, (long)indexList.get(i * 3 + 0));
+					LittleEndianWriterUtils.writeUInt32(mStream, (long)indexList.get(i * 3 + 1));
+					LittleEndianWriterUtils.writeUInt32(mStream, (long)indexList.get(i * 3 + 2));
 				}
 			}
 		}

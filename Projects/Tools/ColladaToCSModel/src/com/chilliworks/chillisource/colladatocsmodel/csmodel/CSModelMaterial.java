@@ -41,10 +41,10 @@ public class CSModelMaterial
 	
 	public CSModelMaterial()
 	{
-		mvEmissive = new Vector4();
-		mvAmbient = new Vector4();
-		mvDiffuse = new Vector4();
-		mvSpecular = new Vector4();
+		mvEmissive = Vector4.ZERO;
+		mvAmbient = Vector4.ZERO;
+		mvDiffuse = Vector4.ZERO;
+		mvSpecular = Vector4.ZERO;
 		mfShininess = 0.0f;
 		mstrName = new String();
 	}

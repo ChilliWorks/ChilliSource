@@ -44,6 +44,7 @@ import com.chilliworks.chillisource.toolutils.FileUtils;
 import com.chilliworks.chillisource.toolutils.LittleEndianWriterUtils;
 import com.chilliworks.chillisource.toolutils.Logging;
 import com.chilliworks.chillisource.toolutils.StringUtils;
+import com.chilliworks.chillisource.toolutils.StringWriterUtils;
 
 /**
  * A container for a series of methods used to write a CSFont to disk. This
@@ -248,7 +249,7 @@ public final class CSFontWriter
 	private static void writeStandardHeader(DataOutputStream in_stream, Glyphs in_glyphs, PackedTexture in_packedBitmapFont) throws IOException
 	{
 		//write the chilli source Id
-		LittleEndianWriterUtils.writeUTF8String(in_stream, "CSCS");
+		StringWriterUtils.writeUTF8String(in_stream, "CSCS");
 		
 		//write the endianness check flag
 		LittleEndianWriterUtils.writeInt32(in_stream, 9999);
@@ -273,12 +274,12 @@ public final class CSFontWriter
 		final int glphChunkSize = calculateGLPHChunkSize(in_packedBitmapFont);
 		
 		//write the INFO chunk entry.
-		LittleEndianWriterUtils.writeUTF8String(in_stream, "INFO");
+		StringWriterUtils.writeUTF8String(in_stream, "INFO");
 		LittleEndianWriterUtils.writeInt32(in_stream, INFO_CHUNK_OFFSET);
 		LittleEndianWriterUtils.writeInt32(in_stream, INFO_CHUNK_SIZE);
 		
 		//write the GLPH chunk entry.
-		LittleEndianWriterUtils.writeUTF8String(in_stream, "GLPH");
+		StringWriterUtils.writeUTF8String(in_stream, "GLPH");
 		LittleEndianWriterUtils.writeInt32(in_stream, GLPH_CHUNK_OFFSET);
 		LittleEndianWriterUtils.writeInt32(in_stream, glphChunkSize);
 	}

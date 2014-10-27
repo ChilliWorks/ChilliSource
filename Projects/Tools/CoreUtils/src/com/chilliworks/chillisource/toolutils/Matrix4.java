@@ -28,496 +28,240 @@
 
 package com.chilliworks.chillisource.toolutils;
 
-public class Matrix4 
+/**
+ * A basic 4x4 matrix math class. This is immutable after construction to ensure it is safe
+ * to pass into methods.
+ * 
+ * @author Ian Copland
+ */
+public final class Matrix4 
 {
-	//-----------------------------------------------------
-	/// Constants
-	//-----------------------------------------------------
-	public static final Matrix4 IDENTITY = new Matrix4();
-	//-----------------------------------------------------
-	/// Public member data
-	//-----------------------------------------------------
-	public float[] mafData;
-	//-----------------------------------------------------
-	/// Constructor
-	//-----------------------------------------------------
-	public Matrix4()
-	{
-		mafData = new float[16];
-		mafData[0] = 1.0f; 	mafData[1] = 0.0f; 	mafData[2] = 0.0f; 	mafData[3] = 0.0f;
-		mafData[4] = 0.0f; 	mafData[5] = 1.0f; 	mafData[6] = 0.0f; 	mafData[7] = 0.0f;
-		mafData[8] = 0.0f; 	mafData[9] = 0.0f; 	mafData[10] = 1.0f; mafData[11] = 0.0f;
-		mafData[12] = 0.0f; mafData[13] = 0.0f; mafData[14] = 0.0f; mafData[15] = 1.0f;
-	}
-	//-----------------------------------------------------
-	/// Constructor
-	//-----------------------------------------------------
-	public Matrix4(float infA, float infB, float infC, float infD,
-					float infE,	float infF,	float infG, float infH,
-					float infI, float infJ, float infK, float infL,
-					float infM, float infN, float infO, float infP)
-	{
-		mafData = new float[16];
-		mafData[0] = infA; 	mafData[1] = infB; 	mafData[2] = infC; 	mafData[3] = infD;
-		mafData[4] = infE; 	mafData[5] = infF; 	mafData[6] = infG; 	mafData[7] = infH;
-		mafData[8] = infI; 	mafData[9] = infJ; 	mafData[10] = infK; mafData[11] = infL;
-		mafData[12] = infM; mafData[13] = infN; mafData[14] = infO; mafData[15] = infP;
-	}
-	//-----------------------------------------------------
-	/// Copy
-	///
-	/// Creates a copy of the matrix.
-	///
-	/// @return the copy.
-	//-----------------------------------------------------
-	public Matrix4 copy()
-	{
-		Matrix4 newMat = new Matrix4();
+	public static final Matrix4 IDENTITY = new Matrix4(
+			1.0, 0.0, 0.0, 0.0,  
+			0.0, 1.0, 0.0, 0.0,  
+			0.0, 0.0, 1.0, 0.0,  
+			0.0, 0.0, 0.0, 1.0);
 
-		for (int i = 0; i < 16; i++)
-		{
-			newMat.mafData[i] = mafData[i];
-		}
+	private double[] m_data;
+
+	/**
+	 * Creates a new matrix which describes the given translation.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_translation - The translation the matrix should describe.
+	 * 
+	 * @return The translation matrix.
+	 */
+	public static Matrix4 createTranslation(Vector3 in_translation)
+	{
+		return new Matrix4(1.0, 0.0, 0.0, 0.0,
+				0.0, 1.0, 0.0, 0.0,
+				0.0, 0.0, 0.0, 0.0,
+				in_translation.getX(), in_translation.getY(), in_translation.getZ(), 1.0);
+	}
+	/**
+	 * Creates a new matrix which describes the given scale.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_scale - The scale the matrix should describe.
+	 * 
+	 * @return The scale matrix.
+	 */
+	public static Matrix4 createScale(Vector3 in_scale)
+	{
+		return new Matrix4(in_scale.getX(), 0.0, 0.0, 0.0,
+				0.0, in_scale.getY(), 0.0, 0.0,
+				0.0, 0.0, in_scale.getZ(), 0.0,
+				0.0, 0.0, 0.0, 1.0);
+	}
+	/**
+	 * Creates a new rotation matrix which describes the given rotation
+	 * around the X axis.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_angle - The angle around the X axis in radians.
+	 * 
+	 * @return The rotation matrix.
+	 */
+	public static Matrix4 createRotateX(double in_angle)
+	{
+		double cosA = Math.cos(in_angle);
+		double sinA = Math.sin(in_angle);
 		
-		return newMat;
+		return new Matrix4(1.0, 0.0, 0.0, 0.0,
+				0.0, cosA, -sinA, 0.0,
+				0.0, sinA, cosA, 0.0,
+				0.0, 0.0, 0.0, 1.0);
 	}
-	//-----------------------------------------------------
-	/// Set
-	///
-	/// Sets a matrix to the value of another matrix.
-	///
-	/// @param the matrix to copy.
-	//-----------------------------------------------------
-	public void set(Matrix4 inMat)
+	/**
+	 * Creates a new rotation matrix which describes the given rotation
+	 * around the Y axis.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_angle - The angle around the Y axis in radians.
+	 * 
+	 * @return The rotation matrix.
+	 */
+	public static Matrix4 createRotateY(double in_angle)
 	{
-		for (int i = 0; i < 16; i++)
-		{
-			mafData[i] = inMat.mafData[i];
-		}
-	}
-	//-----------------------------------------------------
-	/// Get
-	///
-	/// returns the value at the given index.
-	///
-	/// @param the x index.
-	/// @param the y index.
-	/// @return the value at this index.
-	//-----------------------------------------------------
-	public float get(int indwX, int indwY)
-	{
-		return mafData[indwX + indwY * 4];
-	}
-	//-----------------------------------------------------
-	/// Create Rotate X
-	///
-	/// Create a matrix describing a rotation around the X
-	/// axis.
-	///
-	/// @param the angle to rotate through.
-	/// @return the rotation matrix.
-	//-----------------------------------------------------
-	public static Matrix4 createRotateX(float infAngleRads)
-	{
-		Matrix4 newMat = new Matrix4();
-
-		float c = (float)Math.cos(infAngleRads);
-		float s = (float)Math.sin(infAngleRads);
-
-		newMat.mafData[5] = c;
-		newMat.mafData[9] = s;
-		newMat.mafData[6] = -s;
-		newMat.mafData[10] = c;
+		double cosA = Math.cos(in_angle);
+		double sinA = Math.sin(in_angle);
 		
-		return newMat;
+		return new Matrix4(cosA, 0.0, sinA, 0.0,
+				0.0, 1.0, 0.0, 0.0,
+				-sinA, 0.0, cosA, 0.0,
+				0.0, 0.0, 0.0, 1.0);
 	}
-	//-----------------------------------------------------
-	/// Create Rotate Y
-	///
-	/// Create a matrix describing a rotation around the Y
-	/// axis.
-	///
-	/// @param the angle to rotate through.
-	/// @return the rotation matrix.
-	//-----------------------------------------------------
-	public static Matrix4 createRotateY(float infAngleRads)
+	/**
+	 * Creates a new rotation matrix which describes the given rotation
+	 * around the Z axis.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_angle - The angle around the Z axis in radians.
+	 * 
+	 * @return The rotation matrix.
+	 */
+	public static Matrix4 createRotateZ(double in_angle)
 	{
-		Matrix4 newMat = new Matrix4();
-
-		float c = (float)Math.cos(infAngleRads);
-		float s = (float)Math.sin(infAngleRads);
-
-		newMat.mafData[0] = c;
-		newMat.mafData[2] = s;
-		newMat.mafData[8] = -s;
-		newMat.mafData[10] = c;
+		double cosA = Math.cos(in_angle);
+		double sinA = Math.sin(in_angle);
 		
-		return newMat;
+		return new Matrix4(cosA, -sinA, 0.0, 0.0,
+				sinA, cosA, 0.0, 0.0,
+				0.0, 0.0, 1.0, 0.0,
+				0.0, 0.0, 0.0, 1.0);
 	}
-	//-----------------------------------------------------
-	/// Create Rotate Z
-	///
-	/// Create a matrix describing a rotation around the Z
-	/// axis.
-	///
-	/// @param the angle to rotate through.
-	/// @return the rotation matrix.
-	//-----------------------------------------------------
-	public static Matrix4 createRotateZ(float infAngleRads)
+	/**
+	 * Creates a rotation matrix that describes the rotation given by
+	 * the input quaternion.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_orientation - The orientation quaternion.
+	 * 
+	 * @return The rotation matrix.
+	 */
+	public static Matrix4 createRotation(Quaternion in_orientation)
 	{
-		Matrix4 newMat = new Matrix4();
-
-		float c = (float)Math.cos(infAngleRads);
-		float s = (float)Math.sin(infAngleRads);
-
-		newMat.mafData[0] = c;
-		newMat.mafData[4] = s;
-		newMat.mafData[1] = -s;
-		newMat.mafData[5] = c;
+		double cosW = Math.cos(in_orientation.getW());
+		double sinW = Math.sin(in_orientation.getW());
 		
-		return newMat;
-	}
-	//-----------------------------------------------------
-	/// Create Translation
-	///
-	/// Create a matrix describing a translation
-	///
-	/// @param the translation
-	/// @return the translation matrix.
-	//-----------------------------------------------------
-	public static Matrix4 createTranslation(Vector3 inTranslation)
-	{
-		Matrix4 newMat = new Matrix4();
+		double a0 = cosW + (1 - cosW) * (in_orientation.getX() * in_orientation.getX());
+		double a1 = (1 - cosW) * (in_orientation.getX() * in_orientation.getY()) + (sinW * in_orientation.getZ());
+		double a2 = (1 - cosW) * (in_orientation.getX() * in_orientation.getZ()) - (sinW * in_orientation.getY());
 
-		newMat.mafData[12] = inTranslation.x;
-		newMat.mafData[13] = inTranslation.y;
-		newMat.mafData[14] = inTranslation.z;
-		
-		return newMat;
-	}
-	//-----------------------------------------------------
-	/// Create Scale
-	///
-	/// Create a matrix describing scaling
-	///
-	/// @param the scale
-	/// @return the scale matrix.
-	//-----------------------------------------------------
-	public static Matrix4 createScale(Vector3 inScale)
-	{
-		Matrix4 newMat = new Matrix4();
+		double b0 = (1 - cosW) * (in_orientation.getX() * in_orientation.getY()) - (sinW * in_orientation.getZ());
+		double b1 = cosW + (1 - cosW) * (in_orientation.getY() * in_orientation.getY());
+		double b2 = (1 - cosW) * (in_orientation.getY() * in_orientation.getZ()) + (sinW * in_orientation.getX());
 
-		newMat.mafData[0] = inScale.x;
-		newMat.mafData[5] = inScale.y;
-		newMat.mafData[10] = inScale.z;
-		
-		return newMat;
-	}
-	//-----------------------------------------------------
-	/// Create Rotation
-	///
-	/// Create a matrix describing a rotation
-	///
-	/// @param the rotation
-	/// @return the rotation matrix.
-	//-----------------------------------------------------
-	public static Matrix4 createRotation(Quaternion inRot)
-	{
-		Matrix4 newMat = new Matrix4();
-
-		float c = (float)Math.cos(inRot.w);
-		float s = (float)Math.sin(inRot.w);
-
-		newMat.mafData[0] = c + (1 - c) * (inRot.x * inRot.x);				newMat.mafData[4] = (1 - c) * (inRot.x * inRot.y) - (s * inRot.z);	newMat.mafData[8] = (1 - c) * (inRot.x * inRot.z) + (s * inRot.y);
-		newMat.mafData[1] = (1 - c) * (inRot.x * inRot.y) + (s * inRot.z);	newMat.mafData[5] = c + (1 - c) * (inRot.y * inRot.y);				newMat.mafData[9] = (1 - c) * (inRot.y * inRot.z) - (s * inRot.x);
-		newMat.mafData[2] = (1 - c) * (inRot.x * inRot.z) - (s * inRot.y);	newMat.mafData[6] = (1 - c) * (inRot.y * inRot.z) + (s * inRot.x);	newMat.mafData[10] = c + (1 - c) * (inRot.z * inRot.z); 
+		double c0 = (1 - cosW) * (in_orientation.getX() * in_orientation.getZ()) + (sinW * in_orientation.getY());
+		double c1 = (1 - cosW) * (in_orientation.getY() * in_orientation.getZ()) - (sinW * in_orientation.getX());
+		double c2 = cosW + (1 - cosW) * (in_orientation.getZ() * in_orientation.getZ());
 	
-		
-		return newMat;
+		return new Matrix4(a0, a1, a2, 0.0,
+				b0, b1, b2, 0.0,
+				c0, c1, c2, 0.0,
+				0.0, 0.0, 0.0, 1.0);
 	}
-	//-----------------------------------------------------
-	/// Multiply
-	///
-	/// Multiplies this matrix by another.
-	///
-	/// @param the other matrix.
-	/// @return the multiplied matrix.
-	//-----------------------------------------------------
-	public void multiply(Matrix4 inB)
+	/**
+	 * Creates a new transform matrix from the given translation, scale and orientation.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_translation - The translation vector.
+	 * @param in_scale - The scale vector.
+	 * @param in_orientation - The orientation quaternion.
+	 * 
+	 * @return The new transform matrix.
+	 */
+	public static Matrix4 createTransform(Vector3 in_translation, Vector3 in_scale, Quaternion in_orientation)
 	{
-		Matrix4 copy = this.copy();
+		Matrix4 rot = in_orientation.toMatrix();
 		
-		mafData[0] = copy.mafData[0] * inB.mafData[0] + copy.mafData[1] * inB.mafData[4] + copy.mafData[2] * inB.mafData[8] + copy.mafData[3] * inB.mafData[12];
-		mafData[1] = copy.mafData[0] * inB.mafData[1] + copy.mafData[1] * inB.mafData[5] + copy.mafData[2] * inB.mafData[9] + copy.mafData[3] * inB.mafData[13];
-		mafData[2] = copy.mafData[0] * inB.mafData[2] + copy.mafData[1] * inB.mafData[6] + copy.mafData[2] * inB.mafData[10] + copy.mafData[3] * inB.mafData[14];
-		mafData[3] = copy.mafData[0] * inB.mafData[3] + copy.mafData[1] * inB.mafData[7] + copy.mafData[2] * inB.mafData[11] + copy.mafData[3] * inB.mafData[15];
-		
-		mafData[4] = copy.mafData[4] * inB.mafData[0] + copy.mafData[5] * inB.mafData[4] + copy.mafData[6] * inB.mafData[8] + copy.mafData[7] * inB.mafData[12];
-		mafData[5] = copy.mafData[4] * inB.mafData[1] + copy.mafData[5] * inB.mafData[5] + copy.mafData[6] * inB.mafData[9] + copy.mafData[7] * inB.mafData[13];
-		mafData[6] = copy.mafData[4] * inB.mafData[2] + copy.mafData[5] * inB.mafData[6] + copy.mafData[6] * inB.mafData[10] + copy.mafData[7] * inB.mafData[14];
-		mafData[7] = copy.mafData[4] * inB.mafData[3] + copy.mafData[5] * inB.mafData[7] + copy.mafData[6] * inB.mafData[11] + copy.mafData[7] * inB.mafData[15];
-		
-		mafData[8] = copy.mafData[8] * inB.mafData[0] + copy.mafData[9] * inB.mafData[4] + copy.mafData[10] * inB.mafData[8] + copy.mafData[11] * inB.mafData[12];
-		mafData[9] = copy.mafData[8] * inB.mafData[1] + copy.mafData[9] * inB.mafData[5] + copy.mafData[10] * inB.mafData[9] + copy.mafData[11] * inB.mafData[13];
-		mafData[10] = copy.mafData[8] * inB.mafData[2] + copy.mafData[9] * inB.mafData[6] + copy.mafData[10] * inB.mafData[10] + copy.mafData[11] * inB.mafData[14];
-		mafData[11] = copy.mafData[8] * inB.mafData[3] + copy.mafData[9] * inB.mafData[7] + copy.mafData[10] * inB.mafData[11] + copy.mafData[11] * inB.mafData[15];
-		
-		mafData[12] = copy.mafData[12] * inB.mafData[0] + copy.mafData[13] * inB.mafData[4] + copy.mafData[14] * inB.mafData[8] + copy.mafData[15] * inB.mafData[12];
-		mafData[13] = copy.mafData[12] * inB.mafData[1] + copy.mafData[13] * inB.mafData[5] + copy.mafData[14] * inB.mafData[9] + copy.mafData[15] * inB.mafData[13];
-		mafData[14] = copy.mafData[12] * inB.mafData[2] + copy.mafData[13] * inB.mafData[6] + copy.mafData[14] * inB.mafData[10] + copy.mafData[15] * inB.mafData[14];
-		mafData[15] = copy.mafData[12] * inB.mafData[3] + copy.mafData[13] * inB.mafData[7] + copy.mafData[14] * inB.mafData[11] + copy.mafData[15] * inB.mafData[15];
+		return new Matrix4(in_scale.getX() * rot.m_data[0], in_scale.getX() * rot.m_data[1], in_scale.getX() * rot.m_data[2], 0.0,
+				in_scale.getY() * rot.m_data[4], in_scale.getY() * rot.m_data[5], in_scale.getY() * rot.m_data[6], 0.0,
+				in_scale.getZ() * rot.m_data[8], in_scale.getZ() * rot.m_data[9], in_scale.getZ() * rot.m_data[10], 0.0,
+				in_translation.getX(), in_translation.getY(), in_translation.getZ(), 1.0);
 	}
-	//-----------------------------------------------------
-	/// Returns the rotation as euler angles.
-	///
-	/// The following algorithm has been taken from "Computing 
-	/// Euler angles from a rotation matrix" by Gregory G. Slabaugh. 
-	/// The original document can be found at: 
-	//// http://www.gregslabaugh.name/publications/euler.pdf
-	///
-	/// Note: While the algorithm can return two sets of possible 
-	/// answers, we are only returning 1 for simplicities sake.
-	///	
-	/// if (R31 != 1 AND R31 != -1)
-	///		A1 = -asin(R31)
-	///		A2 = PI - A1
-	///		B1 = atan2(R32 / cos A1, R33 / cos A1)
-	///		B2 = atan2(R32 / cos A2, R33 / cos A2)
-	///		C1 = atan2(R21 / cos A1, R11 / cos A1)
-	///		C2 = atan2(R21 / cos A2, R11 / cos A2)
-	/// else
-	///		C = anything, so set to 0.
-	///		if (R31 == -1)
-	///			A = PI / 2
-	///			B = C + atan2(R12,R13)
-	///		else
-	///			A = -PI / 2
-	///			B = -C + atan2(-R12,-R13)
-	///		end if
-	/// end if
-	///
-	/// @return the euler angles.
-	//-----------------------------------------------------
-	public Vector3 getEulerAngles()
-	{
-		Vector3 out = new Vector3();
-		if (mafData[8] != 1.0f && mafData[8] != -1.0f)
-		{
-			//only take one set of angles.
-			out.y = -(float)Math.asin((double)mafData[8]); 
-			out.x = (float)Math.atan2(mafData[9] / (float)Math.cos(out.y), mafData[9] / (float)Math.cos(out.y));
-			out.z = (float)Math.atan2(mafData[4] / (float)Math.cos(out.y), mafData[0] / (float)Math.cos(out.y));
-		}
-		else
-		{
-			out.z = 0.0f;
-			if (mafData[8] == -1)
-			{
-				out.y = ((float)Math.PI) / 2.0f;
-				out.x = out.z + (float)Math.atan2(mafData[1], mafData[2]);
-			}
-			else
-			{
-				out.y = -((float)Math.PI) / 2.0f;
-				out.x = -out.z + (float)Math.atan2(-mafData[1], -mafData[2]);
-			}
-		}
-		
-		return out;
-	}
-	//-----------------------------------------------------
-	/// Contains Scale
-	///
-	/// @return whether or not this contains scaling.
-	//-----------------------------------------------------
-	public boolean containsScale()
-	{
-		float fTolerance = 0.00001f;
-		Matrix4 theCopy = this.copy();
-		
-		theCopy.mafData[12] = 0.0f;
-		theCopy.mafData[13] = 0.0f;
-		theCopy.mafData[14] = 0.0f;
-		
-		Vector3 upRotated = Matrix4.multiply(new Vector3(0.0f ,1.0f, 0.0f), theCopy);
-		Vector3 rightRotated = Matrix4.multiply(new Vector3(1.0f ,0.0f, 0.0f), theCopy);
-		Vector3 forwardRotated = Matrix4.multiply(new Vector3(0.0f ,0.0f, 1.0f), theCopy);
-		
-		if (upRotated.length() < 1.0f - fTolerance || upRotated.length() > 1.0f + fTolerance ||
-			rightRotated.length() < 1.0f - fTolerance || rightRotated.length() > 1.0f + fTolerance ||
-			forwardRotated.length() < 1.0f - fTolerance || forwardRotated.length() > 1.0f + fTolerance)
-		{
-			return true;
-		}
-		
-		return false;
-	}
-	//-----------------------------------------------------
-	/// Get Translation
-	///
-	/// @return the translation component of this matrix.
-	//-----------------------------------------------------
-	public Vector3 getTranslation()
-	{
-		Vector3 translation = new Vector3();
-		
-		translation.x = mafData[12];
-		translation.y = mafData[13];
-		translation.z = mafData[14];
-		
-		return translation;
-	}
-	//-----------------------------------------------------
-	/// Create From 2D Array
-	///
-	/// @param a 2D float array.
-	/// @return a new matrix.
-	//-----------------------------------------------------
-	public static Matrix4 createFrom2DArray(float[][] inafData)
-	{
-		Matrix4 m = new Matrix4();
-		
-		m.mafData[0] = inafData[0][0]; 	m.mafData[1] = inafData[1][0]; 	m.mafData[2] = inafData[2][0]; 	m.mafData[3] = inafData[3][0];
-		m.mafData[4] = inafData[0][1]; 	m.mafData[5] = inafData[1][1]; 	m.mafData[6] = inafData[2][1]; 	m.mafData[7] = inafData[3][1];
-		m.mafData[8] = inafData[0][2]; 	m.mafData[9] = inafData[1][2]; 	m.mafData[10] = inafData[2][2]; m.mafData[11] = inafData[3][2];
-		m.mafData[12] = inafData[0][3]; m.mafData[13] = inafData[1][3];	m.mafData[14] = inafData[2][3]; m.mafData[15] = inafData[3][3];
-		
-		return m;
-	}
-	//-----------------------------------------------------
-	/// Multiply
-	///
-	/// @param vector
-	/// @param matrix.
-	/// @return the transformed vector
-	//-----------------------------------------------------
-	public static Vector3 multiply(Vector3 inVector, Matrix4 inMatrix)
-	{
-		Vector3 out = new Vector3();
-		out.x = inVector.x * inMatrix.mafData[0] + inVector.y * inMatrix.mafData[4] + inVector.z * inMatrix.mafData[8] + inMatrix.mafData[12];
-		out.y = inVector.x * inMatrix.mafData[1] + inVector.y * inMatrix.mafData[5] + inVector.z * inMatrix.mafData[9] + inMatrix.mafData[13];
-		out.z = inVector.x * inMatrix.mafData[2] + inVector.y * inMatrix.mafData[6] + inVector.z * inMatrix.mafData[10] + inMatrix.mafData[14];
-		return out;
-	}
-	//-----------------------------------------------------
-	/// Multiply
-	///
-	/// @param matrix
-	/// @param matrix
-	/// @return the transformed matrix.
-	//-----------------------------------------------------
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @param in_a - The first matrix.
+	 * @param in_b - The second matrix.
+	 * 
+	 * @return The result of multiplying the two matrices together.
+	 */
 	public static Matrix4 multiply(Matrix4 inA, Matrix4 inB)
 	{
-		Matrix4 out = new Matrix4();
+		double a0 = inA.m_data[0] * inB.m_data[0] + inA.m_data[1] * inB.m_data[4] + inA.m_data[2] * inB.m_data[8] + inA.m_data[3] * inB.m_data[12];
+		double a1 = inA.m_data[0] * inB.m_data[1] + inA.m_data[1] * inB.m_data[5] + inA.m_data[2] * inB.m_data[9] + inA.m_data[3] * inB.m_data[13];
+		double a2 = inA.m_data[0] * inB.m_data[2] + inA.m_data[1] * inB.m_data[6] + inA.m_data[2] * inB.m_data[10] + inA.m_data[3] * inB.m_data[14];
+		double a3 = inA.m_data[0] * inB.m_data[3] + inA.m_data[1] * inB.m_data[7] + inA.m_data[2] * inB.m_data[11] + inA.m_data[3] * inB.m_data[15];
 		
-		out.mafData[0] = inA.mafData[0] * inB.mafData[0] + inA.mafData[1] * inB.mafData[4] + inA.mafData[2] * inB.mafData[8] + inA.mafData[3] * inB.mafData[12];
-		out.mafData[1] = inA.mafData[0] * inB.mafData[1] + inA.mafData[1] * inB.mafData[5] + inA.mafData[2] * inB.mafData[9] + inA.mafData[3] * inB.mafData[13];
-		out.mafData[2] = inA.mafData[0] * inB.mafData[2] + inA.mafData[1] * inB.mafData[6] + inA.mafData[2] * inB.mafData[10] + inA.mafData[3] * inB.mafData[14];
-		out.mafData[3] = inA.mafData[0] * inB.mafData[3] + inA.mafData[1] * inB.mafData[7] + inA.mafData[2] * inB.mafData[11] + inA.mafData[3] * inB.mafData[15];
+		double b0 = inA.m_data[4] * inB.m_data[0] + inA.m_data[5] * inB.m_data[4] + inA.m_data[6] * inB.m_data[8] + inA.m_data[7] * inB.m_data[12];
+		double b1 = inA.m_data[4] * inB.m_data[1] + inA.m_data[5] * inB.m_data[5] + inA.m_data[6] * inB.m_data[9] + inA.m_data[7] * inB.m_data[13];
+		double b2 = inA.m_data[4] * inB.m_data[2] + inA.m_data[5] * inB.m_data[6] + inA.m_data[6] * inB.m_data[10] + inA.m_data[7] * inB.m_data[14];
+		double b3 = inA.m_data[4] * inB.m_data[3] + inA.m_data[5] * inB.m_data[7] + inA.m_data[6] * inB.m_data[11] + inA.m_data[7] * inB.m_data[15];
 		
-		out.mafData[4] = inA.mafData[4] * inB.mafData[0] + inA.mafData[5] * inB.mafData[4] + inA.mafData[6] * inB.mafData[8] + inA.mafData[7] * inB.mafData[12];
-		out.mafData[5] = inA.mafData[4] * inB.mafData[1] + inA.mafData[5] * inB.mafData[5] + inA.mafData[6] * inB.mafData[9] + inA.mafData[7] * inB.mafData[13];
-		out.mafData[6] = inA.mafData[4] * inB.mafData[2] + inA.mafData[5] * inB.mafData[6] + inA.mafData[6] * inB.mafData[10] + inA.mafData[7] * inB.mafData[14];
-		out.mafData[7] = inA.mafData[4] * inB.mafData[3] + inA.mafData[5] * inB.mafData[7] + inA.mafData[6] * inB.mafData[11] + inA.mafData[7] * inB.mafData[15];
+		double c0 = inA.m_data[8] * inB.m_data[0] + inA.m_data[9] * inB.m_data[4] + inA.m_data[10] * inB.m_data[8] + inA.m_data[11] * inB.m_data[12];
+		double c1 = inA.m_data[8] * inB.m_data[1] + inA.m_data[9] * inB.m_data[5] + inA.m_data[10] * inB.m_data[9] + inA.m_data[11] * inB.m_data[13];
+		double c2 = inA.m_data[8] * inB.m_data[2] + inA.m_data[9] * inB.m_data[6] + inA.m_data[10] * inB.m_data[10] + inA.m_data[11] * inB.m_data[14];
+		double c3 = inA.m_data[8] * inB.m_data[3] + inA.m_data[9] * inB.m_data[7] + inA.m_data[10] * inB.m_data[11] + inA.m_data[11] * inB.m_data[15];
 		
-		out.mafData[8] = inA.mafData[8] * inB.mafData[0] + inA.mafData[9] * inB.mafData[4] + inA.mafData[10] * inB.mafData[8] + inA.mafData[11] * inB.mafData[12];
-		out.mafData[9] = inA.mafData[8] * inB.mafData[1] + inA.mafData[9] * inB.mafData[5] + inA.mafData[10] * inB.mafData[9] + inA.mafData[11] * inB.mafData[13];
-		out.mafData[10] = inA.mafData[8] * inB.mafData[2] + inA.mafData[9] * inB.mafData[6] + inA.mafData[10] * inB.mafData[10] + inA.mafData[11] * inB.mafData[14];
-		out.mafData[11] = inA.mafData[8] * inB.mafData[3] + inA.mafData[9] * inB.mafData[7] + inA.mafData[10] * inB.mafData[11] + inA.mafData[11] * inB.mafData[15];
+		double d0 = inA.m_data[12] * inB.m_data[0] + inA.m_data[13] * inB.m_data[4] + inA.m_data[14] * inB.m_data[8] + inA.m_data[15] * inB.m_data[12];
+		double d1 = inA.m_data[12] * inB.m_data[1] + inA.m_data[13] * inB.m_data[5] + inA.m_data[14] * inB.m_data[9] + inA.m_data[15] * inB.m_data[13];
+		double d2 = inA.m_data[12] * inB.m_data[2] + inA.m_data[13] * inB.m_data[6] + inA.m_data[14] * inB.m_data[10] + inA.m_data[15] * inB.m_data[14];
+		double d3 = inA.m_data[12] * inB.m_data[3] + inA.m_data[13] * inB.m_data[7] + inA.m_data[14] * inB.m_data[11] + inA.m_data[15] * inB.m_data[15];
 		
-		out.mafData[12] = inA.mafData[12] * inB.mafData[0] + inA.mafData[13] * inB.mafData[4] + inA.mafData[14] * inB.mafData[8] + inA.mafData[15] * inB.mafData[12];
-		out.mafData[13] = inA.mafData[12] * inB.mafData[1] + inA.mafData[13] * inB.mafData[5] + inA.mafData[14] * inB.mafData[9] + inA.mafData[15] * inB.mafData[13];
-		out.mafData[14] = inA.mafData[12] * inB.mafData[2] + inA.mafData[13] * inB.mafData[6] + inA.mafData[14] * inB.mafData[10] + inA.mafData[15] * inB.mafData[14];
-		out.mafData[15] = inA.mafData[12] * inB.mafData[3] + inA.mafData[13] * inB.mafData[7] + inA.mafData[14] * inB.mafData[11] + inA.mafData[15] * inB.mafData[15];
-		
-		return out;
+		return new Matrix4(a0, a1, a2, a3,
+				b0, b1, b2, b3,
+				c0, c1, c2, c3,
+				d0, d1, d2, d3);
 	}
-	//-----------------------------------------------------
-	/// to String
-	///
-	/// @return the matrix in string form.
-	//-----------------------------------------------------
-	public String toString()
+	/**
+	 * Returns a new matrix that is the inverse of the given matrix.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_mat - The matrix to get the inverse of.
+	 * 
+	 * @return The inverse matrix.
+	 */
+	public static Matrix4 inverse(Matrix4 in_mat)
 	{
-		String output = new String();
-		output += "[\t" + mafData[0] + "\t" + mafData[1] + "\t" + mafData[2] + "\t" + mafData[3] + "\t]\n";
-		output += "[\t" + mafData[4] + "\t" + mafData[5] + "\t" + mafData[6] + "\t" + mafData[7] + "\t]\n";
-		output += "[\t" + mafData[8] + "\t" + mafData[9] + "\t" + mafData[10] + "\t" + mafData[11] + "\t]\n";
-		output += "[\t" + mafData[12] + "\t" + mafData[13] + "\t" + mafData[14] + "\t" + mafData[15] + "\t]\n";
-		return output;
-	}
-	//-----------------------------------------------------
-	/// Swap Y and Z
-	///
-	/// @return the matrix in string form.
-	//-----------------------------------------------------
-	public Matrix4 swapYandZ()
-	{
-		Matrix4 output = new Matrix4();
+		double m00 = in_mat.m_data[0]; double m01 = in_mat.m_data[1]; double m02 = in_mat.m_data[2]; double m03 = in_mat.m_data[3];
+		double m10 = in_mat.m_data[4]; double m11 = in_mat.m_data[5]; double m12 = in_mat.m_data[6]; double m13 = in_mat.m_data[7];
+		double m20 = in_mat.m_data[8]; double m21 = in_mat.m_data[9]; double m22 = in_mat.m_data[10]; double m23 = in_mat.m_data[11];
+		double m30 = in_mat.m_data[12]; double m31 = in_mat.m_data[13]; double m32 = in_mat.m_data[14]; double m33 = in_mat.m_data[15];
 		
-		output.mafData[0] = mafData[0]; output.mafData[1] = mafData[2]; output.mafData[2] = mafData[1]; output.mafData[3] = mafData[3];
-		output.mafData[4] = mafData[8]; output.mafData[5] = mafData[10];output.mafData[6] = mafData[9]; output.mafData[7] = mafData[11];
-		output.mafData[8] = mafData[4]; output.mafData[9] = mafData[6]; output.mafData[10]= mafData[5]; output.mafData[11]= mafData[7];
-		output.mafData[12]= mafData[12];output.mafData[13]= mafData[14];output.mafData[14]= mafData[13];output.mafData[15]= mafData[15];
+		double v0 = m20 * m31 - m21 * m30;
+		double v1 = m20 * m32 - m22 * m30;
+		double v2 = m20 * m33 - m23 * m30;
+		double v3 = m21 * m32 - m22 * m31;
+		double v4 = m21 * m33 - m23 * m31;
+		double v5 = m22 * m33 - m23 * m32;
 		
-		return output;
-	}
-	//-----------------------------------------------------
-	/// to String
-	///
-	/// @param the translation
-	/// @param the scale.
-	/// @param the orientation.
-	/// @return the transform.
-	//-----------------------------------------------------
-	public static Matrix4 composeTransforms(Vector3 inTranslate, Vector3 inScale, Quaternion inOrientation)
-	{
-		Matrix4 o = new Matrix4();
-		Matrix4 rot = inOrientation.toMatrix();
+		double t00 = + (v5 * m11 - v4 * m12 + v3 * m13);
+		double t10 = - (v5 * m10 - v2 * m12 + v1 * m13);
+		double t20 = + (v4 * m10 - v2 * m11 + v0 * m13);
+		double t30 = - (v3 * m10 - v1 * m11 + v0 * m12);
 		
-		// Set up final matrix with scale, rotation and translation
-		o.mafData[0] = inScale.x * rot.mafData[0]; 				o.mafData[1] = inScale.x * rot.mafData[1]; 		o.mafData[2] = inScale.x * rot.mafData[2];	 	o.mafData[3] = 0;
-		o.mafData[4] = inScale.y * rot.mafData[4];				o.mafData[5] = inScale.y * rot.mafData[5]; 		o.mafData[6] = inScale.y * rot.mafData[6];	 	o.mafData[7] = 0;
-		o.mafData[8] = inScale.z * rot.mafData[8]; 				o.mafData[9] = inScale.z * rot.mafData[9]; 		o.mafData[10] = inScale.z * rot.mafData[10]; 	o.mafData[11] = 0;
-		o.mafData[12] = inTranslate.x; 							o.mafData[13] = inTranslate.y; 					o.mafData[14] = inTranslate.z; 					o.mafData[15] = 1;
-	
-		return o;
-	}
-	//-----------------------------------------------------
-	/// Inverse
-	///
-	/// @return the inverse of this matrix.
-	//-----------------------------------------------------
-	public Matrix4 inverse()
-	{
-		float m00 = mafData[0],  m01 = mafData[1],  m02 = mafData[2],  m03 = mafData[3];
-		float m10 = mafData[4],  m11 = mafData[5],  m12 = mafData[6],  m13 = mafData[7];
-		float m20 = mafData[8],  m21 = mafData[9],  m22 = mafData[10], m23 = mafData[11];
-		float m30 = mafData[12], m31 = mafData[13], m32 = mafData[14], m33 = mafData[15];
+		double invDet = 1.0 / (t00 * m00 + t10 * m01 + t20 * m02 + t30 * m03);
 		
-		float v0 = m20 * m31 - m21 * m30;
-		float v1 = m20 * m32 - m22 * m30;
-		float v2 = m20 * m33 - m23 * m30;
-		float v3 = m21 * m32 - m22 * m31;
-		float v4 = m21 * m33 - m23 * m31;
-		float v5 = m22 * m33 - m23 * m32;
+		double d00 = t00 * invDet;
+		double d10 = t10 * invDet;
+		double d20 = t20 * invDet;
+		double d30 = t30 * invDet;
 		
-		float t00 = + (v5 * m11 - v4 * m12 + v3 * m13);
-		float t10 = - (v5 * m10 - v2 * m12 + v1 * m13);
-		float t20 = + (v4 * m10 - v2 * m11 + v0 * m13);
-		float t30 = - (v3 * m10 - v1 * m11 + v0 * m12);
-		
-		float invDet = 1 / (t00 * m00 + t10 * m01 + t20 * m02 + t30 * m03);
-		
-		float d00 = t00 * invDet;
-		float d10 = t10 * invDet;
-		float d20 = t20 * invDet;
-		float d30 = t30 * invDet;
-		
-		float d01 = - (v5 * m01 - v4 * m02 + v3 * m03) * invDet;
-		float d11 = + (v5 * m00 - v2 * m02 + v1 * m03) * invDet;
-		float d21 = - (v4 * m00 - v2 * m01 + v0 * m03) * invDet;
-		float d31 = + (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+		double d01 = -(v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+		double d11 =  (v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+		double d21 = -(v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+		double d31 =  (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
 		
 		v0 = m10 * m31 - m11 * m30;
 		v1 = m10 * m32 - m12 * m30;
@@ -526,10 +270,10 @@ public class Matrix4
 		v4 = m11 * m33 - m13 * m31;
 		v5 = m12 * m33 - m13 * m32;
 		
-		float d02 = + (v5 * m01 - v4 * m02 + v3 * m03) * invDet;
-		float d12 = - (v5 * m00 - v2 * m02 + v1 * m03) * invDet;
-		float d22 = + (v4 * m00 - v2 * m01 + v0 * m03) * invDet;
-		float d32 = - (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+		double d02 =  (v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+		double d12 = -(v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+		double d22 =  (v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+		double d32 = -(v3 * m00 - v1 * m01 + v0 * m02) * invDet;
 		
 		v0 = m21 * m10 - m20 * m11;
 		v1 = m22 * m10 - m20 * m12;
@@ -538,42 +282,182 @@ public class Matrix4
 		v4 = m23 * m11 - m21 * m13;
 		v5 = m23 * m12 - m22 * m13;
 		
-		float d03 = - (v5 * m01 - v4 * m02 + v3 * m03) * invDet;
-		float d13 = + (v5 * m00 - v2 * m02 + v1 * m03) * invDet;
-		float d23 = - (v4 * m00 - v2 * m01 + v0 * m03) * invDet;
-		float d33 = + (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
+		double d03 = -(v5 * m01 - v4 * m02 + v3 * m03) * invDet;
+		double d13 =  (v5 * m00 - v2 * m02 + v1 * m03) * invDet;
+		double d23 = -(v4 * m00 - v2 * m01 + v0 * m03) * invDet;
+		double d33 =  (v3 * m00 - v1 * m01 + v0 * m02) * invDet;
 		
-		return new Matrix4(
-					   d00, d01, d02, d03,
-					   d10, d11, d12, d13,
-					   d20, d21, d22, d23,
-					   d30, d31, d32, d33
-					   );
+		return new Matrix4(d00, d01, d02, d03,
+			d10, d11, d12, d13,
+			d20, d21, d22, d23,
+			d30, d31, d32, d33);
 	}
-	//-----------------------------------------------------
-	/// DecomposeTransforms
-	///
-	/// This breaks a transform up into its translation,
-	/// scale and orienation components.
-	///
-	/// @param OUT: The translation.
-	/// @param OUT: The scale.
-	/// @param OUT: The orientation.
-	//-----------------------------------------------------
-	public void decomposeTransforms(Vector3 outTranslate, Vector3 outScale, Quaternion outOrientation)
+	/**
+	 * Returns a copy of the given matrix with the Y and Z components swapped.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_mat - The matrix to swap the components of.
+	 * 
+	 * @return The new matrix with swapped Y and Z.
+	 */
+	public static Matrix4 swapYandZ(Matrix4 in_mat)
+	{
+		return new Matrix4(	in_mat.m_data[0], in_mat.m_data[2], in_mat.m_data[1], in_mat.m_data[3],
+			in_mat.m_data[8], in_mat.m_data[10], in_mat.m_data[9], in_mat.m_data[11],
+			in_mat.m_data[4], in_mat.m_data[6], in_mat.m_data[5], in_mat.m_data[7],
+			in_mat.m_data[12], in_mat.m_data[14], in_mat.m_data[13], in_mat.m_data[15]);
+	}
+	/**
+	 * Constructor. Creates the matrix with the given components. After construction this
+	 * is immutable.
+	 * 
+	 * @param in_a0 - The component at row 1, column 1.
+	 * @param in_a1 - The component at row 1, column 2.
+	 * @param in_a2 - The component at row 1, column 3.
+	 * @param in_a3 - The component at row 1, column 4.
+	 * @param in_b0 - The component at row 2, column 1.
+	 * @param in_b1 - The component at row 2, column 2.
+	 * @param in_b2 - The component at row 2, column 3.
+	 * @param in_b3 - The component at row 2, column 4.
+	 * @param in_c0 - The component at row 3, column 1.
+	 * @param in_c1 - The component at row 3, column 2.
+	 * @param in_c2 - The component at row 3, column 3.
+	 * @param in_c3 - The component at row 3, column 4.
+	 * @param in_d0 - The component at row 4, column 1.
+	 * @param in_d1 - The component at row 4, column 2.
+	 * @param in_d2 - The component at row 4, column 3.
+	 * @param in_d3 - The component at row 4, column 4.
+	 */
+	public Matrix4(double in_a0, double in_a1, double in_a2, double in_a3,
+			double in_b0, double in_b1, double in_b2, double in_b3,
+			double in_c0, double in_c1, double in_c2, double in_c3,
+			double in_d0, double in_d1, double in_d2, double in_d3)
+	{
+		m_data = new double[16];
+		m_data[0] = in_a0; 	m_data[1] = in_a1; 	m_data[2] = in_a2; 	m_data[3] = in_a3;
+		m_data[4] = in_b0; 	m_data[5] = in_b1; 	m_data[6] = in_b2; 	m_data[7] = in_b3;
+		m_data[8] = in_c0; 	m_data[9] = in_c1; 	m_data[10] = in_c2; m_data[11] = in_c3;
+		m_data[12] = in_d0; m_data[13] = in_d1; m_data[14] = in_d2; m_data[15] = in_d3;
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @param in_column - The column. 
+	 * @param in_row - The row.
+	 * 
+	 * @return The value at the given column and row.
+	 */
+	public double get(int in_column, int in_row)
+	{
+		return m_data[in_column + in_row * 4];
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @param in_index - The index into the 
+	 * 
+	 * @return The value at the given index. Values are stored in row-major 
+	 * ordering.
+	 */
+	public double get(int in_index)
+	{
+		return m_data[in_index];
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return Returns the rotation and euler angles.
+	 */
+	public Vector3 getEulerAngles()
+	{
+		// The following algorithm has been taken from "Computing Euler angles from a rotation matrix" by Gregory G. Slabaugh. 
+		// The original document can be found at: http://www.gregslabaugh.name/publications/euler.pdf
+		// Note: While the algorithm can return two sets of possible  answers, we are only returning 1 for simplicities sake.
+		
+		double x = 0.0;
+		double y = 0.0;
+		double z = 0.0;
+		if (m_data[8] != 1.0f && m_data[8] != -1.0f)
+		{
+			//only take one set of angles.
+			y = -Math.asin(m_data[8]); 
+			x = Math.atan2(m_data[9] / Math.cos(y), m_data[9] / Math.cos(y));
+			z = Math.atan2(m_data[4] / Math.cos(y), m_data[0] / Math.cos(y));
+		}
+		else
+		{
+			z = 0.0f;
+			if (m_data[8] == -1)
+			{
+				y = Math.PI / 2.0f;
+				x = z + Math.atan2(m_data[1], m_data[2]);
+			}
+			else
+			{
+				y = -Math.PI / 2.0f;
+				x = -z + Math.atan2(-m_data[1], -m_data[2]);
+			}
+		}
+		
+		return new Vector3(x, y ,z);
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return Whether or not this matrix has a scaling component.
+	 */
+	public boolean containsScale()
+	{
+		Matrix4 theCopy = new Matrix4(m_data[0], m_data[1], m_data[2], m_data[3], 
+				m_data[4], m_data[5], m_data[6], m_data[6], 
+				m_data[8], m_data[9], m_data[10], m_data[11], 
+				0.0, 0.0, 0.0, m_data[15]);
+		
+		Vector3 upRotated = Vector3.multiply(new Vector3(0.0f, 1.0f, 0.0f), theCopy);
+		Vector3 rightRotated = Vector3.multiply(new Vector3(1.0f, 0.0f, 0.0f), theCopy);
+		Vector3 forwardRotated = Vector3.multiply(new Vector3(0.0f, 0.0f, 1.0f), theCopy);
+		
+		final double TOLERANCE = 0.00001;
+		if (upRotated.getLength() < 1.0 - TOLERANCE || upRotated.getLength() > 1.0 + TOLERANCE ||
+			rightRotated.getLength() < 1.0 - TOLERANCE || rightRotated.getLength() > 1.0 + TOLERANCE ||
+			forwardRotated.getLength() < 1.0 - TOLERANCE || forwardRotated.getLength() > 1.0 + TOLERANCE)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The translation part of the transform described by the matrix.
+	 */
+	public Vector3 getTranslation()
+	{
+		return new Vector3(m_data[12], m_data[13], m_data[14]);
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return A string representation of the matrix.
+	 */
+	public String toString()
+	{
+		return  "" + m_data[0] + ", " + m_data[1] + ", " + m_data[2] + ", " + m_data[3] + ", " + 
+			m_data[4] + ", " + m_data[5] + ", " + m_data[6] + ", " + m_data[7] + ", " + 
+			m_data[8] + ", " + m_data[9] + ", " + m_data[10] + ", " + m_data[11] + ", " +
+			m_data[12] + ", " + m_data[13] + ", " + m_data[14] + ", " + m_data[15];
+	}
+	/**
+	 * Returns the transform decomposed into its translation, scale and orientation.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @return A 3-tuple containg the transform, scale and orientation of the transform.
+	 */
+	public Tuple3<Vector3, Vector3, Quaternion> decomposeTransforms()
     {
-		Matrix4 mat3x3 = new Matrix4();
-		mat3x3.mafData[0] = mafData[0]; 	mat3x3.mafData[1] = mafData[1]; 	mat3x3.mafData[2] = mafData[2]; 	mat3x3.mafData[3] = 0;
-		mat3x3.mafData[4] = mafData[4]; 	mat3x3.mafData[5] = mafData[5]; 	mat3x3.mafData[6] = mafData[6]; 	mat3x3.mafData[7] = 0;
-		mat3x3.mafData[8] = mafData[8]; 	mat3x3.mafData[9] = mafData[9]; 	mat3x3.mafData[10] = mafData[10]; 	mat3x3.mafData[11] = 0;
-		mat3x3.mafData[12] = 0; 			mat3x3.mafData[13] =  0; 			mat3x3.mafData[14] = 0; 			mat3x3.mafData[15] = 0;
-		
-		outTranslate.x = mafData[12];
-		outTranslate.y = mafData[13]; 
-		outTranslate.z = mafData[14];
-		
-		Matrix4 kQ = new Matrix4();
-						  
 		// Factor M = QR = QDU where Q is orthogonal, D is diagonal,
 		// and U is upper triangular with ones on its diagonal.  Algorithm uses
 		// Gram-Schmidt orthogonalization (the QR algorithm).
@@ -602,64 +486,75 @@ public class Matrix4
 		// U stores the entries U[0] = u01, U[1] = u02, U[2] = u12
 		
 		// build orthogonal matrix Q
-		float fInvLength = 1.0f / (float)Math.sqrt(mafData[0] * mafData[0] + mafData[1] * mafData[1] + mafData[2] * mafData[2]);
-		kQ.mafData[0] = mafData[0] * fInvLength;
-		kQ.mafData[1] = mafData[1] * fInvLength;
-		kQ.mafData[2] = mafData[2] * fInvLength;
+		double invLength = 1.0 / Math.sqrt(m_data[0] * m_data[0] + m_data[1] * m_data[1] + m_data[2] * m_data[2]);
+		double qA0 = m_data[0] * invLength;
+		double qA1 = m_data[1] * invLength;
+		double qA2 = m_data[2] * invLength;
 		
-		float fDot = kQ.mafData[0]*mafData[4] + kQ.mafData[1]*mafData[5] + kQ.mafData[2]*mafData[6];
-		kQ.mafData[4] = mafData[4]-fDot*kQ.mafData[0];
-		kQ.mafData[5] = mafData[5]-fDot*kQ.mafData[1];
-		kQ.mafData[6] = mafData[6]-fDot*kQ.mafData[2];
-		fInvLength = 1.0f/(float)Math.sqrt(kQ.mafData[4]*kQ.mafData[4] + kQ.mafData[5]*kQ.mafData[5] + kQ.mafData[6]*kQ.mafData[6]);
-		kQ.mafData[4] *= fInvLength;
-		kQ.mafData[5] *= fInvLength;
-		kQ.mafData[6] *= fInvLength;
+		double fDot = qA0 * m_data[4] + qA1 * m_data[5] + qA2 * m_data[6];
+		double qB0 = m_data[4] - fDot * qA0;
+		double qB1 = m_data[5] - fDot * qA1;
+		double qB2 = m_data[6] - fDot * qA2;
+		invLength = 1.0 / Math.sqrt(qB0 * qB0 + qB1 * qB1 + qB2 * qB2);
+		qB0 *= invLength;
+		qB1 *= invLength;
+		qB2 *= invLength;
 		
-		fDot = kQ.mafData[0]*mafData[8] + kQ.mafData[1]*mafData[9] + kQ.mafData[2]*mafData[10];
-		kQ.mafData[8] = mafData[8]-fDot*kQ.mafData[0];
-		kQ.mafData[9] = mafData[9]-fDot*kQ.mafData[1];
-		kQ.mafData[10] = mafData[10]-fDot*kQ.mafData[2];
-		fDot = kQ.mafData[4]*mafData[8] + kQ.mafData[5]*mafData[9] + kQ.mafData[6]*mafData[10];
-		kQ.mafData[8] -= fDot*kQ.mafData[4];
-		kQ.mafData[9] -= fDot*kQ.mafData[5];
-		kQ.mafData[10] -= fDot*kQ.mafData[6];
-		fInvLength = 1.0f/(float)Math.sqrt(kQ.mafData[8]*kQ.mafData[8] + kQ.mafData[9]*kQ.mafData[9] + kQ.mafData[10]*kQ.mafData[10]);
-		kQ.mafData[8] *= fInvLength;
-		kQ.mafData[9] *= fInvLength;
-		kQ.mafData[10] *= fInvLength;
+		fDot = qA0 * m_data[8] + qA1 * m_data[9] + qA2 * m_data[10];
+		double qC0 = m_data[8] - fDot * qA0;
+		double qC1 = m_data[9] - fDot * qA1;
+		double qC2 = m_data[10] - fDot * qA2;
+		fDot = qB0 * m_data[8] + qB1 * m_data[9] + qB2 * m_data[10];
+		qC0 -= fDot * qB0;
+		qC1 -= fDot * qB1;
+		qC2 -= fDot * qB2;
+		invLength = 1.0 / Math.sqrt(qC0 * qC0 + qC1 * qC1 + qC2 * qC2);
+		qC0 *= invLength;
+		qC1 *= invLength;
+		qC2 *= invLength;
 		
-		// guarantee that orthogonal matrix has determinant 1 (no reflections)
-		float fDet = 	kQ.mafData[0]*kQ.mafData[5]*kQ.mafData[10] + kQ.mafData[4]*kQ.mafData[9]*kQ.mafData[2] +
-        				kQ.mafData[8]*kQ.mafData[1]*kQ.mafData[6] - kQ.mafData[8]*kQ.mafData[5]*kQ.mafData[2] -
-        				kQ.mafData[4]*kQ.mafData[1]*kQ.mafData[10] - kQ.mafData[0]*kQ.mafData[9]*kQ.mafData[6];
+		//guarantee that orthogonal matrix has determinant 1 (no reflections)
+		double fDet = qA0 * qB1 * qC2 + qB0 * qC1 * qA2 +
+				qC0 * qA1 * qB2 - qC0 * qB1 * qA2 -
+				qB0 * qA1 * qC2 - qA0 * qC1 * qB2;
 		
-		if ( fDet < 0.0 )
+		Matrix4 q;
+		if (fDet >= 0.0)
 		{
-			for (int i = 0; i < 16; i++)
-				kQ.mafData[i] = -kQ.mafData[i];
+			q = new Matrix4(qA0, qA1, qA2, 0.0,
+					qB0, qB1, qB2, 0.0,
+					qC0, qC1, qC2, 0.0,
+					0.0, 0.0, 0.0, 1.0);
+		}
+		else
+		{
+			q = new Matrix4(-qA0, -qA1, -qA2, 0.0,
+					-qB0, -qB1, -qB2, 0.0,
+					-qC0, -qC1, -qC2, 0.0,
+					0.0, 0.0, 0.0, -1.0);
 		}
 		
-		// build "right" matrix R
-		Matrix4 kR = new Matrix4();
-		kR.mafData[0] = kQ.mafData[0]*mafData[0] + kQ.mafData[1]*mafData[1] + kQ.mafData[2]*mafData[2];
-		kR.mafData[4] = kQ.mafData[0]*mafData[4] + kQ.mafData[1]*mafData[5] + kQ.mafData[2]*mafData[6];
-		kR.mafData[5] = kQ.mafData[4]*mafData[4] + kQ.mafData[5]*mafData[5] + kQ.mafData[6]*mafData[6];
-		kR.mafData[8] = kQ.mafData[0]*mafData[8] + kQ.mafData[1]*mafData[9] + kQ.mafData[2]*mafData[10];
-		kR.mafData[9] = kQ.mafData[4]*mafData[8] + kQ.mafData[5]*mafData[9] + kQ.mafData[6]*mafData[10];
-		kR.mafData[10] = kQ.mafData[8]*mafData[8] + kQ.mafData[9]*mafData[9] + kQ.mafData[10]*mafData[10];
+		//build "right" matrix R
+		double rA0 = q.m_data[0] * m_data[0] + q.m_data[1] * m_data[1] + q.m_data[2] * m_data[2];
+		double rB0 = q.m_data[0] * m_data[4] + q.m_data[1] * m_data[5] + q.m_data[2] * m_data[6];
+		double rB1 = q.m_data[4] * m_data[4] + q.m_data[5] * m_data[5] + q.m_data[6] * m_data[6];
+		double rC0 = q.m_data[0] * m_data[8] + q.m_data[1] * m_data[9] + q.m_data[2] * m_data[10];
+		double rC1 = q.m_data[4] * m_data[8] + q.m_data[5] * m_data[9] + q.m_data[6] * m_data[10];
+		double rC2 = q.m_data[8] * m_data[8] + q.m_data[9] * m_data[9] + q.m_data[10] * m_data[10];
+		Matrix4 r = new Matrix4(rA0, 0.0, 0.0, 0.0,
+				rB0, rB1, 0.0, 0.0,
+				rC0, rC1, rC2, 0.0,
+				0.0, 0.0, 0.0, 1.0);
 		
-		// the scaling component
-		outScale.x = kR.mafData[0];
-		outScale.y = kR.mafData[5];
-		outScale.z = kR.mafData[10];
+		//get the translation
+		Vector3 translation = new Vector3(m_data[12], m_data[13], m_data[14]);
 		
-		//shearing component
-		//float fInvScaleX = 1.0f/outScale.x;
-		//outShear.x = kR.mafData[4]*fInvScaleX;
-		//outShear.y = kR.mafData[8]*fInvScaleX;
-		//outShear.z = kR.mafData[9]/outScale.y;
+		//the scaling component
+		Vector3 scale = new Vector3(r.m_data[0], r.m_data[5], r.m_data[10]);
+	
+		//get the orientation
+		Quaternion orientation = new Quaternion(q);
 		
-		outOrientation.set(Quaternion.createFromMatrix(kQ));
+		return new Tuple3<Vector3, Vector3, Quaternion>(translation, scale, orientation);
 	}
 }

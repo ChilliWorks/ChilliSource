@@ -35,6 +35,7 @@ import com.chilliworks.chillisource.colladatocsanim.csanim.*;
 import com.chilliworks.chillisource.toolutils.Logging;
 import com.chilliworks.chillisource.toolutils.Matrix4;
 import com.chilliworks.chillisource.toolutils.Quaternion;
+import com.chilliworks.chillisource.toolutils.Tuple3;
 import com.chilliworks.chillisource.toolutils.Vector3;
 
 public class CSAnimConverter 
@@ -192,12 +193,11 @@ public class CSAnimConverter
 		for (int i = 0; i < inTransformSource.mFloatArray.mdwCount / 16; i++)
 		{
 			//create new matrix from the float array
-			Matrix4 mat = new Matrix4();
-			mat.mafData[0] = m[i*16 + 0];		mat.mafData[1] = m[i*16 + 4];		mat.mafData[2] = m[i*16 + 8];		mat.mafData[3] = m[i*16 + 12];
-			mat.mafData[4] = m[i*16 + 1];		mat.mafData[5] = m[i*16 + 5];		mat.mafData[6] = m[i*16 + 9];		mat.mafData[7] = m[i*16 + 13];
-			mat.mafData[8] = m[i*16 + 2];		mat.mafData[9] = m[i*16 + 6];		mat.mafData[10] = m[i*16 + 10];		mat.mafData[11] = m[i*16 + 14];
-			mat.mafData[12] = m[i*16 + 3];		mat.mafData[13] = m[i*16 + 7];		mat.mafData[14] = m[i*16 + 11];		mat.mafData[15] = m[i*16 + 15];
-			
+			Matrix4 mat = new Matrix4(m[i*16 + 0], m[i*16 + 4], m[i*16 + 8], m[i*16 + 12],
+				m[i*16 + 1], m[i*16 + 5], m[i*16 + 9], m[i*16 + 13],
+				m[i*16 + 2], m[i*16 + 6], m[i*16 + 10], m[i*16 + 14],
+				m[i*16 + 3], m[i*16 + 7], m[i*16 + 11], m[i*16 + 15]);
+
 			//add matrix to animation
 			anim.mTransformList.add(mat);
 		}
@@ -264,21 +264,17 @@ public class CSAnimConverter
 				
 				for (int j = 0; j < mAnimations.length; j++)
 				{
-					Matrix4 transform = new Matrix4();
+					Matrix4 transform;
 					if (mAnimations[j].mTransformList.size() > 0)
 						transform = mAnimations[j].mTransformList.get(i);
 					else
 						transform = inAnim.mSkeleton.mNodeList.get(j).mInitialPoseMatrix;
 					
-					Vector3 translation = new Vector3();
-					Vector3 scale = new Vector3();
-					Quaternion rot = new Quaternion();
+					Tuple3<Vector3, Vector3, Quaternion> decomposedTransform = transform.decomposeTransforms();
 					
-					transform.decomposeTransforms(translation, scale, rot);
-					
-					frame.mNodeTranslations.add(translation);
-					frame.mNodeOrienations.add(rot.normalise());
-					frame.mNodeScalings.add(scale);
+					frame.mNodeTranslations.add(decomposedTransform.getFirst());
+					frame.mNodeOrienations.add(Quaternion.normalise(decomposedTransform.getThird()));
+					frame.mNodeScalings.add(decomposedTransform.getSecond());
 				}
 				
 				inAnim.mFrames.add(frame);

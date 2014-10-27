@@ -28,187 +28,221 @@
 
 package com.chilliworks.chillisource.toolutils;
 
-public class Quaternion 
+/**
+ * A basic Quaternion math class. This is immutable after construction so it can safely
+ * be passed into methods.
+ * 
+ * @author Ian Copland
+ */
+public final class Quaternion 
 {
-	//------------------------------------------------------------
-	/// Public member data
-	//------------------------------------------------------------
-	public float x;
-	public float y;
-	public float z;
-	public float w;
-	//------------------------------------------------------------
-	/// Constructor
-	//------------------------------------------------------------
-	public Quaternion()
-	{
-		x = y = z = w = 0.0f;
-	}
-	//------------------------------------------------------------
-	/// Set
-	///
-	/// Sets this quaternion to the value of the given quaternion.
-	///
-	/// @param the quaternion to copy.
-	//------------------------------------------------------------
-	public void set(Quaternion inQuat)
-	{
-		x = inQuat.x;
-		y = inQuat.y;
-		z = inQuat.z;
-		w = inQuat.w;
-	}
-	//------------------------------------------------------------
-	/// To Matrix
-	///
-	/// @return the matrix equivalent of this quaternion.
-	//------------------------------------------------------------
-	public Matrix4 toMatrix()
-	{
-		float x2 = x * x;
-		float y2 = y * y;
-		float z2 = z * z;
-		float xy = x * y;
-		float xz = x * z;
-		float yz = y * z;
-		float wx = w * x;
-		float wy = w * y;
-		float wz = w * z;
-		
-		Matrix4 output = new Matrix4();
-		output.mafData[0] = 1.0f - 2.0f * (y2 + z2);	output.mafData[1] = 2.0f * (xy + wz);			output.mafData[2] = 2.0f * (xz - wy);			output.mafData[3] = 0.0f;
-		output.mafData[4] = 2.0f * (xy - wz);			output.mafData[5] = 1.0f - 2.0f * (x2 + z2);	output.mafData[6] = 2.0f * (yz + wx);			output.mafData[7] = 0.0f;
-		output.mafData[8] = 2.0f * (xz + wy);			output.mafData[9] = 2.0f * (yz - wx);			output.mafData[10] = 1.0f - 2.0f * (x2 + y2);	output.mafData[11] = 0.0f;
-		output.mafData[12] = 0.0f;						output.mafData[13] = 0.0f;						output.mafData[14] = 0.0f;						output.mafData[15] = 1.0f;
-		
-		return output;
-	}
-	//------------------------------------------------------------
-	/// Get Axis
-	///
-	/// @return the axis
-	//------------------------------------------------------------
-	public Vector3 getAxis()
-	{
-		float fSqrLength = (x * x + y * y + z * z);
+	public static final Quaternion IDENTITY = new Quaternion(0.0, 0.0, 0.0, 1.0);
+	
+	private double m_x;
+	private double m_y;
+	private double m_z;
+	private double m_w;
 
-		if (fSqrLength > 0.0f)
-		{
-			float fInvLength = 1.0f / (float)Math.sqrt(fSqrLength);
-			return new Vector3(x * fInvLength, y * fInvLength, z * fInvLength);
-		}
-
-		return new Vector3(1.0f, 0.0f, 0.0f);
-	}
-	//------------------------------------------------------------
-	/// Get Angle
-	///
-	/// @return the angle.
-	//------------------------------------------------------------
-	public float getAngle()
+	/**
+	 * Returns a normalised copy of the given quaternion.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param The Quaternion to copy.
+	 * 
+	 * @return The normalised copy.
+	 */
+	public static Quaternion normalise(Quaternion in_quaternion)
 	{
-		float fSqrLength = (x * x + y * y + z * z);
-
-		if (fSqrLength > 0.0f)
-		{
-			return 2.0f * (float)Math.acos(w);
-		} 
-
-		return 0.0f;
+		double s = 1.0 / Math.sqrt(in_quaternion.m_w * in_quaternion.m_w + in_quaternion.m_x * in_quaternion.m_x + in_quaternion.m_y * in_quaternion.m_y + in_quaternion.m_z * in_quaternion.m_z);
+		return new Quaternion(in_quaternion.m_x * s, in_quaternion.m_y * s, in_quaternion.m_z * s, in_quaternion.m_w * s);
 	}
-	//------------------------------------------------------------
-	/// Normalise
-	///
-	/// @return a normalised version of this quaternion
-	//------------------------------------------------------------
-	public Quaternion normalise()
+	/**
+	 * Constructor. Creates a new quaternion with the given components. After 
+	 * construction the quaternion is immutable.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_x - The x component.
+	 * @param in_y - The y component.
+	 * @param in_z - The z component.
+	 * @param in_w - The w component.
+	 */
+	public Quaternion(double in_x, double in_y, double in_z, double in_w)
 	{
-		Quaternion output = new Quaternion();
-		float s = 1.0f / (float)Math.sqrt(w * w + x * x + y * y + z * z);
-		output.w = w * s;
-		output.x = x * s;
-		output.y = y * s;
-		output.z = z * s;
-
-		return output;
+		m_x = in_x;
+		m_y = in_y;
+		m_z = in_z;
+		m_w = in_w;
 	}
-	//------------------------------------------------------------
-	/// Create From Matrix
-	///
-	/// Converts a rotation matrix into a quaternion.
-	///
-	/// @param the rotation matrix.
-	/// @return the quaterion.
-	//------------------------------------------------------------
-	public static Quaternion createFromMatrix(Matrix4 inMat)
+	/**
+	 * Constructor. Creates a quaternion which describes the same rotation as
+	 * the given rotation. Matrix. After construction the quaternion is 
+	 * immutable.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_matrix - The rotation matrix.
+	 */
+	public Quaternion(Matrix4 in_matrix)
 	{
 		// Algorithm in Ken Shoemake's article in 1987 SIGGRAPH course notes
 		// article "Quaternion Calculus and Fast Animation".
 		
-		Quaternion newQuat = new Quaternion();
+		double trace = in_matrix.get(0) + in_matrix.get(5) + in_matrix.get(10) + 1.0;
+		double root = 0.0;
 		
-		float fTrace = inMat.mafData[0]+inMat.mafData[5]+inMat.mafData[10] + 1.0f;
-		float fRoot = 0.0f;
-		
-		if (fTrace > 0.0)
+		if (trace > 0.0)
 		{
-			// |w| > 1/2, may as well choose w > 1/2
-			fRoot = (float)Math.sqrt(fTrace);  // 2w
-			newQuat.w = 0.5f*fRoot;
-			fRoot = 0.5f/fRoot;  // 1/(4w)
-			newQuat.x = (inMat.mafData[6]-inMat.mafData[9])*fRoot;
-			newQuat.y = (inMat.mafData[8]-inMat.mafData[2])*fRoot;
-			newQuat.z = (inMat.mafData[1]-inMat.mafData[4])*fRoot;
+			root = Math.sqrt(trace);
+			m_w = 0.5 * root;
+			root = 0.5 / root; 
+			m_x = (in_matrix.get(6) - in_matrix.get(9)) * root;
+			m_y = (in_matrix.get(8) - in_matrix.get(2)) * root;
+			m_z = (in_matrix.get(1) - in_matrix.get(4)) * root;
 		}
 		else
 		{
-			// |w| <= 1/2
-			int[] s_iNext = { 1, 2, 0 };
+			int[] iNext = { 1, 2, 0 };
 			int i = 0;
-			if ( inMat.mafData[5] > inMat.mafData[0] )
+			if (in_matrix.get(5) > in_matrix.get(0))
+			{
 				i = 1;
-			if ( inMat.mafData[10] > inMat.get(i,i) )
+			}
+			
+			if (in_matrix.get(10) > in_matrix.get(i,i))
+			{
 				i = 2;
-			int j = s_iNext[i];
-			int k = s_iNext[j];
+			}
 			
-			fRoot = (float)Math.sqrt(inMat.get(i,i)-inMat.get(j,j)-inMat.get(k,k) + 1.0f);
+			int j = iNext[i];
+			int k = iNext[j];
 			
-			float[] apkQuat = {0.0f, 0.0f, 0.0f};
-			apkQuat[i] = 0.5f*fRoot;
-			fRoot = 0.5f/fRoot;
-			newQuat.w = (inMat.get(k,j)-inMat.get(j,k))*fRoot;
-			apkQuat[j] = (inMat.get(j,i)+inMat.get(i,j))*fRoot;
-			apkQuat[k] = (inMat.get(k,i)+inMat.get(i,k))*fRoot;
+			root = Math.sqrt(in_matrix.get(i,i) - in_matrix.get(j,j) - in_matrix.get(k,k) + 1.0f);
 			
-			newQuat.x = apkQuat[0];
-			newQuat.y = apkQuat[1];
-			newQuat.z = apkQuat[2];
+			double[] apkQuat = {0.0, 0.0, 0.0};
+			apkQuat[i] = 0.5 * root;
+			root = 0.5f/root;
+			
+			m_w = (in_matrix.get(k, j) - in_matrix.get(j, k)) * root;
+			
+			apkQuat[j] = (in_matrix.get(j, i) + in_matrix.get(i, j)) * root;
+			apkQuat[k] = (in_matrix.get(k, i) + in_matrix.get(i, k)) * root;
+			
+			m_x = apkQuat[0];
+			m_y = apkQuat[1];
+			m_z = apkQuat[2];
+		}
+	}
+	/**
+	 * Constructor. Creates a quaternion which describes the same rotation as the
+	 * given axis and angle. After construction the quaternion is immutable.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_axis - The axis.
+	 * @param in_angle - The angle.
+	 */
+	public Quaternion(Vector3 in_axis, double in_angle)
+	{
+		Vector3 norm = Vector3.normalise(in_axis);
+		double halfAngle = in_angle / 2.0;
+		double sinAngle = Math.sin(halfAngle);
+		
+		m_x = norm.getX() * sinAngle;
+		m_y = norm.getY() * sinAngle;
+		m_z = norm.getZ() * sinAngle;
+		m_w = Math.cos(halfAngle);
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The x component of the quaternion.
+	 */
+	public double getX()
+	{
+		return m_x;
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The y component of the quaternion.
+	 */
+	public double getY()
+	{
+		return m_y;
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The z component of the quaternion.
+	 */
+	public double getZ()
+	{
+		return m_z;
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The w component of the quaternion.
+	 */
+	public double getW()
+	{
+		return m_w;
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The axis of rotation described by the Quaternion.
+	 */
+	public Vector3 getAxis()
+	{
+		double sqrLength = (m_x * m_x + m_y * m_y + m_z * m_z);
+
+		if (sqrLength > 0.0f)
+		{
+			double inverseLength = 1.0 / Math.sqrt(sqrLength);
+			return new Vector3(m_x * inverseLength, m_y * inverseLength, m_z * inverseLength);
 		}
 
-		return newQuat;
+		return new Vector3(1.0, 0.0, 0.0); 
 	}
-	//------------------------------------------------------------
-	/// Create From Axis Angle
-	///
-	/// Creates a new quaternion from an axis and an angle.
-	///
-	/// @param the axis.
-	/// @param the angle.
-	/// @return the quaterion.
-	//------------------------------------------------------------
-	public static Quaternion createFromAxisAngle(Vector3 invAxis, float infAngle)
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The angle of rotation described by the Quaternion.
+	 */
+	public double getAngle()
 	{
-		Quaternion output = new Quaternion();
-		Vector3 Vnorm = invAxis.normalise();
+		double sqrLength = (m_x * m_x + m_y * m_y + m_z * m_z);
 
-		float fHalfAngle = infAngle / 2.0f;
-		float fSinAngle = (float)Math.sin(fHalfAngle);
-		output.x = Vnorm.x * fSinAngle;
-		output.y = Vnorm.y * fSinAngle;
-		output.z = Vnorm.z * fSinAngle;
-		output.w = (float)Math.cos(fHalfAngle);
+		if (sqrLength > 0.0f)
+		{
+			return 2.0 * Math.acos(m_w);
+		} 
+
+		return 0.0;
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return A matrix which describes the same rotation as this quaternion.
+	 */
+	public Matrix4 toMatrix()
+	{
+		double x2 = m_x * m_x;
+		double y2 = m_y * m_y;
+		double z2 = m_z * m_z;
+		double xy = m_x * m_y;
+		double xz = m_x * m_z;
+		double yz = m_y * m_z;
+		double wx = m_w * m_x;
+		double wy = m_w * m_y;
+		double wz = m_w * m_z;
 		
-		return output;
+		return new Matrix4(1.0 - 2.0 * (y2 + z2), 2.0 * (xy + wz), 2.0 * (xz - wy), 0.0,
+				2.0 * (xy - wz), 1.0 - 2.0f * (x2 + z2), 2.0 * (yz + wx), 0.0,
+				2.0 * (xz + wy), 2.0 * (yz - wx), 1.0 - 2.0 * (x2 + y2), 0.0,
+				0.0, 0.0, 0.0, 1.0);
 	}
 }

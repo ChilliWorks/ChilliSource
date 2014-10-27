@@ -85,21 +85,22 @@ public class CSModelConverter
 		}
 		
 		//set the model overall hit box
+		
 		for (CSModelMesh mesh: model.mMeshTable.values())
 		{
-			if (mesh.mvMin.x < model.mvMin.x)
-				model.mvMin.x = mesh.mvMin.x;
-			if (mesh.mvMin.y < model.mvMin.y)
-				model.mvMin.y = mesh.mvMin.y;
-			if (mesh.mvMin.z < model.mvMin.z)
-				model.mvMin.z = mesh.mvMin.z;
+			if (mesh.mvMin.getX() < model.mvMin.getX())
+				model.mvMin = new Vector3(mesh.mvMin.getX(), model.mvMin.getY(), model.mvMin.getZ());
+			if (mesh.mvMin.getY() < model.mvMin.getY())
+				model.mvMin = new Vector3(model.mvMin.getX(), mesh.mvMin.getY(), model.mvMin.getZ());
+			if (mesh.mvMin.getZ() < model.mvMin.getZ())
+				model.mvMin = new Vector3(model.mvMin.getX(), model.mvMin.getY(), mesh.mvMin.getZ());
 			
-			if (mesh.mvMax.x > model.mvMax.x)
-				model.mvMax.x = mesh.mvMax.x;
-			if (mesh.mvMax.y > model.mvMax.y)
-				model.mvMax.y = mesh.mvMax.y;
-			if (mesh.mvMax.z > model.mvMax.z)
-				model.mvMax.z = mesh.mvMax.z;
+			if (mesh.mvMax.getX() > model.mvMax.getX())
+				model.mvMax = new Vector3(mesh.mvMax.getX(), model.mvMax.getY(), model.mvMax.getZ());
+			if (mesh.mvMax.getY() > model.mvMax.getY())
+				model.mvMax = new Vector3(model.mvMax.getX(), mesh.mvMax.getY(), model.mvMax.getZ());
+			if (mesh.mvMax.getZ() > model.mvMax.getZ())
+				model.mvMax = new Vector3(model.mvMax.getX(), model.mvMax.getY(), mesh.mvMax.getZ());
 		}
 		
 		return model;
@@ -184,7 +185,15 @@ public class CSModelConverter
 		//calculate the world position of this node.
 		Matrix4 localMat = Matrix4.IDENTITY;
 		if (inNode.mMatrix != null && inNode.mMatrix.maafValues != null && inNode.mMatrix.maafValues != null)
-			localMat = Matrix4.createFrom2DArray(inNode.mMatrix.maafValues);
+		{
+			float[][] matData = inNode.mMatrix.maafValues;
+			
+			localMat = new Matrix4(matData[0][0], matData[1][0], matData[2][0], matData[3][0],
+				matData[0][1], matData[1][1], matData[2][1], matData[3][1],
+				matData[0][2], matData[1][2], matData[2][2], matData[3][2],
+				matData[0][3], matData[1][3], matData[2][3], matData[3][3]);
+		}
+		
 		Matrix4 worldMat = Matrix4.multiply(localMat, mMatrixStack.peek());
 		mMatrixStack.push(worldMat);
 		
@@ -396,15 +405,18 @@ public class CSModelConverter
 			//get the joint sid and matrix
 			String jointName = jointSource.mNameArray.mstrData[i];
 			
-			Matrix4 newMat = new Matrix4();
+			float[] matData = new float[16];
 			for (int j = 0; j < 4; j++)
 				for (int k = 0; k < 4; k++)
-					newMat.mafData[j + 4 * k] = ibpSource.mFloatArray.mafData[i * 16 + (j * 4 + k)];
-			
+					matData[j + 4 * k] = ibpSource.mFloatArray.mafData[i * 16 + (j * 4 + k)];
+
 			//get the index for this joint
 			int jointIndex = SkeletonBuilder.GetIndexOfJointBySId(inModel, jointName);
 			
-			inMesh.maInverseBindMatrices[jointIndex] = newMat;
+			inMesh.maInverseBindMatrices[jointIndex] = new Matrix4(matData[0], matData[1], matData[2], matData[3],
+					matData[4], matData[5], matData[6], matData[7],
+					matData[8], matData[9], matData[10], matData[11],
+					matData[12], matData[13], matData[14], matData[15]);
 		}
 	}
 	//-------------------------------------------------------------------
@@ -425,29 +437,33 @@ public class CSModelConverter
 		newMat.mstrName = inMaterial.mstrName;
 		
 		//emissive (Note: Phong materials dont contain emissive data. In this case the value will default to that specified in "ColladaBlinnAndPhong")
-		newMat.mvEmissive.x = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mEmissive.mColour.mfR;
-		newMat.mvEmissive.y = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mEmissive.mColour.mfG;
-		newMat.mvEmissive.z = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mEmissive.mColour.mfB;
-		newMat.mvEmissive.w = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mEmissive.mColour.mfA;
+		double emissiveR = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mEmissive.mColour.mfR;
+		double emissiveG = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mEmissive.mColour.mfG;
+		double emissiveB = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mEmissive.mColour.mfB;
+		double emissiveA = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mEmissive.mColour.mfA;
+		newMat.mvEmissive = new Vector4(emissiveR, emissiveG, emissiveB, emissiveA);
 		
 		//ambient
-		newMat.mvAmbient.x = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mAmbient.mColour.mfR;
-		newMat.mvAmbient.y = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mAmbient.mColour.mfG;
-		newMat.mvAmbient.z = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mAmbient.mColour.mfB;
-		newMat.mvAmbient.w = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mAmbient.mColour.mfA;
+		double ambientR = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mAmbient.mColour.mfR;
+		double ambientG = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mAmbient.mColour.mfG;
+		double ambientB = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mAmbient.mColour.mfB;
+		double ambientA = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mAmbient.mColour.mfA;
+		newMat.mvAmbient = new Vector4(ambientR, ambientG, ambientB, ambientA);
 		
 		//diffuse (NOTE: If there is a texture, the collada file does not contain diffuse data. In this case the value will default to that specified 
 		//in "ColladaBlinnAndPhong")
-		newMat.mvDiffuse.x = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mDiffuse.mColour.mfR;
-		newMat.mvDiffuse.y = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mDiffuse.mColour.mfG;
-		newMat.mvDiffuse.z = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mDiffuse.mColour.mfB;
-		newMat.mvDiffuse.w = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mAmbient.mColour.mfA;
+		double diffuseR = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mDiffuse.mColour.mfR;
+		double diffuseG = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mDiffuse.mColour.mfG;
+		double diffuseB = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mDiffuse.mColour.mfB;
+		double diffuseA = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mAmbient.mColour.mfA;
+		newMat.mvDiffuse = new Vector4(diffuseR, diffuseG, diffuseB, diffuseA);
 		
 		//specular
-		newMat.mvSpecular.x = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mSpecular.mColour.mfR;
-		newMat.mvSpecular.y = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mSpecular.mColour.mfG;
-		newMat.mvSpecular.z = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mSpecular.mColour.mfB;
-		newMat.mvSpecular.w = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mSpecular.mColour.mfA;
+		double specularR = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mSpecular.mColour.mfR;
+		double specularG = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mSpecular.mColour.mfG;
+		double specularB = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mSpecular.mColour.mfB;
+		double specularA = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mSpecular.mColour.mfA;
+		newMat.mvSpecular = new Vector4(specularR, specularG, specularB, specularA);
 		
 		//shininess
 		newMat.mfShininess = effect.mProfileCommon.mTechnique.mBlinnAndPhong.mShininess.mFloat.mfValue;
@@ -621,19 +637,26 @@ public class CSModelConverter
 			}
 			
 			//get the vertex data
-			inVertex.mvPosition.x = source.mFloatArray.mafData[indwPositionIndex * dwStride + 0];
-			inVertex.mvPosition.y = source.mFloatArray.mafData[indwPositionIndex * dwStride + 1];
-			inVertex.mvPosition.z = source.mFloatArray.mafData[indwPositionIndex * dwStride + 2];
+			double posX = source.mFloatArray.mafData[indwPositionIndex * dwStride + 0];
+			double posY = source.mFloatArray.mafData[indwPositionIndex * dwStride + 1];
+			double posZ = source.mFloatArray.mafData[indwPositionIndex * dwStride + 2];
+			inVertex.mvPosition = new Vector3(posX, posY, posZ);
 			
 			//if there is a controller, apply its bind shape matrix
 			if (inController != null)
 			{
 				//convert the bind shape matrix to something we can use.
-				Matrix4 bindShapeMatrix = Matrix4.createFrom2DArray(inController.mSkin.mBindShapeMatrix.maafValues);
-				inVertex.mvPosition = Matrix4.multiply(inVertex.mvPosition, bindShapeMatrix);
+				float[][] matData = inController.mSkin.mBindShapeMatrix.maafValues;
+				
+				Matrix4 bindShapeMatrix = new Matrix4(matData[0][0], matData[1][0], matData[2][0], matData[3][0],
+					matData[0][1], matData[1][1], matData[2][1], matData[3][1],
+					matData[0][2], matData[1][2], matData[2][2], matData[3][2],
+					matData[0][3], matData[1][3], matData[2][3], matData[3][3]);
+
+				inVertex.mvPosition = Vector3.multiply(inVertex.mvPosition, bindShapeMatrix);
 			}
 			
-			inVertex.mvPosition = Matrix4.multiply(inVertex.mvPosition, mMatrixStack.peek());
+			inVertex.mvPosition = Vector3.multiply(inVertex.mvPosition, mMatrixStack.peek());
 		}
 	}
 	//-------------------------------------------------------------------
@@ -656,27 +679,32 @@ public class CSModelConverter
 				Logging.logFatal("A stride of less than 3 is not supported for NORMAL sources.");
 			}
 			
-			inVertex.mvNormal.x = source.mFloatArray.mafData[indwNormalIndex * dwStride + 0];
-			inVertex.mvNormal.y = source.mFloatArray.mafData[indwNormalIndex * dwStride + 1];
-			inVertex.mvNormal.z = source.mFloatArray.mafData[indwNormalIndex * dwStride + 2];
+			double normX = source.mFloatArray.mafData[indwNormalIndex * dwStride + 0];
+			double normY = source.mFloatArray.mafData[indwNormalIndex * dwStride + 1];
+			double normZ = source.mFloatArray.mafData[indwNormalIndex * dwStride + 2];
+			inVertex.mvNormal = new Vector3(normX, normY, normZ);
 			
 			//if there is a controller, apply its bind shape matrix
 			if (inController != null)
 			{
-				Matrix4 bindShapeMatrix = Matrix4.createFrom2DArray(inController.mSkin.mBindShapeMatrix.maafValues);
-				bindShapeMatrix.mafData[12] = 0.0f;
-				bindShapeMatrix.mafData[13] = 0.0f;
-				bindShapeMatrix.mafData[14] = 0.0f;
+				float[][] matData = inController.mSkin.mBindShapeMatrix.maafValues;
 				
-				inVertex.mvNormal = Matrix4.multiply(inVertex.mvNormal, bindShapeMatrix);
+				Matrix4 bindShapeMatrix = new Matrix4(matData[0][0], matData[1][0], matData[2][0], matData[3][0],
+					matData[0][1], matData[1][1], matData[2][1], matData[3][1],
+					matData[0][2], matData[1][2], matData[2][2], matData[3][2],
+					0.0, 0.0, 0.0, matData[3][3]);
+				
+				inVertex.mvNormal = Vector3.multiply(inVertex.mvNormal, bindShapeMatrix);
 			}
-			Matrix4 normalWorldMatrix = mMatrixStack.peek().copy();
-			normalWorldMatrix.mafData[12] = 0.0f;
-			normalWorldMatrix.mafData[13] = 0.0f;
-			normalWorldMatrix.mafData[14] = 0.0f;
+			
+			Matrix4 worldMat = mMatrixStack.peek();
+			Matrix4 normalWorldMatrix = new Matrix4(worldMat.get(0), worldMat.get(1), worldMat.get(2), worldMat.get(3), 
+					worldMat.get(4), worldMat.get(5), worldMat.get(6), worldMat.get(7), 
+					worldMat.get(8), worldMat.get(9), worldMat.get(10), worldMat.get(11), 
+					0.0, 0.0, 0.0, worldMat.get(15));
 
-			inVertex.mvNormal = Matrix4.multiply(inVertex.mvNormal, normalWorldMatrix);
-			inVertex.mvNormal = inVertex.mvNormal.normalise();
+			inVertex.mvNormal = Vector3.multiply(inVertex.mvNormal, normalWorldMatrix);
+			inVertex.mvNormal = Vector3.normalise(inVertex.mvNormal);
 		}
 	}
 	//-------------------------------------------------------------------
@@ -700,8 +728,9 @@ public class CSModelConverter
 				Logging.logFatal("A stride of less than 2 is not supported for TEXCOORD sources.");
 			}
 			
-			inVertex.mvTextureCoordinate.x = source.mFloatArray.mafData[indwTexCoordIndex * dwStride + 0]; 
-			inVertex.mvTextureCoordinate.y = source.mFloatArray.mafData[indwTexCoordIndex * dwStride + 1]; 
+			double texCoordX = source.mFloatArray.mafData[indwTexCoordIndex * dwStride + 0]; 
+			double texCoordY = source.mFloatArray.mafData[indwTexCoordIndex * dwStride + 1];
+			inVertex.mvTextureCoordinate = new Vector2(texCoordX, texCoordY);
 		}
 	}
 	//-------------------------------------------------------------------
@@ -725,10 +754,12 @@ public class CSModelConverter
 				Logging.logFatal("A stride of less than 2 is not supported for COLOR sources.");
 			}
 			
-			inVertex.mvVertexColour.x = source.mFloatArray.mafData[indwColourIndex * dwStride + 0] * 255.0f; 
-			inVertex.mvVertexColour.y = source.mFloatArray.mafData[indwColourIndex * dwStride + 1] * 255.0f;
-			inVertex.mvVertexColour.z = source.mFloatArray.mafData[indwColourIndex * dwStride + 2] * 255.0f;
-			inVertex.mvVertexColour.w = 255.0f;
+			
+			double vertexR = source.mFloatArray.mafData[indwColourIndex * dwStride + 0] * 255.0f; 
+			double vertexG = source.mFloatArray.mafData[indwColourIndex * dwStride + 1] * 255.0f;
+			double vertexB = source.mFloatArray.mafData[indwColourIndex * dwStride + 2] * 255.0f;
+			double vertexA = 255.0f;
+			inVertex.mvVertexColour = new Vector4(vertexR, vertexG, vertexB, vertexA);
 		}
 	}
 	//-------------------------------------------------------------------
@@ -748,37 +779,43 @@ public class CSModelConverter
 			ColladaSource source = inController.mSkin.mSourceTable.get(input.mstrSource.substring(1));
 			
 			//weight 0
+			double weightX = 0.0;
 			if (inWeightData.mWeightIndices[indwWeightDataIndex].length > 0)
 			{
 				int index = inWeightData.mWeightIndices[indwWeightDataIndex][0];
-				inVertex.mvWeights.x = source.mFloatArray.mafData[index];
+				weightX = source.mFloatArray.mafData[index];
 			}
 			
 			//weight 1
+			double weightY = 0.0;
 			if (inWeightData.mWeightIndices[indwWeightDataIndex].length > 1)
 			{
 				int index = inWeightData.mWeightIndices[indwWeightDataIndex][1];
-				inVertex.mvWeights.y = source.mFloatArray.mafData[index];
+				weightY = source.mFloatArray.mafData[index];
 			}
 			
 			//weight 2
+			double weightZ = 0.0;
 			if (inWeightData.mWeightIndices[indwWeightDataIndex].length > 2)
 			{
 				int index = inWeightData.mWeightIndices[indwWeightDataIndex][2];
-				inVertex.mvWeights.z = source.mFloatArray.mafData[index];
+				weightZ = source.mFloatArray.mafData[index];
 			}
 			
 			//weight 3
+			double weightW = 0.0;
 			if (inWeightData.mWeightIndices[indwWeightDataIndex].length > 3)
 			{
 				int index = inWeightData.mWeightIndices[indwWeightDataIndex][3];
-				inVertex.mvWeights.w = source.mFloatArray.mafData[index];
+				weightW = source.mFloatArray.mafData[index];
 			}
 			
+			inVertex.mvWeights = new Vector4(weightX, weightY, weightZ, weightW);
+			
 			//check that the weights are valid.
-			final float kfTolerance = 0.0001f;
-			float fTotal = inVertex.mvWeights.x +inVertex.mvWeights.y + inVertex.mvWeights.z + inVertex.mvWeights.w;
-			if (fTotal < 1.0f - kfTolerance || fTotal > 1.0f + kfTolerance)
+			final double kfTolerance = 0.0001;
+			double fTotal = inVertex.mvWeights.getX() + inVertex.mvWeights.getY() + inVertex.mvWeights.getZ() + inVertex.mvWeights.getW();
+			if (fTotal < 1.0 - kfTolerance || fTotal > 1.0 + kfTolerance)
 			{
 				Logging.logWarning("Vertex weights do not add up to 1.0.");
 			}
@@ -800,33 +837,40 @@ public class CSModelConverter
 			//get the source
 			ColladaSource source = inController.mSkin.mSourceTable.get(input.mstrSource.substring(1));
 			
+			int jointIndexX = 0;
+			int jointIndexY = 0;
+			int jointIndexZ = 0;
+			int jointIndexW = 0;
+			
 			//weight 0
 			if (inWeightData.mJointIndices[indwWeightDataIndex].length > 0)
 			{
 				int index = inWeightData.mJointIndices[indwWeightDataIndex][0];
-				inVertex.mvJointIndices.x = SkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
+				jointIndexX = SkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
 			}
 			
 			//weight 1
 			if (inWeightData.mJointIndices[indwWeightDataIndex].length > 1)
 			{
 				int index = inWeightData.mJointIndices[indwWeightDataIndex][1];
-				inVertex.mvJointIndices.y = SkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
+				jointIndexY = SkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
 			}
 			
 			//weight 2
 			if (inWeightData.mJointIndices[indwWeightDataIndex].length > 2)
 			{
 				int index = inWeightData.mJointIndices[indwWeightDataIndex][2];
-				inVertex.mvJointIndices.z = SkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
+				jointIndexZ = SkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
 			}
 			
 			//weight 3
 			if (inWeightData.mJointIndices[indwWeightDataIndex].length > 3)
 			{
 				int index = inWeightData.mJointIndices[indwWeightDataIndex][3];
-				inVertex.mvJointIndices.w = SkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
+				jointIndexW = SkeletonBuilder.GetIndexOfJointBySId(inModel, source.mNameArray.mstrData[index]);
 			}
+			
+			inVertex.mvJointIndices = new Integer4(jointIndexX, jointIndexY, jointIndexZ, jointIndexW);
 		}
 	}
 	//-------------------------------------------------------------------
@@ -886,18 +930,18 @@ public class CSModelConverter
 			inMesh.mIndexList.add(inMesh.mVertexList.size() - 1);
 			
 			//update mesh boundries
-			if (inVertex.mvPosition.x > inMesh.mvMax.x)
-				inMesh.mvMax.x = inVertex.mvPosition.x;
-			if (inVertex.mvPosition.y > inMesh.mvMax.y)
-				inMesh.mvMax.y = inVertex.mvPosition.y;
-			if (inVertex.mvPosition.z > inMesh.mvMax.z)
-				inMesh.mvMax.z = inVertex.mvPosition.z;
-			if (inVertex.mvPosition.x < inMesh.mvMin.x)
-				inMesh.mvMin.x = inVertex.mvPosition.x;
-			if (inVertex.mvPosition.y < inMesh.mvMin.y)
-				inMesh.mvMin.y = inVertex.mvPosition.y;
-			if (inVertex.mvPosition.z < inMesh.mvMin.z)
-				inMesh.mvMin.z = inVertex.mvPosition.z;
+			if (inVertex.mvPosition.getX() > inMesh.mvMax.getX())
+				inMesh.mvMax = new Vector3(inVertex.mvPosition.getX(), inMesh.mvMax.getY(), inMesh.mvMax.getZ());
+			if (inVertex.mvPosition.getY() > inMesh.mvMax.getY())
+				inMesh.mvMax = new Vector3(inMesh.mvMax.getX(), inVertex.mvPosition.getY(), inMesh.mvMax.getZ());
+			if (inVertex.mvPosition.getZ() > inMesh.mvMax.getZ())
+				inMesh.mvMax = new Vector3(inMesh.mvMax.getX(), inMesh.mvMax.getY(), inVertex.mvPosition.getZ());
+			if (inVertex.mvPosition.getX() < inMesh.mvMin.getX())
+				inMesh.mvMin = new Vector3(inVertex.mvPosition.getX(), inMesh.mvMin.getY(), inMesh.mvMin.getZ());
+			if (inVertex.mvPosition.getY() < inMesh.mvMin.getY())
+				inMesh.mvMin = new Vector3(inMesh.mvMin.getX(), inVertex.mvPosition.getY(), inMesh.mvMin.getZ());
+			if (inVertex.mvPosition.getZ() < inMesh.mvMin.getZ())
+				inMesh.mvMin = new Vector3(inMesh.mvMin.getX(), inMesh.mvMin.getY(), inVertex.mvPosition.getZ());
 		}
 	}
 	//-------------------------------------------------------------------

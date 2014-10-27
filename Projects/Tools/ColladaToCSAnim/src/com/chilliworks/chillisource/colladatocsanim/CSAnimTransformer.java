@@ -79,12 +79,12 @@ public final class CSAnimTransformer
 			for (int j = 0; j < frame.mNodeTranslations.size(); j++)
 			{
 				Vector3 translation = frame.mNodeTranslations.get(j);
+				Vector3 newTranslation = new Vector3(translation.getX(), -translation.getY(), translation.getZ());
+				frame.mNodeTranslations.set(j, newTranslation);
+				
 				Quaternion orientation = frame.mNodeOrienations.get(j);
-				
-				translation.y = -translation.y;
-				
-				orientation.y = -orientation.y;
-				orientation.w = -orientation.w;
+				Quaternion newQuaternion = new Quaternion(orientation.getX(), -orientation.getY(), orientation.getZ(), -orientation.getW());
+				frame.mNodeOrienations.set(j, newQuaternion);
 			}
 		}
 	}
@@ -105,25 +105,20 @@ public final class CSAnimTransformer
 			for (int j = 0; j < frame.mNodeTranslations.size(); j++)
 			{
 				Vector3 translation = frame.mNodeTranslations.get(j);
+				Vector3 newTranslation = new Vector3(translation.getX(), translation.getZ(), translation.getY());
+				frame.mNodeTranslations.set(j, newTranslation);
+				
 				Quaternion orientation = frame.mNodeOrienations.get(j);
-				Vector3 scale = frame.mNodeScalings.get(j);
-				
-				float temp = translation.y;
-				translation.y = translation.z;
-				translation.z = temp;
-				
 				Vector3 vAxis = orientation.getAxis();
-				float fAngle = orientation.getAngle();
-				temp = vAxis.y;
-				vAxis.y = vAxis.z;
-				vAxis.z = temp;
+				double fAngle = orientation.getAngle();
+				Vector3 newAxis = new Vector3(vAxis.getX(), vAxis.getZ(), vAxis.getY());
 				fAngle = -fAngle;
-				Quaternion newOrientation = Quaternion.createFromAxisAngle(vAxis, fAngle);
-				orientation.set(newOrientation);
+				Quaternion newOrientation = new Quaternion(newAxis, fAngle);
+				frame.mNodeOrienations.set(j, newOrientation);
 				
-				temp = scale.y;
-				scale.y = scale.z;
-				scale.z = temp;
+				Vector3 scale = frame.mNodeScalings.get(j);
+				Vector3 newScale = new Vector3(scale.getX(), scale.getZ(), scale.getY());
+				frame.mNodeScalings.set(j, newScale);
 			}
 		}
 	}

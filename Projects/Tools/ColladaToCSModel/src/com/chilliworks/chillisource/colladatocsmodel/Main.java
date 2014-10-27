@@ -46,7 +46,7 @@ public final class Main
 	private static final String k_paramNameSwapYAndZ = "--swapyandz";
 	private static final String k_paramNameDisableMeshBatch = "--disablemeshbatch";
 	private static final String k_paramNameDisabletTexCoordFlip = "--disabletexcoordflip";
-	private static final String k_paramNameHelp = "-help";
+	private static final String k_paramNameHelp = "--help";
 	private static final String k_shortParamNameInput = "-i";
 	private static final String k_shortParamNameOutput = "-o";
 	private static final String k_shortParamNameVertexFormat = "-vf";

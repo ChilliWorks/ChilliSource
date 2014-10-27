@@ -33,13 +33,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * A collection of methods for writing little endian binary files such as
- * conversions to little endian version of differents.
+ * A collection of methods for writing little endian binary files. All values
+ * written using this will first be converted to little endian byte order.
  * 
  * @author Ian Copland
- *
  */
-public class LittleEndianWriterUtils
+public final class LittleEndianWriterUtils
 {
 	private static final long MAX_UNSIGNED_INT = 4294967295l;
 	private static final int MAX_UNSIGNED_SHORT = 65535;
@@ -150,33 +149,5 @@ public class LittleEndianWriterUtils
 	public static void writeFloat32(DataOutputStream in_stream, float in_value) throws IOException
 	{
 		writeInt32(in_stream, Float.floatToRawIntBits(in_value));
-	}
-	/**
-	 * Writes a null terminated UTF8 string to the given output stream.
-	 * 
-	 * @param in_stream - The stream to write the string to.
-	 * @param String - The string value.
-	 * 
-	 * @throws IOException - Any IO Exception thrown by the given stream.
-	 */
-	public static void writeUTF8String(OutputStream in_stream, String in_value) throws IOException
-	{
-		in_stream.write(StringUtils.stringToUTF8Bytes(in_value));
-	}
-	/**
-	 * Writes a null terminated UTF8 string to the given output stream.
-	 * 
-	 * @param in_stream - The stream to write the string to.
-	 * @param String - The string value.
-	 * 
-	 * @throws IOException - Any IO Exception thrown by the given stream.
-	 */
-	public static void writeUTF8StringNullTerminated(OutputStream in_stream, String in_value) throws IOException
-	{
-		writeUTF8String(in_stream, in_value);
-		
-		byte[] nullTerminator = new byte[1];
-		nullTerminator[0] = 0;
-		in_stream.write(nullTerminator);
 	}
 }

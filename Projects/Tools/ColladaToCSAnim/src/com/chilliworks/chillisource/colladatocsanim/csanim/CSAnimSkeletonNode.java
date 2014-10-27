@@ -44,6 +44,6 @@ public class CSAnimSkeletonNode
 		mstrName = new String();
 		mstrParentId = new String();
 		mdwParentNodeIndex = -1; 
-		mInitialPoseMatrix = new Matrix4();
+		mInitialPoseMatrix = Matrix4.IDENTITY;
 	}
 }

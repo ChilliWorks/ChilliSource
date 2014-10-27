@@ -137,7 +137,7 @@ public final class Main
 	public static void printHelpText()
 	{
 		Logging.setLoggingLevel(LoggingLevel.k_verbose);
-		Logging.logVerbose("Usage: java -jar ColladaToCSAnim.jar " + k_paramNameInput + " <file path> " + k_paramNameOutput + " <file path> [" + k_paramNameSwapHandedness + " <transforms>] [" + k_paramNameHelp + "] [" + Logging.k_paramLoggingLevel + " <level>]");
+		Logging.logVerbose("Usage: java -jar ColladaToCSAnim.jar " + k_paramNameInput + " <file path> " + k_paramNameOutput + " <file path> [" + k_paramNameSwapHandedness + "] [" + k_paramNameSwapYAndZ + "] [" + k_paramNameHelp + "] [" + Logging.k_paramLoggingLevel + " <level>]");
 		Logging.logVerbose("Parameters:");
 		Logging.logVerbose(" " + k_paramNameInput + "(" + k_shortParamNameInput + "): The input filename.");
 		Logging.logVerbose(" " + k_paramNameOutput + "(" + k_shortParamNameOutput + "): The output filename.");
