@@ -168,7 +168,6 @@ public final class Colour
 	    return (Double.compare(m_r, colour.m_r) == 0 && Double.compare(m_g, colour.m_g) == 0 && Double.compare(m_b, colour.m_b) == 0 && Double.compare(m_a, colour.m_a) == 0);
 	}
 	/**
-
 	 * @author Ian Copland
 	 *
 	 * @return This object in string form.
