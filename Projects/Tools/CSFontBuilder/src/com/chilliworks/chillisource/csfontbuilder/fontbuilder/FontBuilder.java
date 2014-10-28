@@ -97,7 +97,7 @@ public final class FontBuilder
 	{
 		if (new File(in_tempDirectoryPath).exists() == true)
 		{
-			throw new CSException("Could not create temp directory: " + in_tempDirectoryPath);
+			throw new CSException("Could not create temp directory as it already exists: " + in_tempDirectoryPath);
 		}
 		
 		if (FileUtils.createDirectory(in_tempDirectoryPath) == false)
@@ -106,7 +106,7 @@ public final class FontBuilder
 		}
 	}
 	/**
-	 * Deletes the temporary directory and it's contents.
+	 * Deletes the temporary directory and its contents.
 	 * 
 	 * @author Ian Copland
 	 * 

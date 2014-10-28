@@ -125,7 +125,7 @@ public final class CSFontWriter
 	{
 		if (new File(in_tempDirectoryPath).exists() == true)
 		{
-			throw new CSException("Could not create temporary directory: " + in_tempDirectoryPath);
+			throw new CSException("Could not create temporary directory as it already exists: " + in_tempDirectoryPath);
 		}
 		
 		if (FileUtils.createDirectory(in_tempDirectoryPath) == false)
@@ -174,31 +174,31 @@ public final class CSFontWriter
 	{
 		try
 		{
-			PNGToCSImageOptions pngToCSImgeOptions = new PNGToCSImageOptions();
-			pngToCSImgeOptions.strInputFilename = in_inputFilePath;
-			pngToCSImgeOptions.strOutputFilename = in_outputFilePath;
+			PNGToCSImageOptions pngToCSImageOptions = new PNGToCSImageOptions();
+			pngToCSImageOptions.strInputFilename = in_inputFilePath;
+			pngToCSImageOptions.strOutputFilename = in_outputFilePath;
 			
 			if (in_options.m_imageCompression.length() > 0)
 			{
-				pngToCSImgeOptions.eCompressionType = PNGToCSImage.convertStringToCompressionFormat(in_options.m_imageCompression);
+				pngToCSImageOptions.eCompressionType = PNGToCSImage.convertStringToCompressionFormat(in_options.m_imageCompression);
 			}
 			
 			if (in_options.m_imageFormat.length() > 0)
 			{
-				pngToCSImgeOptions.eConversionType = PNGToCSImage.convertStringToConversionFormat(in_options.m_imageFormat);
+				pngToCSImageOptions.eConversionType = PNGToCSImage.convertStringToConversionFormat(in_options.m_imageFormat);
 			}
 			
 			if (in_options.m_imageDither == true)
 			{
-				pngToCSImgeOptions.bDither = true;
+				pngToCSImageOptions.bDither = true;
 			}
 			
 			if (in_options.m_imagePremultiplyAlpha == false)
 			{
-				pngToCSImgeOptions.bPremultiply = false;
+				pngToCSImageOptions.bPremultiply = false;
 			}
 			
-			PNGToCSImage.run(pngToCSImgeOptions);
+			PNGToCSImage.run(pngToCSImageOptions);
 		}
 		catch (Exception e)
 		{
@@ -207,7 +207,7 @@ public final class CSFontWriter
 		}
 	}
 	/**
-	 * Creates the CSFont binary file from the glyphs data and the packged image
+	 * Creates the CSFont binary file from the glyphs data and the packed image
 	 * data.
 	 * 
 	 * @author Ian Copland
@@ -264,7 +264,7 @@ public final class CSFontWriter
 		final int NUM_ENTRIES = 2;
 		LittleEndianWriterUtils.writeInt32(in_stream, NUM_ENTRIES);
 		
-		//calcualte the sizes of the chunks
+		//calculate the sizes of the chunks
 		final int GLOBAL_HEADER_SIZE = 5 * 4; //5x 4byte values
 		final int CHUNK_TABLE_ENTRY_SIZE = 3 * 4; //3x 4byte values
 		final int CHUNK_TABLE_SIZE = NUM_ENTRIES * CHUNK_TABLE_ENTRY_SIZE;
@@ -286,7 +286,7 @@ public final class CSFontWriter
 	/**
 	 * @author Ian Copland
 	 * 
-	 * @return The size of the the GLPH chunk.
+	 * @return The size of the GLPH chunk.
 	 */
 	private static int calculateGLPHChunkSize(PackedTexture in_packedBitmapFont)
 	{
@@ -295,8 +295,8 @@ public final class CSFontWriter
 	}
 	/**
 	 * Writes the INFO chunk to the output stream. The INFO chunk contains information
-	 * relating to the original font such as the point size and data global to all glyphs
-	 * such as the padding added for effects such as the drop shadow or glow.
+	 * relating all glyphs such as the padding added for image effects, and data relating
+	 * to the original font including the point size and line height.
 	 * 
 	 * @author Ian Copland
 	 * 
@@ -383,7 +383,7 @@ public final class CSFontWriter
 		}
 	}
 	/**
-	 * Deletes the temporary directory and it's contents.
+	 * Deletes the temporary directory and its contents.
 	 * 
 	 * @author Ian Copland
 	 * 

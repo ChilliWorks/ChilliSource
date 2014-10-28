@@ -171,7 +171,7 @@ public final class Main
 		
 		if (outputFilePath.length() == 0)
 		{
-			Logging.logFatal("An output directory path must be specfied.");
+			Logging.logFatal("An output directory path must be specified.");
 		}
 		
 		try
@@ -388,7 +388,7 @@ public final class Main
 		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_IMAGE_COMPRESSION + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_IMAGE_COMPRESSION + "): [Optional] The compression used for the output font image.");
 		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_IMAGE_FORMAT + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_IMAGE_FORMAT + "): [Optional] The format of the output font image.");
 		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_IMAGE_FORMAT + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_IMAGE_FORMAT + "): [Optional] If set the output font image will be dithered.");
-		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_DISABLE_PREMULTIPLIED_ALPHA + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_DISABLE_PREMULTIPLIED_ALPHA + "): [Optional] If set the output font image will not have it's alpha premultiplied.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_DISABLE_PREMULTIPLIED_ALPHA + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_DISABLE_PREMULTIPLIED_ALPHA + "): [Optional] If set the output font image will not have its alpha premultiplied.");
 		Logging.logVerbose(" ");
 		Logging.logVerbose("Glyphs Mode Parameters:");
 		Logging.logVerbose(" " + PARAM_OUTPUT + "(" + SHORT_PARAM_OUTPUT + "): The output directory where the bitmap glyphs should be placed.");
@@ -421,7 +421,7 @@ public final class Main
 		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_IMAGE_COMPRESSION + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_IMAGE_COMPRESSION + "): [Optional] The compression used for the output font image.");
 		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_IMAGE_FORMAT + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_IMAGE_FORMAT + "): [Optional] The format of the output font image.");
 		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_IMAGE_FORMAT + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_IMAGE_FORMAT + "): [Optional] If set the output font image will be dithered.");
-		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_DISABLE_PREMULTIPLIED_ALPHA + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_DISABLE_PREMULTIPLIED_ALPHA + "): [Optional] If set the output font image will not have it's alpha premultiplied.");
+		Logging.logVerbose(" " + FontFromGlyphsBuilderOptionsParser.PARAM_DISABLE_PREMULTIPLIED_ALPHA + "(" + FontFromGlyphsBuilderOptionsParser.SHORT_PARAM_DISABLE_PREMULTIPLIED_ALPHA + "): [Optional] If set the output font image will not have its alpha premultiplied.");
 		Logging.logVerbose(" ");
 		Logging.logVerbose("Modes:");
 		Logging.logVerbose(" " + MODE_FONT + ": Creates a CSFont file from the input ttf or oft font file.");

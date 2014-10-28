@@ -139,7 +139,7 @@ public final class GlyphsReader
 	 * @param in_inputDirectoryPath - The directory path that contains the 
 	 * font info file.
 	 * 
-	 * @return A 4-tuple containing the font size, line height, decent and
+	 * @return A 4-tuple containing the font size, line height, descent and
 	 * effect padding of the font. This will never be null.
 	 * 
 	 * @throws CSException - An exception which provides a message describing

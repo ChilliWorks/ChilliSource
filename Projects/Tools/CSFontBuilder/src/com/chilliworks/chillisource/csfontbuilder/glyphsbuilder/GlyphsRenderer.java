@@ -58,7 +58,7 @@ public final class GlyphsRenderer
 	 * 
 	 * @author Ian Copland
 	 * 
-	 * @param in_options - The options for the gylph builder.
+	 * @param in_options - The options for the glyph builder.
 	 * 
 	 * @return The glyph bitmap images. This will never be null.
 	 */
@@ -198,7 +198,7 @@ public final class GlyphsRenderer
 		graphics.setColor(new Color((float)in_shadowColour.getR(), (float)in_shadowColour.getG(), (float)in_shadowColour.getB(), (float)in_shadowColour.getA()));
 		graphics.drawGlyphVector(in_glyphVector, in_shadowPosition.getX(), in_shadowPosition.getY());
 		
-		float BLUR_FACTOR = (1.0f / 9.0f);
+		final float BLUR_FACTOR = (1.0f / 9.0f);
 		float[] blur = new float[]
 		{
 			BLUR_FACTOR, BLUR_FACTOR, BLUR_FACTOR,
@@ -231,9 +231,9 @@ public final class GlyphsRenderer
 		
 		graphics.setColor(new Color((float)in_outlineColour.getR(), (float)in_outlineColour.getG(), (float)in_outlineColour.getB(), (float)in_outlineColour.getA()));
 		
-		for (int x = -in_outlineSize; x <= in_outlineSize; x+=in_outlineSize)
+		for (int x = -in_outlineSize; x <= in_outlineSize; x += in_outlineSize)
 		{
-			for (int y = -in_outlineSize; y <= in_outlineSize; y+=in_outlineSize)
+			for (int y = -in_outlineSize; y <= in_outlineSize; y += in_outlineSize)
 			{
 				graphics.drawGlyphVector(in_glyphVector, in_glyphPosition.getX() + x, in_glyphPosition.getY() + y);
 			}
@@ -262,15 +262,15 @@ public final class GlyphsRenderer
 		
 		graphics.setColor(new Color((float)in_glowColour.getR(), (float)in_glowColour.getG(), (float)in_glowColour.getB(), (float)in_glowColour.getA()));
 		
-		for (int x = -in_glowSize; x <= in_glowSize; x+=in_glowSize)
+		for (int x = -in_glowSize; x <= in_glowSize; x += in_glowSize)
 		{
-			for (int y = -in_glowSize; y <= in_glowSize; y+=in_glowSize)
+			for (int y = -in_glowSize; y <= in_glowSize; y += in_glowSize)
 			{
 				graphics.drawGlyphVector(in_glyphVector, in_glyphPosition.getX() + x, in_glyphPosition.getY() + y);
 			}
 		}
 		
-		float BLUR_FACTOR = (1.0f / 9.0f);
+		final float BLUR_FACTOR = (1.0f / 9.0f);
 		float[] blur = new float[]
 		{
 			BLUR_FACTOR, BLUR_FACTOR, BLUR_FACTOR,

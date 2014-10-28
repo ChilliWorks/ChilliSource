@@ -98,7 +98,7 @@ public final class FontFromGlyphsBuilderOptionsParser
 					out_options.m_fixedWidth = Integer.parseInt(in_arguments[i+1]);
 				else
 					Logging.logFatal("No fixed width provided!");
-				i++;
+				++i;
 			}
 			
 			//fixed height
@@ -108,7 +108,7 @@ public final class FontFromGlyphsBuilderOptionsParser
 					out_options.m_fixedHeight = Integer.parseInt(in_arguments[i+1]);
 				else
 					Logging.logFatal("No fixed height provided!");
-				i++;
+				++i;
 			}
 			
 			//valid widths
@@ -118,7 +118,7 @@ public final class FontFromGlyphsBuilderOptionsParser
 					out_options.m_validWidths = parseIntegerArray(in_arguments[i+1]);
 				else
 					Logging.logFatal("No valid widths provided!");
-				i++;
+				++i;
 			}
 			
 			//valid heights
@@ -128,7 +128,7 @@ public final class FontFromGlyphsBuilderOptionsParser
 					out_options.m_validHeights = parseIntegerArray(in_arguments[i+1]);
 				else
 					Logging.logFatal("No valid heights provided!");
-				i++;
+				++i;
 			}
 			
 			//max width
@@ -138,7 +138,7 @@ public final class FontFromGlyphsBuilderOptionsParser
 					out_options.m_maxWidth = Integer.parseInt(in_arguments[i+1]);
 				else
 					Logging.logFatal("No max width provided!");
-				i++;
+				++i;
 			}
 			
 			//max height
@@ -148,7 +148,7 @@ public final class FontFromGlyphsBuilderOptionsParser
 					out_options.m_maxHeight = Integer.parseInt(in_arguments[i+1]);
 				else
 					Logging.logFatal("No max height provided!");
-				i++;
+				++i;
 			}
 			
 			//divisible by
@@ -158,7 +158,7 @@ public final class FontFromGlyphsBuilderOptionsParser
 					out_options.m_divisibleBy = Integer.parseInt(in_arguments[i+1]);
 				else
 					Logging.logFatal("No divisible by value provided!");
-				i++;
+				++i;
 			}
 			
 			//packing heuristic
@@ -168,7 +168,7 @@ public final class FontFromGlyphsBuilderOptionsParser
 					out_options.m_packingHeuristic = parsePlacementHeuristic(in_arguments[i+1]);
 				else
 					Logging.logFatal("No placement heuristic provided!");
-				i++;
+				++i;
 			}
 			
 			//image compression
@@ -178,7 +178,7 @@ public final class FontFromGlyphsBuilderOptionsParser
 					out_options.m_imageCompression = in_arguments[i+1];
 				else
 					Logging.logFatal("No image compression provided!");
-				i++;
+				++i;
 			}
 			
 			//image format
@@ -188,7 +188,7 @@ public final class FontFromGlyphsBuilderOptionsParser
 					out_options.m_imageFormat = in_arguments[i+1];
 				else
 					Logging.logFatal("No image format provided!");
-				i++;
+				++i;
 			}
 			
 			//image dither
