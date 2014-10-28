@@ -195,7 +195,7 @@ namespace ChilliSource
                 auto resPool = Core::Application::Get()->GetResourcePool();
                 WidgetTemplateCSPtr widgetTemplate = resPool->LoadResource<WidgetTemplate>(location, path);
                 out_hierarchyDesc.m_children.push_back(widgetTemplate->GetHierarchyDesc());
-                out_hierarchyDesc.m_children.back().m_access = WidgetHierarchyDesc::Access::k_internal;
+                out_hierarchyDesc.m_children.back().m_access = WidgetHierarchyDesc::Access::k_external;
             }
             else
             {
