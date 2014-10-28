@@ -98,10 +98,15 @@ namespace ChilliSource
                 ++frameIdx;
 			}
             
+            m_pointSize = in_desc.m_pointSize;
+            
             if(in_desc.m_lineHeight > 0)
             {
                 m_lineHeight = (f32)in_desc.m_lineHeight;
             }
+            
+            m_descent = f32(in_desc.m_descent);
+            m_effectPadding = Core::Vector2(f32(in_desc.m_effectPadding.x), f32(in_desc.m_effectPadding.y));
 			
 			//Just assign the width of a whitespaces based on the similar space character in the
 			//font. This means it will scale relative to the font
@@ -134,11 +139,29 @@ namespace ChilliSource
 		{
 			return m_texture;
 		}
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
+        u32 Font::GetPointSize() const
+        {
+            return m_pointSize;
+        }
 		//-------------------------------------------
 		//-------------------------------------------
 		f32 Font::GetLineHeight() const
 		{
 			return m_lineHeight;
+        }
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
+        f32 Font::GetDescent() const
+        {
+            return m_descent;
+        }
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
+        const Core::Vector2& Font::GetEffectPadding() const
+        {
+            return m_effectPadding;
         }
         //-------------------------------------------
         //-------------------------------------------

@@ -225,6 +225,7 @@ public final class CSFontWriter
 		{
 			writeStandardHeader(stream, in_glyphs, in_packedBitmapFont);
 			writeINFOChunk(stream, in_glyphs, in_packedBitmapFont);
+			writeCHARChunk(stream, in_glyphs.getCharacters());
 			writeGLPHChunk(stream, in_packedBitmapFont);
 		}
 		catch (IOException e)
@@ -260,28 +261,46 @@ public final class CSFontWriter
 		//write the CSFont version number.
 		LittleEndianWriterUtils.writeInt32(in_stream, CSFONT_FILE_VERSION_NUMBER);
 		
-		//write the number of chunk table entries. This will be constant for now as there are always 2 entries: Font Info and Glyph Data.
-		final int NUM_ENTRIES = 2;
+		//write the number of chunk table entries. This will be constant for now as there are always 3 entries: Font Info, Valid Characters and Glyph Data.
+		final int NUM_ENTRIES = 3;
 		LittleEndianWriterUtils.writeInt32(in_stream, NUM_ENTRIES);
 		
 		//calculate the sizes of the chunks
 		final int GLOBAL_HEADER_SIZE = 5 * 4; //5x 4byte values
 		final int CHUNK_TABLE_ENTRY_SIZE = 3 * 4; //3x 4byte values
 		final int CHUNK_TABLE_SIZE = NUM_ENTRIES * CHUNK_TABLE_ENTRY_SIZE;
-		final int INFO_CHUNK_OFFSET = GLOBAL_HEADER_SIZE + CHUNK_TABLE_ENTRY_SIZE + CHUNK_TABLE_SIZE;
+		final int INFO_CHUNK_OFFSET = GLOBAL_HEADER_SIZE + CHUNK_TABLE_SIZE;
 		final int INFO_CHUNK_SIZE = 7 * 4; //7x 4byte values
-		final int GLPH_CHUNK_OFFSET = GLOBAL_HEADER_SIZE + CHUNK_TABLE_ENTRY_SIZE + CHUNK_TABLE_SIZE + INFO_CHUNK_SIZE;
-		final int glphChunkSize = calculateGLPHChunkSize(in_packedBitmapFont);
+		final int CHAR_CHUNK_OFFSET = GLOBAL_HEADER_SIZE + CHUNK_TABLE_SIZE + INFO_CHUNK_SIZE;
+		
+		int charChunkSize = calculateCHARChunkSize(in_glyphs.getCharacters());
+		int glphChunkOffset = GLOBAL_HEADER_SIZE + CHUNK_TABLE_SIZE + INFO_CHUNK_SIZE + charChunkSize;
+		int glphChunkSize = calculateGLPHChunkSize(in_packedBitmapFont);
 		
 		//write the INFO chunk entry.
 		StringWriterUtils.writeUTF8String(in_stream, "INFO");
 		LittleEndianWriterUtils.writeInt32(in_stream, INFO_CHUNK_OFFSET);
 		LittleEndianWriterUtils.writeInt32(in_stream, INFO_CHUNK_SIZE);
 		
+		//write the CHAR chunk entry.
+		StringWriterUtils.writeUTF8String(in_stream, "CHAR");
+		LittleEndianWriterUtils.writeInt32(in_stream, CHAR_CHUNK_OFFSET);
+		LittleEndianWriterUtils.writeInt32(in_stream, charChunkSize);
+		
 		//write the GLPH chunk entry.
 		StringWriterUtils.writeUTF8String(in_stream, "GLPH");
-		LittleEndianWriterUtils.writeInt32(in_stream, GLPH_CHUNK_OFFSET);
+		LittleEndianWriterUtils.writeInt32(in_stream, glphChunkOffset);
 		LittleEndianWriterUtils.writeInt32(in_stream, glphChunkSize);
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The size of the CHAR chunk.
+	 */
+	private static int calculateCHARChunkSize(char[] in_characters)
+	{
+		byte[] charBytes = StringUtils.stringToUTF8Bytes(new String(in_characters));
+		return charBytes.length;
 	}
 	/**
 	 * @author Ian Copland
@@ -304,8 +323,6 @@ public final class CSFontWriter
 	 * @param in_glyphs - The input glyphs data.
 	 * @param in_packedBitmapFont - The input packed bitmap font data.
 	 * 
-	 * @return Whether or not this was successful.
-	 * 
 	 * @throws IOException - Any exception thrown by the output stream.
 	 */
 	private static void writeINFOChunk(DataOutputStream in_stream, Glyphs in_glyphs, PackedTexture in_packedBitmapFont) throws IOException
@@ -322,6 +339,22 @@ public final class CSFontWriter
 		LittleEndianWriterUtils.writeInt32(in_stream, in_glyphs.getEffectPadding().getY());
 	}
 	/**
+	 * Writes the CHAR chunk to the output stream. The CHAR chunk contains the list
+	 * of valid characters in the font. Characters are written as a UTF8 string.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_stream - The stream to write the header to.
+	 * @param in_characters - The list of valid characters.
+	 * 
+	 * @throws IOException - Any exception thrown by the output stream.
+	 */
+	private static void writeCHARChunk(DataOutputStream in_stream, char[] in_characters) throws IOException
+	{
+		String charString = new String(in_characters);
+		StringWriterUtils.writeUTF8String(in_stream, charString);
+	}
+	/**
 	 * Writes the GLPH chunk to the output stream. The GLPH chunk contains all of the
 	 * data for each glyph.
 	 * 
@@ -329,8 +362,6 @@ public final class CSFontWriter
 	 * 
 	 * @param in_stream - The stream to write the header to.
 	 * @param in_packedBitmapFont - The input packed bitmap font data.
-	 * 
-	 * @return Whether or not this was successful.
 	 * 
 	 * @throws IOException - Any exception thrown by the output stream.
 	 */

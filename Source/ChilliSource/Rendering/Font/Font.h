@@ -104,7 +104,10 @@ namespace ChilliSource
                 
                 u32 m_textureAtlasWidth = 0;
                 u32 m_textureAtlasHeight = 0;
+                u32 m_pointSize = 0;
                 u32 m_lineHeight = 0;
+                u32 m_descent = 0;
+                Core::Integer2 m_effectPadding;
             };
 			
 			CS_DECLARE_NAMEDTYPE(Font);
@@ -130,12 +133,31 @@ namespace ChilliSource
 			/// @return Font texture 
 			//---------------------------------------------------------------------
 			const TextureCSPtr& GetTexture() const;
+            //---------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The point size of the font the bitmap font was created from.
+            //---------------------------------------------------------------------
+            u32 GetPointSize() const;
 			//---------------------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return The height of a line as determined by the font
 			//---------------------------------------------------------------------
 			f32 GetLineHeight() const;
+            //---------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The amount of space below the base line in the font.
+            //---------------------------------------------------------------------
+            f32 GetDescent() const;
+            //---------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The amount of padding added to glyphs for image effects
+            /// such as drop shadows and glows.
+            //---------------------------------------------------------------------
+            const Core::Vector2& GetEffectPadding() const;
             //---------------------------------------------------------------------
             /// @author R Henning
             ///
@@ -176,7 +198,10 @@ namespace ChilliSource
             
             TextureCSPtr m_texture;
             
+            u32 m_pointSize = 0;
             f32 m_lineHeight = 0.0f;
+            f32 m_descent = 0.0f;
+            Core::Vector2 m_effectPadding;
             
             static f32 s_globalKerningOffset;
 		};
