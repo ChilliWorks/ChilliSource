@@ -1,6 +1,12 @@
 === Chilli Source Change Log ===
 
-Version 1.1.3 2013-10-20:
+Version 1.1.4 2014-10-24:
+	- Changed the Application::GetSystems() method so that it returns a vector of systems rather than taking a vector of systems as an output parameter.
+	- Added a GetSystems() method to State.
+	- Added constant versions of system getters to Application and State.
+	- Fixed issue with missing includes in the Vector classes and StandardMacros.h.
+
+Version 1.1.3 2014-10-20:
 	- Project generator will now error if the output directory is inside Chilli Source. This was causing recursive file copy issues when copying Chilli Source to the project directory.
 
 Version 1.1.2 2014-10-16:
