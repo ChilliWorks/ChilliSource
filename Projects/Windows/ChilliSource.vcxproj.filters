@@ -827,9 +827,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ParamDictionarySerialiser.h">
       <Filter>ChilliSource\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\WorkerQueue.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\AESEncrypt.h">
       <Filter>ChilliSource\Core</Filter>
     </ClInclude>
@@ -1513,6 +1510,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\TapGesture.h">
       <Filter>ChilliSource\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_worker_queue.h">
+      <Filter>ChilliSource\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

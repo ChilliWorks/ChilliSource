@@ -247,7 +247,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\HashedArray.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ParamDictionary.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ParamDictionarySerialiser.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\WorkerQueue.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_worker_queue.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\AESEncrypt.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\BaseEncoding.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\HashCRC32.h" />

@@ -36,8 +36,8 @@ namespace ChilliSource
     {
         //----------------------------------------------
         //----------------------------------------------
-        ThreadPool::ThreadPool(u32 in_numThreads)
-        : m_isFinished(false)
+		ThreadPool::ThreadPool(u32 in_numThreads)
+			: m_isFinished(false), m_tasks(new TaskQueue())
         {
             //create the threads
             for (u32 i=0; i<in_numThreads; ++i)
@@ -49,22 +49,19 @@ namespace ChilliSource
         //----------------------------------------------
         void ThreadPool::Schedule(const GenericTaskType& in_task)
         {
-            m_tasks.push(std::move(in_task));
+            m_tasks->push(std::move(in_task));
         }
         //----------------------------------------------
         //----------------------------------------------
         u32 ThreadPool::GetNumQueuedTasks() const
         {
-            return m_tasks.size();
+            return m_tasks->size();
         }
         //----------------------------------------------
         //----------------------------------------------
         void ThreadPool::ClearQueuedTasks()
         {
-            while(m_tasks.empty() == false)
-            {
-                m_tasks.pop();
-            }
+			m_tasks->clear();
         }
         //----------------------------------------------
         //----------------------------------------------
@@ -72,12 +69,9 @@ namespace ChilliSource
         {
 			while (m_isFinished == false)
 			{
-				m_tasks.wait_for_push_or_destroy();
-
-				if (m_tasks.empty() == false)
+				GenericTaskType task;
+				if (m_tasks->pop_or_wait(task) == true)
 				{
-					GenericTaskType task(std::move(m_tasks.front()));
-					m_tasks.pop();
 					task();
 				}
             }
@@ -87,7 +81,7 @@ namespace ChilliSource
         ThreadPool::~ThreadPool()
         {
 			m_isFinished = true;
-			m_tasks.awake_all();
+			m_tasks.reset();
             
             //join all threads.
             for (u32 i=0; i<m_threadGroup.size(); ++i)
