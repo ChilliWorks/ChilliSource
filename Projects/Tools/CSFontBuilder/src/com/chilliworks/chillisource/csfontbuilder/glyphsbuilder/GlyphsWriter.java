@@ -28,7 +28,6 @@
 
 package com.chilliworks.chillisource.csfontbuilder.glyphsbuilder;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -85,13 +84,12 @@ public final class GlyphsWriter
 		{
 			for (int i = 0; i < in_glyphs.getNumGlyphs(); ++i)
 			{
-				char character = in_glyphs.getCharacters()[i];
-				BufferedImage glyphImage = in_glyphs.getImages()[i];
-				String characterString = Integer.toHexString((int)character);
+				Glyph glyph = in_glyphs.getGlyph(i);
+				String characterString = Integer.toHexString((int)glyph.getCharacter());
 				String upperCharacterString = characterString.toUpperCase();
 				
 			    File outputfile = new File(in_outputDirectoryPath + upperCharacterString + ".png");
-			    ImageIO.write(glyphImage, "png", outputfile);
+			    ImageIO.write(glyph.getImage(), "png", outputfile);
 			}
 		} 
 		catch (IOException e) 
@@ -117,7 +115,19 @@ public final class GlyphsWriter
 		jsonRoot.put("FontSize", in_glyphs.getFontSize());
 		jsonRoot.put("LineHeight", in_glyphs.getLineHeight());
 		jsonRoot.put("Descent", in_glyphs.getDescent());
-		jsonRoot.put("EffectPadding", in_glyphs.getEffectPadding().toString());
+		jsonRoot.put("VerticalPadding", in_glyphs.getVerticalPadding());
+		
+		JSONObject jsonGlyphs = new JSONObject();
+		for (int i = 0; i < in_glyphs.getNumGlyphs(); ++i)
+		{
+			Glyph glyph = in_glyphs.getGlyph(i);
+			JSONObject jsonGlyph = new JSONObject();
+			jsonGlyph.put("Origin", glyph.getOrigin());
+			jsonGlyph.put("Advance", glyph.getAdvance());
+			jsonGlyphs.put("" + glyph.getCharacter(), jsonGlyph);
+		}
+		jsonRoot.put("Glyphs", jsonGlyphs);
+		
 		String jsonString = jsonRoot.toString(2);
 		
 		String outputFilePath = StringUtils.standardiseFilePath(in_outputDirectoryPath + FONT_INFO_FILE_PATH);

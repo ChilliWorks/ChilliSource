@@ -36,7 +36,6 @@ import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphMetrics;
 import java.awt.font.GlyphVector;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
@@ -74,21 +73,27 @@ public final class GlyphsRenderer
 		Integer2 effectPadding = Integer2.ZERO;
 		if (in_options.m_enableDropShadow == true)
 		{
-			effectPadding = Integer2.max(effectPadding, in_options.m_dropShadowOffset);
+			//because of the blur drop shadow needs some additional padding.
+			Integer2 blurPadding = new Integer2(1, 1);
+			effectPadding = Integer2.max(effectPadding, Integer2.add(in_options.m_dropShadowOffset, blurPadding));
 		}
 		
 		if (in_options.m_enableOutline == true)
 		{
-			effectPadding = Integer2.max(effectPadding, new Integer2(in_options.m_outlineSize, in_options.m_outlineSize));
+			Integer2 outlinePaddingSize = new Integer2(in_options.m_outlineSize, in_options.m_outlineSize);
+			effectPadding = Integer2.max(effectPadding, outlinePaddingSize);
 		}
 		
 		if (in_options.m_enableGlow == true)
 		{
-			effectPadding = Integer2.max(effectPadding, new Integer2(in_options.m_glowSize, in_options.m_glowSize));
+			//because of the blur glow needs some additional padding.
+			Integer2 blurPadding = new Integer2(1, 1);
+			Integer2 glowPadding = new Integer2(in_options.m_glowSize, in_options.m_glowSize);
+			effectPadding = Integer2.max(effectPadding, Integer2.add(glowPadding, blurPadding));
 		}
 		
 		char[] glyphCharacters = in_options.m_characters.toCharArray();
-		BufferedImage[] glyphImages = new BufferedImage[glyphCharacters.length];
+		Glyph[] glyphs = new Glyph[glyphCharacters.length];
 		for (int i = 0; i < glyphCharacters.length; ++i)
 		{
 			char glyphChar = glyphCharacters[i];
@@ -97,11 +102,10 @@ public final class GlyphsRenderer
 			FontRenderContext fontRenderContext = new FontRenderContext(null, true, false);
 			GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, Character.toString(glyphChar));
 			GlyphMetrics glyphMetrics = glyphVector.getGlyphMetrics(0);
-			Rectangle2D glyphBounds = glyphMetrics.getBounds2D();
 			
-			//calculate the size of the image and position of the glyph.
-			Integer2 imageSize = new Integer2((int)Math.ceil(glyphBounds.getMaxX()) + 2 * effectPadding.getX(), fontLineHeight + 2 * effectPadding.getY());
-			Integer2 glyphPos = new Integer2(effectPadding.getX(), fontY + effectPadding.getY());
+			//calculate the image data for this glyph.
+			Integer2 imageSize = new Integer2((int)Math.ceil(glyphMetrics.getBounds2D().getWidth()) + 2 * effectPadding.getX(), fontLineHeight + 2 * effectPadding.getY());
+			Integer2 glyphRenderPos = new Integer2(effectPadding.getX(), fontY + effectPadding.getY());
 			
 			//create the glyph image
 			BufferedImage glyphImage = new BufferedImage(imageSize.getX(), imageSize.getY(), BufferedImage.TYPE_INT_ARGB);
@@ -111,32 +115,37 @@ public final class GlyphsRenderer
 			//draw the drop shadow glyph if required.
 			if (in_options.m_enableDropShadow == true)
 			{
-				Integer2 shadowGlyphPos = Integer2.add(glyphPos, in_options.m_dropShadowOffset);
-				BufferedImage shadowImage = renderDropShadow(glyphVector, imageSize, shadowGlyphPos, in_options.m_dropShadowColour);
+				Integer2 shadowGlyphRenderPos = Integer2.add(glyphRenderPos, in_options.m_dropShadowOffset);
+				BufferedImage shadowImage = renderDropShadow(glyphVector, imageSize, shadowGlyphRenderPos, in_options.m_dropShadowColour);
 				graphics.drawImage(shadowImage, null, null);
 			}
 			
 			//draw the glow glyph if required.
 			if (in_options.m_enableGlow == true)
 			{
-				BufferedImage glowImage = renderGlow(glyphVector, imageSize, glyphPos, in_options.m_glowColour, in_options.m_glowSize);
+				BufferedImage glowImage = renderGlow(glyphVector, imageSize, glyphRenderPos, in_options.m_glowColour, in_options.m_glowSize);
 				graphics.drawImage(glowImage, null, null);
 			}
 			
 			//draw the outline glyph if required.
 			if (in_options.m_enableOutline == true)
 			{
-				BufferedImage outlineImage = renderOutline(glyphVector, imageSize, glyphPos, in_options.m_outlineColour, in_options.m_outlineSize);
+				BufferedImage outlineImage = renderOutline(glyphVector, imageSize, glyphRenderPos, in_options.m_outlineColour, in_options.m_outlineSize);
 				graphics.drawImage(outlineImage, null, null);
 			}
 			
 			//draw the glyph
 			graphics.setColor(new Color((float)in_options.m_fontColour.getR(), (float)in_options.m_fontColour.getG(), (float)in_options.m_fontColour.getB(), (float)in_options.m_fontColour.getA()));
-			graphics.drawGlyphVector(glyphVector, glyphPos.getX(), glyphPos.getY());
-			glyphImages[i] = glyphImage;
+			graphics.drawGlyphVector(glyphVector, glyphRenderPos.getX(), glyphRenderPos.getY());
+			
+			//calculate the glyph info
+			int glyphOrigin = (int)Math.round(effectPadding.getX() - glyphMetrics.getLSB());
+			int glyphAdvance = (int)Math.round(glyphMetrics.getAdvance());
+			
+			glyphs[i] = new Glyph(glyphChar, glyphImage, glyphOrigin, glyphAdvance);
 		}
 		
-		return new Glyphs(glyphCharacters, glyphImages, in_options.m_fontSize, fontLineHeight, fontDescent, effectPadding);
+		return new Glyphs(glyphs, in_options.m_fontSize, fontLineHeight, fontDescent, effectPadding.getY());
 	}
 	/**
 	 * Calculates the height of the given font.

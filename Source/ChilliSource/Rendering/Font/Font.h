@@ -72,6 +72,7 @@ namespace ChilliSource
 				Rendering::UVs m_UVs;
                 Core::Vector2 m_size;
                 Core::Vector2 m_offset;
+                Core::Vector2 m_originalSize;
 			};
             //---------------------------------------------------------------------
             /// Holds the description of a single character frame packed into

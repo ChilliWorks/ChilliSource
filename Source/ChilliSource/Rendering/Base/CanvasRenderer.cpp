@@ -83,7 +83,7 @@ namespace ChilliSource
                 Font::CharacterInfo charInfo;
                 if(in_font->TryGetCharacterInfo(in_character, charInfo) == true)
                 {
-                    return charInfo.m_size.x;
+                    return charInfo.m_originalSize.x - 2.0f * in_font->GetEffectPadding().x;
                 }
                 
                 return 0.0f;
@@ -248,9 +248,10 @@ namespace ChilliSource
                 if(in_font->TryGetCharacterInfo(in_character, info) == true)
                 {
                     result.m_UVs = info.m_UVs;
-                    result.m_size = info.m_size * in_textScale;
-                    result.m_position.x = in_cursorX;
-                    result.m_position.y = in_cursorY - (info.m_offset.y * in_textScale);
+                    result.m_glyphSize = (info.m_originalSize - 2.0f * in_font->GetEffectPadding()) * in_textScale;
+                    result.m_packedImageSize = info.m_size * in_textScale;
+                    result.m_position.x = in_cursorX + (info.m_offset.x - in_font->GetEffectPadding().x) * in_textScale;
+                    result.m_position.y = in_cursorY - (info.m_offset.y - in_font->GetEffectPadding().y) * in_textScale;
                 }
                 else
                 {
@@ -605,9 +606,9 @@ namespace ChilliSource
                     auto character = Core::UTF8StringUtils::Next(characterIt);
                     auto builtCharacter(BuildCharacter(character, in_font, cursorX, cursorY, in_textScale));
                     
-                    cursorX += builtCharacter.m_size.x;
+                    cursorX += builtCharacter.m_glyphSize.x;
                     
-                    if(builtCharacter.m_size.y > 0.0f)
+                    if(builtCharacter.m_packedImageSize.y > 0.0f)
                     {
                         //No point rendering whitespaces
                         result.m_characters.push_back(builtCharacter);
@@ -640,7 +641,7 @@ namespace ChilliSource
 			for (const auto& character : in_characters)
             {
                 matTransformedLocal = Core::Matrix4::CreateTranslation(Core::Vector3(character.m_position, 0.0f)) * matTransform;
-                UpdateSpriteData(matTransformedLocal, character.m_size, Core::Vector2::k_zero, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, m_canvasSprite);
+                UpdateSpriteData(matTransformedLocal, character.m_packedImageSize, Core::Vector2::k_zero, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, m_canvasSprite);
                 m_overlayBatcher->Render(m_canvasSprite);
 			}
             

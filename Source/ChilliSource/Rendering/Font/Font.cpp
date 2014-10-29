@@ -91,6 +91,9 @@ namespace ChilliSource
 				info.m_offset.x = frame.m_offsetX;
 				info.m_offset.y = frame.m_offsetY;
                 
+                info.m_originalSize.x = frame.m_originalWidth;
+                info.m_originalSize.y = frame.m_originalHeight;
+                
                 m_lineHeight = std::max((f32)frame.m_height, m_lineHeight);
                 
 				m_characterInfos.insert(std::make_pair(character, info));
