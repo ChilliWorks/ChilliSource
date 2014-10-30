@@ -91,18 +91,19 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Widget that the input event occurred on
+            /// @param The pointer.
             /// @param The input that triggered the event
             //----------------------------------------------------------------------------------------
-            using InputDelegate = std::function<void(Widget*, Input::Pointer::InputType)>;
+            using InputDelegate = std::function<void(Widget*, const Input::Pointer&, Input::Pointer::InputType)>;
             //----------------------------------------------------------------------------------------
             /// Delegate for moving input events.
             ///
             /// @author S Downie
             ///
             /// @param Widget that the input event occurred on
-            /// @param A set containing the currently active inputs.
+            /// @param The pointer
             //----------------------------------------------------------------------------------------
-            using InputMovedDelegate = std::function<void(Widget*, const std::set<Input::Pointer::InputType>&)>;
+            using InputMovedDelegate = std::function<void(Widget*, const Input::Pointer&)>;
             //----------------------------------------------------------------------------------------
             /// Constructor that builds the widget from the given definition.
             ///
