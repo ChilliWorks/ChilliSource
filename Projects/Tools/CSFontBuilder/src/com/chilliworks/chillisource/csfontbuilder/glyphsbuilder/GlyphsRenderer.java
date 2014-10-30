@@ -67,31 +67,37 @@ public final class GlyphsRenderer
 		Font font = new Font(in_options.m_fontName, in_options.m_fontStyle, in_options.m_fontSize);
 		int fontLineHeight = calcFontHeight(font);
 		int fontDescent = calcFontDescent(font);
+		int fontSpaceAdvance = calcFontSpaceAdvance(font);
 		int fontY = fontLineHeight - fontDescent;
 		
 		//calculate the padding required for the effects applied to the font.
-		Integer2 effectPadding = Integer2.ZERO;
+		Integer2 totalPadding = Integer2.ZERO;
 		if (in_options.m_enableDropShadow == true)
 		{
 			//because of the blur drop shadow needs some additional padding.
 			Integer2 blurPadding = new Integer2(1, 1);
-			effectPadding = Integer2.max(effectPadding, Integer2.add(in_options.m_dropShadowOffset, blurPadding));
+			Integer2 dropShadowPadding = Integer2.add(in_options.m_dropShadowOffset, blurPadding);
+			totalPadding = Integer2.max(totalPadding, dropShadowPadding);
 		}
 		
 		if (in_options.m_enableOutline == true)
 		{
-			Integer2 outlinePaddingSize = new Integer2(in_options.m_outlineSize, in_options.m_outlineSize);
-			effectPadding = Integer2.max(effectPadding, outlinePaddingSize);
+			Integer2 outlinePadding = new Integer2(in_options.m_outlineSize, in_options.m_outlineSize);
+			totalPadding = Integer2.max(totalPadding, outlinePadding);
 		}
 		
 		if (in_options.m_enableGlow == true)
 		{
 			//because of the blur glow needs some additional padding.
 			Integer2 blurPadding = new Integer2(1, 1);
-			Integer2 glowPadding = new Integer2(in_options.m_glowSize, in_options.m_glowSize);
-			effectPadding = Integer2.max(effectPadding, Integer2.add(glowPadding, blurPadding));
+			Integer2 glowPadding = Integer2.add(new Integer2(in_options.m_glowSize, in_options.m_glowSize), blurPadding);
+			totalPadding = Integer2.max(totalPadding, glowPadding);
 		}
 		
+		//add in the base padding to accommodate for the fact that integer rounding means position values can be up to half of a pixel out.
+		totalPadding = Integer2.add(totalPadding, new Integer2(1, 1));
+		
+		//render each glyph
 		char[] glyphCharacters = in_options.m_characters.toCharArray();
 		Glyph[] glyphs = new Glyph[glyphCharacters.length];
 		for (int i = 0; i < glyphCharacters.length; ++i)
@@ -102,10 +108,10 @@ public final class GlyphsRenderer
 			FontRenderContext fontRenderContext = new FontRenderContext(null, true, false);
 			GlyphVector glyphVector = font.createGlyphVector(fontRenderContext, Character.toString(glyphChar));
 			GlyphMetrics glyphMetrics = glyphVector.getGlyphMetrics(0);
-			
+
 			//calculate the image data for this glyph.
-			Integer2 imageSize = new Integer2((int)Math.ceil(glyphMetrics.getBounds2D().getWidth()) + 2 * effectPadding.getX(), fontLineHeight + 2 * effectPadding.getY());
-			Integer2 glyphRenderPos = new Integer2(effectPadding.getX(), fontY + effectPadding.getY());
+			Integer2 imageSize = new Integer2(((int)Math.ceil(glyphMetrics.getBounds2D().getWidth())) + 2 * totalPadding.getX(), fontLineHeight + 2 * totalPadding.getY());
+			Integer2 glyphRenderPos = new Integer2(totalPadding.getX() - ((int)Math.round(glyphMetrics.getLSB())), fontY + totalPadding.getY());
 			
 			//create the glyph image
 			BufferedImage glyphImage = new BufferedImage(imageSize.getX(), imageSize.getY(), BufferedImage.TYPE_INT_ARGB);
@@ -139,13 +145,13 @@ public final class GlyphsRenderer
 			graphics.drawGlyphVector(glyphVector, glyphRenderPos.getX(), glyphRenderPos.getY());
 			
 			//calculate the glyph info
-			int glyphOrigin = (int)Math.round(effectPadding.getX() - glyphMetrics.getLSB());
-			int glyphAdvance = (int)Math.round(glyphMetrics.getAdvance());
+			int glyphOrigin = totalPadding.getX() - (int)Math.floor(glyphMetrics.getLSB());
+			int glyphAdvance = (int)Math.floor(glyphMetrics.getAdvanceX());
 			
 			glyphs[i] = new Glyph(glyphChar, glyphImage, glyphOrigin, glyphAdvance);
 		}
 		
-		return new Glyphs(glyphs, in_options.m_fontSize, fontLineHeight, fontDescent, effectPadding.getY());
+		return new Glyphs(glyphs, in_options.m_fontSize, fontLineHeight, fontDescent, fontSpaceAdvance, totalPadding.getY());
 	}
 	/**
 	 * Calculates the height of the given font.
@@ -185,6 +191,23 @@ public final class GlyphsRenderer
 	    graphics1.dispose();
 	    
 	    return fontDescent;
+	}
+	/**
+	 * Calculates the space advance for the given font.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_font - The font.
+	 * 
+	 * @return The space advance of the font.
+	 */
+	private static int calcFontSpaceAdvance(Font in_font)
+	{
+		FontRenderContext fontRenderContext = new FontRenderContext(null, true, false);
+		GlyphVector glyphVector = in_font.createGlyphVector(fontRenderContext, " ");
+		GlyphMetrics glyphMetrics = glyphVector.getGlyphMetrics(0);
+
+	    return (int)Math.floor(glyphMetrics.getAdvanceX());
 	}
 	/**
 	 * Renders the drop shadow for the given glyph vector.

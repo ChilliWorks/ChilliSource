@@ -115,6 +115,7 @@ public final class GlyphsWriter
 		jsonRoot.put("FontSize", in_glyphs.getFontSize());
 		jsonRoot.put("LineHeight", in_glyphs.getLineHeight());
 		jsonRoot.put("Descent", in_glyphs.getDescent());
+		jsonRoot.put("SpaceAdvance", in_glyphs.getSpaceAdvance());
 		jsonRoot.put("VerticalPadding", in_glyphs.getVerticalPadding());
 		
 		JSONObject jsonGlyphs = new JSONObject();

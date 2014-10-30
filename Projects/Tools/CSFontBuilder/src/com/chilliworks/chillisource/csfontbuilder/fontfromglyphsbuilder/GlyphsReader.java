@@ -36,10 +36,8 @@ import org.json.JSONObject;
 
 import com.chilliworks.chillisource.coreutils.CSException;
 import com.chilliworks.chillisource.coreutils.FileUtils;
-import com.chilliworks.chillisource.coreutils.Integer2;
 import com.chilliworks.chillisource.coreutils.Logging;
 import com.chilliworks.chillisource.coreutils.StringUtils;
-import com.chilliworks.chillisource.coreutils.Tuple4;
 
 /**
  * Provides a series of methods for reading bitmap font glyphs to file.
@@ -68,8 +66,7 @@ public final class GlyphsReader
 	{
 		String[] glyphFilePaths = findImageFilesInDirectory(in_inputDirectoryPath);
 		char[] glyphCharacters = getCharacterForFilePaths(glyphFilePaths);
-		Tuple4<Integer, Integer, Integer, Integer2> fontInfo = readFontInfo(in_inputDirectoryPath);
-		return new Glyphs(glyphCharacters, glyphFilePaths, fontInfo.getFirst(), fontInfo.getSecond(), fontInfo.getThird(), fontInfo.getFourth());
+		return buildGlyphs(glyphCharacters, glyphFilePaths, in_inputDirectoryPath);
 	}
 	/**
 	 * Retrieves the path to all files in the given directory.
@@ -132,10 +129,13 @@ public final class GlyphsReader
 		return characters;
 	}
 	/**
-	 * Reads the font info json file from the given directory. 
+	 * Builds the glyphs from the given data and the contents of the Font
+	 * Info file in the given directory.
 	 * 
 	 * @author Ian Copland
 	 * 
+	 * @param in_characters - The list of glyph characters.
+	 * @param in_filePaths - The list of glyph bitmap image file paths.
 	 * @param in_inputDirectoryPath - The directory path that contains the 
 	 * font info file.
 	 * 
@@ -145,8 +145,10 @@ public final class GlyphsReader
 	 * @throws CSException - An exception which provides a message describing
 	 * the error which has occurred.
 	 */
-	private static Tuple4<Integer, Integer, Integer, Integer2> readFontInfo(String in_inputDirectoryPath) throws CSException
+	private static Glyphs buildGlyphs(char[] in_characters, String[] in_filePaths, String in_inputDirectoryPath) throws CSException
 	{
+		assert (in_characters.length == in_filePaths.length) : "Cannot build glyphs with different sized character and file path arrays.";
+		
 		String filePath = in_inputDirectoryPath + FONT_INFO_FILE_PATH;
 		
 		try
@@ -157,14 +159,27 @@ public final class GlyphsReader
 				return null;
 			}
 			
-			JSONObject json = new JSONObject(fileContents);
+			JSONObject jsonRoot = new JSONObject(fileContents);
+			int fontSize = jsonRoot.getInt("FontSize");
+			int lineHeight = jsonRoot.getInt("LineHeight");
+			int descent = jsonRoot.getInt("Descent");
+			int spaceAdvance = jsonRoot.getInt("SpaceAdvance");
+			int verticalPadding = jsonRoot.getInt("VerticalPadding");
 			
-			int fontSize = json.getInt("FontSize");
-			int lineHeight = json.getInt("LineHeight");
-			int descent = json.getInt("Descent");
-			Integer2 effectPadding = Integer2.parseInt2(json.getString("EffectPadding"));
+			JSONObject jsonGlyphs = jsonRoot.getJSONObject("Glyphs");
+			Glyph[] glyphs = new Glyph[in_characters.length];
+			for (int i = 0; i < in_characters.length; ++i)
+			{
+				char character = in_characters[i];
+				JSONObject jsonGlyph = jsonGlyphs.getJSONObject("" + character);
+				
+				int origin = jsonGlyph.getInt("Origin");
+				int advance = jsonGlyph.getInt("Advance");
+				
+				glyphs[i] = new Glyph(character, in_filePaths[i], origin, advance);
+			}
 			
-			return new Tuple4<Integer, Integer, Integer, Integer2>(fontSize, lineHeight, descent, effectPadding);
+			return new Glyphs(glyphs, fontSize, lineHeight, descent, spaceAdvance, verticalPadding);
 		}
 		catch (Exception e)
 		{

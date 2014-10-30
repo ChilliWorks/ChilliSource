@@ -39,6 +39,7 @@ public final class Glyphs
 	private final int m_fontSize;
 	private final int m_lineHeight;
 	private final int m_descent;
+	private final int m_spaceAdvance;
 	private final int m_verticalPadding;
 	
 	/**
@@ -50,15 +51,17 @@ public final class Glyphs
 	 * @param in_fontSize - The point size of the font the glyphs were created from.
 	 * @param in_lineHeight - The total height of a line of text.
 	 * @param in_descent - The amount of space under the baseline in a line of text.
+	 * @param in_spaceAdvance - The advance for a space character.
 	 * @param in_verticalPadding - The amount of padding at the top and bottom of a
 	 * glyph.
 	 */
-	public Glyphs(Glyph[] in_glyphs, int in_fontSize, int in_lineHeight, int in_descent, int in_verticalPadding)
+	public Glyphs(Glyph[] in_glyphs, int in_fontSize, int in_lineHeight, int in_descent, int in_spaceAdvance, int in_verticalPadding)
 	{
 		m_glyphs = in_glyphs;
 		m_fontSize = in_fontSize;
 		m_lineHeight = in_lineHeight;
 		m_descent = in_descent;
+		m_spaceAdvance = in_spaceAdvance;
 		m_verticalPadding = in_verticalPadding;
 	}
 	/**
@@ -107,6 +110,15 @@ public final class Glyphs
 	public int getDescent()
 	{
 		return m_descent;
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The advance for a space character.
+	 */
+	public int getSpaceAdvance()
+	{
+		return m_spaceAdvance;
 	}
 	/**
 	 * @author Ian Copland

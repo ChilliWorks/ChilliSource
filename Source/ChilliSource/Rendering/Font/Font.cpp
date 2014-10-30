@@ -38,7 +38,6 @@ namespace ChilliSource
 	{
         namespace
         {
-            const Core::UTF8Char k_similarSpaceCharacter = '-';
             const u32 k_spacesPerTab = 5;
         }
         
@@ -91,8 +90,8 @@ namespace ChilliSource
 				info.m_offset.x = frame.m_offsetX;
 				info.m_offset.y = frame.m_offsetY;
                 
-                info.m_originalSize.x = frame.m_originalWidth;
-                info.m_originalSize.y = frame.m_originalHeight;
+                info.m_origin = frame.m_origin;
+                info.m_advance = frame.m_advance;
                 
                 m_lineHeight = std::max((f32)frame.m_height, m_lineHeight);
                 
@@ -109,29 +108,22 @@ namespace ChilliSource
             }
             
             m_descent = f32(in_desc.m_descent);
-            m_effectPadding = Core::Vector2(f32(in_desc.m_effectPadding.x), f32(in_desc.m_effectPadding.y));
+            m_verticalPadding = f32(in_desc.m_verticalPadding);
 			
 			//Just assign the width of a whitespaces based on the similar space character in the
 			//font. This means it will scale relative to the font
-            CharacterInfo info;
-            if(TryGetCharacterInfo(k_similarSpaceCharacter, info) == false)
-            {
-                CS_LOG_ERROR("Cannot find similar space character in font: " + GetName());
-                info.m_size.x = 1.0f;
-                info.m_offset = Core::Vector2::k_zero;
-                info.m_UVs = Rendering::UVs();
-            }
+            CharacterInfo spaceCharacter;
+            spaceCharacter.m_advance = in_desc.m_spaceAdvance;
             
             //Space
-            info.m_size.y = 0.0f;
-            m_characterInfos.insert(std::make_pair(k_spaceCharacter, info));
+            m_characterInfos.insert(std::make_pair(k_spaceCharacter, spaceCharacter));
             
             //Non-breaking space
-            m_characterInfos.insert(std::make_pair(k_nbspCharacter, info));
+            m_characterInfos.insert(std::make_pair(k_nbspCharacter, spaceCharacter));
             
             //Tab
-            info.m_size.x *= k_spacesPerTab;
-            m_characterInfos.insert(std::make_pair(k_tabCharacter, info));
+            spaceCharacter.m_size.x *= k_spacesPerTab;
+            m_characterInfos.insert(std::make_pair(k_tabCharacter, spaceCharacter));
             
             //Return
             m_characterInfos.insert(std::make_pair(k_returnCharacter, CharacterInfo()));
@@ -162,9 +154,9 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
-        const Core::Vector2& Font::GetEffectPadding() const
+        f32 Font::GetVerticalPadding() const
         {
-            return m_effectPadding;
+            return m_verticalPadding;
         }
         //-------------------------------------------
         //-------------------------------------------

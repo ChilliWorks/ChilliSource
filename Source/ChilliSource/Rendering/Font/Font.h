@@ -72,7 +72,8 @@ namespace ChilliSource
 				Rendering::UVs m_UVs;
                 Core::Vector2 m_size;
                 Core::Vector2 m_offset;
-                Core::Vector2 m_originalSize;
+                f32 m_origin = 0.0f;
+                f32 m_advance = 0.0f;
 			};
             //---------------------------------------------------------------------
             /// Holds the description of a single character frame packed into
@@ -90,6 +91,8 @@ namespace ChilliSource
 				s16 m_offsetY;
                 s16 m_originalWidth;
                 s16 m_originalHeight;
+                s16 m_origin;
+                s16 m_advance;
 			};
             //---------------------------------------------------------------------
             /// Holds the description of a font. Used to build the resource
@@ -108,7 +111,8 @@ namespace ChilliSource
                 u32 m_pointSize = 0;
                 u32 m_lineHeight = 0;
                 u32 m_descent = 0;
-                Core::Integer2 m_effectPadding;
+                u32 m_spaceAdvance = 0;
+                u32 m_verticalPadding = 0;
             };
 			
 			CS_DECLARE_NAMEDTYPE(Font);
@@ -155,10 +159,10 @@ namespace ChilliSource
             //---------------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return The amount of padding added to glyphs for image effects
-            /// such as drop shadows and glows.
+            /// @return The amount of padding added to the top and bottom of a
+            /// glyph image.
             //---------------------------------------------------------------------
-            const Core::Vector2& GetEffectPadding() const;
+            f32 GetVerticalPadding() const;
             //---------------------------------------------------------------------
             /// @author R Henning
             ///
@@ -202,7 +206,7 @@ namespace ChilliSource
             u32 m_pointSize = 0;
             f32 m_lineHeight = 0.0f;
             f32 m_descent = 0.0f;
-            Core::Vector2 m_effectPadding;
+            f32 m_verticalPadding;
             
             static f32 s_globalKerningOffset;
 		};

@@ -225,8 +225,8 @@ public final class CSFontWriter
 		{
 			writeStandardHeader(stream, in_glyphs, in_packedBitmapFont);
 			writeINFOChunk(stream, in_glyphs, in_packedBitmapFont);
-			writeCHARChunk(stream, in_glyphs.getCharacters());
-			writeGLPHChunk(stream, in_packedBitmapFont);
+			writeCHARChunk(stream, in_glyphs);
+			writeGLPHChunk(stream, in_glyphs, in_packedBitmapFont);
 		}
 		catch (IOException e)
 		{
@@ -273,7 +273,7 @@ public final class CSFontWriter
 		final int INFO_CHUNK_SIZE = 7 * 4; //7x 4byte values
 		final int CHAR_CHUNK_OFFSET = GLOBAL_HEADER_SIZE + CHUNK_TABLE_SIZE + INFO_CHUNK_SIZE;
 		
-		int charChunkSize = calculateCHARChunkSize(in_glyphs.getCharacters());
+		int charChunkSize = calculateCHARChunkSize(in_glyphs);
 		int glphChunkOffset = GLOBAL_HEADER_SIZE + CHUNK_TABLE_SIZE + INFO_CHUNK_SIZE + charChunkSize;
 		int glphChunkSize = calculateGLPHChunkSize(in_packedBitmapFont);
 		
@@ -295,11 +295,20 @@ public final class CSFontWriter
 	/**
 	 * @author Ian Copland
 	 * 
+	 * @param in_glyphs- The glyphs.
+	 * 
 	 * @return The size of the CHAR chunk.
 	 */
-	private static int calculateCHARChunkSize(char[] in_characters)
+	private static int calculateCHARChunkSize(Glyphs in_glyphs)
 	{
-		byte[] charBytes = StringUtils.stringToUTF8Bytes(new String(in_characters));
+		String charString = new String();
+		
+		for (int i = 0; i < in_glyphs.getNumGlyphs(); ++i)
+		{
+			charString += "" + in_glyphs.getGlyph(i).getCharacter();
+		}
+		
+		byte[] charBytes = StringUtils.stringToUTF8Bytes(charString);
 		return charBytes.length;
 	}
 	/**
@@ -309,13 +318,13 @@ public final class CSFontWriter
 	 */
 	private static int calculateGLPHChunkSize(PackedTexture in_packedBitmapFont)
 	{
-		final int GLPH_ENTRY_SIZE = 8 * 2; //8x 2byte values.
+		final int GLPH_ENTRY_SIZE = 10 * 2; //10x 2byte values.
 		return in_packedBitmapFont.getNumImages() * GLPH_ENTRY_SIZE;
 	}
 	/**
 	 * Writes the INFO chunk to the output stream. The INFO chunk contains information
-	 * relating all glyphs such as the padding added for image effects, and data relating
-	 * to the original font including the point size and line height.
+	 * relating all glyphs such as the vertical padding, and data relating to the 
+	 * original font including the point size and line height.
 	 * 
 	 * @author Ian Copland
 	 * 
@@ -331,12 +340,12 @@ public final class CSFontWriter
 		LittleEndianWriterUtils.writeInt32(in_stream, in_glyphs.getFontSize());
 		LittleEndianWriterUtils.writeInt32(in_stream, in_glyphs.getLineHeight());
 		LittleEndianWriterUtils.writeInt32(in_stream, in_glyphs.getDescent());
+		LittleEndianWriterUtils.writeInt32(in_stream, in_glyphs.getSpaceAdvance());
 		
 		//write info on the bitmap font image
 		LittleEndianWriterUtils.writeInt32(in_stream, in_packedBitmapFont.getPackedWidth());
 		LittleEndianWriterUtils.writeInt32(in_stream, in_packedBitmapFont.getPackedHeight());
-		LittleEndianWriterUtils.writeInt32(in_stream, in_glyphs.getEffectPadding().getX());
-		LittleEndianWriterUtils.writeInt32(in_stream, in_glyphs.getEffectPadding().getY());
+		LittleEndianWriterUtils.writeInt32(in_stream, in_glyphs.getVerticalPadding());
 	}
 	/**
 	 * Writes the CHAR chunk to the output stream. The CHAR chunk contains the list
@@ -345,13 +354,19 @@ public final class CSFontWriter
 	 * @author Ian Copland
 	 * 
 	 * @param in_stream - The stream to write the header to.
-	 * @param in_characters - The list of valid characters.
+	 * @param in_glyphs - The glyphs.
 	 * 
 	 * @throws IOException - Any exception thrown by the output stream.
 	 */
-	private static void writeCHARChunk(DataOutputStream in_stream, char[] in_characters) throws IOException
+	private static void writeCHARChunk(DataOutputStream in_stream, Glyphs in_glyphs) throws IOException
 	{
-		String charString = new String(in_characters);
+		String charString = new String();
+		
+		for (int i = 0; i < in_glyphs.getNumGlyphs(); ++i)
+		{
+			charString += "" + in_glyphs.getGlyph(i).getCharacter();
+		}
+		
 		StringWriterUtils.writeUTF8String(in_stream, charString);
 	}
 	/**
@@ -361,31 +376,40 @@ public final class CSFontWriter
 	 * @author Ian Copland
 	 * 
 	 * @param in_stream - The stream to write the header to.
+	 * @param in_glyphs - The glyphs.
 	 * @param in_packedBitmapFont - The input packed bitmap font data.
 	 * 
 	 * @throws IOException - Any exception thrown by the output stream.
 	 */
-	private static void writeGLPHChunk(DataOutputStream in_stream, PackedTexture in_packedBitmapFont) throws IOException
+	private static void writeGLPHChunk(DataOutputStream in_stream, Glyphs in_glyphs, PackedTexture in_packedBitmapFont) throws IOException
 	{
+		assert (in_glyphs.getNumGlyphs() == in_packedBitmapFont.getNumImages()) : "Cannot write GLPH chunk with different amount of glyphs to packed images.";
+		
 		for (int i = 0; i < in_packedBitmapFont.getNumImages(); ++i)
 		{
-			short originX = (short)in_packedBitmapFont.getOriginX(i);
-			short originY = (short)in_packedBitmapFont.getOriginY(i);
-			short width =  (short)in_packedBitmapFont.getCroppedWidth(i);
-			short height = (short)in_packedBitmapFont.getCroppedHeight(i);
-			short offsetX = (short)in_packedBitmapFont.getOffsetX(i);
-			short offsetY = (short)in_packedBitmapFont.getOffsetY(i);
-			short originalWidth = (short)in_packedBitmapFont.getOriginalWidth(i);
-			short originalHeight = (short)in_packedBitmapFont.getOriginalHeight(i);
+			short imageOriginX = (short)in_packedBitmapFont.getOriginX(i);
+			short imageOriginY = (short)in_packedBitmapFont.getOriginY(i);
+			short imagePackedWidth =  (short)in_packedBitmapFont.getCroppedWidth(i);
+			short imagePackedHeight = (short)in_packedBitmapFont.getCroppedHeight(i);
+			short imagePackedOffsetX = (short)in_packedBitmapFont.getOffsetX(i);
+			short imagePackedOffsetY = (short)in_packedBitmapFont.getOffsetY(i);
+			short imageOriginalWidth = (short)in_packedBitmapFont.getOriginalWidth(i);
+			short imageOriginalHeight = (short)in_packedBitmapFont.getOriginalHeight(i);
 			
-			LittleEndianWriterUtils.writeInt16(in_stream, originX);
-			LittleEndianWriterUtils.writeInt16(in_stream, originY);
-			LittleEndianWriterUtils.writeInt16(in_stream, width);
-			LittleEndianWriterUtils.writeInt16(in_stream, height);
-			LittleEndianWriterUtils.writeInt16(in_stream, offsetX);
-			LittleEndianWriterUtils.writeInt16(in_stream, offsetY);
-			LittleEndianWriterUtils.writeInt16(in_stream, originalWidth);
-			LittleEndianWriterUtils.writeInt16(in_stream, originalHeight);
+			Glyph glyph = in_glyphs.getGlyph(i);
+			short glyphOrigin = (short)glyph.getOrigin();
+			short glyphAdvance = (short)glyph.getAdvance();
+			
+			LittleEndianWriterUtils.writeInt16(in_stream, imageOriginX);
+			LittleEndianWriterUtils.writeInt16(in_stream, imageOriginY);
+			LittleEndianWriterUtils.writeInt16(in_stream, imagePackedWidth);
+			LittleEndianWriterUtils.writeInt16(in_stream, imagePackedHeight);
+			LittleEndianWriterUtils.writeInt16(in_stream, imagePackedOffsetX);
+			LittleEndianWriterUtils.writeInt16(in_stream, imagePackedOffsetY);
+			LittleEndianWriterUtils.writeInt16(in_stream, imageOriginalWidth);
+			LittleEndianWriterUtils.writeInt16(in_stream, imageOriginalHeight);
+			LittleEndianWriterUtils.writeInt16(in_stream, glyphOrigin);
+			LittleEndianWriterUtils.writeInt16(in_stream, glyphAdvance);
 		}
 	}
 	/**

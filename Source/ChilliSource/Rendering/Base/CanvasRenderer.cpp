@@ -83,7 +83,7 @@ namespace ChilliSource
                 Font::CharacterInfo charInfo;
                 if(in_font->TryGetCharacterInfo(in_character, charInfo) == true)
                 {
-                    return charInfo.m_originalSize.x - 2.0f * in_font->GetEffectPadding().x;
+                    return charInfo.m_advance;
                 }
                 
                 return 0.0f;
@@ -248,10 +248,10 @@ namespace ChilliSource
                 if(in_font->TryGetCharacterInfo(in_character, info) == true)
                 {
                     result.m_UVs = info.m_UVs;
-                    result.m_glyphSize = (info.m_originalSize - 2.0f * in_font->GetEffectPadding()) * in_textScale;
+                    result.m_advance = info.m_advance * in_textScale;
                     result.m_packedImageSize = info.m_size * in_textScale;
-                    result.m_position.x = in_cursorX + (info.m_offset.x - in_font->GetEffectPadding().x) * in_textScale;
-                    result.m_position.y = in_cursorY - (info.m_offset.y - in_font->GetEffectPadding().y) * in_textScale;
+                    result.m_position.x = in_cursorX + (info.m_offset.x - info.m_origin) * in_textScale;
+                    result.m_position.y = in_cursorY - (info.m_offset.y - in_font->GetVerticalPadding()) * in_textScale;
                 }
                 else
                 {
@@ -606,7 +606,7 @@ namespace ChilliSource
                     auto character = Core::UTF8StringUtils::Next(characterIt);
                     auto builtCharacter(BuildCharacter(character, in_font, cursorX, cursorY, in_textScale));
                     
-                    cursorX += builtCharacter.m_glyphSize.x;
+                    cursorX += builtCharacter.m_advance;
                     
                     if(builtCharacter.m_packedImageSize.y > 0.0f)
                     {

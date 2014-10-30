@@ -72,11 +72,11 @@ namespace ChilliSource
                     out_desc.m_pointSize = in_chunk->Read<u32>();
                     out_desc.m_lineHeight = in_chunk->Read<u32>();
                     out_desc.m_descent = in_chunk->Read<u32>();
+                    out_desc.m_spaceAdvance = in_chunk->Read<u32>();
                     
                     out_desc.m_textureAtlasWidth = in_chunk->Read<u32>();
                     out_desc.m_textureAtlasHeight = in_chunk->Read<u32>();
-                    out_desc.m_effectPadding.x = in_chunk->Read<u32>();
-                    out_desc.m_effectPadding.y = in_chunk->Read<u32>();
+                    out_desc.m_verticalPadding = in_chunk->Read<u32>();
                     
                     return true;
                 }
@@ -120,7 +120,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
             bool ReadGLPHChunk(Core::CSBinaryChunk* in_chunk, Font::Descriptor& out_desc)
             {
-                const u32 k_glyphInfoSize = 8 * 2;
+                const u32 k_glyphInfoSize = 10 * 2;
                 
                 CS_ASSERT(in_chunk != nullptr, "GLPH chunk cannot be null.");
                 CS_ASSERT(in_chunk->GetSize() % k_glyphInfoSize == 0, "GLPH chunk is the wrong size.");
@@ -139,6 +139,8 @@ namespace ChilliSource
                         frame.m_offsetY = in_chunk->Read<s16>();
                         frame.m_originalWidth = in_chunk->Read<s16>();
                         frame.m_originalHeight = in_chunk->Read<s16>();
+                        frame.m_origin = in_chunk->Read<s16>();
+                        frame.m_advance = in_chunk->Read<s16>();
                         out_desc.m_frames.push_back(frame);
                     }
                     

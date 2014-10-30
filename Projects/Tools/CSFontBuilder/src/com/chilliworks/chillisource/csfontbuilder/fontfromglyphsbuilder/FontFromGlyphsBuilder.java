@@ -87,9 +87,10 @@ public final class FontFromGlyphsBuilder
 			final int PADDING = 2;
 			
 			ArrayList<File> filesToProcess = new ArrayList<File>();
-			for (String filePath : in_glyphs.getFilePaths())
+			for (int i = 0; i < in_glyphs.getNumGlyphs(); ++i)
 			{
-				filesToProcess.add(new File(filePath));
+				Glyph glyph = in_glyphs.getGlyph(i);
+				filesToProcess.add(new File(glyph.getFilePath()));
 			}
 	
 			TexturePacker packer = new TexturePacker();
