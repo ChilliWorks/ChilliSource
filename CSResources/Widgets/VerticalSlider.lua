@@ -167,6 +167,25 @@ function updateSlider(in_pointerPositionY)
     sliderPosition = sliderFraction * (slideRange / barHeight);
     setRelativePosition(sliderWidget, 0.0, sliderPosition)
 end
+-----------------------------------------------------
+-- Called when a widget custom property is changed
+--
+-- @author HMcLaughlin
+--
+-- @param Custom property name
+-- @param Custom property value
+-----------------------------------------------------
+function onCustomPropertyChanged(in_propName, in_propValue)
+    if in_propName == "SliderFraction" then
+        sliderWidth, sliderHeight = getFinalSize(sliderWidget)
+        barWidth, barHeight = getFinalSize(this)
+        slideRange =  math.max(barHeight - sliderHeight, 0.0)
+
+        --convert the slider fraction to a relative position for the slider
+        sliderPosition = in_propValue * (slideRange / barHeight);
+        setRelativePosition(sliderWidget, 0.0, sliderPosition)
+    end
+end
 
 
 
