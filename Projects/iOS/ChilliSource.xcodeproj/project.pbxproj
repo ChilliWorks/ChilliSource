@@ -282,6 +282,7 @@
 		811B181619D19AF400B06B5D /* RotationGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RotationGesture.cpp; sourceTree = "<group>"; };
 		811B181719D19AF400B06B5D /* RotationGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotationGesture.h; sourceTree = "<group>"; };
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
+		8141DFF21A02439100F3D9DF /* concurrent_blocking_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_blocking_queue.h; sourceTree = "<group>"; };
 		8154B74619D0274100F9F5B9 /* concurrent_vector_const_forward_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_const_forward_iterator.h; sourceTree = "<group>"; };
 		8154B74719D0274100F9F5B9 /* concurrent_vector_const_reverse_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_const_reverse_iterator.h; sourceTree = "<group>"; };
 		8158E483196ACB25005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
@@ -421,7 +422,6 @@
 		81D8B2491962E0EB0010DA84 /* ParamDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParamDictionary.h; sourceTree = "<group>"; };
 		81D8B24A1962E0EB0010DA84 /* ParamDictionarySerialiser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParamDictionarySerialiser.cpp; sourceTree = "<group>"; };
 		81D8B24B1962E0EB0010DA84 /* ParamDictionarySerialiser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParamDictionarySerialiser.h; sourceTree = "<group>"; };
-		81D8B24C1962E0EB0010DA84 /* WorkerQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkerQueue.h; sourceTree = "<group>"; };
 		81D8B24E1962E0EB0010DA84 /* AESEncrypt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AESEncrypt.cpp; sourceTree = "<group>"; };
 		81D8B24F1962E0EB0010DA84 /* AESEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AESEncrypt.h; sourceTree = "<group>"; };
 		81D8B2501962E0EB0010DA84 /* BaseEncoding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseEncoding.cpp; sourceTree = "<group>"; };
@@ -1150,6 +1150,7 @@
 		81D8B2461962E0EB0010DA84 /* Container */ = {
 			isa = PBXGroup;
 			children = (
+				8141DFF21A02439100F3D9DF /* concurrent_blocking_queue.h */,
 				816B0C1719CC2E7000520B50 /* concurrent_vector.h */,
 				8154B74619D0274100F9F5B9 /* concurrent_vector_const_forward_iterator.h */,
 				8154B74719D0274100F9F5B9 /* concurrent_vector_const_reverse_iterator.h */,
@@ -1160,7 +1161,6 @@
 				81D8B2491962E0EB0010DA84 /* ParamDictionary.h */,
 				81D8B24A1962E0EB0010DA84 /* ParamDictionarySerialiser.cpp */,
 				81D8B24B1962E0EB0010DA84 /* ParamDictionarySerialiser.h */,
-				81D8B24C1962E0EB0010DA84 /* WorkerQueue.h */,
 			);
 			path = Container;
 			sourceTree = "<group>";

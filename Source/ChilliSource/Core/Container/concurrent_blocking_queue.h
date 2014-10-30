@@ -1,5 +1,5 @@
 //
-//  concurrent_worker_queue.h
+//  concurrent_blocking_queue.h
 //  Chilli Source
 //  Created by Scott Downie on 29/03/2011.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_CONTAINER_CONCURRENTWORKERQUEUE_H_
-#define _CHILLISOURCE_CORE_CONTAINER_CONCURRENTWORKERQUEUE_H_
+#ifndef _CHILLISOURCE_CORE_CONTAINER_CONCURRENTBLOCKINGQUEUE_H_
+#define _CHILLISOURCE_CORE_CONTAINER_CONCURRENTBLOCKINGQUEUE_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -40,21 +40,59 @@ namespace ChilliSource
     namespace Core
     {
 		//------------------------------------------------------------------
-		/// A worker queue which can safely be accessed from multiple
-		/// threads. 
+		/// A queue which can safely be accessed from multiple threads. If
+        /// pop is called when there is nothing in the queue it will block
+        /// until something is available.
 		/// 
 		/// @author Scott Downie
 		//------------------------------------------------------------------
-        template <typename TType> class concurrent_worker_queue final
+        template <typename TType> class concurrent_blocking_queue final
         {
         public:
-			CS_DECLARE_NOCOPY(concurrent_worker_queue);
-			//---------------------------------------------------------
-			/// Default constructor.
-			///
-			/// @author Ian Copland
-			//---------------------------------------------------------
-			concurrent_worker_queue() = default;
+            //---------------------------------------------------------
+            /// Default constructor.
+            ///
+            /// @author Ian Copland
+            //---------------------------------------------------------
+            concurrent_blocking_queue() = default;
+            //---------------------------------------------------------
+            /// Copy constructor. Copies the queue without copying the
+            /// underlying mutex.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The queue to copy.
+            //---------------------------------------------------------
+            concurrent_blocking_queue(const concurrent_blocking_queue<TType>& in_toCopy);
+            //---------------------------------------------------------
+            /// Deleted move constructor.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The queue to move.
+            //---------------------------------------------------------
+            concurrent_blocking_queue(concurrent_blocking_queue<TType>&& in_toMove) = delete;
+            //---------------------------------------------------------
+            /// Copy assignment.Copies the queue without copying the
+            /// underlying mutex.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The queue to copy.
+            ///
+            /// @return a reference to this.
+            //---------------------------------------------------------
+            concurrent_blocking_queue<TType>& operator=(const concurrent_blocking_queue<TType>& in_toCopy);
+            //---------------------------------------------------------
+            /// Deleted Copy assignment.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The queue to move.
+            ///
+            /// @return a reference to this.
+            //---------------------------------------------------------
+            concurrent_blocking_queue<TType>& operator=(concurrent_blocking_queue<TType>&& in_toMove) = delete;
 			//---------------------------------------------------------
 			/// @author Scott Downie
 			///
@@ -102,7 +140,7 @@ namespace ChilliSource
 			///
 			/// @author S Downie
 			//---------------------------------------------------------
-			~concurrent_worker_queue();
+			~concurrent_blocking_queue();
         private:
 			//---------------------------------------------------------
 			/// Awakes all waiting threads regardless of whether 
@@ -117,23 +155,45 @@ namespace ChilliSource
             mutable std::mutex m_queueMutex;
             std::condition_variable m_emptyWaitCondition;
         };
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        template <typename TType> concurrent_blocking_queue<TType>::concurrent_blocking_queue(const concurrent_blocking_queue<TType>& in_toCopy)
+        {
+            std::unique_lock<std::mutex> copyQueueLock(in_toCopy.m_queueMutex);
+            m_queue = in_toCopy.m_queue;
+            m_finished = in_toCopy.m_finished;
+        }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        template <typename TType> concurrent_blocking_queue<TType>& concurrent_blocking_queue<TType>::operator=(const concurrent_blocking_queue<TType>& in_toCopy)
+        {
+            std::unique_lock<std::mutex> copyQueueLock(in_toCopy.m_queueMutex);
+            std::queue<TType> queue = in_toCopy.m_queue;
+            bool finished = in_toCopy.m_finished;
+            copyQueueLock.unlock();
+            
+            std::unique_lock<std::mutex> thisQueueLock(m_queueMutex);
+            m_queue = queue;
+            m_finished = finished;
+            return *this;
+        }
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		template <typename TType> bool concurrent_worker_queue<TType>::empty() const
+		template <typename TType> bool concurrent_blocking_queue<TType>::empty() const
 		{
 			std::unique_lock<std::mutex> queueLock(m_queueMutex);
 			return m_queue.empty();
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		template <typename TType> u32 concurrent_worker_queue<TType>::size() const
+		template <typename TType> u32 concurrent_blocking_queue<TType>::size() const
 		{
 			std::unique_lock<std::mutex> queueLock(m_queueMutex);
 			return m_queue.size();
 		}
 		//---------------------------------------------------------
 		//---------------------------------------------------------
-		template <typename TType> void concurrent_worker_queue<TType>::push(TType in_object)
+		template <typename TType> void concurrent_blocking_queue<TType>::push(TType in_object)
 		{
 			//Lock the queue for writing
 			std::unique_lock<std::mutex> queueLock(m_queueMutex);
@@ -146,7 +206,7 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------------
 		//---------------------------------------------------------
-		template <typename TType> bool concurrent_worker_queue<TType>::pop_or_wait(TType& out_poppedObject)
+		template <typename TType> bool concurrent_blocking_queue<TType>::pop_or_wait(TType& out_poppedObject)
 		{
 			std::unique_lock<std::mutex> queueLock(m_queueMutex);
 
@@ -166,7 +226,7 @@ namespace ChilliSource
 		}
 		//---------------------------------------------------------
 		//---------------------------------------------------------
-		template <typename TType> void concurrent_worker_queue<TType>::clear()
+		template <typename TType> void concurrent_blocking_queue<TType>::clear()
 		{
 			std::unique_lock<std::mutex> queueLock(m_queueMutex);
 
@@ -177,7 +237,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		template <typename TType> void concurrent_worker_queue<TType>::awake_all()
+		template <typename TType> void concurrent_blocking_queue<TType>::awake_all()
 		{
 			std::unique_lock<std::mutex> queueLock(m_queueMutex);
 			m_finished = true;
@@ -185,7 +245,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		template <typename TType> concurrent_worker_queue<TType>::~concurrent_worker_queue()
+		template <typename TType> concurrent_blocking_queue<TType>::~concurrent_blocking_queue()
 		{
 			awake_all();
 		}

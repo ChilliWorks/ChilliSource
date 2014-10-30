@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/HashedArray.h>
 #include <ChilliSource/Core/Container/concurrent_vector.h>
-#include <ChilliSource/Core/Container/concurrent_worker_queue.h>
+#include <ChilliSource/Core/Container/concurrent_blocking_queue.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
 
