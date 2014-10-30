@@ -1511,7 +1511,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\TapGesture.h">
       <Filter>ChilliSource\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_worker_queue.h">
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_blocking_queue.h">
       <Filter>ChilliSource\Core</Filter>
     </ClInclude>
   </ItemGroup>
