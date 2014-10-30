@@ -362,6 +362,7 @@
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
 		813FE9BF19DEBFBD0021F7CD /* DrawableUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableUtils.cpp; sourceTree = "<group>"; };
 		813FE9C019DEBFBD0021F7CD /* DrawableUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableUtils.h; sourceTree = "<group>"; };
+		8141DFF31A025C9E00F3D9DF /* concurrent_blocking_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_blocking_queue.h; sourceTree = "<group>"; };
 		81496B811980F1AE004E79F2 /* Canvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas.cpp; sourceTree = "<group>"; };
 		81496B821980F1AE004E79F2 /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canvas.h; sourceTree = "<group>"; };
 		81496B831980F1AE004E79F2 /* Widget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Widget.cpp; sourceTree = "<group>"; };
@@ -536,7 +537,6 @@
 		81D8B2491962E0EB0010DA84 /* ParamDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParamDictionary.h; sourceTree = "<group>"; };
 		81D8B24A1962E0EB0010DA84 /* ParamDictionarySerialiser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParamDictionarySerialiser.cpp; sourceTree = "<group>"; };
 		81D8B24B1962E0EB0010DA84 /* ParamDictionarySerialiser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParamDictionarySerialiser.h; sourceTree = "<group>"; };
-		81D8B24C1962E0EB0010DA84 /* WorkerQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkerQueue.h; sourceTree = "<group>"; };
 		81D8B24E1962E0EB0010DA84 /* AESEncrypt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AESEncrypt.cpp; sourceTree = "<group>"; };
 		81D8B24F1962E0EB0010DA84 /* AESEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AESEncrypt.h; sourceTree = "<group>"; };
 		81D8B2501962E0EB0010DA84 /* BaseEncoding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseEncoding.cpp; sourceTree = "<group>"; };
@@ -1421,6 +1421,7 @@
 		81D8B2461962E0EB0010DA84 /* Container */ = {
 			isa = PBXGroup;
 			children = (
+				8141DFF31A025C9E00F3D9DF /* concurrent_blocking_queue.h */,
 				8154B74C19D06B4600F9F5B9 /* concurrent_vector.h */,
 				8154B74819D06B4600F9F5B9 /* concurrent_vector_const_forward_iterator.h */,
 				8154B74919D06B4600F9F5B9 /* concurrent_vector_const_reverse_iterator.h */,
@@ -1431,7 +1432,6 @@
 				81D8B2491962E0EB0010DA84 /* ParamDictionary.h */,
 				81D8B24A1962E0EB0010DA84 /* ParamDictionarySerialiser.cpp */,
 				81D8B24B1962E0EB0010DA84 /* ParamDictionarySerialiser.h */,
-				81D8B24C1962E0EB0010DA84 /* WorkerQueue.h */,
 			);
 			path = Container;
 			sourceTree = "<group>";

@@ -55,8 +55,8 @@ namespace ChilliSource
         template <typename TKey, typename TValue> class HashedArray;
         template <typename TType> class ObjectPool;
         CS_FORWARDDECLARE_CLASS(ParamDictionary);
-        template <typename T> class WorkerQueue;
-        template <typename TType> class concurrent_vector;
+		template <typename TType> class concurrent_blocking_queue;
+		template <typename TType> class concurrent_vector;
         //---------------------------------------------------------
         /// Delegate
         //---------------------------------------------------------
