@@ -62,14 +62,14 @@ namespace ChilliSource
                 //test file id.
                 if (headerData[0] != 'C' || headerData[1] != 'S' || headerData[2] != 'C' || headerData[3] != 'S')
                 {
-                    CS_LOG_ERROR("Invalid Chilli Source file idenifier in file: " + in_filePath);
+                    CS_LOG_ERROR("Invalid Chilli Source file identifier in file: " + in_filePath);
                     return false;
                 }
                 
                 //test file endianness.
-                const u32 k_endianessCheckFlagOffset = 4;
-                u32 endianessCheckFlag = *reinterpret_cast<const u32*>(headerData.get() + k_endianessCheckFlagOffset);
-                if (endianessCheckFlag != 9999)
+                const u32 k_endiannessCheckFlagOffset = 4;
+                u32 endiannessCheckFlag = *reinterpret_cast<const u32*>(headerData.get() + k_endiannessCheckFlagOffset);
+                if (endiannessCheckFlag != 9999)
                 {
                     CS_LOG_ERROR("File is big endian, only little endian is currently supported: " + in_filePath);
                     return false;

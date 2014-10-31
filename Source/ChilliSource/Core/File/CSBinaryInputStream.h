@@ -45,7 +45,7 @@ namespace ChilliSource
         ///
         /// The Chilli Source "Chunked" file format has 3 sections. The header,
         /// the chunk table and the chunk data. The header contains basic file
-        /// infomation such as version numbers and the chunk table size. The
+        /// information such as version numbers and the chunk table size. The
         /// chunk table describes the location and size of all file chunks. The
         /// Chunk data section contains each of the chunks described by the
         /// chunk tank. The quantity of chunks and format and contents of a chunk
@@ -55,7 +55,7 @@ namespace ChilliSource
         ///
         ///   [4 bytes] The 4 ASCII character Chilli Source file id: "CSCS".
         ///
-        ///   [4 bytes] Endianess check flag. This is an unsigned integer that
+        ///   [4 bytes] Endianness check flag. This is an unsigned integer that
         ///   should always read 9999. It can be used to determine whether the
         ///   file is big or little endian.
         ///
@@ -69,7 +69,7 @@ namespace ChilliSource
         ///   [4 bytes] An unsigned integer describing the number of entries in
         ///   chunk table.
         ///
-        /// The chunk table simply contains a series of entries, each descrbing
+        /// The chunk table simply contains a series of entries, each describing
         /// a chunk. The format of a chunk table entry is as follows:
         ///
         ///   [4 bytes] A 4 ASCII character unique identifier for the chunk.
@@ -101,7 +101,7 @@ namespace ChilliSource
             /// Returns whether or not the stream has successfully been
             /// created and is read for use. This should be checked prior
             /// to any other action on the stream. If it returns false, the
-            /// stream should be discard and no further action performed on
+            /// stream should be discarded and no further action performed on
             /// it.
             ///
             /// @author Ian Copland
@@ -124,7 +124,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// Reads the contents of the requested chunk into memory and
             /// returns it as a Binary Chunk to allow efficient and easy access
-            /// to the chunks contents. If the file doesnt contain the
+            /// to the chunks contents. If the file doesn't contain the
             /// requested chunk null will be returned.
             ///
             /// @author Ian Copland
