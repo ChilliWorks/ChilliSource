@@ -130,6 +130,27 @@
     <Filter Include="ChilliSource\Core\Math\Geometry">
       <UniqueIdentifier>{a0340f0c-841e-42ee-b080-a3c981501186}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ChilliSource\UI">
+      <UniqueIdentifier>{75eadb93-0e64-4596-9a51-74321fbf7f19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\UI\Base">
+      <UniqueIdentifier>{d9f5f743-d599-4e0e-a4ea-735bfb0ac1f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\UI\Drawable">
+      <UniqueIdentifier>{789c21d5-5821-48d5-95bb-e71a21b5a736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\UI\Layout">
+      <UniqueIdentifier>{2c083834-8e4f-4fc3-997f-8e3be2a1cb50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Scripting">
+      <UniqueIdentifier>{112d0e8c-31d9-489d-b40e-8c343e956eaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Scripting\Lua">
+      <UniqueIdentifier>{6486a3d5-5505-422f-af7f-5c617d7b948b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Scripting\Lua\Function">
+      <UniqueIdentifier>{a53e67e2-5b1f-4591-93cc-7ec89215ed23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.cpp">
@@ -767,6 +788,123 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\RemoteNotificationSystem.cpp">
       <Filter>ChilliSource\Core\Notification</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Canvas.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyMap.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyType.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\SizePolicy.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Widget.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDef.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDefProvider.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetParserUtils.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetProxy.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableProxy.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableType.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableUtils.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableProxy.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawable.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawableProxy.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableProxy.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridLayoutProxy.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListLayoutProxy.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\ILayout.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutProxy.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutType.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayoutProxy.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\LuaScript.cpp">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSource.cpp">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSourceProvider.cpp">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSystem.cpp">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\LuaUtils.cpp">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\Function\ILuaFunction.cpp">
+      <Filter>ChilliSource\Scripting\Lua\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\Function\LuaFunctionUtils.cpp">
+      <Filter>ChilliSource\Scripting\Lua\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\PointerProxy.cpp">
+      <Filter>ChilliSource\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1663,6 +1801,156 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\RemoteNotificationSystem.h">
       <Filter>ChilliSource\Core\Notification</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\ForwardDeclarations.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Canvas.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyAccessor.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyMap.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyType.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\SizePolicy.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Widget.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDef.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDefProvider.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetHierarchyDesc.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetParserUtils.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetProxy.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableProxy.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableType.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableUtils.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableProxy.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawable.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawableProxy.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableProxy.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridLayoutProxy.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\HListLayoutProxy.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\ILayout.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutProxy.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutType.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListLayoutProxy.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\ForwardDeclarations.h">
+      <Filter>ChilliSource\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua.h">
+      <Filter>ChilliSource\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\Function.h">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaLibIncludes.h">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaScript.h">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSource.h">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSourceProvider.h">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSystem.h">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaUtils.h">
+      <Filter>ChilliSource\Scripting\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\Function\ILuaFunction.h">
+      <Filter>ChilliSource\Scripting\Lua\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\Function\LuaFunction.h">
+      <Filter>ChilliSource\Scripting\Lua\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\Function\LuaFunctionUtils.h">
+      <Filter>ChilliSource\Scripting\Lua\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Pointer\PointerProxy.h">
+      <Filter>ChilliSource\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
