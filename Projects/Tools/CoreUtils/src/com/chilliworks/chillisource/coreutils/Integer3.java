@@ -196,6 +196,15 @@ public final class Integer3
 		return m_z;
 	}
 	/**
+	 * @author Ian Copland
+	 *
+	 * @return This object in string form.
+	 */
+	@Override public String toString()
+	{
+		return m_x + ", " + m_y + ", " + m_z;
+	}
+	/**
 	 * Returns whether or not this object is equal in value to the given
 	 * object.
 	 * 
@@ -205,7 +214,7 @@ public final class Integer3
 	 *
 	 * @return Whether or not the given object is equal to this.
 	 */
-	public boolean equals(Object in_object)
+	@Override public boolean equals(Object in_object)
 	{
 		if (in_object == this)
 	    {
@@ -224,15 +233,18 @@ public final class Integer3
 	    
 	    Integer3 integer3 = (Integer3)in_object;
 	    return (m_x == integer3.m_x && m_y == integer3.m_y && m_z == integer3.m_z);
-	}
+	}	
 	/**
-
 	 * @author Ian Copland
 	 *
-	 * @return This object in string form.
+	 * @return The hash code for this object.
 	 */
-	public String toString()
+	@Override public int hashCode()
 	{
-		return "" + m_x + ", " + m_y + ", " + m_z;
+		int hash = HashCodeUtils.INITIAL_VALUE;
+		hash = HashCodeUtils.add(hash, m_x);
+		hash = HashCodeUtils.add(hash, m_y);
+		hash = HashCodeUtils.add(hash, m_z);
+		return hash;
 	}
 }

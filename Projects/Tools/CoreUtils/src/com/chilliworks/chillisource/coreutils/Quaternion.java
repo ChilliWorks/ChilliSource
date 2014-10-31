@@ -118,7 +118,7 @@ public final class Quaternion
 			int j = iNext[i];
 			int k = iNext[j];
 			
-			root = Math.sqrt(in_matrix.get(i,i) - in_matrix.get(j,j) - in_matrix.get(k,k) + 1.0f);
+			root = Math.sqrt(in_matrix.get(i,i) - in_matrix.get(j,j) - in_matrix.get(k,k) + 1.0);
 			
 			double[] apkQuat = {0.0, 0.0, 0.0};
 			apkQuat[i] = 0.5 * root;
@@ -199,7 +199,7 @@ public final class Quaternion
 	{
 		double sqrLength = (m_x * m_x + m_y * m_y + m_z * m_z);
 
-		if (sqrLength > 0.0f)
+		if (sqrLength > 0.0)
 		{
 			double inverseLength = 1.0 / Math.sqrt(sqrLength);
 			return new Vector3(m_x * inverseLength, m_y * inverseLength, m_z * inverseLength);
@@ -216,7 +216,7 @@ public final class Quaternion
 	{
 		double sqrLength = (m_x * m_x + m_y * m_y + m_z * m_z);
 
-		if (sqrLength > 0.0f)
+		if (sqrLength > 0.0)
 		{
 			return 2.0 * Math.acos(m_w);
 		} 
@@ -241,8 +241,61 @@ public final class Quaternion
 		double wz = m_w * m_z;
 		
 		return new Matrix4(1.0 - 2.0 * (y2 + z2), 2.0 * (xy + wz), 2.0 * (xz - wy), 0.0,
-				2.0 * (xy - wz), 1.0 - 2.0f * (x2 + z2), 2.0 * (yz + wx), 0.0,
+				2.0 * (xy - wz), 1.0 - 2.0 * (x2 + z2), 2.0 * (yz + wx), 0.0,
 				2.0 * (xz + wy), 2.0 * (yz - wx), 1.0 - 2.0 * (x2 + y2), 0.0,
 				0.0, 0.0, 0.0, 1.0);
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return This object in string form.
+	 */
+	@Override public String toString()
+	{
+		return m_x + ", " + m_y + ", " + m_z + ", " + m_w;
+	}
+	/**
+	 * Returns whether or not this object is equal in value to the given
+	 * object.
+	 * 
+	 * @author Ian Copland
+	 *
+	 * @param in_object - The other object.
+	 *
+	 * @return Whether or not the given object is equal to this.
+	 */
+	@Override public boolean equals(Object in_object)
+	{
+		if (in_object == this)
+	    {
+	    	return true;
+	    }
+		
+		if (in_object == null)
+	    {
+	    	return false;
+	    }
+	    	
+	    if ((in_object instanceof Quaternion) == false)
+	    {
+	    	return false;
+	    }
+	    
+	    Quaternion vector4 = (Quaternion)in_object;
+	    return (Double.compare(m_x, vector4.m_x) == 0 && Double.compare(m_y, vector4.m_y) == 0 && Double.compare(m_z, vector4.m_z) == 0 && Double.compare(m_w, vector4.m_w) == 0);
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return The hash code for this object.
+	 */
+	@Override public int hashCode()
+	{
+		int hash = HashCodeUtils.INITIAL_VALUE;
+		hash = HashCodeUtils.add(hash, m_x);
+		hash = HashCodeUtils.add(hash, m_y);
+		hash = HashCodeUtils.add(hash, m_z);
+		hash = HashCodeUtils.add(hash, m_w);
+		return hash;
 	}
 }

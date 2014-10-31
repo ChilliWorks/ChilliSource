@@ -93,7 +93,7 @@ public final class Tuple3<TFirst, TSecond, TThird>
 	 */
 	@Override public String toString() 
 	{
-        return "[" + m_first + "," + m_second + "," + m_third + "," + "]";
+        return m_first + ", " + m_second + ", " + m_third;
     }
 	/**
 	 * Compares equality with the given object.
@@ -125,4 +125,17 @@ public final class Tuple3<TFirst, TSecond, TThird>
         boolean thirdEquals = ((m_third == null && tuple.m_third == null) || (m_third != null && m_third.equals(tuple.m_third) == true));
         return (firstEquals == true && secondEquals == true && thirdEquals == true);
     }
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return The hash code for this object.
+	 */
+	@Override public int hashCode()
+	{
+		int hash = HashCodeUtils.INITIAL_VALUE;
+		hash = HashCodeUtils.add(hash, m_first);
+		hash = HashCodeUtils.add(hash, m_second);
+		hash = HashCodeUtils.add(hash, m_third);
+		return hash;
+	}
 }

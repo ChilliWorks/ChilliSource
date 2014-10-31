@@ -183,6 +183,15 @@ public final class Integer2
 		return m_y;
 	}
 	/**
+	 * @author Ian Copland
+	 *
+	 * @return This object in string form.
+	 */
+	@Override public String toString()
+	{
+		return m_x + ", " + m_y;
+	}
+	/**
 	 * Returns whether or not this object is equal in value to the given
 	 * object.
 	 * 
@@ -192,7 +201,7 @@ public final class Integer2
 	 *
 	 * @return Whether or not the given object is equal to this.
 	 */
-	public boolean equals(Object in_object)
+	@Override public boolean equals(Object in_object)
 	{
 		if (in_object == this)
 	    {
@@ -213,13 +222,15 @@ public final class Integer2
 	    return (m_x == integer2.m_x && m_y == integer2.m_y);
 	}
 	/**
-
 	 * @author Ian Copland
 	 *
-	 * @return This object in string form.
+	 * @return The hash code for this object.
 	 */
-	public String toString()
+	@Override public int hashCode()
 	{
-		return "" + m_x + ", " + m_y;
+		int hash = HashCodeUtils.INITIAL_VALUE;
+		hash = HashCodeUtils.add(hash, m_x);
+		hash = HashCodeUtils.add(hash, m_y);
+		return hash;
 	}
 }

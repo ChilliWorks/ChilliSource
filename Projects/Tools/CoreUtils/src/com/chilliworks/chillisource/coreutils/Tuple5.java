@@ -119,7 +119,7 @@ public final class Tuple5<TFirst, TSecond, TThird, TFourth, TFifth>
 	 */
 	@Override public String toString() 
 	{
-        return "[" + m_first + "," + m_second + "," + m_third + "," + m_fourth + "," + m_fifth + "]";
+        return m_first + ", " + m_second + ", " + m_third + ", " + m_fourth + ", " + m_fifth;
     }
 	/**
 	 * Compares equality with the given object.
@@ -153,4 +153,19 @@ public final class Tuple5<TFirst, TSecond, TThird, TFourth, TFifth>
         boolean fifthEquals = ((m_fifth == null && tuple.m_fifth == null) || (m_fifth != null && m_fifth.equals(tuple.m_fifth) == true));
         return (firstEquals == true && secondEquals == true && thirdEquals == true && fourthEquals == true && fifthEquals == true);
     }
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return The hash code for this object.
+	 */
+	@Override public int hashCode()
+	{
+		int hash = HashCodeUtils.INITIAL_VALUE;
+		hash = HashCodeUtils.add(hash, m_first);
+		hash = HashCodeUtils.add(hash, m_second);
+		hash = HashCodeUtils.add(hash, m_third);
+		hash = HashCodeUtils.add(hash, m_fourth);
+		hash = HashCodeUtils.add(hash, m_fifth);
+		return hash;
+	}
 }

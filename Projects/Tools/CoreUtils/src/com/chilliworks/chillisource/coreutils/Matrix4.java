@@ -303,7 +303,7 @@ public final class Matrix4
 	 */
 	public static Matrix4 swapYandZ(Matrix4 in_mat)
 	{
-		return new Matrix4(	in_mat.m_data[0], in_mat.m_data[2], in_mat.m_data[1], in_mat.m_data[3],
+		return new Matrix4(in_mat.m_data[0], in_mat.m_data[2], in_mat.m_data[1], in_mat.m_data[3],
 			in_mat.m_data[8], in_mat.m_data[10], in_mat.m_data[9], in_mat.m_data[11],
 			in_mat.m_data[4], in_mat.m_data[6], in_mat.m_data[5], in_mat.m_data[7],
 			in_mat.m_data[12], in_mat.m_data[14], in_mat.m_data[13], in_mat.m_data[15]);
@@ -378,7 +378,7 @@ public final class Matrix4
 		double x = 0.0;
 		double y = 0.0;
 		double z = 0.0;
-		if (m_data[8] != 1.0f && m_data[8] != -1.0f)
+		if (m_data[8] != 1.0 && m_data[8] != -1.0)
 		{
 			//only take one set of angles.
 			y = -Math.asin(m_data[8]); 
@@ -387,15 +387,15 @@ public final class Matrix4
 		}
 		else
 		{
-			z = 0.0f;
+			z = 0.0;
 			if (m_data[8] == -1)
 			{
-				y = Math.PI / 2.0f;
+				y = Math.PI * 0.5;
 				x = z + Math.atan2(m_data[1], m_data[2]);
 			}
 			else
 			{
-				y = -Math.PI / 2.0f;
+				y = -Math.PI * 0.5;
 				x = -z + Math.atan2(-m_data[1], -m_data[2]);
 			}
 		}
@@ -413,15 +413,15 @@ public final class Matrix4
 				m_data[4], m_data[5], m_data[6], m_data[6], 
 				m_data[8], m_data[9], m_data[10], m_data[11], 
 				0.0, 0.0, 0.0, m_data[15]);
-		
-		Vector3 upRotated = Vector3.multiply(new Vector3(0.0f, 1.0f, 0.0f), theCopy);
-		Vector3 rightRotated = Vector3.multiply(new Vector3(1.0f, 0.0f, 0.0f), theCopy);
-		Vector3 forwardRotated = Vector3.multiply(new Vector3(0.0f, 0.0f, 1.0f), theCopy);
+
+		Vector3 rotationX = Vector3.multiply(new Vector3(1.0, 0.0, 0.0), theCopy);
+		Vector3 rotationY = Vector3.multiply(new Vector3(0.0, 1.0, 0.0), theCopy);
+		Vector3 rotationZ = Vector3.multiply(new Vector3(0.0, 0.0, 1.0), theCopy);
 		
 		final double TOLERANCE = 0.00001;
-		if (upRotated.getLength() < 1.0 - TOLERANCE || upRotated.getLength() > 1.0 + TOLERANCE ||
-			rightRotated.getLength() < 1.0 - TOLERANCE || rightRotated.getLength() > 1.0 + TOLERANCE ||
-			forwardRotated.getLength() < 1.0 - TOLERANCE || forwardRotated.getLength() > 1.0 + TOLERANCE)
+		if (rotationY.getLength() < 1.0 - TOLERANCE || rotationY.getLength() > 1.0 + TOLERANCE ||
+			rotationX.getLength() < 1.0 - TOLERANCE || rotationX.getLength() > 1.0 + TOLERANCE ||
+			rotationZ.getLength() < 1.0 - TOLERANCE || rotationZ.getLength() > 1.0 + TOLERANCE)
 		{
 			return true;
 		}
@@ -436,18 +436,6 @@ public final class Matrix4
 	public Vector3 getTranslation()
 	{
 		return new Vector3(m_data[12], m_data[13], m_data[14]);
-	}
-	/**
-	 * @author Ian Copland
-	 * 
-	 * @return A string representation of the matrix.
-	 */
-	public String toString()
-	{
-		return  "" + m_data[0] + ", " + m_data[1] + ", " + m_data[2] + ", " + m_data[3] + ", " + 
-			m_data[4] + ", " + m_data[5] + ", " + m_data[6] + ", " + m_data[7] + ", " + 
-			m_data[8] + ", " + m_data[9] + ", " + m_data[10] + ", " + m_data[11] + ", " +
-			m_data[12] + ", " + m_data[13] + ", " + m_data[14] + ", " + m_data[15];
 	}
 	/**
 	 * Returns the transform decomposed into its translation, scale and orientation.
@@ -556,5 +544,66 @@ public final class Matrix4
 		Quaternion orientation = new Quaternion(q);
 		
 		return new Tuple3<Vector3, Vector3, Quaternion>(translation, scale, orientation);
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return A string representation of the matrix.
+	 */
+	@Override public String toString()
+	{
+		return  "" + m_data[0] + ", " + m_data[1] + ", " + m_data[2] + ", " + m_data[3] + ", " + 
+			m_data[4] + ", " + m_data[5] + ", " + m_data[6] + ", " + m_data[7] + ", " + 
+			m_data[8] + ", " + m_data[9] + ", " + m_data[10] + ", " + m_data[11] + ", " +
+			m_data[12] + ", " + m_data[13] + ", " + m_data[14] + ", " + m_data[15];
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @param in_object - The other object.
+	 *
+	 * @return Whether or not the given object is equal to this.
+	 */
+	@Override public boolean equals(Object in_object)
+	{
+		if (in_object == this)
+	    {
+	    	return true;
+	    }
+		
+		if (in_object == null)
+	    {
+	    	return false;
+	    }
+	    	
+	    if ((in_object instanceof Matrix4) == false)
+	    {
+	    	return false;
+	    }
+	    
+	    Matrix4 matrix4 = (Matrix4)in_object;
+	    for (int i = 0; i < 16; ++i)
+    	{
+	    	if (Double.compare(m_data[i], matrix4.m_data[i]) != 0)
+	    	{
+	    		return false;
+	    	}
+    	}
+	    
+	    return true;
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return The hash code for this object.
+	 */
+	@Override public int hashCode()
+	{
+		int hash = HashCodeUtils.INITIAL_VALUE;
+		for (int i = 0; i < 16; ++i)
+    	{
+			hash = HashCodeUtils.add(hash, m_data[i]);
+    	}
+		return hash;
 	}
 }

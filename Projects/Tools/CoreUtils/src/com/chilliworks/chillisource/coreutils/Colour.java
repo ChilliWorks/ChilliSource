@@ -138,6 +138,15 @@ public final class Colour
 		return m_a;
 	}
 	/**
+	 * @author Ian Copland
+	 *
+	 * @return This object in string form.
+	 */
+	@Override public String toString()
+	{
+		return "" + m_r + ", " + m_g + ", " + m_b + "," + m_a;
+	}
+	/**
 	 * Returns whether or not this object is equal in value to the given
 	 * object.
 	 * 
@@ -147,7 +156,7 @@ public final class Colour
 	 *
 	 * @return Whether or not the given object is equal to this.
 	 */
-	public boolean equals(Object in_object)
+	@Override public boolean equals(Object in_object)
 	{
 		if (in_object == this)
 	    {
@@ -170,10 +179,15 @@ public final class Colour
 	/**
 	 * @author Ian Copland
 	 *
-	 * @return This object in string form.
+	 * @return The hash code for this object.
 	 */
-	public String toString()
+	@Override public int hashCode()
 	{
-		return "" + m_r + ", " + m_g + ", " + m_b + "," + m_a;
+		int hash = HashCodeUtils.INITIAL_VALUE;
+		hash = HashCodeUtils.add(hash, m_r);
+		hash = HashCodeUtils.add(hash, m_g);
+		hash = HashCodeUtils.add(hash, m_b);
+		hash = HashCodeUtils.add(hash, m_a);
+		return hash;
 	}
 }

@@ -114,7 +114,8 @@ public final class Vector4
 	 */
 	public static Vector4 divide(Vector4 in_a, double in_b)
 	{
-		return new Vector4(in_a.getX() / in_b, in_a.getY() / in_b, in_a.getZ() / in_b, in_a.getW() / in_b);
+		double invB = in_b;
+		return new Vector4(in_a.getX() * invB, in_a.getY() * invB, in_a.getZ() * invB, in_a.getW() * invB);
 	}
 	/**
 	 * Returns the result of dividing two Vector4s.
@@ -261,6 +262,15 @@ public final class Vector4
 		return Math.sqrt(m_x * m_x + m_y * m_y + m_z * m_z + m_w * m_w);
 	}
 	/**
+	 * @author Ian Copland
+	 *
+	 * @return This object in string form.
+	 */
+	@Override public String toString()
+	{
+		return m_x + ", " + m_y + ", " + m_z + ", " + m_w;
+	}
+	/**
 	 * Returns whether or not this object is equal in value to the given
 	 * object.
 	 * 
@@ -270,7 +280,7 @@ public final class Vector4
 	 *
 	 * @return Whether or not the given object is equal to this.
 	 */
-	public boolean equals(Object in_object)
+	@Override public boolean equals(Object in_object)
 	{
 		if (in_object == this)
 	    {
@@ -291,13 +301,17 @@ public final class Vector4
 	    return (Double.compare(m_x, vector4.m_x) == 0 && Double.compare(m_y, vector4.m_y) == 0 && Double.compare(m_z, vector4.m_z) == 0 && Double.compare(m_w, vector4.m_w) == 0);
 	}
 	/**
-
 	 * @author Ian Copland
 	 *
-	 * @return This object in string form.
+	 * @return The hash code for this object.
 	 */
-	public String toString()
+	@Override public int hashCode()
 	{
-		return "" + m_x + ", " + m_y + ", " + m_z + ", " + m_w;
+		int hash = HashCodeUtils.INITIAL_VALUE;
+		hash = HashCodeUtils.add(hash, m_x);
+		hash = HashCodeUtils.add(hash, m_y);
+		hash = HashCodeUtils.add(hash, m_z);
+		hash = HashCodeUtils.add(hash, m_w);
+		return hash;
 	}
 }

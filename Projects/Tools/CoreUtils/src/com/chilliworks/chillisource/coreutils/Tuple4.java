@@ -106,7 +106,7 @@ public final class Tuple4<TFirst, TSecond, TThird, TFourth>
 	 */
 	@Override public String toString() 
 	{
-        return "[" + m_first + "," + m_second + "," + m_third + "," + m_fourth + "]";
+        return m_first + ", " + m_second + ", " + m_third + ", " + m_fourth;
     }
 	/**
 	 * Compares equality with the given object.
@@ -139,4 +139,18 @@ public final class Tuple4<TFirst, TSecond, TThird, TFourth>
         boolean fourthEquals = ((m_fourth == null && tuple.m_fourth == null) || (m_fourth != null && m_fourth.equals(tuple.m_fourth) == true));
         return (firstEquals == true && secondEquals == true && thirdEquals == true && fourthEquals == true);
     }
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return The hash code for this object.
+	 */
+	@Override public int hashCode()
+	{
+		int hash = HashCodeUtils.INITIAL_VALUE;
+		hash = HashCodeUtils.add(hash, m_first);
+		hash = HashCodeUtils.add(hash, m_second);
+		hash = HashCodeUtils.add(hash, m_third);
+		hash = HashCodeUtils.add(hash, m_fourth);
+		return hash;
+	}
 }

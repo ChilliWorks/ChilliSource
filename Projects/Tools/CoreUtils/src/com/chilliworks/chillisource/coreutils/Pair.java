@@ -80,7 +80,7 @@ public final class Pair<TFirst, TSecond>
 	 */
 	@Override public String toString() 
 	{
-        return "[" + m_first + "," + m_second + "]";
+        return m_first + ", " + m_second;
     }
 	/**
 	 * Compares equality with the given object.
@@ -111,4 +111,16 @@ public final class Pair<TFirst, TSecond>
         boolean secondEquals = ((m_second == null && pair.m_second == null) || (m_second != null && m_second.equals(pair.m_second) == true));
         return (firstEquals == true && secondEquals == true);
     }
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return The hash code for this object.
+	 */
+	@Override public int hashCode()
+	{
+		int hash = HashCodeUtils.INITIAL_VALUE;
+		hash = HashCodeUtils.add(hash, m_first);
+		hash = HashCodeUtils.add(hash, m_second);
+		return hash;
+	}
 }
