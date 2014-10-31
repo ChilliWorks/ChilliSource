@@ -58,6 +58,78 @@
     <Filter Include="ChilliSource\Audio">
       <UniqueIdentifier>{5ea16a5b-a814-4e7a-ad61-79ae11172776}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ChilliSource\Core\Base">
+      <UniqueIdentifier>{7a72d25c-dcbd-4158-b222-9797703bcb10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Container">
+      <UniqueIdentifier>{21c7e45f-b7b0-48fd-9b38-c0907fca10a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Cryptographic">
+      <UniqueIdentifier>{5f1ddeec-19ef-4b4a-ba94-076e526831ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Delegate">
+      <UniqueIdentifier>{f725cf5f-0652-430f-8f21-72f655cc6e19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\DialogueBox">
+      <UniqueIdentifier>{8436926e-9be7-4687-818a-4c769177152e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Entity">
+      <UniqueIdentifier>{96aebe2f-fb87-420e-9c0c-b186e9b0dfab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Event">
+      <UniqueIdentifier>{b239027b-2e6c-4220-9154-cc75e8cda666}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\File">
+      <UniqueIdentifier>{cd4dc119-e74b-4db6-92f0-0a7131dafbbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Image">
+      <UniqueIdentifier>{601819ca-474c-42aa-b236-b6bea7c3bf44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Localisation">
+      <UniqueIdentifier>{48952a3a-fc49-4f52-ba45-3f7e2dd6e7d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Math">
+      <UniqueIdentifier>{fc41ea81-2047-4053-b7c8-53b72d96bb58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Notification">
+      <UniqueIdentifier>{09d0c45c-fd8a-4e0d-af30-c533eb62ed3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Reflection">
+      <UniqueIdentifier>{20c11674-c428-4878-b4f6-df19a6ce4593}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Resource">
+      <UniqueIdentifier>{def66ffb-618b-4f68-b2fb-db30c27f5079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Scene">
+      <UniqueIdentifier>{cc48f683-ef9d-4826-911a-bb45260f12e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\State">
+      <UniqueIdentifier>{bf58fea1-37dd-4157-b240-33eeef024dda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\String">
+      <UniqueIdentifier>{e177444d-2067-4538-8b83-048000ce9cd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\System">
+      <UniqueIdentifier>{7f1d6861-fd65-41da-aa01-4c853d31de2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Threading">
+      <UniqueIdentifier>{9bcc1ff0-7c46-40fa-a7f7-23b27137ea7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Time">
+      <UniqueIdentifier>{ff040995-4c87-41ae-8a60-9fee6a49f846}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Tween">
+      <UniqueIdentifier>{ef83b6d0-7655-43b0-a852-c7b84114b564}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Volume">
+      <UniqueIdentifier>{4aa00a31-0e4e-4d45-ae96-06c39878ed49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\XML">
+      <UniqueIdentifier>{c6e13d72-027b-4c1e-b47c-db677d9c1dca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Math\Geometry">
+      <UniqueIdentifier>{a0340f0c-841e-42ee-b080-a3c981501186}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.cpp">
@@ -134,204 +206,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequestSystem.cpp">
       <Filter>CSBackend\Platform\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\AppConfig.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Application.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ByteColour.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Colour.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ColourUtils.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Device.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Logging.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\PlatformSystem.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Screen.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Utils.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Container\ParamDictionary.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Container\ParamDictionarySerialiser.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\AESEncrypt.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\BaseEncoding.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\HashCRC32.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\HashMD5.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\HashSHA1.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\OAuth.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\DialogueBox\DialogueBoxSystem.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Entity\Component.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Entity\Entity.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Entity\Transform.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Event\EventConnection.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\File\AppDataStore.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileSystem.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\File\TaggedFilePathResolver.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Image\CSImageProvider.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Image\ETC1ImageProvider.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Image\Image.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Image\ImageFormatConverter.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Image\PNGImageProvider.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Image\PVRImageProvider.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Localisation\LocalisedText.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Localisation\LocalisedTextProvider.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Math\MathUtils.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Math\UnifiedCoordinates.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Geometry\ShapeIntersection.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Geometry\Shapes.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\AppNotificationSystem.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\LocalNotificationSystem.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\NotificationManager.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\RemoteNotificationSystem.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Reflection\Instance.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Reflection\MetaClass.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Reflection\Property.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Reflection\Registry.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Resource\Resource.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Resource\ResourcePool.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Resource\ResourceProvider.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Scene\Scene.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\State\State.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\State\StateManager.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\String\StringParser.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\String\StringUtils.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\String\ToString.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\String\UTF8StringUtils.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\System\StateSystem.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\ThreadPool.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Time\CoreTimer.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Time\PerformanceTimer.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Time\Timer.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Volume\VolumeComponent.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\XML\XML.cpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\XML\XMLUtils.cpp">
-      <Filter>ChilliSource\Core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\GUI\Base\GUIView.cpp">
       <Filter>ChilliSource\GUI</Filter>
@@ -690,6 +564,210 @@
     <ClCompile Include="..\..\Source\ChilliSource\Input\Gesture\TapGesture.cpp">
       <Filter>ChilliSource\Input</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\AppConfig.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Application.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ByteColour.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Colour.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ColourUtils.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Device.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Logging.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\PlatformSystem.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Screen.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Utils.cpp">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Container\ParamDictionary.cpp">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Container\ParamDictionarySerialiser.cpp">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\AESEncrypt.cpp">
+      <Filter>ChilliSource\Core\Cryptographic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\BaseEncoding.cpp">
+      <Filter>ChilliSource\Core\Cryptographic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\HashCRC32.cpp">
+      <Filter>ChilliSource\Core\Cryptographic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\HashMD5.cpp">
+      <Filter>ChilliSource\Core\Cryptographic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\HashSHA1.cpp">
+      <Filter>ChilliSource\Core\Cryptographic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Cryptographic\OAuth.cpp">
+      <Filter>ChilliSource\Core\Cryptographic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\DialogueBox\DialogueBoxSystem.cpp">
+      <Filter>ChilliSource\Core\DialogueBox</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Entity\Component.cpp">
+      <Filter>ChilliSource\Core\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Entity\Entity.cpp">
+      <Filter>ChilliSource\Core\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Entity\Transform.cpp">
+      <Filter>ChilliSource\Core\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Event\EventConnection.cpp">
+      <Filter>ChilliSource\Core\Event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\AppDataStore.cpp">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\CSBinaryChunk.cpp">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\CSBinaryInputStream.cpp">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileStream.cpp">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\FileSystem.cpp">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\File\TaggedFilePathResolver.cpp">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Image\CSImageProvider.cpp">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Image\ETC1ImageProvider.cpp">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Image\Image.cpp">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Image\ImageFormatConverter.cpp">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Image\PNGImageProvider.cpp">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Image\PVRImageProvider.cpp">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Localisation\LocalisedText.cpp">
+      <Filter>ChilliSource\Core\Localisation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Localisation\LocalisedTextProvider.cpp">
+      <Filter>ChilliSource\Core\Localisation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Math\MathUtils.cpp">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Math\UnifiedCoordinates.cpp">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Geometry\ShapeIntersection.cpp">
+      <Filter>ChilliSource\Core\Math\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Geometry\Shapes.cpp">
+      <Filter>ChilliSource\Core\Math\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\XML\XML.cpp">
+      <Filter>ChilliSource\Core\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\XML\XMLUtils.cpp">
+      <Filter>ChilliSource\Core\XML</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Volume\VolumeComponent.cpp">
+      <Filter>ChilliSource\Core\Volume</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Time\CoreTimer.cpp">
+      <Filter>ChilliSource\Core\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Time\PerformanceTimer.cpp">
+      <Filter>ChilliSource\Core\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Time\Timer.cpp">
+      <Filter>ChilliSource\Core\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.cpp">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\ThreadPool.cpp">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\System\StateSystem.cpp">
+      <Filter>ChilliSource\Core\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\String\StringParser.cpp">
+      <Filter>ChilliSource\Core\String</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\String\StringUtils.cpp">
+      <Filter>ChilliSource\Core\String</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\String\ToString.cpp">
+      <Filter>ChilliSource\Core\String</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\String\UTF8StringUtils.cpp">
+      <Filter>ChilliSource\Core\String</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\State\State.cpp">
+      <Filter>ChilliSource\Core\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\State\StateManager.cpp">
+      <Filter>ChilliSource\Core\State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Scene\Scene.cpp">
+      <Filter>ChilliSource\Core\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Resource\Resource.cpp">
+      <Filter>ChilliSource\Core\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Resource\ResourcePool.cpp">
+      <Filter>ChilliSource\Core\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Resource\ResourceProvider.cpp">
+      <Filter>ChilliSource\Core\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Reflection\Instance.cpp">
+      <Filter>ChilliSource\Core\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Reflection\MetaClass.cpp">
+      <Filter>ChilliSource\Core\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Reflection\Property.cpp">
+      <Filter>ChilliSource\Core\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Reflection\Registry.cpp">
+      <Filter>ChilliSource\Core\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\AppNotificationSystem.cpp">
+      <Filter>ChilliSource\Core\Notification</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\LocalNotificationSystem.cpp">
+      <Filter>ChilliSource\Core\Notification</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\NotificationManager.cpp">
+      <Filter>ChilliSource\Core\Notification</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\RemoteNotificationSystem.cpp">
+      <Filter>ChilliSource\Core\Notification</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
@@ -775,303 +853,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\ChilliSource.h">
       <Filter>ChilliSource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\AppConfig.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Application.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ByteColour.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Colour.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ColourUtils.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Device.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Logging.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\MakeSharedArray.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\PlatformSystem.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\QueryableInterface.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Screen.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Singleton.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\StandardMacros.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Utils.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\HashedArray.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ParamDictionary.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ParamDictionarySerialiser.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\AESEncrypt.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\BaseEncoding.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\HashCRC32.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\HashMD5.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\HashSHA1.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\OAuth.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Delegate\ConnectableDelegate.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Delegate\DelegateConnection.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Delegate\MakeConnectableDelegate.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Delegate\MakeDelegate.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\DialogueBox\DialogueBoxSystem.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Entity\Component.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Entity\Entity.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Entity\Transform.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Event\Event.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Event\EventConnection.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Event\IConnectableEvent.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Event\IDisconnectableEvent.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\File\AppDataStore.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileSystem.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\File\StorageLocation.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\File\TaggedFilePathResolver.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\CSImageProvider.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\ETC1ImageProvider.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\Image.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\ImageCompression.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\ImageFormat.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\ImageFormatConverter.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\PNGImageProvider.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\PVRImageProvider.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Localisation\LocalisedText.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Localisation\LocalisedTextProvider.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\MathUtils.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Matrix3.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Matrix4.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Quaternion.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\UnifiedCoordinates.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector2.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector3.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector4.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Geometry\Curves.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Geometry\ShapeIntersection.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Geometry\Shapes.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\AppNotificationSystem.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\LocalNotificationSystem.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\Notification.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\NotificationManager.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\RemoteNotificationSystem.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\Instance.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\MetaClass.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\Method.hpp">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\PropAccess.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\Property.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\Reflection.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\Registry.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Resource\IResourceOptions.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Resource\Resource.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Resource\ResourcePool.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Resource\ResourceProvider.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Scene\Scene.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\State\State.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\State\StateManager.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\String\StringParser.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\String\StringUtils.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\String\ToString.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\String\UTF8StringUtils.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\System\AppSystem.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\System\StateSystem.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\ThreadPool.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Time\CoreTimer.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Time\PerformanceTimer.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Time\Timer.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\EaseBack.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\EaseQuad.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\Linear.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\Tween.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Volume\VolumeComponent.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\XML\XML.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\XML\XMLUtils.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\ForwardDeclarations.h">
-      <Filter>ChilliSource\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\GUI\Base\GUIView.h">
       <Filter>ChilliSource\GUI</Filter>
@@ -1448,9 +1229,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.h">
       <Filter>ChilliSource\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\SmoothStep.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.h">
       <Filter>CSBackend\Platform\Windows</Filter>
     </ClInclude>
@@ -1475,21 +1253,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\Base\Filter.h">
       <Filter>ChilliSource\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_const_forward_iterator.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_const_reverse_iterator.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_forward_iterator.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_reverse_iterator.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\DragGesture.h">
       <Filter>ChilliSource\Input</Filter>
     </ClInclude>
@@ -1511,8 +1274,395 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\TapGesture.h">
       <Filter>ChilliSource\Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_blocking_queue.h">
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base.h">
       <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Delegate.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\DialogueBox.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Entity.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Event.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\ForwardDeclarations.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Image.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Localisation.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Notification.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Resource.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Scene.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\State.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\String.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\System.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Time.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Tween.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Volume.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\XML.h">
+      <Filter>ChilliSource\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\AppConfig.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Application.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ByteColour.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Colour.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ColourUtils.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Device.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Logging.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\MakeSharedArray.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\PlatformSystem.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\QueryableInterface.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Screen.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Singleton.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\StandardMacros.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Utils.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_blocking_queue.h">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector.h">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_const_forward_iterator.h">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_const_reverse_iterator.h">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_forward_iterator.h">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_reverse_iterator.h">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\HashedArray.h">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ParamDictionary.h">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ParamDictionarySerialiser.h">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\AESEncrypt.h">
+      <Filter>ChilliSource\Core\Cryptographic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\BaseEncoding.h">
+      <Filter>ChilliSource\Core\Cryptographic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\HashCRC32.h">
+      <Filter>ChilliSource\Core\Cryptographic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\HashMD5.h">
+      <Filter>ChilliSource\Core\Cryptographic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\HashSHA1.h">
+      <Filter>ChilliSource\Core\Cryptographic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\OAuth.h">
+      <Filter>ChilliSource\Core\Cryptographic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Delegate\ConnectableDelegate.h">
+      <Filter>ChilliSource\Core\Delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Delegate\DelegateConnection.h">
+      <Filter>ChilliSource\Core\Delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Delegate\MakeConnectableDelegate.h">
+      <Filter>ChilliSource\Core\Delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Delegate\MakeDelegate.h">
+      <Filter>ChilliSource\Core\Delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\DialogueBox\DialogueBoxSystem.h">
+      <Filter>ChilliSource\Core\DialogueBox</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Entity\Component.h">
+      <Filter>ChilliSource\Core\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Entity\Entity.h">
+      <Filter>ChilliSource\Core\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Entity\Transform.h">
+      <Filter>ChilliSource\Core\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Event\Event.h">
+      <Filter>ChilliSource\Core\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Event\EventConnection.h">
+      <Filter>ChilliSource\Core\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Event\IConnectableEvent.h">
+      <Filter>ChilliSource\Core\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Event\IDisconnectableEvent.h">
+      <Filter>ChilliSource\Core\Event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\AppDataStore.h">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\CSBinaryChunk.h">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\CSBinaryInputStream.h">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileStream.h">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\FileSystem.h">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\StorageLocation.h">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\File\TaggedFilePathResolver.h">
+      <Filter>ChilliSource\Core\File</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\CSImageProvider.h">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\ETC1ImageProvider.h">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\Image.h">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\ImageCompression.h">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\ImageFormat.h">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\ImageFormatConverter.h">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\PNGImageProvider.h">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Image\PVRImageProvider.h">
+      <Filter>ChilliSource\Core\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Localisation\LocalisedText.h">
+      <Filter>ChilliSource\Core\Localisation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Localisation\LocalisedTextProvider.h">
+      <Filter>ChilliSource\Core\Localisation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\MathUtils.h">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Matrix3.h">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Matrix4.h">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Quaternion.h">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\UnifiedCoordinates.h">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector2.h">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector3.h">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector4.h">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Geometry\Curves.h">
+      <Filter>ChilliSource\Core\Math\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Geometry\ShapeIntersection.h">
+      <Filter>ChilliSource\Core\Math\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Geometry\Shapes.h">
+      <Filter>ChilliSource\Core\Math\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\XML\XML.h">
+      <Filter>ChilliSource\Core\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\XML\XMLUtils.h">
+      <Filter>ChilliSource\Core\XML</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Volume\VolumeComponent.h">
+      <Filter>ChilliSource\Core\Volume</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\EaseBack.h">
+      <Filter>ChilliSource\Core\Tween</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\EaseQuad.h">
+      <Filter>ChilliSource\Core\Tween</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\Linear.h">
+      <Filter>ChilliSource\Core\Tween</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\SmoothStep.h">
+      <Filter>ChilliSource\Core\Tween</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Tween\Tween.h">
+      <Filter>ChilliSource\Core\Tween</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Time\CoreTimer.h">
+      <Filter>ChilliSource\Core\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Time\PerformanceTimer.h">
+      <Filter>ChilliSource\Core\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Time\Timer.h">
+      <Filter>ChilliSource\Core\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.h">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\ThreadPool.h">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\System\AppSystem.h">
+      <Filter>ChilliSource\Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\System\StateSystem.h">
+      <Filter>ChilliSource\Core\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\String\StringParser.h">
+      <Filter>ChilliSource\Core\String</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\String\StringUtils.h">
+      <Filter>ChilliSource\Core\String</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\String\ToString.h">
+      <Filter>ChilliSource\Core\String</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\String\UTF8StringUtils.h">
+      <Filter>ChilliSource\Core\String</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\State\State.h">
+      <Filter>ChilliSource\Core\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\State\StateManager.h">
+      <Filter>ChilliSource\Core\State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Scene\Scene.h">
+      <Filter>ChilliSource\Core\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Resource\IResourceOptions.h">
+      <Filter>ChilliSource\Core\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Resource\Resource.h">
+      <Filter>ChilliSource\Core\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Resource\ResourcePool.h">
+      <Filter>ChilliSource\Core\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Resource\ResourceProvider.h">
+      <Filter>ChilliSource\Core\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\Instance.h">
+      <Filter>ChilliSource\Core\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\MetaClass.h">
+      <Filter>ChilliSource\Core\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\PropAccess.h">
+      <Filter>ChilliSource\Core\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\Property.h">
+      <Filter>ChilliSource\Core\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\Reflection.h">
+      <Filter>ChilliSource\Core\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\Registry.h">
+      <Filter>ChilliSource\Core\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\AppNotificationSystem.h">
+      <Filter>ChilliSource\Core\Notification</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\LocalNotificationSystem.h">
+      <Filter>ChilliSource\Core\Notification</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\Notification.h">
+      <Filter>ChilliSource\Core\Notification</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\NotificationManager.h">
+      <Filter>ChilliSource\Core\Notification</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\RemoteNotificationSystem.h">
+      <Filter>ChilliSource\Core\Notification</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
