@@ -60,8 +60,9 @@ namespace ChilliSource
             struct DisplayCharacterInfo
             {
                 Rendering::UVs m_UVs;
-                Core::Vector2 m_size;
                 Core::Vector2 m_position;
+                Core::Vector2 m_packedImageSize;
+                f32 m_advance = 0.0f;
             };
             //----------------------------------------------------------------------------
             /// Holds the return information for building text including all the characters

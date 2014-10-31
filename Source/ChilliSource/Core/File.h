@@ -31,6 +31,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
+#include <ChilliSource/Core/File/CSBinaryChunk.h>
+#include <ChilliSource/Core/File/CSBinaryInputStream.h>
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/File/StorageLocation.h>

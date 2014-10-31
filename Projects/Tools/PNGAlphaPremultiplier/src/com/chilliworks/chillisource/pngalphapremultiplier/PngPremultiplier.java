@@ -36,8 +36,8 @@ import java.net.URISyntaxException;
 import java.security.CodeSource;
 import java.util.LinkedList;
 
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.StringUtils;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.StringUtils;
 
 public class PngPremultiplier 
 {
@@ -67,23 +67,23 @@ public class PngPremultiplier
 			//add the logging level to the command list
 			switch (Logging.getLoggingLevel())
 			{
-			case k_none:
+			case NONE:
 				astrCommands.add("--logginglevel");
 				astrCommands.add("none");
 				break;
-			case k_fatal:
+			case FATAL:
 				astrCommands.add("--logginglevel");
 				astrCommands.add("fatal");
 				break;
-			case k_error:
+			case ERROR:
 				astrCommands.add("--logginglevel");
 				astrCommands.add("error");
 				break;
-			case k_warning:
+			case WARNING:
 				astrCommands.add("--logginglevel");
 				astrCommands.add("warning");
 				break;
-			case k_verbose:
+			case VERBOSE:
 				astrCommands.add("--logginglevel");
 				astrCommands.add("warning");
 				break;

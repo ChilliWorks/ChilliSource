@@ -32,15 +32,15 @@ import java.io.*;
 
 import javax.imageio.*;
 
+import com.chilliworks.chillisource.coreutils.FileUtils;
+import com.chilliworks.chillisource.coreutils.LittleEndianWriterUtils;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.StringUtils;
 import com.chilliworks.chillisource.pngtocsimage.PNGToCSImage;
 import com.chilliworks.chillisource.pngtocsimage.PNGToCSImageOptions;
 import com.chilliworks.chillisource.texturepackerutils.PackedTexture;
 import com.chilliworks.chillisource.texturepackerutils.PackerInfo;
 import com.chilliworks.chillisource.texturepackerutils.TexturePacker;
-import com.chilliworks.chillisource.toolutils.FileUtils;
-import com.chilliworks.chillisource.toolutils.LittleEndianOutputStream;
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.StringUtils;
 
 import java.util.*;
 
@@ -357,13 +357,14 @@ public class CSAtlasBuilder
 	private void writeBinaryFile(PackedTexture in_packedTexture) throws FileNotFoundException, IOException, Exception
 	{
 		int numImages = in_packedTexture.getNumImages();
-		LittleEndianOutputStream dosBinary = new LittleEndianOutputStream(m_outputFilePathWithoutExtension + k_atlasExtension);
-		dosBinary.writeShort((short) numImages);
-		dosBinary.writeShort(k_versionNum); // file format revision
+		DataOutputStream dosBinary = new DataOutputStream(new FileOutputStream(m_outputFilePathWithoutExtension + k_atlasExtension));
+		
+		LittleEndianWriterUtils.writeInt16(dosBinary, (short) numImages);
+		LittleEndianWriterUtils.writeInt16(dosBinary, k_versionNum); // file format revision
 
 		//Write out spritesheet size
-		dosBinary.writeShort((short) in_packedTexture.getPackedWidth());
-		dosBinary.writeShort((short) in_packedTexture.getPackedHeight());
+		LittleEndianWriterUtils.writeInt16(dosBinary, (short) in_packedTexture.getPackedWidth());
+		LittleEndianWriterUtils.writeInt16(dosBinary, (short) in_packedTexture.getPackedHeight());
 		
 		Logging.logVerbose("Output Image size::" + in_packedTexture.getPackedWidth() + " x " + in_packedTexture.getPackedHeight());
 		
@@ -382,14 +383,14 @@ public class CSAtlasBuilder
 			Logging.logVerbose("Writing pixels from:" + in_packedTexture.getOriginalFile(i).getName());
 			Logging.logVerbose("Image:" + i + " position:" + ox + "," + oy + ":" + width + "," + height);
 
-			dosBinary.writeShort((short) ox);
-			dosBinary.writeShort((short) oy);
-			dosBinary.writeShort((short) width);
-			dosBinary.writeShort((short) height);
-			dosBinary.writeShort((short) ix);
-			dosBinary.writeShort((short) iy);
-			dosBinary.writeShort((short) orig_width);
-			dosBinary.writeShort((short) orig_height);
+			LittleEndianWriterUtils.writeInt16(dosBinary, (short) ox);
+			LittleEndianWriterUtils.writeInt16(dosBinary, (short) oy);
+			LittleEndianWriterUtils.writeInt16(dosBinary, (short) width);
+			LittleEndianWriterUtils.writeInt16(dosBinary, (short) height);
+			LittleEndianWriterUtils.writeInt16(dosBinary, (short) ix);
+			LittleEndianWriterUtils.writeInt16(dosBinary, (short) iy);
+			LittleEndianWriterUtils.writeInt16(dosBinary, (short) orig_width);
+			LittleEndianWriterUtils.writeInt16(dosBinary, (short) orig_height);
 		}
 
 		dosBinary.close();

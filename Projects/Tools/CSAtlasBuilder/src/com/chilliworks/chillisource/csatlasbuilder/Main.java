@@ -28,10 +28,10 @@
 
 package com.chilliworks.chillisource.csatlasbuilder;
 
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.StringUtils;
+import com.chilliworks.chillisource.coreutils.Logging.LoggingLevel;
 import com.chilliworks.chillisource.texturepackerutils.TexturePacker.PlacementHeuristic;
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.StringUtils;
-import com.chilliworks.chillisource.toolutils.Logging.LoggingLevel;
 
 /**
  * Handles the entry point into the application. This manages the parsing of the input parameters and
@@ -369,12 +369,12 @@ public final class Main
 	 */
 	private static void printHelpText()
 	{
-		Logging.setLoggingLevel(LoggingLevel.k_verbose);
+		Logging.setLoggingLevel(LoggingLevel.VERBOSE);
 		Logging.logVerbose("Usage: java -jar CSAtlasBuilder.jar " + k_paramInput + " <directory path> " + k_paramOutput + " <file path> [" + k_paramFileList + " <file path>] " +
 				"[" + k_paramFixedWidth + " <width>] [" + k_paramFixedHeight + " <height>] [" + k_paramValidWidths + " <w1,w2,w3...>] [" + k_paramValidHeights + " <h1,h2,h3...>] " +
 				"[" + k_paramMaxWidth + " <width>] [" + k_paramMaxHeight + " <height>] [" + k_paramDivisibleBy + "<number>] [" + k_paramDisableCrop + "] [" + k_paramPadding + " <padding>] " +
 				"[" + k_paramInnerPadding + " <padding>] [" + k_paramExtrude + " <extrude>] [" + k_paramPlacementHeuristic + " <heuristic>] [" + k_paramImageCompression + " <compression>] " +
-				"[" + k_paramImageFormat + " <format>] [" + k_paramDitherImage + "] [" + k_paramDisablePremultipliedAlpha + "] [" + Logging.k_paramLoggingLevel + " <level>] [" + k_paramHelp + "]");
+				"[" + k_paramImageFormat + " <format>] [" + k_paramDitherImage + "] [" + k_paramDisablePremultipliedAlpha + "] [" + Logging.PARAM_LOGGING_LEVEL + " <level>] [" + k_paramHelp + "]");
 		Logging.logVerbose("Parameters:");
 		Logging.logVerbose(" " + k_paramInput + "(" + k_paramInputShort + "): The input directory path containing the character PNGs.");
 		Logging.logVerbose(" " + k_paramOutput + "(" + k_paramOutputShort + "): The output font file path.");
@@ -395,7 +395,7 @@ public final class Main
 		Logging.logVerbose(" " + k_paramImageFormat + "(" + k_paramImageFormatShort + "): [Optional] The format of the output font image.");
 		Logging.logVerbose(" " + k_paramDitherImage + "(" + k_paramDitherImageShort + "): [Optional] If set the output font image will be dithered.");
 		Logging.logVerbose(" " + k_paramDisablePremultipliedAlpha + "(" + k_paramDisablePremultipliedAlphaShort + "): [Optional] It set the output image will not have it's alpha premultiplied.");
-		Logging.logVerbose(" " + Logging.k_paramLoggingLevel + "(" + Logging.k_paramLoggingLevelShort + "): [Optional] The level of messages to log.");
+		Logging.logVerbose(" " + Logging.PARAM_LOGGING_LEVEL + "(" + Logging.SHORT_PARAM_LOGGING_LEVEL + "): [Optional] The level of messages to log.");
 		Logging.logVerbose(" " + k_paramHelp + "(" + k_paramHelpShort + "): [Optional] Display this help message.");
 		Logging.logVerbose("Placement Heuristics:");
 		Logging.logVerbose(" " + k_placementHeuristicTopLeft + ": Place top left.");
@@ -411,10 +411,10 @@ public final class Main
 		Logging.logVerbose(" None");
 		Logging.logVerbose(" Default");
 		Logging.logVerbose("Logging Levels:");
-		Logging.logVerbose(" " + Logging.k_loggingLevelNone + ": No logging.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelFatal + ": Only log fatal errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelError + ": Only log errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelWarning + ": Log errors and warnings.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelVerbose + ": Log all messages.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_NONE + ": No logging.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_FATAL + ": Only log fatal errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_ERROR + ": Only log errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_WARNING + ": Log errors and warnings.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_VERBOSE + ": Log all messages.");
 	}
 }
