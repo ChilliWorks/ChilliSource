@@ -28,7 +28,7 @@
 
 package com.chilliworks.chillisource.colladatocsmodel;
 
-import com.chilliworks.chillisource.toolutils.Logging;
+import com.chilliworks.chillisource.coreutils.Logging;
 
 public class ParamsChecker 
 {

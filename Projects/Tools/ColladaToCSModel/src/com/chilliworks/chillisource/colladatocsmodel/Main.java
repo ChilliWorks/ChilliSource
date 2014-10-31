@@ -28,8 +28,8 @@
 
 package com.chilliworks.chillisource.colladatocsmodel;
 
-import com.chilliworks.chillisource.toolutils.*;
-import com.chilliworks.chillisource.toolutils.Logging.LoggingLevel;
+import com.chilliworks.chillisource.coreutils.*;
+import com.chilliworks.chillisource.coreutils.Logging.LoggingLevel;
 
 /**
  * Provides the entry point into the application.
@@ -46,7 +46,7 @@ public final class Main
 	private static final String k_paramNameSwapYAndZ = "--swapyandz";
 	private static final String k_paramNameDisableMeshBatch = "--disablemeshbatch";
 	private static final String k_paramNameDisabletTexCoordFlip = "--disabletexcoordflip";
-	private static final String k_paramNameHelp = "-help";
+	private static final String k_paramNameHelp = "--help";
 	private static final String k_shortParamNameInput = "-i";
 	private static final String k_shortParamNameOutput = "-o";
 	private static final String k_shortParamNameVertexFormat = "-vf";
@@ -234,8 +234,8 @@ public final class Main
 	 */
 	public static void printHelpText()
 	{
-		Logging.setLoggingLevel(LoggingLevel.k_verbose);
-		Logging.logVerbose("Usage: java -jar ColladaToCSModel.jar " + k_paramNameInput + " <file path> " + k_paramNameOutput + " <file path> [" + k_paramNameVertexFormat + " <vertex declaration>] [" + k_paramNameAnimated + "] [" + k_paramNameSwapHandedness + "] [" + k_paramNameSwapYAndZ + "] [" + k_paramNameDisableMeshBatch + "] [" + k_paramNameDisabletTexCoordFlip + "] [" + k_paramNameHelp + "] [" + Logging.k_paramLoggingLevel + " <level>]");
+		Logging.setLoggingLevel(LoggingLevel.VERBOSE);
+		Logging.logVerbose("Usage: java -jar ColladaToCSModel.jar " + k_paramNameInput + " <file path> " + k_paramNameOutput + " <file path> [" + k_paramNameVertexFormat + " <vertex declaration>] [" + k_paramNameAnimated + "] [" + k_paramNameSwapHandedness + "] [" + k_paramNameSwapYAndZ + "] [" + k_paramNameDisableMeshBatch + "] [" + k_paramNameDisabletTexCoordFlip + "] [" + k_paramNameHelp + "] [" + Logging.PARAM_LOGGING_LEVEL + " <level>]");
 		Logging.logVerbose("Parameters:");
 		Logging.logVerbose(" " + k_paramNameInput + "(" + k_shortParamNameInput + "): The input filename.");
 		Logging.logVerbose(" " + k_paramNameOutput + "(" + k_shortParamNameOutput + "): The output filename.");
@@ -245,7 +245,7 @@ public final class Main
 		Logging.logVerbose(" " + k_paramNameSwapYAndZ + "(" + k_shortParamNameSwapYAndZ + "): [Optional] Enables transforming the output data to swap the Y and Z coordinates.");
 		Logging.logVerbose(" " + k_paramNameDisableMeshBatch + "(" + k_shortParamNameDisableMeshBatch + "): [Optional] Disables batching meshes with the same material together.");
 		Logging.logVerbose(" " + k_paramNameDisabletTexCoordFlip + "(" + k_shortParamNameDisabletTexCoordFlip + "): [Optional] Disables flipping the Y component of the texture coordinates.");
-		Logging.logVerbose(" " + Logging.k_paramLoggingLevel + "(" + Logging.k_paramLoggingLevelShort + "): [Optional] The level of messages to log.");
+		Logging.logVerbose(" " + Logging.PARAM_LOGGING_LEVEL + "(" + Logging.SHORT_PARAM_LOGGING_LEVEL + "): [Optional] The level of messages to log.");
 		Logging.logVerbose(" " + k_paramNameHelp + "(" + k_shortParamNameHelp + "): [Optional] Display this help message.");
 		Logging.logVerbose("Vertex Elements:");
 		Logging.logVerbose(" " + k_vertexElementPosition + ": A vertex will contain a position.");
@@ -255,10 +255,10 @@ public final class Main
 		Logging.logVerbose(" " + k_vertexElementWeights + ": A vertex will contain weights.");
 		Logging.logVerbose(" " + k_vertexElementJoints + ": A vertex will contain joint indices.");
 		Logging.logVerbose("Logging Levels:");
-		Logging.logVerbose(" " + Logging.k_loggingLevelNone + ": No logging.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelFatal + ": Only log fatal errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelError + ": Only log errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelWarning + ": Log errors and warnings.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelVerbose + ": Log all messages.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_NONE + ": No logging.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_FATAL + ": Only log fatal errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_ERROR + ": Only log errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_WARNING + ": Log errors and warnings.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_VERBOSE + ": Log all messages.");
 	}
 }

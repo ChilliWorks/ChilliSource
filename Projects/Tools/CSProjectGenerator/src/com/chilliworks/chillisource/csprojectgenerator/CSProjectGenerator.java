@@ -36,10 +36,10 @@ import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.util.LinkedList;
 
-import com.chilliworks.chillisource.toolutils.FileUtils;
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.StringUtils;
-import com.chilliworks.chillisource.toolutils.ZipUtils;
+import com.chilliworks.chillisource.coreutils.FileUtils;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.StringUtils;
+import com.chilliworks.chillisource.coreutils.ZipUtils;
 
 /**
  * A collection of methods for generating new Chilli Source projects.

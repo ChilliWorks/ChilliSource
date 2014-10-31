@@ -38,7 +38,7 @@ import java.util.zip.Deflater;
 import javax.imageio.ImageIO;
 import javax.imageio.spi.IIORegistry;
 
-import com.chilliworks.chillisource.toolutils.Logging;
+import com.chilliworks.chillisource.coreutils.Logging;
 
 //============================================================================
 /// TGA To MoImage

@@ -28,10 +28,10 @@
 
 package com.chilliworks.chillisource.colladatocsmodel.csmodel;
 
-import com.chilliworks.chillisource.toolutils.Integer4;
-import com.chilliworks.chillisource.toolutils.Vector2;
-import com.chilliworks.chillisource.toolutils.Vector3;
-import com.chilliworks.chillisource.toolutils.Vector4;
+import com.chilliworks.chillisource.coreutils.Integer4;
+import com.chilliworks.chillisource.coreutils.Vector2;
+import com.chilliworks.chillisource.coreutils.Vector3;
+import com.chilliworks.chillisource.coreutils.Vector4;
 
 
 public class CSModelVertex 
@@ -45,12 +45,12 @@ public class CSModelVertex
 	
 	public CSModelVertex()
 	{
-		mvPosition = new Vector3();
-		mvNormal = new Vector3();
-		mvTextureCoordinate = new Vector2();
-		mvVertexColour = new Vector4();
-		mvWeights = new Vector4();
-		mvJointIndices = new Integer4();
+		mvPosition = Vector3.ZERO;
+		mvNormal = Vector3.ZERO;
+		mvTextureCoordinate = Vector2.ZERO;
+		mvVertexColour = Vector4.ZERO;
+		mvWeights = Vector4.ZERO;
+		mvJointIndices = Integer4.ZERO;
 	}
 
 	public boolean equals(Object inObj)
@@ -70,6 +70,7 @@ public class CSModelVertex
 	    {
 	    	return true;
 	    }
+	    
 	    return false;
 	}
 }

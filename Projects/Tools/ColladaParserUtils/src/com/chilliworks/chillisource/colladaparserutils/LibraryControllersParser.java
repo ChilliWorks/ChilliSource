@@ -32,7 +32,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
 import com.chilliworks.chillisource.colladaparserutils.colladadata.*;
-import com.chilliworks.chillisource.toolutils.Logging;
+import com.chilliworks.chillisource.coreutils.Logging;
 
 public class LibraryControllersParser 
 {

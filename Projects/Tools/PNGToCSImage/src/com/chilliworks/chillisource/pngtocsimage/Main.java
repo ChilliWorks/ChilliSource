@@ -28,8 +28,8 @@
 
 package com.chilliworks.chillisource.pngtocsimage;
 
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.Logging.LoggingLevel;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.Logging.LoggingLevel;
 
 public class Main 
 {
@@ -161,8 +161,8 @@ public class Main
 	//------------------------------------------------------
 	private static void PrintHelpText()
 	{
-		Logging.setLoggingLevel(LoggingLevel.k_verbose);
-		Logging.logVerbose("Usage: java -jar PNGToCSImage.jar --input <filename> --output <filename> [--convert <type>] [--convertalpha <type>] [--convertnoalpha <type>] [--compression <type>] [--disablepremultipliedalpha] [--dither] [" + Logging.k_paramLoggingLevel + " <level>] [--help]");
+		Logging.setLoggingLevel(LoggingLevel.VERBOSE);
+		Logging.logVerbose("Usage: java -jar PNGToCSImage.jar --input <filename> --output <filename> [--convert <type>] [--convertalpha <type>] [--convertnoalpha <type>] [--compression <type>] [--disablepremultipliedalpha] [--dither] [" + Logging.PARAM_LOGGING_LEVEL + " <level>] [--help]");
 		Logging.logVerbose("Parameters:");
 		Logging.logVerbose(" --input(-i): The path to the source image PNG.");
 		Logging.logVerbose(" --output(-o): The path to the output image csimage.");
@@ -172,7 +172,7 @@ public class Main
 		Logging.logVerbose(" --compression(-cn): [Optional] The compression type. The default is zlib compression.");
 		Logging.logVerbose(" --disablepremultipliedalpha(-dpa): [Optional] If set the output image will not have it's alpha premultiplied.");
 		Logging.logVerbose(" --dither(-d): [Optional] Whether or not to dither if converting to a smaller image format.");
-		Logging.logVerbose(" " + Logging.k_paramLoggingLevel + "(" + Logging.k_paramLoggingLevelShort + "): [Optional] Sets the level of message to log.");
+		Logging.logVerbose(" " + Logging.PARAM_LOGGING_LEVEL + "(" + Logging.SHORT_PARAM_LOGGING_LEVEL + "): [Optional] Sets the level of message to log.");
 		Logging.logVerbose(" --help(-h): [Optional] Display this help message.");
 		Logging.logVerbose("Conversion Types:");
 		Logging.logVerbose(" L8");
@@ -185,10 +185,10 @@ public class Main
 		Logging.logVerbose(" None");
 		Logging.logVerbose(" Default");
 		Logging.logVerbose("Logging Levels:");
-		Logging.logVerbose(" " + Logging.k_loggingLevelNone + ": No logging.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelFatal + ": Only log fatal errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelError + ": Only log errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelWarning + ": Log errors and warnings.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelVerbose + ": Log all messages.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_NONE + ": No logging.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_FATAL + ": Only log fatal errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_ERROR + ": Only log errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_WARNING + ": Log errors and warnings.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_VERBOSE + ": Log all messages.");
 	}
 }

@@ -86,6 +86,8 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(FileSystem);
         CS_FORWARDDECLARE_CLASS(AppDataStore);
         CS_FORWARDDECLARE_CLASS(TaggedFilePathResolver);
+        CS_FORWARDDECLARE_CLASS(CSBinaryInputStream);
+        CS_FORWARDDECLARE_CLASS(CSBinaryChunk);
         enum class StorageLocation;
         //---------------------------------------------------------
         /// Image
