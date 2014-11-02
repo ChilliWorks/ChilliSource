@@ -33,7 +33,6 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particle/CSParticleEffectProvider.h>
 #include <ChilliSource/Rendering/Particle/Particle.h>
-#include <ChilliSource/Rendering/Particle/ParticleDrawData.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffectComponent.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>

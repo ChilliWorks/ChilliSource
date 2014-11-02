@@ -28,10 +28,9 @@
 
 #include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawable.h>
 
-#include <ChilliSource/Core/Container/concurrent_dynamic_array.h>
 #include <ChilliSource/Core/Container/dynamic_array.h>
 #include <ChilliSource/Core/Math/Random.h>
-#include <ChilliSource/Rendering/Particle/ParticleDrawData.h>
+#include <ChilliSource/Rendering/Particle/ConcurrentParticleData.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
 #include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawableDef.h>
 
@@ -151,17 +150,41 @@ namespace ChilliSource
 
 		//----------------------------------------------
 		//----------------------------------------------
-		BillboardParticleDrawable::BillboardParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef,
-			const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray)
-			: ParticleDrawable(in_entity, in_drawableDef, in_particleDrawDataArray), m_billboardDrawableDef(static_cast<const BillboardParticleDrawableDef*>(in_drawableDef)),
+		BillboardParticleDrawable::BillboardParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData)
+			: ParticleDrawable(in_entity, in_drawableDef, in_concurrentParticleData), m_billboardDrawableDef(static_cast<const BillboardParticleDrawableDef*>(in_drawableDef)),
 			m_particleBillboardIndices(in_drawableDef->GetParticleEffect()->GetMaxParticles())
 		{
 			BuildBillboardImageData();
-			PrepareParticleBillboardIndices();
+			
+			for (u32 i = 0; i < m_particleBillboardIndices.size(); ++i)
+			{
+				ActivateParticle(i);
+			}
 		}
-		//----------------------------------------------
-		//----------------------------------------------
-		void BillboardParticleDrawable::Draw(const CameraComponent* in_camera)
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		void BillboardParticleDrawable::ActivateParticle(u32 in_index)
+		{
+			switch (m_billboardDrawableDef->GetImageSelectionType())
+			{
+			case BillboardParticleDrawableDef::ImageSelectionType::k_cycle:
+				m_particleBillboardIndices[in_index] = m_nextBillboardIndex++;
+				if (m_nextBillboardIndex >= m_billboards->size())
+				{
+					m_nextBillboardIndex = 0;
+				}
+				break;
+			case BillboardParticleDrawableDef::ImageSelectionType::k_random:
+				m_particleBillboardIndices[in_index] = Core::Random::GenerateInt<u32>(0, m_billboards->size() - 1);
+				break;
+			default:
+				CS_LOG_FATAL("Invalid image selection type.");
+				break;
+			}
+		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		void BillboardParticleDrawable::DrawParticles(const CameraComponent* in_camera)
 		{
 			switch (GetDrawableDef()->GetParticleEffect()->GetSimulationSpace())
 			{
@@ -232,41 +255,12 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void BillboardParticleDrawable::PrepareParticleBillboardIndices()
-		{
-			switch (m_billboardDrawableDef->GetImageSelectionType())
-			{
-				case BillboardParticleDrawableDef::ImageSelectionType::k_cycle:
-				{
-					for (u32 i = 0; i < m_particleBillboardIndices.size(); ++i)
-					{
-						m_particleBillboardIndices[i] = i % m_billboards->size();
-					}
-					break;
-				}
-				case BillboardParticleDrawableDef::ImageSelectionType::k_random:
-				{
-					for (u32 i = 0; i < m_particleBillboardIndices.size(); ++i)
-					{
-						m_particleBillboardIndices[i] = Core::Random::GenerateInt<u32>(0, m_billboards->size() - 1);
-					}
-					break;
-				}
-				default:
-				{
-					CS_LOG_FATAL("Invalid image selection type.");
-					break;
-				}
-			}
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
 		void BillboardParticleDrawable::DrawLocalSpace(const CameraComponent* in_camera) const
 		{
 			const auto& material = m_billboardDrawableDef->GetMaterial();
 			const auto& particleSize = m_billboardDrawableDef->GetParticleSize();
 			auto sizePolicy = m_billboardDrawableDef->GetSizePolicy();
-			const auto& particleDataArray = GetParticleDrawDataArray();
+			const auto& concurrentParticleData = GetConcurrentParticleData();
 			auto entityWorldTransform = GetEntity()->GetTransform().GetWorldTransform();
 
 			//we can't directly apply the parent entities scale to the particles as this would look strange as
@@ -278,10 +272,11 @@ namespace ChilliSource
 			//billboard by applying the inverse of the view orientation. The view orientation is the inverse of the camera entity orientation.
 			auto inverseView = in_camera->GetEntity()->GetTransform().GetWorldOrientation();
 
-			particleDataArray.lock();
-			for (u32 i = 0; i < particleDataArray.size(); ++i)
+			concurrentParticleData->LockParticles();
+			const auto& particles = concurrentParticleData->GetParticles();
+			for (u32 i = 0; i < particles.size(); ++i)
 			{
-				const auto& particle = particleDataArray[i];
+				const auto& particle = particles[i];
 
 				if (particle.m_isActive == true && particle.m_colour != Core::Colour::k_transparent)
 				{
@@ -298,22 +293,23 @@ namespace ChilliSource
 					Core::Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
 				}
 			}
-			particleDataArray.unlock();
+			concurrentParticleData->UnlockParticles();
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
 		void BillboardParticleDrawable::DrawWorldSpace(const CameraComponent* in_camera) const
 		{
 			const auto& material = m_billboardDrawableDef->GetMaterial();
-			const auto& particleDataArray = GetParticleDrawDataArray();
+			const auto& concurrentParticleData = GetConcurrentParticleData();
 
 			//billboard by applying the inverse of the view orientation. The view orientation is the inverse of the camera entity orientation.
 			auto inverseView = in_camera->GetEntity()->GetTransform().GetWorldOrientation();
 
-			particleDataArray.lock();
-			for (u32 i = 0; i < particleDataArray.size(); ++i)
+			concurrentParticleData->LockParticles();
+			const auto& particles = concurrentParticleData->GetParticles();
+			for (u32 i = 0; i < particles.size(); ++i)
 			{
-				const auto& particle = particleDataArray[i];
+				const auto& particle = particles[i];
 
 				if (particle.m_isActive == true && particle.m_colour.a != Core::Colour::k_transparent)
 				{
@@ -327,7 +323,7 @@ namespace ChilliSource
 					Core::Application::Get()->GetRenderSystem()->GetDynamicSpriteBatchPtr()->Render(spriteData, nullptr);
 				}
 			}
-			particleDataArray.unlock();
+			concurrentParticleData->UnlockParticles();
 		}
 	}
 }

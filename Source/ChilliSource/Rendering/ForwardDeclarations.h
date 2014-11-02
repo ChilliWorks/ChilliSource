@@ -108,6 +108,7 @@ namespace ChilliSource
         //------------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(BillboardParticleDrawable);
 		CS_FORWARDDECLARE_CLASS(BillboardParticleDrawableDef);
+		CS_FORWARDDECLARE_CLASS(ConcurrentParticleData);
 		CS_FORWARDDECLARE_CLASS(ParticleEffect);
 		CS_FORWARDDECLARE_CLASS(ICParticleEffectProvider);
 		CS_FORWARDDECLARE_CLASS(ParticleEffectComponent);

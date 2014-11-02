@@ -314,7 +314,7 @@ namespace ChilliSource
 			ParticleEmitterSPtr m_emitter;
 			std::vector<ParticleAffectorSPtr> m_affectors;
 			std::shared_ptr<Core::dynamic_array<Particle>> m_particleArray;
-			std::shared_ptr<Core::concurrent_dynamic_array<ParticleDrawData>> m_particleDrawDataArray;
+			ConcurrentParticleDataSPtr m_particleDrawDataArray;
 
 			PlaybackType m_playbackType = PlaybackType::k_once;
 			bool m_isPlaying = false;

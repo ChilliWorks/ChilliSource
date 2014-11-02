@@ -58,21 +58,20 @@ namespace ChilliSource
 			///
 			/// @param The entity the effect is attached to.
 			/// @param The particle drawable definition.
-			/// @param The concurrent particle draw data array.
+			/// @param The concurrent particle data.
 			//----------------------------------------------------------------
-			ParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray);
+			ParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData);
 			//----------------------------------------------------------------
-			/// Renders all active particles in the effect. 
+			/// Updates the particle drawable and renders all active particles
+			/// in the effect. 
 			///
-			/// This is called on the main thread, but the particle draw data
-			/// array can be modified on other threads so make sure to lock it
-			/// prior to use.
+			/// This must be called on the main thread.
 			///
 			/// @author Ian Copland
 			///
 			/// @param The camera component used to render.
 			//----------------------------------------------------------------
-			virtual void Draw(const CameraComponent* in_camera) = 0;
+			void Draw(const CameraComponent* in_camera);
 			//----------------------------------------------------------------
 			/// Destructor
 			///
@@ -96,13 +95,37 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			/// @author Ian Copland
 			///
-			/// @return The concurrent particle draw data array.
+			/// @return The concurrent particle data.
 			//----------------------------------------------------------------
-			const Core::concurrent_dynamic_array<ParticleDrawData>& GetParticleDrawDataArray() const;
+			const ConcurrentParticleData* GetConcurrentParticleData() const;
+			//----------------------------------------------------------------
+			/// Activates the particle with the given index.
+			///
+			/// This is called on the main thread, but the particle data can 
+			/// be modified on other threads so make sure to lock it prior to 
+			/// use.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The index of the particle to activate.
+			//----------------------------------------------------------------
+			virtual void ActivateParticle(u32 in_index) = 0;
+			//----------------------------------------------------------------
+			/// Renders all active particles in the effect. 
+			///
+			/// This is called on the main thread, but the particle draw data
+			/// array can be modified on other threads so make sure to lock it
+			/// prior to use.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The camera component used to render.
+			//----------------------------------------------------------------
+			virtual void DrawParticles(const CameraComponent* in_camera) = 0;
 		private:
 			const Core::Entity* m_entity = nullptr;
 			const ParticleDrawableDef* m_drawableDef = nullptr;
-			const Core::concurrent_dynamic_array<ParticleDrawData>* m_particleDrawDataArray = nullptr;
+			ConcurrentParticleData* m_concurrentParticleData = nullptr;
 		};
 	}
 }

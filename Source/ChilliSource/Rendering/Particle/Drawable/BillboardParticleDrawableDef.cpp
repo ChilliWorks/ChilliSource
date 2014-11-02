@@ -76,9 +76,9 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		ParticleDrawableUPtr BillboardParticleDrawableDef::CreateInstance(const Core::Entity* in_entity, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray) const
+		ParticleDrawableUPtr BillboardParticleDrawableDef::CreateInstance(const Core::Entity* in_entity, ConcurrentParticleData* in_concurrentParticleData) const
 		{
-			return ParticleDrawableUPtr(new BillboardParticleDrawable(in_entity, this, in_particleDrawDataArray));
+			return ParticleDrawableUPtr(new BillboardParticleDrawable(in_entity, this, in_concurrentParticleData));
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------

@@ -46,15 +46,6 @@ namespace ChilliSource
 		//-----------------------------------------------------------------------
 		class BillboardParticleDrawable final : public ParticleDrawable
 		{
-		public:
-			//----------------------------------------------------------------
-			/// Renders all active particles in the effect.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The camera component used to render.
-			//----------------------------------------------------------------
-			void Draw(const CameraComponent* in_camera) override;
 		private:
 			friend class BillboardParticleDrawableDef;
 			//----------------------------------------------------------------
@@ -76,9 +67,25 @@ namespace ChilliSource
 			///
 			/// @param The entity the effect is attached to.
 			/// @param The particle drawable definition.
-			/// @param The concurrent particle draw data array.
+			/// @param The concurrent particle data.
 			//----------------------------------------------------------------
-			BillboardParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray);
+			BillboardParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData);
+			//----------------------------------------------------------------
+			/// Activates the particle with the given index.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The index of the particle to activate.
+			//----------------------------------------------------------------
+			void ActivateParticle(u32 in_index) override;
+			//----------------------------------------------------------------
+			/// Renders all active particles in the effect.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The camera component used to render.
+			//----------------------------------------------------------------
+			void DrawParticles(const CameraComponent* in_camera) override;
 			//----------------------------------------------------------------
 			/// Builds the billboard image data from the provided texture
 			/// or texture atlas.
@@ -113,6 +120,7 @@ namespace ChilliSource
 			const BillboardParticleDrawableDef* m_billboardDrawableDef;
 			std::unique_ptr <Core::dynamic_array<BillboardData>> m_billboards;
 			Core::dynamic_array<u32> m_particleBillboardIndices;
+			u32 m_nextBillboardIndex = 0;
 		};
 	}
 }

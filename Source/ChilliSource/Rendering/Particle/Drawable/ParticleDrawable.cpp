@@ -28,15 +28,29 @@
 
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawable.h>
 
+#include <ChilliSource/Rendering/Particle/ConcurrentParticleData.h>
+
 namespace ChilliSource
 {
 	namespace Rendering
 	{
 		//----------------------------------------------
 		//----------------------------------------------
-		ParticleDrawable::ParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray)
-			: m_entity(in_entity), m_drawableDef(in_drawableDef), m_particleDrawDataArray(in_particleDrawDataArray)
+		ParticleDrawable::ParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData)
+			: m_entity(in_entity), m_drawableDef(in_drawableDef), m_concurrentParticleData(in_concurrentParticleData)
 		{
+		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		void ParticleDrawable::Draw(const CameraComponent* in_camera)
+		{
+			auto newIndices = m_concurrentParticleData->TakeNewIndices();
+			for (const auto& index : newIndices)
+			{
+				ActivateParticle(index);
+			}
+
+			DrawParticles(in_camera);
 		}
 		//----------------------------------------------
 		//----------------------------------------------
@@ -52,9 +66,9 @@ namespace ChilliSource
 		}
 		//----------------------------------------------
 		//----------------------------------------------
-		const Core::concurrent_dynamic_array<ParticleDrawData>& ParticleDrawable::GetParticleDrawDataArray() const
+		const ConcurrentParticleData* ParticleDrawable::GetConcurrentParticleData() const
 		{
-			return *m_particleDrawDataArray;
+			return m_concurrentParticleData;
 		}
 	}
 }

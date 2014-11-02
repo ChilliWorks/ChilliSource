@@ -1,11 +1,11 @@
 //
 //  concurrent_vector_const_reverse_iterator.h
 //  Chilli Source
-//  Created by Scott Downie on 19/09/2015.
+//  Created by Scott Downie on 19/09/2014.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2012 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal

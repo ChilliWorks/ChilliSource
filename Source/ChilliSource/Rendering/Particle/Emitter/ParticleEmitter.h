@@ -73,8 +73,10 @@ namespace ChilliSource
 			/// @param The current world space position of the emitter.
 			/// @param The current world space scale of the emitter.
 			/// @param The current world space orientation of the emitter.
+			///
+			/// @return The list of newly emitted particle indices.
 			//----------------------------------------------------------------
-			void TryEmit(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation);
+			std::vector<u32> TryEmit(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation);
 			//----------------------------------------------------------------
 			/// Destructor.
 			///
@@ -111,7 +113,7 @@ namespace ChilliSource
 			/// @param The current world space scale of the emitter.
 			/// @param The current world space orientation of the emitter.
 			//----------------------------------------------------------------
-			void TryEmitStream(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation);
+			std::vector<u32> TryEmitStream(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation);
 			//----------------------------------------------------------------
 			/// Tries to emit new particles in burst mode.
 			///
@@ -122,7 +124,7 @@ namespace ChilliSource
 			/// @param The current world space scale of the emitter.
 			/// @param The current world space orientation of the emitter.
 			//----------------------------------------------------------------
-			void TryEmitBurst(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation);
+			std::vector<u32> TryEmitBurst(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation);
 			//----------------------------------------------------------------
 			/// Emits a new particle if the next particle in the list is free
 			/// to be emitted. 
@@ -136,8 +138,12 @@ namespace ChilliSource
 			/// of emission.
 			/// @param The world orientation of the emitter at the time of
 			/// emission.
+			/// @param [In/Out] The list of emitted particles, will add to the
+			/// list if a particle is successfully emitted.
+			///
+			/// @param The index of the emitted particle. 
 			//----------------------------------------------------------------
-			void Emit(f32 in_emissionTime, const Core::Vector3& in_emissionPosition, const Core::Vector3& in_emissionScale, const Core::Quaternion& in_emissionOrientation);
+			void Emit(f32 in_emissionTime, const Core::Vector3& in_emissionPosition, const Core::Vector3& in_emissionScale, const Core::Quaternion& in_emissionOrientation, std::vector<u32>& inout_emittedParticles);
 
 			const ParticleEmitterDef* m_emitterDef = nullptr;
 			Core::dynamic_array<Particle>* m_particleArray = nullptr;

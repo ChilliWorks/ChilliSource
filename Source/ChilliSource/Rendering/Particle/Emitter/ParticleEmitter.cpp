@@ -52,7 +52,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------
 		//----------------------------------------------
-		void ParticleEmitter::TryEmit(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation)
+		std::vector<u32> ParticleEmitter::TryEmit(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation)
 		{
 			CS_ASSERT(in_playbackTime >= 0.0f, "Playback time cannot be below zero.");
 
@@ -76,11 +76,12 @@ namespace ChilliSource
 			switch (m_emitterDef->GetEmissionMode())
 			{
 			case ParticleEmitterDef::EmissionMode::k_stream:
-				TryEmitStream(in_playbackTime, in_emitterPosition, in_emitterScale, in_emitterOrientation);
-				break;
+				return TryEmitStream(in_playbackTime, in_emitterPosition, in_emitterScale, in_emitterOrientation);
 			case ParticleEmitterDef::EmissionMode::k_burst:
-				TryEmitBurst(in_playbackTime, in_emitterPosition, in_emitterScale, in_emitterOrientation);
-				break;
+				return TryEmitBurst(in_playbackTime, in_emitterPosition, in_emitterScale, in_emitterOrientation);
+			default:
+				CS_LOG_FATAL("Invalid emission mode.");
+				return std::vector<u32>();
 			}
 		}
 		//----------------------------------------------
@@ -91,8 +92,10 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void ParticleEmitter::TryEmitStream(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation)
+		std::vector<u32> ParticleEmitter::TryEmitStream(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation)
 		{
+			std::vector<u32> emittedParticles;
+
 			const ParticleEffect* particleEffect = m_emitterDef->GetParticleEffect();
 
 			//Get the time between emissions at this stage in the playback timer. Note that this doesn't take into account
@@ -122,17 +125,21 @@ namespace ChilliSource
 					f32 random = Core::Random::GenerateReal<f32>();
 					if (random <= chanceOfEmission)
 					{
-						Emit(m_emissionTime, m_emissionPosition, m_emissionScale, m_emissionOrientation);
+						Emit(m_emissionTime, m_emissionPosition, m_emissionScale, m_emissionOrientation, emittedParticles);
 					}
 				}
 
 				nextEmissionTime += timeBetweenEmissions;
 			}
+
+			return emittedParticles;
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void ParticleEmitter::TryEmitBurst(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation)
+		std::vector<u32> ParticleEmitter::TryEmitBurst(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation)
 		{
+			std::vector<u32> emittedParticles;
+
 			m_emissionTime = in_playbackTime;
 
 			if (m_hasEmitted == false)
@@ -149,20 +156,23 @@ namespace ChilliSource
 					f32 random = Core::Random::GenerateReal<f32>();
 					if (random <= chanceOfEmission)
 					{
-						Emit(m_emissionTime, m_emissionPosition, m_emissionScale, m_emissionOrientation);
+						Emit(m_emissionTime, m_emissionPosition, m_emissionScale, m_emissionOrientation, emittedParticles);
 					}
 				}
 
 				m_hasEmitted = true;
 			}
+
+			return emittedParticles;
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void ParticleEmitter::Emit(f32 in_emissionTime, const Core::Vector3& in_emissionPosition, const Core::Vector3& in_emissionScale, const Core::Quaternion& in_emissionOrientation)
+		void ParticleEmitter::Emit(f32 in_emissionTime, const Core::Vector3& in_emissionPosition, const Core::Vector3& in_emissionScale, const Core::Quaternion& in_emissionOrientation, std::vector<u32>& inout_emittedParticles)
 		{
 			const ParticleEffect* particleEffect = m_emitterDef->GetParticleEffect();
 
-			Particle& particle = m_particleArray->at(m_nextParticleIndex++);
+			u32 particleIndex = m_nextParticleIndex++;
+			Particle& particle = m_particleArray->at(particleIndex);
 			if (m_nextParticleIndex >= particleEffect->GetMaxParticles())
 			{
 				m_nextParticleIndex = 0;
@@ -170,6 +180,8 @@ namespace ChilliSource
 
 			if (particle.m_isActive == false)
 			{
+				inout_emittedParticles.push_back(particleIndex);
+
 				//Get the emission position and direction.
 				Core::Vector3 localPosition;
 				Core::Vector3 localDirection;

@@ -30,14 +30,13 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Container/dynamic_array.h>
-#include <ChilliSource/Core/Container/concurrent_dynamic_array.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/State/State.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Camera/PerspectiveCameraComponent.h>
+#include <ChilliSource/Rendering/Particle/ConcurrentParticleData.h>
 #include <ChilliSource/Rendering/Particle/Particle.h>
-#include <ChilliSource/Rendering/Particle/ParticleDrawData.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDef.h>
@@ -49,6 +48,9 @@
 //////////////TODO: !? REMOVE ME
 #include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawableDef.h>
 //////////////
+
+#include <limits>
+#include <tuple>
 
 namespace ChilliSource
 {
@@ -76,38 +78,19 @@ namespace ChilliSource
 				CS_ASSERT(in_particleEffect->GetInitialAngularVelocityProperty() != nullptr, "Trying to use incomplete particle effect: Initial angular velocity property missing.");
 			}
 			//----------------------------------------------------------------
-			/// Copies the changes to the particle effect from the 
+			/// Calculates the bounding shapes for the given set of particles.
 			///
 			/// @author Ian Copland
 			///
 			/// @param The particle effect.
-			/// @param The particle emitter. If null, the effect is no longer
-			/// emitting.
-			/// @param The list of particle affectors.
 			/// @param The array of particles.
-			/// @param The particle draw data array.
-			/// @param The playback time.
-			/// @param The delta time.
+			/// @param 
 			//----------------------------------------------------------------
-			void CommitParticleChanges(const std::shared_ptr<Core::dynamic_array<Particle>>& in_particleArray, const std::shared_ptr<Core::concurrent_dynamic_array<ParticleDrawData>>& in_particleDrawDataArray)
+			std::tuple<Core::AABB, Core::OOBB, Core::Sphere> CalculateBoundingShapes(const ParticleEffect* in_particleEffect, const Core::dynamic_array<Particle>* in_particleArray, 
+				const Core::Vector3& in_entityPosition, const Core::Vector3& in_entityScale, const Core::Quaternion& in_entityOrientation)
 			{
-				CS_ASSERT(in_particleArray->size() == in_particleDrawDataArray->size(), "Particle arrays must be the same size.");
-
-				in_particleDrawDataArray->lock();
-
-				for (u32 i = 0; i < in_particleArray->size(); ++i)
-				{
-					Particle& particle = (*in_particleArray)[i];
-					ParticleDrawData& particleDrawData = (*in_particleDrawDataArray)[i];
-
-					particleDrawData.m_isActive = particle.m_isActive;
-					particleDrawData.m_position = particle.m_position;
-					particleDrawData.m_rotation = particle.m_rotation;
-					particleDrawData.m_scale = particle.m_scale;
-					particleDrawData.m_colour = particle.m_colour;
-				}
-
-				in_particleDrawDataArray->unlock();
+				//TODO: !? do properly.
+				return std::make_tuple(Core::AABB(Core::Vector3::k_zero, Core::Vector3::k_one), Core::OOBB(Core::Vector3::k_zero, Core::Vector3::k_one), Core::Sphere(Core::Vector3::k_zero, 1.0f));
 			}
 			//----------------------------------------------------------------
 			/// Updates the particles on a background thread. This will emit
@@ -130,12 +113,12 @@ namespace ChilliSource
 			/// @param The entity's world orientation.
 			//----------------------------------------------------------------
 			void ParticleUpdateTask(ParticleEffectCSPtr in_particleEffect, ParticleEmitterSPtr in_particleEmitter, std::vector<ParticleAffectorSPtr> in_particleAffectors, 
-				std::shared_ptr<Core::dynamic_array<Particle>> in_particleArray, std::shared_ptr<Core::concurrent_dynamic_array<ParticleDrawData>> in_particleDrawDataArray, f32 in_playbackTime, 
-				f32 in_deltaTime, Core::Vector3 in_entityPosition, Core::Vector3 in_entityScale, Core::Quaternion& in_entityOrientation)
+				std::shared_ptr<Core::dynamic_array<Particle>> in_particleArray, ConcurrentParticleDataSPtr in_concurrentParticleData, f32 in_playbackTime, 
+				f32 in_deltaTime, Core::Vector3 in_entityPosition, Core::Vector3 in_entityScale, Core::Quaternion in_entityOrientation)
 			{
 				CS_ASSERT(in_particleEffect != nullptr, "Cannot update particles with null particle effect.");
 				CS_ASSERT(in_particleArray != nullptr, "Cannot update particles with null particle array.");
-				CS_ASSERT(in_particleDrawDataArray != nullptr, "Cannot update particles with null particle draw data array.");
+				CS_ASSERT(in_concurrentParticleData != nullptr, "Cannot update particles with null concurrent particle data.");
 
 				//TODO: Update affectors.
 
@@ -159,12 +142,15 @@ namespace ChilliSource
 					}
 				}
 
+				std::vector<u32> newIndices;
 				if (in_particleEmitter != nullptr)
 				{
-					in_particleEmitter->TryEmit(in_playbackTime, in_entityPosition, in_entityScale, in_entityOrientation);
+					newIndices = in_particleEmitter->TryEmit(in_playbackTime, in_entityPosition, in_entityScale, in_entityOrientation);
 				}
 
-				CommitParticleChanges(in_particleArray, in_particleDrawDataArray);
+				auto boundingShapes = CalculateBoundingShapes(in_particleEffect.get(), in_particleArray.get(), in_entityPosition, in_entityScale, in_entityOrientation);
+
+				in_concurrentParticleData->CommitParticleData(in_particleArray.get(), newIndices, std::get<0>(boundingShapes), std::get<1>(boundingShapes), std::get<2>(boundingShapes));
 			}
 		}
 		CS_DEFINE_NAMEDTYPE(ParticleEffectComponent);
@@ -303,7 +289,7 @@ namespace ChilliSource
 				ValidateParticleEffect(m_particleEffect);
 
 				m_particleArray = std::make_shared<Core::dynamic_array<Particle>>(m_particleEffect->GetMaxParticles());
-				m_particleDrawDataArray = std::make_shared<Core::concurrent_dynamic_array<ParticleDrawData>>(m_particleEffect->GetMaxParticles());
+				m_particleDrawDataArray = std::make_shared<ConcurrentParticleData>(m_particleEffect->GetMaxParticles());
 
 				m_drawable = m_particleEffect->GetDrawableDef()->CreateInstance(GetEntity(), m_particleDrawDataArray.get());
 				CS_ASSERT(m_drawable != nullptr, "Failed to create particle drawable.");

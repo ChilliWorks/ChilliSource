@@ -31,7 +31,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/HashedArray.h>
-#include <ChilliSource/Core/Container/concurrent_dynamic_array.h>
 #include <ChilliSource/Core/Container/concurrent_vector.h>
 #include <ChilliSource/Core/Container/concurrent_blocking_queue.h>
 #include <ChilliSource/Core/Container/dynamic_array.h>

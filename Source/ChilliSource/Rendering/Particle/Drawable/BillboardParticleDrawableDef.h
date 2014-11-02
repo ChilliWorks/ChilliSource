@@ -180,11 +180,11 @@ namespace ChilliSource
 			/// @author Ian Copland.
 			///
 			/// @param The entity that owns the effect.
-			/// @param The concurrent particle draw data array.
+			/// @param The concurrent particle data.
 			///
 			/// @return the instance.
 			//----------------------------------------------------------------
-			ParticleDrawableUPtr CreateInstance(const Core::Entity* in_entity, const Core::concurrent_dynamic_array<ParticleDrawData>* in_particleDrawDataArray) const override;
+			ParticleDrawableUPtr CreateInstance(const Core::Entity* in_entity, ConcurrentParticleData* in_concurrentParticleData) const override;
 			//----------------------------------------------------------------
 			/// @author Ian Copland.
 			///
