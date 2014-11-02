@@ -234,10 +234,6 @@ namespace ChilliSource
 				particle.m_rotation = localRotation;
 				particle.m_angularVelocity = particleEffect->GetInitialAngularVelocityProperty()->GenerateValue(normalisedPlaybackTime);
 				particle.m_isActive = true;
-
-				//TODO: Initialise affectors.
-
-				//TODO: Handle initialising drawable.
 			}
 		}
 	}

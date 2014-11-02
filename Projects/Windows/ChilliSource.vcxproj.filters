@@ -825,6 +825,30 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ConcurrentParticleData.cpp">
       <Filter>ChilliSource\Rendering\Particle</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ColourOverLifetimeParticleAffector.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ColourOverLifetimeParticleAffectorDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitter.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitterDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitter.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitterDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitter.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitterDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
@@ -1777,6 +1801,30 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\ConcurrentParticleData.h">
       <Filter>ChilliSource\Rendering\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ColourOverLifetimeParticleAffector.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ColourOverLifetimeParticleAffectorDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitter.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitterDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitter.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitterDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitter.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitterDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

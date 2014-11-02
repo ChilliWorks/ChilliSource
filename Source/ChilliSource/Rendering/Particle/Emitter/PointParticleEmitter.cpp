@@ -1,5 +1,5 @@
 //
-//  ParticleAffector.cpp
+//  PointParticleEmitter.cpp
 //  Chilli Source
 //  Created by Ian Copland on 02/11/2014.
 //
@@ -26,7 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
+#include <ChilliSource/Rendering/Particle/Emitter/PointParticleEmitter.h>
+
+#include <ChilliSource/Core/Math/Random.h>
+#include <ChilliSource/Rendering/Particle/ParticleEffect.h>
+#include <ChilliSource/Rendering/Particle/Emitter/PointParticleEmitterDef.h>
 
 namespace ChilliSource
 {
@@ -34,21 +38,16 @@ namespace ChilliSource
 	{
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		ParticleAffector::ParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray)
-			: m_affectorDef(in_affectorDef), m_particleArray(in_particleArray)
+		PointParticleEmitter::PointParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray)
+			: ParticleEmitter(in_particleEmitter, in_particleArray)
 		{
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		const ParticleAffectorDef* ParticleAffector::GetAffectorDef() const
+		void PointParticleEmitter::GenerateEmission(f32 in_emissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
 		{
-			return m_affectorDef;
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		Core::dynamic_array<Particle>* ParticleAffector::GetParticleArray() const
-		{
-			return m_particleArray;
+			out_position = Core::Vector3::k_zero;
+			out_direction = Core::Random::GenerateDirection3D<f32>();
 		}
 	}
 }

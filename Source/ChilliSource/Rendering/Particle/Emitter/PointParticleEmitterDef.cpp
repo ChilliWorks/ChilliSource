@@ -1,5 +1,5 @@
 //
-//  ParticleAffector.cpp
+//  PointParticleEmitterDef.cpp
 //  Chilli Source
 //  Created by Ian Copland on 02/11/2014.
 //
@@ -26,29 +26,41 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
+#include <ChilliSource/Rendering/Particle/Emitter/PointParticleEmitterDef.h>
+
+#include <ChilliSource/Rendering/Particle/Emitter/PointParticleEmitter.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
+		CS_DEFINE_NAMEDTYPE(PointParticleEmitterDef);
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		ParticleAffector::ParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray)
-			: m_affectorDef(in_affectorDef), m_particleArray(in_particleArray)
+		PointParticleEmitterDef::PointParticleEmitterDef(EmissionMode in_emissionMode, ParticlePropertyUPtr<f32> in_emissionRateProperty, ParticlePropertyUPtr<u32> in_particlesPerEmissionProperty,
+			ParticlePropertyUPtr<f32> in_emissionChanceProperty)
+			: ParticleEmitterDef(in_emissionMode, std::move(in_emissionRateProperty), std::move(in_particlesPerEmissionProperty), std::move(in_emissionChanceProperty))
 		{
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		const ParticleAffectorDef* ParticleAffector::GetAffectorDef() const
+		PointParticleEmitterDef::PointParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)
+			: ParticleEmitterDef(in_params)
 		{
-			return m_affectorDef;
+			//TODO: !?
+			CS_LOG_FATAL("Unimplemented: PointParticleEmitterDef::PointParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)");
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		Core::dynamic_array<Particle>* ParticleAffector::GetParticleArray() const
+		bool PointParticleEmitterDef::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return m_particleArray;
+			return (ParticleEmitterDef::InterfaceID == in_interfaceId || PointParticleEmitterDef::InterfaceID == in_interfaceId);
+		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		ParticleEmitterUPtr PointParticleEmitterDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
+		{
+			return ParticleEmitterUPtr(new PointParticleEmitter(this, in_particleArray));
 		}
 	}
 }

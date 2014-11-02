@@ -1,7 +1,7 @@
 //
-//  ParticleAffector.h
+//  ColourOverLifetimeParticleAffector.h
 //  Chilli Source
-//  Created by Ian Copland on 21/10/2014.
+//  Created by Ian Copland on 02/11/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,27 +26,53 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_PARTICLEAFFECTOR_H_
-#define _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_PARTICLEAFFECTOR_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_COLOUROVERLIFETIMEPARTICLEAFFECTOR_H_
+#define _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_COLOUROVERLIFETIMEPARTICLEAFFECTOR_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Container/dynamic_array.h>
+#include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
 		//---------------------------------------------------------------------
-		/// The base class for all particle affectors. Particle affectors are 
-		/// reponsible for applying any sort of effect to particles every update
-		/// frame.
+		/// A particle affector which will change the colour of particles over
+		/// its lifetime.
 		///
-		/// Particle affectors will be updated as part of a background task and 
-		/// should not be accessed from other threads.
+		/// @author Ian Copland
 		//---------------------------------------------------------------------
-		class ParticleAffector
+		class ColourOverLifetimeParticleAffector final : public ParticleAffector
 		{
 		public:
-			CS_DECLARE_NOCOPY(ParticleAffector);
+			//----------------------------------------------------------------
+			/// Stores the initial colour and generates a target colour for the
+			/// activated particle so it can be used to generate the 
+			/// interpolated colour during updates.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The index of the particle to activate.
+			//----------------------------------------------------------------
+			void ActivateParticle(f32 in_playbackTime, u32 in_index) override;
+			//----------------------------------------------------------------
+			/// Updates the colour of each particle.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The delta time.
+			//----------------------------------------------------------------
+			void AffectParticles(f32 in_playbackTime, f32 in_deltaTime) override;
+			//----------------------------------------------------------------
+			/// Destructor
+			///
+			/// @author Ian Copland
+			//----------------------------------------------------------------
+			virtual ~ColourOverLifetimeParticleAffector() {};
+		private:
+			friend class ColourOverLifetimeParticleAffectorDef;
 			//----------------------------------------------------------------
 			/// Constructor.
 			///
@@ -55,50 +81,21 @@ namespace ChilliSource
 			/// @param The particle affector definition.
 			/// @param The particle array.
 			//----------------------------------------------------------------
-			ParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
+			ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
 			//----------------------------------------------------------------
-			/// Activates the particle with the given index.
+			/// A container for the initial and target colour of a single 
+			/// particle.
 			///
-			/// This will be called on a background thread.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The index of the particle to activate.
+			/// @author Ian Copland.
 			//----------------------------------------------------------------
-			virtual void ActivateParticle(f32 in_playbackTime, u32 in_index) = 0;
-			//----------------------------------------------------------------
-			/// Applies the affect to each of the active particles.
-			///
-			/// This will be called on a background thread.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The delta time.
-			//----------------------------------------------------------------
-			virtual void AffectParticles(f32 in_playbackTime, f32 in_deltaTime) = 0;
-			//----------------------------------------------------------------
-			/// Destructor
-			///
-			/// @author Ian Copland
-			//----------------------------------------------------------------
-			virtual ~ParticleAffector() {};
-		protected:
-			//----------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return The particle affector definition
-			//----------------------------------------------------------------
-			const ParticleAffectorDef* GetAffectorDef() const;
-			//----------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return The particle array.
-			//----------------------------------------------------------------
-			Core::dynamic_array<Particle>* GetParticleArray() const;
-		private:
+			struct ColourData
+			{
+				Core::Colour m_initialColour;
+				Core::Colour m_targetColour;
+			};
 
-			const ParticleAffectorDef* m_affectorDef = nullptr;
-			Core::dynamic_array<Particle>* m_particleArray = nullptr;
+			const ColourOverLifetimeParticleAffectorDef* m_colourOverLifetimeAffectorDef = nullptr;
+			Core::dynamic_array<ColourData> m_particleColourData;
 		};
 	}
 }

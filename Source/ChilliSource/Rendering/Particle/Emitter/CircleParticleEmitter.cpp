@@ -1,7 +1,7 @@
 //
-//  SphereParticleEmitter.cpp
+//  CircleParticleEmitter.cpp
 //  Chilli Source
-//  Created by Ian Copland on 19/10/2014.
+//  Created by Ian Copland on 02/11/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,11 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Particle/Emitter/SphereParticleEmitter.h>
+#include <ChilliSource/Rendering/Particle/Emitter/CircleParticleEmitter.h>
 
 #include <ChilliSource/Core/Math/Random.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
-#include <ChilliSource/Rendering/Particle/Emitter/SphereParticleEmitterDef.h>
+#include <ChilliSource/Rendering/Particle/Emitter/CircleParticleEmitterDef.h>
 
 namespace ChilliSource
 {
@@ -39,44 +39,44 @@ namespace ChilliSource
 		namespace
 		{
 			//----------------------------------------------------------------
-			/// Generates a point within a sphere with even distribution. 
+			/// Generates a point within a circle with even distribution. 
 			///
 			/// @author Ian Copland
 			///
-			/// @return A random point in a unit sphere.
+			/// @return A random point in a unit circle.
 			//----------------------------------------------------------------
-			Core::Vector3 GeneratePointInUnitSphere()
+			Core::Vector2 GeneratePointInUnitCircle()
 			{
-				const f32 oneOverThree = 1.0f / 3.0f;
+				const f32 oneOverThree = 1.0f / 2.0f;
 
-				f32 dist = std::pow(Core::Random::GenerateReal<f32>(), oneOverThree);
-				return Core::Random::GenerateDirection3D<f32>() * dist;
+				f32 dist = std::sqrt(Core::Random::GenerateReal<f32>());
+				return Core::Random::GenerateDirection2D<f32>() * dist;
 			}
 		}
 
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		SphereParticleEmitter::SphereParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray)
+		CircleParticleEmitter::CircleParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray)
 			: ParticleEmitter(in_particleEmitter, in_particleArray)
 		{
-			//Only the sphere emitter def can create this, so this is safe.
-			m_sphereParticleEmitterDef = static_cast<const SphereParticleEmitterDef*>(in_particleEmitter);
+			//Only the circle emitter def can create this, so this is safe.
+			m_circleParticleEmitterDef = static_cast<const CircleParticleEmitterDef*>(in_particleEmitter);
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void SphereParticleEmitter::GenerateEmission(f32 in_emissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
+		void CircleParticleEmitter::GenerateEmission(f32 in_emissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
 		{
-			const f32 normalisedEmissionTime = in_emissionTime / m_sphereParticleEmitterDef->GetParticleEffect()->GetDuration();
-			f32 radius = m_sphereParticleEmitterDef->GetRadiusProperty()->GenerateValue(normalisedEmissionTime);
+			const f32 normalisedEmissionTime = in_emissionTime / m_circleParticleEmitterDef->GetParticleEffect()->GetDuration();
+			f32 radius = m_circleParticleEmitterDef->GetRadiusProperty()->GenerateValue(normalisedEmissionTime);
 
 			//calculate the position.
-			switch (m_sphereParticleEmitterDef->GetEmitFromType())
+			switch (m_circleParticleEmitterDef->GetEmitFromType())
 			{
-			case SphereParticleEmitterDef::EmitFromType::k_inside:
-				out_position = GeneratePointInUnitSphere() * radius;
+			case CircleParticleEmitterDef::EmitFromType::k_inside:
+				out_position = Core::Vector3(GeneratePointInUnitCircle() * radius, 0.0f);
 				break;
-			case SphereParticleEmitterDef::EmitFromType::k_surface:
-				out_position = Core::Random::GenerateDirection3D<f32>() * radius;
+			case CircleParticleEmitterDef::EmitFromType::k_surface:
+				out_position = Core::Vector3(Core::Random::GenerateDirection2D<f32>() * radius, 0.0f);
 				break;
 			default:
 				CS_LOG_FATAL("Invalid 'Emit From' type.");
@@ -84,12 +84,12 @@ namespace ChilliSource
 			}
 
 			//calculate the direction.
-			switch (m_sphereParticleEmitterDef->GetEmitDirectionType())
+			switch (m_circleParticleEmitterDef->GetEmitDirectionType())
 			{
-			case SphereParticleEmitterDef::EmitDirectionType::k_random:
-				out_direction = Core::Random::GenerateDirection3D<f32>();
+			case CircleParticleEmitterDef::EmitDirectionType::k_random:
+				out_direction = Core::Vector3(Core::Random::GenerateDirection2D<f32>(), 0.0f);
 				break;
-			case SphereParticleEmitterDef::EmitDirectionType::k_awayFromCentre:
+			case CircleParticleEmitterDef::EmitDirectionType::k_awayFromCentre:
 				out_direction = Core::Vector3::Normalise(out_position);
 				break;
 			default:

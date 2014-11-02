@@ -32,9 +32,12 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particle/CSParticleEffectProvider.h>
+#include <ChilliSource/Rendering/Particle/ConcurrentParticleData.h>
 #include <ChilliSource/Rendering/Particle/Particle.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffectComponent.h>
+#include <ChilliSource/Rendering/Particle/Affector/ColourOverLifetimeParticleAffector.h>
+#include <ChilliSource/Rendering/Particle/Affector/ColourOverLifetimeParticleAffectorDef.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDef.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDefFactory.h>
@@ -43,9 +46,15 @@
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawable.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDef.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDefFactory.h>
+#include <ChilliSource/Rendering/Particle/Emitter/CircleParticleEmitter.h>
+#include <ChilliSource/Rendering/Particle/Emitter/CircleParticleEmitterDef.h>
+#include <ChilliSource/Rendering/Particle/Emitter/ConeParticleEmitter.h>
+#include <ChilliSource/Rendering/Particle/Emitter/ConeParticleEmitterDef.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitter.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDef.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDefFactory.h>
+#include <ChilliSource/Rendering/Particle/Emitter/PointParticleEmitter.h>
+#include <ChilliSource/Rendering/Particle/Emitter/PointParticleEmitterDef.h>
 #include <ChilliSource/Rendering/Particle/Emitter/SphereParticleEmitter.h>
 #include <ChilliSource/Rendering/Particle/Emitter/SphereParticleEmitterDef.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>

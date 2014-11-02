@@ -1,7 +1,7 @@
 //
-//  ParticleAffectorDef.h
+//  ColourOverLifetimeParticleAffectorDef.h
 //  Chilli Source
-//  Created by Ian Copland on 21/10/2014.
+//  Created by Ian Copland on 02/11/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,52 +26,65 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_PARTICLEAFFECTORDEF_H_
-#define _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_PARTICLEAFFECTORDEF_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_COLOUROVERLIFETIMEPARTICLEAFFECTORDEF_H_
+#define _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_COLOUROVERLIFETIMEPARTICLEAFFECTORDEF_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/QueryableInterface.h>
-
-#include <functional>
+#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDef.h>
+#include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
 		//-----------------------------------------------------------------------
-		/// A particle affector def describes the properties that should be used 
-		/// to create a particle affector and creates the affector instances.
-		///
-		/// As a particle affector def's contents can potentially be read from 
-		/// multiple threads, it is immutable after construction. The exception 
-		/// to this is if it was created from a param dictionary with a 
-		/// asynchronous delegate, in which case it is immutable after the
-		/// delegate is called. Classes inheriting from this should also follow 
-		/// these rules.
+		/// The definition for a Colour Over Lifetime particle affector. This
+		/// describes a particle effector which will change the colour of a particle 
+		/// from it's initial colour to the defined colour over the course of the 
+		/// particles life.
 		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
-		class ParticleAffectorDef : public Core::QueryableInterface
+		class ColourOverLifetimeParticleAffectorDef final : public ParticleAffectorDef
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(ParticleAffectorDef);
-			CS_DECLARE_NOCOPY(ParticleAffectorDef);
-			//----------------------------------------------------------------
-			/// The affector def loaded delegate. This is used when background 
-			/// loading the particle affector def, once it has finished loading 
-			/// this delegate should be called.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The particle affector def.
-			//----------------------------------------------------------------
-			using LoadedDelegate = std::function<void(ParticleAffectorDef* in_affectorDef)>;
+			CS_DECLARE_NAMEDTYPE(ColourOverLifetimeParticleAffectorDef);
 			//----------------------------------------------------------------
 			/// Constructor.
 			///
 			/// @author Ian Copland
+			///
+			/// @param The property which describes the colour to change to.
 			//----------------------------------------------------------------
-			ParticleAffectorDef() = default;
+			ColourOverLifetimeParticleAffectorDef(ParticlePropertyUPtr<Core::Colour> in_targetColour);
+			//----------------------------------------------------------------
+			/// Constructor. Loads the params for the affector def from the 
+			/// given param dictionary. If the async delegate is not null, then
+			/// any resource loading will occur as a background task. Once 
+			/// complete the delegate delegate will be called.
+			///
+			/// The values read from param dictionary are:
+			///
+			/// "TargetColour": The property describing the target colour. 
+			///
+			/// @author Ian Copland
+			///
+			/// @param The param dictionary.
+			/// @param The async delegate.
+			//----------------------------------------------------------------
+			ColourOverLifetimeParticleAffectorDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate = nullptr);
+			//----------------------------------------------------------------
+			/// Allows querying of whether or not this implements the interface 
+			/// described by the given Id.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The interface Id.
+			///
+			/// @return Whether or not the interface is implemented.
+			//----------------------------------------------------------------
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------------------
 			/// Creates an instance of the particle affector described by this.
 			///
@@ -81,33 +94,22 @@ namespace ChilliSource
 			///
 			/// @return the instance.
 			//----------------------------------------------------------------
-			virtual ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const = 0;
+			ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const override;
 			//----------------------------------------------------------------
 			/// @author Ian Copland
 			///
-			/// @return The particle effect that owns this particle drawable
-			/// definition.
+			/// @return A property describing the target colour.
 			//----------------------------------------------------------------
-			const ParticleEffect* GetParticleEffect() const;
+			const ParticleProperty<Core::Colour>* GetTargetColourProperty() const;
 			//----------------------------------------------------------------
 			/// Destructor
 			///
 			/// @author Ian Copland.
 			//----------------------------------------------------------------
-			virtual ~ParticleAffectorDef() {}
+			virtual ~ColourOverLifetimeParticleAffectorDef() {}
 		private:
-			friend class ParticleEffect;
-			//----------------------------------------------------------------
-			/// Sets the owning particle effect. This can only be called by the 
-			/// particle effect itself when this is added to it.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The particle effect.
-			//----------------------------------------------------------------
-			void SetParticleEffect(const ParticleEffect* in_particleEffect);
 
-			const ParticleEffect* m_particleEffect = nullptr;
+			ParticlePropertyUPtr<Core::Colour> m_targetColourProperty;
 		};
 	}
 }

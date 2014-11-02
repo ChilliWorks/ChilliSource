@@ -1,7 +1,7 @@
 //
-//  ParticleProperty.h
+//  ConeParticleEmitter.h
 //  Chilli Source
-//  Created by Ian Copland on 06/10/2014.
+//  Created by Ian Copland on 02/11/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,44 +26,54 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_PARTICLEPROPERTY_H_
-#define _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_PARTICLEPROPERTY_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLES_EMITTER_CONEPARTICLEEMITTER_H_
+#define _CHILLISOURCE_RENDERING_PARTICLES_EMITTER_CONEPARTICLEEMITTER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitter.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
 		//-----------------------------------------------------------------------
-		/// A base class for different particle property types. This allows 
-		/// properties more complex than just a single value, for example a property
-		/// that selects a random value within a certain range, or that changes 
-		/// over the life of the particle system.
+		/// A cone particle emitter. This spawns particles either within a 
+		/// cone, on the cones surface or at its base, with a random direction or 
+		/// moving away from the base of the cone. 
+		///
+		/// Particle emitters will be updated as a background task and should not
+		/// be accessed from other threads.
 		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
-		template <typename TPropertyType> class ParticleProperty
+		class ConeParticleEmitter final : public ParticleEmitter
 		{
 		public:
 			//----------------------------------------------------------------
-			/// Generates a new value within the confines of the property's
-			/// settings.
+			/// Generates the position and direction of a new emission. These 
+			/// values are in local space. This will be called as part of a 
+			/// background task.
 			///
 			/// @author Ian Copland
 			///
-			/// @param The normalised (0.0 - 1.0) particle effect playback 
-			/// progress.
-			///
-			/// @return The generated value.
+			/// @param The emission playback time.
+			/// @param [Out] The generated position in local space.
+			/// @param [Out] The generate direction in local space.
 			//----------------------------------------------------------------
-			virtual TPropertyType GenerateValue(f32 in_playbackProgress) const = 0;
+			void GenerateEmission(f32 in_emissionTime, Core::Vector3& out_position, Core::Vector3& out_direction) override;
+		private:
+			friend class ConeParticleEmitterDef;
 			//----------------------------------------------------------------
-			/// Destructor.
+			/// Constructor.
 			///
 			/// @author Ian Copland
+			///
+			/// @param The particle emitter definition.
+			/// @param The particle array.
 			//----------------------------------------------------------------
-			virtual ~ParticleProperty() {};
+			ConeParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
+
+			const ConeParticleEmitterDef* m_coneParticleEmitterDef = nullptr;
 		};
 	}
 }

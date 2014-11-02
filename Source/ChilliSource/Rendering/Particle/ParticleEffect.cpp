@@ -118,7 +118,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		std::vector<const ParticleAffectorDef*> ParticleEffect::GetAffectorList() const
+		std::vector<const ParticleAffectorDef*> ParticleEffect::GetAffectorDefs() const
 		{
 			std::vector<const ParticleAffectorDef*> output;
 
@@ -197,7 +197,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void ParticleEffect::SetDrawableDefinition(ParticleDrawableDefUPtr in_drawableDef)
+		void ParticleEffect::SetDrawableDef(ParticleDrawableDefUPtr in_drawableDef)
 		{
 			CS_ASSERT(m_drawableDef == nullptr, "Cannot change the drawable definition in a Particle Effect.");
 
@@ -206,7 +206,7 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void ParticleEffect::SetEmitterDefinition(ParticleEmitterDefUPtr in_emitterDef)
+		void ParticleEffect::SetEmitterDef(ParticleEmitterDefUPtr in_emitterDef)
 		{
 			CS_ASSERT(m_emitterDef == nullptr, "Cannot change the drawable definition in a Particle Effect.");
 
@@ -215,13 +215,15 @@ namespace ChilliSource
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
-		void ParticleEffect::SetAffectorDefinitions(std::vector<ParticleAffectorDefUPtr> in_affectorDefs)
+		void ParticleEffect::SetAffectorDefs(std::vector<ParticleAffectorDefUPtr> in_affectorDefs)
 		{
 			CS_ASSERT(m_affectorDefs.empty() == true, "Cannot change the affector definitions in a Particle Effect.");
 
 			m_affectorDefs = std::move(in_affectorDefs);
-
-			//TODO: Set the particle effect on each affector.
+			for (auto& affectorDef : m_affectorDefs)
+			{
+				affectorDef->SetParticleEffect(this);
+			}
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------

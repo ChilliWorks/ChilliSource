@@ -159,7 +159,7 @@ namespace ChilliSource
 			///
 			/// @return The list of affector definitions for this effect.
 			//----------------------------------------------------------------
-			std::vector<const ParticleAffectorDef*> GetAffectorList() const;
+			std::vector<const ParticleAffectorDef*> GetAffectorDefs() const;
 			//----------------------------------------------------------------
 			/// Sets the duration of the particle effect. 
 			///
@@ -246,7 +246,7 @@ namespace ChilliSource
 			///
 			/// @param The particle graphic definition.
 			//----------------------------------------------------------------
-			void SetDrawableDefinition(ParticleDrawableDefUPtr in_drawableDef);
+			void SetDrawableDef(ParticleDrawableDefUPtr in_drawableDef);
 			//----------------------------------------------------------------
 			/// Sets the particle emitter definition for this particle effect.
 			///
@@ -254,7 +254,7 @@ namespace ChilliSource
 			///
 			/// @param The particle emitter definition.
 			//----------------------------------------------------------------
-			void SetEmitterDefinition(ParticleEmitterDefUPtr in_emitterDef);
+			void SetEmitterDef(ParticleEmitterDefUPtr in_emitterDef);
 			//----------------------------------------------------------------
 			/// Adds a particle affector definition to this particle effect.
 			///
@@ -262,7 +262,7 @@ namespace ChilliSource
 			///
 			/// @param The particle Affector definition.
 			//----------------------------------------------------------------
-			void SetAffectorDefinitions(std::vector<ParticleAffectorDefUPtr> in_affectorDefs);
+			void SetAffectorDefs(std::vector<ParticleAffectorDefUPtr> in_affectorDefs);
 			//----------------------------------------------------------------
 			/// Destructor
 			///

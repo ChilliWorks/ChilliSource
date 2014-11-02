@@ -72,7 +72,7 @@ namespace ChilliSource
 		//-------------------------------------------------
 		bool BillboardParticleDrawableDef::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (BillboardParticleDrawableDef::InterfaceID == in_interfaceId);
+			return (ParticleDrawableDef::InterfaceID == in_interfaceId || BillboardParticleDrawableDef::InterfaceID == in_interfaceId);
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------

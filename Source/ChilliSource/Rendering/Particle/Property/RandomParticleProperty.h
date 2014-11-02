@@ -71,8 +71,7 @@ namespace ChilliSource
 			/// @author Ian Copland
 			///
 			/// @param The normalised (0.0 - 1.0) particle effect playback 
-			/// progress or normalised life progress of a particle depending
-			/// on the context.
+			/// progress.
 			///
 			/// @param simply returns the static value.
 			//----------------------------------------------------------------

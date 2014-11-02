@@ -120,8 +120,6 @@ namespace ChilliSource
 				CS_ASSERT(in_particleArray != nullptr, "Cannot update particles with null particle array.");
 				CS_ASSERT(in_concurrentParticleData != nullptr, "Cannot update particles with null concurrent particle data.");
 
-				//TODO: Update affectors.
-
 				//update the particles
 				for (u32 i = 0; i < in_particleArray->size(); ++i)
 				{
@@ -142,14 +140,29 @@ namespace ChilliSource
 					}
 				}
 
+				//apply affectors
+				for (auto& affector : in_particleAffectors)
+				{
+					affector->AffectParticles(in_playbackTime, in_deltaTime);
+				}
+
+				//try to emit
 				std::vector<u32> newIndices;
 				if (in_particleEmitter != nullptr)
 				{
 					newIndices = in_particleEmitter->TryEmit(in_playbackTime, in_entityPosition, in_entityScale, in_entityOrientation);
 				}
 
-				auto boundingShapes = CalculateBoundingShapes(in_particleEffect.get(), in_particleArray.get(), in_entityPosition, in_entityScale, in_entityOrientation);
+				//Initialise any new particles in each affector.
+				for (u32 newIndex : newIndices)
+				{
+					for (auto& affector : in_particleAffectors)
+					{
+						affector->ActivateParticle(in_playbackTime, newIndex);
+					}
+				}
 
+				auto boundingShapes = CalculateBoundingShapes(in_particleEffect.get(), in_particleArray.get(), in_entityPosition, in_entityScale, in_entityOrientation);
 				in_concurrentParticleData->CommitParticleData(in_particleArray.get(), newIndices, std::get<0>(boundingShapes), std::get<1>(boundingShapes), std::get<2>(boundingShapes));
 			}
 		}
@@ -289,15 +302,22 @@ namespace ChilliSource
 				ValidateParticleEffect(m_particleEffect);
 
 				m_particleArray = std::make_shared<Core::dynamic_array<Particle>>(m_particleEffect->GetMaxParticles());
-				m_particleDrawDataArray = std::make_shared<ConcurrentParticleData>(m_particleEffect->GetMaxParticles());
+				m_concurrentParticleData = std::make_shared<ConcurrentParticleData>(m_particleEffect->GetMaxParticles());
 
-				m_drawable = m_particleEffect->GetDrawableDef()->CreateInstance(GetEntity(), m_particleDrawDataArray.get());
+				m_drawable = m_particleEffect->GetDrawableDef()->CreateInstance(GetEntity(), m_concurrentParticleData.get());
 				CS_ASSERT(m_drawable != nullptr, "Failed to create particle drawable.");
 
 				m_emitter = m_particleEffect->GetEmitterDef()->CreateInstance(m_particleArray.get());
 				CS_ASSERT(m_emitter != nullptr, "Failed to create particle emitter.");
 
-				//TODO: Create affectors.
+				const std::vector<const ParticleAffectorDef*> affectorDefs = m_particleEffect->GetAffectorDefs();
+				for (const auto& affectorDef : affectorDefs)
+				{
+					ParticleAffectorSPtr affector = affectorDef->CreateInstance(m_particleArray.get());
+					CS_ASSERT(affector != nullptr, "Failed to create particle emitter.");
+
+					m_affectors.push_back(affector);
+				}
 
 				//TODO: Handle more properly
 				mBoundingBox = Core::AABB(Core::Vector3(0.0f, 0.0f, 0.0f), Core::Vector3(1.0f, 1.0f, 1.0f));
@@ -312,11 +332,10 @@ namespace ChilliSource
 		void ParticleEffectComponent::CleanupParticleEffect()
 		{
 			m_particleArray.reset();
-			m_particleDrawDataArray.reset();
+			m_concurrentParticleData.reset();
 			m_drawable.reset();
 			m_emitter.reset();
-		
-			//TODO: Cleanup affectors.
+			m_affectors.clear();
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -352,20 +371,28 @@ namespace ChilliSource
 					}
 				}
 
-				//TODO: If we're not emitting and there are no more active particles, then stop.
+				if (m_isPlaying == true && m_isEmitting == false && m_concurrentParticleData->HasActiveParticles() == false)
+				{
+					Stop();
+				}
 
 				//if we're still playing, then create a new background update task
 				if (m_isPlaying == true)
 				{
-					ParticleEmitterSPtr emitter;
-					if (m_isEmitting == true)
+					m_accumulatedDeltaTime += in_deltaTime;
+					if (m_concurrentParticleData->StartUpdate() == true)
 					{
-						emitter = m_emitter;
-					}
+						ParticleEmitterSPtr emitter;
+						if (m_isEmitting == true)
+						{
+							emitter = m_emitter;
+						}
 
-					//TODO: ensure there isn't already an instance of the task active.
-					Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, emitter, m_affectors, m_particleArray, m_particleDrawDataArray, 
-						m_playbackTimer, in_deltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation()));
+						Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, emitter, m_affectors, m_particleArray, m_concurrentParticleData,
+							m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation()));
+
+						m_accumulatedDeltaTime = 0.0f;
+					}
 				}
 			}
 		}

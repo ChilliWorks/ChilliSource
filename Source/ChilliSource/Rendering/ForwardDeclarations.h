@@ -108,6 +108,8 @@ namespace ChilliSource
         //------------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(BillboardParticleDrawable);
 		CS_FORWARDDECLARE_CLASS(BillboardParticleDrawableDef);
+		CS_FORWARDDECLARE_CLASS(ColourOverLifetimeParticleAffector);
+		CS_FORWARDDECLARE_CLASS(ColourOverLifetimeParticleAffectorDef);
 		CS_FORWARDDECLARE_CLASS(ConcurrentParticleData);
 		CS_FORWARDDECLARE_CLASS(ParticleEffect);
 		CS_FORWARDDECLARE_CLASS(ICParticleEffectProvider);
@@ -125,6 +127,12 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(ParticleAffectorDefFactory);
 		CS_FORWARDDECLARE_CLASS(SphereParticleEmitter);
 		CS_FORWARDDECLARE_CLASS(SphereParticleEmitterDef);
+		CS_FORWARDDECLARE_CLASS(CircleParticleEmitter);
+		CS_FORWARDDECLARE_CLASS(CircleParticleEmitterDef);
+		CS_FORWARDDECLARE_CLASS(PointParticleEmitter);
+		CS_FORWARDDECLARE_CLASS(PointParticleEmitterDef);
+		CS_FORWARDDECLARE_CLASS(ConeParticleEmitter);
+		CS_FORWARDDECLARE_CLASS(ConeParticleEmitterDef);
 		template <typename TPropertyType> class ParticleProperty;
 		template <typename TPropertyType> using ParticlePropertyUPtr = std::unique_ptr<ParticleProperty<TPropertyType>>;
 		template <typename TPropertyType> using ParticlePropertyCUPtr = std::unique_ptr<const ParticleProperty<TPropertyType>>;

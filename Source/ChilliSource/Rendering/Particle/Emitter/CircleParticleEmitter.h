@@ -1,7 +1,7 @@
 //
-//  ParticleProperty.h
+//  CircleParticleEmitter.h
 //  Chilli Source
-//  Created by Ian Copland on 06/10/2014.
+//  Created by Ian Copland on 02/11/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,44 +26,54 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_PARTICLEPROPERTY_H_
-#define _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_PARTICLEPROPERTY_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLES_EMITTER_CIRCLEPARTICLEEMITTER_H_
+#define _CHILLISOURCE_RENDERING_PARTICLES_EMITTER_CIRCLEPARTICLEEMITTER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitter.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
 		//-----------------------------------------------------------------------
-		/// A base class for different particle property types. This allows 
-		/// properties more complex than just a single value, for example a property
-		/// that selects a random value within a certain range, or that changes 
-		/// over the life of the particle system.
+		/// A circle particle emitter. This spawns particles either within a 
+		/// circle or on the circles perimeter, with a random direction or moving
+		/// away from the centre of the circle. 
+		///
+		/// Particle emitters will be updated as a background task and should not
+		/// be accessed from other threads.
 		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
-		template <typename TPropertyType> class ParticleProperty
+		class CircleParticleEmitter final : public ParticleEmitter
 		{
 		public:
 			//----------------------------------------------------------------
-			/// Generates a new value within the confines of the property's
-			/// settings.
+			/// Generates the position and direction of a new emission. These 
+			/// values are in local space. This will be called as part of a 
+			/// background task.
 			///
 			/// @author Ian Copland
 			///
-			/// @param The normalised (0.0 - 1.0) particle effect playback 
-			/// progress.
-			///
-			/// @return The generated value.
+			/// @param The emission playback time.
+			/// @param [Out] The generated position in local space.
+			/// @param [Out] The generate direction in local space.
 			//----------------------------------------------------------------
-			virtual TPropertyType GenerateValue(f32 in_playbackProgress) const = 0;
+			void GenerateEmission(f32 in_emissionTime, Core::Vector3& out_position, Core::Vector3& out_direction) override;
+		private:
+			friend class CircleParticleEmitterDef;
 			//----------------------------------------------------------------
-			/// Destructor.
+			/// Constructor.
 			///
 			/// @author Ian Copland
+			///
+			/// @param The particle emitter definition.
+			/// @param The particle array.
 			//----------------------------------------------------------------
-			virtual ~ParticleProperty() {};
+			CircleParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
+
+			const CircleParticleEmitterDef* m_circleParticleEmitterDef = nullptr;
 		};
 	}
 }

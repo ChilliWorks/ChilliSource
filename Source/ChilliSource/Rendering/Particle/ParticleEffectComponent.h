@@ -314,12 +314,13 @@ namespace ChilliSource
 			ParticleEmitterSPtr m_emitter;
 			std::vector<ParticleAffectorSPtr> m_affectors;
 			std::shared_ptr<Core::dynamic_array<Particle>> m_particleArray;
-			ConcurrentParticleDataSPtr m_particleDrawDataArray;
+			ConcurrentParticleDataSPtr m_concurrentParticleData;
 
 			PlaybackType m_playbackType = PlaybackType::k_once;
 			bool m_isPlaying = false;
 			bool m_isEmitting = false;
 			f32 m_playbackTimer = 0.0f;
+			f32 m_accumulatedDeltaTime = 0.0f;
 			Core::Event<Delegate> m_finishedEvent;
 			Core::Event<Delegate> m_finishedEmittingEvent;
 		};

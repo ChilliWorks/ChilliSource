@@ -155,16 +155,13 @@ namespace ChilliSource
 			m_particleBillboardIndices(in_drawableDef->GetParticleEffect()->GetMaxParticles())
 		{
 			BuildBillboardImageData();
-			
-			for (u32 i = 0; i < m_particleBillboardIndices.size(); ++i)
-			{
-				ActivateParticle(i);
-			}
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
 		void BillboardParticleDrawable::ActivateParticle(u32 in_index)
 		{
+			CS_ASSERT(in_index >= 0 && in_index < m_particleBillboardIndices.size(), "Index out of bounds!");
+
 			switch (m_billboardDrawableDef->GetImageSelectionType())
 			{
 			case BillboardParticleDrawableDef::ImageSelectionType::k_cycle:

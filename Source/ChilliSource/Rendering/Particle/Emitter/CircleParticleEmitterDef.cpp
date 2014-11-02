@@ -1,7 +1,7 @@
 //
-//  SphereParticleEmitterDef.cpp
+//  CircleParticleEmitterDef.cpp
 //  Chilli Source
-//  Created by Ian Copland on 19/10/2014.
+//  Created by Ian Copland on 02/11/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,59 +26,59 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Particle/Emitter/SphereParticleEmitterDef.h>
+#include <ChilliSource/Rendering/Particle/Emitter/CircleParticleEmitterDef.h>
 
-#include <ChilliSource/Rendering/Particle/Emitter/SphereParticleEmitter.h>
+#include <ChilliSource/Rendering/Particle/Emitter/CircleParticleEmitter.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
-		CS_DEFINE_NAMEDTYPE(SphereParticleEmitterDef);
+		CS_DEFINE_NAMEDTYPE(CircleParticleEmitterDef);
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		SphereParticleEmitterDef::SphereParticleEmitterDef(EmissionMode in_emissionMode, ParticlePropertyUPtr<f32> in_emissionRateProperty, ParticlePropertyUPtr<u32> in_particlesPerEmissionProperty,
+		CircleParticleEmitterDef::CircleParticleEmitterDef(EmissionMode in_emissionMode, ParticlePropertyUPtr<f32> in_emissionRateProperty, ParticlePropertyUPtr<u32> in_particlesPerEmissionProperty,
 			ParticlePropertyUPtr<f32> in_emissionChanceProperty, EmitFromType in_emitFromType, EmitDirectionType in_emitDirectionType, ParticlePropertyUPtr<f32> in_radiusProperty)
 			: ParticleEmitterDef(in_emissionMode, std::move(in_emissionRateProperty), std::move(in_particlesPerEmissionProperty), std::move(in_emissionChanceProperty)), m_emitFromType(in_emitFromType),
 			m_emitDirectionType(in_emitDirectionType), m_radiusProperty(std::move(in_radiusProperty))
 		{
-			CS_ASSERT(m_radiusProperty != nullptr, "Cannot create a Sphere Particle Emitter Def with a null 'radius' property.");
+			CS_ASSERT(m_radiusProperty != nullptr, "Cannot create a Circle Particle Emitter Def with a null 'radius' property.");
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		SphereParticleEmitterDef::SphereParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)
+		CircleParticleEmitterDef::CircleParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)
 			: ParticleEmitterDef(in_params)
 		{
 			//TODO: !?
-			CS_LOG_FATAL("Unimplemented: SphereParticleEmitterDef::SphereParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)");
+			CS_LOG_FATAL("Unimplemented: CircleParticleEmitterDef::CircleParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)");
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool SphereParticleEmitterDef::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool CircleParticleEmitterDef::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (ParticleEmitterDef::InterfaceID == in_interfaceId || SphereParticleEmitterDef::InterfaceID == in_interfaceId);
+			return (ParticleEmitterDef::InterfaceID == in_interfaceId || CircleParticleEmitterDef::InterfaceID == in_interfaceId);
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		ParticleEmitterUPtr SphereParticleEmitterDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
+		ParticleEmitterUPtr CircleParticleEmitterDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
 		{
-			return ParticleEmitterUPtr(new SphereParticleEmitter(this, in_particleArray));
+			return ParticleEmitterUPtr(new CircleParticleEmitter(this, in_particleArray));
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		SphereParticleEmitterDef::EmitFromType SphereParticleEmitterDef::GetEmitFromType() const
+		CircleParticleEmitterDef::EmitFromType CircleParticleEmitterDef::GetEmitFromType() const
 		{
 			return m_emitFromType;
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		SphereParticleEmitterDef::EmitDirectionType SphereParticleEmitterDef::GetEmitDirectionType() const
+		CircleParticleEmitterDef::EmitDirectionType CircleParticleEmitterDef::GetEmitDirectionType() const
 		{
 			return m_emitDirectionType;
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		const ParticleProperty<f32>* SphereParticleEmitterDef::GetRadiusProperty() const
+		const ParticleProperty<f32>* CircleParticleEmitterDef::GetRadiusProperty() const
 		{
 			return m_radiusProperty.get();
 		}
