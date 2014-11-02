@@ -28,7 +28,7 @@
 
 package com.chilliworks.chillisource.colladatocsanim.csanim;
 
-import com.chilliworks.chillisource.toolutils.Matrix4;
+import com.chilliworks.chillisource.coreutils.Matrix4;
 
 public class CSAnimSkeletonNode 
 {
@@ -44,6 +44,6 @@ public class CSAnimSkeletonNode
 		mstrName = new String();
 		mstrParentId = new String();
 		mdwParentNodeIndex = -1; 
-		mInitialPoseMatrix = new Matrix4();
+		mInitialPoseMatrix = Matrix4.IDENTITY;
 	}
 }

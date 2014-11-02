@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_CORE_THREADING_THREADPOOL_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Container/WorkerQueue.h>
+#include <ChilliSource/Core/Container/concurrent_blocking_queue.h>
 
 #include <atomic>
 #include <thread>
@@ -89,11 +89,13 @@ namespace ChilliSource
             //----------------------------------------------
             void DoTaskOrWait();
 
-            typedef std::vector<std::thread> ThreadGroup;
-            typedef WorkerQueue<GenericTaskType> TaskQueue;
+			using ThreadGroup = std::vector<std::thread>;
+			using TaskQueue = concurrent_blocking_queue<GenericTaskType>;
+			using TaskQueueUPtr = std::unique_ptr<TaskQueue>;
+
 
             ThreadGroup m_threadGroup;
-            TaskQueue m_tasks;
+			TaskQueueUPtr m_tasks;
             
             std::atomic<bool> m_isFinished;
         };

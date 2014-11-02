@@ -33,7 +33,9 @@ import java.util.LinkedList;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModel;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModelMesh;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModelVertex;
-import com.chilliworks.chillisource.toolutils.Matrix4;
+import com.chilliworks.chillisource.coreutils.Matrix4;
+import com.chilliworks.chillisource.coreutils.Vector2;
+import com.chilliworks.chillisource.coreutils.Vector3;
 
 public final class CSModelTransformer 
 {
@@ -72,23 +74,21 @@ public final class CSModelTransformer
 	private static void swapHandedness(CSModel in_model)
 	{
 		//overall bounds
-		float temp = in_model.mvMin.y;
-		in_model.mvMin.y = -in_model.mvMax.y;
-		in_model.mvMax.y = -temp;
+		in_model.mvMin = new Vector3(in_model.mvMin.getX(), -in_model.mvMax.getY(), in_model.mvMin.getZ());
+		in_model.mvMax = new Vector3(in_model.mvMax.getX(), -in_model.mvMin.getY(), in_model.mvMax.getZ());
 		
 		//each mesh bounds, positions and normals
 		for (CSModelMesh mesh: in_model.mMeshTable.values())
 		{
 			//bounds
-			temp = mesh.mvMin.y;
-			mesh.mvMin.y = -mesh.mvMax.y;
-			mesh.mvMax.y = -temp;
+			mesh.mvMin = new Vector3(mesh.mvMin.getX(), -mesh.mvMax.getY(), mesh.mvMin.getZ());
+			mesh.mvMax = new Vector3(mesh.mvMax.getX(), -mesh.mvMin.getY(), mesh.mvMax.getZ());
 			
 			//position and normal
 			for (CSModelVertex vert: mesh.mVertexList)
 			{
-				vert.mvPosition.y = -vert.mvPosition.y;
-				vert.mvNormal.y = -vert.mvNormal.y;
+				vert.mvPosition = new Vector3(vert.mvPosition.getX(), -vert.mvPosition.getY(), vert.mvPosition.getZ());
+				vert.mvNormal = new Vector3(vert.mvNormal.getX(), -vert.mvNormal.getY(), vert.mvNormal.getZ());
 			}
 			
 			//Mirror inverse bind matrices
@@ -101,7 +101,7 @@ public final class CSModelTransformer
 							0.0f,-1.0f, 0.0f, 0.0f,
 							0.0f, 0.0f, 1.0f, 0.0f,
 							0.0f, 0.0f, 0.0f, 1.0f);
-					mesh.maInverseBindMatrices[i] = Matrix4.multiply(Matrix4.multiply(invertY.inverse(), mesh.maInverseBindMatrices[i]), invertY);
+					mesh.maInverseBindMatrices[i] = Matrix4.multiply(Matrix4.multiply(Matrix4.inverse(invertY), mesh.maInverseBindMatrices[i]), invertY);
 				}
 			}
 		}
@@ -130,40 +130,22 @@ public final class CSModelTransformer
 	 */
 	private static void swapYAndZ(CSModel in_model)
 	{
-		float temp = 0.0f;
-		
 		//overall bounds
-		temp = in_model.mvMin.z;
-		in_model.mvMin.z = in_model.mvMin.y;
-		in_model.mvMin.y = temp;
-		
-		temp = in_model.mvMax.z;
-		in_model.mvMax.z = in_model.mvMax.y;
-		in_model.mvMax.y = temp;
-		
+		in_model.mvMin = new Vector3(in_model.mvMin.getX(), in_model.mvMin.getZ(), in_model.mvMin.getY());
+		in_model.mvMax = new Vector3(in_model.mvMax.getX(), in_model.mvMax.getZ(), in_model.mvMax.getY());
 		
 		//each mesh bounds, positions and normals
 		for (CSModelMesh mesh: in_model.mMeshTable.values())
 		{
 			//bounds
-			temp = mesh.mvMin.z;
-			mesh.mvMin.z = mesh.mvMin.y;
-			mesh.mvMin.y = temp;
-			
-			temp = mesh.mvMax.z;
-			mesh.mvMax.z = mesh.mvMax.y;
-			mesh.mvMax.y = temp;
+			mesh.mvMin = new Vector3(mesh.mvMin.getX(), mesh.mvMin.getZ(), mesh.mvMin.getY());
+			mesh.mvMax = new Vector3(mesh.mvMax.getX(), mesh.mvMax.getZ(), mesh.mvMax.getY());
 			
 			//position and normal
 			for (CSModelVertex vert: mesh.mVertexList)
 			{
-				temp = vert.mvPosition.z;
-				vert.mvPosition.z = vert.mvPosition.y;
-				vert.mvPosition.y = temp;
-				
-				temp = vert.mvNormal.z;
-				vert.mvNormal.z = vert.mvNormal.y;
-				vert.mvNormal.y = temp;
+				vert.mvPosition = new Vector3(vert.mvPosition.getX(), vert.mvPosition.getZ(), vert.mvPosition.getY());
+				vert.mvNormal = new Vector3(vert.mvNormal.getX(), vert.mvNormal.getZ(), vert.mvNormal.getY());
 			}
 			
 			//convert inverse bind matrices
@@ -171,7 +153,7 @@ public final class CSModelTransformer
 			{
 				for (int i = 0; i < mesh.maInverseBindMatrices.length; i++)
 				{	
-					mesh.maInverseBindMatrices[i] = mesh.maInverseBindMatrices[i].swapYandZ();
+					mesh.maInverseBindMatrices[i] = Matrix4.swapYandZ(mesh.maInverseBindMatrices[i]);
 				}
 			}
 		}
@@ -190,7 +172,7 @@ public final class CSModelTransformer
 		{
 			for (CSModelVertex vert: mesh.mVertexList)
 			{
-				vert.mvTextureCoordinate.y = 1.0f - vert.mvTextureCoordinate.y;
+				vert.mvTextureCoordinate = new Vector2(vert.mvTextureCoordinate.getX(), 1.0f - vert.mvTextureCoordinate.getY());
 			}
 		}
 	}

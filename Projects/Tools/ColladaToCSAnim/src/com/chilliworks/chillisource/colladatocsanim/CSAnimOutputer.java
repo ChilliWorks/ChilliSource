@@ -28,11 +28,14 @@
 
 package com.chilliworks.chillisource.colladatocsanim;
 
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
+
 import com.chilliworks.chillisource.colladatocsanim.csanim.*;
-import com.chilliworks.chillisource.toolutils.LittleEndianOutputStream;
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.Quaternion;
-import com.chilliworks.chillisource.toolutils.Vector3;
+import com.chilliworks.chillisource.coreutils.LittleEndianWriterUtils;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.Quaternion;
+import com.chilliworks.chillisource.coreutils.Vector3;
 
 public class CSAnimOutputer 
 {
@@ -45,7 +48,7 @@ public class CSAnimOutputer
 	/**
 	 * Private Data
 	 */
-	LittleEndianOutputStream mStream;
+	DataOutputStream mStream;
 	
 	/**
 	 * Constructor
@@ -65,7 +68,7 @@ public class CSAnimOutputer
 		//try and open a new file stream. if this fails, throw a fatal error.
 		try
 		{	
-			mStream = new LittleEndianOutputStream(inConversionParams.m_outputFilePath);
+			mStream = new DataOutputStream(new FileOutputStream(inConversionParams.m_outputFilePath));
 		}
 		catch (Exception e)
 		{
@@ -107,18 +110,18 @@ public class CSAnimOutputer
 	public boolean WriteHeader(ColladaToCSAnimOptions inConversionParams, CSAnim inAnim) throws Exception
 	{
 		//write endianness check and version number
-		mStream.writeUnsignedInt(ENDIANESS_CHECK_VALUE);
-		mStream.writeUnsignedInt(VERSION_NUMBER);
+		LittleEndianWriterUtils.writeUInt32(mStream, ENDIANESS_CHECK_VALUE);
+		LittleEndianWriterUtils.writeUInt32(mStream, VERSION_NUMBER);
 		
 		//declare that there are no features
 		mStream.writeByte((byte)0);
 		
 		//Write the number of frames and joints
-		mStream.writeUnsignedShort(inAnim.mFrames.size());
-		mStream.writeShort((short)inAnim.mSkeleton.mNodeList.size());
+		LittleEndianWriterUtils.writeUInt16(mStream, inAnim.mFrames.size());
+		LittleEndianWriterUtils.writeInt16(mStream, (short)inAnim.mSkeleton.mNodeList.size());
 		
 		//Write the frame rate
-		mStream.writeFloat(inAnim.mfFrameRate);
+		LittleEndianWriterUtils.writeFloat32(mStream, inAnim.mfFrameRate);
 		
 		return true;
 	}
@@ -142,18 +145,18 @@ public class CSAnimOutputer
 				Quaternion orientation = frame.mNodeOrienations.get(j);
 				Vector3 scale = frame.mNodeScalings.get(j);
 				
-				mStream.writeFloat(translation.x);
-				mStream.writeFloat(translation.y);
-				mStream.writeFloat(translation.z);
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)translation.getX());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)translation.getY());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)translation.getZ());
 				
-				mStream.writeFloat(orientation.x);
-				mStream.writeFloat(orientation.y);
-				mStream.writeFloat(orientation.z);
-				mStream.writeFloat(orientation.w);
-				
-				mStream.writeFloat(scale.x);
-				mStream.writeFloat(scale.y);
-				mStream.writeFloat(scale.z);
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)orientation.getX());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)orientation.getY());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)orientation.getZ());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)orientation.getW());
+
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)scale.getX());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)scale.getY());
+				LittleEndianWriterUtils.writeFloat32(mStream, (float)scale.getZ());
 			}
 		}
 

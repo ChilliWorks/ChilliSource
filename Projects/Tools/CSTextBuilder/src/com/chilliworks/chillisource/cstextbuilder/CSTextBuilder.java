@@ -34,9 +34,9 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import com.chilliworks.chillisource.toolutils.FileUtils;
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.Logging.LoggingLevel;
+import com.chilliworks.chillisource.coreutils.FileUtils;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.Logging.LoggingLevel;
 
 import jxl.Cell;
 import jxl.CellType;
@@ -122,7 +122,7 @@ public class CSTextBuilder
 
         Logging.logVerbose("Opening workbook...");
         WorkbookSettings ws = new WorkbookSettings();
-        if (Logging.getLoggingLevel() == LoggingLevel.k_error || Logging.getLoggingLevel() == LoggingLevel.k_fatal || Logging.getLoggingLevel() == LoggingLevel.k_none)
+        if (Logging.getLoggingLevel() == LoggingLevel.ERROR || Logging.getLoggingLevel() == LoggingLevel.FATAL || Logging.getLoggingLevel() == LoggingLevel.NONE)
         {
         	ws.setSuppressWarnings(true);
         }

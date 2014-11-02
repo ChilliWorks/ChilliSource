@@ -143,8 +143,12 @@ namespace CSModelExporter.Classes
                 process.StartInfo.Arguments = "-jar " + kstrPathToCSAnimTool
                     + " --input \"" + strFilepath + "\""
                     + " --output \"" + strOutputPath + "\""
-                    + " --transforms " + GetModificationsString(mOptions)
                     + " --logginglevel verbose";
+
+                if (mOptions.mbSwapYAndZ == true)
+                {
+                    process.StartInfo.Arguments += " --swapyandz";
+                }
 
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
@@ -197,45 +201,6 @@ namespace CSModelExporter.Classes
             //clean up and reset to allow the task to be started again.
             mastrFilenames = null;
             mbTaskActive = false;
-        }
-
-        /// <summary>
-        /// Returns the "features" string  for passing to the MoModel converter.
-        /// </summary>
-        /// <param name="inOptions"></param>
-        /// <returns></returns>
-        private string GetFeaturesString(CSAnimOptions inOptions)
-        {
-            string output = "";
-            
-            //no features yet...
-
-            if (output.Length > 0 && output[output.Length - 1] == ',')
-                output = output.Substring(0, output.Length - 1);
-
-            if (output.Length == 0)
-                output = "none";
-
-            return output;
-        }
-
-
-        /// <summary>
-        /// Returns the "modifications" string for passing to the MoModel converter.
-        /// </summary>
-        /// <param name="inOptions"></param>
-        /// <returns></returns>
-        private string GetModificationsString(CSAnimOptions inOptions)
-        {
-            string output = "";
-
-            if (inOptions.mbSwapYAndZ == true)
-                output += "y";
-
-            if (output.Length == 0)
-                output = "0";
-
-            return output;
         }
     }
 }

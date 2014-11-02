@@ -52,12 +52,12 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Container
         //---------------------------------------------------------
+		CS_FORWARDDECLARE_CLASS(ParamDictionary);
         template <typename TKey, typename TValue> class HashedArray;
         template <typename TType> class ObjectPool;
-        CS_FORWARDDECLARE_CLASS(ParamDictionary);
-        template <typename T> class WorkerQueue;
-		template <typename TType> class concurrent_vector;
+		template <typename TType> class concurrent_blocking_queue;
 		template <typename TType> class concurrent_dynamic_array;
+		template <typename TType> class concurrent_vector;
 		template <typename TType> class dynamic_array;
         //---------------------------------------------------------
         /// Delegate
@@ -88,6 +88,8 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(FileSystem);
         CS_FORWARDDECLARE_CLASS(AppDataStore);
         CS_FORWARDDECLARE_CLASS(TaggedFilePathResolver);
+        CS_FORWARDDECLARE_CLASS(CSBinaryInputStream);
+        CS_FORWARDDECLARE_CLASS(CSBinaryChunk);
         enum class StorageLocation;
         //---------------------------------------------------------
         /// Image

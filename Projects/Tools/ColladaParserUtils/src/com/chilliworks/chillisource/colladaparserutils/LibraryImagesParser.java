@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
 import com.chilliworks.chillisource.colladaparserutils.colladadata.Collada;
 import com.chilliworks.chillisource.colladaparserutils.colladadata.ColladaImage;
 import com.chilliworks.chillisource.colladaparserutils.colladadata.ColladaInitFrom;
-import com.chilliworks.chillisource.toolutils.Logging;
+import com.chilliworks.chillisource.coreutils.Logging;
 
 public class LibraryImagesParser 
 {

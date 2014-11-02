@@ -28,9 +28,9 @@
 
 package com.chilliworks.chillisource.cstextbuilder;
 
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.StringUtils;
-import com.chilliworks.chillisource.toolutils.Logging.LoggingLevel;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.StringUtils;
+import com.chilliworks.chillisource.coreutils.Logging.LoggingLevel;
 
 public class Main
 {
@@ -117,20 +117,20 @@ public class Main
 	//------------------------------------------------------
 	private static void printHelpText()
 	{
-		Logging.setLoggingLevel(LoggingLevel.k_verbose);
+		Logging.setLoggingLevel(LoggingLevel.VERBOSE);
 		Logging.logVerbose("Usage: java -jar CSTextBuilder.jar " + k_paramInput + " <file path> " + k_paramOutput + " <file path> " + k_paramLanguage + " <language code> [" + 
-				Logging.k_paramLoggingLevel + " <level>] [" + k_paramHelp + "]");
+				Logging.PARAM_LOGGING_LEVEL + " <level>] [" + k_paramHelp + "]");
 		Logging.logVerbose("Parameters:");
 		Logging.logVerbose(" " + k_paramInput + "(" + k_paramInputShort + "): The file path to the source .xls file.");
 		Logging.logVerbose(" " + k_paramOutput + "(" + k_paramOutputShort + "): The output file path.");
 		Logging.logVerbose(" " + k_paramLanguage + "(" + k_paramLanguageShort + "): Name of language column in source .xls to extract text from.");
-		Logging.logVerbose(" " + Logging.k_paramLoggingLevel + "(" + Logging.k_paramLoggingLevelShort + "): The level of message to log to console.");
+		Logging.logVerbose(" " + Logging.PARAM_LOGGING_LEVEL + "(" + Logging.SHORT_PARAM_LOGGING_LEVEL + "): The level of message to log to console.");
 		Logging.logVerbose(" " + k_paramHelp + "(" + k_paramHelpShort + "): Print this help message.");
 		Logging.logVerbose("Logging Levels:");
-		Logging.logVerbose(" " + Logging.k_loggingLevelNone + ": No logging.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelFatal + ": Only log fatal errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelError + ": Only log errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelWarning + ": Log errors and warnings.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelVerbose + ": Log all messages.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_NONE + ": No logging.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_FATAL + ": Only log fatal errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_ERROR + ": Only log errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_WARNING + ": Log errors and warnings.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_VERBOSE + ": Log all messages.");
 	}
 }

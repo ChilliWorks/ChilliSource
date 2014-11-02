@@ -42,7 +42,7 @@ import java.util.HashSet;
 
 import javax.imageio.ImageIO;
 
-import com.chilliworks.chillisource.toolutils.Logging;
+import com.chilliworks.chillisource.coreutils.Logging;
 
 /**
  * Class that holds utility methos for packing images onto a single image to use the minimum

@@ -28,9 +28,9 @@
 
 package com.chilliworks.chillisource.androidmanifestbuilder;
 
-import com.chilliworks.chillisource.toolutils.Logging;
-import com.chilliworks.chillisource.toolutils.StringUtils;
-import com.chilliworks.chillisource.toolutils.Logging.LoggingLevel;
+import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.StringUtils;
+import com.chilliworks.chillisource.coreutils.Logging.LoggingLevel;
 
 /**
  * Handles the entry point into the application. This manages the parsing of the input parameters and
@@ -132,19 +132,19 @@ public final class Main
 	 */
 	public static void printHelpText()
 	{
-		Logging.setLoggingLevel(LoggingLevel.k_verbose);
+		Logging.setLoggingLevel(LoggingLevel.VERBOSE);
 		Logging.logVerbose("Usage: java -jar AndroidManifestBuilder.jar --input <file path> --template <file path> --output <file path> [--logginglevel <level>] [--help]");
 		Logging.logVerbose("Parameters:");
 		Logging.logVerbose(" " + k_paramInput + "(" + k_paramInputShort + "): The file path to the user manifest.");
 		Logging.logVerbose(" " + k_paramTemplate + "(" + k_paramTemplateShort + "): The file path to the template manifest.");
 		Logging.logVerbose(" " + k_paramOutput + "(" + k_paramOutputShort + "): The file path to the output AndroidManifest.xml.");
-		Logging.logVerbose(" " + Logging.k_paramLoggingLevel + "(" + Logging.k_paramLoggingLevelShort + "): [Optional] The level of messages to log.");
+		Logging.logVerbose(" " + Logging.PARAM_LOGGING_LEVEL + "(" + Logging.SHORT_PARAM_LOGGING_LEVEL + "): [Optional] The level of messages to log.");
 		Logging.logVerbose(" " + k_paramHelp + "(" + k_paramHelpShort + "): [Optional] Display this help message.");
 		Logging.logVerbose("Logging Levels:");
-		Logging.logVerbose(" " + Logging.k_loggingLevelNone + ": No logging.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelFatal + ": Only log fatal errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelError + ": Only log errors.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelWarning + ": Log errors and warnings.");
-		Logging.logVerbose(" " + Logging.k_loggingLevelVerbose + ": Log all messages.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_NONE + ": No logging.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_FATAL + ": Only log fatal errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_ERROR + ": Only log errors.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_WARNING + ": Log errors and warnings.");
+		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_VERBOSE + ": Log all messages.");
 	}
 }

@@ -36,7 +36,7 @@ import com.chilliworks.chillisource.colladaparserutils.colladadata.ColladaNode.C
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModel;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModelSkeleton;
 import com.chilliworks.chillisource.colladatocsmodel.csmodel.CSModelSkeletonNode;
-import com.chilliworks.chillisource.toolutils.Logging;
+import com.chilliworks.chillisource.coreutils.Logging;
 
 public class SkeletonBuilder 
 {

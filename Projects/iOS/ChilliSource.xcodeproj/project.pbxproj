@@ -261,6 +261,8 @@
 		81D8B6D71962E0F70010DA84 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B6241962E0F70010DA84 /* Texture.cpp */; };
 		81D8B6D81962E0F70010DA84 /* TextureUnitSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B6261962E0F70010DA84 /* TextureUnitSystem.cpp */; };
 		81D8B6DD1962E1110010DA84 /* libCSBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B6DB1962E1110010DA84 /* libCSBase.a */; };
+		81FB634419FFA86C009D6894 /* CSBinaryInputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81FB634219FFA86C009D6894 /* CSBinaryInputStream.cpp */; };
+		81FB634719FFB723009D6894 /* CSBinaryChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81FB634519FFB723009D6894 /* CSBinaryChunk.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -282,6 +284,7 @@
 		811B181619D19AF400B06B5D /* RotationGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RotationGesture.cpp; sourceTree = "<group>"; };
 		811B181719D19AF400B06B5D /* RotationGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotationGesture.h; sourceTree = "<group>"; };
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
+		8141DFF21A02439100F3D9DF /* concurrent_blocking_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_blocking_queue.h; sourceTree = "<group>"; };
 		8154B74619D0274100F9F5B9 /* concurrent_vector_const_forward_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_const_forward_iterator.h; sourceTree = "<group>"; };
 		8154B74719D0274100F9F5B9 /* concurrent_vector_const_reverse_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_const_reverse_iterator.h; sourceTree = "<group>"; };
 		8158E483196ACB25005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
@@ -421,7 +424,6 @@
 		81D8B2491962E0EB0010DA84 /* ParamDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParamDictionary.h; sourceTree = "<group>"; };
 		81D8B24A1962E0EB0010DA84 /* ParamDictionarySerialiser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParamDictionarySerialiser.cpp; sourceTree = "<group>"; };
 		81D8B24B1962E0EB0010DA84 /* ParamDictionarySerialiser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParamDictionarySerialiser.h; sourceTree = "<group>"; };
-		81D8B24C1962E0EB0010DA84 /* WorkerQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkerQueue.h; sourceTree = "<group>"; };
 		81D8B24E1962E0EB0010DA84 /* AESEncrypt.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AESEncrypt.cpp; sourceTree = "<group>"; };
 		81D8B24F1962E0EB0010DA84 /* AESEncrypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AESEncrypt.h; sourceTree = "<group>"; };
 		81D8B2501962E0EB0010DA84 /* BaseEncoding.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BaseEncoding.cpp; sourceTree = "<group>"; };
@@ -879,6 +881,10 @@
 		81D8B6261962E0F70010DA84 /* TextureUnitSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureUnitSystem.cpp; sourceTree = "<group>"; };
 		81D8B6271962E0F70010DA84 /* TextureUnitSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureUnitSystem.h; sourceTree = "<group>"; };
 		81D8B6DB1962E1110010DA84 /* libCSBase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCSBase.a; sourceTree = "<group>"; };
+		81FB634219FFA86C009D6894 /* CSBinaryInputStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSBinaryInputStream.cpp; sourceTree = "<group>"; };
+		81FB634319FFA86C009D6894 /* CSBinaryInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSBinaryInputStream.h; sourceTree = "<group>"; };
+		81FB634519FFB723009D6894 /* CSBinaryChunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSBinaryChunk.cpp; sourceTree = "<group>"; };
+		81FB634619FFB723009D6894 /* CSBinaryChunk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSBinaryChunk.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1150,6 +1156,7 @@
 		81D8B2461962E0EB0010DA84 /* Container */ = {
 			isa = PBXGroup;
 			children = (
+				8141DFF21A02439100F3D9DF /* concurrent_blocking_queue.h */,
 				816B0C1719CC2E7000520B50 /* concurrent_vector.h */,
 				8154B74619D0274100F9F5B9 /* concurrent_vector_const_forward_iterator.h */,
 				8154B74719D0274100F9F5B9 /* concurrent_vector_const_reverse_iterator.h */,
@@ -1160,7 +1167,6 @@
 				81D8B2491962E0EB0010DA84 /* ParamDictionary.h */,
 				81D8B24A1962E0EB0010DA84 /* ParamDictionarySerialiser.cpp */,
 				81D8B24B1962E0EB0010DA84 /* ParamDictionarySerialiser.h */,
-				81D8B24C1962E0EB0010DA84 /* WorkerQueue.h */,
 			);
 			path = Container;
 			sourceTree = "<group>";
@@ -1241,6 +1247,10 @@
 				81D8B2761962E0EB0010DA84 /* StorageLocation.h */,
 				81D8B2771962E0EB0010DA84 /* TaggedFilePathResolver.cpp */,
 				81D8B2781962E0EB0010DA84 /* TaggedFilePathResolver.h */,
+				81FB634219FFA86C009D6894 /* CSBinaryInputStream.cpp */,
+				81FB634319FFA86C009D6894 /* CSBinaryInputStream.h */,
+				81FB634519FFB723009D6894 /* CSBinaryChunk.cpp */,
+				81FB634619FFB723009D6894 /* CSBinaryChunk.h */,
 			);
 			path = File;
 			sourceTree = "<group>";
@@ -2508,6 +2518,7 @@
 				81D8B48C1962E0EC0010DA84 /* SpinnerParticleAffector.cpp in Sources */,
 				81D8B4531962E0EC0010DA84 /* Label.cpp in Sources */,
 				81D8B69E1962E0F70010DA84 /* Device.mm in Sources */,
+				81FB634419FFA86C009D6894 /* CSBinaryInputStream.cpp in Sources */,
 				81D8B4321962E0EC0010DA84 /* StringParser.cpp in Sources */,
 				81D8B4A71962E0EC0010DA84 /* Subtitles.cpp in Sources */,
 				81D8B40F1962E0EC0010DA84 /* Component.cpp in Sources */,
@@ -2622,6 +2633,7 @@
 				81D8B49F1962E0EC0010DA84 /* TextureAtlasProvider.cpp in Sources */,
 				81D8B6D61962E0F70010DA84 /* Cubemap.cpp in Sources */,
 				81D8B4371962E0EC0010DA84 /* TaskScheduler.cpp in Sources */,
+				81FB634719FFB723009D6894 /* CSBinaryChunk.cpp in Sources */,
 				81D8B48E1962E0EC0010DA84 /* ConeParticleEmitter.cpp in Sources */,
 				81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */,
 				81D8B43B1962E0EC0010DA84 /* Timer.cpp in Sources */,

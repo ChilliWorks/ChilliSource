@@ -72,6 +72,8 @@ namespace ChilliSource
 				Rendering::UVs m_UVs;
                 Core::Vector2 m_size;
                 Core::Vector2 m_offset;
+                f32 m_origin = 0.0f;
+                f32 m_advance = 0.0f;
 			};
             //---------------------------------------------------------------------
             /// Holds the description of a single character frame packed into
@@ -89,6 +91,8 @@ namespace ChilliSource
 				s16 m_offsetY;
                 s16 m_originalWidth;
                 s16 m_originalHeight;
+                s16 m_origin;
+                s16 m_advance;
 			};
             //---------------------------------------------------------------------
             /// Holds the description of a font. Used to build the resource
@@ -104,7 +108,11 @@ namespace ChilliSource
                 
                 u32 m_textureAtlasWidth = 0;
                 u32 m_textureAtlasHeight = 0;
+                u32 m_pointSize = 0;
                 u32 m_lineHeight = 0;
+                u32 m_descent = 0;
+                u32 m_spaceAdvance = 0;
+                u32 m_verticalPadding = 0;
             };
 			
 			CS_DECLARE_NAMEDTYPE(Font);
@@ -130,12 +138,31 @@ namespace ChilliSource
 			/// @return Font texture 
 			//---------------------------------------------------------------------
 			const TextureCSPtr& GetTexture() const;
+            //---------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The point size of the font the bitmap font was created from.
+            //---------------------------------------------------------------------
+            u32 GetPointSize() const;
 			//---------------------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @return The height of a line as determined by the font
 			//---------------------------------------------------------------------
 			f32 GetLineHeight() const;
+            //---------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The amount of space below the base line in the font.
+            //---------------------------------------------------------------------
+            f32 GetDescent() const;
+            //---------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The amount of padding added to the top and bottom of a
+            /// glyph image.
+            //---------------------------------------------------------------------
+            f32 GetVerticalPadding() const;
             //---------------------------------------------------------------------
             /// @author R Henning
             ///
@@ -176,7 +203,10 @@ namespace ChilliSource
             
             TextureCSPtr m_texture;
             
+            u32 m_pointSize = 0;
             f32 m_lineHeight = 0.0f;
+            f32 m_descent = 0.0f;
+            f32 m_verticalPadding;
             
             static f32 s_globalKerningOffset;
 		};

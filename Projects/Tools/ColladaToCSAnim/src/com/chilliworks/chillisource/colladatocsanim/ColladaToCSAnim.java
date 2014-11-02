@@ -37,7 +37,7 @@ import javax.xml.parsers.SAXParserFactory;
 import com.chilliworks.chillisource.colladaparserutils.ColladaParser;
 import com.chilliworks.chillisource.colladaparserutils.colladadata.*;
 import com.chilliworks.chillisource.colladatocsanim.csanim.*;
-import com.chilliworks.chillisource.toolutils.Logging;
+import com.chilliworks.chillisource.coreutils.Logging;
 
 /**
  * A collection of methods for converting from Collada file format to

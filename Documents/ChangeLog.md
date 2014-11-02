@@ -4,6 +4,7 @@ Version 1.1.4 2014-10-24:
 	- Changed the Application::GetSystems() method so that it returns a vector of systems rather than taking a vector of systems as an output parameter.
 	- Added a GetSystems() method to State.
 	- Added constant versions of system getters to Application and State.
+	- Changed WorkerQueue to concurrent_blocking_queue and changed its API to ensure it is thread-safe. This solves the thread-safety issues with the TaskScheduler.
 	- Fixed issue with missing includes in the Vector classes and StandardMacros.h.
 
 Version 1.1.3 2014-10-20:

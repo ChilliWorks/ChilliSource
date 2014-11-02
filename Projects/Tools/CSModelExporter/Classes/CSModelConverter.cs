@@ -154,11 +154,23 @@ namespace CSModelExporter.Classes
                 process.StartInfo.Arguments = "-jar " + kstrPathToCSModelTool
                     + " --input \"" + strFilepath + "\""
                     + " --output \"" + strOutputPath + "\""
-                    + " --features " + GetFeaturesString(mOptions)
-                    + " --vertexdeclaration " + GetVertexDeclarationString(mOptions)
-                    + " --transforms " + GetTransformsString(mOptions)
-                    + " --logginglevel verbose"
-                    + " --errordisplay whenrecieved";
+                    + " --vertexformat " + GetVertexDeclarationString(mOptions)
+                    + " --logginglevel verbose";
+
+                if (mOptions.mbCombineMeshes == false)
+                {
+                    process.StartInfo.Arguments += " --disablemeshbatch";
+                }
+
+                if (mOptions.mbFlipVerticalTexCoords == false)
+                {
+                    process.StartInfo.Arguments += " --disabletexcoordflip";
+                }
+
+                if (mOptions.mbHasAnimationData == true)
+                {
+                    process.StartInfo.Arguments += " --animated";
+                }
 
                 process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardOutput = true;
