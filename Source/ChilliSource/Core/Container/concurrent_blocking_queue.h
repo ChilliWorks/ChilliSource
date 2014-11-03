@@ -129,12 +129,24 @@ namespace ChilliSource
 			/// retreived.
 			//---------------------------------------------------------
 			bool pop_or_wait(TType& out_poppedObject);
-			//---------------------------------------------------------
-			/// Clears the queue of all objects.
-			///
-			/// @author Ian Copland
-			//---------------------------------------------------------
-			void clear();
+            //---------------------------------------------------------
+            /// Clears the queue of all objects.
+            ///
+            /// @author Ian Copland
+            //---------------------------------------------------------
+            void clear();
+            //---------------------------------------------------------
+            /// Aborts the queue, awakening any threads that are
+            /// currently waiting for a push. These threads should be
+            /// joined (or at least confirmed to no longer be executing
+            /// inside the queue) before the queue is deleted. This
+            /// must be called before the queue is deleted. After
+            /// this is called the queue is in a "Finished" state and
+            /// can no longer be used.
+            ///
+            /// @author Ian Copland
+            //---------------------------------------------------------
+            void abort();
 			//---------------------------------------------------------
 			/// Destructor awakes all waiting threads
 			///
@@ -142,13 +154,6 @@ namespace ChilliSource
 			//---------------------------------------------------------
 			~concurrent_blocking_queue();
         private:
-			//---------------------------------------------------------
-			/// Awakes all waiting threads regardless of whether 
-			/// objects have been pushed
-			///
-			/// @author S Downie
-			//---------------------------------------------------------
-			void awake_all();
 
 			std::queue<TType> m_queue;
 			bool m_finished = false;
@@ -181,14 +186,18 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		template <typename TType> bool concurrent_blocking_queue<TType>::empty() const
 		{
-			std::unique_lock<std::mutex> queueLock(m_queueMutex);
+            std::unique_lock<std::mutex> queueLock(m_queueMutex);
+            CS_ASSERT(m_finished == false, "Concurrent blocking queue is being queried after calling abort().");
+            
 			return m_queue.empty();
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
 		template <typename TType> u32 concurrent_blocking_queue<TType>::size() const
 		{
-			std::unique_lock<std::mutex> queueLock(m_queueMutex);
+            std::unique_lock<std::mutex> queueLock(m_queueMutex);
+            CS_ASSERT(m_finished == false, "Concurrent blocking queue is being queried after calling abort().");
+            
 			return m_queue.size();
 		}
 		//---------------------------------------------------------
@@ -196,7 +205,8 @@ namespace ChilliSource
 		template <typename TType> void concurrent_blocking_queue<TType>::push(TType in_object)
 		{
 			//Lock the queue for writing
-			std::unique_lock<std::mutex> queueLock(m_queueMutex);
+            std::unique_lock<std::mutex> queueLock(m_queueMutex);
+            CS_ASSERT(m_finished == false, "Concurrent blocking queue is being pushed after calling abort().");
 
 			//Push the object onto the queue
 			m_queue.push(in_object);
@@ -209,12 +219,13 @@ namespace ChilliSource
 		template <typename TType> bool concurrent_blocking_queue<TType>::pop_or_wait(TType& out_poppedObject)
 		{
 			std::unique_lock<std::mutex> queueLock(m_queueMutex);
-
+            CS_ASSERT(m_finished == false, "Concurrent blocking queue is being popped after calling abort().");
+            
 			while (m_queue.empty() == true && m_finished == false)
 			{
 				m_emptyWaitCondition.wait(queueLock);
 			}
-
+            
 			if (m_finished == false)
 			{
 				out_poppedObject = std::move(m_queue.front());
@@ -229,7 +240,8 @@ namespace ChilliSource
 		template <typename TType> void concurrent_blocking_queue<TType>::clear()
 		{
 			std::unique_lock<std::mutex> queueLock(m_queueMutex);
-
+            CS_ASSERT(m_finished == false, "Concurrent blocking queue is being cleared after calling abort().");
+            
 			while (m_queue.empty() == false)
 			{
 				m_queue.pop();
@@ -237,9 +249,16 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		template <typename TType> void concurrent_blocking_queue<TType>::awake_all()
+		template <typename TType> void concurrent_blocking_queue<TType>::abort()
 		{
 			std::unique_lock<std::mutex> queueLock(m_queueMutex);
+            CS_ASSERT(m_finished == false, "Cannot abort() a concurrent blocking queue twice.");
+            
+            while (m_queue.empty() == false)
+            {
+                m_queue.pop();
+            }
+            
 			m_finished = true;
 			m_emptyWaitCondition.notify_all();
 		}
@@ -247,7 +266,10 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		template <typename TType> concurrent_blocking_queue<TType>::~concurrent_blocking_queue()
 		{
-			awake_all();
+#ifdef CS_ENABLE_DEBUG
+            std::unique_lock<std::mutex> queueLock(m_queueMutex);
+            CS_ASSERT(m_finished == true, "Concurrent blocking queue is being deleted without first calling abort().");
+#endif
 		}
     }
 }
