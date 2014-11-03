@@ -1,7 +1,7 @@
 //
-//  ColourOverLifetimeParticleAffector.h
+//  ScaleOverLifetimeParticleAffector.h
 //  Chilli Source
-//  Created by Ian Copland on 02/11/2014.
+//  Created by Ian Copland on 03/11/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,11 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_COLOUROVERLIFETIMEPARTICLEAFFECTOR_H_
-#define _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_COLOUROVERLIFETIMEPARTICLEAFFECTOR_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_SCALEOVERLIFETIMEPARTICLEAFFECTOR_H_
+#define _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_SCALEOVERLIFETIMEPARTICLEAFFECTOR_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Container/dynamic_array.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
 
@@ -39,18 +39,18 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		//---------------------------------------------------------------------
-		/// A particle affector which will change the colour of particles over
-		/// its lifetime.
+		/// A particle affector which will change the size of particles over
+		/// its lifetime by the calculated scale factor.
 		///
 		/// @author Ian Copland
 		//---------------------------------------------------------------------
-		class ColourOverLifetimeParticleAffector final : public ParticleAffector
+		class ScaleOverLifetimeParticleAffector final : public ParticleAffector
 		{
 		public:
 			//----------------------------------------------------------------
-			/// Stores the initial colour and generates a target colour for the
+			/// Stores the initial size and generates the scale factor for the
 			/// activated particle so it can be used to generate the 
-			/// interpolated colour during updates.
+			/// interpolated size during updates.
 			///
 			/// @author Ian Copland
 			///
@@ -59,7 +59,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			void ActivateParticle(f32 in_playbackTime, u32 in_index) override;
 			//----------------------------------------------------------------
-			/// Updates the colour of each particle.
+			/// Updates the size of each particle.
 			///
 			/// @author Ian Copland
 			///
@@ -72,9 +72,9 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			//----------------------------------------------------------------
-			virtual ~ColourOverLifetimeParticleAffector() {};
+			virtual ~ScaleOverLifetimeParticleAffector() {};
 		private:
-			friend class ColourOverLifetimeParticleAffectorDef;
+			friend class ScaleOverLifetimeParticleAffectorDef;
 			//----------------------------------------------------------------
 			/// Constructor.
 			///
@@ -83,21 +83,21 @@ namespace ChilliSource
 			/// @param The particle affector definition.
 			/// @param The particle array.
 			//----------------------------------------------------------------
-			ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
+			ScaleOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
 			//----------------------------------------------------------------
-			/// A container for the initial and target colour of a single 
+			/// A container for the initial scale and scale factor of a single 
 			/// particle.
 			///
 			/// @author Ian Copland.
 			//----------------------------------------------------------------
-			struct ColourData
+			struct ScaleData
 			{
-				Core::Colour m_initialColour;
-				Core::Colour m_targetColour;
+				Core::Vector2 m_initialScale;
+				Core::Vector2 m_targetScale;
 			};
 
-			const ColourOverLifetimeParticleAffectorDef* m_colourOverLifetimeAffectorDef = nullptr;
-			Core::dynamic_array<ColourData> m_particleColourData;
+			const ScaleOverLifetimeParticleAffectorDef* m_scaleOverLifetimeAffectorDef = nullptr;
+			Core::dynamic_array<ScaleData> m_particleScaleData;
 		};
 	}
 }

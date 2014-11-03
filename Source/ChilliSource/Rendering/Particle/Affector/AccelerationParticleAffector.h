@@ -1,7 +1,7 @@
 //
-//  ColourOverLifetimeParticleAffector.h
+//  AccelerationParticleAffector.h
 //  Chilli Source
-//  Created by Ian Copland on 02/11/2014.
+//  Created by Ian Copland on 03/11/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_COLOUROVERLIFETIMEPARTICLEAFFECTOR_H_
-#define _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_COLOUROVERLIFETIMEPARTICLEAFFECTOR_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_ACCELERATIONPARTICLEAFFECTOR_H_
+#define _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_ACCELERATIONPARTICLEAFFECTOR_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
@@ -39,18 +39,16 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		//---------------------------------------------------------------------
-		/// A particle affector which will change the colour of particles over
-		/// its lifetime.
+		/// A particle affector which will change the speed of particles over
+		/// time.
 		///
 		/// @author Ian Copland
 		//---------------------------------------------------------------------
-		class ColourOverLifetimeParticleAffector final : public ParticleAffector
+		class AccelerationParticleAffector final : public ParticleAffector
 		{
 		public:
 			//----------------------------------------------------------------
-			/// Stores the initial colour and generates a target colour for the
-			/// activated particle so it can be used to generate the 
-			/// interpolated colour during updates.
+			/// Generates an acceleration for the activated particle.
 			///
 			/// @author Ian Copland
 			///
@@ -59,7 +57,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			void ActivateParticle(f32 in_playbackTime, u32 in_index) override;
 			//----------------------------------------------------------------
-			/// Updates the colour of each particle.
+			/// Accelerates all active particles.
 			///
 			/// @author Ian Copland
 			///
@@ -72,9 +70,9 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			//----------------------------------------------------------------
-			virtual ~ColourOverLifetimeParticleAffector() {};
+			virtual ~AccelerationParticleAffector() {};
 		private:
-			friend class ColourOverLifetimeParticleAffectorDef;
+			friend class AccelerationParticleAffectorDef;
 			//----------------------------------------------------------------
 			/// Constructor.
 			///
@@ -83,21 +81,10 @@ namespace ChilliSource
 			/// @param The particle affector definition.
 			/// @param The particle array.
 			//----------------------------------------------------------------
-			ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
-			//----------------------------------------------------------------
-			/// A container for the initial and target colour of a single 
-			/// particle.
-			///
-			/// @author Ian Copland.
-			//----------------------------------------------------------------
-			struct ColourData
-			{
-				Core::Colour m_initialColour;
-				Core::Colour m_targetColour;
-			};
+			AccelerationParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
 
-			const ColourOverLifetimeParticleAffectorDef* m_colourOverLifetimeAffectorDef = nullptr;
-			Core::dynamic_array<ColourData> m_particleColourData;
+			const AccelerationParticleAffectorDef* m_accelerationAffectorDef = nullptr;
+			Core::dynamic_array<Core::Vector3> m_particleAcceleration;
 		};
 	}
 }

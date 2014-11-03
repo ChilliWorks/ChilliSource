@@ -849,6 +849,24 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitterDef.cpp">
       <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ScaleOverLifetimeParticleAffector.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ScaleOverLifetimeParticleAffectorDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffectorDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffector.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AngularAccelerationParticleAffector.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AngularAccelerationParticleAffectorDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
@@ -1825,6 +1843,24 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitterDef.h">
       <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ScaleOverLifetimeParticleAffector.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ScaleOverLifetimeParticleAffectorDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffectorDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffector.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AngularAccelerationParticleAffector.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AngularAccelerationParticleAffectorDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

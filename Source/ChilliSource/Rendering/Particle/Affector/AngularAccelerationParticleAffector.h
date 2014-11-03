@@ -1,7 +1,7 @@
 //
-//  ColourOverLifetimeParticleAffector.h
+//  AngularAccelerationParticleAffector.h
 //  Chilli Source
-//  Created by Ian Copland on 02/11/2014.
+//  Created by Ian Copland on 03/11/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,11 +26,10 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_COLOUROVERLIFETIMEPARTICLEAFFECTOR_H_
-#define _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_COLOUROVERLIFETIMEPARTICLEAFFECTOR_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_ANGULARACCELERATIONPARTICLEAFFECTOR_H_
+#define _CHILLISOURCE_RENDERING_PARTICLE_AFFECTOR_ANGULARACCELERATIONPARTICLEAFFECTOR_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Container/dynamic_array.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
 
@@ -39,31 +38,28 @@ namespace ChilliSource
 	namespace Rendering
 	{
 		//---------------------------------------------------------------------
-		/// A particle affector which will change the colour of particles over
-		/// its lifetime.
+		/// A particle affector which will change the angular velocity of a
+		/// particle over time.
 		///
 		/// @author Ian Copland
 		//---------------------------------------------------------------------
-		class ColourOverLifetimeParticleAffector final : public ParticleAffector
+		class AngularAccelerationParticleAffector final : public ParticleAffector
 		{
 		public:
 			//----------------------------------------------------------------
-			/// Stores the initial colour and generates a target colour for the
-			/// activated particle so it can be used to generate the 
-			/// interpolated colour during updates.
+			/// Generates a new angular acceleration from the property for
+			/// the activated particle.
 			///
 			/// @author Ian Copland
 			///
-			/// @param The current playback time.
 			/// @param The index of the particle to activate.
 			//----------------------------------------------------------------
 			void ActivateParticle(f32 in_playbackTime, u32 in_index) override;
 			//----------------------------------------------------------------
-			/// Updates the colour of each particle.
+			/// Angularly accelerates each active particle.
 			///
 			/// @author Ian Copland
 			///
-			/// @param The current playback time.
 			/// @param The delta time.
 			//----------------------------------------------------------------
 			void AffectParticles(f32 in_playbackTime, f32 in_deltaTime) override;
@@ -72,9 +68,9 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			//----------------------------------------------------------------
-			virtual ~ColourOverLifetimeParticleAffector() {};
+			virtual ~AngularAccelerationParticleAffector() {};
 		private:
-			friend class ColourOverLifetimeParticleAffectorDef;
+			friend class AngularAccelerationParticleAffectorDef;
 			//----------------------------------------------------------------
 			/// Constructor.
 			///
@@ -83,21 +79,10 @@ namespace ChilliSource
 			/// @param The particle affector definition.
 			/// @param The particle array.
 			//----------------------------------------------------------------
-			ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
-			//----------------------------------------------------------------
-			/// A container for the initial and target colour of a single 
-			/// particle.
-			///
-			/// @author Ian Copland.
-			//----------------------------------------------------------------
-			struct ColourData
-			{
-				Core::Colour m_initialColour;
-				Core::Colour m_targetColour;
-			};
+			AngularAccelerationParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
 
-			const ColourOverLifetimeParticleAffectorDef* m_colourOverLifetimeAffectorDef = nullptr;
-			Core::dynamic_array<ColourData> m_particleColourData;
+			const AngularAccelerationParticleAffectorDef* m_angularAccelerationAffectorDef = nullptr;
+			Core::dynamic_array<f32> m_particleAngularAcceleration;
 		};
 	}
 }

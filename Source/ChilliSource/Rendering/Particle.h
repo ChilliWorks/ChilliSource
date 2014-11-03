@@ -36,11 +36,17 @@
 #include <ChilliSource/Rendering/Particle/Particle.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffectComponent.h>
+#include <ChilliSource/Rendering/Particle/Affector/AccelerationParticleAffector.h>
+#include <ChilliSource/Rendering/Particle/Affector/AccelerationParticleAffectorDef.h>
+#include <ChilliSource/Rendering/Particle/Affector/AngularAccelerationParticleAffector.h>
+#include <ChilliSource/Rendering/Particle/Affector/AngularAccelerationParticleAffectorDef.h>
 #include <ChilliSource/Rendering/Particle/Affector/ColourOverLifetimeParticleAffector.h>
 #include <ChilliSource/Rendering/Particle/Affector/ColourOverLifetimeParticleAffectorDef.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDef.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDefFactory.h>
+#include <ChilliSource/Rendering/Particle/Affector/ScaleOverLifetimeParticleAffector.h>
+#include <ChilliSource/Rendering/Particle/Affector/ScaleOverLifetimeParticleAffectorDef.h>
 #include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawable.h>
 #include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawableDef.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawable.h>

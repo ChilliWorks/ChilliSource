@@ -106,10 +106,6 @@ namespace ChilliSource
         //------------------------------------------------------------
         /// Particle
         //------------------------------------------------------------
-		CS_FORWARDDECLARE_CLASS(BillboardParticleDrawable);
-		CS_FORWARDDECLARE_CLASS(BillboardParticleDrawableDef);
-		CS_FORWARDDECLARE_CLASS(ColourOverLifetimeParticleAffector);
-		CS_FORWARDDECLARE_CLASS(ColourOverLifetimeParticleAffectorDef);
 		CS_FORWARDDECLARE_CLASS(ConcurrentParticleData);
 		CS_FORWARDDECLARE_CLASS(ParticleEffect);
 		CS_FORWARDDECLARE_CLASS(ICParticleEffectProvider);
@@ -125,6 +121,16 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(ParticleAffector);
 		CS_FORWARDDECLARE_CLASS(ParticleAffectorDef);
 		CS_FORWARDDECLARE_CLASS(ParticleAffectorDefFactory);
+		CS_FORWARDDECLARE_CLASS(BillboardParticleDrawable);
+		CS_FORWARDDECLARE_CLASS(BillboardParticleDrawableDef);
+		CS_FORWARDDECLARE_CLASS(AccelerationParticleAffector);
+		CS_FORWARDDECLARE_CLASS(AccelerationParticleAffectorDef);
+		CS_FORWARDDECLARE_CLASS(AngularAccelerationParticleAffector);
+		CS_FORWARDDECLARE_CLASS(AngularAccelerationParticleAffectorDef);
+		CS_FORWARDDECLARE_CLASS(ColourOverLifetimeParticleAffector);
+		CS_FORWARDDECLARE_CLASS(ColourOverLifetimeParticleAffectorDef);
+		CS_FORWARDDECLARE_CLASS(ScaleOverLifetimeParticleAffector);
+		CS_FORWARDDECLARE_CLASS(ScaleOverLifetimeParticleAffectorDef);
 		CS_FORWARDDECLARE_CLASS(SphereParticleEmitter);
 		CS_FORWARDDECLARE_CLASS(SphereParticleEmitterDef);
 		CS_FORWARDDECLARE_CLASS(CircleParticleEmitter);
