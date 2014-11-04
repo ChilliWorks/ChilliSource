@@ -91,11 +91,10 @@ namespace ChilliSource
 
 			using ThreadGroup = std::vector<std::thread>;
 			using TaskQueue = concurrent_blocking_queue<GenericTaskType>;
-			using TaskQueueUPtr = std::unique_ptr<TaskQueue>;
 
 
             ThreadGroup m_threadGroup;
-			TaskQueueUPtr m_tasks;
+			TaskQueue m_tasks;
             
             std::atomic<bool> m_isFinished;
         };
