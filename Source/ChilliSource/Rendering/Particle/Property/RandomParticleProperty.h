@@ -57,17 +57,6 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			RandomParticleProperty(TPropertyType in_first, TPropertyType in_second);
 			//----------------------------------------------------------------
-			/// Constructor. This will retreive the parameters of the random
-			/// property from the given param dictionary.
-			///
-			/// TODO: !? describe the values that will be read!
-			///
-			/// @author Ian Copland
-			///
-			/// @param The string to parse to get the static value.
-			//----------------------------------------------------------------
-			RandomParticleProperty(const Core::ParamDictionary& in_params);
-			//----------------------------------------------------------------
 			/// @author Ian Copland
 			///
 			/// @param The normalised (0.0 - 1.0) particle effect playback 
@@ -85,13 +74,6 @@ namespace ChilliSource
 			template <typename TPropertyType> RandomParticleProperty<TPropertyType>::RandomParticleProperty(TPropertyType in_first, TPropertyType in_second)
 				: m_first(in_first), m_second(in_second)
 			{
-			}
-			//--------------------------------------------------
-			//--------------------------------------------------
-			template <typename TPropertyType> RandomParticleProperty<TPropertyType>::RandomParticleProperty(const Core::ParamDictionary& in_params)
-			{
-				//TODO: !?
-				CS_LOG_FATAL("Unimplemented: RandomParticleProperty(const Core::ParamDictionary& in_params)");
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------

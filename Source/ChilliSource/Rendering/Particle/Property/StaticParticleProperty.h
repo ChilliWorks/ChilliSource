@@ -54,15 +54,6 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			StaticParticleProperty(TPropertyType in_value);
 			//----------------------------------------------------------------
-			/// Constructor. This will parse the static value from the given 
-			/// string.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The string to parse to get the static value.
-			//----------------------------------------------------------------
-			StaticParticleProperty(const std::string& in_value);
-			//----------------------------------------------------------------
 			/// @author Ian Copland
 			///
 			/// @param The normalised (0.0 - 1.0) particle effect playback 
@@ -79,12 +70,6 @@ namespace ChilliSource
 		template <typename TPropertyType> StaticParticleProperty<TPropertyType>::StaticParticleProperty(TPropertyType in_value)
 			: m_value(in_value)
 		{
-		}
-		//--------------------------------------------------
-		//--------------------------------------------------
-		template <typename TPropertyType> StaticParticleProperty<TPropertyType>::StaticParticleProperty(const std::string& in_value)
-		{
-			m_value = ParticlePropertyValueParser::Parse<TPropertyType>(in_value);
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------

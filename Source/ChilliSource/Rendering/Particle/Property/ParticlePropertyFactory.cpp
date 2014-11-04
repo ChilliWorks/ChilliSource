@@ -1,7 +1,7 @@
 //
-//  ParticlePropertyValueParser.cpp
+//  ParticlePropertyFactory.cpp
 //  Chilli Source
-//  Created by Ian Copland on 07/10/2014.
+//  Created by Ian Copland on 04/11/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Particle/Property/ParticlePropertyValueParser.h>
+#include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
 #include <ChilliSource/Core/String/StringParser.h>
 
@@ -34,89 +34,77 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		namespace ParticlePropertyValueParser
+		namespace ParticlePropertyFactory
 		{
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> std::string Parse(const std::string& in_value)
-			{
-				return in_value;
-			}
-			//--------------------------------------------------
-			//--------------------------------------------------
-			template <> bool Parse(const std::string& in_value)
-			{
-				return Core::ParseBool(in_value);
-			}
-			//--------------------------------------------------
-			//--------------------------------------------------
-			template <> u32 Parse(const std::string& in_value)
+			template <> u32 ParseValue(const std::string& in_value)
 			{
 				return Core::ParseU32(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> s32 Parse(const std::string& in_value)
+			template <> s32 ParseValue(const std::string& in_value)
 			{
 				return Core::ParseS32(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> u64 Parse(const std::string& in_value)
+			template <> u64 ParseValue(const std::string& in_value)
 			{
 				return Core::ParseU64(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> s64 Parse(const std::string& in_value)
+			template <> s64 ParseValue(const std::string& in_value)
 			{
 				return Core::ParseS64(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> f32 Parse(const std::string& in_value)
+			template <> f32 ParseValue(const std::string& in_value)
 			{
 				return Core::ParseF32(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> Core::Vector2 Parse(const std::string& in_value)
+			template <> Core::Vector2 ParseValue(const std::string& in_value)
 			{
 				return Core::ParseVector2(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> Core::Vector3 Parse(const std::string& in_value)
+			template <> Core::Vector3 ParseValue(const std::string& in_value)
 			{
 				return Core::ParseVector3(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> Core::Vector4 Parse(const std::string& in_value)
+			template <> Core::Vector4 ParseValue(const std::string& in_value)
 			{
 				return Core::ParseVector4(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> Core::Matrix3 Parse(const std::string& in_value)
+			template <> Core::Matrix3 ParseValue(const std::string& in_value)
 			{
 				return Core::ParseMatrix3(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> Core::Matrix4 Parse(const std::string& in_value)
+			template <> Core::Matrix4 ParseValue(const std::string& in_value)
 			{
 				return Core::ParseMatrix4(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> Core::Quaternion Parse(const std::string& in_value)
+			template <> Core::Quaternion ParseValue(const std::string& in_value)
 			{
 				return Core::ParseQuaternion(in_value);
 			}
 			//--------------------------------------------------
 			//--------------------------------------------------
-			template <> Core::Colour Parse(const std::string& in_value)
+			template <> Core::Colour ParseValue(const std::string& in_value)
 			{
 				return Core::ParseColour(in_value);
 			}

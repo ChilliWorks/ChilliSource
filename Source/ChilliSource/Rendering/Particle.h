@@ -31,7 +31,7 @@
 #define _CHILLISOURCE_RENDERING_PARTICLES_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Particle/CSParticleEffectProvider.h>
+#include <ChilliSource/Rendering/Particle/CSParticleProvider.h>
 #include <ChilliSource/Rendering/Particle/ConcurrentParticleData.h>
 #include <ChilliSource/Rendering/Particle/Particle.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>

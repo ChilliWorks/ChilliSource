@@ -107,11 +107,10 @@ namespace ChilliSource
         /// Particle
         //------------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(ConcurrentParticleData);
+		CS_FORWARDDECLARE_CLASS(CSParticleProvider);
 		CS_FORWARDDECLARE_CLASS(ParticleEffect);
-		CS_FORWARDDECLARE_CLASS(ICParticleEffectProvider);
 		CS_FORWARDDECLARE_CLASS(ParticleEffectComponent);
 		CS_FORWARDDECLARE_STRUCT(Particle);
-		CS_FORWARDDECLARE_STRUCT(ParticleDrawData);
 		CS_FORWARDDECLARE_CLASS(ParticleDrawable);
 		CS_FORWARDDECLARE_CLASS(ParticleDrawableDef);
 		CS_FORWARDDECLARE_CLASS(ParticleDrawableDefFactory);

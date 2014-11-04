@@ -70,6 +70,7 @@
 #include <ChilliSource/Rendering/Material/MaterialProvider.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
+#include <ChilliSource/Rendering/Particle/CSParticleProvider.h>
 #include <ChilliSource/Rendering/Texture/CubemapProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
@@ -404,7 +405,9 @@ namespace ChilliSource
             CreateSystem<Rendering::TextureProvider>();
             CreateSystem<Rendering::CubemapProvider>();
             CreateSystem<Rendering::FontProvider>();
-            CreateSystem<Rendering::RenderComponentFactory>();
+			CreateSystem<Rendering::CSParticleProvider>();
+			CreateSystem<Rendering::RenderComponentFactory>();
+
 
             //Create any platform specific default systems
             m_platformSystem->CreateDefaultSystems(this);
