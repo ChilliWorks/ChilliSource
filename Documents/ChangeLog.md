@@ -1,5 +1,8 @@
 === Chilli Source Change Log ===
 
+Version 1.1.5 2014-11-03:
+	- Fixed a windows specific crash on closing an application.
+
 Version 1.1.4 2014-10-24:
 	- Changed the Application::GetSystems() method so that it returns a vector of systems rather than taking a vector of systems as an output parameter.
 	- Added a GetSystems() method to State.
