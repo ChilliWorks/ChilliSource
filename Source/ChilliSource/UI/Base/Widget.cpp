@@ -666,9 +666,37 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Widget* Widget::GetWidget(const std::string& in_name)
+        WidgetSPtr Widget::GetWidget(const std::string& in_name)
         {
-            for(auto& child : m_children)
+            for(const auto& child : m_children)
+            {
+                if(child->m_name == in_name)
+                {
+                    return child;
+                }
+            }
+            
+            return nullptr;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        WidgetCSPtr Widget::GetWidget(const std::string& in_name) const
+        {
+            for(const auto& child : m_children)
+            {
+                if(child->m_name == in_name)
+                {
+                    return child;
+                }
+            }
+            
+            return nullptr;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Widget* Widget::GetInternalWidget(const std::string& in_name)
+        {
+            for(const auto& child : m_internalChildren)
             {
                 if(child->m_name == in_name)
                 {
@@ -680,9 +708,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Widget* Widget::GetInternalWidget(const std::string& in_name)
+        const Widget* Widget::GetInternalWidget(const std::string& in_name) const
         {
-            for(auto& child : m_internalChildren)
+            for(const auto& child : m_internalChildren)
             {
                 if(child->m_name == in_name)
                 {
@@ -691,6 +719,54 @@ namespace ChilliSource
             }
             
             return nullptr;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        std::vector<WidgetSPtr> Widget::GetWidgets()
+        {
+            std::vector<WidgetSPtr> children;
+            for(const auto& widget : m_children)
+            {
+                children.push_back(widget);
+            }
+            
+            return children;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        std::vector<WidgetCSPtr> Widget::GetWidgets() const
+        {
+            std::vector<WidgetCSPtr> children;
+            for(const auto& widget : m_children)
+            {
+                children.push_back(widget);
+            }
+            
+            return children;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        std::vector<Widget*> Widget::GetInternalWidgets()
+        {
+            std::vector<Widget*> internalChildren;
+            for(const auto& widget : m_internalChildren)
+            {
+                internalChildren.push_back(widget.get());
+            }
+            
+            return internalChildren;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        std::vector<const Widget*> Widget::GetInternalWidgets() const
+        {
+            std::vector<const Widget*> internalChildren;
+            for(const auto& widget : m_internalChildren)
+            {
+                internalChildren.push_back(widget.get());
+            }
+            
+            return internalChildren;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

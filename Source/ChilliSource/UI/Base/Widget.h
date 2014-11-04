@@ -562,13 +562,62 @@ namespace ChilliSource
             ///
             /// @return The first child widget with the given name. Note: this is not recursive
             //----------------------------------------------------------------------------------------
-            Widget* GetWidget(const std::string& in_name);
+            WidgetSPtr GetWidget(const std::string& in_name);
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A constant version of the first child widget with the given name. This is not
+            /// recursive.
+            //----------------------------------------------------------------------------------------
+            WidgetCSPtr GetWidget(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @return The first internal child widget with the given name. Note: this is not recursive
             //----------------------------------------------------------------------------------------
             Widget* GetInternalWidget(const std::string& in_name);
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A constant version of the first internal child widget with the given name. This
+            /// is not recursive.
+            //----------------------------------------------------------------------------------------
+            const Widget* GetInternalWidget(const std::string& in_name) const;
+            //----------------------------------------------------------------------------------------
+            /// Constructs a list of child widgets and returns (Use sparingly)
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @return A vector of all child widgets
+            //----------------------------------------------------------------------------------------
+            std::vector<WidgetSPtr> GetWidgets();
+            //----------------------------------------------------------------------------------------
+            /// Returns a const list of the widgets children. A copy of the internal list is created
+            /// so this is relatively expensive if the the widget has a lot of children.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return A const list of the child widgets.
+            //----------------------------------------------------------------------------------------
+            std::vector<WidgetCSPtr> GetWidgets() const;
+            //----------------------------------------------------------------------------------------
+            /// Constructs a list of internal child widgets and returns (Use sparingly)
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @return A vector of all child widgets
+            //----------------------------------------------------------------------------------------
+            std::vector<Widget*> GetInternalWidgets();
+            //----------------------------------------------------------------------------------------
+            /// Returns a const list of the widgets internal children. A copy of the internal list is
+            /// created so this is relatively expensive if the the widget has a lot of internal
+            /// children.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return A const list of the child widgets.
+            //----------------------------------------------------------------------------------------
+            std::vector<const Widget*> GetInternalWidgets() const;
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///

@@ -332,7 +332,7 @@ namespace ChilliSource
                 Widget* childWidget = widget->GetInternalWidget(link.m_widgetName);
                 if(childWidget == nullptr)
                 {
-                    childWidget = widget->GetWidget(link.m_widgetName);
+                    childWidget = widget->GetWidget(link.m_widgetName).get();
                 }
                 CS_ASSERT(childWidget != nullptr, "Cannot link to missing widget: " + link.m_widgetName);
                 
