@@ -854,7 +854,6 @@ namespace ChilliSource
         {
             m_canvas = in_canvas;
             
-            InvalidateTransformCache();
             
             for(auto& child : m_internalChildren)
             {
@@ -865,6 +864,8 @@ namespace ChilliSource
             {
                 child->SetCanvas(m_canvas);
             }
+            
+            InvalidateTransformCache();
             
             if(m_behaviourScript != nullptr)
             {
