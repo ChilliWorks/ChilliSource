@@ -53,59 +53,15 @@ namespace ChilliSource
         class PropertyMap final
         {
         public:
-            
-            //-----------------------------------------------------
-            /// Classes that implement simple type stripping
-            /// by interfacing a concrete template type that holds
-            /// the value
-            ///
-            /// @author S Downie
-            //-----------------------------------------------------
-            struct IProperty
-            {
-                virtual ~IProperty(){}
-                //-----------------------------------------------------
-                /// Allows copying of polymorphic type
-                ///
-                /// @author S Downie
-                ///
-                /// @param Property to copy
-                //-----------------------------------------------------
-                virtual void CopyFrom(const IProperty* in_toCopy) = 0;
-            };
-            //-----------------------------------------------------
-            //-----------------------------------------------------
-            template <typename TType> struct Property : public IProperty
-            {
-                //-----------------------------------------------------
-                /// Copies the value of one property type of TType to
-                /// this property of type TType. Copying across TTypes
-                /// will cause the cast to assert.
-                ///
-                /// @author S Downie
-                ///
-                /// @param Property to copy
-                //-----------------------------------------------------
-                void CopyFrom(const IProperty* in_toCopy) override
-                {
-                    const Property* toCopy = CS_SMARTCAST(const Property*, in_toCopy);
-                    m_value = toCopy->m_value;
-                }
-                
-                TType m_value;
-            };
-            
-            using IPropertyUPtr = std::unique_ptr<IProperty>;
-            //----------------------------------------------------
+            //----------------------------------------------------------------------------------------
             /// Holds the definition of a custom property.
             ///
             /// @author S Downie
-            //----------------------------------------------------
+            //----------------------------------------------------------------------------------------
             struct PropertyDesc
             {
                 PropertyType m_type;
                 std::string m_name;
-                std::string m_value;
             };
             //----------------------------------------------------------------------------------------
             /// Constructor - Note using this constructor will not initialise the map and needs
@@ -173,7 +129,16 @@ namespace ChilliSource
             ///
             /// @return Whether the property key exists
             //----------------------------------------------------------------------------------------
-            bool HasProperty(const std::string& in_name) const;
+            bool HasKey(const std::string& in_name) const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The property name
+            ///
+            /// @return Whether or not property with the given key has a value. This will error if the
+            /// property doesn't exist.
+            //----------------------------------------------------------------------------------------
+            bool HasValue(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
             /// Property values are often passed around as homogenous strings and this function
             /// will parse the string and assign the property with the correct type
@@ -257,7 +222,70 @@ namespace ChilliSource
             PropertyType GetType(const std::string& in_name) const;
             
         private:
+            //-----------------------------------------------------
+            /// Classes that implement simple type stripping
+            /// by interfacing a concrete template type that holds
+            /// the value
+            ///
+            /// @author S Downie
+            //-----------------------------------------------------
+            class IProperty
+            {
+            public:
+                virtual ~IProperty(){}
+                //-----------------------------------------------------
+                /// Allows copying of polymorphic type
+                ///
+                /// @author S Downie
+                ///
+                /// @param Property to copy
+                //-----------------------------------------------------
+                virtual void CopyFrom(const IProperty* in_toCopy) = 0;
+                //-----------------------------------------------------
+                /// @author Ian Copland
+                ///
+                /// @param Whether or not property has has a value
+                /// set for it. It should be be used prior to a value
+                /// being set.
+                //-----------------------------------------------------
+                virtual bool IsInitialised() = 0;
+            };
+            //-----------------------------------------------------
+            //-----------------------------------------------------
+            template <typename TType> class Property final : public IProperty
+            {
+            public:
+                //-----------------------------------------------------
+                /// Copies the value of one property type of TType to
+                /// this property of type TType. Copying across TTypes
+                /// will cause the cast to assert.
+                ///
+                /// @author S Downie
+                ///
+                /// @param Property to copy
+                //-----------------------------------------------------
+                void CopyFrom(const IProperty* in_toCopy) override
+                {
+                    const Property* toCopy = CS_SMARTCAST(const Property*, in_toCopy);
+                    m_initialised = toCopy->m_initialised;
+                    m_value = toCopy->m_value;
+                }
+                //-----------------------------------------------------
+                /// @author Ian Copland
+                ///
+                /// @param Whether or not property has has a value
+                /// set for it. It should be be used prior to a value
+                /// being set.
+                //-----------------------------------------------------
+                bool IsInitialised() override
+                {
+                    return m_initialised;
+                }
             
+                TType m_value;
+                bool m_initialised = false;
+            };
+            using IPropertyUPtr = std::unique_ptr<IProperty>;
             //----------------------------------------------------------------------------------------
             /// Holds the type of the property and the offset into the blob
             ///
@@ -284,7 +312,6 @@ namespace ChilliSource
                     in_move.m_type = PropertyType::k_unknown;
                 }
 
-                
                 PropertyType m_type;
                 IPropertyUPtr m_property;
             };
@@ -297,7 +324,15 @@ namespace ChilliSource
             /// @return The internal enum property type of the given object type
             //----------------------------------------------------------------------------------------
             template<typename TType> PropertyType GetType() const;
-            
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Type
+            ///
+            /// @return New property of given type
+            //----------------------------------------------------------------------------------------
+            IPropertyUPtr CreateProperty(PropertyType in_type) const;
+        
             std::unordered_map<u32, PropertyLookup> m_properties;
         };
         //----------------------------------------------------------------------------------------
@@ -316,6 +351,7 @@ namespace ChilliSource
             
             Property<TValueType>* property = (Property<TValueType>*)entry->second.m_property.get();
             property->m_value = std::forward<TType>(in_value);
+            property->m_initialised = true;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -330,8 +366,10 @@ namespace ChilliSource
             auto entry = m_properties.find(hashKey);
             CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
             CS_ASSERT(entry->second.m_type == GetType<TValueType>(), "Wrong type for property with name " + in_name);
+            CS_ASSERT(entry->second.m_property->IsInitialised() == true, "Cannot get the value for an uninitialised property.");
             
             Property<TValueType>* property = (Property<TValueType>*)entry->second.m_property.get();
+            
             return property->m_value;
         }
         //----------------------------------------------------------------------------------------
@@ -351,6 +389,11 @@ namespace ChilliSource
             }
             
             CS_ASSERT(entry->second.m_type == GetType<TValueType>(), "Wrong type for property with name " + in_name);
+            
+            if (entry->second.m_property->IsInitialised() == false)
+            {
+                return in_default;
+            }
             
             Property<TValueType>* property = (Property<TValueType>*)entry->second.m_property.get();
             return property->m_value;

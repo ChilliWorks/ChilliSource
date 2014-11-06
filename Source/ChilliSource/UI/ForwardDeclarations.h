@@ -68,6 +68,10 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(HListLayout);
         CS_FORWARDDECLARE_CLASS(VListLayout);
         enum class LayoutType;
+        //---------------------------------------------------------
+        /// Text
+        //---------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(TextDrawable);
 	}
 }
 

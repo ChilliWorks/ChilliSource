@@ -25,9 +25,6 @@
     "Slider": {
       "Type": "Widget",
       "RelSize": "0.1 1.1",
-      "Drawable": {
-        "Type": "None"
-      },
       "SizePolicy": "UseHeightMaintainingAspect",
       "ParentalAnchor": "MiddleLeft",
       "OriginAnchor": "MiddleLeft"

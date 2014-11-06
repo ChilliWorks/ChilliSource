@@ -115,6 +115,7 @@ namespace ChilliSource
             //-------------------------------------------------------
             void ParseCustomProperties(const Json::Value& in_properties, PropertyMap& out_customProperties)
             {
+                //define the properties.
                 std::vector<PropertyMap::PropertyDesc> descs;
                 descs.reserve(in_properties.size());
                 for(auto it = in_properties.begin(); it != in_properties.end(); ++it)
@@ -123,11 +124,16 @@ namespace ChilliSource
 					PropertyMap::PropertyDesc desc;
 					desc.m_type = ParsePropertyType((*it).asString());
 					desc.m_name = it.memberName();
-                    desc.m_value = GetDefaultPropertyTypeValue(desc.m_type);
 					descs.push_back(desc);
                 }
-                
                 out_customProperties.AllocateKeys(descs);
+                
+                //initialise the values in the custom properties
+                for(auto it = in_properties.begin(); it != in_properties.end(); ++it)
+                {
+                    PropertyType type = ParsePropertyType((*it).asString());
+                    out_customProperties.SetProperty(type, it.memberName(), GetDefaultPropertyTypeValue(type));
+                }
             }
             //-------------------------------------------------------
             //-------------------------------------------------------
@@ -137,7 +143,7 @@ namespace ChilliSource
         
                 for(auto it = in_defaults.begin(); it != in_defaults.end(); ++it)
                 {
-                    if(out_defaultProperties.HasProperty(it.memberName()) == true)
+                    if(out_defaultProperties.HasKey(it.memberName()) == true)
                     {
                         if(strcmp(it.memberName(), "Drawable") == 0)
                         {
@@ -157,7 +163,7 @@ namespace ChilliSource
                             out_defaultProperties.SetProperty(out_defaultProperties.GetType(it.memberName()), it.memberName(), (*it).asString());
                         }
                     }
-                    else if(out_customProperties.HasProperty(it.memberName()) == true)
+                    else if(out_customProperties.HasKey(it.memberName()) == true)
                     {
                         CS_ASSERT((*it).isString(), "Value can only be specified as string: " + std::string(it.memberName()));
                         out_customProperties.SetProperty(out_customProperties.GetType(it.memberName()), it.memberName(), (*it).asString());

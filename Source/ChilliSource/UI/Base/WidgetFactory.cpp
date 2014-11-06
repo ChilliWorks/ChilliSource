@@ -290,8 +290,11 @@ namespace ChilliSource
         WidgetUPtr WidgetFactory::CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc, const Scripting::LuaSourceCSPtr& in_behaviourSource) const
         {
             WidgetUPtr widget(new Widget(in_hierarchyDesc.m_defaultProperties, in_hierarchyDesc.m_customProperties));
+            CS_ASSERT(in_hierarchyDesc.m_defaultProperties.HasKey("Layout") == true, "Invalid widget property map. Doesn't contain key: Layout");
+            CS_ASSERT(in_hierarchyDesc.m_defaultProperties.HasKey("Drawable") == true, "Invalid widget property map. Doesn't contain key: Drawable");
+            CS_ASSERT(in_hierarchyDesc.m_defaultProperties.HasKey("TextDrawable") == true, "Invalid widget property map. Doesn't contain key: Text");
             
-            if(in_hierarchyDesc.m_defaultProperties.HasProperty("Layout") == true)
+            if(in_hierarchyDesc.m_defaultProperties.HasValue("Layout") == true)
             {
                 switch (in_hierarchyDesc.m_access)
                 {
@@ -303,9 +306,15 @@ namespace ChilliSource
                         break;
                 }
             }
-            if(in_hierarchyDesc.m_defaultProperties.HasProperty("Drawable") == true)
+            
+            if(in_hierarchyDesc.m_defaultProperties.HasValue("Drawable") == true)
             {
                 widget->SetDrawable(CreateDrawable(in_hierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Drawable")));
+            }
+            
+            if(in_hierarchyDesc.m_defaultProperties.HasValue("TextDrawable") == true)
+            {
+                widget->SetTextDrawable(TextDrawableUPtr(new TextDrawable(in_hierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("TextDrawable"))));
             }
             
             for(const auto& childHierarchyDesc : in_hierarchyDesc.m_children)

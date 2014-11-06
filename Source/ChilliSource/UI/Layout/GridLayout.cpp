@@ -40,16 +40,16 @@ namespace ChilliSource
         {
             const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyType::k_string, "Type", "Grid"},
-                {PropertyType::k_int, "NumRows", "1"},
-                {PropertyType::k_int, "NumCols", "1"},
-                {PropertyType::k_float, "RelHSpacing", "0"},
-                {PropertyType::k_float, "AbsHSpacing", "0"},
-                {PropertyType::k_float, "RelVSpacing", "0"},
-                {PropertyType::k_float, "AbsVSpacing", "0"},
-                {PropertyType::k_vec4, "RelMargins", "0 0 0 0"},
-                {PropertyType::k_vec4, "AbsMargins", "0 0 0 0"},
-                {PropertyType::k_string, "CellOrder", "ColMajor"}
+                {PropertyType::k_string, "Type"},
+                {PropertyType::k_int, "NumRows"},
+                {PropertyType::k_int, "NumCols"},
+                {PropertyType::k_float, "RelHSpacing"},
+                {PropertyType::k_float, "AbsHSpacing"},
+                {PropertyType::k_float, "RelVSpacing"},
+                {PropertyType::k_float, "AbsVSpacing"},
+                {PropertyType::k_vec4, "RelMargins"},
+                {PropertyType::k_vec4, "AbsMargins"},
+                {PropertyType::k_string, "CellOrder"}
             };
         }
         
@@ -57,32 +57,35 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         GridLayout::GridLayout(const PropertyMap& in_properties)
         {
-            SetNumRows(in_properties.GetProperty<s32>("NumRows"));
-            SetNumCols(in_properties.GetProperty<s32>("NumCols"));
-            SetRelativeHSpacing(in_properties.GetProperty<f32>("RelHSpacing"));
-            SetAbsoluteHSpacing(in_properties.GetProperty<f32>("AbsHSpacing"));
-            SetRelativeVSpacing(in_properties.GetProperty<f32>("RelVSpacing"));
-            SetAbsoluteVSpacing(in_properties.GetProperty<f32>("AbsVSpacing"));
+            SetNumRows(in_properties.GetPropertyOrDefault("NumRows", (s32)GetNumRows()));
+            SetNumCols(in_properties.GetPropertyOrDefault("NumCols", (s32)GetNumCols()));
+            SetRelativeHSpacing(in_properties.GetPropertyOrDefault("RelHSpacing", GetRelativeHSpacing()));
+            SetAbsoluteHSpacing(in_properties.GetPropertyOrDefault("AbsHSpacing", GetAbsoluteHSpacing()));
+            SetRelativeVSpacing(in_properties.GetPropertyOrDefault("RelVSpacing", GetRelativeVSpacing()));
+            SetAbsoluteVSpacing(in_properties.GetPropertyOrDefault("AbsVSpacing", GetAbsoluteVSpacing()));
             
-            Core::Vector4 relMargins(in_properties.GetProperty<Core::Vector4>("RelMargins"));
+            Core::Vector4 relMargins(in_properties.GetPropertyOrDefault("RelMargins", GetRelativeMargins()));
             SetRelativeMargins(relMargins.x, relMargins.y, relMargins.z, relMargins.w);
-            Core::Vector4 absMargins(in_properties.GetProperty<Core::Vector4>("AbsMargins"));
+            Core::Vector4 absMargins(in_properties.GetPropertyOrDefault("AbsMargins", GetAbsoluteMargins()));
             SetAbsoluteMargins(absMargins.x, absMargins.y, absMargins.z, absMargins.w);
             
-            std::string cellOrder(in_properties.GetProperty<std::string>("CellOrder"));
+            std::string cellOrder(in_properties.GetPropertyOrDefault("CellOrder", ""));
             Core::StringUtils::ToLowerCase(cellOrder);
             
-            if(cellOrder == "colmajor")
+            if (cellOrder != "")
             {
-                SetCellOrder(CellOrder::k_colMajor);
-            }
-            else if(cellOrder == "rowmajor")
-            {
-                SetCellOrder(CellOrder::k_rowMajor);
-            }
-            else
-            {
-                CS_LOG_FATAL("GridLayout: Unknown cell order: " + cellOrder);
+                if(cellOrder == "colmajor")
+                {
+                    SetCellOrder(CellOrder::k_colMajor);
+                }
+                else if(cellOrder == "rowmajor")
+                {
+                    SetCellOrder(CellOrder::k_rowMajor);
+                }
+                else
+                {
+                    CS_LOG_FATAL("GridLayout: Unknown cell order: " + cellOrder);
+                }
             }
         }
         //----------------------------------------------------------------------------------------
@@ -96,6 +99,60 @@ namespace ChilliSource
         LayoutType GridLayout::GetType() const
         {
             return LayoutType::k_grid;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        u32 GridLayout::GetNumRows() const
+        {
+            return m_numRows;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        u32 GridLayout::GetNumCols() const
+        {
+            return m_numCols;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector4 GridLayout::GetRelativeMargins() const
+        {
+            return Core::Vector4(m_marginSizeTop.x, m_marginSizeRight.x, m_marginSizeBottom.x, m_marginSizeLeft.x);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector4 GridLayout::GetAbsoluteMargins() const
+        {
+            return Core::Vector4(m_marginSizeTop.y, m_marginSizeRight.y, m_marginSizeBottom.y, m_marginSizeLeft.y);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        f32 GridLayout::GetRelativeHSpacing() const
+        {
+            return m_spacingSizeH.x;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        f32 GridLayout::GetAbsoluteHSpacing() const
+        {
+            return m_spacingSizeH.y;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        f32 GridLayout::GetRelativeVSpacing() const
+        {
+            return m_spacingSizeV.x;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        f32 GridLayout::GetAbsoluteVSpacing() const
+        {
+            return m_spacingSizeV.y;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        GridLayout::CellOrder GridLayout::GetCellOrder() const
+        {
+            return m_cellOrder;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

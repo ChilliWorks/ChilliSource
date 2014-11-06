@@ -66,6 +66,17 @@ namespace ChilliSource
             /// @return Property values
             //-------------------------------------------------------
             PropertyMap ParseLayoutValues(const Json::Value& in_layout);
+            //-------------------------------------------------------
+            /// From the given JSON value parse the values of the text
+            /// types into a property map
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param Json layout
+            ///
+            /// @return Property values
+            //-------------------------------------------------------
+            PropertyMap ParseTextValues(const Json::Value& in_layout);
         }
 	}
 }

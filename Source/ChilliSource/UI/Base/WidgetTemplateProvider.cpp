@@ -115,6 +115,12 @@ namespace ChilliSource
                     CS_ASSERT(in_json.isObject(), "Value can only be specified as object: " + in_propName);
                     in_propMap.SetProperty(in_propName, WidgetParserUtils::ParseLayoutValues(in_json));
                 }
+                else if(in_propName == "TextDrawable")
+                {
+                    //Special case for drawable
+                    CS_ASSERT(in_json.isObject(), "Value can only be specified as object: " + in_propName);
+                    in_propMap.SetProperty(in_propName, WidgetParserUtils::ParseTextValues(in_json));
+                }
                 else
                 {
                     CS_ASSERT(in_json.isString(), "Value can only be specified as string: " + in_propName);
@@ -218,11 +224,11 @@ namespace ChilliSource
                         out_hierarchyDesc.m_type = (*it).asString();
                     }
                 }
-                else if(out_hierarchyDesc.m_defaultProperties.HasProperty(it.memberName()) == true)
+                else if(out_hierarchyDesc.m_defaultProperties.HasKey(it.memberName()) == true)
                 {
                     SetProperty(propertyName, *it, in_templateLocation, in_templatePath, out_hierarchyDesc.m_defaultProperties);
                 }
-                else if(out_hierarchyDesc.m_customProperties.HasProperty(it.memberName()) == true)
+                else if(out_hierarchyDesc.m_customProperties.HasKey(it.memberName()) == true)
                 {
                     SetProperty(propertyName, *it, in_templateLocation, in_templatePath, out_hierarchyDesc.m_customProperties);
                 }
@@ -244,12 +250,12 @@ namespace ChilliSource
                         {
                             if(child.m_defaultProperties.GetProperty<std::string>("Name") == itLink->m_widgetName)
                             {
-                                if(child.m_defaultProperties.HasProperty(itLink->m_propertyName) == true)
+                                if(child.m_defaultProperties.HasKey(itLink->m_propertyName) == true)
                                 {
                                     SetProperty(itLink->m_propertyName, *it, in_templateLocation, in_templatePath, child.m_defaultProperties);
                                     break;
                                 }
-                                if(child.m_customProperties.HasProperty(itLink->m_propertyName) == true)
+                                if(child.m_customProperties.HasKey(itLink->m_propertyName) == true)
                                 {
                                     SetProperty(itLink->m_propertyName, *it, in_templateLocation, in_templatePath, child.m_customProperties);
                                     break;

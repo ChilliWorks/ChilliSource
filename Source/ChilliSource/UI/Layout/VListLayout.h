@@ -88,6 +88,41 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             LayoutType GetType() const override;
             //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The number of cells that make up the list. The size of each cell is based on
+            /// the number of cells and the overall layout size, governed by the owning widget
+            //----------------------------------------------------------------------------------------
+            u32 GetNumCells() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The relative border size margins for each edge. These are relative to the
+            /// overall layout size (i.e owning widget size).X is top, Y is right, Z is bottom and W
+            /// is left.
+            //----------------------------------------------------------------------------------------
+            Core::Vector4 GetRelativeMargins() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The absolute border size margins for each edge. X is top, Y is right, Z is
+            /// bottom and W is left.
+            //----------------------------------------------------------------------------------------
+            Core::Vector4 GetAbsoluteMargins() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The relative spacing between items. This is relative to the overall layout size
+            /// (i.e. the owning widget)
+            //----------------------------------------------------------------------------------------
+            f32 GetRelativeSpacing() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The absolute spacing between items.
+            //----------------------------------------------------------------------------------------
+            f32 GetAbsoluteSpacing() const;
+            //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @param The number of cells that make up the list. The size of each cell is based

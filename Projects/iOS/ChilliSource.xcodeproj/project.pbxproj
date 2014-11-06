@@ -49,6 +49,7 @@
 		817F766D1A03E31000D36ACF /* LuaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76641A03E31000D36ACF /* LuaUtils.cpp */; };
 		817F76701A03E37200D36ACF /* PointerProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F766E1A03E37200D36ACF /* PointerProxy.cpp */; };
 		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
+		81970FE71A0A48B500505599 /* TextDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81970FE51A0A48B500505599 /* TextDrawable.cpp */; };
 		81AAFBBB19C9C18100CD4A14 /* Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB419C9C18100CD4A14 /* Gesture.cpp */; };
 		81AAFBBC19C9C18100CD4A14 /* GestureSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB619C9C18100CD4A14 /* GestureSystem.cpp */; };
 		81AAFBBD19C9C18100CD4A14 /* TapGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB819C9C18100CD4A14 /* TapGesture.cpp */; };
@@ -471,6 +472,9 @@
 		817F766E1A03E37200D36ACF /* PointerProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PointerProxy.cpp; sourceTree = "<group>"; };
 		817F766F1A03E37200D36ACF /* PointerProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointerProxy.h; sourceTree = "<group>"; };
 		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		81970FE51A0A48B500505599 /* TextDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextDrawable.cpp; sourceTree = "<group>"; };
+		81970FE61A0A48B500505599 /* TextDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextDrawable.h; sourceTree = "<group>"; };
+		81970FE91A0A780A00505599 /* Text.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Text.h; sourceTree = "<group>"; };
 		81AAFBB419C9C18100CD4A14 /* Gesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gesture.cpp; sourceTree = "<group>"; };
 		81AAFBB519C9C18100CD4A14 /* Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gesture.h; sourceTree = "<group>"; };
 		81AAFBB619C9C18100CD4A14 /* GestureSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GestureSystem.cpp; sourceTree = "<group>"; };
@@ -1064,6 +1068,7 @@
 		817F75EA1A03E23A00D36ACF /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				81970FE41A0A48B500505599 /* Text */,
 				817F75EB1A03E23A00D36ACF /* Base */,
 				817F76061A03E23A00D36ACF /* Base.h */,
 				817F76071A03E23A00D36ACF /* Drawable */,
@@ -1071,6 +1076,7 @@
 				817F761D1A03E23A00D36ACF /* ForwardDeclarations.h */,
 				817F761E1A03E23A00D36ACF /* Layout */,
 				817F76311A03E23A00D36ACF /* Layout.h */,
+				81970FE91A0A780A00505599 /* Text.h */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1200,6 +1206,15 @@
 				817F76591A03E31000D36ACF /* LuaFunctionUtils.h */,
 			);
 			path = Function;
+			sourceTree = "<group>";
+		};
+		81970FE41A0A48B500505599 /* Text */ = {
+			isa = PBXGroup;
+			children = (
+				81970FE51A0A48B500505599 /* TextDrawable.cpp */,
+				81970FE61A0A48B500505599 /* TextDrawable.h */,
+			);
+			path = Text;
 			sourceTree = "<group>";
 		};
 		81AAFBB319C9C18100CD4A14 /* Gesture */ = {
@@ -2750,6 +2765,7 @@
 				81D8B4051962E0EC0010DA84 /* Utils.cpp in Sources */,
 				81D8B4711962E0EC0010DA84 /* VertexDeclaration.cpp in Sources */,
 				81D8B6BD1962E0F70010DA84 /* WebView.mm in Sources */,
+				81970FE71A0A48B500505599 /* TextDrawable.cpp in Sources */,
 				81D8B41A1962E0EC0010DA84 /* ImageFormatConverter.cpp in Sources */,
 				81D8B43D1962E0EC0010DA84 /* XML.cpp in Sources */,
 				81D8B4111962E0EC0010DA84 /* Transform.cpp in Sources */,

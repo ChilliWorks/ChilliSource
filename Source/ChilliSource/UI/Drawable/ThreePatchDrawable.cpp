@@ -46,15 +46,15 @@ namespace ChilliSource
         {
             const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyType::k_string, "Type", "ThreePatch"},
-                {PropertyType::k_string, "Direction", "Horizontal"},
-                {PropertyType::k_vec4, "UVs", "0 0 1 1"},
-                {PropertyType::k_vec2, "Insets", "0.01 0.01"},
-                {PropertyType::k_string, "TextureLocation", "Package"},
-                {PropertyType::k_string, "TexturePath", ""},
-                {PropertyType::k_string, "AtlasLocation", "Package"},
-                {PropertyType::k_string, "AtlasPath", ""},
-                {PropertyType::k_string, "AtlasId", ""}
+                {PropertyType::k_string, "Type"},
+                {PropertyType::k_string, "Direction"},
+                {PropertyType::k_vec4, "UVs"},
+                {PropertyType::k_vec2, "Insets"},
+                {PropertyType::k_string, "TextureLocation"},
+                {PropertyType::k_string, "TexturePath"},
+                {PropertyType::k_string, "AtlasLocation"},
+                {PropertyType::k_string, "AtlasPath"},
+                {PropertyType::k_string, "AtlasId"}
             };
         
             //----------------------------------------------------------------------------------------
@@ -471,7 +471,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         ThreePatchDrawable::ThreePatchDrawable(const PropertyMap& in_properties)
         {
-            std::string direction(in_properties.GetProperty<std::string>("Direction"));
+            std::string direction(in_properties.GetPropertyOrDefault("Direction", "horizontal"));
             Core::StringUtils::ToLowerCase(direction);
             
             if(direction == "horizontal")
@@ -493,11 +493,11 @@ namespace ChilliSource
                 CS_LOG_FATAL("ThreePatchDrawable: Unknown type: " + direction);
             }
             
-            Core::Vector4 uvs(in_properties.GetProperty<Core::Vector4>("UVs"));
+            Core::Vector4 uvs(in_properties.GetPropertyOrDefault("UVs", Core::Vector4(m_uvs.m_u, m_uvs.m_v, m_uvs.m_s, m_uvs.m_t)));
             SetUVs(Rendering::UVs(uvs.x, uvs.y, uvs.z, uvs.w));
             
-            std::string textureLocation(in_properties.GetProperty<std::string>("TextureLocation"));
-            std::string texturePath(in_properties.GetProperty<std::string>("TexturePath"));
+            std::string textureLocation(in_properties.GetPropertyOrDefault("TextureLocation", "Package"));
+            std::string texturePath(in_properties.GetPropertyOrDefault("TexturePath", ""));
             
             if(textureLocation.empty() == false && texturePath.empty() == false)
             {
@@ -505,17 +505,17 @@ namespace ChilliSource
                 SetTexture(resPool->LoadResource<Rendering::Texture>(Core::ParseStorageLocation(textureLocation), texturePath));
             }
             
-            std::string atlasLocation(in_properties.GetProperty<std::string>("AtlasLocation"));
-            std::string atlasPath(in_properties.GetProperty<std::string>("AtlasPath"));
+            std::string atlasLocation(in_properties.GetPropertyOrDefault("AtlasLocation", "Package"));
+            std::string atlasPath(in_properties.GetPropertyOrDefault("AtlasPath", ""));
             
             if(atlasLocation.empty() == false && atlasPath.empty() == false)
             {
                 auto resPool = Core::Application::Get()->GetResourcePool();
                 SetTextureAtlas(resPool->LoadResource<Rendering::TextureAtlas>(Core::ParseStorageLocation(atlasLocation), atlasPath));
-                SetTextureAtlasId(in_properties.GetProperty<std::string>("AtlasId"));
+                SetTextureAtlasId(in_properties.GetPropertyOrDefault("AtlasId", ""));
             }
             
-            Core::Vector2 insets(in_properties.GetProperty<Core::Vector2>("Insets"));
+            Core::Vector2 insets(in_properties.GetPropertyOrDefault("Insets", Core::Vector2(m_leftOrBottomInset, m_rightOrTopInset)));
             SetInsets(insets.x, insets.y);
         }
         //----------------------------------------------------------------------------------------

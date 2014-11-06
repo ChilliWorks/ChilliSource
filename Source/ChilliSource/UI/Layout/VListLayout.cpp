@@ -40,12 +40,12 @@ namespace ChilliSource
         {
             const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyType::k_string, "Type", "VList"},
-                {PropertyType::k_int, "NumCells", "1"},
-                {PropertyType::k_float, "RelSpacing", "0"},
-                {PropertyType::k_float, "AbsSpacing", "0"},
-                {PropertyType::k_vec4, "RelMargins", "0 0 0 0"},
-                {PropertyType::k_vec4, "AbsMargins", "0 0 0 0"}
+                {PropertyType::k_string, "Type"},
+                {PropertyType::k_int, "NumCells"},
+                {PropertyType::k_float, "RelSpacing"},
+                {PropertyType::k_float, "AbsSpacing"},
+                {PropertyType::k_vec4, "RelMargins"},
+                {PropertyType::k_vec4, "AbsMargins"}
             };
         }
         
@@ -63,13 +63,13 @@ namespace ChilliSource
             m_gridLayout.SetNumCols(1);
             m_gridLayout.SetCellOrder(GridLayout::CellOrder::k_rowMajor);
             
-            SetNumCells(in_properties.GetProperty<s32>("NumCells"));
-            SetRelativeSpacing(in_properties.GetProperty<f32>("RelSpacing"));
-            SetAbsoluteSpacing(in_properties.GetProperty<f32>("AbsSpacing"));
+            SetNumCells(in_properties.GetPropertyOrDefault("NumCells", (s32)GetNumCells()));
+            SetRelativeSpacing(in_properties.GetPropertyOrDefault("RelSpacing", GetRelativeSpacing()));
+            SetAbsoluteSpacing(in_properties.GetPropertyOrDefault("AbsSpacing", GetAbsoluteSpacing()));
             
-            Core::Vector4 relMargins(in_properties.GetProperty<Core::Vector4>("RelMargins"));
+            Core::Vector4 relMargins(in_properties.GetPropertyOrDefault("RelMargins", GetRelativeMargins()));
             SetRelativeMargins(relMargins.x, relMargins.y, relMargins.z, relMargins.w);
-            Core::Vector4 absMargins(in_properties.GetProperty<Core::Vector4>("AbsMargins"));
+            Core::Vector4 absMargins(in_properties.GetPropertyOrDefault("AbsMargins", GetAbsoluteMargins()));
             SetAbsoluteMargins(absMargins.x, absMargins.y, absMargins.z, absMargins.w);
         }
         //----------------------------------------------------------------------------------------
@@ -83,6 +83,36 @@ namespace ChilliSource
         LayoutType VListLayout::GetType() const
         {
             return LayoutType::k_vList;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        u32 VListLayout::GetNumCells() const
+        {
+            return m_gridLayout.GetNumRows();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector4 VListLayout::GetRelativeMargins() const
+        {
+            return m_gridLayout.GetRelativeMargins();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Core::Vector4 VListLayout::GetAbsoluteMargins() const
+        {
+            return m_gridLayout.GetAbsoluteMargins();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        f32 VListLayout::GetRelativeSpacing() const
+        {
+            return m_gridLayout.GetRelativeVSpacing();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        f32 VListLayout::GetAbsoluteSpacing() const
+        {
+            return m_gridLayout.GetAbsoluteVSpacing();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

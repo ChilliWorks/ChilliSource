@@ -47,25 +47,26 @@ namespace ChilliSource
         {
             const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyType::k_string, "Type", ""},
-                {PropertyType::k_string, "Name", ""},
-                {PropertyType::k_vec2, "RelPosition", "0 0"},
-                {PropertyType::k_vec2, "AbsPosition", "0 0"},
-                {PropertyType::k_vec2, "RelSize", "0 0"},
-                {PropertyType::k_vec2, "AbsSize", "0 0"},
-                {PropertyType::k_vec2, "PreferredSize", "1 1"},
-                {PropertyType::k_vec2, "Scale", "1 1"},
-                {PropertyType::k_colour, "Colour", "1 1 1 1"},
-                {PropertyType::k_float, "Rotation", "0"},
-                {PropertyType::k_alignmentAnchor, "OriginAnchor", "MiddleCentre"},
-                {PropertyType::k_alignmentAnchor, "ParentalAnchor", "MiddleCentre"},
-                {PropertyType::k_bool, "Visible", "true"},
-                {PropertyType::k_bool, "ClipChildren", "false"},
-                {PropertyType::k_bool, "InputEnabled", "false"},
-                {PropertyType::k_bool, "InputConsumeEnabled", "true"},
-                {PropertyType::k_sizePolicy, "SizePolicy", "None"},
-                {PropertyType::k_propertyMap, "Layout", "{\"Type\":\"None\"}"},
-                {PropertyType::k_propertyMap, "Drawable", "{\"Type\":\"None\"}"}
+                {PropertyType::k_string, "Type"},
+                {PropertyType::k_string, "Name"},
+                {PropertyType::k_vec2, "RelPosition"},
+                {PropertyType::k_vec2, "AbsPosition"},
+                {PropertyType::k_vec2, "RelSize",},
+                {PropertyType::k_vec2, "AbsSize"},
+                {PropertyType::k_vec2, "PreferredSize"},
+                {PropertyType::k_vec2, "Scale"},
+                {PropertyType::k_colour, "Colour"},
+                {PropertyType::k_float, "Rotation"},
+                {PropertyType::k_alignmentAnchor, "OriginAnchor"},
+                {PropertyType::k_alignmentAnchor, "ParentalAnchor"},
+                {PropertyType::k_bool, "Visible"},
+                {PropertyType::k_bool, "ClipChildren"},
+                {PropertyType::k_bool, "InputEnabled"},
+                {PropertyType::k_bool, "InputConsumeEnabled"},
+                {PropertyType::k_sizePolicy, "SizePolicy"},
+                {PropertyType::k_propertyMap, "Layout"},
+                {PropertyType::k_propertyMap, "Drawable"},
+                {PropertyType::k_propertyMap, "TextDrawable"}
             };
             
             //----------------------------------------------------------------------------------------
@@ -220,22 +221,22 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::SetDefaultProperties(const PropertyMap& in_defaultProperties)
         {
-            SetName(in_defaultProperties.GetProperty<std::string>("Name"));
-            SetRelativePosition(in_defaultProperties.GetProperty<Core::Vector2>("RelPosition"));
-            SetAbsolutePosition(in_defaultProperties.GetProperty<Core::Vector2>("AbsPosition"));
-            SetRelativeSize(in_defaultProperties.GetProperty<Core::Vector2>("RelSize"));
-            SetAbsoluteSize(in_defaultProperties.GetProperty<Core::Vector2>("AbsSize"));
-            SetDefaultPreferredSize(in_defaultProperties.GetProperty<Core::Vector2>("PreferredSize"));
-            ScaleTo(in_defaultProperties.GetProperty<Core::Vector2>("Scale"));
-            SetColour(in_defaultProperties.GetProperty<Core::Colour>("Colour"));
-            RotateTo(in_defaultProperties.GetProperty<f32>("Rotation"));
-            SetParentalAnchor(in_defaultProperties.GetProperty<Rendering::AlignmentAnchor>("ParentalAnchor"));
-            SetOriginAnchor(in_defaultProperties.GetProperty<Rendering::AlignmentAnchor>("OriginAnchor"));
-            SetVisible(in_defaultProperties.GetProperty<bool>("Visible"));
-            SetClippingEnabled(in_defaultProperties.GetProperty<bool>("ClipChildren"));
-            SetInputEnabled(in_defaultProperties.GetProperty<bool>("InputEnabled"));
-            SetInputConsumeEnabled(in_defaultProperties.GetProperty<bool>("InputConsumeEnabled"));
-            SetSizePolicy(in_defaultProperties.GetProperty<SizePolicy>("SizePolicy"));
+            SetName(in_defaultProperties.GetPropertyOrDefault<std::string>("Name", ""));
+            SetRelativePosition(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("RelPosition", Core::Vector2()));
+            SetAbsolutePosition(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("AbsPosition", Core::Vector2()));
+            SetRelativeSize(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("RelSize", Core::Vector2(1.0f, 1.0f)));
+            SetAbsoluteSize(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("AbsSize", Core::Vector2()));
+            SetDefaultPreferredSize(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("PreferredSize", Core::Vector2(1.0f, 1.0f)));
+            ScaleTo(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("Scale", Core::Vector2(1.0f, 1.0f)));
+            SetColour(in_defaultProperties.GetPropertyOrDefault<Core::Colour>("Colour", Core::Colour(1.0f, 1.0f, 1.0f, 1.0f)));
+            RotateTo(in_defaultProperties.GetPropertyOrDefault<f32>("Rotation", 0.0f));
+            SetParentalAnchor(in_defaultProperties.GetPropertyOrDefault<Rendering::AlignmentAnchor>("ParentalAnchor", Rendering::AlignmentAnchor::k_middleCentre));
+            SetOriginAnchor(in_defaultProperties.GetPropertyOrDefault<Rendering::AlignmentAnchor>("OriginAnchor", Rendering::AlignmentAnchor::k_middleCentre));
+            SetVisible(in_defaultProperties.GetPropertyOrDefault<bool>("Visible", true));
+            SetClippingEnabled(in_defaultProperties.GetPropertyOrDefault<bool>("ClipChildren", false));
+            SetInputEnabled(in_defaultProperties.GetPropertyOrDefault<bool>("InputEnabled", false));
+            SetInputConsumeEnabled(in_defaultProperties.GetPropertyOrDefault<bool>("InputConsumeEnabled", true));
+            SetSizePolicy(in_defaultProperties.GetPropertyOrDefault<SizePolicy>("SizePolicy", SizePolicy::k_none));
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -311,6 +312,20 @@ namespace ChilliSource
             m_drawable = std::move(in_drawable);
             
             InvalidateTransformCache();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetTextDrawable(TextDrawableUPtr in_textDrawable)
+        {
+            m_textDrawable = std::move(in_textDrawable);
+            
+            InvalidateTransformCache();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        TextDrawable* Widget::GetTextDrawable() const
+        {
+            return m_textDrawable.get();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1246,9 +1261,17 @@ namespace ChilliSource
             
             Core::Vector2 finalSize(GetFinalSize());
             
-            if(m_drawable != nullptr && ShouldCull(GetFinalPositionOfCentre(), finalSize, m_screen->GetResolution()) == false)
+            if ((m_drawable != nullptr || m_textDrawable != nullptr) && ShouldCull(GetFinalPositionOfCentre(), finalSize, m_screen->GetResolution()) == false)
             {
-                m_drawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
+                if (m_drawable != nullptr)
+                {
+                    m_drawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
+                }
+                
+                if (m_textDrawable != nullptr)
+                {
+                    m_textDrawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
+                }
             }
             
             if(m_isSubviewClippingEnabled == true)

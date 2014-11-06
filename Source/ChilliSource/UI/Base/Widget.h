@@ -46,6 +46,7 @@
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
+#include <ChilliSource/UI/Text/TextDrawable.h>
 
 #include <cassert>
 #include <functional>
@@ -217,6 +218,22 @@ namespace ChilliSource
             /// @return Drawable or null
             //----------------------------------------------------------------------------------------
             IDrawable* GetDrawable() const;
+            //----------------------------------------------------------------------------------------
+            /// Sets the text drawable that describes how any text used by the widget should be
+            /// rendered. If this is null, no text will be displayed. Text will always display over
+            /// the drawable.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The text that should be added to this widget.
+            //----------------------------------------------------------------------------------------
+            void SetTextDrawable(TextDrawableUPtr in_textDrawable);
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A pointer to the text drawable that will be rendered in this widget.
+            //----------------------------------------------------------------------------------------
+            TextDrawable* GetTextDrawable() const;
             //----------------------------------------------------------------------------------------
             /// Set the layout that handles how to layout the widget's subviews. If this is null then the
             /// subviews will retain their current size and position. Otherwise the size and position may
@@ -1066,6 +1083,7 @@ namespace ChilliSource
             std::string m_name;
             
             IDrawableUPtr m_drawable;
+            TextDrawableUPtr m_textDrawable;
             ILayoutUPtr m_layout;
             ILayoutUPtr m_internalLayout;
             

@@ -45,8 +45,8 @@ namespace ChilliSource
             {
                 case DrawableType::k_none:
                 {
-                    std::vector<PropertyMap::PropertyDesc> propertyDescs = {{PropertyType::k_string, "Type", "None"}};
-                    return propertyDescs;
+                    CS_LOG_FATAL("Cannot get property descriptions for drawble of type 'None'.");
+                    return std::vector<PropertyMap::PropertyDesc>();
                 }
                 case DrawableType::k_standard:
                     return StandardDrawable::GetPropertyDescs();

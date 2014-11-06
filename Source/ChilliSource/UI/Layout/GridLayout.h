@@ -106,6 +106,67 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             LayoutType GetType() const override;
             //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The number of rows that make up the grid. The size of each row is based
+            /// on the number of rows and the overall layout size, governed by the owning widget.
+            //----------------------------------------------------------------------------------------
+            u32 GetNumRows() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The number of columns that make up the grid. The size of each column is based
+            /// on the number of columns and the overall layout size, governed by the owning widget.
+            //----------------------------------------------------------------------------------------
+            u32 GetNumCols() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The relative border size margins for each edge. These are relative to the
+            /// overall layout size (i.e owning widget size). X is top, Y is right, Z is bottom and W
+            /// is left.
+            //----------------------------------------------------------------------------------------
+            Core::Vector4 GetRelativeMargins() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The absolute border size margins for each edge. X is top, Y is right, Z is
+            /// bottom and W is left.
+            //----------------------------------------------------------------------------------------
+            Core::Vector4 GetAbsoluteMargins() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The relative spacing between items horizontally. This is relative to the
+            /// overall layout size (i.e. the owning widget)
+            //----------------------------------------------------------------------------------------
+            f32 GetRelativeHSpacing() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The absolute spacing between items horizontally.
+            //----------------------------------------------------------------------------------------
+            f32 GetAbsoluteHSpacing() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return the relative spacing between items vertically. This is relative to the overall
+            /// layout size (i.e. the owning widget)
+            //----------------------------------------------------------------------------------------
+            f32 GetRelativeVSpacing() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The absolute spacing between items vertically.
+            //----------------------------------------------------------------------------------------
+            f32 GetAbsoluteVSpacing() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return the cell order to be row or column major
+            //----------------------------------------------------------------------------------------
+            CellOrder GetCellOrder() const;
+            //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @param The number of rows that make up the grid. The size of each row is based

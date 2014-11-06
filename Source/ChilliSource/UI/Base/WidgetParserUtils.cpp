@@ -32,6 +32,7 @@
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>
+#include <ChilliSource/UI/Text/TextDrawable.h>
 
 #include <json/json.h>
 
@@ -93,6 +94,23 @@ namespace ChilliSource
             {
                 LayoutType type = ParseLayoutType(in_layout["Type"].asString());
                 auto supportedProperties = ILayout::GetPropertyDescs(type);
+                PropertyMap result(supportedProperties);
+                
+                for(const auto& propDesc : supportedProperties)
+                {
+                    if(in_layout.isMember(propDesc.m_name) == true)
+                    {
+                        result.SetProperty(propDesc.m_type, propDesc.m_name, in_layout[propDesc.m_name].asString());
+                    }
+                }
+                
+                return result;
+            }
+            //-------------------------------------------------------
+            //-------------------------------------------------------
+            PropertyMap ParseTextValues(const Json::Value& in_layout)
+            {
+                auto supportedProperties = TextDrawable::GetPropertyDescs();
                 PropertyMap result(supportedProperties);
                 
                 for(const auto& propDesc : supportedProperties)

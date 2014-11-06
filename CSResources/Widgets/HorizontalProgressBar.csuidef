@@ -24,9 +24,6 @@
     "Bar": {
       "Type": "Widget",
       "RelSize": "0.0 1.0",
-      "Drawable": {
-        "Type": "None"
-      },
       "ParentalAnchor": "MiddleLeft",
       "OriginAnchor": "MiddleLeft"
     }

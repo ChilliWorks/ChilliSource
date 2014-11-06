@@ -41,50 +41,6 @@ namespace ChilliSource
 {
     namespace UI
     {
-        namespace
-        {
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Type
-            ///
-            /// @return New property of given type
-            //----------------------------------------------------------------------------------------
-            PropertyMap::IPropertyUPtr CreateProperty(PropertyType in_type)
-            {
-                switch(in_type)
-                {
-                    case PropertyType::k_bool:
-                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<bool>());
-                    case PropertyType::k_float:
-                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<f32>());
-                    case PropertyType::k_int:
-                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<s32>());
-                    case PropertyType::k_string:
-                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<std::string>());
-                    case PropertyType::k_vec2:
-                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::Vector2>());
-                    case PropertyType::k_vec3:
-                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::Vector3>());
-                    case PropertyType::k_vec4:
-                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::Vector4>());
-                    case PropertyType::k_colour:
-                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::Colour>());
-                    case PropertyType::k_alignmentAnchor:
-                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Rendering::AlignmentAnchor>());
-                    case PropertyType::k_propertyMap:
-                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<PropertyMap>());
-                    case PropertyType::k_sizePolicy:
-                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<SizePolicy>());
-                    case PropertyType::k_storageLocation:
-                        return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::StorageLocation>());
-                    case PropertyType::k_unknown:
-                        return nullptr;
-                }
-
-				return nullptr;
-            }
-        }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         PropertyMap::PropertyMap(const std::vector<PropertyDesc>& in_propertyDefs)
@@ -153,18 +109,34 @@ namespace ChilliSource
                 lookup.m_type = propertyDef.m_type;
                 lookup.m_property = CreateProperty(propertyDef.m_type);
                 m_properties.insert(std::make_pair(hashId, std::move(lookup)));
-                SetProperty(propertyDef.m_type, lowerCaseName, propertyDef.m_value);
             }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        bool PropertyMap::HasProperty(const std::string& in_name) const
+        bool PropertyMap::HasKey(const std::string& in_name) const
         {
             std::string lowerCaseName = in_name;
             Core::StringUtils::ToLowerCase(lowerCaseName);
             u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
             
             return m_properties.find(hashKey) != m_properties.end();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        bool PropertyMap::HasValue(const std::string& in_name) const
+        {
+            std::string lowerCaseName = in_name;
+            Core::StringUtils::ToLowerCase(lowerCaseName);
+            u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
+            
+            auto it = m_properties.find(hashKey);
+            if (it == m_properties.end())
+            {
+                CS_LOG_FATAL("Querying whether a non-existant property has a value.");
+                return false;
+            }
+            
+            return it->second.m_property->IsInitialised();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -237,27 +209,11 @@ namespace ChilliSource
                     break;
                 case PropertyType::k_propertyMap:
                 {
-                    Json::Reader reader;
-                    Json::Value root;
-                    
-                    if(reader.parse(in_value, root) == false)
-                    {
-                        CS_LOG_FATAL("Cannot parse PropertyType::k_propertyMap as it is not key-value JSON");
-                    }
-
-                    std::vector<PropertyDesc> propertyDescs;
-                    for(auto it = root.begin(); it != root.end(); ++it)
-                    {
-                        PropertyDesc desc;
-                        desc.m_name = it.memberName();
-                        desc.m_value = (*it).asString();
-                        desc.m_type = PropertyType::k_string;
-                        propertyDescs.push_back(desc);
-                    }
-                    SetProperty(in_name, PropertyMap(propertyDescs));
+                    CS_LOG_FATAL("Cannot set a 'property map' property from a string.");
                     break;
                 }
                 case PropertyType::k_unknown:
+                    CS_LOG_FATAL("Cannot set an 'unknown' property from a string.");
                     break;
             }
         }
@@ -338,6 +294,42 @@ namespace ChilliSource
         template<> PropertyType PropertyMap::GetType<PropertyMap>() const
         {
             return PropertyType::k_propertyMap;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        PropertyMap::IPropertyUPtr PropertyMap::CreateProperty(PropertyType in_type) const
+        {
+            switch(in_type)
+            {
+                case PropertyType::k_bool:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<bool>());
+                case PropertyType::k_float:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<f32>());
+                case PropertyType::k_int:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<s32>());
+                case PropertyType::k_string:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<std::string>());
+                case PropertyType::k_vec2:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::Vector2>());
+                case PropertyType::k_vec3:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::Vector3>());
+                case PropertyType::k_vec4:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::Vector4>());
+                case PropertyType::k_colour:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::Colour>());
+                case PropertyType::k_alignmentAnchor:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Rendering::AlignmentAnchor>());
+                case PropertyType::k_propertyMap:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<PropertyMap>());
+                case PropertyType::k_sizePolicy:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<SizePolicy>());
+                case PropertyType::k_storageLocation:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::StorageLocation>());
+                case PropertyType::k_unknown:
+                    return nullptr;
+            }
+            
+            return nullptr;
         }
     }
 }

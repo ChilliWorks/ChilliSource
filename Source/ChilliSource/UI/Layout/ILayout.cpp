@@ -45,8 +45,8 @@ namespace ChilliSource
             {
                 case LayoutType::k_none:
                 {
-                    std::vector<PropertyMap::PropertyDesc> propertyDescs = {{PropertyType::k_string, "Type", "None"}};
-                    return propertyDescs;
+                    CS_LOG_FATAL("Cannot get property descs for 'none' layout type.");
+                    return std::vector<PropertyMap::PropertyDesc>();
                 }
                 case LayoutType::k_grid:
                     return GridLayout::GetPropertyDescs();
