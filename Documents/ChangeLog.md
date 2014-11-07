@@ -5,6 +5,7 @@ Version 1.2.0, 2014-11-07:
 	- Font rendering has been significantly improved. This involved updating the font format so any existing fonts will need to be rebuilt. 
 	- CSModelExport is now correctly working again.
 	- Updated the android backend for Android 5.0.
+	- Updated the android backed to use the latest NDK build pipeline.
 
 Version 1.1.5, 2014-11-03:
 	- Fixed a windows specific crash on closing an application.
