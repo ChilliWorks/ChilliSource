@@ -164,7 +164,6 @@ public final class DeviceNativeInterface extends INativeInterface
 		case ConnectionResult.SERVICE_DISABLED:
 		case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
 		case ConnectionResult.SERVICE_INVALID:
-		case ConnectionResult.DATE_INVALID:
 			//Cannot fallback
 			return "";
 		}
