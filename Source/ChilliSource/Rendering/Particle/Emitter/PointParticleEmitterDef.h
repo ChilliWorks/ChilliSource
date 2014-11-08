@@ -79,13 +79,13 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			///
-			/// @param Map containing the setup parameters for the particle 
-			/// emitter.
+			/// @param A json object describing the parameters for the particle
+			/// emitter def.
 			/// @param The loaded delegate. If this is supplied any resources
 			/// will be loaded as a background task. Once complete, this
 			/// delegate will be called.
 			//----------------------------------------------------------------
-			PointParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate = nullptr);
+			PointParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate = nullptr);
 			//----------------------------------------------------------------
 			/// Allows querying of whether or not this implements the interface
 			/// described by the given Id.

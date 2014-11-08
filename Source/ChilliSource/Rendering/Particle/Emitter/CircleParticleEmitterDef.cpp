@@ -46,8 +46,8 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		CircleParticleEmitterDef::CircleParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)
-			: ParticleEmitterDef(in_params)
+		CircleParticleEmitterDef::CircleParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate)
+			: ParticleEmitterDef(in_paramsJson)
 		{
 			//TODO: !?
 			CS_LOG_FATAL("Unimplemented: CircleParticleEmitterDef::CircleParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)");

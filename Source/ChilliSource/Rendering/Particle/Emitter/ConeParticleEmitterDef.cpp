@@ -28,12 +28,79 @@
 
 #include <ChilliSource/Rendering/Particle/Emitter/ConeParticleEmitterDef.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ConeParticleEmitter.h>
+#include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
+		namespace
+		{
+			//-----------------------------------------------------------------
+			/// Parse an emit from type from the given string. This is case 
+			/// insensitive. If the string is not a valid emit from type this 
+			/// will error.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The string to parse.
+			///
+			/// @return the parsed emit from type.
+			//-----------------------------------------------------------------
+			ConeParticleEmitterDef::EmitFromType ParseEmitFromType(const std::string& in_emitFromTypeString)
+			{
+				std::string emitFromTypeString = in_emitFromTypeString;
+				Core::StringUtils::ToLowerCase(emitFromTypeString);
+
+				if (emitFromTypeString == "base")
+				{
+					return ConeParticleEmitterDef::EmitFromType::k_base;
+				}
+				else if (emitFromTypeString == "surface")
+				{
+					return ConeParticleEmitterDef::EmitFromType::k_surface;
+				}
+				else if (emitFromTypeString == "inside")
+				{
+					return ConeParticleEmitterDef::EmitFromType::k_inside;
+				}
+
+				CS_LOG_FATAL("Invalid emit from type: " + in_emitFromTypeString);
+				return ConeParticleEmitterDef::EmitFromType::k_base;
+			}
+			//-----------------------------------------------------------------
+			/// Parse an emit direction type from the given string. This is case 
+			/// insensitive. If the string is not a valid direction from type this 
+			/// will error.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The string to parse.
+			///
+			/// @return the parsed emit direction type.
+			//-----------------------------------------------------------------
+			ConeParticleEmitterDef::EmitDirectionType ParseEmitDirectionType(const std::string& in_emitDirectionTypeString)
+			{
+				std::string emitDirectionTypeString = in_emitDirectionTypeString;
+				Core::StringUtils::ToLowerCase(emitDirectionTypeString);
+
+				if (emitDirectionTypeString == "awayfrombase")
+				{
+					return ConeParticleEmitterDef::EmitDirectionType::k_awayFromBase;
+				}
+				else if (emitDirectionTypeString == "random")
+				{
+					return ConeParticleEmitterDef::EmitDirectionType::k_random;
+				}
+
+				CS_LOG_FATAL("Invalid emit direction type: " + in_emitDirectionTypeString);
+				return ConeParticleEmitterDef::EmitDirectionType::k_awayFromBase;
+			}
+		}
+
 		CS_DEFINE_NAMEDTYPE(ConeParticleEmitterDef);
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
@@ -47,11 +114,47 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		ConeParticleEmitterDef::ConeParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)
-			: ParticleEmitterDef(in_params)
+		ConeParticleEmitterDef::ConeParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate)
+			: ParticleEmitterDef(in_paramsJson)
 		{
-			//TODO: !?
-			CS_LOG_FATAL("Unimplemented: ConeParticleEmitterDef::ConeParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)");
+			//Emit from type
+			Json::Value jsonValue = in_paramsJson.get("EmitFromType", Json::nullValue);
+			if (jsonValue.isNull() == false)
+			{
+				CS_ASSERT(jsonValue.isString(), "Emit from type must be a string.");
+				m_emitFromType = ParseEmitFromType(jsonValue.asString());
+			}
+
+			//Emit direction type
+			jsonValue = in_paramsJson.get("EmitDirectionType", Json::nullValue);
+			if (jsonValue.isNull() == false)
+			{
+				CS_ASSERT(jsonValue.isString(), "Emit direction type must be a string.");
+				m_emitDirectionType = ParseEmitDirectionType(jsonValue.asString());
+			}
+
+			//Radius
+			jsonValue = in_paramsJson.get("RadiusProperty", Json::nullValue);
+			if (jsonValue.isNull() == false)
+			{
+				m_radiusProperty = ParticlePropertyFactory::CreateProperty<f32>(jsonValue);
+			}
+
+			//Radius
+			jsonValue = in_paramsJson.get("AngleProperty", Json::nullValue);
+			if (jsonValue.isNull() == false)
+			{
+				m_angleProperty = ParticlePropertyFactory::CreateProperty<f32>(jsonValue);
+			}
+
+			//call the loaded delegate if required.
+			if (in_loadedDelegate != nullptr)
+			{
+				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask([=]()
+				{
+					in_loadedDelegate(this);
+				});
+			}
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------

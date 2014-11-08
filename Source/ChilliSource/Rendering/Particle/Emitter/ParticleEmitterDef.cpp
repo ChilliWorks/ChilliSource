@@ -29,11 +29,44 @@
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDef.h>
 
 #include <ChilliSource/Core/Container/ParamDictionary.h>
+#include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
+		namespace
+		{
+			//-----------------------------------------------------------------
+			/// Parse an emission mode from the given string. This is case 
+			/// insensitive. If the string is not a valid emission mode this 
+			/// will error.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The string to parse.
+			///
+			/// @return the parsed emission mode.
+			//-----------------------------------------------------------------
+			ParticleEmitterDef::EmissionMode ParseEmissionMode(const std::string& in_emissionModeString)
+			{
+				std::string emissionModeString = in_emissionModeString;
+				Core::StringUtils::ToLowerCase(emissionModeString);
+
+				if (emissionModeString == "stream")
+				{
+					return ParticleEmitterDef::EmissionMode::k_stream;
+				}
+				else if (emissionModeString == "burst")
+				{
+					return ParticleEmitterDef::EmissionMode::k_burst;
+				}
+
+				CS_LOG_FATAL("Invalid emission mode: " + in_emissionModeString);
+				return ParticleEmitterDef::EmissionMode::k_stream;
+			}
+		}
+
 		CS_DEFINE_NAMEDTYPE(ParticleEmitterDef);
 		//-----------------------------------------------
 		//-----------------------------------------------
@@ -56,10 +89,37 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		ParticleEmitterDef::ParticleEmitterDef(const Core::ParamDictionary& in_params)
+		ParticleEmitterDef::ParticleEmitterDef(const Json::Value& in_paramsJson)
 		{
-			//TODO: !?
-			CS_LOG_FATAL("Unimplemented: ParticleEmitterDef::ParticleEmitterDef(const Core::ParamDictionary& in_params)");
+			//Emission mode.
+			Json::Value jsonValue = in_paramsJson.get("EmissionMode", Json::nullValue);
+			if (jsonValue.isNull() == false)
+			{
+				CS_ASSERT(jsonValue.isString(), "Emission mode must be a string.");
+				m_emissionMode = ParseEmissionMode(jsonValue.asString());
+			}
+
+			//Emission rate.
+			jsonValue = in_paramsJson.get("EmissionRateProperty", Json::nullValue);
+			if (jsonValue.isNull() == false)
+			{
+				CS_ASSERT(m_emissionMode == EmissionMode::k_stream, "Emission rate is an invalid parameter when in burst mode.");
+				m_emissionRateProperty = ParticlePropertyFactory::CreateProperty<f32>(jsonValue);
+			}
+
+			//Particles per emission.
+			jsonValue = in_paramsJson.get("ParticlesPerEmissionProperty", Json::nullValue);
+			if (jsonValue.isNull() == false)
+			{
+				m_particlesPerEmissionProperty = ParticlePropertyFactory::CreateProperty<u32>(jsonValue);
+			}
+
+			//Emission chance.
+			jsonValue = in_paramsJson.get("EmissionChanceProperty", Json::nullValue);
+			if (jsonValue.isNull() == false)
+			{
+				m_emissionChanceProperty = ParticlePropertyFactory::CreateProperty<f32>(jsonValue);
+			}
 
 			if (m_emissionMode == EmissionMode::k_burst)
 			{

@@ -46,8 +46,8 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		SphereParticleEmitterDef::SphereParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)
-			: ParticleEmitterDef(in_params)
+		SphereParticleEmitterDef::SphereParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate)
+			: ParticleEmitterDef(in_paramsJson)
 		{
 			//TODO: !?
 			CS_LOG_FATAL("Unimplemented: SphereParticleEmitterDef::SphereParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)");

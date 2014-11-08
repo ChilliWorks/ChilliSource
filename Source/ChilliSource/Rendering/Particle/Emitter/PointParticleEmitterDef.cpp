@@ -44,8 +44,8 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		PointParticleEmitterDef::PointParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)
-			: ParticleEmitterDef(in_params)
+		PointParticleEmitterDef::PointParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate)
+			: ParticleEmitterDef(in_paramsJson)
 		{
 			//TODO: !?
 			CS_LOG_FATAL("Unimplemented: PointParticleEmitterDef::PointParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)");

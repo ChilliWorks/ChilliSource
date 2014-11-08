@@ -32,8 +32,6 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Random.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
-#include <ChilliSource/Rendering/Particle/Property/ParticlePropertyValueParser.h>
-
 namespace ChilliSource
 {
 	namespace Rendering

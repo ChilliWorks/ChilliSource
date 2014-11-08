@@ -33,7 +33,9 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
+#include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDefFactory.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDefFactory.h>
+#include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDefFactory.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
 #include <json/json.h>
@@ -74,6 +76,8 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			/// Opens and reads the CSParticle file into a json object.
 			///
+			/// This is thread-safe.
+			///
 			/// @author Ian Copland
 			///
 			/// @param The storage location of the csparticle json file.
@@ -100,6 +104,8 @@ namespace ChilliSource
 			/// Reads the base properties in the particle effect such as the
 			/// effect duration, the number of particles and the initial
 			/// particle values.
+			///
+			/// This is thread-safe.
 			///
 			/// @author Ian Copland
 			///
@@ -183,6 +189,9 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			/// Reads the drawable def from the csparticle json.
 			///
+			/// This is not thread safe and must be run on the main thread.
+			/// ReadDrawableDefAsync() should be used for background loading.
+			///
 			/// @author Ian Copland
 			///
 			/// @param The root json object
@@ -191,15 +200,35 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			void ReadDrawableDef(const Json::Value& in_jsonRoot, const ParticleDrawableDefFactory* in_drawableDefFactory, const ParticleEffectSPtr& out_particleEffect)
 			{
-				Json::Value jsonDrawable = in_jsonRoot.get("Drawable", Json::nullValue);
-				CS_ASSERT(jsonDrawable.isNull() == false && jsonDrawable.isObject() == true, "CSParticle file '" + out_particleEffect->GetName() + "' does not contain a drawable.");
+				Json::Value drawableJson = in_jsonRoot.get("Drawable", Json::nullValue);
+				CS_ASSERT(drawableJson.isNull() == false && drawableJson.isObject() == true, "CSParticle file '" + out_particleEffect->GetName() + "' does not contain a drawable.");
 
-				Json::Value jsonType = jsonDrawable.get("Type", Json::nullValue);
-				CS_ASSERT(jsonType.isNull() == false && jsonType.isString() == true, "CSParticle file '" + out_particleEffect->GetName() + "' has a drawable with an invalid type.");
+				Json::Value typeJson = drawableJson.get("Type", Json::nullValue);
+				CS_ASSERT(typeJson.isNull() == false && typeJson.isString() == true, "CSParticle file '" + out_particleEffect->GetName() + "' has a drawable with an invalid type.");
 
-				std::string typeName = jsonType.asString();
+				out_particleEffect->SetDrawableDef(in_drawableDefFactory->CreateDrawableDef(typeJson.asString(), drawableJson, nullptr));
+			}
+			//-----------------------------------------------------------------
+			/// Reads the emitter def from the csparticle json.
+			///			
+			/// This is not thread safe and must be run on the main thread.
+			/// ReadEmitterDefAsync() should be used for background loading.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The root json object
+			/// @param The particle emitter def factory.
+			/// @param [Out] The particle effect that should be populated.
+			//-----------------------------------------------------------------
+			void ReadEmitterDef(const Json::Value& in_jsonRoot, const ParticleEmitterDefFactory* in_emitterDefFactory, const ParticleEffectSPtr& out_particleEffect)
+			{
+				Json::Value emitterJson = in_jsonRoot.get("Emitter", Json::nullValue);
+				CS_ASSERT(emitterJson.isNull() == false && emitterJson.isObject() == true, "CSParticle file '" + out_particleEffect->GetName() + "' does not contain an emitter.");
 
-				out_particleEffect->SetDrawableDef(in_drawableDefFactory->CreateDrawableDef(typeName, jsonDrawable, nullptr));
+				Json::Value typeJson = emitterJson.get("Type", Json::nullValue);
+				CS_ASSERT(typeJson.isNull() == false && typeJson.isString() == true, "CSParticle file '" + out_particleEffect->GetName() + "' has an emitter with an invalid type.");
+
+				out_particleEffect->SetEmitterDef(in_emitterDefFactory->CreateEmitterDef(typeJson.asString(), emitterJson, nullptr));
 			}
 			//-----------------------------------------------------------------
 			/// Reads the CSParticle json file and populates the particle effect.
@@ -209,10 +238,12 @@ namespace ChilliSource
 			/// @param The storage location of the csparticle json file.
 			/// @param The file path to the csparticle json file.
 			/// @param The particle drawable def factory.
+			/// @param The particle emitter def factory.
+			/// @param The particle affector def factory.
 			/// @param [Out] The particle effect that should be populated.
 			//-----------------------------------------------------------------
 			void LoadCSParticle(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const ParticleDrawableDefFactory* in_drawableDefFactory,
-				const ParticleEffectSPtr& out_particleEffect)
+				const ParticleEmitterDefFactory* in_emitterDefFactory, const ParticleAffectorDefFactory* in_affectorDefFactory, const ParticleEffectSPtr& out_particleEffect)
 			{
 				Json::Value jsonRoot;
 				if (OpenCSParticleFile(in_storageLocation, in_filePath, jsonRoot) == false)
@@ -223,6 +254,9 @@ namespace ChilliSource
 
 				ReadBaseValues(jsonRoot, out_particleEffect);
 				ReadDrawableDef(jsonRoot, in_drawableDefFactory, out_particleEffect);
+				ReadEmitterDef(jsonRoot, in_emitterDefFactory, out_particleEffect);
+
+				out_particleEffect->SetLoadState(Core::Resource::LoadState::k_loaded);
 			}
 		}
 
@@ -262,7 +296,7 @@ namespace ChilliSource
 			CS_ASSERT(out_resource->IsA<ParticleEffect>() == true, "resource must be a particle effect.");
 
 			ParticleEffectSPtr particleEffect = std::static_pointer_cast<ParticleEffect>(out_resource);
-			LoadCSParticle(in_location, in_filePath, m_drawableDefFactory, particleEffect);
+			LoadCSParticle(in_location, in_filePath, m_drawableDefFactory, m_emitterDefFactory, m_affectorDefFactory, particleEffect);
 		}
 		//-----------------------------------------------------------------
 		//------------------------------------------------------------------
@@ -282,12 +316,20 @@ namespace ChilliSource
 		{
 			m_drawableDefFactory = Core::Application::Get()->GetSystem<ParticleDrawableDefFactory>();
 			CS_ASSERT(m_drawableDefFactory != nullptr, "CSParticle Provider is missing required system: ParticleDrawableDefFactory.");
+
+			m_emitterDefFactory = Core::Application::Get()->GetSystem<ParticleEmitterDefFactory>();
+			CS_ASSERT(m_emitterDefFactory != nullptr, "CSParticle Provider is missing required system: ParticleEmitterDefFactory.");
+
+			m_affectorDefFactory = Core::Application::Get()->GetSystem<ParticleAffectorDefFactory>();
+			CS_ASSERT(m_affectorDefFactory != nullptr, "CSParticle Provider is missing required system: ParticleAffectorDefFactory.");
 		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
 		void CSParticleProvider::OnDestroy()
 		{
 			m_drawableDefFactory = nullptr;
+			m_emitterDefFactory = nullptr;
+			m_affectorDefFactory = nullptr;
 		}
 	}
 }

@@ -151,48 +151,36 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void ParticleEffect::SetLifetimeProperty(ParticlePropertyUPtr<f32> in_lifetimeProperty)
 		{
-			CS_ASSERT(m_lifetimeProperty == nullptr, "Cannot change lifetime property in a Particle Effect.");
-
 			m_lifetimeProperty = std::move(in_lifetimeProperty);
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void ParticleEffect::SetInitialScaleProperty(ParticlePropertyUPtr<Core::Vector2> in_initialScaleProperty)
 		{
-			CS_ASSERT(m_initialScaleProperty == nullptr, "Cannot change initial scale property in a Particle Effect.");
-
 			m_initialScaleProperty = std::move(in_initialScaleProperty);
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void ParticleEffect::SetInitialRotationProperty(ParticlePropertyUPtr<f32> in_initialRotationProperty)
 		{
-			CS_ASSERT(m_initialRotationProperty == nullptr, "Cannot change initial rotation property in a Particle Effect.");
-
 			m_initialRotationProperty = std::move(in_initialRotationProperty);
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void ParticleEffect::SetInitialColourProperty(ParticlePropertyUPtr<Core::Colour> in_initialColourProperty)
 		{
-			CS_ASSERT(m_initialColourProperty == nullptr, "Cannot change initial colour property in a Particle Effect.");
-
 			m_initialColourProperty = std::move(in_initialColourProperty);
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void ParticleEffect::SetInitialSpeedProperty(ParticlePropertyUPtr<f32> in_initialSpeedProperty)
 		{
-			CS_ASSERT(m_initialSpeedProperty == nullptr, "Cannot change initial speed property in a Particle Effect.");
-
 			m_initialSpeedProperty = std::move(in_initialSpeedProperty);
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void ParticleEffect::SetInitialAngularVelocityProperty(ParticlePropertyUPtr<f32> in_initialAngularVelocityProperty)
 		{
-			CS_ASSERT(m_initialAngularVelocityProperty == nullptr, "Cannot change initial angular velocity property in a Particle Effect.");
-
 			m_initialAngularVelocityProperty = std::move(in_initialAngularVelocityProperty);
 		}
 		//-------------------------------------------------------

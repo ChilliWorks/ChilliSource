@@ -138,6 +138,8 @@ namespace ChilliSource
 			void OnDestroy() override;
 
 			const ParticleDrawableDefFactory* m_drawableDefFactory = nullptr;
+			const ParticleEmitterDefFactory* m_emitterDefFactory = nullptr;
+			const ParticleAffectorDefFactory* m_affectorDefFactory = nullptr;
 		};
 	}
 }

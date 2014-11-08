@@ -161,7 +161,7 @@ namespace ChilliSource
 			/// given json params. If the async delegate is not null, then
 			/// any resource loading will occur as a background task. Once 
 			/// complete the delegate delegate will be called. The values read 
-			/// from param dictionary are described in the class documentation.
+			/// from json are described in the class documentation.
 			///
 			/// @author Ian Copland
 			//----------------------------------------------------------------

@@ -32,6 +32,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
+#include <ChilliSource/Rendering/Particle/Property/StaticParticleProperty.h>
+
+#include <json/json.h>
 
 #include <functional>
 
@@ -49,6 +52,22 @@ namespace ChilliSource
 		/// asynchronous delegate, in which case it is immutable after the
 		/// delegate is called. Classes inheriting from this should also follow 
 		/// these rules.
+		///
+		/// The following are the parameters that all particle emitter definitions
+		/// contain. Specific particle emitter types may contain additional
+		/// parameters.
+		///
+		/// "EmissionMode": Describes the emission mode. Possible values are 
+		/// "Stream" or "Burst". Defaults to "Stream".
+		///
+		/// "EmissionRateProperty": A property describing the rate of emission
+		/// when in stream emission mode. Ignored in burst emission mode.
+		/// 
+		/// "ParticlesPerEmissionProperty": A property describing the number of 
+		/// particles in each emission.
+		///
+		/// "EmissionChanceProperty": A property describing the chance that a 
+		/// particle will actually be emitted during each attempt.
 		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
@@ -98,27 +117,15 @@ namespace ChilliSource
 			/// param dictionary. Inheriting classes should also take a delegate 
 			/// as a parameter for their equivelent constructor. If the delegate 
 			/// is not null, resources should be loaded asynchonously and the 
-			/// delegate should be called once finished.
-			///
-			/// The values read from the param dictionary are:
-			///
-			/// "EmissionMode": Describes the emission mode. Possible values are 
-			/// "Stream" or "Burst". Defaults to "Stream".
-			///
-			/// "EmissionRate": The rate of emission when in stream emission mode. 
-			/// Ignored in burst emission mode.
-			/// 
-			/// "ParticlesPerEmission": The number of particles in each emission.
-			///
-			/// "EmissionChance": The chance that a particle will actually be 
-			/// emitted during each attempt.
+			/// delegate should be called once finished. The parameters takem
+			/// by a particle emitter def are described in the class documentation.
 			///
 			/// @author Ian Copland
 			///
-			/// @param Map containing the setup parameters for the particle 
-			/// emitter.
+			/// @param A json object describing the parameters for the
+			/// particle emitter def.
 			//----------------------------------------------------------------
-			ParticleEmitterDef(const Core::ParamDictionary& in_params);
+			ParticleEmitterDef(const Json::Value& in_paramsJson);
 			//----------------------------------------------------------------
 			/// Creates an instance of the particle emitter described by this.
 			///
@@ -184,9 +191,9 @@ namespace ChilliSource
 
 			const ParticleEffect* m_particleEffect = nullptr;
 			EmissionMode m_emissionMode = EmissionMode::k_stream;
-			ParticlePropertyUPtr<f32> m_emissionRateProperty;
-			ParticlePropertyUPtr<u32> m_particlesPerEmissionProperty;
-			ParticlePropertyUPtr<f32> m_emissionChanceProperty;
+			ParticlePropertyUPtr<f32> m_emissionRateProperty = ParticlePropertyUPtr<f32>(new StaticParticleProperty<f32>(10.0f));
+			ParticlePropertyUPtr<u32> m_particlesPerEmissionProperty = ParticlePropertyUPtr<u32>(new StaticParticleProperty<u32>(1));
+			ParticlePropertyUPtr<f32> m_emissionChanceProperty = ParticlePropertyUPtr<f32>(new StaticParticleProperty<f32>(1.0f));
 		};
 	}
 }

@@ -46,6 +46,21 @@ namespace ChilliSource
 		/// asynchronous delegate, in which case it is immutable after the
 		/// delegate is called.
 		///
+		/// The following are properties that a that a cone particle emitter 
+		/// contains in addition to the standard emitter properties:
+		///			
+		/// "EmitFromType": Where on the particle emitter particles can be
+		/// emitted from. The possible values are "Inside",  "Surface" or
+		/// "Base". The default value is "Base".
+		/// 
+		/// "EmitDirectionType": Describes how the direction of an emitted
+		/// particle will be generated. The possible values are "AwayFromBase"
+		/// and "Random". This defaults to "AwayFromBase".
+		///
+		/// "RadiusProperty": A property describing the radius of the emitter.
+		///
+		/// "AngleProperty": A property describing the angle of the emitter.
+		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
 		class ConeParticleEmitterDef final : public ParticleEmitterDef
@@ -109,32 +124,18 @@ namespace ChilliSource
 			/// Constructor. Initialises with parameters read from the given 
 			/// param dictionary.  If the async delegate is not null, then any 
 			/// resource loading will occur as a background task. Once complete 
-			/// the delegate delegate will be called.
-			///
-			/// In addition to the values read by the base class Particle 
-			/// Emitter, this will read the following from the param dictionary:
-			///
-			/// "EmitFromType": Where on the particle emitter particles can be
-			/// emitted from. The possible values are "Inside",  "Surface" or
-			/// "Base". The default value is "Inside".
-			/// 
-			/// "EmitDirectionType": Describes how the direction of an emitted
-			/// particle will be generated. The possible values are "AwayFromBase"
-			/// and "Random". This defaults to "AwayFromBase".
-			///
-			/// "Radius": The radius of the emitter.
-			///
-			/// "Angle": The angle of the emitter.
+			/// the delegate delegate will be called. The parameters read from
+			/// json are described in the class documentation.
 			///
 			/// @author Ian Copland
 			///
-			/// @param Map containing the setup parameters for the particle 
-			/// emitter.
+			/// @param A json object describing the parameters for the particle
+			/// emitter def.
 			/// @param The loaded delegate. If this is supplied any resources
 			/// will be loaded as a background task. Once complete, this
 			/// delegate will be called.
 			//----------------------------------------------------------------
-			ConeParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate = nullptr);
+			ConeParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate = nullptr);
 			//----------------------------------------------------------------
 			/// Allows querying of whether or not this implements the interface
 			/// described by the given Id.
@@ -184,7 +185,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			const ParticleProperty<f32>* GetAngleProperty() const;
 		private:
-			EmitFromType m_emitFromType = EmitFromType::k_inside;
+			EmitFromType m_emitFromType = EmitFromType::k_base;
 			EmitDirectionType m_emitDirectionType = EmitDirectionType::k_awayFromBase;
 			ParticlePropertyUPtr<f32> m_radiusProperty;
 			ParticlePropertyUPtr<f32> m_angleProperty;

@@ -30,11 +30,14 @@
 #define _CHILLISOURCE_RENDERING_PARTICLE_PARTICLEEFFECT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDef.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDef.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDef.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
+#include <ChilliSource/Rendering/Particle/Property/StaticParticleProperty.h>
 
 #include <vector>
 
@@ -290,11 +293,11 @@ namespace ChilliSource
 			SimulationSpace m_simulationSpace = SimulationSpace::k_local;
 
 			ParticlePropertyUPtr<f32> m_lifetimeProperty;
-			ParticlePropertyUPtr<Core::Vector2> m_initialScaleProperty;
-			ParticlePropertyUPtr<f32> m_initialRotationProperty;
-			ParticlePropertyUPtr<Core::Colour> m_initialColourProperty;
-			ParticlePropertyUPtr<f32> m_initialSpeedProperty;
-			ParticlePropertyUPtr<f32> m_initialAngularVelocityProperty;
+			ParticlePropertyUPtr<Core::Vector2> m_initialScaleProperty = ParticlePropertyUPtr<Core::Vector2>(new StaticParticleProperty<Core::Vector2>(Core::Vector2::k_one));
+			ParticlePropertyUPtr<f32> m_initialRotationProperty = ParticlePropertyUPtr<f32>(new StaticParticleProperty<f32>(0.0f));
+			ParticlePropertyUPtr<Core::Colour> m_initialColourProperty = ParticlePropertyUPtr<Core::Colour>(new StaticParticleProperty<Core::Colour>(Core::Colour::k_white));
+			ParticlePropertyUPtr<f32> m_initialSpeedProperty = ParticlePropertyUPtr<f32>(new StaticParticleProperty<f32>(0.0f));
+			ParticlePropertyUPtr<f32> m_initialAngularVelocityProperty = ParticlePropertyUPtr<f32>(new StaticParticleProperty<f32>(0.0f));
 
 			ParticleDrawableDefUPtr m_drawableDef;
 			ParticleEmitterDefUPtr m_emitterDef;
