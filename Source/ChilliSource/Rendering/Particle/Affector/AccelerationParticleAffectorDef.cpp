@@ -29,6 +29,7 @@
 #include <ChilliSource/Rendering/Particle/Affector/AccelerationParticleAffectorDef.h>
 
 #include <ChilliSource/Rendering/Particle/Affector/AccelerationParticleAffector.h>
+#include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
 namespace ChilliSource
 {
@@ -43,10 +44,18 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		AccelerationParticleAffectorDef::AccelerationParticleAffectorDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate)
+		AccelerationParticleAffectorDef::AccelerationParticleAffectorDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate)
 		{
-			//TODO: !?
-			CS_LOG_FATAL("Unimplemented: AccelerationParticleAffectorDef::AccelerationParticleAffectorDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate = nullptr)");
+			//Acceleration
+			Json::Value jsonValue = in_paramsJson.get("AccelerationProperty", Json::nullValue);
+			CS_ASSERT(jsonValue.isNull() == false, "No angular acceleration property provided.");
+			m_accelerationProperty = ParticlePropertyFactory::CreateProperty<Core::Vector3>(jsonValue);
+
+			//call the loaded delegate if required.
+			if (in_asyncDelegate != nullptr)
+			{
+				in_asyncDelegate(this);
+			}
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------

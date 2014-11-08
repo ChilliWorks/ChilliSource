@@ -28,8 +28,6 @@
 
 #include <ChilliSource/Rendering/Particle/Emitter/ConeParticleEmitterDef.h>
 
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ConeParticleEmitter.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
@@ -140,7 +138,7 @@ namespace ChilliSource
 				m_radiusProperty = ParticlePropertyFactory::CreateProperty<f32>(jsonValue);
 			}
 
-			//Radius
+			//Angle
 			jsonValue = in_paramsJson.get("AngleProperty", Json::nullValue);
 			if (jsonValue.isNull() == false)
 			{
@@ -150,10 +148,7 @@ namespace ChilliSource
 			//call the loaded delegate if required.
 			if (in_loadedDelegate != nullptr)
 			{
-				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask([=]()
-				{
-					in_loadedDelegate(this);
-				});
+				in_loadedDelegate(this);
 			}
 		}
 		//----------------------------------------------------------------

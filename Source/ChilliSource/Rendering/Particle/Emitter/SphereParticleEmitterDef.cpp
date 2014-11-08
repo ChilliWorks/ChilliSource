@@ -29,11 +29,72 @@
 #include <ChilliSource/Rendering/Particle/Emitter/SphereParticleEmitterDef.h>
 
 #include <ChilliSource/Rendering/Particle/Emitter/SphereParticleEmitter.h>
+#include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
 namespace ChilliSource
 {
 	namespace Rendering
 	{
+		namespace
+		{
+			//-----------------------------------------------------------------
+			/// Parse an emit from type from the given string. This is case 
+			/// insensitive. If the string is not a valid emit from type this 
+			/// will error.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The string to parse.
+			///
+			/// @return the parsed emit from type.
+			//-----------------------------------------------------------------
+			SphereParticleEmitterDef::EmitFromType ParseEmitFromType(const std::string& in_emitFromTypeString)
+			{
+				std::string emitFromTypeString = in_emitFromTypeString;
+				Core::StringUtils::ToLowerCase(emitFromTypeString);
+
+				if (emitFromTypeString == "inside")
+				{
+					return SphereParticleEmitterDef::EmitFromType::k_inside;
+				}
+				else if (emitFromTypeString == "surface")
+				{
+					return SphereParticleEmitterDef::EmitFromType::k_surface;
+				}
+
+				CS_LOG_FATAL("Invalid emit from type: " + in_emitFromTypeString);
+				return SphereParticleEmitterDef::EmitFromType::k_inside;
+			}
+			//-----------------------------------------------------------------
+			/// Parse an emit direction type from the given string. This is case 
+			/// insensitive. If the string is not a valid direction from type this 
+			/// will error.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The string to parse.
+			///
+			/// @return the parsed emit direction type.
+			//-----------------------------------------------------------------
+			SphereParticleEmitterDef::EmitDirectionType ParseEmitDirectionType(const std::string& in_emitDirectionTypeString)
+			{
+				std::string emitDirectionTypeString = in_emitDirectionTypeString;
+				Core::StringUtils::ToLowerCase(emitDirectionTypeString);
+
+				if (emitDirectionTypeString == "awayfromcentre")
+				{
+					return SphereParticleEmitterDef::EmitDirectionType::k_awayFromCentre;
+				}
+				else if (emitDirectionTypeString == "random")
+				{
+					return SphereParticleEmitterDef::EmitDirectionType::k_random;
+				}
+
+				CS_LOG_FATAL("Invalid emit direction type: " + in_emitDirectionTypeString);
+				return SphereParticleEmitterDef::EmitDirectionType::k_awayFromCentre;
+			}
+		}
+
 		CS_DEFINE_NAMEDTYPE(SphereParticleEmitterDef);
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
@@ -49,8 +110,34 @@ namespace ChilliSource
 		SphereParticleEmitterDef::SphereParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate)
 			: ParticleEmitterDef(in_paramsJson)
 		{
-			//TODO: !?
-			CS_LOG_FATAL("Unimplemented: SphereParticleEmitterDef::SphereParticleEmitterDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_loadedDelegate)");
+			//Emit from type
+			Json::Value jsonValue = in_paramsJson.get("EmitFromType", Json::nullValue);
+			if (jsonValue.isNull() == false)
+			{
+				CS_ASSERT(jsonValue.isString(), "Emit from type must be a string.");
+				m_emitFromType = ParseEmitFromType(jsonValue.asString());
+			}
+
+			//Emit direction type
+			jsonValue = in_paramsJson.get("EmitDirectionType", Json::nullValue);
+			if (jsonValue.isNull() == false)
+			{
+				CS_ASSERT(jsonValue.isString(), "Emit direction type must be a string.");
+				m_emitDirectionType = ParseEmitDirectionType(jsonValue.asString());
+			}
+
+			//Radius
+			jsonValue = in_paramsJson.get("RadiusProperty", Json::nullValue);
+			if (jsonValue.isNull() == false)
+			{
+				m_radiusProperty = ParticlePropertyFactory::CreateProperty<f32>(jsonValue);
+			}
+
+			//call the loaded delegate if required.
+			if (in_loadedDelegate != nullptr)
+			{
+				in_loadedDelegate(this);
+			}
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------

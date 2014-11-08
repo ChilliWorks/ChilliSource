@@ -46,6 +46,9 @@ namespace ChilliSource
 		/// asynchronous delegate, in which case it is immutable after the
 		/// delegate is called.
 		///
+		/// A point emitter def only contains the parameters provided by the base
+		/// particle emitter.
+		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
 		class PointParticleEmitterDef final : public ParticleEmitterDef
@@ -72,10 +75,8 @@ namespace ChilliSource
 			/// Constructor. Initialises with parameters read from the given 
 			/// param dictionary.  If the async delegate is not null, then any 
 			/// resource loading will occur as a background task. Once complete 
-			/// the delegate delegate will be called.
-			///
-			/// The values read are described in the base class constructor
-			/// documentation.
+			/// the delegate delegate will be called. The parameters read from
+			/// json are described in the base class's class documentation.
 			///
 			/// @author Ian Copland
 			///
@@ -85,7 +86,7 @@ namespace ChilliSource
 			/// will be loaded as a background task. Once complete, this
 			/// delegate will be called.
 			//----------------------------------------------------------------
-			PointParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate = nullptr);
+			PointParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate);
 			//----------------------------------------------------------------
 			/// Allows querying of whether or not this implements the interface
 			/// described by the given Id.

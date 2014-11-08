@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_RENDERING_PARTICLE_EMITTER_CONEPARTICLEEMITTERDEF_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDef.h>
 
 namespace ChilliSource
@@ -135,7 +136,7 @@ namespace ChilliSource
 			/// will be loaded as a background task. Once complete, this
 			/// delegate will be called.
 			//----------------------------------------------------------------
-			ConeParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate = nullptr);
+			ConeParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate);
 			//----------------------------------------------------------------
 			/// Allows querying of whether or not this implements the interface
 			/// described by the given Id.
@@ -187,8 +188,8 @@ namespace ChilliSource
 		private:
 			EmitFromType m_emitFromType = EmitFromType::k_base;
 			EmitDirectionType m_emitDirectionType = EmitDirectionType::k_awayFromBase;
-			ParticlePropertyUPtr<f32> m_radiusProperty;
-			ParticlePropertyUPtr<f32> m_angleProperty;
+			ParticlePropertyUPtr<f32> m_radiusProperty = ParticlePropertyUPtr<f32>(new StaticParticleProperty<f32>(1.0f));
+			ParticlePropertyUPtr<f32> m_angleProperty = ParticlePropertyUPtr<f32>(new StaticParticleProperty<f32>(Core::MathUtils::k_pi / 4.0f));
 		};
 	}
 }

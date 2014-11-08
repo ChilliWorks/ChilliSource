@@ -34,6 +34,8 @@
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDef.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
 
+#include <json/json.h>
+
 namespace ChilliSource
 {
 	namespace Rendering
@@ -43,6 +45,10 @@ namespace ChilliSource
 		/// describes a particle effector which will change the colour of a particle 
 		/// from it's initial colour to the defined colour over the course of the 
 		/// particles life.
+		///
+		/// A colour over lifetime particle affector contains the following params:
+		///
+		/// "TargetColourProperty": The property describing the target colour. 
 		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
@@ -62,18 +68,18 @@ namespace ChilliSource
 			/// Constructor. Loads the params for the affector def from the 
 			/// given param dictionary. If the async delegate is not null, then
 			/// any resource loading will occur as a background task. Once 
-			/// complete the delegate delegate will be called.
-			///
-			/// The values read from param dictionary are:
-			///
-			/// "TargetColour": The property describing the target colour. 
+			/// complete the delegate delegate will be called. The parameters
+			/// read from json are described in the class documentation.
 			///
 			/// @author Ian Copland
 			///
-			/// @param The param dictionary.
-			/// @param The async delegate.
+			/// @param A json object describing the parameters for the particle
+			/// emitter def.
+			/// @param The loaded delegate. If this is supplied any resources
+			/// will be loaded as a background task. Once complete, this
+			/// delegate will be called.
 			//----------------------------------------------------------------
-			ColourOverLifetimeParticleAffectorDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate = nullptr);
+			ColourOverLifetimeParticleAffectorDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate);
 			//----------------------------------------------------------------
 			/// Allows querying of whether or not this implements the interface 
 			/// described by the given Id.

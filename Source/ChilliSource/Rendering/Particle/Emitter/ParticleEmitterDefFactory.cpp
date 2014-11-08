@@ -63,10 +63,10 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void ParticleEmitterDefFactory::OnInit()
 		{
-			//RegisterEmitterDef<CircleParticleEmitterDef>("Circle");
+			RegisterEmitterDef<CircleParticleEmitterDef>("Circle");
 			RegisterEmitterDef<ConeParticleEmitterDef>("Cone");
-			//RegisterEmitterDef<PointParticleEmitterDef>("Point");
-			//RegisterEmitterDef<SphereParticleEmitterDef>("Sphere");
+			RegisterEmitterDef<PointParticleEmitterDef>("Point");
+			RegisterEmitterDef<SphereParticleEmitterDef>("Sphere");
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------

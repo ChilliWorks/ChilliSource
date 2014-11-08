@@ -86,15 +86,27 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			bool OpenCSParticleFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Json::Value& out_jsonRoot)
 			{
-				if (Core::Utils::ReadJson(in_storageLocation, in_filePath, &out_jsonRoot) == false)
+				Core::FileStreamSPtr fileStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_read);
+
+				if (fileStream == nullptr || fileStream->IsOpen() == false || fileStream->IsBad() == true)
 				{
-					CS_LOG_ERROR("Failed to read csparticle file: " + in_filePath);
+					CS_LOG_ERROR("Could not open csparticle file: " + in_filePath);
 					return false;
+				}
+
+				std::string fileContents;
+				fileStream->GetAll(fileContents);
+				fileStream->Close();
+
+				Json::Reader jsonReader;
+				if (jsonReader.parse(fileContents, out_jsonRoot) == false)
+				{
+					CS_LOG_FATAL("Could not parse csparticle file '" + in_filePath + "' due to errors: \n" + jsonReader.getFormatedErrorMessages());
 				}
 
 				if (out_jsonRoot.isNull())
 				{
-					CS_LOG_ERROR("Failed to read csparticle file: " + in_filePath);
+					CS_LOG_ERROR("Could not parse csparticle file: " + in_filePath);
 					return false;
 				}
 
@@ -231,6 +243,39 @@ namespace ChilliSource
 				out_particleEffect->SetEmitterDef(in_emitterDefFactory->CreateEmitterDef(typeJson.asString(), emitterJson, nullptr));
 			}
 			//-----------------------------------------------------------------
+			/// Reads the affector defs from the csparticle json.
+			///			
+			/// This is not thread safe and must be run on the main thread.
+			/// ReadEmitterDefAsync() should be used for background loading.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The root json object
+			/// @param The particle affector def factory.
+			/// @param [Out] The particle effect that should be populated.
+			//-----------------------------------------------------------------
+			void ReadAffectorDefs(const Json::Value& in_jsonRoot, const ParticleAffectorDefFactory* in_affectorDefFactory, const ParticleEffectSPtr& out_particleEffect)
+			{
+				Json::Value affectorsJson = in_jsonRoot.get("Affectors", Json::nullValue);
+				if (affectorsJson.isNull() == false)
+				{
+					CS_ASSERT(affectorsJson.isArray() == true, "CSParticle file '" + out_particleEffect->GetName() + "' contains an 'Affectors' object that isn't an array.");
+
+					std::vector<ParticleAffectorDefUPtr> affectorDefs;
+					for (const Json::Value& affectorJson : affectorsJson)
+					{
+						CS_ASSERT(affectorJson.isObject() == true, "CSParticle file '" + out_particleEffect->GetName() + "' contains affector json that isn't an object.");
+
+						Json::Value typeJson = affectorJson.get("Type", Json::nullValue);
+						CS_ASSERT(typeJson.isNull() == false && typeJson.isString() == true, "CSParticle file '" + out_particleEffect->GetName() + "' has an affector with an invalid type.");
+
+						affectorDefs.push_back(in_affectorDefFactory->CreateAffectorDef(typeJson.asString(), affectorJson, nullptr));
+					}
+
+					out_particleEffect->SetAffectorDefs(std::move(affectorDefs));
+				}
+			}
+			//-----------------------------------------------------------------
 			/// Reads the CSParticle json file and populates the particle effect.
 			///
 			/// @author Ian Copland
@@ -255,6 +300,7 @@ namespace ChilliSource
 				ReadBaseValues(jsonRoot, out_particleEffect);
 				ReadDrawableDef(jsonRoot, in_drawableDefFactory, out_particleEffect);
 				ReadEmitterDef(jsonRoot, in_emitterDefFactory, out_particleEffect);
+				ReadAffectorDefs(jsonRoot, in_affectorDefFactory, out_particleEffect);
 
 				out_particleEffect->SetLoadState(Core::Resource::LoadState::k_loaded);
 			}

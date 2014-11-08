@@ -29,6 +29,7 @@
 #include <ChilliSource/Rendering/Particle/Affector/ColourOverLifetimeParticleAffectorDef.h>
 
 #include <ChilliSource/Rendering/Particle/Affector/ColourOverLifetimeParticleAffector.h>
+#include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
 namespace ChilliSource
 {
@@ -43,10 +44,18 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		ColourOverLifetimeParticleAffectorDef::ColourOverLifetimeParticleAffectorDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate)
+		ColourOverLifetimeParticleAffectorDef::ColourOverLifetimeParticleAffectorDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate)
 		{
-			//TODO: !?
-			CS_LOG_FATAL("Unimplemented: ColourOverLifetimeParticleAffectorDef::ColourOverLifetimeParticleAffectorDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate = nullptr)");
+			//Colour
+			Json::Value jsonValue = in_paramsJson.get("TargetColourProperty", Json::nullValue);
+			CS_ASSERT(jsonValue.isNull() == false, "No target colour property provided.");
+			m_targetColourProperty = ParticlePropertyFactory::CreateProperty<Core::Colour>(jsonValue);
+
+			//call the loaded delegate if required.
+			if (in_asyncDelegate != nullptr)
+			{
+				in_asyncDelegate(this);
+			}
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------

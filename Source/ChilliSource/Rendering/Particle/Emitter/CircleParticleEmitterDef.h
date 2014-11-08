@@ -46,6 +46,19 @@ namespace ChilliSource
 		/// asynchronous delegate, in which case it is immutable after the
 		/// delegate is called.
 		///
+		/// The following are properties that a that a circle particle emitter 
+		/// contains in addition to the standard emitter properties:
+		///
+		/// "EmitFromType": Where on the particle emitter particles can be
+		/// emitted from. The possible values are "Inside" or "Surface".
+		/// The default value is "Inside".
+		///
+		/// "EmitDirectionType": Describes how the direction of an emitted
+		/// particle will be generated. The possible values are "AwayFromCentre"
+		/// and "Random". This defaults to "AwayFromCentre".
+		///
+		/// "RadiusProperty": A property describing the radius of the emitter.
+		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
 		class CircleParticleEmitterDef final : public ParticleEmitterDef
@@ -103,20 +116,8 @@ namespace ChilliSource
 			/// Constructor. Initialises with parameters read from the given 
 			/// param dictionary.  If the async delegate is not null, then any 
 			/// resource loading will occur as a background task. Once complete 
-			/// the delegate delegate will be called.
-			///
-			/// In addition to the values read by the base class Particle 
-			/// Emitter, this will read the following from the param dictionary:
-			///
-			/// "EmitFromType": Where on the particle emitter particles can be
-			/// emitted from. The possible values are "Inside" or "Surface".
-			/// The default value is "Inside".
-			///
-			/// "EmitDirectionType": Describes how the direction of an emitted
-			/// particle will be generated. The possible values are "AwayFromCentre"
-			/// and "Random". This defaults to "AwayFromCentre".
-			///
-			/// "Radius": The radius of the emitter.
+			/// the delegate delegate will be called.The parameters read from
+			/// json are described in the class documentation.
 			///
 			/// @author Ian Copland
 			///
@@ -126,7 +127,7 @@ namespace ChilliSource
 			/// will be loaded as a background task. Once complete, this
 			/// delegate will be called.
 			//----------------------------------------------------------------
-			CircleParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate = nullptr);
+			CircleParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate);
 			//----------------------------------------------------------------
 			/// Allows querying of whether or not this implements the interface
 			/// described by the given Id.
@@ -171,7 +172,7 @@ namespace ChilliSource
 		private:
 			EmitFromType m_emitFromType = EmitFromType::k_inside;
 			EmitDirectionType m_emitDirectionType = EmitDirectionType::k_awayFromCentre;
-			ParticlePropertyUPtr<f32> m_radiusProperty;
+			ParticlePropertyUPtr<f32> m_radiusProperty = ParticlePropertyUPtr<f32>(new StaticParticleProperty<f32>(1.0f));
 		};
 	}
 }

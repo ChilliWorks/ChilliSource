@@ -63,10 +63,10 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void ParticleAffectorDefFactory::OnInit()
 		{
-			//RegisterAffectorDef<AccelerationParticleAffectorDef>("Acceleration");
-			//RegisterAffectorDef<AngularAccelerationParticleAffectorDef>("AngularAcceleration");
-			//RegisterAffectorDef<ColourOverLifetimeParticleAffectorDef>("ColourOverLifetime");
-			//RegisterAffectorDef<ScaleOverLifetimeParticleAffectorDef>("ScaleOverLifetime");
+			RegisterAffectorDef<AccelerationParticleAffectorDef>("Acceleration");
+			RegisterAffectorDef<AngularAccelerationParticleAffectorDef>("AngularAcceleration");
+			RegisterAffectorDef<ColourOverLifetimeParticleAffectorDef>("ColourOverLifetime");
+			RegisterAffectorDef<ScaleOverLifetimeParticleAffectorDef>("ScaleOverLifetime");
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------

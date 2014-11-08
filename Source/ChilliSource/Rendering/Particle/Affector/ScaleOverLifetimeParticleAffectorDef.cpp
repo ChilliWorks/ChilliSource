@@ -29,6 +29,7 @@
 #include <ChilliSource/Rendering/Particle/Affector/ScaleOverLifetimeParticleAffectorDef.h>
 
 #include <ChilliSource/Rendering/Particle/Affector/ScaleOverLifetimeParticleAffector.h>
+#include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
 namespace ChilliSource
 {
@@ -43,10 +44,18 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		ScaleOverLifetimeParticleAffectorDef::ScaleOverLifetimeParticleAffectorDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate)
+		ScaleOverLifetimeParticleAffectorDef::ScaleOverLifetimeParticleAffectorDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate)
 		{
-			//TODO: !?
-			CS_LOG_FATAL("Unimplemented: ScaleOverLifetimeParticleAffectorDef::ScaleOverLifetimeParticleAffectorDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate = nullptr)");
+			//scale
+			Json::Value jsonValue = in_paramsJson.get("ScaleProperty", Json::nullValue);
+			CS_ASSERT(jsonValue.isNull() == false, "No scale property provided.");
+			m_scaleProperty = ParticlePropertyFactory::CreateProperty<Core::Vector2>(jsonValue);
+
+			//call the loaded delegate if required.
+			if (in_asyncDelegate != nullptr)
+			{
+				in_asyncDelegate(this);
+			}
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
