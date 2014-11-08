@@ -122,6 +122,22 @@ namespace ChilliSource
 			//------------------------------------------------------------------
 			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, 
 				const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+			//------------------------------------------------------------------
+			/// Tries to acquire references to the drawable, emitter and affector
+			/// definition factories. If they don't exist this will try to assert.
+			///
+			/// @author Ian Copland
+			//------------------------------------------------------------------
+			void OnInit() override;
+			//------------------------------------------------------------------
+			/// Cleans up the handles to the drawable, emitter and affector
+			/// definition factories.
+			///
+			/// @author Ian Copland
+			//------------------------------------------------------------------
+			void OnDestroy() override;
+
+			const ParticleDrawableDefFactory* m_drawableDefFactory = nullptr;
 		};
 	}
 }

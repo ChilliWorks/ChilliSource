@@ -33,6 +33,8 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDef.h>
 
+#include <json/json.h>
+
 namespace ChilliSource
 {
 	namespace Rendering
@@ -46,6 +48,33 @@ namespace ChilliSource
 		/// to this is if it was created from a param dictionary with a 
 		/// asynchronous delegate, in which case it is immutable after the
 		/// delegate returns.
+		///
+		/// The following are the parameters of a billboard particle drawable
+		/// def:
+		///
+		/// "MaterialLocation": The storage location of the material that 
+		/// will be used to render the particles.
+		///
+		/// "MaterialPath": The file path of the material that will be used
+		/// to render the particles.
+		///
+		/// "AtlasLocation": The storage location of the texture atlas 
+		/// that will be used to render the particles.
+		///
+		/// "AtlasPath": The file path of the texture atlas that will be 
+		/// used to render the particles.
+		///
+		/// "AtlasIds": A comma separated list of texture atlas Ids that 
+		/// will be used to render the particles.
+		///
+		/// "ImageSelectionType": A string describing the method used to 
+		/// select the atlas Id. Possible values are "Random" or "Cycle".
+		///
+		/// "ParticleSize": The base size for a billboard.
+		///
+		/// "SizePolicy": The size policy descibing how the particle is 
+		/// rendered when the rendered image has a different aspect ratio
+		/// to the given size.
 		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
@@ -78,8 +107,7 @@ namespace ChilliSource
 				k_useWidthMaintainingAspect,
 				k_useHeightMaintainingAspect,
 				k_fitMaintainingAspect,
-				k_fillMaintainingAspect,
-				k_totalNum
+				k_fillMaintainingAspect
 			};
 			//----------------------------------------------------------------
 			/// Constructor for creating a billboard particle drawable
@@ -130,39 +158,14 @@ namespace ChilliSource
 			BillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::vector<std::string>& in_atlasIds, ImageSelectionType in_imageSelectionType, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy);
 			//----------------------------------------------------------------
 			/// Constructor. Loads the params for the drawable def from the 
-			/// given param dictionary. If the async delegate is not null, then
+			/// given json params. If the async delegate is not null, then
 			/// any resource loading will occur as a background task. Once 
-			/// complete the delegate delegate will be called.
-			///
-			/// The values read from param dictionary are:
-			///
-			/// "MaterialLocation": The storage location of the material that 
-			/// will be used to render the particles.
-			///
-			/// "MaterialPath": The file path of the material that will be used
-			/// to render the particles.
-			///
-			/// "AtlasLocation": The storage location of the texture atlas 
-			/// that will be used to render the particles.
-			///
-			/// "AtlasPath": The file path of the texture atlas that will be 
-			/// used to render the particles.
-			///
-			/// "AtlasIds": A comma separated list of texture atlas Ids that 
-			/// will be used to render the particles.
-			///
-			/// "ImageSelectionType": A string describing the method used to 
-			/// select the atlas Id. Possible values are "Random" or "Cycle".
-			///
-			/// "ParticleSize": The base size for a billboard.
-			///
-			/// "SizePolicy": The size policy descibing how the particle is 
-			/// rendered when the rendered image has a different aspect ratio
-			/// to the given size.
+			/// complete the delegate delegate will be called. The values read 
+			/// from param dictionary are described in the class documentation.
 			///
 			/// @author Ian Copland
 			//----------------------------------------------------------------
-			BillboardParticleDrawableDef(const Core::ParamDictionary& in_params, const LoadedDelegate& in_asyncDelegate = nullptr);
+			BillboardParticleDrawableDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate = nullptr);
 			//----------------------------------------------------------------
 			/// Allows querying of whether or not this implements the interface 
 			/// described by the given Id.
@@ -229,12 +232,31 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			SizePolicy GetSizePolicy() const;
 		private:
+			//----------------------------------------------------------------
+			/// Loads the billboard resources on the main thread.
+			///
+			/// @author Ian Copland
+			///
+			/// @param A json object describing the resources.
+			//----------------------------------------------------------------
+			void LoadResources(const Json::Value& in_paramsJson);
+			//----------------------------------------------------------------
+			/// Loads the billboard resources on a background thread. Once
+			/// complete the async delegate will be called.
+			///
+			/// @author Ian Copland
+			///
+			/// @param A json object describing the resources.
+			/// @param The async delegate.
+			//----------------------------------------------------------------
+			void LoadResourcesAsync(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate);
+
 			MaterialCSPtr m_material;
 			TextureAtlasCSPtr m_textureAtlas;
 			std::vector<std::string> m_atlasIds;
 			ImageSelectionType m_imageSelectionType = ImageSelectionType::k_cycle;
-			Core::Vector2 m_particleSize;
-			SizePolicy m_sizePolicy;
+			Core::Vector2 m_particleSize = Core::Vector2::k_one;
+			SizePolicy m_sizePolicy = SizePolicy::k_none;
 		};
 	}
 }

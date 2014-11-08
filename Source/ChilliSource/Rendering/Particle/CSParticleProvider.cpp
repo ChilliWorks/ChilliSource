@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
+#include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDefFactory.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
 #include <json/json.h>
@@ -109,22 +110,25 @@ namespace ChilliSource
 			{
 				//Duration
 				Json::Value jsonValue = in_jsonRoot.get("Duration", Json::nullValue);
-				if (jsonValue.isNull() == false && jsonValue.isString() == true)
+				if (jsonValue.isNull() == false)
 				{
+					CS_ASSERT(jsonValue.isString(), "Duration value must be a string.");
 					out_particleEffect->SetDuration(Core::ParseF32(jsonValue.asString()));
 				}
 
 				//Max Particles
 				jsonValue = in_jsonRoot.get("MaxParticles", Json::nullValue);
-				if (jsonValue.isNull() == false && jsonValue.isString() == true)
+				if (jsonValue.isNull() == false)
 				{
+					CS_ASSERT(jsonValue.isString(), "Max particles value must be a string.");
 					out_particleEffect->SetMaxParticles(Core::ParseU32(jsonValue.asString()));
 				}
 
 				//Simulation Space
 				jsonValue = in_jsonRoot.get("SimulationSpace", Json::nullValue);
-				if (jsonValue.isNull() == false && jsonValue.isString() == true)
+				if (jsonValue.isNull() == false)
 				{
+					CS_ASSERT(jsonValue.isString(), "SimulationSpace value must be a string.");
 					out_particleEffect->SetSimulationSpace(ParseSimulationSpace(jsonValue.asString()));
 				}
 
@@ -177,36 +181,48 @@ namespace ChilliSource
 				}
 			}
 			//-----------------------------------------------------------------
+			/// Reads the drawable def from the csparticle json.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The root json object
+			/// @param The particle drawable def factory.
+			/// @param [Out] The particle effect that should be populated.
+			//-----------------------------------------------------------------
+			void ReadDrawableDef(const Json::Value& in_jsonRoot, const ParticleDrawableDefFactory* in_drawableDefFactory, const ParticleEffectSPtr& out_particleEffect)
+			{
+				Json::Value jsonDrawable = in_jsonRoot.get("Drawable", Json::nullValue);
+				CS_ASSERT(jsonDrawable.isNull() == false && jsonDrawable.isObject() == true, "CSParticle file '" + out_particleEffect->GetName() + "' does not contain a drawable.");
+
+				Json::Value jsonType = jsonDrawable.get("Type", Json::nullValue);
+				CS_ASSERT(jsonType.isNull() == false && jsonType.isString() == true, "CSParticle file '" + out_particleEffect->GetName() + "' has a drawable with an invalid type.");
+
+				std::string typeName = jsonType.asString();
+
+				out_particleEffect->SetDrawableDef(in_drawableDefFactory->CreateDrawableDef(typeName, jsonDrawable, nullptr));
+			}
+			//-----------------------------------------------------------------
 			/// Reads the CSParticle json file and populates the particle effect.
-			/// If an async load delete is provided any resource loading will
-			/// be executed on a background thread. Once complete the async
-			/// load delegate will be called on the main thread.
 			///
 			/// @author Ian Copland
 			///
 			/// @param The storage location of the csparticle json file.
 			/// @param The file path to the csparticle json file.
-			/// @param The async load delegate. This can be null.
+			/// @param The particle drawable def factory.
 			/// @param [Out] The particle effect that should be populated.
 			//-----------------------------------------------------------------
-			void LoadCSParticle(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate,
+			void LoadCSParticle(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const ParticleDrawableDefFactory* in_drawableDefFactory,
 				const ParticleEffectSPtr& out_particleEffect)
 			{
 				Json::Value jsonRoot;
 				if (OpenCSParticleFile(in_storageLocation, in_filePath, jsonRoot) == false)
 				{
 					out_particleEffect->SetLoadState(Core::Resource::LoadState::k_failed);
-					if (in_delegate != nullptr)
-					{
-						Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_particleEffect));
-					}
 					return;
 				}
 
 				ReadBaseValues(jsonRoot, out_particleEffect);
-
-
-				//TODO: continue here...
+				ReadDrawableDef(jsonRoot, in_drawableDefFactory, out_particleEffect);
 			}
 		}
 
@@ -246,7 +262,7 @@ namespace ChilliSource
 			CS_ASSERT(out_resource->IsA<ParticleEffect>() == true, "resource must be a particle effect.");
 
 			ParticleEffectSPtr particleEffect = std::static_pointer_cast<ParticleEffect>(out_resource);
-			LoadCSParticle(in_location, in_filePath, nullptr, particleEffect);
+			LoadCSParticle(in_location, in_filePath, m_drawableDefFactory, particleEffect);
 		}
 		//-----------------------------------------------------------------
 		//------------------------------------------------------------------
@@ -258,7 +274,20 @@ namespace ChilliSource
 			CS_ASSERT(in_delegate != nullptr, "Async load delegate cannot be null.");
 
 			ParticleEffectSPtr particleEffect = std::static_pointer_cast<ParticleEffect>(out_resource);
-			LoadCSParticle(in_location, in_filePath, in_delegate, particleEffect);
+			//LoadCSParticleAsync(in_location, in_filePath, m_drawableDefFactory, in_delegate, particleEffect);
+		}
+		//------------------------------------------------------------------
+		//------------------------------------------------------------------
+		void CSParticleProvider::OnInit()
+		{
+			m_drawableDefFactory = Core::Application::Get()->GetSystem<ParticleDrawableDefFactory>();
+			CS_ASSERT(m_drawableDefFactory != nullptr, "CSParticle Provider is missing required system: ParticleDrawableDefFactory.");
+		}
+		//------------------------------------------------------------------
+		//------------------------------------------------------------------
+		void CSParticleProvider::OnDestroy()
+		{
+			m_drawableDefFactory = nullptr;
 		}
 	}
 }
