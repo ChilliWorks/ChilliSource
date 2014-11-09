@@ -52,27 +52,12 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
-		ParticleEmitterDefUPtr ParticleEmitterDefFactory::CreateEmitterDef(const std::string& in_name, const Json::Value& in_jsonParams, const ParticleEmitterDef::LoadedDelegate& in_asyncLoadDelegate) const
+		void ParticleEmitterDefFactory::RegisterDefaults()
 		{
-			auto delegateIt = m_creatorDelegateMap.find(in_name);
-			CS_ASSERT(delegateIt != m_creatorDelegateMap.end(), "Could not create particle emitter def with name: " + in_name);
-
-			return delegateIt->second(in_jsonParams, in_asyncLoadDelegate);
-		}
-		//-----------------------------------------------------------------
-		//-----------------------------------------------------------------
-		void ParticleEmitterDefFactory::OnInit()
-		{
-			RegisterEmitterDef<CircleParticleEmitterDef>("Circle");
-			RegisterEmitterDef<ConeParticleEmitterDef>("Cone");
-			RegisterEmitterDef<PointParticleEmitterDef>("Point");
-			RegisterEmitterDef<SphereParticleEmitterDef>("Sphere");
-		}
-		//-----------------------------------------------------------------
-		//-----------------------------------------------------------------
-		void ParticleEmitterDefFactory::OnDestroy()
-		{
-			m_creatorDelegateMap.clear();
+			Register<CircleParticleEmitterDef>("Circle");
+			Register<ConeParticleEmitterDef>("Cone");
+			Register<PointParticleEmitterDef>("Point");
+			Register<SphereParticleEmitterDef>("Sphere");
 		}
 	}
 }

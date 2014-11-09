@@ -49,24 +49,9 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
-		ParticleDrawableDefUPtr ParticleDrawableDefFactory::CreateDrawableDef(const std::string& in_name, const Json::Value& in_jsonParams, const ParticleDrawableDef::LoadedDelegate& in_asyncLoadDelegate) const
+		void ParticleDrawableDefFactory::RegisterDefaults()
 		{
-			auto delegateIt = m_creatorDelegateMap.find(in_name);
-			CS_ASSERT(delegateIt != m_creatorDelegateMap.end(), "Could not create particle drawable def with name: " + in_name);
-
-			return delegateIt->second(in_jsonParams, in_asyncLoadDelegate);
-		}
-		//-----------------------------------------------------------------
-		//-----------------------------------------------------------------
-		void ParticleDrawableDefFactory::OnInit()
-		{
-			RegisterDrawableDef<BillboardParticleDrawableDef>("Billboard");
-		}
-		//-----------------------------------------------------------------
-		//-----------------------------------------------------------------
-		void ParticleDrawableDefFactory::OnDestroy()
-		{
-			m_creatorDelegateMap.clear();
+			Register<BillboardParticleDrawableDef>("Billboard");
 		}
 	}
 }

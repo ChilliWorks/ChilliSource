@@ -30,8 +30,8 @@
 #define _ICENGINE_RENDERING_PARTICLES_PARTICLEEMITTERDEFFACTORY_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/GenericFactory.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
-#include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDef.h>
 
 #include <json/json.h>
@@ -51,7 +51,7 @@ namespace ChilliSource
 		///
 		/// @author Ian Copland
 		//--------------------------------------------------------------------------
-		class ParticleEmitterDefFactory final : public Core::AppSystem
+		class ParticleEmitterDefFactory final : public Core::GenericFactory<ParticleEmitterDef>
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(ParticleEmitterDefFactory);
@@ -66,51 +66,8 @@ namespace ChilliSource
 			/// @return Whether this implements the interface.
 			//-----------------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-			//-----------------------------------------------------------------
-			/// Registers a new particle emitter definition type with the 
-			/// factory. Future calls to CreateEmitterDef() with the given name 
-			/// will instantiate a particle emitter definition of this type. 
-			/// The given name must be unique, this will try to assert if it is
-			/// not.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The name of the emitter def.
-			//-----------------------------------------------------------------
-			template <typename TEmitterDefType> void RegisterEmitterDef(const std::string& in_typeName);
-			//-----------------------------------------------------------------
-			/// Creates an instance of the particle emitter def registered 
-			/// under the given name with the given json description. If a 
-			/// async load delegate is provided then any resources will be
-			/// asynchronously loaded and the async load delegate called on
-			/// completion. Other-wise resources are loaded on the the current
-			/// thread, which must be the main thread.
-			///
-			/// This is thread-safe when a async load delegate is supplied.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The name of the emitter def.
-			/// @param A json object describing the parameters of the emitter
-			/// def.
-			/// @param The async load delegate. Can be null.
-			///
-			/// @return The new particle emitter def.
-			//-----------------------------------------------------------------
-			ParticleEmitterDefUPtr CreateEmitterDef(const std::string& in_name, const Json::Value& in_jsonParams, const ParticleEmitterDef::LoadedDelegate& in_asyncLoadDelegate) const;
 		private:
 			friend class Core::Application;
-			//-----------------------------------------------------------------
-			/// A delegate which is used to instantiate the registered particle
-			/// emitter def types.
-			///
-			/// @author Ian Copland
-			///
-			/// @param A json object describing the parameters to create the
-			/// particle emitter def with.
-			/// @param The async load delegate. Can be null.
-			//-----------------------------------------------------------------
-			using CreatorDelegate = std::function<ParticleEmitterDefUPtr(const Json::Value& in_jsonParams, const ParticleEmitterDef::LoadedDelegate& in_asyncLoadDelegate)>;
 			//-----------------------------------------------------------------
 			/// A factory method for creating new instances of a particle 
 			/// emitter def factory.
@@ -128,44 +85,12 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			ParticleEmitterDefFactory() = default;
 			//-----------------------------------------------------------------
-			/// Creates a new instance of the emitter def of the given type.
-			/// This is the method refered to by the creator delegates.
-			///
-			/// @author Ian Copland
-			///
-			/// @param A json object describing the parameters for the particle
-			/// emitter def.
-			/// @param The async load delegate. Can be null.
-			//-----------------------------------------------------------------
-			template <typename TEmitterDefType> std::unique_ptr<TEmitterDefType> CreateEmitterDef(const Json::Value& in_jsonParams, const ParticleEmitterDef::LoadedDelegate& in_asyncLoadDelegate);
-			//-----------------------------------------------------------------
-			/// Initialised the factory, registering all default emitter def
-			/// types.
+			/// Registers the default particle emitter definitions.
 			///
 			/// @author Ian Copland
 			//-----------------------------------------------------------------
-			void OnInit() override;
-			//-----------------------------------------------------------------
-			/// Deregisters all emitter def types.
-			///
-			/// @author Ian Copland
-			//-----------------------------------------------------------------
-			void OnDestroy() override;
-
-			std::unordered_map<std::string, CreatorDelegate> m_creatorDelegateMap;
+			void RegisterDefaults() override;
 		};
-		//-----------------------------------------------------------------
-		//-----------------------------------------------------------------
-		template <typename TEmitterDefType> void ParticleEmitterDefFactory::RegisterEmitterDef(const std::string& in_typeName)
-		{
-			m_creatorDelegateMap.insert(std::make_pair(in_typeName, Core::MakeDelegate(this, &ParticleEmitterDefFactory::CreateEmitterDef<TEmitterDefType>)));
-		}
-		//-----------------------------------------------------------------
-		//-----------------------------------------------------------------
-		template <typename TEmitterDefType> std::unique_ptr<TEmitterDefType> ParticleEmitterDefFactory::CreateEmitterDef(const Json::Value& in_jsonParams, const ParticleEmitterDef::LoadedDelegate& in_asyncLoadDelegate)
-		{
-			return std::unique_ptr<TEmitterDefType>(new TEmitterDefType(in_jsonParams, in_asyncLoadDelegate));
-		}
 	}
 }
 

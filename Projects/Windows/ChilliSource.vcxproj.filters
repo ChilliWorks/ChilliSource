@@ -1862,5 +1862,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactory.h">
       <Filter>ChilliSource\Rendering\Particle\Property</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\GenericFactory.h">
+      <Filter>ChilliSource\Core\Base</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

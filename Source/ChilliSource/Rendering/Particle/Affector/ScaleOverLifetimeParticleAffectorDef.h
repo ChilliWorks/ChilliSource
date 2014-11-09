@@ -79,7 +79,7 @@ namespace ChilliSource
 			/// will be loaded as a background task. Once complete, this
 			/// delegate will be called.
 			//----------------------------------------------------------------
-			ScaleOverLifetimeParticleAffectorDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate);
+			ScaleOverLifetimeParticleAffectorDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate = nullptr);
 			//----------------------------------------------------------------
 			/// Allows querying of whether or not this implements the interface 
 			/// described by the given Id.

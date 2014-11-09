@@ -52,27 +52,12 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
-		ParticleAffectorDefUPtr ParticleAffectorDefFactory::CreateAffectorDef(const std::string& in_name, const Json::Value& in_jsonParams, const ParticleAffectorDef::LoadedDelegate& in_asyncLoadDelegate) const
+		void ParticleAffectorDefFactory::RegisterDefaults()
 		{
-			auto delegateIt = m_creatorDelegateMap.find(in_name);
-			CS_ASSERT(delegateIt != m_creatorDelegateMap.end(), "Could not create particle affector def with name: " + in_name);
-
-			return delegateIt->second(in_jsonParams, in_asyncLoadDelegate);
-		}
-		//-----------------------------------------------------------------
-		//-----------------------------------------------------------------
-		void ParticleAffectorDefFactory::OnInit()
-		{
-			RegisterAffectorDef<AccelerationParticleAffectorDef>("Acceleration");
-			RegisterAffectorDef<AngularAccelerationParticleAffectorDef>("AngularAcceleration");
-			RegisterAffectorDef<ColourOverLifetimeParticleAffectorDef>("ColourOverLifetime");
-			RegisterAffectorDef<ScaleOverLifetimeParticleAffectorDef>("ScaleOverLifetime");
-		}
-		//-----------------------------------------------------------------
-		//-----------------------------------------------------------------
-		void ParticleAffectorDefFactory::OnDestroy()
-		{
-			m_creatorDelegateMap.clear();
+			Register<AccelerationParticleAffectorDef>("Acceleration");
+			Register<AngularAccelerationParticleAffectorDef>("AngularAcceleration");
+			Register<ColourOverLifetimeParticleAffectorDef>("ColourOverLifetime");
+			Register<ScaleOverLifetimeParticleAffectorDef>("ScaleOverLifetime");
 		}
 	}
 }

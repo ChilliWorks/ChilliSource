@@ -136,7 +136,7 @@ namespace ChilliSource
 			/// will be loaded as a background task. Once complete, this
 			/// delegate will be called.
 			//----------------------------------------------------------------
-			ConeParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate);
+			ConeParticleEmitterDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_loadedDelegate = nullptr);
 			//----------------------------------------------------------------
 			/// Allows querying of whether or not this implements the interface
 			/// described by the given Id.
