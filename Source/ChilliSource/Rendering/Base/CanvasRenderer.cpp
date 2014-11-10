@@ -80,13 +80,15 @@ namespace ChilliSource
             ///
             /// @param Character
             /// @param Font
+            /// @param The absolute character spacing offset.
+            /// @param The text scale factor.
             //----------------------------------------------------------------------------
-            f32 GetCharacterWidth(Core::UTF8Char in_character, const FontCSPtr& in_font)
+            f32 GetCharacterWidth(Core::UTF8Char in_character, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_textScale)
             {
                 Font::CharacterInfo charInfo;
                 if(in_font->TryGetCharacterInfo(in_character, charInfo) == true)
                 {
-                    return charInfo.m_advance;
+                    return (charInfo.m_advance + in_absCharSpacingOffset) * in_textScale;
                 }
 
                 return 0.0f;
@@ -110,21 +112,22 @@ namespace ChilliSource
             /// @param Iterator pointing to start
             /// @param Iterator pointing to end
             /// @param Font
+            /// @param The absolute character spacing offset.
+            /// @param The text scale factor.
             //----------------------------------------------------------------------------
-            f32 CalculateDistanceToNextBreak(std::string::const_iterator in_itStart, std::string::const_iterator in_itEnd, const FontCSPtr& in_font)
+            f32 CalculateDistanceToNextBreak(std::string::const_iterator in_itStart, std::string::const_iterator in_itEnd, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_textScale)
             {
                 f32 totalWidth = 0.0f;
-
+                
                 while(in_itStart < in_itEnd)
                 {
                     auto nextCharacter = Core::UTF8StringUtils::Next(in_itStart);
-
-                    if(IsBreakableCharacter(nextCharacter) == true)
+                    if (IsBreakableCharacter(nextCharacter) == true)
                     {
                         break;
                     }
-
-                    totalWidth += GetCharacterWidth(nextCharacter, in_font);
+                    
+                    totalWidth += GetCharacterWidth(nextCharacter, in_font, in_absCharSpacingOffset, in_textScale);
                 }
 
                 return totalWidth;
@@ -172,10 +175,11 @@ namespace ChilliSource
             /// @param Text (UTF-8)
             /// @param Font
             /// @param Text scale
+            /// @param The absolute character spacing offset.
             /// @param Bounds
             /// @param [Out] Array of lines split to fit in bounds
             //----------------------------------------------------------------------------
-            void SplitByBounds(const std::string& in_text, const FontCSPtr& in_font, f32 in_textScale, const Core::Vector2& in_bounds, std::vector<std::string>& out_lines)
+            void SplitByBounds(const std::string& in_text, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_textScale, const Core::Vector2& in_bounds, std::vector<std::string>& out_lines)
             {
                 f32 maxLineWidth = in_bounds.x;
 
@@ -186,41 +190,46 @@ namespace ChilliSource
                 while(it < in_text.end())
                 {
                     auto character = Core::UTF8StringUtils::Next(it);
-                    currentLineWidth += (GetCharacterWidth(character, in_font) * in_textScale);
-
+                    u32 characterWidth = GetCharacterWidth(character, in_font, in_absCharSpacingOffset, in_textScale);
+                    
                     //If we come across a character on which we can wrap we need
                     //to check ahead to see if the next space is within the bounds or
                     //whether we need to wrap now
                     if(IsBreakableCharacter(character) == true)
                     {
-                        f32 nextBreakWidth = currentLineWidth + (CalculateDistanceToNextBreak(it, in_text.end(), in_font) * in_textScale);
+                        f32 nextBreakWidth = currentLineWidth + characterWidth + CalculateDistanceToNextBreak(it, in_text.end(), in_font, in_absCharSpacingOffset, in_textScale);
 
                         if(nextBreakWidth >= maxLineWidth && line.size() > 0)
                         {
                             out_lines.push_back(line);
                             line.clear();
                             currentLineWidth = 0.0f;
+                            
+                            //since we've broken mid line we don't want to start the next line with
+                            //whitespace. To ensure this we want to jump the cursor forward to find
+                            //the next non-breakable character.
+                            auto nextIt = it;
+                            Core::UTF8Char nextCharacter = Core::UTF8StringUtils::Next(nextIt);
+                            while (IsBreakableCharacter(nextCharacter) == true)
+                            {
+                                it = nextIt;
+                                nextCharacter = Core::UTF8StringUtils::Next(nextIt);
+                            }
+                            
                             continue;
                         }
                     }
-
-                    //If text has no characters to break on then we need break anyway should
-                    //we exceed the bounds.
-                    f32 nextCharacterWidth = 0.0f;
-                    if(it < in_text.end())
-                    {
-                        auto itNext = it;
-                        auto nextCharacter = Core::UTF8StringUtils::Next(itNext);
-                        nextCharacterWidth = GetCharacterWidth(nextCharacter, in_font) * in_textScale;
-                    }
-
-                    if((currentLineWidth + nextCharacterWidth) >= maxLineWidth)
+                    
+                    //If this is not a breakable character, but it still beyond the bounds
+                    //then wrap anyway even though we are mid word.
+                    else if((currentLineWidth + characterWidth) >= maxLineWidth)
                     {
                         out_lines.push_back(line);
                         line.clear();
                         currentLineWidth = 0.0f;
                     }
-
+                    
+                    currentLineWidth += characterWidth;
                     Core::UTF8StringUtils::Append(character, line);
                 }
 
@@ -410,6 +419,82 @@ namespace ChilliSource
                 out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos.z = -k_nearClipDistance;
                 out_sprite.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos.w = 1.0f;
             }
+            //----------------------------------------------------------------------------
+            /// Adds an ellipsis to the end of the line of text without increasing the
+            /// width of the line of text beyond the given length. If required, characters
+            /// will be removed from the string.
+            ///
+            /// If the font doesn't contain '.' the original string will simply be returned.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The string to add the ellipsis to.
+            /// @param The font the string will be renderered with.
+            /// @param The absolute pixel offset to regular character spacing.
+            /// @param The text scale factor.
+            /// @param The maximum pixel width of the text.
+            ///
+            /// @return The output string with ellipsis
+            //----------------------------------------------------------------------------
+            std::string AppendEllipsis(const std::string& in_text, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_textScale, f32 in_maxTextWidth)
+            {
+                const u32 k_numDots = 3;
+                
+                //Check the font contains '.' for building the ellipsis.
+                Font::CharacterInfo charInfo;
+                if (in_font->TryGetCharacterInfo((Core::UTF8Char)'.', charInfo) == false)
+                {
+                    return in_text;
+                }
+                
+                //get the width of an ellipsis
+                f32 dotWidth = GetCharacterWidth((Core::UTF8Char)'.', in_font, in_absCharSpacingOffset, in_textScale);
+                f32 ellipsisWidth = dotWidth * k_numDots;
+                
+                //if there is space for some of the text and the elipsis, then calculate the output string.
+                std::string outputText;
+                if (in_maxTextWidth > ellipsisWidth)
+                {
+                    f32 currentLineWidth = 0.0f;
+                    auto it = in_text.begin();
+                    while(it < in_text.end())
+                    {
+                        auto character = Core::UTF8StringUtils::Next(it);
+                        
+                        currentLineWidth += GetCharacterWidth(character, in_font, in_absCharSpacingOffset, in_textScale);
+                        if (currentLineWidth > in_maxTextWidth - ellipsisWidth)
+                        {
+                            break;
+                        }
+                        
+                        Core::UTF8StringUtils::Append(character, outputText);
+                    }
+                    
+                    //append the ellipsis
+                    for (u32 i = 0; i < k_numDots; ++i)
+                    {
+                        Core::UTF8StringUtils::Append((Core::UTF8Char)'.', outputText);
+                    }
+                }
+                
+                //otherwise don't bother trying to use the input text and just build the ellipis text.
+                else
+                {
+                    f32 currentLineWidth = 0.0f;
+                    for (u32 i = 0; i < k_numDots; ++i)
+                    {
+                        currentLineWidth += dotWidth;
+                        if (currentLineWidth > in_maxTextWidth)
+                        {
+                            break;
+                        }
+                        
+                        Core::UTF8StringUtils::Append((Core::UTF8Char)'.', outputText);
+                    }
+                }
+                
+                return outputText;
+            }
         }
 
         CS_DEFINE_NAMEDTYPE(CanvasRenderer);
@@ -489,9 +574,6 @@ namespace ChilliSource
             m_canvasSprite.pMaterial = nullptr;
 		}
         //----------------------------------------------------------
-		/// Render
-		///
-		/// Draw the UI
 		//----------------------------------------------------------
 		void CanvasRenderer::Render(UI::Canvas* in_canvas)
 		{
@@ -600,7 +682,7 @@ namespace ChilliSource
             std::vector<std::string> linesOnBounds;
             for(const auto& line : linesOnNewLine)
             {
-                SplitByBounds(line, in_font, in_textScale, in_bounds, linesOnBounds);
+                SplitByBounds(line, in_font, in_absCharSpacingOffset, in_textScale, in_bounds, linesOnBounds);
             }
 
             //Only build as many lines as we have been told to. If ZERO is specified
@@ -611,6 +693,12 @@ namespace ChilliSource
             f32 maxHeight = in_bounds.y;
             numLines = std::min(numLines, (u32)(maxHeight/lineHeight));
 
+            //add an ellipsis if the text doesn't fit.
+            if (linesOnBounds.size() > numLines && numLines > 0)
+            {
+                linesOnBounds[numLines-1] = AppendEllipsis(linesOnBounds[numLines-1], in_font, in_absCharSpacingOffset, in_textScale, in_bounds.x);
+            }
+            
             //The middle of the text label is 0,0. We want to be starting at the top left.
             f32 cursorXReturnPos = -in_bounds.x * 0.5f;
             f32 cursorX = cursorXReturnPos;

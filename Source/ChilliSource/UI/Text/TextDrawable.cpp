@@ -305,6 +305,12 @@ namespace ChilliSource
         //--------------------------------------------------------------------
         void TextDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
         {
+            if (m_cachedSize != in_absSize)
+            {
+                m_cachedSize = in_absSize;
+                m_invalidateCache = true;
+            }
+            
             if (m_invalidateCache == true)
             {
                 m_invalidateCache = false;

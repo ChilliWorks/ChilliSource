@@ -338,6 +338,7 @@ namespace ChilliSource
             f32 m_textScale = 1.0f;
             
             bool m_invalidateCache = true;
+            Core::Vector2 m_cachedSize;
             Rendering::CanvasRenderer::BuiltText m_cachedText;
         };
     }
