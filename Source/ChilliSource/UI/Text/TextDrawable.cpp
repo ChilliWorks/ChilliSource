@@ -76,68 +76,6 @@ namespace ChilliSource
                 {PropertyType::k_int, k_maxNumberOfLinesKey},
                 {PropertyType::k_float, k_textScaleKey}
             };
-            //-------------------------------------------------------------------
-            /// Parses a Horizonal Justification string. If the string is not
-            /// valid, this will error.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The horizonal justification string.
-            ///
-            /// @return The horizontal justification string.
-            //-------------------------------------------------------------------
-            TextDrawable::HorizontalJustification ParseHorizontalJustification(const std::string& in_horizonalJustificationString)
-            {
-                std::string horizonalJustificationStringLower = in_horizonalJustificationString;
-                Core::StringUtils::ToLowerCase(horizonalJustificationStringLower);
-                
-                if (horizonalJustificationStringLower == "left")
-                {
-                    return TextDrawable::HorizontalJustification::k_left;
-                }
-                else if (horizonalJustificationStringLower == "centre")
-                {
-                    return TextDrawable::HorizontalJustification::k_centre;
-                }
-                else if (horizonalJustificationStringLower == "right")
-                {
-                    return TextDrawable::HorizontalJustification::k_right;
-                }
-                
-                CS_LOG_FATAL("Invalid horizontal justification.");
-                return TextDrawable::HorizontalJustification::k_centre;
-            }
-            //-------------------------------------------------------------------
-            /// Parses a Vertical Justification string. If the string is not
-            /// valid, this will error.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The vertical justification string.
-            ///
-            /// @return The vertical justification string.
-            //-------------------------------------------------------------------
-            TextDrawable::VerticalJustification ParseVerticalJustification(const std::string& in_verticalJustificationString)
-            {
-                std::string verticalJustificationString = in_verticalJustificationString;
-                Core::StringUtils::ToLowerCase(verticalJustificationString);
-                
-                if (verticalJustificationString == "left")
-                {
-                    return TextDrawable::VerticalJustification::k_bottom;
-                }
-                else if (verticalJustificationString == "centre")
-                {
-                    return TextDrawable::VerticalJustification::k_centre;
-                }
-                else if (verticalJustificationString == "right")
-                {
-                    return TextDrawable::VerticalJustification::k_top;
-                }
-                
-                CS_LOG_FATAL("Invalid vertical justification.");
-                return TextDrawable::VerticalJustification::k_centre;
-            }
         }
         
         //-------------------------------------------------------------------
@@ -194,13 +132,13 @@ namespace ChilliSource
             if (in_properties.HasValue(k_horizontalJustificationKey) == true)
             {
                 std::string horizontalJustification = in_properties.GetProperty(k_horizontalJustificationKey);
-                SetHorizontalJustification(ParseHorizontalJustification(horizontalJustification));
+                SetHorizontalJustification(Rendering::ParseHorizontalTextJustification(horizontalJustification));
             }
             
             if (in_properties.HasValue(k_verticalJustificationKey) == true)
             {
                 std::string verticalJustification = in_properties.GetProperty(k_verticalJustificationKey);
-                SetVerticalJustification(ParseVerticalJustification(verticalJustification));
+                SetVerticalJustification(Rendering::ParseVerticalTextJustification(verticalJustification));
             }
             
             SetAbsoluteCharacterSpacingOffset(in_properties.GetPropertyOrDefault(k_absCharSpacingOffsetKey, GetAbsoluteCharacterSpacingOffset()));
@@ -229,13 +167,13 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        TextDrawable::HorizontalJustification TextDrawable::GetHorizontalJustification() const
+        Rendering::HorizontalTextJustification TextDrawable::GetHorizontalJustification() const
         {
             return m_horizontalJustification;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        TextDrawable::VerticalJustification TextDrawable::GetVerticalJustification() const
+        Rendering::VerticalTextJustification TextDrawable::GetVerticalJustification() const
         {
             return m_verticalJustification;
         }
@@ -277,6 +215,8 @@ namespace ChilliSource
             CS_ASSERT(in_font->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot set an incomplete font on a Text Drawable.");
             
             m_font = in_font;
+            
+            m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -286,106 +226,92 @@ namespace ChilliSource
             CS_ASSERT(in_localisedText->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot set text using an incomplete localised text.");
             
             m_text = in_localisedText->GetText(in_localisedTextId);
+            
+            m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void TextDrawable::SetText(const std::string& in_text)
         {
             m_text = in_text;
+            
+            m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void TextDrawable::SetTextColour(const Core::Colour& in_textColour)
         {
             m_textColour = in_textColour;
+            
+            m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextDrawable::SetHorizontalJustification(HorizontalJustification in_horizontalJustification)
+        void TextDrawable::SetHorizontalJustification(Rendering::HorizontalTextJustification in_horizontalJustification)
         {
             m_horizontalJustification = in_horizontalJustification;
+            
+            m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextDrawable::SetVerticalJustification(VerticalJustification in_verticalJustification)
+        void TextDrawable::SetVerticalJustification(Rendering::VerticalTextJustification in_verticalJustification)
         {
             m_verticalJustification = in_verticalJustification;
+            
+            m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void TextDrawable::SetAbsoluteCharacterSpacingOffset(f32 in_offset)
         {
             m_absCharSpacingOffset = in_offset;
+            
+            m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void TextDrawable::SetAbsoluteLineSpacingOffset(f32 in_offset)
         {
             m_absLineSpacingOffset = in_offset;
+            
+            m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void TextDrawable::SetLineSpacingScale(f32 in_scale)
         {
             m_lineSpacingScale = in_scale;
+            
+            m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void TextDrawable::SetMaxNumberOfLines(u32 in_numLines)
         {
             m_maxNumLines = in_numLines;
+            
+            m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void TextDrawable::SetTextScale(f32 in_scale)
         {
             m_textScale = in_scale;
+            
+            m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //--------------------------------------------------------------------
         void TextDrawable::Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
         {
-            //DoAutosizing(inpCanvas);
-            
-            //Calculate the size of the label box
-            //Core::Vector2 vAbsoluteLabelSize = GetAbsoluteSize();
-            //Core::Colour AbsCol = GetAbsoluteColour();
-            
-            //if(m_cachedGlyphs.empty())
+            if (m_invalidateCache == true)
             {
-                //////////////////////// REMOVE ME!
-                GUI::TextJustification horizontalJustification;
-                switch(m_horizontalJustification)
-                {
-                    case HorizontalJustification::k_left:
-                        horizontalJustification = GUI::TextJustification::k_left;
-                        break;
-                    case HorizontalJustification::k_centre:
-                        horizontalJustification = GUI::TextJustification::k_centre;
-                        break;
-                    case HorizontalJustification::k_right:
-                        horizontalJustification = GUI::TextJustification::k_right;
-                        break;
-                }
-                GUI::TextJustification verticalJustification;
-                switch(m_verticalJustification)
-                {
-                    case VerticalJustification::k_bottom:
-                        verticalJustification = GUI::TextJustification::k_bottom;
-                        break;
-                    case VerticalJustification::k_centre:
-                        verticalJustification = GUI::TextJustification::k_centre;
-                        break;
-                    case VerticalJustification::k_top:
-                        verticalJustification = GUI::TextJustification::k_top;
-                        break;
-                }
-                //////////////////////////////////
-                
-                m_cachedGlyphs = in_renderer->BuildText(m_text, m_font, m_textScale, m_lineSpacingScale, in_absSize, m_maxNumLines, horizontalJustification, verticalJustification).m_characters;
+                m_invalidateCache = false;
+                m_cachedText = in_renderer->BuildText(m_text, m_font, m_textScale, m_absCharSpacingOffset, m_absLineSpacingOffset, m_lineSpacingScale, in_absSize, m_maxNumLines, m_horizontalJustification, m_verticalJustification);
             }
         
-            in_renderer->DrawText(m_cachedGlyphs, in_transform, m_textColour, m_font->GetTexture());
+            in_renderer->DrawText(m_cachedText.m_characters, in_transform, m_textColour, m_font->GetTexture());
         }
     }
 }

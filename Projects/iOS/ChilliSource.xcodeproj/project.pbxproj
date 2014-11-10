@@ -301,6 +301,8 @@
 		81D8B6D71962E0F70010DA84 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B6241962E0F70010DA84 /* Texture.cpp */; };
 		81D8B6D81962E0F70010DA84 /* TextureUnitSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B6261962E0F70010DA84 /* TextureUnitSystem.cpp */; };
 		81D8B6DD1962E1110010DA84 /* libCSBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B6DB1962E1110010DA84 /* libCSBase.a */; };
+		81F6DEA41A10CE0800B422C1 /* VerticalTextJustification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81F6DEA31A10CE0800B422C1 /* VerticalTextJustification.cpp */; };
+		81F6DEA61A10CEB300B422C1 /* HorizontalTextJustification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81F6DEA51A10CEB300B422C1 /* HorizontalTextJustification.cpp */; };
 		81FB634419FFA86C009D6894 /* CSBinaryInputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81FB634219FFA86C009D6894 /* CSBinaryInputStream.cpp */; };
 		81FB634719FFB723009D6894 /* CSBinaryChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81FB634519FFB723009D6894 /* CSBinaryChunk.cpp */; };
 /* End PBXBuildFile section */
@@ -1013,6 +1015,10 @@
 		81D8B6261962E0F70010DA84 /* TextureUnitSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureUnitSystem.cpp; sourceTree = "<group>"; };
 		81D8B6271962E0F70010DA84 /* TextureUnitSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureUnitSystem.h; sourceTree = "<group>"; };
 		81D8B6DB1962E1110010DA84 /* libCSBase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCSBase.a; sourceTree = "<group>"; };
+		81F6DEA11A10C6A900B422C1 /* VerticalTextJustification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalTextJustification.h; sourceTree = "<group>"; };
+		81F6DEA21A10C6DD00B422C1 /* HorizontalTextJustification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HorizontalTextJustification.h; sourceTree = "<group>"; };
+		81F6DEA31A10CE0800B422C1 /* VerticalTextJustification.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalTextJustification.cpp; sourceTree = "<group>"; };
+		81F6DEA51A10CEB300B422C1 /* HorizontalTextJustification.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HorizontalTextJustification.cpp; sourceTree = "<group>"; };
 		81FB634219FFA86C009D6894 /* CSBinaryInputStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSBinaryInputStream.cpp; sourceTree = "<group>"; };
 		81FB634319FFA86C009D6894 /* CSBinaryInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSBinaryInputStream.h; sourceTree = "<group>"; };
 		81FB634519FFB723009D6894 /* CSBinaryChunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSBinaryChunk.cpp; sourceTree = "<group>"; };
@@ -2037,6 +2043,8 @@
 		81D8B3531962E0EC0010DA84 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				81F6DEA11A10C6A900B422C1 /* VerticalTextJustification.h */,
+				81F6DEA31A10CE0800B422C1 /* VerticalTextJustification.cpp */,
 				81D8B3541962E0EC0010DA84 /* AlignmentAnchors.cpp */,
 				81D8B3551962E0EC0010DA84 /* AlignmentAnchors.h */,
 				81D8B3561962E0EC0010DA84 /* AspectRatioUtils.cpp */,
@@ -2070,6 +2078,8 @@
 				81D8B3721962E0EC0010DA84 /* VertexDeclaration.cpp */,
 				81D8B3731962E0EC0010DA84 /* VertexDeclaration.h */,
 				81D8B3741962E0EC0010DA84 /* VertexLayouts.h */,
+				81F6DEA21A10C6DD00B422C1 /* HorizontalTextJustification.h */,
+				81F6DEA51A10CEB300B422C1 /* HorizontalTextJustification.cpp */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -2725,6 +2735,7 @@
 				81D8B4121962E0EC0010DA84 /* EventConnection.cpp in Sources */,
 				81D8B4241962E0EC0010DA84 /* AppNotificationSystem.cpp in Sources */,
 				81D8B4431962E0EC0010DA84 /* InputEvents.cpp in Sources */,
+				81F6DEA41A10CE0800B422C1 /* VerticalTextJustification.cpp in Sources */,
 				81D8B4251962E0EC0010DA84 /* LocalNotificationSystem.cpp in Sources */,
 				81D8B4651962E0EC0010DA84 /* AlignmentAnchors.cpp in Sources */,
 				81D8B6B91962E0F70010DA84 /* SubtitlesRenderer.mm in Sources */,
@@ -2897,6 +2908,7 @@
 				81D8B4A51962E0EC0010DA84 /* FacebookPostSystem.cpp in Sources */,
 				81D8B69F1962E0F70010DA84 /* PlatformSystem.mm in Sources */,
 				81D8B4571962E0EC0010DA84 /* ProgressBar.cpp in Sources */,
+				81F6DEA61A10CEB300B422C1 /* HorizontalTextJustification.cpp in Sources */,
 				817F76481A03E23A00D36ACF /* GridLayout.cpp in Sources */,
 				81D8B4201962E0EC0010DA84 /* ShapeIntersection.cpp in Sources */,
 				81D8B4131962E0EC0010DA84 /* AppDataStore.cpp in Sources */,

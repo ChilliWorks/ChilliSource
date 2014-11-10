@@ -38,6 +38,7 @@
 #include <ChilliSource/Rendering/Base/CullFace.h>
 #include <ChilliSource/Rendering/Base/CullingPredicates.h>
 #include <ChilliSource/Rendering/Base/DepthTestComparison.h>
+#include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/MeshBatch.h>
 #include <ChilliSource/Rendering/Base/MeshBuffer.h>
 #include <ChilliSource/Rendering/Base/RenderCapabilities.h>
@@ -51,5 +52,6 @@
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 #include <ChilliSource/Rendering/Base/VertexDeclaration.h>
 #include <ChilliSource/Rendering/Base/VertexLayouts.h>
+#include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 
 #endif

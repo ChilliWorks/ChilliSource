@@ -37,15 +37,6 @@ namespace ChilliSource
 {
     namespace GUI
     {
-		enum class TextJustification
-        {
-            k_left,
-            k_right,
-            k_centre,
-            k_top,
-            k_bottom
-        };
-		
         class Label : public GUIView
         {
         public:
@@ -159,25 +150,25 @@ namespace ChilliSource
             ///
             /// @param Horizontal justification
             //-------------------------------------------------------
-            void SetHorizontalJustification(TextJustification ineHorizontalJustification);
+            void SetHorizontalJustification(Rendering::HorizontalTextJustification in_horizontalJustification);
             //-------------------------------------------------------
             /// Set Vertical Justification
             ///
 			/// @param Vertical justification
             //-------------------------------------------------------
-            void SetVerticalJustification(TextJustification ineVerticalJustification);
+            void SetVerticalJustification(Rendering::VerticalTextJustification in_verticalJustification);
             //-------------------------------------------------------
             /// Get Horizontal Justification
             ///
             /// @return Horizontal justification
             //-------------------------------------------------------
-            TextJustification GetHorizontalJustification() const;
+            Rendering::HorizontalTextJustification GetHorizontalJustification() const;
             //-------------------------------------------------------
             /// Get Vertical Justification
             ///
 			/// @return Vertical justification
             //-------------------------------------------------------
-            TextJustification GetVerticalJustification() const;
+            Rendering::VerticalTextJustification GetVerticalJustification() const;
             //-------------------------------------------------------
             /// Set Text Colour
             ///
@@ -369,8 +360,8 @@ namespace ChilliSource
 			DECLARE_PROPERTY_A(u32, MaxNumLines, SetNumberOfLines, GetNumberOfLines);
 			DECLARE_PROPERTY_A(f32, TextScale, SetTextScale, GetTextScale);
 			DECLARE_PROPERTY_A(f32, LineSpacing, SetLineSpacing, GetLineSpacing);
-			DECLARE_PROPERTY_A(TextJustification, HorizontalJustification, SetHorizontalJustification, GetHorizontalJustification);
-			DECLARE_PROPERTY_A(TextJustification, VerticalJustification, SetVerticalJustification, GetVerticalJustification);
+            DECLARE_PROPERTY_A(Rendering::HorizontalTextJustification, HorizontalJustification, SetHorizontalJustification, GetHorizontalJustification);
+			DECLARE_PROPERTY_A(Rendering::VerticalTextJustification, VerticalJustification, SetVerticalJustification, GetVerticalJustification);
 			DECLARE_PROPERTY_A(Rendering::FontCSPtr, Font, SetFont, GetFont);
 			DECLARE_PROPERTY_A(Core::Colour, TextColour, SetTextColour, GetTextColour);
             DECLARE_PROPERTY_A(Core::Colour, TextOutlineColour, SetTextOutlineColour, GetTextOutlineColour);

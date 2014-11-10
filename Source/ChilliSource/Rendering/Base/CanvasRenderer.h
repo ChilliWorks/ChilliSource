@@ -51,7 +51,6 @@ namespace ChilliSource
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(CanvasRenderer);
-
             //----------------------------------------------------------------------------
             /// Holds the information required to build a sprite for a text character
             ///
@@ -138,7 +137,9 @@ namespace ChilliSource
             /// @param Text to convert to display characters (UTF-8)
             /// @param Font
             /// @param Text scale
-            /// @param Line spacing
+            /// @param Absolute character spacing offset in pixels.
+            /// @param Absolute line spacing offset in pixels.
+            /// @param Line spacing scale factor.
             /// @param Max bounds
             /// @param Max num lines (ZERO = infinite)
             /// @param Horizontal justification
@@ -146,8 +147,8 @@ namespace ChilliSource
             ///
             /// @return Built text struct containing all the character infos
             //----------------------------------------------------------------------------
-            BuiltText BuildText(const std::string& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
-                                const Core::Vector2& in_bounds, u32 in_numLines, GUI::TextJustification in_horizontal, GUI::TextJustification in_vertical) const;
+            BuiltText BuildText(const std::string& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_absCharSpacingOffset, f32 in_absLineSpacingOffset, f32 in_lineSpacingScale, const Core::Vector2& in_bounds,
+                                u32 in_numLines, HorizontalTextJustification in_horizontal, VerticalTextJustification in_vertical) const;
             //----------------------------------------------------------------------------
             /// Build the sprites for each given character and render them to screen.
             ///

@@ -33,6 +33,8 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
+#include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 
 namespace ChilliSource
@@ -329,7 +331,7 @@ namespace ChilliSource
                 if(mCachedChars.empty())
                 {
                     f32 fAssetTextScale = GetGlobalTextScale();
-                    mCachedChars = inpCanvas->BuildText(strutf8DisplayString, Font, TextScale * fAssetTextScale, LineSpacing, vAbsoluteLabelSize, MaxNumLines, HorizontalJustification, VerticalJustification).m_characters;
+                    mCachedChars = inpCanvas->BuildText(strutf8DisplayString, Font, TextScale * fAssetTextScale, 0.0f, 0.0f, LineSpacing, vAbsoluteLabelSize, MaxNumLines, HorizontalJustification, VerticalJustification).m_characters;
                 }
                 
                 inpCanvas->DrawText(mCachedChars, GetTransform(), TextColour, Font->GetTexture());

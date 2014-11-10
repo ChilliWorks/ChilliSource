@@ -63,6 +63,8 @@ namespace ChilliSource
         enum class CullFace;
         enum class DepthTestComparison;
         enum class SurfaceFormat;
+        enum class HorizontalTextJustification;
+        enum class VerticalTextJustification;
         //------------------------------------------------------------
         /// Camera
         //------------------------------------------------------------

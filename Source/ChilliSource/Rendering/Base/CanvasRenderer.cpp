@@ -34,6 +34,8 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
 #include <ChilliSource/GUI/Label/Label.h>
+#include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
+#include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
@@ -238,10 +240,11 @@ namespace ChilliSource
             /// @param Current cursor X pos
             /// @param Current cursor Y pos
             /// @param Text scale
+            /// @param The character spacing offset in pixels.
             ///
             /// @return Display characer info
             //----------------------------------------------------------------------------
-            CanvasRenderer::DisplayCharacterInfo BuildCharacter(Core::UTF8Char in_character, const FontCSPtr& in_font, f32 in_cursorX, f32 in_cursorY, f32 in_textScale)
+            CanvasRenderer::DisplayCharacterInfo BuildCharacter(Core::UTF8Char in_character, const FontCSPtr& in_font, f32 in_cursorX, f32 in_cursorY, f32 in_textScale, f32 in_absCharSpacingOffset)
             {
                 CanvasRenderer::DisplayCharacterInfo result;
 
@@ -249,7 +252,7 @@ namespace ChilliSource
                 if(in_font->TryGetCharacterInfo(in_character, info) == true)
                 {
                     result.m_UVs = info.m_UVs;
-                    result.m_advance = info.m_advance * in_textScale;
+                    result.m_advance = ((info.m_advance + in_absCharSpacingOffset) * in_textScale);
                     result.m_packedImageSize = info.m_size * in_textScale;
                     result.m_position.x = in_cursorX + (info.m_offset.x - info.m_origin) * in_textScale;
                     result.m_position.y = in_cursorY - (info.m_offset.y - in_font->GetVerticalPadding()) * in_textScale;
@@ -275,7 +278,7 @@ namespace ChilliSource
             /// @param [In/Out] List of display character infos that will be manipulated.
             ///         These are the charcters for all lines.
             //----------------------------------------------------------------------------
-            void ApplyHorizontalTextJustifications(GUI::TextJustification in_horizontal, f32 in_boundsWidth, u32 in_lineStartIdx, u32 in_lineEndIdx, f32 in_lineWidth,
+            void ApplyHorizontalTextJustifications(HorizontalTextJustification in_horizontal, f32 in_boundsWidth, u32 in_lineStartIdx, u32 in_lineEndIdx, f32 in_lineWidth,
                                                    std::vector<CanvasRenderer::DisplayCharacterInfo>& inout_characters)
             {
                 f32 horizontalOffset = 0.0f;
@@ -283,12 +286,12 @@ namespace ChilliSource
                 switch(in_horizontal)
                 {
                     default:
-                    case GUI::TextJustification::k_left:
+                    case HorizontalTextJustification::k_left:
                         return;
-                    case GUI::TextJustification::k_centre:
+                    case HorizontalTextJustification::k_centre:
                         horizontalOffset = (in_boundsWidth * 0.5f) - (in_lineWidth * 0.5f);
                         break;
-                    case GUI::TextJustification::k_right:
+                    case HorizontalTextJustification::k_right:
                         horizontalOffset = in_boundsWidth - in_lineWidth;
                         break;
                 }
@@ -309,19 +312,19 @@ namespace ChilliSource
             /// @param Height of all the built lines combined
             /// @param [In/Out] List of display character infos that will be manipulated
             //----------------------------------------------------------------------------
-            void ApplyVerticalTextJustifications(GUI::TextJustification in_vertical, f32 in_boundsHeight, f32 in_totalLinesHeight, std::vector<CanvasRenderer::DisplayCharacterInfo>& inout_characters)
+            void ApplyVerticalTextJustifications(VerticalTextJustification in_vertical, f32 in_boundsHeight, f32 in_totalLinesHeight, std::vector<CanvasRenderer::DisplayCharacterInfo>& inout_characters)
             {
                 f32 verticalOffset = 0.0f;
 
                 switch(in_vertical)
                 {
                     default:
-                    case GUI::TextJustification::k_top:
+                    case VerticalTextJustification::k_top:
                         return;
-                    case GUI::TextJustification::k_centre:
+                    case VerticalTextJustification::k_centre:
                         verticalOffset = (in_boundsHeight * 0.5f) - (in_totalLinesHeight * 0.5f);
                         break;
-                    case GUI::TextJustification::k_bottom:
+                    case VerticalTextJustification::k_bottom:
                         verticalOffset = in_boundsHeight - in_totalLinesHeight;
                         break;
                 }
@@ -572,8 +575,8 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        CanvasRenderer::BuiltText CanvasRenderer::BuildText(const std::string& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_lineSpacing,
-                                                            const Core::Vector2& in_bounds, u32 in_numLines, GUI::TextJustification in_horizontal, GUI::TextJustification in_vertical) const
+        CanvasRenderer::BuiltText CanvasRenderer::BuildText(const std::string& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_absCharSpacingOffset, f32 in_absLineSpacingOffset, f32 in_lineSpacingScale,
+                                                            const Core::Vector2& in_bounds, u32 in_numLines, HorizontalTextJustification in_horizontal, VerticalTextJustification in_vertical) const
         {
             BuiltText result;
             result.m_width = 0.0f;
@@ -604,7 +607,7 @@ namespace ChilliSource
             //this means build all lines. We are also constrained by the size of the bounds
             u32 numLines = (in_numLines == 0) ? linesOnBounds.size() : std::min((u32)linesOnBounds.size(), in_numLines);
 
-            f32 lineHeight = in_lineSpacing * (in_font->GetLineHeight() * in_textScale);
+            f32 lineHeight = in_lineSpacingScale * ((in_font->GetLineHeight() + in_absLineSpacingOffset) * in_textScale);
             f32 maxHeight = in_bounds.y;
             numLines = std::min(numLines, (u32)(maxHeight/lineHeight));
 
@@ -621,7 +624,7 @@ namespace ChilliSource
                 while(characterIt < linesOnBounds[lineIdx].end())
                 {
                     auto character = Core::UTF8StringUtils::Next(characterIt);
-                    auto builtCharacter(BuildCharacter(character, in_font, cursorX, cursorY, in_textScale));
+                    auto builtCharacter(BuildCharacter(character, in_font, cursorX, cursorY, in_textScale, in_absCharSpacingOffset));
                     
                     cursorX += builtCharacter.m_advance;
                     

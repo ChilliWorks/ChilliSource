@@ -32,8 +32,10 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
-#include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+#include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
+#include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
+#include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 
 #include <vector>
@@ -99,28 +101,6 @@ namespace ChilliSource
         public:
             CS_DECLARE_NOCOPY(TextDrawable);
             //-------------------------------------------------------------------
-            /// An enum describing the horizontal justification of text.
-            ///
-            /// @author Ian Copland
-            //-------------------------------------------------------------------
-            enum class HorizontalJustification
-            {
-                k_left,
-                k_centre,
-                k_right
-            };
-            //-------------------------------------------------------------------
-            /// An enum describing the vertical justification of text.
-            ///
-            /// @author Ian Copland
-            //-------------------------------------------------------------------
-            enum class VerticalJustification
-            {
-                k_bottom,
-                k_centre,
-                k_top
-            };
-            //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return The list of properties supported by text.
@@ -182,14 +162,14 @@ namespace ChilliSource
             /// @return The horizontal justification of the text within the owning
             /// widget's bounds.
             //-------------------------------------------------------------------
-            HorizontalJustification GetHorizontalJustification() const;
+            Rendering::HorizontalTextJustification GetHorizontalJustification() const;
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return The vertical justification of the text within the owning
             /// widget's bounds.
             //-------------------------------------------------------------------
-            VerticalJustification GetVerticalJustification() const;
+            Rendering::VerticalTextJustification GetVerticalJustification() const;
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -273,7 +253,7 @@ namespace ChilliSource
             ///
             /// @param The justfication.
             //-------------------------------------------------------------------
-            void SetHorizontalJustification(HorizontalJustification in_horizontalJustification);
+            void SetHorizontalJustification(Rendering::HorizontalTextJustification in_horizontalJustification);
             //-------------------------------------------------------------------
             /// Sets the vertical justification of the text within the owning
             /// widget's bounds.
@@ -282,7 +262,7 @@ namespace ChilliSource
             ///
             /// @param The justification.
             //-------------------------------------------------------------------
-            void SetVerticalJustification(VerticalJustification in_verticalJustification);
+            void SetVerticalJustification(Rendering::VerticalTextJustification in_verticalJustification);
             //-------------------------------------------------------------------
             /// Sets the absolute pixel offset to the standard character spacing.
             /// This is used to increase of reduce the space between characters in
@@ -348,16 +328,17 @@ namespace ChilliSource
         private:
             Rendering::FontCSPtr m_font;
             std::string m_text;
-            HorizontalJustification m_horizontalJustification = HorizontalJustification::k_centre;
-            VerticalJustification m_verticalJustification = VerticalJustification::k_centre;
+            Rendering::HorizontalTextJustification m_horizontalJustification = Rendering::HorizontalTextJustification::k_centre;
+            Rendering::VerticalTextJustification m_verticalJustification = Rendering::VerticalTextJustification::k_centre;
             Core::Colour m_textColour;
-            f32 m_absCharSpacingOffset = 0;
-            f32 m_absLineSpacingOffset = 0;
+            f32 m_absCharSpacingOffset = 0.0f;
+            f32 m_absLineSpacingOffset = 0.0f;
             f32 m_lineSpacingScale = 1.0f;
             u32 m_maxNumLines = 0;
             f32 m_textScale = 1.0f;
             
-            std::vector<Rendering::CanvasRenderer::DisplayCharacterInfo> m_cachedGlyphs;
+            bool m_invalidateCache = true;
+            Rendering::CanvasRenderer::BuiltText m_cachedText;
         };
     }
 }

@@ -35,7 +35,8 @@
 #include <ChilliSource/Core/Image/ImageCompression.h>
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/String/StringParser.h>
-
+#include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
+#include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
@@ -70,8 +71,8 @@ namespace ChilliSource
         ///
         /// Default
         //-------------------------------------------------------
-        Label::Label() : MaxNumLines(0), TextScale(1.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
-		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
+        Label::Label() : MaxNumLines(0), TextScale(1.0f), LineSpacing(1.0f), HorizontalJustification(Rendering::HorizontalTextJustification::k_left),
+        VerticalJustification(Rendering::VerticalTextJustification::k_centre), Background(true), Autosizing(false), FlipVertical(false), mbLastDrawWasClipped(false), mbLastDrawHadInvalidCharacter(false)
         {
             SetColour(Core::Colour(0.18f, 0.3f, 0.4f, 0.6f));
 
@@ -89,8 +90,8 @@ namespace ChilliSource
         /// From param dictionary
         //-------------------------------------------------------
         Label::Label(const Core::ParamDictionary& insParams) 
-        : GUIView(insParams), MaxNumLines(0), TextScale(1.0f), LineSpacing(1.0f), HorizontalJustification(TextJustification::k_left),
-		VerticalJustification(TextJustification::k_centre), Background(true), Autosizing(false), FlipVertical(false)
+        : GUIView(insParams), MaxNumLines(0), TextScale(1.0f), LineSpacing(1.0f), HorizontalJustification(Rendering::HorizontalTextJustification::k_left),
+        VerticalJustification(Rendering::VerticalTextJustification::k_centre), Background(true), Autosizing(false), FlipVertical(false)
         {
             std::string strValue;
             
@@ -150,11 +151,11 @@ namespace ChilliSource
             //---Text justification
             if(insParams.TryGetValue("HorizontalJustification", strValue))
             {
-                HorizontalJustification = JustificationFromString(strValue);
+                HorizontalJustification = Rendering::ParseHorizontalTextJustification(strValue);
             }
 			if(insParams.TryGetValue("VerticalJustification", strValue))
             {
-                VerticalJustification = JustificationFromString(strValue);
+                VerticalJustification = Rendering::ParseVerticalTextJustification(strValue);
             }
             //---Font
             Core::StorageLocation eFontLocation = Core::StorageLocation::k_package;
@@ -477,42 +478,30 @@ namespace ChilliSource
 			return TextColour;
 		}
 		//-------------------------------------------------------
-		/// Set Horizontal Justification
-		///
-		/// @param Horizontal justification
 		//-------------------------------------------------------
-		void Label::SetHorizontalJustification(TextJustification ineHorizontalJustification)
+        void Label::SetHorizontalJustification(Rendering::HorizontalTextJustification in_horizontalJustification)
 		{
-			HorizontalJustification = ineHorizontalJustification;
+			HorizontalJustification = in_horizontalJustification;
 
 			mCachedChars.clear();
 		}
         //-------------------------------------------------------
-        /// Set Vertical Justification
-        ///
-        /// @param Vertical justification
         //-------------------------------------------------------
-        void Label::SetVerticalJustification(TextJustification ineVerticalJustification)
+        void Label::SetVerticalJustification(Rendering::VerticalTextJustification in_verticalJustification)
         {
-			VerticalJustification = ineVerticalJustification;
+			VerticalJustification = in_verticalJustification;
             
             mCachedChars.clear();
         }
         //-------------------------------------------------------
-        /// Get Horizontal Justification
-        ///
-        /// @return Horizontal justification
         //-------------------------------------------------------
-        TextJustification Label::GetHorizontalJustification() const
+        Rendering::HorizontalTextJustification Label::GetHorizontalJustification() const
         {
             return HorizontalJustification;
         }
         //-------------------------------------------------------
-        /// Get Vertical Justification
-        ///
-        /// @return Vertical justification
         //-------------------------------------------------------
-        TextJustification Label::GetVerticalJustification() const
+        Rendering::VerticalTextJustification  Label::GetVerticalJustification() const
         {
             return VerticalJustification;
         }
@@ -534,42 +523,6 @@ namespace ChilliSource
 		{
 			return Background;
 		}
-        //-------------------------------------------------------
-        /// Justification From String
-        ///
-        /// Convert the string to a justification enum. This is
-        /// used when creating labels from script files
-        ///
-        /// @param Text representation of justification
-        /// @return Justification enum
-        //-------------------------------------------------------
-        TextJustification Label::JustificationFromString(const std::string& instrJustification)
-        {
-            if(instrJustification == "Left")
-            {
-                return TextJustification::k_left;
-            }
-            else if(instrJustification == "Right")
-            {
-                return TextJustification::k_right;
-            }
-            else if(instrJustification == "Centre")
-            {
-                return TextJustification::k_centre;
-            }
-			else if(instrJustification == "Top")
-            {
-                return TextJustification::k_top;
-            }
-            else if(instrJustification == "Bottom")
-            {
-                return TextJustification::k_bottom;
-            }
-            
-            CS_LOG_FATAL("No justification matches type");
-            
-            return TextJustification::k_left;
-        }
         //-------------------------------------------------------
         /// Draw
         ///
@@ -615,7 +568,7 @@ namespace ChilliSource
                 if(mCachedChars.empty())
                 {
                     f32 fAssetTextScale = GetGlobalTextScale();
-                    mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * fAssetTextScale, LineSpacing, vAbsoluteLabelSize, MaxNumLines, HorizontalJustification, VerticalJustification).m_characters;
+                    mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * fAssetTextScale, 0.0f, 0.0f, LineSpacing, vAbsoluteLabelSize, MaxNumLines, HorizontalJustification, VerticalJustification).m_characters;
                 }
                 
                 Core::Colour sDrawColour = TextColour * GetAbsoluteColour();
@@ -651,8 +604,8 @@ namespace ChilliSource
                 Core::Vector2 vAbsMaxSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMaxSize.GetRelative()) + UnifiedMaxSize.GetAbsolute() : UnifiedMaxSize.GetAbsolute();
                 Core::Vector2 vAbsMinSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMinSize.GetRelative()) + UnifiedMinSize.GetAbsolute() : UnifiedMinSize.GetAbsolute();
                 
-                //Build the text for the biggest possible bounds
-                Rendering::CanvasRenderer::BuiltText builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, vAbsMaxSize, MaxNumLines, HorizontalJustification, VerticalJustification);
+
+                Rendering::CanvasRenderer::BuiltText builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, 0.0f, 0.0f, LineSpacing, vAbsMaxSize, MaxNumLines, HorizontalJustification, VerticalJustification);
                 
                 f32 fNewRelWidth = UnifiedMaxSize.vRelative.x;
                 f32 fNewRelHeight = 0.0f;
@@ -669,7 +622,7 @@ namespace ChilliSource
                     
                     //Now that we have calculated the width of the label we
                     //can use that to work out the height
-                    builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, vAbsMinSize, MaxNumLines, HorizontalJustification, VerticalJustification);
+                    builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, 0.0f, 0.0f, LineSpacing, vAbsMinSize, MaxNumLines, HorizontalJustification, VerticalJustification);
                     fTextHeight = builtText.m_height;
                 }
                 //If the size of text is smaller than the max bounds then clamp to that
@@ -680,7 +633,7 @@ namespace ChilliSource
                     
                     //Now that we have calculated the width of the label we
                     //can use that to work out the height
-                    builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, LineSpacing, Core::Vector2(fNewAbsWidth, vAbsMaxSize.y), MaxNumLines, HorizontalJustification, VerticalJustification);
+                    builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, 0.0f, 0.0f, LineSpacing, Core::Vector2(fNewAbsWidth, vAbsMaxSize.y), MaxNumLines, HorizontalJustification, VerticalJustification);
                     fTextHeight = builtText.m_height;
                 }
                 
