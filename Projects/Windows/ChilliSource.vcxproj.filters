@@ -151,6 +151,9 @@
     <Filter Include="ChilliSource\Scripting\Lua\Function">
       <UniqueIdentifier>{a53e67e2-5b1f-4591-93cc-7ec89215ed23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ChilliSource\UI\Text">
+      <UniqueIdentifier>{8b479988-1966-4721-9cd6-ad252a7a93ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.cpp">
@@ -905,6 +908,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\PointerProxy.cpp">
       <Filter>ChilliSource\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Text\TextDrawable.cpp">
+      <Filter>ChilliSource\UI\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.cpp">
+      <Filter>ChilliSource\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1951,6 +1963,15 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Input\Pointer\PointerProxy.h">
       <Filter>ChilliSource\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextDrawable.h">
+      <Filter>ChilliSource\UI\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.h">
+      <Filter>ChilliSource\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

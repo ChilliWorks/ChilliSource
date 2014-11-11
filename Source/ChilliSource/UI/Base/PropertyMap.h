@@ -181,16 +181,6 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             template<typename TType> TType GetProperty(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
-            /// Specialisation to return property value for const char* which is stored as a std::string
-            ///
-            /// @author S Downie
-            ///
-            /// @param Property name
-            ///
-            /// @return Property value
-            //----------------------------------------------------------------------------------------
-            const char* GetProperty(const std::string& in_name) const;
-            //----------------------------------------------------------------------------------------
             /// Get the value of the property with the given name. If no property exists
             /// with the name then the default value will be returned
             ///
@@ -211,7 +201,7 @@ namespace ChilliSource
             ///
             /// @return Property value or default if name not found
             //----------------------------------------------------------------------------------------
-            const char* GetPropertyOrDefault(const std::string& in_name, const char* in_default) const;
+			std::string GetPropertyOrDefault(const std::string& in_name, const char* in_default) const;
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///

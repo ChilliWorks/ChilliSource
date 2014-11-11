@@ -158,15 +158,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        const char* PropertyMap::GetProperty(const std::string& in_name) const
+        std::string PropertyMap::GetPropertyOrDefault(const std::string& in_name, const char* in_default) const
         {
-            return GetProperty<std::string>(in_name).c_str();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        const char* PropertyMap::GetPropertyOrDefault(const std::string& in_name, const char* in_default) const
-        {
-            return GetPropertyOrDefault<std::string>(in_name, in_default).c_str();
+            return GetPropertyOrDefault<std::string>(in_name, in_default);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

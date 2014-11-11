@@ -127,13 +127,13 @@ namespace ChilliSource
 
             if (in_properties.HasValue(k_horizontalJustificationKey) == true)
             {
-                std::string horizontalJustification = in_properties.GetProperty(k_horizontalJustificationKey);
+                std::string horizontalJustification = in_properties.GetProperty<std::string>(k_horizontalJustificationKey);
                 SetHorizontalJustification(Rendering::ParseHorizontalTextJustification(horizontalJustification));
             }
             
             if (in_properties.HasValue(k_verticalJustificationKey) == true)
             {
-                std::string verticalJustification = in_properties.GetProperty(k_verticalJustificationKey);
+				std::string verticalJustification = in_properties.GetProperty<std::string>(k_verticalJustificationKey);
                 SetVerticalJustification(Rendering::ParseVerticalTextJustification(verticalJustification));
             }
             

@@ -131,6 +131,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CullingPredicates.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBuffer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp" />
@@ -140,6 +141,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RendererSortPredicates.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\OrthographicCameraComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\PerspectiveCameraComponent.cpp" />
@@ -230,6 +232,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutType.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayoutProxy.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Text\TextDrawable.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Video\Base\CSSubtitlesProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Video\Base\Subtitles.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Video\Base\VideoPlayer.cpp" />
@@ -459,6 +462,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullFace.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullingPredicates.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\DepthTestComparison.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBuffer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h" />
@@ -472,6 +476,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SurfaceFormat.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexLayouts.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\OrthographicCameraComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\PerspectiveCameraComponent.h" />
@@ -576,6 +581,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutType.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListLayoutProxy.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextDrawable.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Video\Base\CSSubtitlesProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Video\Base\Subtitles.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Video\Base\VideoPlayer.h" />
