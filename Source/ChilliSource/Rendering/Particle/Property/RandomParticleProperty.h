@@ -32,6 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Random.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
+
 namespace ChilliSource
 {
 	namespace Rendering
@@ -58,9 +59,10 @@ namespace ChilliSource
 			/// @author Ian Copland
 			///
 			/// @param The normalised (0.0 - 1.0) particle effect playback 
-			/// progress.
+			/// progress. This is ignored for a random property.
 			///
-			/// @param simply returns the static value.
+			/// @return a random value between the values the property was
+			/// created with.
 			//----------------------------------------------------------------
 			TPropertyType GenerateValue(f32 in_playbackProgress) const override;
 		private:

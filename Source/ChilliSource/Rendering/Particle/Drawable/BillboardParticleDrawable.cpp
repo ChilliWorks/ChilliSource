@@ -155,6 +155,11 @@ namespace ChilliSource
 			m_particleBillboardIndices(in_drawableDef->GetParticleEffect()->GetMaxParticles())
 		{
 			BuildBillboardImageData();
+
+			for (u32 i = 0; i < m_particleBillboardIndices.size(); ++i)
+			{
+				ActivateParticle(i);
+			}
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
@@ -308,7 +313,7 @@ namespace ChilliSource
 			{
 				const auto& particle = particles[i];
 
-				if (particle.m_isActive == true && particle.m_colour.a != Core::Colour::k_transparent)
+				if (particle.m_isActive == true && particle.m_colour != Core::Colour::k_transparent)
 				{
 					//rotate locally in the XY plane before rotating to face the camera.
 					auto worldOrientation = Core::Quaternion(Core::Vector3::k_unitPositiveZ, particle.m_rotation) * inverseView;
