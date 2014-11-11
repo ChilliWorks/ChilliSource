@@ -108,7 +108,7 @@ namespace ChilliSource
             }
             //-------------------------------------------------------
             //-------------------------------------------------------
-            PropertyMap ParseTextValues(const Json::Value& in_layout)
+            PropertyMap ParseTextDrawableValues(const Json::Value& in_layout)
             {
                 auto supportedProperties = TextDrawable::GetPropertyDescs();
                 PropertyMap result(supportedProperties);

@@ -244,9 +244,9 @@ namespace ChilliSource
                 //-----------------------------------------------------
                 /// @author Ian Copland
                 ///
-                /// @param Whether or not property has has a value
-                /// set for it. It should be be used prior to a value
-                /// being set.
+                /// @return Whether or not the property has its value
+                /// set. It should be be used prior to a value being
+                /// set.
                 //-----------------------------------------------------
                 virtual bool IsInitialised() = 0;
             };
@@ -273,9 +273,9 @@ namespace ChilliSource
                 //-----------------------------------------------------
                 /// @author Ian Copland
                 ///
-                /// @param Whether or not property has has a value
-                /// set for it. It should be be used prior to a value
-                /// being set.
+                /// @return Whether or not the property has its value
+                /// set. It should be be used prior to a value being
+                /// set.
                 //-----------------------------------------------------
                 bool IsInitialised() override
                 {

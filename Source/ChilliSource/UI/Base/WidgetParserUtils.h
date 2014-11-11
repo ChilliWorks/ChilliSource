@@ -76,7 +76,7 @@ namespace ChilliSource
             ///
             /// @return Property values
             //-------------------------------------------------------
-            PropertyMap ParseTextValues(const Json::Value& in_layout);
+            PropertyMap ParseTextDrawableValues(const Json::Value& in_layout);
         }
 	}
 }

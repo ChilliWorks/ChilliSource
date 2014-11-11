@@ -1,5 +1,5 @@
 //
-//  TextDrawable.h
+//  TextDrawable.cpp
 //  Chilli Source
 //  Created by Ian Copland on 05/11/2014.
 //
@@ -33,10 +33,6 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Font/Font.h>
-
-//////////// REMOVE ME!
-#include <ChilliSource/GUI/Label/Label.h>
-///////////////////////
 
 namespace ChilliSource
 {
@@ -169,43 +165,43 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         Rendering::HorizontalTextJustification TextDrawable::GetHorizontalJustification() const
         {
-            return m_horizontalJustification;
+            return m_textProperties.m_horizontalJustification;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         Rendering::VerticalTextJustification TextDrawable::GetVerticalJustification() const
         {
-            return m_verticalJustification;
+            return m_textProperties.m_verticalJustification;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         f32 TextDrawable::GetAbsoluteCharacterSpacingOffset() const
         {
-            return m_absCharSpacingOffset;
+            return m_textProperties.m_absCharSpacingOffset;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         f32 TextDrawable::GetAbsoluteLineSpacingOffset() const
         {
-            return m_absLineSpacingOffset;
+            return m_textProperties.m_absLineSpacingOffset;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         f32 TextDrawable::GetLineSpacingScale() const
         {
-            return m_lineSpacingScale;
+            return m_textProperties.m_lineSpacingScale;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         u32 TextDrawable::GetMaxNumberOfLines() const
         {
-            return m_maxNumLines;
+            return m_textProperties.m_maxNumLines;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         f32 TextDrawable::GetTextScale() const
         {
-            return m_textScale;
+            return m_textProperties.m_textScale;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -242,14 +238,12 @@ namespace ChilliSource
         void TextDrawable::SetTextColour(const Core::Colour& in_textColour)
         {
             m_textColour = in_textColour;
-            
-            m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void TextDrawable::SetHorizontalJustification(Rendering::HorizontalTextJustification in_horizontalJustification)
         {
-            m_horizontalJustification = in_horizontalJustification;
+            m_textProperties.m_horizontalJustification = in_horizontalJustification;
             
             m_invalidateCache = true;
         }
@@ -257,7 +251,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void TextDrawable::SetVerticalJustification(Rendering::VerticalTextJustification in_verticalJustification)
         {
-            m_verticalJustification = in_verticalJustification;
+            m_textProperties.m_verticalJustification = in_verticalJustification;
             
             m_invalidateCache = true;
         }
@@ -265,7 +259,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void TextDrawable::SetAbsoluteCharacterSpacingOffset(f32 in_offset)
         {
-            m_absCharSpacingOffset = in_offset;
+            m_textProperties.m_absCharSpacingOffset = in_offset;
             
             m_invalidateCache = true;
         }
@@ -273,7 +267,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void TextDrawable::SetAbsoluteLineSpacingOffset(f32 in_offset)
         {
-            m_absLineSpacingOffset = in_offset;
+            m_textProperties.m_absLineSpacingOffset = in_offset;
             
             m_invalidateCache = true;
         }
@@ -281,7 +275,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void TextDrawable::SetLineSpacingScale(f32 in_scale)
         {
-            m_lineSpacingScale = in_scale;
+            m_textProperties.m_lineSpacingScale = in_scale;
             
             m_invalidateCache = true;
         }
@@ -289,7 +283,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void TextDrawable::SetMaxNumberOfLines(u32 in_numLines)
         {
-            m_maxNumLines = in_numLines;
+            m_textProperties.m_maxNumLines = in_numLines;
             
             m_invalidateCache = true;
         }
@@ -297,7 +291,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void TextDrawable::SetTextScale(f32 in_scale)
         {
-            m_textScale = in_scale;
+            m_textProperties.m_textScale = in_scale;
             
             m_invalidateCache = true;
         }
@@ -314,7 +308,7 @@ namespace ChilliSource
             if (m_invalidateCache == true)
             {
                 m_invalidateCache = false;
-                m_cachedText = in_renderer->BuildText(m_text, m_font, m_textScale, m_absCharSpacingOffset, m_absLineSpacingOffset, m_lineSpacingScale, in_absSize, m_maxNumLines, m_horizontalJustification, m_verticalJustification);
+                m_cachedText = in_renderer->BuildText(m_text, m_font, in_absSize, m_textProperties);
             }
         
             in_renderer->DrawText(m_cachedText.m_characters, in_transform, m_textColour, m_font->GetTexture());

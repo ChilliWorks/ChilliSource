@@ -119,7 +119,7 @@ namespace ChilliSource
                 {
                     //Special case for drawable
                     CS_ASSERT(in_json.isObject(), "Value can only be specified as object: " + in_propName);
-                    in_propMap.SetProperty(in_propName, WidgetParserUtils::ParseTextValues(in_json));
+                    in_propMap.SetProperty(in_propName, WidgetParserUtils::ParseTextDrawableValues(in_json));
                 }
                 else
                 {

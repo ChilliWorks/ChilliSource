@@ -390,6 +390,26 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        NinePatchDrawable::NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset)
+        {
+            SetTexture(in_texture);
+            SetInsets(in_leftInset, in_rightInset, in_topInset, in_bottomInset);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        NinePatchDrawable::NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset,
+                                             f32 in_topInset, f32 in_bottomInset)
+        {
+            CS_ASSERT(in_atlas != nullptr, "Texture atlas cannot be null.");
+            CS_ASSERT(in_atlas->HasFrameWithId(in_atlasId) == true, "Texture atlas must contain provided Id.");
+            
+            SetTexture(in_texture);
+            SetTextureAtlas(in_atlas);
+            SetTextureAtlasId(in_atlasId);
+            SetInsets(in_leftInset, in_rightInset, in_topInset, in_bottomInset);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         NinePatchDrawable::NinePatchDrawable(const PropertyMap& in_properties)
         {
             Core::Vector4 uvs(in_properties.GetPropertyOrDefault("UVs", Core::Vector4(m_uvs.m_u, m_uvs.m_v, m_uvs.m_s, m_uvs.m_t)));
@@ -433,6 +453,8 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void NinePatchDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
         {
+            CS_ASSERT(in_texture != nullptr, "Texture cannot be null in a nine-patch drawable.");
+            
             m_texture = in_texture;
             
             m_atlasFrame = DrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);

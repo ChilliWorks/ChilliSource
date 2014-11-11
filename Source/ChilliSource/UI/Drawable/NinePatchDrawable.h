@@ -62,9 +62,29 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// Constructor
             ///
-            /// @author S Downie
+            /// @author Ian Copland
+            ///
+            /// @param The texture.
+            /// @param The left inset.
+            /// @param The right inset.
+            /// @param The top inset.
+            /// @param The bottom inset.
             //----------------------------------------------------------------------------------------
-            NinePatchDrawable() = default;
+            NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
+            //----------------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The texture.
+            /// @param The texture atlas.
+            /// @param The atlas id.
+            /// @param The left inset.
+            /// @param The right inset.
+            /// @param The top inset.
+            /// @param The bottom inset.
+            //----------------------------------------------------------------------------------------
+            NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
             //----------------------------------------------------------------------------------------
             /// Constructor that builds the drawable from key-value properties
             ///

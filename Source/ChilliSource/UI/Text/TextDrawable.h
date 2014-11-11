@@ -46,26 +46,26 @@ namespace ChilliSource
     {
         //--------------------------------------------------------------------------
         /// A component which can be added to a widget to provide text rendering
-        /// functionality. Text contains the following properties:
+        /// functionality. Text drawable contains the following properties:
         ///
-        /// "FontLocation": The storage location of the font. This can be the
-        /// any of the standard storage location values and defaults to "Package".
+        /// "FontLocation": The storage location of the font. This can be any of
+        /// the standard storage location values and defaults to "Package".
         ///
         /// "FontPath": The file path to the font in the given storage location.
         ///
         /// "LocalisedTextLocation": The storage location of the localised
         /// text file. This can be any of the standard storage location values and
-        /// defaults to "Pacakge".
+        /// defaults to "Package".
         ///
-        /// "LocalisedTextPath": The file path ot the storage location in the
+        /// "LocalisedTextPath": The file path of the storage location in the
         /// given storage location.
         ///
         /// "LocalisedTextId": The Id of the string in the given localised text
         /// file.
         ///
-        /// "Text": The UTF-8 format string that that should be displayed. Using
-        /// this is not recommended, it is usually better to create text using
-        /// a localised text resource.
+        /// "Text": The UTF-8 format string that should be displayed. Using this is
+        /// not recommended, it is usually better to create text using a localised
+        /// text resource.
         ///
         /// "TextColour": The colour of the text. Defaults to white.
         ///
@@ -84,7 +84,7 @@ namespace ChilliSource
         /// Defaults to 0.
         ///
         /// "LineSpacingScale": A scale factor to alter the line spacing. This
-        /// allows lines of text to be moved closer to together or further apart.
+        /// allows lines of text to be moved closer together or further apart.
         /// Defaults to 1.0
         ///
         /// "MaxNumberOfLines": The maximum number of lines the text will be displayed
@@ -107,7 +107,7 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
             //-------------------------------------------------------------------
-            /// Constructor. Creates the text using a string retreived from a
+            /// Constructor. Creates the text using a string retrieved from a
             /// localised text resource.
             ///
             /// @author Ian Copland
@@ -328,14 +328,8 @@ namespace ChilliSource
         private:
             Rendering::FontCSPtr m_font;
             std::string m_text;
-            Rendering::HorizontalTextJustification m_horizontalJustification = Rendering::HorizontalTextJustification::k_centre;
-            Rendering::VerticalTextJustification m_verticalJustification = Rendering::VerticalTextJustification::k_centre;
+            Rendering::CanvasRenderer::TextProperties m_textProperties;
             Core::Colour m_textColour;
-            f32 m_absCharSpacingOffset = 0.0f;
-            f32 m_absLineSpacingOffset = 0.0f;
-            f32 m_lineSpacingScale = 1.0f;
-            u32 m_maxNumLines = 0;
-            f32 m_textScale = 1.0f;
             
             bool m_invalidateCache = true;
             Core::Vector2 m_cachedSize;

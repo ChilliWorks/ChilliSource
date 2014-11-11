@@ -72,11 +72,31 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// Constructor
             ///
-            /// @author S Downie
+            /// @author Ian Copland
             ///
-            /// @param Direction
+            /// @param The texture.
+            /// @param The direction the drawable will stretch.
+            /// @param The left inset if a horizontal 3-patch or the bottom inset if a vertical
+            /// 3-patch. This should be provided as a normalised fraction, 0.0 - 1.0.
+            /// @param The right inset if a horizontal 3-patch or the top inset if a vertical 3-patch.
+            /// This should be provided as a normalised fraction, 0.0 - 1.0.
             //----------------------------------------------------------------------------------------
-            ThreePatchDrawable(Direction in_direction);
+            ThreePatchDrawable(const Rendering::TextureCSPtr& in_texture, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop);
+            //----------------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The texture.
+            /// @param The texture atlas.
+            /// @param The atlas id.
+            /// @param The direction the drawable will stretch.
+            /// @param The left inset if a horizontal 3-patch or the bottom inset if a vertical
+            /// 3-patch. This should be provided as a normalised fraction, 0.0 - 1.0.
+            /// @param The right inset if a horizontal 3-patch or the top inset if a vertical 3-patch.
+            /// This should be provided as a normalised fraction, 0.0 - 1.0.
+            //----------------------------------------------------------------------------------------
+            ThreePatchDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop);
             //----------------------------------------------------------------------------------------
             /// Constructor that builds the drawable from key-value properties
             ///

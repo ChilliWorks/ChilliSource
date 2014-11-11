@@ -53,7 +53,23 @@ namespace ChilliSource
                 {PropertyType::k_string, "AtlasId"}
             };
         }
-        
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        StandardDrawable::StandardDrawable(const Rendering::TextureCSPtr& in_texture)
+        {
+            SetTexture(in_texture);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        StandardDrawable::StandardDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId)
+        {
+            CS_ASSERT(in_atlas != nullptr, "The given texture atlas cannot be null.");
+            CS_ASSERT(in_atlas->HasFrameWithId(in_atlasId) == true, "The texture atlas id must exist in the atlas.");
+            
+            SetTexture(in_texture);
+            SetTextureAtlas(in_atlas);
+            SetTextureAtlasId(in_atlasId);
+        }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         StandardDrawable::StandardDrawable(const PropertyMap& in_properties)
@@ -96,6 +112,8 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void StandardDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
         {
+            CS_ASSERT(in_texture != nullptr, "Cannot set a null texture on a drawable.");
+            
             m_texture = in_texture;
             
             m_atlasFrame = DrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);

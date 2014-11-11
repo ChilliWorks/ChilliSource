@@ -32,6 +32,8 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
+#include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
 #include <ChilliSource/Rendering/Sprite/SpriteComponent.h>
 
@@ -51,6 +53,21 @@ namespace ChilliSource
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(CanvasRenderer);
+            //----------------------------------------------------------------------------
+            /// A container for text properties for altering the look of built text.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------
+            struct TextProperties
+            {
+                f32 m_textScale = 1.0f;
+                f32 m_absCharSpacingOffset = 0.0f;
+                f32 m_absLineSpacingOffset = 0.0f;
+                f32 m_lineSpacingScale = 1.0f;
+                u32 m_maxNumLines = 0;
+                HorizontalTextJustification m_horizontalJustification = HorizontalTextJustification::k_centre;
+                VerticalTextJustification m_verticalJustification = VerticalTextJustification::k_centre;
+            };
             //----------------------------------------------------------------------------
             /// Holds the information required to build a sprite for a text character
             ///
@@ -136,19 +153,12 @@ namespace ChilliSource
             ///
             /// @param Text to convert to display characters (UTF-8)
             /// @param Font
-            /// @param Text scale
-            /// @param Absolute character spacing offset in pixels.
-            /// @param Absolute line spacing offset in pixels.
-            /// @param Line spacing scale factor.
             /// @param Max bounds
-            /// @param Max num lines (ZERO = infinite)
-            /// @param Horizontal justification
-            /// @param Vertical justufication
+            /// @param The text properties.
             ///
             /// @return Built text struct containing all the character infos
             //----------------------------------------------------------------------------
-            BuiltText BuildText(const std::string& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_absCharSpacingOffset, f32 in_absLineSpacingOffset, f32 in_lineSpacingScale, const Core::Vector2& in_bounds,
-                                u32 in_numLines, HorizontalTextJustification in_horizontal, VerticalTextJustification in_vertical) const;
+            BuiltText BuildText(const std::string& in_text, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& in_textProperties) const;
             //----------------------------------------------------------------------------
             /// Build the sprites for each given character and render them to screen.
             ///

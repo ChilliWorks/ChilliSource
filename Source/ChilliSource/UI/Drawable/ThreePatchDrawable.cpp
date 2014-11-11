@@ -449,7 +449,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        ThreePatchDrawable::ThreePatchDrawable(Direction in_direction)
+        ThreePatchDrawable::ThreePatchDrawable(const Rendering::TextureCSPtr& in_texture, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop)
         {
             switch (in_direction)
             {
@@ -466,6 +466,38 @@ namespace ChilliSource
                     m_offsetCalculationDelegate = CalculateThreePatchOffsetVertical;
                     break;
             }
+            
+            SetTexture(in_texture);
+            SetInsets(in_leftOrBottom, in_rightOrTop);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        ThreePatchDrawable::ThreePatchDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, Direction in_direction,
+                                               f32 in_leftOrBottom, f32 in_rightOrTop)
+        {
+            CS_ASSERT(in_atlas != nullptr, "The given texture atlas cannot be null.");
+            CS_ASSERT(in_atlas->HasFrameWithId(in_atlasId) == true, "The given atlas Id must exist in the texture atlas.");
+            
+            switch (in_direction)
+            {
+                case Direction::k_horizontal:
+                    m_uvCalculationDelegate = CalculateThreePatchUVsHorizontal;
+                    m_sizeCalculationDelegate = CalculateThreePatchSizesHorizontal;
+                    m_positionCalculationDelegate = CalculateThreePatchPositionsHorizontal;
+                    m_offsetCalculationDelegate = CalculateThreePatchOffsetHorizontal;
+                    break;
+                case Direction::k_vertical:
+                    m_uvCalculationDelegate = CalculateThreePatchUVsVertical;
+                    m_sizeCalculationDelegate = CalculateThreePatchSizesVertical;
+                    m_positionCalculationDelegate = CalculateThreePatchPositionsVertical;
+                    m_offsetCalculationDelegate = CalculateThreePatchOffsetVertical;
+                    break;
+            }
+            
+            SetTexture(in_texture);
+            SetTextureAtlas(in_atlas);
+            SetTextureAtlasId(in_atlasId);
+            SetInsets(in_leftOrBottom, in_rightOrTop);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -534,6 +566,8 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void ThreePatchDrawable::SetTexture(const Rendering::TextureCSPtr& in_texture)
         {
+            CS_ASSERT(in_texture != nullptr, "Cannot set a null texture on a drawable.");
+            
             m_texture = in_texture;
             
             m_atlasFrame = DrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);

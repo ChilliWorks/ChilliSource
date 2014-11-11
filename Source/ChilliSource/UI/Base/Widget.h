@@ -215,9 +215,15 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return Drawable or null
+            /// @return A pointer to the drawable. This will return null if there is no drawable.
             //----------------------------------------------------------------------------------------
-            IDrawable* GetDrawable() const;
+            IDrawable* GetDrawable();
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return A const pointer to the drawable. This will return null if there is no drawable.
+            //----------------------------------------------------------------------------------------
+            const IDrawable* GetDrawable() const;
             //----------------------------------------------------------------------------------------
             /// Sets the text drawable that describes how any text used by the widget should be
             /// rendered. If this is null, no text will be displayed. Text will always display over
@@ -231,9 +237,17 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return A pointer to the text drawable that will be rendered in this widget.
+            /// @return A pointer to the text drawable that will be rendered in this widget. This will
+            /// return null if there is no text drawable.
             //----------------------------------------------------------------------------------------
-            TextDrawable* GetTextDrawable() const;
+            TextDrawable* GetTextDrawable();
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the text drawable that will be rendered in this widget. This
+            /// will return null if there is no text drawable.
+            //----------------------------------------------------------------------------------------
+            const TextDrawable* GetTextDrawable() const;
             //----------------------------------------------------------------------------------------
             /// Set the layout that handles how to layout the widget's subviews. If this is null then the
             /// subviews will retain their current size and position. Otherwise the size and position may

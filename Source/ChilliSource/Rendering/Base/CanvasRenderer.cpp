@@ -34,8 +34,6 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
 #include <ChilliSource/GUI/Label/Label.h>
-#include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
-#include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
@@ -220,8 +218,8 @@ namespace ChilliSource
                         }
                     }
                     
-                    //If this is not a breakable character, but it still beyond the bounds
-                    //then wrap anyway even though we are mid word.
+                    //If this is not a breakable character, but it is still beyond the bounds
+                    //then wrap anyway, even though we are mid word.
                     else if((currentLineWidth + characterWidth) >= maxLineWidth)
                     {
                         out_lines.push_back(line);
@@ -305,13 +303,13 @@ namespace ChilliSource
                         break;
                 }
 
-                for(u32 i=in_lineStartIdx; i<=in_lineEndIdx; ++i)
+                for(u32 i = in_lineStartIdx; i <= in_lineEndIdx; ++i)
                 {
                     inout_characters[i].m_position.x += horizontalOffset;
                 }
             }
             //----------------------------------------------------------------------------
-            /// The text by default is top justfied. If another justification
+            /// The text by default is top justified. If another justification
             /// is required this function will update all the characters positions
             ///
             /// @author S Downie
@@ -451,7 +449,7 @@ namespace ChilliSource
                 f32 dotWidth = GetCharacterWidth((Core::UTF8Char)'.', in_font, in_absCharSpacingOffset, in_textScale);
                 f32 ellipsisWidth = dotWidth * k_numDots;
                 
-                //if there is space for some of the text and the elipsis, then calculate the output string.
+                //if there is space for some of the text and the ellipsis, then calculate the output string.
                 std::string outputText;
                 if (in_maxTextWidth > ellipsisWidth)
                 {
@@ -477,7 +475,7 @@ namespace ChilliSource
                     }
                 }
                 
-                //otherwise don't bother trying to use the input text and just build the ellipis text.
+                //otherwise don't bother trying to use the input text and just build the ellipsis text.
                 else
                 {
                     f32 currentLineWidth = 0.0f;
@@ -657,8 +655,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        CanvasRenderer::BuiltText CanvasRenderer::BuildText(const std::string& in_text, const FontCSPtr& in_font, f32 in_textScale, f32 in_absCharSpacingOffset, f32 in_absLineSpacingOffset, f32 in_lineSpacingScale,
-                                                            const Core::Vector2& in_bounds, u32 in_numLines, HorizontalTextJustification in_horizontal, VerticalTextJustification in_vertical) const
+        CanvasRenderer::BuiltText CanvasRenderer::BuildText(const std::string& in_text, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& in_properties) const
         {
             BuiltText result;
             result.m_width = 0.0f;
@@ -682,21 +679,21 @@ namespace ChilliSource
             std::vector<std::string> linesOnBounds;
             for(const auto& line : linesOnNewLine)
             {
-                SplitByBounds(line, in_font, in_absCharSpacingOffset, in_textScale, in_bounds, linesOnBounds);
+                SplitByBounds(line, in_font, in_properties.m_absCharSpacingOffset, in_properties.m_textScale, in_bounds, linesOnBounds);
             }
 
             //Only build as many lines as we have been told to. If ZERO is specified
             //this means build all lines. We are also constrained by the size of the bounds
-            u32 numLines = (in_numLines == 0) ? linesOnBounds.size() : std::min((u32)linesOnBounds.size(), in_numLines);
+            u32 numLines = (in_properties.m_maxNumLines == 0) ? linesOnBounds.size() : std::min((u32)linesOnBounds.size(), in_properties.m_maxNumLines);
 
-            f32 lineHeight = in_lineSpacingScale * ((in_font->GetLineHeight() + in_absLineSpacingOffset) * in_textScale);
+            f32 lineHeight = in_properties.m_lineSpacingScale * ((in_font->GetLineHeight() + in_properties.m_absLineSpacingOffset) * in_properties.m_textScale);
             f32 maxHeight = in_bounds.y;
             numLines = std::min(numLines, (u32)(maxHeight/lineHeight));
 
             //add an ellipsis if the text doesn't fit.
             if (linesOnBounds.size() > numLines && numLines > 0)
             {
-                linesOnBounds[numLines-1] = AppendEllipsis(linesOnBounds[numLines-1], in_font, in_absCharSpacingOffset, in_textScale, in_bounds.x);
+                linesOnBounds[numLines-1] = AppendEllipsis(linesOnBounds[numLines-1], in_font, in_properties.m_absCharSpacingOffset, in_properties.m_textScale, in_bounds.x);
             }
             
             //The middle of the text label is 0,0. We want to be starting at the top left.
@@ -712,7 +709,7 @@ namespace ChilliSource
                 while(characterIt < linesOnBounds[lineIdx].end())
                 {
                     auto character = Core::UTF8StringUtils::Next(characterIt);
-                    auto builtCharacter(BuildCharacter(character, in_font, cursorX, cursorY, in_textScale, in_absCharSpacingOffset));
+                    auto builtCharacter(BuildCharacter(character, in_font, cursorX, cursorY, in_properties.m_textScale, in_properties.m_absCharSpacingOffset));
                     
                     cursorX += builtCharacter.m_advance;
                     
@@ -724,7 +721,7 @@ namespace ChilliSource
                 }
 
                 f32 lineWidth = cursorX - cursorXReturnPos;
-                ApplyHorizontalTextJustifications(in_horizontal, in_bounds.x, lineStartIdx, result.m_characters.size() - 1, lineWidth, result.m_characters);
+                ApplyHorizontalTextJustifications(in_properties.m_horizontalJustification, in_bounds.x, lineStartIdx, result.m_characters.size() - 1, lineWidth, result.m_characters);
 
                 result.m_width = std::max(lineWidth, result.m_width);
 
@@ -733,7 +730,7 @@ namespace ChilliSource
             }
 
             result.m_height = numLines * lineHeight;
-            ApplyVerticalTextJustifications(in_vertical, in_bounds.y, result.m_height, result.m_characters);
+            ApplyVerticalTextJustifications(in_properties.m_verticalJustification, in_bounds.y, result.m_height, result.m_characters);
 
             return result;
         }

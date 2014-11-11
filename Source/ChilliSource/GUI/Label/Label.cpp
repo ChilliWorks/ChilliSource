@@ -568,7 +568,14 @@ namespace ChilliSource
                 if(mCachedChars.empty())
                 {
                     f32 fAssetTextScale = GetGlobalTextScale();
-                    mCachedChars = inpCanvas->BuildText(Text, Font, TextScale * fAssetTextScale, 0.0f, 0.0f, LineSpacing, vAbsoluteLabelSize, MaxNumLines, HorizontalJustification, VerticalJustification).m_characters;
+                    
+                    Rendering::CanvasRenderer::TextProperties properties;
+                    properties.m_textScale = TextScale * fAssetTextScale;
+                    properties.m_maxNumLines = MaxNumLines;
+                    properties.m_horizontalJustification = HorizontalJustification;
+                    properties.m_verticalJustification = VerticalJustification;
+                    properties.m_lineSpacingScale = LineSpacing;
+                    mCachedChars = inpCanvas->BuildText(Text, Font, vAbsoluteLabelSize, properties).m_characters;
                 }
                 
                 Core::Colour sDrawColour = TextColour * GetAbsoluteColour();
@@ -604,8 +611,13 @@ namespace ChilliSource
                 Core::Vector2 vAbsMaxSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMaxSize.GetRelative()) + UnifiedMaxSize.GetAbsolute() : UnifiedMaxSize.GetAbsolute();
                 Core::Vector2 vAbsMinSize = mpParentView ? (mpParentView->GetAbsoluteSize() * UnifiedMinSize.GetRelative()) + UnifiedMinSize.GetAbsolute() : UnifiedMinSize.GetAbsolute();
                 
-
-                Rendering::CanvasRenderer::BuiltText builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, 0.0f, 0.0f, LineSpacing, vAbsMaxSize, MaxNumLines, HorizontalJustification, VerticalJustification);
+                Rendering::CanvasRenderer::TextProperties properties;
+                properties.m_textScale = TextScale * mfGlobalTextScale;
+                properties.m_maxNumLines = MaxNumLines;
+                properties.m_horizontalJustification = HorizontalJustification;
+                properties.m_verticalJustification = VerticalJustification;
+                properties.m_lineSpacingScale = LineSpacing;
+                Rendering::CanvasRenderer::BuiltText builtText = inpCanvas->BuildText(Text, Font, vAbsMaxSize, properties);
                 
                 f32 fNewRelWidth = UnifiedMaxSize.vRelative.x;
                 f32 fNewRelHeight = 0.0f;
@@ -622,7 +634,7 @@ namespace ChilliSource
                     
                     //Now that we have calculated the width of the label we
                     //can use that to work out the height
-                    builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, 0.0f, 0.0f, LineSpacing, vAbsMinSize, MaxNumLines, HorizontalJustification, VerticalJustification);
+                    builtText = inpCanvas->BuildText(Text, Font, vAbsMinSize, properties);
                     fTextHeight = builtText.m_height;
                 }
                 //If the size of text is smaller than the max bounds then clamp to that
@@ -633,7 +645,7 @@ namespace ChilliSource
                     
                     //Now that we have calculated the width of the label we
                     //can use that to work out the height
-                    builtText = inpCanvas->BuildText(Text, Font, TextScale * mfGlobalTextScale, 0.0f, 0.0f, LineSpacing, Core::Vector2(fNewAbsWidth, vAbsMaxSize.y), MaxNumLines, HorizontalJustification, VerticalJustification);
+                    builtText = inpCanvas->BuildText(Text, Font, Core::Vector2(fNewAbsWidth, vAbsMaxSize.y), properties);
                     fTextHeight = builtText.m_height;
                 }
                 

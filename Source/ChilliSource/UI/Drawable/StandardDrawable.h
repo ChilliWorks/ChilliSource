@@ -49,14 +49,25 @@ namespace ChilliSource
         class StandardDrawable final : public IDrawable
         {
         public:
-
             //----------------------------------------------------------------------------------------
             /// Constructor
             ///
-            /// @author S Downie
+            /// @author Ian Copland
+            ///
+            /// @param The texture.
             //----------------------------------------------------------------------------------------
-            StandardDrawable() = default;
+            StandardDrawable(const Rendering::TextureCSPtr& in_texture);
             //----------------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The texture.
+            /// @param The texture atlas.
+            /// @param The atlas id.
+            //----------------------------------------------------------------------------------------
+            StandardDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId);
+            //---------------------------------------------------------------------------------------
             /// Constructor that builds the drawable from key-value properties
             ///
             /// Properties:
