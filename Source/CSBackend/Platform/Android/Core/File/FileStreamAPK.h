@@ -189,16 +189,6 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------------------
 			void Read(s8* inpbyBuffer, s32 indwStreamSize) override;
 			//--------------------------------------------------------------------------------------------------
-			/// Read Some
-			///
-			/// Very similar to Read(), but this will stop if there are no more characters in the steam, even
-			/// without hitting EOF.
-			///
-			/// @param the buffer.
-			/// @param the stream size.
-			//--------------------------------------------------------------------------------------------------
-			s32 ReadSome(s8* inpbyBuffer, s32 indwStreamSize) override;
-			//--------------------------------------------------------------------------------------------------
 			/// Put Back
 			///
 			/// Decriments the get pointer by one, and sets inbyChar as the next char to be read.
