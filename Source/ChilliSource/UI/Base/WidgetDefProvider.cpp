@@ -100,7 +100,7 @@ namespace ChilliSource
                     const Json::Value& children = hierarchyItem["Children"];
                     if(children.isNull() == false)
                     {
-                        ParseChildWidgets(children, in_widgets, in_definitionLocation, in_definitionPath, WidgetHierarchyDesc::Access::k_internal, childDesc.m_children);
+                        ParseChildWidgets(children, in_widgets, in_definitionLocation, in_definitionPath, WidgetHierarchyDesc::Access::k_external, childDesc.m_children);
                     }
                     
                     out_children.push_back(childDesc);

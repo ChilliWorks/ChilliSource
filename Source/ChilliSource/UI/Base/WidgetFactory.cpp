@@ -338,11 +338,7 @@ namespace ChilliSource
             
             for(const auto& link : in_hierarchyDesc.m_links)
             {
-                Widget* childWidget = widget->GetInternalWidget(link.m_widgetName);
-                if(childWidget == nullptr)
-                {
-                    childWidget = widget->GetWidget(link.m_widgetName).get();
-                }
+                Widget* childWidget = widget->GetInternalWidgetRecursive(link.m_widgetName);
                 CS_ASSERT(childWidget != nullptr, "Cannot link to missing widget: " + link.m_widgetName);
                 
                 std::string lowerCasePropName(link.m_propertyName);
