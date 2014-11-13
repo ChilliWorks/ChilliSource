@@ -349,7 +349,6 @@ namespace ChilliSource
             
         private:
             Rendering::FontCSPtr m_font;
-            std::string m_unformattedText;
             std::string m_text;
             Rendering::CanvasRenderer::TextProperties m_textProperties;
             Core::Colour m_textColour;
