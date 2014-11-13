@@ -228,6 +228,28 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             void SetText(const Core::LocalisedTextCSPtr& in_localisedText, const std::string& in_localisedTextId);
             //-------------------------------------------------------------------
+            /// Sets the rendered text from a localised text resource. Text can
+            /// contain basic markup for inserting variables into the string. The
+            /// markup is in the form [var=VariablenName], and the value for the
+            /// variable is looked up in the given param dictionary.
+            ///
+            /// For example "Time remaining: [var=TimeRemaining]" with a param
+            /// dictionary containig "TimeRemaining"="12" will become "Time
+            /// Remaining: 12".
+            ///
+            /// The markup is also recursive, meaning that the following is valid:
+            /// "[var=TextValue[var=ValueIndex]]".
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The localised text resource.
+            /// @param The localised text id which is used to lookup the string
+            /// in the localised text resource.
+            /// @param The param dictionary which contains the values which should
+            /// be used for each variable in the string.
+            //-------------------------------------------------------------------
+            void SetText(const Core::LocalisedTextCSPtr& in_localisedText, const std::string& in_localisedTextId, const Core::ParamDictionary& in_params);
+            //-------------------------------------------------------------------
             /// Directly sets the text that will be rendered. This is not
             /// recommended, usually is it better to set the text using a
             /// localised text resource.
@@ -327,6 +349,7 @@ namespace ChilliSource
             
         private:
             Rendering::FontCSPtr m_font;
+            std::string m_unformattedText;
             std::string m_text;
             Rendering::CanvasRenderer::TextProperties m_textProperties;
             Core::Colour m_textColour;

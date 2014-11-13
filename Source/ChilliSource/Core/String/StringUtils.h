@@ -197,9 +197,9 @@ namespace ChilliSource
 			///
 			/// @param Text string (UTF-8)
 			/// @param Params
-            /// @param Out: Text string (UTF-8)
+            /// @return Text string (UTF-8)
 			//-------------------------------------------------------
-			void InsertVariables(const std::string& instrText, const Core::ParamDictionary& insParams, std::string& outstrText);
+			std::string InsertVariables(const std::string& instrText, const Core::ParamDictionary& insParams);
             
             /** Checks the std::string is a inValid number inValue. */
 			bool isNumber(const std::string& inVal);

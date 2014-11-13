@@ -68,7 +68,7 @@ namespace ChilliSource
             if(inbOverwriteText)
                 Label::SetText("");
             
-            Core::StringUtils::InsertVariables(instrText, insParams, Text);
+            Text = Core::StringUtils::InsertVariables(instrText, insParams);
         }
     }
 }

@@ -227,6 +227,17 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
+        void TextDrawable::SetText(const Core::LocalisedTextCSPtr& in_localisedText, const std::string& in_localisedTextId, const Core::ParamDictionary& in_params)
+        {
+            CS_ASSERT(in_localisedText != nullptr, "Cannot set text using a null localised text.");
+            CS_ASSERT(in_localisedText->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot set text using an incomplete localised text.");
+            
+            m_text = Core::StringUtils::InsertVariables(in_localisedText->GetText(in_localisedTextId), in_params);
+            
+            m_invalidateCache = true;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
         void TextDrawable::SetText(const std::string& in_text)
         {
             m_text = in_text;
