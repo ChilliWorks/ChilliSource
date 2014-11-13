@@ -634,7 +634,7 @@ namespace ChilliSource
             WidgetCSPtr GetWidgetRecursive(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
             /// Returns a list of the widgets immediate children. A copy of the internal list is
-            /// created so this is relatively expensive if the the widget has a lot of children.
+            /// created so this is relatively expensive if the widget has a lot of children.
             ///
             /// @author HMcLaughlin
             ///
@@ -643,7 +643,7 @@ namespace ChilliSource
             std::vector<WidgetSPtr> GetWidgets();
             //----------------------------------------------------------------------------------------
             /// Returns a const list of the widgets immediate children. A copy of the internal list is
-            /// created so this is relatively expensive if the the widget has a lot of children.
+            /// created so this is relatively expensive if the widget has a lot of children.
             ///
             /// @author Ian Copland
             ///
@@ -696,7 +696,7 @@ namespace ChilliSource
             const Widget* GetInternalWidgetRecursive(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
             /// Returns a list of the widgets immediate internal children. A copy of the internal list
-            /// is created so this is relatively expensive if the the widget has a lot of internal
+            /// is created so this is relatively expensive if the widget has a lot of internal
             /// children.
             ///
             /// @author HMcLaughlin
@@ -706,7 +706,7 @@ namespace ChilliSource
             std::vector<Widget*> GetInternalWidgets();
             //----------------------------------------------------------------------------------------
             /// Returns a const list of the widgets immediate internal children. A copy of the internal
-            /// list is created so this is relatively expensive if the the widget has a lot of internal
+            /// list is created so this is relatively expensive if the widget has a lot of internal
             /// children.
             ///
             /// @author Ian Copland

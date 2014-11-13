@@ -39,10 +39,10 @@ namespace ChilliSource
     {
         //------------------------------------------------------------------------
         /// Casts the const away from a pointer return value of a const method.
-        /// This is used to avoid duplicate code when defining both a non const and
+        /// This is used to avoid duplicate code when defining both a non-const and
         /// const version of a method. This should only be used in non-const
-        /// methods of the class that contain the const member, it's use else
-        /// where should be considered just as evil as a standard const_cast!
+        /// methods of the class that contains the const member, its use elsewhere
+        /// should be considered just as evil as a standard const_cast!
         ///
         /// @author Ian Copland
         ///
@@ -55,14 +55,15 @@ namespace ChilliSource
         //------------------------------------------------------------------------
         template <typename TClassType, typename TReturnType, typename... TArgs> TReturnType* ConstMethodCast(TClassType* in_object, const TReturnType*(TClassType::*in_method)(TArgs...) const, TArgs&& ...in_args)
         {
-            return const_cast<TReturnType*>((static_cast<const TClassType*>(in_object)->*in_method)(std::forward<TArgs>(in_args)...));
+            const TReturnType* constReturn = (static_cast<const TClassType*>(in_object)->*in_method)(std::forward<TArgs>(in_args)...);
+            return const_cast<TReturnType*>(constReturn);
         }
         //------------------------------------------------------------------------
         /// Casts the const away from a reference return value of a const method.
-        /// This is used to avoid duplicate code when defining both a non const and
+        /// This is used to avoid duplicate code when defining both a non-const and
         /// const version of a method. This should only be used in non-const
-        /// methods of the class that contain the const member, it's use else
-        /// where should be considered just as evil as a standard const_cast!
+        /// methods of the class that contains the const member, its use elsewhere
+        /// should be considered just as evil as a standard const_cast!
         ///
         /// @author Ian Copland
         ///
@@ -75,14 +76,15 @@ namespace ChilliSource
         //------------------------------------------------------------------------
         template <typename TClassType, typename TReturnType, typename... TArgs> TReturnType& ConstMethodCast(TClassType* in_object, const TReturnType&(TClassType::*in_method)(TArgs...) const, TArgs&& ...in_args)
         {
-            return const_cast<TReturnType&>((static_cast<const TClassType*>(in_object)->*in_method)(std::forward<TArgs>(in_args)...));
+            const TReturnType& constReturn = (static_cast<const TClassType*>(in_object)->*in_method)(std::forward<TArgs>(in_args)...);
+            return const_cast<TReturnType&>(constReturn);
         }
         //------------------------------------------------------------------------
         /// Casts the const away from a shared pointer return value of a const method.
-        /// This is used to avoid duplicate code when defining both a non const and
+        /// This is used to avoid duplicate code when defining both a non-const and
         /// const version of a method. This should only be used in non-const
-        /// methods of the class that contain the const member, it's use else
-        /// where should be considered just as evil as a standard const_cast!
+        /// methods of the class that contains the const member, its use elsewhere
+        /// should be considered just as evil as a standard const_cast!
         ///
         /// @author Ian Copland
         ///
@@ -95,7 +97,8 @@ namespace ChilliSource
         //------------------------------------------------------------------------
         template <typename TClassType, typename TReturnType, typename... TArgs> std::shared_ptr<TReturnType> ConstMethodCast(TClassType* in_object, std::shared_ptr<const TReturnType>(TClassType::*in_method)(TArgs...) const, TArgs&& ...in_args)
         {
-            return std::const_pointer_cast<TReturnType>((static_cast<const TClassType*>(in_object)->*in_method)(std::forward<TArgs>(in_args)...));
+            std::shared_ptr<const TReturnType> constReturn = (static_cast<const TClassType*>(in_object)->*in_method)(std::forward<TArgs>(in_args)...);
+            return std::const_pointer_cast<TReturnType>(constReturn);
         }
     }
 }
