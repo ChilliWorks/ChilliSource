@@ -652,12 +652,12 @@ namespace ChilliSource
         
             //-------------------------------------------------------
             //-------------------------------------------------------
-            std::string InsertVariables(const std::string& instrText, const Core::ParamDictionary& insParams)
+            std::string InsertVariables(const std::string& in_text, const Core::ParamDictionary& in_params)
             {
                 std::string output;
                 
-                auto it = instrText.begin();
-                while(it < instrText.end())
+                auto it = in_text.begin();
+                while(it < in_text.end())
                 {
                     auto character = UTF8StringUtils::Next(it);
 
@@ -668,7 +668,7 @@ namespace ChilliSource
                     else
                     {
                         // Found a mark up, check it
-                        ReplaceVariableRecursive(insParams, output, it);
+                        ReplaceVariableRecursive(in_params, output, it);
                     }
                 }
                 
