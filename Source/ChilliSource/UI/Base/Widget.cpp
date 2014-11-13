@@ -29,6 +29,7 @@
 #include <ChilliSource/UI/Base/Widget.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Base/ConstMethodCast.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Scripting/Lua/LuaSystem.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
@@ -695,15 +696,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         WidgetSPtr Widget::GetWidget(const std::string& in_name)
         {
-            for(const auto& child : m_children)
-            {
-                if(child->m_name == in_name)
-                {
-                    return child;
-                }
-            }
-            
-            return nullptr;
+            return Core::ConstMethodCast(this, &Widget::GetWidget, in_name);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -721,27 +714,28 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Widget* Widget::GetInternalWidget(const std::string& in_name)
+        WidgetSPtr Widget::GetWidgetRecursive(const std::string& in_name)
         {
-            for(const auto& child : m_internalChildren)
-            {
-                if(child->m_name == in_name)
-                {
-                    return child.get();
-                }
-            }
-            
-            return nullptr;
+            return Core::ConstMethodCast(this, &Widget::GetWidgetRecursive, in_name);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        const Widget* Widget::GetInternalWidget(const std::string& in_name) const
+        WidgetCSPtr Widget::GetWidgetRecursive(const std::string& in_name) const
         {
-            for(const auto& child : m_internalChildren)
+            for(const auto& child : m_children)
             {
                 if(child->m_name == in_name)
                 {
-                    return child.get();
+                    return child;
+                }
+            }
+            
+            for(const auto& child : m_children)
+            {
+                auto childsChild = child->GetWidgetRecursive(in_name);
+                if (childsChild != nullptr)
+                {
+                    return childsChild;
                 }
             }
             
@@ -770,6 +764,55 @@ namespace ChilliSource
             }
             
             return children;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Widget* Widget::GetInternalWidget(const std::string& in_name)
+        {
+            return Core::ConstMethodCast(this, &Widget::GetInternalWidget, in_name);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const Widget* Widget::GetInternalWidget(const std::string& in_name) const
+        {
+            for(const auto& child : m_internalChildren)
+            {
+                if(child->m_name == in_name)
+                {
+                    return child.get();
+                }
+            }
+            
+            return nullptr;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Widget* Widget::GetInternalWidgetRecursive(const std::string& in_name)
+        {
+            return Core::ConstMethodCast(this, &Widget::GetInternalWidgetRecursive, in_name);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const Widget* Widget::GetInternalWidgetRecursive(const std::string& in_name) const
+        {
+            for(const auto& child : m_internalChildren)
+            {
+                if(child->m_name == in_name)
+                {
+                    return child.get();
+                }
+            }
+            
+            for(const auto& child : m_internalChildren)
+            {
+                auto childsChild = child->GetWidgetRecursive(in_name);
+                if (childsChild != nullptr)
+                {
+                    return childsChild.get();
+                }
+            }
+            
+            return nullptr;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

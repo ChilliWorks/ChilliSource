@@ -81,9 +81,11 @@ namespace ChilliSource
             /// @param Json widgets
             /// @param Definition location
             /// @param Defintion path (no file name)
+            /// @param The access of the child widget. On recursion
+            /// this will be set to public.
             /// @param [Out] Children descriptions
             //-------------------------------------------------------
-            void ParseChildWidgets(const Json::Value& in_hierarchy, const Json::Value& in_widgets, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, std::vector<WidgetHierarchyDesc>& out_children)
+            void ParseChildWidgets(const Json::Value& in_hierarchy, const Json::Value& in_widgets, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, WidgetHierarchyDesc::Access in_access, std::vector<WidgetHierarchyDesc>& out_children)
             {
                 for(u32 i=0; i<in_hierarchy.size(); ++i)
                 {
@@ -93,12 +95,12 @@ namespace ChilliSource
                     
                     WidgetHierarchyDesc childDesc;
                     WidgetTemplateProvider::ParseTemplate(widget, name, Json::nullValue, in_hierarchy, in_definitionLocation, in_definitionPath, childDesc);
-                    childDesc.m_access = WidgetHierarchyDesc::Access::k_internal;
+                    childDesc.m_access = in_access;
                     
                     const Json::Value& children = hierarchyItem["Children"];
                     if(children.isNull() == false)
                     {
-                        ParseChildWidgets(children, in_widgets, in_definitionLocation, in_definitionPath, childDesc.m_children);
+                        ParseChildWidgets(children, in_widgets, in_definitionLocation, in_definitionPath, WidgetHierarchyDesc::Access::k_internal, childDesc.m_children);
                     }
                     
                     out_children.push_back(childDesc);
@@ -226,7 +228,7 @@ namespace ChilliSource
                 const Json::Value& children = root["Children"];
                 if(hierarchy.isNull() == false && hierarchy.isArray() == true && children.isNull() == false)
                 {
-                    ParseChildWidgets(hierarchy, children, in_storageLocation, pathToDefinition, hierarchyDesc.m_children);
+                    ParseChildWidgets(hierarchy, children, in_storageLocation, pathToDefinition, WidgetHierarchyDesc::Access::k_internal, hierarchyDesc.m_children);
                 }
                 
                 const Json::Value& customProperties = root["Properties"];

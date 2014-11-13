@@ -589,33 +589,52 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void RemoveFromParent();
             //----------------------------------------------------------------------------------------
+            /// Searches the immediate children for a widget with the given name and returns it.
+            /// If the child cannot be found this will return null. If there are multiple children
+            /// with the name the first with be returned.
+            ///
             /// @author S Downie
             ///
-            /// @return The first child widget with the given name. Note: this is not recursive
+            /// @return The child with the given name or null if one doesn't exist.
             //----------------------------------------------------------------------------------------
             WidgetSPtr GetWidget(const std::string& in_name);
             //----------------------------------------------------------------------------------------
+            /// Searches the immediate children for a widget with the given name and returns a
+            /// constant version of it. If the child cannot be found this will return null. If there
+            /// are multiple children with the name the first found will be returned.
+            ///
             /// @author Ian Copland
             ///
-            /// @return A constant version of the first child widget with the given name. This is not
-            /// recursive.
+            /// @return A constant version of the child with the given name or null if one doesn't
+            /// exist.
             //----------------------------------------------------------------------------------------
             WidgetCSPtr GetWidget(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
-            /// @author S Downie
+            /// Recurses through the widget hierarchy seaching for a widget with the given name and
+            /// returns it. If the child cannot be found this will return null. If there are multiple
+            /// children with the same name the first found will be returned. The hierarchy will be
+            /// navigated breadth first.
             ///
-            /// @return The first internal child widget with the given name. Note: this is not recursive
-            //----------------------------------------------------------------------------------------
-            Widget* GetInternalWidget(const std::string& in_name);
-            //----------------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return A constant version of the first internal child widget with the given name. This
-            /// is not recursive.
+            /// @return The child with the given name or null if one doesn't exist.
             //----------------------------------------------------------------------------------------
-            const Widget* GetInternalWidget(const std::string& in_name) const;
+            WidgetSPtr GetWidgetRecursive(const std::string& in_name);
             //----------------------------------------------------------------------------------------
-            /// Constructs a list of child widgets and returns (Use sparingly)
+            /// Recurses through the widget hierarchy seaching for a widget with the given name and
+            /// returns a constant version of it. If the child cannot be found this will return null.
+            /// If there are multiple children with the same name the first found will be returned.
+            /// The hierarchy will be navigated breadth first.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return A constant version of the child with the given name or null if one doesn't
+            /// exist.
+            //----------------------------------------------------------------------------------------
+            WidgetCSPtr GetWidgetRecursive(const std::string& in_name) const;
+            //----------------------------------------------------------------------------------------
+            /// Returns a list of the widgets immediate children. A copy of the internal list is
+            /// created so this is relatively expensive if the the widget has a lot of children.
             ///
             /// @author HMcLaughlin
             ///
@@ -623,8 +642,8 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             std::vector<WidgetSPtr> GetWidgets();
             //----------------------------------------------------------------------------------------
-            /// Returns a const list of the widgets children. A copy of the internal list is created
-            /// so this is relatively expensive if the the widget has a lot of children.
+            /// Returns a const list of the widgets immediate children. A copy of the internal list is
+            /// created so this is relatively expensive if the the widget has a lot of children.
             ///
             /// @author Ian Copland
             ///
@@ -632,7 +651,53 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             std::vector<WidgetCSPtr> GetWidgets() const;
             //----------------------------------------------------------------------------------------
-            /// Constructs a list of internal child widgets and returns (Use sparingly)
+            /// Searches the immediate internal children for a widget with the given name and returns
+            /// it. If the child cannot be found this will return null. If there are multiple children
+            /// with the name the first with be returned.
+            ///
+            /// @author S Downie
+            ///
+            /// @return The internal child with the given name or null if one doesn't exist.
+            //----------------------------------------------------------------------------------------
+            Widget* GetInternalWidget(const std::string& in_name);
+            //----------------------------------------------------------------------------------------
+            /// Searches the immediate internal children for a widget with the given name and returns
+            /// a constant version of it. If the child cannot be found this will return null. If there
+            /// are multiple children with the name the first with be returned.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return A constant version of the internal child with the given name or null if one
+            /// doesn't exist.
+            //----------------------------------------------------------------------------------------
+            const Widget* GetInternalWidget(const std::string& in_name) const;
+            //----------------------------------------------------------------------------------------
+            /// Searches the immediate internal children and recurses through their external children
+            /// for a widget with the given name and returns it. If the child cannot be found this will
+            /// return null. If there are multiple children with the name the first with be returned.
+            /// The hierarchy will be navigated breadth first.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return The internal child with the given name or null if one doesn't exist.
+            //----------------------------------------------------------------------------------------
+            Widget* GetInternalWidgetRecursive(const std::string& in_name);
+            //----------------------------------------------------------------------------------------
+            /// Searches the immediate internal children and recurses through their external children
+            /// for a widget with the given name and returns a constant version of it. If the child
+            /// cannot be found this will return null. If there are multiple children with the name
+            /// the first with be returned. The hierarchy will be navigated breadth first.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return A constant version of the internal child with the given name or null if one
+            /// doesn't exist.
+            //----------------------------------------------------------------------------------------
+            const Widget* GetInternalWidgetRecursive(const std::string& in_name) const;
+            //----------------------------------------------------------------------------------------
+            /// Returns a list of the widgets immediate internal children. A copy of the internal list
+            /// is created so this is relatively expensive if the the widget has a lot of internal
+            /// children.
             ///
             /// @author HMcLaughlin
             ///
@@ -640,8 +705,8 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             std::vector<Widget*> GetInternalWidgets();
             //----------------------------------------------------------------------------------------
-            /// Returns a const list of the widgets internal children. A copy of the internal list is
-            /// created so this is relatively expensive if the the widget has a lot of internal
+            /// Returns a const list of the widgets immediate internal children. A copy of the internal
+            /// list is created so this is relatively expensive if the the widget has a lot of internal
             /// children.
             ///
             /// @author Ian Copland

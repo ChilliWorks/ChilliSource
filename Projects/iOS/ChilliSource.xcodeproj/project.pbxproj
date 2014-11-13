@@ -1015,6 +1015,7 @@
 		81D8B6261962E0F70010DA84 /* TextureUnitSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureUnitSystem.cpp; sourceTree = "<group>"; };
 		81D8B6271962E0F70010DA84 /* TextureUnitSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureUnitSystem.h; sourceTree = "<group>"; };
 		81D8B6DB1962E1110010DA84 /* libCSBase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCSBase.a; sourceTree = "<group>"; };
+		81E648A91A14FBF500054326 /* ConstMethodCast.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConstMethodCast.h; sourceTree = "<group>"; };
 		81F6DEA11A10C6A900B422C1 /* VerticalTextJustification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalTextJustification.h; sourceTree = "<group>"; };
 		81F6DEA21A10C6DD00B422C1 /* HorizontalTextJustification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HorizontalTextJustification.h; sourceTree = "<group>"; };
 		81F6DEA31A10CE0800B422C1 /* VerticalTextJustification.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalTextJustification.cpp; sourceTree = "<group>"; };
@@ -1441,6 +1442,7 @@
 				81D8B2431962E0EB0010DA84 /* StandardMacros.h */,
 				81D8B2441962E0EB0010DA84 /* Utils.cpp */,
 				81D8B2451962E0EB0010DA84 /* Utils.h */,
+				81E648A91A14FBF500054326 /* ConstMethodCast.h */,
 			);
 			path = Base;
 			sourceTree = "<group>";
