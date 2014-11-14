@@ -1,7 +1,7 @@
 //
-//  Base.h
+//  Component.cpp
 //  Chilli Source
-//  Created by Scott Downie on 25/07/2014.
+//  Created by Ian Copland on 14/11/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,22 +26,30 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_UI_BASE_H_
-#define _CHILLISOURCE_UI_BASE_H_
-
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Base/Canvas.h>
 #include <ChilliSource/UI/Base/Component.h>
-#include <ChilliSource/UI/Base/ComponentFactory.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
-#include <ChilliSource/UI/Base/PropertyType.h>
-#include <ChilliSource/UI/Base/SizePolicy.h>
-#include <ChilliSource/UI/Base/Widget.h>
-#include <ChilliSource/UI/Base/WidgetDef.h>
-#include <ChilliSource/UI/Base/WidgetDefProvider.h>
-#include <ChilliSource/UI/Base/WidgetTemplate.h>
-#include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
-#include <ChilliSource/UI/Base/WidgetFactory.h>
 
-#endif
+namespace ChilliSource
+{
+    namespace UI
+    {
+        CS_DEFINE_NAMEDTYPE(Component);
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        Component::Component(Widget* in_widget)
+            : m_widget(in_widget)
+        {
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        Widget* Component::GetWidget()
+        {
+            return m_widget;
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        const Widget* Component::GetWidget() const
+        {
+            return m_widget;
+        }
+    }
+}

@@ -41,6 +41,8 @@ namespace ChilliSource
         /// Base
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Canvas);
+        CS_FORWARDDECLARE_CLASS(Component);
+        CS_FORWARDDECLARE_CLASS(ComponentFactory);
         CS_FORWARDDECLARE_CLASS(IPropertyAccessor);
         CS_FORWARDDECLARE_CLASS(PropertyMap);
         CS_FORWARDDECLARE_CLASS(Widget);
