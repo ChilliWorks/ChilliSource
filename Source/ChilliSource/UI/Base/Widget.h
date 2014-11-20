@@ -106,34 +106,6 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             using InputMovedDelegate = std::function<void(Widget*, const Input::Pointer&)>;
             //----------------------------------------------------------------------------------------
-            /// Constructor that builds the widget from the given definition.
-            ///
-            /// Default properties exposed to UI files:
-            ///
-            ///     - Name - String - Identifying name
-            ///     - RelPosition - f32 f32 - Position of local anchor relative to parent anchor and parent size
-            ///     - AbsPosition - f32 f32 - Absolute position of local anchor relative to parent anchor
-            ///     - RelSize - f32 f32 - Size relative to the parent size
-            ///     - AbsSize - f32 f32 - Absolute size
-            ///     - PreferredSize - f32 f32 - Absolute preferred size
-            ///     - Scale - f32 f32 - Scale
-            ///     - Rotation - f32 - Rotation in radians
-            ///     - Colour - f32 f32 f32 f32 - Colour
-            ///     - Visible - "true"/"false" - Visiblity flag
-            ///     - ClipChildren - "true"/"false" - Whether children that exceed bounds are clipped
-            ///     - OriginAnchor - "TopLeft"/"TopCentre"/"TopRight"/"MiddleLeft"/"MiddleCentre"/"MiddleRight"/"BottomLeft"/"BottomCentre"/"BottomRight" - Origin anchor
-            ///     - ParentalAnchor - "TopLeft"/"TopCentre"/"TopRight"/"MiddleLeft"/"MiddleCentre"/"MiddleRight"/"BottomLeft"/"BottomCentre"/"BottomRight" - Parent anchor
-            ///     - SizePolicy - "None"/"UsePreferredSize"/"UseWidthMaintainingAspect"/"UseHeightMaintainingAspect"/"FitMaintainingAspect"/"FillMaintainingAspect" - Size policy
-            ///     - Drawable - Object - See *Drawable.h
-            ///     - Layout - Object - See *Layout.h
-            ///
-            /// @author S Downie
-            ///
-            /// @param Default property values
-            /// @param Custom property values
-            //----------------------------------------------------------------------------------------
-            Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties);
-            //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @return The list of properties supported by widget
@@ -921,6 +893,35 @@ namespace ChilliSource
         private:
             friend class Canvas;
             friend class WidgetFactory;
+            //----------------------------------------------------------------------------------------
+            /// Constructor that builds the widget from the given definition.
+            ///
+            /// Default properties exposed to UI files:
+            ///
+            ///     - Name - String - Identifying name
+            ///     - RelPosition - f32 f32 - Position of local anchor relative to parent anchor and parent size
+            ///     - AbsPosition - f32 f32 - Absolute position of local anchor relative to parent anchor
+            ///     - RelSize - f32 f32 - Size relative to the parent size
+            ///     - AbsSize - f32 f32 - Absolute size
+            ///     - PreferredSize - f32 f32 - Absolute preferred size
+            ///     - Scale - f32 f32 - Scale
+            ///     - Rotation - f32 - Rotation in radians
+            ///     - Colour - f32 f32 f32 f32 - Colour
+            ///     - Visible - "true"/"false" - Visiblity flag
+            ///     - ClipChildren - "true"/"false" - Whether children that exceed bounds are clipped
+            ///     - OriginAnchor - "TopLeft"/"TopCentre"/"TopRight"/"MiddleLeft"/"MiddleCentre"/"MiddleRight"/"BottomLeft"/"BottomCentre"/"BottomRight" - Origin anchor
+            ///     - ParentalAnchor - "TopLeft"/"TopCentre"/"TopRight"/"MiddleLeft"/"MiddleCentre"/"MiddleRight"/"BottomLeft"/"BottomCentre"/"BottomRight" - Parent anchor
+            ///     - SizePolicy - "None"/"UsePreferredSize"/"UseWidthMaintainingAspect"/"UseHeightMaintainingAspect"/"FitMaintainingAspect"/"FillMaintainingAspect" - Size policy
+            ///     - Drawable - Object - See *Drawable.h
+            ///     - Layout - Object - See *Layout.h
+            ///
+            /// @author S Downie
+            ///
+            /// @param The property 
+            /// @param Custom property values
+            //----------------------------------------------------------------------------------------
+            Widget(const PropertyMap& in_properties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<WidgetDesc>& in_childDescs,
+                   const std::vector<ComponentPropertyLink>& in_componentPropertyLinks, const std::vector<ChildPropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource);
             //----------------------------------------------------------------------------------------
             /// Set the pointer to the canvas
             ///

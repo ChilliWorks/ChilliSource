@@ -51,6 +51,8 @@
 		817F766D1A03E31000D36ACF /* LuaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76641A03E31000D36ACF /* LuaUtils.cpp */; };
 		817F76701A03E37200D36ACF /* PointerProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F766E1A03E37200D36ACF /* PointerProxy.cpp */; };
 		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
+		81890EC41A1CF481005811F1 /* ComponentDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81890EC31A1CF481005811F1 /* ComponentDesc.cpp */; };
+		81890EC71A1D020A005811F1 /* WidgetDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81890EC51A1D020A005811F1 /* WidgetDesc.cpp */; };
 		81970FE71A0A48B500505599 /* TextDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81970FE51A0A48B500505599 /* TextDrawable.cpp */; };
 		81AAFBBB19C9C18100CD4A14 /* Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB419C9C18100CD4A14 /* Gesture.cpp */; };
 		81AAFBBC19C9C18100CD4A14 /* GestureSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB619C9C18100CD4A14 /* GestureSystem.cpp */; };
@@ -407,7 +409,6 @@
 		817F75FA1A03E23A00D36ACF /* WidgetDefProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetDefProvider.h; sourceTree = "<group>"; };
 		817F75FB1A03E23A00D36ACF /* WidgetFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetFactory.cpp; sourceTree = "<group>"; };
 		817F75FC1A03E23A00D36ACF /* WidgetFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetFactory.h; sourceTree = "<group>"; };
-		817F75FD1A03E23A00D36ACF /* WidgetHierarchyDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetHierarchyDesc.h; sourceTree = "<group>"; };
 		817F75FE1A03E23A00D36ACF /* WidgetParserUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetParserUtils.cpp; sourceTree = "<group>"; };
 		817F75FF1A03E23A00D36ACF /* WidgetParserUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetParserUtils.h; sourceTree = "<group>"; };
 		817F76001A03E23A00D36ACF /* WidgetProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetProxy.cpp; sourceTree = "<group>"; };
@@ -480,6 +481,10 @@
 		817F766E1A03E37200D36ACF /* PointerProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PointerProxy.cpp; sourceTree = "<group>"; };
 		817F766F1A03E37200D36ACF /* PointerProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointerProxy.h; sourceTree = "<group>"; };
 		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		81890EC21A1CF1D6005811F1 /* ComponentDesc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComponentDesc.h; sourceTree = "<group>"; };
+		81890EC31A1CF481005811F1 /* ComponentDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentDesc.cpp; sourceTree = "<group>"; };
+		81890EC51A1D020A005811F1 /* WidgetDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetDesc.cpp; sourceTree = "<group>"; };
+		81890EC61A1D020A005811F1 /* WidgetDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetDesc.h; sourceTree = "<group>"; };
 		81970FE51A0A48B500505599 /* TextDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextDrawable.cpp; sourceTree = "<group>"; };
 		81970FE61A0A48B500505599 /* TextDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextDrawable.h; sourceTree = "<group>"; };
 		81970FE91A0A780A00505599 /* Text.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Text.h; sourceTree = "<group>"; };
@@ -1114,7 +1119,6 @@
 				817F75FA1A03E23A00D36ACF /* WidgetDefProvider.h */,
 				817F75FB1A03E23A00D36ACF /* WidgetFactory.cpp */,
 				817F75FC1A03E23A00D36ACF /* WidgetFactory.h */,
-				817F75FD1A03E23A00D36ACF /* WidgetHierarchyDesc.h */,
 				817F75FE1A03E23A00D36ACF /* WidgetParserUtils.cpp */,
 				817F75FF1A03E23A00D36ACF /* WidgetParserUtils.h */,
 				817F76001A03E23A00D36ACF /* WidgetProxy.cpp */,
@@ -1127,6 +1131,10 @@
 				81173CDC1A163B2900E169C0 /* Component.h */,
 				81173CDE1A16489D00E169C0 /* ComponentFactory.cpp */,
 				81173CDF1A16489D00E169C0 /* ComponentFactory.h */,
+				81890EC21A1CF1D6005811F1 /* ComponentDesc.h */,
+				81890EC31A1CF481005811F1 /* ComponentDesc.cpp */,
+				81890EC51A1D020A005811F1 /* WidgetDesc.cpp */,
+				81890EC61A1D020A005811F1 /* WidgetDesc.h */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -2951,6 +2959,7 @@
 				81D8B4541962E0EC0010DA84 /* HorizontalClippingProgressBar.cpp in Sources */,
 				81D8B4931962E0EC0010DA84 /* ParticleComponent.cpp in Sources */,
 				81D8B4071962E0EC0010DA84 /* ParamDictionarySerialiser.cpp in Sources */,
+				81890EC41A1CF481005811F1 /* ComponentDesc.cpp in Sources */,
 				81D8B6CF1962E0F70010DA84 /* GLError.cpp in Sources */,
 				81D8B44A1962E0EC0010DA84 /* HorizontalList.cpp in Sources */,
 				81D8B4561962E0EC0010DA84 /* HorizontalProgressBar.cpp in Sources */,
@@ -2986,6 +2995,7 @@
 				81D8B48E1962E0EC0010DA84 /* ConeParticleEmitter.cpp in Sources */,
 				81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */,
 				817F76351A03E23A00D36ACF /* SizePolicy.cpp in Sources */,
+				81890EC71A1D020A005811F1 /* WidgetDesc.cpp in Sources */,
 				81D8B43B1962E0EC0010DA84 /* Timer.cpp in Sources */,
 				817F76401A03E23A00D36ACF /* DrawableUtils.cpp in Sources */,
 				81D8B4391962E0EC0010DA84 /* CoreTimer.cpp in Sources */,

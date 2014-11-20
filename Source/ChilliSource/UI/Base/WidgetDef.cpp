@@ -47,16 +47,54 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void WidgetDef::Build(const WidgetHierarchyDesc& in_desc, const Scripting::LuaSourceCSPtr& in_behaviourSource)
+        void WidgetDef::Build(const std::string& in_typeName, const PropertyMap& in_defaultProperties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<WidgetDesc>& in_childDescs,
+                   const std::vector<ComponentPropertyLink>& in_componentPropertyLinks, const std::vector<ChildPropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource)
         {
-            m_desc = in_desc;
+            CS_ASSERT(GetLoadState() == LoadState::k_loading, "A WidgetDef can only be built while in the loading state.");
+            
+            m_typeName = in_typeName;
+            m_defaultProperties = in_defaultProperties;
+            m_componentDescs = in_componentDescs;
+            m_childDescs = in_childDescs;
+            m_componentPropertyLinks = in_componentPropertyLinks;
+            m_childPropertyLinks = in_childPropertyLinks;
             m_behaviourSource = in_behaviourSource;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        const WidgetHierarchyDesc& WidgetDef::GetHierarchyDesc() const
+        const std::string& WidgetDef::GetTypeName() const
         {
-            return m_desc;
+            return m_typeName;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        const PropertyMap& WidgetDef::GetDefaultProperties() const
+        {
+            return m_defaultProperties;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        const std::vector<ComponentDesc>& WidgetDef::GetComponentDescs() const
+        {
+            return m_componentDescs;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        const std::vector<WidgetDesc>& WidgetDef::GetChildDescs() const
+        {
+            return m_childDescs;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        const std::vector<WidgetDef::ComponentPropertyLink>& WidgetDef::GetComponentPropertyLinks() const
+        {
+            return m_componentPropertyLinks;
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        const std::vector<WidgetDef::ChildPropertyLink>& WidgetDef::GetChildPropertyLinks() const
+        {
+            return m_childPropertyLinks;
         }
         //-------------------------------------------------------t
         //-------------------------------------------------------

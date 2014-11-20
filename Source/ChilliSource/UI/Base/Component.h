@@ -52,7 +52,7 @@ namespace ChilliSource
             //----------------------------------------------------------------
             /// Destructor
             ///
-            /// @author S McGaw
+            /// @author Ian Copland
             //----------------------------------------------------------------
             virtual ~Component(){}
         protected:

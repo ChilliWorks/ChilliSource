@@ -77,6 +77,24 @@ namespace ChilliSource
             /// @return Property values
             //-------------------------------------------------------
             PropertyMap ParseTextDrawableValues(const Json::Value& in_layout);
+            //-------------------------------------------------------
+            /// From the given JSON value parse the values of the property
+            /// types into the given container. Some of the properties
+            /// require conversion from relative to absolute paths
+            /// hence the definition path info.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Json template
+            /// @param Name of instance
+            /// @param Json widget children
+            /// @param Json hierarchy
+            /// @param Template location
+            /// @param Template path (no file name)
+            ///
+            /// @return The output widget description.
+            //-------------------------------------------------------
+            WidgetDesc ParseWidget(const Json::Value& in_template, const std::string& in_name, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath);
         }
 	}
 }

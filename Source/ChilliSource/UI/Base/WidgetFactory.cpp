@@ -220,7 +220,7 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         void WidgetFactory::RegisterDefinition(const WidgetDefCSPtr& in_def)
         {
-            m_widgetDefNameMap.insert(std::make_pair(in_def->GetHierarchyDesc().m_type, in_def));
+            m_widgetDefNameMap.insert(std::make_pair(in_def->GetTypeName(), in_def));
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
@@ -234,14 +234,18 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         WidgetUPtr WidgetFactory::Create(const WidgetDefCSPtr& in_def) const
         {
-            return CreateRecursive(in_def->GetHierarchyDesc(), in_def->GetBehaviourSource());
+            WidgetDesc desc(in_def->GetTypeName(), in_def->GetDefaultProperties(), std::vector<WidgetDesc>());
+            
+            return CreateRecursive(in_def, desc);
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
         WidgetUPtr WidgetFactory::Create(const WidgetTemplateCSPtr& in_template) const
         {
-            auto def = m_widgetDefNameMap.find(in_template->GetHierarchyDesc().m_type)->second;
-            return CreateRecursive(in_template->GetHierarchyDesc(), def->GetBehaviourSource());
+            auto def = m_widgetDefNameMap.find(in_template->GetWidgetDesc().GetType())->second;
+            CS_ASSERT(def != nullptr, "Invalid widget type in widget template: " + in_template->GetFilePath());
+            
+            return CreateRecursive(def, in_template->GetWidgetDesc());
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
@@ -287,9 +291,9 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        WidgetUPtr WidgetFactory::CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc, const Scripting::LuaSourceCSPtr& in_behaviourSource) const
+        WidgetUPtr WidgetFactory::CreateRecursive(const WidgetDefCSPtr& in_widgetDef, const WidgetDesc& in_widgetDesc) const
         {
-            WidgetUPtr widget(new Widget(in_hierarchyDesc.m_defaultProperties, in_hierarchyDesc.m_customProperties));
+            WidgetUPtr widget(new Widget(in_widgetDef->GEt, in_hierarchyDesc.m_customProperties));
             CS_ASSERT(in_hierarchyDesc.m_defaultProperties.HasKey("Layout") == true, "Invalid widget property map. Doesn't contain key: Layout");
             CS_ASSERT(in_hierarchyDesc.m_defaultProperties.HasKey("Drawable") == true, "Invalid widget property map. Doesn't contain key: Drawable");
             CS_ASSERT(in_hierarchyDesc.m_defaultProperties.HasKey("TextDrawable") == true, "Invalid widget property map. Doesn't contain key: Text");

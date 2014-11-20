@@ -28,16 +28,13 @@
 
 #include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
 
-#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
-#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/Widget.h>
-#include <ChilliSource/UI/Base/WidgetFactory.h>
-#include <ChilliSource/UI/Base/WidgetHierarchyDesc.h>
+#include <ChilliSource/UI/Base/WidgetDesc.h>
 #include <ChilliSource/UI/Base/WidgetParserUtils.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
 
@@ -69,8 +66,6 @@ namespace ChilliSource
                 
                 WidgetTemplate* widgetTemplate = (WidgetTemplate*)out_resource.get();
                 
-                WidgetHierarchyDesc hierarchyDesc;
-                
                 std::string definitionFileName;
                 std::string pathToDefinition;
                 Core::StringUtils::SplitFilename(in_filepath, definitionFileName, pathToDefinition);
@@ -78,53 +73,14 @@ namespace ChilliSource
                 Json::Value hierarchy = root["Hierarchy"];
                 Json::Value children = root["Children"];
                 
-                WidgetTemplateProvider::ParseTemplate(root, "", children, hierarchy, in_storageLocation, pathToDefinition, hierarchyDesc);
+                WidgetDesc desc = WidgetParserUtils::ParseWidget(root, "", children, hierarchy, in_storageLocation, pathToDefinition);
                 
-                widgetTemplate->Build(hierarchyDesc);
+                widgetTemplate->Build(desc);
                 
                 out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
                 if(in_delegate != nullptr)
                 {
                     CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
-                }
-            }
-            //-------------------------------------------------------
-            /// Convenience method for setting a property in a prop
-            /// map from JSON. This will handle the special cases
-            /// of object types layout and drawable
-            ///
-            /// @author S Downie
-            ///
-            /// @param Property name
-            /// @param JSON to parse and assign into map
-            /// @param Location of file for relative pathing
-            /// @param Base path of file for relative pathing
-            /// @param [Out] Property map to assign to
-            //-------------------------------------------------------
-            void SetProperty(const std::string& in_propName, const Json::Value& in_json, Core::StorageLocation in_templateLocation, const std::string& in_templatePath, PropertyMap& in_propMap)
-            {
-                if(in_propName == "Drawable")
-                {
-                    //Special case for drawable
-                    CS_ASSERT(in_json.isObject(), "Value can only be specified as object: " + in_propName);
-                    in_propMap.SetProperty(in_propName, WidgetParserUtils::ParseDrawableValues(in_json, in_templateLocation, in_templatePath));
-                }
-                else if(in_propName == "Layout")
-                {
-                    //Special case for drawable
-                    CS_ASSERT(in_json.isObject(), "Value can only be specified as object: " + in_propName);
-                    in_propMap.SetProperty(in_propName, WidgetParserUtils::ParseLayoutValues(in_json));
-                }
-                else if(in_propName == "TextDrawable")
-                {
-                    //Special case for drawable
-                    CS_ASSERT(in_json.isObject(), "Value can only be specified as object: " + in_propName);
-                    in_propMap.SetProperty(in_propName, WidgetParserUtils::ParseTextDrawableValues(in_json));
-                }
-                else
-                {
-                    CS_ASSERT(in_json.isString(), "Value can only be specified as string: " + in_propName);
-                    in_propMap.SetProperty(in_propMap.GetType(in_propName), in_propName, in_json.asString());
                 }
             }
         }
@@ -166,130 +122,6 @@ namespace ChilliSource
         {
 			auto task = std::bind(LoadDesc, in_storageLocation, in_filepath, in_delegate, out_resource);
             Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void WidgetTemplateProvider::ParseTemplate(const Json::Value& in_template, const std::string& in_name, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath, WidgetHierarchyDesc& out_hierarchyDesc)
-        {
-            CS_ASSERT(in_template.isMember("Type") == true, "Widget template must have type");
-            std::string type = in_template["Type"].asString();
-            
-            if(type == "Template")
-            {
-                //This type is a special case in which the property values are read from a separate template file
-                CS_ASSERT(in_template.isMember("TemplatePath"), "Link to template file must have TemplatePath");
-                
-                bool relativePath = in_template.isMember("TemplateLocation") == false;
-                Core::StorageLocation location = in_templateLocation;
-                std::string path = in_template["TemplatePath"].asString();
-                
-                if(relativePath == false)
-                {
-                    location = Core::ParseStorageLocation(in_template["TemplateLocation"].asString());
-                }
-                else
-                {
-                    path = Core::StringUtils::ResolveParentedDirectories(in_templatePath + path);
-                }
-                
-                //Template widgets need to be created as a hierarchy so that we can set properties such as layout
-                //on the widget without affecting the contents of the template and vice-versa.
-                auto widgetFactory = Core::Application::Get()->GetWidgetFactory();
-                WidgetDefCSPtr widgetDef = widgetFactory->GetDefinition("Widget");
-                out_hierarchyDesc = widgetDef->GetHierarchyDesc();
-                
-                auto resPool = Core::Application::Get()->GetResourcePool();
-                WidgetTemplateCSPtr widgetTemplate = resPool->LoadResource<WidgetTemplate>(location, path);
-                out_hierarchyDesc.m_children.push_back(widgetTemplate->GetHierarchyDesc());
-                out_hierarchyDesc.m_children.back().m_access = WidgetHierarchyDesc::Access::k_external;
-            }
-            else
-            {
-                auto widgetFactory = Core::Application::Get()->GetWidgetFactory();
-                WidgetDefCSPtr widgetDef = widgetFactory->GetDefinition(type);
-                out_hierarchyDesc = widgetDef->GetHierarchyDesc();
-            }
-            
-            out_hierarchyDesc.m_defaultProperties.SetProperty("Name", in_name);
-            
-            for(auto it = in_template.begin(); it != in_template.end(); ++it)
-            {
-                std::string propertyName = it.memberName();
-                
-                if(propertyName == "Type")
-                {
-                    CS_ASSERT((*it).isString(), "Value can only be specified as string: " + std::string(it.memberName()));
-                    if(type != "Template")
-                    {
-                        out_hierarchyDesc.m_type = (*it).asString();
-                    }
-                }
-                else if(out_hierarchyDesc.m_defaultProperties.HasKey(it.memberName()) == true)
-                {
-                    SetProperty(propertyName, *it, in_templateLocation, in_templatePath, out_hierarchyDesc.m_defaultProperties);
-                }
-                else if(out_hierarchyDesc.m_customProperties.HasKey(it.memberName()) == true)
-                {
-                    SetProperty(propertyName, *it, in_templateLocation, in_templatePath, out_hierarchyDesc.m_customProperties);
-                }
-                else if(propertyName == "TemplateLocation" || propertyName == "TemplatePath" || propertyName == "Children" || propertyName == "Hierarchy")
-                {
-                    //Ignore these as they are handled elsewhere but we do not want them to be included
-                    //in the custom properties list
-                }
-                else
-                {
-                    auto itLink = std::find_if(out_hierarchyDesc.m_links.begin(), out_hierarchyDesc.m_links.end(), [propertyName](const WidgetHierarchyDesc::WidgetPropertyLink& in_link)
-                    {
-                        return in_link.m_linkName == propertyName;
-                    });
-                    
-                    if(itLink != out_hierarchyDesc.m_links.end())
-                    {
-                        for(auto& child : out_hierarchyDesc.m_children)
-                        {
-                            if(child.m_defaultProperties.GetProperty<std::string>("Name") == itLink->m_widgetName)
-                            {
-                                if(child.m_defaultProperties.HasKey(itLink->m_propertyName) == true)
-                                {
-                                    SetProperty(itLink->m_propertyName, *it, in_templateLocation, in_templatePath, child.m_defaultProperties);
-                                    break;
-                                }
-                                if(child.m_customProperties.HasKey(itLink->m_propertyName) == true)
-                                {
-                                    SetProperty(itLink->m_propertyName, *it, in_templateLocation, in_templatePath, child.m_customProperties);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        CS_LOG_FATAL("Property with name does not exist: " + std::string(propertyName));
-                    }
-                }
-            }
-            
-            out_hierarchyDesc.m_access = WidgetHierarchyDesc::Access::k_external;
-            
-            if(!in_hierarchy.isNull())
-            {
-                if(in_hierarchy.isNull() == false && in_hierarchy.isArray() == true && in_children.isNull() == false)
-                {
-                    for(u32 i=0; i<in_hierarchy.size(); ++i)
-                    {
-                        const Json::Value& hierarchyItem = in_hierarchy[i];
-                        std::string name = hierarchyItem["Name"].asString();
-                        
-                        const Json::Value& hierarchyChildren = hierarchyItem["Children"];
-                        const Json::Value& widget = in_children[name];
-                        
-                        WidgetHierarchyDesc childDesc;
-                        ParseTemplate(widget, name, in_children, hierarchyChildren, in_templateLocation, in_templatePath, childDesc);
-                        out_hierarchyDesc.m_children.push_back(childDesc);
-                    }
-                }
-            }
         }
     }
 }

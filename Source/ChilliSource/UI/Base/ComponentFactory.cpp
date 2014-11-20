@@ -34,10 +34,19 @@ namespace ChilliSource
     {
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
+        std::vector<PropertyMap::PropertyDesc> ComponentFactory::GetPropertyDescs(const std::string& in_componentTypeName) const
+        {
+            auto descsIt = m_descsMap.find(in_componentTypeName);
+            CS_ASSERT(descsIt != m_descsMap.end(), "Could not get property descs for component with name: " + in_componentTypeName);
+            
+            return descsIt->second;
+        }
+        //-----------------------------------------------------------------
+        //-----------------------------------------------------------------
         std::unique_ptr<Component> ComponentFactory::CreateComponent(const std::string& in_componentTypeName, Widget* in_widget, const PropertyMap& in_propertyMap) const
         {
             auto delegateIt = m_creatorDelegateMap.find(in_componentTypeName);
-            CS_ASSERT(delegateIt != m_creatorDelegateMap.end(), "Could not create object with name: " + in_componentTypeName);
+            CS_ASSERT(delegateIt != m_creatorDelegateMap.end(), "Could not create component with name: " + in_componentTypeName);
             
             return delegateIt->second(in_widget, in_propertyMap);
         }

@@ -28,6 +28,8 @@
 
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
 
+#include <ChilliSource/UI/Base/PropertyMap.h>
+
 namespace ChilliSource
 {
     namespace UI
@@ -41,19 +43,25 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
+        WidgetTemplate::WidgetTemplate()
+            : m_desc("", PropertyMap(), std::vector<WidgetDesc>())
+        {
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
         bool WidgetTemplate::IsA(Core::InterfaceIDType in_interfaceId) const
         {
             return in_interfaceId == WidgetTemplate::InterfaceID;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void WidgetTemplate::Build(const WidgetHierarchyDesc& in_desc)
+        void WidgetTemplate::Build(const WidgetDesc& in_desc)
         {
             m_desc = in_desc;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        const WidgetHierarchyDesc& WidgetTemplate::GetHierarchyDesc() const
+        const WidgetDesc& WidgetTemplate::GetWidgetDesc() const
         {
             return m_desc;
         }

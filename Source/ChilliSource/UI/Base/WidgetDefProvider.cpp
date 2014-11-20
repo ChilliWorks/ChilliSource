@@ -81,30 +81,32 @@ namespace ChilliSource
             /// @param Json widgets
             /// @param Definition location
             /// @param Defintion path (no file name)
-            /// @param The access of the child widget. On recursion
-            /// this will be set to public.
-            /// @param [Out] Children descriptions
+            ///
+            /// @return The child widget descriptions.
             //-------------------------------------------------------
-            void ParseChildWidgets(const Json::Value& in_hierarchy, const Json::Value& in_widgets, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, WidgetHierarchyDesc::Access in_access, std::vector<WidgetHierarchyDesc>& out_children)
+            std::vector<WidgetDesc> ParseChildWidgets(const Json::Value& in_hierarchy, const Json::Value& in_widgets, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath)
             {
+                std::vector<WidgetDesc> output;
+                
                 for(u32 i=0; i<in_hierarchy.size(); ++i)
                 {
                     const Json::Value& hierarchyItem = in_hierarchy[i];
                     std::string name = hierarchyItem["Name"].asString();
                     const Json::Value& widget = in_widgets[name];
                     
-                    WidgetHierarchyDesc childDesc;
-                    WidgetTemplateProvider::ParseTemplate(widget, name, Json::nullValue, in_hierarchy, in_definitionLocation, in_definitionPath, childDesc);
-                    childDesc.m_access = in_access;
+                    WidgetDesc childDesc = WidgetParserUtils::ParseWidget(widget, name, Json::nullValue, in_hierarchy, in_definitionLocation, in_definitionPath);
                     
-                    const Json::Value& children = hierarchyItem["Children"];
-                    if(children.isNull() == false)
-                    {
-                        ParseChildWidgets(children, in_widgets, in_definitionLocation, in_definitionPath, WidgetHierarchyDesc::Access::k_external, childDesc.m_children);
-                    }
+                    //TODO: is this needed?
+//                    const Json::Value& children = hierarchyItem["Children"];
+//                    if(children.isNull() == false)
+//                    {
+//                        ParseChildWidgets(children, in_widgets, in_definitionLocation, in_definitionPath, WidgetHierarchyDesc::Access::k_external, childDesc.m_children);
+//                    }
                     
-                    out_children.push_back(childDesc);
+                    output.push_back(childDesc);
                 }
+                
+                return output;
             }
             //-------------------------------------------------------
             /// From the given JSON value parse the custom property
@@ -115,10 +117,10 @@ namespace ChilliSource
             /// @param Json properties
             /// @param [Out] Custom properties
             //-------------------------------------------------------
-            void ParseCustomProperties(const Json::Value& in_properties, PropertyMap& out_customProperties)
+            PropertyMap BuildPropertyMap(const Json::Value& in_properties)
             {
                 //define the properties.
-                std::vector<PropertyMap::PropertyDesc> descs;
+                std::vector<PropertyMap::PropertyDesc> descs = Widget::GetPropertyDescs();
                 descs.reserve(in_properties.size());
                 for(auto it = in_properties.begin(); it != in_properties.end(); ++it)
                 {
@@ -128,47 +130,42 @@ namespace ChilliSource
 					desc.m_name = it.memberName();
 					descs.push_back(desc);
                 }
-                out_customProperties.AllocateKeys(descs);
+                PropertyMap output(descs);
                 
                 //initialise the values in the custom properties
                 for(auto it = in_properties.begin(); it != in_properties.end(); ++it)
                 {
                     PropertyType type = ParsePropertyType((*it).asString());
-                    out_customProperties.SetProperty(type, it.memberName(), GetDefaultPropertyTypeValue(type));
+                    output.SetProperty(type, it.memberName(), GetDefaultPropertyTypeValue(type));
                 }
+                
+                return output;
             }
             //-------------------------------------------------------
             //-------------------------------------------------------
-            void ParseDefaultValues(const Json::Value& in_defaults, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, PropertyMap& out_defaultProperties, PropertyMap& out_customProperties)
+            PropertyMap ParseDefaultValues(const Json::Value& in_defaults, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, PropertyMap& out_properties)
             {
-                out_defaultProperties.AllocateKeys(Widget::GetPropertyDescs());
-        
                 for(auto it = in_defaults.begin(); it != in_defaults.end(); ++it)
                 {
-                    if(out_defaultProperties.HasKey(it.memberName()) == true)
+                    if(out_properties.HasKey(it.memberName()) == true)
                     {
                         if(strcmp(it.memberName(), "Drawable") == 0)
                         {
                             //Special case for drawable
                             CS_ASSERT((*it).isObject(), "Value can only be specified as object: " + std::string(it.memberName()));
-                            out_defaultProperties.SetProperty(it.memberName(), WidgetParserUtils::ParseDrawableValues(*it, in_definitionLocation, in_definitionPath));
+                            out_properties.SetProperty(it.memberName(), WidgetParserUtils::ParseDrawableValues(*it, in_definitionLocation, in_definitionPath));
                         }
                         else if(strcmp(it.memberName(), "Layout") == 0)
                         {
                             //Special case for drawable
                             CS_ASSERT((*it).isObject(), "Value can only be specified as object: " + std::string(it.memberName()));
-                            out_defaultProperties.SetProperty(it.memberName(), WidgetParserUtils::ParseLayoutValues(*it));
+                            out_properties.SetProperty(it.memberName(), WidgetParserUtils::ParseLayoutValues(*it));
                         }
                         else
                         {
                             CS_ASSERT((*it).isString(), "Value can only be specified as string: " + std::string(it.memberName()));
-                            out_defaultProperties.SetProperty(out_defaultProperties.GetType(it.memberName()), it.memberName(), (*it).asString());
+                            out_properties.SetProperty(out_properties.GetType(it.memberName()), it.memberName(), (*it).asString());
                         }
-                    }
-                    else if(out_customProperties.HasKey(it.memberName()) == true)
-                    {
-                        CS_ASSERT((*it).isString(), "Value can only be specified as string: " + std::string(it.memberName()));
-                        out_customProperties.SetProperty(out_customProperties.GetType(it.memberName()), it.memberName(), (*it).asString());
                     }
                     else
                     {
@@ -183,18 +180,23 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param JSON object containing all exposed properties
-            /// @param [Out] Links
+            ///
+            /// @return The list of child links.
             //-------------------------------------------------------
-            void ParseLinkedChildProperties(const Json::Value& in_properties, std::vector<WidgetHierarchyDesc::WidgetPropertyLink>& out_links)
+            std::vector<WidgetDef::ChildPropertyLink> ParseLinkedChildProperties(const Json::Value& in_properties)
             {
+                std::vector<WidgetDef::ChildPropertyLink> links;
+                
                 for(auto it = in_properties.begin(); it != in_properties.end(); ++it)
                 {
-                    WidgetHierarchyDesc::WidgetPropertyLink link;
+                    WidgetDef::ChildPropertyLink link;
                     link.m_linkName = it.memberName();
-                    link.m_widgetName = (*it)["Child"].asString();
+                    link.m_childName = (*it)["Child"].asString();
                     link.m_propertyName = (*it)["Property"].asString();
-                    out_links.push_back(link);
+                    links.push_back(link);
                 }
+                
+                return links;
             }
             //-------------------------------------------------------
             /// Performs the heavy lifting for loading a UI
@@ -214,11 +216,8 @@ namespace ChilliSource
                 
                 WidgetDef* widgetDef = (WidgetDef*)out_resource.get();
                 
-                WidgetHierarchyDesc hierarchyDesc;
-                hierarchyDesc.m_access = WidgetHierarchyDesc::Access::k_internal;
-                
                 CS_ASSERT(root.isMember("Type"), "Widget def must have Type");
-                hierarchyDesc.m_type = root["Type"].asString();
+                std::string typeName = root["Type"].asString();
                 
                 std::string definitionFileName;
                 std::string pathToDefinition;
@@ -226,21 +225,17 @@ namespace ChilliSource
             
                 const Json::Value& hierarchy = root["Hierarchy"];
                 const Json::Value& children = root["Children"];
+                std::vector<WidgetDesc> childDescs;
                 if(hierarchy.isNull() == false && hierarchy.isArray() == true && children.isNull() == false)
                 {
-                    ParseChildWidgets(hierarchy, children, in_storageLocation, pathToDefinition, WidgetHierarchyDesc::Access::k_internal, hierarchyDesc.m_children);
-                }
-                
-                const Json::Value& customProperties = root["Properties"];
-                if(customProperties.isNull() == false)
-                {
-                    ParseCustomProperties(customProperties, hierarchyDesc.m_customProperties);
+                    childDescs = ParseChildWidgets(hierarchy, children, in_storageLocation, pathToDefinition);
                 }
                 
                 const Json::Value& defaults = root["Defaults"];
+                PropertyMap defaultProperties;
                 if(defaults.isNull() == false)
                 {
-                    ParseDefaultValues(defaults, in_storageLocation, pathToDefinition, hierarchyDesc.m_defaultProperties, hierarchyDesc.m_customProperties);
+                    defaultProperties = ParseDefaultValues(defaults, in_storageLocation, pathToDefinition);
                 }
                 
                 const Json::Value& childProperties = root["ChildProperties"];

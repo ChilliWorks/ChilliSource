@@ -32,6 +32,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/UI/Base/WidgetHierarchyDesc.h>
+#include <ChilliSource/UI/Base/ComponentDesc.h>
+
+#include <vector>
 
 namespace ChilliSource
 {
@@ -54,6 +57,28 @@ namespace ChilliSource
             CS_DECLARE_NAMEDTYPE(WidgetDef);
             
             //-------------------------------------------------------
+            /// Describes a proxy to a property of a component.
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------
+            struct ComponentPropertyLink final
+            {
+                std::string m_linkName;
+                std::string m_componentName;
+                std::string m_propertyName;
+            };
+            //-------------------------------------------------------
+            /// Describes a proxy to a property of a child widget.
+            ///
+            /// @author S Downie
+            //-------------------------------------------------------
+            struct ChildPropertyLink final
+            {
+                std::string m_linkName;
+                std::string m_childName;
+                std::string m_propertyName;
+            };
+            //-------------------------------------------------------
             /// Is the object of the given interface type.
             ///
             /// @author S Downie
@@ -64,21 +89,72 @@ namespace ChilliSource
             //-------------------------------------------------------
             bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------
-            /// Build the resource which consists of the description
-            /// of a widget and all its children
+            /// Build the widget def resource, consisting of its
+            /// default properties, components and children.
             ///
-            /// @author S Downie
+            /// @author Ian Copland
             ///
-            /// @param Hierarchy desc
-            /// @param Lua source for widget behaviour
+            /// @param The name of the widget type.
+            /// @param The property map containing all of the keys
+            /// for for this widget type--both the base properties all
+            /// widgets have and linked properties. The values of
+            /// each property is the default value in any instance
+            /// of the widget being used.
+            /// @param The list of component descriptions. This can
+            /// be empty if no components are required.
+            /// @param The list of internal child descriptions. This
+            /// can be empty if no internal children are required.
+            /// @param The links between properties of the widget
+            /// def and properties of components.
+            /// @param The links between properties of the widget
+            /// def and properties of internal children.
+            /// @param Lua source for widget behaviour (will be
+            /// removed when Lua functionality is changed to a
+            /// component.
             //-------------------------------------------------------
-            void Build(const WidgetHierarchyDesc& in_desc, const Scripting::LuaSourceCSPtr& in_behaviourSource);
+            void Build(const std::string& in_typeName, const PropertyMap& in_defaultProperties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<WidgetDesc>& in_childDescs,
+                       const std::vector<ComponentPropertyLink>& in_componentPropertyLinks, const std::vector<ChildPropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource);
             //-------------------------------------------------------
-            /// @author S Downie
+            /// @author Ian Copland
             ///
-            /// @return Hierarchy description
+            /// @return The name of the widget type.
             //-------------------------------------------------------
-            const WidgetHierarchyDesc& GetHierarchyDesc() const;
+            const std::string& GetTypeName() const;
+            //-------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The property map containing all of the keys
+            /// for for this widget type--both the base properties all
+            /// widgets have and linked properties. All values are
+            /// set to their default value.
+            //-------------------------------------------------------
+            const PropertyMap& GetDefaultProperties() const;
+            //-------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The list of component descriptions.
+            //-------------------------------------------------------
+            const std::vector<ComponentDesc>& GetComponentDescs() const;
+            //-------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The list of internal child descriptions.
+            //-------------------------------------------------------
+            const std::vector<WidgetDesc>& GetChildDescs() const;
+            //-------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The links between properties of the widget
+            /// def and properties of components.
+            //-------------------------------------------------------
+            const std::vector<ComponentPropertyLink>& GetComponentPropertyLinks() const;
+            //-------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The links between properties of the widget
+            /// def and properties of internal children.
+            //-------------------------------------------------------
+            const std::vector<ChildPropertyLink>& GetChildPropertyLinks() const;
             //-------------------------------------------------------
             /// @author S Downie
             ///
@@ -87,7 +163,6 @@ namespace ChilliSource
             const Scripting::LuaSourceCSPtr& GetBehaviourSource() const;
             
         private:
-            
             friend class Core::ResourcePool;
             //-------------------------------------------------------
             /// Factory method
@@ -105,9 +180,12 @@ namespace ChilliSource
             WidgetDef() = default;
             
         private:
-            
-            WidgetHierarchyDesc m_desc;
-            
+            std::string m_typeName;
+            PropertyMap m_defaultProperties;
+            std::vector<ComponentDesc> m_componentDescs;
+            std::vector<WidgetDesc> m_childDescs;
+            std::vector<ComponentPropertyLink> m_componentPropertyLinks;
+            std::vector<ChildPropertyLink> m_childPropertyLinks;
             Scripting::LuaSourceCSPtr m_behaviourSource;
         };
     }
