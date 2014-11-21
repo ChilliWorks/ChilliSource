@@ -50,7 +50,8 @@ namespace ChilliSource
                 "MiddleCentre", //k_alignmentAnchor
                 "None",         //k_sizePolicy
                 "None",         //k_storageLocation
-                "{}"            //k_propertyMap
+                "{}",             //k_drawableDesc
+                "{}"              //k_layoutDesc
             };
         }
         //----------------------------------------------------------------------------------------
@@ -71,7 +72,8 @@ namespace ChilliSource
             if(lowerCase == "storagelocation") return PropertyType::k_storageLocation;
             if(lowerCase == "alignmentanchor") return PropertyType::k_alignmentAnchor;
             if(lowerCase == "colour") return PropertyType::k_colour;
-            if(lowerCase == "propertymap") return PropertyType::k_propertyMap;
+            if(lowerCase == "drawabledesc") return PropertyType::k_drawableDesc;
+            if(lowerCase == "layoutdesc") return PropertyType::k_layoutDesc;
             
             CS_LOG_FATAL("Cannot parse property type: " + in_type);
             return PropertyType::k_unknown;

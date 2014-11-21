@@ -37,7 +37,6 @@
 		817F76491A03E23A00D36ACF /* GridLayoutProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76211A03E23A00D36ACF /* GridLayoutProxy.cpp */; };
 		817F764A1A03E23A00D36ACF /* HListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76231A03E23A00D36ACF /* HListLayout.cpp */; };
 		817F764B1A03E23A00D36ACF /* HListLayoutProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76251A03E23A00D36ACF /* HListLayoutProxy.cpp */; };
-		817F764C1A03E23A00D36ACF /* ILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76271A03E23A00D36ACF /* ILayout.cpp */; };
 		817F764D1A03E23A00D36ACF /* LayoutProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76291A03E23A00D36ACF /* LayoutProxy.cpp */; };
 		817F764E1A03E23A00D36ACF /* LayoutType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F762B1A03E23A00D36ACF /* LayoutType.cpp */; };
 		817F764F1A03E23A00D36ACF /* VListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F762D1A03E23A00D36ACF /* VListLayout.cpp */; };
@@ -54,6 +53,8 @@
 		81890EC41A1CF481005811F1 /* ComponentDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81890EC31A1CF481005811F1 /* ComponentDesc.cpp */; };
 		81890EC71A1D020A005811F1 /* WidgetDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81890EC51A1D020A005811F1 /* WidgetDesc.cpp */; };
 		81970FE71A0A48B500505599 /* TextDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81970FE51A0A48B500505599 /* TextDrawable.cpp */; };
+		819CE3CF1A1F668900A49B5C /* LayoutDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819CE3CD1A1F668900A49B5C /* LayoutDesc.cpp */; };
+		819CE3D21A1F98DC00A49B5C /* DrawableDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819CE3D01A1F98DC00A49B5C /* DrawableDesc.cpp */; };
 		81AAFBBB19C9C18100CD4A14 /* Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB419C9C18100CD4A14 /* Gesture.cpp */; };
 		81AAFBBC19C9C18100CD4A14 /* GestureSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB619C9C18100CD4A14 /* GestureSystem.cpp */; };
 		81AAFBBD19C9C18100CD4A14 /* TapGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB819C9C18100CD4A14 /* TapGesture.cpp */; };
@@ -448,7 +449,6 @@
 		817F76241A03E23A00D36ACF /* HListLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HListLayout.h; sourceTree = "<group>"; };
 		817F76251A03E23A00D36ACF /* HListLayoutProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HListLayoutProxy.cpp; sourceTree = "<group>"; };
 		817F76261A03E23A00D36ACF /* HListLayoutProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HListLayoutProxy.h; sourceTree = "<group>"; };
-		817F76271A03E23A00D36ACF /* ILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILayout.cpp; sourceTree = "<group>"; };
 		817F76281A03E23A00D36ACF /* ILayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILayout.h; sourceTree = "<group>"; };
 		817F76291A03E23A00D36ACF /* LayoutProxy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutProxy.cpp; sourceTree = "<group>"; };
 		817F762A1A03E23A00D36ACF /* LayoutProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutProxy.h; sourceTree = "<group>"; };
@@ -488,6 +488,10 @@
 		81970FE51A0A48B500505599 /* TextDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextDrawable.cpp; sourceTree = "<group>"; };
 		81970FE61A0A48B500505599 /* TextDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextDrawable.h; sourceTree = "<group>"; };
 		81970FE91A0A780A00505599 /* Text.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Text.h; sourceTree = "<group>"; };
+		819CE3CD1A1F668900A49B5C /* LayoutDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutDesc.cpp; sourceTree = "<group>"; };
+		819CE3CE1A1F668900A49B5C /* LayoutDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutDesc.h; sourceTree = "<group>"; };
+		819CE3D01A1F98DC00A49B5C /* DrawableDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableDesc.cpp; sourceTree = "<group>"; };
+		819CE3D11A1F98DC00A49B5C /* DrawableDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableDesc.h; sourceTree = "<group>"; };
 		81AAFBB419C9C18100CD4A14 /* Gesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gesture.cpp; sourceTree = "<group>"; };
 		81AAFBB519C9C18100CD4A14 /* Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gesture.h; sourceTree = "<group>"; };
 		81AAFBB619C9C18100CD4A14 /* GestureSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GestureSystem.cpp; sourceTree = "<group>"; };
@@ -1162,6 +1166,8 @@
 				817F76191A03E23A00D36ACF /* ThreePatchDrawable.h */,
 				817F761A1A03E23A00D36ACF /* ThreePatchDrawableProxy.cpp */,
 				817F761B1A03E23A00D36ACF /* ThreePatchDrawableProxy.h */,
+				819CE3D01A1F98DC00A49B5C /* DrawableDesc.cpp */,
+				819CE3D11A1F98DC00A49B5C /* DrawableDesc.h */,
 			);
 			path = Drawable;
 			sourceTree = "<group>";
@@ -1177,7 +1183,6 @@
 				817F76241A03E23A00D36ACF /* HListLayout.h */,
 				817F76251A03E23A00D36ACF /* HListLayoutProxy.cpp */,
 				817F76261A03E23A00D36ACF /* HListLayoutProxy.h */,
-				817F76271A03E23A00D36ACF /* ILayout.cpp */,
 				817F76281A03E23A00D36ACF /* ILayout.h */,
 				817F76291A03E23A00D36ACF /* LayoutProxy.cpp */,
 				817F762A1A03E23A00D36ACF /* LayoutProxy.h */,
@@ -1187,6 +1192,8 @@
 				817F762E1A03E23A00D36ACF /* VListLayout.h */,
 				817F762F1A03E23A00D36ACF /* VListLayoutProxy.cpp */,
 				817F76301A03E23A00D36ACF /* VListLayoutProxy.h */,
+				819CE3CD1A1F668900A49B5C /* LayoutDesc.cpp */,
+				819CE3CE1A1F668900A49B5C /* LayoutDesc.h */,
 			);
 			path = Layout;
 			sourceTree = "<group>";
@@ -2876,6 +2883,7 @@
 				81D8B6B31962E0F70010DA84 /* EmailComposer.mm in Sources */,
 				81D8B4181962E0EC0010DA84 /* ETC1ImageProvider.cpp in Sources */,
 				81D8B69D1962E0F70010DA84 /* CSGLViewController.mm in Sources */,
+				819CE3D21A1F98DC00A49B5C /* DrawableDesc.cpp in Sources */,
 				81D8B4331962E0EC0010DA84 /* StringUtils.cpp in Sources */,
 				81D8B4671962E0EC0010DA84 /* CanvasRenderer.cpp in Sources */,
 				81D8B43C1962E0EC0010DA84 /* VolumeComponent.cpp in Sources */,
@@ -2884,7 +2892,6 @@
 				81D8B6A41962E0F70010DA84 /* PNGImageProvider.cpp in Sources */,
 				81D8B4971962E0EC0010DA84 /* DynamicSpriteBatcher.cpp in Sources */,
 				81D8B6A91962E0F70010DA84 /* Accelerometer.mm in Sources */,
-				817F764C1A03E23A00D36ACF /* ILayout.cpp in Sources */,
 				817F76701A03E37200D36ACF /* PointerProxy.cpp in Sources */,
 				81D8B6A31962E0F70010DA84 /* FileSystem.mm in Sources */,
 				81D8B6D01962E0F70010DA84 /* MeshBuffer.cpp in Sources */,
@@ -2974,6 +2981,7 @@
 				81D8B4701962E0EC0010DA84 /* RenderSystem.cpp in Sources */,
 				81D8B6D41962E0F70010DA84 /* GLSLShaderProvider.cpp in Sources */,
 				81D8B4481962E0EC0010DA84 /* ToggleButton.cpp in Sources */,
+				819CE3CF1A1F668900A49B5C /* LayoutDesc.cpp in Sources */,
 				81D8B49E1962E0EC0010DA84 /* TextureAtlas.cpp in Sources */,
 				81D8B46B1962E0EC0010DA84 /* RenderCapabilities.cpp in Sources */,
 				81D8B4061962E0EC0010DA84 /* ParamDictionary.cpp in Sources */,

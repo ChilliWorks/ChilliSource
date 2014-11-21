@@ -52,6 +52,12 @@ namespace ChilliSource
         {
         public:
             //------------------------------------------------------------------
+            /// Constructor. Creates an empty description.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------
+            WidgetDesc() = default;
+            //------------------------------------------------------------------
             /// Constructor.
             ///
             /// @author Ian Copland
@@ -80,7 +86,7 @@ namespace ChilliSource
             //------------------------------------------------------------------
             const std::vector<WidgetDesc>& GetChildDescs() const;
         private:
-            std::string m_type;
+            std::string m_type = "";
             PropertyMap m_propertyMap;
             std::vector<WidgetDesc> m_childDescs;
         };

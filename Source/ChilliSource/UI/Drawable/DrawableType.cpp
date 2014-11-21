@@ -49,5 +49,24 @@ namespace ChilliSource
             CS_LOG_FATAL("Cannot parse drawable type: " + in_type);
             return DrawableType::k_none;
         }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        std::string ToString(DrawableType in_drawable)
+        {
+            switch (in_drawable)
+            {
+                case DrawableType::k_none:
+                    return "none";
+                case DrawableType::k_standard:
+                    return "standard";
+                case DrawableType::k_threePatch:
+                    return "threepatch";
+                case DrawableType::k_ninePatch:
+                    return "ninepatch";
+                default:
+                    CS_LOG_FATAL("Invalid drawable type.");
+                    return "";
+            }
+        }
     }
 }

@@ -48,6 +48,13 @@ namespace ChilliSource
         //--------------------------------------------------------------------------
         class ComponentDesc final
         {
+        public:
+            //------------------------------------------------------------------
+            /// Constructor. Creates an empty description.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------
+            ComponentDesc() = default;
             //------------------------------------------------------------------
             /// Constructor.
             ///
@@ -72,8 +79,8 @@ namespace ChilliSource
             //------------------------------------------------------------------
             const PropertyMap& GetPropertyMap() const;
         private:
-            const std::string m_type;
-            const PropertyMap m_propertyMap;
+            std::string m_type = "";
+            PropertyMap m_propertyMap;
         };
     }
 }

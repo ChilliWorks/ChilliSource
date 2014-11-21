@@ -205,22 +205,27 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Widget::Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties)
-        {
-            SetDefaultProperties(in_defaultProperties);
-            SetCustomProperties(in_customProperties);
-            
-            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
         std::vector<PropertyMap::PropertyDesc> Widget::GetPropertyDescs()
         {
             return k_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetDefaultProperties(const PropertyMap& in_defaultProperties)
+        Widget::Widget(const PropertyMap& in_properties, std::vector<WidgetUPtr> in_internalChildren, const std::vector<WidgetDef::ChildPropertyLink>& in_childPropertyLinks,
+                       const Scripting::LuaSourceCSPtr& in_behaviourSource)
+        {
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            
+            InitInternalWidgets(std::move(in_internalChildren));
+            InitPropertyLinks(in_childPropertyLinks);
+            InitProperties(in_properties);
+            
+            SetCustomProperties(in_properties);
+            SetBehaviourScript(in_behaviourSource);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::InitProperties(const PropertyMap& in_defaultProperties)
         {
             SetName(in_defaultProperties.GetPropertyOrDefault<std::string>("Name", ""));
             SetRelativePosition(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("RelPosition", Core::Vector2()));
@@ -241,16 +246,98 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetCustomProperties(const PropertyMap& in_customProperties)
+        void Widget::InitPropertyLinks(const std::vector<WidgetDef::ChildPropertyLink>& in_childPropertyLinks)
         {
-            m_customProperties = in_customProperties;
+            //Hook up any links to our childrens properties
+            for(const auto& link : in_childPropertyLinks)
+            {
+                Widget* childWidget = GetInternalWidgetRecursive(link.m_childName);
+                CS_ASSERT(childWidget != nullptr, "Cannot link to missing widget: " + link.m_childName);
+                
+                std::string lowerCasePropName(link.m_propertyName);
+                Core::StringUtils::ToLowerCase(lowerCasePropName);
+                
+                if(lowerCasePropName == "name")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<const std::string&>(Core::MakeDelegate(childWidget, &Widget::SetName), Core::MakeDelegate(childWidget, &Widget::GetName))));
+                }
+                else if(lowerCasePropName == "relposition")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetRelativePosition), Core::MakeDelegate(childWidget, &Widget::GetLocalRelativePosition))));
+                }
+                else if(lowerCasePropName == "absposition")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetAbsolutePosition), Core::MakeDelegate(childWidget, &Widget::GetLocalAbsolutePosition))));
+                }
+                else if(lowerCasePropName == "relsize")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetRelativeSize), Core::MakeDelegate(childWidget, &Widget::GetLocalRelativeSize))));
+                }
+                else if(lowerCasePropName == "abssize")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetAbsoluteSize), Core::MakeDelegate(childWidget, &Widget::GetLocalAbsoluteSize))));
+                }
+                else if(lowerCasePropName == "preferredsize")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetDefaultPreferredSize), Core::MakeDelegate(childWidget, &Widget::GetPreferredSize))));
+                }
+                else if(lowerCasePropName == "scale")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::ScaleTo), Core::MakeDelegate(childWidget, &Widget::GetLocalScale))));
+                }
+                else if(lowerCasePropName == "colour")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Colour>(Core::MakeDelegate(childWidget, &Widget::SetColour), Core::MakeDelegate(childWidget, &Widget::GetLocalColour))));
+                }
+                else if(lowerCasePropName == "rotation")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<f32>(Core::MakeDelegate(childWidget, &Widget::RotateTo), Core::MakeDelegate(childWidget, &Widget::GetLocalRotation))));
+                }
+                else if(lowerCasePropName == "originanchor")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Rendering::AlignmentAnchor>(Core::MakeDelegate(childWidget, &Widget::SetOriginAnchor), Core::MakeDelegate(childWidget, &Widget::GetOriginAnchor))));
+                }
+                else if(lowerCasePropName == "parentalanchor")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Rendering::AlignmentAnchor>(Core::MakeDelegate(childWidget, &Widget::SetParentalAnchor), Core::MakeDelegate(childWidget, &Widget::GetParentalAnchor))));
+                }
+                else if(lowerCasePropName == "visible")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(childWidget, &Widget::SetVisible), Core::MakeDelegate(childWidget, &Widget::IsVisible))));
+                }
+                else if(lowerCasePropName == "clipchildren")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(childWidget, &Widget::SetClippingEnabled), Core::MakeDelegate(childWidget, &Widget::IsClippingEnabled))));
+                }
+                else if(lowerCasePropName == "sizepolicy")
+                {
+                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<SizePolicy>(Core::MakeDelegate(childWidget, &Widget::SetSizePolicy), Core::MakeDelegate(childWidget, &Widget::GetSizePolicy))));
+                }
+                else
+                {
+                    m_customPropertyLinks.emplace(link.m_linkName, std::make_pair(childWidget, link.m_propertyName));
+                }
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetPropertyLinks(std::unordered_map<std::string, IPropertyAccessorUPtr>&& in_defaultLinks, std::unordered_map<std::string, std::pair<Widget*, std::string>>&& in_customLinks)
+        void Widget::InitInternalWidgets(std::vector<WidgetUPtr> in_widgets)
         {
-            m_defaultPropertyLinks = std::move(in_defaultLinks);
-            m_customPropertyLinks = std::move(in_customLinks);
+            for (auto& widget : in_widgets)
+            {
+                CS_ASSERT(widget->GetParent() == nullptr, "Cannot add a widget as a child of more than 1 parent");
+                
+                WidgetSPtr sharedWidget = std::move(widget);
+                m_internalChildren.push_back(sharedWidget);
+                sharedWidget->m_parent = this;
+                sharedWidget->SetCanvas(m_canvas);
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetCustomProperties(const PropertyMap& in_customProperties)
+        {
+            m_customProperties = in_customProperties;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -673,16 +760,6 @@ namespace ChilliSource
                     return;
                 }
             }
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::AddInternalWidget(const WidgetSPtr& in_widget)
-        {
-            CS_ASSERT(in_widget->GetParent() == nullptr, "Cannot add a widget as a child of more than 1 parent");
-            
-            m_internalChildren.push_back(in_widget);
-            in_widget->m_parent = this;
-            in_widget->SetCanvas(m_canvas);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

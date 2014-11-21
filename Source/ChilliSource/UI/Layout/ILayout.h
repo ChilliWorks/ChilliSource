@@ -56,14 +56,6 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param Layout type
-            ///
-            /// @return The list of properties supported by the layout of given type
-            //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs(LayoutType in_type);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
             /// @return The layout type of this object
             //----------------------------------------------------------------------------------------
             virtual LayoutType GetType() const = 0;

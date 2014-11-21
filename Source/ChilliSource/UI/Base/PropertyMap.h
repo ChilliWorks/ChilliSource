@@ -492,13 +492,21 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<Core::StorageLocation>() const;
         //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for property maps
+        /// Specialisation to return property type for drawable descriptions
         ///
         /// @author S Downie
         ///
         /// @return Property map prop type
         //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<PropertyMap>() const;
+        template<> PropertyType PropertyMap::GetType<DrawableDesc>() const;
+        //----------------------------------------------------------------------------------------
+        /// Specialisation to return property type for layout descriptions.
+        ///
+        /// @author S Downie
+        ///
+        /// @return Property map prop type
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<LayoutDesc>() const;
 	}
 }
 

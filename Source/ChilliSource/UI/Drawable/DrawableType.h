@@ -57,6 +57,16 @@ namespace ChilliSource
         /// @return Drawable type
         //----------------------------------------------------------------------------------------
         DrawableType ParseDrawableType(const std::string& in_type);
+        //----------------------------------------------------------------------------------------
+        /// Converts the given drawable to string.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The drawable.
+        ///
+        /// @return A string representation of the given drawable.
+        //----------------------------------------------------------------------------------------
+        std::string ToString(DrawableType in_drawable);
 	}
 }
 

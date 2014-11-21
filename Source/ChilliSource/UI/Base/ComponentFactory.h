@@ -32,6 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/UI/Base/Component.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 
 #include <functional>

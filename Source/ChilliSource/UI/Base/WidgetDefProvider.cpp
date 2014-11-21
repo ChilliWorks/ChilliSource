@@ -38,7 +38,6 @@
 #include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
-#include <ChilliSource/UI/Base/WidgetHierarchyDesc.h>
 #include <ChilliSource/UI/Base/WidgetParserUtils.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
 #include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
@@ -52,22 +51,6 @@ namespace ChilliSource
         namespace
         {
             const std::string k_extension("csuidef");
-            
-            //-------------------------------------------------------
-            /// From the given JSON value parse the values of the property
-            /// types into the given container. Some of the properties
-            /// require conversion from relative to absolute paths
-            /// hence the definition path info.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Json defaults
-            /// @param Definition location
-            /// @param Defintion path (no file name)
-            /// @param [Out] Default property values
-            /// @param [Out] Custom property values
-            //-------------------------------------------------------
-            void ParseDefaultValues(const Json::Value& in_defaults, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, PropertyMap& out_defaultProperties, PropertyMap& out_customProperties);
 
             //-------------------------------------------------------
             /// From the given JSON value parse the hierarchy and
@@ -93,21 +76,28 @@ namespace ChilliSource
                     const Json::Value& hierarchyItem = in_hierarchy[i];
                     std::string name = hierarchyItem["Name"].asString();
                     const Json::Value& widget = in_widgets[name];
-                    
-                    WidgetDesc childDesc = WidgetParserUtils::ParseWidget(widget, name, Json::nullValue, in_hierarchy, in_definitionLocation, in_definitionPath);
-                    
-                    //TODO: is this needed?
-//                    const Json::Value& children = hierarchyItem["Children"];
-//                    if(children.isNull() == false)
-//                    {
-//                        ParseChildWidgets(children, in_widgets, in_definitionLocation, in_definitionPath, WidgetHierarchyDesc::Access::k_external, childDesc.m_children);
-//                    }
-                    
+                    const Json::Value& childrenHierarchy = hierarchyItem["Children"];
+                    WidgetDesc childDesc = WidgetParserUtils::ParseWidget(widget, name, in_widgets, childrenHierarchy, in_definitionLocation, in_definitionPath);
                     output.push_back(childDesc);
                 }
                 
                 return output;
             }
+            
+            WidgetDesc GetDescWithName(const std::vector<WidgetDesc>& in_widgets, const std::string& in_name)
+            {
+                for (const auto& desc : in_widgets)
+                {
+                    if (desc.GetProperties().GetPropertyOrDefault("Name", "") == in_name)
+                    {
+                        return desc;
+                    }
+                }
+                
+                CS_LOG_FATAL("Could not find widget desc with name: " + in_name);
+                return WidgetDesc("", PropertyMap(), std::vector<WidgetDesc>());
+            }
+            
             //-------------------------------------------------------
             /// From the given JSON value parse the custom property
             /// types, names and values into the given container
@@ -117,11 +107,23 @@ namespace ChilliSource
             /// @param Json properties
             /// @param [Out] Custom properties
             //-------------------------------------------------------
-            PropertyMap BuildPropertyMap(const Json::Value& in_properties)
+            PropertyMap BuildPropertyMap(const Json::Value& in_properties, const std::vector<WidgetDesc>& in_children, const std::vector<WidgetDef::ChildPropertyLink>& in_childPropertyLinks)
             {
                 //define the properties.
                 std::vector<PropertyMap::PropertyDesc> descs = Widget::GetPropertyDescs();
-                descs.reserve(in_properties.size());
+                
+                //add linked properties
+                for (auto& link : in_childPropertyLinks)
+                {
+                    auto widgetDesc = GetDescWithName(in_children, link.m_childName);
+                    PropertyMap::PropertyDesc desc;
+                    desc.m_type = widgetDesc.GetProperties().GetType(link.m_propertyName);
+                    desc.m_name = link.m_linkName;
+                    descs.push_back(desc);
+                }
+                
+                //add custom properties.
+                //TODO: This should be removed once Lua functionality is a component.
                 for(auto it = in_properties.begin(); it != in_properties.end(); ++it)
                 {
                     CS_ASSERT((*it).isString() == true, "WidgetDefProvider: Properties values in file must be strings: " + std::string(it.memberName()));
@@ -130,9 +132,12 @@ namespace ChilliSource
 					desc.m_name = it.memberName();
 					descs.push_back(desc);
                 }
+                
+                //build the property map
                 PropertyMap output(descs);
                 
                 //initialise the values in the custom properties
+                //TODO: This should be removed once Lua functionality is a component.
                 for(auto it = in_properties.begin(); it != in_properties.end(); ++it)
                 {
                     PropertyType type = ParsePropertyType((*it).asString());
@@ -142,8 +147,20 @@ namespace ChilliSource
                 return output;
             }
             //-------------------------------------------------------
+            /// From the given JSON value parse the values of the property
+            /// types into the given container. Some of the properties
+            /// require conversion from relative to absolute paths
+            /// hence the definition path info.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Json defaults
+            /// @param Definition location
+            /// @param Defintion path (no file name)
+            /// @param [Out] Default property values
+            /// @param [Out] Custom property values
             //-------------------------------------------------------
-            PropertyMap ParseDefaultValues(const Json::Value& in_defaults, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, PropertyMap& out_properties)
+            void ParseDefaultValues(const Json::Value& in_defaults, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, PropertyMap& out_properties)
             {
                 for(auto it = in_defaults.begin(); it != in_defaults.end(); ++it)
                 {
@@ -231,17 +248,20 @@ namespace ChilliSource
                     childDescs = ParseChildWidgets(hierarchy, children, in_storageLocation, pathToDefinition);
                 }
                 
-                const Json::Value& defaults = root["Defaults"];
-                PropertyMap defaultProperties;
-                if(defaults.isNull() == false)
-                {
-                    defaultProperties = ParseDefaultValues(defaults, in_storageLocation, pathToDefinition);
-                }
-                
+                std::vector<WidgetDef::ChildPropertyLink> childPropertyLinks;
                 const Json::Value& childProperties = root["ChildProperties"];
                 if(childProperties.isNull() == false)
                 {
-                    ParseLinkedChildProperties(childProperties, hierarchyDesc.m_links);
+                    childPropertyLinks = ParseLinkedChildProperties(childProperties);
+                }
+                
+                const Json::Value& customProperties = root["Properties"];
+                PropertyMap defaultProperties = BuildPropertyMap(customProperties, childDescs, childPropertyLinks);
+                
+                const Json::Value& defaults = root["Defaults"];
+                if(defaults.isNull() == false)
+                {
+                    ParseDefaultValues(defaults, in_storageLocation, pathToDefinition, defaultProperties);
                 }
                 
                 const Json::Value& behaviour = root["Behaviour"];
@@ -264,23 +284,23 @@ namespace ChilliSource
                     if(in_delegate == nullptr)
                     {
                         auto luaSource = Core::Application::Get()->GetResourcePool()->LoadResource<Scripting::LuaSource>(behaviourLocation, behaviourPath);
+                        widgetDef->Build(typeName, defaultProperties, childDescs, childPropertyLinks, luaSource);
                         out_resource->SetLoadState(luaSource->GetLoadState());
-                        widgetDef->Build(hierarchyDesc, luaSource);
                     }
                     else
                     {
                         Core::Application::Get()->GetResourcePool()->LoadResourceAsync<Scripting::LuaSource>(behaviourLocation, behaviourPath, [=](const Core::ResourceCSPtr& in_resource)
                         {
                             auto luaSource = std::static_pointer_cast<const Scripting::LuaSource>(in_resource);
+                            widgetDef->Build(typeName, defaultProperties, childDescs, childPropertyLinks, luaSource);
                             out_resource->SetLoadState(luaSource->GetLoadState());
-                            widgetDef->Build(hierarchyDesc, luaSource);
                             CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                         });
                     }
                 }
                 else
                 {
-                    widgetDef->Build(hierarchyDesc, nullptr);
+                    widgetDef->Build(typeName, defaultProperties, childDescs, childPropertyLinks, nullptr);
                     
                     out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
                     if(in_delegate != nullptr)

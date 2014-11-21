@@ -34,6 +34,8 @@
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
+#include <ChilliSource/UI/Drawable/DrawableDesc.h>
+#include <ChilliSource/UI/Layout/LayoutDesc.h>
 
 #include <json/json.h>
 
@@ -201,11 +203,12 @@ namespace ChilliSource
                 case PropertyType::k_storageLocation:
                     SetProperty(in_name, Core::ParseStorageLocation(in_value));
                     break;
-                case PropertyType::k_propertyMap:
-                {
-                    CS_LOG_FATAL("Cannot set a 'property map' property from a string.");
+                case PropertyType::k_drawableDesc:
+                    SetProperty(in_name, DrawableDesc(Json::Value(in_value)));
                     break;
-                }
+                case PropertyType::k_layoutDesc:
+                    SetProperty(in_name, LayoutDesc(Json::Value(in_value)));
+                    break;
                 case PropertyType::k_unknown:
                     CS_LOG_FATAL("Cannot set an 'unknown' property from a string.");
                     break;
@@ -285,9 +288,15 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<PropertyMap>() const
+        template<> PropertyType PropertyMap::GetType<DrawableDesc>() const
         {
-            return PropertyType::k_propertyMap;
+            return PropertyType::k_drawableDesc;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<LayoutDesc>() const
+        {
+            return PropertyType::k_layoutDesc;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -313,12 +322,14 @@ namespace ChilliSource
                     return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::Colour>());
                 case PropertyType::k_alignmentAnchor:
                     return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Rendering::AlignmentAnchor>());
-                case PropertyType::k_propertyMap:
-                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<PropertyMap>());
                 case PropertyType::k_sizePolicy:
                     return PropertyMap::IPropertyUPtr(new PropertyMap::Property<SizePolicy>());
                 case PropertyType::k_storageLocation:
                     return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::StorageLocation>());
+                case PropertyType::k_drawableDesc:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<DrawableDesc>());
+                case PropertyType::k_layoutDesc:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<LayoutDesc>());
                 case PropertyType::k_unknown:
                     return nullptr;
             }

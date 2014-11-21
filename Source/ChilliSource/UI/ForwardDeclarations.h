@@ -53,12 +53,12 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(WidgetFactory);
         CS_FORWARDDECLARE_CLASS(WidgetTemplate);
         CS_FORWARDDECLARE_CLASS(WidgetTemplateProvider);
-        CS_FORWARDDECLARE_STRUCT(WidgetHierarchyDesc);
         enum class PropertyType;
         enum class SizePolicy;
         //---------------------------------------------------------
         /// Drawable
         //---------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(DrawableDesc);
         CS_FORWARDDECLARE_CLASS(IDrawable);
         CS_FORWARDDECLARE_CLASS(NinePatchDrawable);
         CS_FORWARDDECLARE_CLASS(StandardDrawable);
@@ -71,6 +71,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(GridLayout);
         CS_FORWARDDECLARE_CLASS(HListLayout);
         CS_FORWARDDECLARE_CLASS(VListLayout);
+        CS_FORWARDDECLARE_CLASS(LayoutDesc);
         enum class LayoutType;
         //---------------------------------------------------------
         /// Text

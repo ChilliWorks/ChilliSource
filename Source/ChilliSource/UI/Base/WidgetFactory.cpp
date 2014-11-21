@@ -293,125 +293,47 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         WidgetUPtr WidgetFactory::CreateRecursive(const WidgetDefCSPtr& in_widgetDef, const WidgetDesc& in_widgetDesc) const
         {
-            WidgetUPtr widget(new Widget(in_widgetDef->GEt, in_hierarchyDesc.m_customProperties));
-            CS_ASSERT(in_hierarchyDesc.m_defaultProperties.HasKey("Layout") == true, "Invalid widget property map. Doesn't contain key: Layout");
-            CS_ASSERT(in_hierarchyDesc.m_defaultProperties.HasKey("Drawable") == true, "Invalid widget property map. Doesn't contain key: Drawable");
-            CS_ASSERT(in_hierarchyDesc.m_defaultProperties.HasKey("TextDrawable") == true, "Invalid widget property map. Doesn't contain key: Text");
+            CS_ASSERT(in_widgetDef->GetDefaultProperties().HasKey("Layout") == true, "Invalid widget property map. Doesn't contain key: Layout");
+            CS_ASSERT(in_widgetDef->GetDefaultProperties().HasKey("Drawable") == true, "Invalid widget property map. Doesn't contain key: Drawable");
+            CS_ASSERT(in_widgetDef->GetDefaultProperties().HasKey("TextDrawable") == true, "Invalid widget property map. Doesn't contain key: Text");
             
-            if(in_hierarchyDesc.m_defaultProperties.HasValue("Layout") == true)
+            //create the internal children
+            std::vector<WidgetUPtr> internalChildren;
+            for (const auto& internalChild : in_widgetDef->GetChildDescs())
             {
-                switch (in_hierarchyDesc.m_access)
-                {
-                    case WidgetHierarchyDesc::Access::k_internal:
-                        widget->SetInternalLayout(CreateLayout(in_hierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Layout")));
-                        break;
-                    case WidgetHierarchyDesc::Access::k_external:
-                        widget->SetLayout(CreateLayout(in_hierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Layout")));
-                        break;
-                }
-            }
-            
-            if(in_hierarchyDesc.m_defaultProperties.HasValue("Drawable") == true)
-            {
-                widget->SetDrawable(CreateDrawable(in_hierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("Drawable")));
-            }
-            
-            if(in_hierarchyDesc.m_defaultProperties.HasValue("TextDrawable") == true)
-            {
-                widget->SetTextDrawable(TextDrawableUPtr(new TextDrawable(in_hierarchyDesc.m_defaultProperties.GetProperty<PropertyMap>("TextDrawable"))));
-            }
-            
-            for(const auto& childHierarchyDesc : in_hierarchyDesc.m_children)
-            {
-                auto def = m_widgetDefNameMap.find(childHierarchyDesc.m_type)->second;
-                WidgetSPtr childWidget = CreateRecursive(childHierarchyDesc, def->GetBehaviourSource());
-                switch (childHierarchyDesc.m_access)
-                {
-                    case WidgetHierarchyDesc::Access::k_internal:
-                        widget->AddInternalWidget(childWidget);
-                        break;
-                    case WidgetHierarchyDesc::Access::k_external:
-                        widget->AddWidget(childWidget);
-                        break;
-                }
-            }
-            
-            //Hook up any links to our childrens properties
-            std::unordered_map<std::string, IPropertyAccessorUPtr> defaultPropertyLinks;
-            std::unordered_map<std::string, std::pair<Widget*, std::string>> customPropertyLinks;
-            
-            for(const auto& link : in_hierarchyDesc.m_links)
-            {
-                Widget* childWidget = widget->GetInternalWidgetRecursive(link.m_widgetName);
-                CS_ASSERT(childWidget != nullptr, "Cannot link to missing widget: " + link.m_widgetName);
+                auto def = m_widgetDefNameMap.find(internalChild.GetType())->second;
+                CS_ASSERT(def != nullptr, "Invalid widget def type in internal child widget.");
                 
-                std::string lowerCasePropName(link.m_propertyName);
-                Core::StringUtils::ToLowerCase(lowerCasePropName);
-
-                if(lowerCasePropName == "name")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<const std::string&>(Core::MakeDelegate(childWidget, &Widget::SetName), Core::MakeDelegate(childWidget, &Widget::GetName))));
-                }
-                else if(lowerCasePropName == "relposition")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetRelativePosition), Core::MakeDelegate(childWidget, &Widget::GetLocalRelativePosition))));
-                }
-                else if(lowerCasePropName == "absposition")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetAbsolutePosition), Core::MakeDelegate(childWidget, &Widget::GetLocalAbsolutePosition))));
-                }
-                else if(lowerCasePropName == "relsize")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetRelativeSize), Core::MakeDelegate(childWidget, &Widget::GetLocalRelativeSize))));
-                }
-                else if(lowerCasePropName == "abssize")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetAbsoluteSize), Core::MakeDelegate(childWidget, &Widget::GetLocalAbsoluteSize))));
-                }
-                else if(lowerCasePropName == "preferredsize")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetDefaultPreferredSize), Core::MakeDelegate(childWidget, &Widget::GetPreferredSize))));
-                }
-                else if(lowerCasePropName == "scale")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::ScaleTo), Core::MakeDelegate(childWidget, &Widget::GetLocalScale))));
-                }
-                else if(lowerCasePropName == "colour")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Colour>(Core::MakeDelegate(childWidget, &Widget::SetColour), Core::MakeDelegate(childWidget, &Widget::GetLocalColour))));
-                }
-                else if(lowerCasePropName == "rotation")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<f32>(Core::MakeDelegate(childWidget, &Widget::RotateTo), Core::MakeDelegate(childWidget, &Widget::GetLocalRotation))));
-                }
-                else if(lowerCasePropName == "originanchor")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Rendering::AlignmentAnchor>(Core::MakeDelegate(childWidget, &Widget::SetOriginAnchor), Core::MakeDelegate(childWidget, &Widget::GetOriginAnchor))));
-                }
-                else if(lowerCasePropName == "parentalanchor")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Rendering::AlignmentAnchor>(Core::MakeDelegate(childWidget, &Widget::SetParentalAnchor), Core::MakeDelegate(childWidget, &Widget::GetParentalAnchor))));
-                }
-                else if(lowerCasePropName == "visible")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(childWidget, &Widget::SetVisible), Core::MakeDelegate(childWidget, &Widget::IsVisible))));
-                }
-                else if(lowerCasePropName == "clipchildren")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(childWidget, &Widget::SetClippingEnabled), Core::MakeDelegate(childWidget, &Widget::IsClippingEnabled))));
-                }
-                else if(lowerCasePropName == "sizepolicy")
-                {
-                    defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<SizePolicy>(Core::MakeDelegate(childWidget, &Widget::SetSizePolicy), Core::MakeDelegate(childWidget, &Widget::GetSizePolicy))));
-                }
-                else
-                {
-                    customPropertyLinks.emplace(link.m_linkName, std::make_pair(childWidget, link.m_propertyName));
-                }
+                WidgetUPtr childWidget = CreateRecursive(def, internalChild);
+                internalChildren.push_back(std::move(childWidget));
             }
             
-            widget->SetPropertyLinks(std::move(defaultPropertyLinks), std::move(customPropertyLinks));
-            widget->SetBehaviourScript(in_behaviourSource);
+            WidgetUPtr widget(new Widget(in_widgetDesc.GetProperties(), std::move(internalChildren), in_widgetDef->GetChildPropertyLinks(), in_widgetDef->GetBehaviourSource()));
+            
+            
+            if(in_widgetDesc.GetProperties().HasValue("Layout") == true)
+            {
+                widget->SetLayout(CreateLayout(in_widgetDesc.GetProperties().GetProperty<PropertyMap>("Layout")));
+            }
+            
+            if(in_widgetDesc.GetProperties().HasValue("Drawable") == true)
+            {
+                widget->SetDrawable(CreateDrawable(in_widgetDesc.GetProperties().GetProperty<PropertyMap>("Drawable")));
+            }
+            
+            if(in_widgetDesc.GetProperties().HasValue("TextDrawable") == true)
+            {
+                widget->SetTextDrawable(TextDrawableUPtr(new TextDrawable(in_widgetDesc.GetProperties().GetProperty<PropertyMap>("TextDrawable"))));
+            }
+            
+            for(const auto& childDesc : in_widgetDesc.GetChildDescs())
+            {
+                auto def = m_widgetDefNameMap.find(childDesc.GetType())->second;
+                CS_ASSERT(def != nullptr, "Invalid widget def type in internal child widget.");
+                
+                WidgetSPtr childWidget = CreateRecursive(def, childDesc);
+                widget->AddWidget(childWidget);
+            }
             
             return widget;
         }

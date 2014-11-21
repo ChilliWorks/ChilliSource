@@ -54,7 +54,8 @@ namespace ChilliSource
             k_alignmentAnchor,
             k_sizePolicy,
             k_storageLocation,
-            k_propertyMap
+            k_drawableDesc,
+            k_layoutDesc
         };
         //----------------------------------------------------------------------------------------
         /// Convert the string type to internal property type

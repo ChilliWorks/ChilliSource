@@ -46,7 +46,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        const PropertyMap& WidgetDesc::GetPropertyMap() const
+        const PropertyMap& WidgetDesc::GetProperties() const
         {
             return m_propertyMap;
         }

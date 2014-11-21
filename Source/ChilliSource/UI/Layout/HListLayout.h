@@ -60,27 +60,14 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             HListLayout();
             //----------------------------------------------------------------------------------------
-            /// Constructor that builds the layout from key-value properties
+            /// Constructor that builds the layout from the given Layout Description. This will assert
+            /// if the given description is not a list.
             ///
-            /// Properties:
+            /// @author Ian Copland
             ///
-            ///     - NumCells - u32 - Number of cells
-            ///     - RelSpacing - f32 - Relative spacing
-            ///     - AbsSpacing - f32 - Absolute spacing
-            ///     - RelMargins - f32 f32 f32 f32 - Relative margins top, right, bottom, left
-            ///     - AbsMargins - f32 f32 f32 f32 - Absolute margins top, right, bottom, left
-            ///
-            /// @author S Downie
-            ///
-            /// @param Key-value properties
+            /// @param The layout description.
             //----------------------------------------------------------------------------------------
-            HListLayout(const PropertyMap& in_properties);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The list of properties supported by this layout
-            //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
+            HListLayout(const LayoutDesc& in_layoutDesc);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///

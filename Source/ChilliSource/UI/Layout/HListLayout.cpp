@@ -31,24 +31,12 @@
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>
+#include <ChilliSource/UI/Layout/LayoutDesc.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
-        namespace
-        {
-            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
-            {
-                {PropertyType::k_string, "Type"},
-                {PropertyType::k_int, "NumCells"},
-                {PropertyType::k_float, "RelSpacing"},
-                {PropertyType::k_float, "AbsSpacing"},
-                {PropertyType::k_vec4, "RelMargins"},
-                {PropertyType::k_vec4, "AbsMargins"}
-            };
-        }
-        
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         HListLayout::HListLayout()
@@ -58,25 +46,22 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        HListLayout::HListLayout(const PropertyMap& in_properties)
+        HListLayout::HListLayout(const LayoutDesc& in_layoutDesc)
         {
+            CS_ASSERT(in_layoutDesc.GetType() != LayoutType::k_hList, "Cannot create a HList layout with a description for a different type of layout.");
+            
             m_gridLayout.SetNumRows(1);
             m_gridLayout.SetCellOrder(GridLayout::CellOrder::k_colMajor);
             
-            SetNumCells(in_properties.GetPropertyOrDefault("NumCells", (s32)GetNumCells()));
-            SetRelativeSpacing(in_properties.GetPropertyOrDefault("RelSpacing", GetRelativeSpacing()));
-            SetAbsoluteSpacing(in_properties.GetPropertyOrDefault("AbsSpacing", GetAbsoluteSpacing()));
+            SetNumCells(in_layoutDesc.GetNumCells());
+            SetRelativeSpacing(in_layoutDesc.GetRelativeSpacing());
+            SetAbsoluteSpacing(in_layoutDesc.GetAbsoluteSpacing());
             
-            Core::Vector4 relMargins(in_properties.GetPropertyOrDefault("RelMargins", GetRelativeMargins()));
+            Core::Vector4 relMargins = in_layoutDesc.GetRelativeMargins();
             SetRelativeMargins(relMargins.x, relMargins.y, relMargins.z, relMargins.w);
-            Core::Vector4 absMargins(in_properties.GetPropertyOrDefault("AbsMargins", GetAbsoluteMargins()));
+            
+            Core::Vector4 absMargins = in_layoutDesc.GetAbsoluteMargins();
             SetAbsoluteMargins(absMargins.x, absMargins.y, absMargins.z, absMargins.w);
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        std::vector<PropertyMap::PropertyDesc> HListLayout::GetPropertyDescs()
-        {
-            return k_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

@@ -30,69 +30,32 @@
 
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Base/Widget.h>
+#include <ChilliSource/UI/Layout/LayoutDesc.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
-        namespace
-        {
-            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
-            {
-                {PropertyType::k_string, "Type"},
-                {PropertyType::k_int, "NumRows"},
-                {PropertyType::k_int, "NumCols"},
-                {PropertyType::k_float, "RelHSpacing"},
-                {PropertyType::k_float, "AbsHSpacing"},
-                {PropertyType::k_float, "RelVSpacing"},
-                {PropertyType::k_float, "AbsVSpacing"},
-                {PropertyType::k_vec4, "RelMargins"},
-                {PropertyType::k_vec4, "AbsMargins"},
-                {PropertyType::k_string, "CellOrder"}
-            };
-        }
-        
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        GridLayout::GridLayout(const PropertyMap& in_properties)
+        GridLayout::GridLayout(const LayoutDesc& in_layoutDesc)
         {
-            SetNumRows(in_properties.GetPropertyOrDefault("NumRows", (s32)GetNumRows()));
-            SetNumCols(in_properties.GetPropertyOrDefault("NumCols", (s32)GetNumCols()));
-            SetRelativeHSpacing(in_properties.GetPropertyOrDefault("RelHSpacing", GetRelativeHSpacing()));
-            SetAbsoluteHSpacing(in_properties.GetPropertyOrDefault("AbsHSpacing", GetAbsoluteHSpacing()));
-            SetRelativeVSpacing(in_properties.GetPropertyOrDefault("RelVSpacing", GetRelativeVSpacing()));
-            SetAbsoluteVSpacing(in_properties.GetPropertyOrDefault("AbsVSpacing", GetAbsoluteVSpacing()));
+            CS_ASSERT(in_layoutDesc.GetType() != LayoutType::k_grid, "Cannot create a Grid layout with a description for a different type of layout.");
             
-            Core::Vector4 relMargins(in_properties.GetPropertyOrDefault("RelMargins", GetRelativeMargins()));
+            SetNumRows(in_layoutDesc.GetNumRows());
+            SetNumCols(in_layoutDesc.GetNumCols());
+            SetRelativeHSpacing(in_layoutDesc.GetRelativeHSpacing());
+            SetRelativeHSpacing(in_layoutDesc.GetRelativeHSpacing());
+            SetRelativeHSpacing(in_layoutDesc.GetRelativeHSpacing());
+            SetRelativeHSpacing(in_layoutDesc.GetRelativeHSpacing());
+            SetCellOrder(in_layoutDesc.GetCellOrder());
+            
+            Core::Vector4 relMargins = in_layoutDesc.GetRelativeMargins();
             SetRelativeMargins(relMargins.x, relMargins.y, relMargins.z, relMargins.w);
-            Core::Vector4 absMargins(in_properties.GetPropertyOrDefault("AbsMargins", GetAbsoluteMargins()));
+            
+            Core::Vector4 absMargins = in_layoutDesc.GetAbsoluteMargins();
             SetAbsoluteMargins(absMargins.x, absMargins.y, absMargins.z, absMargins.w);
-            
-            std::string cellOrder(in_properties.GetPropertyOrDefault("CellOrder", ""));
-            Core::StringUtils::ToLowerCase(cellOrder);
-            
-            if (cellOrder != "")
-            {
-                if(cellOrder == "colmajor")
-                {
-                    SetCellOrder(CellOrder::k_colMajor);
-                }
-                else if(cellOrder == "rowmajor")
-                {
-                    SetCellOrder(CellOrder::k_rowMajor);
-                }
-                else
-                {
-                    CS_LOG_FATAL("GridLayout: Unknown cell order: " + cellOrder);
-                }
-            }
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        std::vector<PropertyMap::PropertyDesc> GridLayout::GetPropertyDescs()
-        {
-            return k_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

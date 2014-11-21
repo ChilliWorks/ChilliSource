@@ -920,8 +920,61 @@ namespace ChilliSource
             /// @param The property 
             /// @param Custom property values
             //----------------------------------------------------------------------------------------
-            Widget(const PropertyMap& in_properties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<WidgetDesc>& in_childDescs,
-                   const std::vector<ComponentPropertyLink>& in_componentPropertyLinks, const std::vector<ChildPropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource);
+            Widget(const PropertyMap& in_properties, std::vector<WidgetUPtr> in_internalChildren, const std::vector<WidgetDef::ChildPropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource);
+            //----------------------------------------------------------------------------------------
+            /// Adds a widget as a child of this widget. The widget will be rendered as part of this
+            /// hierarchy and any relative coordinates will now be in relation to this widget.
+            ///
+            /// This widget is effectively a private implementation detail and is not affected by the
+            /// layout and is not returned when querying for widgets
+            ///
+            /// NOTE: Will assert if the widget already has a parent
+            ///
+            /// @author S Downie
+            ///
+            /// @param Widget to add
+            //----------------------------------------------------------------------------------------
+            void InitInternalWidgets(std::vector<WidgetUPtr> in_widgets);
+            //----------------------------------------------------------------------------------------
+            /// Set up the links so that this widget can access the properties of another via the
+            /// SetProperty and GetProperty
+            ///
+            /// @author S Downie
+            ///
+            /// @param Links to default properties of the specified widget
+            /// @param Links to custom properties of the specified widget
+            //----------------------------------------------------------------------------------------
+            void InitPropertyLinks(const std::vector<WidgetDef::ChildPropertyLink>& in_childPropertyLinks);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Default property values
+            //----------------------------------------------------------------------------------------
+            void InitProperties(const PropertyMap& in_defaultProperties);
+            //----------------------------------------------------------------------------------------
+            /// Sets the Lua script that controls the behaviour of this widget
+            ///
+            /// @author S Downie
+            ///
+            /// @param Lua script source
+            //----------------------------------------------------------------------------------------
+            void SetBehaviourScript(const Scripting::LuaSourceCSPtr& in_behaviourSource);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param Custom property values
+            //----------------------------------------------------------------------------------------
+            void SetCustomProperties(const PropertyMap& in_customProperties);
+            //----------------------------------------------------------------------------------------
+            /// Set the layout that handles how to layout the widget's internal subviews. If this is null then the
+            /// subviews will retain their current size and position. Otherwise the size and position may
+            /// be manipulatd by the layout
+            ///
+            /// @author S Downie
+            ///
+            /// @param Layout
+            //----------------------------------------------------------------------------------------
+            void SetInternalLayout(ILayoutUPtr in_layout);
             //----------------------------------------------------------------------------------------
             /// Set the pointer to the canvas
             ///
@@ -938,60 +991,6 @@ namespace ChilliSource
             /// @param Parent
             //----------------------------------------------------------------------------------------
             void SetParent(Widget* in_parent);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Default property values
-            //----------------------------------------------------------------------------------------
-            void SetDefaultProperties(const PropertyMap& in_defaultProperties);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Custom property values
-            //----------------------------------------------------------------------------------------
-            void SetCustomProperties(const PropertyMap& in_customProperties);
-            //----------------------------------------------------------------------------------------
-            /// Set up the links so that this widget can access the properties of another via the
-            /// SetProperty and GetProperty
-            ///
-            /// @author S Downie
-            ///
-            /// @param Links to default properties of the specified widget
-            /// @param Links to custom properties of the specified widget
-            //----------------------------------------------------------------------------------------
-            void SetPropertyLinks(std::unordered_map<std::string, IPropertyAccessorUPtr>&& in_defaultLinks, std::unordered_map<std::string, std::pair<Widget*, std::string>>&& in_customLinks);
-            //----------------------------------------------------------------------------------------
-            /// Sets the Lua script that controls the behaviour of this widget
-            ///
-            /// @author S Downie
-            ///
-            /// @param Lua script source
-            //----------------------------------------------------------------------------------------
-            void SetBehaviourScript(const Scripting::LuaSourceCSPtr& in_behaviourSource);
-            //----------------------------------------------------------------------------------------
-            /// Adds a widget as a child of this widget. The widget will be rendered as part of this
-            /// hierarchy and any relative coordinates will now be in relation to this widget.
-            ///
-            /// This widget is effectively a private implementation detail and is not affected by the
-            /// layout and is not returned when querying for widgets
-            ///
-            /// NOTE: Will assert if the widget already has a parent
-            ///
-            /// @author S Downie
-            ///
-            /// @param Widget to add
-            //----------------------------------------------------------------------------------------
-            void AddInternalWidget(const WidgetSPtr& in_widget);
-            //----------------------------------------------------------------------------------------
-            /// Set the layout that handles how to layout the widget's internal subviews. If this is null then the
-            /// subviews will retain their current size and position. Otherwise the size and position may
-            /// be manipulatd by the layout
-            ///
-            /// @author S Downie
-            ///
-            /// @param Layout
-            //----------------------------------------------------------------------------------------
-            void SetInternalLayout(ILayoutUPtr in_layout);
             //----------------------------------------------------------------------------------------
             /// Calculate the transform matrix of the object based on the local scale, rotation and
             /// position

@@ -94,87 +94,6 @@ namespace ChilliSource
             
             //-------------------------------------------------------
             //-------------------------------------------------------
-            PropertyMap ParseDrawableValues(const Json::Value& in_drawable, Core::StorageLocation in_location, const std::string& in_absPath)
-            {
-                DrawableType type = ParseDrawableType(in_drawable["Type"].asString());
-                auto supportedProperties = IDrawable::GetPropertyDescs(type);
-                PropertyMap result(supportedProperties);
-                
-                if(type != DrawableType::k_none)
-                {
-                    bool relativeTexturePath = in_drawable.isMember("TextureLocation") == false;
-                    bool hasAtlas = in_drawable.isMember("AtlasPath") == true;
-                    bool relativeAtlasPath = hasAtlas == true && in_drawable.isMember("AtlasLocation") == false;
-                    
-                    if(relativeTexturePath == true)
-                    {
-                        result.SetProperty(PropertyType::k_string, "TextureLocation", Core::ToString(in_location));
-                    }
-                    
-                    if(relativeAtlasPath == true)
-                    {
-                        result.SetProperty(PropertyType::k_string, "AtlasLocation", Core::ToString(in_location));
-                    }
-                    
-                    for(const auto& propDesc : supportedProperties)
-                    {
-                        if(in_drawable.isMember(propDesc.m_name) == true)
-                        {
-                            std::string value = in_drawable[propDesc.m_name].asString();
-                            
-                            if(propDesc.m_name == "TexturePath" && relativeTexturePath == true)
-                            {
-                                value = Core::StringUtils::ResolveParentedDirectories(in_absPath + value);
-                            }
-                            else if(propDesc.m_name == "AtlasPath" && relativeAtlasPath == true)
-                            {
-                                value = Core::StringUtils::ResolveParentedDirectories(in_absPath + value);
-                            }
-                            
-                            result.SetProperty(propDesc.m_type, propDesc.m_name, value);
-                        }
-                    }
-                }
-                
-                return result;
-            }
-            //-------------------------------------------------------
-            //-------------------------------------------------------
-            PropertyMap ParseLayoutValues(const Json::Value& in_layout)
-            {
-                LayoutType type = ParseLayoutType(in_layout["Type"].asString());
-                auto supportedProperties = ILayout::GetPropertyDescs(type);
-                PropertyMap result(supportedProperties);
-                
-                for(const auto& propDesc : supportedProperties)
-                {
-                    if(in_layout.isMember(propDesc.m_name) == true)
-                    {
-                        result.SetProperty(propDesc.m_type, propDesc.m_name, in_layout[propDesc.m_name].asString());
-                    }
-                }
-                
-                return result;
-            }
-            //-------------------------------------------------------
-            //-------------------------------------------------------
-            PropertyMap ParseTextDrawableValues(const Json::Value& in_layout)
-            {
-                auto supportedProperties = TextDrawable::GetPropertyDescs();
-                PropertyMap result(supportedProperties);
-                
-                for(const auto& propDesc : supportedProperties)
-                {
-                    if(in_layout.isMember(propDesc.m_name) == true)
-                    {
-                        result.SetProperty(propDesc.m_type, propDesc.m_name, in_layout[propDesc.m_name].asString());
-                    }
-                }
-                
-                return result;
-            }
-            //-------------------------------------------------------
-            //-------------------------------------------------------
             WidgetDesc ParseWidget(const Json::Value& in_template, const std::string& in_name, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath)
             {
                 CS_ASSERT(in_template.isMember("Type") == true, "Widget template must have type");
@@ -228,7 +147,7 @@ namespace ChilliSource
                         //Ignore these as they are handled elsewhere but we do not want them to be included
                         //in the properties list
                     }
-                    if (outputProperties.HasKey(it.memberName()) == true)
+                    else if (outputProperties.HasKey(it.memberName()) == true)
                     {
                         SetProperty(propertyName, *it, in_templateLocation, in_templatePath, outputProperties);
                     }

@@ -31,8 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
-#include <ChilliSource/UI/Base/WidgetHierarchyDesc.h>
-#include <ChilliSource/UI/Base/ComponentDesc.h>
+#include <ChilliSource/UI/Base/WidgetDesc.h>
 
 #include <vector>
 
@@ -56,17 +55,6 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(WidgetDef);
             
-            //-------------------------------------------------------
-            /// Describes a proxy to a property of a component.
-            ///
-            /// @author Ian Copland
-            //-------------------------------------------------------
-            struct ComponentPropertyLink final
-            {
-                std::string m_linkName;
-                std::string m_componentName;
-                std::string m_propertyName;
-            };
             //-------------------------------------------------------
             /// Describes a proxy to a property of a child widget.
             ///
@@ -100,20 +88,16 @@ namespace ChilliSource
             /// widgets have and linked properties. The values of
             /// each property is the default value in any instance
             /// of the widget being used.
-            /// @param The list of component descriptions. This can
-            /// be empty if no components are required.
             /// @param The list of internal child descriptions. This
             /// can be empty if no internal children are required.
-            /// @param The links between properties of the widget
-            /// def and properties of components.
             /// @param The links between properties of the widget
             /// def and properties of internal children.
             /// @param Lua source for widget behaviour (will be
             /// removed when Lua functionality is changed to a
             /// component.
             //-------------------------------------------------------
-            void Build(const std::string& in_typeName, const PropertyMap& in_defaultProperties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<WidgetDesc>& in_childDescs,
-                       const std::vector<ComponentPropertyLink>& in_componentPropertyLinks, const std::vector<ChildPropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource);
+            void Build(const std::string& in_typeName, const PropertyMap& in_defaultProperties, const std::vector<WidgetDesc>& in_childDescs, const std::vector<ChildPropertyLink>& in_childPropertyLinks,
+                       const Scripting::LuaSourceCSPtr& in_behaviourSource);
             //-------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -132,22 +116,9 @@ namespace ChilliSource
             //-------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return The list of component descriptions.
-            //-------------------------------------------------------
-            const std::vector<ComponentDesc>& GetComponentDescs() const;
-            //-------------------------------------------------------
-            /// @author Ian Copland
-            ///
             /// @return The list of internal child descriptions.
             //-------------------------------------------------------
             const std::vector<WidgetDesc>& GetChildDescs() const;
-            //-------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The links between properties of the widget
-            /// def and properties of components.
-            //-------------------------------------------------------
-            const std::vector<ComponentPropertyLink>& GetComponentPropertyLinks() const;
             //-------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -182,9 +153,7 @@ namespace ChilliSource
         private:
             std::string m_typeName;
             PropertyMap m_defaultProperties;
-            std::vector<ComponentDesc> m_componentDescs;
             std::vector<WidgetDesc> m_childDescs;
-            std::vector<ComponentPropertyLink> m_componentPropertyLinks;
             std::vector<ChildPropertyLink> m_childPropertyLinks;
             Scripting::LuaSourceCSPtr m_behaviourSource;
         };

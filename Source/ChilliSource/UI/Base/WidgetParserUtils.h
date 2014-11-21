@@ -41,43 +41,6 @@ namespace ChilliSource
         namespace WidgetParserUtils
         {
             //-------------------------------------------------------
-            /// From the given JSON value parse the values of the drawable
-            /// types into a property map. Drawables can be specified
-            /// with a relative path and this needs conversion to an
-            /// absolute path
-            ///
-            /// @author S Downie
-            ///
-            /// @param Json drawable
-            /// @param Absolute storage location
-            /// @param Absolute file path (no file name)
-            ///
-            /// @return Property values
-            //-------------------------------------------------------
-            PropertyMap ParseDrawableValues(const Json::Value& in_drawable, Core::StorageLocation in_location, const std::string& in_absPath);
-            //-------------------------------------------------------
-            /// From the given JSON value parse the values of the layout
-            /// types into a property map
-            ///
-            /// @author S Downie
-            ///
-            /// @param Json layout
-            ///
-            /// @return Property values
-            //-------------------------------------------------------
-            PropertyMap ParseLayoutValues(const Json::Value& in_layout);
-            //-------------------------------------------------------
-            /// From the given JSON value parse the values of the text
-            /// types into a property map
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param Json layout
-            ///
-            /// @return Property values
-            //-------------------------------------------------------
-            PropertyMap ParseTextDrawableValues(const Json::Value& in_layout);
-            //-------------------------------------------------------
             /// From the given JSON value parse the values of the property
             /// types into the given container. Some of the properties
             /// require conversion from relative to absolute paths
