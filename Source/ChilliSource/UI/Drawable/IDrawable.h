@@ -31,7 +31,6 @@
 #define _CHILLISOURCE_UI_DRAWABLE_IDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
 
 namespace ChilliSource
 {
@@ -47,19 +46,21 @@ namespace ChilliSource
         public:
             CS_DECLARE_NOCOPY(IDrawable);
             //----------------------------------------------------------------------------------------
+            /// Factory method for creating a new drawable instance from a drawable description.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The drawable description.
+            ///
+            /// @return The new drawable instance.
+            //----------------------------------------------------------------------------------------
+            static IDrawableUPtr Create(const DrawableDesc& in_desc);
+            //----------------------------------------------------------------------------------------
             /// Constructor
             ///
             /// @author S Downie
             //----------------------------------------------------------------------------------------
             IDrawable() = default;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Drawable type
-            ///
-            /// @return The list of properties supported by the drawable of given type
-            //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs(DrawableType in_type);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///

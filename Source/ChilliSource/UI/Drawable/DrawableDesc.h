@@ -30,7 +30,10 @@
 #define _CHILLISOURCE_UI_DRAWABLE_DRAWABLEDESC_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
+#include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 #include <json/forwards.h>
 
@@ -75,6 +78,9 @@ namespace ChilliSource
         /// "ThreePatchInsets": The insets from the edges of the stretchable
         /// portion of the image. This should only be supplied for Three-Patch
         /// type drawables.
+        ///
+        /// "ThreePatchDirection": The direction the Three-Patch will stretch
+        /// in: horizontal or vertical. Defaults to horizontal.
         ///
         /// @author Ian Copland
         //---------------------------------------------------------------------
@@ -160,6 +166,13 @@ namespace ChilliSource
             /// the type is three-patch.
             //--------------------------------------------------------------
             const Core::Vector2& GetThreePatchInsets() const;
+            //--------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The direction that a Three-Patch drawable will stretch.
+            /// This should only be used with a 3-patch drawable.
+            //--------------------------------------------------------------
+            ThreePatchDrawable::Direction GetThreePatchDirection() const;
             
         private:
             DrawableType m_type = DrawableType::k_standard;
@@ -171,6 +184,7 @@ namespace ChilliSource
             Rendering::UVs m_uvs;
             Core::Vector4 m_ninePatchInsets;
             Core::Vector2 m_threePatchInsets;
+            ThreePatchDrawable::Direction m_threePatchDirection;
         };
     }
 }

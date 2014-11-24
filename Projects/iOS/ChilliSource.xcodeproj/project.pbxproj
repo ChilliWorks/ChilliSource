@@ -26,7 +26,6 @@
 		817F763E1A03E23A00D36ACF /* DrawableProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76081A03E23A00D36ACF /* DrawableProxy.cpp */; };
 		817F763F1A03E23A00D36ACF /* DrawableType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F760A1A03E23A00D36ACF /* DrawableType.cpp */; };
 		817F76401A03E23A00D36ACF /* DrawableUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F760C1A03E23A00D36ACF /* DrawableUtils.cpp */; };
-		817F76411A03E23A00D36ACF /* IDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F760E1A03E23A00D36ACF /* IDrawable.cpp */; };
 		817F76421A03E23A00D36ACF /* NinePatchDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76101A03E23A00D36ACF /* NinePatchDrawable.cpp */; };
 		817F76431A03E23A00D36ACF /* NinePatchDrawableProxy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76121A03E23A00D36ACF /* NinePatchDrawableProxy.cpp */; };
 		817F76441A03E23A00D36ACF /* StandardDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76141A03E23A00D36ACF /* StandardDrawable.cpp */; };
@@ -59,6 +58,9 @@
 		81AAFBBC19C9C18100CD4A14 /* GestureSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB619C9C18100CD4A14 /* GestureSystem.cpp */; };
 		81AAFBBD19C9C18100CD4A14 /* TapGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB819C9C18100CD4A14 /* TapGesture.cpp */; };
 		81AE299619D072800053FCB6 /* PinchGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AE299419D072800053FCB6 /* PinchGesture.cpp */; };
+		81AECBDF1A234570009DFA59 /* IDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AECBDE1A234570009DFA59 /* IDrawable.cpp */; };
+		81AECBE11A23464D009DFA59 /* ILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AECBE01A23464D009DFA59 /* ILayout.cpp */; };
+		81AECBE61A234D4E009DFA59 /* JsonUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AECBE31A234D4E009DFA59 /* JsonUtils.cpp */; };
 		81B1D2D1196C0167000F13DD /* Pointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2CF196C0167000F13DD /* Pointer.cpp */; };
 		81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D3196C2410000F13DD /* TextEntry.cpp */; };
 		81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D9196C2B31000F13DD /* TextEntry.mm */; };
@@ -425,7 +427,6 @@
 		817F760B1A03E23A00D36ACF /* DrawableType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableType.h; sourceTree = "<group>"; };
 		817F760C1A03E23A00D36ACF /* DrawableUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableUtils.cpp; sourceTree = "<group>"; };
 		817F760D1A03E23A00D36ACF /* DrawableUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableUtils.h; sourceTree = "<group>"; };
-		817F760E1A03E23A00D36ACF /* IDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IDrawable.cpp; sourceTree = "<group>"; };
 		817F760F1A03E23A00D36ACF /* IDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDrawable.h; sourceTree = "<group>"; };
 		817F76101A03E23A00D36ACF /* NinePatchDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NinePatchDrawable.cpp; sourceTree = "<group>"; };
 		817F76111A03E23A00D36ACF /* NinePatchDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NinePatchDrawable.h; sourceTree = "<group>"; };
@@ -501,6 +502,11 @@
 		81AAFBBA19C9C18100CD4A14 /* Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gesture.h; sourceTree = "<group>"; };
 		81AE299419D072800053FCB6 /* PinchGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PinchGesture.cpp; sourceTree = "<group>"; };
 		81AE299519D072800053FCB6 /* PinchGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinchGesture.h; sourceTree = "<group>"; };
+		81AECBDE1A234570009DFA59 /* IDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IDrawable.cpp; sourceTree = "<group>"; };
+		81AECBE01A23464D009DFA59 /* ILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILayout.cpp; sourceTree = "<group>"; };
+		81AECBE31A234D4E009DFA59 /* JsonUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonUtils.cpp; sourceTree = "<group>"; };
+		81AECBE41A234D4E009DFA59 /* JsonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonUtils.h; sourceTree = "<group>"; };
+		81AECBE51A234D4E009DFA59 /* Json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Json.h; sourceTree = "<group>"; };
 		81B1D2CF196C0167000F13DD /* Pointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pointer.cpp; sourceTree = "<group>"; };
 		81B1D2D0196C0167000F13DD /* Pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pointer.h; sourceTree = "<group>"; };
 		81B1D2D3196C2410000F13DD /* TextEntry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextEntry.cpp; sourceTree = "<group>"; };
@@ -1152,8 +1158,8 @@
 				817F760B1A03E23A00D36ACF /* DrawableType.h */,
 				817F760C1A03E23A00D36ACF /* DrawableUtils.cpp */,
 				817F760D1A03E23A00D36ACF /* DrawableUtils.h */,
-				817F760E1A03E23A00D36ACF /* IDrawable.cpp */,
 				817F760F1A03E23A00D36ACF /* IDrawable.h */,
+				81AECBDE1A234570009DFA59 /* IDrawable.cpp */,
 				817F76101A03E23A00D36ACF /* NinePatchDrawable.cpp */,
 				817F76111A03E23A00D36ACF /* NinePatchDrawable.h */,
 				817F76121A03E23A00D36ACF /* NinePatchDrawableProxy.cpp */,
@@ -1184,6 +1190,7 @@
 				817F76251A03E23A00D36ACF /* HListLayoutProxy.cpp */,
 				817F76261A03E23A00D36ACF /* HListLayoutProxy.h */,
 				817F76281A03E23A00D36ACF /* ILayout.h */,
+				81AECBE01A23464D009DFA59 /* ILayout.cpp */,
 				817F76291A03E23A00D36ACF /* LayoutProxy.cpp */,
 				817F762A1A03E23A00D36ACF /* LayoutProxy.h */,
 				817F762B1A03E23A00D36ACF /* LayoutType.cpp */,
@@ -1268,6 +1275,15 @@
 				811B181719D19AF400B06B5D /* RotationGesture.h */,
 			);
 			path = Gesture;
+			sourceTree = "<group>";
+		};
+		81AECBE21A234D4E009DFA59 /* Json */ = {
+			isa = PBXGroup;
+			children = (
+				81AECBE31A234D4E009DFA59 /* JsonUtils.cpp */,
+				81AECBE41A234D4E009DFA59 /* JsonUtils.h */,
+			);
+			path = Json;
 			sourceTree = "<group>";
 		};
 		81B1D2D2196C2410000F13DD /* TextEntry */ = {
@@ -1390,51 +1406,53 @@
 			isa = PBXGroup;
 			children = (
 				81D8B22D1962E0EB0010DA84 /* Base */,
+				8158E483196ACB25005FF0A8 /* Base.h */,
 				81D8B2461962E0EB0010DA84 /* Container */,
+				8158E484196ACB32005FF0A8 /* Container.h */,
 				81D8B24D1962E0EB0010DA84 /* Cryptographic */,
+				8158E485196ACB41005FF0A8 /* Cryptographic.h */,
 				81D8B25A1962E0EB0010DA84 /* Delegate */,
+				8158E486196ACB4B005FF0A8 /* Delegate.h */,
 				81D8B25F1962E0EB0010DA84 /* DialogueBox */,
+				8158E487196ACB58005FF0A8 /* DialogueBox.h */,
 				81D8B2621962E0EB0010DA84 /* Entity */,
+				8158E488196ACB62005FF0A8 /* Entity.h */,
 				81D8B2691962E0EB0010DA84 /* Event */,
+				8158E489196ACB6E005FF0A8 /* Event.h */,
 				81D8B26F1962E0EB0010DA84 /* File */,
+				8158E48A196ACB7A005FF0A8 /* File.h */,
 				81D8B2791962E0EB0010DA84 /* ForwardDeclarations.h */,
 				81D8B27A1962E0EB0010DA84 /* Image */,
-				81D8B2891962E0EB0010DA84 /* Localisation */,
-				81D8B28E1962E0EB0010DA84 /* Math */,
-				81D8B2A01962E0EB0010DA84 /* Notification */,
-				81D8B2AA1962E0EB0010DA84 /* Reflection */,
-				81D8B2B61962E0EB0010DA84 /* Resource */,
-				81D8B2BE1962E0EB0010DA84 /* Scene */,
-				81D8B2C11962E0EB0010DA84 /* State */,
-				81D8B2C61962E0EB0010DA84 /* String */,
-				81D8B2CF1962E0EB0010DA84 /* System */,
-				81D8B2D31962E0EB0010DA84 /* Threading */,
-				81D8B2D81962E0EB0010DA84 /* Time */,
-				81D8B2DF1962E0EB0010DA84 /* Tween */,
-				81D8B2E41962E0EB0010DA84 /* Volume */,
-				81D8B2E71962E0EB0010DA84 /* XML */,
-				8158E483196ACB25005FF0A8 /* Base.h */,
-				8158E484196ACB32005FF0A8 /* Container.h */,
-				8158E485196ACB41005FF0A8 /* Cryptographic.h */,
-				8158E486196ACB4B005FF0A8 /* Delegate.h */,
-				8158E487196ACB58005FF0A8 /* DialogueBox.h */,
-				8158E488196ACB62005FF0A8 /* Entity.h */,
-				8158E489196ACB6E005FF0A8 /* Event.h */,
-				8158E48A196ACB7A005FF0A8 /* File.h */,
 				8158E48B196ACB84005FF0A8 /* Image.h */,
+				81AECBE21A234D4E009DFA59 /* Json */,
+				81AECBE51A234D4E009DFA59 /* Json.h */,
+				81D8B2891962E0EB0010DA84 /* Localisation */,
 				8158E48C196ACB91005FF0A8 /* Localisation.h */,
+				81D8B28E1962E0EB0010DA84 /* Math */,
 				8158E48D196ACB9B005FF0A8 /* Math.h */,
+				81D8B2A01962E0EB0010DA84 /* Notification */,
 				8158E48E196ACBA5005FF0A8 /* Notification.h */,
+				81D8B2AA1962E0EB0010DA84 /* Reflection */,
 				8158E48F196ACBB0005FF0A8 /* Reflection.h */,
+				81D8B2B61962E0EB0010DA84 /* Resource */,
 				8158E490196ACBBB005FF0A8 /* Resource.h */,
+				81D8B2BE1962E0EB0010DA84 /* Scene */,
 				8158E491196ACBC5005FF0A8 /* Scene.h */,
+				81D8B2C11962E0EB0010DA84 /* State */,
 				8158E492196ACBFC005FF0A8 /* State.h */,
+				81D8B2C61962E0EB0010DA84 /* String */,
 				8158E493196ACC0B005FF0A8 /* String.h */,
+				81D8B2CF1962E0EB0010DA84 /* System */,
 				8158E494196ACC1A005FF0A8 /* System.h */,
+				81D8B2D31962E0EB0010DA84 /* Threading */,
 				8158E495196ACC26005FF0A8 /* Threading.h */,
+				81D8B2D81962E0EB0010DA84 /* Time */,
 				8158E496196ACC2F005FF0A8 /* Time.h */,
+				81D8B2DF1962E0EB0010DA84 /* Tween */,
 				8158E497196ACC3C005FF0A8 /* Tween.h */,
+				81D8B2E41962E0EB0010DA84 /* Volume */,
 				8158E498196ACC4A005FF0A8 /* Volume.h */,
+				81D8B2E71962E0EB0010DA84 /* XML */,
 				8158E499196ACC76005FF0A8 /* XML.h */,
 			);
 			path = Core;
@@ -2784,6 +2802,7 @@
 				81D8B42B1962E0EC0010DA84 /* Registry.cpp in Sources */,
 				81D8B4281962E0EC0010DA84 /* Instance.cpp in Sources */,
 				817F76371A03E23A00D36ACF /* WidgetDef.cpp in Sources */,
+				81AECBE61A234D4E009DFA59 /* JsonUtils.cpp in Sources */,
 				81D8B6A61962E0F70010DA84 /* NSNotificationAdapter.mm in Sources */,
 				81D8B4011962E0EC0010DA84 /* Device.cpp in Sources */,
 				81D8B4621962E0EC0010DA84 /* MoContentDownloader.cpp in Sources */,
@@ -2901,6 +2920,7 @@
 				81D8B4261962E0EC0010DA84 /* NotificationManager.cpp in Sources */,
 				817F763F1A03E23A00D36ACF /* DrawableType.cpp in Sources */,
 				81D8B4801962E0EC0010DA84 /* CSModelProvider.cpp in Sources */,
+				81AECBDF1A234570009DFA59 /* IDrawable.cpp in Sources */,
 				81D8B4A91962E0EC0010DA84 /* WebView.cpp in Sources */,
 				817F76421A03E23A00D36ACF /* NinePatchDrawable.cpp in Sources */,
 				817F766C1A03E31000D36ACF /* LuaSystem.cpp in Sources */,
@@ -2909,7 +2929,6 @@
 				81D8B4151962E0EC0010DA84 /* FileSystem.cpp in Sources */,
 				81D8B43F1962E0EC0010DA84 /* DebugStats.cpp in Sources */,
 				81AAFBBD19C9C18100CD4A14 /* TapGesture.cpp in Sources */,
-				817F76411A03E23A00D36ACF /* IDrawable.cpp in Sources */,
 				81D8B42A1962E0EC0010DA84 /* Property.cpp in Sources */,
 				817F763A1A03E23A00D36ACF /* WidgetParserUtils.cpp in Sources */,
 				81D8B4851962E0EC0010DA84 /* SkinnedAnimationGroup.cpp in Sources */,
@@ -2937,6 +2956,7 @@
 				81D8B4A51962E0EC0010DA84 /* FacebookPostSystem.cpp in Sources */,
 				81D8B69F1962E0F70010DA84 /* PlatformSystem.mm in Sources */,
 				81D8B4571962E0EC0010DA84 /* ProgressBar.cpp in Sources */,
+				81AECBE11A23464D009DFA59 /* ILayout.cpp in Sources */,
 				81F6DEA61A10CEB300B422C1 /* HorizontalTextJustification.cpp in Sources */,
 				817F76481A03E23A00D36ACF /* GridLayout.cpp in Sources */,
 				81D8B4201962E0EC0010DA84 /* ShapeIntersection.cpp in Sources */,

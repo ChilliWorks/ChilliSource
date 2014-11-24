@@ -29,7 +29,7 @@
 #include <ChilliSource/UI/Base/WidgetDefProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -166,23 +166,7 @@ namespace ChilliSource
                 {
                     if(out_properties.HasKey(it.memberName()) == true)
                     {
-                        if(strcmp(it.memberName(), "Drawable") == 0)
-                        {
-                            //Special case for drawable
-                            CS_ASSERT((*it).isObject(), "Value can only be specified as object: " + std::string(it.memberName()));
-                            out_properties.SetProperty(it.memberName(), WidgetParserUtils::ParseDrawableValues(*it, in_definitionLocation, in_definitionPath));
-                        }
-                        else if(strcmp(it.memberName(), "Layout") == 0)
-                        {
-                            //Special case for drawable
-                            CS_ASSERT((*it).isObject(), "Value can only be specified as object: " + std::string(it.memberName()));
-                            out_properties.SetProperty(it.memberName(), WidgetParserUtils::ParseLayoutValues(*it));
-                        }
-                        else
-                        {
-                            CS_ASSERT((*it).isString(), "Value can only be specified as string: " + std::string(it.memberName()));
-                            out_properties.SetProperty(out_properties.GetType(it.memberName()), it.memberName(), (*it).asString());
-                        }
+                        WidgetParserUtils::SetProperty(it.memberName(), (*it), out_properties);
                     }
                     else
                     {
@@ -229,7 +213,16 @@ namespace ChilliSource
             void LoadDesc(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
             {
                 Json::Value root;
-                Core::Utils::ReadJson(in_storageLocation, in_filepath, &root);
+                if (Core::JsonUtils::ReadJson(in_storageLocation, in_filepath, root) == false)
+                {
+                    CS_LOG_ERROR("Cannot read widget def file: " + in_filepath);
+                    out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    }
+                    return;
+                }
                 
                 WidgetDef* widgetDef = (WidgetDef*)out_resource.get();
                 

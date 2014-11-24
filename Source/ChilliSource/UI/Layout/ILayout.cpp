@@ -1,5 +1,5 @@
 //
-//  IDrawable.cpp
+//  ILayout.cpp
 //  Chilli Source
 //  Created by Scott Downie on 18/04/2014.
 //
@@ -26,31 +26,31 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Drawable/IDrawable.h>
+#include <ChilliSource/UI/Layout/ILayout.h>
 
-#include <ChilliSource/UI/Drawable/DrawableDesc.h>
-#include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
-#include <ChilliSource/UI/Drawable/StandardDrawable.h>
-#include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
+#include <ChilliSource/UI/Layout/GridLayout.h>
+#include <ChilliSource/UI/Layout/HListLayout.h>
+#include <ChilliSource/UI/Layout/LayoutDesc.h>
+#include <ChilliSource/UI/Layout/VListLayout.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
-        //---------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        IDrawableUPtr IDrawable::Create(const DrawableDesc& in_desc)
+        //----------------------------------------------------------------------------------------
+        ILayoutUPtr ILayout::Create(const LayoutDesc& in_desc)
         {
             switch(in_desc.GetType())
             {
-                case DrawableType::k_standard:
-                    return IDrawableUPtr(new StandardDrawable(in_desc));
-                case DrawableType::k_ninePatch:
-                    return IDrawableUPtr(new NinePatchDrawable(in_desc));
-                case DrawableType::k_threePatch:
-                    return IDrawableUPtr(new ThreePatchDrawable(in_desc));
+                case LayoutType::k_grid:
+                    return ILayoutUPtr(new GridLayout(in_desc));
+                case LayoutType::k_hList:
+                    return ILayoutUPtr(new HListLayout(in_desc));
+                case LayoutType::k_vList:
+                    return ILayoutUPtr(new VListLayout(in_desc));
                 default:
-                    CS_LOG_FATAL("Cannot create a widget drawable instance: invalid type.");
+                    CS_LOG_FATAL("Cannot create a widget layout instance: invalid type.");
                     return nullptr;
             }
         }

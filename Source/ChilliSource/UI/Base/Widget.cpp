@@ -36,9 +36,11 @@
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/UI/Base/WidgetProxy.h>
+#include <ChilliSource/UI/Drawable/DrawableDesc.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawableProxy.h>
 #include <ChilliSource/UI/Drawable/StandardDrawableProxy.h>
 #include <ChilliSource/UI/Drawable/ThreePatchDrawableProxy.h>
+#include <ChilliSource/UI/Layout/LayoutDesc.h>
 
 namespace ChilliSource
 {
@@ -65,9 +67,8 @@ namespace ChilliSource
                 {PropertyType::k_bool, "InputEnabled"},
                 {PropertyType::k_bool, "InputConsumeEnabled"},
                 {PropertyType::k_sizePolicy, "SizePolicy"},
-                {PropertyType::k_propertyMap, "Layout"},
-                {PropertyType::k_propertyMap, "Drawable"},
-                {PropertyType::k_propertyMap, "TextDrawable"}
+                {PropertyType::k_layoutDesc, "Layout"},
+                {PropertyType::k_drawableDesc, "Drawable"},
             };
             
             //----------------------------------------------------------------------------------------
@@ -243,6 +244,18 @@ namespace ChilliSource
             SetInputEnabled(in_defaultProperties.GetPropertyOrDefault<bool>("InputEnabled", false));
             SetInputConsumeEnabled(in_defaultProperties.GetPropertyOrDefault<bool>("InputConsumeEnabled", true));
             SetSizePolicy(in_defaultProperties.GetPropertyOrDefault<SizePolicy>("SizePolicy", SizePolicy::k_none));
+            
+            if(in_defaultProperties.HasValue("Layout") == true)
+            {
+                SetLayout(ILayout::Create(in_defaultProperties.GetProperty<LayoutDesc>("Layout")));
+            }
+            
+            if(in_defaultProperties.HasValue("Drawable") == true)
+            {
+                SetDrawable(IDrawable::Create(in_defaultProperties.GetProperty<DrawableDesc>("Drawable")));
+            }
+            
+            //TODO: apply linked property defaults.
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

@@ -35,6 +35,7 @@
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/UI/Drawable/DrawableDesc.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/DrawableUtils.h>
 
@@ -44,19 +45,6 @@ namespace ChilliSource
     {
         namespace
         {
-            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
-            {
-                {PropertyType::k_string, "Type"},
-                {PropertyType::k_string, "Direction"},
-                {PropertyType::k_vec4, "UVs"},
-                {PropertyType::k_vec2, "Insets"},
-                {PropertyType::k_string, "TextureLocation"},
-                {PropertyType::k_string, "TexturePath"},
-                {PropertyType::k_string, "AtlasLocation"},
-                {PropertyType::k_string, "AtlasPath"},
-                {PropertyType::k_string, "AtlasId"}
-            };
-        
             //----------------------------------------------------------------------------------------
             /// Identifier for each patch in the 3 patch. Can be used as index look-ups into
             /// arrays of UVs, positions, etc.
@@ -501,60 +489,51 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        ThreePatchDrawable::ThreePatchDrawable(const PropertyMap& in_properties)
+        ThreePatchDrawable::ThreePatchDrawable(const DrawableDesc& in_desc)
         {
-            std::string direction(in_properties.GetPropertyOrDefault("Direction", "horizontal"));
-            Core::StringUtils::ToLowerCase(direction);
-            
-            if(direction == "horizontal")
+            switch (in_desc.GetThreePatchDirection())
             {
-                m_uvCalculationDelegate = CalculateThreePatchUVsHorizontal;
-                m_sizeCalculationDelegate = CalculateThreePatchSizesHorizontal;
-                m_positionCalculationDelegate = CalculateThreePatchPositionsHorizontal;
-                m_offsetCalculationDelegate = CalculateThreePatchOffsetHorizontal;
-            }
-            else if(direction == "vertical")
-            {
-                m_uvCalculationDelegate = CalculateThreePatchUVsVertical;
-                m_sizeCalculationDelegate = CalculateThreePatchSizesVertical;
-                m_positionCalculationDelegate = CalculateThreePatchPositionsVertical;
-                m_offsetCalculationDelegate = CalculateThreePatchOffsetVertical;
-            }
-            else
-            {
-                CS_LOG_FATAL("ThreePatchDrawable: Unknown type: " + direction);
+                case Direction::k_horizontal:
+                    m_uvCalculationDelegate = CalculateThreePatchUVsHorizontal;
+                    m_sizeCalculationDelegate = CalculateThreePatchSizesHorizontal;
+                    m_positionCalculationDelegate = CalculateThreePatchPositionsHorizontal;
+                    m_offsetCalculationDelegate = CalculateThreePatchOffsetHorizontal;
+                    break;
+                case Direction::k_vertical:
+                    m_uvCalculationDelegate = CalculateThreePatchUVsVertical;
+                    m_sizeCalculationDelegate = CalculateThreePatchSizesVertical;
+                    m_positionCalculationDelegate = CalculateThreePatchPositionsVertical;
+                    m_offsetCalculationDelegate = CalculateThreePatchOffsetVertical;
+                    break;
+                default:
+                    CS_LOG_FATAL("Invalid three-patch direction type.");
+                    break;
             }
             
-            Core::Vector4 uvs(in_properties.GetPropertyOrDefault("UVs", Core::Vector4(m_uvs.m_u, m_uvs.m_v, m_uvs.m_s, m_uvs.m_t)));
-            SetUVs(Rendering::UVs(uvs.x, uvs.y, uvs.z, uvs.w));
-            
-            std::string textureLocation(in_properties.GetPropertyOrDefault("TextureLocation", "Package"));
-            std::string texturePath(in_properties.GetPropertyOrDefault("TexturePath", ""));
-            
-            if(textureLocation.empty() == false && texturePath.empty() == false)
-            {
-                auto resPool = Core::Application::Get()->GetResourcePool();
-                SetTexture(resPool->LoadResource<Rendering::Texture>(Core::ParseStorageLocation(textureLocation), texturePath));
-            }
-            
-            std::string atlasLocation(in_properties.GetPropertyOrDefault("AtlasLocation", "Package"));
-            std::string atlasPath(in_properties.GetPropertyOrDefault("AtlasPath", ""));
-            
-            if(atlasLocation.empty() == false && atlasPath.empty() == false)
-            {
-                auto resPool = Core::Application::Get()->GetResourcePool();
-                SetTextureAtlas(resPool->LoadResource<Rendering::TextureAtlas>(Core::ParseStorageLocation(atlasLocation), atlasPath));
-                SetTextureAtlasId(in_properties.GetPropertyOrDefault("AtlasId", ""));
-            }
-            
-            Core::Vector2 insets(in_properties.GetPropertyOrDefault("Insets", Core::Vector2(m_leftOrBottomInset, m_rightOrTopInset)));
+            SetUVs(in_desc.GetUVs());
+            Core::Vector2 insets = in_desc.GetThreePatchInsets();
             SetInsets(insets.x, insets.y);
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        std::vector<PropertyMap::PropertyDesc> ThreePatchDrawable::GetPropertyDescs()
-        {
-            return k_propertyDescs;
+            
+            Core::StorageLocation textureLocation = in_desc.GetTextureLocation();
+            std::string texturePath = in_desc.GetTexturePath();
+            CS_ASSERT(texturePath.empty() == false, "Must provide a texture path in a widget drawable.");
+            
+            auto resPool = Core::Application::Get()->GetResourcePool();
+            SetTexture(resPool->LoadResource<Rendering::Texture>(textureLocation, texturePath));
+            
+            Core::StorageLocation atlasLocation = in_desc.GetAtlasLocation();
+            std::string atlasPath = in_desc.GetAtlasPath();
+            
+            if(atlasPath.empty() == false)
+            {
+                SetTextureAtlas(resPool->LoadResource<Rendering::TextureAtlas>(atlasLocation, atlasPath));
+                CS_ASSERT(m_atlas != nullptr, "Invalid atlas Id provided for widget drawable: " + atlasPath);
+                
+                std::string atlasId = in_desc.GetAtlasId();
+                CS_ASSERT(m_atlas->HasFrameWithId(atlasId) == true, "Invalid atlas id provided for widget drawable: " + atlasId);
+                
+                SetTextureAtlasId(atlasId);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

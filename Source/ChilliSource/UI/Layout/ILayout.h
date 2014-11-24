@@ -48,6 +48,16 @@ namespace ChilliSource
         public:
             CS_DECLARE_NOCOPY(ILayout);
             //----------------------------------------------------------------------------------------
+            /// Factory method for creating a new layout instance from a layout description.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The layout description.
+            ///
+            /// @return The new layout instance.
+            //----------------------------------------------------------------------------------------
+            static ILayoutUPtr Create(const LayoutDesc& in_desc);
+            //----------------------------------------------------------------------------------------
             /// Constructor
             ///
             /// @author S Downie

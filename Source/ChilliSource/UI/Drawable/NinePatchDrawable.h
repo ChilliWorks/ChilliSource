@@ -86,26 +86,14 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
             //----------------------------------------------------------------------------------------
-            /// Constructor that builds the drawable from key-value properties
+            /// Constructor that builds the drawable from a drawable description. The description
+            /// must be for a nine-patch drawable or this will assert.
             ///
-            /// Properties:
+            /// @author Ian Copland
             ///
-            ///     - UVs - f32 f32 f32 f32 - U, V, S, T
-            ///     - Insets - f32 f32 f32 f32 - left, right, top, bottom insets
-            ///     - TextureLocation - StorageLocation String - The storage location of the texture
-            ///     - TexturePath - String - File path fo the texture relative to the location
-            ///
-            /// @author S Downie
-            ///
-            /// @param Key-value properties
+            /// @param The drawable description.
             //----------------------------------------------------------------------------------------
-            NinePatchDrawable(const PropertyMap& in_properties);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The list of properties supported by this drawable
-            //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
+            NinePatchDrawable(const DrawableDesc& in_desc);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///

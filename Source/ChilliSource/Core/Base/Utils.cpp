@@ -38,31 +38,6 @@ namespace ChilliSource
     {
         namespace Utils
         {
-            bool ReadJson(CSCore::StorageLocation ineStorageLocation, const std::string &instrPath, Json::Value *outpJson)
-            {
-                if(!outpJson)
-                {
-                    CS_LOG_WARNING("Utils::ReadJson: Output is nullptr");
-                    return false;
-                }
-                
-                std::string strJsonString;
-                if(!FileToString(ineStorageLocation, instrPath, strJsonString))
-                    return false;
-                
-                Json::Reader jReader;
-                
-                *outpJson = Json::Value();
-                
-                if(!jReader.parse(strJsonString, *outpJson))
-                {
-					CS_LOG_WARNING("Utils::ReadJson: Json could not be parsed: " + jReader.getFormatedErrorMessages());
-                    return false;
-                }
-                
-                return true;
-            }
-
             bool FileToString(StorageLocation ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent)
             {
                 FileStreamSPtr pFile = Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_read);

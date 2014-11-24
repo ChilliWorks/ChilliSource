@@ -35,6 +35,7 @@
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/UI/Drawable/DrawableDesc.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/DrawableUtils.h>
 
@@ -44,18 +45,6 @@ namespace ChilliSource
     {
         namespace
         {
-            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
-            {
-                {PropertyType::k_string, "Type"},
-                {PropertyType::k_vec4, "UVs"},
-                {PropertyType::k_vec4, "Insets"},
-                {PropertyType::k_string, "TextureLocation"},
-                {PropertyType::k_string, "TexturePath"},
-                {PropertyType::k_string, "AtlasLocation"},
-                {PropertyType::k_string, "AtlasPath"},
-                {PropertyType::k_string, "AtlasId"}
-            };
-            
             //----------------------------------------------------------------------------------------
             /// Identifier for each patch in the 9 patch. Can be used as index look-ups into
             /// arrays of UVs, positions, etc.
@@ -410,38 +399,32 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        NinePatchDrawable::NinePatchDrawable(const PropertyMap& in_properties)
+        NinePatchDrawable::NinePatchDrawable(const DrawableDesc& in_desc)
         {
-            Core::Vector4 uvs(in_properties.GetPropertyOrDefault("UVs", Core::Vector4(m_uvs.m_u, m_uvs.m_v, m_uvs.m_s, m_uvs.m_t)));
-            SetUVs(Rendering::UVs(uvs.x, uvs.y, uvs.z, uvs.w));
-            
-            Core::Vector4 insets(in_properties.GetPropertyOrDefault("Insets", Core::Vector4(m_leftInset, m_rightInset, m_topInset, m_bottomInset)));
+            SetUVs(in_desc.GetUVs());
+            Core::Vector4 insets = in_desc.GetNinePatchInsets();
             SetInsets(insets.x, insets.y, insets.z, insets.w);
             
-            std::string textureLocation(in_properties.GetPropertyOrDefault("TextureLocation", "Package"));
-            std::string texturePath(in_properties.GetPropertyOrDefault("TexturePath", ""));
+            Core::StorageLocation textureLocation = in_desc.GetTextureLocation();
+            std::string texturePath = in_desc.GetTexturePath();
+            CS_ASSERT(texturePath.empty() == false, "Must provide a texture path in a widget drawable.");
             
-            if(textureLocation.empty() == false && texturePath.empty() == false)
+            auto resPool = Core::Application::Get()->GetResourcePool();
+            SetTexture(resPool->LoadResource<Rendering::Texture>(textureLocation, texturePath));
+            
+            Core::StorageLocation atlasLocation = in_desc.GetAtlasLocation();
+            std::string atlasPath = in_desc.GetAtlasPath();
+            
+            if(atlasPath.empty() == false)
             {
-                auto resPool = Core::Application::Get()->GetResourcePool();
-                SetTexture(resPool->LoadResource<Rendering::Texture>(Core::ParseStorageLocation(textureLocation), texturePath));
+                SetTextureAtlas(resPool->LoadResource<Rendering::TextureAtlas>(atlasLocation, atlasPath));
+                CS_ASSERT(m_atlas != nullptr, "Invalid atlas Id provided for widget drawable: " + atlasPath);
+                
+                std::string atlasId = in_desc.GetAtlasId();
+                CS_ASSERT(m_atlas->HasFrameWithId(atlasId) == true, "Invalid atlas id provided for widget drawable: " + atlasId);
+                
+                SetTextureAtlasId(atlasId);
             }
-            
-            std::string atlasLocation(in_properties.GetPropertyOrDefault("AtlasLocation", "Package"));
-            std::string atlasPath(in_properties.GetPropertyOrDefault("AtlasPath", ""));
-            
-            if(atlasLocation.empty() == false && atlasPath.empty() == false)
-            {
-                auto resPool = Core::Application::Get()->GetResourcePool();
-                SetTextureAtlas(resPool->LoadResource<Rendering::TextureAtlas>(Core::ParseStorageLocation(atlasLocation), atlasPath));
-                SetTextureAtlasId(in_properties.GetPropertyOrDefault("AtlasId", ""));
-            }
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        std::vector<PropertyMap::PropertyDesc> NinePatchDrawable::GetPropertyDescs()
-        {
-            return k_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

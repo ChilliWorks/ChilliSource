@@ -68,25 +68,14 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             StandardDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId);
             //---------------------------------------------------------------------------------------
-            /// Constructor that builds the drawable from key-value properties
+            /// Constructor that builds the drawable from a drawable description. The description
+            /// must be for a standard drawable type or this will assert.
             ///
-            /// Properties:
+            /// @author Ian Copland
             ///
-            ///     - UVs - f32 f32 f32 f32 - U, V, S, T
-            ///     - TextureLocation - StorageLocation String - The storage location of the texture
-            ///     - TexturePath - String - File path fo the texture relative to the location
-            ///
-            /// @author S Downie
-            ///
-            /// @param Key-value properties
+            /// @param The drawable description.
             //----------------------------------------------------------------------------------------
-            StandardDrawable(const PropertyMap& in_properties);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The list of properties supported by this drawable
-            //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
+            StandardDrawable(const DrawableDesc& in_desc);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///

@@ -49,49 +49,24 @@ namespace ChilliSource
 	{
         namespace WidgetParserUtils
         {
-            namespace
+            //-------------------------------------------------------
+            //-------------------------------------------------------
+            void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, PropertyMap& out_propertyMap)
             {
-                //-------------------------------------------------------
-                /// Convenience method for setting a property in a prop
-                /// map from JSON. This will handle the special cases
-                /// of object types layout and drawable
-                ///
-                /// @author S Downie
-                ///
-                /// @param Property name
-                /// @param JSON to parse and assign into map
-                /// @param Location of file for relative pathing
-                /// @param Base path of file for relative pathing
-                /// @param [Out] Property map to assign to
-                //-------------------------------------------------------
-                void SetProperty(const std::string& in_propName, const Json::Value& in_json, Core::StorageLocation in_templateLocation, const std::string& in_templatePath, PropertyMap& in_propMap)
+                CS_ASSERT(in_jsonValue.isString() || in_jsonValue.isObject(), "Value can only be specified as string or object: " + in_propertyName);
+                
+                std::string value;
+                if (in_jsonValue.isObject() == true)
                 {
-                    if(in_propName == "Drawable")
-                    {
-                        //Special case for drawable
-                        CS_ASSERT(in_json.isObject(), "Value can only be specified as object: " + in_propName);
-                        in_propMap.SetProperty(in_propName, WidgetParserUtils::ParseDrawableValues(in_json, in_templateLocation, in_templatePath));
-                    }
-                    else if(in_propName == "Layout")
-                    {
-                        //Special case for drawable
-                        CS_ASSERT(in_json.isObject(), "Value can only be specified as object: " + in_propName);
-                        in_propMap.SetProperty(in_propName, WidgetParserUtils::ParseLayoutValues(in_json));
-                    }
-                    else if(in_propName == "TextDrawable")
-                    {
-                        //Special case for drawable
-                        CS_ASSERT(in_json.isObject(), "Value can only be specified as object: " + in_propName);
-                        in_propMap.SetProperty(in_propName, WidgetParserUtils::ParseTextDrawableValues(in_json));
-                    }
-                    else
-                    {
-                        CS_ASSERT(in_json.isString(), "Value can only be specified as string: " + in_propName);
-                        in_propMap.SetProperty(in_propMap.GetType(in_propName), in_propName, in_json.asString());
-                    }
+                    value = in_jsonValue.toStyledString();
                 }
+                else
+                {
+                    value = in_jsonValue.asString();
+                }
+                
+                out_propertyMap.SetProperty(out_propertyMap.GetType(in_propertyName), in_propertyName, value);
             }
-            
             //-------------------------------------------------------
             //-------------------------------------------------------
             WidgetDesc ParseWidget(const Json::Value& in_template, const std::string& in_name, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath)
@@ -142,14 +117,15 @@ namespace ChilliSource
                 {
                     std::string propertyName = it.memberName();
                     
-                    if (propertyName == "TemplateLocation" || propertyName == "TemplatePath" || propertyName == "Children" || propertyName == "Hierarchy")
+                    //TODO: Remove TextDrawable from the ignore list!
+                    if (propertyName == "TemplateLocation" || propertyName == "TemplatePath" || propertyName == "Children" || propertyName == "Hierarchy" || propertyName == "TextDrawable")
                     {
                         //Ignore these as they are handled elsewhere but we do not want them to be included
                         //in the properties list
                     }
-                    else if (outputProperties.HasKey(it.memberName()) == true)
+                    else if (outputProperties.HasKey(propertyName) == true)
                     {
-                        SetProperty(propertyName, *it, in_templateLocation, in_templatePath, outputProperties);
+                        SetProperty(propertyName, (*it), outputProperties);
                     }
                     else
                     {

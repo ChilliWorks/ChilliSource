@@ -41,6 +41,18 @@ namespace ChilliSource
         namespace WidgetParserUtils
         {
             //-------------------------------------------------------
+            /// Sets a property in a property map from a json value.
+            /// The value type must be a string or a json object or
+            /// this will assert.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The property name.
+            /// @param The json value.
+            /// @param [Out] The output property map.
+            //-------------------------------------------------------
+            void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, PropertyMap& out_propertyMap);
+            //-------------------------------------------------------
             /// From the given JSON value parse the values of the property
             /// types into the given container. Some of the properties
             /// require conversion from relative to absolute paths

@@ -28,16 +28,52 @@
 
 #include <ChilliSource/UI/Drawable/DrawableDesc.h>
 
+#include <ChilliSource/Core/String/StringParser.h>
+
 #include <json/json.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
+        namespace
+        {
+            //--------------------------------------------------------------
+            /// Parses a three-patch drawable direction from the given
+            /// string. If the given string is not a valid direction this
+            /// will fatal log.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The string to parse.
+            ///
+            /// @return The output three-patch drawable direction.
+            //--------------------------------------------------------------
+            ThreePatchDrawable::Direction ParseThreePatchDirection(const std::string& in_directionString)
+            {
+                std::string directionString = in_directionString;
+                Core::StringUtils::ToLowerCase(directionString);
+                
+                if (directionString == "horizontal")
+                {
+                    return ThreePatchDrawable::Direction::k_horizontal;
+                }
+                else if (directionString == "vertical")
+                {
+                    return ThreePatchDrawable::Direction::k_vertical;
+                }
+                
+                CS_LOG_FATAL("Cannot parse invalid three-patch direction.");
+                return ThreePatchDrawable::Direction::k_horizontal;
+            }
+        }
+        
         //--------------------------------------------------------------
         //--------------------------------------------------------------
         DrawableDesc::DrawableDesc(const Json::Value& in_json)
         {
+            CS_ASSERT(in_json.isObject() == true, "Drawable description must be created from a json value of type Object.");
+            
             auto typeJson = in_json.get("Type", Json::nullValue);
             CS_ASSERT(typeJson != Json::nullValue, "Type must be specified in a Drawable Description.");
             
@@ -52,32 +88,40 @@ namespace ChilliSource
                 
                 if (key == "TextureLocation")
                 {
-                    m_relativeMargins = Core::ParseVector4(value);
+                    m_textureLocation = Core::ParseStorageLocation(value);
                 }
                 else if (key == "TexturePath")
                 {
-                    m_absoluteMargins = Core::ParseVector4(value);
+                    m_texturePath = value;
                 }
                 else if (key == "AtlasLocation")
                 {
-                    m_numRows = Core::ParseU32(value);
+                    m_atlasLocation = Core::ParseStorageLocation(value);
                 }
                 else if (key == "AtlasPath")
                 {
-                    m_numCols = Core::ParseU32(value);
+                    m_atlasPath = value;
                 }
                 else if (key == "AtlasId")
                 {
-                    m_relativeHSpacing = Core::ParseF32(value);
+                    m_atlasId = value;
                 }
                 else if (key == "UVs")
                 {
-                    m_absoluteHSpacing = Core::ParseF32(value);
+                    auto vec =  Core::ParseVector4(value);;
+                    m_uvs = Rendering::UVs(vec.x, vec.y, vec.z, vec.w);
                 }
-            
-                else if (key == "Type")
+                else if (key == "Insets" && m_type == DrawableType::k_ninePatch)
                 {
-                    //ignore
+                    m_ninePatchInsets = Core::ParseVector4(value);
+                }
+                else if (key == "Insets" && m_type == DrawableType::k_threePatch)
+                {
+                    m_threePatchInsets = Core::ParseVector2(value);
+                }
+                else if (key == "Direction" && m_type == DrawableType::k_threePatch)
+                {
+                    m_threePatchDirection = ParseThreePatchDirection(value);
                 }
                 else if (key == "Type")
                 {
@@ -88,8 +132,7 @@ namespace ChilliSource
                     CS_LOG_FATAL("Invalid property found in a " + ToString(m_type) + " layout description: " + key);
                 }
                 
-                /// "NinePatchInsets"
-                /// "ThreePatchInsets"
+                CS_ASSERT((m_atlasPath == "" && m_atlasId == "") || (m_atlasPath != "" && m_atlasId != ""), "Both the atlas id and atlas path must be specified when using a texture atlas in a widget drawable.");
             }
         }
         //--------------------------------------------------------------
@@ -146,7 +189,11 @@ namespace ChilliSource
         {
             return m_threePatchInsets;
         }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        ThreePatchDrawable::Direction DrawableDesc::GetThreePatchDirection() const
+        {
+            return m_threePatchDirection;
+        }
     }
 }
-
-#endif

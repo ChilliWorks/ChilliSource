@@ -73,61 +73,6 @@ namespace ChilliSource
             const std::string k_horizontalSliderKey = "HorizontalSlider";
             const std::string k_horizontalProgressBarKey = "HorizontalProgressBar";
             const std::string k_verticalProgressBarKey = "VerticalProgressBar";
-            
-            //---------------------------------------------------------------------------
-            /// Create the layout class based on the given description
-            ///
-            /// @author S Downie
-            ///
-            /// @param Layout desc
-            ///
-            /// @return Layout or nullptr
-            //---------------------------------------------------------------------------
-            ILayoutUPtr CreateLayout(const PropertyMap& in_properties)
-            {
-                LayoutType type = ParseLayoutType(in_properties.GetProperty<std::string>("Type"));
-                
-                switch(type)
-                {
-                    case LayoutType::k_none:
-                        return nullptr;
-                    case LayoutType::k_grid:
-                        return ILayoutUPtr(new GridLayout(in_properties));
-                    case LayoutType::k_hList:
-                        return ILayoutUPtr(new HListLayout(in_properties));
-                    case LayoutType::k_vList:
-                        return ILayoutUPtr(new VListLayout(in_properties));
-                }
-                
-                return nullptr;
-            }
-            //---------------------------------------------------------------------------
-            /// Create the drawable class based on the given description
-            ///
-            /// @author S Downie
-            ///
-            /// @param Drawable desc
-            ///
-            /// @return Drawable or nullptr
-            //---------------------------------------------------------------------------
-            IDrawableUPtr CreateDrawable(const PropertyMap& in_properties)
-            {
-                DrawableType type = ParseDrawableType(in_properties.GetProperty<std::string>("Type"));
-                
-                switch(type)
-                {
-                    case DrawableType::k_none:
-                        return nullptr;
-                    case DrawableType::k_standard:
-                        return IDrawableUPtr(new StandardDrawable(in_properties));
-                    case DrawableType::k_ninePatch:
-                        return IDrawableUPtr(new NinePatchDrawable(in_properties));
-                    case DrawableType::k_threePatch:
-                        return IDrawableUPtr(new ThreePatchDrawable(in_properties));
-                }
-                
-                return nullptr;
-            }
         }
         
         //---------------------------------------------------------------------------
@@ -293,10 +238,6 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         WidgetUPtr WidgetFactory::CreateRecursive(const WidgetDefCSPtr& in_widgetDef, const WidgetDesc& in_widgetDesc) const
         {
-            CS_ASSERT(in_widgetDef->GetDefaultProperties().HasKey("Layout") == true, "Invalid widget property map. Doesn't contain key: Layout");
-            CS_ASSERT(in_widgetDef->GetDefaultProperties().HasKey("Drawable") == true, "Invalid widget property map. Doesn't contain key: Drawable");
-            CS_ASSERT(in_widgetDef->GetDefaultProperties().HasKey("TextDrawable") == true, "Invalid widget property map. Doesn't contain key: Text");
-            
             //create the internal children
             std::vector<WidgetUPtr> internalChildren;
             for (const auto& internalChild : in_widgetDef->GetChildDescs())
@@ -309,22 +250,6 @@ namespace ChilliSource
             }
             
             WidgetUPtr widget(new Widget(in_widgetDesc.GetProperties(), std::move(internalChildren), in_widgetDef->GetChildPropertyLinks(), in_widgetDef->GetBehaviourSource()));
-            
-            
-            if(in_widgetDesc.GetProperties().HasValue("Layout") == true)
-            {
-                widget->SetLayout(CreateLayout(in_widgetDesc.GetProperties().GetProperty<PropertyMap>("Layout")));
-            }
-            
-            if(in_widgetDesc.GetProperties().HasValue("Drawable") == true)
-            {
-                widget->SetDrawable(CreateDrawable(in_widgetDesc.GetProperties().GetProperty<PropertyMap>("Drawable")));
-            }
-            
-            if(in_widgetDesc.GetProperties().HasValue("TextDrawable") == true)
-            {
-                widget->SetTextDrawable(TextDrawableUPtr(new TextDrawable(in_widgetDesc.GetProperties().GetProperty<PropertyMap>("TextDrawable"))));
-            }
             
             for(const auto& childDesc : in_widgetDesc.GetChildDescs())
             {

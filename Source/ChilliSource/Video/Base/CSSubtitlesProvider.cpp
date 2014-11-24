@@ -29,8 +29,8 @@
 #include <ChilliSource/Video/Base/CSSubtitlesProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileStream.h>
+#include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
@@ -127,7 +127,16 @@ namespace ChilliSource
         {
             //read the JSON
             Json::Value root;
-            CSCore::Utils::ReadJson(in_storageLocation, in_filePath, &root);
+            if (Core::JsonUtils::ReadJson(in_storageLocation, in_filePath, root) == false)
+            {
+                CS_LOG_ERROR("Subtitles file '" + in_filePath + "' could not be read.");
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                if(in_delegate != nullptr)
+                {
+                    Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                }
+                return;
+            }
             
             //get the version number
             u32 udwVersionNumber = root.get(k_tagVersionNumber, 0).asUInt();

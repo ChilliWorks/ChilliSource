@@ -28,6 +28,7 @@
 
 #include <ChilliSource/UI/Base/PropertyMap.h>
 
+#include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/String/StringParser.h>
@@ -204,10 +205,10 @@ namespace ChilliSource
                     SetProperty(in_name, Core::ParseStorageLocation(in_value));
                     break;
                 case PropertyType::k_drawableDesc:
-                    SetProperty(in_name, DrawableDesc(Json::Value(in_value)));
+                    SetProperty(in_name, DrawableDesc(Core::JsonUtils::ParseJson(in_value)));
                     break;
                 case PropertyType::k_layoutDesc:
-                    SetProperty(in_name, LayoutDesc(Json::Value(in_value)));
+                    SetProperty(in_name, LayoutDesc(Core::JsonUtils::ParseJson(in_value)));
                     break;
                 case PropertyType::k_unknown:
                     CS_LOG_FATAL("Cannot set an 'unknown' property from a string.");

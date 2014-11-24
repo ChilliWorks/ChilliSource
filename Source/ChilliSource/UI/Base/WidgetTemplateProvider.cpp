@@ -28,7 +28,7 @@
 
 #include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
 
-#include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
@@ -62,7 +62,16 @@ namespace ChilliSource
             void LoadDesc(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
             {
                 Json::Value root;
-                Core::Utils::ReadJson(in_storageLocation, in_filepath, &root);
+                if (Core::JsonUtils::ReadJson(in_storageLocation, in_filepath, root) == false)
+                {
+                    CS_LOG_ERROR("Cannot read widget file: " + in_filepath);
+                    out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    }
+                    return;
+                }
                 
                 WidgetTemplate* widgetTemplate = (WidgetTemplate*)out_resource.get();
                 
