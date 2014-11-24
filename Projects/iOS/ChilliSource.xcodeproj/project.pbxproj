@@ -61,6 +61,7 @@
 		81AECBDF1A234570009DFA59 /* IDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AECBDE1A234570009DFA59 /* IDrawable.cpp */; };
 		81AECBE11A23464D009DFA59 /* ILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AECBE01A23464D009DFA59 /* ILayout.cpp */; };
 		81AECBE61A234D4E009DFA59 /* JsonUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AECBE31A234D4E009DFA59 /* JsonUtils.cpp */; };
+		81AECBE91A2368FF009DFA59 /* PropertyLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AECBE81A2368FF009DFA59 /* PropertyLink.cpp */; };
 		81B1D2D1196C0167000F13DD /* Pointer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2CF196C0167000F13DD /* Pointer.cpp */; };
 		81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D3196C2410000F13DD /* TextEntry.cpp */; };
 		81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D9196C2B31000F13DD /* TextEntry.mm */; };
@@ -507,6 +508,8 @@
 		81AECBE31A234D4E009DFA59 /* JsonUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonUtils.cpp; sourceTree = "<group>"; };
 		81AECBE41A234D4E009DFA59 /* JsonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonUtils.h; sourceTree = "<group>"; };
 		81AECBE51A234D4E009DFA59 /* Json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Json.h; sourceTree = "<group>"; };
+		81AECBE71A23679B009DFA59 /* PropertyLink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PropertyLink.h; sourceTree = "<group>"; };
+		81AECBE81A2368FF009DFA59 /* PropertyLink.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyLink.cpp; sourceTree = "<group>"; };
 		81B1D2CF196C0167000F13DD /* Pointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Pointer.cpp; sourceTree = "<group>"; };
 		81B1D2D0196C0167000F13DD /* Pointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Pointer.h; sourceTree = "<group>"; };
 		81B1D2D3196C2410000F13DD /* TextEntry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextEntry.cpp; sourceTree = "<group>"; };
@@ -1096,7 +1099,6 @@
 		817F75EA1A03E23A00D36ACF /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				81970FE41A0A48B500505599 /* Text */,
 				817F75EB1A03E23A00D36ACF /* Base */,
 				817F76061A03E23A00D36ACF /* Base.h */,
 				817F76071A03E23A00D36ACF /* Drawable */,
@@ -1104,6 +1106,7 @@
 				817F761D1A03E23A00D36ACF /* ForwardDeclarations.h */,
 				817F761E1A03E23A00D36ACF /* Layout */,
 				817F76311A03E23A00D36ACF /* Layout.h */,
+				81970FE41A0A48B500505599 /* Text */,
 				81970FE91A0A780A00505599 /* Text.h */,
 			);
 			path = UI;
@@ -1114,7 +1117,15 @@
 			children = (
 				817F75EC1A03E23A00D36ACF /* Canvas.cpp */,
 				817F75ED1A03E23A00D36ACF /* Canvas.h */,
+				81173CDB1A163B2900E169C0 /* Component.cpp */,
+				81173CDC1A163B2900E169C0 /* Component.h */,
+				81890EC31A1CF481005811F1 /* ComponentDesc.cpp */,
+				81890EC21A1CF1D6005811F1 /* ComponentDesc.h */,
+				81173CDE1A16489D00E169C0 /* ComponentFactory.cpp */,
+				81173CDF1A16489D00E169C0 /* ComponentFactory.h */,
 				817F75EE1A03E23A00D36ACF /* PropertyAccessor.h */,
+				81AECBE81A2368FF009DFA59 /* PropertyLink.cpp */,
+				81AECBE71A23679B009DFA59 /* PropertyLink.h */,
 				817F75EF1A03E23A00D36ACF /* PropertyMap.cpp */,
 				817F75F01A03E23A00D36ACF /* PropertyMap.h */,
 				817F75F11A03E23A00D36ACF /* PropertyType.cpp */,
@@ -1127,6 +1138,8 @@
 				817F75F81A03E23A00D36ACF /* WidgetDef.h */,
 				817F75F91A03E23A00D36ACF /* WidgetDefProvider.cpp */,
 				817F75FA1A03E23A00D36ACF /* WidgetDefProvider.h */,
+				81890EC51A1D020A005811F1 /* WidgetDesc.cpp */,
+				81890EC61A1D020A005811F1 /* WidgetDesc.h */,
 				817F75FB1A03E23A00D36ACF /* WidgetFactory.cpp */,
 				817F75FC1A03E23A00D36ACF /* WidgetFactory.h */,
 				817F75FE1A03E23A00D36ACF /* WidgetParserUtils.cpp */,
@@ -1137,14 +1150,6 @@
 				817F76031A03E23A00D36ACF /* WidgetTemplate.h */,
 				817F76041A03E23A00D36ACF /* WidgetTemplateProvider.cpp */,
 				817F76051A03E23A00D36ACF /* WidgetTemplateProvider.h */,
-				81173CDB1A163B2900E169C0 /* Component.cpp */,
-				81173CDC1A163B2900E169C0 /* Component.h */,
-				81173CDE1A16489D00E169C0 /* ComponentFactory.cpp */,
-				81173CDF1A16489D00E169C0 /* ComponentFactory.h */,
-				81890EC21A1CF1D6005811F1 /* ComponentDesc.h */,
-				81890EC31A1CF481005811F1 /* ComponentDesc.cpp */,
-				81890EC51A1D020A005811F1 /* WidgetDesc.cpp */,
-				81890EC61A1D020A005811F1 /* WidgetDesc.h */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -2938,6 +2943,7 @@
 				81D8B4871962E0EC0010DA84 /* SubMesh.cpp in Sources */,
 				81D8B47A1962E0EC0010DA84 /* PointLightComponent.cpp in Sources */,
 				81D8B3FC1962E0EC0010DA84 /* AppConfig.cpp in Sources */,
+				81AECBE91A2368FF009DFA59 /* PropertyLink.cpp in Sources */,
 				817F76321A03E23A00D36ACF /* Canvas.cpp in Sources */,
 				81D8B6AF1962E0F70010DA84 /* HttpRequest.cpp in Sources */,
 				81D8B4141962E0EC0010DA84 /* FileStream.cpp in Sources */,

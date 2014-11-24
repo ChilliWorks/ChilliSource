@@ -35,9 +35,15 @@ namespace ChilliSource
         CS_DEFINE_NAMEDTYPE(Component);
         //----------------------------------------------------------------
         //----------------------------------------------------------------
-        Component::Component(Widget* in_widget)
-            : m_widget(in_widget)
+        Component::Component(const std::string& in_name)
+            : m_widget(nullptr), m_name(in_name)
         {
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        const std::string& Component::GetName() const
+        {
+            return m_name;
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
@@ -50,6 +56,14 @@ namespace ChilliSource
         const Widget* Component::GetWidget() const
         {
             return m_widget;
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        void Component::SetWidget(Widget* in_widget)
+        {
+            CS_ASSERT(m_widget == nullptr, "Cannot change the owning widget on a component.");
+            
+            m_widget = in_widget;
         }
     }
 }

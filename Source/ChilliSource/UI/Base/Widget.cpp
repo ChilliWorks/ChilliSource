@@ -29,7 +29,6 @@
 #include <ChilliSource/UI/Base/Widget.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/ConstMethodCast.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Scripting/Lua/LuaSystem.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
@@ -212,13 +211,13 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Widget::Widget(const PropertyMap& in_properties, std::vector<WidgetUPtr> in_internalChildren, const std::vector<WidgetDef::ChildPropertyLink>& in_childPropertyLinks,
-                       const Scripting::LuaSourceCSPtr& in_behaviourSource)
+        Widget::Widget(const PropertyMap& in_properties, std::vector<ComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
+                       const std::vector<PropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource)
         {
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
             
             InitInternalWidgets(std::move(in_internalChildren));
-            InitPropertyLinks(in_childPropertyLinks);
+            InitPropertyLinks(in_componentPropertyLinks, in_childPropertyLinks);
             InitProperties(in_properties);
             
             SetCustomProperties(in_properties);

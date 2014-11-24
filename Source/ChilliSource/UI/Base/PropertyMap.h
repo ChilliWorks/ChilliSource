@@ -115,13 +115,12 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             PropertyMap& operator=(const PropertyMap& in_copy);
             //----------------------------------------------------------------------------------------
-            /// Set the keys which will allocate space for the values
+            /// @author Ian Copland
             ///
-            /// @author S Downie
-            ///
-            /// @param List of the key names and types
+            /// @return A list of all property keys in the property map. These are allocated on
+            /// construction and will never change.
             //----------------------------------------------------------------------------------------
-            void AllocateKeys(const std::vector<PropertyDesc>& in_propertyDefs);
+            const std::vector<std::string>& GetKeys() const;
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -304,7 +303,15 @@ namespace ChilliSource
 
                 PropertyType m_type;
                 IPropertyUPtr m_property;
-            };
+            };    
+            //----------------------------------------------------------------------------------------
+            /// Set the keys which will allocate space for the values
+            ///
+            /// @author S Downie
+            ///
+            /// @param List of the key names and types
+            //----------------------------------------------------------------------------------------
+            void AllocateKeys(const std::vector<PropertyDesc>& in_propertyDefs);
             //----------------------------------------------------------------------------------------
             /// Converts the object type to proprty type and throws compiler error for unsupported
             /// types
@@ -322,7 +329,8 @@ namespace ChilliSource
             /// @return New property of given type
             //----------------------------------------------------------------------------------------
             IPropertyUPtr CreateProperty(PropertyType in_type) const;
-        
+    
+            std::vector<std::string> m_propertyKeys;
             std::unordered_map<u32, PropertyLookup> m_properties;
         };
         //----------------------------------------------------------------------------------------

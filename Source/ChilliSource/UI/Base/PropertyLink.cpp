@@ -1,7 +1,7 @@
 //
-//  ComponentDesc.cpp
+//  PropertyLink.cpp
 //  Chilli Source
-//  Created by Ian Copland on 19/11/2014.
+//  Created by Ian Copland on 24/11/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Base/ComponentDesc.h>
+#include <ChilliSource/UI/Base/PropertyLink.h>
 
 namespace ChilliSource
 {
@@ -34,27 +34,27 @@ namespace ChilliSource
     {
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        ComponentDesc::ComponentDesc(const std::string& in_type, const std::string& in_name, const PropertyMap& in_propertyMap)
-            : m_type(in_type), m_name(in_name), m_propertyMap(in_propertyMap)
+        PropertyLink::PropertyLink(const std::string& in_linkName, const std::string& in_linkedOwner, const std::string& in_linkedProperty)
+            : m_linkName(in_linkName), m_linkedOwner(in_linkedOwner), m_linkedProperty(in_linkedProperty)
         {
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        const std::string& ComponentDesc::GetType() const
+        const std::string& PropertyLink::GetLinkName() const
         {
-            return m_type;
+            return m_linkName;
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        const std::string& ComponentDesc::GetName() const
+        const std::string& PropertyLink::GetLinkedOwner() const
         {
-            return m_name;
+            return m_linkedOwner;
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        const PropertyMap& ComponentDesc::GetPropertyMap() const
+        const std::string& PropertyLink::GetLinkedProperty() const
         {
-            return m_propertyMap;
+            return m_linkedProperty;
         }
     }
 }

@@ -50,6 +50,12 @@ namespace ChilliSource
             CS_DECLARE_NAMEDTYPE(Component);
             CS_DECLARE_NOCOPY(Component);
             //----------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The name of the component instance.
+            //----------------------------------------------------------------
+            const std::string& GetName() const;
+            //----------------------------------------------------------------
             /// Destructor
             ///
             /// @author Ian Copland
@@ -60,8 +66,10 @@ namespace ChilliSource
             /// Constructor
             ///
             /// @author Ian Copland
+            ///
+            /// @param The name of the component instance.
             //----------------------------------------------------------------
-            Component(Widget* in_widget);
+            Component(const std::string& in_name);
             //----------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -128,6 +136,16 @@ namespace ChilliSource
             //----------------------------------------------------------------
             virtual void OnFixedUpdate(f32 in_fixedUpdateDeltaTime) {}
             //----------------------------------------------------------------
+            /// This is called during the draw event whenever the application
+            /// is active and the owning widget in on the canvas. This should
+            /// be used for any rendering.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The canvas renderer.
+            //----------------------------------------------------------------
+            virtual void Draw(Rendering::CanvasRenderer* in_renderer) {}
+            //----------------------------------------------------------------
             /// This is called when the application is backgrounded while the
             /// owning widget is on the canvas. This will also be called when
             /// the owning widget is removed from the canvas if the application
@@ -162,8 +180,18 @@ namespace ChilliSource
             virtual void OnDestroy() {}
         private:
             friend class Widget;
+            //----------------------------------------------------------------
+            /// Sets the owning widget. This should be called by the owning
+            /// widget when it is first added, prior to calling OnInit().
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The owning widget.
+            //----------------------------------------------------------------
+            void SetWidget(Widget* in_widget);
 
             Widget* m_widget = nullptr;
+            std::string m_name;
         };
     }
 }

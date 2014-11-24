@@ -43,12 +43,12 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
-        std::unique_ptr<Component> ComponentFactory::CreateComponent(const std::string& in_componentTypeName, Widget* in_widget, const PropertyMap& in_propertyMap) const
+        ComponentUPtr ComponentFactory::CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const PropertyMap& in_propertyMap) const
         {
             auto delegateIt = m_creatorDelegateMap.find(in_componentTypeName);
             CS_ASSERT(delegateIt != m_creatorDelegateMap.end(), "Could not create component with name: " + in_componentTypeName);
             
-            return delegateIt->second(in_widget, in_propertyMap);
+            return delegateIt->second(in_name, in_propertyMap);
         }
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------

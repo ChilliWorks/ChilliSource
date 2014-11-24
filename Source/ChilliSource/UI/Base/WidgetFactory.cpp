@@ -37,6 +37,8 @@
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Scripting/Lua/LuaSystem.h>
 #include <ChilliSource/UI/Base/PropertyAccessor.h>
+#include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Base/ComponentFactory.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Base/WidgetProxy.h>
@@ -91,6 +93,9 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         void WidgetFactory::OnInit()
         {
+            m_componentFactory = Core::Application::Get()->GetSystem<ComponentFactory>();
+            CS_ASSERT(m_componentFactory != nullptr, "WidgetFactory is missing required system: ComponentFactory");
+            
             auto resPool = Core::Application::Get()->GetResourcePool();
 
             WidgetDefCSPtr widgetDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Widget.csuidef");
@@ -238,6 +243,13 @@ namespace ChilliSource
         //---------------------------------------------------------------------------
         WidgetUPtr WidgetFactory::CreateRecursive(const WidgetDefCSPtr& in_widgetDef, const WidgetDesc& in_widgetDesc) const
         {
+            //create the components
+            std::vector<ComponentUPtr> components;
+            for (const auto& componentDesc : in_widgetDef->GetComponentDescs())
+            {
+                components.push_back(m_componentFactory->CreateComponent(componentDesc.GetType(), componentDesc.GetName(), componentDesc.GetPropertyMap()));
+            }
+            
             //create the internal children
             std::vector<WidgetUPtr> internalChildren;
             for (const auto& internalChild : in_widgetDef->GetChildDescs())
@@ -249,8 +261,11 @@ namespace ChilliSource
                 internalChildren.push_back(std::move(childWidget));
             }
             
-            WidgetUPtr widget(new Widget(in_widgetDesc.GetProperties(), std::move(internalChildren), in_widgetDef->GetChildPropertyLinks(), in_widgetDef->GetBehaviourSource()));
+            //create the widget.
+            WidgetUPtr widget(new Widget(in_widgetDesc.GetProperties(), std::move(components), in_widgetDef->GetComponentPropertyLinks(), std::move(internalChildren), in_widgetDef->GetChildPropertyLinks(),
+                                         in_widgetDef->GetBehaviourSource()));
             
+            //create and add the external children.
             for(const auto& childDesc : in_widgetDesc.GetChildDescs())
             {
                 auto def = m_widgetDefNameMap.find(childDesc.GetType())->second;

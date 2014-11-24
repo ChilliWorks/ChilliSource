@@ -49,7 +49,7 @@ namespace ChilliSource
         /// used in a WidgetDef. Component implementations should provide a
         /// constructor and a static method with the following signatures:
         ///
-        /// TComponent(Widget*, const PropertyMap&);
+        /// TComponent(const std::string& in_name, const PropertyMap& in_propMap);
         /// static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
         ///
         /// @author Ian Copland
@@ -93,12 +93,12 @@ namespace ChilliSource
             ///
             /// @param The name of the property type previously registered with
             /// the factory.
-            /// @param The owning widget for the new component.
+            /// @param The name of the component instance.
             /// @param The property map to create the component with.
             ///
             /// @return The new component instance.
             //-----------------------------------------------------------------
-            std::unique_ptr<Component> CreateComponent(const std::string& in_componentTypeName, Widget* in_widget, const PropertyMap& in_propertyMap) const;
+            ComponentUPtr CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const PropertyMap& in_propertyMap) const;
         private:
             //-----------------------------------------------------------------
             /// A delegate which is used to instantiate the registered component
@@ -106,24 +106,24 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
-            /// @param The owning widget of the component.
+            /// @param The name of the component instance.
             /// @param The property map to create the component with.
             ///
             /// @return The newly created component.
             //-----------------------------------------------------------------
-            using CreatorDelegate = std::function<std::unique_ptr<Component>(Widget* in_widget, const PropertyMap& in_propertyMap)>;
+            using CreatorDelegate = std::function<ComponentUPtr(const std::string& in_name, const PropertyMap& in_propertyMap)>;
             //-----------------------------------------------------------------
             /// Creates a new instance of the given component type. This is the
             /// method referred to by the creator delegates.
             ///
             /// @author Ian Copland
             ///
-            /// @param The owning widget of the component.
+            /// @param The name of the component instance.
             /// @param The property map to create the component with.
             ///
             /// @return The newly created component.
             //-----------------------------------------------------------------
-            template <typename TComponentType> std::unique_ptr<TComponentType> CreateComponent(Widget* in_widget, const PropertyMap& in_propertyMap) const;
+            template <typename TComponentType> std::unique_ptr<TComponentType> CreateComponent(const std::string& in_name, const PropertyMap& in_propertyMap) const;
             //-----------------------------------------------------------------
             /// Initialised the factory, registering all default component
             /// types.
@@ -150,9 +150,9 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
-        template <typename TComponentType> std::unique_ptr<TComponentType> ComponentFactory::CreateComponent(Widget* in_widget, const PropertyMap& in_propertyMap) const
+        template <typename TComponentType> std::unique_ptr<TComponentType> ComponentFactory::CreateComponent(const std::string& in_name, const PropertyMap& in_propertyMap) const
         {
-            return std::unique_ptr<Component>(new TComponentType(in_widget, in_propertyMap));
+            return std::unique_ptr<TComponentType>(new TComponentType(in_name, in_propertyMap));
         }
     }
 }

@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Scripting/Lua/LuaSource.h>
+#include <ChilliSource/UI/Base/ComponentFactory.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/Widget.h>
@@ -52,6 +53,131 @@ namespace ChilliSource
         {
             const std::string k_extension("csuidef");
 
+            //-------------------------------------------------------
+            /// Searches the given widget desc list for a widget
+            /// description with the given name. This is recursive and
+            /// will nagivate down the widget desc tree to find the
+            /// widget. Recursion is breadth first. This will fatal log
+            /// if one cannot be found.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The list of widget descriptions.
+            /// @param The name to look for.
+            /// @param [Out] The widget description with the given
+            /// name.
+            //-------------------------------------------------------
+            bool GetWidgetDescWithName(const std::vector<WidgetDesc>& in_widgets, const std::string& in_name, WidgetDesc& out_widgetDesc)
+            {
+                for (const auto& desc : in_widgets)
+                {
+                    if (desc.GetProperties().GetPropertyOrDefault("Name", "") == in_name)
+                    {
+                        out_widgetDesc = desc;
+                        return true;
+                    }
+                }
+                
+                for (const auto& desc : in_widgets)
+                {
+                    if (GetWidgetDescWithName(desc.GetChildDescs(), in_name, out_widgetDesc) == true)
+                    {
+                        return true;
+                    }
+                }
+                
+                return false;
+            }
+            //-------------------------------------------------------
+            /// Searches the given component desc list for a component
+            /// description with the given name. This will fatal log
+            /// if one cannot be found.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The list of component descriptions.
+            /// @param The name to look for.
+            ///
+            /// @return The widget description with the given name.
+            //-------------------------------------------------------
+            ComponentDesc GetComponentDescWithName(const std::vector<ComponentDesc>& in_componentDescs, const std::string& in_name)
+            {
+                for (const auto& desc : in_componentDescs)
+                {
+                    if (desc.GetName() == in_name)
+                    {
+                        return desc;
+                    }
+                }
+                
+                CS_LOG_FATAL("Could not find component description with name: " + in_name);
+                return ComponentDesc();
+            }
+            //-------------------------------------------------------
+            /// Parses the given json to create a single component
+            /// object.
+            ///
+            /// A component may contain file path properties which may
+            /// be relative to the widget def if a storage location
+            /// is not supplied.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The component json object.
+            /// @param The storage location of the definition.
+            /// @param The directory path of the definition.
+            ///
+            /// @return The output component description.
+            //-------------------------------------------------------
+            ComponentDesc ParseComponent(const Json::Value& in_componentJson, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, ComponentFactory* in_componentFactory)
+            {
+                CS_ASSERT(in_componentJson.isNull() == false, "Cannot parse null component json.");
+                CS_ASSERT(in_componentJson.isObject() == true, "Component json must be an object.");
+                CS_ASSERT(in_componentJson.isMember("Type") == true, "Component json must contain a 'Type' key.");
+                CS_ASSERT(in_componentJson.isMember("Name") == true, "Component json must contain a 'Name' key.");
+                
+                Json::Value typeJson = in_componentJson.get("Type", Json::nullValue);
+                Json::Value nameJson = in_componentJson.get("Name", Json::nullValue);
+                CS_ASSERT(typeJson.isString() == true, "The 'Type' in component json must be a string.");
+                CS_ASSERT(nameJson.isString() == true, "The 'Name' in component json must be a string.");
+                
+                std::string type = typeJson.asString();
+                std::string name = nameJson.asString();
+                PropertyMap propertyMap(in_componentFactory->GetPropertyDescs(type));
+                
+                //TODO: Read property values.
+                
+                return ComponentDesc(type, name, propertyMap);
+            }
+            //-------------------------------------------------------
+            /// Parses the given json to create a list of component
+            /// descriptions.
+            ///
+            /// Components may contain file path properties which may
+            /// be relative to the widget def if a storage location
+            /// is not supplied.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The components json object.
+            /// @param The storage location of the definition.
+            /// @param The directory path of the definition.
+            ///
+            /// @return The output component descriptions.
+            //-------------------------------------------------------
+            std::vector<ComponentDesc> ParseComponents(const Json::Value& in_componentsJson, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, ComponentFactory* in_componentFactory)
+            {
+                CS_ASSERT(in_componentsJson.isNull() == false, "Cannot parse null components json.");
+                CS_ASSERT(in_componentsJson.isArray() == true, "Components json must be an array.");
+                
+                std::vector<ComponentDesc> output;
+                for(auto& componentJson : in_componentsJson)
+                {
+                    output.push_back(ParseComponent(componentJson, in_definitionLocation, in_definitionPath, in_componentFactory));
+                }
+                
+                return output;
+            }
             //-------------------------------------------------------
             /// From the given JSON value parse the hierarchy and
             /// create definitions for all child widgets. Some of the properties
@@ -83,21 +209,6 @@ namespace ChilliSource
                 
                 return output;
             }
-            
-            WidgetDesc GetDescWithName(const std::vector<WidgetDesc>& in_widgets, const std::string& in_name)
-            {
-                for (const auto& desc : in_widgets)
-                {
-                    if (desc.GetProperties().GetPropertyOrDefault("Name", "") == in_name)
-                    {
-                        return desc;
-                    }
-                }
-                
-                CS_LOG_FATAL("Could not find widget desc with name: " + in_name);
-                return WidgetDesc("", PropertyMap(), std::vector<WidgetDesc>());
-            }
-            
             //-------------------------------------------------------
             /// From the given JSON value parse the custom property
             /// types, names and values into the given container
@@ -107,7 +218,7 @@ namespace ChilliSource
             /// @param Json properties
             /// @param [Out] Custom properties
             //-------------------------------------------------------
-            PropertyMap BuildPropertyMap(const Json::Value& in_properties, const std::vector<WidgetDesc>& in_children, const std::vector<WidgetDef::ChildPropertyLink>& in_childPropertyLinks)
+            PropertyMap BuildPropertyMap(const Json::Value& in_properties, const std::vector<WidgetDesc>& in_children, const std::vector<PropertyLink>& in_childPropertyLinks)
             {
                 //define the properties.
                 std::vector<PropertyMap::PropertyDesc> descs = Widget::GetPropertyDescs();
@@ -115,10 +226,14 @@ namespace ChilliSource
                 //add linked properties
                 for (auto& link : in_childPropertyLinks)
                 {
-                    auto widgetDesc = GetDescWithName(in_children, link.m_childName);
+                    WidgetDesc widgetDesc;
+                    if (GetWidgetDescWithName(in_children, link.GetLinkedOwner(), widgetDesc) == false)
+                    {
+                        CS_LOG_FATAL("Could not find widget desc with name: " + link.GetLinkedOwner());
+                    }
                     PropertyMap::PropertyDesc desc;
-                    desc.m_type = widgetDesc.GetProperties().GetType(link.m_propertyName);
-                    desc.m_name = link.m_linkName;
+                    desc.m_type = widgetDesc.GetProperties().GetType(link.GetLinkedProperty());
+                    desc.m_name = link.GetLinkName();
                     descs.push_back(desc);
                 }
                 
@@ -175,6 +290,65 @@ namespace ChilliSource
                 }
             }
             //-------------------------------------------------------
+            /// Parses and builds the linked properties between the
+            /// widget and components.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The component properties json.
+            ///
+            /// @return The list of component property links.
+            //-------------------------------------------------------
+            std::vector<PropertyLink> ParseLinkedComponentProperties(const Json::Value& in_properties, const std::vector<ComponentDesc>& in_componentDescs)
+            {
+                std::vector<PropertyLink> links;
+                
+                for (auto linkedComponentIt = in_properties.begin(); linkedComponentIt != in_properties.end(); ++linkedComponentIt)
+                {
+                    std::string linkedComponentName = linkedComponentIt.memberName();
+                    Json::Value linkedComponentJson = (*linkedComponentIt);
+                    CS_ASSERT((linkedComponentJson.isString() == true || linkedComponentJson.isObject() == true), "A component link must be an object or a string (containing either 'all' or 'none').");
+                    
+                    if (linkedComponentJson.isString() == true)
+                    {
+                        
+                        std::string lowerValue = linkedComponentJson.asString();
+                        Core::StringUtils::ToLowerCase(lowerValue);
+                        
+                        if (lowerValue == "all")
+                        {
+                            ComponentDesc componentDesc = GetComponentDescWithName(in_componentDescs, linkedComponentName);
+                            for (const auto& propertyName : componentDesc.GetPropertyMap().GetKeys())
+                            {
+                                links.push_back(PropertyLink(propertyName, linkedComponentName, propertyName));
+                            }
+                        }
+                        else if (lowerValue == "none")
+                        {
+                            //If none is selected we don't want any links, so do nothing.
+                        }
+                        else
+                        {
+                            CS_LOG_FATAL("Invalid property link value for component: " + linkedComponentName);
+                        }
+                    }
+                    else if (linkedComponentJson.isObject() == true)
+                    {
+                        for (auto linkedPropertyIt = linkedComponentJson.begin(); linkedPropertyIt != linkedComponentJson.end(); ++linkedPropertyIt)
+                        {
+                            std::string linkName = linkedPropertyIt.memberName();
+                            Json::Value linkedPropertyJson = (*linkedPropertyIt);
+                            CS_ASSERT(linkedPropertyJson.isString(), "A linked property name must be a string.");
+                            
+                            std::string linkedPropertyName = linkedPropertyJson.asString();
+                            links.push_back(PropertyLink(linkName, linkedComponentName, linkedPropertyName));
+                        }
+                    }
+                }
+                
+                return links;
+            }
+            //-------------------------------------------------------
             /// Parses and builds the links for a parent property
             /// that directly affects a child property
             ///
@@ -184,17 +358,25 @@ namespace ChilliSource
             ///
             /// @return The list of child links.
             //-------------------------------------------------------
-            std::vector<WidgetDef::ChildPropertyLink> ParseLinkedChildProperties(const Json::Value& in_properties)
+            std::vector<PropertyLink> ParseLinkedChildProperties(const Json::Value& in_properties)
             {
-                std::vector<WidgetDef::ChildPropertyLink> links;
+                std::vector<PropertyLink> links;
                 
-                for(auto it = in_properties.begin(); it != in_properties.end(); ++it)
+                for (auto linkedWidgetIt = in_properties.begin(); linkedWidgetIt != in_properties.end(); ++linkedWidgetIt)
                 {
-                    WidgetDef::ChildPropertyLink link;
-                    link.m_linkName = it.memberName();
-                    link.m_childName = (*it)["Child"].asString();
-                    link.m_propertyName = (*it)["Property"].asString();
-                    links.push_back(link);
+                    std::string linkedWidgetName = linkedWidgetIt.memberName();
+                    Json::Value linkedWidgetJson = (*linkedWidgetIt);
+                    CS_ASSERT(linkedWidgetJson.isObject() == true, "A child link must be an object.");
+                    
+                    for (auto linkedPropertyIt = linkedWidgetJson.begin(); linkedPropertyIt != linkedWidgetJson.end(); ++linkedPropertyIt)
+                    {
+                        std::string linkName = linkedPropertyIt.memberName();
+                        Json::Value linkedPropertyJson = (*linkedPropertyIt);
+                        CS_ASSERT(linkedPropertyJson.isString(), "A linked property name must be a string.");
+                        
+                        std::string linkedPropertyName = linkedPropertyJson.asString();
+                        links.push_back(PropertyLink(linkName, linkedWidgetName, linkedPropertyName));
+                    }
                 }
                 
                 return links;
@@ -212,6 +394,9 @@ namespace ChilliSource
             //-------------------------------------------------------
             void LoadDesc(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
             {
+                ComponentFactory* componentFactory = Core::Application::Get()->GetSystem<ComponentFactory>();
+                
+                //read the json
                 Json::Value root;
                 if (Core::JsonUtils::ReadJson(in_storageLocation, in_filepath, root) == false)
                 {
@@ -224,15 +409,33 @@ namespace ChilliSource
                     return;
                 }
                 
+                //get the type
                 WidgetDef* widgetDef = (WidgetDef*)out_resource.get();
                 
                 CS_ASSERT(root.isMember("Type"), "Widget def must have Type");
                 std::string typeName = root["Type"].asString();
                 
+                //parse components
                 std::string definitionFileName;
                 std::string pathToDefinition;
                 Core::StringUtils::SplitFilename(in_filepath, definitionFileName, pathToDefinition);
             
+                const Json::Value& componentsJson = root["Components"];
+                std::vector<ComponentDesc> componentDescs;
+                if(componentsJson.isNull() == false)
+                {
+                    componentDescs = ParseComponents(componentsJson, in_storageLocation, pathToDefinition, componentFactory);
+                }
+                
+                //parse component property links
+                std::vector<PropertyLink> componentPropertyLinks;
+                const Json::Value& componentPropertiesJson = root["ComponentProperties"];
+                if(componentPropertiesJson.isNull() == false)
+                {
+                    componentPropertyLinks = ParseLinkedComponentProperties(componentPropertiesJson, componentDescs);
+                }
+                
+                //parse children
                 const Json::Value& hierarchy = root["Hierarchy"];
                 const Json::Value& children = root["Children"];
                 std::vector<WidgetDesc> childDescs;
@@ -241,7 +444,8 @@ namespace ChilliSource
                     childDescs = ParseChildWidgets(hierarchy, children, in_storageLocation, pathToDefinition);
                 }
                 
-                std::vector<WidgetDef::ChildPropertyLink> childPropertyLinks;
+                //parse child property links
+                std::vector<PropertyLink> childPropertyLinks;
                 const Json::Value& childProperties = root["ChildProperties"];
                 if(childProperties.isNull() == false)
                 {
@@ -277,7 +481,7 @@ namespace ChilliSource
                     if(in_delegate == nullptr)
                     {
                         auto luaSource = Core::Application::Get()->GetResourcePool()->LoadResource<Scripting::LuaSource>(behaviourLocation, behaviourPath);
-                        widgetDef->Build(typeName, defaultProperties, childDescs, childPropertyLinks, luaSource);
+                        widgetDef->Build(typeName, defaultProperties, componentDescs, componentPropertyLinks, childDescs, childPropertyLinks, luaSource);
                         out_resource->SetLoadState(luaSource->GetLoadState());
                     }
                     else
@@ -285,7 +489,7 @@ namespace ChilliSource
                         Core::Application::Get()->GetResourcePool()->LoadResourceAsync<Scripting::LuaSource>(behaviourLocation, behaviourPath, [=](const Core::ResourceCSPtr& in_resource)
                         {
                             auto luaSource = std::static_pointer_cast<const Scripting::LuaSource>(in_resource);
-                            widgetDef->Build(typeName, defaultProperties, childDescs, childPropertyLinks, luaSource);
+                            widgetDef->Build(typeName, defaultProperties, componentDescs, componentPropertyLinks, childDescs, childPropertyLinks, luaSource);
                             out_resource->SetLoadState(luaSource->GetLoadState());
                             CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                         });
@@ -293,7 +497,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    widgetDef->Build(typeName, defaultProperties, childDescs, childPropertyLinks, nullptr);
+                    widgetDef->Build(typeName, defaultProperties, componentDescs, componentPropertyLinks, childDescs, childPropertyLinks, nullptr);
                     
                     out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
                     if(in_delegate != nullptr)

@@ -112,7 +112,15 @@ namespace ChilliSource
                 lookup.m_type = propertyDef.m_type;
                 lookup.m_property = CreateProperty(propertyDef.m_type);
                 m_properties.insert(std::make_pair(hashId, std::move(lookup)));
+                
+                m_propertyKeys.push_back(propertyDef.m_name);
             }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const std::vector<std::string>& PropertyMap::GetKeys() const
+        {
+            return m_propertyKeys;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

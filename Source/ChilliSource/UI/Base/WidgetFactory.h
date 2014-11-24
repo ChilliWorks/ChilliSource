@@ -213,6 +213,7 @@ namespace ChilliSource
             
         private:
             
+            ComponentFactory* m_componentFactory;
             std::unordered_map<std::string, WidgetDefCSPtr> m_widgetDefNameMap;
 		};
 	}

@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Base/ConstMethodCast.h>
 #include <ChilliSource/Core/Container/concurrent_vector.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
@@ -39,11 +40,12 @@
 #include <ChilliSource/Input/Base/Filter.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/Scripting/Lua/LuaScript.h>
+#include <ChilliSource/UI/Base/Component.h>
 #include <ChilliSource/UI/Base/PropertyAccessor.h>
+#include <ChilliSource/UI/Base/PropertyLink.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
-#include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 #include <ChilliSource/UI/Text/TextDrawable.h>
@@ -530,6 +532,37 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             bool IsInputConsumeEnabled() const;
             //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return the first component found of the specified type or nullptr if there isn't one.
+            //----------------------------------------------------------------------------------------
+            template <typename TComponentType> TComponentType* GetComponent();
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A const version of the first component found of the specified type or nullptr
+            /// if there isn't one.
+            //----------------------------------------------------------------------------------------
+            template <typename TComponentType> const TComponentType* GetComponent() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The name of the component. There should only be one component with the name.
+            ///
+            /// @return A const version of the component of the specified type with the given name.
+            /// This will return nullptr is no component could be found.
+            //----------------------------------------------------------------------------------------
+            template <typename TComponentType> TComponentType* GetComponent(const std::string& m_name);
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The name of the component. There should only be one component with the name.
+            ///
+            /// @return The component of the specified type with the given name. This will return
+            /// nullptr is no component could be found.
+            //----------------------------------------------------------------------------------------
+            template <typename TComponentType> const TComponentType* GetComponent(const std::string& m_name) const;
+            //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
             ///
@@ -917,10 +950,16 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param The property 
-            /// @param Custom property values
+            /// @param The property map containing the initial values for properties.
+            /// @param The list of components.
+            /// @param The list of component property links.
+            /// @param The list of internal children.
+            /// @param The list of internal children property links.
+            /// @param The behaviour script. This should be removed once Lua functionality is exposed
+            /// via a component.
             //----------------------------------------------------------------------------------------
-            Widget(const PropertyMap& in_properties, std::vector<WidgetUPtr> in_internalChildren, const std::vector<WidgetDef::ChildPropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource);
+            Widget(const PropertyMap& in_properties, std::vector<ComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
+                   const std::vector<PropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource);
             //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
@@ -944,7 +983,7 @@ namespace ChilliSource
             /// @param Links to default properties of the specified widget
             /// @param Links to custom properties of the specified widget
             //----------------------------------------------------------------------------------------
-            void InitPropertyLinks(const std::vector<WidgetDef::ChildPropertyLink>& in_childPropertyLinks);
+            void InitPropertyLinks(const std::vector<PropertyLink>& in_childPropertyLinks);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -1161,6 +1200,8 @@ namespace ChilliSource
             
             std::string m_name;
             
+            std::vector<ComponentUPtr> m_components;
+            
             IDrawableUPtr m_drawable;
             TextDrawableUPtr m_textDrawable;
             ILayoutUPtr m_layout;
@@ -1189,6 +1230,46 @@ namespace ChilliSource
     
             Core::Screen* m_screen;
         };
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        template <typename TComponentType> TComponentType* Widget::GetComponent()
+        {
+            return Core::ConstMethodCast(this, &Widget::GetComponent<TComponentType>);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        template <typename TComponentType> const TComponentType* Widget::GetComponent() const
+        {
+            for (const auto& component : m_components)
+            {
+                if (component->IsA<TComponentType>() == true)
+                {
+                    return component;
+                }
+            }
+            
+            return nullptr;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        template <typename TComponentType> TComponentType* Widget::GetComponent(const std::string& in_name)
+        {
+            return Core::ConstMethodCast(this, &Widget::GetComponent<TComponentType>, in_name);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        template <typename TComponentType> const TComponentType* Widget::GetComponent(const std::string& in_name) const
+        {
+            for (const auto& component : m_components)
+            {
+                if (component->IsA<TComponentType>() == true && component->GetName() == in_name)
+                {
+                    return component;
+                }
+            }
+            
+            return nullptr;
+        }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         template<typename TType> void Widget::SetCustomProperty(const std::string& in_name, TType&& in_value)
