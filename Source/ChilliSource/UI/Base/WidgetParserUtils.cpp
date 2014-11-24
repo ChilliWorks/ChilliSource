@@ -29,13 +29,14 @@
 #include <ChilliSource/UI/Base/WidgetParserUtils.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDesc.h>
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
-#include <ChilliSource/UI/Drawable/DrawableType.h>
+#include <ChilliSource/UI/Drawable/DrawableDesc.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>
@@ -51,7 +52,7 @@ namespace ChilliSource
         {
             //-------------------------------------------------------
             //-------------------------------------------------------
-            void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, PropertyMap& out_propertyMap)
+            void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath, PropertyMap& out_propertyMap)
             {
                 CS_ASSERT(in_jsonValue.isString() || in_jsonValue.isObject(), "Value can only be specified as string or object: " + in_propertyName);
                 
@@ -65,7 +66,16 @@ namespace ChilliSource
                     value = in_jsonValue.asString();
                 }
                 
-                out_propertyMap.SetProperty(out_propertyMap.GetType(in_propertyName), in_propertyName, value);
+                if (out_propertyMap.GetType(in_propertyName) == PropertyType::k_drawableDesc)
+                {
+                    DrawableDesc drawbleDesc(Core::JsonUtils::ParseJson(value), in_relStorageLocation, in_relDirectoryPath);
+                    out_propertyMap.SetProperty(in_propertyName, drawbleDesc);
+                }
+                else
+                {
+                    out_propertyMap.SetProperty(out_propertyMap.GetType(in_propertyName), in_propertyName, value);
+                }
+                
             }
             //-------------------------------------------------------
             //-------------------------------------------------------
@@ -125,7 +135,7 @@ namespace ChilliSource
                     }
                     else if (outputProperties.HasKey(propertyName) == true)
                     {
-                        SetProperty(propertyName, (*it), outputProperties);
+                        SetProperty(propertyName, (*it), in_templateLocation, in_templatePath, outputProperties);
                     }
                     else
                     {

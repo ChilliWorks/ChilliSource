@@ -53,7 +53,8 @@ namespace ChilliSource
         /// type determins which of the other properties can be used.
         ///
         /// "TextureLocation": The storage location of the texture that is
-        /// used. Defaults to Package.
+        /// used. If this is not specified a relative path will be instead used,
+        /// loading the drawable relative to the parent resource.
         ///
         /// "TexturePath": The path to the texture the drawable will render.
         /// A texture must always be supplied.
@@ -100,8 +101,14 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @param The JSON object containing the drawable properties.
+            /// @param [Optional] The relative storage location which will
+            /// be used if there is no storage location specified in the
+            /// json. Defaults to package.
+            /// @param [Optional] The directory paths will be relative to if
+            /// there is no storage location specified in the json. Defaults
+            /// to empty.
             //--------------------------------------------------------------
-            DrawableDesc(const Json::Value& in_json);
+            DrawableDesc(const Json::Value& in_json, Core::StorageLocation in_relStorageLocation = Core::StorageLocation::k_package, const std::string& in_relDirectoryPath = "");
             //--------------------------------------------------------------
             /// @author Ian Copland
             ///

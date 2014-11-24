@@ -166,7 +166,7 @@ namespace ChilliSource
                 {
                     if(out_properties.HasKey(it.memberName()) == true)
                     {
-                        WidgetParserUtils::SetProperty(it.memberName(), (*it), out_properties);
+                        WidgetParserUtils::SetProperty(it.memberName(), (*it), in_definitionLocation, in_definitionPath, out_properties);
                     }
                     else
                     {

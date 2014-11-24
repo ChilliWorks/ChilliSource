@@ -77,7 +77,7 @@ namespace ChilliSource
             if(atlasPath.empty() == false)
             {
                 SetTextureAtlas(resPool->LoadResource<Rendering::TextureAtlas>(atlasLocation, atlasPath));
-                CS_ASSERT(m_atlas != nullptr, "Invalid atlas Id provided for widget drawable: " + atlasPath);
+                CS_ASSERT(m_atlas != nullptr, "Invalid atlas provided for widget drawable: " + atlasPath);
                 
                 std::string atlasId = in_desc.GetAtlasId();
                 CS_ASSERT(m_atlas->HasFrameWithId(atlasId) == true, "Invalid atlas id provided for widget drawable: " + atlasId);

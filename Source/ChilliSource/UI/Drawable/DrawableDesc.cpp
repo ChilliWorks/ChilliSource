@@ -70,7 +70,7 @@ namespace ChilliSource
         
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        DrawableDesc::DrawableDesc(const Json::Value& in_json)
+        DrawableDesc::DrawableDesc(const Json::Value& in_json, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath)
         {
             CS_ASSERT(in_json.isObject() == true, "Drawable description must be created from a json value of type Object.");
             
@@ -131,8 +131,23 @@ namespace ChilliSource
                 {
                     CS_LOG_FATAL("Invalid property found in a " + ToString(m_type) + " layout description: " + key);
                 }
-                
-                CS_ASSERT((m_atlasPath == "" && m_atlasId == "") || (m_atlasPath != "" && m_atlasId != ""), "Both the atlas id and atlas path must be specified when using a texture atlas in a widget drawable.");
+            }
+            
+            CS_ASSERT(m_texturePath.empty() == false, "Texture must be supplied in a drawable.");
+            CS_ASSERT((m_atlasPath == "" && m_atlasId == "") || (m_atlasPath != "" && m_atlasId != ""), "Both the atlas id and atlas path must be specified when using a texture atlas in a widget drawable.");
+            
+            //We need to support relative paths. When no storage location is specified in Json a path relative to the
+            //parent resources directory will be used instead.
+            if (in_json.isMember("TextureLocation") == false)
+            {
+                m_textureLocation = in_relStorageLocation;
+                m_texturePath = Core::StringUtils::StandardiseDirectoryPath(in_relDirectoryPath) + m_texturePath;
+            }
+            
+            if (m_atlasPath.empty() == false && in_json.isMember("AtlasLocation") == false)
+            {
+                m_atlasLocation = in_relStorageLocation;
+                m_atlasPath = Core::StringUtils::StandardiseDirectoryPath(in_relDirectoryPath) + m_atlasPath;
             }
         }
         //--------------------------------------------------------------

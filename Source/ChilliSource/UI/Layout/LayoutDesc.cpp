@@ -212,7 +212,7 @@ namespace ChilliSource
                 }
                 else if (key == "CellOrder")
                 {
-                    m_absoluteVSpacing = Core::ParseF32(value);
+                    m_cellOrder = ParseCellOrder(value);
                 }
                 else if (key == "Type")
                 {

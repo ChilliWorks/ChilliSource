@@ -51,7 +51,7 @@ namespace ChilliSource
             /// @param The json value.
             /// @param [Out] The output property map.
             //-------------------------------------------------------
-            void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, PropertyMap& out_propertyMap);
+            void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath, PropertyMap& out_propertyMap);
             //-------------------------------------------------------
             /// From the given JSON value parse the values of the property
             /// types into the given container. Some of the properties
