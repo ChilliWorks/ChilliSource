@@ -216,119 +216,48 @@ namespace ChilliSource
         {
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
             
+            InitBaseProperties();
+            InitComponents(std::move(in_components));
             InitInternalWidgets(std::move(in_internalChildren));
             InitPropertyLinks(in_componentPropertyLinks, in_childPropertyLinks);
-            InitProperties(in_properties);
+            InitPropertyValues(in_properties);
             
-            SetCustomProperties(in_properties);
             SetBehaviourScript(in_behaviourSource);
+            
+            for (const auto& component : m_components)
+            {
+                component->OnInit();
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::InitProperties(const PropertyMap& in_defaultProperties)
+        void Widget::InitBaseProperties()
         {
-            SetName(in_defaultProperties.GetPropertyOrDefault<std::string>("Name", ""));
-            SetRelativePosition(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("RelPosition", Core::Vector2()));
-            SetAbsolutePosition(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("AbsPosition", Core::Vector2()));
-            SetRelativeSize(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("RelSize", Core::Vector2(1.0f, 1.0f)));
-            SetAbsoluteSize(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("AbsSize", Core::Vector2()));
-            SetDefaultPreferredSize(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("PreferredSize", Core::Vector2(1.0f, 1.0f)));
-            ScaleTo(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("Scale", Core::Vector2(1.0f, 1.0f)));
-            SetColour(in_defaultProperties.GetPropertyOrDefault<Core::Colour>("Colour", Core::Colour(1.0f, 1.0f, 1.0f, 1.0f)));
-            RotateTo(in_defaultProperties.GetPropertyOrDefault<f32>("Rotation", 0.0f));
-            SetParentalAnchor(in_defaultProperties.GetPropertyOrDefault<Rendering::AlignmentAnchor>("ParentalAnchor", Rendering::AlignmentAnchor::k_middleCentre));
-            SetOriginAnchor(in_defaultProperties.GetPropertyOrDefault<Rendering::AlignmentAnchor>("OriginAnchor", Rendering::AlignmentAnchor::k_middleCentre));
-            SetVisible(in_defaultProperties.GetPropertyOrDefault<bool>("Visible", true));
-            SetClippingEnabled(in_defaultProperties.GetPropertyOrDefault<bool>("ClipChildren", false));
-            SetInputEnabled(in_defaultProperties.GetPropertyOrDefault<bool>("InputEnabled", false));
-            SetInputConsumeEnabled(in_defaultProperties.GetPropertyOrDefault<bool>("InputConsumeEnabled", true));
-            SetSizePolicy(in_defaultProperties.GetPropertyOrDefault<SizePolicy>("SizePolicy", SizePolicy::k_none));
-            
-            if(in_defaultProperties.HasValue("Layout") == true)
-            {
-                SetLayout(ILayout::Create(in_defaultProperties.GetProperty<LayoutDesc>("Layout")));
-            }
-            
-            if(in_defaultProperties.HasValue("Drawable") == true)
-            {
-                SetDrawable(IDrawable::Create(in_defaultProperties.GetProperty<DrawableDesc>("Drawable")));
-            }
-            
-            //TODO: apply linked property defaults.
+            m_basePropertyAccessors.emplace("name", IPropertyAccessorUPtr(new PropertyAccessor<const std::string&>(Core::MakeDelegate(this, &Widget::SetName), Core::MakeDelegate(this, &Widget::GetName))));
+            m_basePropertyAccessors.emplace("relposition", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::SetRelativePosition), Core::MakeDelegate(this, &Widget::GetLocalRelativePosition))));
+            m_basePropertyAccessors.emplace("absposition", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::SetAbsolutePosition), Core::MakeDelegate(this, &Widget::GetLocalAbsolutePosition))));
+            m_basePropertyAccessors.emplace("relsize", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::SetRelativeSize), Core::MakeDelegate(this, &Widget::GetLocalRelativeSize))));
+            m_basePropertyAccessors.emplace("abssize", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::SetAbsoluteSize), Core::MakeDelegate(this, &Widget::GetLocalAbsoluteSize))));
+            m_basePropertyAccessors.emplace("preferredsize", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::SetDefaultPreferredSize), Core::MakeDelegate(this, &Widget::GetPreferredSize))));
+            m_basePropertyAccessors.emplace("scale", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::ScaleTo), Core::MakeDelegate(this, &Widget::GetLocalScale))));
+            m_basePropertyAccessors.emplace("colour", IPropertyAccessorUPtr(new PropertyAccessor<Core::Colour>(Core::MakeDelegate(this, &Widget::SetColour), Core::MakeDelegate(this, &Widget::GetLocalColour))));
+            m_basePropertyAccessors.emplace("rotation", IPropertyAccessorUPtr(new PropertyAccessor<f32>(Core::MakeDelegate(this, &Widget::RotateTo), Core::MakeDelegate(this, &Widget::GetLocalRotation))));
+            m_basePropertyAccessors.emplace("originanchor", IPropertyAccessorUPtr(new PropertyAccessor<Rendering::AlignmentAnchor>(Core::MakeDelegate(this, &Widget::SetOriginAnchor), Core::MakeDelegate(this, &Widget::GetOriginAnchor))));
+            m_basePropertyAccessors.emplace("parentalanchor", IPropertyAccessorUPtr(new PropertyAccessor<Rendering::AlignmentAnchor>(Core::MakeDelegate(this, &Widget::SetParentalAnchor), Core::MakeDelegate(this, &Widget::GetParentalAnchor))));
+            m_basePropertyAccessors.emplace("visible", IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(this, &Widget::SetVisible), Core::MakeDelegate(this, &Widget::IsVisible))));
+            m_basePropertyAccessors.emplace("clipchildren", IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(this, &Widget::SetClippingEnabled), Core::MakeDelegate(this, &Widget::IsClippingEnabled))));
+            m_basePropertyAccessors.emplace("sizepolicy", IPropertyAccessorUPtr(new PropertyAccessor<SizePolicy>(Core::MakeDelegate(this, &Widget::SetSizePolicy), Core::MakeDelegate(this, &Widget::GetSizePolicy))));
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::InitPropertyLinks(const std::vector<WidgetDef::ChildPropertyLink>& in_childPropertyLinks)
+        void Widget::InitComponents(std::vector<ComponentUPtr> in_components)
         {
-            //Hook up any links to our childrens properties
-            for(const auto& link : in_childPropertyLinks)
+            m_components = std::move(in_components);
+            
+            for (auto& component : m_components)
             {
-                Widget* childWidget = GetInternalWidgetRecursive(link.m_childName);
-                CS_ASSERT(childWidget != nullptr, "Cannot link to missing widget: " + link.m_childName);
-                
-                std::string lowerCasePropName(link.m_propertyName);
-                Core::StringUtils::ToLowerCase(lowerCasePropName);
-                
-                if(lowerCasePropName == "name")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<const std::string&>(Core::MakeDelegate(childWidget, &Widget::SetName), Core::MakeDelegate(childWidget, &Widget::GetName))));
-                }
-                else if(lowerCasePropName == "relposition")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetRelativePosition), Core::MakeDelegate(childWidget, &Widget::GetLocalRelativePosition))));
-                }
-                else if(lowerCasePropName == "absposition")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetAbsolutePosition), Core::MakeDelegate(childWidget, &Widget::GetLocalAbsolutePosition))));
-                }
-                else if(lowerCasePropName == "relsize")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetRelativeSize), Core::MakeDelegate(childWidget, &Widget::GetLocalRelativeSize))));
-                }
-                else if(lowerCasePropName == "abssize")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetAbsoluteSize), Core::MakeDelegate(childWidget, &Widget::GetLocalAbsoluteSize))));
-                }
-                else if(lowerCasePropName == "preferredsize")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::SetDefaultPreferredSize), Core::MakeDelegate(childWidget, &Widget::GetPreferredSize))));
-                }
-                else if(lowerCasePropName == "scale")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(childWidget, &Widget::ScaleTo), Core::MakeDelegate(childWidget, &Widget::GetLocalScale))));
-                }
-                else if(lowerCasePropName == "colour")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Core::Colour>(Core::MakeDelegate(childWidget, &Widget::SetColour), Core::MakeDelegate(childWidget, &Widget::GetLocalColour))));
-                }
-                else if(lowerCasePropName == "rotation")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<f32>(Core::MakeDelegate(childWidget, &Widget::RotateTo), Core::MakeDelegate(childWidget, &Widget::GetLocalRotation))));
-                }
-                else if(lowerCasePropName == "originanchor")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Rendering::AlignmentAnchor>(Core::MakeDelegate(childWidget, &Widget::SetOriginAnchor), Core::MakeDelegate(childWidget, &Widget::GetOriginAnchor))));
-                }
-                else if(lowerCasePropName == "parentalanchor")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<Rendering::AlignmentAnchor>(Core::MakeDelegate(childWidget, &Widget::SetParentalAnchor), Core::MakeDelegate(childWidget, &Widget::GetParentalAnchor))));
-                }
-                else if(lowerCasePropName == "visible")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(childWidget, &Widget::SetVisible), Core::MakeDelegate(childWidget, &Widget::IsVisible))));
-                }
-                else if(lowerCasePropName == "clipchildren")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(childWidget, &Widget::SetClippingEnabled), Core::MakeDelegate(childWidget, &Widget::IsClippingEnabled))));
-                }
-                else if(lowerCasePropName == "sizepolicy")
-                {
-                    m_defaultPropertyLinks.emplace(link.m_linkName, IPropertyAccessorUPtr(new PropertyAccessor<SizePolicy>(Core::MakeDelegate(childWidget, &Widget::SetSizePolicy), Core::MakeDelegate(childWidget, &Widget::GetSizePolicy))));
-                }
-                else
-                {
-                    m_customPropertyLinks.emplace(link.m_linkName, std::make_pair(childWidget, link.m_propertyName));
-                }
+                component->SetWidget(this);
+                component->RegisterProperties();
             }
         }
         //----------------------------------------------------------------------------------------
@@ -347,9 +276,86 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetCustomProperties(const PropertyMap& in_customProperties)
+        void Widget::InitPropertyLinks(const std::vector<PropertyLink>& in_componentPropertyLinks, const std::vector<PropertyLink>& in_childPropertyLinks)
         {
-            m_customProperties = in_customProperties;
+            //Hook up any links to our components
+            for(const auto& link : in_componentPropertyLinks)
+            {
+                Component* component = GetComponentWithName(link.GetLinkedOwner());
+                CS_ASSERT(component != nullptr, "Cannot create property link for property '" + link.GetLinkName() + "' becuase target component '" + link.GetLinkedOwner() + "' doesn't exist.");
+                CS_ASSERT(component->HasProperty(link.GetLinkName()) == true, "Cannot create property link for property '" + link.GetLinkName() + "' becuase target component '" +
+                          link.GetLinkedOwner() + "' doesn't contain a property called '" + link.GetLinkedProperty() + "'.");
+                
+                std::string lowerLinkName = link.GetLinkName();
+                Core::StringUtils::ToLowerCase(lowerLinkName);
+                
+                m_componentPropertyLinks.emplace(lowerLinkName, std::make_pair(component, link.GetLinkedProperty()));
+            }
+            
+            //Hook up any links to our childrens properties
+            for(const auto& link : in_childPropertyLinks)
+            {
+                Widget* childWidget = GetInternalWidgetRecursive(link.GetLinkedOwner());
+                CS_ASSERT(childWidget != nullptr, "Cannot create property link for property '" + link.GetLinkName() + "' becuase target widget '" + link.GetLinkedOwner() + "' doesn't exist.");
+                
+                std::string lowerLinkName = link.GetLinkName();
+                Core::StringUtils::ToLowerCase(lowerLinkName);
+                
+                m_childPropertyLinks.emplace(lowerLinkName, std::make_pair(childWidget, link.GetLinkedProperty()));
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::InitPropertyValues(const PropertyMap& in_propertyMap)
+        {
+            SetName(in_propertyMap.GetPropertyOrDefault<std::string>("Name", ""));
+            SetRelativePosition(in_propertyMap.GetPropertyOrDefault<Core::Vector2>("RelPosition", Core::Vector2()));
+            SetAbsolutePosition(in_propertyMap.GetPropertyOrDefault<Core::Vector2>("AbsPosition", Core::Vector2()));
+            SetRelativeSize(in_propertyMap.GetPropertyOrDefault<Core::Vector2>("RelSize", Core::Vector2(1.0f, 1.0f)));
+            SetAbsoluteSize(in_propertyMap.GetPropertyOrDefault<Core::Vector2>("AbsSize", Core::Vector2()));
+            SetDefaultPreferredSize(in_propertyMap.GetPropertyOrDefault<Core::Vector2>("PreferredSize", Core::Vector2(1.0f, 1.0f)));
+            ScaleTo(in_propertyMap.GetPropertyOrDefault<Core::Vector2>("Scale", Core::Vector2(1.0f, 1.0f)));
+            SetColour(in_propertyMap.GetPropertyOrDefault<Core::Colour>("Colour", Core::Colour(1.0f, 1.0f, 1.0f, 1.0f)));
+            RotateTo(in_propertyMap.GetPropertyOrDefault<f32>("Rotation", 0.0f));
+            SetParentalAnchor(in_propertyMap.GetPropertyOrDefault<Rendering::AlignmentAnchor>("ParentalAnchor", Rendering::AlignmentAnchor::k_middleCentre));
+            SetOriginAnchor(in_propertyMap.GetPropertyOrDefault<Rendering::AlignmentAnchor>("OriginAnchor", Rendering::AlignmentAnchor::k_middleCentre));
+            SetVisible(in_propertyMap.GetPropertyOrDefault<bool>("Visible", true));
+            SetClippingEnabled(in_propertyMap.GetPropertyOrDefault<bool>("ClipChildren", false));
+            SetInputEnabled(in_propertyMap.GetPropertyOrDefault<bool>("InputEnabled", false));
+            SetInputConsumeEnabled(in_propertyMap.GetPropertyOrDefault<bool>("InputConsumeEnabled", true));
+            SetSizePolicy(in_propertyMap.GetPropertyOrDefault<SizePolicy>("SizePolicy", SizePolicy::k_none));
+            
+            if(in_propertyMap.HasValue("Layout") == true)
+            {
+                SetLayout(ILayout::Create(in_propertyMap.GetProperty<LayoutDesc>("Layout")));
+            }
+            
+            if(in_propertyMap.HasValue("Drawable") == true)
+            {
+                SetDrawable(IDrawable::Create(in_propertyMap.GetProperty<DrawableDesc>("Drawable")));
+            }
+            
+            //TODO: apply linked property defaults.
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Component* Widget::GetComponentWithName(const std::string& in_name)
+        {
+            return Core::ConstMethodCast(this, &Widget::GetComponentWithName, in_name);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const Component* Widget::GetComponentWithName(const std::string& in_name) const
+        {
+            for (const auto& component : m_components)
+            {
+                if (component->GetName() == in_name)
+                {
+                    return component.get();
+                }
+            }
+            
+            return nullptr;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1048,15 +1054,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetCustomProperty(const std::string& in_name, const char* in_value)
+        void Widget::SetProperty(const std::string& in_name, const char* in_value)
         {
-            SetCustomProperty<std::string>(in_name, in_value);
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        const char* Widget::GetCustomProperty(const std::string& in_name) const
-        {
-            return GetCustomProperty<std::string>(in_name).c_str();
+            SetProperty<std::string>(in_name, in_value);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

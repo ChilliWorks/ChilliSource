@@ -9,13 +9,10 @@
     "SliderFraction": "0"
   },
   "ChildProperties": {
-    "SliderRelSize": {
-      "Child": "Slider",
-      "Property": "RelSize"
-    },
-    "SliderDrawable": {
-      "Child": "Slider",
-      "Property": "Drawable"
+    "Slider":
+    {
+      "SliderRelSize": "RelSize",
+      "SliderDrawable": "Drawable"
     }
   },
   "Behaviour": {

@@ -54,15 +54,27 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         //--------------------------------------------------------------------------
-        class ComponentFactory : public Core::AppSystem
+        class ComponentFactory final : public Core::AppSystem
         {
         public:
-            CS_DECLARE_NAMEDTYPE(GenericFactory);
+            CS_DECLARE_NAMEDTYPE(ComponentFactory);
+            //-----------------------------------------------------------------
+            /// Allows querying of whether or not the system implements the
+            /// interface associated with the given interface Id.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The interface Id.
+            ///
+            /// @return Whether or not the interface is implemented.
+            //-----------------------------------------------------------------
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //-----------------------------------------------------------------
             /// Registers a new component type with the factory. Future calls
             /// to CreateComponent() with the given name will instantiate a
-            /// component of this type. The given name must be unique, this will
-            /// try to assert if it is not.
+            /// component of this type. The given name must be unique; if a
+            /// duplicate component name is registered the app is considered
+            /// to be in an irrecoverable state and will terminate.
             ///
             /// This is not thread-safe and should only be called on the main
             /// thread.
@@ -100,6 +112,15 @@ namespace ChilliSource
             //-----------------------------------------------------------------
             ComponentUPtr CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const PropertyMap& in_propertyMap) const;
         private:
+            friend class Core::Application;
+            //-----------------------------------------------------------------
+            /// A factory method for creating new instances of the system.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return A new instance of the system.
+            //-----------------------------------------------------------------
+            static ComponentFactoryUPtr Create();
             //-----------------------------------------------------------------
             /// A delegate which is used to instantiate the registered component
             /// types.

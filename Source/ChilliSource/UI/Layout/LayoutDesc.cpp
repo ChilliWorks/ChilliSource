@@ -40,7 +40,8 @@ namespace ChilliSource
         {
             //--------------------------------------------------------------
             /// Parses the given cell order string. If the string is not
-            /// a valid cell order this will fatal log.
+            /// a valid cell order the app is considered to be in an
+            /// irrecoverable state and will terminate.
             ///
             /// @author Ian Copland
             ///

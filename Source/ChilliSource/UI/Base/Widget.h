@@ -545,24 +545,6 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             template <typename TComponentType> const TComponentType* GetComponent() const;
             //----------------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @param The name of the component. There should only be one component with the name.
-            ///
-            /// @return A const version of the component of the specified type with the given name.
-            /// This will return nullptr is no component could be found.
-            //----------------------------------------------------------------------------------------
-            template <typename TComponentType> TComponentType* GetComponent(const std::string& m_name);
-            //----------------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @param The name of the component. There should only be one component with the name.
-            ///
-            /// @return The component of the specified type with the given name. This will return
-            /// nullptr is no component could be found.
-            //----------------------------------------------------------------------------------------
-            template <typename TComponentType> const TComponentType* GetComponent(const std::string& m_name) const;
-            //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
             ///
@@ -857,40 +839,30 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Name
+            /// @param Name. This is case insensitive.
             /// @param Value
             //----------------------------------------------------------------------------------------
-            template<typename TType> void SetCustomProperty(const std::string& in_name, TType&& in_value);
+            template<typename TType> void SetProperty(const std::string& in_name, TType&& in_value);
             //----------------------------------------------------------------------------------------
             /// Specialisation to store property value for const char* as a std::string
             ///
             /// @author S Downie
             ///
-            /// @param Property name
+            /// @param Property name. This is case insensitive.
             /// @param Property value
             //----------------------------------------------------------------------------------------
-            void SetCustomProperty(const std::string& in_name, const char* in_value);
+            void SetProperty(const std::string& in_name, const char* in_value);
             //----------------------------------------------------------------------------------------
             /// Get the value of the property with the given name. If no property exists
             /// with the name then it will assert.
             ///
             /// @author S Downie
             ///
-            /// @param Name
+            /// @param Name. This is case insensitive.
             ///
             /// @return Value
             //----------------------------------------------------------------------------------------
-            template<typename TType> TType GetCustomProperty(const std::string& in_name) const;
-            //----------------------------------------------------------------------------------------
-            /// Specialisation to return property value for const char* which is stored as a std::string
-            ///
-            /// @author S Downie
-            ///
-            /// @param Property name
-            ///
-            /// @return Property value
-            //----------------------------------------------------------------------------------------
-            const char* GetCustomProperty(const std::string& in_name) const;
+            template<typename TType> TType GetProperty(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
             /// Performs a calculation to check if the given position is within the OOBB
             /// of the widget
@@ -961,17 +933,30 @@ namespace ChilliSource
             Widget(const PropertyMap& in_properties, std::vector<ComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
                    const std::vector<PropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource);
             //----------------------------------------------------------------------------------------
-            /// Adds a widget as a child of this widget. The widget will be rendered as part of this
-            /// hierarchy and any relative coordinates will now be in relation to this widget.
+            /// Initialises the internal mapping to base properties. This allows base properties,
+            /// such as Relative Position or Size Policy to be set via the SetProperty method.
             ///
-            /// This widget is effectively a private implementation detail and is not affected by the
-            /// layout and is not returned when querying for widgets
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------------------
+            void InitBaseProperties();
+            //----------------------------------------------------------------------------------------
+            /// Initialises the widgets components. This can only be called once and each component
+            /// must have a unique name. If called a second time the app will be considered to be
+            /// in an irrecoverable state and will terminate.
             ///
-            /// NOTE: Will assert if the widget already has a parent
+            /// @author Ian Copland
+            ///
+            /// @param The list of components.
+            //----------------------------------------------------------------------------------------
+            void InitComponents(std::vector<ComponentUPtr> in_components);
+            //----------------------------------------------------------------------------------------
+            /// Adds all of the internal widgets. The given widgets must not already have a parent,
+            /// if they do the app will be considered to be in an irrecoverable state and will
+            /// terminate.
             ///
             /// @author S Downie
             ///
-            /// @param Widget to add
+            /// @param The list of widgets.
             //----------------------------------------------------------------------------------------
             void InitInternalWidgets(std::vector<WidgetUPtr> in_widgets);
             //----------------------------------------------------------------------------------------
@@ -983,13 +968,33 @@ namespace ChilliSource
             /// @param Links to default properties of the specified widget
             /// @param Links to custom properties of the specified widget
             //----------------------------------------------------------------------------------------
-            void InitPropertyLinks(const std::vector<PropertyLink>& in_childPropertyLinks);
+            void InitPropertyLinks(const std::vector<PropertyLink>& in_componentPropertyLinks, const std::vector<PropertyLink>& in_childPropertyLinks);
             //----------------------------------------------------------------------------------------
-            /// @author S Downie
+            /// Initialise the values of all properties from the given property map.
             ///
-            /// @param Default property values
+            /// @author Ian Copland
+            ///
+            /// @param The property map.
             //----------------------------------------------------------------------------------------
-            void InitProperties(const PropertyMap& in_defaultProperties);
+            void InitPropertyValues(const PropertyMap& in_propertyMap);
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The name of the component. There should only be one component with the name.
+            ///
+            /// @return The component with the given name. This will return nullptr is no component
+            /// could be found.
+            //----------------------------------------------------------------------------------------
+            Component* GetComponentWithName(const std::string& m_name);
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The name of the component. There should only be one component with the name.
+            ///
+            /// @return A const version of the component with the given name. This will return nullptr
+            /// is no component could be found.
+            //----------------------------------------------------------------------------------------
+            const Component* GetComponentWithName(const std::string& m_name) const;
             //----------------------------------------------------------------------------------------
             /// Sets the Lua script that controls the behaviour of this widget
             ///
@@ -998,12 +1003,6 @@ namespace ChilliSource
             /// @param Lua script source
             //----------------------------------------------------------------------------------------
             void SetBehaviourScript(const Scripting::LuaSourceCSPtr& in_behaviourSource);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Custom property values
-            //----------------------------------------------------------------------------------------
-            void SetCustomProperties(const PropertyMap& in_customProperties);
             //----------------------------------------------------------------------------------------
             /// Set the layout that handles how to layout the widget's internal subviews. If this is null then the
             /// subviews will retain their current size and position. Otherwise the size and position may
@@ -1166,9 +1165,9 @@ namespace ChilliSource
             
         private:
             
-            PropertyMap m_customProperties;
-            std::unordered_map<std::string, IPropertyAccessorUPtr> m_defaultPropertyLinks;
-            std::unordered_map<std::string, std::pair<Widget*, std::string>> m_customPropertyLinks;
+            std::unordered_map<std::string, IPropertyAccessorUPtr> m_basePropertyAccessors;
+            std::unordered_map<std::string, std::pair<Component*, std::string>> m_componentPropertyLinks;
+            std::unordered_map<std::string, std::pair<Widget*, std::string>> m_childPropertyLinks;
             
             std::unordered_map<Input::Pointer::Id, std::set<Input::Pointer::InputType>> m_pressedInput;
             
@@ -1252,68 +1251,63 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template <typename TComponentType> TComponentType* Widget::GetComponent(const std::string& in_name)
+        template<typename TType> void Widget::SetProperty(const std::string& in_name, TType&& in_value)
         {
-            return Core::ConstMethodCast(this, &Widget::GetComponent<TComponentType>, in_name);
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template <typename TComponentType> const TComponentType* Widget::GetComponent(const std::string& in_name) const
-        {
-            for (const auto& component : m_components)
-            {
-                if (component->IsA<TComponentType>() == true && component->GetName() == in_name)
-                {
-                    return component;
-                }
-            }
+            std::string lowerName = in_name;
+            Core::StringUtils::ToLowerCase(lowerName);
             
-            return nullptr;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<typename TType> void Widget::SetCustomProperty(const std::string& in_name, TType&& in_value)
-        {
-            auto itDefault = m_defaultPropertyLinks.find(in_name);
-            if(itDefault != m_defaultPropertyLinks.end())
+            auto basePropIt = m_basePropertyAccessors.find(lowerName);
+            if(basePropIt != m_basePropertyAccessors.end())
             {
-                auto accessor = CS_SMARTCAST(PropertyAccessor<TType>*, itDefault->second.get());
+                auto accessor = CS_SMARTCAST(PropertyAccessor<TType>*, basePropIt->second.get());
                 accessor->Set(std::forward<TType>(in_value));
                 return;
             }
             
-            auto itCustom = m_customPropertyLinks.find(in_name);
-            if(itCustom != m_customPropertyLinks.end())
+            auto componentPropIt = m_componentPropertyLinks.find(lowerName);
+            if(componentPropIt != m_componentPropertyLinks.end())
             {
-                itCustom->second.first->SetCustomProperty<TType>(itCustom->second.second, std::forward<TType>(in_value));
+                componentPropIt->second.first->SetProperty<TType>(componentPropIt->second.second, std::forward<TType>(in_value));
                 return;
             }
             
-            m_customProperties.SetProperty(in_name, std::forward<TType>(in_value));
-            
-            if(m_behaviourScript != nullptr)
+            auto childPropIt = m_childPropertyLinks.find(lowerName);
+            if(childPropIt != m_childPropertyLinks.end())
             {
-                m_behaviourScript->CallFunction("onCustomPropertyChanged", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, in_name, std::forward<TType>(in_value));
+                childPropIt->second.first->SetProperty<TType>(childPropIt->second.second, std::forward<TType>(in_value));
+                return;
             }
+            
+            CS_LOG_FATAL("Invalid property name for Widget: " + in_name);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<typename TType> TType Widget::GetCustomProperty(const std::string& in_name) const
+        template<typename TType> TType Widget::GetProperty(const std::string& in_name) const
         {
-            auto itDefault = m_defaultPropertyLinks.find(in_name);
-            if(itDefault != m_defaultPropertyLinks.end())
+            std::string lowerName = in_name;
+            Core::StringUtils::ToLowerCase(lowerName);
+            
+            auto basePropIt = m_basePropertyAccessors.find(lowerName);
+            if(basePropIt != m_basePropertyAccessors.end())
             {
-                auto accessor = CS_SMARTCAST(PropertyAccessor<TType>*, itDefault->second.get());
+                auto accessor = CS_SMARTCAST(PropertyAccessor<TType>*, basePropIt->second.get());
                 return accessor->Get();
             }
             
-            auto itCustom = m_customPropertyLinks.find(in_name);
-            if(itCustom != m_customPropertyLinks.end())
+            auto componentPropIt = m_componentPropertyLinks.find(lowerName);
+            if(componentPropIt != m_componentPropertyLinks.end())
             {
-                return itCustom->second.first->GetCustomProperty<TType>(itCustom->second.second);
+                return componentPropIt->second.first->GetProperty<TType>(componentPropIt->second.second);
             }
             
-            return m_customProperties.GetProperty<TType>(in_name);
+            auto childPropIt = m_childPropertyLinks.find(lowerName);
+            if(childPropIt != m_childPropertyLinks.end())
+            {
+                return childPropIt->second.first->GetProperty<TType>(childPropIt->second.second);
+            }
+            
+            CS_LOG_FATAL("Invalid property name for Widget: " + in_name);
+            return TType();
         }
     }
 }

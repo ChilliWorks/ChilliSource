@@ -39,7 +39,7 @@
 local getFinalSize = Widget.getFinalSize
 local setRelativeSize = Widget.setRelativeSize
 local getLocalRelativeSize = Widget.getLocalRelativeSize
-local getFloatCustomProperty = Widget.getFloatCustomProperty
+local getFloatProperty = Widget.getFloatProperty
 local getInternalWidget = Widget.getInternalWidget
 
 local barWidget = nil
@@ -51,7 +51,7 @@ local barWidget = nil
 -----------------------------------------------------
 function onAddedToCanvas()
     barWidget = getInternalWidget(this, "Bar")
-    progress = getFloatCustomProperty(this, "Progress")
+    progress = getFloatProperty(this, "Progress")
     updateBar(progress)
 end
 -----------------------------------------------------
@@ -62,7 +62,7 @@ end
 -- @param Custom property name
 -- @param Custom property value
 -----------------------------------------------------
-function onCustomPropertyChanged(in_propName, in_propValue)
+function onPropertyChanged(in_propName, in_propValue)
     if barWidget ~= nil and in_propName == "Progress" then
         updateBar(in_propValue)
     end

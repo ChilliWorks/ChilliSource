@@ -8,13 +8,10 @@
     "Progress": "0"
   },
   "ChildProperties": {
-    "BarRelSize": {
-      "Child": "Bar",
-      "Property": "RelSize"
-    },
-    "BarDrawable": {
-      "Child": "Bar",
-      "Property": "Drawable"
+    "Bar":
+    {
+      "BarRelSize": "RelSize",
+      "BarDrawable": "Drawable"
     }
   },
   "Behaviour": {

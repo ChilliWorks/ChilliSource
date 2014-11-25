@@ -40,8 +40,9 @@ namespace ChilliSource
         {
             //--------------------------------------------------------------
             /// Parses a three-patch drawable direction from the given
-            /// string. If the given string is not a valid direction this
-            /// will fatal log.
+            /// string. If the given string is not a valid direction the app
+            /// is considered to be in an irrecoverable state and will
+            /// terminate.
             ///
             /// @author Ian Copland
             ///

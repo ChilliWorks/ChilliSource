@@ -28,6 +28,8 @@
 
 #include <ChilliSource/UI/Base/Component.h>
 
+#include <ChilliSource/Core/String/StringUtils.h>
+
 namespace ChilliSource
 {
     namespace UI
@@ -44,6 +46,22 @@ namespace ChilliSource
         const std::string& Component::GetName() const
         {
             return m_name;
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        bool Component::HasProperty(const std::string& in_propertyName) const
+        {
+            std::string lowerPropertyName = in_propertyName;
+            Core::StringUtils::ToLowerCase(lowerPropertyName);
+            
+            auto it = m_properties.find(lowerPropertyName);
+            return (it != m_properties.end());
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        void Component::SetProperty(const std::string& in_propertyName, const char* in_propertyValue)
+        {
+            SetProperty(in_propertyName, std::string(in_propertyValue));
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
@@ -64,6 +82,16 @@ namespace ChilliSource
             CS_ASSERT(m_widget == nullptr, "Cannot change the owning widget on a component.");
             
             m_widget = in_widget;
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        void Component::RegisterProperties()
+        {
+            CS_ASSERT(m_properties.empty() == true, "Cannot change the properties on a component.");
+            
+            m_propertyRegistrationEnabled = true;
+            OnRegisterProperties();
+            m_propertyRegistrationEnabled = false;
         }
     }
 }

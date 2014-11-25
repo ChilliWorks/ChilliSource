@@ -57,8 +57,9 @@ namespace ChilliSource
             /// Searches the given widget desc list for a widget
             /// description with the given name. This is recursive and
             /// will nagivate down the widget desc tree to find the
-            /// widget. Recursion is breadth first. This will fatal log
-            /// if one cannot be found.
+            /// widget. Recursion is breadth first. If one cannot
+            /// be found the app is considered to be in an
+            /// irrecoverable state and will terminate.
             ///
             /// @author Ian Copland
             ///
@@ -90,8 +91,9 @@ namespace ChilliSource
             }
             //-------------------------------------------------------
             /// Searches the given component desc list for a component
-            /// description with the given name. This will fatal log
-            /// if one cannot be found.
+            /// description with the given name. If one cannot be
+            /// found the app is considered to be in an irrecoverable
+            /// state and will terminate.
             ///
             /// @author Ian Copland
             ///

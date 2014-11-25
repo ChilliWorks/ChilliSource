@@ -32,6 +32,19 @@ namespace ChilliSource
 {
     namespace UI
     {
+        CS_DEFINE_NAMEDTYPE(ComponentFactory);
+        //-----------------------------------------------------------------
+        //-----------------------------------------------------------------
+        ComponentFactoryUPtr ComponentFactory::Create()
+        {
+            return ComponentFactoryUPtr(new ComponentFactory());
+        }
+        //-----------------------------------------------------------------
+        //-----------------------------------------------------------------
+        bool ComponentFactory::IsA(Core::InterfaceIDType in_interfaceId) const
+        {
+            return (ComponentFactory::InterfaceID == in_interfaceId);
+        }
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
         std::vector<PropertyMap::PropertyDesc> ComponentFactory::GetPropertyDescs(const std::string& in_componentTypeName) const

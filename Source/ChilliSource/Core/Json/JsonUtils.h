@@ -48,7 +48,8 @@ namespace ChilliSource
         {
             //---------------------------------------------------------------
             /// Creates a new Json object from the given string. If there
-            /// are any errors in the given Json this will fatal log.
+            /// are any errors in the given Json the app is considered to be
+            /// in an irrecoverable state and will terminate.
             ///
             /// @author Ian Copland
             ///
@@ -61,7 +62,8 @@ namespace ChilliSource
             /// Creates a new Json object from the contents of the file
             /// at the given path. If the file cannot be read this will return
             /// false, but if the file can be read but it is not valid json
-            /// this will fatal log.
+            /// the app is considered to be in an irrecoverable state and
+            /// will terminate.
             ///
             /// @author Ian Copland
             ///

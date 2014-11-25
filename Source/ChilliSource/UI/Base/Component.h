@@ -31,6 +31,9 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
+#include <ChilliSource/UI/Base/PropertyAccessor.h>
+
+#include <unordered_map>
 
 namespace ChilliSource
 {
@@ -55,6 +58,57 @@ namespace ChilliSource
             /// @return The name of the component instance.
             //----------------------------------------------------------------
             const std::string& GetName() const;
+            //----------------------------------------------------------------
+            /// Allows querying of whether or not the component has a property
+            /// with the given name.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The name of the property. This is case insensitive.
+            ///
+            /// @return Whether or not the property exists.
+            //----------------------------------------------------------------
+            bool HasProperty(const std::string& in_propertyName) const;
+            //----------------------------------------------------------------
+            /// Allows querying for the value of properties in the component
+            /// using a string name. If there is no property with the given
+            /// name or it is not of the requested type the app is considered
+            /// to be in an irrecoverable state and will terminate.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The name of the property to get. This is case insensitive.
+            ///
+            /// @return The value of the requested property.
+            //----------------------------------------------------------------
+            template <typename TPropertyType> TPropertyType GetProperty(const std::string& in_propertyName) const;
+            //----------------------------------------------------------------
+            /// Allows setting of properties in the component using a string
+            /// name. If there is no property with the given name or it is not
+            /// of the requested type the app is considered to be in an
+            /// irrecoverable state and will terminate.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The name of the property. This is case insensitive.
+            /// @param The value of the property.
+            //----------------------------------------------------------------
+            template <typename TPropertyType> void SetProperty(const std::string& in_propertyName, TPropertyType&& in_propertyValue);
+            //----------------------------------------------------------------
+            /// Allows setting of properties in the component using a string
+            /// name. If there is no property with the given name or it is not
+            /// of the requested type the app is considered to be in an
+            /// irrecoverable state and will terminate.
+            ///
+            /// This is an overload of the templated version of SetProperty
+            /// which will convert a string literal to a std::string.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The name of the property. This is case insensitive.
+            /// @param The value of the property.
+            //----------------------------------------------------------------
+            void SetProperty(const std::string& in_propertyName, const char* in_propertyValue);
             //----------------------------------------------------------------
             /// Destructor
             ///
@@ -84,9 +138,37 @@ namespace ChilliSource
             //----------------------------------------------------------------
             const Widget* GetWidget() const;
             //----------------------------------------------------------------
+            /// This registers a property such that it can be called using the
+            /// set property method. This takes two function pointers, one
+            /// for getting the value of a property and one for setting the
+            /// value of a property. Property names must be unqiue; if a
+            /// duplicate property name is registered the app is considered to
+            /// be in an irrecoverable state and will terminate.
+            ///
+            /// This should only be called during the register properties
+            /// lifecycle event.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The name of the registered property. This is case
+            /// insensitive.
+            /// @param The getter delegate for the property.
+            /// @param The setter delegate for the property.
+            //----------------------------------------------------------------
+            template <typename TPropertyType> void RegisterProperty(const std::string& in_name, const std::function<TPropertyType()>& in_getter, const std::function<void(TPropertyType&&)> in_setter);
+            //----------------------------------------------------------------
+            /// This is called prior to the On Init lifecycle event. This
+            /// should be used to register all component properties.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------
+            virtual void OnRegisterProperties() {}
+            //----------------------------------------------------------------
             /// A method which is called when all components owned by the parent
             /// widget have been created and added. Inheriting classes should use
             /// this for any required initialisation.
+            ///
+            /// All registration of properties should occur at this stage.
             ///
             /// @author Ian Copland
             //----------------------------------------------------------------
@@ -189,10 +271,68 @@ namespace ChilliSource
             /// @param The owning widget.
             //----------------------------------------------------------------
             void SetWidget(Widget* in_widget);
+            //----------------------------------------------------------------
+            /// Enables property registration then calls down to the subclass
+            /// to register its properties then again disables registation.
+            /// This can only be called once and should be called between setting
+            /// the owning widget and calling OnInit.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The owning widget.
+            //----------------------------------------------------------------
+            void RegisterProperties();
 
+            bool m_propertyRegistrationEnabled = false;
+            std::unordered_map<std::string, IPropertyAccessorUPtr> m_properties;
             Widget* m_widget = nullptr;
             std::string m_name;
         };
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        template <typename TPropertyType> TPropertyType Component::GetProperty(const std::string& in_propertyName) const
+        {
+            std::string lowerPropertyName = in_propertyName;
+            Core::StringUtils::ToLowerCase(lowerPropertyName);
+            
+            auto it = m_properties.find(lowerPropertyName);
+            if(it == m_properties.end())
+            {
+                CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::Component.");
+            }
+            
+            auto accessor = CS_SMARTCAST(PropertyAccessor<TPropertyType>*, it->second.get());
+            return accessor->Get();
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        template <typename TPropertyType> void Component::SetProperty(const std::string& in_propertyName, TPropertyType&& in_propertyValue)
+        {
+            std::string lowerPropertyName = in_propertyName;
+            Core::StringUtils::ToLowerCase(lowerPropertyName);
+            
+            auto it = m_properties.find(lowerPropertyName);
+            if(it == m_properties.end())
+            {
+                CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::Component.");
+            }
+            
+            auto accessor = CS_SMARTCAST(PropertyAccessor<TPropertyType>*, it->second.get());
+            accessor->Set(std::forward<TPropertyType>(in_propertyValue));
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        template <typename TPropertyType> void Component::RegisterProperty(const std::string& in_name, const std::function<TPropertyType()>& in_getter, const std::function<void(TPropertyType&&)> in_setter)
+        {
+            CS_ASSERT(m_propertyRegistrationEnabled == false, "UI::Component properties can only be registered during the OnRegisterProperties lifecycle event.");
+            
+            std::string lowerPropertyName = in_name;
+            Core::StringUtils::ToLowerCase(lowerPropertyName);
+            
+            CS_ASSERT(m_properties.find(lowerPropertyName) == m_properties.end(), "Cannot register duplicate property name '" + in_name + "' in a UI::Component.");
+            
+            m_properties.emplace(lowerPropertyName, IPropertyAccessorUPtr(new PropertyAccessor<TPropertyType>(in_setter, in_getter)));
+        }
     }
 }
 

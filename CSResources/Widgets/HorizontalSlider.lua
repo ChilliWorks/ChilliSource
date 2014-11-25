@@ -42,7 +42,7 @@ local getPointerPosition = Pointer.getPosition
 local getFinalPositionOfCentre = Widget.getFinalPositionOfCentre
 local getFinalSize = Widget.getFinalSize
 local setRelativePosition = Widget.setRelativePosition
-local setFloatCustomProperty = Widget.setFloatCustomProperty
+local setFloatProperty = Widget.setFloatProperty
 
 local sliderWidget = nil
 local isDragging = false
@@ -161,7 +161,7 @@ function updateSlider(in_pointerPositionX)
     slideRange =  math.max(barWidth - sliderWidth, 0.0)
     pointerPositionOnBar = math.max((in_pointerPositionX - barLeftX - 0.5 * sliderWidth), 0.0)
     sliderFraction = math.max(math.min((pointerPositionOnBar / slideRange), 1.0), 0.0)
-    setFloatCustomProperty(this, "SliderFraction", sliderFraction)
+    setFloatProperty(this, "SliderFraction", sliderFraction)
 
     --convert the slider fraction to a relative position for the slider
     sliderPosition = sliderFraction * (slideRange / barWidth);
@@ -175,7 +175,7 @@ end
 -- @param Custom property name
 -- @param Custom property value
 -----------------------------------------------------
-function onCustomPropertyChanged(in_propName, in_propValue)
+function onPropertyChanged(in_propName, in_propValue)
     if in_propName == "SliderFraction" then
         sliderWidth = getFinalSize(sliderWidget)
         barWidth = getFinalSize(this)

@@ -45,9 +45,9 @@ local setTextureAtlas = Drawable.setTextureAtlas
 local setTextureAtlasId = Drawable.setTextureAtlasId
 local setColour = Widget.setColour
 local getDrawable = Widget.getDrawable
-local getStorageLocationCustomProperty = Widget.getStorageLocationCustomProperty
-local getStringCustomProperty = Widget.getStringCustomProperty
-local getColourCustomProperty = Widget.getColourCustomProperty
+local getStorageLocationProperty = Widget.getStorageLocationProperty
+local getStringProperty = Widget.getStringProperty
+local getColourProperty = Widget.getColourProperty
 local getPointerId = Pointer.getId
 
 local activePointerIds = {}
@@ -164,21 +164,21 @@ end
 function highlight()
     drawable = getDrawable(this)
     if drawable then
-        path = getStringCustomProperty(this, "HighlightTexturePath")
+        path = getStringProperty(this, "HighlightTexturePath")
         if path ~= "" then
-            location = getStorageLocationCustomProperty(this, "HighlightTextureLocation")
+            location = getStorageLocationProperty(this, "HighlightTextureLocation")
             setTexture(drawable, location, path)
         end
-        path = getStringCustomProperty(this, "HighlightAtlasPath")
+        path = getStringProperty(this, "HighlightAtlasPath")
         if path ~= "" then
-            location = getStorageLocationCustomProperty(this, "HighlightAtlasLocation")
+            location = getStorageLocationProperty(this, "HighlightAtlasLocation")
             setTextureAtlas(drawable, location, path)
-            id = getStringCustomProperty(this, "HighlightAtlasId")
+            id = getStringProperty(this, "HighlightAtlasId")
             setTextureAtlasId(drawable, id)
         end
     end
 
-    r, g, b, a = getColourCustomProperty(this, "HighlightColour")
+    r, g, b, a = getColourProperty(this, "HighlightColour")
     setColour(this, r, g, b, a)
 end
 -----------------------------------------------------
@@ -189,20 +189,20 @@ end
 function unhighlight()
     drawable = getDrawable(this)
     if drawable then
-        path = getStringCustomProperty(this, "NormalTexturePath")
+        path = getStringProperty(this, "NormalTexturePath")
         if path ~= "" then
-            location = getStorageLocationCustomProperty(this, "NormalTextureLocation")
+            location = getStorageLocationProperty(this, "NormalTextureLocation")
             setTexture(drawable, location, path)
         end
-        path = getStringCustomProperty(this, "NormalAtlasPath")
+        path = getStringProperty(this, "NormalAtlasPath")
         if path ~= "" then
-            location = getStorageLocationCustomProperty(this, "NormalAtlasLocation")
+            location = getStorageLocationProperty(this, "NormalAtlasLocation")
             setTextureAtlas(drawable, location, path)
-            id = getStringCustomProperty(this, "NormalAtlasId")
+            id = getStringProperty(this, "NormalAtlasId")
             setTextureAtlasId(drawable, id)
         end
     end
 
-    r, g, b, a = getColourCustomProperty(this, "NormalColour")
+    r, g, b, a = getColourProperty(this, "NormalColour")
     setColour(this, r, g, b, a)
 end
