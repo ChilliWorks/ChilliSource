@@ -286,8 +286,8 @@ namespace ChilliSource
             for(const auto& link : in_componentPropertyLinks)
             {
                 Component* component = GetComponentWithName(link.GetLinkedOwner());
-                CS_ASSERT(component != nullptr, "Cannot create property link for property '" + link.GetLinkName() + "' becuase target component '" + link.GetLinkedOwner() + "' doesn't exist.");
-                CS_ASSERT(component->HasProperty(link.GetLinkName()) == true, "Cannot create property link for property '" + link.GetLinkName() + "' becuase target component '" +
+                CS_ASSERT(component != nullptr, "Cannot create property link for property '" + link.GetLinkName() + "' because target component '" + link.GetLinkedOwner() + "' doesn't exist.");
+                CS_ASSERT(component->HasProperty(link.GetLinkName()) == true, "Cannot create property link for property '" + link.GetLinkName() + "' because target component '" +
                           link.GetLinkedOwner() + "' doesn't contain a property called '" + link.GetLinkedProperty() + "'.");
                 
                 std::string lowerLinkName = link.GetLinkName();
@@ -300,7 +300,7 @@ namespace ChilliSource
             for(const auto& link : in_childPropertyLinks)
             {
                 Widget* childWidget = GetInternalWidgetRecursive(link.GetLinkedOwner());
-                CS_ASSERT(childWidget != nullptr, "Cannot create property link for property '" + link.GetLinkName() + "' becuase target widget '" + link.GetLinkedOwner() + "' doesn't exist.");
+                CS_ASSERT(childWidget != nullptr, "Cannot create property link for property '" + link.GetLinkName() + "' because target widget '" + link.GetLinkedOwner() + "' doesn't exist.");
                 
                 std::string lowerLinkName = link.GetLinkName();
                 Core::StringUtils::ToLowerCase(lowerLinkName);

@@ -75,8 +75,7 @@ namespace ChilliSource
             };
         }
         
-        CS_ASSERT(<#in_query#>, <#in_message#>)
-        
+        CS_DEFINE_NAMEDTYPE(TextComponent);
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         const std::vector<PropertyMap::PropertyDesc>& TextComponent::GetPropertyDescs()
@@ -107,10 +106,17 @@ namespace ChilliSource
             auto resourcePool = Core::Application::Get()->GetResourcePool();
             
             //load the font
-            std::string fontLocation = in_properties.GetPropertyOrDefault(k_fontLocationKey, "Package");
-            std::string fontPath = in_properties.GetPropertyOrDefault(k_fontPathKey, "");
-            CS_ASSERT((fontLocation.empty() == false && fontPath.empty() == false), "Must supply a valid font file path.");
-            SetFont(resourcePool->LoadResource<Rendering::Font>(Core::ParseStorageLocation(fontLocation), fontPath));
+            if (in_properties.HasValue(k_fontPathKey) == true)
+            {
+                std::string fontLocation = in_properties.GetPropertyOrDefault(k_fontLocationKey, "Package");
+                std::string fontPath = in_properties.GetPropertyOrDefault(k_fontPathKey, "");
+                CS_ASSERT((fontLocation.empty() == false && fontPath.empty() == false), "Must supply a valid font file path.");
+                SetFont(resourcePool->LoadResource<Rendering::Font>(Core::ParseStorageLocation(fontLocation), fontPath));
+            }
+            else
+            {
+                SetFont(resourcePool->LoadResource<Rendering::Font>(Core::StorageLocation::k_chilliSource, "Fonts/CarlitoMed.csfont"));
+            }
             
             //load the localised text if one if supplied, otherwise fall back on the manually supplied text.
             if (in_properties.HasValue(k_localisedTextPathKey) == true)
@@ -148,6 +154,12 @@ namespace ChilliSource
             SetLineSpacingScale(in_properties.GetPropertyOrDefault(k_lineSpacingScaleKey, GetLineSpacingScale()));
             SetMaxNumberOfLines(in_properties.GetPropertyOrDefault(k_maxNumberOfLinesKey, (s32)GetMaxNumberOfLines()));
             SetTextScale(in_properties.GetPropertyOrDefault(k_textScaleKey, GetTextScale()));
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        bool TextComponent::IsA(Core::InterfaceIDType in_interfaceId) const
+        {
+            return (Component::InterfaceID == in_interfaceId || TextComponent::InterfaceID == in_interfaceId);
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------

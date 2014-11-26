@@ -316,7 +316,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         template <typename TPropertyType> void Component::RegisterProperty(const std::string& in_name, const std::function<TPropertyType()>& in_getter, const std::function<void(TPropertyType)> in_setter)
         {
-            CS_ASSERT(m_propertyRegistrationEnabled == false, "UI::Component properties can only be registered during the OnRegisterProperties lifecycle event.");
+            CS_ASSERT(m_propertyRegistrationEnabled == true, "UI::Component properties can only be registered during the OnRegisterProperties lifecycle event.");
             
             std::string lowerPropertyName = in_name;
             Core::StringUtils::ToLowerCase(lowerPropertyName);
