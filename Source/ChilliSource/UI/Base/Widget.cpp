@@ -448,26 +448,6 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetTextDrawable(TextDrawableUPtr in_textDrawable)
-        {
-            m_textDrawable = std::move(in_textDrawable);
-            
-            InvalidateTransformCache();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        TextDrawable* Widget::GetTextDrawable()
-        {
-            return m_textDrawable.get();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        const TextDrawable* Widget::GetTextDrawable() const
-        {
-            return m_textDrawable.get();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
         void Widget::SetLayout(const ILayoutSPtr& in_layout)
         {
             m_layout = in_layout;
@@ -1428,16 +1408,16 @@ namespace ChilliSource
             
             Core::Vector2 finalSize(GetFinalSize());
             
-            if ((m_drawable != nullptr || m_textDrawable != nullptr) && ShouldCull(GetFinalPositionOfCentre(), finalSize, m_screen->GetResolution()) == false)
+            if (ShouldCull(GetFinalPositionOfCentre(), finalSize, m_screen->GetResolution()) == false)
             {
                 if (m_drawable != nullptr)
                 {
                     m_drawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
                 }
                 
-                if (m_textDrawable != nullptr)
+                for (auto& component : m_components)
                 {
-                    m_textDrawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
+                    component->OnDraw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
                 }
             }
             

@@ -28,6 +28,8 @@
 
 #include <ChilliSource/UI/Base/ComponentFactory.h>
 
+#include <ChilliSource/UI/Text/TextComponent.h>
+
 namespace ChilliSource
 {
     namespace UI
@@ -67,7 +69,7 @@ namespace ChilliSource
         //-----------------------------------------------------------------
         void ComponentFactory::OnInit()
         {
-            //TODO: Register defaults.
+            Register<TextComponent>("Text");
         }
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------

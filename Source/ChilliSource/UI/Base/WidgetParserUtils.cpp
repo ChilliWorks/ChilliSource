@@ -41,7 +41,6 @@
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>
-#include <ChilliSource/UI/Text/TextDrawable.h>
 
 #include <json/json.h>
 
@@ -128,8 +127,7 @@ namespace ChilliSource
                 {
                     std::string propertyName = it.memberName();
                     
-                    //TODO: Remove TextDrawable from the ignore list!
-                    if (propertyName == "TemplateLocation" || propertyName == "TemplatePath" || propertyName == "Children" || propertyName == "Hierarchy" || propertyName == "Type" || propertyName == "TextDrawable")
+                    if (propertyName == "TemplateLocation" || propertyName == "TemplatePath" || propertyName == "Children" || propertyName == "Hierarchy" || propertyName == "Type")
                     {
                         //Ignore these as they are handled elsewhere but we do not want them to be included
                         //in the properties list

@@ -1,5 +1,5 @@
 //
-//  TextDrawable.h
+//  TextComponent.h
 //  Chilli Source
 //  Created by Ian Copland on 05/11/2014.
 //
@@ -27,8 +27,8 @@
 //
 
 
-#ifndef _CHILLISOURCE_UI_TEXT_TEXTDRAWABLE_H_
-#define _CHILLISOURCE_UI_TEXT_TEXTDRAWABLE_H_
+#ifndef _CHILLISOURCE_UI_TEXT_TEXTCOMPONENT_H_
+#define _CHILLISOURCE_UI_TEXT_TEXTCOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
@@ -36,6 +36,7 @@
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/Rendering/Font/Font.h>
+#include <ChilliSource/UI/Base/Component.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 
 #include <vector>
@@ -96,10 +97,10 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         //--------------------------------------------------------------------------
-        class TextDrawable final
+        class TextComponent final : public Component
         {
         public:
-            CS_DECLARE_NOCOPY(TextDrawable);
+            CS_DECLARE_NAMEDTYPE(TextComponent);
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -107,27 +108,29 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
             //-------------------------------------------------------------------
-            /// Constructor. Creates the text using a string retrieved from a
-            /// localised text resource.
+            /// Constructor. Creates the text component using a string retrieved
+            /// from a localised text resource.
             ///
             /// @author Ian Copland
             ///
+            /// @param The component name.
             /// @param The font.
             /// @param The localised text resource.
             /// @param The localised text Id.
             //-------------------------------------------------------------------
-            TextDrawable(const Rendering::FontCSPtr& in_font, const Core::LocalisedTextCSPtr& in_localisedText, const std::string& in_localisedTextId);
+            TextComponent(const std::string& in_componentName, const Rendering::FontCSPtr& in_font, const Core::LocalisedTextCSPtr& in_localisedText, const std::string& in_localisedTextId);
             //-------------------------------------------------------------------
-            /// Constructor. Creates the text using the given string. This is
-            /// not recommended, it is usually better to create text using a
-            /// localised text resource.
+            /// Constructor. Creates the text component using the given string.
+            /// This is not recommended, it is usually better to create text using
+            /// a localised text resource.
             ///
             /// @author Ian Copland
             ///
+            /// @param The component name.
             /// @param The font.
             /// @param The UTF-8 format string.
             //-------------------------------------------------------------------
-            TextDrawable(const Rendering::FontCSPtr& in_font, const std::string& in_string);
+            TextComponent(const std::string& in_componentName, const Rendering::FontCSPtr& in_font, const std::string& in_string);
             //-------------------------------------------------------------------
             /// Constructor that builds the drawable from key-value properties.
             /// The properties used to create the text are described in the
@@ -135,9 +138,23 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
+            /// @param The component name.
             /// @param The property map.
             //-------------------------------------------------------------------
-            TextDrawable(const PropertyMap& in_properties);
+            TextComponent(const std::string& in_componentName, const PropertyMap& in_properties);
+            //-------------------------------------------------------------------
+            /// Allows querying of whether or not the component implements the
+            /// interface associated with the given interface Id. Typically
+            /// this wont be called directly, instead the templated version
+            /// IsA<Interface>() should be used.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The interface Id.
+            ///
+            /// @return Whether the object implements the given interface.
+            //-------------------------------------------------------------------
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -334,6 +351,16 @@ namespace ChilliSource
             /// @param The scale factor.
             //-------------------------------------------------------------------
             void SetTextScale(f32 in_scale);
+            
+        private:
+            //-------------------------------------------------------------------
+            /// This registers all of the properties of a Text component
+            /// such that they can be accessed via the SetProperty() and
+            /// GetProperty() methods.
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------------------
+            void OnRegisterProperties() override;
             //-------------------------------------------------------------------
             /// Render the text using the transform and size of the owning
             /// widget.
@@ -345,9 +372,8 @@ namespace ChilliSource
             /// @param The final screen space size.
             /// @param The final colour.
             //--------------------------------------------------------------------
-            void Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour);
+            void OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) override;
             
-        private:
             Rendering::FontCSPtr m_font;
             std::string m_text;
             Rendering::CanvasRenderer::TextProperties m_textProperties;

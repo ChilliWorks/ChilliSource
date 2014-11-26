@@ -77,7 +77,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Text
         //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(TextDrawable);
+        CS_FORWARDDECLARE_CLASS(TextComponent);
 	}
 }
 

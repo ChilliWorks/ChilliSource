@@ -51,7 +51,7 @@
 		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
 		81890EC41A1CF481005811F1 /* ComponentDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81890EC31A1CF481005811F1 /* ComponentDesc.cpp */; };
 		81890EC71A1D020A005811F1 /* WidgetDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81890EC51A1D020A005811F1 /* WidgetDesc.cpp */; };
-		81970FE71A0A48B500505599 /* TextDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81970FE51A0A48B500505599 /* TextDrawable.cpp */; };
+		81970FE71A0A48B500505599 /* TextComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81970FE51A0A48B500505599 /* TextComponent.cpp */; };
 		819CE3CF1A1F668900A49B5C /* LayoutDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819CE3CD1A1F668900A49B5C /* LayoutDesc.cpp */; };
 		819CE3D21A1F98DC00A49B5C /* DrawableDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819CE3D01A1F98DC00A49B5C /* DrawableDesc.cpp */; };
 		81AAFBBB19C9C18100CD4A14 /* Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB419C9C18100CD4A14 /* Gesture.cpp */; };
@@ -487,8 +487,8 @@
 		81890EC31A1CF481005811F1 /* ComponentDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ComponentDesc.cpp; sourceTree = "<group>"; };
 		81890EC51A1D020A005811F1 /* WidgetDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetDesc.cpp; sourceTree = "<group>"; };
 		81890EC61A1D020A005811F1 /* WidgetDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetDesc.h; sourceTree = "<group>"; };
-		81970FE51A0A48B500505599 /* TextDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextDrawable.cpp; sourceTree = "<group>"; };
-		81970FE61A0A48B500505599 /* TextDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextDrawable.h; sourceTree = "<group>"; };
+		81970FE51A0A48B500505599 /* TextComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextComponent.cpp; sourceTree = "<group>"; };
+		81970FE61A0A48B500505599 /* TextComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextComponent.h; sourceTree = "<group>"; };
 		81970FE91A0A780A00505599 /* Text.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Text.h; sourceTree = "<group>"; };
 		819CE3CD1A1F668900A49B5C /* LayoutDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutDesc.cpp; sourceTree = "<group>"; };
 		819CE3CE1A1F668900A49B5C /* LayoutDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutDesc.h; sourceTree = "<group>"; };
@@ -1255,8 +1255,8 @@
 		81970FE41A0A48B500505599 /* Text */ = {
 			isa = PBXGroup;
 			children = (
-				81970FE51A0A48B500505599 /* TextDrawable.cpp */,
-				81970FE61A0A48B500505599 /* TextDrawable.h */,
+				81970FE51A0A48B500505599 /* TextComponent.cpp */,
+				81970FE61A0A48B500505599 /* TextComponent.h */,
 			);
 			path = Text;
 			sourceTree = "<group>";
@@ -2827,7 +2827,7 @@
 				81D8B4051962E0EC0010DA84 /* Utils.cpp in Sources */,
 				81D8B4711962E0EC0010DA84 /* VertexDeclaration.cpp in Sources */,
 				81D8B6BD1962E0F70010DA84 /* WebView.mm in Sources */,
-				81970FE71A0A48B500505599 /* TextDrawable.cpp in Sources */,
+				81970FE71A0A48B500505599 /* TextComponent.cpp in Sources */,
 				81D8B41A1962E0EC0010DA84 /* ImageFormatConverter.cpp in Sources */,
 				81D8B43D1962E0EC0010DA84 /* XML.cpp in Sources */,
 				81173CDD1A163B2900E169C0 /* Component.cpp in Sources */,

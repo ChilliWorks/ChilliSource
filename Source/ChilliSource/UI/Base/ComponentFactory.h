@@ -50,7 +50,7 @@ namespace ChilliSource
         /// constructor and a static method with the following signatures:
         ///
         /// TComponent(const std::string& in_name, const PropertyMap& in_propMap);
-        /// static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
+        /// static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
         ///
         /// @author Ian Copland
         //--------------------------------------------------------------------------

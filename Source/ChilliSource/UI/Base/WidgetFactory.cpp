@@ -119,6 +119,9 @@ namespace ChilliSource
             WidgetDefCSPtr verticalProgressDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/VerticalProgressBar.csuidef");
             RegisterDefinition(verticalProgressDef);
             
+            WidgetDefCSPtr labelDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Label.csuidef");
+            RegisterDefinition(labelDef);
+            
             auto luaSystem = Core::Application::Get()->GetSystem<Scripting::LuaSystem>();
             luaSystem->RegisterEnum("SizePolicy",
                                     "none", SizePolicy::k_none,

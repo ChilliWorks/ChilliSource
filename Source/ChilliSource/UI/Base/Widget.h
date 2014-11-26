@@ -39,6 +39,7 @@
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Input/Base/Filter.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
+#include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/UI/Base/Component.h>
 #include <ChilliSource/UI/Base/PropertyAccessor.h>
 #include <ChilliSource/UI/Base/PropertyLink.h>
@@ -47,7 +48,6 @@
 #include <ChilliSource/UI/Base/SizePolicy.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
-#include <ChilliSource/UI/Text/TextDrawable.h>
 
 #include <cassert>
 #include <functional>
@@ -197,30 +197,6 @@ namespace ChilliSource
             /// @return A const pointer to the drawable. This will return null if there is no drawable.
             //----------------------------------------------------------------------------------------
             IDrawableCSPtr GetDrawable() const;
-            //----------------------------------------------------------------------------------------
-            /// Sets the text drawable that describes how any text used by the widget should be
-            /// rendered. If this is null, no text will be displayed. Text will always display over
-            /// the drawable.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The text that should be added to this widget.
-            //----------------------------------------------------------------------------------------
-            void SetTextDrawable(TextDrawableUPtr in_textDrawable);
-            //----------------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return A pointer to the text drawable that will be rendered in this widget. This will
-            /// return null if there is no text drawable.
-            //----------------------------------------------------------------------------------------
-            TextDrawable* GetTextDrawable();
-            //----------------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return A const pointer to the text drawable that will be rendered in this widget. This
-            /// will return null if there is no text drawable.
-            //----------------------------------------------------------------------------------------
-            const TextDrawable* GetTextDrawable() const;
             //----------------------------------------------------------------------------------------
             /// Set the layout that handles how to layout the widget's subviews. If this is null then the
             /// subviews will retain their current size and position. Otherwise the size and position may
@@ -1197,7 +1173,6 @@ namespace ChilliSource
             std::vector<ComponentUPtr> m_components;
             
             IDrawableSPtr m_drawable;
-            TextDrawableUPtr m_textDrawable;
             ILayoutSPtr m_layout;
             ILayoutUPtr m_internalLayout;
             

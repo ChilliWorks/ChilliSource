@@ -31,6 +31,6 @@
 #define _CHILLISOURCE_UI_TEXT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Text/TextDrawable.h>
+#include <ChilliSource/UI/Text/TextComponent.h>
 
 #endif

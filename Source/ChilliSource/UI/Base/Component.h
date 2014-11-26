@@ -155,14 +155,14 @@ namespace ChilliSource
             /// @param The getter delegate for the property.
             /// @param The setter delegate for the property.
             //----------------------------------------------------------------
-            template <typename TPropertyType> void RegisterProperty(const std::string& in_name, const std::function<TPropertyType()>& in_getter, const std::function<void(TPropertyType&&)> in_setter);
+            template <typename TPropertyType> void RegisterProperty(const std::string& in_name, const std::function<TPropertyType()>& in_getter, const std::function<void(TPropertyType)> in_setter);
             //----------------------------------------------------------------
             /// This is called prior to the On Init lifecycle event. This
             /// should be used to register all component properties.
             ///
             /// @author Ian Copland
             //----------------------------------------------------------------
-            virtual void OnRegisterProperties() {}
+            virtual void OnRegisterProperties() = 0;
             //----------------------------------------------------------------
             /// A method which is called when all components owned by the parent
             /// widget have been created and added. Inheriting classes should use
@@ -214,8 +214,11 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @param The canvas renderer.
+            /// @param The final screen space transform.
+            /// @param The final screen space size.
+            /// @param The final colour.
             //----------------------------------------------------------------
-            virtual void Draw(Rendering::CanvasRenderer* in_renderer) {}
+            virtual void OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) {}
             //----------------------------------------------------------------
             /// This is called when the application is backgrounded while the
             /// owning widget is on the canvas. This will also be called when
@@ -311,7 +314,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
-        template <typename TPropertyType> void Component::RegisterProperty(const std::string& in_name, const std::function<TPropertyType()>& in_getter, const std::function<void(TPropertyType&&)> in_setter)
+        template <typename TPropertyType> void Component::RegisterProperty(const std::string& in_name, const std::function<TPropertyType()>& in_getter, const std::function<void(TPropertyType)> in_setter)
         {
             CS_ASSERT(m_propertyRegistrationEnabled == false, "UI::Component properties can only be registered during the OnRegisterProperties lifecycle event.");
             
