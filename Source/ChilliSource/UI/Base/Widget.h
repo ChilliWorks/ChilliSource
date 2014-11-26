@@ -1189,7 +1189,7 @@ namespace ChilliSource
             SizePolicy m_sizePolicy = SizePolicy::k_none;
             SizePolicyDelegate m_sizePolicyDelegate;
             
-            Core::concurrent_vector<WidgetSPtr> m_internalChildren;
+            Core::concurrent_vector<WidgetUPtr> m_internalChildren;
             Core::concurrent_vector<WidgetSPtr> m_children;
             
             std::string m_name;

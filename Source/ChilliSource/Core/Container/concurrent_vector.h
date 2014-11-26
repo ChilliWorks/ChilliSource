@@ -393,7 +393,7 @@ namespace ChilliSource
         template <typename TType> void concurrent_vector<TType>::push_back(TType&& in_object)
         {
             std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
-            m_container.push_back(std::make_pair(in_object, false));
+            m_container.push_back(std::make_pair(std::move(in_object), false));
             m_size++;
         }
         //--------------------------------------------------------------------

@@ -272,10 +272,10 @@ namespace ChilliSource
             {
                 CS_ASSERT(widget->GetParent() == nullptr, "Cannot add a widget as a child of more than 1 parent");
                 
-                WidgetSPtr sharedWidget = std::move(widget);
-                m_internalChildren.push_back(sharedWidget);
-                sharedWidget->m_parent = this;
-                sharedWidget->SetCanvas(m_canvas);
+                Widget* widgetRaw = widget.get();
+                m_internalChildren.push_back(std::move(widget));
+                widgetRaw->m_parent = this;
+                widgetRaw->SetCanvas(m_canvas);
             }
         }
         //----------------------------------------------------------------------------------------
