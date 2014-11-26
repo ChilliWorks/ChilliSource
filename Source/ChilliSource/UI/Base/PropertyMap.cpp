@@ -53,8 +53,9 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         PropertyMap::PropertyMap(PropertyMap&& in_move)
-        : m_properties(std::move(in_move.m_properties))
+        : m_properties(std::move(in_move.m_properties)), m_propertyKeys(std::move(in_move.m_propertyKeys))
         {
+            in_move.m_propertyKeys.clear();
             in_move.m_properties.clear();
         }
         //----------------------------------------------------------------------------------------
@@ -69,13 +70,18 @@ namespace ChilliSource
                 lookup.m_property->CopyFrom(pair.second.m_property.get());
                 m_properties.insert(std::make_pair(pair.first, std::move(lookup)));
             }
+            
+            m_propertyKeys = in_copy.m_propertyKeys;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         PropertyMap& PropertyMap::operator=(PropertyMap&& in_move)
         {
             m_properties = std::move(in_move.m_properties);
+            m_propertyKeys = std::move(in_move.m_propertyKeys);
+            
             in_move.m_properties.clear();
+            in_move.m_propertyKeys.clear();
             
             return *this;
         }
@@ -91,6 +97,8 @@ namespace ChilliSource
                 lookup.m_property->CopyFrom(pair.second.m_property.get());
                 m_properties.insert(std::make_pair(pair.first, std::move(lookup)));
             }
+            
+            m_propertyKeys = in_copy.m_propertyKeys;
             
             return *this;
         }

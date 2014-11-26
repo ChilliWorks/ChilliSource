@@ -1,13 +1,11 @@
 {
   "Type": "HorizontalSlider",
-  "Properties": {
-    "SliderFraction": "Float"
-  },
+
   "Defaults": {
     "Name": "HorizontalSlider",
-    "InputEnabled": "true",
-    "SliderFraction": "0"
+    "InputEnabled": "true"
   },
+
   "ChildProperties": {
     "Slider":
     {
@@ -15,9 +13,7 @@
       "SliderDrawable": "Drawable"
     }
   },
-  "Behaviour": {
-    "FilePath": "HorizontalSlider.lua"
-  },
+
   "Children": {
     "Slider": {
       "Type": "Widget",
@@ -27,6 +23,7 @@
       "OriginAnchor": "MiddleLeft"
     }
   },
+
   "Hierarchy": [
     {
       "Name": "Slider"

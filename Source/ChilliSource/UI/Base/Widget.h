@@ -39,7 +39,6 @@
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Input/Base/Filter.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
-#include <ChilliSource/Scripting/Lua/LuaScript.h>
 #include <ChilliSource/UI/Base/Component.h>
 #include <ChilliSource/UI/Base/PropertyAccessor.h>
 #include <ChilliSource/UI/Base/PropertyLink.h>
@@ -185,19 +184,19 @@ namespace ChilliSource
             ///
             /// @param Drawable
             //----------------------------------------------------------------------------------------
-            void SetDrawable(IDrawableUPtr in_drawable);
+            void SetDrawable(const IDrawableSPtr& in_drawable);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @return A pointer to the drawable. This will return null if there is no drawable.
             //----------------------------------------------------------------------------------------
-            IDrawable* GetDrawable();
+            const IDrawableSPtr& GetDrawable();
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @return A const pointer to the drawable. This will return null if there is no drawable.
             //----------------------------------------------------------------------------------------
-            const IDrawable* GetDrawable() const;
+            IDrawableCSPtr GetDrawable() const;
             //----------------------------------------------------------------------------------------
             /// Sets the text drawable that describes how any text used by the widget should be
             /// rendered. If this is null, no text will be displayed. Text will always display over
@@ -231,13 +230,19 @@ namespace ChilliSource
             ///
             /// @param Layout
             //----------------------------------------------------------------------------------------
-            void SetLayout(ILayoutUPtr in_layout);
+            void SetLayout(const ILayoutSPtr& in_layout);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @return Layout or null
             //----------------------------------------------------------------------------------------
-            ILayout* GetLayout() const;
+            const ILayoutSPtr& GetLayout();
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the layout, or null if there isn't one.
+            //----------------------------------------------------------------------------------------
+            ILayoutCSPtr GetLayout() const;
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -927,11 +932,9 @@ namespace ChilliSource
             /// @param The list of component property links.
             /// @param The list of internal children.
             /// @param The list of internal children property links.
-            /// @param The behaviour script. This should be removed once Lua functionality is exposed
-            /// via a component.
             //----------------------------------------------------------------------------------------
             Widget(const PropertyMap& in_properties, std::vector<ComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
-                   const std::vector<PropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource);
+                   const std::vector<PropertyLink>& in_childPropertyLinks);
             //----------------------------------------------------------------------------------------
             /// Initialises the internal mapping to base properties. This allows base properties,
             /// such as Relative Position or Size Policy to be set via the SetProperty method.
@@ -995,14 +998,6 @@ namespace ChilliSource
             /// is no component could be found.
             //----------------------------------------------------------------------------------------
             const Component* GetComponentWithName(const std::string& m_name) const;
-            //----------------------------------------------------------------------------------------
-            /// Sets the Lua script that controls the behaviour of this widget
-            ///
-            /// @author S Downie
-            ///
-            /// @param Lua script source
-            //----------------------------------------------------------------------------------------
-            void SetBehaviourScript(const Scripting::LuaSourceCSPtr& in_behaviourSource);
             //----------------------------------------------------------------------------------------
             /// Set the layout that handles how to layout the widget's internal subviews. If this is null then the
             /// subviews will retain their current size and position. Otherwise the size and position may
@@ -1180,18 +1175,18 @@ namespace ChilliSource
             Core::Event<InputMovedDelegate> m_draggedOutsideEvent;
             
             Core::UnifiedVector2 m_localPosition;
-            Core::UnifiedVector2 m_localSize;
-            Core::Vector2 m_preferredSize;
-            Core::Vector2 m_localScale;
+            Core::UnifiedVector2 m_localSize = Core::UnifiedVector2(1.0f, 1.0f, 0.0f, 0.0f);
+            Core::Vector2 m_preferredSize = Core::Vector2::k_one;
+            Core::Vector2 m_localScale = Core::Vector2::k_one;
             Core::Colour m_localColour;
-            f32 m_localRotation;
+            f32 m_localRotation = 0.0f;
             
             mutable Core::Matrix3 m_cachedLocalTransform;
             mutable Core::Matrix3 m_cachedFinalTransform;
             mutable Core::Vector2 m_cachedFinalPosition;
             mutable Core::Vector2 m_cachedFinalSize;
             
-            SizePolicy m_sizePolicy;
+            SizePolicy m_sizePolicy = SizePolicy::k_none;
             SizePolicyDelegate m_sizePolicyDelegate;
             
             Core::concurrent_vector<WidgetSPtr> m_internalChildren;
@@ -1201,24 +1196,22 @@ namespace ChilliSource
             
             std::vector<ComponentUPtr> m_components;
             
-            IDrawableUPtr m_drawable;
+            IDrawableSPtr m_drawable;
             TextDrawableUPtr m_textDrawable;
-            ILayoutUPtr m_layout;
+            ILayoutSPtr m_layout;
             ILayoutUPtr m_internalLayout;
-            
-            Scripting::LuaScriptUPtr m_behaviourScript;
             
             Widget* m_parent = nullptr;
             const Widget* m_canvas = nullptr;
             
-            Rendering::AlignmentAnchor m_parentalAnchor;
-            Rendering::AlignmentAnchor m_originAnchor;
+            Rendering::AlignmentAnchor m_parentalAnchor = Rendering::AlignmentAnchor::k_middleCentre;
+            Rendering::AlignmentAnchor m_originAnchor = Rendering::AlignmentAnchor::k_middleCentre;
             Core::UnifiedVector2 m_originPosition;
             
-            bool m_isVisible;
-            bool m_isSubviewClippingEnabled;
-            bool m_isInputEnabled;
-            bool m_isInputConsumeEnabled;
+            bool m_isVisible = true;
+            bool m_isSubviewClippingEnabled = false;
+            bool m_isInputEnabled = false;
+            bool m_isInputConsumeEnabled = true;
             
             mutable bool m_isParentTransformCacheValid = false;
             mutable bool m_isLocalTransformCacheValid = false;
@@ -1227,7 +1220,7 @@ namespace ChilliSource
             
             mutable std::mutex m_sizeMutex;
     
-            Core::Screen* m_screen;
+            Core::Screen* m_screen = nullptr;
         };
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

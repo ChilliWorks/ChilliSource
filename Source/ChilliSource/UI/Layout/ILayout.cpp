@@ -39,16 +39,16 @@ namespace ChilliSource
     {
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        ILayoutUPtr ILayout::Create(const LayoutDesc& in_desc)
+        ILayoutSPtr ILayout::Create(const LayoutDesc& in_desc)
         {
             switch(in_desc.GetType())
             {
                 case LayoutType::k_grid:
-                    return ILayoutUPtr(new GridLayout(in_desc));
+                    return std::make_shared<GridLayout>(in_desc);
                 case LayoutType::k_hList:
-                    return ILayoutUPtr(new HListLayout(in_desc));
+                    return std::make_shared<HListLayout>(in_desc);
                 case LayoutType::k_vList:
-                    return ILayoutUPtr(new VListLayout(in_desc));
+                    return std::make_shared<VListLayout>(in_desc);
                 default:
                     CS_LOG_FATAL("Cannot create a widget layout instance: invalid type.");
                     return nullptr;

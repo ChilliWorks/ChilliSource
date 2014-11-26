@@ -48,7 +48,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         //-------------------------------------------------------
         void WidgetDef::Build(const std::string& in_typeName, const PropertyMap& in_defaultProperties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
-                              const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource)
+                              const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks)
         {
             CS_ASSERT(GetLoadState() == LoadState::k_loading, "A WidgetDef can only be built while in the loading state.");
             
@@ -58,7 +58,6 @@ namespace ChilliSource
             m_childPropertyLinks = in_childPropertyLinks;
             m_componentDescs = in_componentDescs;
             m_componentPropertyLinks = in_componentPropertyLinks;
-            m_behaviourSource = in_behaviourSource;
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
@@ -95,12 +94,6 @@ namespace ChilliSource
         const std::vector<PropertyLink>& WidgetDef::GetChildPropertyLinks() const
         {
             return m_childPropertyLinks;
-        }
-        //-------------------------------------------------------t
-        //-------------------------------------------------------
-        const Scripting::LuaSourceCSPtr& WidgetDef::GetBehaviourSource() const
-        {
-            return m_behaviourSource;
         }
     }
 }

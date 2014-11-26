@@ -39,16 +39,16 @@ namespace ChilliSource
     {
         //---------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        IDrawableUPtr IDrawable::Create(const DrawableDesc& in_desc)
+        IDrawableSPtr IDrawable::Create(const DrawableDesc& in_desc)
         {
             switch(in_desc.GetType())
             {
                 case DrawableType::k_standard:
-                    return IDrawableUPtr(new StandardDrawable(in_desc));
+                    return std::make_shared<StandardDrawable>(in_desc);
                 case DrawableType::k_ninePatch:
-                    return IDrawableUPtr(new NinePatchDrawable(in_desc));
+                    return std::make_shared<NinePatchDrawable>(in_desc);
                 case DrawableType::k_threePatch:
-                    return IDrawableUPtr(new ThreePatchDrawable(in_desc));
+                    return std::make_shared<ThreePatchDrawable>(in_desc);
                 default:
                     CS_LOG_FATAL("Cannot create a widget drawable instance: invalid type.");
                     return nullptr;

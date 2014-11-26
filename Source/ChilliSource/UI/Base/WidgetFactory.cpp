@@ -262,8 +262,7 @@ namespace ChilliSource
             }
             
             //create the widget.
-            WidgetUPtr widget(new Widget(in_widgetDesc.GetProperties(), std::move(components), in_widgetDef->GetComponentPropertyLinks(), std::move(internalChildren), in_widgetDef->GetChildPropertyLinks(),
-                                         in_widgetDef->GetBehaviourSource()));
+            WidgetUPtr widget(new Widget(in_widgetDesc.GetProperties(), std::move(components), in_widgetDef->GetComponentPropertyLinks(), std::move(internalChildren), in_widgetDef->GetChildPropertyLinks()));
             
             //create and add the external children.
             for(const auto& childDesc : in_widgetDesc.GetChildDescs())

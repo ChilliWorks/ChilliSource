@@ -129,7 +129,7 @@ namespace ChilliSource
                     std::string propertyName = it.memberName();
                     
                     //TODO: Remove TextDrawable from the ignore list!
-                    if (propertyName == "TemplateLocation" || propertyName == "TemplatePath" || propertyName == "Children" || propertyName == "Hierarchy" || propertyName == "TextDrawable")
+                    if (propertyName == "TemplateLocation" || propertyName == "TemplatePath" || propertyName == "Children" || propertyName == "Hierarchy" || propertyName == "Type" || propertyName == "TextDrawable")
                     {
                         //Ignore these as they are handled elsewhere but we do not want them to be included
                         //in the properties list

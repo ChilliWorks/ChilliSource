@@ -207,17 +207,6 @@ namespace ChilliSource
             //----------------------------------------------------------------
             virtual void OnUpdate(f32 in_deltaTime) {}
             //----------------------------------------------------------------
-            /// This is called at a fixed time interval while the application
-            /// is active and the owning widget is on the canvas. This should
-            /// be used for any update logic that requires a fixed time
-            /// between updates in the component.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The delta time between fixed updates.
-            //----------------------------------------------------------------
-            virtual void OnFixedUpdate(f32 in_fixedUpdateDeltaTime) {}
-            //----------------------------------------------------------------
             /// This is called during the draw event whenever the application
             /// is active and the owning widget in on the canvas. This should
             /// be used for any rendering.

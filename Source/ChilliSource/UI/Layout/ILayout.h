@@ -56,7 +56,7 @@ namespace ChilliSource
             ///
             /// @return The new layout instance.
             //----------------------------------------------------------------------------------------
-            static ILayoutUPtr Create(const LayoutDesc& in_desc);
+            static ILayoutSPtr Create(const LayoutDesc& in_desc);
             //----------------------------------------------------------------------------------------
             /// Constructor
             ///

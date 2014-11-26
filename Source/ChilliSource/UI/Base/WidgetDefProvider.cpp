@@ -462,50 +462,13 @@ namespace ChilliSource
                 {
                     ParseDefaultValues(defaults, in_storageLocation, pathToDefinition, defaultProperties);
                 }
+
+                widgetDef->Build(typeName, defaultProperties, componentDescs, componentPropertyLinks, childDescs, childPropertyLinks);
+                out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
                 
-                const Json::Value& behaviour = root["Behaviour"];
-                
-                if(behaviour.isNull() == false)
+                if(in_delegate != nullptr)
                 {
-                    bool relativePath = behaviour.isMember("Location") == false;
-                    Core::StorageLocation behaviourLocation = in_storageLocation;
-                    std::string behaviourPath = behaviour["FilePath"].asString();
-                    
-                    if(relativePath == false)
-                    {
-                        behaviourLocation = Core::ParseStorageLocation(behaviour["Location"].asString());
-                    }
-                    else
-                    {
-                        behaviourPath = Core::StringUtils::ResolveParentedDirectories(pathToDefinition + behaviourPath);
-                    }
-                    
-                    if(in_delegate == nullptr)
-                    {
-                        auto luaSource = Core::Application::Get()->GetResourcePool()->LoadResource<Scripting::LuaSource>(behaviourLocation, behaviourPath);
-                        widgetDef->Build(typeName, defaultProperties, componentDescs, componentPropertyLinks, childDescs, childPropertyLinks, luaSource);
-                        out_resource->SetLoadState(luaSource->GetLoadState());
-                    }
-                    else
-                    {
-                        Core::Application::Get()->GetResourcePool()->LoadResourceAsync<Scripting::LuaSource>(behaviourLocation, behaviourPath, [=](const Core::ResourceCSPtr& in_resource)
-                        {
-                            auto luaSource = std::static_pointer_cast<const Scripting::LuaSource>(in_resource);
-                            widgetDef->Build(typeName, defaultProperties, componentDescs, componentPropertyLinks, childDescs, childPropertyLinks, luaSource);
-                            out_resource->SetLoadState(luaSource->GetLoadState());
-                            CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
-                        });
-                    }
-                }
-                else
-                {
-                    widgetDef->Build(typeName, defaultProperties, componentDescs, componentPropertyLinks, childDescs, childPropertyLinks, nullptr);
-                    
-                    out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
-                    if(in_delegate != nullptr)
-                    {
-                        CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
-                    }
+                    CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
                 }
             }
         }

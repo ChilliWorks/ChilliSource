@@ -54,7 +54,7 @@ namespace ChilliSource
             ///
             /// @return The new drawable instance.
             //----------------------------------------------------------------------------------------
-            static IDrawableUPtr Create(const DrawableDesc& in_desc);
+            static IDrawableSPtr Create(const DrawableDesc& in_desc);
             //----------------------------------------------------------------------------------------
             /// Constructor
             ///

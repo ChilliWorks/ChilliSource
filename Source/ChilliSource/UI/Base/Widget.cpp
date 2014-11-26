@@ -49,7 +49,6 @@ namespace ChilliSource
         {
             const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyType::k_string, "Type"},
                 {PropertyType::k_string, "Name"},
                 {PropertyType::k_vec2, "RelPosition"},
                 {PropertyType::k_vec2, "AbsPosition"},
@@ -212,17 +211,18 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         Widget::Widget(const PropertyMap& in_properties, std::vector<ComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
-                       const std::vector<PropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource)
+                       const std::vector<PropertyLink>& in_childPropertyLinks)
         {
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            
+            //ensure the size policy delegate is correct.
+            SetSizePolicy(m_sizePolicy);
             
             InitBaseProperties();
             InitComponents(std::move(in_components));
             InitInternalWidgets(std::move(in_internalChildren));
             InitPropertyLinks(in_componentPropertyLinks, in_childPropertyLinks);
             InitPropertyValues(in_properties);
-            
-            SetBehaviourScript(in_behaviourSource);
             
             for (const auto& component : m_components)
             {
@@ -246,7 +246,11 @@ namespace ChilliSource
             m_basePropertyAccessors.emplace("parentalanchor", IPropertyAccessorUPtr(new PropertyAccessor<Rendering::AlignmentAnchor>(Core::MakeDelegate(this, &Widget::SetParentalAnchor), Core::MakeDelegate(this, &Widget::GetParentalAnchor))));
             m_basePropertyAccessors.emplace("visible", IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(this, &Widget::SetVisible), Core::MakeDelegate(this, &Widget::IsVisible))));
             m_basePropertyAccessors.emplace("clipchildren", IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(this, &Widget::SetClippingEnabled), Core::MakeDelegate(this, &Widget::IsClippingEnabled))));
+            m_basePropertyAccessors.emplace("inputenabled", IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(this, &Widget::SetInputEnabled), Core::MakeDelegate(this, &Widget::IsInputEnabled))));
+            m_basePropertyAccessors.emplace("inputconsumeenabled", IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(this, &Widget::SetInputConsumeEnabled), Core::MakeDelegate(this, &Widget::IsInputConsumeEnabled))));
             m_basePropertyAccessors.emplace("sizepolicy", IPropertyAccessorUPtr(new PropertyAccessor<SizePolicy>(Core::MakeDelegate(this, &Widget::SetSizePolicy), Core::MakeDelegate(this, &Widget::GetSizePolicy))));
+            m_basePropertyAccessors.emplace("drawable", IPropertyAccessorUPtr(new PropertyAccessor<IDrawableSPtr>(Core::MakeDelegate(this, &Widget::SetDrawable), Core::MakeDelegate(this, &Widget::GetDrawable))));
+            m_basePropertyAccessors.emplace("layout", IPropertyAccessorUPtr(new PropertyAccessor<ILayoutSPtr>(Core::MakeDelegate(this, &Widget::SetLayout), Core::MakeDelegate(this, &Widget::GetLayout))));
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -308,34 +312,57 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::InitPropertyValues(const PropertyMap& in_propertyMap)
         {
-            SetName(in_propertyMap.GetPropertyOrDefault<std::string>("Name", ""));
-            SetRelativePosition(in_propertyMap.GetPropertyOrDefault<Core::Vector2>("RelPosition", Core::Vector2()));
-            SetAbsolutePosition(in_propertyMap.GetPropertyOrDefault<Core::Vector2>("AbsPosition", Core::Vector2()));
-            SetRelativeSize(in_propertyMap.GetPropertyOrDefault<Core::Vector2>("RelSize", Core::Vector2(1.0f, 1.0f)));
-            SetAbsoluteSize(in_propertyMap.GetPropertyOrDefault<Core::Vector2>("AbsSize", Core::Vector2()));
-            SetDefaultPreferredSize(in_propertyMap.GetPropertyOrDefault<Core::Vector2>("PreferredSize", Core::Vector2(1.0f, 1.0f)));
-            ScaleTo(in_propertyMap.GetPropertyOrDefault<Core::Vector2>("Scale", Core::Vector2(1.0f, 1.0f)));
-            SetColour(in_propertyMap.GetPropertyOrDefault<Core::Colour>("Colour", Core::Colour(1.0f, 1.0f, 1.0f, 1.0f)));
-            RotateTo(in_propertyMap.GetPropertyOrDefault<f32>("Rotation", 0.0f));
-            SetParentalAnchor(in_propertyMap.GetPropertyOrDefault<Rendering::AlignmentAnchor>("ParentalAnchor", Rendering::AlignmentAnchor::k_middleCentre));
-            SetOriginAnchor(in_propertyMap.GetPropertyOrDefault<Rendering::AlignmentAnchor>("OriginAnchor", Rendering::AlignmentAnchor::k_middleCentre));
-            SetVisible(in_propertyMap.GetPropertyOrDefault<bool>("Visible", true));
-            SetClippingEnabled(in_propertyMap.GetPropertyOrDefault<bool>("ClipChildren", false));
-            SetInputEnabled(in_propertyMap.GetPropertyOrDefault<bool>("InputEnabled", false));
-            SetInputConsumeEnabled(in_propertyMap.GetPropertyOrDefault<bool>("InputConsumeEnabled", true));
-            SetSizePolicy(in_propertyMap.GetPropertyOrDefault<SizePolicy>("SizePolicy", SizePolicy::k_none));
-            
-            if(in_propertyMap.HasValue("Layout") == true)
+            for (const auto& key : in_propertyMap.GetKeys())
             {
-                SetLayout(ILayout::Create(in_propertyMap.GetProperty<LayoutDesc>("Layout")));
+                if (in_propertyMap.HasValue(key) == true)
+                {
+                    switch(in_propertyMap.GetType(key))
+                    {
+                        case PropertyType::k_bool:
+                            SetProperty(key, in_propertyMap.GetProperty<bool>(key));
+                            break;
+                        case PropertyType::k_int:
+                            SetProperty(key, in_propertyMap.GetProperty<s32>(key));
+                            break;
+                        case PropertyType::k_float:
+                            SetProperty(key, in_propertyMap.GetProperty<f32>(key));
+                            break;
+                        case PropertyType::k_string:
+                            SetProperty(key, in_propertyMap.GetProperty<const std::string&>(key));
+                            break;
+                        case PropertyType::k_vec2:
+                            SetProperty(key, in_propertyMap.GetProperty<Core::Vector2>(key));
+                            break;
+                        case PropertyType::k_vec3:
+                            SetProperty(key, in_propertyMap.GetProperty<Core::Vector3>(key));
+                            break;
+                        case PropertyType::k_vec4:
+                            SetProperty(key, in_propertyMap.GetProperty<Core::Vector4>(key));
+                            break;
+                        case PropertyType::k_colour:
+                            SetProperty(key, in_propertyMap.GetProperty<Core::Colour>(key));
+                            break;
+                        case PropertyType::k_alignmentAnchor:
+                            SetProperty(key, in_propertyMap.GetProperty<Rendering::AlignmentAnchor>(key));
+                            break;
+                        case PropertyType::k_sizePolicy:
+                            SetProperty(key, in_propertyMap.GetProperty<SizePolicy>(key));
+                            break;
+                        case PropertyType::k_storageLocation:
+                            SetProperty(key, in_propertyMap.GetProperty<Core::StorageLocation>(key));
+                            break;
+                        case PropertyType::k_drawableDesc:
+                            SetProperty(key, IDrawable::Create(in_propertyMap.GetProperty<DrawableDesc>(key)));
+                            break;
+                        case PropertyType::k_layoutDesc:
+                            SetProperty(key, ILayout::Create(in_propertyMap.GetProperty<LayoutDesc>(key)));
+                            break;
+                        case PropertyType::k_unknown:
+                            CS_LOG_FATAL("Cannot set an 'unknown' property.");
+                            break;
+                    }
+                }
             }
-            
-            if(in_propertyMap.HasValue("Drawable") == true)
-            {
-                SetDrawable(IDrawable::Create(in_propertyMap.GetProperty<DrawableDesc>("Drawable")));
-            }
-            
-            //TODO: apply linked property defaults.
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -356,18 +383,6 @@ namespace ChilliSource
             }
             
             return nullptr;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::SetBehaviourScript(const Scripting::LuaSourceCSPtr& in_behaviourSource)
-        {
-            if(in_behaviourSource != nullptr)
-            {
-                auto luaSystem = Core::Application::Get()->GetSystem<Scripting::LuaSystem>();
-                m_behaviourScript = luaSystem->CreateScript(in_behaviourSource);
-                m_behaviourScript->RegisterVariable("this", this);
-                m_behaviourScript->Run();
-            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -413,23 +428,23 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetDrawable(IDrawableUPtr in_drawable)
+        void Widget::SetDrawable(const IDrawableSPtr& in_drawable)
         {
-            m_drawable = std::move(in_drawable);
+            m_drawable = in_drawable;
             
             InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        IDrawable* Widget::GetDrawable()
+        const IDrawableSPtr& Widget::GetDrawable()
         {
-            return m_drawable.get();
+            return m_drawable;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        const IDrawable* Widget::GetDrawable() const
+        IDrawableCSPtr Widget::GetDrawable() const
         {
-            return m_drawable.get();
+            return m_drawable;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -453,9 +468,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetLayout(ILayoutUPtr in_layout)
+        void Widget::SetLayout(const ILayoutSPtr& in_layout)
         {
-            m_layout = std::move(in_layout);
+            m_layout = in_layout;
             
             if(m_layout != nullptr)
             {
@@ -466,9 +481,15 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        ILayout* Widget::GetLayout() const
+        const ILayoutSPtr& Widget::GetLayout()
         {
-            return m_layout.get();
+            return m_layout;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        ILayoutCSPtr Widget::GetLayout() const
+        {
+            return m_layout;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1019,7 +1040,6 @@ namespace ChilliSource
         {
             m_canvas = in_canvas;
             
-            
             for(auto& child : m_internalChildren)
             {
                 child->SetCanvas(m_canvas);
@@ -1032,15 +1052,18 @@ namespace ChilliSource
             
             InvalidateTransformCache();
             
-            if(m_behaviourScript != nullptr)
+            if(m_canvas != nullptr)
             {
-                if(m_canvas != nullptr)
+                for (const auto& component : m_components)
                 {
-                    m_behaviourScript->CallFunction("onAddedToCanvas", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                    component->OnAddedToCanvas();
                 }
-                else
+            }
+            else
+            {
+                for (const auto& component : m_components)
                 {
-                    m_behaviourScript->CallFunction("onRemovedFromCanvas", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                    component->OnRemovedFromCanvas();
                 }
             }
         }
@@ -1375,9 +1398,9 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::Update(f32 in_timeSinceLastUpdate)
         {
-            if(m_behaviourScript != nullptr)
+            for (const auto& component : m_components)
             {
-                m_behaviourScript->CallFunction("onUpdate", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, in_timeSinceLastUpdate);
+                component->OnUpdate(in_timeSinceLastUpdate);
             }
             
             m_internalChildren.lock();
@@ -1516,10 +1539,10 @@ namespace ChilliSource
 					m_pressedInput.emplace(in_pointer.GetId(), inputTypeSet);
 				}
                 
-                if(m_behaviourScript != nullptr)
-                {
-                    m_behaviourScript->CallFunction("onPressedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
-                }
+//                if(m_behaviourScript != nullptr)
+//                {
+//                    m_behaviourScript->CallFunction("onPressedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
+//                }
                 
                 m_pressedInsideEvent.NotifyConnections(this, in_pointer, in_inputType);
                 
@@ -1557,19 +1580,19 @@ namespace ChilliSource
             
             if(containsPrevious == false && containsCurrent == true)
             {
-                if(m_behaviourScript != nullptr)
-                {
-                    m_behaviourScript->CallFunction("onMoveEntered", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
-                }
+//                if(m_behaviourScript != nullptr)
+//                {
+//                    m_behaviourScript->CallFunction("onMoveEntered", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
+//                }
                 
                 m_moveEnteredEvent.NotifyConnections(this, in_pointer);
             }
             else if(containsPrevious == true && containsCurrent == false)
             {
-                if(m_behaviourScript != nullptr)
-                {
-                    m_behaviourScript->CallFunction("onMoveExited", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
-                }
+//                if(m_behaviourScript != nullptr)
+//                {
+//                    m_behaviourScript->CallFunction("onMoveExited", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
+//                }
                 
                 m_moveExitedEvent.NotifyConnections(this, in_pointer);
             }
@@ -1578,10 +1601,10 @@ namespace ChilliSource
                 auto itPressedInput = m_pressedInput.find(in_pointer.GetId());
 				if (itPressedInput != m_pressedInput.end())
                 {
-                    if(m_behaviourScript != nullptr)
-                    {
-                        m_behaviourScript->CallFunction("onDraggedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
-                    }
+//                    if(m_behaviourScript != nullptr)
+//                    {
+//                        m_behaviourScript->CallFunction("onDraggedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
+//                    }
                     
                     m_draggedOutsideEvent.NotifyConnections(this, in_pointer);
                 }
@@ -1591,10 +1614,10 @@ namespace ChilliSource
 				auto itPressedInput = m_pressedInput.find(in_pointer.GetId());
 				if (itPressedInput != m_pressedInput.end())
                 {
-                    if(m_behaviourScript != nullptr)
-                    {
-                        m_behaviourScript->CallFunction("onDraggedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
-                    }
+//                    if(m_behaviourScript != nullptr)
+//                    {
+//                        m_behaviourScript->CallFunction("onDraggedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
+//                    }
                     
                     m_draggedInsideEvent.NotifyConnections(this, in_pointer);
                 }
@@ -1637,19 +1660,19 @@ namespace ChilliSource
 
 					if(Contains(in_pointer.GetPosition()) == true)
 					{
-						if(m_behaviourScript != nullptr)
-						{
-							m_behaviourScript->CallFunction("onReleasedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
-						}
+//						if(m_behaviourScript != nullptr)
+//						{
+//							m_behaviourScript->CallFunction("onReleasedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
+//						}
                     
 						m_releasedInsideEvent.NotifyConnections(this, in_pointer, in_inputType);
 					}
 					else
 					{
-						if(m_behaviourScript != nullptr)
-						{
-							m_behaviourScript->CallFunction("onReleasedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
-						}
+//						if(m_behaviourScript != nullptr)
+//						{
+//							m_behaviourScript->CallFunction("onReleasedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
+//						}
                     
 						m_releasedOutsideEvent.NotifyConnections(this, in_pointer, in_inputType);
 					}

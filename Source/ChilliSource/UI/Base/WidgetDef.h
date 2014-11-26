@@ -86,12 +86,9 @@ namespace ChilliSource
             /// can be empty if no internal children are required.
             /// @param The links between properties of the widget
             /// def and properties of internal children.
-            /// @param Lua source for widget behaviour (will be
-            /// removed when Lua functionality is changed to a
-            /// component.
             //-------------------------------------------------------
             void Build(const std::string& in_typeName, const PropertyMap& in_defaultProperties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
-                       const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks, const Scripting::LuaSourceCSPtr& in_behaviourSource);
+                       const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks);
             //-------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -133,12 +130,6 @@ namespace ChilliSource
             /// def and properties of internal children.
             //-------------------------------------------------------
             const std::vector<PropertyLink>& GetChildPropertyLinks() const;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Lua source for widget behaviour
-            //-------------------------------------------------------
-            const Scripting::LuaSourceCSPtr& GetBehaviourSource() const;
             
         private:
             friend class Core::ResourcePool;
@@ -164,7 +155,6 @@ namespace ChilliSource
             std::vector<PropertyLink> m_componentPropertyLinks;
             std::vector<WidgetDesc> m_childDescs;
             std::vector<PropertyLink> m_childPropertyLinks;
-            Scripting::LuaSourceCSPtr m_behaviourSource;
         };
     }
 }

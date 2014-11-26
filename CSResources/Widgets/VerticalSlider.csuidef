@@ -1,13 +1,11 @@
 {
   "Type": "VerticalSlider",
-  "Properties": {
-    "SliderFraction": "Float"
-  },
+
   "Defaults": {
     "Name": "VerticalSlider",
-    "InputEnabled": "true",
-    "SliderFraction": "0"
+    "InputEnabled": "true"
   },
+
   "ChildProperties": {
     "Slider":
     {
@@ -15,9 +13,7 @@
       "SliderDrawable": "Drawable"
     }
   },
-  "Behaviour": {
-    "FilePath": "VerticalSlider.lua"
-  },
+
   "Children": {
     "Slider": {
       "Type": "Widget",
@@ -27,6 +23,7 @@
       "OriginAnchor": "BottomCentre"
     }
   },
+
   "Hierarchy": [
     {
       "Name": "Slider"

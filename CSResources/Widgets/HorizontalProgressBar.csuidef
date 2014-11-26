@@ -1,12 +1,10 @@
 {
   "Type": "HorizontalProgressBar",
-  "Properties": {
-    "Progress": "Float"
-  },
+
   "Defaults": {
-    "Name": "HorizontalProgressBar",
-    "Progress": "0"
+    "Name": "HorizontalProgressBar"
   },
+
   "ChildProperties": {
     "Bar":
     {
@@ -14,9 +12,7 @@
       "BarDrawable": "Drawable"
     }
   },
-  "Behaviour": {
-    "FilePath": "HorizontalProgressBar.lua"
-  },
+
   "Children": {
     "Bar": {
       "Type": "Widget",
@@ -25,6 +21,7 @@
       "OriginAnchor": "MiddleLeft"
     }
   },
+
   "Hierarchy": [
     {
       "Name": "Bar"
