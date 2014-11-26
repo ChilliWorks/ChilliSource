@@ -247,7 +247,7 @@ namespace ChilliSource
             std::vector<ComponentUPtr> components;
             for (const auto& componentDesc : in_widgetDef->GetComponentDescs())
             {
-                components.push_back(m_componentFactory->CreateComponent(componentDesc.GetType(), componentDesc.GetName(), componentDesc.GetPropertyMap()));
+                components.push_back(m_componentFactory->CreateComponent(componentDesc.GetType(), componentDesc.GetName(), componentDesc.GetProperties()));
             }
             
             //create the internal children

@@ -52,7 +52,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        const PropertyMap& ComponentDesc::GetPropertyMap() const
+        const PropertyMap& ComponentDesc::GetProperties() const
         {
             return m_propertyMap;
         }

@@ -84,7 +84,7 @@ namespace ChilliSource
             /// @return The map of properties the component should be created
             /// with.
             //------------------------------------------------------------------
-            const PropertyMap& GetPropertyMap() const;
+            const PropertyMap& GetProperties() const;
         private:
             std::string m_type;
             std::string m_name;

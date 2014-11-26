@@ -147,7 +147,23 @@ namespace ChilliSource
                 std::string name = nameJson.asString();
                 PropertyMap propertyMap(in_componentFactory->GetPropertyDescs(type));
                 
-                //TODO: Read property values.
+                for(auto it = in_componentJson.begin(); it != in_componentJson.end(); ++it)
+                {
+                    std::string propertyName = it.memberName();
+                    
+                    if (propertyName == "Type" || propertyName == "Name")
+                    {
+                        //ignore these has they're handled above.
+                    }
+                    else if(propertyMap.HasKey(propertyName) == true)
+                    {
+                        WidgetParserUtils::SetProperty(propertyName, (*it), in_definitionLocation, in_definitionPath, propertyMap);
+                    }
+                    else
+                    {
+                        CS_LOG_FATAL("Property '" + propertyName + "' in component '" + name + "' of type '" + type + "' does not exist.");
+                    }
+                }
                 
                 return ComponentDesc(type, name, propertyMap);
             }
@@ -212,24 +228,41 @@ namespace ChilliSource
                 return output;
             }
             //-------------------------------------------------------
-            /// From the given JSON value parse the custom property
-            /// types, names and values into the given container
+            /// Builds a property map containing all of the properties
+            /// that the intended widget type can contain. This includes
+            /// all base widget properties plus the linked component
+            /// and child properties.
             ///
-            /// @author S Downie
+            /// @author Ian Copland
             ///
-            /// @param Json properties
-            /// @param [Out] Custom properties
+            /// @param The component descriptions.
+            /// @param The component property links.
+            /// @param The child descriptions.
+            /// @param The child property links.
+            ///
+            /// @return The property map.
             //-------------------------------------------------------
-            PropertyMap BuildPropertyMap(const Json::Value& in_properties, const std::vector<WidgetDesc>& in_children, const std::vector<PropertyLink>& in_childPropertyLinks)
+            PropertyMap BuildPropertyMap(const std::vector<ComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
+                                         const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks)
             {
                 //define the properties.
                 std::vector<PropertyMap::PropertyDesc> descs = Widget::GetPropertyDescs();
+                
+                //add linked component properties
+                for (auto& link : in_componentPropertyLinks)
+                {
+                    auto componentDesc = GetComponentDescWithName(in_componentDescs, link.GetLinkedOwner());
+                    PropertyMap::PropertyDesc desc;
+                    desc.m_type = componentDesc.GetProperties().GetType(link.GetLinkedProperty());
+                    desc.m_name = link.GetLinkName();
+                    descs.push_back(desc);
+                }
                 
                 //add linked properties
                 for (auto& link : in_childPropertyLinks)
                 {
                     WidgetDesc widgetDesc;
-                    if (GetWidgetDescWithName(in_children, link.GetLinkedOwner(), widgetDesc) == false)
+                    if (GetWidgetDescWithName(in_childDescs, link.GetLinkedOwner(), widgetDesc) == false)
                     {
                         CS_LOG_FATAL("Could not find widget desc with name: " + link.GetLinkedOwner());
                     }
@@ -239,27 +272,8 @@ namespace ChilliSource
                     descs.push_back(desc);
                 }
                 
-                //add custom properties.
-                //TODO: This should be removed once Lua functionality is a component.
-                for(auto it = in_properties.begin(); it != in_properties.end(); ++it)
-                {
-                    CS_ASSERT((*it).isString() == true, "WidgetDefProvider: Properties values in file must be strings: " + std::string(it.memberName()));
-					PropertyMap::PropertyDesc desc;
-					desc.m_type = ParsePropertyType((*it).asString());
-					desc.m_name = it.memberName();
-					descs.push_back(desc);
-                }
-                
                 //build the property map
                 PropertyMap output(descs);
-                
-                //initialise the values in the custom properties
-                //TODO: This should be removed once Lua functionality is a component.
-                for(auto it = in_properties.begin(); it != in_properties.end(); ++it)
-                {
-                    PropertyType type = ParsePropertyType((*it).asString());
-                    output.SetProperty(type, it.memberName(), GetDefaultPropertyTypeValue(type));
-                }
                 
                 return output;
             }
@@ -320,7 +334,7 @@ namespace ChilliSource
                         if (lowerValue == "all")
                         {
                             ComponentDesc componentDesc = GetComponentDescWithName(in_componentDescs, linkedComponentName);
-                            for (const auto& propertyName : componentDesc.GetPropertyMap().GetKeys())
+                            for (const auto& propertyName : componentDesc.GetProperties().GetKeys())
                             {
                                 links.push_back(PropertyLink(propertyName, linkedComponentName, propertyName));
                             }
@@ -454,15 +468,15 @@ namespace ChilliSource
                     childPropertyLinks = ParseLinkedChildProperties(childProperties);
                 }
                 
-                const Json::Value& customProperties = root["Properties"];
-                PropertyMap defaultProperties = BuildPropertyMap(customProperties, childDescs, childPropertyLinks);
-                
+                //build the default values property map and read the default values from the json
+                PropertyMap defaultProperties = BuildPropertyMap(componentDescs, componentPropertyLinks, childDescs, childPropertyLinks);
                 const Json::Value& defaults = root["Defaults"];
                 if(defaults.isNull() == false)
                 {
                     ParseDefaultValues(defaults, in_storageLocation, pathToDefinition, defaultProperties);
                 }
 
+                //build the widget def.
                 widgetDef->Build(typeName, defaultProperties, componentDescs, componentPropertyLinks, childDescs, childPropertyLinks);
                 out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
                 
