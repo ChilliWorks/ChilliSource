@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_UI_BASE_WIDGETPARSERUTILS_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 
 #include <json/forwards.h>
@@ -40,6 +41,22 @@ namespace ChilliSource
 	{
         namespace WidgetParserUtils
         {
+            //-------------------------------------------------------
+            /// Loads a storage location and file path from the given
+            /// json. If a storage location is not specified this
+            /// will use the resource is considered to be relative
+            /// to the given path and location.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The json object.
+            /// @param [Optional] The relative storage location.
+            /// @param [Optional] The relative directory path.
+            ///
+            /// @return a pair containing the storage location and
+            /// file path of the resource.
+            //-------------------------------------------------------
+            std::pair<Core::StorageLocation, std::string> ParseResource(const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation = Core::StorageLocation::k_package, const std::string& in_relDirectoryPath = "");
             //-------------------------------------------------------
             /// Sets a property in a property map from a json value.
             /// The value type must be a string or a json object or

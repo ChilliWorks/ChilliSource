@@ -41,10 +41,8 @@ namespace ChilliSource
     {
         namespace
         {
-            const char k_fontLocationKey[] = "FontLocation";
-            const char k_fontPathKey[] = "FontPath";
-            const char k_localisedTextLocationKey[] = "LocalisedTextLocation";
-            const char k_localisedTextPathKey[] = "LocalisedTextPath";
+            const char k_fontKey[] = "Font";
+            const char k_localisedTextKey[] = "LocalisedText";
             const char k_localisedTextIdKey[] = "LocalisedTextId";
             const char k_textKey[] = "Text";
             const char k_textColourKey[] = "TextColour";
@@ -58,15 +56,13 @@ namespace ChilliSource
             
             const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyType::k_string, k_fontLocationKey},
-                {PropertyType::k_string, k_fontPathKey},
-                {PropertyType::k_string, k_localisedTextLocationKey},
-                {PropertyType::k_string, k_localisedTextPathKey},
+                {PropertyType::k_font, k_fontKey},
+                {PropertyType::k_localisedText, k_localisedTextKey},
                 {PropertyType::k_string, k_localisedTextIdKey},
                 {PropertyType::k_string, k_textKey},
                 {PropertyType::k_colour, k_textColourKey},
-                {PropertyType::k_string, k_horizontalJustificationKey},
-                {PropertyType::k_string, k_verticalJustificationKey},
+                {PropertyType::k_horizontalTextJustification, k_horizontalJustificationKey},
+                {PropertyType::k_verticalTextJustification, k_verticalJustificationKey},
                 {PropertyType::k_float, k_absCharSpacingOffsetKey},
                 {PropertyType::k_float, k_absLineSpacingOffsetKey},
                 {PropertyType::k_float, k_lineSpacingScaleKey},
@@ -84,76 +80,34 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        TextComponent::TextComponent(const std::string& in_componentName, const Rendering::FontCSPtr& in_font, const Core::LocalisedTextCSPtr& in_localisedText, const std::string& in_localisedTextId)
-            : Component(in_componentName)
-        {
-            SetFont(in_font);
-            SetText(in_localisedText, in_localisedTextId);
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        TextComponent::TextComponent(const std::string& in_componentName, const Rendering::FontCSPtr& in_font, const std::string& in_string)
-            : Component(in_componentName)
-        {
-            SetFont(in_font);
-            SetText(in_string);
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
         TextComponent::TextComponent(const std::string& in_componentName, const PropertyMap& in_properties)
             : Component(in_componentName)
         {
-            auto resourcePool = Core::Application::Get()->GetResourcePool();
-            
-            //load the font
-            if (in_properties.HasValue(k_fontPathKey) == true)
+            if (in_properties.HasValue(k_fontKey) == true)
             {
-                std::string fontLocation = in_properties.GetPropertyOrDefault(k_fontLocationKey, "Package");
-                std::string fontPath = in_properties.GetPropertyOrDefault(k_fontPathKey, "");
-                CS_ASSERT((fontLocation.empty() == false && fontPath.empty() == false), "Must supply a valid font file path.");
-                SetFont(resourcePool->LoadResource<Rendering::Font>(Core::ParseStorageLocation(fontLocation), fontPath));
+                SetFont(in_properties.GetProperty<Rendering::FontCSPtr>(k_fontKey));
             }
             else
             {
+                auto resourcePool = Core::Application::Get()->GetResourcePool();
                 SetFont(resourcePool->LoadResource<Rendering::Font>(Core::StorageLocation::k_chilliSource, "Fonts/CarlitoMed.csfont"));
             }
             
-            //load the localised text if one if supplied, otherwise fall back on the manually supplied text.
-            if (in_properties.HasValue(k_localisedTextPathKey) == true)
+            if (in_properties.HasValue(k_localisedTextKey) == true)
             {
-                std::string localisedTextLocation = in_properties.GetPropertyOrDefault(k_localisedTextLocationKey, "Package");
-                std::string localisedTextPath = in_properties.GetProperty<std::string>(k_localisedTextPathKey);
-           
-                auto localisedText = resourcePool->LoadResource<Core::LocalisedText>(Core::ParseStorageLocation(localisedTextLocation), localisedTextPath);
-                std::string localisedTextId = in_properties.GetPropertyOrDefault(k_localisedTextIdKey, "");
-                SetText(localisedText, localisedTextId);
-            }
-            else
-            {
-                std::string text = in_properties.GetPropertyOrDefault(k_textKey, "");
-                SetText(text);
+                SetLocalisedText(in_properties.GetProperty<Core::LocalisedTextCSPtr>(k_localisedTextKey));
             }
             
-            //read the other properties
+            SetLocalisedTextId(in_properties.GetPropertyOrDefault(k_textKey, GetLocalisedTextId()));
+            SetText(in_properties.GetPropertyOrDefault(k_textKey, GetText()));
             SetTextColour(in_properties.GetPropertyOrDefault(k_textColourKey, GetTextColour()));
-
-            if (in_properties.HasValue(k_horizontalJustificationKey) == true)
-            {
-                std::string horizontalJustification = in_properties.GetProperty<std::string>(k_horizontalJustificationKey);
-                SetHorizontalJustification(Rendering::ParseHorizontalTextJustification(horizontalJustification));
-            }
-            
-            if (in_properties.HasValue(k_verticalJustificationKey) == true)
-            {
-				std::string verticalJustification = in_properties.GetProperty<std::string>(k_verticalJustificationKey);
-                SetVerticalJustification(Rendering::ParseVerticalTextJustification(verticalJustification));
-            }
-            
             SetAbsoluteCharacterSpacingOffset(in_properties.GetPropertyOrDefault(k_absCharSpacingOffsetKey, GetAbsoluteCharacterSpacingOffset()));
             SetAbsoluteLineSpacingOffset(in_properties.GetPropertyOrDefault(k_absLineSpacingOffsetKey, GetAbsoluteLineSpacingOffset()));
             SetLineSpacingScale(in_properties.GetPropertyOrDefault(k_lineSpacingScaleKey, GetLineSpacingScale()));
             SetMaxNumberOfLines(in_properties.GetPropertyOrDefault(k_maxNumberOfLinesKey, (s32)GetMaxNumberOfLines()));
             SetTextScale(in_properties.GetPropertyOrDefault(k_textScaleKey, GetTextScale()));
+            SetHorizontalJustification(in_properties.GetPropertyOrDefault(k_horizontalJustificationKey, GetHorizontalJustification()));
+            SetVerticalJustification(in_properties.GetPropertyOrDefault(k_verticalJustificationKey, GetVerticalJustification()));
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -166,6 +120,18 @@ namespace ChilliSource
         const Rendering::FontCSPtr& TextComponent::GetFont() const
         {
             return m_font;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        const Core::LocalisedTextCSPtr& TextComponent::GetLocalisedText() const
+        {
+            return m_localisedText;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        const std::string& TextComponent::GetLocalisedTextId() const
+        {
+            return m_localisedTextId;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -211,7 +177,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        u32 TextComponent::GetMaxNumberOfLines() const
+        s32 TextComponent::GetMaxNumberOfLines() const
         {
             return m_textProperties.m_maxNumLines;
         }
@@ -234,23 +200,52 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextComponent::SetText(const Core::LocalisedTextCSPtr& in_localisedText, const std::string& in_localisedTextId)
+        void TextComponent::SetLocalisedText(const Core::LocalisedTextCSPtr& in_localisedText)
         {
-            CS_ASSERT(in_localisedText != nullptr, "Cannot set text using a null localised text.");
-            CS_ASSERT(in_localisedText->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot set text using an incomplete localised text.");
+#ifdef CS_ENABLE_DEBUG
+            if (in_localisedText != nullptr)
+            {
+                CS_ASSERT(in_localisedText->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot set text using an incomplete localised text.");
+            }
+#endif
             
-            m_text = in_localisedText->GetText(in_localisedTextId);
+            m_localisedText = in_localisedText;
+            
+            if (m_localisedText != nullptr && m_localisedText->Contains(m_localisedTextId) == true)
+            {
+                m_text = m_localisedText->GetText(m_localisedTextId);
+            }
+            else
+            {
+                m_text = "";
+            }
             
             m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextComponent::SetText(const Core::LocalisedTextCSPtr& in_localisedText, const std::string& in_localisedTextId, const Core::ParamDictionary& in_params)
+        void TextComponent::SetLocalisedTextId(const std::string& in_localisedTextId)
         {
-            CS_ASSERT(in_localisedText != nullptr, "Cannot set text using a null localised text.");
-            CS_ASSERT(in_localisedText->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot set text using an incomplete localised text.");
+            m_localisedTextId = in_localisedTextId;
             
-            m_text = Core::StringUtils::InsertVariables(in_localisedText->GetText(in_localisedTextId), in_params);
+            if (m_localisedText != nullptr && m_localisedText->Contains(m_localisedTextId) == true)
+            {
+                m_text = m_localisedText->GetText(m_localisedTextId);
+            }
+            else
+            {
+                m_text = "";
+            }
+            
+            m_invalidateCache = true;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        void TextComponent::SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params)
+        {
+            CS_ASSERT(m_localisedText != nullptr, "Cannot set text using a null localised text.");
+            
+            m_text = Core::StringUtils::InsertVariables(m_localisedText->GetText(in_localisedTextId), in_params);
             
             m_invalidateCache = true;
         }
@@ -310,8 +305,10 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextComponent::SetMaxNumberOfLines(u32 in_numLines)
+        void TextComponent::SetMaxNumberOfLines(s32 in_numLines)
         {
+            CS_ASSERT(in_numLines >= 0, "The maximum number of lines cannot be below 0.");
+            
             m_textProperties.m_maxNumLines = in_numLines;
             
             m_invalidateCache = true;
@@ -328,16 +325,18 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void TextComponent::OnRegisterProperties()
         {
-            RegisterProperty("Font", CSCore::MakeDelegate(this, &TextComponent::GetFont), CSCore::MakeDelegate(this, &TextComponent::SetFont));
-            RegisterProperty(k_textKey, CSCore::MakeDelegate(this, &TextComponent::GetText), CSCore::MakeDelegate<TextComponent, TextComponent, void, const std::string&>(this, &TextComponent::SetText));
-            RegisterProperty(k_textColourKey, CSCore::MakeDelegate(this, &TextComponent::GetTextColour), CSCore::MakeDelegate(this, &TextComponent::SetTextColour));
-            RegisterProperty(k_horizontalJustificationKey, CSCore::MakeDelegate(this, &TextComponent::GetHorizontalJustification), CSCore::MakeDelegate(this, &TextComponent::SetHorizontalJustification));
-            RegisterProperty(k_verticalJustificationKey, CSCore::MakeDelegate(this, &TextComponent::GetVerticalJustification), CSCore::MakeDelegate(this, &TextComponent::SetVerticalJustification));
-            RegisterProperty(k_absCharSpacingOffsetKey, CSCore::MakeDelegate(this, &TextComponent::GetAbsoluteCharacterSpacingOffset), CSCore::MakeDelegate(this, &TextComponent::SetAbsoluteCharacterSpacingOffset));
-            RegisterProperty(k_absLineSpacingOffsetKey, CSCore::MakeDelegate(this, &TextComponent::GetAbsoluteLineSpacingOffset), CSCore::MakeDelegate(this, &TextComponent::SetAbsoluteCharacterSpacingOffset));
-            RegisterProperty(k_lineSpacingScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetLineSpacingScale), CSCore::MakeDelegate(this, &TextComponent::SetLineSpacingScale));
-            RegisterProperty(k_maxNumberOfLinesKey, CSCore::MakeDelegate(this, &TextComponent::GetMaxNumberOfLines), CSCore::MakeDelegate(this, &TextComponent::SetMaxNumberOfLines));
-            RegisterProperty(k_textScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetTextScale), CSCore::MakeDelegate(this, &TextComponent::SetTextScale));
+            RegisterProperty<Rendering::FontCSPtr>(k_fontKey, CSCore::MakeDelegate(this, &TextComponent::GetFont), CSCore::MakeDelegate(this, &TextComponent::SetFont));
+            RegisterProperty<Core::LocalisedTextCSPtr>(k_localisedTextKey, CSCore::MakeDelegate(this, &TextComponent::GetLocalisedText), CSCore::MakeDelegate(this, &TextComponent::SetLocalisedText));
+            RegisterProperty<std::string>(k_localisedTextIdKey, CSCore::MakeDelegate(this, &TextComponent::GetLocalisedTextId), CSCore::MakeDelegate<TextComponent, TextComponent, void, const std::string&>(this, &TextComponent::SetLocalisedTextId));
+            RegisterProperty<std::string>(k_textKey, CSCore::MakeDelegate(this, &TextComponent::GetText), CSCore::MakeDelegate<TextComponent, TextComponent, void, const std::string&>(this, &TextComponent::SetText));
+            RegisterProperty<Core::Colour>(k_textColourKey, CSCore::MakeDelegate(this, &TextComponent::GetTextColour), CSCore::MakeDelegate(this, &TextComponent::SetTextColour));
+            RegisterProperty<Rendering::HorizontalTextJustification>(k_horizontalJustificationKey, CSCore::MakeDelegate(this, &TextComponent::GetHorizontalJustification), CSCore::MakeDelegate(this, &TextComponent::SetHorizontalJustification));
+            RegisterProperty<Rendering::VerticalTextJustification>(k_verticalJustificationKey, CSCore::MakeDelegate(this, &TextComponent::GetVerticalJustification), CSCore::MakeDelegate(this, &TextComponent::SetVerticalJustification));
+            RegisterProperty<f32>(k_absCharSpacingOffsetKey, CSCore::MakeDelegate(this, &TextComponent::GetAbsoluteCharacterSpacingOffset), CSCore::MakeDelegate(this, &TextComponent::SetAbsoluteCharacterSpacingOffset));
+            RegisterProperty<f32>(k_absLineSpacingOffsetKey, CSCore::MakeDelegate(this, &TextComponent::GetAbsoluteLineSpacingOffset), CSCore::MakeDelegate(this, &TextComponent::SetAbsoluteCharacterSpacingOffset));
+            RegisterProperty<f32>(k_lineSpacingScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetLineSpacingScale), CSCore::MakeDelegate(this, &TextComponent::SetLineSpacingScale));
+            RegisterProperty<s32>(k_maxNumberOfLinesKey, CSCore::MakeDelegate(this, &TextComponent::GetMaxNumberOfLines), CSCore::MakeDelegate(this, &TextComponent::SetMaxNumberOfLines));
+            RegisterProperty<f32>(k_textScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetTextScale), CSCore::MakeDelegate(this, &TextComponent::SetTextScale));
         }
         //-------------------------------------------------------------------
         //--------------------------------------------------------------------

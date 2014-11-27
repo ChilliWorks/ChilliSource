@@ -33,6 +33,8 @@
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
+#include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
+#include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
 #include <ChilliSource/UI/Drawable/DrawableDesc.h>
@@ -183,56 +185,6 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void PropertyMap::SetProperty(PropertyType in_type, const std::string& in_name, const std::string& in_value)
-        {
-            switch(in_type)
-            {
-                case PropertyType::k_bool:
-                    SetProperty(in_name, Core::ParseBool(in_value));
-                    break;
-                case PropertyType::k_int:
-                    SetProperty(in_name, Core::ParseS32(in_value));
-                    break;
-                case PropertyType::k_float:
-                    SetProperty(in_name, Core::ParseF32(in_value));
-                    break;
-                case PropertyType::k_string:
-                    SetProperty(in_name, in_value);
-                    break;
-                case PropertyType::k_vec2:
-                    SetProperty(in_name, Core::ParseVector2(in_value));
-                    break;
-                case PropertyType::k_vec3:
-                    SetProperty(in_name, Core::ParseVector3(in_value));
-                    break;
-                case PropertyType::k_vec4:
-                    SetProperty(in_name, Core::ParseVector4(in_value));
-                    break;
-                case PropertyType::k_colour:
-                    SetProperty(in_name, Core::ParseColour(in_value));
-                    break;
-                case PropertyType::k_alignmentAnchor:
-                    SetProperty(in_name, Rendering::ParseAlignmentAnchor(in_value));
-                    break;
-                case PropertyType::k_sizePolicy:
-                    SetProperty(in_name, ParseSizePolicy(in_value));
-                    break;
-                case PropertyType::k_storageLocation:
-                    SetProperty(in_name, Core::ParseStorageLocation(in_value));
-                    break;
-                case PropertyType::k_drawableDesc:
-                    SetProperty(in_name, DrawableDesc(Core::JsonUtils::ParseJson(in_value)));
-                    break;
-                case PropertyType::k_layoutDesc:
-                    SetProperty(in_name, LayoutDesc(Core::JsonUtils::ParseJson(in_value)));
-                    break;
-                case PropertyType::k_unknown:
-                    CS_LOG_FATAL("Cannot set an 'unknown' property from a string.");
-                    break;
-            }
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<bool>() const
         {
             return PropertyType::k_bool;
@@ -299,9 +251,39 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<Core::StorageLocation>() const
+        template<> PropertyType PropertyMap::GetType<Rendering::HorizontalTextJustification>() const
         {
-            return PropertyType::k_storageLocation;
+            return PropertyType::k_horizontalTextJustification;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<Rendering::VerticalTextJustification>() const
+        {
+            return PropertyType::k_verticalTextJustification;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<Rendering::TextureCSPtr>() const
+        {
+            return PropertyType::k_texture;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<Rendering::TextureAtlasCSPtr>() const
+        {
+            return PropertyType::k_textureAtlas;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<Rendering::FontCSPtr>() const
+        {
+            return PropertyType::k_font;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<Core::LocalisedTextCSPtr>() const
+        {
+            return PropertyType::k_localisedText;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -341,8 +323,18 @@ namespace ChilliSource
                     return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Rendering::AlignmentAnchor>());
                 case PropertyType::k_sizePolicy:
                     return PropertyMap::IPropertyUPtr(new PropertyMap::Property<SizePolicy>());
-                case PropertyType::k_storageLocation:
-                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::StorageLocation>());
+                case PropertyType::k_horizontalTextJustification:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Rendering::HorizontalTextJustification>());
+                case PropertyType::k_verticalTextJustification:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Rendering::VerticalTextJustification>());
+                case PropertyType::k_texture:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Rendering::TextureCSPtr>());
+                case PropertyType::k_textureAtlas:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Rendering::TextureAtlasCSPtr>());
+                case PropertyType::k_font:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Rendering::FontCSPtr>());
+                case PropertyType::k_localisedText:
+                    return PropertyMap::IPropertyUPtr(new PropertyMap::Property<Core::LocalisedTextCSPtr>());
                 case PropertyType::k_drawableDesc:
                     return PropertyMap::IPropertyUPtr(new PropertyMap::Property<DrawableDesc>());
                 case PropertyType::k_layoutDesc:

@@ -155,7 +155,7 @@ namespace ChilliSource
             /// @param The getter delegate for the property.
             /// @param The setter delegate for the property.
             //----------------------------------------------------------------
-            template <typename TPropertyType> void RegisterProperty(const std::string& in_name, const std::function<TPropertyType()>& in_getter, const std::function<void(TPropertyType)> in_setter);
+            template <typename TPropertyType> void RegisterProperty(const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter);
             //----------------------------------------------------------------
             /// This is called prior to the On Init lifecycle event. This
             /// should be used to register all component properties.
@@ -314,7 +314,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
-        template <typename TPropertyType> void Component::RegisterProperty(const std::string& in_name, const std::function<TPropertyType()>& in_getter, const std::function<void(TPropertyType)> in_setter)
+        template <typename TPropertyType> void Component::RegisterProperty(const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter)
         {
             CS_ASSERT(m_propertyRegistrationEnabled == true, "UI::Component properties can only be registered during the OnRegisterProperties lifecycle event.");
             

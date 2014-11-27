@@ -108,30 +108,6 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
             //-------------------------------------------------------------------
-            /// Constructor. Creates the text component using a string retrieved
-            /// from a localised text resource.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The component name.
-            /// @param The font.
-            /// @param The localised text resource.
-            /// @param The localised text Id.
-            //-------------------------------------------------------------------
-            TextComponent(const std::string& in_componentName, const Rendering::FontCSPtr& in_font, const Core::LocalisedTextCSPtr& in_localisedText, const std::string& in_localisedTextId);
-            //-------------------------------------------------------------------
-            /// Constructor. Creates the text component using the given string.
-            /// This is not recommended, it is usually better to create text using
-            /// a localised text resource.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The component name.
-            /// @param The font.
-            /// @param The UTF-8 format string.
-            //-------------------------------------------------------------------
-            TextComponent(const std::string& in_componentName, const Rendering::FontCSPtr& in_font, const std::string& in_string);
-            //-------------------------------------------------------------------
             /// Constructor that builds the drawable from key-value properties.
             /// The properties used to create the text are described in the
             /// class documentation.
@@ -164,7 +140,22 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return The UTF-8 format string that will be rendered.
+            /// @return The localised text resource that will be used to render
+            /// text.
+            //-------------------------------------------------------------------
+            const Core::LocalisedTextCSPtr& GetLocalisedText() const;
+            //-------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The localised text Id that will be used to render
+            /// text.
+            //-------------------------------------------------------------------
+            const std::string& GetLocalisedTextId() const;
+            //-------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The UTF-8 format string that will be rendered. This is
+            /// typically not used, use of localised text is prefered.
             //-------------------------------------------------------------------
             const std::string& GetText() const;
             //-------------------------------------------------------------------
@@ -217,7 +208,7 @@ namespace ChilliSource
             /// @return The maximum number of lines of text that will be rendered.
             /// A value of 0 means there is no limit to the number of lines.
             //-------------------------------------------------------------------
-            u32 GetMaxNumberOfLines() const;
+            s32 GetMaxNumberOfLines() const;
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -235,15 +226,23 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             void SetFont(const Rendering::FontCSPtr& in_font);
             //-------------------------------------------------------------------
-            /// Sets the rendered text from a localised text resource.
+            /// Sets the localised text that should be used to render text. A
+            /// valid localised text id should also be set.
             ///
             /// @author Ian Copland
             ///
             /// @param The localised text resource.
-            /// @param The localised text id which is used to lookup the string
-            /// in the localised text resource.
             //-------------------------------------------------------------------
-            void SetText(const Core::LocalisedTextCSPtr& in_localisedText, const std::string& in_localisedTextId);
+            void SetLocalisedText(const Core::LocalisedTextCSPtr& in_localisedText);
+            //-------------------------------------------------------------------
+            /// The Id of the entry in the localised text resource that should be
+            /// used to render text.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The localised text Id.
+            //-------------------------------------------------------------------
+            void SetLocalisedTextId(const std::string& in_localisedTextId);
             //-------------------------------------------------------------------
             /// Sets the rendered text from a localised text resource. Text can
             /// contain basic markup for inserting variables into the string. The
@@ -259,13 +258,12 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
-            /// @param The localised text resource.
             /// @param The localised text id which is used to lookup the string
             /// in the localised text resource.
             /// @param The param dictionary which contains the values which should
             /// be used for each variable in the string.
             //-------------------------------------------------------------------
-            void SetText(const Core::LocalisedTextCSPtr& in_localisedText, const std::string& in_localisedTextId, const Core::ParamDictionary& in_params);
+            void SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params);
             //-------------------------------------------------------------------
             /// Directly sets the text that will be rendered. This is not
             /// recommended, usually is it better to set the text using a
@@ -340,7 +338,7 @@ namespace ChilliSource
             ///
             /// @param The number of lines, or 0 if no limit.
             //-------------------------------------------------------------------
-            void SetMaxNumberOfLines(u32 in_numLines);
+            void SetMaxNumberOfLines(s32 in_numLines);
             //-------------------------------------------------------------------
             /// Sets the text scale. Scaling text significantly reduces the
             /// quality of the text rendered so this should only be used when
@@ -375,6 +373,8 @@ namespace ChilliSource
             void OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) override;
             
             Rendering::FontCSPtr m_font;
+            Core::LocalisedTextCSPtr m_localisedText;
+            std::string m_localisedTextId;
             std::string m_text;
             Rendering::CanvasRenderer::TextProperties m_textProperties;
             Core::Colour m_textColour;

@@ -48,10 +48,15 @@ namespace ChilliSource
             if(lowerCase == "vec2") return PropertyType::k_vec2;
             if(lowerCase == "vec3") return PropertyType::k_vec3;
             if(lowerCase == "vec4") return PropertyType::k_vec4;
-            if(lowerCase == "sizepolicy") return PropertyType::k_sizePolicy;
-            if(lowerCase == "storagelocation") return PropertyType::k_storageLocation;
-            if(lowerCase == "alignmentanchor") return PropertyType::k_alignmentAnchor;
             if(lowerCase == "colour") return PropertyType::k_colour;
+            if(lowerCase == "alignmentanchor") return PropertyType::k_alignmentAnchor;
+            if(lowerCase == "sizepolicy") return PropertyType::k_sizePolicy;
+            if(lowerCase == "horizontaltextjustification") return PropertyType::k_horizontalTextJustification;
+            if(lowerCase == "verticaltextjustification") return PropertyType::k_verticalTextJustification;
+            if(lowerCase == "texture") return PropertyType::k_texture;
+            if(lowerCase == "textureatlas") return PropertyType::k_textureAtlas;
+            if(lowerCase == "font") return PropertyType::k_font;
+            if(lowerCase == "localisedtext") return PropertyType::k_localisedText;
             if(lowerCase == "drawabledesc") return PropertyType::k_drawableDesc;
             if(lowerCase == "layoutdesc") return PropertyType::k_layoutDesc;
             

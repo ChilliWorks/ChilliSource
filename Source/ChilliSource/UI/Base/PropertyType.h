@@ -53,7 +53,12 @@ namespace ChilliSource
             k_colour,
             k_alignmentAnchor,
             k_sizePolicy,
-            k_storageLocation,
+            k_horizontalTextJustification,
+            k_verticalTextJustification,
+            k_texture,
+            k_textureAtlas,
+            k_font,
+            k_localisedText,
             k_drawableDesc,
             k_layoutDesc
         };

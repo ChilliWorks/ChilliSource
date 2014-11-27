@@ -233,7 +233,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::InitBaseProperties()
         {
-            m_basePropertyAccessors.emplace("name", IPropertyAccessorUPtr(new PropertyAccessor<const std::string&>(Core::MakeDelegate(this, &Widget::SetName), Core::MakeDelegate(this, &Widget::GetName))));
+            m_basePropertyAccessors.emplace("name", IPropertyAccessorUPtr(new PropertyAccessor<std::string>(Core::MakeDelegate(this, &Widget::SetName), Core::MakeDelegate(this, &Widget::GetName))));
             m_basePropertyAccessors.emplace("relposition", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::SetRelativePosition), Core::MakeDelegate(this, &Widget::GetLocalRelativePosition))));
             m_basePropertyAccessors.emplace("absposition", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::SetAbsolutePosition), Core::MakeDelegate(this, &Widget::GetLocalAbsolutePosition))));
             m_basePropertyAccessors.emplace("relsize", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::SetRelativeSize), Core::MakeDelegate(this, &Widget::GetLocalRelativeSize))));
@@ -328,7 +328,7 @@ namespace ChilliSource
                             SetProperty(key, in_propertyMap.GetProperty<f32>(key));
                             break;
                         case PropertyType::k_string:
-                            SetProperty(key, in_propertyMap.GetProperty<const std::string&>(key));
+                            SetProperty(key, in_propertyMap.GetProperty<std::string>(key));
                             break;
                         case PropertyType::k_vec2:
                             SetProperty(key, in_propertyMap.GetProperty<Core::Vector2>(key));
@@ -348,8 +348,23 @@ namespace ChilliSource
                         case PropertyType::k_sizePolicy:
                             SetProperty(key, in_propertyMap.GetProperty<SizePolicy>(key));
                             break;
-                        case PropertyType::k_storageLocation:
-                            SetProperty(key, in_propertyMap.GetProperty<Core::StorageLocation>(key));
+                        case PropertyType::k_horizontalTextJustification:
+                            SetProperty(key, in_propertyMap.GetProperty<Rendering::HorizontalTextJustification>(key));
+                            break;
+                        case PropertyType::k_verticalTextJustification:
+                            SetProperty(key, in_propertyMap.GetProperty<Rendering::VerticalTextJustification>(key));
+                            break;
+                        case PropertyType::k_texture:
+                            SetProperty(key, in_propertyMap.GetProperty<Rendering::TextureCSPtr>(key));
+                            break;
+                        case PropertyType::k_textureAtlas:
+                            SetProperty(key, in_propertyMap.GetProperty<Rendering::TextureAtlasCSPtr>(key));
+                            break;
+                        case PropertyType::k_font:
+                            SetProperty(key, in_propertyMap.GetProperty<Rendering::FontCSPtr>(key));
+                            break;
+                        case PropertyType::k_localisedText:
+                            SetProperty(key, in_propertyMap.GetProperty<Core::LocalisedTextCSPtr>(key));
                             break;
                         case PropertyType::k_drawableDesc:
                             SetProperty(key, IDrawable::Create(in_propertyMap.GetProperty<DrawableDesc>(key)));

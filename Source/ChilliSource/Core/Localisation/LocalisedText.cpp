@@ -56,6 +56,12 @@ namespace ChilliSource
 		}
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
+        bool LocalisedText::Contains(const std::string& in_key) const
+        {
+            return (m_text.find(in_key) != m_text.end());
+        }
+        //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
         const std::string& LocalisedText::GetText(const std::string& in_key) const
         {
 			auto it = m_text.find(in_key);

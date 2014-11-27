@@ -139,17 +139,6 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             bool HasValue(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
-            /// Property values are often passed around as homogenous strings and this function
-            /// will parse the string and assign the property with the correct type
-            ///
-            /// @author S Downie
-            ///
-            /// @param Property type
-            /// @param Property name
-            /// @param Property value to parse
-            //----------------------------------------------------------------------------------------
-            void SetProperty(PropertyType in_type, const std::string& in_name, const std::string& in_value);
-            //----------------------------------------------------------------------------------------
             /// Set the value of the property with the given name. If no property exists
             /// with the name then it will assert.
             ///
@@ -492,17 +481,57 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         template<> PropertyType PropertyMap::GetType<SizePolicy>() const;
         //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for storage location
+        /// Specialisation to return property type for horizontal text justification
         ///
-        /// @author S Downie
+        /// @author Ian Copland
         ///
-        /// @return Storage location prop type
+        /// @return Size policy prop type
         //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<Core::StorageLocation>() const;
+        template<> PropertyType PropertyMap::GetType<Rendering::HorizontalTextJustification>() const;
+        //----------------------------------------------------------------------------------------
+        /// Specialisation to return property type for vertical text justification
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return Size policy prop type
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<Rendering::VerticalTextJustification>() const;
+        //----------------------------------------------------------------------------------------
+        /// Specialisation to return property type for texture resources.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return Property map prop type
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<Rendering::TextureCSPtr>() const;
+        //----------------------------------------------------------------------------------------
+        /// Specialisation to return property type for texture altas resources.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return Property map prop type
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<Rendering::TextureAtlasCSPtr>() const;
+        //----------------------------------------------------------------------------------------
+        /// Specialisation to return property type for font resources.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return Property map prop type
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<Rendering::FontCSPtr>() const;
+        //----------------------------------------------------------------------------------------
+        /// Specialisation to return property type for localised text resources.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return Property map prop type
+        //----------------------------------------------------------------------------------------
+        template<> PropertyType PropertyMap::GetType<Core::LocalisedTextCSPtr>() const;
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for drawable descriptions
         ///
-        /// @author S Downie
+        /// @author Ian Copland
         ///
         /// @return Property map prop type
         //----------------------------------------------------------------------------------------
@@ -510,7 +539,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         /// Specialisation to return property type for layout descriptions.
         ///
-        /// @author S Downie
+        /// @author Ian Copland
         ///
         /// @return Property map prop type
         //----------------------------------------------------------------------------------------
