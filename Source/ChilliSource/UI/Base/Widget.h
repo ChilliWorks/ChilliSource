@@ -75,7 +75,6 @@ namespace ChilliSource
         public:
 
             CS_DECLARE_NOCOPY(Widget);
-            
             //----------------------------------------------------------------------------------------
             /// Delegate for size policy functions.
             ///

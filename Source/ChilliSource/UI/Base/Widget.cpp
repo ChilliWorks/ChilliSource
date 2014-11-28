@@ -1619,11 +1619,6 @@ namespace ChilliSource
 					m_pressedInput.emplace(in_pointer.GetId(), inputTypeSet);
 				}
                 
-//                if(m_behaviourScript != nullptr)
-//                {
-//                    m_behaviourScript->CallFunction("onPressedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
-//                }
-                
                 m_pressedInsideEvent.NotifyConnections(this, in_pointer, in_inputType);
                 
                 if(m_isInputConsumeEnabled == true)
@@ -1660,20 +1655,10 @@ namespace ChilliSource
             
             if(containsPrevious == false && containsCurrent == true)
             {
-//                if(m_behaviourScript != nullptr)
-//                {
-//                    m_behaviourScript->CallFunction("onMoveEntered", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
-//                }
-                
                 m_moveEnteredEvent.NotifyConnections(this, in_pointer);
             }
             else if(containsPrevious == true && containsCurrent == false)
             {
-//                if(m_behaviourScript != nullptr)
-//                {
-//                    m_behaviourScript->CallFunction("onMoveExited", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
-//                }
-                
                 m_moveExitedEvent.NotifyConnections(this, in_pointer);
             }
             else if(containsPrevious == false && containsCurrent == false)
@@ -1681,11 +1666,6 @@ namespace ChilliSource
                 auto itPressedInput = m_pressedInput.find(in_pointer.GetId());
 				if (itPressedInput != m_pressedInput.end())
                 {
-//                    if(m_behaviourScript != nullptr)
-//                    {
-//                        m_behaviourScript->CallFunction("onDraggedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
-//                    }
-                    
                     m_draggedOutsideEvent.NotifyConnections(this, in_pointer);
                 }
             }
@@ -1694,11 +1674,6 @@ namespace ChilliSource
 				auto itPressedInput = m_pressedInput.find(in_pointer.GetId());
 				if (itPressedInput != m_pressedInput.end())
                 {
-//                    if(m_behaviourScript != nullptr)
-//                    {
-//                        m_behaviourScript->CallFunction("onDraggedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
-//                    }
-                    
                     m_draggedInsideEvent.NotifyConnections(this, in_pointer);
                 }
             }
@@ -1740,20 +1715,10 @@ namespace ChilliSource
 
 					if(Contains(in_pointer.GetPosition()) == true)
 					{
-//						if(m_behaviourScript != nullptr)
-//						{
-//							m_behaviourScript->CallFunction("onReleasedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
-//						}
-                    
 						m_releasedInsideEvent.NotifyConnections(this, in_pointer, in_inputType);
 					}
 					else
 					{
-//						if(m_behaviourScript != nullptr)
-//						{
-//							m_behaviourScript->CallFunction("onReleasedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
-//						}
-                    
 						m_releasedOutsideEvent.NotifyConnections(this, in_pointer, in_inputType);
 					}
 				}

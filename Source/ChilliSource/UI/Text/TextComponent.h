@@ -108,17 +108,6 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
             //-------------------------------------------------------------------
-            /// Constructor that builds the drawable from key-value properties.
-            /// The properties used to create the text are described in the
-            /// class documentation.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The component name.
-            /// @param The property map.
-            //-------------------------------------------------------------------
-            TextComponent(const std::string& in_componentName, const PropertyMap& in_properties);
-            //-------------------------------------------------------------------
             /// Allows querying of whether or not the component implements the
             /// interface associated with the given interface Id. Typically
             /// this wont be called directly, instead the templated version
@@ -351,6 +340,18 @@ namespace ChilliSource
             void SetTextScale(f32 in_scale);
             
         private:
+            friend class ComponentFactory;
+            //-------------------------------------------------------------------
+            /// Constructor that builds the drawable from key-value properties.
+            /// The properties used to create the text are described in the
+            /// class documentation.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The component name.
+            /// @param The property map.
+            //-------------------------------------------------------------------
+            TextComponent(const std::string& in_componentName, const PropertyMap& in_properties);
             //-------------------------------------------------------------------
             /// Render the text using the transform and size of the owning
             /// widget.
