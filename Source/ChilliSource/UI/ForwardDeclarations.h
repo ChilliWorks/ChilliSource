@@ -59,6 +59,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Drawable
         //---------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(DrawableComponent);
         CS_FORWARDDECLARE_CLASS(DrawableDesc);
         CS_FORWARDDECLARE_CLASS(IDrawable);
         CS_FORWARDDECLARE_CLASS(NinePatchDrawable);

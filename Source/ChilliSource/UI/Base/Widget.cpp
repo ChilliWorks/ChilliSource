@@ -34,6 +34,7 @@
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+#include <ChilliSource/UI/Drawable/DrawableComponent.h>
 #include <ChilliSource/UI/Drawable/DrawableDesc.h>
 #include <ChilliSource/UI/Layout/LayoutDesc.h>
 
@@ -62,7 +63,6 @@ namespace ChilliSource
                 {PropertyType::k_bool, "InputConsumeEnabled"},
                 {PropertyType::k_sizePolicy, "SizePolicy"},
                 {PropertyType::k_layoutDesc, "Layout"},
-                {PropertyType::k_drawableDesc, "Drawable"},
             };
             
             //----------------------------------------------------------------------------------------
@@ -245,7 +245,6 @@ namespace ChilliSource
             m_basePropertyAccessors.emplace("inputenabled", IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(this, &Widget::SetInputEnabled), Core::MakeDelegate(this, &Widget::IsInputEnabled))));
             m_basePropertyAccessors.emplace("inputconsumeenabled", IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(this, &Widget::SetInputConsumeEnabled), Core::MakeDelegate(this, &Widget::IsInputConsumeEnabled))));
             m_basePropertyAccessors.emplace("sizepolicy", IPropertyAccessorUPtr(new PropertyAccessor<SizePolicy>(Core::MakeDelegate(this, &Widget::SetSizePolicy), Core::MakeDelegate(this, &Widget::GetSizePolicy))));
-            m_basePropertyAccessors.emplace("drawable", IPropertyAccessorUPtr(new PropertyAccessor<IDrawableSPtr>(Core::MakeDelegate(this, &Widget::SetDrawable), Core::MakeDelegate(this, &Widget::GetDrawable))));
             m_basePropertyAccessors.emplace("layout", IPropertyAccessorUPtr(new PropertyAccessor<ILayoutSPtr>(Core::MakeDelegate(this, &Widget::SetLayout), Core::MakeDelegate(this, &Widget::GetLayout))));
         }
         //----------------------------------------------------------------------------------------
@@ -461,26 +460,6 @@ namespace ChilliSource
         Core::IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetDraggedOutsideEvent()
         {
             return m_draggedOutsideEvent;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::SetDrawable(const IDrawableSPtr& in_drawable)
-        {
-            m_drawable = in_drawable;
-            
-            InvalidateTransformCache();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        const IDrawableSPtr& Widget::GetDrawable()
-        {
-            return m_drawable;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        IDrawableCSPtr Widget::GetDrawable() const
-        {
-            return m_drawable;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1281,9 +1260,14 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         Core::Vector2 Widget::GetPreferredSize() const
         {
-            if(m_drawable != nullptr)
+            const DrawableComponent* drawableComponent = GetComponent<DrawableComponent>();
+            if(drawableComponent != nullptr)
             {
-                return m_drawable->GetPreferredSize();
+                auto drawable = drawableComponent->GetDrawable();
+                if (drawable != nullptr)
+                {
+                    return drawable->GetPreferredSize();
+                }
             }
             
             return m_preferredSize;
@@ -1471,11 +1455,6 @@ namespace ChilliSource
             
             if (ShouldCull(GetFinalPositionOfCentre(), finalSize, m_screen->GetResolution()) == false)
             {
-                if (m_drawable != nullptr)
-                {
-                    m_drawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
-                }
-                
                 for (auto& component : m_components)
                 {
                     component->OnDraw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());

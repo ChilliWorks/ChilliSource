@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/UI/Base/Widget.h>
+#include <ChilliSource/UI/Drawable/DrawableComponent.h>
 
 namespace ChilliSource
 {
@@ -144,7 +145,7 @@ namespace ChilliSource
             CS_ASSERT(m_highlighted == false, "Cannot highlight when already highlighted.");
             
             m_highlighted = true;
-            GetWidget()->SetDrawable(m_highlightDrawable);
+            m_drawableComponent->SetDrawable(m_highlightDrawable);
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -153,13 +154,14 @@ namespace ChilliSource
             CS_ASSERT(m_highlighted == true, "Cannot unhighlight when already unhighlighted.");
             
             m_highlighted = false;
-            GetWidget()->SetDrawable(m_normalDrawable);
+            m_drawableComponent->SetDrawable(m_normalDrawable);
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void HighlightComponent::OnInit()
         {
-            GetWidget()->SetDrawable(m_normalDrawable);
+            m_drawableComponent = GetWidget()->GetComponent<DrawableComponent>();
+            m_drawableComponent->SetDrawable(m_normalDrawable);
             
             m_pressedInsideConnection = GetWidget()->GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightComponent::OnPressedInside));
             m_moveEnteredConnection = GetWidget()->GetMoveEnteredEvent().OpenConnection(Core::MakeDelegate(this, &HighlightComponent::OnMoveEntered));

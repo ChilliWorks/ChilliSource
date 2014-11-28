@@ -174,28 +174,6 @@ namespace ChilliSource
             /// @return Connectable event
             //----------------------------------------------------------------------------------------
             Core::IConnectableEvent<InputMovedDelegate>& GetDraggedOutsideEvent();
-
-            //----------------------------------------------------------------------------------------
-            /// Set the drawable that handles how to render the widget. If this is null then the
-            /// widget will not be visible. The widget takes ownership of the drawable.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Drawable
-            //----------------------------------------------------------------------------------------
-            void SetDrawable(const IDrawableSPtr& in_drawable);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return A pointer to the drawable. This will return null if there is no drawable.
-            //----------------------------------------------------------------------------------------
-            const IDrawableSPtr& GetDrawable();
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return A const pointer to the drawable. This will return null if there is no drawable.
-            //----------------------------------------------------------------------------------------
-            IDrawableCSPtr GetDrawable() const;
             //----------------------------------------------------------------------------------------
             /// Set the layout that handles how to layout the widget's subviews. If this is null then the
             /// subviews will retain their current size and position. Otherwise the size and position may
@@ -903,8 +881,6 @@ namespace ChilliSource
             ///     - OriginAnchor - "TopLeft"/"TopCentre"/"TopRight"/"MiddleLeft"/"MiddleCentre"/"MiddleRight"/"BottomLeft"/"BottomCentre"/"BottomRight" - Origin anchor
             ///     - ParentalAnchor - "TopLeft"/"TopCentre"/"TopRight"/"MiddleLeft"/"MiddleCentre"/"MiddleRight"/"BottomLeft"/"BottomCentre"/"BottomRight" - Parent anchor
             ///     - SizePolicy - "None"/"UsePreferredSize"/"UseWidthMaintainingAspect"/"UseHeightMaintainingAspect"/"FitMaintainingAspect"/"FillMaintainingAspect" - Size policy
-            ///     - Drawable - Object - See *Drawable.h
-            ///     - Layout - Object - See *Layout.h
             ///
             /// @author S Downie
             ///
@@ -1107,7 +1083,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void OnUpdate(f32 in_timeSinceLastUpdate);
             //----------------------------------------------------------------------------------------
-            /// Draw the view using the currently set drawable. Tell any subviews to draw.
+            /// Tells any components or child widgets to draw.
             ///
             /// @author S Downie
             ///
@@ -1198,8 +1174,7 @@ namespace ChilliSource
             std::string m_name;
             
             std::vector<ComponentUPtr> m_components;
-            
-            IDrawableSPtr m_drawable;
+
             ILayoutSPtr m_layout;
             
             Widget* m_parent = nullptr;
@@ -1237,7 +1212,7 @@ namespace ChilliSource
             {
                 if (component->IsA<TComponentType>() == true)
                 {
-                    return component;
+                    return static_cast<const TComponentType*>(component.get());
                 }
             }
             

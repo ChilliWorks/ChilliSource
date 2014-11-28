@@ -1,22 +1,16 @@
 {
   "Type": "VerticalSlider",
 
-  "Defaults": {
-    "Name": "VerticalSlider",
-    "InputEnabled": "true"
-  },
-
-  "ChildProperties": {
-    "Slider":
+  "Components":[
     {
-      "SliderRelSize": "RelSize",
-      "SliderDrawable": "Drawable"
+      "Type": "Drawable",
+      "Name": "Drawable"
     }
-  },
+  ],
 
   "Children": {
     "Slider": {
-      "Type": "Widget",
+      "Type": "Image",
       "RelSize": "1.1 0.1",
       "SizePolicy": "UseWidthMaintainingAspect",
       "ParentalAnchor": "BottomCentre",
@@ -28,5 +22,22 @@
     {
       "Name": "Slider"
     }
-  ]
+  ],
+
+  "ComponentProperties":{
+    "Drawable": "all"
+  },
+
+  "ChildProperties": {
+    "Slider":
+    {
+      "SliderRelSize": "RelSize",
+      "SliderDrawable": "Drawable"
+    }
+  },
+
+  "Defaults": {
+    "Name": "VerticalSlider",
+    "InputEnabled": "true"
+  }
 }

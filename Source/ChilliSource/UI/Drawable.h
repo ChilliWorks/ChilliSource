@@ -31,8 +31,9 @@
 #define _CHILLISOURCE_UI_DRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Drawable/DrawableType.h>
+#include <ChilliSource/UI/Drawable/DrawableComponent.h>
 #include <ChilliSource/UI/Drawable/DrawableDesc.h>
+#include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
 #include <ChilliSource/UI/Drawable/StandardDrawable.h>

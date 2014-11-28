@@ -26,7 +26,6 @@
 //  THE SOFTWARE.
 //
 
-
 #ifndef _CHILLISOURCE_UI_TEXT_HIGHLIGHTCOMPONENT_H_
 #define _CHILLISOURCE_UI_TEXT_HIGHLIGHTCOMPONENT_H_
 
@@ -206,6 +205,8 @@ namespace ChilliSource
             
             IDrawableSPtr m_normalDrawable;
             IDrawableSPtr m_highlightDrawable;
+            
+            DrawableComponent* m_drawableComponent = nullptr;
             
             bool m_highlighted = false;
             std::vector<Input::Pointer::Id> m_activePointerIds;

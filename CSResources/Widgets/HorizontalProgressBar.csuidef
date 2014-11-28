@@ -1,21 +1,16 @@
 {
   "Type": "HorizontalProgressBar",
 
-  "Defaults": {
-    "Name": "HorizontalProgressBar"
-  },
-
-  "ChildProperties": {
-    "Bar":
+  "Components":[
     {
-      "BarRelSize": "RelSize",
-      "BarDrawable": "Drawable"
+      "Type": "Drawable",
+      "Name": "Drawable"
     }
-  },
+  ],
 
   "Children": {
     "Bar": {
-      "Type": "Widget",
+      "Type": "Image",
       "RelSize": "0.0 1.0",
       "ParentalAnchor": "MiddleLeft",
       "OriginAnchor": "MiddleLeft"
@@ -26,5 +21,21 @@
     {
       "Name": "Bar"
     }
-  ]
+  ],
+
+  "ComponentProperties":{
+    "Drawable": "all"
+  },
+
+  "ChildProperties": {
+    "Bar":
+    {
+      "BarRelSize": "RelSize",
+      "BarDrawable": "Drawable"
+    }
+  },
+
+  "Defaults": {
+    "Name": "HorizontalProgressBar"
+  }
 }

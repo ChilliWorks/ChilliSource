@@ -12,6 +12,7 @@
 		81173CE01A16489D00E169C0 /* ComponentFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81173CDE1A16489D00E169C0 /* ComponentFactory.cpp */; };
 		811B181819D19AF400B06B5D /* RotationGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 811B181619D19AF400B06B5D /* RotationGesture.cpp */; };
 		816E8BE91A28B33600207BEE /* HighlightComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 816E8BE61A28B33600207BEE /* HighlightComponent.cpp */; };
+		816E8BEC1A28CB9100207BEE /* DrawableComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 816E8BEA1A28CB9100207BEE /* DrawableComponent.cpp */; };
 		817F76321A03E23A00D36ACF /* Canvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F75EC1A03E23A00D36ACF /* Canvas.cpp */; };
 		817F76331A03E23A00D36ACF /* PropertyMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F75EF1A03E23A00D36ACF /* PropertyMap.cpp */; };
 		817F76341A03E23A00D36ACF /* PropertyType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F75F11A03E23A00D36ACF /* PropertyType.cpp */; };
@@ -383,6 +384,8 @@
 		816E8BE61A28B33600207BEE /* HighlightComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HighlightComponent.cpp; sourceTree = "<group>"; };
 		816E8BE71A28B33600207BEE /* HighlightComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HighlightComponent.h; sourceTree = "<group>"; };
 		816E8BE81A28B33600207BEE /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Button.h; sourceTree = "<group>"; };
+		816E8BEA1A28CB9100207BEE /* DrawableComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableComponent.cpp; sourceTree = "<group>"; };
+		816E8BEB1A28CB9100207BEE /* DrawableComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableComponent.h; sourceTree = "<group>"; };
 		817F75EC1A03E23A00D36ACF /* Canvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas.cpp; sourceTree = "<group>"; };
 		817F75ED1A03E23A00D36ACF /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canvas.h; sourceTree = "<group>"; };
 		817F75EE1A03E23A00D36ACF /* PropertyAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyAccessor.h; sourceTree = "<group>"; };
@@ -1114,6 +1117,8 @@
 		817F76071A03E23A00D36ACF /* Drawable */ = {
 			isa = PBXGroup;
 			children = (
+				816E8BEA1A28CB9100207BEE /* DrawableComponent.cpp */,
+				816E8BEB1A28CB9100207BEE /* DrawableComponent.h */,
 				817F760A1A03E23A00D36ACF /* DrawableType.cpp */,
 				817F760B1A03E23A00D36ACF /* DrawableType.h */,
 				817F760C1A03E23A00D36ACF /* DrawableUtils.cpp */,
@@ -2832,6 +2837,7 @@
 				817F76321A03E23A00D36ACF /* Canvas.cpp in Sources */,
 				81D8B6AF1962E0F70010DA84 /* HttpRequest.cpp in Sources */,
 				81D8B4141962E0EC0010DA84 /* FileStream.cpp in Sources */,
+				816E8BEC1A28CB9100207BEE /* DrawableComponent.cpp in Sources */,
 				81D8B44E1962E0EC0010DA84 /* ImageView.cpp in Sources */,
 				81D8B4611962E0EC0010DA84 /* ContentManagementSystem.cpp in Sources */,
 				81D8B4031962E0EC0010DA84 /* PlatformSystem.cpp in Sources */,

@@ -2,15 +2,19 @@
   "Type": "HighlightButton",
 
   "Components":[
+    {
+      "Type": "Drawable",
+      "Name": "Drawable"
+    },
   	{
   		"Type": "Highlight",
-  		"Name": "HighlightLogic"
+  		"Name": "Highlight"
   	}
   ],
 
-  "ComponentProperties":
-  {
-  	"HighlightLogic": "all"
+  "ComponentProperties":{
+    "Drawable": "none",
+  	"Highlight": "all"
   },
 
   "Defaults": {    

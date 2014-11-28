@@ -90,6 +90,9 @@ namespace ChilliSource
             WidgetDefCSPtr widgetDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Widget.csuidef");
             RegisterDefinition(widgetDef);
             
+            WidgetDefCSPtr imageDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Image.csuidef");
+            RegisterDefinition(imageDef);
+            
             WidgetDefCSPtr highlightButtonDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HighlightButton.csuidef");
             RegisterDefinition(highlightButtonDef);
             

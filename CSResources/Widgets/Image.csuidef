@@ -1,5 +1,5 @@
 {
-  "Type": "ToggleButton",
+  "Type": "Image",
 
   "Components":[
   	{
@@ -12,8 +12,7 @@
   	"Drawable": "all"
   },
 
-  "Defaults": {
-    "Name": "ToggleButton",
-    "InputEnabled": "true"
+  "Defaults": {    
+    "Name": "Image"
   }
 }
