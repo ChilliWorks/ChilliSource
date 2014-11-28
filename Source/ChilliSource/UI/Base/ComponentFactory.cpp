@@ -28,6 +28,7 @@
 
 #include <ChilliSource/UI/Base/ComponentFactory.h>
 
+#include <ChilliSource/UI/Button/HighlightComponent.h>
 #include <ChilliSource/UI/Text/TextComponent.h>
 
 namespace ChilliSource
@@ -69,6 +70,7 @@ namespace ChilliSource
         //-----------------------------------------------------------------
         void ComponentFactory::OnInit()
         {
+            Register<HighlightComponent>("Highlight");
             Register<TextComponent>("Text");
         }
         //-----------------------------------------------------------------

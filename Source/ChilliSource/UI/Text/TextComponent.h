@@ -49,17 +49,11 @@ namespace ChilliSource
         /// A component which can be added to a widget to provide text rendering
         /// functionality. Text drawable contains the following properties:
         ///
-        /// "FontLocation": The storage location of the font. This can be any of
-        /// the standard storage location values and defaults to "Package".
+        /// "Font": The description of the font resource that will be used to render
+        /// the text. This default to the default font built into chilli source.
         ///
-        /// "FontPath": The file path to the font in the given storage location.
-        ///
-        /// "LocalisedTextLocation": The storage location of the localised
-        /// text file. This can be any of the standard storage location values and
-        /// defaults to "Package".
-        ///
-        /// "LocalisedTextPath": The file path of the storage location in the
-        /// given storage location.
+        /// "LocalisedText": The description of the localised text resource which
+        /// will be used to generate the text.
         ///
         /// "LocalisedTextId": The Id of the string in the given localised text
         /// file.
@@ -342,7 +336,7 @@ namespace ChilliSource
         private:
             friend class ComponentFactory;
             //-------------------------------------------------------------------
-            /// Constructor that builds the drawable from key-value properties.
+            /// Constructor that builds the text from key-value properties.
             /// The properties used to create the text are described in the
             /// class documentation.
             ///

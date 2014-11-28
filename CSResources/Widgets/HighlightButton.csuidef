@@ -1,6 +1,18 @@
 {
   "Type": "HighlightButton",
 
+  "Components":[
+  	{
+  		"Type": "Highlight",
+  		"Name": "HighlightLogic"
+  	}
+  ],
+
+  "ComponentProperties":
+  {
+  	"HighlightLogic": "all"
+  },
+
   "Defaults": {    
     "Name": "HighlightButton",
     "InputEnabled": "true"
