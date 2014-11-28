@@ -876,6 +876,12 @@ namespace ChilliSource
             /// @param The layout that changed
             //----------------------------------------------------------------------------------------
             void OnLayoutChanged(const ILayout* in_layout);
+            //----------------------------------------------------------------------------------------
+            /// Destructor. Sends the OnDestroy event to all components.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------------------
+            ~Widget();
         private:
             friend class Canvas;
             friend class WidgetFactory;
@@ -974,16 +980,6 @@ namespace ChilliSource
             /// is no component could be found.
             //----------------------------------------------------------------------------------------
             const Component* GetComponentWithName(const std::string& m_name) const;
-            //----------------------------------------------------------------------------------------
-            /// Set the layout that handles how to layout the widget's internal subviews. If this is null then the
-            /// subviews will retain their current size and position. Otherwise the size and position may
-            /// be manipulatd by the layout
-            ///
-            /// @author S Downie
-            ///
-            /// @param Layout
-            //----------------------------------------------------------------------------------------
-            void SetInternalLayout(ILayoutUPtr in_layout);
             //----------------------------------------------------------------------------------------
             /// Set the pointer to the canvas
             ///
@@ -1088,13 +1084,29 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void OnParentTransformChanged();
             //----------------------------------------------------------------------------------------
+            /// Resumes the widget, its components and its children. This is called when the widget
+            /// is attached to the canvas and every time the state that owns the canvas is resumed while
+            /// the widget is attached.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------------------
+            void OnResume();
+            //----------------------------------------------------------------------------------------
+            /// Foregrounds the widget, its components and its children. This is called when the widget
+            /// is attached to the canvas and every time the state that owns the canvas is foregrounded
+            /// while the widget is attached.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------------------
+            void OnForeground();
+            //----------------------------------------------------------------------------------------
             /// Update this widget and any sub widgets
             ///
             /// @author S Downie
             ///
             /// @param Time in seconds since last update
             //----------------------------------------------------------------------------------------
-            void Update(f32 in_timeSinceLastUpdate);
+            void OnUpdate(f32 in_timeSinceLastUpdate);
             //----------------------------------------------------------------------------------------
             /// Draw the view using the currently set drawable. Tell any subviews to draw.
             ///
@@ -1102,7 +1114,23 @@ namespace ChilliSource
             ///
             /// @param Canvas renderer
             //----------------------------------------------------------------------------------------
-            void Draw(Rendering::CanvasRenderer* in_renderer);
+            void OnDraw(Rendering::CanvasRenderer* in_renderer);
+            //----------------------------------------------------------------------------------------
+            /// Backgrounds the widget, its components and its children. This is called when the widget
+            /// is removed from the canvas and every time the state that owns the canvas is backgrounded
+            /// while the widget is attached.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------------------
+            void OnBackground();
+            //----------------------------------------------------------------------------------------
+            /// Suspends the widget, its components and its children. This is called when the widget
+            /// is removed from the canvas and every time the state that owns the canvas is suspended
+            /// while the widget is attached.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------------------
+            void OnSuspend();
             //-----------------------------------------------------------
             /// Called when the canvas receives cursor/touch input
             ///
@@ -1174,7 +1202,6 @@ namespace ChilliSource
             
             IDrawableSPtr m_drawable;
             ILayoutSPtr m_layout;
-            ILayoutUPtr m_internalLayout;
             
             Widget* m_parent = nullptr;
             const Widget* m_canvas = nullptr;

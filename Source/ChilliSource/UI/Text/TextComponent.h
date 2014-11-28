@@ -352,14 +352,6 @@ namespace ChilliSource
             
         private:
             //-------------------------------------------------------------------
-            /// This registers all of the properties of a Text component
-            /// such that they can be accessed via the SetProperty() and
-            /// GetProperty() methods.
-            ///
-            /// @author Ian Copland
-            //-------------------------------------------------------------------
-            void OnRegisterProperties() override;
-            //-------------------------------------------------------------------
             /// Render the text using the transform and size of the owning
             /// widget.
             ///

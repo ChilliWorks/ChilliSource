@@ -83,31 +83,23 @@ namespace ChilliSource
         TextComponent::TextComponent(const std::string& in_componentName, const PropertyMap& in_properties)
             : Component(in_componentName)
         {
-            if (in_properties.HasValue(k_fontKey) == true)
-            {
-                SetFont(in_properties.GetProperty<Rendering::FontCSPtr>(k_fontKey));
-            }
-            else
-            {
-                auto resourcePool = Core::Application::Get()->GetResourcePool();
-                SetFont(resourcePool->LoadResource<Rendering::Font>(Core::StorageLocation::k_chilliSource, "Fonts/CarlitoMed.csfont"));
-            }
+            auto resourcePool = Core::Application::Get()->GetResourcePool();
+            SetFont(resourcePool->LoadResource<Rendering::Font>(Core::StorageLocation::k_chilliSource, "Fonts/CarlitoMed.csfont"));
             
-            if (in_properties.HasValue(k_localisedTextKey) == true)
-            {
-                SetLocalisedText(in_properties.GetProperty<Core::LocalisedTextCSPtr>(k_localisedTextKey));
-            }
+            RegisterProperty<Rendering::FontCSPtr>(k_fontKey, CSCore::MakeDelegate(this, &TextComponent::GetFont), CSCore::MakeDelegate(this, &TextComponent::SetFont));
+            RegisterProperty<Core::LocalisedTextCSPtr>(k_localisedTextKey, CSCore::MakeDelegate(this, &TextComponent::GetLocalisedText), CSCore::MakeDelegate(this, &TextComponent::SetLocalisedText));
+            RegisterProperty<std::string>(k_localisedTextIdKey, CSCore::MakeDelegate(this, &TextComponent::GetLocalisedTextId), CSCore::MakeDelegate<TextComponent, TextComponent, void, const std::string&>(this, &TextComponent::SetLocalisedTextId));
+            RegisterProperty<std::string>(k_textKey, CSCore::MakeDelegate(this, &TextComponent::GetText), CSCore::MakeDelegate<TextComponent, TextComponent, void, const std::string&>(this, &TextComponent::SetText));
+            RegisterProperty<Core::Colour>(k_textColourKey, CSCore::MakeDelegate(this, &TextComponent::GetTextColour), CSCore::MakeDelegate(this, &TextComponent::SetTextColour));
+            RegisterProperty<Rendering::HorizontalTextJustification>(k_horizontalJustificationKey, CSCore::MakeDelegate(this, &TextComponent::GetHorizontalJustification), CSCore::MakeDelegate(this, &TextComponent::SetHorizontalJustification));
+            RegisterProperty<Rendering::VerticalTextJustification>(k_verticalJustificationKey, CSCore::MakeDelegate(this, &TextComponent::GetVerticalJustification), CSCore::MakeDelegate(this, &TextComponent::SetVerticalJustification));
+            RegisterProperty<f32>(k_absCharSpacingOffsetKey, CSCore::MakeDelegate(this, &TextComponent::GetAbsoluteCharacterSpacingOffset), CSCore::MakeDelegate(this, &TextComponent::SetAbsoluteCharacterSpacingOffset));
+            RegisterProperty<f32>(k_absLineSpacingOffsetKey, CSCore::MakeDelegate(this, &TextComponent::GetAbsoluteLineSpacingOffset), CSCore::MakeDelegate(this, &TextComponent::SetAbsoluteCharacterSpacingOffset));
+            RegisterProperty<f32>(k_lineSpacingScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetLineSpacingScale), CSCore::MakeDelegate(this, &TextComponent::SetLineSpacingScale));
+            RegisterProperty<s32>(k_maxNumberOfLinesKey, CSCore::MakeDelegate(this, &TextComponent::GetMaxNumberOfLines), CSCore::MakeDelegate(this, &TextComponent::SetMaxNumberOfLines));
+            RegisterProperty<f32>(k_textScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetTextScale), CSCore::MakeDelegate(this, &TextComponent::SetTextScale));
             
-            SetLocalisedTextId(in_properties.GetPropertyOrDefault(k_textKey, GetLocalisedTextId()));
-            SetText(in_properties.GetPropertyOrDefault(k_textKey, GetText()));
-            SetTextColour(in_properties.GetPropertyOrDefault(k_textColourKey, GetTextColour()));
-            SetAbsoluteCharacterSpacingOffset(in_properties.GetPropertyOrDefault(k_absCharSpacingOffsetKey, GetAbsoluteCharacterSpacingOffset()));
-            SetAbsoluteLineSpacingOffset(in_properties.GetPropertyOrDefault(k_absLineSpacingOffsetKey, GetAbsoluteLineSpacingOffset()));
-            SetLineSpacingScale(in_properties.GetPropertyOrDefault(k_lineSpacingScaleKey, GetLineSpacingScale()));
-            SetMaxNumberOfLines(in_properties.GetPropertyOrDefault(k_maxNumberOfLinesKey, (s32)GetMaxNumberOfLines()));
-            SetTextScale(in_properties.GetPropertyOrDefault(k_textScaleKey, GetTextScale()));
-            SetHorizontalJustification(in_properties.GetPropertyOrDefault(k_horizontalJustificationKey, GetHorizontalJustification()));
-            SetVerticalJustification(in_properties.GetPropertyOrDefault(k_verticalJustificationKey, GetVerticalJustification()));
+            ApplyRegisteredProperties(in_properties);
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -320,23 +312,6 @@ namespace ChilliSource
             m_textProperties.m_textScale = in_scale;
             
             m_invalidateCache = true;
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        void TextComponent::OnRegisterProperties()
-        {
-            RegisterProperty<Rendering::FontCSPtr>(k_fontKey, CSCore::MakeDelegate(this, &TextComponent::GetFont), CSCore::MakeDelegate(this, &TextComponent::SetFont));
-            RegisterProperty<Core::LocalisedTextCSPtr>(k_localisedTextKey, CSCore::MakeDelegate(this, &TextComponent::GetLocalisedText), CSCore::MakeDelegate(this, &TextComponent::SetLocalisedText));
-            RegisterProperty<std::string>(k_localisedTextIdKey, CSCore::MakeDelegate(this, &TextComponent::GetLocalisedTextId), CSCore::MakeDelegate<TextComponent, TextComponent, void, const std::string&>(this, &TextComponent::SetLocalisedTextId));
-            RegisterProperty<std::string>(k_textKey, CSCore::MakeDelegate(this, &TextComponent::GetText), CSCore::MakeDelegate<TextComponent, TextComponent, void, const std::string&>(this, &TextComponent::SetText));
-            RegisterProperty<Core::Colour>(k_textColourKey, CSCore::MakeDelegate(this, &TextComponent::GetTextColour), CSCore::MakeDelegate(this, &TextComponent::SetTextColour));
-            RegisterProperty<Rendering::HorizontalTextJustification>(k_horizontalJustificationKey, CSCore::MakeDelegate(this, &TextComponent::GetHorizontalJustification), CSCore::MakeDelegate(this, &TextComponent::SetHorizontalJustification));
-            RegisterProperty<Rendering::VerticalTextJustification>(k_verticalJustificationKey, CSCore::MakeDelegate(this, &TextComponent::GetVerticalJustification), CSCore::MakeDelegate(this, &TextComponent::SetVerticalJustification));
-            RegisterProperty<f32>(k_absCharSpacingOffsetKey, CSCore::MakeDelegate(this, &TextComponent::GetAbsoluteCharacterSpacingOffset), CSCore::MakeDelegate(this, &TextComponent::SetAbsoluteCharacterSpacingOffset));
-            RegisterProperty<f32>(k_absLineSpacingOffsetKey, CSCore::MakeDelegate(this, &TextComponent::GetAbsoluteLineSpacingOffset), CSCore::MakeDelegate(this, &TextComponent::SetAbsoluteCharacterSpacingOffset));
-            RegisterProperty<f32>(k_lineSpacingScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetLineSpacingScale), CSCore::MakeDelegate(this, &TextComponent::SetLineSpacingScale));
-            RegisterProperty<s32>(k_maxNumberOfLinesKey, CSCore::MakeDelegate(this, &TextComponent::GetMaxNumberOfLines), CSCore::MakeDelegate(this, &TextComponent::SetMaxNumberOfLines));
-            RegisterProperty<f32>(k_textScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetTextScale), CSCore::MakeDelegate(this, &TextComponent::SetTextScale));
         }
         //-------------------------------------------------------------------
         //--------------------------------------------------------------------

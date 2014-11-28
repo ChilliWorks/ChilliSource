@@ -257,8 +257,21 @@ namespace ChilliSource
             for (auto& component : m_components)
             {
                 component->SetWidget(this);
-                component->RegisterProperties();
             }
+            
+#ifdef CS_ENABLE_DEBUG
+            //ensure there are no duplicate names
+            for (const auto& componentA : m_components)
+            {
+                for (const auto& componentB : m_components)
+                {
+                    if (componentA != componentB)
+                    {
+                        CS_ASSERT(componentA->GetName() != componentB->GetName(), "Duplicate widget component name '" + componentA->GetName() + "'.");
+                    }
+                }
+            }
+#endif
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -271,7 +284,11 @@ namespace ChilliSource
                 Widget* widgetRaw = widget.get();
                 m_internalChildren.push_back(std::move(widget));
                 widgetRaw->m_parent = this;
-                widgetRaw->SetCanvas(m_canvas);
+                
+                if (m_canvas != nullptr)
+                {
+                    widgetRaw->SetCanvas(m_canvas);
+                }
             }
         }
         //----------------------------------------------------------------------------------------
@@ -281,6 +298,10 @@ namespace ChilliSource
             //Hook up any links to our components
             for(const auto& link : in_componentPropertyLinks)
             {
+                CS_ASSERT(m_basePropertyAccessors.find(link.GetLinkName()) == m_basePropertyAccessors.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                CS_ASSERT(m_componentPropertyLinks.find(link.GetLinkName()) == m_componentPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                CS_ASSERT(m_childPropertyLinks.find(link.GetLinkName()) == m_childPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                
                 Component* component = GetComponentWithName(link.GetLinkedOwner());
                 CS_ASSERT(component != nullptr, "Cannot create property link for property '" + link.GetLinkName() + "' because target component '" + link.GetLinkedOwner() + "' doesn't exist.");
                 CS_ASSERT(component->HasProperty(link.GetLinkName()) == true, "Cannot create property link for property '" + link.GetLinkName() + "' because target component '" +
@@ -295,6 +316,10 @@ namespace ChilliSource
             //Hook up any links to our childrens properties
             for(const auto& link : in_childPropertyLinks)
             {
+                CS_ASSERT(m_basePropertyAccessors.find(link.GetLinkName()) == m_basePropertyAccessors.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                CS_ASSERT(m_componentPropertyLinks.find(link.GetLinkName()) == m_componentPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                CS_ASSERT(m_childPropertyLinks.find(link.GetLinkName()) == m_childPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                
                 Widget* childWidget = GetInternalWidgetRecursive(link.GetLinkedOwner());
                 CS_ASSERT(childWidget != nullptr, "Cannot create property link for property '" + link.GetLinkName() + "' because target widget '" + link.GetLinkedOwner() + "' doesn't exist.");
                 
@@ -481,19 +506,6 @@ namespace ChilliSource
         ILayoutCSPtr Widget::GetLayout() const
         {
             return m_layout;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::SetInternalLayout(ILayoutUPtr in_layout)
-        {
-            m_internalLayout = std::move(in_layout);
-            
-            if(m_internalLayout != nullptr)
-            {
-                m_internalLayout->SetWidget(this);
-            }
-            
-            OnLayoutChanged(m_internalLayout.get());
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -772,7 +784,11 @@ namespace ChilliSource
 
             m_children.push_back(in_widget);
             in_widget->m_parent = this;
-            in_widget->SetCanvas(m_canvas);
+            
+            if (m_canvas != nullptr)
+            {
+                in_widget->SetCanvas(m_canvas);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -784,7 +800,11 @@ namespace ChilliSource
             {
                 if(it->get() == in_widget)
                 {
-                    (*it)->SetCanvas(nullptr);
+                    if (m_canvas != nullptr)
+                    {
+                        (*it)->SetCanvas(nullptr);
+                    }
+                    
                     (*it)->m_parent = nullptr;
                     m_children.erase(it);
                     return;
@@ -1029,19 +1049,9 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::SetCanvas(const Widget* in_canvas)
         {
+            CS_ASSERT((in_canvas == nullptr && m_canvas != nullptr) || (in_canvas != nullptr && m_canvas == nullptr), "Cannot set canvas to null if already null or set to non-null if already not null.");
+            
             m_canvas = in_canvas;
-            
-            for(auto& child : m_internalChildren)
-            {
-                child->SetCanvas(m_canvas);
-            }
-            
-            for(auto& child : m_children)
-            {
-                child->SetCanvas(m_canvas);
-            }
-            
-            InvalidateTransformCache();
             
             if(m_canvas != nullptr)
             {
@@ -1057,6 +1067,18 @@ namespace ChilliSource
                     component->OnRemovedFromCanvas();
                 }
             }
+            
+            for(auto& child : m_internalChildren)
+            {
+                child->SetCanvas(m_canvas);
+            }
+            
+            for(auto& child : m_children)
+            {
+                child->SetCanvas(m_canvas);
+            }
+            
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1331,19 +1353,6 @@ namespace ChilliSource
                 }
             }
             
-            if(layout == nullptr)
-            {
-                for(u32 i=0; i<m_internalChildren.size(); ++i)
-                {
-                    if(m_internalChildren[i].get() == in_child)
-                    {
-                        childIndex = (s32)i;
-                        layout = m_internalLayout.get();
-                        break;
-                    }
-                }
-            }
-            
             return std::make_pair(layout, childIndex);
         }
         //----------------------------------------------------------------------------------------
@@ -1358,11 +1367,6 @@ namespace ChilliSource
                 if(m_layout != nullptr)
                 {
                     m_layout->BuildLayout();
-                }
-                
-                if(m_internalLayout != nullptr)
-                {
-                    m_internalLayout->BuildLayout();
                 }
             }
             
@@ -1387,7 +1391,53 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::Update(f32 in_timeSinceLastUpdate)
+        void Widget::OnResume()
+        {
+            for (const auto& component : m_components)
+            {
+                component->OnResume();
+            }
+            
+            m_internalChildren.lock();
+            for(auto& child : m_internalChildren)
+            {
+                child->OnResume();
+            }
+            m_internalChildren.unlock();
+            
+            m_children.lock();
+            for(auto& child : m_children)
+            {
+                child->OnResume();
+            }
+            m_children.unlock();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::OnForeground()
+        {
+            for (const auto& component : m_components)
+            {
+                component->OnForeground();
+            }
+            
+            m_internalChildren.lock();
+            for(auto& child : m_internalChildren)
+            {
+                child->OnForeground();
+            }
+            m_internalChildren.unlock();
+            
+            m_children.lock();
+            for(auto& child : m_children)
+            {
+                child->OnForeground();
+            }
+            m_children.unlock();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::OnUpdate(f32 in_timeSinceLastUpdate)
         {
             for (const auto& component : m_components)
             {
@@ -1397,20 +1447,20 @@ namespace ChilliSource
             m_internalChildren.lock();
             for(auto& child : m_internalChildren)
             {
-                child->Update(in_timeSinceLastUpdate);
+                child->OnUpdate(in_timeSinceLastUpdate);
             }
             m_internalChildren.unlock();
             
             m_children.lock();
             for(auto& child : m_children)
             {
-                child->Update(in_timeSinceLastUpdate);
+                child->OnUpdate(in_timeSinceLastUpdate);
             }
             m_children.unlock();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::Draw(Rendering::CanvasRenderer* in_renderer)
+        void Widget::OnDraw(Rendering::CanvasRenderer* in_renderer)
         {
             if(m_isVisible == false)
             {
@@ -1443,14 +1493,14 @@ namespace ChilliSource
             m_internalChildren.lock();
             for(auto& child : m_internalChildren)
             {
-                child->Draw(in_renderer);
+                child->OnDraw(in_renderer);
             }
             m_internalChildren.unlock();
             
             m_children.lock();
             for(auto& child : m_children)
             {
-                child->Draw(in_renderer);
+                child->OnDraw(in_renderer);
             }
             m_children.unlock();
             
@@ -1461,18 +1511,57 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        void Widget::OnBackground()
+        {
+            m_children.lock();
+            for(auto& child : m_children)
+            {
+                child->OnBackground();
+            }
+            m_children.unlock();
+            
+            m_internalChildren.lock();
+            for(auto& child : m_internalChildren)
+            {
+                child->OnBackground();
+            }
+            m_internalChildren.unlock();
+            
+            for (const auto& component : m_components)
+            {
+                component->OnBackground();
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::OnSuspend()
+        {
+            m_children.lock();
+            for(auto& child : m_children)
+            {
+                child->OnSuspend();
+            }
+            m_children.unlock();
+            
+            m_internalChildren.lock();
+            for(auto& child : m_internalChildren)
+            {
+                child->OnSuspend();
+            }
+            m_internalChildren.unlock();
+            
+            for (const auto& component : m_components)
+            {
+                component->OnSuspend();
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         void Widget::OnLayoutChanged(const ILayout* in_layout)
         {
             if(in_layout == m_layout.get())
             {
                 for(auto& child : m_children)
-                {
-                    child->OnParentTransformChanged();
-                }
-            }
-            else if(in_layout == m_internalLayout.get())
-            {
-                for(auto& child : m_internalChildren)
                 {
                     child->OnParentTransformChanged();
                 }
@@ -1668,6 +1757,15 @@ namespace ChilliSource
 						m_releasedOutsideEvent.NotifyConnections(this, in_pointer, in_inputType);
 					}
 				}
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Widget::~Widget()
+        {
+            for (auto& component : m_components)
+            {
+                component->OnDestroy();
             }
         }
     }

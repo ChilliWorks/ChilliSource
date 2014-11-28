@@ -114,7 +114,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             //----------------------------------------------------------------
-            virtual ~Component(){}
+            virtual ~Component() {}
         protected:
             //----------------------------------------------------------------
             /// Constructor
@@ -145,8 +145,8 @@ namespace ChilliSource
             /// duplicate property name is registered the app is considered to
             /// be in an irrecoverable state and will terminate.
             ///
-            /// This should only be called during the register properties
-            /// lifecycle event.
+            /// This should only be called during construction of the component.
+            /// Once finished adding properties ApplyProperties should be called.
             ///
             /// @author Ian Copland
             ///
@@ -157,12 +157,18 @@ namespace ChilliSource
             //----------------------------------------------------------------
             template <typename TPropertyType> void RegisterProperty(const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter);
             //----------------------------------------------------------------
-            /// This is called prior to the On Init lifecycle event. This
-            /// should be used to register all component properties.
+            /// Finalises any registered properties and applies the default
+            /// values for them as supplied by the given property map.
+            ///
+            /// This must only be called once, and should be called during
+            /// the construction of a component, after registering all
+            /// properties.
             ///
             /// @author Ian Copland
+            ///
+            /// @param The property map
             //----------------------------------------------------------------
-            virtual void OnRegisterProperties() = 0;
+            void ApplyRegisteredProperties(const PropertyMap& in_properties);
             //----------------------------------------------------------------
             /// A method which is called when all components owned by the parent
             /// widget have been created and added. Inheriting classes should use
@@ -263,19 +269,8 @@ namespace ChilliSource
             /// @param The owning widget.
             //----------------------------------------------------------------
             void SetWidget(Widget* in_widget);
-            //----------------------------------------------------------------
-            /// Enables property registration then calls down to the subclass
-            /// to register its properties then again disables registation.
-            /// This can only be called once and should be called between setting
-            /// the owning widget and calling OnInit.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The owning widget.
-            //----------------------------------------------------------------
-            void RegisterProperties();
 
-            bool m_propertyRegistrationEnabled = false;
+            bool m_propertyRegistrationComplete = false;
             std::unordered_map<std::string, IPropertyAccessorUPtr> m_properties;
             Widget* m_widget = nullptr;
             std::string m_name;
@@ -284,6 +279,8 @@ namespace ChilliSource
         //----------------------------------------------------------------
         template <typename TPropertyType> TPropertyType Component::GetProperty(const std::string& in_propertyName) const
         {
+            CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot get a property on a UI::Component prior to property registration completion.");
+            
             std::string lowerPropertyName = in_propertyName;
             Core::StringUtils::ToLowerCase(lowerPropertyName);
             
@@ -300,6 +297,8 @@ namespace ChilliSource
         //----------------------------------------------------------------
         template <typename TPropertyType> void Component::SetProperty(const std::string& in_propertyName, TPropertyType&& in_propertyValue)
         {
+            CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot set a property on a UI::Component prior to property registration completion.");
+            
             std::string lowerPropertyName = in_propertyName;
             Core::StringUtils::ToLowerCase(lowerPropertyName);
             
@@ -316,7 +315,7 @@ namespace ChilliSource
         //----------------------------------------------------------------
         template <typename TPropertyType> void Component::RegisterProperty(const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter)
         {
-            CS_ASSERT(m_propertyRegistrationEnabled == true, "UI::Component properties can only be registered during the OnRegisterProperties lifecycle event.");
+            CS_ASSERT(m_propertyRegistrationComplete == false, "UI::Component properties cannot be registered after property registration completion.");
             
             std::string lowerPropertyName = in_name;
             Core::StringUtils::ToLowerCase(lowerPropertyName);

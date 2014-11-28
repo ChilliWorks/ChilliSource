@@ -121,6 +121,18 @@ namespace ChilliSource
             //-------------------------------------------------------
             void OnInit() override;
             //-------------------------------------------------------
+            /// Called when the owning state is resumed.
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------
+            void OnResume() override;
+            //-------------------------------------------------------
+            /// Called when the owning state is foregrounded.
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------
+            void OnForeground() override;
+            //-------------------------------------------------------
             /// Called every frame that the canvas is active
             ///
             /// @author S Downie
@@ -128,6 +140,18 @@ namespace ChilliSource
             /// @param Time in seconds since last update
             //-------------------------------------------------------
             void OnUpdate(f32 in_timeSinceLastUpdate) override;
+            //-------------------------------------------------------
+            /// Called when the owning state is backgrounded.
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------
+            void OnBackground() override;
+            //-------------------------------------------------------
+            /// Called when the owning state is suspened.
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------
+            void OnSuspend() override;
             //-------------------------------------------------------
             /// Called when the system is destroyed to destroy the
             /// canvas widget

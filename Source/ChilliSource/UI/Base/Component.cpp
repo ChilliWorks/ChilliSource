@@ -28,7 +28,15 @@
 
 #include <ChilliSource/UI/Base/Component.h>
 
+#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/UI/Base/PropertyMap.h>
+#include <ChilliSource/UI/Drawable/DrawableDesc.h>
+#include <ChilliSource/UI/Layout/LayoutDesc.h>
+
 
 namespace ChilliSource
 {
@@ -77,21 +85,87 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
-        void Component::SetWidget(Widget* in_widget)
+        void Component::ApplyRegisteredProperties(const PropertyMap& in_properties)
         {
-            CS_ASSERT(m_widget == nullptr, "Cannot change the owning widget on a component.");
+            CS_ASSERT(m_propertyRegistrationComplete == false, "Registered properties have already been applied.");
             
-            m_widget = in_widget;
+            m_propertyRegistrationComplete = true;
+            
+            for (const auto& key : in_properties.GetKeys())
+            {
+                if (in_properties.HasValue(key) == true)
+                {
+                    switch(in_properties.GetType(key))
+                    {
+                        case PropertyType::k_bool:
+                            SetProperty(key, in_properties.GetProperty<bool>(key));
+                            break;
+                        case PropertyType::k_int:
+                            SetProperty(key, in_properties.GetProperty<s32>(key));
+                            break;
+                        case PropertyType::k_float:
+                            SetProperty(key, in_properties.GetProperty<f32>(key));
+                            break;
+                        case PropertyType::k_string:
+                            SetProperty(key, in_properties.GetProperty<std::string>(key));
+                            break;
+                        case PropertyType::k_vec2:
+                            SetProperty(key, in_properties.GetProperty<Core::Vector2>(key));
+                            break;
+                        case PropertyType::k_vec3:
+                            SetProperty(key, in_properties.GetProperty<Core::Vector3>(key));
+                            break;
+                        case PropertyType::k_vec4:
+                            SetProperty(key, in_properties.GetProperty<Core::Vector4>(key));
+                            break;
+                        case PropertyType::k_colour:
+                            SetProperty(key, in_properties.GetProperty<Core::Colour>(key));
+                            break;
+                        case PropertyType::k_alignmentAnchor:
+                            SetProperty(key, in_properties.GetProperty<Rendering::AlignmentAnchor>(key));
+                            break;
+                        case PropertyType::k_sizePolicy:
+                            SetProperty(key, in_properties.GetProperty<SizePolicy>(key));
+                            break;
+                        case PropertyType::k_horizontalTextJustification:
+                            SetProperty(key, in_properties.GetProperty<Rendering::HorizontalTextJustification>(key));
+                            break;
+                        case PropertyType::k_verticalTextJustification:
+                            SetProperty(key, in_properties.GetProperty<Rendering::VerticalTextJustification>(key));
+                            break;
+                        case PropertyType::k_texture:
+                            SetProperty(key, in_properties.GetProperty<Rendering::TextureCSPtr>(key));
+                            break;
+                        case PropertyType::k_textureAtlas:
+                            SetProperty(key, in_properties.GetProperty<Rendering::TextureAtlasCSPtr>(key));
+                            break;
+                        case PropertyType::k_font:
+                            SetProperty(key, in_properties.GetProperty<Rendering::FontCSPtr>(key));
+                            break;
+                        case PropertyType::k_localisedText:
+                            SetProperty(key, in_properties.GetProperty<Core::LocalisedTextCSPtr>(key));
+                            break;
+                        case PropertyType::k_drawableDesc:
+                            SetProperty(key, IDrawable::Create(in_properties.GetProperty<DrawableDesc>(key)));
+                            break;
+                        case PropertyType::k_layoutDesc:
+                            SetProperty(key, ILayout::Create(in_properties.GetProperty<LayoutDesc>(key)));
+                            break;
+                        case PropertyType::k_unknown:
+                            CS_LOG_FATAL("Cannot set an 'unknown' property.");
+                            break;
+                    }
+                }
+            }
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
-        void Component::RegisterProperties()
+        void Component::SetWidget(Widget* in_widget)
         {
-            CS_ASSERT(m_properties.empty() == true, "Cannot change the properties on a component.");
+            CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot add component to a widget before property registration is complete.");
+            CS_ASSERT(m_widget == nullptr, "Cannot change the owning widget on a component.");
             
-            m_propertyRegistrationEnabled = true;
-            OnRegisterProperties();
-            m_propertyRegistrationEnabled = false;
+            m_widget = in_widget;
         }
     }
 }
