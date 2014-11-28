@@ -78,9 +78,6 @@
 #include <ChilliSource/Rendering/Texture/TextureProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 
-#include <ChilliSource/Scripting/Lua/LuaSourceProvider.h>
-#include <ChilliSource/Scripting/Lua/LuaSystem.h>
-
 #include <ChilliSource/UI/Base/ComponentFactory.h>
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 #include <ChilliSource/UI/Base/WidgetDefProvider.h>
@@ -417,10 +414,6 @@ namespace ChilliSource
             CreateSystem<Rendering::CubemapProvider>();
             CreateSystem<Rendering::FontProvider>();
             CreateSystem<Rendering::RenderComponentFactory>();
-            
-            //Scripting
-            CreateSystem<Scripting::LuaSystem>();
-            CreateSystem<Scripting::LuaSourceProvider>();
             
             //Particles
             CreateSystem<Rendering::ParticleSystem>();

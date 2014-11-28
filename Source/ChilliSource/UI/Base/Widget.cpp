@@ -30,15 +30,11 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Scripting/Lua/LuaSystem.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
-#include <ChilliSource/UI/Base/WidgetProxy.h>
 #include <ChilliSource/UI/Drawable/DrawableDesc.h>
-#include <ChilliSource/UI/Drawable/NinePatchDrawableProxy.h>
-#include <ChilliSource/UI/Drawable/StandardDrawableProxy.h>
-#include <ChilliSource/UI/Drawable/ThreePatchDrawableProxy.h>
 #include <ChilliSource/UI/Layout/LayoutDesc.h>
 
 namespace ChilliSource

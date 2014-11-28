@@ -32,33 +32,22 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
-#include <ChilliSource/Input/Pointer/PointerProxy.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
-#include <ChilliSource/Scripting/Lua/LuaSystem.h>
 #include <ChilliSource/UI/Base/PropertyAccessor.h>
 #include <ChilliSource/UI/Base/Component.h>
 #include <ChilliSource/UI/Base/ComponentFactory.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
-#include <ChilliSource/UI/Base/WidgetProxy.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
-#include <ChilliSource/UI/Drawable/DrawableProxy.h>
 #include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
 #include <ChilliSource/UI/Drawable/StandardDrawable.h>
 #include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
-#include <ChilliSource/UI/Drawable/NinePatchDrawableProxy.h>
-#include <ChilliSource/UI/Drawable/StandardDrawableProxy.h>
-#include <ChilliSource/UI/Drawable/ThreePatchDrawableProxy.h>
 #include <ChilliSource/UI/Layout/GridLayout.h>
-#include <ChilliSource/UI/Layout/GridLayoutProxy.h>
 #include <ChilliSource/UI/Layout/HListLayout.h>
-#include <ChilliSource/UI/Layout/HListLayoutProxy.h>
-#include <ChilliSource/UI/Layout/LayoutProxy.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>
 #include <ChilliSource/UI/Layout/VListLayout.h>
-#include <ChilliSource/UI/Layout/VListLayoutProxy.h>
 
 namespace ChilliSource
 {
@@ -121,53 +110,6 @@ namespace ChilliSource
             
             WidgetDefCSPtr labelDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Label.csuidef");
             RegisterDefinition(labelDef);
-            
-            auto luaSystem = Core::Application::Get()->GetSystem<Scripting::LuaSystem>();
-            luaSystem->RegisterEnum("SizePolicy",
-                                    "none", SizePolicy::k_none,
-                                    "usePreferredSize", SizePolicy::k_usePreferredSize,
-                                    "fillMaintainingAspect", SizePolicy::k_fillMaintainingAspect,
-                                    "fitMaintainingAspect", SizePolicy::k_fitMaintainingAspect,
-                                    "useWidthMaintainingAspect", SizePolicy::k_useWidthMaintainingAspect,
-                                    "useHeightMaintainingAspect", SizePolicy::k_useHeightMaintainingAspect
-                                    );
-            
-            luaSystem->RegisterEnum("Anchor",
-                                    "topLeft", Rendering::AlignmentAnchor::k_topLeft,
-                                    "topRight", Rendering::AlignmentAnchor::k_topRight,
-                                    "topCentre", Rendering::AlignmentAnchor::k_topCentre,
-                                    "middleLeft", Rendering::AlignmentAnchor::k_middleLeft,
-                                    "middleRight", Rendering::AlignmentAnchor::k_middleRight,
-                                    "middleCentre", Rendering::AlignmentAnchor::k_middleCentre,
-                                    "bottomLeft", Rendering::AlignmentAnchor::k_bottomLeft,
-                                    "bottomRight", Rendering::AlignmentAnchor::k_bottomRight,
-                                    "bottomCentre", Rendering::AlignmentAnchor::k_bottomCentre
-                                    );
-            
-            luaSystem->RegisterEnum("InputType",
-                                    "None", Input::Pointer::InputType::k_none,
-                                    "Touch", Input::Pointer::InputType::k_touch,
-                                    "LeftMouseButton", Input::Pointer::InputType::k_leftMouseButton,
-                                    "MiddleMouseButton", Input::Pointer::InputType::k_middleMouseButton,
-                                    "RightMouseButton", Input::Pointer::InputType::k_rightMouseButton,
-                                    "Default", Input::Pointer::GetDefaultInputType()
-                                    );
-            
-            Input::PointerProxy::RegisterWithLua(luaSystem);
-            WidgetProxy::RegisterWithLua(luaSystem);
-            DrawableProxy::RegisterWithLua(luaSystem);
-            StandardDrawableProxy::RegisterWithLua(luaSystem);
-            NinePatchDrawableProxy::RegisterWithLua(luaSystem);
-            ThreePatchDrawableProxy::RegisterWithLua(luaSystem);
-            LayoutProxy::RegisterWithLua(luaSystem);
-            GridLayoutProxy::RegisterWithLua(luaSystem);
-            HListLayoutProxy::RegisterWithLua(luaSystem);
-            VListLayoutProxy::RegisterWithLua(luaSystem);
-            
-            luaSystem->RegisterClass("Screen", Core::Application::Get()->GetScreen(),
-                                     "getResolution", &Core::Screen::GetResolution
-                                     );
-
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------

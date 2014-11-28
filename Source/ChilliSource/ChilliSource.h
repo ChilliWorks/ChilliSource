@@ -62,7 +62,6 @@ typedef u64                 TimeIntervalMs;
 #include <ChilliSource/Debugging/ForwardDeclarations.h>
 #include <ChilliSource/Input/ForwardDeclarations.h>
 #include <ChilliSource/GUI/ForwardDeclarations.h>
-#include <ChilliSource/Scripting/ForwardDeclarations.h>
 #include <ChilliSource/Networking/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/ForwardDeclarations.h>
 #include <ChilliSource/Social/ForwardDeclarations.h>

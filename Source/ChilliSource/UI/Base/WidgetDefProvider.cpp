@@ -33,7 +33,6 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Scripting/Lua/LuaSource.h>
 #include <ChilliSource/UI/Base/ComponentFactory.h>
 #include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Base/PropertyType.h>
