@@ -44,13 +44,17 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void ParticleDrawable::Draw(const CameraComponent* in_camera)
 		{
+			m_concurrentParticleData->Lock();
+
 			auto newIndices = m_concurrentParticleData->TakeNewIndices();
 			for (const auto& index : newIndices)
 			{
-				ActivateParticle(index);
+				ActivateParticle(m_concurrentParticleData->GetParticles(), index);
 			}
 
-			DrawParticles(in_camera);
+			DrawParticles(m_concurrentParticleData->GetParticles(), in_camera);
+
+			m_concurrentParticleData->Unlock();
 		}
 		//----------------------------------------------
 		//----------------------------------------------
@@ -63,12 +67,6 @@ namespace ChilliSource
 		const ParticleDrawableDef* ParticleDrawable::GetDrawableDef() const
 		{
 			return m_drawableDef;
-		}
-		//----------------------------------------------
-		//----------------------------------------------
-		const ConcurrentParticleData* ParticleDrawable::GetConcurrentParticleData() const
-		{
-			return m_concurrentParticleData;
 		}
 	}
 }

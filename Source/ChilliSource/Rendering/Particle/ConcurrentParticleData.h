@@ -121,10 +121,19 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			Core::Sphere GetBoundingSphere() const;
 			//-----------------------------------------------------------------
+			/// Locks the container so other threads cannot update it while
+			/// accessing the new indices and particle list.
+			///
+			/// @author Ian Copland
+			//-----------------------------------------------------------------
+			void Lock() const;
+			//-----------------------------------------------------------------
 			/// Returns the list of indicies that have changed since the last
 			/// time this was called. The list will be cleared when called.
-			///
-			/// This is thread-safe, lock doesn't need to be called first.
+			/// Before this is called the container must be locked to ensure
+			/// that new particles are not activated prior to being rendered.
+			/// If the container is not locked the app is considered to be
+			/// in an irrecoverable state and will terminate.
 			/// 
 			/// @author Ian Copland
 			///
@@ -132,16 +141,10 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			std::vector<u32> TakeNewIndices();
 			//-----------------------------------------------------------------
-			/// Locks the particle list so that it cannot be updated on another
-			/// thread while in use.
-			///
-			/// @author Ian Copland
-			//-----------------------------------------------------------------
-			void LockParticles() const;
-			//-----------------------------------------------------------------
 			/// Before this is called the container must be locked to ensure
-			/// that any iteration over the particle data is safe. This will
-			/// try to assert otherwise.
+			/// that any iteration over the particle data is safe. If not the
+			/// app is considered to be in an irrecoverable state and will
+			/// terminate.
 			///
 			/// @author Ian Copland
 			///
@@ -149,12 +152,12 @@ namespace ChilliSource
 			//-----------------------------------------------------------------
 			const Core::dynamic_array<ConcurrentParticleData::Particle>& GetParticles() const;
 			//-----------------------------------------------------------------
-			/// Unlocks the particle list. This should be called as soon as
-			/// the particle list is no longer being used.
+			/// Unlocks the container. This should be called as soon as possible
+			/// after dealing with data that needs to be locked.
 			///
 			/// @author Ian Copland
 			//-----------------------------------------------------------------
-			void UnlockParticles() const;
+			void Unlock() const;
 			//-----------------------------------------------------------------
 			/// Updates the particle data.
 			///
@@ -179,8 +182,8 @@ namespace ChilliSource
 			bool m_updating = false;
 			bool m_activeParticles = false;
 			
-			mutable std::mutex m_mutex;
-			mutable std::unique_lock<std::mutex> m_lock;
+			mutable std::recursive_mutex m_mutex;
+			mutable std::unique_lock<std::recursive_mutex> m_lock;
 		};
 	}
 }

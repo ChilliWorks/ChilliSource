@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_RENDERING_PARTICLE_DRAWABLE_PARTICLEDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Rendering/Particle/ConcurrentParticleData.h>
 
 namespace ChilliSource
 {
@@ -93,12 +94,6 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			const ParticleDrawableDef* GetDrawableDef() const;
 			//----------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return The concurrent particle data.
-			//----------------------------------------------------------------
-			const ConcurrentParticleData* GetConcurrentParticleData() const;
-			//----------------------------------------------------------------
 			/// Activates the particle with the given index.
 			///
 			/// This is called on the main thread, but the particle data can 
@@ -107,21 +102,21 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			///
+			/// @param The particle draw data.
 			/// @param The index of the particle to activate.
 			//----------------------------------------------------------------
-			virtual void ActivateParticle(u32 in_index) = 0;
+			virtual void ActivateParticle(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, u32 in_index) = 0;
 			//----------------------------------------------------------------
 			/// Renders all active particles in the effect. 
 			///
-			/// This is called on the main thread, but the particle draw data
-			/// array can be modified on other threads so make sure to lock it
-			/// prior to use.
+			/// This is always called on the main thread.
 			///
 			/// @author Ian Copland
 			///
+			/// @param The particle draw data.
 			/// @param The camera component used to render.
 			//----------------------------------------------------------------
-			virtual void DrawParticles(const CameraComponent* in_camera) = 0;
+			virtual void DrawParticles(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) = 0;
 		private:
 			const Core::Entity* m_entity = nullptr;
 			const ParticleDrawableDef* m_drawableDef = nullptr;

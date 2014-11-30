@@ -75,17 +75,19 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			///
+			/// @param The particle draw data.
 			/// @param The index of the particle to activate.
 			//----------------------------------------------------------------
-			void ActivateParticle(u32 in_index) override;
+			void ActivateParticle(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, u32 in_index) override;
 			//----------------------------------------------------------------
 			/// Renders all active particles in the effect.
 			///
 			/// @author Ian Copland
 			///
+			/// @param The particle draw data.
 			/// @param The camera component used to render.
 			//----------------------------------------------------------------
-			void DrawParticles(const CameraComponent* in_camera) override;
+			void DrawParticles(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) override;
 			//----------------------------------------------------------------
 			/// Builds the billboard image data from the provided texture
 			/// or texture atlas.
@@ -106,16 +108,22 @@ namespace ChilliSource
 			/// transform of the owning entity.
 			///
 			/// @author Ian Copland
+			///
+			/// @param The particle draw data.
+			/// @param The camera component used to render.
 			//----------------------------------------------------------------
-			void DrawLocalSpace(const CameraComponent* in_camera) const;
+			void DrawLocalSpace(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const;
 			//----------------------------------------------------------------
 			/// Draws the particles without taking into account the world
 			/// space transform of the owning entity as the particles are
 			/// already in world space.
 			///
 			/// @author Ian Copland
+			///
+			/// @param The particle draw data.
+			/// @param The camera component used to render.
 			//----------------------------------------------------------------
-			void DrawWorldSpace(const CameraComponent* in_camera) const;
+			void DrawWorldSpace(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const;
 
 			const BillboardParticleDrawableDef* m_billboardDrawableDef;
 			std::unique_ptr <Core::dynamic_array<BillboardData>> m_billboards;

@@ -44,7 +44,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		bool ConcurrentParticleData::StartUpdate()
 		{
-			std::unique_lock<std::mutex> lock(m_mutex);
+			std::unique_lock<std::recursive_mutex> lock(m_mutex);
 			if (m_updating == false)
 			{
 				m_updating = true;
@@ -57,44 +57,45 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		bool ConcurrentParticleData::HasActiveParticles() const
 		{
-			std::unique_lock<std::mutex> lock(m_mutex);
+			std::unique_lock<std::recursive_mutex> lock(m_mutex);
 			return m_activeParticles;
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
 		Core::AABB ConcurrentParticleData::GetAABB() const
 		{
-			std::unique_lock<std::mutex> lock(m_mutex);
+			std::unique_lock<std::recursive_mutex> lock(m_mutex);
 			return m_aabb;
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
 		Core::OOBB ConcurrentParticleData::GetOBB() const
 		{
-			std::unique_lock<std::mutex> lock(m_mutex);
+			std::unique_lock<std::recursive_mutex> lock(m_mutex);
 			return m_obb;
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
 		Core::Sphere ConcurrentParticleData::GetBoundingSphere() const
 		{
-			std::unique_lock<std::mutex> lock(m_mutex);
+			std::unique_lock<std::recursive_mutex> lock(m_mutex);
 			return m_boundingSphere;
+		}
+		//-----------------------------------------------------------------
+		//-----------------------------------------------------------------
+		void ConcurrentParticleData::Lock() const
+		{
+			m_lock.lock();
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
 		std::vector<u32> ConcurrentParticleData::TakeNewIndices()
 		{
-			std::unique_lock<std::mutex> lock(m_mutex);
+			CS_ASSERT(m_lock.owns_lock() == true, "Must be locked when taking new indices!")
+
 			std::vector<u32> output = m_newParticleIndices;
 			m_newParticleIndices.clear();
 			return output;
-		}
-		//-----------------------------------------------------------------
-		//-----------------------------------------------------------------
-		void ConcurrentParticleData::LockParticles() const
-		{
-			m_lock.lock();
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
@@ -106,7 +107,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
-		void ConcurrentParticleData::UnlockParticles() const
+		void ConcurrentParticleData::Unlock() const
 		{
 			m_lock.unlock();
 		}
@@ -114,7 +115,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void ConcurrentParticleData::CommitParticleData(const Core::dynamic_array<Rendering::Particle>* in_particles, const std::vector<u32>& in_newIndices, const Core::AABB& in_aabb, const Core::OOBB& in_obb, const Core::Sphere& in_boundingSphere)
 		{
-			std::unique_lock<std::mutex> lock(m_mutex);
+			std::unique_lock<std::recursive_mutex> lock(m_mutex);
 
 			CS_ASSERT(in_particles->size() == m_particles.size(), "Particle data lists must be the same size.");
 
