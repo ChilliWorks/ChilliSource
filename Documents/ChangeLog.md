@@ -1,16 +1,26 @@
 === Chilli Source Change Log ===
 
-Version 1.1.4 2014-10-24:
+Version 1.2.0, 2014-11-07:
+	- Replaced the existing Font Builder tool with a new version. Unlike the previous tool this can be run on Windows, OSX and Linux, and fonts can be generated from command line. Fonts can also have a number of effects applied including outlines, glow and drop shadows.
+	- Font rendering has been significantly improved. This involved updating the font format so any existing fonts will need to be rebuilt. 
+	- CSModelExport is now correctly working again.
+	- Updated the android backend for Android 5.0.
+	- Updated the android backed to use the latest NDK build pipeline.
+
+Version 1.1.5, 2014-11-03:
+	- Fixed a windows specific crash on closing an application.
+
+Version 1.1.4, 2014-10-24:
 	- Changed the Application::GetSystems() method so that it returns a vector of systems rather than taking a vector of systems as an output parameter.
 	- Added a GetSystems() method to State.
 	- Added constant versions of system getters to Application and State.
 	- Changed WorkerQueue to concurrent_blocking_queue and changed its API to ensure it is thread-safe. This solves the thread-safety issues with the TaskScheduler.
 	- Fixed issue with missing includes in the Vector classes and StandardMacros.h.
 
-Version 1.1.3 2014-10-20:
+Version 1.1.3, 2014-10-20:
 	- Project generator will now error if the output directory is inside Chilli Source. This was causing recursive file copy issues when copying Chilli Source to the project directory.
 
-Version 1.1.2 2014-10-16:
+Version 1.1.2, 2014-10-16:
 	- Added CSProjectGenerator, a tool for generating new Chilli Source project.
 
 Version 1.1.1, 2014-10-10:

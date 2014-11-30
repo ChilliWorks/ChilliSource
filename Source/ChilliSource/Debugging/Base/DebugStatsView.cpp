@@ -45,7 +45,7 @@ namespace ChilliSource
 	{
         namespace
         {
-            const std::string k_defaultFont = "Fonts/SystemMed.csfont";
+            const std::string k_defaultFont = "Fonts/CarlitoMed.csfont";
         }
         //--------------------------------------------------
         //--------------------------------------------------

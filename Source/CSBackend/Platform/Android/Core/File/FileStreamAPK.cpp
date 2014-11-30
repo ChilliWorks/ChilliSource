@@ -236,13 +236,6 @@ namespace CSBackend
 			mStringStream.read(inpbyBuffer, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
-		/// Read Some
-		//--------------------------------------------------------------------------------------------------
-		s32 FileStreamAPK::ReadSome(s8* inpbyBuffer, s32 indwStreamSize)
-		{
-			return mStringStream.readsome(inpbyBuffer, indwStreamSize);
-		}
-		//--------------------------------------------------------------------------------------------------
 		/// Put Back
 		//--------------------------------------------------------------------------------------------------
 		void FileStreamAPK::PutBack(s8 inbyChar)

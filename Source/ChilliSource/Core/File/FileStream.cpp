@@ -51,18 +51,30 @@ namespace ChilliSource
         std::string FileStream::GetMD5Checksum()
         {
             s32 dwCurrentPos = TellG();
+            
+            // Get file size
+            mFileStream.seekg(0, mFileStream.end);
+            u32 udwLength = TellG();
+            
             SeekG(0);
             
             const u32 kudwChunkSize = 256;
             s8 byData[kudwChunkSize];
             
             MD5 Hash;
-            s32 dwSize = kudwChunkSize;
             
-            while(dwSize != 0)
+            while(udwLength >= kudwChunkSize)
             {
-                dwSize = ReadSome(byData, kudwChunkSize);
-                Hash.update(byData, dwSize);
+                Read(byData, kudwChunkSize);
+                Hash.update(byData, kudwChunkSize);
+                udwLength -= kudwChunkSize;
+            }
+            
+            // Last chunk
+            if(udwLength > 0)
+            {
+                Read(byData, udwLength);
+                Hash.update(byData, udwLength);
             }
             
             SeekG(dwCurrentPos);
@@ -76,6 +88,11 @@ namespace ChilliSource
         std::string FileStream::GetSHA1Checksum(CSHA1::REPORT_TYPE ineReportType)
         {
             s32 dwCurrentPos = TellG();
+            
+            // Get file size
+            mFileStream.seekg(0, mFileStream.end);
+            u32 udwLength = TellG();
+            
             SeekG(0);
             
             const u32 kudwChunkSize = 256;
@@ -83,12 +100,19 @@ namespace ChilliSource
             
             CSHA1 Hash;
             Hash.Reset();
-            s32 dwSize = kudwChunkSize;
             
-            while(dwSize != 0)
+            while(udwLength >= kudwChunkSize)
             {
-                dwSize = ReadSome(byData, kudwChunkSize);
-                Hash.Update(reinterpret_cast<u8*>(byData), dwSize);
+                Read(byData, kudwChunkSize);
+                Hash.Update(reinterpret_cast<u8*>(byData), kudwChunkSize);
+                udwLength -= kudwChunkSize;
+            }
+            
+            // Last chunk
+            if(udwLength > 0)
+            {
+                Read(byData, udwLength);
+                Hash.Update(reinterpret_cast<u8*>(byData), udwLength);
             }
             
             SeekG(dwCurrentPos);
@@ -235,13 +259,6 @@ namespace ChilliSource
 		void FileStream::Read(s8* inpbyBuffer, s32 indwStreamSize)
 		{
 			mFileStream.read(inpbyBuffer, indwStreamSize);
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Read Some
-		//--------------------------------------------------------------------------------------------------
-		s32 FileStream::ReadSome(s8* inpbyBuffer, s32 indwStreamSize)
-		{
-			return (s32)mFileStream.readsome(inpbyBuffer, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Put Back

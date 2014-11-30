@@ -143,16 +143,4 @@ public class CSPowerManager
 		
 		return mpcPowerManager.isScreenOn();
 	}
-	//--------------------------------------------------------
-	/// PutDeviceToSleep
-	///
-	/// @param how long to sleep the device
-	//--------------------------------------------------------
-	public static void PutDeviceToSleep(long inTime)
-	{
-		if(mpcPowerManager == null)
-			return;
-		
-		mpcPowerManager.goToSleep(inTime);
-	}
 }

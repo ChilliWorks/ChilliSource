@@ -174,27 +174,8 @@ namespace ChilliSource
         //--------------------------------------------------------------
         std::string FileSystem::GetFileChecksumMD5(StorageLocation in_storageLocation, const std::string& in_filePath) const
         {
-            const u32 k_chunkSize = 256;
-            s8 data[k_chunkSize];
-            
-            MD5 hash;
-            s32 size = k_chunkSize;
-            
             FileStreamUPtr file = CreateFileStream(in_storageLocation, in_filePath, FileMode::k_readBinary);
-            
-            if(!file->IsOpen() || file->IsBad())
-            {
-                return "";
-            }
-            
-            while(size != 0)
-            {
-                size = file->ReadSome(data, k_chunkSize);
-                hash.update(data, size);
-            }
-            
-            hash.finalize();
-            return hash.binarydigest();
+            return file->GetMD5Checksum();
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
