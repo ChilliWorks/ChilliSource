@@ -101,7 +101,9 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			///
-			/// @author The AABB for the particle effect.
+			/// @author The AABB for the particle effect. Whether or not this
+			/// is in world or local space is determined by the simulation space
+			/// of a particle.
 			//-----------------------------------------------------------------
 			Core::AABB GetAABB() const;
 			//-----------------------------------------------------------------
@@ -109,15 +111,9 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			///
-			/// @author The OBB for the particle effect.
-			//-----------------------------------------------------------------
-			Core::OOBB GetOBB() const;
-			//-----------------------------------------------------------------
-			/// This is thread-safe, lock doesn't need to be called first.
-			///
-			/// @author Ian Copland
-			///
-			/// @author The bounding sphere for the particle effect.
+			/// @author The bounding sphere for the particle effect. Whether or 
+			/// not this is in world or local space is determined by the 
+			/// simulation space of a particle.
 			//-----------------------------------------------------------------
 			Core::Sphere GetBoundingSphere() const;
 			//-----------------------------------------------------------------
@@ -171,13 +167,12 @@ namespace ChilliSource
 			/// @param The obb.
 			/// @param The bounding sphere.
 			//-----------------------------------------------------------------
-			void CommitParticleData(const Core::dynamic_array<Rendering::Particle>* in_particles, const std::vector<u32>& in_newIndices, const Core::AABB& in_aabb, const Core::OOBB& in_obb, const Core::Sphere& in_boundingSphere);
+			void CommitParticleData(const Core::dynamic_array<Rendering::Particle>* in_particles, const std::vector<u32>& in_newIndices, const Core::AABB& in_aabb, const Core::Sphere& in_boundingSphere);
 		private:
 
 			Core::dynamic_array<ConcurrentParticleData::Particle> m_particles;
 			std::vector<u32> m_newParticleIndices;
 			Core::AABB m_aabb;
-			Core::OOBB m_obb;
 			Core::Sphere m_boundingSphere;
 			bool m_updating = false;
 			bool m_activeParticles = false;

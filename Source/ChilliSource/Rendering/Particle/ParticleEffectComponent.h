@@ -147,6 +147,24 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			bool IsEmitting() const;
 			//----------------------------------------------------------------
+			/// @author Ian Copland
+			///
+			/// @return The world space AABB of the effect.
+			//----------------------------------------------------------------
+			const Core::AABB& GetAABB() override;
+			//----------------------------------------------------------------
+			/// @author Ian Copland
+			/// 
+			/// @return The world space OBB of the effect.
+			//----------------------------------------------------------------
+			const Core::OOBB& GetOOBB() override;
+			//----------------------------------------------------------------
+			/// @author Ian Copland
+			///
+			/// @param The world space bounding sphere of the effect.
+			//----------------------------------------------------------------
+			const Core::Sphere& GetBoundingSphere() override;
+			//----------------------------------------------------------------
 			/// Sets a new particle effect for the component to play. If the
 			/// component was playing, it will start playing the new effect
 			/// from the beginning. Any existing particles will be removed from
@@ -261,6 +279,20 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			void CleanupParticleEffect();
 			//----------------------------------------------------------------
+			/// Takes the calculated local bounds of the particle effect and
+			/// stores them for later calculating the world bounds.
+			///
+			/// @author Ian Copland
+			//----------------------------------------------------------------
+			void StoreLocalBoundingShapes();
+			//----------------------------------------------------------------
+			/// Re-calculates the world space bounding shapes if the bounding 
+			/// shape cache has been invalidated.
+			///
+			/// @author Ian Copland
+			//----------------------------------------------------------------
+			void UpdateWorldBoundingShapes();
+			//----------------------------------------------------------------
 			/// Called either when this is added to an entity.
 			///
 			/// @author Ian Copland
@@ -335,6 +367,13 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			void RenderShadowMap(RenderSystem* in_renderSystem, CameraComponent* in_camera, const MaterialCSPtr& in_staticShadowMat, const MaterialCSPtr& in_animShadowMat) override {};
 			//----------------------------------------------------------------
+			/// Called when the entities transform changes. This invalidates
+			/// the bounding shape cache.
+			///
+			/// @author Ian Copland
+			//----------------------------------------------------------------
+			void OnEntityTransformChanged();
+			//----------------------------------------------------------------
 			/// Called either when this is removed from an entity that is 
 			/// attached to the scene or when an entity this is attached to is 
 			/// removed from the scene. This will stop the particle effect 
@@ -363,6 +402,11 @@ namespace ChilliSource
 			f32 m_accumulatedDeltaTime = 0.0f;
 			Core::Event<Delegate> m_finishedEvent;
 			Core::Event<Delegate> m_finishedEmittingEvent;
+
+			Core::AABB m_localAABB;
+			Core::Sphere m_localBoundingSphere;
+			bool m_invalidateBoundingShapeCache = true;
+			Core::EventConnectionUPtr m_entityTransformConnection;
 		};
 	}
 }

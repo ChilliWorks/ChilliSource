@@ -69,13 +69,6 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
-		Core::OOBB ConcurrentParticleData::GetOBB() const
-		{
-			std::unique_lock<std::recursive_mutex> lock(m_mutex);
-			return m_obb;
-		}
-		//-----------------------------------------------------------------
-		//-----------------------------------------------------------------
 		Core::Sphere ConcurrentParticleData::GetBoundingSphere() const
 		{
 			std::unique_lock<std::recursive_mutex> lock(m_mutex);
@@ -113,7 +106,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------
 		//-----------------------------------------------------------------
-		void ConcurrentParticleData::CommitParticleData(const Core::dynamic_array<Rendering::Particle>* in_particles, const std::vector<u32>& in_newIndices, const Core::AABB& in_aabb, const Core::OOBB& in_obb, const Core::Sphere& in_boundingSphere)
+		void ConcurrentParticleData::CommitParticleData(const Core::dynamic_array<Rendering::Particle>* in_particles, const std::vector<u32>& in_newIndices, const Core::AABB& in_aabb, const Core::Sphere& in_boundingSphere)
 		{
 			std::unique_lock<std::recursive_mutex> lock(m_mutex);
 
@@ -139,7 +132,6 @@ namespace ChilliSource
 
 			m_newParticleIndices.insert(m_newParticleIndices.end(), in_newIndices.begin(), in_newIndices.end());
 			m_aabb = in_aabb;
-			m_obb = in_obb;
 			m_boundingSphere = in_boundingSphere;
 			m_updating = false;
 		}

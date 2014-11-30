@@ -80,13 +80,49 @@ namespace ChilliSource
 			///
 			/// @param The particle effect.
 			/// @param The array of particles.
-			/// @param 
+			/// 
+			/// @return a pair containing the AABB and the Bounding Sphere.
 			//----------------------------------------------------------------
-			std::tuple<Core::AABB, Core::OOBB, Core::Sphere> CalculateBoundingShapes(const ParticleEffect* in_particleEffect, const Core::dynamic_array<Particle>* in_particleArray, 
-				const Core::Vector3& in_entityPosition, const Core::Vector3& in_entityScale, const Core::Quaternion& in_entityOrientation)
+			std::pair<Core::AABB, Core::Sphere> CalculateBoundingShapes(const ParticleEffect* in_particleEffect, const Core::dynamic_array<Particle>* in_particleArray)
 			{
-				//TODO: !? do properly.
-				return std::make_tuple(Core::AABB(Core::Vector3::k_zero, Core::Vector3::k_one), Core::OOBB(Core::Vector3::k_zero, Core::Vector3::k_one), Core::Sphere(Core::Vector3::k_zero, 1.0f));
+				Core::Vector3 min = CSCore::Vector3(std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max());
+				Core::Vector3 max = CSCore::Vector3(-std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max());
+
+				bool anyActive = false;
+				for (u32 i = 0; i < in_particleArray->size(); ++i)
+				{
+					const auto& particle = in_particleArray->at(i);
+
+					if (particle.m_isActive == true)
+					{
+						anyActive = true;
+
+						if (particle.m_position.x < min.x)
+							min.x = particle.m_position.x;
+						if (particle.m_position.y < min.y)
+							min.y = particle.m_position.y;
+						if (particle.m_position.z < min.z)
+							min.z = particle.m_position.z;
+
+						if (particle.m_position.x > max.x)
+							max.x = particle.m_position.x;
+						if (particle.m_position.y > max.y)
+							max.y = particle.m_position.y;
+						if (particle.m_position.z > max.z)
+							max.z = particle.m_position.z;
+					}
+				}
+
+				if (anyActive == false)
+				{
+					min = CSCore::Vector3::k_zero;
+					max = CSCore::Vector3::k_zero;
+				}
+
+				Core::Vector3 size = max - min;
+				Core::Vector3 centre = min + 0.5f * size;
+
+				return std::make_pair(Core::AABB(centre, size), Core::Sphere(centre, size.Length() * 0.5f));
 			}
 			//----------------------------------------------------------------
 			/// Updates the particles on a background thread. This will emit
@@ -159,8 +195,8 @@ namespace ChilliSource
 					}
 				}
 
-				auto boundingShapes = CalculateBoundingShapes(in_particleEffect.get(), in_particleArray.get(), in_entityPosition, in_entityScale, in_entityOrientation);
-				in_concurrentParticleData->CommitParticleData(in_particleArray.get(), newIndices, std::get<0>(boundingShapes), std::get<1>(boundingShapes), std::get<2>(boundingShapes));
+				auto boundingShapes = CalculateBoundingShapes(in_particleEffect.get(), in_particleArray.get());
+				in_concurrentParticleData->CommitParticleData(in_particleArray.get(), newIndices, boundingShapes.first, boundingShapes.second);
 			}
 		}
 		CS_DEFINE_NAMEDTYPE(ParticleEffectComponent);
@@ -208,6 +244,33 @@ namespace ChilliSource
 
 			return (m_playbackState == PlaybackState::k_starting || m_playbackState == PlaybackState::k_playing);
 		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		const Core::AABB& ParticleEffectComponent::GetAABB()
+		{
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
+
+			UpdateWorldBoundingShapes();
+			return mBoundingBox;
+		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		const Core::OOBB& ParticleEffectComponent::GetOOBB()
+		{
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
+
+			UpdateWorldBoundingShapes();
+			return mOBBoundingBox;
+		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		const Core::Sphere& ParticleEffectComponent::GetBoundingSphere()
+		{
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query for particle effect bounding shapes on the main thread.");
+
+			UpdateWorldBoundingShapes();
+			return mBoundingSphere;
+		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void ParticleEffectComponent::SetParticleEffect(const ParticleEffectCSPtr& in_particleEffect)
@@ -250,6 +313,11 @@ namespace ChilliSource
 				m_accumulatedDeltaTime = 0.0f;
 				m_playbackState = PlaybackState::k_playing;
 			}
+
+			//reset the bounding shapes.
+			m_localAABB = Core::AABB();
+			m_localBoundingSphere = Core::Sphere();
+			m_invalidateBoundingShapeCache = true;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -322,11 +390,10 @@ namespace ChilliSource
 
 				mpMaterial = m_particleEffect->GetDrawableDef()->GetMaterial();
 
-				//TODO: Handle more properly
-				mBoundingBox = Core::AABB(Core::Vector3(0.0f, 0.0f, 0.0f), Core::Vector3(1.0f, 1.0f, 1.0f));
-				mOBBoundingBox = Core::OOBB(Core::Vector3(0.0f, 0.0f, 0.0f), Core::Vector3(1.0f, 1.0f, 1.0f));
-				mOBBoundingBox.SetTransform(Core::Matrix4::k_identity);
-				mBoundingSphere = Core::Sphere(Core::Vector3(0.0f, 0.0f, 0.0f), 1.0f);
+				//reset the bounding shapes.
+				m_localAABB = Core::AABB();
+				m_localBoundingSphere = Core::Sphere();
+				m_invalidateBoundingShapeCache = true;
 			}
 		}
 		//-------------------------------------------------------
@@ -339,11 +406,88 @@ namespace ChilliSource
 			m_emitter.reset();
 			m_affectors.clear();
 		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		void ParticleEffectComponent::StoreLocalBoundingShapes()
+		{
+			CS_ASSERT((m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_stopping), "Can only store local bounding shapes when playing or stopping.");
+
+			m_localAABB = m_concurrentParticleData->GetAABB();
+			m_localBoundingSphere = m_concurrentParticleData->GetBoundingSphere();
+			m_invalidateBoundingShapeCache = true;
+		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		void ParticleEffectComponent::UpdateWorldBoundingShapes()
+		{
+			CS_ASSERT(GetEntity() != nullptr, "Cannot get world bounding shapes without being attached to an entity.");
+
+			if (m_invalidateBoundingShapeCache == true)
+			{
+				if (m_particleEffect != nullptr && m_particleEffect->GetSimulationSpace() == ParticleEffect::SimulationSpace::k_world)
+				{
+					mBoundingBox = m_localAABB;
+					mOBBoundingBox = Core::OOBB(m_localAABB.GetOrigin(), m_localAABB.GetSize());
+					mOBBoundingBox.SetTransform(Core::Matrix4::k_identity);
+					mBoundingSphere = m_localBoundingSphere;
+				}
+				else
+				{
+					const Core::Matrix4& worldMatrix = GetEntity()->GetTransform().GetWorldTransform();
+
+					//OBB is the AABB with the entity transform.
+					mOBBoundingBox = Core::OOBB(m_localAABB.GetOrigin(), m_localAABB.GetSize());
+					mOBBoundingBox.SetTransform(worldMatrix);
+
+					//transform the 8 points of the AABB into world space and recalculate.
+					std::vector<Core::Vector3> points;
+					points.push_back(m_localAABB.BackBottomLeft() * worldMatrix);
+					points.push_back(m_localAABB.BackBottomRight() * worldMatrix);
+					points.push_back(m_localAABB.BackTopLeft() * worldMatrix);
+					points.push_back(m_localAABB.BackTopRight() * worldMatrix);
+					points.push_back(m_localAABB.FrontBottomLeft() * worldMatrix);
+					points.push_back(m_localAABB.FrontBottomRight() * worldMatrix);
+					points.push_back(m_localAABB.FrontTopLeft() * worldMatrix);
+					points.push_back(m_localAABB.FrontTopRight() * worldMatrix);
+
+					Core::Vector3 min = CSCore::Vector3(std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max(), std::numeric_limits<f32>::max());
+					Core::Vector3 max = CSCore::Vector3(-std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max());
+					for (auto& point : points)
+					{
+						if (point.x < min.x)
+							min.x = point.x;
+						if (point.y < min.y)
+							min.y = point.y;
+						if (point.z < min.z)
+							min.z = point.z;
+
+						if (point.x > max.x)
+							max.x = point.x;
+						if (point.y > max.y)
+							max.y = point.y;
+						if (point.z > max.z)
+							max.z = point.z;
+					}
+
+					Core::Vector3 size = max - min;
+					Core::Vector3 centre = min + 0.5f * size;
+
+					mBoundingBox = Core::AABB(centre, size);
+
+					//bounding sphere encapsulates the AABB.
+					mBoundingSphere = Core::Sphere(centre, size.Length() * 0.5f);
+				}
+
+				m_invalidateBoundingShapeCache = false;
+			}
+		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void ParticleEffectComponent::OnAddedToEntity()
 		{
 			PrepareParticleEffect();
+
+			m_entityTransformConnection = GetEntity()->GetTransform().GetTransformChangedEvent().OpenConnection(Core::MakeDelegate(this, &ParticleEffectComponent::OnEntityTransformChanged));
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -381,8 +525,6 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void ParticleEffectComponent::UpdateStartingState(f32 in_deltaTime)
 		{
-			m_playbackTimer += in_deltaTime;
-			m_accumulatedDeltaTime += in_deltaTime;
 			if (m_concurrentParticleData->StartUpdate() == true)
 			{
 				//intialise the particles by disabling them all.
@@ -390,14 +532,15 @@ namespace ChilliSource
 				{
 					m_particleArray->at(i).m_isActive = false;
 				}
-				m_concurrentParticleData->CommitParticleData(m_particleArray.get(), std::vector<u32>(), mBoundingBox, mOBBoundingBox, mBoundingSphere);
-
-				Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, m_emitter, m_affectors, m_particleArray, m_concurrentParticleData,
-					m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation()));
-
-				m_accumulatedDeltaTime = 0.0f;
+				m_concurrentParticleData->CommitParticleData(m_particleArray.get(), std::vector<u32>(), Core::AABB(), Core::Sphere());
 
 				m_playbackState = PlaybackState::k_playing;
+				UpdatePlayingState(in_deltaTime);
+			}
+			else
+			{
+				m_playbackTimer += in_deltaTime;
+				m_accumulatedDeltaTime += in_deltaTime;
 			}
 		}
 		//----------------------------------------------------------------
@@ -424,6 +567,8 @@ namespace ChilliSource
 			m_accumulatedDeltaTime += in_deltaTime;
 			if (m_concurrentParticleData->StartUpdate() == true)
 			{
+				StoreLocalBoundingShapes();
+
 				Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, m_emitter, m_affectors, m_particleArray, m_concurrentParticleData,
 					m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation()));
 
@@ -443,6 +588,8 @@ namespace ChilliSource
 				m_accumulatedDeltaTime += in_deltaTime;
 				if (m_concurrentParticleData->StartUpdate() == true)
 				{
+					StoreLocalBoundingShapes();
+
 					Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, nullptr, m_affectors, m_particleArray, m_concurrentParticleData,
 						m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation()));
 
@@ -461,6 +608,12 @@ namespace ChilliSource
 				m_drawable->Draw(in_camera);
 			}
 		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		void ParticleEffectComponent::OnEntityTransformChanged()
+		{
+			m_invalidateBoundingShapeCache = true;
+		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void ParticleEffectComponent::OnRemovedFromScene()
@@ -471,6 +624,8 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void ParticleEffectComponent::OnRemovedFromEntity()
 		{
+			m_entityTransformConnection.reset();
+
 			CleanupParticleEffect();
 		}
 	}
