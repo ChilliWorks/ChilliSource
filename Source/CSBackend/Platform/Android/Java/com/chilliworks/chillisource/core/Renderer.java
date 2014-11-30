@@ -63,16 +63,16 @@ public class Renderer implements GLSurfaceView.Renderer
 	 * @param GL Context
 	 */
     @Override public void onDrawFrame(GL10 in_GlContext) 
-    {	
+    {
+		//The surface must issue at least one draw command per draw frame call. Even if 
+		//the application isn't active
+		in_GlContext.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		in_GlContext.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+			
 		//Hacky state to allow the loading image to actually appear. Android seems to require that you draw
 		//a few frames in order for this to appear
 		if(m_prepareFrameCount > 0)
 		{
-    		//The surface must issue at least one draw command per draw frame call. Even if 
-    		//the application isn't active
-    		in_GlContext.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    		in_GlContext.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-    		
 			m_prepareFrameCount--;
 		}
 		else if (CSApplication.get() != null && CSApplication.get().isActive() == true)
