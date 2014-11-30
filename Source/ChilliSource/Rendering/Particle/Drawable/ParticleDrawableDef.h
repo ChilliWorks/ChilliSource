@@ -90,6 +90,12 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			const ParticleEffect* GetParticleEffect() const;
 			//----------------------------------------------------------------
+			/// @author Ian Copland
+			///
+			/// @return The material that will be used to render the particles.
+			//----------------------------------------------------------------
+			virtual const MaterialCSPtr& GetMaterial() const = 0;
+			//----------------------------------------------------------------
 			/// Destructor
 			///
 			/// @author Ian Copland.

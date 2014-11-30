@@ -233,8 +233,21 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			//----------------------------------------------------------------
-			~ParticleEffectComponent();
+			~ParticleEffectComponent() {};
 		private:
+			//----------------------------------------------------------------
+			/// An enum describing the current playback state of the particle
+			/// effect.
+			///
+			/// @author Ian Copland
+			//----------------------------------------------------------------
+			enum class PlaybackState
+			{
+				k_notPlaying,
+				k_starting,
+				k_playing,
+				k_stopping
+			};
 			//----------------------------------------------------------------
 			/// Sets up the particle effect, ready to be played.
 			///
@@ -263,13 +276,41 @@ namespace ChilliSource
 			void OnAddedToScene() override;
 			//----------------------------------------------------------------
 			/// Called every frame the particle effect is in the scene. This
-			/// will fire off a new particle update background task.
+			/// will update depending on the current playback state of the
+			/// effect.
 			///
 			/// @author Ian Copland
 			///
 			/// @param The delta time.
 			//----------------------------------------------------------------
 			void OnUpdate(f32 in_deltaTime) override;
+			//----------------------------------------------------------------
+			/// Updates while the particle effect is starting. This will wait
+			/// until an appropriate time to send a background task to initialise 
+			/// the particles and start updating.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The delta time.
+			//----------------------------------------------------------------
+			void UpdateStartingState(f32 in_deltaTime);
+			//----------------------------------------------------------------
+			/// This will fire off a new particle update background task.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The delta time.
+			//----------------------------------------------------------------
+			void UpdatePlayingState(f32 in_deltaTime);
+			//----------------------------------------------------------------
+			/// This waits for all activate particles effects to finish then
+			/// will end the effect.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The delta time.
+			//----------------------------------------------------------------
+			void UpdateStoppingState(f32 in_deltaTime);
 			//----------------------------------------------------------------
 			/// Called when the component should render all particles.
 			///
@@ -317,8 +358,7 @@ namespace ChilliSource
 			ConcurrentParticleDataSPtr m_concurrentParticleData;
 
 			PlaybackType m_playbackType = PlaybackType::k_once;
-			bool m_isPlaying = false;
-			bool m_isEmitting = false;
+			PlaybackState m_playbackState = PlaybackState::k_notPlaying;
 			f32 m_playbackTimer = 0.0f;
 			f32 m_accumulatedDeltaTime = 0.0f;
 			Core::Event<Delegate> m_finishedEvent;

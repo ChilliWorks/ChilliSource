@@ -193,7 +193,7 @@ namespace ChilliSource
 			///
 			/// @return The material that will be used to render the particles.
 			//----------------------------------------------------------------
-			const MaterialCSPtr& GetMaterial() const;
+			const MaterialCSPtr& GetMaterial() const override;
 			//----------------------------------------------------------------
 			/// @author Ian Copland.
 			///

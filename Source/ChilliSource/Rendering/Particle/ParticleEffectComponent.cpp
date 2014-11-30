@@ -45,10 +45,6 @@
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitter.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDef.h>
 
-//////////////TODO: !? REMOVE ME
-#include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawableDef.h>
-//////////////
-
 #include <limits>
 #include <tuple>
 
@@ -100,6 +96,7 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			///
+			/// @param Whether or not this needs to initialise the particles.
 			/// @param The particle effect.
 			/// @param The particle emitter. If null, the effect is no longer
 			/// emitting.
@@ -191,7 +188,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		ParticleEffectComponent::PlaybackType ParticleEffectComponent::GetPlaybackType() const
 		{
-			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the playback type of a particle effect on the main thread.");
 
 			return m_playbackType;
 		}
@@ -199,17 +196,17 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		bool ParticleEffectComponent::IsPlaying() const
 		{
-			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query whether a particle effect is playing on the main thread.");
 
-			return m_isPlaying;
+			return (m_playbackState == PlaybackState::k_starting || m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_stopping);
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		bool ParticleEffectComponent::IsEmitting() const
 		{
-			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only get the Particle Effect on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Can only query whether a particle effect is emitting on the main thread.");
 
-			return m_isEmitting;
+			return (m_playbackState == PlaybackState::k_starting || m_playbackState == PlaybackState::k_playing);
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -238,13 +235,20 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void ParticleEffectComponent::Play()
 		{
-			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop must be called on the main thread.");
+			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Play must be called on the main thread.");
+			CS_ASSERT((m_playbackState == PlaybackState::k_notPlaying || m_playbackState == PlaybackState::k_stopping), "Cannot play a particle effect when it is already playing.");
 
-			if (m_isPlaying == false)
+			if (m_playbackState == PlaybackState::k_notPlaying)
 			{
 				m_playbackTimer = 0.0f;
-				m_isEmitting = true;
-				m_isPlaying = true;
+				m_accumulatedDeltaTime = 0.0f;
+				m_playbackState = PlaybackState::k_starting;
+			}
+			else if (m_playbackState == PlaybackState::k_stopping)
+			{
+				m_playbackTimer = 0.0f;
+				m_accumulatedDeltaTime = 0.0f;
+				m_playbackState = PlaybackState::k_playing;
 			}
 		}
 		//-------------------------------------------------------
@@ -252,28 +256,25 @@ namespace ChilliSource
 		void ParticleEffectComponent::Stop()
 		{
 			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop must be called on the main thread.");
+			CS_ASSERT((m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_starting || m_playbackState == PlaybackState::k_stopping), "Cannot stop a particle effect when it is already stopped.");
 
-			if (m_isPlaying == true)
+			if (m_playbackState == PlaybackState::k_starting || m_playbackState == PlaybackState::k_playing)
 			{
 				StopEmitting();
-				m_isPlaying = false;
-
-				//TODO: Deactivate all active particles.
-				
-				m_finishedEvent.NotifyConnections(this);
 			}
+			m_playbackState = PlaybackState::k_notPlaying;
+			m_finishedEvent.NotifyConnections(this);
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void ParticleEffectComponent::StopEmitting()
 		{
 			CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Stop Emitting must be called on the main thread.");
+			CS_ASSERT((m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_starting), "Cannot stop a particle effect emitting when it is not emitting.");
 
-			if (m_isEmitting == true)
-			{
-				m_isEmitting = false;
-				m_finishedEmittingEvent.NotifyConnections(this);
-			}
+			m_playbackTimer = m_particleEffect->GetDuration();
+			m_playbackState = PlaybackState::k_stopping;
+			m_finishedEmittingEvent.NotifyConnections(this);
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -319,12 +320,13 @@ namespace ChilliSource
 					m_affectors.push_back(affector);
 				}
 
+				mpMaterial = m_particleEffect->GetDrawableDef()->GetMaterial();
+
 				//TODO: Handle more properly
 				mBoundingBox = Core::AABB(Core::Vector3(0.0f, 0.0f, 0.0f), Core::Vector3(1.0f, 1.0f, 1.0f));
 				mOBBoundingBox = Core::OOBB(Core::Vector3(0.0f, 0.0f, 0.0f), Core::Vector3(1.0f, 1.0f, 1.0f));
 				mOBBoundingBox.SetTransform(Core::Matrix4::k_identity);
 				mBoundingSphere = Core::Sphere(Core::Vector3(0.0f, 0.0f, 0.0f), 1.0f);
-				mpMaterial = static_cast<const BillboardParticleDrawableDef*>(m_particleEffect->GetDrawableDef())->GetMaterial();
 			}
 		}
 		//-------------------------------------------------------
@@ -353,46 +355,98 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void ParticleEffectComponent::OnUpdate(f32 in_deltaTime)
 		{
-			if (m_particleEffect != nullptr && m_isPlaying == true)
+			if (m_particleEffect != nullptr)
 			{
-				m_playbackTimer += in_deltaTime;
-
-				//Update the playback timer. If we're not looping and times up, then stop emitting.
-				if (m_playbackType == PlaybackType::k_once && m_playbackTimer >= m_particleEffect->GetDuration())
+				switch (m_playbackState)
 				{
-					m_isEmitting = false;
-					m_playbackTimer = m_particleEffect->GetDuration();
+				case PlaybackState::k_notPlaying:
+					//Do nothing.
+					break;
+				case PlaybackState::k_starting:
+					UpdateStartingState(in_deltaTime);
+					break;
+				case PlaybackState::k_playing:
+					UpdatePlayingState(in_deltaTime);
+					break;
+				case PlaybackState::k_stopping:
+					UpdateStoppingState(in_deltaTime);
+					break;
+				default:
+					CS_LOG_FATAL("Invalid playback state.");
+					break;
 				}
-				else
+			}
+		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		void ParticleEffectComponent::UpdateStartingState(f32 in_deltaTime)
+		{
+			m_playbackTimer += in_deltaTime;
+			m_accumulatedDeltaTime += in_deltaTime;
+			if (m_concurrentParticleData->StartUpdate() == true)
+			{
+				//intialise the particles by disabling them all.
+				for (u32 i = 0; i < m_particleArray->size(); ++i)
 				{
-					while (m_playbackTimer >= m_particleEffect->GetDuration())
-					{
-						m_playbackTimer -= m_particleEffect->GetDuration();
-					}
+					m_particleArray->at(i).m_isActive = false;
 				}
+				m_concurrentParticleData->CommitParticleData(m_particleArray.get(), std::vector<u32>(), mBoundingBox, mOBBoundingBox, mBoundingSphere);
 
-				if (m_isPlaying == true && m_isEmitting == false && m_concurrentParticleData->HasActiveParticles() == false)
+				Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, m_emitter, m_affectors, m_particleArray, m_concurrentParticleData,
+					m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation()));
+
+				m_accumulatedDeltaTime = 0.0f;
+
+				m_playbackState = PlaybackState::k_playing;
+			}
+		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		void ParticleEffectComponent::UpdatePlayingState(f32 in_deltaTime)
+		{
+			m_playbackTimer += in_deltaTime;
+
+			//Update the playback timer. If we're not looping and times up, then stop emitting.
+			if (m_playbackType == PlaybackType::k_once && m_playbackTimer >= m_particleEffect->GetDuration())
+			{
+				StopEmitting();
+				UpdateStoppingState(in_deltaTime);
+				return;
+			}
+			else
+			{
+				while (m_playbackTimer >= m_particleEffect->GetDuration())
 				{
-					Stop();
+					m_playbackTimer -= m_particleEffect->GetDuration();
 				}
+			}
 
-				//if we're still playing, then create a new background update task
-				if (m_isPlaying == true)
+			m_accumulatedDeltaTime += in_deltaTime;
+			if (m_concurrentParticleData->StartUpdate() == true)
+			{
+				Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, m_emitter, m_affectors, m_particleArray, m_concurrentParticleData,
+					m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation()));
+
+				m_accumulatedDeltaTime = 0.0f;
+			}
+		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		void ParticleEffectComponent::UpdateStoppingState(f32 in_deltaTime)
+		{
+			if (m_concurrentParticleData->HasActiveParticles() == false)
+			{
+				Stop();
+			}
+			else
+			{
+				m_accumulatedDeltaTime += in_deltaTime;
+				if (m_concurrentParticleData->StartUpdate() == true)
 				{
-					m_accumulatedDeltaTime += in_deltaTime;
-					if (m_concurrentParticleData->StartUpdate() == true)
-					{
-						ParticleEmitterSPtr emitter;
-						if (m_isEmitting == true)
-						{
-							emitter = m_emitter;
-						}
+					Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, nullptr, m_affectors, m_particleArray, m_concurrentParticleData,
+						m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation()));
 
-						Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, emitter, m_affectors, m_particleArray, m_concurrentParticleData,
-							m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation()));
-
-						m_accumulatedDeltaTime = 0.0f;
-					}
+					m_accumulatedDeltaTime = 0.0f;
 				}
 			}
 		}
@@ -400,7 +454,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		void ParticleEffectComponent::Render(RenderSystem* in_renderSystem, CameraComponent* in_camera, ShaderPass in_shaderPass)
 		{
-			if (m_particleEffect != nullptr && m_isPlaying == true)
+			if (m_particleEffect != nullptr && (m_playbackState == PlaybackState::k_playing || m_playbackState == PlaybackState::k_stopping))
 			{
 				CS_ASSERT(m_drawable != nullptr, "Cannot render without a drawable.");
 
@@ -418,12 +472,6 @@ namespace ChilliSource
 		void ParticleEffectComponent::OnRemovedFromEntity()
 		{
 			CleanupParticleEffect();
-		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		ParticleEffectComponent::~ParticleEffectComponent()
-		{
-			m_drawable.reset();
 		}
 	}
 }
