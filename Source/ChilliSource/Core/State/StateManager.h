@@ -274,6 +274,8 @@ namespace ChilliSource
 			std::list<StateOperation> m_operations;
             
             bool m_isStartState;
+			bool m_statesActive = false;
+			bool m_statesForegrounded = false;
 		};
 	}
 }
