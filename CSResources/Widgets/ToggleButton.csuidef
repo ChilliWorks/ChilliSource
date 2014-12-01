@@ -14,7 +14,7 @@
 
   "ComponentProperties":{
   	"Drawable": "none",
-    "Highlight": "all"
+    "ToggleHighlight": "all"
   },
 
   "Defaults": {

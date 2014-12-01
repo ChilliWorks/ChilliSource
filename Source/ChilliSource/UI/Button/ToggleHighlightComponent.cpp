@@ -116,7 +116,7 @@ namespace ChilliSource
         {
             m_normalOffDrawable = in_drawable;
             
-            if (m_state == ToggleHighlightState::k_normalOff)
+            if (m_drawableComponent != nullptr && m_state == ToggleHighlightState::k_normalOff)
             {
                 m_drawableComponent->SetDrawable(m_normalOffDrawable);
             }
@@ -127,7 +127,7 @@ namespace ChilliSource
         {
             m_highlightOffDrawable = in_drawable;
             
-            if (m_state == ToggleHighlightState::k_highlightedOff)
+            if (m_drawableComponent != nullptr && m_state == ToggleHighlightState::k_highlightedOff)
             {
                 m_drawableComponent->SetDrawable(m_highlightOffDrawable);
             }
@@ -138,7 +138,7 @@ namespace ChilliSource
         {
             m_normalOnDrawable = in_drawable;
             
-            if (m_state == ToggleHighlightState::k_normalOn)
+            if (m_drawableComponent != nullptr && m_state == ToggleHighlightState::k_normalOn)
             {
                 m_drawableComponent->SetDrawable(m_normalOnDrawable);
             }
@@ -149,7 +149,7 @@ namespace ChilliSource
         {
             m_highlightOnDrawable = in_drawable;
             
-            if (m_state == ToggleHighlightState::k_highlightedOn)
+            if (m_drawableComponent != nullptr && m_state == ToggleHighlightState::k_highlightedOn)
             {
                 m_drawableComponent->SetDrawable(m_highlightOnDrawable);
             }

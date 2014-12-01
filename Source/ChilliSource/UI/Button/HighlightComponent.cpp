@@ -89,7 +89,7 @@ namespace ChilliSource
         {
             m_normalDrawable = in_drawable;
             
-            if (m_highlighted == false)
+            if (m_drawableComponent != nullptr && m_highlighted == false)
             {
                 m_drawableComponent->SetDrawable(m_normalDrawable);
             }
@@ -100,7 +100,7 @@ namespace ChilliSource
         {
             m_highlightDrawable = in_drawable;
             
-            if (m_highlighted == true)
+            if (m_drawableComponent != nullptr && m_highlighted == true)
             {
                 m_drawableComponent->SetDrawable(m_highlightDrawable);
             }
