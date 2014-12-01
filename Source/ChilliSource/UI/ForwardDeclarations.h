@@ -57,6 +57,11 @@ namespace ChilliSource
         enum class PropertyType;
         enum class SizePolicy;
         //---------------------------------------------------------
+        /// Button
+        //---------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(HighlightComponent);
+        CS_FORWARDDECLARE_CLASS(ToggleHighlightComponent);
+        //---------------------------------------------------------
         /// Drawable
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(DrawableComponent);

@@ -35,5 +35,6 @@
 #include <ChilliSource/Core/Container/concurrent_blocking_queue.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
+#include <ChilliSource/Core/Container/VectorUtils.h>
 
 #endif

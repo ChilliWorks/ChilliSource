@@ -51,6 +51,7 @@
 		81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D3196C2410000F13DD /* TextEntry.cpp */; };
 		81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D9196C2B31000F13DD /* TextEntry.mm */; };
 		81B1D2DD196C2B31000F13DD /* TextEntryDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2DB196C2B31000F13DD /* TextEntryDelegate.mm */; };
+		81B204F11A2C95CC0074CBCE /* ToggleHighlightComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B204EF1A2C95CC0074CBCE /* ToggleHighlightComponent.cpp */; };
 		81CF34A119CC297600B9D0B1 /* DragGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CF349F19CC297600B9D0B1 /* DragGesture.cpp */; };
 		81CF34A419CC67AC00B9D0B1 /* HoldGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */; };
 		81D8ACF91962CEDC0010DA84 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8ACF81962CEDC0010DA84 /* Foundation.framework */; };
@@ -472,6 +473,9 @@
 		81B1D2DB196C2B31000F13DD /* TextEntryDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TextEntryDelegate.mm; sourceTree = "<group>"; };
 		81B1D2DE196D8033000F13DD /* KeyCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyCode.h; sourceTree = "<group>"; };
 		81B1D2DF196D9713000F13DD /* ModifierKeyCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModifierKeyCode.h; sourceTree = "<group>"; };
+		81B204EF1A2C95CC0074CBCE /* ToggleHighlightComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ToggleHighlightComponent.cpp; sourceTree = "<group>"; };
+		81B204F01A2C95CC0074CBCE /* ToggleHighlightComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToggleHighlightComponent.h; sourceTree = "<group>"; };
+		81B204F51A2CAEFC0074CBCE /* VectorUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VectorUtils.h; sourceTree = "<group>"; };
 		81CF349F19CC297600B9D0B1 /* DragGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DragGesture.cpp; sourceTree = "<group>"; };
 		81CF34A019CC297600B9D0B1 /* DragGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragGesture.h; sourceTree = "<group>"; };
 		81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HoldGesture.cpp; sourceTree = "<group>"; };
@@ -1052,6 +1056,8 @@
 			children = (
 				816E8BE61A28B33600207BEE /* HighlightComponent.cpp */,
 				816E8BE71A28B33600207BEE /* HighlightComponent.h */,
+				81B204EF1A2C95CC0074CBCE /* ToggleHighlightComponent.cpp */,
+				81B204F01A2C95CC0074CBCE /* ToggleHighlightComponent.h */,
 			);
 			path = Button;
 			sourceTree = "<group>";
@@ -1412,6 +1418,7 @@
 				81D8B2491962E0EB0010DA84 /* ParamDictionary.h */,
 				81D8B24A1962E0EB0010DA84 /* ParamDictionarySerialiser.cpp */,
 				81D8B24B1962E0EB0010DA84 /* ParamDictionarySerialiser.h */,
+				81B204F51A2CAEFC0074CBCE /* VectorUtils.h */,
 			);
 			path = Container;
 			sourceTree = "<group>";
@@ -2794,6 +2801,7 @@
 				81B1D2DD196C2B31000F13DD /* TextEntryDelegate.mm in Sources */,
 				81D8B6B41962E0F70010DA84 /* EmailComposerDelegate.mm in Sources */,
 				81D8B4461962E0EC0010DA84 /* HighlightButton.cpp in Sources */,
+				81B204F11A2C95CC0074CBCE /* ToggleHighlightComponent.cpp in Sources */,
 				81D8B49D1962E0EC0010DA84 /* Texture.cpp in Sources */,
 				81D8B48A1962E0EC0010DA84 /* ParticleAffectorFactory.cpp in Sources */,
 				81D8B6B31962E0F70010DA84 /* EmailComposer.mm in Sources */,

@@ -1,7 +1,7 @@
 //
-//  HighlightComponent.h
+//  ToggleHighlightComponent.h
 //  Chilli Source
-//  Created by Ian Copland on 28/11/2014.
+//  Created by Ian Copland on 01/12/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BUTTON_HIGHLIGHTCOMPONENT_H_
-#define _CHILLISOURCE_UI_BUTTON_HIGHLIGHTCOMPONENT_H_
+#ifndef _CHILLISOURCE_UI_BUTTON_TOGGLEHIGHLIGHTCOMPONENT_H_
+#define _CHILLISOURCE_UI_BUTTON_TOGGLEHIGHLIGHTCOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
@@ -44,18 +44,27 @@ namespace ChilliSource
         /// when it has been pressed down. A highlight component has the following
         /// properties:
         ///
-        /// "NormalDrawable": A description of the drawable that will be used when
-        /// the parent widget is not highlighted.
+        /// "NormalOffDrawable": A description of the drawable that will be used when
+        /// the parent widget is not highlighted and is toggled off.
         ///
-        /// "HighlightDrawable": A description of the drawable that will be used when
-        /// the parent widget is highlighted.
+        /// "HighlightOffDrawable": A description of the drawable that will be used when
+        /// the parent widget is highlighted and is toggled off.
+        ///
+        /// "NormalOnDrawable": A description of the drawable that will be used when
+        /// the parent widget is not highlighted and is toggled on.
+        ///
+        /// "HighlightOnDrawable": A description of the drawable that will be used when
+        /// the parent widget is highlighted and is toggled on.
+        ///
+        /// "ToggledOn": A boolean describing whether or not the toggle is on of
+        /// off.
         ///
         /// @author Ian Copland
         //--------------------------------------------------------------------------
-        class HighlightComponent final : public Component
+        class ToggleHighlightComponent final : public Component
         {
         public:
-            CS_DECLARE_NAMEDTYPE(HighlightComponent);
+            CS_DECLARE_NAMEDTYPE(ToggleHighlightComponent);
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -79,60 +88,156 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @return the drawable that will be set on the owning widget when
-            /// it is not pressed.
+            /// it is not pressed while toggled off.
             //-------------------------------------------------------------------
-            const IDrawableSPtr& GetNormalDrawable() const;
+            const IDrawableSPtr& GetNormalOffDrawable() const;
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return the drawable that will be set on the owning widget when
-            /// it is pressed.
+            /// it is pressed while toggled off.
             //-------------------------------------------------------------------
-            const IDrawableSPtr& GetHighlightDrawable() const;
+            const IDrawableSPtr& GetHighlightOffDrawable() const;
+            //-------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return the drawable that will be set on the owning widget when
+            /// it is not pressed while toggled on.
+            //-------------------------------------------------------------------
+            const IDrawableSPtr& GetNormalOnDrawable() const;
+            //-------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return the drawable that will be set on the owning widget when
+            /// it is pressed while toggled on.
+            //-------------------------------------------------------------------
+            const IDrawableSPtr& GetHighlightOnDrawable() const;
+            //-------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return Whether or not the toggle is currently on or off.
+            //-------------------------------------------------------------------
+            bool IsToggledOn() const;
             //-------------------------------------------------------------------
             /// Sets the drawable that will be set on the owning widget when
-            /// it is not pressed.
+            /// it is not pressed and is toggled off.
             ///
             /// @author Ian Copland
             ///
             /// @param The drawable.
             //-------------------------------------------------------------------
-            void SetNormalDrawable(const IDrawableSPtr& in_drawable);
+            void SetNormalOffDrawable(const IDrawableSPtr& in_drawable);
             //-------------------------------------------------------------------
             /// Sets the drawable that will be set on the owning widget when
-            /// it is pressed.
+            /// it is pressed and is toggled off.
             ///
             /// @author Ian Copland
             ///
             /// @param The drawable.
             //-------------------------------------------------------------------
-            void SetHighlightDrawable(const IDrawableSPtr& in_drawable);
+            void SetHighlightOffDrawable(const IDrawableSPtr& in_drawable);
+            //-------------------------------------------------------------------
+            /// Sets the drawable that will be set on the owning widget when
+            /// it is not pressed and is toggled on.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The drawable.
+            //-------------------------------------------------------------------
+            void SetNormalOnDrawable(const IDrawableSPtr& in_drawable);
+            //-------------------------------------------------------------------
+            /// Sets the drawable that will be set on the owning widget when
+            /// it is pressed and is toggled on.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The drawable.
+            //-------------------------------------------------------------------
+            void SetHighlightOnDrawable(const IDrawableSPtr& in_drawable);
+            //-------------------------------------------------------------------
+            /// Sets whether or not the toggle is on or off.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param Whether or not it is on or off.
+            //-------------------------------------------------------------------
+            void SetToggleOn(bool in_toggleOn);
             
         private:
             friend class ComponentFactory;
             //-------------------------------------------------------------------
+            /// An enum describing the current state of the toggle highlight.
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------------------
+            enum class ToggleHighlightState
+            {
+                k_normalOff,
+                k_highlightedOff,
+                k_normalOn,
+                k_highlightedOn
+            };
+            //-------------------------------------------------------------------
             /// Constructor that builds the component from key-value properties.
-            /// The properties used to create a highlight component are described
-            /// in the class documentation.
+            /// The properties used to create a toggle highlight component are
+            /// described in the class documentation.
             ///
             /// @author Ian Copland
             ///
             /// @param The component name.
             /// @param The property map.
             //-------------------------------------------------------------------
-            HighlightComponent(const std::string& in_componentName, const PropertyMap& in_properties);
+            ToggleHighlightComponent(const std::string& in_componentName, const PropertyMap& in_properties);
             //-------------------------------------------------------------------
-            /// Enables the highlight on the owning widget.
+            /// @author Ian Copland
+            ///
+            /// @return Whether or not the component is highlighted.
+            //-------------------------------------------------------------------
+            bool IsHighlighted() const;
+            //-------------------------------------------------------------------
+            /// Toggles the current state of the toggle button.
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------------------
+            void Toggle();
+            //-------------------------------------------------------------------
+            /// Highlights the toggle button depending on the current toggle
+            /// state.
             ///
             /// @author Ian Copland
             //-------------------------------------------------------------------
             void Highlight();
             //-------------------------------------------------------------------
-            /// Enables the highlight on the owning widget.
+            /// Unhighlights the toggle button depending on the current toggle
+            /// state.
             ///
             /// @author Ian Copland
             //-------------------------------------------------------------------
             void Unhighlight();
+            //-------------------------------------------------------------------
+            /// Puts the toggle highlight component in the normal 'Off' state.
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------------------
+            void ApplyOffNormal();
+            //-------------------------------------------------------------------
+            /// Puts the toggle highlight component in the highlighted 'Off' state.
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------------------
+            void ApplyOffHightlighted();
+            //-------------------------------------------------------------------
+            /// Puts the toggle highlight component in the normal 'On' state.
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------------------
+            void ApplyOnNormal();
+            //-------------------------------------------------------------------
+            /// Puts the toggle highlight component in the highlighted 'On' state.
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------------------
+            void ApplyOnHightlighted();
             //-------------------------------------------------------------------
             /// Called when the component is first added to the owning widget.
             ///
@@ -203,12 +308,14 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             void OnDestroy();
             
-            IDrawableSPtr m_normalDrawable;
-            IDrawableSPtr m_highlightDrawable;
-            
+            IDrawableSPtr m_normalOffDrawable;
+            IDrawableSPtr m_highlightOffDrawable;
+            IDrawableSPtr m_normalOnDrawable;
+            IDrawableSPtr m_highlightOnDrawable;
+
             DrawableComponent* m_drawableComponent = nullptr;
             
-            bool m_highlighted = false;
+            ToggleHighlightState m_state = ToggleHighlightState::k_normalOff;
             std::vector<Input::Pointer::Id> m_activePointerIds;
             std::vector<Input::Pointer::Id> m_highlightingPointerIds;
             

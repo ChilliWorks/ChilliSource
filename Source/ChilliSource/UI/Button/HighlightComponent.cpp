@@ -28,6 +28,7 @@
 
 #include <ChilliSource/UI/Button/HighlightComponent.h>
 
+#include <ChilliSource/Core/Container/VectorUtils.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
@@ -46,50 +47,6 @@ namespace ChilliSource
                 {PropertyType::k_drawableDesc, k_normalDrawableKey},
                 {PropertyType::k_drawableDesc, k_highlightDrawableKey},
             };
-            
-            //-------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @param The list of pointer Ids.
-            /// @param The pointer Id to find.
-            ///
-            /// @return Whether or not the given list contains the given id.
-            //-------------------------------------------------------------------
-            bool Contains(const std::vector<Input::Pointer::Id>& in_ids, Input::Pointer::Id in_id)
-            {
-                for (auto& id : in_ids)
-                {
-                    if (id == in_id)
-                    {
-                        return true;
-                    }
-                }
-                
-                return false;
-            }
-            //-------------------------------------------------------------------
-            /// Removes the given pointer id from the given list. If the pointer
-            /// Id doesn't exist then the application is considered to be in an
-            /// irrecoverable state and will terminate.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The list of pointer Ids.
-            /// @param The pointer Id to remove.
-            //-------------------------------------------------------------------
-            void Remove(std::vector<Input::Pointer::Id>& in_ids, Input::Pointer::Id in_id)
-            {
-                for (auto it = in_ids.begin(); it != in_ids.end(); ++it)
-                {
-                    if ((*it) == in_id)
-                    {
-                        in_ids.erase(it);
-                        return;
-                    }
-                }
-                
-                CS_LOG_FATAL("Could not remove Id from Id list as it does not exist.");
-            }
         }
         
         CS_DEFINE_NAMEDTYPE(HighlightComponent);
@@ -131,12 +88,22 @@ namespace ChilliSource
         void HighlightComponent::SetNormalDrawable(const IDrawableSPtr& in_drawable)
         {
             m_normalDrawable = in_drawable;
+            
+            if (m_highlighted == false)
+            {
+                m_drawableComponent->SetDrawable(m_normalDrawable);
+            }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void HighlightComponent::SetHighlightDrawable(const IDrawableSPtr& in_drawable)
         {
             m_highlightDrawable = in_drawable;
+            
+            if (m_highlighted == true)
+            {
+                m_drawableComponent->SetDrawable(m_highlightDrawable);
+            }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -161,6 +128,8 @@ namespace ChilliSource
         void HighlightComponent::OnInit()
         {
             m_drawableComponent = GetWidget()->GetComponent<DrawableComponent>();
+            CS_ASSERT(m_drawableComponent != nullptr, "Widgets with a Highlight Component must also contain a Drawable Component.");
+            
             m_drawableComponent->SetDrawable(m_normalDrawable);
             
             m_pressedInsideConnection = GetWidget()->GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightComponent::OnPressedInside));
@@ -175,8 +144,8 @@ namespace ChilliSource
         {
             if (in_inputType == Input::Pointer::GetDefaultInputType())
             {
-                CS_ASSERT(Contains(m_activePointerIds, in_pointer.GetId()) == false, "Received pressed event for already pressed Id.");
-                CS_ASSERT(Contains(m_highlightingPointerIds, in_pointer.GetId()) == false, "Received pressed event for already highlighting Id.");
+                CS_ASSERT(Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == false, "Received pressed event for already pressed Id.");
+                CS_ASSERT(Core::VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == false, "Received pressed event for already highlighting Id.");
                 
                 m_activePointerIds.push_back(in_pointer.GetId());
                 m_highlightingPointerIds.push_back(in_pointer.GetId());
@@ -191,9 +160,9 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void HighlightComponent::OnMoveEntered(Widget* in_widget, const Input::Pointer& in_pointer)
         {
-            if (Contains(m_activePointerIds, in_pointer.GetId()) == true)
+            if (Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
             {
-                CS_ASSERT(Contains(m_highlightingPointerIds, in_pointer.GetId()) == false, "Received move entered for already highlighting Id.");
+                CS_ASSERT(Core::VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == false, "Received move entered for already highlighting Id.");
                 
                 m_highlightingPointerIds.push_back(in_pointer.GetId());
                 
@@ -207,11 +176,11 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void HighlightComponent::OnMoveExited(Widget* in_widget, const Input::Pointer& in_pointer)
         {
-            if (Contains(m_activePointerIds, in_pointer.GetId()) == true)
+            if (Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
             {
-                CS_ASSERT(Contains(m_highlightingPointerIds, in_pointer.GetId()) == true, "Received move exited event for an id that is not in the highlighting list.");
+                CS_ASSERT(Core::VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == true, "Received move exited event for an id that is not in the highlighting list.");
                 
-                Remove(m_highlightingPointerIds, in_pointer.GetId());
+                Core::VectorUtils::Remove(m_highlightingPointerIds, in_pointer.GetId());
                 
                 if (m_highlighted == true && m_highlightingPointerIds.empty() == true)
                 {
@@ -223,12 +192,12 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void HighlightComponent::OnReleasedInside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType)
         {
-            if (Contains(m_activePointerIds, in_pointer.GetId()) == true)
+            if (Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
             {
-                CS_ASSERT(Contains(m_highlightingPointerIds, in_pointer.GetId()) == true, "Received released inside event for an id that is not in the highlighting list.");
+                CS_ASSERT(Core::VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == true, "Received released inside event for an id that is not in the highlighting list.");
                 
-                Remove(m_activePointerIds, in_pointer.GetId());
-                Remove(m_highlightingPointerIds, in_pointer.GetId());
+                Core::VectorUtils::Remove(m_activePointerIds, in_pointer.GetId());
+                Core::VectorUtils::Remove(m_highlightingPointerIds, in_pointer.GetId());
                 
                 if (m_highlighted == true && m_highlightingPointerIds.empty() == true)
                 {
@@ -240,11 +209,11 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void HighlightComponent::OnReleasedOutside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType)
         {
-            if (Contains(m_activePointerIds, in_pointer.GetId()) == true)
+            if (Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
             {
-                CS_ASSERT(Contains(m_highlightingPointerIds, in_pointer.GetId()) == false, "Received released inside event for an id that is in the highlighting list.");
+                CS_ASSERT(Core::VectorUtils::Contains(m_highlightingPointerIds, in_pointer.GetId()) == false, "Received released inside event for an id that is in the highlighting list.");
                 
-                Remove(m_activePointerIds, in_pointer.GetId());
+                Core::VectorUtils::Remove(m_activePointerIds, in_pointer.GetId());
                 
                 if (m_highlighted == true && m_highlightingPointerIds.empty() == true)
                 {
@@ -262,7 +231,11 @@ namespace ChilliSource
             m_releasedInsideConnection.reset();
             m_releasedOutsideConnection.reset();
             
-            Unhighlight();
+            if (m_highlighted == true)
+            {
+                Unhighlight();
+            }
+            
             m_activePointerIds.clear();
             m_highlightingPointerIds.clear();
         }

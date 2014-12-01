@@ -32,5 +32,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/UI/Button/HighlightComponent.h>
+#include <ChilliSource/UI/Button/ToggleHighlightComponent.h>
 
 #endif

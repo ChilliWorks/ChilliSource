@@ -5,11 +5,16 @@
   	{
   		"Type": "Drawable",
   		"Name": "Drawable"
-  	}
+  	},
+    {
+      "Type": "ToggleHighlight",
+      "Name": "ToggleHighlight"
+    }
   ],
 
   "ComponentProperties":{
-  	"Drawable": "all"
+  	"Drawable": "none",
+    "Highlight": "all"
   },
 
   "Defaults": {
