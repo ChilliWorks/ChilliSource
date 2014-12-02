@@ -1,5 +1,5 @@
 //
-//  BillboardParticleDrawable.h
+//  StaticBillboardParticleDrawable.h
 //  Chilli Source
 //  Created by Ian Copland on 13/10/2014.
 //
@@ -44,10 +44,10 @@ namespace ChilliSource
 		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
-		class BillboardParticleDrawable final : public ParticleDrawable
+		class StaticBillboardParticleDrawable final : public ParticleDrawable
 		{
 		private:
-			friend class BillboardParticleDrawableDef;
+			friend class StaticBillboardParticleDrawableDef;
 			//----------------------------------------------------------------
 			/// A container for information on a single billboard, such as
 			/// the UVs and the local vertex position data.
@@ -69,7 +69,7 @@ namespace ChilliSource
 			/// @param The particle drawable definition.
 			/// @param The concurrent particle data.
 			//----------------------------------------------------------------
-			BillboardParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData);
+			StaticBillboardParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData);
 			//----------------------------------------------------------------
 			/// Activates the particle with the given index.
 			///
@@ -125,7 +125,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			void DrawWorldSpace(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const;
 
-			const BillboardParticleDrawableDef* m_billboardDrawableDef;
+			const StaticBillboardParticleDrawableDef* m_billboardDrawableDef;
 			std::unique_ptr <Core::dynamic_array<BillboardData>> m_billboards;
 			Core::dynamic_array<u32> m_particleBillboardIndices;
 			u32 m_nextBillboardIndex = 0;

@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDefFactory.h>
 
-#include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawableDef.h>
+#include <ChilliSource/Rendering/Particle/Drawable/StaticBillboardParticleDrawableDef.h>
 
 namespace ChilliSource
 {
@@ -51,7 +51,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------------
 		void ParticleDrawableDefFactory::RegisterDefaults()
 		{
-			Register<BillboardParticleDrawableDef>("Billboard");
+			Register<StaticBillboardParticleDrawableDef>("StaticBillboard");
 		}
 	}
 }

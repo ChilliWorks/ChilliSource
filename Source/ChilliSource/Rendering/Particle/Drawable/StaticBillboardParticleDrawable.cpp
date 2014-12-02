@@ -1,5 +1,5 @@
 //
-//  BillboardParticleDrawable.cpp
+//  StaticBillboardParticleDrawable.cpp
 //  Chilli Source
 //  Created by Ian Copland on 13/10/2014.
 //
@@ -26,13 +26,13 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawable.h>
+#include <ChilliSource/Rendering/Particle/Drawable/StaticBillboardParticleDrawable.h>
 
 #include <ChilliSource/Core/Container/dynamic_array.h>
 #include <ChilliSource/Core/Math/Random.h>
 #include <ChilliSource/Rendering/Particle/ConcurrentParticleData.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
-#include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawableDef.h>
+#include <ChilliSource/Rendering/Particle/Drawable/StaticBillboardParticleDrawableDef.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/ColourUtils.h>
@@ -66,21 +66,21 @@ namespace ChilliSource
 			///
 			/// @param The billboard size.
 			//-----------------------------------------------------------------------------
-			Core::Vector2 CalcBillboardSize(const Core::Vector2& in_particleSize, const Core::Vector2& in_imageSize, BillboardParticleDrawableDef::SizePolicy in_sizePolicy)
+			Core::Vector2 CalcBillboardSize(const Core::Vector2& in_particleSize, const Core::Vector2& in_imageSize, StaticBillboardParticleDrawableDef::SizePolicy in_sizePolicy)
 			{
 				switch (in_sizePolicy)
 				{
-				case BillboardParticleDrawableDef::SizePolicy::k_none:
+				case StaticBillboardParticleDrawableDef::SizePolicy::k_none:
 					return in_particleSize;
-				case BillboardParticleDrawableDef::SizePolicy::k_usePreferredSize:
+				case StaticBillboardParticleDrawableDef::SizePolicy::k_usePreferredSize:
 					return in_imageSize;
-				case BillboardParticleDrawableDef::SizePolicy::k_useWidthMaintainingAspect:
+				case StaticBillboardParticleDrawableDef::SizePolicy::k_useWidthMaintainingAspect:
 					return AspectRatioUtils::KeepOriginalWidthAdaptHeight(in_particleSize, in_imageSize.x / in_imageSize.y);
-				case BillboardParticleDrawableDef::SizePolicy::k_useHeightMaintainingAspect:
+				case StaticBillboardParticleDrawableDef::SizePolicy::k_useHeightMaintainingAspect:
 					return AspectRatioUtils::KeepOriginalHeightAdaptWidth(in_particleSize, in_imageSize.x / in_imageSize.y);
-				case BillboardParticleDrawableDef::SizePolicy::k_fitMaintainingAspect:
+				case StaticBillboardParticleDrawableDef::SizePolicy::k_fitMaintainingAspect:
 					return AspectRatioUtils::FitOriginal(in_particleSize, in_imageSize.x / in_imageSize.y);
-				case BillboardParticleDrawableDef::SizePolicy::k_fillMaintainingAspect:
+				case StaticBillboardParticleDrawableDef::SizePolicy::k_fillMaintainingAspect:
 					return AspectRatioUtils::FillOriginal(in_particleSize, in_imageSize.x / in_imageSize.y);
 				default:
 					CS_LOG_FATAL("Invalid size policy.");
@@ -150,28 +150,28 @@ namespace ChilliSource
 
 		//----------------------------------------------
 		//----------------------------------------------
-		BillboardParticleDrawable::BillboardParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData)
-			: ParticleDrawable(in_entity, in_drawableDef, in_concurrentParticleData), m_billboardDrawableDef(static_cast<const BillboardParticleDrawableDef*>(in_drawableDef)),
+		StaticBillboardParticleDrawable::StaticBillboardParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData)
+			: ParticleDrawable(in_entity, in_drawableDef, in_concurrentParticleData), m_billboardDrawableDef(static_cast<const StaticBillboardParticleDrawableDef*>(in_drawableDef)),
 			m_particleBillboardIndices(in_drawableDef->GetParticleEffect()->GetMaxParticles())
 		{
 			BuildBillboardImageData();
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void BillboardParticleDrawable::ActivateParticle(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, u32 in_index)
+		void StaticBillboardParticleDrawable::ActivateParticle(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, u32 in_index)
 		{
 			CS_ASSERT(in_index >= 0 && in_index < m_particleBillboardIndices.size(), "Index out of bounds!");
 
 			switch (m_billboardDrawableDef->GetImageSelectionType())
 			{
-			case BillboardParticleDrawableDef::ImageSelectionType::k_cycle:
+			case StaticBillboardParticleDrawableDef::ImageSelectionType::k_cycle:
 				m_particleBillboardIndices[in_index] = m_nextBillboardIndex++;
 				if (m_nextBillboardIndex >= m_billboards->size())
 				{
 					m_nextBillboardIndex = 0;
 				}
 				break;
-			case BillboardParticleDrawableDef::ImageSelectionType::k_random:
+			case StaticBillboardParticleDrawableDef::ImageSelectionType::k_random:
 				m_particleBillboardIndices[in_index] = Core::Random::GenerateInt<u32>(0, m_billboards->size() - 1);
 				break;
 			default:
@@ -181,7 +181,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void BillboardParticleDrawable::DrawParticles(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera)
+		void StaticBillboardParticleDrawable::DrawParticles(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera)
 		{
 			switch (GetDrawableDef()->GetParticleEffect()->GetSimulationSpace())
 			{
@@ -197,7 +197,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void BillboardParticleDrawable::BuildBillboardImageData()
+		void StaticBillboardParticleDrawable::BuildBillboardImageData()
 		{
 			const auto& textureAtlas = m_billboardDrawableDef->GetTextureAltas();
 			const auto& atlasIds = m_billboardDrawableDef->GetAtlasIds();
@@ -252,7 +252,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void BillboardParticleDrawable::DrawLocalSpace(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const
+		void StaticBillboardParticleDrawable::DrawLocalSpace(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const
 		{
 			const auto& material = m_billboardDrawableDef->GetMaterial();
 			const auto& particleSize = m_billboardDrawableDef->GetParticleSize();
@@ -290,7 +290,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void BillboardParticleDrawable::DrawWorldSpace(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const
+		void StaticBillboardParticleDrawable::DrawWorldSpace(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const
 		{
 			const auto& material = m_billboardDrawableDef->GetMaterial();
 

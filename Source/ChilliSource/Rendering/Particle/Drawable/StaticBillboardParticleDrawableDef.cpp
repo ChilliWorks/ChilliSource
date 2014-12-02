@@ -1,5 +1,5 @@
 //
-//  BillboardParticleDrawableDef.cpp
+//  StaticBillboardParticleDrawableDef.cpp
 //  Chilli Source
 //  Created by Ian Copland on 13/10/2014.
 //
@@ -26,14 +26,14 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawableDef.h>
+#include <ChilliSource/Rendering/Particle/Drawable/StaticBillboardParticleDrawableDef.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Material/Material.h>
-#include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawable.h>
+#include <ChilliSource/Rendering/Particle/Drawable/StaticBillboardParticleDrawable.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
 namespace ChilliSource
@@ -53,22 +53,22 @@ namespace ChilliSource
 			///
 			/// @return the parsed image selection type.
 			//-----------------------------------------------------------------
-			BillboardParticleDrawableDef::ImageSelectionType ParseImageSelectionType(const std::string& in_imageSelectionTypeString)
+			StaticBillboardParticleDrawableDef::ImageSelectionType ParseImageSelectionType(const std::string& in_imageSelectionTypeString)
 			{
 				std::string imageSelectionTypeString = in_imageSelectionTypeString;
 				Core::StringUtils::ToLowerCase(imageSelectionTypeString);
 
 				if (imageSelectionTypeString == "cycle")
 				{
-					return BillboardParticleDrawableDef::ImageSelectionType::k_cycle;
+					return StaticBillboardParticleDrawableDef::ImageSelectionType::k_cycle;
 				}
 				else if (imageSelectionTypeString == "random")
 				{
-					return BillboardParticleDrawableDef::ImageSelectionType::k_random;
+					return StaticBillboardParticleDrawableDef::ImageSelectionType::k_random;
 				}
 
 				CS_LOG_FATAL("Invalid image selection type: " + in_imageSelectionTypeString);
-				return BillboardParticleDrawableDef::ImageSelectionType::k_random;
+				return StaticBillboardParticleDrawableDef::ImageSelectionType::k_random;
 			}
 			//-----------------------------------------------------------------
 			/// Parse a size policy from the given string. This is case 
@@ -81,38 +81,38 @@ namespace ChilliSource
 			///
 			/// @return the parsed size policy.
 			//-----------------------------------------------------------------
-			BillboardParticleDrawableDef::SizePolicy ParseSizePolicy(const std::string& in_sizePolicyString)
+			StaticBillboardParticleDrawableDef::SizePolicy ParseSizePolicy(const std::string& in_sizePolicyString)
 			{
 				std::string sizePolicyString = in_sizePolicyString;
 				Core::StringUtils::ToLowerCase(sizePolicyString);
 
 				if (sizePolicyString == "fillmaintainingaspect")
 				{
-					return BillboardParticleDrawableDef::SizePolicy::k_fillMaintainingAspect;
+					return StaticBillboardParticleDrawableDef::SizePolicy::k_fillMaintainingAspect;
 				}
 				else if (sizePolicyString == "fitmaintainingaspect")
 				{
-					return BillboardParticleDrawableDef::SizePolicy::k_fitMaintainingAspect;
+					return StaticBillboardParticleDrawableDef::SizePolicy::k_fitMaintainingAspect;
 				}
 				else if (sizePolicyString == "none")
 				{
-					return BillboardParticleDrawableDef::SizePolicy::k_none;
+					return StaticBillboardParticleDrawableDef::SizePolicy::k_none;
 				}
 				else if (sizePolicyString == "useheightmaintainingaspect")
 				{
-					return BillboardParticleDrawableDef::SizePolicy::k_useHeightMaintainingAspect;
+					return StaticBillboardParticleDrawableDef::SizePolicy::k_useHeightMaintainingAspect;
 				}
 				else if (sizePolicyString == "usepreferredsize")
 				{
-					return BillboardParticleDrawableDef::SizePolicy::k_usePreferredSize;
+					return StaticBillboardParticleDrawableDef::SizePolicy::k_usePreferredSize;
 				}
 				else if (sizePolicyString == "usewidthmaintainingaspect")
 				{
-					return BillboardParticleDrawableDef::SizePolicy::k_useWidthMaintainingAspect;
+					return StaticBillboardParticleDrawableDef::SizePolicy::k_useWidthMaintainingAspect;
 				}
 
 				CS_LOG_FATAL("Invalid size policy: " + sizePolicyString);
-				return BillboardParticleDrawableDef::SizePolicy::k_none;
+				return StaticBillboardParticleDrawableDef::SizePolicy::k_none;
 			}
 			//-----------------------------------------------------------------
 			/// Parse a list of space separated strings.
@@ -129,17 +129,17 @@ namespace ChilliSource
 			}
 		}
 
-		CS_DEFINE_NAMEDTYPE(BillboardParticleDrawableDef);
+		CS_DEFINE_NAMEDTYPE(StaticBillboardParticleDrawableDef);
 		//--------------------------------------------------
 		//--------------------------------------------------
-		BillboardParticleDrawableDef::BillboardParticleDrawableDef(const MaterialCSPtr& in_material, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy)
+		StaticBillboardParticleDrawableDef::StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy)
 			: m_material(in_material), m_particleSize(in_particleSize), m_sizePolicy(in_sizePolicy)
 		{
 			CS_ASSERT(m_material != nullptr, "Cannot create a Billboard Particle Drawable Def with a null material.");
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		BillboardParticleDrawableDef::BillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_atlasId, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy)
+		StaticBillboardParticleDrawableDef::StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_atlasId, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy)
 			: m_material(in_material), m_textureAtlas(in_textureAtlas), m_particleSize(in_particleSize), m_sizePolicy(in_sizePolicy)
 		{
 			CS_ASSERT(m_material != nullptr, "Cannot create a Billboard Particle Drawable Def with a null material.");
@@ -149,7 +149,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		BillboardParticleDrawableDef::BillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::vector<std::string>& in_atlasIds, ImageSelectionType in_imageSelectionType, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy)
+		StaticBillboardParticleDrawableDef::StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::vector<std::string>& in_atlasIds, ImageSelectionType in_imageSelectionType, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy)
 			: m_material(in_material), m_textureAtlas(in_textureAtlas), m_atlasIds(in_atlasIds), m_imageSelectionType(in_imageSelectionType), m_particleSize(in_particleSize), m_sizePolicy(in_sizePolicy)
 		{
 			CS_ASSERT(m_material != nullptr, "Cannot create a Billboard Particle Drawable Def with a null material.");
@@ -157,7 +157,7 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		BillboardParticleDrawableDef::BillboardParticleDrawableDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate)
+		StaticBillboardParticleDrawableDef::StaticBillboardParticleDrawableDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate)
 		{
 			//Image selection type
 			Json::Value jsonValue = in_paramsJson.get("ImageSelectionType", Json::nullValue);
@@ -195,55 +195,55 @@ namespace ChilliSource
 		}
 		//--------------------------------------------------
 		//-------------------------------------------------
-		bool BillboardParticleDrawableDef::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool StaticBillboardParticleDrawableDef::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (ParticleDrawableDef::InterfaceID == in_interfaceId || BillboardParticleDrawableDef::InterfaceID == in_interfaceId);
+			return (ParticleDrawableDef::InterfaceID == in_interfaceId || StaticBillboardParticleDrawableDef::InterfaceID == in_interfaceId);
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		ParticleDrawableUPtr BillboardParticleDrawableDef::CreateInstance(const Core::Entity* in_entity, ConcurrentParticleData* in_concurrentParticleData) const
+		ParticleDrawableUPtr StaticBillboardParticleDrawableDef::CreateInstance(const Core::Entity* in_entity, ConcurrentParticleData* in_concurrentParticleData) const
 		{
-			return ParticleDrawableUPtr(new BillboardParticleDrawable(in_entity, this, in_concurrentParticleData));
+			return ParticleDrawableUPtr(new StaticBillboardParticleDrawable(in_entity, this, in_concurrentParticleData));
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		const MaterialCSPtr& BillboardParticleDrawableDef::GetMaterial() const
+		const MaterialCSPtr& StaticBillboardParticleDrawableDef::GetMaterial() const
 		{
 			return m_material;
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		const TextureAtlasCSPtr& BillboardParticleDrawableDef::GetTextureAltas() const
+		const TextureAtlasCSPtr& StaticBillboardParticleDrawableDef::GetTextureAltas() const
 		{
 			return m_textureAtlas;
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		const std::vector<std::string>& BillboardParticleDrawableDef::GetAtlasIds() const
+		const std::vector<std::string>& StaticBillboardParticleDrawableDef::GetAtlasIds() const
 		{
 			return m_atlasIds;
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		BillboardParticleDrawableDef::ImageSelectionType BillboardParticleDrawableDef::GetImageSelectionType() const
+		StaticBillboardParticleDrawableDef::ImageSelectionType StaticBillboardParticleDrawableDef::GetImageSelectionType() const
 		{
 			return m_imageSelectionType;
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		const Core::Vector2& BillboardParticleDrawableDef::GetParticleSize() const
+		const Core::Vector2& StaticBillboardParticleDrawableDef::GetParticleSize() const
 		{
 			return m_particleSize;
 		}
 		//--------------------------------------------------
 		//--------------------------------------------------
-		BillboardParticleDrawableDef::SizePolicy BillboardParticleDrawableDef::GetSizePolicy() const
+		StaticBillboardParticleDrawableDef::SizePolicy StaticBillboardParticleDrawableDef::GetSizePolicy() const
 		{
 			return m_sizePolicy;
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void BillboardParticleDrawableDef::LoadResources(const Json::Value& in_paramsJson)
+		void StaticBillboardParticleDrawableDef::LoadResources(const Json::Value& in_paramsJson)
 		{
 			auto resourcePool = Core::Application::Get()->GetResourcePool();
 
@@ -277,7 +277,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void BillboardParticleDrawableDef::LoadResourcesAsync(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate)
+		void StaticBillboardParticleDrawableDef::LoadResourcesAsync(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate)
 		{
 			auto resourcePool = Core::Application::Get()->GetResourcePool();
 

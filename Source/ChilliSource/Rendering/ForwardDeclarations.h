@@ -120,8 +120,8 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(ParticleAffector);
 		CS_FORWARDDECLARE_CLASS(ParticleAffectorDef);
 		CS_FORWARDDECLARE_CLASS(ParticleAffectorDefFactory);
-		CS_FORWARDDECLARE_CLASS(BillboardParticleDrawable);
-		CS_FORWARDDECLARE_CLASS(BillboardParticleDrawableDef);
+		CS_FORWARDDECLARE_CLASS(StaticBillboardParticleDrawable);
+		CS_FORWARDDECLARE_CLASS(StaticBillboardParticleDrawableDef);
 		CS_FORWARDDECLARE_CLASS(AccelerationParticleAffector);
 		CS_FORWARDDECLARE_CLASS(AccelerationParticleAffectorDef);
 		CS_FORWARDDECLARE_CLASS(AngularAccelerationParticleAffector);

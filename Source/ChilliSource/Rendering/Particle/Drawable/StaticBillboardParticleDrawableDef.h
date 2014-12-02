@@ -1,5 +1,5 @@
 //
-//  BillboardParticleDrawableDef.h
+//  StaticBillboardParticleDrawableDef.h
 //  Chilli Source
 //  Created by Ian Copland on 13/10/2014.
 //
@@ -78,10 +78,10 @@ namespace ChilliSource
 		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------
-		class BillboardParticleDrawableDef final : public ParticleDrawableDef
+		class StaticBillboardParticleDrawableDef final : public ParticleDrawableDef
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(BillboardParticleDrawableDef);
+			CS_DECLARE_NAMEDTYPE(StaticBillboardParticleDrawableDef);
 			//----------------------------------------------------------------
 			/// An enum describing the different types of image selection. 
 			/// Random will pick an image from the list at random, while cycle
@@ -121,7 +121,7 @@ namespace ChilliSource
 			/// when the rendered image has a different aspect ratio to the 
 			/// given size.
 			//----------------------------------------------------------------
-			BillboardParticleDrawableDef(const MaterialCSPtr& in_material, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy);
+			StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy);
 			//----------------------------------------------------------------
 			/// Constructor for creating a billboard particle drawable defintion
 			/// which uses a texture atlas and multiple atlas Ids.
@@ -137,7 +137,7 @@ namespace ChilliSource
 			/// when the rendered image has a different aspect ratio to the 
 			/// given size.
 			//----------------------------------------------------------------
-			BillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_atlasId, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy);
+			StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::string& in_atlasId, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy);
 			//----------------------------------------------------------------
 			/// Constructor for creating a billboard particle drawable 
 			/// defintion which uses a texture atlas and multiple atlas Ids.
@@ -155,7 +155,7 @@ namespace ChilliSource
 			/// when the rendered image has a different aspect ratio to the 
 			/// given size.
 			//----------------------------------------------------------------
-			BillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::vector<std::string>& in_atlasIds, ImageSelectionType in_imageSelectionType, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy);
+			StaticBillboardParticleDrawableDef(const MaterialCSPtr& in_material, const TextureAtlasCSPtr& in_textureAtlas, const std::vector<std::string>& in_atlasIds, ImageSelectionType in_imageSelectionType, const Core::Vector2& in_particleSize, SizePolicy in_sizePolicy);
 			//----------------------------------------------------------------
 			/// Constructor. Loads the params for the drawable def from the 
 			/// given json params. If the async delegate is not null, then
@@ -165,7 +165,7 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			//----------------------------------------------------------------
-			BillboardParticleDrawableDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate = nullptr);
+			StaticBillboardParticleDrawableDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate = nullptr);
 			//----------------------------------------------------------------
 			/// Allows querying of whether or not this implements the interface 
 			/// described by the given Id.

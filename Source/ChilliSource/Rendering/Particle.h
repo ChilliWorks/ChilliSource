@@ -47,8 +47,8 @@
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDefFactory.h>
 #include <ChilliSource/Rendering/Particle/Affector/ScaleOverLifetimeParticleAffector.h>
 #include <ChilliSource/Rendering/Particle/Affector/ScaleOverLifetimeParticleAffectorDef.h>
-#include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawable.h>
-#include <ChilliSource/Rendering/Particle/Drawable/BillboardParticleDrawableDef.h>
+#include <ChilliSource/Rendering/Particle/Drawable/StaticBillboardParticleDrawable.h>
+#include <ChilliSource/Rendering/Particle/Drawable/StaticBillboardParticleDrawableDef.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawable.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDef.h>
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDefFactory.h>
