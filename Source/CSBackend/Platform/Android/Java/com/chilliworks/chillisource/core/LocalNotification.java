@@ -99,7 +99,6 @@ public final class LocalNotification
 			m_time = in_json.getLong(k_paramNameTime);
 			
 			JSONObject jsonParams = in_json.getJSONObject(k_paramNameParams);
-			@SuppressWarnings("unchecked")
 			Iterator<String> it = jsonParams.keys();
 			while (it.hasNext())
 			{

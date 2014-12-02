@@ -75,7 +75,7 @@ public class StringUtils
 	public static String standardiseFilePath(String in_filePath)
 	{
 		String standardisedPath = in_filePath.replace("\\", "/");
-		standardisedPath = in_filePath.replace("//", "/");
+		standardisedPath = standardisedPath.replace("//", "/");
 		if (standardisedPath.endsWith("/") == true)
 		{
 			standardisedPath = standardisedPath.substring(0, standardisedPath.length() - 1);

@@ -82,7 +82,7 @@ public class FileUtils
 	{
 		try
 		{
-			Files.write(Paths.get(in_filePath), in_contents.getBytes());
+			Files.write(Paths.get(in_filePath), in_contents.getBytes(StandardCharsets.UTF_8));
 			return true;
 		}
 		catch (Exception e)
