@@ -26,13 +26,12 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_PROPERTYMAP_H_
-#define _CHILLISOURCE_UI_BASE_PROPERTYMAP_H_
+#ifndef _CHILLISOURCE_CORE_CONTAINER_PROPERTY_PROPERTYMAP_H_
+#define _CHILLISOURCE_CORE_CONTAINER_PROPERTY_PROPERTYMAP_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/UI/Base/PropertyType.h>
 
 #include <cassert>
 #include <unordered_map>
@@ -40,7 +39,7 @@
 
 namespace ChilliSource
 {
-	namespace UI
+	namespace Core
 	{
         //---------------------------------------------------------------------------------
         /// Simplified version of a map data-structure that is specialised for UI property

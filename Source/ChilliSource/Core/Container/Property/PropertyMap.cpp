@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Base/PropertyMap.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 
 #include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/Math/Vector2.h>
@@ -44,7 +44,7 @@
 
 namespace ChilliSource
 {
-    namespace UI
+    namespace Core
     {
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

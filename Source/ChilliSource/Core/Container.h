@@ -36,5 +36,12 @@
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
+#include <ChilliSource/Core/Container/Property/IProperty.h>
+#include <ChilliSource/Core/Container/Property/IPropertyType.h>
+#include <ChilliSource/Core/Container/Property/Property.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
+#include <ChilliSource/Core/Container/Property/PropertyType.h>
+#include <ChilliSource/Core/Container/Property/ReferenceProperty.h>
+#include <ChilliSource/Core/Container/Property/ValueProperty.h>
 
 #endif

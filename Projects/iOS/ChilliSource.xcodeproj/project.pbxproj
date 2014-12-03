@@ -14,8 +14,6 @@
 		816E8BE91A28B33600207BEE /* HighlightComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 816E8BE61A28B33600207BEE /* HighlightComponent.cpp */; };
 		816E8BEC1A28CB9100207BEE /* DrawableComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 816E8BEA1A28CB9100207BEE /* DrawableComponent.cpp */; };
 		817F76321A03E23A00D36ACF /* Canvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F75EC1A03E23A00D36ACF /* Canvas.cpp */; };
-		817F76331A03E23A00D36ACF /* PropertyMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F75EF1A03E23A00D36ACF /* PropertyMap.cpp */; };
-		817F76341A03E23A00D36ACF /* PropertyType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F75F11A03E23A00D36ACF /* PropertyType.cpp */; };
 		817F76351A03E23A00D36ACF /* SizePolicy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F75F31A03E23A00D36ACF /* SizePolicy.cpp */; };
 		817F76361A03E23A00D36ACF /* Widget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F75F51A03E23A00D36ACF /* Widget.cpp */; };
 		817F76371A03E23A00D36ACF /* WidgetDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F75F71A03E23A00D36ACF /* WidgetDef.cpp */; };
@@ -54,6 +52,7 @@
 		81B204F11A2C95CC0074CBCE /* ToggleHighlightComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B204EF1A2C95CC0074CBCE /* ToggleHighlightComponent.cpp */; };
 		81CF34A119CC297600B9D0B1 /* DragGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CF349F19CC297600B9D0B1 /* DragGesture.cpp */; };
 		81CF34A419CC67AC00B9D0B1 /* HoldGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */; };
+		81D3A5531A2F567700FC08C9 /* PropertyMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D3A54E1A2F567700FC08C9 /* PropertyMap.cpp */; };
 		81D8ACF91962CEDC0010DA84 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8ACF81962CEDC0010DA84 /* Foundation.framework */; };
 		81D8B1E61962D1B90010DA84 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1CF1962D1B90010DA84 /* Accounts.framework */; };
 		81D8B1E71962D1B90010DA84 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1D01962D1B90010DA84 /* AddressBook.framework */; };
@@ -389,11 +388,6 @@
 		816E8BEB1A28CB9100207BEE /* DrawableComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableComponent.h; sourceTree = "<group>"; };
 		817F75EC1A03E23A00D36ACF /* Canvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas.cpp; sourceTree = "<group>"; };
 		817F75ED1A03E23A00D36ACF /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canvas.h; sourceTree = "<group>"; };
-		817F75EE1A03E23A00D36ACF /* PropertyAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyAccessor.h; sourceTree = "<group>"; };
-		817F75EF1A03E23A00D36ACF /* PropertyMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyMap.cpp; sourceTree = "<group>"; };
-		817F75F01A03E23A00D36ACF /* PropertyMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyMap.h; sourceTree = "<group>"; };
-		817F75F11A03E23A00D36ACF /* PropertyType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyType.cpp; sourceTree = "<group>"; };
-		817F75F21A03E23A00D36ACF /* PropertyType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyType.h; sourceTree = "<group>"; };
 		817F75F31A03E23A00D36ACF /* SizePolicy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SizePolicy.cpp; sourceTree = "<group>"; };
 		817F75F41A03E23A00D36ACF /* SizePolicy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SizePolicy.h; sourceTree = "<group>"; };
 		817F75F51A03E23A00D36ACF /* Widget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Widget.cpp; sourceTree = "<group>"; };
@@ -480,6 +474,14 @@
 		81CF34A019CC297600B9D0B1 /* DragGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragGesture.h; sourceTree = "<group>"; };
 		81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HoldGesture.cpp; sourceTree = "<group>"; };
 		81CF34A319CC67AC00B9D0B1 /* HoldGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HoldGesture.h; sourceTree = "<group>"; };
+		81D3A54B1A2F567700FC08C9 /* IProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IProperty.h; sourceTree = "<group>"; };
+		81D3A54C1A2F567700FC08C9 /* IPropertyType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPropertyType.h; sourceTree = "<group>"; };
+		81D3A54D1A2F567700FC08C9 /* Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Property.h; sourceTree = "<group>"; };
+		81D3A54E1A2F567700FC08C9 /* PropertyMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyMap.cpp; sourceTree = "<group>"; };
+		81D3A54F1A2F567700FC08C9 /* PropertyMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyMap.h; sourceTree = "<group>"; };
+		81D3A5501A2F567700FC08C9 /* PropertyType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyType.h; sourceTree = "<group>"; };
+		81D3A5511A2F567700FC08C9 /* ReferenceProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReferenceProperty.h; sourceTree = "<group>"; };
+		81D3A5521A2F567700FC08C9 /* ValueProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ValueProperty.h; sourceTree = "<group>"; };
 		81D8ACF51962CEDC0010DA84 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D8ACF81962CEDC0010DA84 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		81D8AD061962CEDC0010DA84 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -1091,13 +1093,8 @@
 				81890EC21A1CF1D6005811F1 /* ComponentDesc.h */,
 				81173CDE1A16489D00E169C0 /* ComponentFactory.cpp */,
 				81173CDF1A16489D00E169C0 /* ComponentFactory.h */,
-				817F75EE1A03E23A00D36ACF /* PropertyAccessor.h */,
 				81AECBE81A2368FF009DFA59 /* PropertyLink.cpp */,
 				81AECBE71A23679B009DFA59 /* PropertyLink.h */,
-				817F75EF1A03E23A00D36ACF /* PropertyMap.cpp */,
-				817F75F01A03E23A00D36ACF /* PropertyMap.h */,
-				817F75F11A03E23A00D36ACF /* PropertyType.cpp */,
-				817F75F21A03E23A00D36ACF /* PropertyType.h */,
 				817F75F31A03E23A00D36ACF /* SizePolicy.cpp */,
 				817F75F41A03E23A00D36ACF /* SizePolicy.h */,
 				817F75F51A03E23A00D36ACF /* Widget.cpp */,
@@ -1219,6 +1216,21 @@
 				81B1D2DB196C2B31000F13DD /* TextEntryDelegate.mm */,
 			);
 			path = TextEntry;
+			sourceTree = "<group>";
+		};
+		81D3A54A1A2F567700FC08C9 /* Property */ = {
+			isa = PBXGroup;
+			children = (
+				81D3A54B1A2F567700FC08C9 /* IProperty.h */,
+				81D3A54C1A2F567700FC08C9 /* IPropertyType.h */,
+				81D3A54D1A2F567700FC08C9 /* Property.h */,
+				81D3A54E1A2F567700FC08C9 /* PropertyMap.cpp */,
+				81D3A54F1A2F567700FC08C9 /* PropertyMap.h */,
+				81D3A5501A2F567700FC08C9 /* PropertyType.h */,
+				81D3A5511A2F567700FC08C9 /* ReferenceProperty.h */,
+				81D3A5521A2F567700FC08C9 /* ValueProperty.h */,
+			);
+			path = Property;
 			sourceTree = "<group>";
 		};
 		81D8ACEC1962CEDC0010DA84 = {
@@ -1407,6 +1419,7 @@
 		81D8B2461962E0EB0010DA84 /* Container */ = {
 			isa = PBXGroup;
 			children = (
+				81D3A54A1A2F567700FC08C9 /* Property */,
 				8141DFF21A02439100F3D9DF /* concurrent_blocking_queue.h */,
 				816B0C1719CC2E7000520B50 /* concurrent_vector.h */,
 				8154B74619D0274100F9F5B9 /* concurrent_vector_const_forward_iterator.h */,
@@ -2824,6 +2837,7 @@
 				81D8B4261962E0EC0010DA84 /* NotificationManager.cpp in Sources */,
 				817F763F1A03E23A00D36ACF /* DrawableType.cpp in Sources */,
 				81D8B4801962E0EC0010DA84 /* CSModelProvider.cpp in Sources */,
+				81D3A5531A2F567700FC08C9 /* PropertyMap.cpp in Sources */,
 				81AECBDF1A234570009DFA59 /* IDrawable.cpp in Sources */,
 				81D8B4A91962E0EC0010DA84 /* WebView.cpp in Sources */,
 				817F76421A03E23A00D36ACF /* NinePatchDrawable.cpp in Sources */,
@@ -2878,7 +2892,6 @@
 				81D8B41B1962E0EC0010DA84 /* PNGImageProvider.cpp in Sources */,
 				81D8B6A81962E0F70010DA84 /* NSStringUtils.mm in Sources */,
 				81D8B42F1962E0EC0010DA84 /* Scene.cpp in Sources */,
-				817F76341A03E23A00D36ACF /* PropertyType.cpp in Sources */,
 				81D8B42E1962E0EC0010DA84 /* ResourceProvider.cpp in Sources */,
 				81D8B4951962E0EC0010DA84 /* ParticleSystem.cpp in Sources */,
 				81D8B4471962E0EC0010DA84 /* StretchableHighlightButton.cpp in Sources */,
@@ -2919,7 +2932,6 @@
 				81D8B49F1962E0EC0010DA84 /* TextureAtlasProvider.cpp in Sources */,
 				81D8B6D61962E0F70010DA84 /* Cubemap.cpp in Sources */,
 				81D8B4371962E0EC0010DA84 /* TaskScheduler.cpp in Sources */,
-				817F76331A03E23A00D36ACF /* PropertyMap.cpp in Sources */,
 				81FB634719FFB723009D6894 /* CSBinaryChunk.cpp in Sources */,
 				81D8B48E1962E0EC0010DA84 /* ConeParticleEmitter.cpp in Sources */,
 				81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */,
