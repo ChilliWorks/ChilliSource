@@ -56,6 +56,8 @@
 #include <ChilliSource/Rendering/Particle/Emitter/CircleParticleEmitterDef.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ConeParticleEmitter.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ConeParticleEmitterDef.h>
+#include <ChilliSource/Rendering/Particle/Emitter/Cone2DParticleEmitter.h>
+#include <ChilliSource/Rendering/Particle/Emitter/Cone2DParticleEmitterDef.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitter.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDef.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDefFactory.h>

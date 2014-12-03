@@ -255,8 +255,6 @@ namespace ChilliSource
 		void StaticBillboardParticleDrawable::DrawLocalSpace(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) const
 		{
 			const auto& material = m_billboardDrawableDef->GetMaterial();
-			const auto& particleSize = m_billboardDrawableDef->GetParticleSize();
-			auto sizePolicy = m_billboardDrawableDef->GetSizePolicy();
 			auto entityWorldTransform = GetEntity()->GetTransform().GetWorldTransform();
 
 			//we can't directly apply the parent entities scale to the particles as this would look strange as
