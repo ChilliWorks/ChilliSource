@@ -182,6 +182,8 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawableDefFactory.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitter.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitterDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitter.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitterDef.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitter.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitterDef.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitter.cpp" />
@@ -504,6 +506,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawableDefFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitter.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitterDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitter.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitterDef.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitter.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitterDef.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitter.h" />

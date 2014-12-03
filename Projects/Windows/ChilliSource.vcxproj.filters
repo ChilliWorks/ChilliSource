@@ -867,6 +867,12 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\StaticBillboardParticleDrawable.cpp">
       <Filter>ChilliSource\Rendering\Particle\Drawable</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitter.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitterDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
@@ -1864,6 +1870,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\StaticBillboardParticleDrawable.h">
       <Filter>ChilliSource\Rendering\Particle\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitter.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitterDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

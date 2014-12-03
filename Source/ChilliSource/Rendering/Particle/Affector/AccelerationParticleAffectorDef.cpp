@@ -48,7 +48,7 @@ namespace ChilliSource
 		{
 			//Acceleration
 			Json::Value jsonValue = in_paramsJson.get("AccelerationProperty", Json::nullValue);
-			CS_ASSERT(jsonValue.isNull() == false, "No angular acceleration property provided.");
+			CS_ASSERT(jsonValue.isNull() == false, "No acceleration property provided.");
 			m_accelerationProperty = ParticlePropertyFactory::CreateProperty<Core::Vector3>(jsonValue);
 
 			//call the loaded delegate if required.

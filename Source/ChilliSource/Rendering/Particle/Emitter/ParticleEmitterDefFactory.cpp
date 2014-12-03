@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Rendering/Particle/Emitter/CircleParticleEmitterDef.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ConeParticleEmitterDef.h>
+#include <ChilliSource/Rendering/Particle/Emitter/Cone2DParticleEmitterDef.h>
 #include <ChilliSource/Rendering/Particle/Emitter/PointParticleEmitterDef.h>
 #include <ChilliSource/Rendering/Particle/Emitter/SphereParticleEmitterDef.h>
 
@@ -56,6 +57,7 @@ namespace ChilliSource
 		{
 			Register<CircleParticleEmitterDef>("Circle");
 			Register<ConeParticleEmitterDef>("Cone");
+			Register<Cone2DParticleEmitterDef>("Cone2D");
 			Register<PointParticleEmitterDef>("Point");
 			Register<SphereParticleEmitterDef>("Sphere");
 		}
