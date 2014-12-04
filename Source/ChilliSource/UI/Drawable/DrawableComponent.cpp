@@ -29,7 +29,9 @@
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
 
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/UI/Base/WidgetPropertyTypes.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
+#include <ChilliSource/UI/Drawable/DrawableDesc.h>
 
 namespace ChilliSource
 {
@@ -39,25 +41,25 @@ namespace ChilliSource
         {
             const char k_drawableKey[] = "Drawable";
             
-            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
+            const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyType::k_drawableDesc, k_drawableKey},
+                {&WidgetPropertyTypes::k_drawableDesc, k_drawableKey},
             };
         }
         
         CS_DEFINE_NAMEDTYPE(DrawableComponent);
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const std::vector<PropertyMap::PropertyDesc>& DrawableComponent::GetPropertyDescs()
+        const std::vector<Core::PropertyMap::PropertyDesc>& DrawableComponent::GetPropertyDescs()
         {
             return k_propertyDescs;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        DrawableComponent::DrawableComponent(const std::string& in_componentName, const PropertyMap& in_properties)
+        DrawableComponent::DrawableComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
             : Component(in_componentName)
         {
-            RegisterProperty<IDrawableSPtr>(k_drawableKey, Core::MakeDelegate(this, &DrawableComponent::GetDrawable), Core::MakeDelegate(this, &DrawableComponent::SetDrawable));
+            RegisterProperty<IDrawableSPtr>(&WidgetPropertyTypes::k_drawable, k_drawableKey, Core::MakeDelegate(this, &DrawableComponent::GetDrawable), Core::MakeDelegate(this, &DrawableComponent::SetDrawable));
             ApplyRegisteredProperties(in_properties);
         }
         //-------------------------------------------------------------------

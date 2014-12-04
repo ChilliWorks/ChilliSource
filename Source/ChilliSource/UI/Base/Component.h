@@ -31,7 +31,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
-#include <ChilliSource/UI/Base/PropertyAccessor.h>
+#include <ChilliSource/Core/Container/Property/Property.h>
+#include <ChilliSource/Core/Container/Property/PropertyType.h>
 
 #include <unordered_map>
 
@@ -150,12 +151,13 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
+            /// @param The property type.
             /// @param The name of the registered property. This is case
             /// insensitive.
             /// @param The getter delegate for the property.
             /// @param The setter delegate for the property.
             //----------------------------------------------------------------
-            template <typename TPropertyType> void RegisterProperty(const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter);
+            template <typename TPropertyType> void RegisterProperty(const Core::PropertyType<TPropertyType>* in_propertyType, const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter);
             //----------------------------------------------------------------
             /// Finalises any registered properties and applies the default
             /// values for them as supplied by the given property map.
@@ -168,7 +170,7 @@ namespace ChilliSource
             ///
             /// @param The property map
             //----------------------------------------------------------------
-            void ApplyRegisteredProperties(const PropertyMap& in_properties);
+            void ApplyRegisteredProperties(const Core::PropertyMap& in_properties);
             //----------------------------------------------------------------
             /// A method which is called when all components owned by the parent
             /// widget have been created and added. Inheriting classes should use
@@ -269,9 +271,21 @@ namespace ChilliSource
             /// @param The owning widget.
             //----------------------------------------------------------------
             void SetWidget(Widget* in_widget);
+            //----------------------------------------------------------------
+            /// Sets the value of a property from another property. The given
+            /// property must be of the same type as the given property or
+            /// the app will be considered to be in an irrecoverable state
+            /// and will terminate.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The property name.
+            /// @param The property used to set the value.
+            //----------------------------------------------------------------
+            void SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property);
 
             bool m_propertyRegistrationComplete = false;
-            std::unordered_map<std::string, IPropertyAccessorUPtr> m_properties;
+            std::unordered_map<std::string, Core::IPropertyUPtr> m_properties;
             Widget* m_widget = nullptr;
             std::string m_name;
         };
@@ -290,7 +304,7 @@ namespace ChilliSource
                 CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::Component.");
             }
             
-            auto accessor = CS_SMARTCAST(PropertyAccessor<TPropertyType>*, it->second.get());
+            auto accessor = CS_SMARTCAST(const Core::Property<TPropertyType>*, it->second.get(), "Incorrect type for property with name: " + in_propertyName);
             return accessor->Get();
         }
         //----------------------------------------------------------------
@@ -308,12 +322,12 @@ namespace ChilliSource
                 CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::Component.");
             }
             
-            auto accessor = CS_SMARTCAST(PropertyAccessor<TPropertyType>*, it->second.get());
+            auto accessor = CS_SMARTCAST(Core::Property<TPropertyType>*, it->second.get(), "Incorrect type for property with name: " + in_propertyName);
             accessor->Set(std::forward<TPropertyType>(in_propertyValue));
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
-        template <typename TPropertyType> void Component::RegisterProperty(const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter)
+        template <typename TPropertyType> void Component::RegisterProperty(const Core::PropertyType<TPropertyType>* in_propertyType, const std::string& in_name, std::function<TPropertyType()>&& in_getter, std::function<void(TPropertyType)>&& in_setter)
         {
             CS_ASSERT(m_propertyRegistrationComplete == false, "UI::Component properties cannot be registered after property registration completion.");
             
@@ -322,7 +336,7 @@ namespace ChilliSource
             
             CS_ASSERT(m_properties.find(lowerPropertyName) == m_properties.end(), "Cannot register duplicate property name '" + in_name + "' in a UI::Component.");
             
-            m_properties.emplace(lowerPropertyName, IPropertyAccessorUPtr(new PropertyAccessor<TPropertyType>(in_setter, in_getter)));
+            m_properties.emplace(lowerPropertyName, in_propertyType->CreateProperty(in_setter, in_getter));
         }
     }
 }

@@ -54,13 +54,13 @@ namespace ChilliSource
             ///
             /// @param The type description.
             //-----------------------------------------------------------------
-            Property(const PropertyType<TType>& in_type);
+            Property(const PropertyType<TType>* in_type);
             //-----------------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return The property type description.
             //-----------------------------------------------------------------
-            const IPropertyType& GetType() const override;
+            const IPropertyType* GetType() const override;
             //-----------------------------------------------------------------
             /// A basic getter for the value of the property. The literal storage
             /// of the value is determined by the implementing type.
@@ -88,7 +88,7 @@ namespace ChilliSource
             ///
             /// @param The property whose value this will be set to.
             //-----------------------------------------------------------------
-            void Set(const IProperty& in_property) override;
+            void Set(const IProperty* in_property) override;
             //-----------------------------------------------------------------
             /// A basic setter for the value of the property. The literal storage
             /// of the value is determined by the implementing type.
@@ -118,7 +118,7 @@ namespace ChilliSource
     {
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
-        template <typename TType> Property<TType>::Property(const PropertyType<TType>& in_type)
+        template <typename TType> Property<TType>::Property(const PropertyType<TType>* in_type)
         : m_type(in_type)
         {
         }
@@ -132,17 +132,19 @@ namespace ChilliSource
         //-----------------------------------------------------------------
         template <typename TType> void Property<TType>::Parse(const std::string& in_string)
         {
-            TType value = m_type->GetParseDelegate()(in_string);
+            auto parser = m_type->GetParseDelegate();
+            CS_ASSERT(parser != nullptr, "Cannot parse property of type '" + m_type->GetTypeName() + "' from string.");
+            
+            TType value = parser(in_string);
             Set(value);
         }
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
-        template <typename TType> void Property<TType>::Set(const IProperty& in_property)
+        template <typename TType> void Property<TType>::Set(const IProperty* in_property)
         {
-            //TODO: This assert doesn't make sense at the moment, but I think it is required. How to solve...?
-            //CS_ASSERT(in_property.GetType() == GetType(), "Cannot set property of a different property type.");
+            CS_ASSERT(in_property->GetType() == GetType(), "Cannot set a property with a property created through a different Property Type.");
             
-            const Property<TType>* castProperty = CS_SMARTCAST(const Property<TType>*, &in_property);
+            const Property<TType>* castProperty = CS_SMARTCAST(const Property<TType>*, &in_property, "Cannot set a property of a different property type.");
             Set(castProperty->Get());
         }
     }

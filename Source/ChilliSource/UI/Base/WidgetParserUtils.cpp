@@ -29,6 +29,7 @@
 #include <ChilliSource/UI/Base/WidgetParserUtils.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
@@ -42,6 +43,7 @@
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Base/WidgetDesc.h>
 #include <ChilliSource/UI/Base/WidgetFactory.h>
+#include <ChilliSource/UI/Base/WidgetPropertyTypes.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
 #include <ChilliSource/UI/Drawable/DrawableDesc.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
@@ -100,105 +102,65 @@ namespace ChilliSource
             }
             //-------------------------------------------------------
             //-------------------------------------------------------
-            void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath, PropertyMap& out_propertyMap)
+            void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath, Core::PropertyMap& out_propertyMap)
             {
-                switch(out_propertyMap.GetType(in_propertyName))
+                auto propertyType = out_propertyMap.GetType(in_propertyName);
+                
+                if (propertyType == &WidgetPropertyTypes::k_texture)
                 {
-                    case PropertyType::k_bool:
-                        CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
-                        out_propertyMap.SetProperty(in_propertyName, Core::ParseBool(in_jsonValue.asString()));
-                        break;
-                    case PropertyType::k_int:
-                        CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
-                        out_propertyMap.SetProperty(in_propertyName, Core::ParseS32(in_jsonValue.asString()));
-                        break;
-                    case PropertyType::k_float:
-                        CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
-                        out_propertyMap.SetProperty(in_propertyName, Core::ParseF32(in_jsonValue.asString()));
-                        break;
-                    case PropertyType::k_string:
-                        CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
-                        out_propertyMap.SetProperty(in_propertyName, in_jsonValue.asString());
-                        break;
-                    case PropertyType::k_vec2:
-                        CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
-                        out_propertyMap.SetProperty(in_propertyName, Core::ParseVector2(in_jsonValue.asString()));
-                        break;
-                    case PropertyType::k_vec3:
-                        CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
-                        out_propertyMap.SetProperty(in_propertyName, Core::ParseVector3(in_jsonValue.asString()));
-                        break;
-                    case PropertyType::k_vec4:
-                        CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
-                        out_propertyMap.SetProperty(in_propertyName, Core::ParseVector4(in_jsonValue.asString()));
-                        break;
-                    case PropertyType::k_colour:
-                        CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
-                        out_propertyMap.SetProperty(in_propertyName, Core::ParseColour(in_jsonValue.asString()));
-                        break;
-                    case PropertyType::k_alignmentAnchor:
-                        CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
-                        out_propertyMap.SetProperty(in_propertyName, Rendering::ParseAlignmentAnchor(in_jsonValue.asString()));
-                        break;
-                    case PropertyType::k_sizePolicy:
-                        CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
-                        out_propertyMap.SetProperty(in_propertyName, ParseSizePolicy(in_jsonValue.asString()));
-                        break;
-                    case PropertyType::k_horizontalTextJustification:
-                        CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
-                        out_propertyMap.SetProperty(in_propertyName, Rendering::ParseHorizontalTextJustification(in_jsonValue.asString()));
-                        break;
-                    case PropertyType::k_verticalTextJustification:
-                        CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
-                        out_propertyMap.SetProperty(in_propertyName, Rendering::ParseVerticalTextJustification(in_jsonValue.asString()));
-                        break;
-                    case PropertyType::k_texture:
-                    {
-                        auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
-                        auto texture = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Texture>(resourcePair.first, resourcePair.second);
-                        out_propertyMap.SetProperty(in_propertyName, texture);
-                        break;
-                    }
-                    case PropertyType::k_textureAtlas:
-                    {
-                        auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
-                        auto textureAtlas = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::TextureAtlas>(resourcePair.first, resourcePair.second);
-                        out_propertyMap.SetProperty(in_propertyName, textureAtlas);
-                        break;
-                    }
-                    case PropertyType::k_font:
-                    {
-                        auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
-                        auto font = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Font>(resourcePair.first, resourcePair.second);
-                        out_propertyMap.SetProperty(in_propertyName, font);
-                        break;
-                    }
-                    case PropertyType::k_localisedText:
-                    {
-                        auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
-                        auto localisedText = Core::Application::Get()->GetResourcePool()->LoadResource<Core::LocalisedText>(resourcePair.first, resourcePair.second);
-                        out_propertyMap.SetProperty(in_propertyName, localisedText);
-                        break;
-                    }
-                    case PropertyType::k_drawableDesc:
-                    {
-                        CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
-                        DrawableDesc drawbleDesc(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
-                        out_propertyMap.SetProperty(in_propertyName, drawbleDesc);
-                        break;
-                    }
-                    case PropertyType::k_layoutDesc:
-                    {
-                        CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
-                        LayoutDesc layoutDesc(in_jsonValue);
-                        out_propertyMap.SetProperty(in_propertyName, layoutDesc);
-                        break;
-                    }
-                    case PropertyType::k_unknown:
-                    default:
-                        CS_LOG_FATAL("Cannot set an 'unknown' property from a string.");
-                        break;
+                    auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
+                    auto texture = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Texture>(resourcePair.first, resourcePair.second);
+                    out_propertyMap.SetProperty(in_propertyName, texture);
                 }
+                else if (propertyType == &WidgetPropertyTypes::k_textureAtlas)
+                {
+                    auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
+                    auto textureAtlas = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::TextureAtlas>(resourcePair.first, resourcePair.second);
+                    out_propertyMap.SetProperty(in_propertyName, textureAtlas);
+                }
+                else if (propertyType == &WidgetPropertyTypes::k_font)
+                {
+                    auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
+                    auto font = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Font>(resourcePair.first, resourcePair.second);
+                    out_propertyMap.SetProperty(in_propertyName, font);
+                }
+                
+                //TODO: Continue here.
+                
+//                switch()
+//                {
+//                    case :
+//                    {
+//
+//                        break;
+//                    }
+//                    case WidgetPropertyTypes::k_localisedText:
+//                    {
+//                        auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
+//                        auto localisedText = Core::Application::Get()->GetResourcePool()->LoadResource<Core::LocalisedText>(resourcePair.first, resourcePair.second);
+//                        out_propertyMap.SetProperty(in_propertyName, localisedText);
+//                        break;
+//                    }
+//                    case WidgetPropertyTypes::k_drawableDesc:
+//                    {
+//                        CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
+//                        DrawableDesc drawbleDesc(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
+//                        out_propertyMap.SetProperty(in_propertyName, drawbleDesc);
+//                        break;
+//                    }
+//                    case WidgetPropertyTypes::k_layoutDesc:
+//                    {
+//                        CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
+//                        LayoutDesc layoutDesc(in_jsonValue);
+//                        out_propertyMap.SetProperty(in_propertyName, layoutDesc);
+//                        break;
+//                    }
+//                    default:
+//                        
+//                        CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as a string: " + in_propertyName);
+//                        out_propertyMap.SetProperty("");
+//                        break;
+//                }
                 
             }
             //-------------------------------------------------------

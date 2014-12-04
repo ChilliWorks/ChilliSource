@@ -70,7 +70,7 @@ namespace ChilliSource
             /// @param The getter delegate.
             /// @param The setter delegate.
             //-----------------------------------------------------------------
-            ReferenceProperty(const PropertyType<TType>& in_type, const GetterDelegate& in_getter, const SetterDelegate& in_setter);
+            ReferenceProperty(const PropertyType<TType>* in_type, const GetterDelegate& in_getter, const SetterDelegate& in_setter);
             //-----------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -105,7 +105,7 @@ namespace ChilliSource
     {
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
-        template <typename TType> ReferenceProperty<TType>::ReferenceProperty(const PropertyType<TType>& in_type, const GetterDelegate& in_getter, const SetterDelegate& in_setter)
+        template <typename TType> ReferenceProperty<TType>::ReferenceProperty(const PropertyType<TType>* in_type, const GetterDelegate& in_getter, const SetterDelegate& in_setter)
         : Property<TType>(in_type), m_getter(in_getter), m_setter(in_setter)
         {
         }

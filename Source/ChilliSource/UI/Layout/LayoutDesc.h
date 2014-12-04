@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_UI_LAYOUT_LAYOUTDESC_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Container/Property/PropertyType.h>
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Layout/GridLayout.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>

@@ -31,7 +31,9 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
+#include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 #include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/Container/Property/Property.h>
 
 #include <cassert>
 #include <unordered_map>
@@ -42,10 +44,13 @@ namespace ChilliSource
 	namespace Core
 	{
         //---------------------------------------------------------------------------------
-        /// Simplified version of a map data-structure that is specialised for UI property
-        /// types. The keys can only be set at construction time as the map has a fixed
-        /// size and is contiguous. Unlike STL maps, the property map can handle heterogenous
-        /// types
+        /// Simplified version of a map data-structure. The keys can only be set at
+        /// construction time as the map has a fixed size and is contiguous. Unlike STL
+        /// maps, the property map can handle heterogenous types.
+        ///
+        /// Properties are created without a value. GetProperty() should only be used on
+        /// a property after SetProperty() has been called for it. HasValue() can be used
+        /// to check if a value has been set.
         ///
         /// @author S Downie
         //---------------------------------------------------------------------------------
@@ -59,16 +64,9 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             struct PropertyDesc
             {
-                PropertyType m_type;
+                const IPropertyType* m_type;
                 std::string m_name;
             };
-            //----------------------------------------------------------------------------------------
-            /// Constructor - Note using this constructor will not initialise the map and needs
-            /// to be used with AllocateKeys
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            PropertyMap() = default;
             //----------------------------------------------------------------------------------------
             /// Constructor
             ///
@@ -116,8 +114,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return A list of all property keys in the property map. These are allocated on
-            /// construction and will never change.
+            /// @return The list of keys in the property map.
             //----------------------------------------------------------------------------------------
             const std::vector<std::string>& GetKeys() const;
             //----------------------------------------------------------------------------------------
@@ -138,8 +135,8 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             bool HasValue(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
-            /// Set the value of the property with the given name. If no property exists
-            /// with the name then it will assert.
+            /// Set the value of the property with the given name. If no property exists with the
+            /// name then it will assert.
             ///
             /// @author S Downie
             ///
@@ -157,8 +154,8 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetProperty(const std::string& in_name, const char* in_value);
             //----------------------------------------------------------------------------------------
-            /// Get the value of the property with the given name. If no property exists
-            /// with the name then it will assert.
+            /// Get the value of the property with the given name. If no property exists with the name
+            /// or the property doesn't yet have a value, with the name then it will assert.
             ///
             /// @author S Downie
             ///
@@ -168,8 +165,8 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             template<typename TType> TType GetProperty(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
-            /// Get the value of the property with the given name. If no property exists
-            /// with the name then the default value will be returned
+            /// Get the value of the property with the given name. If the property has not been set
+            /// the default will be returned instead. If the property doesn't exist it will assert.
             ///
             /// @author S Downie
             ///
@@ -196,130 +193,41 @@ namespace ChilliSource
             ///
             /// @return The type of the property with the given name
             //----------------------------------------------------------------------------------------
-            PropertyType GetType(const std::string& in_name) const;
+            const IPropertyType* GetType(const std::string& in_name) const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The property name.
+            ///
+            /// @return The underlying property object for the given key. If there is no property
+            /// with the given name, or the property has no value this will assert.
+            //----------------------------------------------------------------------------------------
+            IProperty* GetPropertyObject(const std::string& in_name);
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The property name.
+            ///
+            /// @return A constant version of the underlying property object for the given key. If
+            /// there is no property with the given name, or the property has no value this will assert.
+            //----------------------------------------------------------------------------------------
+            const IProperty* GetPropertyObject(const std::string& in_name) const;
             
         private:
-            //-----------------------------------------------------
-            /// Classes that implement simple type stripping
-            /// by interfacing a concrete template type that holds
-            /// the value
+            //----------------------------------------------------------------------------------------
+            /// A container for the property and a boolean to state whether or not the property has
+            /// been given a value.
             ///
-            /// @author S Downie
-            //-----------------------------------------------------
-            class IProperty
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------------------
+            struct PropertyContainer
             {
-            public:
-                virtual ~IProperty(){}
-                //-----------------------------------------------------
-                /// Allows copying of polymorphic type
-                ///
-                /// @author S Downie
-                ///
-                /// @param Property to copy
-                //-----------------------------------------------------
-                virtual void CopyFrom(const IProperty* in_toCopy) = 0;
-                //-----------------------------------------------------
-                /// @author Ian Copland
-                ///
-                /// @return Whether or not the property has its value
-                /// set. It should be be used prior to a value being
-                /// set.
-                //-----------------------------------------------------
-                virtual bool IsInitialised() = 0;
-            };
-            //-----------------------------------------------------
-            //-----------------------------------------------------
-            template <typename TType> class Property final : public IProperty
-            {
-            public:
-                //-----------------------------------------------------
-                /// Copies the value of one property type of TType to
-                /// this property of type TType. Copying across TTypes
-                /// will cause the cast to assert.
-                ///
-                /// @author S Downie
-                ///
-                /// @param Property to copy
-                //-----------------------------------------------------
-                void CopyFrom(const IProperty* in_toCopy) override
-                {
-                    const Property* toCopy = CS_SMARTCAST(const Property*, in_toCopy);
-                    m_initialised = toCopy->m_initialised;
-                    m_value = toCopy->m_value;
-                }
-                //-----------------------------------------------------
-                /// @author Ian Copland
-                ///
-                /// @return Whether or not the property has its value
-                /// set. It should be be used prior to a value being
-                /// set.
-                //-----------------------------------------------------
-                bool IsInitialised() override
-                {
-                    return m_initialised;
-                }
-            
-                TType m_value;
                 bool m_initialised = false;
-            };
-            using IPropertyUPtr = std::unique_ptr<IProperty>;
-            //----------------------------------------------------------------------------------------
-            /// Holds the type of the property and the offset into the blob
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            struct PropertyLookup
-            {
-                //----------------------------------------------------------------------------------------
-                /// Constructor
-                ///
-                /// @author S Downie
-                //----------------------------------------------------------------------------------------
-                PropertyLookup() = default;
-                //----------------------------------------------------------------------------------------
-                /// Move Constructor
-                ///
-                /// @author S Downie
-                ///
-                /// @param Object to move into this
-                //----------------------------------------------------------------------------------------
-                PropertyLookup(PropertyLookup&& in_move)
-                : m_type(in_move.m_type), m_property(std::move(in_move.m_property))
-                {
-                    in_move.m_type = PropertyType::k_unknown;
-                }
-
-                PropertyType m_type;
                 IPropertyUPtr m_property;
-            };    
-            //----------------------------------------------------------------------------------------
-            /// Set the keys which will allocate space for the values
-            ///
-            /// @author S Downie
-            ///
-            /// @param List of the key names and types
-            //----------------------------------------------------------------------------------------
-            void AllocateKeys(const std::vector<PropertyDesc>& in_propertyDefs);
-            //----------------------------------------------------------------------------------------
-            /// Converts the object type to proprty type and throws compiler error for unsupported
-            /// types
-            ///
-            /// @author S Downie
-            ///
-            /// @return The internal enum property type of the given object type
-            //----------------------------------------------------------------------------------------
-            template<typename TType> PropertyType GetType() const;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Type
-            ///
-            /// @return New property of given type
-            //----------------------------------------------------------------------------------------
-            IPropertyUPtr CreateProperty(PropertyType in_type) const;
+            };
     
             std::vector<std::string> m_propertyKeys;
-            std::unordered_map<u32, PropertyLookup> m_properties;
+            std::unordered_map<std::string, PropertyContainer> m_properties;
         };
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -329,15 +237,13 @@ namespace ChilliSource
             
             std::string lowerCaseName = in_name;
             Core::StringUtils::ToLowerCase(lowerCaseName);
-            u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
             
-            auto entry = m_properties.find(hashKey);
-            CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
-            CS_ASSERT(entry->second.m_type == GetType<TValueType>(), "Wrong type for property with name " + in_name);
-            
-            Property<TValueType>* property = (Property<TValueType>*)entry->second.m_property.get();
-            property->m_value = std::forward<TType>(in_value);
-            property->m_initialised = true;
+            auto entry = m_properties.find(lowerCaseName);
+            CS_ASSERT(entry != m_properties.end(), "No property in property map with name: " + in_name);
+
+            Property<TValueType>* property = CS_SMARTCAST(Property<TValueType>*, entry->second.m_property.get(), "Wrong type for property with name: " + in_name);
+            property->Set(std::forward<TType>(in_value));
+            entry->second.m_initialised = true;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -347,16 +253,13 @@ namespace ChilliSource
             
             std::string lowerCaseName = in_name;
             Core::StringUtils::ToLowerCase(lowerCaseName);
-            u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
             
-            auto entry = m_properties.find(hashKey);
-            CS_ASSERT(entry != m_properties.end(), "No UI property with name: " + in_name);
-            CS_ASSERT(entry->second.m_type == GetType<TValueType>(), "Wrong type for property with name " + in_name);
-            CS_ASSERT(entry->second.m_property->IsInitialised() == true, "Cannot get the value for an uninitialised property.");
+            auto entry = m_properties.find(lowerCaseName);
+            CS_ASSERT(entry != m_properties.end(), "No property in property map with name: " + in_name);
+            CS_ASSERT(entry->second.m_initialised == true, "Cannot get the value for an uninitialised property.");
             
-            Property<TValueType>* property = (Property<TValueType>*)entry->second.m_property.get();
-            
-            return property->m_value;
+            Property<TValueType>* property = CS_SMARTCAST(Property<TValueType>*, entry->second.m_property.get(), "Wrong type for property with name: " + in_name);
+            return property->Get();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -366,184 +269,19 @@ namespace ChilliSource
             
             std::string lowerCaseName = in_name;
             Core::StringUtils::ToLowerCase(lowerCaseName);
-            u32 hashKey = Core::HashCRC32::GenerateHashCode(lowerCaseName);
             
-            auto entry = m_properties.find(hashKey);
-            if(entry == m_properties.end())
+            auto entry = m_properties.find(lowerCaseName);
+            CS_ASSERT(entry != m_properties.end(), "No property in property map with name: " + in_name);
+            
+            Property<TValueType>* property = CS_SMARTCAST(Property<TValueType>*, entry->second.m_property.get(), "Wrong type for property with name: " + in_name);
+            if (entry->second.m_initialised == true)
             {
-                return in_default;
+                return property->Get();
             }
             
-            CS_ASSERT(entry->second.m_type == GetType<TValueType>(), "Wrong type for property with name " + in_name);
-            
-            if (entry->second.m_property->IsInitialised() == false)
-            {
-                return in_default;
-            }
-            
-            Property<TValueType>* property = (Property<TValueType>*)entry->second.m_property.get();
-            return property->m_value;
+            return in_default;
         }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        template<typename TType> PropertyType PropertyMap::GetType() const
-        {
-            static_assert(std::is_pointer<TType>::value, "Property type not supported");
-            return PropertyType::k_unknown;
-        }
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for bool
-        ///
-        /// @author S Downie
-        ///
-        /// @return Bool prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<bool>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for int
-        ///
-        /// @author S Downie
-        ///
-        /// @return Int prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<s32>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for string
-        ///
-        /// @author S Downie
-        ///
-        /// @return String prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<std::string>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for string
-        ///
-        /// @author S Downie
-        ///
-        /// @return String prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<const char*>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for float
-        ///
-        /// @author S Downie
-        ///
-        /// @return Float prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<f32>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for vec2
-        ///
-        /// @author S Downie
-        ///
-        /// @return Vec2 prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<Core::Vector2>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for vec3
-        ///
-        /// @author S Downie
-        ///
-        /// @return Vec3 prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<Core::Vector3>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for vec4
-        ///
-        /// @author S Downie
-        ///
-        /// @return Vec4 prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<Core::Vector4>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for colour
-        ///
-        /// @author S Downie
-        ///
-        /// @return Colour prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<Core::Colour>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for anchors
-        ///
-        /// @author S Downie
-        ///
-        /// @return Anchor prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<Rendering::AlignmentAnchor>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for size policy
-        ///
-        /// @author S Downie
-        ///
-        /// @return Size policy prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<SizePolicy>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for horizontal text justification
-        ///
-        /// @author Ian Copland
-        ///
-        /// @return Size policy prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<Rendering::HorizontalTextJustification>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for vertical text justification
-        ///
-        /// @author Ian Copland
-        ///
-        /// @return Size policy prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<Rendering::VerticalTextJustification>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for texture resources.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @return Property map prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<Rendering::TextureCSPtr>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for texture altas resources.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @return Property map prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<Rendering::TextureAtlasCSPtr>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for font resources.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @return Property map prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<Rendering::FontCSPtr>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for localised text resources.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @return Property map prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<Core::LocalisedTextCSPtr>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for drawable descriptions
-        ///
-        /// @author Ian Copland
-        ///
-        /// @return Property map prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<DrawableDesc>() const;
-        //----------------------------------------------------------------------------------------
-        /// Specialisation to return property type for layout descriptions.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @return Property map prop type
-        //----------------------------------------------------------------------------------------
-        template<> PropertyType PropertyMap::GetType<LayoutDesc>() const;
-	}
+    }
 }
 
 #endif

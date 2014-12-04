@@ -25,6 +25,7 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 //
+
 #ifndef _CHILLISOURCE_CORE_CONTAINER_PROPERTY_VALUEPROPERTY_H_
 #define _CHILLISOURCE_CORE_CONTAINER_PROPERTY_VALUEPROPERTY_H_
 
@@ -51,7 +52,7 @@ namespace ChilliSource
             ///
             /// @param The type of the property.
             //-----------------------------------------------------------------
-            ValueProperty(const PropertyType<TType>& in_type);
+            ValueProperty(const PropertyType<TType>* in_type);
             //-----------------------------------------------------------------
             /// Directly sets the underlying property value.
             ///
@@ -86,7 +87,7 @@ namespace ChilliSource
     {
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
-        template <typename TType> ValueProperty<TType>::ValueProperty(const PropertyType<TType>& in_type)
+        template <typename TType> ValueProperty<TType>::ValueProperty(const PropertyType<TType>* in_type)
             : Property<TType>(in_type), m_value(in_type->GetDefaultValue())
         {
         }

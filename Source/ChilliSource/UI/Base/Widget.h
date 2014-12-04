@@ -110,7 +110,7 @@ namespace ChilliSource
             ///
             /// @return The list of properties supported by widget
             //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
+            static std::vector<Core::PropertyMap::PropertyDesc> GetPropertyDescs();
             //----------------------------------------------------------------------------------------
             /// Event triggered when a pointer is pressed inside the widget
             ///
@@ -890,7 +890,7 @@ namespace ChilliSource
             /// @param The list of internal children.
             /// @param The list of internal children property links.
             //----------------------------------------------------------------------------------------
-            Widget(const PropertyMap& in_properties, std::vector<ComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
+            Widget(const Core::PropertyMap& in_properties, std::vector<ComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
                    const std::vector<PropertyLink>& in_childPropertyLinks);
             //----------------------------------------------------------------------------------------
             /// Initialises the internal mapping to base properties. This allows base properties,
@@ -936,7 +936,7 @@ namespace ChilliSource
             ///
             /// @param The property map.
             //----------------------------------------------------------------------------------------
-            void InitPropertyValues(const PropertyMap& in_propertyMap);
+            void InitPropertyValues(const Core::PropertyMap& in_propertyMap);
             //----------------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -1047,6 +1047,17 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             std::pair<ILayout*, s32> GetLayoutForChild(const Widget* in_child);
             //----------------------------------------------------------------------------------------
+            /// Sets the value of a property from another property. The given property must be of the
+            /// same type as the given property or the app will be considered to be in an irrecoverable
+            /// state and will terminate.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The property name.
+            /// @param The property used to set the value.
+            //----------------------------------------------------------------------------------------
+            void SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property);
+            //----------------------------------------------------------------------------------------
             /// Called when the out transform changes forcing this to update its caches
             ///
             /// @author S Downie
@@ -1139,7 +1150,7 @@ namespace ChilliSource
             
         private:
             
-            std::unordered_map<std::string, IPropertyAccessorUPtr> m_basePropertyAccessors;
+            std::unordered_map<std::string, CSCore::IPropertyUPtr> m_baseProperties;
             std::unordered_map<std::string, std::pair<Component*, std::string>> m_componentPropertyLinks;
             std::unordered_map<std::string, std::pair<Widget*, std::string>> m_childPropertyLinks;
             

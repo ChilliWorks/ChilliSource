@@ -30,10 +30,13 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
+#include <ChilliSource/Core/Container/Property/PropertyTypes.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
+#include <ChilliSource/UI/Base/WidgetPropertyTypes.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
 #include <ChilliSource/UI/Drawable/DrawableDesc.h>
 #include <ChilliSource/UI/Layout/LayoutDesc.h>
@@ -44,25 +47,25 @@ namespace ChilliSource
     {
         namespace
         {
-            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
+            const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyType::k_string, "Name"},
-                {PropertyType::k_vec2, "RelPosition"},
-                {PropertyType::k_vec2, "AbsPosition"},
-                {PropertyType::k_vec2, "RelSize",},
-                {PropertyType::k_vec2, "AbsSize"},
-                {PropertyType::k_vec2, "PreferredSize"},
-                {PropertyType::k_vec2, "Scale"},
-                {PropertyType::k_colour, "Colour"},
-                {PropertyType::k_float, "Rotation"},
-                {PropertyType::k_alignmentAnchor, "OriginAnchor"},
-                {PropertyType::k_alignmentAnchor, "ParentalAnchor"},
-                {PropertyType::k_bool, "Visible"},
-                {PropertyType::k_bool, "ClipChildren"},
-                {PropertyType::k_bool, "InputEnabled"},
-                {PropertyType::k_bool, "InputConsumeEnabled"},
-                {PropertyType::k_sizePolicy, "SizePolicy"},
-                {PropertyType::k_layoutDesc, "Layout"},
+                {&Core::PropertyTypes::k_string, "Name"},
+                {&Core::PropertyTypes::k_vec2, "RelPosition"},
+                {&Core::PropertyTypes::k_vec2, "AbsPosition"},
+                {&Core::PropertyTypes::k_vec2, "RelSize",},
+                {&Core::PropertyTypes::k_vec2, "AbsSize"},
+                {&Core::PropertyTypes::k_vec2, "PreferredSize"},
+                {&Core::PropertyTypes::k_vec2, "Scale"},
+                {&Core::PropertyTypes::k_colour, "Colour"},
+                {&Core::PropertyTypes::k_float, "Rotation"},
+                {&WidgetPropertyTypes::k_alignmentAnchor, "OriginAnchor"},
+                {&WidgetPropertyTypes::k_alignmentAnchor, "ParentalAnchor"},
+                {&Core::PropertyTypes::k_bool, "Visible"},
+                {&Core::PropertyTypes::k_bool, "ClipChildren"},
+                {&Core::PropertyTypes::k_bool, "InputEnabled"},
+                {&Core::PropertyTypes::k_bool, "InputConsumeEnabled"},
+                {&WidgetPropertyTypes::k_sizePolicy, "SizePolicy"},
+                {&WidgetPropertyTypes::k_layoutDesc, "Layout"},
             };
             
             //----------------------------------------------------------------------------------------
@@ -200,13 +203,13 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        std::vector<PropertyMap::PropertyDesc> Widget::GetPropertyDescs()
+        std::vector<Core::PropertyMap::PropertyDesc> Widget::GetPropertyDescs()
         {
             return k_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Widget::Widget(const PropertyMap& in_properties, std::vector<ComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
+        Widget::Widget(const Core::PropertyMap& in_properties, std::vector<ComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
                        const std::vector<PropertyLink>& in_childPropertyLinks)
         {
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
@@ -229,23 +232,23 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::InitBaseProperties()
         {
-            m_basePropertyAccessors.emplace("name", IPropertyAccessorUPtr(new PropertyAccessor<std::string>(Core::MakeDelegate(this, &Widget::SetName), Core::MakeDelegate(this, &Widget::GetName))));
-            m_basePropertyAccessors.emplace("relposition", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::SetRelativePosition), Core::MakeDelegate(this, &Widget::GetLocalRelativePosition))));
-            m_basePropertyAccessors.emplace("absposition", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::SetAbsolutePosition), Core::MakeDelegate(this, &Widget::GetLocalAbsolutePosition))));
-            m_basePropertyAccessors.emplace("relsize", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::SetRelativeSize), Core::MakeDelegate(this, &Widget::GetLocalRelativeSize))));
-            m_basePropertyAccessors.emplace("abssize", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::SetAbsoluteSize), Core::MakeDelegate(this, &Widget::GetLocalAbsoluteSize))));
-            m_basePropertyAccessors.emplace("preferredsize", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::SetDefaultPreferredSize), Core::MakeDelegate(this, &Widget::GetPreferredSize))));
-            m_basePropertyAccessors.emplace("scale", IPropertyAccessorUPtr(new PropertyAccessor<Core::Vector2>(Core::MakeDelegate(this, &Widget::ScaleTo), Core::MakeDelegate(this, &Widget::GetLocalScale))));
-            m_basePropertyAccessors.emplace("colour", IPropertyAccessorUPtr(new PropertyAccessor<Core::Colour>(Core::MakeDelegate(this, &Widget::SetColour), Core::MakeDelegate(this, &Widget::GetLocalColour))));
-            m_basePropertyAccessors.emplace("rotation", IPropertyAccessorUPtr(new PropertyAccessor<f32>(Core::MakeDelegate(this, &Widget::RotateTo), Core::MakeDelegate(this, &Widget::GetLocalRotation))));
-            m_basePropertyAccessors.emplace("originanchor", IPropertyAccessorUPtr(new PropertyAccessor<Rendering::AlignmentAnchor>(Core::MakeDelegate(this, &Widget::SetOriginAnchor), Core::MakeDelegate(this, &Widget::GetOriginAnchor))));
-            m_basePropertyAccessors.emplace("parentalanchor", IPropertyAccessorUPtr(new PropertyAccessor<Rendering::AlignmentAnchor>(Core::MakeDelegate(this, &Widget::SetParentalAnchor), Core::MakeDelegate(this, &Widget::GetParentalAnchor))));
-            m_basePropertyAccessors.emplace("visible", IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(this, &Widget::SetVisible), Core::MakeDelegate(this, &Widget::IsVisible))));
-            m_basePropertyAccessors.emplace("clipchildren", IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(this, &Widget::SetClippingEnabled), Core::MakeDelegate(this, &Widget::IsClippingEnabled))));
-            m_basePropertyAccessors.emplace("inputenabled", IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(this, &Widget::SetInputEnabled), Core::MakeDelegate(this, &Widget::IsInputEnabled))));
-            m_basePropertyAccessors.emplace("inputconsumeenabled", IPropertyAccessorUPtr(new PropertyAccessor<bool>(Core::MakeDelegate(this, &Widget::SetInputConsumeEnabled), Core::MakeDelegate(this, &Widget::IsInputConsumeEnabled))));
-            m_basePropertyAccessors.emplace("sizepolicy", IPropertyAccessorUPtr(new PropertyAccessor<SizePolicy>(Core::MakeDelegate(this, &Widget::SetSizePolicy), Core::MakeDelegate(this, &Widget::GetSizePolicy))));
-            m_basePropertyAccessors.emplace("layout", IPropertyAccessorUPtr(new PropertyAccessor<ILayoutSPtr>(Core::MakeDelegate(this, &Widget::SetLayout), Core::MakeDelegate(this, &Widget::GetLayout))));
+            m_baseProperties.emplace("name", Core::PropertyTypes::k_string.CreateProperty(Core::MakeDelegate(this, &Widget::GetName), Core::MakeDelegate(this, &Widget::SetName)));
+            m_baseProperties.emplace("relposition", Core::PropertyTypes::k_vec2.CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRelativePosition), Core::MakeDelegate(this, &Widget::SetRelativePosition)));
+            m_baseProperties.emplace("absposition", Core::PropertyTypes::k_vec2.CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalAbsolutePosition), Core::MakeDelegate(this, &Widget::SetAbsolutePosition)));
+            m_baseProperties.emplace("relsize", Core::PropertyTypes::k_vec2.CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRelativeSize), Core::MakeDelegate(this, &Widget::SetRelativeSize)));
+            m_baseProperties.emplace("abssize", Core::PropertyTypes::k_vec2.CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalAbsoluteSize), Core::MakeDelegate(this, &Widget::SetAbsoluteSize)));
+            m_baseProperties.emplace("preferredsize", Core::PropertyTypes::k_vec2.CreateProperty(Core::MakeDelegate(this, &Widget::GetPreferredSize), Core::MakeDelegate(this, &Widget::SetDefaultPreferredSize)));
+            m_baseProperties.emplace("scale", Core::PropertyTypes::k_vec2.CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalScale), Core::MakeDelegate(this, &Widget::ScaleTo)));
+            m_baseProperties.emplace("colour", Core::PropertyTypes::k_colour.CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalColour), Core::MakeDelegate(this, &Widget::SetColour)));
+            m_baseProperties.emplace("rotation", Core::PropertyTypes::k_float.CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRotation), Core::MakeDelegate(this, &Widget::RotateTo)));
+            m_baseProperties.emplace("originanchor", WidgetPropertyTypes::k_alignmentAnchor.CreateProperty(Core::MakeDelegate(this, &Widget::GetOriginAnchor), Core::MakeDelegate(this, &Widget::SetOriginAnchor)));
+            m_baseProperties.emplace("parentalanchor", WidgetPropertyTypes::k_alignmentAnchor.CreateProperty(Core::MakeDelegate(this, &Widget::GetParentalAnchor), Core::MakeDelegate(this, &Widget::SetParentalAnchor)));
+            m_baseProperties.emplace("visible", Core::PropertyTypes::k_bool.CreateProperty(Core::MakeDelegate(this, &Widget::IsVisible), Core::MakeDelegate(this, &Widget::SetVisible)));
+            m_baseProperties.emplace("clipchildren", Core::PropertyTypes::k_bool.CreateProperty(Core::MakeDelegate(this, &Widget::IsClippingEnabled), Core::MakeDelegate(this, &Widget::SetClippingEnabled)));
+            m_baseProperties.emplace("inputenabled", Core::PropertyTypes::k_bool.CreateProperty(Core::MakeDelegate(this, &Widget::IsInputEnabled), Core::MakeDelegate(this, &Widget::SetInputEnabled)));
+            m_baseProperties.emplace("inputconsumeenabled", Core::PropertyTypes::k_bool.CreateProperty(Core::MakeDelegate(this, &Widget::IsInputConsumeEnabled), Core::MakeDelegate(this, &Widget::SetInputConsumeEnabled)));
+            m_baseProperties.emplace("sizepolicy", WidgetPropertyTypes::k_sizePolicy.CreateProperty(Core::MakeDelegate(this, &Widget::GetSizePolicy), Core::MakeDelegate(this, &Widget::SetSizePolicy)));
+            m_baseProperties.emplace("layout", WidgetPropertyTypes::k_layout.CreateProperty(Core::MakeDelegate(this, &Widget::GetLayout), Core::MakeDelegate(this, &Widget::SetLayout)));
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -297,7 +300,7 @@ namespace ChilliSource
             //Hook up any links to our components
             for(const auto& link : in_componentPropertyLinks)
             {
-                CS_ASSERT(m_basePropertyAccessors.find(link.GetLinkName()) == m_basePropertyAccessors.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                CS_ASSERT(m_baseProperties.find(link.GetLinkName()) == m_baseProperties.end(), "Cannot add duplicate property: " + link.GetLinkName());
                 CS_ASSERT(m_componentPropertyLinks.find(link.GetLinkName()) == m_componentPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
                 CS_ASSERT(m_childPropertyLinks.find(link.GetLinkName()) == m_childPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
                 
@@ -315,7 +318,7 @@ namespace ChilliSource
             //Hook up any links to our childrens properties
             for(const auto& link : in_childPropertyLinks)
             {
-                CS_ASSERT(m_basePropertyAccessors.find(link.GetLinkName()) == m_basePropertyAccessors.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                CS_ASSERT(m_baseProperties.find(link.GetLinkName()) == m_baseProperties.end(), "Cannot add duplicate property: " + link.GetLinkName());
                 CS_ASSERT(m_componentPropertyLinks.find(link.GetLinkName()) == m_componentPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
                 CS_ASSERT(m_childPropertyLinks.find(link.GetLinkName()) == m_childPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
                 
@@ -330,71 +333,25 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::InitPropertyValues(const PropertyMap& in_propertyMap)
+        void Widget::InitPropertyValues(const Core::PropertyMap& in_propertyMap)
         {
             for (const auto& key : in_propertyMap.GetKeys())
             {
                 if (in_propertyMap.HasValue(key) == true)
                 {
-                    switch(in_propertyMap.GetType(key))
+                    const Core::IPropertyType* type = in_propertyMap.GetType(key);
+                    
+                    if (type == &WidgetPropertyTypes::k_layoutDesc)
                     {
-                        case PropertyType::k_bool:
-                            SetProperty(key, in_propertyMap.GetProperty<bool>(key));
-                            break;
-                        case PropertyType::k_int:
-                            SetProperty(key, in_propertyMap.GetProperty<s32>(key));
-                            break;
-                        case PropertyType::k_float:
-                            SetProperty(key, in_propertyMap.GetProperty<f32>(key));
-                            break;
-                        case PropertyType::k_string:
-                            SetProperty(key, in_propertyMap.GetProperty<std::string>(key));
-                            break;
-                        case PropertyType::k_vec2:
-                            SetProperty(key, in_propertyMap.GetProperty<Core::Vector2>(key));
-                            break;
-                        case PropertyType::k_vec3:
-                            SetProperty(key, in_propertyMap.GetProperty<Core::Vector3>(key));
-                            break;
-                        case PropertyType::k_vec4:
-                            SetProperty(key, in_propertyMap.GetProperty<Core::Vector4>(key));
-                            break;
-                        case PropertyType::k_colour:
-                            SetProperty(key, in_propertyMap.GetProperty<Core::Colour>(key));
-                            break;
-                        case PropertyType::k_alignmentAnchor:
-                            SetProperty(key, in_propertyMap.GetProperty<Rendering::AlignmentAnchor>(key));
-                            break;
-                        case PropertyType::k_sizePolicy:
-                            SetProperty(key, in_propertyMap.GetProperty<SizePolicy>(key));
-                            break;
-                        case PropertyType::k_horizontalTextJustification:
-                            SetProperty(key, in_propertyMap.GetProperty<Rendering::HorizontalTextJustification>(key));
-                            break;
-                        case PropertyType::k_verticalTextJustification:
-                            SetProperty(key, in_propertyMap.GetProperty<Rendering::VerticalTextJustification>(key));
-                            break;
-                        case PropertyType::k_texture:
-                            SetProperty(key, in_propertyMap.GetProperty<Rendering::TextureCSPtr>(key));
-                            break;
-                        case PropertyType::k_textureAtlas:
-                            SetProperty(key, in_propertyMap.GetProperty<Rendering::TextureAtlasCSPtr>(key));
-                            break;
-                        case PropertyType::k_font:
-                            SetProperty(key, in_propertyMap.GetProperty<Rendering::FontCSPtr>(key));
-                            break;
-                        case PropertyType::k_localisedText:
-                            SetProperty(key, in_propertyMap.GetProperty<Core::LocalisedTextCSPtr>(key));
-                            break;
-                        case PropertyType::k_drawableDesc:
-                            SetProperty(key, IDrawable::Create(in_propertyMap.GetProperty<DrawableDesc>(key)));
-                            break;
-                        case PropertyType::k_layoutDesc:
-                            SetProperty(key, ILayout::Create(in_propertyMap.GetProperty<LayoutDesc>(key)));
-                            break;
-                        case PropertyType::k_unknown:
-                            CS_LOG_FATAL("Cannot set an 'unknown' property.");
-                            break;
+                        SetProperty(key, ILayout::Create(in_propertyMap.GetProperty<LayoutDesc>(key)));
+                    }
+                    else if (type == &WidgetPropertyTypes::k_drawableDesc)
+                    {
+                        SetProperty(key, IDrawable::Create(in_propertyMap.GetProperty<DrawableDesc>(key)));
+                    }
+                    else
+                    {
+                        SetProperty(key, in_propertyMap.GetPropertyObject(key));
                     }
                 }
             }
@@ -1338,6 +1295,36 @@ namespace ChilliSource
             }
             
             return std::make_pair(layout, childIndex);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property)
+        {
+            std::string lowerName = in_propertyName;
+            Core::StringUtils::ToLowerCase(lowerName);
+            
+            auto basePropIt = m_baseProperties.find(lowerName);
+            if(basePropIt != m_baseProperties.end())
+            {
+                basePropIt->second->Set(in_property);
+                return;
+            }
+            
+            auto componentPropIt = m_componentPropertyLinks.find(lowerName);
+            if(componentPropIt != m_componentPropertyLinks.end())
+            {
+                componentPropIt->second.first->SetProperty(componentPropIt->second.second, in_property);
+                return;
+            }
+            
+            auto childPropIt = m_childPropertyLinks.find(lowerName);
+            if(childPropIt != m_childPropertyLinks.end())
+            {
+                childPropIt->second.first->SetProperty(childPropIt->second.second, in_property);
+                return;
+            }
+            
+            CS_LOG_FATAL("Invalid property name for Widget: " + in_propertyName);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

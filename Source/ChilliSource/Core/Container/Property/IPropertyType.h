@@ -42,6 +42,11 @@ namespace ChilliSource
         /// creation of instances of the property described without knowing the
         /// specific type.
         ///
+        /// Properties retain a pointer to the Property Type that created them
+        /// which means the property type must outlive any properties created
+        /// through it. Typically Property Types are allocated statically to
+        /// guarantee this.
+        ///
         /// @author Ian Copland
         //------------------------------------------------------------------------
         class IPropertyType

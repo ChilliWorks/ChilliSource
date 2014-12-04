@@ -53,7 +53,7 @@ namespace ChilliSource
             /// @return The underlying property type description. This can be
             /// used to re-establish the underlying type.
             //-----------------------------------------------------------------
-            virtual const IPropertyType& GetType() const = 0;
+            virtual const IPropertyType* GetType() const = 0;
             //-----------------------------------------------------------------
             /// Parses the given string and sets the property to the parsed
             /// value.
@@ -72,7 +72,7 @@ namespace ChilliSource
             ///
             /// @param The property whose value this will be set to.
             //-----------------------------------------------------------------
-            virtual void Set(const IProperty& in_property) = 0;
+            virtual void Set(const IProperty* in_property) = 0;
             //-----------------------------------------------------------------
             /// Virtual destructor.
             ///

@@ -28,6 +28,7 @@
 
 #include <ChilliSource/UI/Drawable/DrawableDesc.h>
 
+#include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
 #include <json/json.h>

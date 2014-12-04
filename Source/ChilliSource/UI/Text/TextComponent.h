@@ -31,12 +31,12 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/UI/Base/Component.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
 
 #include <vector>
 
@@ -99,7 +99,7 @@ namespace ChilliSource
             ///
             /// @return The list of properties supported by text.
             //-------------------------------------------------------------------
-            static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
+            static const std::vector<Core::PropertyMap::PropertyDesc>& GetPropertyDescs();
             //-------------------------------------------------------------------
             /// Allows querying of whether or not the component implements the
             /// interface associated with the given interface Id. Typically
@@ -344,7 +344,7 @@ namespace ChilliSource
             /// @param The component name.
             /// @param The property map.
             //-------------------------------------------------------------------
-            TextComponent(const std::string& in_componentName, const PropertyMap& in_properties);
+            TextComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
             //-------------------------------------------------------------------
             /// Render the text using the transform and size of the owning
             /// widget.

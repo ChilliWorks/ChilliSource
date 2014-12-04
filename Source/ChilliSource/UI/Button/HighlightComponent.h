@@ -30,10 +30,10 @@
 #define _CHILLISOURCE_UI_BUTTON_HIGHLIGHTCOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/UI/Base/Component.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
 
 namespace ChilliSource
 {
@@ -61,7 +61,7 @@ namespace ChilliSource
             ///
             /// @return The list of properties supported by a highlight component.
             //-------------------------------------------------------------------
-            static const std::vector<PropertyMap::PropertyDesc>& GetPropertyDescs();
+            static const std::vector<Core::PropertyMap::PropertyDesc>& GetPropertyDescs();
             //-------------------------------------------------------------------
             /// Allows querying of whether or not the component implements the
             /// interface associated with the given interface Id. Typically
@@ -120,7 +120,7 @@ namespace ChilliSource
             /// @param The component name.
             /// @param The property map.
             //-------------------------------------------------------------------
-            HighlightComponent(const std::string& in_componentName, const PropertyMap& in_properties);
+            HighlightComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
             //-------------------------------------------------------------------
             /// Enables the highlight on the owning widget.
             ///

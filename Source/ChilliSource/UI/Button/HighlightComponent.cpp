@@ -29,9 +29,14 @@
 #include <ChilliSource/UI/Button/HighlightComponent.h>
 
 #include <ChilliSource/Core/Container/VectorUtils.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/UI/Base/Widget.h>
+#include <ChilliSource/UI/Base/WidgetPropertyTypes.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
+#include <ChilliSource/UI/Drawable/DrawableDesc.h>
+#include <ChilliSource/UI/Drawable/IDrawable.h>
+
 
 namespace ChilliSource
 {
@@ -39,30 +44,30 @@ namespace ChilliSource
     {
         namespace
         {
-            const char k_normalDrawableKey[] = "NormalDrawable";
-            const char k_highlightDrawableKey[] = "HighlightDrawable";
+            const char* k_normalDrawableKey = "NormalDrawable";
+            const char* k_highlightDrawableKey = "HighlightDrawable";
             
-            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
+            const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyType::k_drawableDesc, k_normalDrawableKey},
-                {PropertyType::k_drawableDesc, k_highlightDrawableKey},
+                {&WidgetPropertyTypes::k_drawableDesc, k_normalDrawableKey},
+                {&WidgetPropertyTypes::k_drawableDesc, k_highlightDrawableKey}
             };
         }
         
         CS_DEFINE_NAMEDTYPE(HighlightComponent);
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const std::vector<PropertyMap::PropertyDesc>& HighlightComponent::GetPropertyDescs()
+        const std::vector<Core::PropertyMap::PropertyDesc>& HighlightComponent::GetPropertyDescs()
         {
             return k_propertyDescs;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        HighlightComponent::HighlightComponent(const std::string& in_componentName, const PropertyMap& in_properties)
+        HighlightComponent::HighlightComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
             : Component(in_componentName)
         {
-            RegisterProperty<IDrawableSPtr>(k_normalDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetNormalDrawable), Core::MakeDelegate(this, &HighlightComponent::SetNormalDrawable));
-            RegisterProperty<IDrawableSPtr>(k_highlightDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetHighlightDrawable), Core::MakeDelegate(this, &HighlightComponent::SetHighlightDrawable));
+            RegisterProperty<IDrawableSPtr>(&WidgetPropertyTypes::k_drawable, k_normalDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetNormalDrawable), Core::MakeDelegate(this, &HighlightComponent::SetNormalDrawable));
+            RegisterProperty<IDrawableSPtr>(&WidgetPropertyTypes::k_drawable, k_highlightDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetHighlightDrawable), Core::MakeDelegate(this, &HighlightComponent::SetHighlightDrawable));
             ApplyRegisteredProperties(in_properties);
         }
         //-------------------------------------------------------------------

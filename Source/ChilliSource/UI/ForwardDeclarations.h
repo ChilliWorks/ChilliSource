@@ -44,9 +44,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(Component);
         CS_FORWARDDECLARE_CLASS(ComponentDesc);
         CS_FORWARDDECLARE_CLASS(ComponentFactory);
-        CS_FORWARDDECLARE_CLASS(IPropertyAccessor);
         CS_FORWARDDECLARE_CLASS(PropertyLink);
-        CS_FORWARDDECLARE_CLASS(PropertyMap);
         CS_FORWARDDECLARE_CLASS(Widget);
         CS_FORWARDDECLARE_CLASS(WidgetDef);
         CS_FORWARDDECLARE_CLASS(WidgetDesc);
@@ -54,7 +52,6 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(WidgetFactory);
         CS_FORWARDDECLARE_CLASS(WidgetTemplate);
         CS_FORWARDDECLARE_CLASS(WidgetTemplateProvider);
-        enum class PropertyType;
         enum class SizePolicy;
         //---------------------------------------------------------
         /// Button

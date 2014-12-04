@@ -29,6 +29,7 @@
 #include <ChilliSource/UI/Text/TextComponent.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Container/Property/PropertyTypes.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
@@ -54,20 +55,20 @@ namespace ChilliSource
             const char k_maxNumberOfLinesKey[] = "MaxNumberOfLines";
             const char k_textScaleKey[] = "TextScale";
             
-            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
+            const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyType::k_font, k_fontKey},
-                {PropertyType::k_localisedText, k_localisedTextKey},
-                {PropertyType::k_string, k_localisedTextIdKey},
-                {PropertyType::k_string, k_textKey},
-                {PropertyType::k_colour, k_textColourKey},
-                {PropertyType::k_horizontalTextJustification, k_horizontalJustificationKey},
-                {PropertyType::k_verticalTextJustification, k_verticalJustificationKey},
-                {PropertyType::k_float, k_absCharSpacingOffsetKey},
-                {PropertyType::k_float, k_absLineSpacingOffsetKey},
-                {PropertyType::k_float, k_lineSpacingScaleKey},
-                {PropertyType::k_int, k_maxNumberOfLinesKey},
-                {PropertyType::k_float, k_textScaleKey}
+                {&Core::PropertyTypes::k_font, k_fontKey},
+                {&Core::PropertyTypes::k_localisedText, k_localisedTextKey},
+                {&Core::PropertyTypes::k_string, k_localisedTextIdKey},
+                {&Core::PropertyTypes::k_string, k_textKey},
+                {&Core::PropertyTypes::k_colour, k_textColourKey},
+                {&Core::PropertyTypes::k_horizontalTextJustification, k_horizontalJustificationKey},
+                {&Core::PropertyTypes::k_verticalTextJustification, k_verticalJustificationKey},
+                {&Core::PropertyTypes::k_float, k_absCharSpacingOffsetKey},
+                {&Core::PropertyTypes::k_float, k_absLineSpacingOffsetKey},
+                {&Core::PropertyTypes::k_float, k_lineSpacingScaleKey},
+                {&Core::PropertyTypes::k_int, k_maxNumberOfLinesKey},
+                {&Core::PropertyTypes::k_float, k_textScaleKey}
             };
         }
         

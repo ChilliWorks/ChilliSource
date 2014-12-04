@@ -29,6 +29,7 @@
 #define _CHILLISOURCE_CORE_CONTAINER_PROPERTY_PROPERTYTYPE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Container/Property/IPropertyType.h>
 
 namespace ChilliSource
 {
@@ -40,9 +41,14 @@ namespace ChilliSource
         /// methods for creating properties of this type. A property type is
         /// immutable after construction.
         ///
+        /// Properties retain a pointer to the Property Type that created them
+        /// which means the property type must outlive any properties created
+        /// through it. Typically Property Types are allocated statically to
+        /// guarantee this.
+        ///
         /// @author Ian Copland
         //------------------------------------------------------------------------
-        template <typename TType> class PropertyType : public IProperty
+        template <typename TType> class PropertyType : public IPropertyType
         {
         public:
             //-----------------------------------------------------------------
@@ -79,8 +85,13 @@ namespace ChilliSource
             /// After construction it is immutable.
             ///
             /// @author Ian Copland
+            ///
+            /// @param The name of the property type.
+            /// @param The default value for the property type.
+            /// @param The string parsing method for the type. This can be null
+            /// if the type cannot be parsed from string.
             //-----------------------------------------------------------------
-            PropertyType(const std::string& in_typeName, TType&& in_defaultValue, const ParseDelegate& in_parseDelegate));
+            PropertyType(const std::string& in_typeName, TType&& in_defaultValue, const ParseDelegate& in_parseDelegate);
             //-----------------------------------------------------------------
             /// @author Ian Copland
             ///

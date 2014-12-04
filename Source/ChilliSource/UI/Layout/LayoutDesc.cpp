@@ -29,6 +29,7 @@
 #include <ChilliSource/UI/Layout/LayoutDesc.h>
 
 #include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Core/Json/JsonUtils.h>
 
 #include <json/json.h>
 
@@ -67,7 +68,7 @@ namespace ChilliSource
                 return GridLayout::CellOrder::k_colMajor;
             }
         }
-        
+
         //--------------------------------------------------------------
         //--------------------------------------------------------------
         LayoutDesc::LayoutDesc(const Json::Value& in_json)

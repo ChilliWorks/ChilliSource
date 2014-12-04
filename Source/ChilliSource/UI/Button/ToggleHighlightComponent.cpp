@@ -29,9 +29,13 @@
 #include <ChilliSource/UI/Button/ToggleHighlightComponent.h>
 
 #include <ChilliSource/Core/Container/VectorUtils.h>
+#include <ChilliSource/Core/Container/Property/PropertyTypes.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/UI/Base/Widget.h>
+#include <ChilliSource/UI/Base/WidgetPropertyTypes.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
+#include <ChilliSource/UI/Drawable/DrawableDesc.h>
+#include <ChilliSource/UI/Drawable/IDrawable.h>
 
 namespace ChilliSource
 {
@@ -45,33 +49,33 @@ namespace ChilliSource
             const char k_highlightOnDrawableKey[] = "HighlightOnDrawable";
             const char k_toggledOnKey[] = "ToggledOn";
             
-            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
+            const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyType::k_drawableDesc, k_normalOffDrawableKey},
-                {PropertyType::k_drawableDesc, k_highlightOffDrawableKey},
-                {PropertyType::k_drawableDesc, k_normalOnDrawableKey},
-                {PropertyType::k_drawableDesc, k_highlightOnDrawableKey},
-                {PropertyType::k_bool, k_toggledOnKey}
+                {&WidgetPropertyTypes::k_drawableDesc, k_normalOffDrawableKey},
+                {&WidgetPropertyTypes::k_drawableDesc, k_highlightOffDrawableKey},
+                {&WidgetPropertyTypes::k_drawableDesc, k_normalOnDrawableKey},
+                {&WidgetPropertyTypes::k_drawableDesc, k_highlightOnDrawableKey},
+                {&Core::PropertyTypes::k_bool, k_toggledOnKey}
             };
         }
         
         CS_DEFINE_NAMEDTYPE(ToggleHighlightComponent);
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const std::vector<PropertyMap::PropertyDesc>& ToggleHighlightComponent::GetPropertyDescs()
+        const std::vector<Core::PropertyMap::PropertyDesc>& ToggleHighlightComponent::GetPropertyDescs()
         {
             return k_propertyDescs;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        ToggleHighlightComponent::ToggleHighlightComponent(const std::string& in_componentName, const PropertyMap& in_properties)
+        ToggleHighlightComponent::ToggleHighlightComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
             : Component(in_componentName)
         {
-            RegisterProperty<IDrawableSPtr>(k_normalOffDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetNormalOffDrawable), Core::MakeDelegate(this, &ToggleHighlightComponent::SetNormalOffDrawable));
-            RegisterProperty<IDrawableSPtr>(k_highlightOffDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOffDrawable), Core::MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOffDrawable));
-            RegisterProperty<IDrawableSPtr>(k_normalOnDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetNormalOnDrawable), Core::MakeDelegate(this, &ToggleHighlightComponent::SetNormalOnDrawable));
-            RegisterProperty<IDrawableSPtr>(k_highlightOnDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOnDrawable), Core::MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOnDrawable));
-            RegisterProperty<bool>(k_toggledOnKey, Core::MakeDelegate(this, &ToggleHighlightComponent::IsToggledOn), Core::MakeDelegate(this, &ToggleHighlightComponent::SetToggleOn));
+            RegisterProperty<IDrawableSPtr>(&WidgetPropertyTypes::k_drawable, k_normalOffDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetNormalOffDrawable), Core::MakeDelegate(this, &ToggleHighlightComponent::SetNormalOffDrawable));
+            RegisterProperty<IDrawableSPtr>(&WidgetPropertyTypes::k_drawable, k_highlightOffDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOffDrawable), Core::MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOffDrawable));
+            RegisterProperty<IDrawableSPtr>(&WidgetPropertyTypes::k_drawable, k_normalOnDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetNormalOnDrawable), Core::MakeDelegate(this, &ToggleHighlightComponent::SetNormalOnDrawable));
+            RegisterProperty<IDrawableSPtr>(&WidgetPropertyTypes::k_drawable, k_highlightOnDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOnDrawable), Core::MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOnDrawable));
+            RegisterProperty<bool>(&Core::PropertyTypes::k_bool, k_toggledOnKey, Core::MakeDelegate(this, &ToggleHighlightComponent::IsToggledOn), Core::MakeDelegate(this, &ToggleHighlightComponent::SetToggleOn));
             ApplyRegisteredProperties(in_properties);
         }
         //-------------------------------------------------------------------
