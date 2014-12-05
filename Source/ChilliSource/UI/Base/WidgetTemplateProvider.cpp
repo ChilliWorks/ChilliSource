@@ -29,10 +29,9 @@
 #include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
 
 #include <ChilliSource/Core/Json/JsonUtils.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
-#include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDesc.h>
 #include <ChilliSource/UI/Base/WidgetParserUtils.h>

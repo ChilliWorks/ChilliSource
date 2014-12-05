@@ -28,7 +28,7 @@
 
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
 
-#include <ChilliSource/UI/Base/PropertyMap.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 
 namespace ChilliSource
 {
@@ -44,7 +44,7 @@ namespace ChilliSource
         //-------------------------------------------------------
         //-------------------------------------------------------
         WidgetTemplate::WidgetTemplate()
-            : m_desc("", PropertyMap(), std::vector<WidgetDesc>())
+            : m_desc("", Core::PropertyMap(), std::vector<WidgetDesc>())
         {
         }
         //-------------------------------------------------------

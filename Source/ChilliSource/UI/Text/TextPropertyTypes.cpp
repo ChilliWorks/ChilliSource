@@ -1,7 +1,7 @@
 //
-//  Base.h
+//  WidgetPropertyTypes.cpp
 //  Chilli Source
-//  Created by Scott Downie on 25/07/2014.
+//  Created by Ian Copland on 04/12/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,22 +26,19 @@
 //  THE SOFTWARE.
 //
 
+#include <ChilliSource/UI/Text/TextPropertyTypes.h>
 
-#ifndef _CHILLISOURCE_UI_BASE_H_
-#define _CHILLISOURCE_UI_BASE_H_
+#include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
+#include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Base/Canvas.h>
-#include <ChilliSource/UI/Base/Component.h>
-#include <ChilliSource/UI/Base/ComponentDesc.h>
-#include <ChilliSource/UI/Base/ComponentFactory.h>
-#include <ChilliSource/UI/Base/PropertyLink.h>
-#include <ChilliSource/UI/Base/SizePolicy.h>
-#include <ChilliSource/UI/Base/Widget.h>
-#include <ChilliSource/UI/Base/WidgetDef.h>
-#include <ChilliSource/UI/Base/WidgetDefProvider.h>
-#include <ChilliSource/UI/Base/WidgetTemplate.h>
-#include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
-#include <ChilliSource/UI/Base/WidgetFactory.h>
-
-#endif
+namespace ChilliSource
+{
+    namespace UI
+    {
+        namespace TextPropertyTypes
+        {
+            const Core::PropertyType<Rendering::HorizontalTextJustification> k_horizontalTextJustification("HorizontalJustification", Rendering::HorizontalTextJustification::k_centre, &Rendering::ParseHorizontalTextJustification);
+            const Core::PropertyType<Rendering::VerticalTextJustification> k_verticalTextJustification("VerticalJustification", Rendering::VerticalTextJustification::k_centre, &Rendering::ParseVerticalTextJustification);
+        }
+    }
+}

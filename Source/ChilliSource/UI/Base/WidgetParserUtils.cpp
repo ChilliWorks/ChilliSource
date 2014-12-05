@@ -124,44 +124,29 @@ namespace ChilliSource
                     auto font = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Font>(resourcePair.first, resourcePair.second);
                     out_propertyMap.SetProperty(in_propertyName, font);
                 }
-                
-                //TODO: Continue here.
-                
-//                switch()
-//                {
-//                    case :
-//                    {
-//
-//                        break;
-//                    }
-//                    case WidgetPropertyTypes::k_localisedText:
-//                    {
-//                        auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
-//                        auto localisedText = Core::Application::Get()->GetResourcePool()->LoadResource<Core::LocalisedText>(resourcePair.first, resourcePair.second);
-//                        out_propertyMap.SetProperty(in_propertyName, localisedText);
-//                        break;
-//                    }
-//                    case WidgetPropertyTypes::k_drawableDesc:
-//                    {
-//                        CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
-//                        DrawableDesc drawbleDesc(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
-//                        out_propertyMap.SetProperty(in_propertyName, drawbleDesc);
-//                        break;
-//                    }
-//                    case WidgetPropertyTypes::k_layoutDesc:
-//                    {
-//                        CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
-//                        LayoutDesc layoutDesc(in_jsonValue);
-//                        out_propertyMap.SetProperty(in_propertyName, layoutDesc);
-//                        break;
-//                    }
-//                    default:
-//                        
-//                        CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as a string: " + in_propertyName);
-//                        out_propertyMap.SetProperty("");
-//                        break;
-//                }
-                
+                else if (propertyType == &WidgetPropertyTypes::k_localisedText)
+                {
+                    auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
+                    auto localisedText = Core::Application::Get()->GetResourcePool()->LoadResource<Core::LocalisedText>(resourcePair.first, resourcePair.second);
+                    out_propertyMap.SetProperty(in_propertyName, localisedText);
+                }
+                else if (propertyType == &WidgetPropertyTypes::k_drawableDesc)
+                {
+                    CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
+                    DrawableDesc drawbleDesc(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
+                    out_propertyMap.SetProperty(in_propertyName, drawbleDesc);
+                }
+                else if (propertyType == &WidgetPropertyTypes::k_layoutDesc)
+                {
+                    CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
+                    LayoutDesc layoutDesc(in_jsonValue);
+                    out_propertyMap.SetProperty(in_propertyName, layoutDesc);
+                }
+                else
+                {
+                    CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
+                    out_propertyMap.GetPropertyObject(in_propertyName)->Parse(in_jsonValue.asString());
+                }
             }
             //-------------------------------------------------------
             //-------------------------------------------------------
@@ -170,7 +155,7 @@ namespace ChilliSource
                 CS_ASSERT(in_template.isMember("Type") == true, "Widget template must have type");
                 
                 std::string outputType = in_template["Type"].asString();
-                PropertyMap outputProperties;
+                Core::PropertyMap outputProperties;
                 std::vector<WidgetDesc> outputChildren;
                 
                 if(outputType == "Template")
@@ -194,7 +179,7 @@ namespace ChilliSource
                     //Template widgets need to be created as a hierarchy so that we can set properties such as layout
                     //on the widget without affecting the contents of the template and vice-versa.
                     outputType = "Widget";
-                    outputProperties = PropertyMap(Widget::GetPropertyDescs());
+                    outputProperties = Core::PropertyMap(Widget::GetPropertyDescs());
 
                     //TODO: this will not work with async loading.
                     WidgetTemplateCSPtr widgetTemplate = Core::Application::Get()->GetResourcePool()->LoadResource<WidgetTemplate>(location, path);

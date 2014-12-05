@@ -52,7 +52,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
-        std::vector<PropertyMap::PropertyDesc> ComponentFactory::GetPropertyDescs(const std::string& in_componentTypeName) const
+        std::vector<Core::PropertyMap::PropertyDesc> ComponentFactory::GetPropertyDescs(const std::string& in_componentTypeName) const
         {
             auto descsIt = m_descsMap.find(in_componentTypeName);
             CS_ASSERT(descsIt != m_descsMap.end(), "Could not get property descs for component with name: " + in_componentTypeName);
@@ -61,7 +61,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
-        ComponentUPtr ComponentFactory::CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const PropertyMap& in_propertyMap) const
+        ComponentUPtr ComponentFactory::CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const Core::PropertyMap& in_propertyMap) const
         {
             auto delegateIt = m_creatorDelegateMap.find(in_componentTypeName);
             CS_ASSERT(delegateIt != m_creatorDelegateMap.end(), "Could not create component with name: " + in_componentTypeName);

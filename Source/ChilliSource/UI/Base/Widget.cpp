@@ -52,7 +52,7 @@ namespace ChilliSource
                 {&Core::PropertyTypes::k_string, "Name"},
                 {&Core::PropertyTypes::k_vec2, "RelPosition"},
                 {&Core::PropertyTypes::k_vec2, "AbsPosition"},
-                {&Core::PropertyTypes::k_vec2, "RelSize",},
+                {&Core::PropertyTypes::k_vec2, "RelSize"},
                 {&Core::PropertyTypes::k_vec2, "AbsSize"},
                 {&Core::PropertyTypes::k_vec2, "PreferredSize"},
                 {&Core::PropertyTypes::k_vec2, "Scale"},

@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_UI_BASE_COMPONENTDESC_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 
 namespace ChilliSource
 {
@@ -65,7 +65,7 @@ namespace ChilliSource
             /// @param The map of properties the component should be created
             /// with.
             //------------------------------------------------------------------
-            ComponentDesc(const std::string& in_type, const std::string& in_name, const PropertyMap& in_propertyMap);
+            ComponentDesc(const std::string& in_type, const std::string& in_name, const Core::PropertyMap& in_propertyMap);
             //------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -84,11 +84,11 @@ namespace ChilliSource
             /// @return The map of properties the component should be created
             /// with.
             //------------------------------------------------------------------
-            const PropertyMap& GetProperties() const;
+            const Core::PropertyMap& GetProperties() const;
         private:
             std::string m_type;
             std::string m_name;
-            PropertyMap m_propertyMap;
+            Core::PropertyMap m_propertyMap;
         };
     }
 }

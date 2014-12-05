@@ -100,7 +100,7 @@ namespace ChilliSource
             virtual void Set(const TType& in_value) = 0;
             
         private:
-            PropertyType<TType> m_type;
+            const PropertyType<TType>* m_type;
         };
     }
 }
@@ -119,7 +119,7 @@ namespace ChilliSource
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
         template <typename TType> Property<TType>::Property(const PropertyType<TType>* in_type)
-        : m_type(in_type)
+            : m_type(in_type)
         {
         }
         //-----------------------------------------------------------------
@@ -144,7 +144,7 @@ namespace ChilliSource
         {
             CS_ASSERT(in_property->GetType() == GetType(), "Cannot set a property with a property created through a different Property Type.");
             
-            const Property<TType>* castProperty = CS_SMARTCAST(const Property<TType>*, &in_property, "Cannot set a property of a different property type.");
+            const Property<TType>* castProperty = CS_SMARTCAST(const Property<TType>*, in_property, "Cannot set a property of a different property type.");
             Set(castProperty->Get());
         }
     }

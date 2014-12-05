@@ -30,10 +30,10 @@
 #define _ICENGINE_UI_BASE_COMPONENTFACTORY_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/UI/Base/Component.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
 
 #include <functional>
 #include <unordered_map>
@@ -96,7 +96,7 @@ namespace ChilliSource
             ///
             /// @return The property descs.
             //-----------------------------------------------------------------
-            std::vector<PropertyMap::PropertyDesc> GetPropertyDescs(const std::string& in_componentTypeName) const;
+            std::vector<Core::PropertyMap::PropertyDesc> GetPropertyDescs(const std::string& in_componentTypeName) const;
             //-----------------------------------------------------------------
             /// Creates an instance of the component type registered under the
             /// given name with the given owner widget and property map.
@@ -110,7 +110,7 @@ namespace ChilliSource
             ///
             /// @return The new component instance.
             //-----------------------------------------------------------------
-            ComponentUPtr CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const PropertyMap& in_propertyMap) const;
+            ComponentUPtr CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const Core::PropertyMap& in_propertyMap) const;
         private:
             friend class Core::Application;
             //-----------------------------------------------------------------
@@ -132,7 +132,7 @@ namespace ChilliSource
             ///
             /// @return The newly created component.
             //-----------------------------------------------------------------
-            using CreatorDelegate = std::function<ComponentUPtr(const std::string& in_name, const PropertyMap& in_propertyMap)>;
+            using CreatorDelegate = std::function<ComponentUPtr(const std::string& in_name, const Core::PropertyMap& in_propertyMap)>;
             //-----------------------------------------------------------------
             /// Creates a new instance of the given component type. This is the
             /// method referred to by the creator delegates.
@@ -144,7 +144,7 @@ namespace ChilliSource
             ///
             /// @return The newly created component.
             //-----------------------------------------------------------------
-            template <typename TComponentType> std::unique_ptr<TComponentType> CreateComponent(const std::string& in_name, const PropertyMap& in_propertyMap) const;
+            template <typename TComponentType> std::unique_ptr<TComponentType> CreateComponent(const std::string& in_name, const Core::PropertyMap& in_propertyMap) const;
             //-----------------------------------------------------------------
             /// Initialised the factory, registering all default component
             /// types.
@@ -160,7 +160,7 @@ namespace ChilliSource
             void OnDestroy() override;
             
             std::unordered_map<std::string, CreatorDelegate> m_creatorDelegateMap;
-            std::unordered_map<std::string, std::vector<PropertyMap::PropertyDesc>> m_descsMap;
+            std::unordered_map<std::string, std::vector<Core::PropertyMap::PropertyDesc>> m_descsMap;
         };
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
@@ -171,7 +171,7 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
-        template <typename TComponentType> std::unique_ptr<TComponentType> ComponentFactory::CreateComponent(const std::string& in_name, const PropertyMap& in_propertyMap) const
+        template <typename TComponentType> std::unique_ptr<TComponentType> ComponentFactory::CreateComponent(const std::string& in_name, const Core::PropertyMap& in_propertyMap) const
         {
             return std::unique_ptr<TComponentType>(new TComponentType(in_name, in_propertyMap));
         }

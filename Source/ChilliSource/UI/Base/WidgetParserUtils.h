@@ -30,8 +30,8 @@
 #define _CHILLISOURCE_UI_BASE_WIDGETPARSERUTILS_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/File/StorageLocation.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
 
 #include <json/forwards.h>
 

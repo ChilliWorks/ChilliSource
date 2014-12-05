@@ -1,7 +1,7 @@
 //
-//  Base.h
+//  TextPropertyTypes.h
 //  Chilli Source
-//  Created by Scott Downie on 25/07/2014.
+//  Created by Ian Copland on 05/12/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,22 +26,27 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_UI_BASE_H_
-#define _CHILLISOURCE_UI_BASE_H_
+#ifndef _CHILLISOURCE_UI_BASE_TEXTPROPERTYTYPES_H_
+#define _CHILLISOURCE_UI_BASE_TEXTPROPERTYTYPES_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Base/Canvas.h>
-#include <ChilliSource/UI/Base/Component.h>
-#include <ChilliSource/UI/Base/ComponentDesc.h>
-#include <ChilliSource/UI/Base/ComponentFactory.h>
-#include <ChilliSource/UI/Base/PropertyLink.h>
-#include <ChilliSource/UI/Base/SizePolicy.h>
-#include <ChilliSource/UI/Base/Widget.h>
-#include <ChilliSource/UI/Base/WidgetDef.h>
-#include <ChilliSource/UI/Base/WidgetDefProvider.h>
-#include <ChilliSource/UI/Base/WidgetTemplate.h>
-#include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
-#include <ChilliSource/UI/Base/WidgetFactory.h>
+#include <ChilliSource/Core/Container/Property/PropertyType.h>
+
+namespace ChilliSource
+{
+    namespace UI
+    {
+        //------------------------------------------------------------------------
+        /// Additional property types that are specific to UI text.
+        ///
+        /// @author Ian Copland
+        //------------------------------------------------------------------------
+        namespace TextPropertyTypes
+        {
+            extern const Core::PropertyType<Rendering::HorizontalTextJustification> k_horizontalTextJustification;
+            extern const Core::PropertyType<Rendering::VerticalTextJustification> k_verticalTextJustification;
+        }
+    }
+}
 
 #endif

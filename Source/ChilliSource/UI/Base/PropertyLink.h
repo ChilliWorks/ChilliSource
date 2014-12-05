@@ -30,7 +30,6 @@
 #define _CHILLISOURCE_UI_BASE_PROPERTYLINK_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
 
 namespace ChilliSource
 {

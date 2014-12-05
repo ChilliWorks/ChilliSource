@@ -33,7 +33,6 @@
 #include <ChilliSource/ChilliSource.h>
 
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Layout/GridLayout.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 

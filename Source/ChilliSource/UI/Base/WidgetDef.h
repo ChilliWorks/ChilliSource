@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_UI_BASE_WIDGETDEF_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/UI/Base/ComponentDesc.h>
 #include <ChilliSource/UI/Base/PropertyLink.h>
@@ -87,7 +88,7 @@ namespace ChilliSource
             /// @param The links between properties of the widget
             /// def and properties of internal children.
             //-------------------------------------------------------
-            void Build(const std::string& in_typeName, const PropertyMap& in_defaultProperties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
+            void Build(const std::string& in_typeName, const Core::PropertyMap& in_defaultProperties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
                        const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks);
             //-------------------------------------------------------
             /// @author Ian Copland
@@ -103,7 +104,7 @@ namespace ChilliSource
             /// widgets have and linked properties. All values are
             /// set to their default value.
             //-------------------------------------------------------
-            const PropertyMap& GetDefaultProperties() const;
+            const Core::PropertyMap& GetDefaultProperties() const;
             //-------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -150,7 +151,7 @@ namespace ChilliSource
             
         private:
             std::string m_typeName;
-            PropertyMap m_defaultProperties;
+            Core::PropertyMap m_defaultProperties;
             std::vector<ComponentDesc> m_componentDescs;
             std::vector<PropertyLink> m_componentPropertyLinks;
             std::vector<WidgetDesc> m_childDescs;

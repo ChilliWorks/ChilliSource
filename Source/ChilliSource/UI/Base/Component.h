@@ -336,7 +336,7 @@ namespace ChilliSource
             
             CS_ASSERT(m_properties.find(lowerPropertyName) == m_properties.end(), "Cannot register duplicate property name '" + in_name + "' in a UI::Component.");
             
-            m_properties.emplace(lowerPropertyName, in_propertyType->CreateProperty(in_setter, in_getter));
+            m_properties.emplace(lowerPropertyName, in_propertyType->CreateProperty(std::forward<std::function<TPropertyType()>>(in_getter), std::forward<std::function<void(TPropertyType)>>(in_setter)));
         }
     }
 }

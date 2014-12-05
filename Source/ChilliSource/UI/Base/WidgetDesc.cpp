@@ -34,7 +34,7 @@ namespace ChilliSource
     {
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        WidgetDesc::WidgetDesc(const std::string& in_type, const PropertyMap& in_propertyMap, const std::vector<WidgetDesc>& in_childDescs)
+        WidgetDesc::WidgetDesc(const std::string& in_type, const Core::PropertyMap& in_propertyMap, const std::vector<WidgetDesc>& in_childDescs)
             : m_type(in_type), m_propertyMap(in_propertyMap), m_childDescs(in_childDescs)
         {
         }
@@ -46,7 +46,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        const PropertyMap& WidgetDesc::GetProperties() const
+        const Core::PropertyMap& WidgetDesc::GetProperties() const
         {
             return m_propertyMap;
         }

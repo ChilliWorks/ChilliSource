@@ -96,19 +96,19 @@ namespace ChilliSource
             {
                 if (in_properties.HasValue(key) == true)
                 {
-                    const Core::IPropertyType* type = in_propertyMap.GetType(key);
+                    const Core::IPropertyType* type = in_properties.GetType(key);
                     
                     if (type == &WidgetPropertyTypes::k_layoutDesc)
                     {
-                        SetProperty(key, ILayout::Create(in_propertyMap.GetProperty<LayoutDesc>(key)));
+                        SetProperty(key, ILayout::Create(in_properties.GetProperty<LayoutDesc>(key)));
                     }
                     else if (type == &WidgetPropertyTypes::k_drawableDesc)
                     {
-                        SetProperty(key, IDrawable::Create(in_propertyMap.GetProperty<DrawableDesc>(key)));
+                        SetProperty(key, IDrawable::Create(in_properties.GetProperty<DrawableDesc>(key)));
                     }
                     else
                     {
-                        SetProperty(key, in_propertyMap.GetPropertyObject(key));
+                        SetProperty(key, in_properties.GetPropertyObject(key));
                     }
                 }
             }

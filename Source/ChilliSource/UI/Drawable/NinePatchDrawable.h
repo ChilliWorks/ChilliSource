@@ -33,7 +33,6 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 
 #include <array>

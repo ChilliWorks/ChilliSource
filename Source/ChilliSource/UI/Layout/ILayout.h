@@ -30,7 +30,6 @@
 #define _CHILLISOURCE_UI_LAYOUT_ILAYOUT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
 
 #include <vector>
 

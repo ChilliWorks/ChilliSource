@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_UI_BASE_WIDGETDESC_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 
 #include <vector>
 
@@ -66,7 +66,7 @@ namespace ChilliSource
             /// @param The map of properties the widget should be created with.
             /// @param The list of child widget descriptions.
             //------------------------------------------------------------------
-            WidgetDesc(const std::string& in_type, const PropertyMap& in_properties, const std::vector<WidgetDesc>& in_childDescs);
+            WidgetDesc(const std::string& in_type, const Core::PropertyMap& in_properties, const std::vector<WidgetDesc>& in_childDescs);
             //------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -78,7 +78,7 @@ namespace ChilliSource
             ///
             /// @return The map of properties the widget should be created with.
             //------------------------------------------------------------------
-            const PropertyMap& GetProperties() const;
+            const Core::PropertyMap& GetProperties() const;
             //------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -87,7 +87,7 @@ namespace ChilliSource
             const std::vector<WidgetDesc>& GetChildDescs() const;
         private:
             std::string m_type = "";
-            PropertyMap m_propertyMap;
+            Core::PropertyMap m_propertyMap;
             std::vector<WidgetDesc> m_childDescs;
         };
     }

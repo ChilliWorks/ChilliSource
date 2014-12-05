@@ -49,10 +49,13 @@ namespace ChilliSource
             {
                 CS_ASSERT(m_properties.find(propertyDef.m_name) == m_properties.end(), "Duplicate property name in property map descs: " + propertyDef.m_name);
                 
+                std::string lowerName = propertyDef.m_name;
+                StringUtils::ToLowerCase(lowerName);
+                
                 PropertyContainer container;
                 container.m_initialised = false;
                 container.m_property = propertyDef.m_type->CreateProperty();
-                m_properties.insert(std::make_pair(propertyDef.m_name, std::move(container)));
+                m_properties.insert(std::make_pair(lowerName, std::move(container)));
                 
                 m_propertyKeys.push_back(propertyDef.m_name);
             }
@@ -164,6 +167,17 @@ namespace ChilliSource
             auto entry = m_properties.find(lowerCaseName);
             CS_ASSERT(entry != m_properties.end(), "No property with name: " + in_name);
             return entry->second.m_property->GetType();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        IProperty* PropertyMap::GetPropertyObject(const std::string& in_name)
+        {
+            std::string lowerCaseName = in_name;
+            Core::StringUtils::ToLowerCase(lowerCaseName);
+            
+            auto entry = m_properties.find(lowerCaseName);
+            CS_ASSERT(entry != m_properties.end(), "No property with name: " + in_name);
+            return entry->second.m_property.get();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

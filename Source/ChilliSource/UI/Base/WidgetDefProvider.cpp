@@ -29,13 +29,12 @@
 #include <ChilliSource/UI/Base/WidgetDefProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/UI/Base/ComponentFactory.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
-#include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Base/WidgetParserUtils.h>
@@ -144,7 +143,7 @@ namespace ChilliSource
                 
                 std::string type = typeJson.asString();
                 std::string name = nameJson.asString();
-                PropertyMap propertyMap(in_componentFactory->GetPropertyDescs(type));
+                Core::PropertyMap propertyMap(in_componentFactory->GetPropertyDescs(type));
                 
                 for(auto it = in_componentJson.begin(); it != in_componentJson.end(); ++it)
                 {
@@ -241,17 +240,17 @@ namespace ChilliSource
             ///
             /// @return The property map.
             //-------------------------------------------------------
-            PropertyMap BuildPropertyMap(const std::vector<ComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
+            Core::PropertyMap BuildPropertyMap(const std::vector<ComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
                                          const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks)
             {
                 //define the properties.
-                std::vector<PropertyMap::PropertyDesc> descs = Widget::GetPropertyDescs();
+                std::vector<Core::PropertyMap::PropertyDesc> descs = Widget::GetPropertyDescs();
                 
                 //add linked component properties
                 for (auto& link : in_componentPropertyLinks)
                 {
                     auto componentDesc = GetComponentDescWithName(in_componentDescs, link.GetLinkedOwner());
-                    PropertyMap::PropertyDesc desc;
+                    Core::PropertyMap::PropertyDesc desc;
                     desc.m_type = componentDesc.GetProperties().GetType(link.GetLinkedProperty());
                     desc.m_name = link.GetLinkName();
                     descs.push_back(desc);
@@ -265,14 +264,14 @@ namespace ChilliSource
                     {
                         CS_LOG_FATAL("Could not find widget desc with name: " + link.GetLinkedOwner());
                     }
-                    PropertyMap::PropertyDesc desc;
+                    Core::PropertyMap::PropertyDesc desc;
                     desc.m_type = widgetDesc.GetProperties().GetType(link.GetLinkedProperty());
                     desc.m_name = link.GetLinkName();
                     descs.push_back(desc);
                 }
                 
                 //build the property map
-                PropertyMap output(descs);
+                Core::PropertyMap output(descs);
                 
                 return output;
             }
@@ -290,7 +289,7 @@ namespace ChilliSource
             /// @param [Out] Default property values
             /// @param [Out] Custom property values
             //-------------------------------------------------------
-            void ParseDefaultValues(const Json::Value& in_defaults, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, PropertyMap& out_properties)
+            void ParseDefaultValues(const Json::Value& in_defaults, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath, Core::PropertyMap& out_properties)
             {
                 for(auto it = in_defaults.begin(); it != in_defaults.end(); ++it)
                 {
@@ -468,7 +467,7 @@ namespace ChilliSource
                 }
                 
                 //build the default values property map and read the default values from the json
-                PropertyMap defaultProperties = BuildPropertyMap(componentDescs, componentPropertyLinks, childDescs, childPropertyLinks);
+                Core::PropertyMap defaultProperties = BuildPropertyMap(componentDescs, componentPropertyLinks, childDescs, childPropertyLinks);
                 const Json::Value& defaults = root["Defaults"];
                 if(defaults.isNull() == false)
                 {

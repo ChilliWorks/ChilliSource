@@ -34,7 +34,7 @@ namespace ChilliSource
     {
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        ComponentDesc::ComponentDesc(const std::string& in_type, const std::string& in_name, const PropertyMap& in_propertyMap)
+        ComponentDesc::ComponentDesc(const std::string& in_type, const std::string& in_name, const Core::PropertyMap& in_propertyMap)
             : m_type(in_type), m_name(in_name), m_propertyMap(in_propertyMap)
         {
         }
@@ -52,7 +52,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        const PropertyMap& ComponentDesc::GetProperties() const
+        const Core::PropertyMap& ComponentDesc::GetProperties() const
         {
             return m_propertyMap;
         }

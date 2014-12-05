@@ -34,7 +34,6 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
-#include <ChilliSource/UI/Base/PropertyAccessor.h>
 #include <ChilliSource/UI/Base/Component.h>
 #include <ChilliSource/UI/Base/ComponentFactory.h>
 #include <ChilliSource/UI/Base/Widget.h>

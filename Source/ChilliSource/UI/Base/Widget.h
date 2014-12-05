@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Base/ConstMethodCast.h>
 #include <ChilliSource/Core/Container/concurrent_vector.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/Math/Matrix3.h>
@@ -41,10 +42,7 @@
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/UI/Base/Component.h>
-#include <ChilliSource/UI/Base/PropertyAccessor.h>
 #include <ChilliSource/UI/Base/PropertyLink.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
-#include <ChilliSource/UI/Base/PropertyType.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
@@ -1236,11 +1234,11 @@ namespace ChilliSource
             std::string lowerName = in_name;
             Core::StringUtils::ToLowerCase(lowerName);
             
-            auto basePropIt = m_basePropertyAccessors.find(lowerName);
-            if(basePropIt != m_basePropertyAccessors.end())
+            auto basePropIt = m_baseProperties.find(lowerName);
+            if(basePropIt != m_baseProperties.end())
             {
-                auto accessor = CS_SMARTCAST(PropertyAccessor<TType>*, basePropIt->second.get());
-                accessor->Set(std::forward<TType>(in_value));
+                auto property = CS_SMARTCAST(Core::Property<TType>*, basePropIt->second.get(), "Incorrect type for property with name: " + in_name);
+                property->Set(std::forward<TType>(in_value));
                 return;
             }
             
@@ -1267,11 +1265,11 @@ namespace ChilliSource
             std::string lowerName = in_name;
             Core::StringUtils::ToLowerCase(lowerName);
             
-            auto basePropIt = m_basePropertyAccessors.find(lowerName);
-            if(basePropIt != m_basePropertyAccessors.end())
+            auto basePropIt = m_baseProperties.find(lowerName);
+            if(basePropIt != m_baseProperties.end())
             {
-                auto accessor = CS_SMARTCAST(PropertyAccessor<TType>*, basePropIt->second.get());
-                return accessor->Get();
+                auto property = CS_SMARTCAST(Core::Property<TType>*, basePropIt->second.get(), "Incorrect type for property with name: " + in_name);
+                return property->Get();
             }
             
             auto componentPropIt = m_componentPropertyLinks.find(lowerName);

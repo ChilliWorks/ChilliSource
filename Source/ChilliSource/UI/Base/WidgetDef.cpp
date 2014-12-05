@@ -47,7 +47,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        void WidgetDef::Build(const std::string& in_typeName, const PropertyMap& in_defaultProperties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
+        void WidgetDef::Build(const std::string& in_typeName, const Core::PropertyMap& in_defaultProperties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
                               const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks)
         {
             CS_ASSERT(GetLoadState() == LoadState::k_loading, "A WidgetDef can only be built while in the loading state.");
@@ -67,7 +67,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        const PropertyMap& WidgetDef::GetDefaultProperties() const
+        const Core::PropertyMap& WidgetDef::GetDefaultProperties() const
         {
             return m_defaultProperties;
         }

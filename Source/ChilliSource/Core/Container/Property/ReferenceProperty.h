@@ -108,6 +108,8 @@ namespace ChilliSource
         template <typename TType> ReferenceProperty<TType>::ReferenceProperty(const PropertyType<TType>* in_type, const GetterDelegate& in_getter, const SetterDelegate& in_setter)
         : Property<TType>(in_type), m_getter(in_getter), m_setter(in_setter)
         {
+            CS_ASSERT(m_getter != nullptr, "Property getter delegate cannot be null.");
+            CS_ASSERT(m_setter != nullptr, "Property setter delegate cannot be null.");
         }
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
