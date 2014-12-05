@@ -660,6 +660,13 @@ namespace ChilliSource
             BuiltText result;
             result.m_width = 0.0f;
             result.m_height = 0.0f;
+            
+            //Don't build the text if scale is invalid
+            if(in_properties.m_textScale <= 0.0f)
+            {
+                return result;
+            }
+            
             result.m_characters.reserve(in_text.size());
 
             //NOTE: | denotes the bounds of the box
@@ -701,12 +708,12 @@ namespace ChilliSource
             f32 cursorX = cursorXReturnPos;
             f32 cursorY = in_bounds.y * 0.5f;
 
-            for(u32 lineIdx=0; lineIdx<numLines; ++lineIdx)
+            for(u32 lineIdx = 0; lineIdx < numLines; ++lineIdx)
             {
                 u32 lineStartIdx = result.m_characters.size();
 
                 auto characterIt = linesOnBounds[lineIdx].begin();
-                while(characterIt < linesOnBounds[lineIdx].end())
+                while(characterIt != linesOnBounds[lineIdx].end())
                 {
                     auto character = Core::UTF8StringUtils::Next(characterIt);
                     auto builtCharacter(BuildCharacter(character, in_font, cursorX, cursorY, in_properties.m_textScale, in_properties.m_absCharSpacingOffset));
