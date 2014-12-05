@@ -75,7 +75,7 @@ namespace ChilliSource
             ///
             /// @param The name of the widget type.
             /// @param The property map containing all of the keys
-            /// for for this widget type--both the base properties all
+            /// for this widget type--both the base properties all
             /// widgets have and linked properties. The values of
             /// each property is the default value in any instance
             /// of the widget being used.
@@ -100,7 +100,7 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @return The property map containing all of the keys
-            /// for for this widget type--both the base properties all
+            /// for this widget type--both the base properties all
             /// widgets have and linked properties. All values are
             /// set to their default value.
             //-------------------------------------------------------

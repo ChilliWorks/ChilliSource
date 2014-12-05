@@ -79,8 +79,8 @@
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
 
 #include <ChilliSource/UI/Base/ComponentFactory.h>
-#include <ChilliSource/UI/Base/WidgetFactory.h>
 #include <ChilliSource/UI/Base/WidgetDefProvider.h>
+#include <ChilliSource/UI/Base/WidgetFactory.h>
 #include <ChilliSource/UI/Base/WidgetTemplateProvider.h>
 
 #include <algorithm>

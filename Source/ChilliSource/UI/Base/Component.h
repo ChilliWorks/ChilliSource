@@ -142,7 +142,7 @@ namespace ChilliSource
             /// This registers a property such that it can be called using the
             /// set property method. This takes two function pointers, one
             /// for getting the value of a property and one for setting the
-            /// value of a property. Property names must be unqiue; if a
+            /// value of a property. Property names must be unique; if a
             /// duplicate property name is registered the app is considered to
             /// be in an irrecoverable state and will terminate.
             ///

@@ -57,14 +57,54 @@ namespace ChilliSource
     {
         //----------------------------------------------------------------------------------------
         /// The Widget class that holds the components for laying out, rendering and manipulating
-        /// UI widgets. A widget can be a single widget or a collection of widgets.
-        /// Widgets can be added to other widgets to create a hierarchy. Widgets are
-        /// layed out using a mixture of absolute and relative coordinates in which relative coordinates
-        /// are relative to the parent
+        /// UI widgets. A widget can be a single widget or a collection of widgets. Widgets can be
+        /// added to other widgets to create a hierarchy. Widgets are layed out using a mixture of
+        /// absolute and relative coordinates in which relative coordinates are relative to the
+        /// parent.
         ///
-        /// Note: Some widgets have private sub-widgets. These are not exposed through the API
-        /// and allow the widget to be treated as a solid black box while maintaining the flexibility
-        /// of building widgets from smaller blocks.
+        /// Some widgets have private 'internal' child widgets. These are not exposed through APIs
+        /// like GetWidget() and allow the widget to be treated as a solid black box while
+        /// maintaining the flexibility  of building widgets from smaller blocks.
+        ///
+        /// The default properties exposed to UI files are as follows:
+        ///
+        /// "Name": A string used to identity a widget.
+        ///
+        /// "RelPosition": A Vector2 describing the position of local anchor relative to parent
+        /// anchor and parent size.
+        ///
+        /// "AbsPosition" A Vector2 describing the absolute position of local anchor relative to
+        /// parent anchor.
+        ///
+        /// "RelSize": A Vector2 describing the size relative to the parent size.
+        ///
+        /// "AbsSize": A Vector2 describing the absolute size.
+        ///
+        /// "PreferredSize": A Vector2 describing the default prefered size. This may be overriden
+        /// by the prefered size of certain components.
+        ///
+        /// "Scale": A Vector2 describing the scale of the widget.
+        ///
+        /// "Rotation": A float describing the rotation of a widget in radians.
+        ///
+        /// "Colour": The colour of the widget.
+        ///
+        /// "Visible": A boolean describing whether or not the widget and it's children are visible.
+        ///
+        /// "ClipChildren": A boolean describing whether children that exceed bounds are clipped.
+        ///
+        /// "OriginAnchor": The anchor point of the widgets origin. Possible values are: 'TopLeft',
+        /// 'TopCentre', 'TopRight', 'MiddleLeft', 'MiddleCentre', 'MiddleRight', 'BottomLeft',
+        /// 'BottomCentre', 'BottomRight'
+        ///
+        /// "ParentalAnchor": The anchor in the parent that local coordinates are relative to.
+        /// Possible values are: 'TopLeft', 'TopCentre', 'TopRight', 'MiddleLeft', 'MiddleCentre',
+        /// 'MiddleRight', 'BottomLeft', 'BottomCentre', 'BottomRight'
+        ///
+        /// "SizePolicy": A description of how the widget will be sized if the aspect ratio of the
+        /// widget differs from the perferred size. The possible values are: 'None', 'UsePreferredSize',
+        /// 'UseWidthMaintainingAspect', 'UseHeightMaintainingAspect', 'FitMaintainingAspect',
+        /// 'FillMaintainingAspect'
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
@@ -861,24 +901,8 @@ namespace ChilliSource
             friend class Canvas;
             friend class WidgetFactory;
             //----------------------------------------------------------------------------------------
-            /// Constructor that builds the widget from the given definition.
-            ///
-            /// Default properties exposed to UI files:
-            ///
-            ///     - Name - String - Identifying name
-            ///     - RelPosition - f32 f32 - Position of local anchor relative to parent anchor and parent size
-            ///     - AbsPosition - f32 f32 - Absolute position of local anchor relative to parent anchor
-            ///     - RelSize - f32 f32 - Size relative to the parent size
-            ///     - AbsSize - f32 f32 - Absolute size
-            ///     - PreferredSize - f32 f32 - Absolute preferred size
-            ///     - Scale - f32 f32 - Scale
-            ///     - Rotation - f32 - Rotation in radians
-            ///     - Colour - f32 f32 f32 f32 - Colour
-            ///     - Visible - "true"/"false" - Visiblity flag
-            ///     - ClipChildren - "true"/"false" - Whether children that exceed bounds are clipped
-            ///     - OriginAnchor - "TopLeft"/"TopCentre"/"TopRight"/"MiddleLeft"/"MiddleCentre"/"MiddleRight"/"BottomLeft"/"BottomCentre"/"BottomRight" - Origin anchor
-            ///     - ParentalAnchor - "TopLeft"/"TopCentre"/"TopRight"/"MiddleLeft"/"MiddleCentre"/"MiddleRight"/"BottomLeft"/"BottomCentre"/"BottomRight" - Parent anchor
-            ///     - SizePolicy - "None"/"UsePreferredSize"/"UseWidthMaintainingAspect"/"UseHeightMaintainingAspect"/"FitMaintainingAspect"/"FillMaintainingAspect" - Size policy
+            /// Constructor that builds the widget from the given definition. The default properties
+            /// of a widget are described in the class documentation.
             ///
             /// @author S Downie
             ///
@@ -943,7 +967,7 @@ namespace ChilliSource
             /// @return The component with the given name. This will return nullptr is no component
             /// could be found.
             //----------------------------------------------------------------------------------------
-            Component* GetComponentWithName(const std::string& m_name);
+            Component* GetComponentWithName(const std::string& in_name);
             //----------------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -952,7 +976,7 @@ namespace ChilliSource
             /// @return A const version of the component with the given name. This will return nullptr
             /// is no component could be found.
             //----------------------------------------------------------------------------------------
-            const Component* GetComponentWithName(const std::string& m_name) const;
+            const Component* GetComponentWithName(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
             /// Set the pointer to the canvas
             ///

@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _ICENGINE_UI_BASE_COMPONENTFACTORY_H_
-#define _ICENGINE_UI_BASE_COMPONENTFACTORY_H_
+#ifndef _CHILLISOURCE_UI_BASE_COMPONENTFACTORY_H_
+#define _CHILLISOURCE_UI_BASE_COMPONENTFACTORY_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>

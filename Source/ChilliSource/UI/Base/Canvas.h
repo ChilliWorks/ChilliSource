@@ -147,7 +147,7 @@ namespace ChilliSource
             //-------------------------------------------------------
             void OnBackground() override;
             //-------------------------------------------------------
-            /// Called when the owning state is suspened.
+            /// Called when the owning state is suspended.
             ///
             /// @author Ian Copland
             //-------------------------------------------------------

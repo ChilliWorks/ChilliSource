@@ -50,11 +50,16 @@ namespace ChilliSource
         namespace
         {
             const std::string k_extension("csuidef");
+            
+            const char k_widgetNameKey[] = "Name";
+            
+            const char k_componentTypeKey[] = "Type";
+            const char k_componentNameKey[] = "Name";
 
             //-------------------------------------------------------
             /// Searches the given widget desc list for a widget
             /// description with the given name. This is recursive and
-            /// will nagivate down the widget desc tree to find the
+            /// will navigate down the widget desc tree to find the
             /// widget. Recursion is breadth first. If one cannot
             /// be found the app is considered to be in an
             /// irrecoverable state and will terminate.
@@ -70,7 +75,7 @@ namespace ChilliSource
             {
                 for (const auto& desc : in_widgets)
                 {
-                    if (desc.GetProperties().GetPropertyOrDefault("Name", "") == in_name)
+                    if (desc.GetProperties().GetPropertyOrDefault(k_widgetNameKey, "") == in_name)
                     {
                         out_widgetDesc = desc;
                         return true;
@@ -133,13 +138,13 @@ namespace ChilliSource
             {
                 CS_ASSERT(in_componentJson.isNull() == false, "Cannot parse null component json.");
                 CS_ASSERT(in_componentJson.isObject() == true, "Component json must be an object.");
-                CS_ASSERT(in_componentJson.isMember("Type") == true, "Component json must contain a 'Type' key.");
-                CS_ASSERT(in_componentJson.isMember("Name") == true, "Component json must contain a 'Name' key.");
+                CS_ASSERT(in_componentJson.isMember(k_componentTypeKey) == true, "Component json must contain a '" + std::string(k_componentTypeKey) + "' key.");
+                CS_ASSERT(in_componentJson.isMember(k_componentNameKey) == true, "Component json must contain a '" + std::string(k_componentNameKey) + "' key.");
                 
-                Json::Value typeJson = in_componentJson.get("Type", Json::nullValue);
-                Json::Value nameJson = in_componentJson.get("Name", Json::nullValue);
-                CS_ASSERT(typeJson.isString() == true, "The 'Type' in component json must be a string.");
-                CS_ASSERT(nameJson.isString() == true, "The 'Name' in component json must be a string.");
+                Json::Value typeJson = in_componentJson.get(k_componentTypeKey, Json::nullValue);
+                Json::Value nameJson = in_componentJson.get(k_componentNameKey, Json::nullValue);
+                CS_ASSERT(typeJson.isString() == true, "The '" + std::string(k_componentTypeKey) + "' in component json must be a string.");
+                CS_ASSERT(nameJson.isString() == true, "The '" + std::string(k_componentNameKey) + "' in component json must be a string.");
                 
                 std::string type = typeJson.asString();
                 std::string name = nameJson.asString();
@@ -149,7 +154,7 @@ namespace ChilliSource
                 {
                     std::string propertyName = it.memberName();
                     
-                    if (propertyName == "Type" || propertyName == "Name")
+                    if (propertyName == k_componentTypeKey || propertyName == k_componentNameKey)
                     {
                         //ignore these has they're handled above.
                     }
@@ -211,14 +216,16 @@ namespace ChilliSource
             //-------------------------------------------------------
             std::vector<WidgetDesc> ParseChildWidgets(const Json::Value& in_hierarchy, const Json::Value& in_widgets, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath)
             {
+                const char k_hierarchyChildrenKey[] = "Children";
+                
                 std::vector<WidgetDesc> output;
                 
                 for(u32 i=0; i<in_hierarchy.size(); ++i)
                 {
                     const Json::Value& hierarchyItem = in_hierarchy[i];
-                    std::string name = hierarchyItem["Name"].asString();
+                    std::string name = hierarchyItem[k_widgetNameKey].asString();
                     const Json::Value& widget = in_widgets[name];
-                    const Json::Value& childrenHierarchy = hierarchyItem["Children"];
+                    const Json::Value& childrenHierarchy = hierarchyItem[k_hierarchyChildrenKey];
                     WidgetDesc childDesc = WidgetParserUtils::ParseWidget(widget, name, in_widgets, childrenHierarchy, in_definitionLocation, in_definitionPath);
                     output.push_back(childDesc);
                 }
@@ -315,6 +322,9 @@ namespace ChilliSource
             //-------------------------------------------------------
             std::vector<PropertyLink> ParseLinkedComponentProperties(const Json::Value& in_properties, const std::vector<ComponentDesc>& in_componentDescs)
             {
+                const char k_componentLinkTypeAllKey[] = "all";
+                const char k_componentLinkTypeNoneKey[] = "none";
+                
                 std::vector<PropertyLink> links;
                 
                 for (auto linkedComponentIt = in_properties.begin(); linkedComponentIt != in_properties.end(); ++linkedComponentIt)
@@ -329,7 +339,7 @@ namespace ChilliSource
                         std::string lowerValue = linkedComponentJson.asString();
                         Core::StringUtils::ToLowerCase(lowerValue);
                         
-                        if (lowerValue == "all")
+                        if (lowerValue == k_componentLinkTypeAllKey)
                         {
                             ComponentDesc componentDesc = GetComponentDescWithName(in_componentDescs, linkedComponentName);
                             for (const auto& propertyName : componentDesc.GetProperties().GetKeys())
@@ -337,7 +347,7 @@ namespace ChilliSource
                                 links.push_back(PropertyLink(propertyName, linkedComponentName, propertyName));
                             }
                         }
-                        else if (lowerValue == "none")
+                        else if (lowerValue == k_componentLinkTypeNoneKey)
                         {
                             //If none is selected we don't want any links, so do nothing.
                         }
@@ -408,6 +418,14 @@ namespace ChilliSource
             //-------------------------------------------------------
             void LoadDesc(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
             {
+                const char k_widgetTypeKey[] = "Type";
+                const char k_widgetComponentsKey[] = "Components";
+                const char k_widgetComponentPropertiesKey[] = "ComponentProperties";
+                const char k_widgetHierarchyKey[] = "Hierarchy";
+                const char k_widgetChildrenKey[] = "Children";
+                const char k_widgetChildPropertiesKey[] = "ChildProperties";
+                const char k_widgetPropertyDefaultsKey[] = "Defaults";
+                
                 ComponentFactory* componentFactory = Core::Application::Get()->GetSystem<ComponentFactory>();
                 
                 //read the json
@@ -426,15 +444,15 @@ namespace ChilliSource
                 //get the type
                 WidgetDef* widgetDef = (WidgetDef*)out_resource.get();
                 
-                CS_ASSERT(root.isMember("Type"), "Widget def must have Type");
-                std::string typeName = root["Type"].asString();
+                CS_ASSERT(root.isMember(k_widgetTypeKey), "Widget def must have Type");
+                std::string typeName = root[k_widgetTypeKey].asString();
                 
                 //parse components
                 std::string definitionFileName;
                 std::string pathToDefinition;
                 Core::StringUtils::SplitFilename(in_filepath, definitionFileName, pathToDefinition);
             
-                const Json::Value& componentsJson = root["Components"];
+                const Json::Value& componentsJson = root[k_widgetComponentsKey];
                 std::vector<ComponentDesc> componentDescs;
                 if(componentsJson.isNull() == false)
                 {
@@ -443,15 +461,15 @@ namespace ChilliSource
                 
                 //parse component property links
                 std::vector<PropertyLink> componentPropertyLinks;
-                const Json::Value& componentPropertiesJson = root["ComponentProperties"];
+                const Json::Value& componentPropertiesJson = root[k_widgetComponentPropertiesKey];
                 if(componentPropertiesJson.isNull() == false)
                 {
                     componentPropertyLinks = ParseLinkedComponentProperties(componentPropertiesJson, componentDescs);
                 }
                 
                 //parse children
-                const Json::Value& hierarchy = root["Hierarchy"];
-                const Json::Value& children = root["Children"];
+                const Json::Value& hierarchy = root[k_widgetHierarchyKey];
+                const Json::Value& children = root[k_widgetChildrenKey];
                 std::vector<WidgetDesc> childDescs;
                 if(hierarchy.isNull() == false && hierarchy.isArray() == true && children.isNull() == false)
                 {
@@ -460,7 +478,7 @@ namespace ChilliSource
                 
                 //parse child property links
                 std::vector<PropertyLink> childPropertyLinks;
-                const Json::Value& childProperties = root["ChildProperties"];
+                const Json::Value& childProperties = root[k_widgetChildPropertiesKey];
                 if(childProperties.isNull() == false)
                 {
                     childPropertyLinks = ParseLinkedChildProperties(childProperties);
@@ -468,7 +486,7 @@ namespace ChilliSource
                 
                 //build the default values property map and read the default values from the json
                 Core::PropertyMap defaultProperties = BuildPropertyMap(componentDescs, componentPropertyLinks, childDescs, childPropertyLinks);
-                const Json::Value& defaults = root["Defaults"];
+                const Json::Value& defaults = root[k_widgetPropertyDefaultsKey];
                 if(defaults.isNull() == false)
                 {
                     ParseDefaultValues(defaults, in_storageLocation, pathToDefinition, defaultProperties);
