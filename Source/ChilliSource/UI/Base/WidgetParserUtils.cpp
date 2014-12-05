@@ -145,7 +145,7 @@ namespace ChilliSource
                 else
                 {
                     CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
-                    out_propertyMap.GetPropertyObject(in_propertyName)->Parse(in_jsonValue.asString());
+                    out_propertyMap.ParseProperty(in_propertyName, in_jsonValue.asString());
                 }
             }
             //-------------------------------------------------------

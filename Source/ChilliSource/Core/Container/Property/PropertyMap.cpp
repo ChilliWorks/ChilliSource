@@ -153,6 +153,20 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        void PropertyMap::ParseProperty(const std::string& in_name, const std::string& in_value)
+        {
+            std::string lowerCaseName = in_name;
+            Core::StringUtils::ToLowerCase(lowerCaseName);
+            
+            auto entry = m_properties.find(lowerCaseName);
+            CS_ASSERT(entry != m_properties.end(), "No property in property map with name: " + in_name);
+            
+            IProperty* property = entry->second.m_property.get();
+            property->Parse(in_value);
+            entry->second.m_initialised = true;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         std::string PropertyMap::GetPropertyOrDefault(const std::string& in_name, const char* in_default) const
         {
             return GetPropertyOrDefault<std::string>(in_name, in_default);

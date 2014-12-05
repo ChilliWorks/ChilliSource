@@ -160,6 +160,18 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetProperty(const std::string& in_name, const char* in_value);
             //----------------------------------------------------------------------------------------
+            /// Sets the property with the given name to the result of parsing the given string.
+            /// Not all property types can be parsed depending on whether or not the type specifies
+            /// a parse delegate. If not or a property with the given name doesn't exist the app is
+            /// considered to be in an irrecoverable state and will terminate.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The name of the property.
+            /// @param The value to set in string form.
+            //----------------------------------------------------------------------------------------
+            void ParseProperty(const std::string& in_name, const std::string& in_value);
+            //----------------------------------------------------------------------------------------
             /// Get the value of the property with the given name. If no property exists with the name
             /// or the property doesn't yet have a value, with the name then it will assert.
             ///
