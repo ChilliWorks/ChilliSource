@@ -594,17 +594,6 @@ public class CSApplication
 		};
 
 		scheduleUIThreadTask(task);
-
-		try
-		{
-			synchronized(task)
-			{
-				task.wait();
-			}
-		}
-		catch(Exception e)
-		{
-		}
 	}
 	/**
 	 * Load the shared Java libraries required by the engine

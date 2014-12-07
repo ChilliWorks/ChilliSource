@@ -305,23 +305,22 @@ namespace ChilliSource
 
 			if (m_playbackState == PlaybackState::k_notPlaying)
 			{
-				m_playbackTimer = 0.0f;
-				m_accumulatedDeltaTime = 0.0f;
+
 				m_playbackState = PlaybackState::k_starting;
 			}
 			else if (m_playbackState == PlaybackState::k_stopping)
 			{
-				m_playbackTimer = 0.0f;
-				m_accumulatedDeltaTime = 0.0f;
 				m_playbackState = PlaybackState::k_playing;
 			}
+
+			m_playbackTimer = 0.0f;
+			m_accumulatedDeltaTime = 0.0f;
+			m_firstFrame = true;
 
 			//reset the bounding shapes.
 			m_localAABB = Core::AABB();
 			m_localBoundingSphere = Core::Sphere();
 			m_invalidateBoundingShapeCache = true;
-
-			m_firstFrame = true;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
