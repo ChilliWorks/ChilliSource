@@ -402,6 +402,7 @@ namespace ChilliSource
 			f32 m_accumulatedDeltaTime = 0.0f;
 			Core::Event<Delegate> m_finishedEvent;
 			Core::Event<Delegate> m_finishedEmittingEvent;
+			bool m_firstFrame = false;
 
 			Core::AABB m_localAABB;
 			Core::Sphere m_localBoundingSphere;

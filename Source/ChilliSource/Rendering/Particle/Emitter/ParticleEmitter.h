@@ -73,10 +73,12 @@ namespace ChilliSource
 			/// @param The current world space position of the emitter.
 			/// @param The current world space scale of the emitter.
 			/// @param The current world space orientation of the emitter.
+			/// @param Whether or not to interpolate the emission position
+			/// since the last frame.
 			///
 			/// @return The list of newly emitted particle indices.
 			//----------------------------------------------------------------
-			std::vector<u32> TryEmit(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation);
+			std::vector<u32> TryEmit(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation, bool in_interpolateEmission);
 			//----------------------------------------------------------------
 			/// Destructor.
 			///
@@ -148,7 +150,6 @@ namespace ChilliSource
 			const ParticleEmitterDef* m_emitterDef = nullptr;
 			Core::dynamic_array<Particle>* m_particleArray = nullptr;
 
-			bool m_firstEmission = true;
 			Core::Vector3 m_emissionPosition;
 			Core::Vector3 m_emissionScale;
 			Core::Quaternion m_emissionOrientation;

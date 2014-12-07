@@ -52,17 +52,16 @@ namespace ChilliSource
 		}
 		//----------------------------------------------
 		//----------------------------------------------
-		std::vector<u32> ParticleEmitter::TryEmit(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation)
+		std::vector<u32> ParticleEmitter::TryEmit(f32 in_playbackTime, const Core::Vector3& in_emitterPosition, const Core::Vector3& in_emitterScale, const Core::Quaternion& in_emitterOrientation, bool in_interpolateEmission)
 		{
 			CS_ASSERT(in_playbackTime >= 0.0f, "Playback time cannot be below zero.");
 
 			//If this is the first emission, then setup the correct entity positions.
-			if (m_firstEmission == true)
+			if (in_interpolateEmission == false)
 			{
 				m_emissionPosition = in_emitterPosition;
 				m_emissionScale = in_emitterScale;
 				m_emissionOrientation = in_emitterOrientation;
-				m_firstEmission = false;
 			}
 
 			//wrap the emission timer if required.

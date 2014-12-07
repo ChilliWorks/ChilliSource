@@ -144,10 +144,12 @@ namespace ChilliSource
 			/// @param The entity's world position.
 			/// @param The entity's world scale.
 			/// @param The entity's world orientation.
+			/// @param Whether or not to interpolate the particles point
+			/// of emission since the last frame.
 			//----------------------------------------------------------------
 			void ParticleUpdateTask(ParticleEffectCSPtr in_particleEffect, ParticleEmitterSPtr in_particleEmitter, std::vector<ParticleAffectorSPtr> in_particleAffectors, 
 				std::shared_ptr<Core::dynamic_array<Particle>> in_particleArray, ConcurrentParticleDataSPtr in_concurrentParticleData, f32 in_playbackTime, 
-				f32 in_deltaTime, Core::Vector3 in_entityPosition, Core::Vector3 in_entityScale, Core::Quaternion in_entityOrientation)
+				f32 in_deltaTime, Core::Vector3 in_entityPosition, Core::Vector3 in_entityScale, Core::Quaternion in_entityOrientation, bool in_interpolateEmission)
 			{
 				CS_ASSERT(in_particleEffect != nullptr, "Cannot update particles with null particle effect.");
 				CS_ASSERT(in_particleArray != nullptr, "Cannot update particles with null particle array.");
@@ -183,7 +185,7 @@ namespace ChilliSource
 				std::vector<u32> newIndices;
 				if (in_particleEmitter != nullptr)
 				{
-					newIndices = in_particleEmitter->TryEmit(in_playbackTime, in_entityPosition, in_entityScale, in_entityOrientation);
+					newIndices = in_particleEmitter->TryEmit(in_playbackTime, in_entityPosition, in_entityScale, in_entityOrientation, in_interpolateEmission);
 				}
 
 				//Initialise any new particles in each affector.
@@ -318,6 +320,8 @@ namespace ChilliSource
 			m_localAABB = Core::AABB();
 			m_localBoundingSphere = Core::Sphere();
 			m_invalidateBoundingShapeCache = true;
+
+			m_firstFrame = true;
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -569,9 +573,11 @@ namespace ChilliSource
 			{
 				StoreLocalBoundingShapes();
 
+				bool shouldInterpolateEmission = (m_firstFrame == false);
 				Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, m_emitter, m_affectors, m_particleArray, m_concurrentParticleData,
-					m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation()));
+					m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation(), shouldInterpolateEmission));
 
+				m_firstFrame = false;
 				m_accumulatedDeltaTime = 0.0f;
 			}
 		}
@@ -590,9 +596,11 @@ namespace ChilliSource
 				{
 					StoreLocalBoundingShapes();
 
+					bool shouldInterpolateEmission = (m_firstFrame == false);
 					Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, nullptr, m_affectors, m_particleArray, m_concurrentParticleData,
-						m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation()));
+						m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation(), shouldInterpolateEmission));
 
+					m_firstFrame = false;
 					m_accumulatedDeltaTime = 0.0f;
 				}
 			}
