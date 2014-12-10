@@ -75,19 +75,27 @@ namespace ChilliSource
         //---------------------------------------------------------
         void StateManager::ResumeStates()
         {
+			CS_ASSERT(m_statesActive == false, "Resume states called when states are already active.");
+
             if(!m_states.empty())
 			{
 				m_states.back()->Resume();
 			}
+
+			m_statesActive = true;
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
         void StateManager::ForegroundStates()
         {
+			CS_ASSERT(m_statesForegrounded == false, "Foreground states called when states are not backgrounded.");
+
             if(!m_states.empty())
 			{
 				m_states.back()->Foreground();
 			}
+
+			m_statesForegrounded = true;
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
@@ -112,8 +120,15 @@ namespace ChilliSource
                         //is the only one we need to stop
 						if(!m_isStartState && !m_states.empty())
 						{
-                            top->Background();
-                            top->Suspend();
+							if (m_statesForegrounded == true)
+							{
+								top->Background();
+							}
+
+							if (m_statesActive == true)
+							{
+								top->Suspend();
+							}
 						}
                         
                         //Check that the state we have pushed is not already in the hierarchy
@@ -141,8 +156,16 @@ namespace ChilliSource
 							if(!isTopStateStopped)
 							{
 								isTopStateStopped = true;
-                                popped->Background();
-                                popped->Suspend();
+
+								if (m_statesForegrounded == true)
+								{
+									popped->Background();
+								}
+
+								if (m_statesActive == true)
+								{
+									popped->Suspend();
+								}
 							}
 							
                             if(GetNumInstancesOfState(popped.get()) == 1)
@@ -174,8 +197,16 @@ namespace ChilliSource
 							if(!isTopStateStopped)
 							{
 								isTopStateStopped = true;
-                                popped->Background();
-                                popped->Suspend();
+                                
+								if (m_statesForegrounded == true)
+								{
+									popped->Background();
+								}
+
+								if (m_statesActive == true)
+								{
+									popped->Suspend();
+								}
 							}
 							
                             if(GetNumInstancesOfState(popped.get()) == 1)
@@ -195,8 +226,16 @@ namespace ChilliSource
                         if(!m_states.empty())
                         {
                             StateSPtr top = m_states.back();
-                            top->Background();
-                            top->Suspend();
+
+							if (m_statesForegrounded == true)
+							{
+								top->Background();
+							}
+
+							if (m_statesActive == true)
+							{
+								top->Suspend();
+							}
                         }
                         
 						while (!m_states.empty())
@@ -224,8 +263,15 @@ namespace ChilliSource
                         
 						if(!m_isStartState)
 						{
-                            popped->Background();
-                            popped->Suspend();
+							if (m_statesForegrounded == true)
+							{
+								popped->Background();
+							}
+
+							if (m_statesActive == true)
+							{
+								popped->Suspend();
+							}
 						}
                         
                         if(GetNumInstancesOfState(popped.get()) == 1)
@@ -250,8 +296,16 @@ namespace ChilliSource
                 if(m_isStartState)
                 {
                     m_isStartState = false;
-                    m_states.back()->Resume();
-                    m_states.back()->Foreground();
+
+					if (m_statesActive == true)
+					{
+						m_states.back()->Resume();
+					}
+
+					if (m_statesForegrounded == true)
+					{
+						m_states.back()->Foreground();
+					}
                 }
                 
 				m_states.back()->Update(in_timeSinceLastUpdate);
@@ -271,19 +325,27 @@ namespace ChilliSource
         //---------------------------------------------------------
         void StateManager::BackgroundStates()
         {
+			CS_ASSERT(m_statesForegrounded == true, "Background states called when states are not foregrounded.");
+
             if(!m_states.empty())
 			{
 				m_states.back()->Background();
 			}
+
+			m_statesForegrounded = false;
         }
         //---------------------------------------------------------
         //---------------------------------------------------------
         void StateManager::SuspendStates()
         {
+			CS_ASSERT(m_statesActive == true, "Suspend states called when states are not active.");
+
             if(!m_states.empty())
 			{
 				m_states.back()->Suspend();
 			}
+
+			m_statesActive = false;
         }
         //---------------------------------------------------------
         //---------------------------------------------------------

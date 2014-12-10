@@ -68,6 +68,18 @@ public class Rectangle
 		this.height = in_height;
 	}
 	/**
+	 * Copy constructor
+	 * 
+	 * @author Ian Copland.
+	 */
+	public Rectangle(Rectangle in_rectangle)
+	{
+		this.x = in_rectangle.x;
+		this.y = in_rectangle.y;
+		this.width = in_rectangle.width;
+		this.height = in_rectangle.height;
+	}
+	/**
 	 * @author R Henning
 	 * 
 	 * @return Left edge of the rectangle

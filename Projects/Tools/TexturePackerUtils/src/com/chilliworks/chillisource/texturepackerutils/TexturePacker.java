@@ -892,7 +892,8 @@ public class TexturePacker
 		//before we place the 
 		if (useGraphics[nOriginalIndex] != nOriginalIndex)
 		{
-			placedSpriteRects[nOriginalIndex] = placedSpriteRects[useGraphics[nOriginalIndex]];
+			Rectangle copy = new Rectangle(placedSpriteRects[useGraphics[nOriginalIndex]]);
+			placedSpriteRects[nOriginalIndex] = copy;
 		}
 		else
 		{

@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_CORE_THREADING_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Theading/TaskScheduler.h>
-#include <ChilliSource/Core/Theading/ThreadPool.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Core/Threading/ThreadPool.h>
 
 #endif
