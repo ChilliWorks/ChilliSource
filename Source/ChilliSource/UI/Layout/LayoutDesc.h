@@ -50,7 +50,7 @@ namespace ChilliSource
         /// The properties contained in a layout desc are as follows:
         ///
         /// "Type": Describes the type of layout that should be used. The layout
-        /// type determins which of the other properties can be used.
+        /// type determines which of the other properties can be used.
         ///
         /// "RelMargins": The relative padding from the widget edge to the cells
         /// in any layout.
@@ -98,7 +98,8 @@ namespace ChilliSource
             LayoutDesc() = default;
             //--------------------------------------------------------------
             /// Constructor. Creates the layout description from a JSON
-            /// object. The
+            /// object. The values loaded from Json are described in the
+            /// class documentation.
             ///
             /// @author Ian Copland
             ///
@@ -108,33 +109,33 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @param The type of layout.
+            /// @return The type of layout.
             //--------------------------------------------------------------
             LayoutType GetType() const;
             //--------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @param The relative padding from the widget edge to the cells
+            /// @return The relative padding from the widget edge to the cells
             /// in any layout.
             //--------------------------------------------------------------
             Core::Vector4 GetRelativeMargins() const;
             //--------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @param The absolute padding from the widget edge to the cells
+            /// @return The absolute padding from the widget edge to the cells
             /// in any layout.
             //--------------------------------------------------------------
             Core::Vector4 GetAbsoluteMargins() const;
             //--------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @param The number of rows in a Grid layout.
+            /// @return The number of rows in a Grid layout.
             //--------------------------------------------------------------
             u32 GetNumRows() const;
             //--------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @param The number of columns in a Grid layout.
+            /// @return The number of columns in a Grid layout.
             //--------------------------------------------------------------
             u32 GetNumCols() const;
             //--------------------------------------------------------------

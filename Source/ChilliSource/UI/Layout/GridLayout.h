@@ -40,8 +40,8 @@ namespace ChilliSource
     namespace UI
     {
         //----------------------------------------------------------------------------------------
-        /// Lays out widgets in a grid where each widget has a single cell. The cells
-        /// have spacing between them and the entire grid has a surrounding margin.
+        /// Lays out widgets in a grid where each widget has a single cell. The cells have spacing
+        /// between them and the entire grid has a surrounding margin.
         ///
         /// The grid size is fixed and will not expand
         ///
@@ -74,7 +74,8 @@ namespace ChilliSource
             GridLayout() = default;
             //----------------------------------------------------------------------------------------
             /// Constructor that builds the layout from the given Layout Description. This will fatal
-            /// log if the given description is not a grid.
+            /// log if the given description is not a grid. The properties used here are described in
+            /// the class documentation for LayoutDesc.
             ///
             /// @author Ian Copland
             ///

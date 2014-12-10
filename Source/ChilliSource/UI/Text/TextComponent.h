@@ -228,7 +228,7 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             /// Sets the rendered text from a localised text resource. Text can
             /// contain basic markup for inserting variables into the string. The
-            /// markup is in the form [var=VariablenName], and the value for the
+            /// markup is in the form [var=VariableName], and the value for the
             /// variable is looked up in the given param dictionary.
             ///
             /// For example "Time remaining: [var=TimeRemaining]" with a param
@@ -236,7 +236,7 @@ namespace ChilliSource
             /// Remaining: 12".
             ///
             /// The markup is also recursive, meaning that the following is valid:
-            /// "[var=TextValue[var=ValueIndex]]".
+            /// "[var=EntryNumber_[var=Number]]".
             ///
             /// @author Ian Copland
             ///

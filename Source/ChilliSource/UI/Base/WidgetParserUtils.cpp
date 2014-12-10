@@ -76,19 +76,22 @@ namespace ChilliSource
             //-------------------------------------------------------
             std::pair<Core::StorageLocation, std::string> ParseResource(const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath)
             {
-                CS_ASSERT(in_jsonValue.isObject(), "Resource json must be an object.");
-                CS_ASSERT(in_jsonValue.isMember("Path") == true, "Resource json must contain a Path.");
+                const char k_resourceFilePathKey[] = "Path";
+                const char k_resourceLocationKey[] = "Location";
                 
-                const Json::Value& pathJson = in_jsonValue.get("Path", Json::nullValue);
-                CS_ASSERT(pathJson.isString() == true, "Path must be a string.");
+                CS_ASSERT(in_jsonValue.isObject(), "Resource json must be an object.");
+                CS_ASSERT(in_jsonValue.isMember(k_resourceFilePathKey) == true, "Resource json must contain a '" + std::string(k_resourceFilePathKey) + "' key.");
+                
+                const Json::Value& pathJson = in_jsonValue.get(k_resourceFilePathKey, Json::nullValue);
+                CS_ASSERT(pathJson.isString() == true, "'" + std::string(k_resourceFilePathKey) + "' must be a string.");
                 
                 std::string outputPath = pathJson.asString();
                 
                 Core::StorageLocation outputLocation;
-                if (in_jsonValue.isMember("Location") == true)
+                if (in_jsonValue.isMember(k_resourceLocationKey) == true)
                 {
-                    const Json::Value& locationJson = in_jsonValue.get("Location", Json::nullValue);
-                    CS_ASSERT(locationJson.isString() == true, "Location must be a string.");
+                    const Json::Value& locationJson = in_jsonValue.get(k_resourceLocationKey, Json::nullValue);
+                    CS_ASSERT(locationJson.isString() == true, "'" + std::string(k_resourceLocationKey) + "' must be a string.");
 
                     outputLocation = Core::ParseStorageLocation(locationJson.asString());
                 }
@@ -152,24 +155,32 @@ namespace ChilliSource
             //-------------------------------------------------------
             WidgetDesc ParseWidget(const Json::Value& in_template, const std::string& in_name, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath)
             {
-                CS_ASSERT(in_template.isMember("Type") == true, "Widget template must have type");
+                const char k_widgetTypeKey[] = "Type";
+                const char k_widgetChildrenKey[] = "Children";
+                const char k_widgetHierarchyKey[] = "Hierarchy";
+                const char k_templateTypeName[] = "Template";
+                const char k_templateFilePathKey[] = "TemplatePath";
+                const char k_templateLocationKey[] = "TemplateLocation";
+                const char k_nameKey[] = "Name";
                 
-                std::string outputType = in_template["Type"].asString();
+                CS_ASSERT(in_template.isMember(k_widgetTypeKey) == true, "Widget must have '" + std::string(k_widgetTypeKey) + "' key.");
+                
+                std::string outputType = in_template[k_widgetTypeKey].asString();
                 Core::PropertyMap outputProperties;
                 std::vector<WidgetDesc> outputChildren;
                 
-                if(outputType == "Template")
+                if(outputType == k_templateTypeName)
                 {
                     //This type is a special case in which the property values are read from a separate template file
-                    CS_ASSERT(in_template.isMember("TemplatePath"), "Link to template file must have TemplatePath");
+                    CS_ASSERT(in_template.isMember(k_templateFilePathKey), "Link to template file must have '" + std::string(k_templateFilePathKey) + "' key.");
                     
-                    bool relativePath = in_template.isMember("TemplateLocation") == false;
+                    bool relativePath = in_template.isMember(k_templateLocationKey) == false;
                     Core::StorageLocation location = in_templateLocation;
-                    std::string path = in_template["TemplatePath"].asString();
+                    std::string path = in_template[k_templateFilePathKey].asString();
                     
                     if(relativePath == false)
                     {
-                        location = Core::ParseStorageLocation(in_template["TemplateLocation"].asString());
+                        location = Core::ParseStorageLocation(in_template[k_templateLocationKey].asString());
                     }
                     else
                     {
@@ -192,13 +203,13 @@ namespace ChilliSource
                     outputProperties = widgetDef->GetDefaultProperties();
                 }
                 
-                outputProperties.SetProperty("Name", in_name);
+                outputProperties.SetProperty(k_nameKey, in_name);
                 
                 for(auto it = in_template.begin(); it != in_template.end(); ++it)
                 {
                     std::string propertyName = it.memberName();
                     
-                    if (propertyName == "TemplateLocation" || propertyName == "TemplatePath" || propertyName == "Children" || propertyName == "Hierarchy" || propertyName == "Type")
+                    if (propertyName == k_templateLocationKey || propertyName == k_templateFilePathKey || propertyName == k_widgetChildrenKey || propertyName == k_widgetHierarchyKey || propertyName == k_widgetTypeKey)
                     {
                         //Ignore these as they are handled elsewhere but we do not want them to be included
                         //in the properties list
@@ -220,9 +231,9 @@ namespace ChilliSource
                         for(u32 i=0; i<in_hierarchy.size(); ++i)
                         {
                             const Json::Value& hierarchyItem = in_hierarchy[i];
-                            std::string name = hierarchyItem["Name"].asString();
+                            std::string name = hierarchyItem[k_nameKey].asString();
                             
-                            const Json::Value& hierarchyChildren = hierarchyItem["Children"];
+                            const Json::Value& hierarchyChildren = hierarchyItem[k_widgetChildrenKey];
                             const Json::Value& widget = in_children[name];
                             
                             WidgetDesc childDesc = ParseWidget(widget, name, in_children, hierarchyChildren, in_templateLocation, in_templatePath);

@@ -53,14 +53,17 @@ namespace ChilliSource
             //--------------------------------------------------------------
             ThreePatchDrawable::Direction ParseThreePatchDirection(const std::string& in_directionString)
             {
+                const char k_horizontalType[] = "horizontal";
+                const char k_verticalType[] = "vertical";
+                
                 std::string directionString = in_directionString;
                 Core::StringUtils::ToLowerCase(directionString);
                 
-                if (directionString == "horizontal")
+                if (directionString == k_horizontalType)
                 {
                     return ThreePatchDrawable::Direction::k_horizontal;
                 }
-                else if (directionString == "vertical")
+                else if (directionString == k_verticalType)
                 {
                     return ThreePatchDrawable::Direction::k_vertical;
                 }
@@ -74,10 +77,21 @@ namespace ChilliSource
         //--------------------------------------------------------------
         DrawableDesc::DrawableDesc(const Json::Value& in_json, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath)
         {
+            const char k_typeKey[] = "Type";
+            const char k_textureLocationKey[] = "TextureLocation";
+            const char k_textureFilePathKey[] = "TexturePath";
+            const char k_atlasLocationKey[] = "AtlasLocation";
+            const char k_atlasFilePathKey[] = "AtlasPath";
+            const char k_atlasIdKey[] = "AtlasId";
+            const char k_uvsKey[] = "UVs";
+            const char k_ninePatchInsetsKey[] = "Insets";
+            const char k_threePatchInsetsKey[] = "Insets";
+            const char k_threePatchDirectionKey[] = "Direction";
+            
             CS_ASSERT(in_json.isObject() == true, "Drawable description must be created from a json value of type Object.");
             
-            auto typeJson = in_json.get("Type", Json::nullValue);
-            CS_ASSERT(typeJson != Json::nullValue, "Type must be specified in a Drawable Description.");
+            const auto& typeJson = in_json.get(k_typeKey, Json::nullValue);
+            CS_ASSERT(typeJson != Json::nullValue, "'" + std::string(k_typeKey) + "' must be specified in a Drawable Description.");
             
             m_type = ParseDrawableType(typeJson.asString());
             
@@ -88,44 +102,44 @@ namespace ChilliSource
                 std::string key = it.memberName();
                 std::string value = (*it).asString();
                 
-                if (key == "TextureLocation")
+                if (key == k_textureLocationKey)
                 {
                     m_textureLocation = Core::ParseStorageLocation(value);
                 }
-                else if (key == "TexturePath")
+                else if (key == k_textureFilePathKey)
                 {
                     m_texturePath = value;
                 }
-                else if (key == "AtlasLocation")
+                else if (key == k_atlasLocationKey)
                 {
                     m_atlasLocation = Core::ParseStorageLocation(value);
                 }
-                else if (key == "AtlasPath")
+                else if (key == k_atlasFilePathKey)
                 {
                     m_atlasPath = value;
                 }
-                else if (key == "AtlasId")
+                else if (key == k_atlasIdKey)
                 {
                     m_atlasId = value;
                 }
-                else if (key == "UVs")
+                else if (key == k_uvsKey)
                 {
                     auto vec =  Core::ParseVector4(value);;
                     m_uvs = Rendering::UVs(vec.x, vec.y, vec.z, vec.w);
                 }
-                else if (key == "Insets" && m_type == DrawableType::k_ninePatch)
+                else if (key == k_ninePatchInsetsKey && m_type == DrawableType::k_ninePatch)
                 {
                     m_ninePatchInsets = Core::ParseVector4(value);
                 }
-                else if (key == "Insets" && m_type == DrawableType::k_threePatch)
+                else if (key == k_threePatchInsetsKey && m_type == DrawableType::k_threePatch)
                 {
                     m_threePatchInsets = Core::ParseVector2(value);
                 }
-                else if (key == "Direction" && m_type == DrawableType::k_threePatch)
+                else if (key == k_threePatchDirectionKey && m_type == DrawableType::k_threePatch)
                 {
                     m_threePatchDirection = ParseThreePatchDirection(value);
                 }
-                else if (key == "Type")
+                else if (key == k_typeKey)
                 {
                     //ignore
                 }
@@ -140,13 +154,13 @@ namespace ChilliSource
             
             //We need to support relative paths. When no storage location is specified in Json a path relative to the
             //parent resources directory will be used instead.
-            if (in_json.isMember("TextureLocation") == false)
+            if (in_json.isMember(k_textureLocationKey) == false)
             {
                 m_textureLocation = in_relStorageLocation;
                 m_texturePath = Core::StringUtils::StandardiseDirectoryPath(in_relDirectoryPath) + m_texturePath;
             }
             
-            if (m_atlasPath.empty() == false && in_json.isMember("AtlasLocation") == false)
+            if (m_atlasPath.empty() == false && in_json.isMember(k_atlasLocationKey) == false)
             {
                 m_atlasLocation = in_relStorageLocation;
                 m_atlasPath = Core::StringUtils::StandardiseDirectoryPath(in_relDirectoryPath) + m_atlasPath;

@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_TEXT_DRAWABLECOMPONENT_H_
-#define _CHILLISOURCE_UI_TEXT_DRAWABLECOMPONENT_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_DRAWABLECOMPONENT_H_
+#define _CHILLISOURCE_UI_DRAWABLE_DRAWABLECOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
@@ -51,7 +51,9 @@ namespace ChilliSource
         ///
         /// A DrawableComponent contains the following properties:
         ///
-        /// "Drawable": The description of the drawable that will be rendered.
+        /// "Drawable": The description of the drawable that will be rendered. The
+        /// contents of a drawable description are described in the class
+        /// documentation for DrawableDesc.
         ///
         /// @author Ian Copland
         //--------------------------------------------------------------------------

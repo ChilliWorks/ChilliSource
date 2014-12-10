@@ -30,8 +30,8 @@
 
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/UI/Base/Widget.h>
-#include <ChilliSource/UI/Layout/LayoutType.h>
 #include <ChilliSource/UI/Layout/LayoutDesc.h>
+#include <ChilliSource/UI/Layout/LayoutType.h>
 
 namespace ChilliSource
 {

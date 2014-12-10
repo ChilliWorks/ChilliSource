@@ -50,7 +50,7 @@ namespace ChilliSource
         /// The properties contained in a drawable desc are as follows:
         ///
         /// "Type": Describes the type of layout that should be used. The layout
-        /// type determins which of the other properties can be used.
+        /// type determines which of the other properties can be used.
         ///
         /// "TextureLocation": The storage location of the texture that is
         /// used. If this is not specified a relative path will be instead used,

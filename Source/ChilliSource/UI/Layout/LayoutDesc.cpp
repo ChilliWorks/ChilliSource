@@ -39,6 +39,10 @@ namespace ChilliSource
     {
         namespace
         {
+            const char k_layoutTypeKey[] = "Type";
+            const char k_relativeMarginsKey[] = "RelMargins";
+            const char k_absoluteMarginsKey[] = "AbsMargins";
+            
             //--------------------------------------------------------------
             /// Parses the given cell order string. If the string is not
             /// a valid cell order the app is considered to be in an
@@ -52,14 +56,17 @@ namespace ChilliSource
             //--------------------------------------------------------------
             GridLayout::CellOrder ParseCellOrder(const std::string& in_cellOrderString)
             {
+                const char k_columnMajor[] = "colmajor";
+                const char k_rowMajor[] = "rowmajor";
+                
                 std::string cellOrderString = in_cellOrderString;
                 Core::StringUtils::ToLowerCase(cellOrderString);
                 
-                if(cellOrderString == "colmajor")
+                if(cellOrderString == k_columnMajor)
                 {
                     return GridLayout::CellOrder::k_colMajor;
                 }
-                else if(cellOrderString == "rowmajor")
+                else if(cellOrderString == k_rowMajor)
                 {
                     return GridLayout::CellOrder::k_rowMajor;
                 }
@@ -73,8 +80,8 @@ namespace ChilliSource
         //--------------------------------------------------------------
         LayoutDesc::LayoutDesc(const Json::Value& in_json)
         {
-            auto typeJson = in_json.get("Type", Json::nullValue);
-            CS_ASSERT(typeJson != Json::nullValue, "Type must be specified in a Layout Description.");
+            const auto& typeJson = in_json.get(k_layoutTypeKey, Json::nullValue);
+            CS_ASSERT(typeJson != Json::nullValue, "'" + std::string(k_layoutTypeKey) + "' must be specified in a Layout Description.");
             
             m_type = ParseLayoutType(typeJson.asString());
             switch (m_type)
@@ -173,6 +180,14 @@ namespace ChilliSource
         //--------------------------------------------------------------
         void LayoutDesc::InitAsGrid(const Json::Value& in_json)
         {
+            const char k_numRowsKey[] = "NumRows";
+            const char k_numColumnsKey[] = "NumCols";
+            const char k_relativeHSpacingKey[] = "RelHSpacing";
+            const char k_absoluteHSpacingKey[] = "AbsHSpacing";
+            const char k_relativeVSpacingKey[] = "RelVSpacing";
+            const char k_absoluteVSpacingKey[] = "AbsVSpacing";
+            const char k_cellOrderKey[] = "CellOrder";
+            
             for(auto it = in_json.begin(); it != in_json.end(); ++it)
             {
                 CS_ASSERT((*it).isString() == true, "All properties in a Layout Description must be a string: " + std::string(it.memberName()));
@@ -180,43 +195,43 @@ namespace ChilliSource
                 std::string key = it.memberName();
                 std::string value = (*it).asString();
                 
-                if (key == "RelMargins")
+                if (key == k_relativeMarginsKey)
                 {
                     m_relativeMargins = Core::ParseVector4(value);
                 }
-                else if (key == "AbsMargins")
+                else if (key == k_absoluteMarginsKey)
                 {
                     m_absoluteMargins = Core::ParseVector4(value);
                 }
-                else if (key == "NumRows")
+                else if (key == k_numRowsKey)
                 {
                     m_numRows = Core::ParseU32(value);
                 }
-                else if (key == "NumCols")
+                else if (key == k_numColumnsKey)
                 {
                     m_numCols = Core::ParseU32(value);
                 }
-                else if (key == "RelHSpacing")
+                else if (key == k_relativeHSpacingKey)
                 {
                     m_relativeHSpacing = Core::ParseF32(value);
                 }
-                else if (key == "AbsHSpacing")
+                else if (key == k_absoluteHSpacingKey)
                 {
                     m_absoluteHSpacing = Core::ParseF32(value);
                 }
-                else if (key == "RelVSpacing")
+                else if (key == k_relativeVSpacingKey)
                 {
                     m_relativeVSpacing = Core::ParseF32(value);
                 }
-                else if (key == "AbsVSpacing")
+                else if (key == k_absoluteVSpacingKey)
                 {
                     m_absoluteVSpacing = Core::ParseF32(value);
                 }
-                else if (key == "CellOrder")
+                else if (key == k_cellOrderKey)
                 {
                     m_cellOrder = ParseCellOrder(value);
                 }
-                else if (key == "Type")
+                else if (key == k_layoutTypeKey)
                 {
                     //ignore
                 }
@@ -230,6 +245,11 @@ namespace ChilliSource
         //--------------------------------------------------------------
         void LayoutDesc::InitAsList(const Json::Value& in_json)
         {
+            const char k_numCellsKey[] = "NumCells";
+            const char k_numColumnsKey[] = "NumCols";
+            const char k_relativeSpacingKey[] = "RelSpacing";
+            const char k_absoluteSpacingKey[] = "AbsSpacing";
+            
             for(auto it = in_json.begin(); it != in_json.end(); ++it)
             {
                 CS_ASSERT((*it).isString() == true, "All properties in a Layout Description must be a string: " + std::string(it.memberName()));
@@ -237,27 +257,27 @@ namespace ChilliSource
                 std::string key = it.memberName();
                 std::string value = (*it).asString();
                 
-                if (key == "RelMargins")
+                if (key == k_relativeMarginsKey)
                 {
                     m_relativeMargins = Core::ParseVector4(value);
                 }
-                else if (key == "AbsMargins")
+                else if (key == k_absoluteMarginsKey)
                 {
                     m_absoluteMargins = Core::ParseVector4(value);
                 }
-                else if (key == "NumCells")
+                else if (key == k_numCellsKey)
                 {
                     m_numCells = Core::ParseU32(value);
                 }
-                else if (key == "RelSpacing")
+                else if (key == k_relativeSpacingKey)
                 {
                     m_relativeSpacing = Core::ParseF32(value);
                 }
-                else if (key == "AbsSpacing")
+                else if (key == k_absoluteSpacingKey)
                 {
                     m_absoluteSpacing = Core::ParseF32(value);
                 }
-                else if (key == "Type")
+                else if (key == k_layoutTypeKey)
                 {
                     //ignore
                 }
