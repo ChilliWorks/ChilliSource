@@ -43,7 +43,7 @@
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Base/WidgetDesc.h>
 #include <ChilliSource/UI/Base/WidgetFactory.h>
-#include <ChilliSource/UI/Base/WidgetPropertyTypes.h>
+#include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
 #include <ChilliSource/UI/Drawable/DrawableDesc.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
@@ -109,37 +109,37 @@ namespace ChilliSource
             {
                 auto propertyType = out_propertyMap.GetType(in_propertyName);
                 
-                if (propertyType == &WidgetPropertyTypes::k_texture)
+                if (propertyType == PropertyTypes::Texture())
                 {
                     auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
                     auto texture = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Texture>(resourcePair.first, resourcePair.second);
                     out_propertyMap.SetProperty(in_propertyName, texture);
                 }
-                else if (propertyType == &WidgetPropertyTypes::k_textureAtlas)
+                else if (propertyType == PropertyTypes::TextureAtlas())
                 {
                     auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
                     auto textureAtlas = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::TextureAtlas>(resourcePair.first, resourcePair.second);
                     out_propertyMap.SetProperty(in_propertyName, textureAtlas);
                 }
-                else if (propertyType == &WidgetPropertyTypes::k_font)
+                else if (propertyType == PropertyTypes::Font())
                 {
                     auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
                     auto font = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Font>(resourcePair.first, resourcePair.second);
                     out_propertyMap.SetProperty(in_propertyName, font);
                 }
-                else if (propertyType == &WidgetPropertyTypes::k_localisedText)
+                else if (propertyType == PropertyTypes::LocalisedText())
                 {
                     auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
                     auto localisedText = Core::Application::Get()->GetResourcePool()->LoadResource<Core::LocalisedText>(resourcePair.first, resourcePair.second);
                     out_propertyMap.SetProperty(in_propertyName, localisedText);
                 }
-                else if (propertyType == &WidgetPropertyTypes::k_drawableDesc)
+                else if (propertyType == PropertyTypes::DrawableDesc())
                 {
                     CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
                     DrawableDesc drawbleDesc(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
                     out_propertyMap.SetProperty(in_propertyName, drawbleDesc);
                 }
-                else if (propertyType == &WidgetPropertyTypes::k_layoutDesc)
+                else if (propertyType == PropertyTypes::LayoutDesc())
                 {
                     CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
                     LayoutDesc layoutDesc(in_jsonValue);

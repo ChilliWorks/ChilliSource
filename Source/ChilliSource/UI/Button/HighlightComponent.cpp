@@ -32,7 +32,7 @@
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/UI/Base/Widget.h>
-#include <ChilliSource/UI/Base/WidgetPropertyTypes.h>
+#include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
 #include <ChilliSource/UI/Drawable/DrawableDesc.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
@@ -49,8 +49,8 @@ namespace ChilliSource
             
             const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {&WidgetPropertyTypes::k_drawableDesc, k_normalDrawableKey},
-                {&WidgetPropertyTypes::k_drawableDesc, k_highlightDrawableKey}
+                {PropertyTypes::DrawableDesc(), k_normalDrawableKey},
+                {PropertyTypes::DrawableDesc(), k_highlightDrawableKey}
             };
         }
         
@@ -66,8 +66,8 @@ namespace ChilliSource
         HighlightComponent::HighlightComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
             : Component(in_componentName)
         {
-            RegisterProperty<IDrawableSPtr>(&WidgetPropertyTypes::k_drawable, k_normalDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetNormalDrawable), Core::MakeDelegate(this, &HighlightComponent::SetNormalDrawable));
-            RegisterProperty<IDrawableSPtr>(&WidgetPropertyTypes::k_drawable, k_highlightDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetHighlightDrawable), Core::MakeDelegate(this, &HighlightComponent::SetHighlightDrawable));
+            RegisterProperty<IDrawableSPtr>(PropertyTypes::Drawable(), k_normalDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetNormalDrawable), Core::MakeDelegate(this, &HighlightComponent::SetNormalDrawable));
+            RegisterProperty<IDrawableSPtr>(PropertyTypes::Drawable(), k_highlightDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetHighlightDrawable), Core::MakeDelegate(this, &HighlightComponent::SetHighlightDrawable));
             ApplyRegisteredProperties(in_properties);
         }
         //-------------------------------------------------------------------

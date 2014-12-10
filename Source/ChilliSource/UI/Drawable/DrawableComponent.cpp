@@ -29,7 +29,7 @@
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
 
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
-#include <ChilliSource/UI/Base/WidgetPropertyTypes.h>
+#include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Drawable/DrawableDesc.h>
 
@@ -43,7 +43,7 @@ namespace ChilliSource
             
             const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {&WidgetPropertyTypes::k_drawableDesc, k_drawableKey},
+                {PropertyTypes::DrawableDesc(), k_drawableKey},
             };
         }
         
@@ -59,7 +59,7 @@ namespace ChilliSource
         DrawableComponent::DrawableComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
             : Component(in_componentName)
         {
-            RegisterProperty<IDrawableSPtr>(&WidgetPropertyTypes::k_drawable, k_drawableKey, Core::MakeDelegate(this, &DrawableComponent::GetDrawable), Core::MakeDelegate(this, &DrawableComponent::SetDrawable));
+            RegisterProperty<IDrawableSPtr>(PropertyTypes::Drawable(), k_drawableKey, Core::MakeDelegate(this, &DrawableComponent::GetDrawable), Core::MakeDelegate(this, &DrawableComponent::SetDrawable));
             ApplyRegisteredProperties(in_properties);
         }
         //-------------------------------------------------------------------

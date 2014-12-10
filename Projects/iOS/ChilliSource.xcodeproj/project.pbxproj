@@ -38,8 +38,7 @@
 		819CE3CF1A1F668900A49B5C /* LayoutDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819CE3CD1A1F668900A49B5C /* LayoutDesc.cpp */; };
 		819CE3D21A1F98DC00A49B5C /* DrawableDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819CE3D01A1F98DC00A49B5C /* DrawableDesc.cpp */; };
 		819FB37D1A30757600A0E965 /* PropertyTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819FB37C1A30757600A0E965 /* PropertyTypes.cpp */; };
-		819FB3801A307CEC00A0E965 /* WidgetPropertyTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819FB37E1A307CEC00A0E965 /* WidgetPropertyTypes.cpp */; };
-		81A00FFD1A31C47900CF740A /* TextPropertyTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81A00FFB1A31C47900CF740A /* TextPropertyTypes.cpp */; };
+		819FB3801A307CEC00A0E965 /* PropertyTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819FB37E1A307CEC00A0E965 /* PropertyTypes.cpp */; };
 		81AAFBBB19C9C18100CD4A14 /* Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB419C9C18100CD4A14 /* Gesture.cpp */; };
 		81AAFBBC19C9C18100CD4A14 /* GestureSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB619C9C18100CD4A14 /* GestureSystem.cpp */; };
 		81AAFBBD19C9C18100CD4A14 /* TapGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB819C9C18100CD4A14 /* TapGesture.cpp */; };
@@ -445,10 +444,8 @@
 		819CE3D11A1F98DC00A49B5C /* DrawableDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableDesc.h; sourceTree = "<group>"; };
 		819FB37B1A30756400A0E965 /* PropertyTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PropertyTypes.h; sourceTree = "<group>"; };
 		819FB37C1A30757600A0E965 /* PropertyTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyTypes.cpp; sourceTree = "<group>"; };
-		819FB37E1A307CEC00A0E965 /* WidgetPropertyTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetPropertyTypes.cpp; sourceTree = "<group>"; };
-		819FB37F1A307CEC00A0E965 /* WidgetPropertyTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetPropertyTypes.h; sourceTree = "<group>"; };
-		81A00FFB1A31C47900CF740A /* TextPropertyTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextPropertyTypes.cpp; sourceTree = "<group>"; };
-		81A00FFC1A31C47900CF740A /* TextPropertyTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextPropertyTypes.h; sourceTree = "<group>"; };
+		819FB37E1A307CEC00A0E965 /* PropertyTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyTypes.cpp; sourceTree = "<group>"; };
+		819FB37F1A307CEC00A0E965 /* PropertyTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyTypes.h; sourceTree = "<group>"; };
 		81AAFBB419C9C18100CD4A14 /* Gesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gesture.cpp; sourceTree = "<group>"; };
 		81AAFBB519C9C18100CD4A14 /* Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gesture.h; sourceTree = "<group>"; };
 		81AAFBB619C9C18100CD4A14 /* GestureSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GestureSystem.cpp; sourceTree = "<group>"; };
@@ -1121,8 +1118,8 @@
 				817F76031A03E23A00D36ACF /* WidgetTemplate.h */,
 				817F76041A03E23A00D36ACF /* WidgetTemplateProvider.cpp */,
 				817F76051A03E23A00D36ACF /* WidgetTemplateProvider.h */,
-				819FB37E1A307CEC00A0E965 /* WidgetPropertyTypes.cpp */,
-				819FB37F1A307CEC00A0E965 /* WidgetPropertyTypes.h */,
+				819FB37E1A307CEC00A0E965 /* PropertyTypes.cpp */,
+				819FB37F1A307CEC00A0E965 /* PropertyTypes.h */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1174,8 +1171,6 @@
 			children = (
 				81970FE51A0A48B500505599 /* TextComponent.cpp */,
 				81970FE61A0A48B500505599 /* TextComponent.h */,
-				81A00FFB1A31C47900CF740A /* TextPropertyTypes.cpp */,
-				81A00FFC1A31C47900CF740A /* TextPropertyTypes.h */,
 			);
 			path = Text;
 			sourceTree = "<group>";
@@ -2770,7 +2765,6 @@
 				81D8B4191962E0EC0010DA84 /* Image.cpp in Sources */,
 				81D8B6B61962E0F70010DA84 /* FacebookAuthenticationSystem.cpp in Sources */,
 				81D8B42C1962E0EC0010DA84 /* Resource.cpp in Sources */,
-				81A00FFD1A31C47900CF740A /* TextPropertyTypes.cpp in Sources */,
 				81D8B46F1962E0EC0010DA84 /* RendererSortPredicates.cpp in Sources */,
 				81D8B4211962E0EC0010DA84 /* Shapes.cpp in Sources */,
 				81D8B4741962E0EC0010DA84 /* PerspectiveCameraComponent.cpp in Sources */,
@@ -2853,7 +2847,7 @@
 				817F763F1A03E23A00D36ACF /* DrawableType.cpp in Sources */,
 				81D8B4801962E0EC0010DA84 /* CSModelProvider.cpp in Sources */,
 				81D3A5531A2F567700FC08C9 /* PropertyMap.cpp in Sources */,
-				819FB3801A307CEC00A0E965 /* WidgetPropertyTypes.cpp in Sources */,
+				819FB3801A307CEC00A0E965 /* PropertyTypes.cpp in Sources */,
 				81AECBDF1A234570009DFA59 /* IDrawable.cpp in Sources */,
 				81D8B4A91962E0EC0010DA84 /* WebView.cpp in Sources */,
 				817F76421A03E23A00D36ACF /* NinePatchDrawable.cpp in Sources */,

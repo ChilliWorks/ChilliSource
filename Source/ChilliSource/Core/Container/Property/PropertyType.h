@@ -190,4 +190,14 @@ namespace ChilliSource
     }
 }
 
+#define CS_DECLARE_PROPERTYTYPE(in_type, in_name) \
+    const CSCore::PropertyType<in_type>* in_name();
+
+#define CS_DEFINE_PROPERTYTYPE(in_type, in_name, in_stringName, in_defaultValue, in_parseMethod) \
+    const CSCore::PropertyType<in_type>* in_name() \
+    { \
+        static const CSCore::PropertyType<in_type> k_property(in_stringName, in_defaultValue, in_parseMethod); \
+        return &k_property; \
+    }
+
 #endif

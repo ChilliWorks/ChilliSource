@@ -246,7 +246,6 @@ namespace ChilliSource
         void LayoutDesc::InitAsList(const Json::Value& in_json)
         {
             const char k_numCellsKey[] = "NumCells";
-            const char k_numColumnsKey[] = "NumCols";
             const char k_relativeSpacingKey[] = "RelSpacing";
             const char k_absoluteSpacingKey[] = "AbsSpacing";
             

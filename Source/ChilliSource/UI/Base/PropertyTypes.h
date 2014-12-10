@@ -1,7 +1,7 @@
 //
-//  TextPropertyTypes.h
+//  WidgetPropertyTypes.h
 //  Chilli Source
-//  Created by Ian Copland on 05/12/2014.
+//  Created by Ian Copland on 04/12/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_TEXTPROPERTYTYPES_H_
-#define _CHILLISOURCE_UI_BASE_TEXTPROPERTYTYPES_H_
+#ifndef _CHILLISOURCE_UI_BASE_PROPERTYTYPES_H_
+#define _CHILLISOURCE_UI_BASE_PROPERTYTYPES_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyType.h>
@@ -37,14 +37,24 @@ namespace ChilliSource
     namespace UI
     {
         //------------------------------------------------------------------------
-        /// Additional property types that are specific to UI text.
+        /// Additional property types that are specific to UI.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------
-        namespace TextPropertyTypes
+        namespace PropertyTypes
         {
-            extern const Core::PropertyType<Rendering::HorizontalTextJustification> k_horizontalTextJustification;
-            extern const Core::PropertyType<Rendering::VerticalTextJustification> k_verticalTextJustification;
+            CS_DECLARE_PROPERTYTYPE(Rendering::AlignmentAnchor, AlignmentAnchor);
+            CS_DECLARE_PROPERTYTYPE(SizePolicy, SizePolicy);
+            CS_DECLARE_PROPERTYTYPE(LayoutDesc, LayoutDesc);
+            CS_DECLARE_PROPERTYTYPE(ILayoutSPtr, Layout);
+            CS_DECLARE_PROPERTYTYPE(DrawableDesc, DrawableDesc);
+            CS_DECLARE_PROPERTYTYPE(IDrawableSPtr, Drawable);
+            CS_DECLARE_PROPERTYTYPE(Rendering::TextureCSPtr, Texture);
+            CS_DECLARE_PROPERTYTYPE(Rendering::TextureAtlasCSPtr, TextureAtlas);
+            CS_DECLARE_PROPERTYTYPE(Rendering::FontCSPtr, Font);
+            CS_DECLARE_PROPERTYTYPE(Core::LocalisedTextCSPtr, LocalisedText);
+            CS_DECLARE_PROPERTYTYPE(Rendering::HorizontalTextJustification, HorizontalTextJustification);
+            CS_DECLARE_PROPERTYTYPE(Rendering::VerticalTextJustification, VerticalTextJustification);
         }
     }
 }

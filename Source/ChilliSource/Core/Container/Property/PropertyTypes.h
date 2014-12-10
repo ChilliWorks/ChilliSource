@@ -30,15 +30,7 @@
 #define _CHILLISOURCE_CORE_CONTAINER_PROPERTY_DEFAULTPROPERTYTYPES_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChillISource/Core/Base/Colour.h>
 #include <ChillISource/Core/Container/Property/PropertyType.h>
-#include <ChillISource/Core/File/StorageLocation.h>
-#include <ChillISource/Core/Math/Matrix3.h>
-#include <ChillISource/Core/Math/Matrix4.h>
-#include <ChillISource/Core/Math/Quaternion.h>
-#include <ChillISource/Core/Math/Vector2.h>
-#include <ChillISource/Core/Math/Vector3.h>
-#include <ChillISource/Core/Math/Vector4.h>
 
 namespace ChilliSource
 {
@@ -52,19 +44,19 @@ namespace ChilliSource
         //------------------------------------------------------------------------
         namespace PropertyTypes
         {
-            extern const PropertyType<bool> k_bool;
-            extern const PropertyType<s32> k_int;
-            extern const PropertyType<u32> k_uint;
-            extern const PropertyType<f32> k_float;
-            extern const PropertyType<Vector2> k_vec2;
-            extern const PropertyType<Vector3> k_vec3;
-            extern const PropertyType<Vector4> k_vec4;
-            extern const PropertyType<Matrix3> k_mat3;
-            extern const PropertyType<Matrix4> k_mat4;
-            extern const PropertyType<Quaternion> k_quaternion;
-            extern const PropertyType<Colour> k_colour;
-            extern const PropertyType<StorageLocation> k_storageLocation;
-            extern const PropertyType<std::string> k_string;
+            CS_DECLARE_PROPERTYTYPE(bool, Bool);
+            CS_DECLARE_PROPERTYTYPE(s32, Int);
+            CS_DECLARE_PROPERTYTYPE(u32, UInt);
+            CS_DECLARE_PROPERTYTYPE(f32, Float);
+            CS_DECLARE_PROPERTYTYPE(Vector2, Vector2);
+            CS_DECLARE_PROPERTYTYPE(Vector3, Vector3);
+            CS_DECLARE_PROPERTYTYPE(Vector4, Vector4);
+            CS_DECLARE_PROPERTYTYPE(Matrix3, Matrix3);
+            CS_DECLARE_PROPERTYTYPE(Matrix4, Matrix4);
+            CS_DECLARE_PROPERTYTYPE(Quaternion, Quaternion);
+            CS_DECLARE_PROPERTYTYPE(Colour, Colour);
+            CS_DECLARE_PROPERTYTYPE(StorageLocation, StorageLocation);
+            CS_DECLARE_PROPERTYTYPE(std::string, String);
         }
     }
 }
