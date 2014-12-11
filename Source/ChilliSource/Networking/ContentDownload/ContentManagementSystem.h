@@ -82,7 +82,7 @@ namespace ChilliSource
             ///
             /// @param The result.
             //--------------------------------------------------------
-            typedef std::function<void(CheckForUpdatesResult)> CheckForUpdateDelegate;
+            using CheckForUpdateDelegate = std::function<void(CheckForUpdatesResult)>;
             //--------------------------------------------------------
             /// A delegate used for receiving the result of a content
             /// download request.
@@ -91,7 +91,17 @@ namespace ChilliSource
             ///
             /// @param The result.
             //--------------------------------------------------------
-            typedef std::function<void(Result)> CompleteDelegate;
+            using CompleteDelegate = std::function<void(Result)>;
+            //-----------------------------------------------------------
+            /// Called when a checksum needs to be calculated.
+            ///
+            /// @author N Tanda
+            ///
+            /// @param File location
+            /// @param File path
+            /// @return Checksum string
+            //-----------------------------------------------------------
+            using ChecksumDelegate = std::function<std::string(Core::StorageLocation in_location, const std::string& in_filePath)>;
             //--------------------------------------------------------
             /// Creates a new instance of this system.
             ///
@@ -164,7 +174,7 @@ namespace ChilliSource
             /// @param File name
             /// @return Checksum of file as found in the current manifest
             //-----------------------------------------------------------
-            static std::string GetManifestChecksumForFile(const std::string& in_filename);
+            std::string GetManifestChecksumForFile(const std::string& in_filename) const;
 			//-----------------------------------------------------------
 			/// Returns the current running total of the size of data to
             /// download.
@@ -173,7 +183,7 @@ namespace ChilliSource
 			///
 			/// @return The size of the data needing to be downloaded
 			//-----------------------------------------------------------			
-			u32 GetRunningTotalToDownload();
+			u32 GetRunningTotalToDownload() const;
 			//-----------------------------------------------------------
 			/// Returns the current running total of the size of data
             /// downloaded
@@ -182,14 +192,20 @@ namespace ChilliSource
 			///
 			/// @return The current running total of the size of data
             /// downloaded
-			//-----------------------------------------------------------
-			u32 GetRunningTotalDownloaded();
-			//-----------------------------------------------------------
+            //-----------------------------------------------------------
+            u32 GetRunningTotalDownloaded() const;
+            //-----------------------------------------------------------
             /// @author S Downie
-			///
-			/// @return The current content downloader
-			//-----------------------------------------------------------
-			IContentDownloader* GetContentDownloader() const;
+            ///
+            /// @return The current content downloader
+            //-----------------------------------------------------------
+            IContentDownloader* GetContentDownloader() const;
+            //-----------------------------------------------------------
+            /// @author N Tanda
+            ///
+            /// @param The checksum calculation delegate
+            //-----------------------------------------------------------
+            void SetChecksumDelegate(const ChecksumDelegate& in_delegate);
             
         private:
             //-----------------------------------------------------------
@@ -198,7 +214,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
 			//-----------------------------------------------------------
-            struct PackageDetails
+            struct PackageDetails final
             {
                 std::string m_url;
                 std::string m_id;
@@ -310,11 +326,12 @@ namespace ChilliSource
             ///
             /// @return Whether the file exists
             //-----------------------------------------------------------
-            static bool DoesFileExist(const std::string& in_filename, const std::string in_checksum, bool in_checkOnlyBundle);
+            bool DoesFileExist(const std::string& in_filename, const std::string in_checksum, bool in_checkOnlyBundle) const;
             //-----------------------------------------------------------
-            /// Calculate a checksum for the file. This involves
-            /// performing an MD5 hash of the file and converting that
-            /// to base 64 encoded and then trimming the trailing '='
+            /// Calculate a checksum for the file. Will call the custom
+            /// checksum delegate if provided. Otherwise, will perform an
+            /// SHA1 hash of the file and convert that to base 64 encoded
+            /// and then trim the trailing '='
             ///
             /// @author S Downie
             ///
@@ -322,34 +339,35 @@ namespace ChilliSource
             /// @param File path
             /// @return Checksum string
             //-----------------------------------------------------------
-            static std::string CalculateChecksum(Core::StorageLocation in_location, const std::string& in_filePath);
+            std::string CalculateChecksum(Core::StorageLocation in_location, const std::string& in_filePath) const;
             //-----------------------------------------------------------
             /// Perform the HTTP request for the next DLC package.
             ///
             /// @author S Downie
             //-----------------------------------------------------------
             void DownloadNextPackage();
-        private:
             
+        private:
             std::vector<std::string> m_removePackageIds;
             std::vector<PackageDetails> m_packageDetails;
 			
-			u32	m_runningToDownloadTotal;
-			u32 m_runningDownloadedTotal;
+			u32	m_runningToDownloadTotal = 0;
+			u32 m_runningDownloadedTotal = 0;
             
             Core::XMLUPtr m_serverManifest;
             
-            IContentDownloader* m_contentDownloader;
+            IContentDownloader* m_contentDownloader = nullptr;
             
             CheckForUpdateDelegate m_onUpdateCheckCompleteDelegate;
             CompleteDelegate m_onDownloadCompleteDelegate;
+            ChecksumDelegate m_checksumDelegate;
             
             std::string m_serverManifestData;
             std::string m_contentDirectory;
 			
-            u32 m_currentPackageDownload;
+            u32 m_currentPackageDownload = 0;
             
-            bool m_dlcCachePurged;
+            bool m_dlcCachePurged = false;
         };
     }
 }

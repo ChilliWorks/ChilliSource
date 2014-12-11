@@ -169,7 +169,14 @@ namespace ChilliSource
 		const std::string& FileSystem::GetPackageDLCPath() const
 		{
 			return m_packageDLCPath;
-		}
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        std::string FileSystem::GetFileChecksumSHA1(StorageLocation in_storageLocation, const std::string& in_filePath) const
+        {
+            FileStreamUPtr file = CreateFileStream(in_storageLocation, in_filePath, FileMode::k_readBinary);
+            return file->GetSHA1Checksum(CSHA1::REPORT_TYPE::REPORT_HEX_SHORT);
+        }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
         std::string FileSystem::GetFileChecksumMD5(StorageLocation in_storageLocation, const std::string& in_filePath) const

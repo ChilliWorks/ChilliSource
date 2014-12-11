@@ -338,10 +338,22 @@ namespace ChilliSource
 			///
             /// @return The package DLC directory.
 			//--------------------------------------------------------------
-			const std::string& GetPackageDLCPath() const;
+            const std::string& GetPackageDLCPath() const;
+            //--------------------------------------------------------------
+            /// Calculate the SHA1 checksum of the file at the
+            /// given directory
+            ///
+            /// @author N Tanda
+            ///
+            /// @param Storage location
+            /// @param File path
+            ///
+            /// @return SHA1 checksum
+            //--------------------------------------------------------------
+            std::string GetFileChecksumSHA1(StorageLocation in_storageLocation, const std::string& in_filePath) const;
             //--------------------------------------------------------------
             /// Calculate the MD5 checksum of the file at the
-            /// give directory
+            /// given directory
             ///
             /// @author S Downie
             ///
