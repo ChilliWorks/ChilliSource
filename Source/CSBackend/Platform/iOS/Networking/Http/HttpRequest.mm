@@ -77,7 +77,7 @@ namespace CSBackend
                 if (in_requestDesc.m_type == Type::k_post)
                 {
                     request.HTTPMethod = @"POST";
-                    request.HTTPBody = [NSData dataWithBytes:in_requestDesc.m_body.c_str() length:in_requestDesc.m_body.length()];
+                    request.HTTPBody =[NSData dataWithBytes:in_requestDesc.m_body.c_str() length:in_requestDesc.m_body.length()];
                 }
                 
                 m_httpDelegate = [[HttpDelegate alloc] initWithRequest:this];
