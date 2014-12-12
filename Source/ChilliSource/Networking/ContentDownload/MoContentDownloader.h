@@ -68,12 +68,6 @@ namespace ChilliSource
             //----------------------------------------------------------------
             void DownloadPackage(const std::string& instrURL, const Delegate& inDelegate);
             //----------------------------------------------------------------
-            /// Get CurrentDownloaded Bytes
-            ///
-            /// @return The amount of bytes read by the current request, if any
-            //----------------------------------------------------------------
-            u32 GetCurrentDownloadedBytes() const;
-            //----------------------------------------------------------------
             /// Get Tags
             ///
             /// @return The current tags of this downloader
