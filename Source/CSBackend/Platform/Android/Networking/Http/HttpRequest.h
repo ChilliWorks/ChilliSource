@@ -83,12 +83,6 @@ namespace CSBackend
             //----------------------------------------------------------------------------------------
             u32 GetResponseCode() const override;
             //----------------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return Number of bytes read til now
-            //----------------------------------------------------------------------------------------
-            u32 GetBytesRead() const override;
-            //----------------------------------------------------------------------------------------
             /// Checks the stream to see if any data is available for reading
             /// and reads this into a buffer. Once all the data is read
             /// the request will call the complete delegate
