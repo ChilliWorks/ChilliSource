@@ -30,8 +30,8 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Container/Property/PropertyTypes.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
+#include <ChilliSource/Core/Container/Property/PropertyTypes.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
@@ -47,25 +47,43 @@ namespace ChilliSource
     {
         namespace
         {
+            const char k_properyNameName[] = "name";
+            const char k_properyNameRelPosition[] = "relposition";
+            const char k_properyNameAbsPosition[] = "absposition";
+            const char k_properyNameRelSize[] = "relsize";
+            const char k_properyNameAbsSize[] = "abssize";
+            const char k_properyNamePreferredSize[] = "preferredsize";
+            const char k_properyNameScale[] = "scale";
+            const char k_properyNameColour[] = "colour";
+            const char k_properyNameRotation[] = "rotation";
+            const char k_properyNameOriginAnchor[] = "originanchor";
+            const char k_properyNameParentalAnchor[] = "parentalanchor";
+            const char k_properyNameVisible[] = "visible";
+            const char k_properyNameClipChildren[] = "clipchildren";
+            const char k_properyNameInputEnabled[] = "inputenabled";
+            const char k_properyNameInputConsumeEnabled[] = "inputconsumeenabled";
+            const char k_properyNameSizePolicy[] = "sizepolicy";
+            const char k_properyNameLayout[] = "layout";
+            
             const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {Core::PropertyTypes::String(), "Name"},
-                {Core::PropertyTypes::Vector2(), "RelPosition"},
-                {Core::PropertyTypes::Vector2(), "AbsPosition"},
-                {Core::PropertyTypes::Vector2(), "RelSize"},
-                {Core::PropertyTypes::Vector2(), "AbsSize"},
-                {Core::PropertyTypes::Vector2(), "PreferredSize"},
-                {Core::PropertyTypes::Vector2(), "Scale"},
-                {Core::PropertyTypes::Colour(), "Colour"},
-                {Core::PropertyTypes::Float(), "Rotation"},
-                {PropertyTypes::AlignmentAnchor(), "OriginAnchor"},
-                {PropertyTypes::AlignmentAnchor(), "ParentalAnchor"},
-                {Core::PropertyTypes::Bool(), "Visible"},
-                {Core::PropertyTypes::Bool(), "ClipChildren"},
-                {Core::PropertyTypes::Bool(), "InputEnabled"},
-                {Core::PropertyTypes::Bool(), "InputConsumeEnabled"},
-                {PropertyTypes::SizePolicy(), "SizePolicy"},
-                {PropertyTypes::LayoutDesc(), "Layout"},
+                {Core::PropertyTypes::String(), k_properyNameName},
+                {Core::PropertyTypes::Vector2(), k_properyNameRelPosition},
+                {Core::PropertyTypes::Vector2(), k_properyNameAbsPosition},
+                {Core::PropertyTypes::Vector2(), k_properyNameRelSize},
+                {Core::PropertyTypes::Vector2(), k_properyNameAbsSize},
+                {Core::PropertyTypes::Vector2(), k_properyNamePreferredSize},
+                {Core::PropertyTypes::Vector2(), k_properyNameScale},
+                {Core::PropertyTypes::Colour(), k_properyNameColour},
+                {Core::PropertyTypes::Float(), k_properyNameRotation},
+                {PropertyTypes::AlignmentAnchor(), k_properyNameOriginAnchor},
+                {PropertyTypes::AlignmentAnchor(), k_properyNameParentalAnchor},
+                {Core::PropertyTypes::Bool(), k_properyNameVisible},
+                {Core::PropertyTypes::Bool(), k_properyNameClipChildren},
+                {Core::PropertyTypes::Bool(), k_properyNameInputEnabled},
+                {Core::PropertyTypes::Bool(), k_properyNameInputConsumeEnabled},
+                {PropertyTypes::SizePolicy(), k_properyNameSizePolicy},
+                {PropertyTypes::LayoutDesc(), k_properyNameLayout},
             };
             
             //----------------------------------------------------------------------------------------
@@ -232,23 +250,23 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::InitBaseProperties()
         {
-            m_baseProperties.emplace("name", Core::PropertyTypes::String()->CreateProperty(Core::MakeDelegate(this, &Widget::GetName), Core::MakeDelegate(this, &Widget::SetName)));
-            m_baseProperties.emplace("relposition", Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRelativePosition), Core::MakeDelegate(this, &Widget::SetRelativePosition)));
-            m_baseProperties.emplace("absposition", Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalAbsolutePosition), Core::MakeDelegate(this, &Widget::SetAbsolutePosition)));
-            m_baseProperties.emplace("relsize", Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRelativeSize), Core::MakeDelegate(this, &Widget::SetRelativeSize)));
-            m_baseProperties.emplace("abssize", Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalAbsoluteSize), Core::MakeDelegate(this, &Widget::SetAbsoluteSize)));
-            m_baseProperties.emplace("preferredsize", Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetPreferredSize), Core::MakeDelegate(this, &Widget::SetDefaultPreferredSize)));
-            m_baseProperties.emplace("scale", Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalScale), Core::MakeDelegate(this, &Widget::ScaleTo)));
-            m_baseProperties.emplace("colour", Core::PropertyTypes::Colour()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalColour), Core::MakeDelegate(this, &Widget::SetColour)));
-            m_baseProperties.emplace("rotation", Core::PropertyTypes::Float()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRotation), Core::MakeDelegate(this, &Widget::RotateTo)));
-            m_baseProperties.emplace("originanchor", PropertyTypes::AlignmentAnchor()->CreateProperty(Core::MakeDelegate(this, &Widget::GetOriginAnchor), Core::MakeDelegate(this, &Widget::SetOriginAnchor)));
-            m_baseProperties.emplace("parentalanchor", PropertyTypes::AlignmentAnchor()->CreateProperty(Core::MakeDelegate(this, &Widget::GetParentalAnchor), Core::MakeDelegate(this, &Widget::SetParentalAnchor)));
-            m_baseProperties.emplace("visible", Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsVisible), Core::MakeDelegate(this, &Widget::SetVisible)));
-            m_baseProperties.emplace("clipchildren", Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsClippingEnabled), Core::MakeDelegate(this, &Widget::SetClippingEnabled)));
-            m_baseProperties.emplace("inputenabled", Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsInputEnabled), Core::MakeDelegate(this, &Widget::SetInputEnabled)));
-            m_baseProperties.emplace("inputconsumeenabled", Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsInputConsumeEnabled), Core::MakeDelegate(this, &Widget::SetInputConsumeEnabled)));
-            m_baseProperties.emplace("sizepolicy", PropertyTypes::SizePolicy()->CreateProperty(Core::MakeDelegate(this, &Widget::GetSizePolicy), Core::MakeDelegate(this, &Widget::SetSizePolicy)));
-            m_baseProperties.emplace("layout", PropertyTypes::Layout()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLayout), Core::MakeDelegate(this, &Widget::SetLayout)));
+            m_baseProperties.emplace(k_properyNameName, Core::PropertyTypes::String()->CreateProperty(Core::MakeDelegate(this, &Widget::GetName), Core::MakeDelegate(this, &Widget::SetName)));
+            m_baseProperties.emplace(k_properyNameRelPosition, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRelativePosition), Core::MakeDelegate(this, &Widget::SetRelativePosition)));
+            m_baseProperties.emplace(k_properyNameAbsPosition, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalAbsolutePosition), Core::MakeDelegate(this, &Widget::SetAbsolutePosition)));
+            m_baseProperties.emplace(k_properyNameRelSize, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRelativeSize), Core::MakeDelegate(this, &Widget::SetRelativeSize)));
+            m_baseProperties.emplace(k_properyNameAbsSize, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalAbsoluteSize), Core::MakeDelegate(this, &Widget::SetAbsoluteSize)));
+            m_baseProperties.emplace(k_properyNamePreferredSize, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetPreferredSize), Core::MakeDelegate(this, &Widget::SetDefaultPreferredSize)));
+            m_baseProperties.emplace(k_properyNameScale, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalScale), Core::MakeDelegate(this, &Widget::ScaleTo)));
+            m_baseProperties.emplace(k_properyNameColour, Core::PropertyTypes::Colour()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalColour), Core::MakeDelegate(this, &Widget::SetColour)));
+            m_baseProperties.emplace(k_properyNameRotation, Core::PropertyTypes::Float()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRotation), Core::MakeDelegate(this, &Widget::RotateTo)));
+            m_baseProperties.emplace(k_properyNameOriginAnchor, PropertyTypes::AlignmentAnchor()->CreateProperty(Core::MakeDelegate(this, &Widget::GetOriginAnchor), Core::MakeDelegate(this, &Widget::SetOriginAnchor)));
+            m_baseProperties.emplace(k_properyNameParentalAnchor, PropertyTypes::AlignmentAnchor()->CreateProperty(Core::MakeDelegate(this, &Widget::GetParentalAnchor), Core::MakeDelegate(this, &Widget::SetParentalAnchor)));
+            m_baseProperties.emplace(k_properyNameVisible, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsVisible), Core::MakeDelegate(this, &Widget::SetVisible)));
+            m_baseProperties.emplace(k_properyNameClipChildren, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsClippingEnabled), Core::MakeDelegate(this, &Widget::SetClippingEnabled)));
+            m_baseProperties.emplace(k_properyNameInputEnabled, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsInputEnabled), Core::MakeDelegate(this, &Widget::SetInputEnabled)));
+            m_baseProperties.emplace(k_properyNameInputConsumeEnabled, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsInputConsumeEnabled), Core::MakeDelegate(this, &Widget::SetInputConsumeEnabled)));
+            m_baseProperties.emplace(k_properyNameSizePolicy, PropertyTypes::SizePolicy()->CreateProperty(Core::MakeDelegate(this, &Widget::GetSizePolicy), Core::MakeDelegate(this, &Widget::SetSizePolicy)));
+            m_baseProperties.emplace(k_properyNameLayout, PropertyTypes::Layout()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLayout), Core::MakeDelegate(this, &Widget::SetLayout)));
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1218,7 +1236,7 @@ namespace ChilliSource
         Core::Vector2 Widget::GetPreferredSize() const
         {
             //This should be improved to make the acquisition of preferred size from components
-            //more generic, i.e handled via an interface. This will allow over component types
+            //more generic, i.e handled via an interface. This will allow other component types
             //to also prefer sizes.
             const DrawableComponent* drawableComponent = GetComponent<DrawableComponent>();
             if(drawableComponent != nullptr)

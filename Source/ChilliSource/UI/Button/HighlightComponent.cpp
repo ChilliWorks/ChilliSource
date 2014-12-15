@@ -44,8 +44,8 @@ namespace ChilliSource
     {
         namespace
         {
-            const char* k_normalDrawableKey = "NormalDrawable";
-            const char* k_highlightDrawableKey = "HighlightDrawable";
+            const char k_normalDrawableKey[] = "NormalDrawable";
+            const char k_highlightDrawableKey[] = "HighlightDrawable";
             
             const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {

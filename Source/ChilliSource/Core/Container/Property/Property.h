@@ -142,7 +142,7 @@ namespace ChilliSource
         //-----------------------------------------------------------------
         template <typename TType> void Property<TType>::Set(const IProperty* in_property)
         {
-            CS_ASSERT(in_property->GetType() == GetType(), "Cannot set a property with a property created through a different Property Type.");
+            CS_ASSERT(in_property->GetType() == GetType(), "Cannot set using the contents of another property created from a different Property Type.");
             
             const Property<TType>* castProperty = CS_SMARTCAST(const Property<TType>*, in_property, "Cannot set a property of a different property type.");
             Set(castProperty->Get());

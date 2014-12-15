@@ -40,7 +40,7 @@ namespace ChilliSource
         /// The list of default property types. Other property types can be added
         /// in addition to these.
         ///
-        /// @param Ian Copland
+        /// @author Ian Copland
         //------------------------------------------------------------------------
         namespace PropertyTypes
         {

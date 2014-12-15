@@ -39,11 +39,11 @@
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
+#include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Base/WidgetDesc.h>
 #include <ChilliSource/UI/Base/WidgetFactory.h>
-#include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
 #include <ChilliSource/UI/Drawable/DrawableDesc.h>
 #include <ChilliSource/UI/Drawable/IDrawable.h>
