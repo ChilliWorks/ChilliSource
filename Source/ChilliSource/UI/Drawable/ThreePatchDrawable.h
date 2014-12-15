@@ -57,17 +57,7 @@ namespace ChilliSource
         public:
 
             static const u32 k_numPatches = 3;
-            
-            //----------------------------------------------------------------------------------------
-            /// The type of the 3-patch i.e. horizontal or vertical
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            enum class Direction
-            {
-                k_horizontal,
-                k_vertical
-            };
+
             //----------------------------------------------------------------------------------------
             /// Constructor
             ///

@@ -62,11 +62,14 @@ namespace ChilliSource
         /// Drawable
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(DrawableComponent);
-        CS_FORWARDDECLARE_CLASS(DrawableDesc);
+        CS_FORWARDDECLARE_CLASS(DrawableDef);
         CS_FORWARDDECLARE_CLASS(IDrawable);
         CS_FORWARDDECLARE_CLASS(NinePatchDrawable);
+        CS_FORWARDDECLARE_CLASS(NinePatchDrawableDef);
         CS_FORWARDDECLARE_CLASS(StandardDrawable);
+        CS_FORWARDDECLARE_CLASS(StandardDrawableDef);
         CS_FORWARDDECLARE_CLASS(ThreePatchDrawable);
+        CS_FORWARDDECLARE_CLASS(ThreePatchDrawableDef);
         enum class DrawableType;
         //---------------------------------------------------------
         /// Layout

@@ -37,42 +37,6 @@ namespace ChilliSource
 {
     namespace UI
     {
-        namespace
-        {
-            //--------------------------------------------------------------
-            /// Parses a three-patch drawable direction from the given
-            /// string. If the given string is not a valid direction the app
-            /// is considered to be in an irrecoverable state and will
-            /// terminate.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The string to parse.
-            ///
-            /// @return The output three-patch drawable direction.
-            //--------------------------------------------------------------
-            ThreePatchDrawable::Direction ParseThreePatchDirection(const std::string& in_directionString)
-            {
-                const char k_horizontalType[] = "horizontal";
-                const char k_verticalType[] = "vertical";
-                
-                std::string directionString = in_directionString;
-                Core::StringUtils::ToLowerCase(directionString);
-                
-                if (directionString == k_horizontalType)
-                {
-                    return ThreePatchDrawable::Direction::k_horizontal;
-                }
-                else if (directionString == k_verticalType)
-                {
-                    return ThreePatchDrawable::Direction::k_vertical;
-                }
-                
-                CS_LOG_FATAL("Cannot parse invalid three-patch direction.");
-                return ThreePatchDrawable::Direction::k_horizontal;
-            }
-        }
-        
         //--------------------------------------------------------------
         //--------------------------------------------------------------
         DrawableDesc::DrawableDesc(const Json::Value& in_json, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath)

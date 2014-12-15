@@ -296,6 +296,10 @@
 		81D8B6D71962E0F70010DA84 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B6241962E0F70010DA84 /* Texture.cpp */; };
 		81D8B6D81962E0F70010DA84 /* TextureUnitSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B6261962E0F70010DA84 /* TextureUnitSystem.cpp */; };
 		81D8B6DD1962E1110010DA84 /* libCSBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B6DB1962E1110010DA84 /* libCSBase.a */; };
+		81F4A1341A3F300600908FFF /* DrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81F4A1321A3F300600908FFF /* DrawableDef.cpp */; };
+		81F4A1371A3F34B300908FFF /* StandardDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81F4A1351A3F34B300908FFF /* StandardDrawableDef.cpp */; };
+		81F4A13A1A3F440300908FFF /* ThreePatchDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81F4A1381A3F440300908FFF /* ThreePatchDrawableDef.cpp */; };
+		81F4A13D1A3F48DF00908FFF /* NinePatchDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81F4A13B1A3F48DF00908FFF /* NinePatchDrawableDef.cpp */; };
 		81F6DEA41A10CE0800B422C1 /* VerticalTextJustification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81F6DEA31A10CE0800B422C1 /* VerticalTextJustification.cpp */; };
 		81F6DEA61A10CEB300B422C1 /* HorizontalTextJustification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81F6DEA51A10CEB300B422C1 /* HorizontalTextJustification.cpp */; };
 		81FB634419FFA86C009D6894 /* CSBinaryInputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81FB634219FFA86C009D6894 /* CSBinaryInputStream.cpp */; };
@@ -1002,6 +1006,14 @@
 		81D8B6271962E0F70010DA84 /* TextureUnitSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureUnitSystem.h; sourceTree = "<group>"; };
 		81D8B6DB1962E1110010DA84 /* libCSBase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCSBase.a; sourceTree = "<group>"; };
 		81E648A91A14FBF500054326 /* ConstMethodCast.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConstMethodCast.h; sourceTree = "<group>"; };
+		81F4A1321A3F300600908FFF /* DrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableDef.cpp; sourceTree = "<group>"; };
+		81F4A1331A3F300600908FFF /* DrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableDef.h; sourceTree = "<group>"; };
+		81F4A1351A3F34B300908FFF /* StandardDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StandardDrawableDef.cpp; sourceTree = "<group>"; };
+		81F4A1361A3F34B300908FFF /* StandardDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StandardDrawableDef.h; sourceTree = "<group>"; };
+		81F4A1381A3F440300908FFF /* ThreePatchDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreePatchDrawableDef.cpp; sourceTree = "<group>"; };
+		81F4A1391A3F440300908FFF /* ThreePatchDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreePatchDrawableDef.h; sourceTree = "<group>"; };
+		81F4A13B1A3F48DF00908FFF /* NinePatchDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NinePatchDrawableDef.cpp; sourceTree = "<group>"; };
+		81F4A13C1A3F48DF00908FFF /* NinePatchDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NinePatchDrawableDef.h; sourceTree = "<group>"; };
 		81F6DEA11A10C6A900B422C1 /* VerticalTextJustification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalTextJustification.h; sourceTree = "<group>"; };
 		81F6DEA21A10C6DD00B422C1 /* HorizontalTextJustification.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HorizontalTextJustification.h; sourceTree = "<group>"; };
 		81F6DEA31A10CE0800B422C1 /* VerticalTextJustification.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalTextJustification.cpp; sourceTree = "<group>"; };
@@ -1143,6 +1155,14 @@
 				817F76191A03E23A00D36ACF /* ThreePatchDrawable.h */,
 				819CE3D01A1F98DC00A49B5C /* DrawableDesc.cpp */,
 				819CE3D11A1F98DC00A49B5C /* DrawableDesc.h */,
+				81F4A1321A3F300600908FFF /* DrawableDef.cpp */,
+				81F4A1331A3F300600908FFF /* DrawableDef.h */,
+				81F4A1351A3F34B300908FFF /* StandardDrawableDef.cpp */,
+				81F4A1361A3F34B300908FFF /* StandardDrawableDef.h */,
+				81F4A1381A3F440300908FFF /* ThreePatchDrawableDef.cpp */,
+				81F4A1391A3F440300908FFF /* ThreePatchDrawableDef.h */,
+				81F4A13B1A3F48DF00908FFF /* NinePatchDrawableDef.cpp */,
+				81F4A13C1A3F48DF00908FFF /* NinePatchDrawableDef.h */,
 			);
 			path = Drawable;
 			sourceTree = "<group>";
@@ -2729,6 +2749,7 @@
 				81D8B6A51962E0F70010DA84 /* LocalNotificationSystem.cpp in Sources */,
 				81D8B44F1962E0EC0010DA84 /* StretchableImage.cpp in Sources */,
 				81D8B48F1962E0EC0010DA84 /* ParticleEmitter.cpp in Sources */,
+				81F4A1371A3F34B300908FFF /* StandardDrawableDef.cpp in Sources */,
 				81D8B42B1962E0EC0010DA84 /* Registry.cpp in Sources */,
 				81D8B4281962E0EC0010DA84 /* Instance.cpp in Sources */,
 				817F76371A03E23A00D36ACF /* WidgetDef.cpp in Sources */,
@@ -2766,6 +2787,7 @@
 				81D8B6B61962E0F70010DA84 /* FacebookAuthenticationSystem.cpp in Sources */,
 				81D8B42C1962E0EC0010DA84 /* Resource.cpp in Sources */,
 				81D8B46F1962E0EC0010DA84 /* RendererSortPredicates.cpp in Sources */,
+				81F4A13A1A3F440300908FFF /* ThreePatchDrawableDef.cpp in Sources */,
 				81D8B4211962E0EC0010DA84 /* Shapes.cpp in Sources */,
 				81D8B4741962E0EC0010DA84 /* PerspectiveCameraComponent.cpp in Sources */,
 				81D8B45F1962E0EC0010DA84 /* Keyboard.cpp in Sources */,
@@ -2877,6 +2899,7 @@
 				81D8B4421962E0EC0010DA84 /* GUIViewFactory.cpp in Sources */,
 				81D8B4021962E0EC0010DA84 /* Logging.cpp in Sources */,
 				81D8B4491962E0EC0010DA84 /* GridView.cpp in Sources */,
+				81F4A1341A3F300600908FFF /* DrawableDef.cpp in Sources */,
 				81D8B4341962E0EC0010DA84 /* ToString.cpp in Sources */,
 				81D8B6B11962E0F70010DA84 /* IAPSystem.mm in Sources */,
 				81D8B47F1962E0EC0010DA84 /* CSAnimProvider.cpp in Sources */,
@@ -2926,6 +2949,7 @@
 				81D8B6D41962E0F70010DA84 /* GLSLShaderProvider.cpp in Sources */,
 				81D8B4481962E0EC0010DA84 /* ToggleButton.cpp in Sources */,
 				819CE3CF1A1F668900A49B5C /* LayoutDesc.cpp in Sources */,
+				81F4A13D1A3F48DF00908FFF /* NinePatchDrawableDef.cpp in Sources */,
 				81D8B49E1962E0EC0010DA84 /* TextureAtlas.cpp in Sources */,
 				81D8B46B1962E0EC0010DA84 /* RenderCapabilities.cpp in Sources */,
 				81D8B4061962E0EC0010DA84 /* ParamDictionary.cpp in Sources */,
