@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Container/VectorUtils.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
+#include <ChilliSource/Core/Container/Property/PropertyTypes.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
@@ -45,11 +46,13 @@ namespace ChilliSource
         {
             const char k_normalDrawableKey[] = "NormalDrawable";
             const char k_highlightDrawableKey[] = "HighlightDrawable";
+            const char k_highlightColourKey[] = "HighlightColour";
             
             const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
                 {PropertyTypes::DrawableDef(), k_normalDrawableKey},
-                {PropertyTypes::DrawableDef(), k_highlightDrawableKey}
+                {PropertyTypes::DrawableDef(), k_highlightDrawableKey},
+                {Core::PropertyTypes::Colour(), k_highlightColourKey}
             };
         }
         
@@ -67,6 +70,7 @@ namespace ChilliSource
         {
             RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_normalDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetNormalDrawableDef), Core::MakeDelegate(this, &HighlightComponent::SetNormalDrawableDef));
             RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_highlightDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetHighlightDrawableDef), Core::MakeDelegate(this, &HighlightComponent::SetHighlightDrawableDef));
+            RegisterProperty<Core::Colour>(Core::PropertyTypes::Colour(), k_highlightColourKey, Core::MakeDelegate(this, &HighlightComponent::GetHighlightColour), Core::MakeDelegate(this, &HighlightComponent::SetHighlightColour));
             ApplyRegisteredProperties(in_properties);
         }
         //-------------------------------------------------------------------
@@ -89,6 +93,12 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
+        const Core::Colour& HighlightComponent::GetHighlightColour() const
+        {
+            return m_highlightColour;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
         void HighlightComponent::SetNormalDrawableDef(const DrawableDefCSPtr& in_drawableDef)
         {
             m_normalDrawableDef = in_drawableDef;
@@ -107,6 +117,21 @@ namespace ChilliSource
             if (m_drawableComponent != nullptr && m_highlighted == true)
             {
                 m_drawableComponent->SetDrawableDef(m_highlightDrawableDef);
+                
+                auto drawable = m_drawableComponent->GetDrawable();
+                drawable->SetColour(m_highlightColour * m_highlightDrawableDef->GetColour());
+            }
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        void HighlightComponent::SetHighlightColour(const Core::Colour& in_colour)
+        {
+            m_highlightColour = in_colour;
+            
+            if (m_drawableComponent != nullptr && m_highlighted == true)
+            {
+                auto drawable = m_drawableComponent->GetDrawable();
+                drawable->SetColour(m_highlightColour * m_highlightDrawableDef->GetColour());
             }
         }
         //-------------------------------------------------------------------
@@ -116,7 +141,23 @@ namespace ChilliSource
             CS_ASSERT(m_highlighted == false, "Cannot highlight when already highlighted.");
             
             m_highlighted = true;
-            m_drawableComponent->SetDrawableDef(m_highlightDrawableDef);
+            
+            if (m_highlightDrawableDef != nullptr)
+            {
+                m_drawableComponent->SetDrawableDef(m_highlightDrawableDef);
+                
+                auto drawable = m_drawableComponent->GetDrawable();
+                drawable->SetColour(m_highlightColour * m_highlightDrawableDef->GetColour());
+            }
+            else
+            {
+                m_drawableComponent->SetDrawableDef(m_normalDrawableDef);
+                
+                auto drawable = m_drawableComponent->GetDrawable();
+                drawable->SetColour(m_highlightColour * m_normalDrawableDef->GetColour());
+            }
+            
+
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------

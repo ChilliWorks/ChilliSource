@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_UI_BUTTON_HIGHLIGHTCOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
@@ -48,7 +49,11 @@ namespace ChilliSource
         /// the parent widget is not highlighted.
         ///
         /// "HighlightDrawable": A description of the drawable that will be used when
-        /// the parent widget is highlighted.
+        /// the parent widget is highlighted. If no highlight drawable is set the
+        /// normal drawable will be used instead.
+        ///
+        /// "HighlightColour": The colour that the widget will be set to while
+        /// highlighted. This defaults to white.
         ///
         /// @author Ian Copland
         //--------------------------------------------------------------------------
@@ -90,6 +95,12 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             const DrawableDefCSPtr& GetHighlightDrawableDef() const;
             //-------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The highlight colour
+            //-------------------------------------------------------------------
+            const Core::Colour& GetHighlightColour() const;
+            //-------------------------------------------------------------------
             /// Sets the drawable that will be set on the owning widget when
             /// it is not pressed.
             ///
@@ -107,6 +118,14 @@ namespace ChilliSource
             /// @param The drawable.
             //-------------------------------------------------------------------
             void SetHighlightDrawableDef(const DrawableDefCSPtr& in_drawableDef);
+            //-------------------------------------------------------------------
+            /// Sets the highlight colour.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The colour.
+            //-------------------------------------------------------------------
+            void SetHighlightColour(const Core::Colour& in_colour);
             
         private:
             friend class ComponentFactory;
@@ -205,6 +224,7 @@ namespace ChilliSource
             
             DrawableDefCSPtr m_normalDrawableDef;
             DrawableDefCSPtr m_highlightDrawableDef;
+            Core::Colour m_highlightColour;
             
             DrawableComponent* m_drawableComponent = nullptr;
             
