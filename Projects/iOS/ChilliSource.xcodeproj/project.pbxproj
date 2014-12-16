@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		8113673019C99A2E00D9AEDC /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8113672D19C99A2E00D9AEDC /* Filter.cpp */; };
 		811B181819D19AF400B06B5D /* RotationGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 811B181619D19AF400B06B5D /* RotationGesture.cpp */; };
+		817DE7691A406E3800FBFEAB /* HttpDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 817DE7641A406E3800FBFEAB /* HttpDelegate.mm */; };
+		817DE76A1A406E3800FBFEAB /* HttpRequest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 817DE7661A406E3800FBFEAB /* HttpRequest.mm */; };
+		817DE76B1A406E3800FBFEAB /* HttpRequestSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 817DE7681A406E3800FBFEAB /* HttpRequestSystem.mm */; };
 		817F76321A03E23A00D36ACF /* Canvas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F75EC1A03E23A00D36ACF /* Canvas.cpp */; };
 		817F76331A03E23A00D36ACF /* PropertyMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F75EF1A03E23A00D36ACF /* PropertyMap.cpp */; };
 		817F76341A03E23A00D36ACF /* PropertyType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F75F11A03E23A00D36ACF /* PropertyType.cpp */; };
@@ -273,8 +276,6 @@
 		81D8B6AA1962E0F70010DA84 /* DeviceButtonSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5AA1962E0F60010DA84 /* DeviceButtonSystem.mm */; };
 		81D8B6AD1962E0F70010DA84 /* PointerSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5B21962E0F60010DA84 /* PointerSystem.mm */; };
 		81D8B6AE1962E0F70010DA84 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5B31962E0F60010DA84 /* Main.cpp */; };
-		81D8B6AF1962E0F70010DA84 /* HttpRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5B61962E0F60010DA84 /* HttpRequest.cpp */; };
-		81D8B6B01962E0F70010DA84 /* HttpRequestSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5B81962E0F60010DA84 /* HttpRequestSystem.cpp */; };
 		81D8B6B11962E0F70010DA84 /* IAPSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5BC1962E0F60010DA84 /* IAPSystem.mm */; };
 		81D8B6B21962E0F70010DA84 /* StoreKitIAPSystem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5BE1962E0F60010DA84 /* StoreKitIAPSystem.mm */; };
 		81D8B6B31962E0F70010DA84 /* EmailComposer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B5C21962E0F60010DA84 /* EmailComposer.mm */; };
@@ -384,6 +385,12 @@
 		816B0C1719CC2E7000520B50 /* concurrent_vector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = concurrent_vector.h; sourceTree = "<group>"; };
 		816B0C1819CC48D300520B50 /* concurrent_vector_forward_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_forward_iterator.h; sourceTree = "<group>"; };
 		816B0C1919CC66E300520B50 /* concurrent_vector_reverse_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_reverse_iterator.h; sourceTree = "<group>"; };
+		817DE7631A406E3800FBFEAB /* HttpDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpDelegate.h; sourceTree = "<group>"; };
+		817DE7641A406E3800FBFEAB /* HttpDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HttpDelegate.mm; sourceTree = "<group>"; };
+		817DE7651A406E3800FBFEAB /* HttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRequest.h; sourceTree = "<group>"; };
+		817DE7661A406E3800FBFEAB /* HttpRequest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HttpRequest.mm; sourceTree = "<group>"; };
+		817DE7671A406E3800FBFEAB /* HttpRequestSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRequestSystem.h; sourceTree = "<group>"; };
+		817DE7681A406E3800FBFEAB /* HttpRequestSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HttpRequestSystem.mm; sourceTree = "<group>"; };
 		817F75EC1A03E23A00D36ACF /* Canvas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Canvas.cpp; sourceTree = "<group>"; };
 		817F75ED1A03E23A00D36ACF /* Canvas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Canvas.h; sourceTree = "<group>"; };
 		817F75EE1A03E23A00D36ACF /* PropertyAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertyAccessor.h; sourceTree = "<group>"; };
@@ -957,10 +964,6 @@
 		81D8B5B11962E0F60010DA84 /* PointerSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointerSystem.h; sourceTree = "<group>"; };
 		81D8B5B21962E0F60010DA84 /* PointerSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = PointerSystem.mm; sourceTree = "<group>"; };
 		81D8B5B31962E0F60010DA84 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Main.cpp; sourceTree = "<group>"; };
-		81D8B5B61962E0F60010DA84 /* HttpRequest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HttpRequest.cpp; sourceTree = "<group>"; };
-		81D8B5B71962E0F60010DA84 /* HttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRequest.h; sourceTree = "<group>"; };
-		81D8B5B81962E0F60010DA84 /* HttpRequestSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HttpRequestSystem.cpp; sourceTree = "<group>"; };
-		81D8B5B91962E0F60010DA84 /* HttpRequestSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HttpRequestSystem.h; sourceTree = "<group>"; };
 		81D8B5BB1962E0F60010DA84 /* IAPSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPSystem.h; sourceTree = "<group>"; };
 		81D8B5BC1962E0F60010DA84 /* IAPSystem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IAPSystem.mm; sourceTree = "<group>"; };
 		81D8B5BD1962E0F60010DA84 /* StoreKitIAPSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StoreKitIAPSystem.h; sourceTree = "<group>"; };
@@ -2502,10 +2505,12 @@
 		81D8B5B51962E0F60010DA84 /* Http */ = {
 			isa = PBXGroup;
 			children = (
-				81D8B5B61962E0F60010DA84 /* HttpRequest.cpp */,
-				81D8B5B71962E0F60010DA84 /* HttpRequest.h */,
-				81D8B5B81962E0F60010DA84 /* HttpRequestSystem.cpp */,
-				81D8B5B91962E0F60010DA84 /* HttpRequestSystem.h */,
+				817DE7631A406E3800FBFEAB /* HttpDelegate.h */,
+				817DE7641A406E3800FBFEAB /* HttpDelegate.mm */,
+				817DE7651A406E3800FBFEAB /* HttpRequest.h */,
+				817DE7661A406E3800FBFEAB /* HttpRequest.mm */,
+				817DE7671A406E3800FBFEAB /* HttpRequestSystem.h */,
+				817DE7681A406E3800FBFEAB /* HttpRequestSystem.mm */,
 			);
 			path = Http;
 			sourceTree = "<group>";
@@ -2743,6 +2748,7 @@
 				81D8B6B91962E0F70010DA84 /* SubtitlesRenderer.mm in Sources */,
 				81D8B6B71962E0F70010DA84 /* FacebookPostSystem.cpp in Sources */,
 				81D8B6D31962E0F70010DA84 /* RenderTarget.cpp in Sources */,
+				817DE7691A406E3800FBFEAB /* HttpDelegate.mm in Sources */,
 				817F76361A03E23A00D36ACF /* Widget.cpp in Sources */,
 				81D8B6B51962E0F70010DA84 /* FacebookAppDelegate.mm in Sources */,
 				81D8B6A21962E0F70010DA84 /* DialogueBoxSystem.mm in Sources */,
@@ -2888,12 +2894,12 @@
 				81D8B4851962E0EC0010DA84 /* SkinnedAnimationGroup.cpp in Sources */,
 				81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */,
 				81D8B4881962E0EC0010DA84 /* ColourChangerParticleAffector.cpp in Sources */,
+				817DE76B1A406E3800FBFEAB /* HttpRequestSystem.mm in Sources */,
 				81D8B4401962E0EC0010DA84 /* DebugStatsView.cpp in Sources */,
 				81D8B4871962E0EC0010DA84 /* SubMesh.cpp in Sources */,
 				81D8B47A1962E0EC0010DA84 /* PointLightComponent.cpp in Sources */,
 				81D8B3FC1962E0EC0010DA84 /* AppConfig.cpp in Sources */,
 				817F76321A03E23A00D36ACF /* Canvas.cpp in Sources */,
-				81D8B6AF1962E0F70010DA84 /* HttpRequest.cpp in Sources */,
 				81D8B4141962E0EC0010DA84 /* FileStream.cpp in Sources */,
 				81D8B44E1962E0EC0010DA84 /* ImageView.cpp in Sources */,
 				81D8B4611962E0EC0010DA84 /* ContentManagementSystem.cpp in Sources */,
@@ -2946,6 +2952,7 @@
 				81D8B4661962E0EC0010DA84 /* AspectRatioUtils.cpp in Sources */,
 				81D8B4821962E0EC0010DA84 /* MeshDescriptor.cpp in Sources */,
 				81D8B4751962E0EC0010DA84 /* Font.cpp in Sources */,
+				817DE76A1A406E3800FBFEAB /* HttpRequest.mm in Sources */,
 				81D8B6AD1962E0F70010DA84 /* PointerSystem.mm in Sources */,
 				81D8B48D1962E0EC0010DA84 /* CSParticleEffectProvider.cpp in Sources */,
 				81D8B4601962E0EC0010DA84 /* PointerSystem.cpp in Sources */,
@@ -2983,7 +2990,6 @@
 				81D8B4991962E0EC0010DA84 /* SpriteComponent.cpp in Sources */,
 				81D8B4631962E0EC0010DA84 /* HttpRequestSystem.cpp in Sources */,
 				817F764F1A03E23A00D36ACF /* VListLayout.cpp in Sources */,
-				81D8B6B01962E0F70010DA84 /* HttpRequestSystem.cpp in Sources */,
 				81D8B6D51962E0F70010DA84 /* Shader.cpp in Sources */,
 				81D8B4231962E0EC0010DA84 /* UnifiedCoordinates.cpp in Sources */,
 				81D8B4901962E0EC0010DA84 /* ParticleEmitterFactory.cpp in Sources */,

@@ -236,19 +236,5 @@ namespace ChilliSource
                 }
             }
         }
-        
-        //----------------------------------------------------------------
-        /// Get CurrentDownloaded Bytes
-        ///
-        /// @return The amount of bytes read by the current request, if any
-        //----------------------------------------------------------------
-        u32 MoContentDownloader::GetCurrentDownloadedBytes() const
-        {
-            if(mpCurrentRequest)
-            {
-                return mpCurrentRequest->GetBytesRead();
-            }
-            return 0;
-        }
     }
 }
