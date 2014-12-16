@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_UI_BUTTON_TOGGLEHIGHLIGHTCOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
@@ -50,11 +51,17 @@ namespace ChilliSource
         /// "HighlightOffDrawable": A description of the drawable that will be used when
         /// the parent widget is highlighted and is toggled off.
         ///
+        /// "HighlightOffColour": The colour set when the button is highlighted while
+        /// off.
+        ///
         /// "NormalOnDrawable": A description of the drawable that will be used when
         /// the parent widget is not highlighted and is toggled on.
         ///
         /// "HighlightOnDrawable": A description of the drawable that will be used when
         /// the parent widget is highlighted and is toggled on.
+        ///
+        /// "HighlightOnColour": The colour set when the button is highlighted while
+        /// on.
         ///
         /// "ToggledOn": A boolean describing whether or not the toggle is on of
         /// off.
@@ -101,6 +108,12 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
+            /// @return The colour set when the button is highlighted while off.
+            //-------------------------------------------------------------------
+            const Core::Colour& GetHighlightOffColour() const;
+            //-------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
             /// @return the drawable that will be set on the owning widget when
             /// it is not pressed while toggled on.
             //-------------------------------------------------------------------
@@ -112,6 +125,12 @@ namespace ChilliSource
             /// it is pressed while toggled on.
             //-------------------------------------------------------------------
             const DrawableDefCSPtr& GetHighlightOnDrawableDef() const;
+            //-------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The colour set when the button is highlighted while on.
+            //-------------------------------------------------------------------
+            const Core::Colour& GetHighlightOnColour() const;
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -137,6 +156,14 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             void SetHighlightOffDrawableDef(const DrawableDefCSPtr& in_drawableDef);
             //-------------------------------------------------------------------
+            /// Sets the colour used when the button is highlighted while off.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The colour.
+            //-------------------------------------------------------------------
+            void SetHighlightOffColour(const Core::Colour& in_colour);
+            //-------------------------------------------------------------------
             /// Sets the drawable that will be set on the owning widget when
             /// it is not pressed and is toggled on.
             ///
@@ -154,6 +181,14 @@ namespace ChilliSource
             /// @param The drawable.
             //-------------------------------------------------------------------
             void SetHighlightOnDrawableDef(const DrawableDefCSPtr& in_drawableDef);
+            //-------------------------------------------------------------------
+            /// Sets the colour used when the button is highlighted while on.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The colour.
+            //-------------------------------------------------------------------
+            void SetHighlightOnColour(const Core::Colour& in_colour);
             //-------------------------------------------------------------------
             /// Sets whether or not the toggle is on or off.
             ///
@@ -225,7 +260,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             //-------------------------------------------------------------------
-            void ApplyOffHightlighted();
+            void ApplyOffHighlighted();
             //-------------------------------------------------------------------
             /// Puts the toggle highlight component in the normal 'On' state.
             ///
@@ -310,8 +345,10 @@ namespace ChilliSource
             
             DrawableDefCSPtr m_normalOffDrawableDef;
             DrawableDefCSPtr m_highlightOffDrawableDef;
+            Core::Colour m_highlightOffColour;
             DrawableDefCSPtr m_normalOnDrawableDef;
             DrawableDefCSPtr m_highlightOnDrawableDef;
+            Core::Colour m_highlightOnColour;
 
             DrawableComponent* m_drawableComponent = nullptr;
             

@@ -44,16 +44,20 @@ namespace ChilliSource
         {
             const char k_normalOffDrawableKey[] = "NormalOffDrawable";
             const char k_highlightOffDrawableKey[] = "HighlightOffDrawable";
+            const char k_highlightOffColourKey[] = "HighlightOffColour";
             const char k_normalOnDrawableKey[] = "NormalOnDrawable";
             const char k_highlightOnDrawableKey[] = "HighlightOnDrawable";
+            const char k_highlightOnColourKey[] = "HighlightOnColour";
             const char k_toggledOnKey[] = "ToggledOn";
             
             const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
                 {PropertyTypes::DrawableDef(), k_normalOffDrawableKey},
                 {PropertyTypes::DrawableDef(), k_highlightOffDrawableKey},
+                {Core::PropertyTypes::Colour(), k_highlightOffColourKey},
                 {PropertyTypes::DrawableDef(), k_normalOnDrawableKey},
                 {PropertyTypes::DrawableDef(), k_highlightOnDrawableKey},
+                {Core::PropertyTypes::Colour(), k_highlightOnColourKey},
                 {Core::PropertyTypes::Bool(), k_toggledOnKey}
             };
         }
@@ -72,8 +76,10 @@ namespace ChilliSource
         {
             RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_normalOffDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetNormalOffDrawableDef), Core::MakeDelegate(this, &ToggleHighlightComponent::SetNormalOffDrawableDef));
             RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_highlightOffDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOffDrawableDef), Core::MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOffDrawableDef));
+            RegisterProperty<Core::Colour>(Core::PropertyTypes::Colour(), k_highlightOffColourKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOffColour), Core::MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOffColour));
             RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_normalOnDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetNormalOnDrawableDef), Core::MakeDelegate(this, &ToggleHighlightComponent::SetNormalOnDrawableDef));
             RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_highlightOnDrawableKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOnDrawableDef), Core::MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOnDrawableDef));
+            RegisterProperty<Core::Colour>(Core::PropertyTypes::Colour(), k_highlightOnColourKey, Core::MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOnColour), Core::MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOnColour));
             RegisterProperty<bool>(Core::PropertyTypes::Bool(), k_toggledOnKey, Core::MakeDelegate(this, &ToggleHighlightComponent::IsToggledOn), Core::MakeDelegate(this, &ToggleHighlightComponent::SetToggleOn));
             ApplyRegisteredProperties(in_properties);
         }
@@ -97,6 +103,12 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
+        const Core::Colour& ToggleHighlightComponent::GetHighlightOffColour() const
+        {
+            return m_highlightOffColour;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
         const DrawableDefCSPtr& ToggleHighlightComponent::GetNormalOnDrawableDef() const
         {
             return m_normalOnDrawableDef;
@@ -106,6 +118,12 @@ namespace ChilliSource
         const DrawableDefCSPtr& ToggleHighlightComponent::GetHighlightOnDrawableDef() const
         {
             return m_normalOffDrawableDef;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        const Core::Colour& ToggleHighlightComponent::GetHighlightOnColour() const
+        {
+            return m_highlightOnColour;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -119,9 +137,9 @@ namespace ChilliSource
         {
             m_normalOffDrawableDef = in_drawableDef;
             
-            if (m_drawableComponent != nullptr && m_state == ToggleHighlightState::k_normalOff)
+            if (m_state == ToggleHighlightState::k_normalOff)
             {
-                m_drawableComponent->SetDrawableDef(m_normalOffDrawableDef);
+                ApplyOffNormal();
             }
         }
         //-------------------------------------------------------------------
@@ -130,9 +148,20 @@ namespace ChilliSource
         {
             m_highlightOffDrawableDef = in_drawableDef;
             
-            if (m_drawableComponent != nullptr && m_state == ToggleHighlightState::k_highlightedOff)
+            if (m_state == ToggleHighlightState::k_highlightedOff)
             {
-                m_drawableComponent->SetDrawableDef(m_highlightOffDrawableDef);
+                ApplyOffHighlighted();
+            }
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        void ToggleHighlightComponent::SetHighlightOffColour(const Core::Colour& in_colour)
+        {
+            m_highlightOffColour = in_colour;
+            
+            if (m_state == ToggleHighlightState::k_highlightedOff)
+            {
+                ApplyOffHighlighted();
             }
         }
         //-------------------------------------------------------------------
@@ -141,9 +170,9 @@ namespace ChilliSource
         {
             m_normalOnDrawableDef = in_drawableDef;
             
-            if (m_drawableComponent != nullptr && m_state == ToggleHighlightState::k_normalOn)
+            if (m_state == ToggleHighlightState::k_normalOn)
             {
-                m_drawableComponent->SetDrawableDef(m_normalOnDrawableDef);
+                ApplyOnNormal();
             }
         }
         //-------------------------------------------------------------------
@@ -152,9 +181,20 @@ namespace ChilliSource
         {
             m_highlightOnDrawableDef = in_drawableDef;
             
-            if (m_drawableComponent != nullptr && m_state == ToggleHighlightState::k_highlightedOn)
+            if (m_state == ToggleHighlightState::k_highlightedOn)
             {
-                m_drawableComponent->SetDrawableDef(m_highlightOnDrawableDef);
+                ApplyOnHightlighted();
+            }
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        void ToggleHighlightComponent::SetHighlightOnColour(const Core::Colour& in_colour)
+        {
+            m_highlightOnColour = in_colour;
+            
+            if (m_state == ToggleHighlightState::k_highlightedOn)
+            {
+                ApplyOnHightlighted();
             }
         }
         //-------------------------------------------------------------------
@@ -175,7 +215,7 @@ namespace ChilliSource
             }
             else if (in_toggleOn == false && m_state == ToggleHighlightState::k_highlightedOn)
             {
-                ApplyOffHightlighted();
+                ApplyOffHighlighted();
             }
         }
         //-------------------------------------------------------------------
@@ -201,67 +241,109 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void ToggleHighlightComponent::Highlight()
         {
-            CS_ASSERT(IsHighlighted() == false, "Cannot highlight when already highlighted.");
-            
-            if (m_state == ToggleHighlightState::k_normalOff)
+            switch (m_state)
             {
-                ApplyOffHightlighted();
-            }
-            else if (m_state == ToggleHighlightState::k_normalOn)
-            {
-                ApplyOnHightlighted();
+                case ToggleHighlightState::k_normalOff:
+                case ToggleHighlightState::k_highlightedOff:
+                    ApplyOffHighlighted();
+                    break;
+                case ToggleHighlightState::k_normalOn:
+                case ToggleHighlightState::k_highlightedOn:
+                    ApplyOnHightlighted();
+                    break;
+                default:
+                    CS_LOG_FATAL("Invalid state.");
+                    break;
             }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void ToggleHighlightComponent::Unhighlight()
         {
-            CS_ASSERT(IsHighlighted() == true, "Cannot highlight when already highlighted.");
-            
-            if (m_state == ToggleHighlightState::k_highlightedOff)
+            switch (m_state)
             {
-                ApplyOffNormal();
-            }
-            else if (m_state == ToggleHighlightState::k_highlightedOn)
-            {
-                ApplyOnNormal();
+                case ToggleHighlightState::k_normalOff:
+                case ToggleHighlightState::k_highlightedOff:
+                    ApplyOffNormal();
+                    break;
+                case ToggleHighlightState::k_normalOn:
+                case ToggleHighlightState::k_highlightedOn:
+                    ApplyOnNormal();
+                    break;
+                default:
+                    CS_LOG_FATAL("Invalid state.");
+                    break;
             }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void ToggleHighlightComponent::ApplyOffNormal()
         {
-            CS_ASSERT(m_state != ToggleHighlightState::k_normalOff, "Trying to apply state that is already active.");
-            
             m_state = ToggleHighlightState::k_normalOff;
-            m_drawableComponent->SetDrawableDef(m_normalOffDrawableDef);
+            
+            if (m_drawableComponent != nullptr)
+            {
+                m_drawableComponent->SetDrawableDef(m_normalOffDrawableDef);
+            }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void ToggleHighlightComponent::ApplyOffHightlighted()
+        void ToggleHighlightComponent::ApplyOffHighlighted()
         {
-            CS_ASSERT(m_state != ToggleHighlightState::k_highlightedOff, "Trying to apply state that is already active.");
-            
             m_state = ToggleHighlightState::k_highlightedOff;
-            m_drawableComponent->SetDrawableDef(m_highlightOffDrawableDef);
+            
+            if (m_drawableComponent != nullptr)
+            {
+                if (m_highlightOffDrawableDef != nullptr)
+                {
+                    m_drawableComponent->SetDrawableDef(m_highlightOffDrawableDef);
+                    
+                    auto drawable = m_drawableComponent->GetDrawable();
+                    drawable->SetColour(m_highlightOffColour * m_highlightOffDrawableDef->GetColour());
+                }
+                else
+                {
+                    m_drawableComponent->SetDrawableDef(m_normalOffDrawableDef);
+                    
+                    auto drawable = m_drawableComponent->GetDrawable();
+                    drawable->SetColour(m_highlightOffColour * m_normalOffDrawableDef->GetColour());
+                }
+            }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void ToggleHighlightComponent::ApplyOnNormal()
         {
-            CS_ASSERT(m_state != ToggleHighlightState::k_normalOn, "Trying to apply state that is already active.");
-            
             m_state = ToggleHighlightState::k_normalOn;
-            m_drawableComponent->SetDrawableDef(m_normalOnDrawableDef);
+            
+            if (m_drawableComponent != nullptr)
+            {
+                m_drawableComponent->SetDrawableDef(m_normalOnDrawableDef);
+            }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void ToggleHighlightComponent::ApplyOnHightlighted()
         {
-            CS_ASSERT(m_state != ToggleHighlightState::k_highlightedOn, "Trying to apply state that is already active.");
-            
             m_state = ToggleHighlightState::k_highlightedOn;
-            m_drawableComponent->SetDrawableDef(m_highlightOnDrawableDef);
+            
+            if (m_drawableComponent != nullptr)
+            {
+                if (m_highlightOnDrawableDef != nullptr)
+                {
+                    m_drawableComponent->SetDrawableDef(m_highlightOnDrawableDef);
+                    
+                    auto drawable = m_drawableComponent->GetDrawable();
+                    drawable->SetColour(m_highlightOnColour * m_highlightOnDrawableDef->GetColour());
+                }
+                else
+                {
+                    m_drawableComponent->SetDrawableDef(m_normalOnDrawableDef);
+                    
+                    auto drawable = m_drawableComponent->GetDrawable();
+                    drawable->SetColour(m_highlightOnColour * m_normalOnDrawableDef->GetColour());
+                }
+            }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -272,11 +354,11 @@ namespace ChilliSource
             
             if (IsToggledOn() == false)
             {
-                m_drawableComponent->SetDrawableDef(m_normalOffDrawableDef);
+                Unhighlight();
             }
             else
             {
-                m_drawableComponent->SetDrawableDef(m_normalOnDrawableDef);
+                Highlight();
             }
             
             m_pressedInsideConnection = GetWidget()->GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &ToggleHighlightComponent::OnPressedInside));

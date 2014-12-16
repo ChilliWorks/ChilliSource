@@ -103,9 +103,9 @@ namespace ChilliSource
         {
             m_normalDrawableDef = in_drawableDef;
             
-            if (m_drawableComponent != nullptr && m_highlighted == false)
+            if (m_highlighted == false)
             {
-                m_drawableComponent->SetDrawableDef(m_normalDrawableDef);
+                Unhighlight();
             }
         }
         //-------------------------------------------------------------------
@@ -114,12 +114,9 @@ namespace ChilliSource
         {
             m_highlightDrawableDef = in_drawable;
             
-            if (m_drawableComponent != nullptr && m_highlighted == true)
+            if (m_highlighted == true)
             {
-                m_drawableComponent->SetDrawableDef(m_highlightDrawableDef);
-                
-                auto drawable = m_drawableComponent->GetDrawable();
-                drawable->SetColour(m_highlightColour * m_highlightDrawableDef->GetColour());
+                Highlight();
             }
         }
         //-------------------------------------------------------------------
@@ -128,45 +125,45 @@ namespace ChilliSource
         {
             m_highlightColour = in_colour;
             
-            if (m_drawableComponent != nullptr && m_highlighted == true)
+            if (m_highlighted == true)
             {
-                auto drawable = m_drawableComponent->GetDrawable();
-                drawable->SetColour(m_highlightColour * m_highlightDrawableDef->GetColour());
+                Highlight();
             }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void HighlightComponent::Highlight()
         {
-            CS_ASSERT(m_highlighted == false, "Cannot highlight when already highlighted.");
-            
             m_highlighted = true;
             
-            if (m_highlightDrawableDef != nullptr)
+            if (m_drawableComponent != nullptr)
             {
-                m_drawableComponent->SetDrawableDef(m_highlightDrawableDef);
-                
-                auto drawable = m_drawableComponent->GetDrawable();
-                drawable->SetColour(m_highlightColour * m_highlightDrawableDef->GetColour());
+                if (m_highlightDrawableDef != nullptr)
+                {
+                    m_drawableComponent->SetDrawableDef(m_highlightDrawableDef);
+                    
+                    auto drawable = m_drawableComponent->GetDrawable();
+                    drawable->SetColour(m_highlightColour * m_highlightDrawableDef->GetColour());
+                }
+                else
+                {
+                    m_drawableComponent->SetDrawableDef(m_normalDrawableDef);
+                    
+                    auto drawable = m_drawableComponent->GetDrawable();
+                    drawable->SetColour(m_highlightColour * m_normalDrawableDef->GetColour());
+                }
             }
-            else
-            {
-                m_drawableComponent->SetDrawableDef(m_normalDrawableDef);
-                
-                auto drawable = m_drawableComponent->GetDrawable();
-                drawable->SetColour(m_highlightColour * m_normalDrawableDef->GetColour());
-            }
-            
-
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         void HighlightComponent::Unhighlight()
         {
-            CS_ASSERT(m_highlighted == true, "Cannot unhighlight when already unhighlighted.");
-            
             m_highlighted = false;
-            m_drawableComponent->SetDrawableDef(m_normalDrawableDef);
+            
+            if (m_drawableComponent != nullptr)
+            {
+                m_drawableComponent->SetDrawableDef(m_normalDrawableDef);
+            }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -175,7 +172,14 @@ namespace ChilliSource
             m_drawableComponent = GetWidget()->GetComponent<DrawableComponent>();
             CS_ASSERT(m_drawableComponent != nullptr, "Widgets with a Highlight Component must also contain a Drawable Component.");
             
-            m_drawableComponent->SetDrawableDef(m_normalDrawableDef);
+            if (m_highlighted == false)
+            {
+                Unhighlight();
+            }
+            else
+            {
+                Highlight();
+            }
             
             m_pressedInsideConnection = GetWidget()->GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightComponent::OnPressedInside));
             m_moveEnteredConnection = GetWidget()->GetMoveEnteredEvent().OpenConnection(Core::MakeDelegate(this, &HighlightComponent::OnMoveEntered));
