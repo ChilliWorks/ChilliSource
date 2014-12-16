@@ -26,33 +26,12 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Drawable/IDrawable.h>
-
-#include <ChilliSource/UI/Drawable/DrawableDesc.h>
-#include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
-#include <ChilliSource/UI/Drawable/StandardDrawable.h>
-#include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
+#include <ChilliSource/UI/Drawable/Drawable.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
-        //---------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        IDrawableSPtr IDrawable::Create(const DrawableDesc& in_desc)
-        {
-            switch(in_desc.GetType())
-            {
-                case DrawableType::k_standard:
-                    return std::make_shared<StandardDrawable>(in_desc);
-                case DrawableType::k_ninePatch:
-                    return std::make_shared<NinePatchDrawable>(in_desc);
-                case DrawableType::k_threePatch:
-                    return std::make_shared<ThreePatchDrawable>(in_desc);
-                default:
-                    CS_LOG_FATAL("Cannot create a widget drawable instance: invalid type.");
-                    return nullptr;
-            }
-        }
+        CS_DEFINE_NAMEDTYPE(Drawable);
     }
 }

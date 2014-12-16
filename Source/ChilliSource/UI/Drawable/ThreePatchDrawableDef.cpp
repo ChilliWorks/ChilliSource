@@ -52,7 +52,7 @@ namespace ChilliSource
             ///
             /// @return The output three-patch drawable direction.
             //--------------------------------------------------------------
-            ThreePatchDrawableDef::Direction ParseThreePatchDirection(const std::string& in_directionString)
+            ThreePatchDrawable::Direction ParseThreePatchDirection(const std::string& in_directionString)
             {
                 const char k_horizontalType[] = "horizontal";
                 const char k_verticalType[] = "vertical";
@@ -62,15 +62,15 @@ namespace ChilliSource
                 
                 if (directionString == k_horizontalType)
                 {
-                    return ThreePatchDrawableDef::Direction::k_horizontal;
+                    return ThreePatchDrawable::Direction::k_horizontal;
                 }
                 else if (directionString == k_verticalType)
                 {
-                    return ThreePatchDrawableDef::Direction::k_vertical;
+                    return ThreePatchDrawable::Direction::k_vertical;
                 }
                 
                 CS_LOG_FATAL("Cannot parse invalid three-patch direction.");
-                return ThreePatchDrawableDef::Direction::k_horizontal;
+                return ThreePatchDrawable::Direction::k_horizontal;
             }
         }
         
@@ -184,7 +184,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        ThreePatchDrawableDef::ThreePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::UVs& in_uvs, const Core::Colour& in_colour, const Core::Vector2& in_insets, Direction in_direction)
+        ThreePatchDrawableDef::ThreePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::UVs& in_uvs, const Core::Colour& in_colour, const Core::Vector2& in_insets, ThreePatchDrawable::Direction in_direction)
             : m_texture(in_texture), m_uvs(in_uvs), m_colour(in_colour), m_insets(in_insets), m_direction(in_direction)
         {
             CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Three-Patch Drawable Def.");
@@ -192,7 +192,7 @@ namespace ChilliSource
         //--------------------------------------------------------------
         //--------------------------------------------------------------
         ThreePatchDrawableDef::ThreePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Rendering::UVs& in_uvs,
-                                                     const Core::Colour& in_colour, const Core::Vector2& in_insets, Direction in_direction)
+                                                     const Core::Colour& in_colour, const Core::Vector2& in_insets, ThreePatchDrawable::Direction in_direction)
             : m_texture(in_texture), m_atlas(in_atlas), m_atlasId(in_atlasId), m_uvs(in_uvs), m_colour(in_colour), m_insets(in_insets), m_direction(in_direction)
         {
             CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Three-Patch Drawable Def.");
@@ -243,9 +243,30 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        ThreePatchDrawableDef::Direction ThreePatchDrawableDef::GetDirection() const
+        ThreePatchDrawable::Direction ThreePatchDrawableDef::GetDirection() const
         {
             return m_direction;
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        DrawableUPtr ThreePatchDrawableDef::CreateDrawable() const
+        {
+            ThreePatchDrawableUPtr drawable;
+            
+            if (m_atlas != nullptr)
+            {
+                drawable = ThreePatchDrawableUPtr(new ThreePatchDrawable(m_texture, m_atlas, m_atlasId, m_direction, m_insets.x, m_insets.y));
+            }
+            else
+            {
+                drawable = ThreePatchDrawableUPtr(new ThreePatchDrawable(m_texture, m_direction, m_insets.x, m_insets.y));
+            }
+            
+            drawable->SetUVs(m_uvs);
+            drawable->SetColour(m_colour);
+            
+            DrawableUPtr output = std::move(drawable);
+            return output;
         }
     }
 }

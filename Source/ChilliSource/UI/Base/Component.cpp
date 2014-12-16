@@ -35,7 +35,6 @@
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
-#include <ChilliSource/UI/Drawable/DrawableDesc.h>
 #include <ChilliSource/UI/Layout/LayoutDesc.h>
 
 
@@ -101,10 +100,6 @@ namespace ChilliSource
                     if (type == PropertyTypes::LayoutDesc())
                     {
                         SetProperty(key, ILayout::Create(in_properties.GetProperty<LayoutDesc>(key)));
-                    }
-                    else if (type == PropertyTypes::DrawableDesc())
-                    {
-                        SetProperty(key, IDrawable::Create(in_properties.GetProperty<DrawableDesc>(key)));
                     }
                     else
                     {

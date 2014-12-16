@@ -37,8 +37,8 @@
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
+#include <ChilliSource/UI/Drawable/Drawable.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
-#include <ChilliSource/UI/Drawable/DrawableDesc.h>
 #include <ChilliSource/UI/Layout/LayoutDesc.h>
 
 namespace ChilliSource
@@ -362,10 +362,6 @@ namespace ChilliSource
                     if (type == PropertyTypes::LayoutDesc())
                     {
                         SetProperty(key, ILayout::Create(in_propertyMap.GetProperty<LayoutDesc>(key)));
-                    }
-                    else if (type == PropertyTypes::DrawableDesc())
-                    {
-                        SetProperty(key, IDrawable::Create(in_propertyMap.GetProperty<DrawableDesc>(key)));
                     }
                     else
                     {

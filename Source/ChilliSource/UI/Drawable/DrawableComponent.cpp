@@ -30,8 +30,8 @@
 
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
-#include <ChilliSource/UI/Drawable/IDrawable.h>
-#include <ChilliSource/UI/Drawable/DrawableDesc.h>
+#include <ChilliSource/UI/Drawable/Drawable.h>
+#include <ChilliSource/UI/Drawable/DrawableDef.h>
 
 namespace ChilliSource
 {
@@ -43,7 +43,7 @@ namespace ChilliSource
             
             const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyTypes::DrawableDesc(), k_drawableKey},
+                {PropertyTypes::DrawableDef(), k_drawableKey},
             };
         }
         
@@ -59,7 +59,7 @@ namespace ChilliSource
         DrawableComponent::DrawableComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
             : Component(in_componentName)
         {
-            RegisterProperty<IDrawableSPtr>(PropertyTypes::Drawable(), k_drawableKey, Core::MakeDelegate(this, &DrawableComponent::GetDrawable), Core::MakeDelegate(this, &DrawableComponent::SetDrawable));
+            RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_drawableKey, Core::MakeDelegate(this, &DrawableComponent::GetDrawableDef), Core::MakeDelegate(this, &DrawableComponent::SetDrawableDef));
             ApplyRegisteredProperties(in_properties);
         }
         //-------------------------------------------------------------------
@@ -70,17 +70,30 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const IDrawableSPtr& DrawableComponent::GetDrawable() const
+        Drawable* DrawableComponent::GetDrawable()
         {
-            return m_drawable;
+            return m_drawable.get();
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void DrawableComponent::SetDrawable(const IDrawableSPtr& in_drawable)
+        const Drawable* DrawableComponent::GetDrawable() const
         {
-            CS_ASSERT(in_drawable != nullptr, "Cannot set null drawable on a drawable component.");
+            return m_drawable.get();
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        const DrawableDefCSPtr& DrawableComponent::GetDrawableDef() const
+        {
+            return m_drawableDef;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        void DrawableComponent::SetDrawableDef(const DrawableDefCSPtr& in_drawableDef)
+        {
+            CS_ASSERT(in_drawableDef != nullptr, "Cannot set null drawable def on a drawable component.");
             
-            m_drawable = in_drawable;
+            m_drawableDef = in_drawableDef;
+            m_drawable = m_drawableDef->CreateDrawable();
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------

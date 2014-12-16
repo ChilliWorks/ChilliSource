@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
+#include <ChilliSource/UI/Drawable/StandardDrawable.h>
 
 #include <json/json.h>
 
@@ -189,6 +190,27 @@ namespace ChilliSource
         const Core::Colour& StandardDrawableDef::GetColour() const
         {
             return m_colour;
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        DrawableUPtr StandardDrawableDef::CreateDrawable() const
+        {
+            StandardDrawableUPtr drawable;
+            
+            if (m_atlas != nullptr)
+            {
+                drawable = StandardDrawableUPtr(new StandardDrawable(m_texture, m_atlas, m_atlasId));
+            }
+            else
+            {
+                drawable = StandardDrawableUPtr(new StandardDrawable(m_texture));
+            }
+            
+            drawable->SetUVs(m_uvs);
+            drawable->SetColour(m_colour);
+
+            DrawableUPtr output = std::move(drawable);
+            return output;
         }
     }
 }

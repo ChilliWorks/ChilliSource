@@ -1,5 +1,5 @@
 //
-//  IDrawble.h
+//  Drawble.h
 //  Chilli Source
 //  Created by Scott Downie on 17/04/2014.
 //
@@ -27,46 +27,32 @@
 //
 
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_IDRAWABLE_H_
-#define _CHILLISOURCE_UI_DRAWABLE_IDRAWABLE_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_DRAWABLE_H_
+#define _CHILLISOURCE_UI_DRAWABLE_DRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/QueryableInterface.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
-        //----------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------
         /// Interface for rendering widgets
         ///
         /// @author S Downie
-        //----------------------------------------------------------------------------------------
-        class IDrawable
+        //------------------------------------------------------------------------
+        class Drawable : public Core::QueryableInterface
         {
         public:
-            CS_DECLARE_NOCOPY(IDrawable);
-            //----------------------------------------------------------------------------------------
-            /// Factory method for creating a new drawable instance from a drawable description.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The drawable description.
-            ///
-            /// @return The new drawable instance.
-            //----------------------------------------------------------------------------------------
-            static IDrawableSPtr Create(const DrawableDesc& in_desc);
+            CS_DECLARE_NAMEDTYPE(Drawable);
+            CS_DECLARE_NOCOPY(Drawable);
             //----------------------------------------------------------------------------------------
             /// Constructor
             ///
             /// @author S Downie
             //----------------------------------------------------------------------------------------
-            IDrawable() = default;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The type of this drawable instance
-            //----------------------------------------------------------------------------------------
-            virtual DrawableType GetType() const = 0;
+            Drawable() = default;
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -112,6 +98,15 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             virtual void SetUVs(const Rendering::UVs& in_UVs) = 0;
             //----------------------------------------------------------------------------------------
+            /// Sets the colour of the drawable. The final colour of the drawable takes into account
+            /// the owning widgets colour and this colour.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The colour.
+            //----------------------------------------------------------------------------------------
+            virtual void SetColour(const Core::Colour& in_colour) = 0;
+            //----------------------------------------------------------------------------------------
             /// Render the widget using the canvas renderer
             ///
             /// @author S Downie
@@ -127,7 +122,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //----------------------------------------------------------------------------------------
-            virtual ~IDrawable(){};
+            virtual ~Drawable(){};
         };
     }
 }

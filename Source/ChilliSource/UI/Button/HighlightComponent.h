@@ -81,14 +81,14 @@ namespace ChilliSource
             /// @return the drawable that will be set on the owning widget when
             /// it is not pressed.
             //-------------------------------------------------------------------
-            const IDrawableSPtr& GetNormalDrawable() const;
+            const DrawableDefCSPtr& GetNormalDrawableDef() const;
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return the drawable that will be set on the owning widget when
             /// it is pressed.
             //-------------------------------------------------------------------
-            const IDrawableSPtr& GetHighlightDrawable() const;
+            const DrawableDefCSPtr& GetHighlightDrawableDef() const;
             //-------------------------------------------------------------------
             /// Sets the drawable that will be set on the owning widget when
             /// it is not pressed.
@@ -97,7 +97,7 @@ namespace ChilliSource
             ///
             /// @param The drawable.
             //-------------------------------------------------------------------
-            void SetNormalDrawable(const IDrawableSPtr& in_drawable);
+            void SetNormalDrawableDef(const DrawableDefCSPtr& in_drawableDef);
             //-------------------------------------------------------------------
             /// Sets the drawable that will be set on the owning widget when
             /// it is pressed.
@@ -106,7 +106,7 @@ namespace ChilliSource
             ///
             /// @param The drawable.
             //-------------------------------------------------------------------
-            void SetHighlightDrawable(const IDrawableSPtr& in_drawable);
+            void SetHighlightDrawableDef(const DrawableDefCSPtr& in_drawableDef);
             
         private:
             friend class ComponentFactory;
@@ -203,8 +203,8 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             void OnDestroy();
             
-            IDrawableSPtr m_normalDrawable;
-            IDrawableSPtr m_highlightDrawable;
+            DrawableDefCSPtr m_normalDrawableDef;
+            DrawableDefCSPtr m_highlightDrawableDef;
             
             DrawableComponent* m_drawableComponent = nullptr;
             

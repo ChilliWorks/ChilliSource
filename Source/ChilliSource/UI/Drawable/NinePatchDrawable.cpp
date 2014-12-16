@@ -35,8 +35,6 @@
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/UI/Drawable/DrawableDesc.h>
-#include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/DrawableUtils.h>
 
 namespace ChilliSource
@@ -377,6 +375,8 @@ namespace ChilliSource
                 return result;
             }
         }
+        
+        CS_DEFINE_NAMEDTYPE(NinePatchDrawable);
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         NinePatchDrawable::NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset)
@@ -397,40 +397,11 @@ namespace ChilliSource
             SetTextureAtlasId(in_atlasId);
             SetInsets(in_leftInset, in_rightInset, in_topInset, in_bottomInset);
         }
+                //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        NinePatchDrawable::NinePatchDrawable(const DrawableDesc& in_desc)
+        bool NinePatchDrawable::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            SetUVs(in_desc.GetUVs());
-            Core::Vector4 insets = in_desc.GetNinePatchInsets();
-            SetInsets(insets.x, insets.y, insets.z, insets.w);
-            
-            Core::StorageLocation textureLocation = in_desc.GetTextureLocation();
-            std::string texturePath = in_desc.GetTexturePath();
-            CS_ASSERT(texturePath.empty() == false, "Must provide a texture path in a widget drawable.");
-            
-            auto resPool = Core::Application::Get()->GetResourcePool();
-            SetTexture(resPool->LoadResource<Rendering::Texture>(textureLocation, texturePath));
-            
-            Core::StorageLocation atlasLocation = in_desc.GetAtlasLocation();
-            std::string atlasPath = in_desc.GetAtlasPath();
-            
-            if(atlasPath.empty() == false)
-            {
-                SetTextureAtlas(resPool->LoadResource<Rendering::TextureAtlas>(atlasLocation, atlasPath));
-                CS_ASSERT(m_atlas != nullptr, "Invalid atlas Id provided for widget drawable: " + atlasPath);
-                
-                std::string atlasId = in_desc.GetAtlasId();
-                CS_ASSERT(m_atlas->HasFrameWithId(atlasId) == true, "Invalid atlas id provided for widget drawable: " + atlasId);
-                
-                SetTextureAtlasId(atlasId);
-            }
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        DrawableType NinePatchDrawable::GetType() const
-        {
-            return DrawableType::k_ninePatch;
+            return (Drawable::InterfaceID == in_interfaceId || NinePatchDrawable::InterfaceID == in_interfaceId);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -472,6 +443,12 @@ namespace ChilliSource
             
             m_atlasFrame = DrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
             m_isPatchCatchValid = false;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void NinePatchDrawable::SetColour(const Core::Colour& in_colour)
+        {
+            m_colour = in_colour;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -520,7 +497,7 @@ namespace ChilliSource
             for(u32 i=0; i<k_numPatches; ++i)
             {
                 Core::Matrix3 patchTransform = Core::Matrix3::CreateTranslation(m_cachedPositions[i]);
-                in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
+                in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour * m_colour, Rendering::AlignmentAnchor::k_middleCentre);
             }
         }
     }

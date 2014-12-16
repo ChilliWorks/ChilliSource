@@ -90,28 +90,28 @@ namespace ChilliSource
             /// @return the drawable that will be set on the owning widget when
             /// it is not pressed while toggled off.
             //-------------------------------------------------------------------
-            const IDrawableSPtr& GetNormalOffDrawable() const;
+            const DrawableDefCSPtr& GetNormalOffDrawableDef() const;
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return the drawable that will be set on the owning widget when
             /// it is pressed while toggled off.
             //-------------------------------------------------------------------
-            const IDrawableSPtr& GetHighlightOffDrawable() const;
+            const DrawableDefCSPtr& GetHighlightOffDrawableDef() const;
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return the drawable that will be set on the owning widget when
             /// it is not pressed while toggled on.
             //-------------------------------------------------------------------
-            const IDrawableSPtr& GetNormalOnDrawable() const;
+            const DrawableDefCSPtr& GetNormalOnDrawableDef() const;
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return the drawable that will be set on the owning widget when
             /// it is pressed while toggled on.
             //-------------------------------------------------------------------
-            const IDrawableSPtr& GetHighlightOnDrawable() const;
+            const DrawableDefCSPtr& GetHighlightOnDrawableDef() const;
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -126,7 +126,7 @@ namespace ChilliSource
             ///
             /// @param The drawable.
             //-------------------------------------------------------------------
-            void SetNormalOffDrawable(const IDrawableSPtr& in_drawable);
+            void SetNormalOffDrawableDef(const DrawableDefCSPtr& in_drawableDef);
             //-------------------------------------------------------------------
             /// Sets the drawable that will be set on the owning widget when
             /// it is pressed and is toggled off.
@@ -135,7 +135,7 @@ namespace ChilliSource
             ///
             /// @param The drawable.
             //-------------------------------------------------------------------
-            void SetHighlightOffDrawable(const IDrawableSPtr& in_drawable);
+            void SetHighlightOffDrawableDef(const DrawableDefCSPtr& in_drawableDef);
             //-------------------------------------------------------------------
             /// Sets the drawable that will be set on the owning widget when
             /// it is not pressed and is toggled on.
@@ -144,7 +144,7 @@ namespace ChilliSource
             ///
             /// @param The drawable.
             //-------------------------------------------------------------------
-            void SetNormalOnDrawable(const IDrawableSPtr& in_drawable);
+            void SetNormalOnDrawableDef(const DrawableDefCSPtr& in_drawableDef);
             //-------------------------------------------------------------------
             /// Sets the drawable that will be set on the owning widget when
             /// it is pressed and is toggled on.
@@ -153,7 +153,7 @@ namespace ChilliSource
             ///
             /// @param The drawable.
             //-------------------------------------------------------------------
-            void SetHighlightOnDrawable(const IDrawableSPtr& in_drawable);
+            void SetHighlightOnDrawableDef(const DrawableDefCSPtr& in_drawableDef);
             //-------------------------------------------------------------------
             /// Sets whether or not the toggle is on or off.
             ///
@@ -308,10 +308,10 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             void OnDestroy();
             
-            IDrawableSPtr m_normalOffDrawable;
-            IDrawableSPtr m_highlightOffDrawable;
-            IDrawableSPtr m_normalOnDrawable;
-            IDrawableSPtr m_highlightOnDrawable;
+            DrawableDefCSPtr m_normalOffDrawableDef;
+            DrawableDefCSPtr m_highlightOffDrawableDef;
+            DrawableDefCSPtr m_normalOnDrawableDef;
+            DrawableDefCSPtr m_highlightOnDrawableDef;
 
             DrawableComponent* m_drawableComponent = nullptr;
             

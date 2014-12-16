@@ -28,8 +28,9 @@
 
 #include <ChilliSource/UI/Drawable/DrawableDef.h>
 
-#include <ChilliSource/UI/Drawable/DrawableType.h>
+#include <ChilliSource/UI/Drawable/NinePatchDrawableDef.h>
 #include <ChilliSource/UI/Drawable/StandardDrawableDef.h>
+#include <ChilliSource/UI/Drawable/ThreePatchDrawableDef.h>
 
 #include <json/json.h>
 
@@ -37,10 +38,48 @@ namespace ChilliSource
 {
     namespace UI
     {
+        namespace
+        {
+            //--------------------------------------------------------------
+            /// Identifiers for the different drawable definition types.
+            ///
+            /// @author S Downie
+            //--------------------------------------------------------------
+            enum class DrawableType
+            {
+                k_none,
+                k_standard,
+                k_ninePatch,
+                k_threePatch
+            };
+            //--------------------------------------------------------------
+            /// Converts a string to a drawable type
+            ///
+            /// @author S Downie
+            ///
+            /// @param String
+            ///
+            /// @return Drawable type
+            //--------------------------------------------------------------
+            DrawableType ParseDrawableType(const std::string& in_type)
+            {
+                std::string lowerCase = in_type;
+                Core::StringUtils::ToLowerCase(lowerCase);
+                
+                if(lowerCase == "none") return DrawableType::k_none;
+                if(lowerCase == "standard") return DrawableType::k_standard;
+                if(lowerCase == "ninepatch") return DrawableType::k_ninePatch;
+                if(lowerCase == "threepatch") return DrawableType::k_threePatch;
+                
+                CS_LOG_FATAL("Cannot parse drawable type: " + in_type);
+                return DrawableType::k_none;
+            }
+        }
+        
         CS_DEFINE_NAMEDTYPE(DrawableDef);
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        DrawableDefUPtr DrawableDef::Create(const Json::Value& in_json, Core::StorageLocation in_defaultLocation, const std::string& in_defaultPath)
+        DrawableDefCUPtr DrawableDef::Create(const Json::Value& in_json, Core::StorageLocation in_defaultLocation, const std::string& in_defaultPath)
         {
             const char k_typeKey[] = "Type";
             
@@ -54,11 +93,11 @@ namespace ChilliSource
             switch (type)
             {
                 case DrawableType::k_standard:
-                    return DrawableDefUPtr(new StandardDrawableDef(in_json, in_defaultLocation, in_defaultPath));
+                    return DrawableDefCUPtr(new StandardDrawableDef(in_json, in_defaultLocation, in_defaultPath));
                 case DrawableType::k_threePatch:
-                    return nullptr;
+                    return DrawableDefCUPtr(new ThreePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
                 case DrawableType::k_ninePatch:
-                    return nullptr;
+                    return DrawableDefCUPtr(new NinePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
                 default:
                     CS_LOG_FATAL("Invalid drawable def type.");
                     return nullptr;

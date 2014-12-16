@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Drawable/Drawable.h>
 
 namespace ChilliSource
 {
@@ -83,17 +84,35 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return the drawable that will be rendered.
+            /// @return The drawable object that performs the rendering. This
+            /// can be used to directly change properties such as the UVs and
+            /// colour of the rendered image. Note that manually changing this
             //-------------------------------------------------------------------
-            const IDrawableSPtr& GetDrawable() const;
+            Drawable* GetDrawable();
             //-------------------------------------------------------------------
-            /// Sets the drawable that will be rendered.
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the drawable object that performs the
+            /// rendering. This can be used to directly change properties such as
+            /// the UVs and colour of the rendered image.
+            //-------------------------------------------------------------------
+            const Drawable* GetDrawable() const;
+            //-------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The drawable definition that was used to create the
+            /// underlying drawable object.
+            //-------------------------------------------------------------------
+            const DrawableDefCSPtr& GetDrawableDef() const;
+            //-------------------------------------------------------------------
+            /// Sets the drawable definition that is used to create the underlying
+            /// drawable object.
             ///
             /// @author Ian Copland
             ///
-            /// @param The drawable.
+            /// @param The drawable defintion.
             //-------------------------------------------------------------------
-            void SetDrawable(const IDrawableSPtr& in_drawable);
+            void SetDrawableDef(const DrawableDefCSPtr& in_drawableDef);
             
         private:
             friend class ComponentFactory;
@@ -122,7 +141,8 @@ namespace ChilliSource
             //----------------------------------------------------------------
             void OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) override;
             
-            IDrawableSPtr m_drawable;
+            DrawableDefCSPtr m_drawableDef;
+            DrawableUPtr m_drawable;
         };
     }
 }

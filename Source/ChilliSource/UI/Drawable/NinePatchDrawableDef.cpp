@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
+#include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
 
 namespace ChilliSource
 {
@@ -199,6 +200,27 @@ namespace ChilliSource
         const Core::Vector4& NinePatchDrawableDef::GetInsets() const
         {
             return m_insets;
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        DrawableUPtr NinePatchDrawableDef::CreateDrawable() const
+        {
+            NinePatchDrawableUPtr drawable;
+            
+            if (m_atlas != nullptr)
+            {
+                drawable = NinePatchDrawableUPtr(new NinePatchDrawable(m_texture, m_atlas, m_atlasId, m_insets.x, m_insets.y, m_insets.z, m_insets.w));
+            }
+            else
+            {
+                drawable = NinePatchDrawableUPtr(new NinePatchDrawable(m_texture, m_insets.x, m_insets.y, m_insets.z, m_insets.w));
+            }
+            
+            drawable->SetUVs(m_uvs);
+            drawable->SetColour(m_colour);
+            
+            DrawableUPtr output = std::move(drawable);
+            return output;
         }
     }
 }

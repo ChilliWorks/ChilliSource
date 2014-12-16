@@ -39,7 +39,6 @@
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
-#include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
 #include <ChilliSource/UI/Drawable/StandardDrawable.h>
 #include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>

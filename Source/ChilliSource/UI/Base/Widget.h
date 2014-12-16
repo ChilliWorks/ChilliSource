@@ -44,7 +44,6 @@
 #include <ChilliSource/UI/Base/Component.h>
 #include <ChilliSource/UI/Base/PropertyLink.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
-#include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 
 #include <cassert>

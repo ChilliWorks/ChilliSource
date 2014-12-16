@@ -33,14 +33,13 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/UI/Drawable/DrawableType.h>
-#include <ChilliSource/UI/Drawable/DrawableDesc.h>
 #include <ChilliSource/UI/Drawable/DrawableUtils.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
+        CS_DEFINE_NAMEDTYPE(StandardDrawable);
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         StandardDrawable::StandardDrawable(const Rendering::TextureCSPtr& in_texture)
@@ -60,36 +59,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        StandardDrawable::StandardDrawable(const DrawableDesc& in_desc)
+        bool StandardDrawable::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            SetUVs(in_desc.GetUVs());
-            
-            Core::StorageLocation textureLocation = in_desc.GetTextureLocation();
-            std::string texturePath = in_desc.GetTexturePath();
-            CS_ASSERT(texturePath.empty() == false, "Must provide a texture path in a widget drawable.");
-            
-            auto resPool = Core::Application::Get()->GetResourcePool();
-            SetTexture(resPool->LoadResource<Rendering::Texture>(textureLocation, texturePath));
-            
-            Core::StorageLocation atlasLocation = in_desc.GetAtlasLocation();
-            std::string atlasPath = in_desc.GetAtlasPath();
-            
-            if(atlasPath.empty() == false)
-            {
-                SetTextureAtlas(resPool->LoadResource<Rendering::TextureAtlas>(atlasLocation, atlasPath));
-                CS_ASSERT(m_atlas != nullptr, "Invalid atlas provided for widget drawable: " + atlasPath);
-                
-                std::string atlasId = in_desc.GetAtlasId();
-                CS_ASSERT(m_atlas->HasFrameWithId(atlasId) == true, "Invalid atlas id provided for widget drawable: " + atlasId);
-                
-                SetTextureAtlasId(atlasId);
-            }
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        DrawableType StandardDrawable::GetType() const
-        {
-            return DrawableType::k_standard;
+            return (Drawable::InterfaceID == in_interfaceId || StandardDrawable::InterfaceID == in_interfaceId);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -130,6 +102,12 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        void StandardDrawable::SetColour(const Core::Colour& in_colour)
+        {
+            m_colour = in_colour;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         Core::Vector2 StandardDrawable::GetPreferredSize() const
         {
             return m_atlasFrame.m_originalSize;
@@ -149,7 +127,7 @@ namespace ChilliSource
             offsetTL = in_absSize/m_atlasFrame.m_originalSize * offsetTL;
             Core::Vector2 size = in_absSize/m_atlasFrame.m_originalSize * m_atlasFrame.m_croppedSize;
             
-            in_renderer->DrawBox(in_transform, size, offsetTL, m_texture, m_atlasFrame.m_uvs, in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
+            in_renderer->DrawBox(in_transform, size, offsetTL, m_texture, m_atlasFrame.m_uvs, in_absColour * m_colour, Rendering::AlignmentAnchor::k_middleCentre);
         }
     }
 }

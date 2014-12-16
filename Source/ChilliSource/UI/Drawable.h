@@ -26,17 +26,18 @@
 //  THE SOFTWARE.
 //
 
-
 #ifndef _CHILLISOURCE_UI_DRAWABLE_H_
 #define _CHILLISOURCE_UI_DRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/UI/Drawable/Drawable.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
-#include <ChilliSource/UI/Drawable/DrawableDesc.h>
-#include <ChilliSource/UI/Drawable/DrawableType.h>
-#include <ChilliSource/UI/Drawable/IDrawable.h>
+#include <ChilliSource/UI/Drawable/DrawableDef.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
+#include <ChilliSource/UI/Drawable/NinePatchDrawableDef.h>
 #include <ChilliSource/UI/Drawable/StandardDrawable.h>
+#include <ChilliSource/UI/Drawable/StandardDrawableDef.h>
 #include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
+#include <ChilliSource/UI/Drawable/ThreePatchDrawableDef.h>
 
 #endif

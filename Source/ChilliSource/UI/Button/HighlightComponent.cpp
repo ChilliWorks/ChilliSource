@@ -34,8 +34,7 @@
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
-#include <ChilliSource/UI/Drawable/DrawableDesc.h>
-#include <ChilliSource/UI/Drawable/IDrawable.h>
+#include <ChilliSource/UI/Drawable/DrawableDef.h>
 
 
 namespace ChilliSource
@@ -49,8 +48,8 @@ namespace ChilliSource
             
             const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyTypes::DrawableDesc(), k_normalDrawableKey},
-                {PropertyTypes::DrawableDesc(), k_highlightDrawableKey}
+                {PropertyTypes::DrawableDef(), k_normalDrawableKey},
+                {PropertyTypes::DrawableDef(), k_highlightDrawableKey}
             };
         }
         
@@ -66,8 +65,8 @@ namespace ChilliSource
         HighlightComponent::HighlightComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
             : Component(in_componentName)
         {
-            RegisterProperty<IDrawableSPtr>(PropertyTypes::Drawable(), k_normalDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetNormalDrawable), Core::MakeDelegate(this, &HighlightComponent::SetNormalDrawable));
-            RegisterProperty<IDrawableSPtr>(PropertyTypes::Drawable(), k_highlightDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetHighlightDrawable), Core::MakeDelegate(this, &HighlightComponent::SetHighlightDrawable));
+            RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_normalDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetNormalDrawableDef), Core::MakeDelegate(this, &HighlightComponent::SetNormalDrawableDef));
+            RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_highlightDrawableKey, Core::MakeDelegate(this, &HighlightComponent::GetHighlightDrawableDef), Core::MakeDelegate(this, &HighlightComponent::SetHighlightDrawableDef));
             ApplyRegisteredProperties(in_properties);
         }
         //-------------------------------------------------------------------
@@ -78,36 +77,36 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const IDrawableSPtr& HighlightComponent::GetNormalDrawable() const
+        const DrawableDefCSPtr& HighlightComponent::GetNormalDrawableDef() const
         {
-            return m_normalDrawable;
+            return m_normalDrawableDef;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const IDrawableSPtr& HighlightComponent::GetHighlightDrawable() const
+        const DrawableDefCSPtr& HighlightComponent::GetHighlightDrawableDef() const
         {
-            return m_highlightDrawable;
+            return m_highlightDrawableDef;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void HighlightComponent::SetNormalDrawable(const IDrawableSPtr& in_drawable)
+        void HighlightComponent::SetNormalDrawableDef(const DrawableDefCSPtr& in_drawableDef)
         {
-            m_normalDrawable = in_drawable;
+            m_normalDrawableDef = in_drawableDef;
             
             if (m_drawableComponent != nullptr && m_highlighted == false)
             {
-                m_drawableComponent->SetDrawable(m_normalDrawable);
+                m_drawableComponent->SetDrawableDef(m_normalDrawableDef);
             }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void HighlightComponent::SetHighlightDrawable(const IDrawableSPtr& in_drawable)
+        void HighlightComponent::SetHighlightDrawableDef(const DrawableDefCSPtr& in_drawable)
         {
-            m_highlightDrawable = in_drawable;
+            m_highlightDrawableDef = in_drawable;
             
             if (m_drawableComponent != nullptr && m_highlighted == true)
             {
-                m_drawableComponent->SetDrawable(m_highlightDrawable);
+                m_drawableComponent->SetDrawableDef(m_highlightDrawableDef);
             }
         }
         //-------------------------------------------------------------------
@@ -117,7 +116,7 @@ namespace ChilliSource
             CS_ASSERT(m_highlighted == false, "Cannot highlight when already highlighted.");
             
             m_highlighted = true;
-            m_drawableComponent->SetDrawable(m_highlightDrawable);
+            m_drawableComponent->SetDrawableDef(m_highlightDrawableDef);
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -126,7 +125,7 @@ namespace ChilliSource
             CS_ASSERT(m_highlighted == true, "Cannot unhighlight when already unhighlighted.");
             
             m_highlighted = false;
-            m_drawableComponent->SetDrawable(m_normalDrawable);
+            m_drawableComponent->SetDrawableDef(m_normalDrawableDef);
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -135,7 +134,7 @@ namespace ChilliSource
             m_drawableComponent = GetWidget()->GetComponent<DrawableComponent>();
             CS_ASSERT(m_drawableComponent != nullptr, "Widgets with a Highlight Component must also contain a Drawable Component.");
             
-            m_drawableComponent->SetDrawable(m_normalDrawable);
+            m_drawableComponent->SetDrawableDef(m_normalDrawableDef);
             
             m_pressedInsideConnection = GetWidget()->GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &HighlightComponent::OnPressedInside));
             m_moveEnteredConnection = GetWidget()->GetMoveEnteredEvent().OpenConnection(Core::MakeDelegate(this, &HighlightComponent::OnMoveEntered));

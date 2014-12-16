@@ -29,7 +29,7 @@
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 
 #include <ChilliSource/UI/Base/SizePolicy.h>
-#include <ChilliSource/UI/Drawable/DrawableDesc.h>
+#include <ChilliSource/UI/Drawable/DrawableDef.h>
 #include <ChilliSource/UI/Layout/LayoutDesc.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
@@ -45,8 +45,7 @@ namespace ChilliSource
             CS_DEFINE_PROPERTYTYPE(UI::SizePolicy, SizePolicy, "SizePolicy", UI::SizePolicy::k_none, &ParseSizePolicy);
             CS_DEFINE_PROPERTYTYPE(UI::LayoutDesc, LayoutDesc, "LayoutDesc", UI::LayoutDesc(), nullptr);
             CS_DEFINE_PROPERTYTYPE(ILayoutSPtr, Layout, "Layout", nullptr, nullptr);
-            CS_DEFINE_PROPERTYTYPE(UI::DrawableDesc, DrawableDesc, "DrawableDesc", UI::DrawableDesc(), nullptr);
-            CS_DEFINE_PROPERTYTYPE(IDrawableSPtr, Drawable, "Drawable", nullptr, nullptr);
+            CS_DEFINE_PROPERTYTYPE(DrawableDefCSPtr, DrawableDef, "Drawable", nullptr, nullptr);
             CS_DEFINE_PROPERTYTYPE(Rendering::TextureCSPtr, Texture, "Texture", nullptr, nullptr);
             CS_DEFINE_PROPERTYTYPE(Rendering::TextureAtlasCSPtr, TextureAtlas, "TextureAtlas", nullptr, nullptr);
             CS_DEFINE_PROPERTYTYPE(Rendering::FontCSPtr, Font, "Font", nullptr, nullptr);

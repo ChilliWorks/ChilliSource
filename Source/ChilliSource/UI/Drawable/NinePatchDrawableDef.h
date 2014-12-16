@@ -162,6 +162,17 @@ namespace ChilliSource
             const Core::Vector4& GetInsets() const;
             
         private:
+            //--------------------------------------------------------------
+            /// Creates a new instance of a standard drawable as described
+            /// by this definition. This should typically only be called by
+            /// a drawable component.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return a new drawable instance.
+            //--------------------------------------------------------------
+            DrawableUPtr CreateDrawable() const override;
+            
             Rendering::TextureCSPtr m_texture;
             Rendering::TextureAtlasCSPtr m_atlas;
             std::string m_atlasId;

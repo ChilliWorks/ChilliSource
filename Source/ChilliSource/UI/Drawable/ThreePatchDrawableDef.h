@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 #include <ChilliSource/UI/Drawable/DrawableDef.h>
+#include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
 
 namespace ChilliSource
 {
@@ -60,16 +61,6 @@ namespace ChilliSource
         {
         public:
             CS_DECLARE_NAMEDTYPE(ThreePatchDrawableDef);
-            //--------------------------------------------------------------
-            /// The type of the 3-patch i.e. horizontal or vertical
-            ///
-            /// @author S Downie
-            //--------------------------------------------------------------
-            enum class Direction
-            {
-                k_horizontal,
-                k_vertical
-            };
             //--------------------------------------------------------------
             /// Constructor. Creates an empty standard drawable definition.
             ///
@@ -103,7 +94,7 @@ namespace ChilliSource
             /// @param The insets.
             /// @param The stretch direction.
             //--------------------------------------------------------------
-            ThreePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::UVs& in_uvs, const Core::Colour& in_colour, const Core::Vector2& in_insets, Direction in_direction);
+            ThreePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::UVs& in_uvs, const Core::Colour& in_colour, const Core::Vector2& in_insets, ThreePatchDrawable::Direction in_direction);
             //--------------------------------------------------------------
             /// Constructor. Creates a standard drawable definition from
             /// with a texture atlas.
@@ -119,7 +110,7 @@ namespace ChilliSource
             /// @param The stretch direction.
             //--------------------------------------------------------------
             ThreePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Rendering::UVs& in_uvs,
-                                  const Core::Colour& in_colour, const Core::Vector2& in_insets, Direction in_direction);
+                                  const Core::Colour& in_colour, const Core::Vector2& in_insets, ThreePatchDrawable::Direction in_direction);
             //--------------------------------------------------------------
             /// Allows querying of whether or not the component implements
             /// the interface associated with the given interface Id.
@@ -180,16 +171,27 @@ namespace ChilliSource
             ///
             /// @param The direction that a Three-Patch drawable will stretch.
             //--------------------------------------------------------------
-            Direction GetDirection() const;
+            ThreePatchDrawable::Direction GetDirection() const;
             
         private:
+            //--------------------------------------------------------------
+            /// Creates a new instance of a standard drawable as described
+            /// by this definition. This should typically only be called by
+            /// a drawable component.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return a new drawable instance.
+            //--------------------------------------------------------------
+            DrawableUPtr CreateDrawable() const override;
+            
             Rendering::TextureCSPtr m_texture;
             Rendering::TextureAtlasCSPtr m_atlas;
             std::string m_atlasId;
             Rendering::UVs m_uvs;
             Core::Colour m_colour;
             Core::Vector2 m_insets;
-            Direction m_direction;
+            ThreePatchDrawable::Direction m_direction;
         };
     }
 }

@@ -95,7 +95,7 @@ namespace ChilliSource
             /// there is no storage location specified in the json. Defaults
             /// to empty.
             //--------------------------------------------------------------
-            static DrawableDefUPtr Create(const Json::Value& in_json, Core::StorageLocation in_defaultLocation = Core::StorageLocation::k_package, const std::string& in_defaultPath = "");
+            static DrawableDefCUPtr Create(const Json::Value& in_json, Core::StorageLocation in_defaultLocation = Core::StorageLocation::k_package, const std::string& in_defaultPath = "");
             //--------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -136,8 +136,19 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             //--------------------------------------------------------------
-            virtual ~DrawableDef() = 0;
-            
+            virtual ~DrawableDef() {};
+        protected:
+            friend class DrawableComponent;
+            //--------------------------------------------------------------
+            /// Creates a new instance of the drawable described by this
+            /// definition. This should typically only be called by a
+            /// drawable component.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return a new drawable instance.
+            //--------------------------------------------------------------
+            virtual DrawableUPtr CreateDrawable() const = 0;
         };
     }
 }

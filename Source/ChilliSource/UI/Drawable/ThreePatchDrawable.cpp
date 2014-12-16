@@ -35,8 +35,6 @@
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/UI/Drawable/DrawableDesc.h>
-#include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/DrawableUtils.h>
 
 namespace ChilliSource
@@ -435,6 +433,8 @@ namespace ChilliSource
                 return result;
             }
         }
+        
+        CS_DEFINE_NAMEDTYPE(ThreePatchDrawable);
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         ThreePatchDrawable::ThreePatchDrawable(const Rendering::TextureCSPtr& in_texture, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop)
@@ -487,59 +487,12 @@ namespace ChilliSource
             SetTextureAtlasId(in_atlasId);
             SetInsets(in_leftOrBottom, in_rightOrTop);
         }
+        
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        ThreePatchDrawable::ThreePatchDrawable(const DrawableDesc& in_desc)
+        bool ThreePatchDrawable::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            switch (in_desc.GetThreePatchDirection())
-            {
-                case Direction::k_horizontal:
-                    m_uvCalculationDelegate = CalculateThreePatchUVsHorizontal;
-                    m_sizeCalculationDelegate = CalculateThreePatchSizesHorizontal;
-                    m_positionCalculationDelegate = CalculateThreePatchPositionsHorizontal;
-                    m_offsetCalculationDelegate = CalculateThreePatchOffsetHorizontal;
-                    break;
-                case Direction::k_vertical:
-                    m_uvCalculationDelegate = CalculateThreePatchUVsVertical;
-                    m_sizeCalculationDelegate = CalculateThreePatchSizesVertical;
-                    m_positionCalculationDelegate = CalculateThreePatchPositionsVertical;
-                    m_offsetCalculationDelegate = CalculateThreePatchOffsetVertical;
-                    break;
-                default:
-                    CS_LOG_FATAL("Invalid three-patch direction type.");
-                    break;
-            }
-            
-            SetUVs(in_desc.GetUVs());
-            Core::Vector2 insets = in_desc.GetThreePatchInsets();
-            SetInsets(insets.x, insets.y);
-            
-            Core::StorageLocation textureLocation = in_desc.GetTextureLocation();
-            std::string texturePath = in_desc.GetTexturePath();
-            CS_ASSERT(texturePath.empty() == false, "Must provide a texture path in a widget drawable.");
-            
-            auto resPool = Core::Application::Get()->GetResourcePool();
-            SetTexture(resPool->LoadResource<Rendering::Texture>(textureLocation, texturePath));
-            
-            Core::StorageLocation atlasLocation = in_desc.GetAtlasLocation();
-            std::string atlasPath = in_desc.GetAtlasPath();
-            
-            if(atlasPath.empty() == false)
-            {
-                SetTextureAtlas(resPool->LoadResource<Rendering::TextureAtlas>(atlasLocation, atlasPath));
-                CS_ASSERT(m_atlas != nullptr, "Invalid atlas Id provided for widget drawable: " + atlasPath);
-                
-                std::string atlasId = in_desc.GetAtlasId();
-                CS_ASSERT(m_atlas->HasFrameWithId(atlasId) == true, "Invalid atlas id provided for widget drawable: " + atlasId);
-                
-                SetTextureAtlasId(atlasId);
-            }
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        DrawableType ThreePatchDrawable::GetType() const
-        {
-            return DrawableType::k_threePatch;
+            return (Drawable::InterfaceID == in_interfaceId || ThreePatchDrawable::InterfaceID == in_interfaceId);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -584,6 +537,12 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        void ThreePatchDrawable::SetColour(const Core::Colour& in_colour)
+        {
+            m_colour = in_colour;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         void ThreePatchDrawable::SetInsets(f32 in_leftOrBottom, f32 in_rightOrTop)
         {
             CS_ASSERT(in_leftOrBottom > 0.0f && in_rightOrTop > 0.0f, "Insets must be greater than 0");
@@ -624,7 +583,7 @@ namespace ChilliSource
             for(u32 i=0; i<k_numPatches; ++i)
             {
                 Core::Matrix3 patchTransform = Core::Matrix3::CreateTranslation(m_cachedPositions[i]);
-                in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
+                in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour * m_colour, Rendering::AlignmentAnchor::k_middleCentre);
             }
         }
     }

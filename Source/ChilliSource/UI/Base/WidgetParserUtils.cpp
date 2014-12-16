@@ -45,8 +45,7 @@
 #include <ChilliSource/UI/Base/WidgetDesc.h>
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
-#include <ChilliSource/UI/Drawable/DrawableDesc.h>
-#include <ChilliSource/UI/Drawable/IDrawable.h>
+#include <ChilliSource/UI/Drawable/DrawableDef.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 #include <ChilliSource/UI/Layout/LayoutDesc.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>
@@ -133,11 +132,11 @@ namespace ChilliSource
                     auto localisedText = Core::Application::Get()->GetResourcePool()->LoadResource<Core::LocalisedText>(resourcePair.first, resourcePair.second);
                     out_propertyMap.SetProperty(in_propertyName, localisedText);
                 }
-                else if (propertyType == PropertyTypes::DrawableDesc())
+                else if (propertyType == PropertyTypes::DrawableDef())
                 {
                     CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
-                    DrawableDesc drawbleDesc(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
-                    out_propertyMap.SetProperty(in_propertyName, drawbleDesc);
+                    DrawableDefCSPtr drawableDef = DrawableDef::Create(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
+                    out_propertyMap.SetProperty(in_propertyName, drawableDef);
                 }
                 else if (propertyType == PropertyTypes::LayoutDesc())
                 {

@@ -22,7 +22,6 @@
 		817F763A1A03E23A00D36ACF /* WidgetParserUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F75FE1A03E23A00D36ACF /* WidgetParserUtils.cpp */; };
 		817F763C1A03E23A00D36ACF /* WidgetTemplate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76021A03E23A00D36ACF /* WidgetTemplate.cpp */; };
 		817F763D1A03E23A00D36ACF /* WidgetTemplateProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76041A03E23A00D36ACF /* WidgetTemplateProvider.cpp */; };
-		817F763F1A03E23A00D36ACF /* DrawableType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F760A1A03E23A00D36ACF /* DrawableType.cpp */; };
 		817F76401A03E23A00D36ACF /* DrawableUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F760C1A03E23A00D36ACF /* DrawableUtils.cpp */; };
 		817F76421A03E23A00D36ACF /* NinePatchDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76101A03E23A00D36ACF /* NinePatchDrawable.cpp */; };
 		817F76441A03E23A00D36ACF /* StandardDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817F76141A03E23A00D36ACF /* StandardDrawable.cpp */; };
@@ -36,14 +35,13 @@
 		81890EC71A1D020A005811F1 /* WidgetDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81890EC51A1D020A005811F1 /* WidgetDesc.cpp */; };
 		81970FE71A0A48B500505599 /* TextComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81970FE51A0A48B500505599 /* TextComponent.cpp */; };
 		819CE3CF1A1F668900A49B5C /* LayoutDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819CE3CD1A1F668900A49B5C /* LayoutDesc.cpp */; };
-		819CE3D21A1F98DC00A49B5C /* DrawableDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819CE3D01A1F98DC00A49B5C /* DrawableDesc.cpp */; };
 		819FB37D1A30757600A0E965 /* PropertyTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819FB37C1A30757600A0E965 /* PropertyTypes.cpp */; };
 		819FB3801A307CEC00A0E965 /* PropertyTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 819FB37E1A307CEC00A0E965 /* PropertyTypes.cpp */; };
 		81AAFBBB19C9C18100CD4A14 /* Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB419C9C18100CD4A14 /* Gesture.cpp */; };
 		81AAFBBC19C9C18100CD4A14 /* GestureSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB619C9C18100CD4A14 /* GestureSystem.cpp */; };
 		81AAFBBD19C9C18100CD4A14 /* TapGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB819C9C18100CD4A14 /* TapGesture.cpp */; };
 		81AE299619D072800053FCB6 /* PinchGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AE299419D072800053FCB6 /* PinchGesture.cpp */; };
-		81AECBDF1A234570009DFA59 /* IDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AECBDE1A234570009DFA59 /* IDrawable.cpp */; };
+		81AECBDF1A234570009DFA59 /* Drawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AECBDE1A234570009DFA59 /* Drawable.cpp */; };
 		81AECBE11A23464D009DFA59 /* ILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AECBE01A23464D009DFA59 /* ILayout.cpp */; };
 		81AECBE61A234D4E009DFA59 /* JsonUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AECBE31A234D4E009DFA59 /* JsonUtils.cpp */; };
 		81AECBE91A2368FF009DFA59 /* PropertyLink.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AECBE81A2368FF009DFA59 /* PropertyLink.cpp */; };
@@ -411,11 +409,9 @@
 		817F76041A03E23A00D36ACF /* WidgetTemplateProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WidgetTemplateProvider.cpp; sourceTree = "<group>"; };
 		817F76051A03E23A00D36ACF /* WidgetTemplateProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WidgetTemplateProvider.h; sourceTree = "<group>"; };
 		817F76061A03E23A00D36ACF /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
-		817F760A1A03E23A00D36ACF /* DrawableType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableType.cpp; sourceTree = "<group>"; };
-		817F760B1A03E23A00D36ACF /* DrawableType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableType.h; sourceTree = "<group>"; };
 		817F760C1A03E23A00D36ACF /* DrawableUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableUtils.cpp; sourceTree = "<group>"; };
 		817F760D1A03E23A00D36ACF /* DrawableUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableUtils.h; sourceTree = "<group>"; };
-		817F760F1A03E23A00D36ACF /* IDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IDrawable.h; sourceTree = "<group>"; };
+		817F760F1A03E23A00D36ACF /* Drawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawable.h; sourceTree = "<group>"; };
 		817F76101A03E23A00D36ACF /* NinePatchDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NinePatchDrawable.cpp; sourceTree = "<group>"; };
 		817F76111A03E23A00D36ACF /* NinePatchDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NinePatchDrawable.h; sourceTree = "<group>"; };
 		817F76141A03E23A00D36ACF /* StandardDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StandardDrawable.cpp; sourceTree = "<group>"; };
@@ -444,8 +440,6 @@
 		81970FE91A0A780A00505599 /* Text.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Text.h; sourceTree = "<group>"; };
 		819CE3CD1A1F668900A49B5C /* LayoutDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutDesc.cpp; sourceTree = "<group>"; };
 		819CE3CE1A1F668900A49B5C /* LayoutDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutDesc.h; sourceTree = "<group>"; };
-		819CE3D01A1F98DC00A49B5C /* DrawableDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableDesc.cpp; sourceTree = "<group>"; };
-		819CE3D11A1F98DC00A49B5C /* DrawableDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableDesc.h; sourceTree = "<group>"; };
 		819FB37B1A30756400A0E965 /* PropertyTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PropertyTypes.h; sourceTree = "<group>"; };
 		819FB37C1A30757600A0E965 /* PropertyTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyTypes.cpp; sourceTree = "<group>"; };
 		819FB37E1A307CEC00A0E965 /* PropertyTypes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PropertyTypes.cpp; sourceTree = "<group>"; };
@@ -459,7 +453,7 @@
 		81AAFBBA19C9C18100CD4A14 /* Gesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Gesture.h; sourceTree = "<group>"; };
 		81AE299419D072800053FCB6 /* PinchGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PinchGesture.cpp; sourceTree = "<group>"; };
 		81AE299519D072800053FCB6 /* PinchGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinchGesture.h; sourceTree = "<group>"; };
-		81AECBDE1A234570009DFA59 /* IDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IDrawable.cpp; sourceTree = "<group>"; };
+		81AECBDE1A234570009DFA59 /* Drawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Drawable.cpp; sourceTree = "<group>"; };
 		81AECBE01A23464D009DFA59 /* ILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILayout.cpp; sourceTree = "<group>"; };
 		81AECBE31A234D4E009DFA59 /* JsonUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsonUtils.cpp; sourceTree = "<group>"; };
 		81AECBE41A234D4E009DFA59 /* JsonUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsonUtils.h; sourceTree = "<group>"; };
@@ -1139,30 +1133,26 @@
 		817F76071A03E23A00D36ACF /* Drawable */ = {
 			isa = PBXGroup;
 			children = (
+				81AECBDE1A234570009DFA59 /* Drawable.cpp */,
+				817F760F1A03E23A00D36ACF /* Drawable.h */,
 				816E8BEA1A28CB9100207BEE /* DrawableComponent.cpp */,
 				816E8BEB1A28CB9100207BEE /* DrawableComponent.h */,
-				817F760A1A03E23A00D36ACF /* DrawableType.cpp */,
-				817F760B1A03E23A00D36ACF /* DrawableType.h */,
-				817F760C1A03E23A00D36ACF /* DrawableUtils.cpp */,
-				817F760D1A03E23A00D36ACF /* DrawableUtils.h */,
-				817F760F1A03E23A00D36ACF /* IDrawable.h */,
-				81AECBDE1A234570009DFA59 /* IDrawable.cpp */,
-				817F76101A03E23A00D36ACF /* NinePatchDrawable.cpp */,
-				817F76111A03E23A00D36ACF /* NinePatchDrawable.h */,
-				817F76141A03E23A00D36ACF /* StandardDrawable.cpp */,
-				817F76151A03E23A00D36ACF /* StandardDrawable.h */,
-				817F76181A03E23A00D36ACF /* ThreePatchDrawable.cpp */,
-				817F76191A03E23A00D36ACF /* ThreePatchDrawable.h */,
-				819CE3D01A1F98DC00A49B5C /* DrawableDesc.cpp */,
-				819CE3D11A1F98DC00A49B5C /* DrawableDesc.h */,
 				81F4A1321A3F300600908FFF /* DrawableDef.cpp */,
 				81F4A1331A3F300600908FFF /* DrawableDef.h */,
-				81F4A1351A3F34B300908FFF /* StandardDrawableDef.cpp */,
-				81F4A1361A3F34B300908FFF /* StandardDrawableDef.h */,
-				81F4A1381A3F440300908FFF /* ThreePatchDrawableDef.cpp */,
-				81F4A1391A3F440300908FFF /* ThreePatchDrawableDef.h */,
+				817F760C1A03E23A00D36ACF /* DrawableUtils.cpp */,
+				817F760D1A03E23A00D36ACF /* DrawableUtils.h */,
+				817F76101A03E23A00D36ACF /* NinePatchDrawable.cpp */,
+				817F76111A03E23A00D36ACF /* NinePatchDrawable.h */,
 				81F4A13B1A3F48DF00908FFF /* NinePatchDrawableDef.cpp */,
 				81F4A13C1A3F48DF00908FFF /* NinePatchDrawableDef.h */,
+				817F76141A03E23A00D36ACF /* StandardDrawable.cpp */,
+				817F76151A03E23A00D36ACF /* StandardDrawable.h */,
+				81F4A1351A3F34B300908FFF /* StandardDrawableDef.cpp */,
+				81F4A1361A3F34B300908FFF /* StandardDrawableDef.h */,
+				817F76181A03E23A00D36ACF /* ThreePatchDrawable.cpp */,
+				817F76191A03E23A00D36ACF /* ThreePatchDrawable.h */,
+				81F4A1381A3F440300908FFF /* ThreePatchDrawableDef.cpp */,
+				81F4A1391A3F440300908FFF /* ThreePatchDrawableDef.h */,
 			);
 			path = Drawable;
 			sourceTree = "<group>";
@@ -2851,7 +2841,6 @@
 				81D8B6B31962E0F70010DA84 /* EmailComposer.mm in Sources */,
 				81D8B4181962E0EC0010DA84 /* ETC1ImageProvider.cpp in Sources */,
 				81D8B69D1962E0F70010DA84 /* CSGLViewController.mm in Sources */,
-				819CE3D21A1F98DC00A49B5C /* DrawableDesc.cpp in Sources */,
 				81D8B4331962E0EC0010DA84 /* StringUtils.cpp in Sources */,
 				81D8B4671962E0EC0010DA84 /* CanvasRenderer.cpp in Sources */,
 				81D8B43C1962E0EC0010DA84 /* VolumeComponent.cpp in Sources */,
@@ -2866,11 +2855,10 @@
 				81173CE01A16489D00E169C0 /* ComponentFactory.cpp in Sources */,
 				81D8B46C1962E0EC0010DA84 /* RenderComponent.cpp in Sources */,
 				81D8B4261962E0EC0010DA84 /* NotificationManager.cpp in Sources */,
-				817F763F1A03E23A00D36ACF /* DrawableType.cpp in Sources */,
 				81D8B4801962E0EC0010DA84 /* CSModelProvider.cpp in Sources */,
 				81D3A5531A2F567700FC08C9 /* PropertyMap.cpp in Sources */,
 				819FB3801A307CEC00A0E965 /* PropertyTypes.cpp in Sources */,
-				81AECBDF1A234570009DFA59 /* IDrawable.cpp in Sources */,
+				81AECBDF1A234570009DFA59 /* Drawable.cpp in Sources */,
 				81D8B4A91962E0EC0010DA84 /* WebView.cpp in Sources */,
 				817F76421A03E23A00D36ACF /* NinePatchDrawable.cpp in Sources */,
 				81D8B6A71962E0F70010DA84 /* RemoteNotificationSystem.cpp in Sources */,
