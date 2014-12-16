@@ -37,7 +37,7 @@ namespace ChilliSource
 {
     namespace Networking
     {
-        class MoContentDownloader : public IContentDownloader
+        class MoContentDownloader final : public IContentDownloader
         {
         public:
             //----------------------------------------------------------------

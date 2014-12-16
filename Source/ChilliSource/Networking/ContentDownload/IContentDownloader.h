@@ -89,13 +89,6 @@ namespace ChilliSource
             //---------------------------------------------------------
             virtual void DownloadPackage(const std::string& in_url, const Delegate& in_delegate) = 0;
             //---------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The amount of bytes read by the current request,
-            /// if any
-            //---------------------------------------------------------
-            virtual u32 GetCurrentDownloadedBytes() const = 0;
-            //---------------------------------------------------------
             /// The destructor.
             ///
             /// @author S Downie

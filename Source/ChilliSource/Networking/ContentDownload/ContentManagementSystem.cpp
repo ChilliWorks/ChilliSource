@@ -638,7 +638,7 @@ namespace ChilliSource
 		//-----------------------------------------------------------
 		u32 ContentManagementSystem::GetRunningTotalDownloaded() const
 		{
-			return m_runningDownloadedTotal + m_contentDownloader->GetCurrentDownloadedBytes();
+			return m_runningDownloadedTotal;
 		}
         //-----------------------------------------------------------
         //-----------------------------------------------------------
