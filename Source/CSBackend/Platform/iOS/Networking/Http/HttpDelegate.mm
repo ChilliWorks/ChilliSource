@@ -28,8 +28,9 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 #import <CSBackend/Platform/iOS/Networking/Http/HttpDelegate.h>
+
+#import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 #import <CSBackend/Platform/iOS/Networking/Http/HttpRequest.h>
 
 @implementation HttpDelegate
@@ -81,7 +82,7 @@
 //-----------------------------------------------------------------------------
 - (void) connection:(NSURLConnection*)in_connection didReceiveData:(NSData *)in_data
 {
-    CS_ASSERT(m_data != nil, "Cannot receive data before connection estabilished!");
+    CS_ASSERT(m_data != nil, "Cannot receive data before connection is estabilished!");
     
     [m_data appendData:in_data];
 }
@@ -94,7 +95,7 @@
 //-----------------------------------------------------------------------------
 - (void) connectionDidFinishLoading:(NSURLConnection*)in_connection
 {
-    CS_ASSERT(m_data != nil, "Cannot finish before connection estabilished!");
+    CS_ASSERT(m_data != nil, "Cannot finish before connection is estabilished!");
     
     std::string data(reinterpret_cast<const s8*>([m_data bytes]), (s32)[m_data length]);
     [m_data release];
@@ -118,7 +119,7 @@
     m_request->OnComplete(CSNetworking::HttpRequest::Result::k_failed, m_responseCode, "");
 }
 //-----------------------------------------------------------------------------
-/// Called to check how a resposne should be cached. We don't want to cache
+/// Called to check how a response should be cached. We don't want to cache
 /// so we return nil.
 ///
 /// @author Ian Copland

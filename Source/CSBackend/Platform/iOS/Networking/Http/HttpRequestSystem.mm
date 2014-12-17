@@ -43,8 +43,19 @@ namespace CSBackend
 {
 	namespace iOS
 	{
+        namespace
+        {
+            const u32 k_defaultTimeoutSecs = 15;
+        }
+        
         CS_DEFINE_NAMEDTYPE(HttpRequestSystem);
         
+        //------------------------------------------------------------------
+        //------------------------------------------------------------------
+        HttpRequestSystem::HttpRequestSystem()
+            : m_connectionTimeoutSecs(k_defaultTimeoutSecs)
+        {
+        }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
 		bool HttpRequestSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const

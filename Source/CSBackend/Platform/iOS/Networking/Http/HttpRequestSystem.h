@@ -106,7 +106,7 @@ namespace CSBackend
             ///
             /// @author S Downie
             //------------------------------------------------------------------
-            HttpRequestSystem() = default;
+            HttpRequestSystem();
             //------------------------------------------------------------------
             /// Poll the connection on active requests
             ///
@@ -125,10 +125,9 @@ namespace CSBackend
         private:
 			std::vector<HttpRequestUPtr> m_requests;
             std::vector<HttpRequest*> m_finishedRequests;
-            u32 m_connectionTimeoutSecs = 15;
+            u32 m_connectionTimeoutSecs;
 		};
 	}
-    
 }
 
 #endif
