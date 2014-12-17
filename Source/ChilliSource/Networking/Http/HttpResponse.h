@@ -1,7 +1,7 @@
 //
-//  HttpRequest.h
+//  HttpResponse.h
 //  Chilli Source
-//  Created by Scott Downie on 23/05/2011.
+//  Created by Scott Downie on 17/12/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,96 +26,75 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_NETWORKING_HTTP_HTTPREQUEST_H_
-#define _CHILLISOURCE_NETWORKING_HTTP_HTTPREQUEST_H_
+#ifndef _CHILLISOURCE_NETWORKING_HTTP_HTTPRESPONSE_H_
+#define _CHILLISOURCE_NETWORKING_HTTP_HTTPRESPONSE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Container/ParamDictionary.h>
-
-#include <functional>
 
 namespace ChilliSource
 {
-	namespace Networking
+    namespace Networking
     {
         //----------------------------------------------------------------------------------------
-        /// Interface class to a platform dependent http request. A request can be issued
-        /// via the HttpRequestSystem to a given URL. Requests can be of type POST or GET. The
-        /// request object can be used to cancel the request
+        /// The response result of an http request. This contains the http response code and
+        /// the response data. The response also contains the result which is whether the request
+        /// succeeded or failed. If the request fails then the response data will be empty
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-		class HttpRequest
+        class HttpResponse
         {
-		public:
-            
-            CS_DECLARE_NOCOPY(HttpRequest);
-            
+        public:
             //----------------------------------------------------------------------------------------
-            /// Type of the Http request (Post or Get)
+            /// Result of the http request
             ///
             /// @author S Downie
             //----------------------------------------------------------------------------------------
-            enum class Type
+            enum class Result
             {
-                k_get,
-                k_post
+                k_completed,    //The request completed (response data is available)
+                k_failed,       //The request failed (no response data available)
+                k_cancelled,    //The request was cancelled (no response data available)
+                k_timeout,      //The request timed out (no response data available)
+                k_flushed       //The request buffer is full and has been flushed. (response data is partial and more will follow)
             };
             //----------------------------------------------------------------------------------------
-            /// Delegate called when the request completes (either with success of failure)
+            /// Constructor
             ///
-            /// @param Original request
-            /// @param Request response
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-			typedef std::function<void(const HttpRequest*, const HttpResponse&)> Delegate;
-			//----------------------------------------------------------------------------------------
-			/// Constructor
-			///
-			/// @author S Downie
-			//----------------------------------------------------------------------------------------
-			HttpRequest() = default;
-			//----------------------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The type of the request (POST or GET)
-			//----------------------------------------------------------------------------------------
-			virtual Type GetType() const = 0;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The original url to which the request was sent
-            //----------------------------------------------------------------------------------------
-            virtual const std::string& GetUrl() const = 0;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The body of the POST request (GET request will return empty)
-            //----------------------------------------------------------------------------------------
-            virtual const std::string& GetBody() const = 0;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The original headers of the request as keys/values
-            //----------------------------------------------------------------------------------------
-            virtual const Core::ParamDictionary& GetHeaders() const = 0;
-            //----------------------------------------------------------------------------------------
-            /// Cancel the request. Does not invoke the completion delegate
+            /// @param Result
+            /// @param Response code
+            /// @param Response data
             ///
             /// @author S Downie
             //----------------------------------------------------------------------------------------
-            virtual void Cancel() = 0;
+            HttpResponse(Result in_result, u32 in_responseCode, const std::string& in_data);
             //----------------------------------------------------------------------------------------
-            /// Destructor
-            ///
             /// @author S Downie
+            ///
+            /// @return The result of the request (determines whether data is available)
             //----------------------------------------------------------------------------------------
-            virtual ~HttpRequest(){}
-		};
-	}
+            Result GetResult() const;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The contents of the response as a string. (This could be binary data and could
+            /// also be empty if the result is failure)
+            //----------------------------------------------------------------------------------------
+            const std::string& GetData() const;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return HTTP response code (i.e. 200 = OK).
+            //----------------------------------------------------------------------------------------
+            u32 GetCode() const;
+            
+        private:
+            
+            const std::string m_data;
+            const Result m_result;
+            const u32 m_code;
+        };
+    }
 }
-
-
 
 #endif

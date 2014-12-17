@@ -32,15 +32,10 @@
 
 #import <CSBackend/Platform/iOS/Networking/Http/HttpDelegate.h>
 #include <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
-#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/String/StringUtils.h>
-#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 #import <Foundation/Foundation.h>
-
-#include <sstream>
-#include <thread>
 
 namespace CSBackend
 {
@@ -48,22 +43,22 @@ namespace CSBackend
 	{
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-		HttpRequest::HttpRequest(const Desc& in_requestDesc, u32 in_timeoutSecs, const Delegate& in_delegate)
-            : m_desc(in_requestDesc), m_completionDelegate(in_delegate)
+		HttpRequest::HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, const Delegate& in_delegate)
+        : m_type(in_type), m_url(in_url), m_body(in_body), m_headers(in_headers), m_completionDelegate(in_delegate)
 		{
             CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
             
             @autoreleasepool
             {
-                NSString* urlString = [NSStringUtils newNSStringWithUTF8String:in_requestDesc.m_url];
+                NSString* urlString = [NSStringUtils newNSStringWithUTF8String:m_url];
                 NSURL* url = [NSURL URLWithString:urlString];
                 [urlString release];
                 
                 NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:in_timeoutSecs];
                 
                 //apply header
-                NSMutableDictionary* header = [NSMutableDictionary dictionaryWithCapacity:in_requestDesc.m_headers.size()];
-                for (const auto& fieldPair : in_requestDesc.m_headers)
+                NSMutableDictionary* header = [NSMutableDictionary dictionaryWithCapacity:m_headers.size()];
+                for (const auto& fieldPair : m_headers)
                 {
                     NSString* key = [NSStringUtils newNSStringWithUTF8String:fieldPair.first];
                     NSString* value = [NSStringUtils newNSStringWithUTF8String:fieldPair.second];
@@ -74,37 +69,39 @@ namespace CSBackend
                 [request setAllHTTPHeaderFields:header];
                 
                 //apply body if a post request.
-                if (in_requestDesc.m_type == Type::k_post)
+                if (m_type == Type::k_post)
                 {
                     request.HTTPMethod = @"POST";
-                    request.HTTPBody =[NSData dataWithBytes:in_requestDesc.m_body.c_str() length:in_requestDesc.m_body.length()];
+                    request.HTTPBody = [NSData dataWithBytes:m_body.c_str() length:m_body.length()];
                 }
                 
                 m_httpDelegate = [[HttpDelegate alloc] initWithRequest:this];
                 m_connection = [[NSURLConnection connectionWithRequest:[request copy] delegate: m_httpDelegate] retain];
             }
         }
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        const HttpRequest::Desc& HttpRequest::GetDescription() const
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        HttpRequest::Type HttpRequest::GetType() const
         {
-            return m_desc;
+            return m_type;
         }
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        const std::string& HttpRequest::GetResponse() const
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const std::string& HttpRequest::GetUrl() const
         {
-            CS_ASSERT(m_complete == true, "Cannot get response from incomplete request.");
-            
-            return m_responseData;
+            return m_url;
         }
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        u32 HttpRequest::GetResponseCode() const
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const std::string& HttpRequest::GetBody() const
         {
-            CS_ASSERT(m_complete == true, "Cannot get response code from incomplete request.");
-            
-            return m_responseCode;
+            return m_body;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const CSCore::ParamDictionary& HttpRequest::GetHeaders() const
+        {
+            return m_headers;
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
@@ -113,22 +110,17 @@ namespace CSBackend
             CS_ASSERT(m_complete == false, "Cannot cancel an already complete request.");
             
             m_complete = true;
-            m_responseCode = 0;
-            m_responseData = "";
             
             [m_connection cancel];
 		}
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-        void HttpRequest::OnComplete(CSNetworking::HttpRequest::Result in_result, u32 in_responseCode, const std::string& in_data)
+        void HttpRequest::OnComplete(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
         {
             CS_ASSERT(m_complete == false, "Cannot complete an already completed request.");
             
             m_complete = true;
-            m_responseCode = in_responseCode;
-            m_responseData = in_data;
-            
-            m_completionDelegate(this, in_result);
+            m_completionDelegate(this, CSNetworking::HttpResponse(in_result, in_responseCode, in_data));
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------

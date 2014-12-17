@@ -33,5 +33,6 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Networking/Http/HttpRequest.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
+#include <ChilliSource/Networking/Http/HttpResponse.h>
 
 #endif

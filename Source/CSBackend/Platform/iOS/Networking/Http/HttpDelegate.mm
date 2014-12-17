@@ -1,5 +1,5 @@
 //
-//  HttpDelegate.h
+//  HttpDelegate.mm
 //  Chilli Source
 //  Created by Ian Copland on 11/12/2014.
 //
@@ -101,7 +101,7 @@
     [m_data release];
     m_data = nil;
     
-    m_request->OnComplete(CSNetworking::HttpRequest::Result::k_completed, m_responseCode, data);
+    m_request->OnComplete(CSNetworking::HttpResponse::Result::k_completed, m_responseCode, data);
 }
 //-----------------------------------------------------------------------------
 /// Called if a connection fails.
@@ -116,7 +116,7 @@
     std::string errorMessage = [NSStringUtils newUTF8StringWithNSString:[in_error localizedDescription]];
     CS_LOG_VERBOSE("HTTP Request error: " + errorMessage);
     
-    m_request->OnComplete(CSNetworking::HttpRequest::Result::k_failed, m_responseCode, "");
+    m_request->OnComplete(CSNetworking::HttpResponse::Result::k_failed, m_responseCode, "");
 }
 //-----------------------------------------------------------------------------
 /// Called to check how a response should be cached. We don't want to cache

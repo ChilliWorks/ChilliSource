@@ -19,6 +19,7 @@
 		81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D3196C2410000F13DD /* TextEntry.cpp */; };
 		81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2D9196C2B31000F13DD /* TextEntry.mm */; };
 		81B1D2DD196C2B31000F13DD /* TextEntryDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81B1D2DB196C2B31000F13DD /* TextEntryDelegate.mm */; };
+		81B729121A41C00100AC6619 /* HttpResponse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B729111A41C00100AC6619 /* HttpResponse.cpp */; };
 		81CF34A119CC297600B9D0B1 /* DragGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CF349F19CC297600B9D0B1 /* DragGesture.cpp */; };
 		81CF34A419CC67AC00B9D0B1 /* HoldGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */; };
 		81D8ACF91962CEDC0010DA84 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8ACF81962CEDC0010DA84 /* Foundation.framework */; };
@@ -366,6 +367,8 @@
 		81B1D2DB196C2B31000F13DD /* TextEntryDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TextEntryDelegate.mm; sourceTree = "<group>"; };
 		81B1D2DE196D8033000F13DD /* KeyCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyCode.h; sourceTree = "<group>"; };
 		81B1D2DF196D9713000F13DD /* ModifierKeyCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModifierKeyCode.h; sourceTree = "<group>"; };
+		81B729101A41AE1100AC6619 /* HttpResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HttpResponse.h; sourceTree = "<group>"; };
+		81B729111A41C00100AC6619 /* HttpResponse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HttpResponse.cpp; sourceTree = "<group>"; };
 		81CF349F19CC297600B9D0B1 /* DragGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DragGesture.cpp; sourceTree = "<group>"; };
 		81CF34A019CC297600B9D0B1 /* DragGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragGesture.h; sourceTree = "<group>"; };
 		81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HoldGesture.cpp; sourceTree = "<group>"; };
@@ -1708,6 +1711,8 @@
 				81D8B34C1962E0EC0010DA84 /* HttpRequest.h */,
 				81D8B34D1962E0EC0010DA84 /* HttpRequestSystem.cpp */,
 				81D8B34E1962E0EC0010DA84 /* HttpRequestSystem.h */,
+				81B729101A41AE1100AC6619 /* HttpResponse.h */,
+				81B729111A41C00100AC6619 /* HttpResponse.cpp */,
 			);
 			path = Http;
 			sourceTree = "<group>";
@@ -2452,6 +2457,7 @@
 				81D8B47C1962E0EC0010DA84 /* MaterialFactory.cpp in Sources */,
 				81D8B4271962E0EC0010DA84 /* RemoteNotificationSystem.cpp in Sources */,
 				81D8B6A51962E0F70010DA84 /* LocalNotificationSystem.cpp in Sources */,
+				81B729121A41C00100AC6619 /* HttpResponse.cpp in Sources */,
 				81D8B44F1962E0EC0010DA84 /* StretchableImage.cpp in Sources */,
 				81D8B48F1962E0EC0010DA84 /* ParticleEmitter.cpp in Sources */,
 				81D8B42B1962E0EC0010DA84 /* Registry.cpp in Sources */,
