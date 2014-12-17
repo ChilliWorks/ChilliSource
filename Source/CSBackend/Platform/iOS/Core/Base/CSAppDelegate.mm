@@ -199,8 +199,6 @@ CSAppDelegate* singletonInstance = nil;
 //-------------------------------------------------------------
 - (void)applicationWillEnterForeground:(UIApplication*)in_application
 {
-    CS_LOG_ERROR("applicationWillEnterForeground");
-    
     //Sometimes iOS steals the context and doesn't return it.
     GLKView* view = (GLKView*)viewControllerInternal.view;
     if([EAGLContext currentContext] != view.context)
