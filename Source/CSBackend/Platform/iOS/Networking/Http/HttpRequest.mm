@@ -63,7 +63,7 @@ namespace CSBackend
                 
                 //apply header
                 NSMutableDictionary* header = [NSMutableDictionary dictionaryWithCapacity:in_requestDesc.m_headers.size()];
-                for (auto fieldPair : in_requestDesc.m_headers)
+                for (const auto& fieldPair : in_requestDesc.m_headers)
                 {
                     NSString* key = [NSStringUtils newNSStringWithUTF8String:fieldPair.first];
                     NSString* value = [NSStringUtils newNSStringWithUTF8String:fieldPair.second];
