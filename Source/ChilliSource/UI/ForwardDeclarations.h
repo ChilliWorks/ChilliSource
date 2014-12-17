@@ -80,6 +80,12 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(LayoutDesc);
         enum class LayoutType;
         //---------------------------------------------------------
+        /// Progress Bar
+        //---------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(ProgressBarComponent);
+        enum class ProgressBarDirection;
+        enum class ProgressBarType;
+        //---------------------------------------------------------
         /// Text
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(TextComponent);

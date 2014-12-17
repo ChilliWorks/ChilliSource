@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/Container/Property/Property.h>
 #include <ChilliSource/Core/Container/Property/PropertyType.h>
 
+#include <type_traits>
 #include <unordered_map>
 
 namespace ChilliSource
@@ -304,7 +305,7 @@ namespace ChilliSource
                 CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::Component.");
             }
             
-            auto accessor = CS_SMARTCAST(const Core::Property<TPropertyType>*, it->second.get(), "Incorrect type for property with name: " + in_propertyName);
+            auto accessor = CS_SMARTCAST(const Core::Property<typename std::decay<TPropertyType>::type>*, it->second.get(), "Incorrect type for property with name: " + in_propertyName);
             return accessor->Get();
         }
         //----------------------------------------------------------------
@@ -322,7 +323,7 @@ namespace ChilliSource
                 CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::Component.");
             }
             
-            auto accessor = CS_SMARTCAST(Core::Property<TPropertyType>*, it->second.get(), "Incorrect type for property with name: " + in_propertyName);
+            auto accessor = CS_SMARTCAST(Core::Property<typename std::decay<TPropertyType>::type>*, it->second.get(), "Incorrect type for property with name: " + in_propertyName);
             accessor->Set(std::forward<TPropertyType>(in_propertyValue));
         }
         //----------------------------------------------------------------

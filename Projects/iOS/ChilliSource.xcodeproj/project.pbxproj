@@ -294,6 +294,9 @@
 		81D8B6D71962E0F70010DA84 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B6241962E0F70010DA84 /* Texture.cpp */; };
 		81D8B6D81962E0F70010DA84 /* TextureUnitSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B6261962E0F70010DA84 /* TextureUnitSystem.cpp */; };
 		81D8B6DD1962E1110010DA84 /* libCSBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B6DB1962E1110010DA84 /* libCSBase.a */; };
+		81E4DE461A4193EB00762268 /* ProgressBarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E4DE431A4193EB00762268 /* ProgressBarComponent.cpp */; };
+		81E4DE491A41948B00762268 /* ProgressBarDirection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E4DE471A41948B00762268 /* ProgressBarDirection.cpp */; };
+		81E4DE4C1A41989C00762268 /* ProgressBarType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E4DE4A1A41989C00762268 /* ProgressBarType.cpp */; };
 		81F4A1341A3F300600908FFF /* DrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81F4A1321A3F300600908FFF /* DrawableDef.cpp */; };
 		81F4A1371A3F34B300908FFF /* StandardDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81F4A1351A3F34B300908FFF /* StandardDrawableDef.cpp */; };
 		81F4A13A1A3F440300908FFF /* ThreePatchDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81F4A1381A3F440300908FFF /* ThreePatchDrawableDef.cpp */; };
@@ -999,6 +1002,13 @@
 		81D8B6261962E0F70010DA84 /* TextureUnitSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureUnitSystem.cpp; sourceTree = "<group>"; };
 		81D8B6271962E0F70010DA84 /* TextureUnitSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureUnitSystem.h; sourceTree = "<group>"; };
 		81D8B6DB1962E1110010DA84 /* libCSBase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCSBase.a; sourceTree = "<group>"; };
+		81E4DE431A4193EB00762268 /* ProgressBarComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressBarComponent.cpp; sourceTree = "<group>"; };
+		81E4DE441A4193EB00762268 /* ProgressBarComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBarComponent.h; sourceTree = "<group>"; };
+		81E4DE451A4193EB00762268 /* ProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBar.h; sourceTree = "<group>"; };
+		81E4DE471A41948B00762268 /* ProgressBarDirection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressBarDirection.cpp; sourceTree = "<group>"; };
+		81E4DE481A41948B00762268 /* ProgressBarDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBarDirection.h; sourceTree = "<group>"; };
+		81E4DE4A1A41989C00762268 /* ProgressBarType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressBarType.cpp; sourceTree = "<group>"; };
+		81E4DE4B1A41989C00762268 /* ProgressBarType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBarType.h; sourceTree = "<group>"; };
 		81E648A91A14FBF500054326 /* ConstMethodCast.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConstMethodCast.h; sourceTree = "<group>"; };
 		81F4A1321A3F300600908FFF /* DrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableDef.cpp; sourceTree = "<group>"; };
 		81F4A1331A3F300600908FFF /* DrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableDef.h; sourceTree = "<group>"; };
@@ -1087,6 +1097,8 @@
 				817F761D1A03E23A00D36ACF /* ForwardDeclarations.h */,
 				817F761E1A03E23A00D36ACF /* Layout */,
 				817F76311A03E23A00D36ACF /* Layout.h */,
+				81E4DE421A4193EB00762268 /* ProgressBar */,
+				81E4DE451A4193EB00762268 /* ProgressBar.h */,
 				81970FE41A0A48B500505599 /* Text */,
 				81970FE91A0A780A00505599 /* Text.h */,
 			);
@@ -2659,6 +2671,19 @@
 			path = ../../Libraries/Core/iOS/Libs;
 			sourceTree = "<group>";
 		};
+		81E4DE421A4193EB00762268 /* ProgressBar */ = {
+			isa = PBXGroup;
+			children = (
+				81E4DE431A4193EB00762268 /* ProgressBarComponent.cpp */,
+				81E4DE441A4193EB00762268 /* ProgressBarComponent.h */,
+				81E4DE471A41948B00762268 /* ProgressBarDirection.cpp */,
+				81E4DE481A41948B00762268 /* ProgressBarDirection.h */,
+				81E4DE4A1A41989C00762268 /* ProgressBarType.cpp */,
+				81E4DE4B1A41989C00762268 /* ProgressBarType.h */,
+			);
+			path = ProgressBar;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2794,6 +2819,7 @@
 				81D8B4351962E0EC0010DA84 /* UTF8StringUtils.cpp in Sources */,
 				81D8B4221962E0EC0010DA84 /* MathUtils.cpp in Sources */,
 				81D8B47B1962E0EC0010DA84 /* Material.cpp in Sources */,
+				81E4DE491A41948B00762268 /* ProgressBarDirection.cpp in Sources */,
 				81D8B4691962E0EC0010DA84 /* MeshBatch.cpp in Sources */,
 				81D8B6BB1962E0F70010DA84 /* VideoPlayer.mm in Sources */,
 				81D8B4311962E0EC0010DA84 /* StateManager.cpp in Sources */,
@@ -2870,6 +2896,7 @@
 				817F763A1A03E23A00D36ACF /* WidgetParserUtils.cpp in Sources */,
 				81D8B4851962E0EC0010DA84 /* SkinnedAnimationGroup.cpp in Sources */,
 				81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */,
+				81E4DE461A4193EB00762268 /* ProgressBarComponent.cpp in Sources */,
 				81D8B4881962E0EC0010DA84 /* ColourChangerParticleAffector.cpp in Sources */,
 				81D8B4401962E0EC0010DA84 /* DebugStatsView.cpp in Sources */,
 				81D8B4871962E0EC0010DA84 /* SubMesh.cpp in Sources */,
@@ -2916,6 +2943,7 @@
 				81D8B42E1962E0EC0010DA84 /* ResourceProvider.cpp in Sources */,
 				81D8B4951962E0EC0010DA84 /* ParticleSystem.cpp in Sources */,
 				81D8B4471962E0EC0010DA84 /* StretchableHighlightButton.cpp in Sources */,
+				81E4DE4C1A41989C00762268 /* ProgressBarType.cpp in Sources */,
 				811B181819D19AF400B06B5D /* RotationGesture.cpp in Sources */,
 				81D8B46A1962E0EC0010DA84 /* MeshBuffer.cpp in Sources */,
 				81D8B4541962E0EC0010DA84 /* HorizontalClippingProgressBar.cpp in Sources */,

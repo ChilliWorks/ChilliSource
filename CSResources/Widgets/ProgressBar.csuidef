@@ -1,10 +1,15 @@
 {
-  "Type": "HorizontalProgressBar",
+  "Type": "ProgressBar",
 
   "Components":[
     {
       "Type": "Drawable",
       "Name": "Drawable"
+    },
+    {
+      "Type": "ProgressBar",
+      "Name": "ProgressBar",
+      "BarWidgetName": "Bar"
     }
   ],
 
@@ -24,18 +29,24 @@
   ],
 
   "ComponentProperties":{
-    "Drawable": "all"
+    "Drawable": "all",
+    "ProgressBar":
+    {
+      "BarDirection": "BarDirection",
+      "BarType": "BarType",
+      "RelBarSize": "RelBarSize",
+      "Progress": "Progress"
+    }
   },
 
   "ChildProperties": {
     "Bar":
     {
-      "BarRelSize": "RelSize",
       "BarDrawable": "Drawable"
     }
   },
 
   "Defaults": {
-    "Name": "HorizontalProgressBar"
+    "Name": "ProgressBar"
   }
 }

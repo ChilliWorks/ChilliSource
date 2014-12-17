@@ -103,11 +103,8 @@ namespace ChilliSource
             WidgetDefCSPtr verticalSliderDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/VerticalSlider.csuidef");
             RegisterDefinition(verticalSliderDef);
 
-            WidgetDefCSPtr horizontalProgressDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HorizontalProgressBar.csuidef");
-            RegisterDefinition(horizontalProgressDef);
-            
-            WidgetDefCSPtr verticalProgressDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/VerticalProgressBar.csuidef");
-            RegisterDefinition(verticalProgressDef);
+            WidgetDefCSPtr progressDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/ProgressBar.csuidef");
+            RegisterDefinition(progressDef);
             
             WidgetDefCSPtr labelDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Label.csuidef");
             RegisterDefinition(labelDef);

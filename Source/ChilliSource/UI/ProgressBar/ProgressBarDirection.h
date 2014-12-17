@@ -1,7 +1,7 @@
 //
-//  WidgetPropertyTypes.h
+//  ProgressBarDirection.h
 //  Chilli Source
-//  Created by Ian Copland on 04/12/2014.
+//  Created by Ian Copland on 17/12/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,37 +26,48 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_BASE_PROPERTYTYPES_H_
-#define _CHILLISOURCE_UI_BASE_PROPERTYTYPES_H_
+#ifndef _CHILLISOURCE_UI_PROGRESSBAR_PROGRESSBARDIRECTION_H_
+#define _CHILLISOURCE_UI_PROGRESSBAR_PROGRESSBARDIRECTION_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Container/Property/PropertyType.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
         //------------------------------------------------------------------------
-        /// Additional property types that are specific to UI.
+        /// An enum describing the direction of a progress bar: vertical or
+        /// horizontal.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------
-        namespace PropertyTypes
+        enum class ProgressBarDirection
         {
-            CS_DECLARE_PROPERTYTYPE(Rendering::AlignmentAnchor, AlignmentAnchor);
-            CS_DECLARE_PROPERTYTYPE(SizePolicy, SizePolicy);
-            CS_DECLARE_PROPERTYTYPE(LayoutDesc, LayoutDesc);
-            CS_DECLARE_PROPERTYTYPE(ILayoutSPtr, Layout);
-            CS_DECLARE_PROPERTYTYPE(DrawableDefCSPtr, DrawableDef);
-            CS_DECLARE_PROPERTYTYPE(Rendering::TextureCSPtr, Texture);
-            CS_DECLARE_PROPERTYTYPE(Rendering::TextureAtlasCSPtr, TextureAtlas);
-            CS_DECLARE_PROPERTYTYPE(Rendering::FontCSPtr, Font);
-            CS_DECLARE_PROPERTYTYPE(Core::LocalisedTextCSPtr, LocalisedText);
-            CS_DECLARE_PROPERTYTYPE(Rendering::HorizontalTextJustification, HorizontalTextJustification);
-            CS_DECLARE_PROPERTYTYPE(Rendering::VerticalTextJustification, VerticalTextJustification);
-            CS_DECLARE_PROPERTYTYPE(ProgressBarDirection, ProgressBarDirection);
-            CS_DECLARE_PROPERTYTYPE(ProgressBarType, ProgressBarType);
-        }
+            k_horizontal,
+            k_vertical
+        };
+        //------------------------------------------------------------------------
+        /// Parse a progress bar direction from string. This is case insensitive.
+        /// If the string is not a valid direction then the app is considered to
+        /// be in an irrecoverable state and will terminate.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The string to parse.
+        ///
+        /// @return The parsed direction.
+        //------------------------------------------------------------------------
+        ProgressBarDirection ParseProgressParDirection(const std::string& in_stringDirection);
+        //------------------------------------------------------------------------
+        /// Converts the given progress bar direction to a string.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The progress bar direction to convert to string.
+        ///
+        /// @return The direction in string form.
+        //------------------------------------------------------------------------
+        std::string ToString(ProgressBarDirection in_direction);
     }
 }
 

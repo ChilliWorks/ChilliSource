@@ -31,6 +31,8 @@
 #include <ChilliSource/UI/Base/SizePolicy.h>
 #include <ChilliSource/UI/Drawable/DrawableDef.h>
 #include <ChilliSource/UI/Layout/LayoutDesc.h>
+#include <ChilliSource/UI/ProgressBar/ProgressBarDirection.h>
+#include <ChilliSource/UI/ProgressBar/ProgressBarType.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
@@ -52,6 +54,8 @@ namespace ChilliSource
             CS_DEFINE_PROPERTYTYPE(Core::LocalisedTextCSPtr, LocalisedText, "LocalisedText", nullptr, nullptr);
             CS_DEFINE_PROPERTYTYPE(Rendering::HorizontalTextJustification, HorizontalTextJustification, "HorizontalJustification", Rendering::HorizontalTextJustification::k_centre, &Rendering::ParseHorizontalTextJustification);
             CS_DEFINE_PROPERTYTYPE(Rendering::VerticalTextJustification, VerticalTextJustification, "VerticalJustification", Rendering::VerticalTextJustification::k_centre, &Rendering::ParseVerticalTextJustification);
+            CS_DEFINE_PROPERTYTYPE(UI::ProgressBarDirection, ProgressBarDirection, "ProgressBarDirection", ProgressBarDirection::k_horizontal, &ParseProgressParDirection);
+            CS_DEFINE_PROPERTYTYPE(UI::ProgressBarType, ProgressBarType, "ProgressBarType", UI::ProgressBarType::k_stretch, &ParseProgressParType);
         }
     }
 }

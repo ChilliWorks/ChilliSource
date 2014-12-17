@@ -31,6 +31,7 @@
 #include <ChilliSource/UI/Button/HighlightComponent.h>
 #include <ChilliSource/UI/Button/ToggleHighlightComponent.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
+#include <ChilliSource/UI/ProgressBar/ProgressBarComponent.h>
 #include <ChilliSource/UI/Text/TextComponent.h>
 
 namespace ChilliSource
@@ -76,6 +77,7 @@ namespace ChilliSource
             Register<HighlightComponent>("Highlight");
             Register<ToggleHighlightComponent>("ToggleHighlight");
             Register<TextComponent>("Text");
+            Register<ProgressBarComponent>("ProgressBar");
         }
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
