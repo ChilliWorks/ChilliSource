@@ -116,7 +116,6 @@ namespace CSBackend
             HttpDelegate* m_httpDelegate = nil;
         };
 	}
-    
 }
 
 #endif
