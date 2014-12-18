@@ -125,6 +125,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Networking\ContentDownload\ContentManagementSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\ContentDownload\MoContentDownloader.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\Http\HttpRequestSystem.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Networking\Http\HttpResponse.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\IAP\IAPSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.cpp" />
@@ -411,6 +412,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\Http\HttpRequest.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\Http\HttpRequestSystem.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Networking\Http\HttpResponse.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\IAP\IAPSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.h" />

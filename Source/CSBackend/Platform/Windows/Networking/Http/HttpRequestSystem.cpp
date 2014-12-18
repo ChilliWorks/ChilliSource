@@ -31,7 +31,6 @@
 #include <CSBackend/Platform/Windows/Networking/Http/HttpRequestSystem.h>
 
 #include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
-#include <CSBackend/Platform/Windows/Networking/Http/HttpRequest.h>
 
 #include <Windows.h>
 #include <winhttp.h>
@@ -111,8 +110,6 @@ namespace CSBackend
 		{
 			m_sessionHandle = ::WinHttpOpen(L"CSWinHttpClient", WINHTTP_ACCESS_TYPE_NO_PROXY, WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
 			CS_ASSERT(m_sessionHandle != nullptr, "Failed to open WinHTTP session");
-
-			SetConnectionTimeout(15);
 		}
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
@@ -122,17 +119,34 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		void HttpRequestSystem::SetConnectionTimeout(u32 in_timeoutSecs)
+		HttpRequest* HttpRequestSystem::MakeGetRequest(const std::string& in_url, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
 		{
-			u32 connectTimeoutMilliSecs = in_timeoutSecs * 1000;
-			u32 readTimeoutMilliSecs = 60000;
-			::WinHttpSetTimeouts(m_sessionHandle, connectTimeoutMilliSecs, connectTimeoutMilliSecs, readTimeoutMilliSecs, readTimeoutMilliSecs);
+			return MakeRequest(HttpRequest::Type::k_get, in_url, "", CSCore::ParamDictionary(), in_delegate, in_timeoutSecs);
 		}
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		CSNetworking::HttpRequest* HttpRequestSystem::MakeRequest(const CSNetworking::HttpRequest::Desc& in_requestDesc, const CSNetworking::HttpRequest::Delegate& in_delegate)
+		HttpRequest* HttpRequestSystem::MakeGetRequest(const std::string& in_url, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
 		{
-			CS_ASSERT(in_requestDesc.m_url.empty() == false, "Cannot make an http request to a blank url");
+			return MakeRequest(HttpRequest::Type::k_get, in_url, "", in_headers, in_delegate, in_timeoutSecs);
+		}
+		//--------------------------------------------------------------------------------------------------
+		//--------------------------------------------------------------------------------------------------
+		HttpRequest* HttpRequestSystem::MakePostRequest(const std::string& in_url, const std::string& in_body, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
+		{
+			return MakeRequest(HttpRequest::Type::k_post, in_url, in_body, CSCore::ParamDictionary(), in_delegate, in_timeoutSecs);
+		}
+		//--------------------------------------------------------------------------------------------------
+		//--------------------------------------------------------------------------------------------------
+		HttpRequest* HttpRequestSystem::MakePostRequest(const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
+		{
+			return MakeRequest(HttpRequest::Type::k_post, in_url, in_body, in_headers, in_delegate, in_timeoutSecs);
+		}
+		//--------------------------------------------------------------------------------------------------
+		//--------------------------------------------------------------------------------------------------
+		HttpRequest* HttpRequestSystem::MakeRequest(HttpRequest::Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
+		{
+			CS_ASSERT(in_delegate != nullptr, "Cannot make an http request with a null delegate");
+			CS_ASSERT(in_url.empty() == false, "Cannot make an http request to a blank url");
 
 			URL_COMPONENTS urlComps;
 
@@ -147,12 +161,12 @@ namespace CSBackend
 			urlComps.dwExtraInfoLength = (DWORD)-1;
 
 			//Change the URL to wide string
-			std::wstring url(WindowsStringUtils::UTF8ToUTF16(in_requestDesc.m_url));
+			std::wstring url(WindowsStringUtils::UTF8ToUTF16(in_url));
 
 			//Crack the URL.
 			if (!WinHttpCrackUrl(url.c_str(), (DWORD)url.length(), 0, &urlComps))
 			{
-				CS_LOG_FATAL("Cannot crack URL: " + in_requestDesc.m_url);
+				CS_LOG_FATAL("Cannot crack URL: " + in_url);
 				return nullptr;
 			}
 
@@ -163,12 +177,12 @@ namespace CSBackend
 
 			if (!connectionHandle)
 			{
-				CS_LOG_ERROR("Failed to connect to server: " + in_requestDesc.m_url);
+				CS_LOG_ERROR("Failed to connect to server: " + in_url);
 				return nullptr;
 			}
 
 			//Set up the request based on whether it is POST or GET and whether it is SSL
-			LPCWSTR type = (in_requestDesc.m_type == CSNetworking::HttpRequest::Type::k_get ? L"GET" : L"POST");
+			LPCWSTR type = (in_type == CSNetworking::HttpRequest::Type::k_get ? L"GET" : L"POST");
 			HINTERNET requestHandle = 0;
 
 			std::wstring urlPath = urlComps.lpszUrlPath;
@@ -182,7 +196,7 @@ namespace CSBackend
 				requestHandle = ::WinHttpOpenRequest(connectionHandle, type, urlPath.c_str(), L"HTTP/1.1", WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, WINHTTP_FLAG_SECURE);
 				if (requestHandle == nullptr || ApplySSLSettings(m_sessionHandle, requestHandle) == false)
 				{
-					CS_LOG_ERROR("Failed to open request: " + in_requestDesc.m_url);
+					CS_LOG_ERROR("Failed to open request: " + in_url);
 					WinHttpCloseHandle(connectionHandle);
 					return nullptr;
 				}
@@ -192,26 +206,26 @@ namespace CSBackend
 				requestHandle = ::WinHttpOpenRequest(connectionHandle, type, urlPath.c_str(), L"HTTP/1.1", WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, 0);
 				if (requestHandle == nullptr)
 				{
-					CS_LOG_ERROR("Failed to open request: " + in_requestDesc.m_url);
+					CS_LOG_ERROR("Failed to open request: " + in_url);
 					WinHttpCloseHandle(connectionHandle);
 					return nullptr;
 				}
 			}
 
-			if (in_requestDesc.m_headers.empty() == false)
+			if (in_headers.empty() == false)
 			{
-				std::wstring headerBlob = ConvertHeaders(in_requestDesc.m_headers);
+				std::wstring headerBlob = ConvertHeaders(in_headers);
 
 				if (WinHttpAddRequestHeaders(requestHandle, headerBlob.c_str(), headerBlob.length(), WINHTTP_ADDREQ_FLAG_ADD) == false)
 				{
-					CS_LOG_ERROR("Failed to add http headers: " + in_requestDesc.m_url);
+					CS_LOG_ERROR("Failed to add http headers: " + in_url);
 					WinHttpCloseHandle(requestHandle);
 					WinHttpCloseHandle(connectionHandle);
 					return nullptr;
 				}
 			}
 
-			HttpRequest* httpRequest = new HttpRequest(in_requestDesc, requestHandle, connectionHandle, GetMaxBufferSize(), in_delegate);
+			HttpRequest* httpRequest = new HttpRequest(in_type, in_url, in_body, in_headers, in_timeoutSecs, requestHandle, connectionHandle, GetMaxBufferSize(), in_delegate);
 			m_requests.push_back(httpRequest);
 			return httpRequest;
 		}
