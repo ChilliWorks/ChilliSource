@@ -91,6 +91,19 @@ namespace CSBackend
             //------------------------------------------------------------------
             void OnComplete(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data);
             //------------------------------------------------------------------
+            /// Called by the Http Delegate when the max buffer size is exceeded
+            /// and it flushes the current data.
+            ///
+            /// This is for internal use only and should not be called by the user.
+            ///
+            /// @author S Downie
+            ///
+            /// @param The result.
+            /// @param The response code.
+            /// @param The partial data in string form.
+            //------------------------------------------------------------------
+            void OnFlushed(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data);
+            //------------------------------------------------------------------
             /// Destructor.
             ///
             /// @author Ian Copland
@@ -110,9 +123,10 @@ namespace CSBackend
             /// @param POST body
             /// @param Headers
             /// @param Timeout in seconds
+            /// @param Max buffer size in bytes
             /// @param Completion delegate
             //------------------------------------------------------------------
-            HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, const Delegate& in_delegate);
+            HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate);
             
         private:
             

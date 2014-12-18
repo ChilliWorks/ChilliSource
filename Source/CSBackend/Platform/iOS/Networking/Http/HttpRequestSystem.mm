@@ -77,7 +77,7 @@ namespace CSBackend
             CS_ASSERT(in_delegate != nullptr, "Cannot make an http request with a null delegate");
             CS_ASSERT(in_url.empty() == false, "Cannot make an http request to a blank url");
             
-            HttpRequestUPtr request(new HttpRequest(in_type, in_url, in_body, in_headers, in_timeoutSecs, [=](const CSNetworking::HttpRequest* in_request, const CSNetworking::HttpResponse& in_response)
+            HttpRequestUPtr request(new HttpRequest(in_type, in_url, in_body, in_headers, in_timeoutSecs, GetMaxBufferSize(), [=](const CSNetworking::HttpRequest* in_request, const CSNetworking::HttpResponse& in_response)
             {
                 m_finishedRequests.push_back(in_request);
                 in_delegate(in_request, in_response);

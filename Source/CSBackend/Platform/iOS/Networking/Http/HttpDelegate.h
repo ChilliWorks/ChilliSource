@@ -43,6 +43,7 @@
 {
     CSBackend::iOS::HttpRequest* m_request;
     u32 m_responseCode;
+    u32 m_maxBufferSize;
     NSMutableData* m_data;
 }
 //---------------------------------------------------------------------------
@@ -51,8 +52,10 @@
 /// @author Ian Copland
 ///
 /// @param The owning request.
+/// @param The max buffer size of the request in bytes after which the
+/// request must be flushed (0 == no limit)
 //---------------------------------------------------------------------------
-- (id) initWithRequest:(CSBackend::iOS::HttpRequest*)in_request;
+- (id) initWithRequest:(CSBackend::iOS::HttpRequest*)in_request andMaxBufferSize:(u32) in_bufferSize;
 //---------------------------------------------------------------------------
 /// Cleans up the delegate.
 ///

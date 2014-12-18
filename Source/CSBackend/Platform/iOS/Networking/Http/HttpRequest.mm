@@ -43,7 +43,7 @@ namespace CSBackend
 	{
         //------------------------------------------------------------------
         //------------------------------------------------------------------
-		HttpRequest::HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, const Delegate& in_delegate)
+		HttpRequest::HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate)
         : m_type(in_type), m_url(in_url), m_body(in_body), m_headers(in_headers), m_completionDelegate(in_delegate)
 		{
             CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
@@ -75,7 +75,7 @@ namespace CSBackend
                     request.HTTPBody = [NSData dataWithBytes:m_body.c_str() length:m_body.length()];
                 }
                 
-                m_httpDelegate = [[HttpDelegate alloc] initWithRequest:this];
+                m_httpDelegate = [[HttpDelegate alloc] initWithRequest:this andMaxBufferSize:in_maxBufferSize];
                 m_connection = [[NSURLConnection connectionWithRequest:[request copy] delegate: m_httpDelegate] retain];
             }
         }
@@ -120,6 +120,13 @@ namespace CSBackend
             CS_ASSERT(m_complete == false, "Cannot complete an already completed request.");
             
             m_complete = true;
+            m_completionDelegate(this, CSNetworking::HttpResponse(in_result, in_responseCode, in_data));
+        }
+        //------------------------------------------------------------------
+        //------------------------------------------------------------------
+        void HttpRequest::OnFlushed(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
+        {
+            CS_ASSERT(m_complete == false, "Cannot flush an already completed request.");
             m_completionDelegate(this, CSNetworking::HttpResponse(in_result, in_responseCode, in_data));
         }
         //------------------------------------------------------------------
