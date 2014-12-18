@@ -57,7 +57,9 @@ namespace ChilliSource
         
         //--------------------------------------------------------------------------------------------------
         /// Base class for platform depended http request system. This system is responsible for making
-        /// http requests to a url and managing the lifetime of the requests and the connections
+        /// http requests to a url and managing the lifetime of the requests and the connections.
+        ///
+        /// NOTE: On certain platforms you cannot redirect from https to http. You have been warned!
         ///
         /// @author S Downie
         //--------------------------------------------------------------------------------------------------
@@ -146,12 +148,9 @@ namespace ChilliSource
             //--------------------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param The number of bytes read before the buffer is flushed (0 is infinite)
+            /// @param The number of bytes read before the buffer is flushed (0 is unlimited)
             //--------------------------------------------------------------------------------------------------
-            inline void SetMaxBufferSize(u32 in_sizeInBytes)
-            {
-                m_maxBufferSize = in_sizeInBytes;
-            }
+            void SetMaxBufferSize(u32 in_sizeInBytes);
             
         protected:
             
@@ -160,10 +159,7 @@ namespace ChilliSource
             ///
             /// @return The number of bytes read before the buffer is flushed
             //--------------------------------------------------------------------------------------------------
-            inline u32 GetMaxBufferSize() const
-            {
-                return m_maxBufferSize;
-            }
+            u32 GetMaxBufferSize() const;
             
         private:
             
