@@ -39,7 +39,7 @@ namespace ChilliSource
         
         //------------------------------------------------------------------------
         //------------------------------------------------------------------------
-        ProgressBarDirection ParseProgressParDirection(const std::string& in_stringDirection)
+        ProgressBarDirection ParseProgressBarDirection(const std::string& in_stringDirection)
         {
             std::string lowerDirection = in_stringDirection;
             Core::StringUtils::ToLowerCase(lowerDirection);

@@ -133,7 +133,7 @@ namespace ChilliSource
         template <typename TType> void Property<TType>::Parse(const std::string& in_string)
         {
             auto parser = m_type->GetParseDelegate();
-            CS_ASSERT(parser != nullptr, "Cannot parse property of type '" + m_type->GetTypeName() + "' from string.");
+            CS_ASSERT(parser != nullptr, "Cannot parse this property type from string.");
             
             TType value = parser(in_string);
             Set(value);

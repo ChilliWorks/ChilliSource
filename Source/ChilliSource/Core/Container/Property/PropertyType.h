@@ -86,18 +86,11 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
-            /// @param The name of the property type.
             /// @param The default value for the property type.
             /// @param The string parsing method for the type. This can be null
             /// if the type cannot be parsed from string.
             //-----------------------------------------------------------------
-            PropertyType(const std::string& in_typeName, TType&& in_defaultValue, const ParseDelegate& in_parseDelegate);
-            //-----------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The string name of the type of the property.
-            //-----------------------------------------------------------------
-            const std::string& GetTypeName() const override;
+            PropertyType(TType&& in_defaultValue, const ParseDelegate& in_parseDelegate);
             //-----------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -132,7 +125,6 @@ namespace ChilliSource
             std::unique_ptr<IProperty> CreateProperty(GetterDelegate&& in_getter, SetterDelegate&& in_setter) const;
             
         private:
-            std::string m_typeName;
             TType m_defaultValue;
             ParseDelegate m_parseDelegate;
         };
@@ -153,15 +145,9 @@ namespace ChilliSource
     {
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
-        template <typename TType> PropertyType<TType>::PropertyType(const std::string& in_typeName, TType&& in_defaultValue, const ParseDelegate& in_parseDelegate)
-            : m_typeName(in_typeName), m_defaultValue(std::forward<TType>(in_defaultValue)), m_parseDelegate(in_parseDelegate)
+        template <typename TType> PropertyType<TType>::PropertyType(TType&& in_defaultValue, const ParseDelegate& in_parseDelegate)
+            : m_defaultValue(std::forward<TType>(in_defaultValue)), m_parseDelegate(in_parseDelegate)
         {
-        }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        template <typename TType> const std::string& PropertyType<TType>::GetTypeName() const
-        {
-            return m_typeName;
         }
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
@@ -193,10 +179,10 @@ namespace ChilliSource
 #define CS_DECLARE_PROPERTYTYPE(in_type, in_name) \
     const CSCore::PropertyType<in_type>* in_name();
 
-#define CS_DEFINE_PROPERTYTYPE(in_type, in_name, in_stringName, in_defaultValue, in_parseMethod) \
+#define CS_DEFINE_PROPERTYTYPE(in_type, in_name, in_defaultValue, in_parseMethod) \
     const CSCore::PropertyType<in_type>* in_name() \
     { \
-        static const CSCore::PropertyType<in_type> k_property(in_stringName, in_defaultValue, in_parseMethod); \
+        static const CSCore::PropertyType<in_type> k_property(in_defaultValue, in_parseMethod); \
         return &k_property; \
     }
 

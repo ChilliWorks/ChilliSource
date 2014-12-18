@@ -42,7 +42,7 @@ namespace ChilliSource
         
         //------------------------------------------------------------------------
         //------------------------------------------------------------------------
-        ProgressBarType ParseProgressParType(const std::string& in_stringType)
+        ProgressBarType ParseProgressBarType(const std::string& in_stringType)
         {
             std::string lowerType = in_stringType;
             Core::StringUtils::ToLowerCase(lowerType);

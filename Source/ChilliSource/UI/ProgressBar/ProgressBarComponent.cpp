@@ -163,14 +163,6 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void ProgressBarComponent::UpdateBar()
         {
-            if (GetWidget() != nullptr && m_barWidget == nullptr)
-            {
-                m_barWidget = GetWidget()->GetInternalWidget(m_barWidgetName);
-                CS_ASSERT(m_barWidget != nullptr, "Could not find bar widget with name: " + m_barWidgetName);
-                
-                m_barDrawableComponent = m_barWidget->GetComponent<DrawableComponent>();
-            }
-            
             if (m_barWidget != nullptr)
             {
                 if (m_direction == ProgressBarDirection::k_horizontal)
@@ -241,6 +233,11 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void ProgressBarComponent::OnInit()
         {
+            m_barWidget = GetWidget()->GetInternalWidget(m_barWidgetName);
+            CS_ASSERT(m_barWidget != nullptr, "Could not find bar widget with name: " + m_barWidgetName);
+            
+            m_barDrawableComponent = m_barWidget->GetComponent<DrawableComponent>();
+            
             UpdateBar();
         }
         //-------------------------------------------------------------------

@@ -53,12 +53,6 @@ namespace ChilliSource
         {
         public:
             //-----------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The string name of the underlying type.
-            //-----------------------------------------------------------------
-            virtual const std::string& GetTypeName() const = 0;
-            //-----------------------------------------------------------------
             /// Creates a new instance of the described property type. This
             /// does not require knowledge of the specific property type.
             ///

@@ -36,8 +36,7 @@ namespace ChilliSource
     namespace UI
     {
         //------------------------------------------------------------------------
-        /// An enum describing the direction of a progress bar: vertical or
-        /// horizontal.
+        /// An enum describing the type of a progress bar: fill or stretch.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------
@@ -57,7 +56,7 @@ namespace ChilliSource
         ///
         /// @return The parsed direction.
         //------------------------------------------------------------------------
-        ProgressBarType ParseProgressParType(const std::string& in_stringType);
+        ProgressBarType ParseProgressBarType(const std::string& in_stringType);
         //------------------------------------------------------------------------
         /// Converts the given progress bar type to a string.
         ///

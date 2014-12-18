@@ -57,7 +57,7 @@ namespace ChilliSource
         ///
         /// @return The parsed direction.
         //------------------------------------------------------------------------
-        ProgressBarDirection ParseProgressParDirection(const std::string& in_stringDirection);
+        ProgressBarDirection ParseProgressBarDirection(const std::string& in_stringDirection);
         //------------------------------------------------------------------------
         /// Converts the given progress bar direction to a string.
         ///
