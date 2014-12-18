@@ -30,13 +30,11 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/iOS/ForwardDeclarations.h>
-#include <ChilliSource/Networking/Http/HttpRequestSystem.h>
-
 #import <CSBackend/Platform/iOS/Networking/Http/HttpRequest.h>
+#include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
 #import <CoreFoundation/CoreFoundation.h>
 
-#include <unordered_map>
 #include <vector>
 
 namespace CSBackend
