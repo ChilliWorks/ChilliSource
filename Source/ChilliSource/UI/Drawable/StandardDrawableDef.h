@@ -100,8 +100,8 @@ namespace ChilliSource
             //--------------------------------------------------------------
             /// Allows querying of whether or not the component implements
             /// the interface associated with the given interface Id.
-            /// Typically this wont be called directly, instead the templated
-            /// version IsA<Interface>() should be used.
+            /// Typically this won't be called directly, instead the
+            /// templated version IsA<Interface>() should be used.
             ///
             /// @author Ian Copland
             ///

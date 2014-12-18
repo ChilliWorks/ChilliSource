@@ -61,7 +61,7 @@ namespace ChilliSource
             static const u32 k_numPatches = 9;
             //----------------------------------------------------------------------------------------
             /// Allows querying of whether or not the component implements the interface associated
-            /// with the given interface Id.  Typically this wont be called directly, instead the
+            /// with the given interface Id. Typically this won't be called directly, instead the
             /// templated version IsA<Interface>() should be used.
             ///
             /// @author Ian Copland

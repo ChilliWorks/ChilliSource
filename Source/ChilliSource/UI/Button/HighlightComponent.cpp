@@ -140,14 +140,14 @@ namespace ChilliSource
             {
                 if (m_highlightDrawableDef != nullptr)
                 {
-                    m_drawableComponent->SetDrawableDef(m_highlightDrawableDef);
+                    m_drawableComponent->ApplyDrawableDef(m_highlightDrawableDef);
                     
                     auto drawable = m_drawableComponent->GetDrawable();
                     drawable->SetColour(m_highlightColour * m_highlightDrawableDef->GetColour());
                 }
                 else
                 {
-                    m_drawableComponent->SetDrawableDef(m_normalDrawableDef);
+                    m_drawableComponent->ApplyDrawableDef(m_normalDrawableDef);
                     
                     auto drawable = m_drawableComponent->GetDrawable();
                     drawable->SetColour(m_highlightColour * m_normalDrawableDef->GetColour());
@@ -162,7 +162,7 @@ namespace ChilliSource
             
             if (m_drawableComponent != nullptr)
             {
-                m_drawableComponent->SetDrawableDef(m_normalDrawableDef);
+                m_drawableComponent->ApplyDrawableDef(m_normalDrawableDef);
             }
         }
         //-------------------------------------------------------------------

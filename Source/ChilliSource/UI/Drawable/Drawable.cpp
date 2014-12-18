@@ -1,5 +1,5 @@
 //
-//  IDrawable.cpp
+//  Drawable.cpp
 //  Chilli Source
 //  Created by Scott Downie on 18/04/2014.
 //

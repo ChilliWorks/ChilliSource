@@ -71,7 +71,7 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             /// Allows querying of whether or not the component implements the
             /// interface associated with the given interface Id. Typically
-            /// this wont be called directly, instead the templated version
+            /// this won't be called directly, instead the templated version
             /// IsA<Interface>() should be used.
             ///
             /// @author Ian Copland
@@ -86,7 +86,7 @@ namespace ChilliSource
             ///
             /// @return The drawable object that performs the rendering. This
             /// can be used to directly change properties such as the UVs and
-            /// colour of the rendered image. Note that manually changing this
+            /// colour of the rendered image.
             //-------------------------------------------------------------------
             Drawable* GetDrawable();
             //-------------------------------------------------------------------
@@ -98,13 +98,6 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             const Drawable* GetDrawable() const;
             //-------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The drawable definition that was used to create the
-            /// underlying drawable object.
-            //-------------------------------------------------------------------
-            const DrawableDefCSPtr& GetDrawableDef() const;
-            //-------------------------------------------------------------------
             /// Sets the drawable definition that is used to create the underlying
             /// drawable object.
             ///
@@ -112,7 +105,7 @@ namespace ChilliSource
             ///
             /// @param The drawable defintion.
             //-------------------------------------------------------------------
-            void SetDrawableDef(const DrawableDefCSPtr& in_drawableDef);
+            void ApplyDrawableDef(const DrawableDefCSPtr& in_drawableDef);
             
         private:
             friend class ComponentFactory;
@@ -127,6 +120,13 @@ namespace ChilliSource
             /// @param The property map.
             //-------------------------------------------------------------------
             DrawableComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
+            //-------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The drawable definition that was used to create the
+            /// underlying drawable object.
+            //-------------------------------------------------------------------
+            const DrawableDefCSPtr& GetDrawableDef() const;
             //----------------------------------------------------------------
             /// This is called during the draw event whenever the application
             /// is active and the owning widget in on the canvas. This will

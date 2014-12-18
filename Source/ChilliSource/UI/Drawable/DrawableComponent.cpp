@@ -59,7 +59,7 @@ namespace ChilliSource
         DrawableComponent::DrawableComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
             : Component(in_componentName)
         {
-            RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_drawableKey, Core::MakeDelegate(this, &DrawableComponent::GetDrawableDef), Core::MakeDelegate(this, &DrawableComponent::SetDrawableDef));
+            RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_drawableKey, Core::MakeDelegate(this, &DrawableComponent::GetDrawableDef), Core::MakeDelegate(this, &DrawableComponent::ApplyDrawableDef));
             ApplyRegisteredProperties(in_properties);
         }
         //-------------------------------------------------------------------
@@ -82,18 +82,18 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const DrawableDefCSPtr& DrawableComponent::GetDrawableDef() const
-        {
-            return m_drawableDef;
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        void DrawableComponent::SetDrawableDef(const DrawableDefCSPtr& in_drawableDef)
+        void DrawableComponent::ApplyDrawableDef(const DrawableDefCSPtr& in_drawableDef)
         {
             CS_ASSERT(in_drawableDef != nullptr, "Cannot set null drawable def on a drawable component.");
             
             m_drawableDef = in_drawableDef;
             m_drawable = m_drawableDef->CreateDrawable();
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        const DrawableDefCSPtr& DrawableComponent::GetDrawableDef() const
+        {
+            return m_drawableDef;
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
