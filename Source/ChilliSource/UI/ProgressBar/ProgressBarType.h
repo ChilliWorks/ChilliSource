@@ -43,8 +43,8 @@ namespace ChilliSource
         //------------------------------------------------------------------------
         enum class ProgressBarType
         {
-            k_stretch,
-            k_fill
+            k_fill,
+            k_stretch
         };
         //------------------------------------------------------------------------
         /// Parse a progress bar type from string. This is case insensitive.

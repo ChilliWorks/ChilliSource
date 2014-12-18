@@ -54,11 +54,11 @@ namespace ChilliSource
         /// This defaults to 0.0.
         ///
         /// "BarType": A string describing the type of progress bar. The possible
-        /// values for this are "Stretch" or "Clipping". A stretch progress bar
+        /// values for this are "Fill" or "Stretch". A stretch progress bar
         /// simply changes the size of the bar widget as progress changes. A
-        /// clipping progress bar will also alter the UVs of the widgets drawable
+        /// fill progress bar will also alter the UVs of the widgets drawable
         /// such that it appears to reveal more of the bar as it progresses. This
-        /// defaults to "Stretch". If using Clipping the underlying bar widget must
+        /// defaults to "Fill". If using Fill the underlying bar widget must
         /// have a Drawable Component, otherwise the app is considered to be in an
         /// irrecoverable state and will terminate.
         ///
@@ -112,7 +112,7 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @param The type of the progress bar: Stretch or Clipping.
+            /// @param The type of the progress bar: Fill or Stretch.
             //-------------------------------------------------------------------
             ProgressBarType GetBarType() const;
             //-------------------------------------------------------------------
@@ -146,7 +146,7 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             void SetProgress(f32 in_progress);
             //-------------------------------------------------------------------
-            /// Sets the type of the progress bar: Stretch or Clipping.
+            /// Sets the type of the progress bar: Fill or Stretch.
             ///
             /// @author Ian Copland
             ///
@@ -221,7 +221,7 @@ namespace ChilliSource
             
             Core::Vector2 m_relBarSize;
             f32 m_progress = 0.0f;
-            ProgressBarType m_barType = ProgressBarType::k_stretch;
+            ProgressBarType m_barType = ProgressBarType::k_fill;
             ProgressBarDirection m_direction = ProgressBarDirection::k_horizontal;
             std::string m_barWidgetName;
             

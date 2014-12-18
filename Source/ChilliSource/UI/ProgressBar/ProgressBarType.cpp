@@ -36,8 +36,8 @@ namespace ChilliSource
     {
         namespace
         {
-            const char k_typeStretch[] = "stretch";
             const char k_typeFill[] = "fill";
+            const char k_typeStretch[] = "stretch";
         }
         
         //------------------------------------------------------------------------
@@ -47,17 +47,17 @@ namespace ChilliSource
             std::string lowerType = in_stringType;
             Core::StringUtils::ToLowerCase(lowerType);
             
-            if (lowerType == k_typeStretch)
-            {
-                return ProgressBarType::k_stretch;
-            }
-            else if (lowerType == k_typeFill)
+            if (lowerType == k_typeFill)
             {
                 return ProgressBarType::k_fill;
             }
+            else if (lowerType == k_typeStretch)
+            {
+                return ProgressBarType::k_stretch;
+            }
             
             CS_LOG_FATAL("Could not parse progress bar type: " + in_stringType);
-            return ProgressBarType::k_stretch;
+            return ProgressBarType::k_fill;
         }
         //------------------------------------------------------------------------
         //------------------------------------------------------------------------
@@ -65,13 +65,13 @@ namespace ChilliSource
         {
             switch (in_direction)
             {
-                case ProgressBarType::k_stretch:
-                    return k_typeStretch;
                 case ProgressBarType::k_fill:
                     return k_typeFill;
+                case ProgressBarType::k_stretch:
+                    return k_typeStretch;
                 default:
                     CS_LOG_FATAL("Invalid progress bar type.");
-                    return k_typeStretch;
+                    return k_typeFill;
                     
             }
         }
