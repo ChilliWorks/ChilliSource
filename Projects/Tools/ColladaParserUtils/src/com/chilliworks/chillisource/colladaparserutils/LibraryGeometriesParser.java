@@ -78,10 +78,12 @@ public class LibraryGeometriesParser
 			return PushFloatArray(inAttributes);
 		else if (instrQName.equalsIgnoreCase("vertices"))
 			return PushVertices(inAttributes);
-		else if (instrQName.equalsIgnoreCase("triangles"))
+		else if (instrQName.equalsIgnoreCase("triangles") || instrQName.equalsIgnoreCase("polylist"))
 			return PushTriangles(inAttributes);
 		else if (instrQName.equalsIgnoreCase("input"))
 			return PushInput(inAttributes);
+		else if (instrQName.equalsIgnoreCase("vcount"))
+			return PushVCount(inAttributes);
 		else if (instrQName.equalsIgnoreCase("p"))
 			return PushP(inAttributes);
 		else
@@ -112,10 +114,12 @@ public class LibraryGeometriesParser
 			PopFloatArray(inData);
 		else if (instrQName.equalsIgnoreCase("vertices"))
 			PopVertices(inData);
-		else if (instrQName.equalsIgnoreCase("triangles"))
+		else if (instrQName.equalsIgnoreCase("triangles") || instrQName.equalsIgnoreCase("polylist"))
 			PopTriangles(inData);
 		else if (instrQName.equalsIgnoreCase("input"))
 			PopInput(inData);
+		else if (instrQName.equalsIgnoreCase("vcount"))
+			PopVCount(inData);
 		else if (instrQName.equalsIgnoreCase("p"))
 			PopP(inData);
 		else
@@ -153,6 +157,36 @@ public class LibraryGeometriesParser
 		if (mdwIgnoreStack > 0 ) return;
 		
 		mCurrentGeometry = null;
+	}
+	//--------------------------------------------------------------
+	/// Push VCount
+	///
+	/// Pushes a vertex count element on to the element stack.
+	//--------------------------------------------------------------
+	private boolean PushVCount(Attributes inAttributes)
+	{
+		if (mdwIgnoreStack > 0 ) return false;
+		
+		return true;
+	}
+	//--------------------------------------------------------------
+	/// Pop VCount
+	///
+	/// Pops a vertex count element from the element stack.
+	//--------------------------------------------------------------
+	private void PopVCount(String inData)
+	{
+		if (mdwIgnoreStack > 0 ) return;
+		
+		
+		String[] values = inData.split(" ");
+		for(String val : values)
+		{
+			if(val.equals("3") == false)
+			{
+				Logging.logFatal("Exporter only supports models with triangles");
+			}
+		}
 	}
 	//--------------------------------------------------------------
 	/// Push Mesh
