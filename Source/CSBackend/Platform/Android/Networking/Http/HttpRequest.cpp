@@ -40,9 +40,8 @@ namespace CSBackend
 	{
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
-		HttpRequest::HttpRequest(const Desc& in_requestDesc, u32 in_bufferFlushSize, const Delegate& in_delegate)
-		: m_desc(in_requestDesc), m_completionDelegate(in_delegate), m_isRequestComplete(false), m_isPollingComplete(false), m_shouldKillThread(false),
-		  m_responseCode(0), m_requestResult(Result::k_failed)
+		HttpRequest::HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate)
+	    : m_type(in_type), m_url(in_url), m_body(in_body), m_headers(in_headers), m_completionDelegate(in_delegate), m_timeoutSecs(in_timeoutSecs)
 		{
 			CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
 
@@ -58,12 +57,10 @@ namespace CSBackend
 			{
                 m_isRequestComplete = true;
 
-				if(m_requestResult != Result::k_cancelled)
+				if(m_requestResult != CSNetworking::HttpResponse::Result::k_cancelled)
 				{
-					m_completionDelegate(this, m_requestResult);
+					m_completionDelegate(this, CSNetworking::HttpResponse(m_requestResult, m_responseCode, m_responseData));
 				}
-
-				m_completionDelegate = nullptr;
 			}
 		}
 		//------------------------------------------------------------------
@@ -71,27 +68,27 @@ namespace CSBackend
 		void HttpRequest::PerformRequest()
 		{
 			HttpRequestJavaInterface::RequestType type = HttpRequestJavaInterface::RequestType::k_get;
-			if (m_desc.m_type == CSNetworking::HttpRequest::Type::k_post)
+			if (m_type == CSNetworking::HttpRequest::Type::k_post)
 			{
 				type = HttpRequestJavaInterface::RequestType::k_post;
 			}
 
 			//This is a blocking call
-			HttpRequestJavaInterface::RequestResultCode requestResultCode = HttpRequestJavaInterface::MakeHttpRequest(m_desc.m_url, type, m_desc.m_headers, m_desc.m_body, m_responseData, m_desc.m_redirectionUrl, (s32&)m_responseCode);
+			HttpRequestJavaInterface::RequestResultCode requestResultCode = HttpRequestJavaInterface::MakeHttpRequest(m_url, type, m_headers, m_body, (s32)m_timeoutSecs, m_responseData, (s32&)m_responseCode);
 
 			if (m_shouldKillThread == false)
 			{
 				switch (requestResultCode)
 				{
 				case HttpRequestJavaInterface::RequestResultCode::k_success:
-					m_requestResult = Result::k_completed;
+					m_requestResult = CSNetworking::HttpResponse::Result::k_completed;
 					break;
 				case HttpRequestJavaInterface::RequestResultCode::k_couldNotConnect:
 				case HttpRequestJavaInterface::RequestResultCode::k_couldNotMakeRequest:
-					m_requestResult = Result::k_failed;
+					m_requestResult = CSNetworking::HttpResponse::Result::k_failed;
 					break;
 				case HttpRequestJavaInterface::RequestResultCode::k_timeout:
-					m_requestResult = Result::k_timeout;
+					m_requestResult = CSNetworking::HttpResponse::Result::k_timeout;
 					break;
 				default:
 					break;
@@ -105,7 +102,7 @@ namespace CSBackend
 		void HttpRequest::Cancel()
 		{
             m_shouldKillThread = true;
-            m_requestResult = Result::k_cancelled;
+            m_requestResult = CSNetworking::HttpResponse::Result::k_cancelled;
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
@@ -113,24 +110,30 @@ namespace CSBackend
 		{
 			return m_isRequestComplete;
 		}
-		//----------------------------------------------------------------------------------------
-		//----------------------------------------------------------------------------------------
-		const HttpRequest::Desc& HttpRequest::GetDescription() const
-		{
-			return m_desc;
-		}
-		//----------------------------------------------------------------------------------------
-		//----------------------------------------------------------------------------------------
-		const std::string& HttpRequest::GetResponse() const
-		{
-			return m_responseData;
-		}
-		//----------------------------------------------------------------------------------------
-		//----------------------------------------------------------------------------------------
-		u32 HttpRequest::GetResponseCode() const
-		{
-			return m_responseCode;
-		}
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        HttpRequest::Type HttpRequest::GetType() const
+        {
+            return m_type;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const std::string& HttpRequest::GetUrl() const
+        {
+            return m_url;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const std::string& HttpRequest::GetBody() const
+        {
+            return m_body;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const CSCore::ParamDictionary& HttpRequest::GetHeaders() const
+        {
+            return m_headers;
+        }
 	}
 }
 

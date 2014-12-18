@@ -66,8 +66,6 @@ public class HttpRequestNativeInterface
 	private static X509TrustManager[] msTrustManagers;
 	private static HostnameVerifier msHostnameVerifier;
 	
-	private static int m_connectTimeoutMilliSecs = 15000;
-	
 	//-------------------------------------------------------------------
 	/// Setup
 	///
@@ -80,17 +78,8 @@ public class HttpRequestNativeInterface
 		msActivity = inActivity;
 		msTrustManagers = new X509TrustManager[] {new InsecureTrustManager()};
 		msHostnameVerifier = new InsecureHostnameVerifier();
-	}
-	//-------------------------------------------------------------------
-	/// Set the time taken for a request connection to timeout in seconds
-	///
-	/// @author S Downie
-	///
-	/// @param Timeout (Seconds)
-	//-------------------------------------------------------------------
-	public static void setConnectionTimeout(int in_timeoutInSecs)
-	{
-		m_connectTimeoutMilliSecs = in_timeoutInSecs * 1000;
+		
+		HttpURLConnection.setFollowRedirects(true);
 	}
 	//-------------------------------------------------------------------
 	/// Http Request with headers
@@ -103,6 +92,7 @@ public class HttpRequestNativeInterface
 	/// @param Array of key strings for headers
 	/// @param Array of value strings for headers
 	/// @param The post body. Not used if inbIsPost is false
+	/// @param The connection timeout in seconds
 	/// @param The result length. This is stored as an array in order to
 	///		   pass by reference. 
 	/// @param The result code. This is stored as an array in order to
@@ -112,9 +102,11 @@ public class HttpRequestNativeInterface
 	/// @return The response as a byte array.
 	//-------------------------------------------------------------------
 	public static byte[] HttpRequestWithHeaders(String instrUrl, boolean inbIsPost,
-									 			String[] inastrHeaderKeys, String[] inastrHeaderValues, String instrBody,
-									 			int[] outadwResultLength, String[] outstrRedirectionLocation, int[] outadwResultCode, int[] outadwHttpResponseCode)
+									 			String[] inastrHeaderKeys, String[] inastrHeaderValues, String instrBody, int in_timeout,
+									 			int[] outadwResultLength, int[] outadwResultCode, int[] outadwHttpResponseCode)
 	{
+		int connectionTimeoutMs = in_timeout * 1000;
+		
 		boolean bRetry = false;
 
 		outadwResultLength[0] = 0;
@@ -144,9 +136,8 @@ public class HttpRequestNativeInterface
 
 				try 
 				{	        	
-					HttpURLConnection.setFollowRedirects(false);
 					urlConnection.setReadTimeout(k_readTimeoutMilliSecs);
-					urlConnection.setConnectTimeout(m_connectTimeoutMilliSecs);
+					urlConnection.setConnectTimeout(connectionTimeoutMs);
 
 					//if the protocol is HTTPS then set that up.
 					if (instrUrl.startsWith("https") == true)
@@ -197,16 +188,6 @@ public class HttpRequestNativeInterface
 					{
 						// Get the response (either by InputStream or ErrorStream)
 						abyOutputData = ReadStream(dwResponseCode, urlConnection, outadwResultLength);
-					}
-
-					String strLocation = urlConnection.getHeaderField("Location");
-					if(strLocation != null)
-					{
-						outstrRedirectionLocation[0] = strLocation;
-					}
-					else
-					{
-						outstrRedirectionLocation[0] = "";
 					}
 				}
 				catch (UnknownHostException eUnknownHostException)

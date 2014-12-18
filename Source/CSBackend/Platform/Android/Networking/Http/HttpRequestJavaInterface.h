@@ -83,14 +83,6 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------
 			static void SetupJavaInterface(JavaVM* in_javaVM);
 			//--------------------------------------------------------------------------------------
-			/// Set the connection timeout time in seconds
-			///
-			/// @author S Downie
-			///
-			/// @param Timeout in seconds
-			//--------------------------------------------------------------------------------------
-			static void SetConnectionTimeout(u32 in_timeoutSecs);
-			//--------------------------------------------------------------------------------------
 			/// Sends a HTTP request using java "HttpURLConnection" system. This handles persistent
 			/// connections and SSL.
 			///
@@ -100,14 +92,13 @@ namespace CSBackend
 			/// @param The request type
 			/// @param Dictionary of key value headers
 			/// @param The post body. Not used if type is not post
+			/// @param Connection timeout in seconds
 			/// @param [Out] Parameter containing the response data as a string.
-			/// @param [Out] URL of any redirection
 			/// @param [Out] Http response code
 			///
 			/// @return The result code.
 			//--------------------------------------------------------------------------------------
-			static RequestResultCode MakeHttpRequest(const std::string& in_url, RequestType in_type, const CSCore::ParamDictionary& in_headers, const std::string& in_body,
-													std::string& out_response, std::string& out_redirectUrl, s32& out_reponseCode);
+			static RequestResultCode MakeHttpRequest(const std::string& in_url, RequestType in_type, const CSCore::ParamDictionary& in_headers, const std::string& in_body, s32 in_timeout, std::string& out_response, s32& out_reponseCode);
 			//--------------------------------------------------------------------------------------
 			/// Calls into java to find whether or not the device is currently connected to the
 			/// internet
