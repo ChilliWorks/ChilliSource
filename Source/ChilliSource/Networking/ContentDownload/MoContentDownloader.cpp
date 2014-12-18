@@ -121,14 +121,14 @@ namespace ChilliSource
                         default:   //OK 
                         case HttpResponseCode::k_ok:
                         {
-                            mOnContentManifestDownloadCompleteDelegate(Result::k_succeeded, in_response.GetData());
+                            mOnContentManifestDownloadCompleteDelegate(Result::k_succeeded, in_response.GetDataAsString());
                             break;
                         }
                         case HttpResponseCode::k_error:      //Error
                         case HttpResponseCode::k_unavailable://Temporary error try again later
                         case HttpResponseCode::k_notFound:   //End point doesn't exist
                         {
-                            mOnContentManifestDownloadCompleteDelegate(Result::k_failed, in_response.GetData());
+                            mOnContentManifestDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
                             break;
                         }
                     }
@@ -138,7 +138,7 @@ namespace ChilliSource
                 case HttpResponse::Result::k_failed:
                 case HttpResponse::Result::k_cancelled:
                 {
-                    mOnContentManifestDownloadCompleteDelegate(Result::k_failed, in_response.GetData());
+                    mOnContentManifestDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
                     break;
                 }
                 case HttpResponse::Result::k_flushed:
@@ -149,14 +149,14 @@ namespace ChilliSource
                         default:   //OK 
                         case HttpResponseCode::k_ok:
                         {
-                            mOnContentManifestDownloadCompleteDelegate(Result::k_flushed, in_response.GetData());
+                            mOnContentManifestDownloadCompleteDelegate(Result::k_flushed, in_response.GetDataAsString());
                             break;
                         }
                         case HttpResponseCode::k_error:      //Error
                         case HttpResponseCode::k_unavailable://Temporary error try again later
                         case HttpResponseCode::k_notFound:   //End point doesn't exist
                         {
-                            mOnContentManifestDownloadCompleteDelegate(Result::k_failed, in_response.GetData());
+                            mOnContentManifestDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
                             break;
                         }
                     }
@@ -180,7 +180,7 @@ namespace ChilliSource
                     {
                         default:   //OK
                         case HttpResponseCode::k_ok:
-                            mOnContentDownloadCompleteDelegate(Result::k_succeeded, in_response.GetData());
+                            mOnContentDownloadCompleteDelegate(Result::k_succeeded, in_response.GetDataAsString());
                             break;
                     }
                     break;
@@ -189,12 +189,12 @@ namespace ChilliSource
                 case HttpResponse::Result::k_failed:
                 case HttpResponse::Result::k_cancelled:
                 {
-                    mOnContentDownloadCompleteDelegate(Result::k_failed, in_response.GetData());
+                    mOnContentDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
                     break;
                 }
                 case HttpResponse::Result::k_flushed:
                 {
-                    mOnContentDownloadCompleteDelegate(Result::k_flushed, in_response.GetData());
+                    mOnContentDownloadCompleteDelegate(Result::k_flushed, in_response.GetDataAsString());
                     break;
                 }
             }

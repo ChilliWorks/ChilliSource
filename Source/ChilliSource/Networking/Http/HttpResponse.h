@@ -77,10 +77,22 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return The contents of the response as a string. (This could be binary data and could
-            /// also be empty if the result is failure)
+            /// @return The contents of the response. (This could be null if a failure occured)
             //----------------------------------------------------------------------------------------
-            const std::string& GetData() const;
+            const u8* GetData() const;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return Size of data in bytes (This could be 0 if a failure occured)
+            //----------------------------------------------------------------------------------------
+            const u32 GetDataSize() const;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The contents of the response as a string. (This could be binary data and could
+            /// also be empty if the result is failure. Some string operations may fail on binary data).
+            //----------------------------------------------------------------------------------------
+            const std::string& GetDataAsString() const;
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
