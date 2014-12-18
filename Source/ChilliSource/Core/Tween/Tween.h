@@ -188,6 +188,12 @@ namespace ChilliSource
             /// @return Normalised T (0 - 1)
             //-----------------------------------------------------------------------
             f32 GetT() const;
+            //-----------------------------------------------------------------------
+            /// @author HMcLaughlin
+            ///
+            /// @return Duration in seconds of one cycle
+            //-----------------------------------------------------------------------
+            f32 GetDuration() const;
 			//-----------------------------------------------------------------------
 			/// Uses the set interpolation function to calculate an interpolated
 			/// value from the current normalised T
@@ -460,6 +466,12 @@ namespace ChilliSource
         template <typename TInterpFunc> f32 Tween<TInterpFunc>::GetT() const
         {
             return m_currentT;
+        }
+        //-----------------------------------------------------------------------
+        //-----------------------------------------------------------------------
+        template <typename TInterpFunc> f32 Tween<TInterpFunc>::GetDuration() const
+        {
+            return m_duration;
         }
 	}
 }
