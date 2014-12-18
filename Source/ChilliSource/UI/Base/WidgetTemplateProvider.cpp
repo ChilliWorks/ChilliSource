@@ -128,8 +128,8 @@ namespace ChilliSource
         //----------------------------------------------------
 		void WidgetTemplateProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
-			auto task = std::bind(LoadDesc, in_storageLocation, in_filepath, in_delegate, out_resource);
-            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
+            //TODO: Async support.
+			CS_LOG_FATAL("Asynchronous loading of Widget Templates is currently not supported. Feature coming soon!");
         }
     }
 }

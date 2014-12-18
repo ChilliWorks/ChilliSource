@@ -127,7 +127,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void ProgressBarComponent::SetProgress(f32 in_progress)
         {
-            CS_ASSERT(m_progress >= 0.0f && m_progress <= 1.0f, "Progress must be in the range: 0.0 - 1.0");
+            CS_ASSERT(in_progress >= 0.0f && in_progress <= 1.0f, "Progress must be in the range: 0.0 - 1.0");
             
             m_progress = in_progress;
             

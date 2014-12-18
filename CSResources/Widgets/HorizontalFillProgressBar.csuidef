@@ -1,5 +1,5 @@
 {
-  "Type": "ProgressBar",
+  "Type": "HorizontalFillProgressBar",
 
   "Components":[
     {
@@ -9,7 +9,9 @@
     {
       "Type": "ProgressBar",
       "Name": "ProgressBar",
-      "BarWidgetName": "Bar"
+      "BarWidgetName": "Bar",
+      "BarDirection": "Horizontal",
+      "BarType": "Fill"
     }
   ],
 
@@ -32,8 +34,6 @@
     "Drawable": "all",
     "ProgressBar":
     {
-      "BarDirection": "BarDirection",
-      "BarType": "BarType",
       "RelBarSize": "RelBarSize",
       "Progress": "Progress"
     }
@@ -47,6 +47,6 @@
   },
 
   "Defaults": {
-    "Name": "ProgressBar"
+    "Name": "HorizontalFillProgressBar"
   }
 }

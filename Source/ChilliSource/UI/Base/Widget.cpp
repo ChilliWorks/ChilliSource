@@ -1003,14 +1003,7 @@ namespace ChilliSource
             
             m_canvas = in_canvas;
             
-            if(m_canvas != nullptr)
-            {
-                for (const auto& component : m_components)
-                {
-                    component->OnAddedToCanvas();
-                }
-            }
-            else
+            if (m_canvas == nullptr)
             {
                 for (const auto& component : m_components)
                 {
@@ -1026,6 +1019,14 @@ namespace ChilliSource
             for(auto& child : m_children)
             {
                 child->SetCanvas(m_canvas);
+            }
+            
+            if(m_canvas != nullptr)
+            {
+                for (const auto& component : m_components)
+                {
+                    component->OnAddedToCanvas();
+                }
             }
             
             InvalidateTransformCache();

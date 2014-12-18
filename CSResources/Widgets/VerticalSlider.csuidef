@@ -5,13 +5,20 @@
     {
       "Type": "Drawable",
       "Name": "Drawable"
+    },
+    {
+      "Type": "SliderBar",
+      "Name": "SliderBar",
+      "SliderWidgetName": "Slider",
+      "SliderDirection": "Vertical"
     }
   ],
 
   "Children": {
     "Slider": {
       "Type": "Image",
-      "RelSize": "1.1 0.1",
+      "RelPosition": "0.0 0.5",
+      "RelSize": "1.0 0.0",
       "SizePolicy": "UseWidthMaintainingAspect",
       "ParentalAnchor": "BottomCentre",
       "OriginAnchor": "BottomCentre"
@@ -25,13 +32,16 @@
   ],
 
   "ComponentProperties":{
-    "Drawable": "all"
+    "Drawable": "all",
+    "SliderBar":{
+      "SliderSize": "SliderSize",
+      "SliderPosition": "SliderPosition"
+    }
   },
 
   "ChildProperties": {
     "Slider":
     {
-      "SliderRelSize": "RelSize",
       "SliderDrawable": "Drawable"
     }
   },
