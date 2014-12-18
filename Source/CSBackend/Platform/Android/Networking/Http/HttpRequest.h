@@ -83,6 +83,7 @@ namespace CSBackend
 		private:
 
             friend class HttpRequestSystem;
+            friend class HttpRequestJavaInterface;
             //------------------------------------------------------------------
             /// Constructor. Can only be created via HttpRequestSystem
             ///
@@ -117,6 +118,15 @@ namespace CSBackend
 			/// Sends the request
 			//------------------------------------------------------------------
 			void PerformRequest();
+			//--------------------------------------------------------------------------------------
+			/// Called by Java when the request contents exceed the max buffer size and are flushed
+			///
+			/// @author S Downie
+			///
+			/// @param Partial data
+			/// @param Response code
+			//--------------------------------------------------------------------------------------
+			void OnFlushed(const std::string& in_data, u32 in_responseCode);
 
 		private:
 			
@@ -126,6 +136,7 @@ namespace CSBackend
             const CSCore::ParamDictionary m_headers;
 			const Delegate m_completionDelegate;
 			const u32 m_timeoutSecs;
+			const u32 m_maxBufferSize;
 			
 			bool m_shouldKillThread = false;
 			bool m_isPollingComplete = false;

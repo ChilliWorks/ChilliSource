@@ -121,6 +121,15 @@ public class DynamicByteBuffer
 		}
 	}
 	/**
+	 * Clears the current buffer so that its size is zero
+	 * 
+	 * @author S Downie
+	 */
+	public void clear()
+	{
+		m_size = 0;
+	}
+	/**
 	 * This makes sure the capacity is always big enough to fit any new data 
 	 * being added. Any time the size will not be enough this will simply 
 	 * double the size.

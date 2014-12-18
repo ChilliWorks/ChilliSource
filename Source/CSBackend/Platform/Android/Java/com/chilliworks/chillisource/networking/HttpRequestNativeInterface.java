@@ -66,6 +66,19 @@ public class HttpRequestNativeInterface
 	private static X509TrustManager[] msTrustManagers;
 	private static HostnameVerifier msHostnameVerifier;
 	
+	/**
+	 * Called when the max buffer size is exceeded by an http request causing it
+	 * to flush the current buffer contents to the application
+	 * 
+	 * @author S Downie
+	 * 
+	 * @param in_data - The partial response data that has been flushed
+	 * @param in_dataLength - The length of the partial response data
+	 * @param in_responseCode - The http reponse code
+	 * @param in_requestId - The id of this request
+	 */
+	public static native void OnBufferFlushed(byte[] in_data, int in_dataLength, int in_responseCode, int in_requestId);
+	
 	//-------------------------------------------------------------------
 	/// Setup
 	///
@@ -93,6 +106,7 @@ public class HttpRequestNativeInterface
 	/// @param Array of value strings for headers
 	/// @param The post body. Not used if inbIsPost is false
 	/// @param The connection timeout in seconds
+	/// @param Request Id
 	/// @param The result length. This is stored as an array in order to
 	///		   pass by reference. 
 	/// @param The result code. This is stored as an array in order to
@@ -102,7 +116,7 @@ public class HttpRequestNativeInterface
 	/// @return The response as a byte array.
 	//-------------------------------------------------------------------
 	public static byte[] HttpRequestWithHeaders(String instrUrl, boolean inbIsPost,
-									 			String[] inastrHeaderKeys, String[] inastrHeaderValues, String instrBody, int in_timeout,
+									 			String[] inastrHeaderKeys, String[] inastrHeaderValues, String instrBody, int in_timeout, int in_maxBufferSize, int in_requestId,
 									 			int[] outadwResultLength, int[] outadwResultCode, int[] outadwHttpResponseCode)
 	{
 		int connectionTimeoutMs = in_timeout * 1000;
@@ -187,7 +201,7 @@ public class HttpRequestNativeInterface
 					else 
 					{
 						// Get the response (either by InputStream or ErrorStream)
-						abyOutputData = ReadStream(dwResponseCode, urlConnection, outadwResultLength);
+						abyOutputData = ReadStream(dwResponseCode, in_maxBufferSize, in_requestId, urlConnection, outadwResultLength);
 					}
 				}
 				catch (UnknownHostException eUnknownHostException)
@@ -238,13 +252,14 @@ public class HttpRequestNativeInterface
 		return abyOutputData;
 	}
 	
-	private static byte[] ReadStream(int indwResponseCode, HttpURLConnection inurlConnection, int[] outadwResultLength) throws IOException
+	private static byte[] ReadStream(int indwResponseCode, int in_maxBufferSize, int in_requestId, HttpURLConnection inurlConnection, int[] outadwResultLength) throws IOException
 	{
 		DynamicByteBuffer byteContainer = new DynamicByteBuffer(kdwDataBlockSize);
     	byte[] byDataBlock = new byte[kdwDataBlockSize];
     	byte[] abyOutputData = null;
 		
     	int dwAmountRead = 0;
+    	int currentBufferSize = 0;
     	InputStream reader = null;
     	try
     	{
@@ -266,7 +281,16 @@ public class HttpRequestNativeInterface
     			// Keep reading until the end has been found
     			while (dwAmountRead != -1)
     			{
+    				if(in_maxBufferSize > 0 && currentBufferSize + dwAmountRead >= in_maxBufferSize)
+    				{
+    					//Flush the buffer
+    					OnBufferFlushed(byteContainer.getInternalBuffer(), byteContainer.getByteCount(), indwResponseCode, in_requestId);
+    					currentBufferSize = 0;
+    					byteContainer.clear();
+    				}
+    				
     				byteContainer.appendBytes(byDataBlock, dwAmountRead);
+    				currentBufferSize += dwAmountRead;
     				dwAmountRead = reader.read(byDataBlock);
     			}
 

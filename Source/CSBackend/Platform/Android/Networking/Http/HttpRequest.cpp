@@ -41,7 +41,7 @@ namespace CSBackend
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
 		HttpRequest::HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate)
-	    : m_type(in_type), m_url(in_url), m_body(in_body), m_headers(in_headers), m_completionDelegate(in_delegate), m_timeoutSecs(in_timeoutSecs)
+	    : m_type(in_type), m_url(in_url), m_body(in_body), m_headers(in_headers), m_completionDelegate(in_delegate), m_timeoutSecs(in_timeoutSecs), m_maxBufferSize(in_maxBufferSize)
 		{
 			CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
 
@@ -74,7 +74,7 @@ namespace CSBackend
 			}
 
 			//This is a blocking call
-			HttpRequestJavaInterface::RequestResultCode requestResultCode = HttpRequestJavaInterface::MakeHttpRequest(m_url, type, m_headers, m_body, (s32)m_timeoutSecs, m_responseData, (s32&)m_responseCode);
+			HttpRequestJavaInterface::RequestResultCode requestResultCode = HttpRequestJavaInterface::MakeHttpRequest(this, m_url, type, m_headers, m_body, (s32)m_timeoutSecs, (s32)m_maxBufferSize, m_responseData, (s32&)m_responseCode);
 
 			if (m_shouldKillThread == false)
 			{
@@ -96,6 +96,12 @@ namespace CSBackend
 			}
 
 			m_isPollingComplete = true;
+		}
+		//--------------------------------------------------------------------------------------
+		//--------------------------------------------------------------------------------------
+		void HttpRequest::OnFlushed(const std::string& in_data, u32 in_responseCode)
+		{
+			m_completionDelegate(this, CSNetworking::HttpResponse(CSNetworking::HttpResponse::Result::k_flushed, in_responseCode, in_data));
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
