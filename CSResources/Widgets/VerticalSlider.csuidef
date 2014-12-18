@@ -7,8 +7,8 @@
       "Name": "Drawable"
     },
     {
-      "Type": "SliderBar",
-      "Name": "SliderBar",
+      "Type": "Slider",
+      "Name": "Slider",
       "SliderWidgetName": "Slider",
       "SliderDirection": "Vertical"
     }
@@ -33,7 +33,7 @@
 
   "ComponentProperties":{
     "Drawable": "all",
-    "SliderBar":{
+    "Slider":{
       "SliderSize": "SliderSize",
       "SliderPosition": "SliderPosition"
     }

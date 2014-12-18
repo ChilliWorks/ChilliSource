@@ -1,5 +1,5 @@
 //
-//  SliderBarDirection.cpp
+//  SliderDirection.cpp
 //  Chilli Source
 //  Created by Ian Copland on 18/12/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/SliderBar/SliderBarDirection.h>
+#include <ChilliSource/UI/Slider/SliderDirection.h>
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
@@ -39,35 +39,35 @@ namespace ChilliSource
         
         //------------------------------------------------------------------------
         //------------------------------------------------------------------------
-        SliderBarDirection ParseSliderBarDirection(const std::string& in_stringDirection)
+        SliderDirection ParseSliderDirection(const std::string& in_stringDirection)
         {
             std::string lowerDirection = in_stringDirection;
             Core::StringUtils::ToLowerCase(lowerDirection);
             
             if (lowerDirection == k_directionHorizontal)
             {
-                return SliderBarDirection::k_horizontal;
+                return SliderDirection::k_horizontal;
             }
             else if (lowerDirection == k_directionVertical)
             {
-                return SliderBarDirection::k_vertical;
+                return SliderDirection::k_vertical;
             }
             
-            CS_LOG_FATAL("Could not parse slider bar direction: " + in_stringDirection);
-            return SliderBarDirection::k_horizontal;
+            CS_LOG_FATAL("Could not parse slider direction: " + in_stringDirection);
+            return SliderDirection::k_horizontal;
         }
         //------------------------------------------------------------------------
         //------------------------------------------------------------------------
-        std::string ToString(SliderBarDirection in_direction)
+        std::string ToString(SliderDirection in_direction)
         {
             switch (in_direction)
             {
-                case SliderBarDirection::k_horizontal:
+                case SliderDirection::k_horizontal:
                     return k_directionHorizontal;
-                case SliderBarDirection::k_vertical:
+                case SliderDirection::k_vertical:
                     return k_directionVertical;
                 default:
-                    CS_LOG_FATAL("Invalid slider bar direction.");
+                    CS_LOG_FATAL("Invalid slider direction.");
                     return k_directionHorizontal;
                     
             }

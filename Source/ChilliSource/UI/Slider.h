@@ -1,5 +1,5 @@
 //
-//  SliderBar.h
+//  Slider.h
 //  Chilli Source
 //  Created by Ian Copland on 18/12/2014.
 //
@@ -27,11 +27,11 @@
 //
 
 
-#ifndef _CHILLISOURCE_UI_SLIDERBAR_H_
-#define _CHILLISOURCE_UI_SLIDERBAR_H_
+#ifndef _CHILLISOURCE_UI_SLIDER_H_
+#define _CHILLISOURCE_UI_SLIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/SliderBar/SliderBarComponent.h>
-#include <ChilliSource/UI/SliderBar/SliderBarDirection.h>
+#include <ChilliSource/UI/Slider/SliderComponent.h>
+#include <ChilliSource/UI/Slider/SliderDirection.h>
 
 #endif

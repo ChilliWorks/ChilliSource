@@ -82,7 +82,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(ProgressBar);
         CS_FORWARDDECLARE_CLASS(VerticalEndcappedProgressBar);
         //--------------------------------------------------------
-        /// Slider Bar
+        /// Slider
         //--------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(HorizontalSliderBar);
         CS_FORWARDDECLARE_CLASS(SliderBar);

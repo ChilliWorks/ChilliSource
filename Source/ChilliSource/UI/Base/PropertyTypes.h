@@ -54,7 +54,7 @@ namespace ChilliSource
             CS_DECLARE_PROPERTYTYPE(Core::LocalisedTextCSPtr, LocalisedText);
             CS_DECLARE_PROPERTYTYPE(Rendering::HorizontalTextJustification, HorizontalTextJustification);
             CS_DECLARE_PROPERTYTYPE(Rendering::VerticalTextJustification, VerticalTextJustification);
-            CS_DECLARE_PROPERTYTYPE(SliderBarDirection, SliderBarDirection);
+            CS_DECLARE_PROPERTYTYPE(SliderDirection, SliderDirection);
             CS_DECLARE_PROPERTYTYPE(ProgressBarDirection, ProgressBarDirection);
             CS_DECLARE_PROPERTYTYPE(ProgressBarType, ProgressBarType);
         }

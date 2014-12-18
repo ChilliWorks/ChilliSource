@@ -33,7 +33,7 @@
 #include <ChilliSource/UI/Layout/LayoutDesc.h>
 #include <ChilliSource/UI/ProgressBar/ProgressBarDirection.h>
 #include <ChilliSource/UI/ProgressBar/ProgressBarType.h>
-#include <ChilliSource/UI/SliderBar/SliderBarDirection.h>
+#include <ChilliSource/UI/Slider/SliderDirection.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
@@ -55,7 +55,7 @@ namespace ChilliSource
             CS_DEFINE_PROPERTYTYPE(Core::LocalisedTextCSPtr, LocalisedText, nullptr, nullptr);
             CS_DEFINE_PROPERTYTYPE(Rendering::HorizontalTextJustification, HorizontalTextJustification, Rendering::HorizontalTextJustification::k_centre, &Rendering::ParseHorizontalTextJustification);
             CS_DEFINE_PROPERTYTYPE(Rendering::VerticalTextJustification, VerticalTextJustification, Rendering::VerticalTextJustification::k_centre, &Rendering::ParseVerticalTextJustification);
-            CS_DEFINE_PROPERTYTYPE(UI::SliderBarDirection, SliderBarDirection, SliderBarDirection::k_horizontal, &ParseSliderBarDirection);
+            CS_DEFINE_PROPERTYTYPE(UI::SliderDirection, SliderDirection, SliderDirection::k_horizontal, &ParseSliderDirection);
             CS_DEFINE_PROPERTYTYPE(UI::ProgressBarDirection, ProgressBarDirection, ProgressBarDirection::k_horizontal, &ParseProgressBarDirection);
             CS_DEFINE_PROPERTYTYPE(UI::ProgressBarType, ProgressBarType, UI::ProgressBarType::k_stretch, &ParseProgressBarType);
         }

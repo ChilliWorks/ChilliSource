@@ -1,5 +1,5 @@
 //
-//  SliderBarDirection.h
+//  SliderDirection.h
 //  Chilli Source
 //  Created by Ian Copland on 18/12/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_SLIDERBAR_SLIDERBARDIRECTION_H_
-#define _CHILLISOURCE_UI_SLIDERBAR_SLIDERBARDIRECTION_H_
+#ifndef _CHILLISOURCE_UI_SLIDER_SLIDERDIRECTION_H_
+#define _CHILLISOURCE_UI_SLIDER_SLIDERDIRECTION_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -36,18 +36,18 @@ namespace ChilliSource
     namespace UI
     {
         //------------------------------------------------------------------------
-        /// An enum describing the direction of a slider bar: vertical or
+        /// An enum describing the direction of a slider: vertical or
         /// horizontal.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------
-        enum class SliderBarDirection
+        enum class SliderDirection
         {
             k_horizontal,
             k_vertical
         };
         //------------------------------------------------------------------------
-        /// Parse a slider bar direction from string. This is case insensitive.
+        /// Parse a slider direction from string. This is case insensitive.
         /// If the string is not a valid direction then the app is considered to
         /// be in an irrecoverable state and will terminate.
         ///
@@ -57,17 +57,17 @@ namespace ChilliSource
         ///
         /// @return The parsed direction.
         //------------------------------------------------------------------------
-        SliderBarDirection ParseSliderBarDirection(const std::string& in_stringDirection);
+        SliderDirection ParseSliderDirection(const std::string& in_stringDirection);
         //------------------------------------------------------------------------
-        /// Converts the given slider bar direction to a string.
+        /// Converts the given slider direction to a string.
         ///
         /// @author Ian Copland
         ///
-        /// @param The slider bar direction to convert to string.
+        /// @param The slider direction to convert to string.
         ///
         /// @return The direction in string form.
         //------------------------------------------------------------------------
-        std::string ToString(SliderBarDirection in_direction);
+        std::string ToString(SliderDirection in_direction);
     }
 }
 

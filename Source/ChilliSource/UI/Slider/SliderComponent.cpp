@@ -1,5 +1,5 @@
 //
-//  SliderBarComponent.cpp
+//  SliderComponent.cpp
 //  Chilli Source
 //  Created by Ian Copland on 18/12/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/SliderBar/SliderBarComponent.h>
+#include <ChilliSource/UI/Slider/SliderComponent.h>
 
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
@@ -53,64 +53,64 @@ namespace ChilliSource
             {
                 {Core::PropertyTypes::Float(), k_sliderSizeKey},
                 {Core::PropertyTypes::Float(), k_sliderPositionKey},
-                {PropertyTypes::SliderBarDirection(), k_sliderDirectionKey},
+                {PropertyTypes::SliderDirection(), k_sliderDirectionKey},
                 {Core::PropertyTypes::String(), k_sliderWidgetName}
             };
         }
         
-        CS_DEFINE_NAMEDTYPE(SliderBarComponent);
+        CS_DEFINE_NAMEDTYPE(SliderComponent);
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const std::vector<Core::PropertyMap::PropertyDesc>& SliderBarComponent::GetPropertyDescs()
+        const std::vector<Core::PropertyMap::PropertyDesc>& SliderComponent::GetPropertyDescs()
         {
             return k_propertyDescs;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        SliderBarComponent::SliderBarComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
+        SliderComponent::SliderComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
             : Component(in_componentName)
         {
-            RegisterProperty<f32>(Core::PropertyTypes::Float(), k_sliderSizeKey, CSCore::MakeDelegate(this, &SliderBarComponent::GetSliderSize), CSCore::MakeDelegate(this, &SliderBarComponent::SetSliderSize));
-            RegisterProperty<f32>(Core::PropertyTypes::Float(), k_sliderPositionKey, CSCore::MakeDelegate(this, &SliderBarComponent::GetSliderPosition), CSCore::MakeDelegate(this, &SliderBarComponent::SetSliderPosition));
-            RegisterProperty<SliderBarDirection>(PropertyTypes::SliderBarDirection(), k_sliderDirectionKey, CSCore::MakeDelegate(this, &SliderBarComponent::GetSliderDirection), CSCore::MakeDelegate(this, &SliderBarComponent::SetSliderDirection));
-            RegisterProperty<std::string>(Core::PropertyTypes::String(), k_sliderWidgetName, CSCore::MakeDelegate(this, &SliderBarComponent::GetSliderWidgetName), CSCore::MakeDelegate(this, &SliderBarComponent::SetSliderWidgetName));
+            RegisterProperty<f32>(Core::PropertyTypes::Float(), k_sliderSizeKey, CSCore::MakeDelegate(this, &SliderComponent::GetSliderSize), CSCore::MakeDelegate(this, &SliderComponent::SetSliderSize));
+            RegisterProperty<f32>(Core::PropertyTypes::Float(), k_sliderPositionKey, CSCore::MakeDelegate(this, &SliderComponent::GetSliderPosition), CSCore::MakeDelegate(this, &SliderComponent::SetSliderPosition));
+            RegisterProperty<SliderDirection>(PropertyTypes::SliderDirection(), k_sliderDirectionKey, CSCore::MakeDelegate(this, &SliderComponent::GetSliderDirection), CSCore::MakeDelegate(this, &SliderComponent::SetSliderDirection));
+            RegisterProperty<std::string>(Core::PropertyTypes::String(), k_sliderWidgetName, CSCore::MakeDelegate(this, &SliderComponent::GetSliderWidgetName), CSCore::MakeDelegate(this, &SliderComponent::SetSliderWidgetName));
             ApplyRegisteredProperties(in_properties);
             
-            CS_ASSERT(m_sliderWidgetName.empty() == false, "Slider widget name must be set on a Slider bar component.");
+            CS_ASSERT(m_sliderWidgetName.empty() == false, "Slider widget name must be set on a Slider component.");
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        bool SliderBarComponent::IsA(Core::InterfaceIDType in_interfaceId) const
+        bool SliderComponent::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            return (Component::InterfaceID == in_interfaceId || SliderBarComponent::InterfaceID == in_interfaceId);
+            return (Component::InterfaceID == in_interfaceId || SliderComponent::InterfaceID == in_interfaceId);
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        f32 SliderBarComponent::GetSliderSize() const
+        f32 SliderComponent::GetSliderSize() const
         {
             return m_sliderSize;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        f32 SliderBarComponent::GetSliderPosition() const
+        f32 SliderComponent::GetSliderPosition() const
         {
             return m_sliderPos;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        SliderBarDirection SliderBarComponent::GetSliderDirection() const
+        SliderDirection SliderComponent::GetSliderDirection() const
         {
             return m_direction;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const std::string& SliderBarComponent::GetSliderWidgetName() const
+        const std::string& SliderComponent::GetSliderWidgetName() const
         {
             return m_sliderWidgetName;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void SliderBarComponent::SetSliderSize(f32 in_size)
+        void SliderComponent::SetSliderSize(f32 in_size)
         {
             m_sliderSize = in_size;
             
@@ -118,7 +118,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void SliderBarComponent::SetSliderPosition(f32 in_sliderPos)
+        void SliderComponent::SetSliderPosition(f32 in_sliderPos)
         {
             CS_ASSERT(in_sliderPos >= 0.0f && in_sliderPos <= 1.0f, "Slider must be in the range: 0.0 - 1.0");
             
@@ -128,7 +128,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void SliderBarComponent::SetSliderDirection(SliderBarDirection in_direction)
+        void SliderComponent::SetSliderDirection(SliderDirection in_direction)
         {
             m_direction = in_direction;
             
@@ -136,9 +136,9 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void SliderBarComponent::SetSliderWidgetName(const std::string& in_name)
+        void SliderComponent::SetSliderWidgetName(const std::string& in_name)
         {
-            CS_ASSERT(m_sliderWidgetName.empty(), "Cannot change the bar widget on a Slider bar component.");
+            CS_ASSERT(m_sliderWidgetName.empty(), "Cannot change the bar widget on a Slider component.");
             
             m_sliderWidgetName = in_name;
             
@@ -146,11 +146,11 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void SliderBarComponent::UpdateSlider()
+        void SliderComponent::UpdateSlider()
         {
             if (m_sliderWidget != nullptr && GetWidget() != nullptr && GetWidget()->IsOnCanvas() == true)
             {
-                if (m_direction == SliderBarDirection::k_horizontal)
+                if (m_direction == SliderDirection::k_horizontal)
                 {
                     m_sliderWidget->SetParentalAnchor(Rendering::AlignmentAnchor::k_middleLeft);
                     m_sliderWidget->SetOriginAnchor(Rendering::AlignmentAnchor::k_middleLeft);
@@ -174,7 +174,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void SliderBarComponent::UpdateSliderFromScreenPosition(const Core::Vector2& in_screenSpacePos)
+        void SliderComponent::UpdateSliderFromScreenPosition(const Core::Vector2& in_screenSpacePos)
         {
             CS_ASSERT(GetWidget() != nullptr, "Must have an owning widget to update slider from screen position.");
             CS_ASSERT(GetWidget()->IsOnCanvas() == true, "Owning widget must be on the canvas to update slider from screen position.");
@@ -182,7 +182,7 @@ namespace ChilliSource
             Core::Vector2 localSpacePoint = GetWidget()->ToLocalSpace(in_screenSpacePos, Rendering::AlignmentAnchor::k_middleCentre);
             Core::Vector2 ownerSize = GetWidget()->GetFinalSize();
             
-            if (m_direction == SliderBarDirection::k_horizontal)
+            if (m_direction == SliderDirection::k_horizontal)
             {
                 f32 padding = m_sliderWidget->GetFinalSize().x;
                 f32 range = ownerSize.x - padding;
@@ -201,26 +201,26 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void SliderBarComponent::OnInit()
+        void SliderComponent::OnInit()
         {
             m_sliderWidget = GetWidget()->GetInternalWidget(m_sliderWidgetName);
             CS_ASSERT(m_sliderWidget != nullptr, "Could not find bar widget with name: " + m_sliderWidgetName);
             
-            m_pressedInsideConnection = GetWidget()->GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &SliderBarComponent::OnPressedInside));
-            m_draggedInsideConnection = GetWidget()->GetDraggedInsideEvent().OpenConnection(Core::MakeDelegate(this, &SliderBarComponent::OnDraggedInside));
-            m_draggedOutsideConnection = GetWidget()->GetDraggedOutsideEvent().OpenConnection(Core::MakeDelegate(this, &SliderBarComponent::OnDraggedOutside));
-            m_releasedInsideConnection = GetWidget()->GetReleasedInsideEvent().OpenConnection(Core::MakeDelegate(this, &SliderBarComponent::OnReleasedInside));
-            m_releasedOutsideConnection = GetWidget()->GetReleasedOutsideEvent().OpenConnection(Core::MakeDelegate(this, &SliderBarComponent::OnReleasedOutside));
+            m_pressedInsideConnection = GetWidget()->GetPressedInsideEvent().OpenConnection(Core::MakeDelegate(this, &SliderComponent::OnPressedInside));
+            m_draggedInsideConnection = GetWidget()->GetDraggedInsideEvent().OpenConnection(Core::MakeDelegate(this, &SliderComponent::OnDraggedInside));
+            m_draggedOutsideConnection = GetWidget()->GetDraggedOutsideEvent().OpenConnection(Core::MakeDelegate(this, &SliderComponent::OnDraggedOutside));
+            m_releasedInsideConnection = GetWidget()->GetReleasedInsideEvent().OpenConnection(Core::MakeDelegate(this, &SliderComponent::OnReleasedInside));
+            m_releasedOutsideConnection = GetWidget()->GetReleasedOutsideEvent().OpenConnection(Core::MakeDelegate(this, &SliderComponent::OnReleasedOutside));
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void SliderBarComponent::OnAddedToCanvas()
+        void SliderComponent::OnAddedToCanvas()
         {
             UpdateSlider();
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void SliderBarComponent::OnPressedInside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType)
+        void SliderComponent::OnPressedInside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType)
         {
             if (in_inputType == Input::Pointer::GetDefaultInputType())
             {
@@ -230,7 +230,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void SliderBarComponent::OnDraggedInside(Widget* in_widget, const Input::Pointer& in_pointer)
+        void SliderComponent::OnDraggedInside(Widget* in_widget, const Input::Pointer& in_pointer)
         {
             if (Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
             {
@@ -239,7 +239,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void SliderBarComponent::OnDraggedOutside(Widget* in_widget, const Input::Pointer& in_pointer)
+        void SliderComponent::OnDraggedOutside(Widget* in_widget, const Input::Pointer& in_pointer)
         {
             if (Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
             {
@@ -248,7 +248,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void SliderBarComponent::OnReleasedInside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType)
+        void SliderComponent::OnReleasedInside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType)
         {
             if (Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
             {
@@ -258,7 +258,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void SliderBarComponent::OnReleasedOutside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType)
+        void SliderComponent::OnReleasedOutside(Widget* in_widget, const Input::Pointer& in_pointer, Input::Pointer::InputType in_inputType)
         {
             if (Core::VectorUtils::Contains(m_activePointerIds, in_pointer.GetId()) == true)
             {
@@ -268,7 +268,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void SliderBarComponent::OnDestroy()
+        void SliderComponent::OnDestroy()
         {
             m_pressedInsideConnection.reset();
             m_draggedInsideConnection.reset();

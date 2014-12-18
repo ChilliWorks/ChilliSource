@@ -1,5 +1,5 @@
 //
-//  SliderBarComponent.h
+//  SliderComponent.h
 //  Chilli Source
 //  Created by Ian Copland on 18/12/2014.
 //
@@ -26,23 +26,23 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_SLIDERBAR_SLIDERBARCOMPONENT_H_
-#define _CHILLISOURCE_UI_SLIDERBAR_SLIDERBARCOMPONENT_H_
+#ifndef _CHILLISOURCE_UI_Slider_SliderCOMPONENT_H_
+#define _CHILLISOURCE_UI_Slider_SliderCOMPONENT_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/UI/Base/Component.h>
-#include <ChilliSource/UI/SliderBar/SliderBarDirection.h>
+#include <ChilliSource/UI/Slider/SliderDirection.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
         //------------------------------------------------------------------------------
-        /// A logic component for controlling a slider bar. This handles both vertical
-        /// and horizontal slider bar types.
+        /// A logic component for controlling a slider. This handles both vertical
+        /// and horizontal slider types.
         ///
         /// "SliderSize": A float describing the size of the slider relative to the
         /// slider background. The size is dependant on the direction of the slider,
@@ -56,7 +56,7 @@ namespace ChilliSource
         /// the app is considered to be in an irrecoverable state and will terminate.
         /// This defaults to 0.0.
         ///
-        /// "SliderDirection": A string describing the direction of the slider bar. The
+        /// "SliderDirection": A string describing the direction of the slider. The
         /// possible values are 'Horizontal' or 'Vertical' and defaults to Horizontal'.
         ///
         /// "SliderWidgetName": The name of the internal widget that should be used as
@@ -67,10 +67,10 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------------
-        class SliderBarComponent final : public Component
+        class SliderComponent final : public Component
         {
         public:
-            CS_DECLARE_NAMEDTYPE(SliderBarComponent);
+            CS_DECLARE_NAMEDTYPE(SliderComponent);
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -108,9 +108,9 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @param The direction of the slider bar: horizontal or vertical.
+            /// @param The direction of the slider: horizontal or vertical.
             //------------------------------------------------------------------------------
-            SliderBarDirection GetSliderDirection() const;
+            SliderDirection GetSliderDirection() const;
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -140,19 +140,19 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             void SetSliderPosition(f32 in_sliderPos);
             //------------------------------------------------------------------------------
-            /// Sets the direction of the slider bar: horizontal or vertical.
+            /// Sets the direction of the slider: horizontal or vertical.
             ///
             /// @author Ian Copland
             ///
             /// @param The direction.
             //------------------------------------------------------------------------------
-            void SetSliderDirection(SliderBarDirection in_direction);
+            void SetSliderDirection(SliderDirection in_direction);
 
         private:
             friend class ComponentFactory;
             //------------------------------------------------------------------------------
             /// Constructor that builds the component from key-value properties. The
-            /// properties used to create a slider bar component are described in the class
+            /// properties used to create a slider component are described in the class
             /// documentation.
             ///
             /// @author Ian Copland
@@ -160,7 +160,7 @@ namespace ChilliSource
             /// @param The component name.
             /// @param The property map.
             //------------------------------------------------------------------------------
-            SliderBarComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
+            SliderComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
             //------------------------------------------------------------------------------
             /// Sets the name of the slider widget. This can only be called once, on
             /// construction. If this is called a second time the app is considered to be in
@@ -256,7 +256,7 @@ namespace ChilliSource
             
             f32 m_sliderSize = 1.0f;
             f32 m_sliderPos = 0.5f;
-            SliderBarDirection m_direction = SliderBarDirection::k_horizontal;
+            SliderDirection m_direction = SliderDirection::k_horizontal;
             std::string m_sliderWidgetName;
             
             Widget* m_sliderWidget = nullptr;

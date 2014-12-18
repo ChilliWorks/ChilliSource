@@ -294,8 +294,8 @@
 		81D8B6D71962E0F70010DA84 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B6241962E0F70010DA84 /* Texture.cpp */; };
 		81D8B6D81962E0F70010DA84 /* TextureUnitSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B6261962E0F70010DA84 /* TextureUnitSystem.cpp */; };
 		81D8B6DD1962E1110010DA84 /* libCSBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B6DB1962E1110010DA84 /* libCSBase.a */; };
-		81DB8C441A42F2CF00215398 /* SliderBarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81DB8C3F1A42F2CF00215398 /* SliderBarComponent.cpp */; };
-		81DB8C451A42F2CF00215398 /* SliderBarDirection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81DB8C411A42F2CF00215398 /* SliderBarDirection.cpp */; };
+		81DB8C4B1A433ECD00215398 /* SliderComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81DB8C471A433ECD00215398 /* SliderComponent.cpp */; };
+		81DB8C4C1A433ECD00215398 /* SliderDirection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81DB8C491A433ECD00215398 /* SliderDirection.cpp */; };
 		81E4DE461A4193EB00762268 /* ProgressBarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E4DE431A4193EB00762268 /* ProgressBarComponent.cpp */; };
 		81E4DE491A41948B00762268 /* ProgressBarDirection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E4DE471A41948B00762268 /* ProgressBarDirection.cpp */; };
 		81E4DE4C1A41989C00762268 /* ProgressBarType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E4DE4A1A41989C00762268 /* ProgressBarType.cpp */; };
@@ -1004,11 +1004,11 @@
 		81D8B6261962E0F70010DA84 /* TextureUnitSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureUnitSystem.cpp; sourceTree = "<group>"; };
 		81D8B6271962E0F70010DA84 /* TextureUnitSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureUnitSystem.h; sourceTree = "<group>"; };
 		81D8B6DB1962E1110010DA84 /* libCSBase.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCSBase.a; sourceTree = "<group>"; };
-		81DB8C3F1A42F2CF00215398 /* SliderBarComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SliderBarComponent.cpp; sourceTree = "<group>"; };
-		81DB8C401A42F2CF00215398 /* SliderBarComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderBarComponent.h; sourceTree = "<group>"; };
-		81DB8C411A42F2CF00215398 /* SliderBarDirection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SliderBarDirection.cpp; sourceTree = "<group>"; };
-		81DB8C421A42F2CF00215398 /* SliderBarDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderBarDirection.h; sourceTree = "<group>"; };
-		81DB8C431A42F2CF00215398 /* SliderBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderBar.h; sourceTree = "<group>"; };
+		81DB8C431A42F2CF00215398 /* Slider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Slider.h; sourceTree = "<group>"; };
+		81DB8C471A433ECD00215398 /* SliderComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SliderComponent.cpp; sourceTree = "<group>"; };
+		81DB8C481A433ECD00215398 /* SliderComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderComponent.h; sourceTree = "<group>"; };
+		81DB8C491A433ECD00215398 /* SliderDirection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SliderDirection.cpp; sourceTree = "<group>"; };
+		81DB8C4A1A433ECD00215398 /* SliderDirection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SliderDirection.h; sourceTree = "<group>"; };
 		81E4DE431A4193EB00762268 /* ProgressBarComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressBarComponent.cpp; sourceTree = "<group>"; };
 		81E4DE441A4193EB00762268 /* ProgressBarComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBarComponent.h; sourceTree = "<group>"; };
 		81E4DE451A4193EB00762268 /* ProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBar.h; sourceTree = "<group>"; };
@@ -1106,8 +1106,8 @@
 				817F76311A03E23A00D36ACF /* Layout.h */,
 				81E4DE421A4193EB00762268 /* ProgressBar */,
 				81E4DE451A4193EB00762268 /* ProgressBar.h */,
-				81DB8C3E1A42F2CF00215398 /* SliderBar */,
-				81DB8C431A42F2CF00215398 /* SliderBar.h */,
+				81DB8C461A433ECD00215398 /* Slider */,
+				81DB8C431A42F2CF00215398 /* Slider.h */,
 				81970FE41A0A48B500505599 /* Text */,
 				81970FE91A0A780A00505599 /* Text.h */,
 			);
@@ -2680,15 +2680,15 @@
 			path = ../../Libraries/Core/iOS/Libs;
 			sourceTree = "<group>";
 		};
-		81DB8C3E1A42F2CF00215398 /* SliderBar */ = {
+		81DB8C461A433ECD00215398 /* Slider */ = {
 			isa = PBXGroup;
 			children = (
-				81DB8C3F1A42F2CF00215398 /* SliderBarComponent.cpp */,
-				81DB8C401A42F2CF00215398 /* SliderBarComponent.h */,
-				81DB8C411A42F2CF00215398 /* SliderBarDirection.cpp */,
-				81DB8C421A42F2CF00215398 /* SliderBarDirection.h */,
+				81DB8C471A433ECD00215398 /* SliderComponent.cpp */,
+				81DB8C481A433ECD00215398 /* SliderComponent.h */,
+				81DB8C491A433ECD00215398 /* SliderDirection.cpp */,
+				81DB8C4A1A433ECD00215398 /* SliderDirection.h */,
 			);
-			path = SliderBar;
+			path = Slider;
 			sourceTree = "<group>";
 		};
 		81E4DE421A4193EB00762268 /* ProgressBar */ = {
@@ -2760,7 +2760,6 @@
 				81D8B6AA1962E0F70010DA84 /* DeviceButtonSystem.mm in Sources */,
 				81D8B46D1962E0EC0010DA84 /* RenderComponentFactory.cpp in Sources */,
 				81D8B4301962E0EC0010DA84 /* State.cpp in Sources */,
-				81DB8C441A42F2CF00215398 /* SliderBarComponent.cpp in Sources */,
 				81D8B43E1962E0EC0010DA84 /* XMLUtils.cpp in Sources */,
 				81D8B6B21962E0F70010DA84 /* StoreKitIAPSystem.mm in Sources */,
 				81D8B6D71962E0F70010DA84 /* Texture.cpp in Sources */,
@@ -2799,6 +2798,7 @@
 				81D8B4681962E0EC0010DA84 /* CullingPredicates.cpp in Sources */,
 				81D8B45A1962E0EC0010DA84 /* SliderBar.cpp in Sources */,
 				81D8B46E1962E0EC0010DA84 /* Renderer.cpp in Sources */,
+				81DB8C4B1A433ECD00215398 /* SliderComponent.cpp in Sources */,
 				81D8B6D81962E0F70010DA84 /* TextureUnitSystem.cpp in Sources */,
 				81D8B49C1962E0EC0010DA84 /* CubemapResourceOptions.cpp in Sources */,
 				81D8B6A11962E0F70010DA84 /* DialogueBoxListener.mm in Sources */,
@@ -2939,7 +2939,6 @@
 				81D8B4341962E0EC0010DA84 /* ToString.cpp in Sources */,
 				81D8B6B11962E0F70010DA84 /* IAPSystem.mm in Sources */,
 				81D8B47F1962E0EC0010DA84 /* CSAnimProvider.cpp in Sources */,
-				81DB8C451A42F2CF00215398 /* SliderBarDirection.cpp in Sources */,
 				81D8B6A01962E0F70010DA84 /* Screen.mm in Sources */,
 				81D8B4A51962E0EC0010DA84 /* FacebookPostSystem.cpp in Sources */,
 				81D8B69F1962E0F70010DA84 /* PlatformSystem.mm in Sources */,
@@ -2960,6 +2959,7 @@
 				81CF34A119CC297600B9D0B1 /* DragGesture.cpp in Sources */,
 				8113673019C99A2E00D9AEDC /* Filter.cpp in Sources */,
 				81D8B41B1962E0EC0010DA84 /* PNGImageProvider.cpp in Sources */,
+				81DB8C4C1A433ECD00215398 /* SliderDirection.cpp in Sources */,
 				81D8B6A81962E0F70010DA84 /* NSStringUtils.mm in Sources */,
 				81D8B42F1962E0EC0010DA84 /* Scene.cpp in Sources */,
 				81D8B42E1962E0EC0010DA84 /* ResourceProvider.cpp in Sources */,

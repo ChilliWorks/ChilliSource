@@ -32,7 +32,7 @@
 #include <ChilliSource/UI/Button/ToggleHighlightComponent.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
 #include <ChilliSource/UI/ProgressBar/ProgressBarComponent.h>
-#include <ChilliSource/UI/SliderBar/SliderBarComponent.h>
+#include <ChilliSource/UI/Slider/SliderComponent.h>
 #include <ChilliSource/UI/Text/TextComponent.h>
 
 namespace ChilliSource
@@ -79,7 +79,7 @@ namespace ChilliSource
             Register<ToggleHighlightComponent>("ToggleHighlight");
             Register<TextComponent>("Text");
             Register<ProgressBarComponent>("ProgressBar");
-            Register<SliderBarComponent>("SliderBar");
+            Register<SliderComponent>("Slider");
         }
         //-----------------------------------------------------------------
         //-----------------------------------------------------------------
