@@ -48,24 +48,16 @@ namespace CSBackend
 			///
 			/// @author S Downie
 			///
-			/// @param Session handle
 			/// @param Request handle
 			///
 			/// @return Success or failure
 			//--------------------------------------------------------------------------------------------------
-			bool ApplySSLSettings(HINTERNET in_sessionHandle, HINTERNET in_requestHandle)
+			bool ApplySSLSettings(HINTERNET in_requestHandle)
 			{
 				DWORD requestOptions = SECURITY_FLAG_IGNORE_CERT_CN_INVALID | SECURITY_FLAG_IGNORE_CERT_DATE_INVALID | SECURITY_FLAG_IGNORE_UNKNOWN_CA | SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE;
 				if (!WinHttpSetOption(in_requestHandle, WINHTTP_OPTION_SECURITY_FLAGS, &requestOptions, sizeof(DWORD)))
 				{
 					CS_LOG_ERROR("Failed to set HTTP SSL security flag options");
-					return false;
-				}
-
-				DWORD sessionOptions = WINHTTP_FLAG_SECURE_PROTOCOL_SSL3;
-				if (!WinHttpSetOption(in_sessionHandle, WINHTTP_OPTION_SECURE_PROTOCOLS, &sessionOptions, sizeof(DWORD)))
-				{
-					CS_LOG_ERROR("Failed to set HTTP SSL secure protocol options");
 					return false;
 				}
 
@@ -188,13 +180,10 @@ namespace CSBackend
 			std::wstring urlPath = urlComps.lpszUrlPath;
 			urlPath = urlPath.substr(0, urlComps.dwUrlPathLength);
 
-			std::wstring scheme = urlComps.lpszScheme;
-			scheme = scheme.substr(0, urlComps.dwSchemeLength);
-
-			if (scheme == L"https")
+			if (urlComps.nScheme == INTERNET_SCHEME_HTTPS)
 			{
 				requestHandle = ::WinHttpOpenRequest(connectionHandle, type, urlPath.c_str(), L"HTTP/1.1", WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, WINHTTP_FLAG_SECURE);
-				if (requestHandle == nullptr || ApplySSLSettings(m_sessionHandle, requestHandle) == false)
+				if (requestHandle == nullptr || ApplySSLSettings(requestHandle) == false)
 				{
 					CS_LOG_ERROR("Failed to open request: " + in_url);
 					WinHttpCloseHandle(connectionHandle);
