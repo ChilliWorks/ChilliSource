@@ -306,7 +306,15 @@ namespace ChilliSource
 			/// @return Pointer to the parent entity or null
 			//------------------------------------------------------------------
 			Entity* GetParent();
-			
+            //------------------------------------------------------------------
+            /// Return the parent entity of this entity. nullptr is returned if
+            /// there is no parent.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @return Const Pointer to the parent entity or null
+            //------------------------------------------------------------------
+            const Entity* GetParent() const;
             //------------------------------------------------------------------
 			/// Search only immediate children to find an entity and return a pointer
 			/// to the first entity it finds with the name matching that given,
