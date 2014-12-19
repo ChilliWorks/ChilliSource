@@ -55,8 +55,8 @@ namespace ChilliSource
             CS_DEFINE_PROPERTYTYPE(Core::LocalisedTextCSPtr, LocalisedText, nullptr, nullptr);
             CS_DEFINE_PROPERTYTYPE(Rendering::HorizontalTextJustification, HorizontalTextJustification, Rendering::HorizontalTextJustification::k_centre, &Rendering::ParseHorizontalTextJustification);
             CS_DEFINE_PROPERTYTYPE(Rendering::VerticalTextJustification, VerticalTextJustification, Rendering::VerticalTextJustification::k_centre, &Rendering::ParseVerticalTextJustification);
-            CS_DEFINE_PROPERTYTYPE(UI::SliderDirection, SliderDirection, SliderDirection::k_horizontal, &ParseSliderDirection);
-            CS_DEFINE_PROPERTYTYPE(UI::ProgressBarDirection, ProgressBarDirection, ProgressBarDirection::k_horizontal, &ParseProgressBarDirection);
+            CS_DEFINE_PROPERTYTYPE(UI::SliderDirection, SliderDirection, UI::SliderDirection::k_horizontal, &ParseSliderDirection);
+            CS_DEFINE_PROPERTYTYPE(UI::ProgressBarDirection, ProgressBarDirection, UI::ProgressBarDirection::k_horizontal, &ParseProgressBarDirection);
             CS_DEFINE_PROPERTYTYPE(UI::ProgressBarType, ProgressBarType, UI::ProgressBarType::k_stretch, &ParseProgressBarType);
         }
     }

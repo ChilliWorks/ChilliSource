@@ -38,6 +38,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <json/json.h>
@@ -163,7 +164,7 @@ namespace CSBackend
 			void AddToPendingCache(const std::string& in_transactionId)
 			{
 				Json::Value jData;
-				CSCore::Utils::ReadJson(CSCore::StorageLocation::k_cache, k_pendingCacheFile, &jData);
+				CSCore::JsonUtils::ReadJson(CSCore::StorageLocation::k_cache, k_pendingCacheFile, jData);
 				jData[in_transactionId] = 0;
 				CSCore::Utils::StringToFile(CSCore::StorageLocation::k_cache, k_pendingCacheFile, jData.toStyledString());
 			}
@@ -179,7 +180,7 @@ namespace CSBackend
 			{
 				//Remove the transaction from the pending cache
 				Json::Value jData;
-				if(CSCore::Utils::ReadJson(CSCore::StorageLocation::k_cache, k_pendingCacheFile, &jData))
+				if(CSCore::JsonUtils::ReadJson(CSCore::StorageLocation::k_cache, k_pendingCacheFile, jData))
 				{
 					jData.removeMember(in_transactionId);
 					CSCore::Utils::StringToFile(CSCore::StorageLocation::k_cache, k_pendingCacheFile, jData.toStyledString());
@@ -235,7 +236,7 @@ namespace CSBackend
         	env->CallVoidMethod(GetJavaObject(), GetMethodID("RestorePendingUnmanagedTransactions"));
 
         	Json::Value jData;
-        	if(CSCore::Utils::ReadJson(CSCore::StorageLocation::k_cache, k_pendingCacheFile, &jData))
+        	if(CSCore::JsonUtils::ReadJson(CSCore::StorageLocation::k_cache, k_pendingCacheFile, jData))
         	{
         		const Json::Value::Members& members = jData.getMemberNames();
         		jobjectArray transactionIDs = env->NewObjectArray(members.size(), env->FindClass("java/lang/String"), env->NewStringUTF(""));

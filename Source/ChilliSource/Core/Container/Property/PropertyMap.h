@@ -240,6 +240,34 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             struct PropertyContainer
             {
+				CS_DECLARE_NOCOPY(PropertyContainer);
+				//----------------------------------------------------------------------------------------
+				/// Default constructor.
+				///
+				/// @author Ian Copland
+				//----------------------------------------------------------------------------------------
+				PropertyContainer() = default;
+				//----------------------------------------------------------------------------------------
+				/// Move constructor. The implicit move constructor isn't enough on windows so it needs to
+				/// be manually specified.
+				///
+				/// @author Ian Copland
+				///
+				/// @param The container to move.
+				//----------------------------------------------------------------------------------------
+				PropertyContainer(PropertyContainer&& in_move);
+				//----------------------------------------------------------------------------------------
+				/// Move asignment operator. The implicit move assignment isn't enough on windows so it 
+				/// needs to be manually specified.
+				///
+				/// @author Ian Copland
+				///
+				/// @param The container to move.
+				///
+				/// @return A reference to this.
+				//----------------------------------------------------------------------------------------
+				PropertyContainer& operator=(PropertyContainer&& in_move);
+
                 bool m_initialised = false;
                 IPropertyUPtr m_property;
             };

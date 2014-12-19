@@ -31,6 +31,8 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/IPropertyType.h>
 
+#include <functional>
+
 namespace ChilliSource
 {
     namespace Core

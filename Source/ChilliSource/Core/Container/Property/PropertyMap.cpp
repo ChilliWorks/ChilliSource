@@ -204,5 +204,25 @@ namespace ChilliSource
             CS_ASSERT(entry != m_properties.end(), "No property with name: " + in_name);
             return entry->second.m_property.get();
         }
+		//----------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------
+		PropertyMap::PropertyContainer::PropertyContainer(PropertyContainer&& in_move)
+		{
+			m_initialised = in_move.m_initialised;
+			m_property = std::move(in_move.m_property);
+
+			in_move.m_initialised = false;
+		}
+		//----------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------
+		PropertyMap::PropertyContainer& PropertyMap::PropertyContainer::operator=(PropertyContainer&& in_move)
+		{
+			m_initialised = in_move.m_initialised;
+			m_property = std::move(in_move.m_property);
+
+			in_move.m_initialised = false;
+
+			return *this;
+		}
     }
 }
