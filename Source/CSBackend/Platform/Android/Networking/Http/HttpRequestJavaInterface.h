@@ -32,9 +32,13 @@
 #define _CSBACKEND_PLATFORM_ANDROID_HTTP_HTTPREQUESTJAVAINTERFACE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Core/JNI/_JavaInterface.h>
 
 #include <jni.h>
+
+#include <mutex>
+#include <unordered_map>
 
 namespace CSBackend
 {
@@ -83,31 +87,26 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------
 			static void SetupJavaInterface(JavaVM* in_javaVM);
 			//--------------------------------------------------------------------------------------
-			/// Set the connection timeout time in seconds
-			///
-			/// @author S Downie
-			///
-			/// @param Timeout in seconds
-			//--------------------------------------------------------------------------------------
-			static void SetConnectionTimeout(u32 in_timeoutSecs);
-			//--------------------------------------------------------------------------------------
 			/// Sends a HTTP request using java "HttpURLConnection" system. This handles persistent
 			/// connections and SSL.
 			///
 			/// @author Ian Copland
 			///
+			/// @param The request object used for callbacks
 			/// @param The url
 			/// @param The request type
 			/// @param Dictionary of key value headers
 			/// @param The post body. Not used if type is not post
+			/// @param Connection timeout in seconds
+			/// @param Max buffer size in bytes
 			/// @param [Out] Parameter containing the response data as a string.
-			/// @param [Out] URL of any redirection
 			/// @param [Out] Http response code
 			///
 			/// @return The result code.
 			//--------------------------------------------------------------------------------------
-			static RequestResultCode MakeHttpRequest(const std::string& in_url, RequestType in_type, const CSCore::ParamDictionary& in_headers, const std::string& in_body,
-													std::string& out_response, std::string& out_redirectUrl, s32& out_reponseCode);
+			static RequestResultCode MakeHttpRequest(HttpRequest* in_request, const std::string& in_url, RequestType in_type, const CSCore::ParamDictionary& in_headers, const std::string& in_body,
+					s32 in_timeout, s32 in_maxBufferSize,
+					std::string& out_response, s32& out_reponseCode);
 			//--------------------------------------------------------------------------------------
 			/// Calls into java to find whether or not the device is currently connected to the
 			/// internet
@@ -117,6 +116,20 @@ namespace CSBackend
 			/// @return whether or not it's connected.
 			//--------------------------------------------------------------------------------------
 			static bool IsConnected();
+			//--------------------------------------------------------------------------------------
+			/// Called by Java when the request contents exceed the max buffer size and are flushed
+			///
+			/// @author S Downie
+			///
+			/// @param Partial data
+			/// @param Response code
+			/// @param Request Id of request to notify
+			//--------------------------------------------------------------------------------------
+			static void OnFlushed(const std::string& in_data, u32 in_responseCode, s32 in_requestId);
+
+			static s32 s_requestIdCounter;
+			static std::unordered_map<s32, HttpRequest*> s_requestMap;
+			static std::mutex s_requestMutex;
 		};
 	}
 }

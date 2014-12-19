@@ -61,5 +61,20 @@ namespace ChilliSource
 #endif
             return nullptr;
         }
+        //--------------------------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param The number of bytes read before the buffer is flushed (0 is infinite)
+        //--------------------------------------------------------------------------------------------------
+        void HttpRequestSystem::SetMaxBufferSize(u32 in_sizeInBytes)
+        {
+            m_maxBufferSize = in_sizeInBytes;
+        }
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        u32 HttpRequestSystem::GetMaxBufferSize() const
+        {
+            return m_maxBufferSize;
+        }
 	}
 }

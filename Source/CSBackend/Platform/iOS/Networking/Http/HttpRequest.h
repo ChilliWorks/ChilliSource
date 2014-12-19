@@ -31,10 +31,9 @@
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Networking/Http/HttpRequest.h>
+#include <ChilliSource/Networking/Http/HttpResponse.h>
 
 #import <Foundation/Foundation.h>
-
-#include <vector>
 
 @class HttpDelegate;
 
@@ -43,44 +42,37 @@ namespace CSBackend
 	namespace iOS
 	{
         //-------------------------------------------------------------------------
-        /// Concrete implementation of iOS http request using the CFNetworking
-        /// library. Requests are performed on a background thread.
+        /// Concrete implementation of an Http request using iOS NSURLConnection
         ///
         /// @author S Downie
         //-------------------------------------------------------------------------
         class HttpRequest final : public CSNetworking::HttpRequest
         {
         public:
-            //------------------------------------------------------------------
-            /// Constructor. The request is started as a background task.
-            ///
+            //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param Request description
-            /// @param Timeout in seconds
-            /// @param Completion delegate
-            //------------------------------------------------------------------
-            HttpRequest(const Desc& in_requestDesc, u32 in_timeoutSecs, const Delegate& in_delegate);
-            //------------------------------------------------------------------
+            /// @return The type of the request (POST or GET)
+            //----------------------------------------------------------------------------------------
+            Type GetType() const override;
+            //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return The original request details, including whether it is a
-            /// post of get request and the body and header.
-            //------------------------------------------------------------------
-            const Desc& GetDescription() const override;
-            //------------------------------------------------------------------
+            /// @return The original url to which the request was sent
+            //----------------------------------------------------------------------------------------
+            const std::string& GetUrl() const override;
+            //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return The contents of the response as a string. This could be
-            /// binary data
-            //------------------------------------------------------------------
-            const std::string& GetResponse() const override;
-            //------------------------------------------------------------------
+            /// @return The body of the POST request (GET request will return empty)
+            //----------------------------------------------------------------------------------------
+            const std::string& GetBody() const override;
+            //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return HTTP response code (i.e. 200 = OK, 400 = Error)
-            //------------------------------------------------------------------
-            u32 GetResponseCode() const override;
+            /// @return The original headers of the request as keys/values
+            //----------------------------------------------------------------------------------------
+            const CSCore::ParamDictionary& GetHeaders() const override;
             //------------------------------------------------------------------
             /// Close the request. Note: The completion delegate is not invoked
             ///
@@ -97,20 +89,54 @@ namespace CSBackend
             /// @param The response code.
             /// @param The data in string form.
             //------------------------------------------------------------------
-            void OnComplete(CSNetworking::HttpRequest::Result in_result, u32 in_responseCode, const std::string& in_data);
+            void OnComplete(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data);
+            //------------------------------------------------------------------
+            /// Called by the Http Delegate when the max buffer size is exceeded
+            /// and it flushes the current data.
+            ///
+            /// This is for internal use only and should not be called by the user.
+            ///
+            /// @author S Downie
+            ///
+            /// @param The result.
+            /// @param The response code.
+            /// @param The partial data in string form.
+            //------------------------------------------------------------------
+            void OnFlushed(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data);
             //------------------------------------------------------------------
             /// Destructor.
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------
             ~HttpRequest();
+            
         private:
-            const Desc m_desc;
-            Delegate m_completionDelegate;
+            
+            friend class HttpRequestSystem;
+            //------------------------------------------------------------------
+            /// Constructor. Can only be created via HttpRequestSystem
+            ///
+            /// @author S Downie
+            ///
+            /// @param Type (POST or GET)
+            /// @param Url to send request to
+            /// @param POST body
+            /// @param Headers
+            /// @param Timeout in seconds
+            /// @param Max buffer size in bytes
+            /// @param Completion delegate
+            //------------------------------------------------------------------
+            HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate);
+            
+        private:
+            
+            const Type m_type;
+            const std::string m_url;
+            const std::string m_body;
+            const CSCore::ParamDictionary m_headers;
+            const Delegate m_completionDelegate;
             
             bool m_complete = false;
-            u32 m_responseCode;
-            std::string m_responseData;
             
             NSURLConnection* m_connection = nil;
             HttpDelegate* m_httpDelegate = nil;

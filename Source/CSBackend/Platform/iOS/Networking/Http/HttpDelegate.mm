@@ -1,5 +1,5 @@
 //
-//  HttpDelegate.h
+//  HttpDelegate.mm
 //  Chilli Source
 //  Created by Ian Copland on 11/12/2014.
 //
@@ -37,13 +37,14 @@
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-- (id) initWithRequest:(CSBackend::iOS::HttpRequest*)in_request
+- (id) initWithRequest:(CSBackend::iOS::HttpRequest*)in_request andMaxBufferSize:(u32) in_bufferSize
 {
     if (self = [super init])
     {
         m_data = nil;
         m_request = in_request;
         m_responseCode = 0;
+        m_maxBufferSize = in_bufferSize;
         CS_ASSERT(m_request != nullptr, "Request must be supplied to Http Delegate.");
         return self;
     }
@@ -84,6 +85,19 @@
 {
     CS_ASSERT(m_data != nil, "Cannot receive data before connection is estabilished!");
     
+    if(m_maxBufferSize > 0)
+    {
+        NSUInteger currentSize = [m_data length];
+        NSUInteger appendSize = [in_data length];
+        if(currentSize + appendSize >= m_maxBufferSize)
+        {
+            std::string data(reinterpret_cast<const s8*>([m_data bytes]), (s32)[m_data length]);
+            m_request->OnFlushed(CSNetworking::HttpResponse::Result::k_flushed, m_responseCode, data);
+            [m_data setLength:0];
+        }
+        
+    }
+    
     [m_data appendData:in_data];
 }
 //-----------------------------------------------------------------------------
@@ -101,7 +115,7 @@
     [m_data release];
     m_data = nil;
     
-    m_request->OnComplete(CSNetworking::HttpRequest::Result::k_completed, m_responseCode, data);
+    m_request->OnComplete(CSNetworking::HttpResponse::Result::k_completed, m_responseCode, data);
 }
 //-----------------------------------------------------------------------------
 /// Called if a connection fails.
@@ -116,7 +130,7 @@
     std::string errorMessage = [NSStringUtils newUTF8StringWithNSString:[in_error localizedDescription]];
     CS_LOG_VERBOSE("HTTP Request error: " + errorMessage);
     
-    m_request->OnComplete(CSNetworking::HttpRequest::Result::k_failed, m_responseCode, "");
+    m_request->OnComplete(CSNetworking::HttpResponse::Result::k_failed, m_responseCode, "");
 }
 //-----------------------------------------------------------------------------
 /// Called to check how a response should be cached. We don't want to cache

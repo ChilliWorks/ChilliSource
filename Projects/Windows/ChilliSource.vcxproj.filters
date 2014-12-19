@@ -768,6 +768,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\RemoteNotificationSystem.cpp">
       <Filter>ChilliSource\Core\Notification</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Networking\Http\HttpResponse.cpp">
+      <Filter>ChilliSource\Networking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
@@ -1663,6 +1666,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\RemoteNotificationSystem.h">
       <Filter>ChilliSource\Core\Notification</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Networking\Http\HttpResponse.h">
+      <Filter>ChilliSource\Networking</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
