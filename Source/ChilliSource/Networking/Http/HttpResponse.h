@@ -85,7 +85,7 @@ namespace ChilliSource
             ///
             /// @return Size of data in bytes (This could be 0 if a failure occured)
             //----------------------------------------------------------------------------------------
-            const u32 GetDataSize() const;
+            u32 GetDataSize() const;
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///

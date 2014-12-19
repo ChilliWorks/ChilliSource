@@ -31,6 +31,8 @@
 #include <CSBackend/Platform/Android/Networking/Http/HttpRequestSystem.h>
 
 #include <CSBackend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace CSBackend
 {
@@ -72,6 +74,7 @@ namespace CSBackend
 		//--------------------------------------------------------------------------------------------------
         HttpRequest* HttpRequestSystem::MakeRequest(HttpRequest::Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
         {
+        	CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Http requests can currently only be made on the main thread");
         	CS_ASSERT(in_delegate != nullptr, "Cannot make an http request with a null delegate");
 			CS_ASSERT(in_url.empty() == false, "Cannot make an http request to a blank url");
 
@@ -84,6 +87,8 @@ namespace CSBackend
 		//--------------------------------------------------------------------------------------------------
 		void HttpRequestSystem::CancelAllRequests()
         {
+			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Http requests can currently only be made on the main thread");
+
 			for(u32 nRequest=0; nRequest<m_requests.size(); ++nRequest)
             {
 				m_requests[nRequest]->Cancel();

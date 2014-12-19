@@ -53,7 +53,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        const u32 HttpResponse::GetDataSize() const
+        u32 HttpResponse::GetDataSize() const
         {
             return m_data.size();
         }

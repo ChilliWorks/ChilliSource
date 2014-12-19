@@ -128,6 +128,7 @@ public class DynamicByteBuffer
 	public void clear()
 	{
 		m_size = 0;
+		m_capacity = 0;
 	}
 	/**
 	 * This makes sure the capacity is always big enough to fit any new data 

@@ -119,7 +119,8 @@ namespace CSBackend
 			//------------------------------------------------------------------
 			void PerformRequest();
 			//--------------------------------------------------------------------------------------
-			/// Called by Java when the request contents exceed the max buffer size and are flushed
+			/// Called by Java when the request contents exceed the max buffer size and are flushed.
+			/// This is called on the main thread.
 			///
 			/// @author S Downie
 			///

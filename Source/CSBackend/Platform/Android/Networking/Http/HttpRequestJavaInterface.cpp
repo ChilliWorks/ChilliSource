@@ -44,6 +44,8 @@ extern "C"
 	//-----------------------------------------------------------------------
 	/// Called when http request contents are flushed due to exceeding
 	/// the buffer size
+    ///
+    /// @author S Downie
 	///
 	/// @param The jni environment.
 	/// @param The java object calling the function.
@@ -59,7 +61,7 @@ extern "C"
 void Java_com_chilliworks_chillisource_networking_HttpRequestNativeInterface_OnBufferFlushed(JNIEnv* in_env, jobject in_this, jbyteArray in_data, jint in_dataLength, jint in_responseCode, jint in_requestId)
 {
 	std::string data = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJByteArray(in_data, in_dataLength);
-	CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::HttpRequestJavaInterface::OnFlushed, data, (u32)in_responseCode, in_requestId));
+	CSBackend::Android::HttpRequestJavaInterface::OnFlushed(data, (u32)in_responseCode, in_requestId);
 }
 
 namespace CSBackend
@@ -176,7 +178,7 @@ namespace CSBackend
 			auto it = s_requestMap.find(in_requestId);
 			if(it != s_requestMap.end())
 			{
-				it->second->OnFlushed(in_data, in_responseCode);
+				CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::HttpRequest::OnFlushed, it->second, in_data, in_responseCode));
 			}
 		}
 	}
