@@ -1,0 +1,18 @@
+{
+  "Type": "Image",
+
+  "Components":[
+  	{
+  		"Type": "Drawable",
+  		"Name": "Drawable"
+  	}
+  ],
+
+  "ComponentProperties":{
+  	"Drawable": "all"
+  },
+
+  "Defaults": {    
+    "Name": "Image"
+  }
+}

@@ -1,38 +1,53 @@
 {
   "Type": "HorizontalSlider",
-  "Properties": {
-    "SliderFraction": "Float"
-  },
-  "Defaults": {
-    "Name": "HorizontalSlider",
-    "InputEnabled": "true",
-    "SliderFraction": "0"
-  },
-  "ChildProperties": {
-    "SliderRelSize": {
-      "Child": "Slider",
-      "Property": "RelSize"
+
+  "Components":[
+    {
+      "Type": "Drawable",
+      "Name": "Drawable"
     },
-    "SliderDrawable": {
-      "Child": "Slider",
-      "Property": "Drawable"
+    {
+      "Type": "Slider",
+      "Name": "Slider",
+      "SliderWidgetName": "Slider",
+      "SliderDirection": "Horizontal"
     }
-  },
-  "Behaviour": {
-    "FilePath": "HorizontalSlider.lua"
-  },
+  ],
+
   "Children": {
     "Slider": {
-      "Type": "Widget",
-      "RelSize": "0.1 1.1",
+      "Type": "Image",
+      "RelPosition": "0.5 0.0",
+      "RelSize": "0.0 1.0",
       "SizePolicy": "UseHeightMaintainingAspect",
       "ParentalAnchor": "MiddleLeft",
       "OriginAnchor": "MiddleLeft"
     }
   },
+
   "Hierarchy": [
     {
       "Name": "Slider"
     }
-  ]
+  ],
+
+  "ComponentProperties":{
+    "Drawable": "all",
+    "Slider":{
+      "SliderSize": "SliderSize",
+      "SliderPosition": "SliderPosition"
+    }
+  },
+
+  "ChildProperties": {
+    "Slider":
+    {
+      "SliderDrawable": "Drawable"
+    }
+  },
+
+  "Defaults": {
+    "Name": "HorizontalSlider",
+    "InputEnabled": "true"
+  }
 }

@@ -36,9 +36,10 @@
 #include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayExpansionJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
-#include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
+#include <json/json.h>
 #include <minizip/unzip.h>
 
 namespace CSBackend
@@ -192,7 +193,7 @@ namespace CSBackend
 			bool bLatestVersion = false;
 
 			Json::Value jDesc;
-			if(CSCore::Utils::ReadJson(CSCore::StorageLocation::k_cache, "GoogleExpansionDownloader.cache", &jDesc))
+			if(CSCore::JsonUtils::ReadJson(CSCore::StorageLocation::k_cache, "GoogleExpansionDownloader.cache", jDesc) == true)
 			{
 				bLatestVersion = true;
 
@@ -408,7 +409,7 @@ namespace CSBackend
         {
         	//Load the manifest
         	Json::Value jManifest;
-        	if(CSCore::Utils::ReadJson(CSCore::StorageLocation::k_cache, "AndroidExpansion.manifest", &jManifest))
+        	if(CSCore::JsonUtils::ReadJson(CSCore::StorageLocation::k_cache, "AndroidExpansion.manifest", jManifest))
         	{
         		for(u32 i=0; i<jManifest.size(); ++i)
         		{

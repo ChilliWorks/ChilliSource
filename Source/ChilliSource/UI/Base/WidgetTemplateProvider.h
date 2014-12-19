@@ -103,23 +103,6 @@ namespace ChilliSource
             /// @param [Out] The output resource.
             //----------------------------------------------------
 			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filepath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
-            //-------------------------------------------------------
-            /// From the given JSON value parse the values of the property
-            /// types into the given container. Some of the properties
-            /// require conversion from relative to absolute paths
-            /// hence the definition path info.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Json template
-            /// @param Name of instance
-            /// @param Json widget children
-            /// @param Json hierarchy
-            /// @param Template location
-            /// @param Template path (no file name)
-            /// @param [Out] Hierarchy desc
-            //-------------------------------------------------------
-            static void ParseTemplate(const Json::Value& in_template, const std::string& in_name, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath, WidgetHierarchyDesc& out_hierarchyDesc);
         private:
             
             friend class Core::Application;

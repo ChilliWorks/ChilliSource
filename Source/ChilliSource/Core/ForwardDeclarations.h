@@ -52,11 +52,18 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Container
         //---------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(ParamDictionary);
+        CS_FORWARDDECLARE_CLASS(IProperty);
+        CS_FORWARDDECLARE_CLASS(IPropertyType);
+        CS_FORWARDDECLARE_CLASS(PropertyMap);
         template <typename TKey, typename TValue> class HashedArray;
         template <typename TType> class ObjectPool;
-        CS_FORWARDDECLARE_CLASS(ParamDictionary);
 		template <typename TType> class concurrent_blocking_queue;
 		template <typename TType> class concurrent_vector;
+        template <typename TType> class Property;
+        template <typename TType> class PropertyType;
+        template <typename TType> class ReferenceProperty;
+        template <typename TType> class ValueProperty;
         //---------------------------------------------------------
         /// Delegate
         //---------------------------------------------------------

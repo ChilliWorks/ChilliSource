@@ -70,13 +70,21 @@ namespace ChilliSource
 			//---------------------------------------------------------------------
 			void Build(const std::unordered_map<std::string, std::string>& in_textMap);
             //---------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @param String key
-			///
-			/// @return String containing UTF8 codepoints that maps to this key
-			//---------------------------------------------------------------------
-			const std::string& GetText(const std::string& in_key) const;
+            /// @author Ian Copland
+            ///
+            /// @param The string key.
+            ///
+            /// @return Whether or not this has the given key.
+            //---------------------------------------------------------------------
+            bool Contains(const std::string& in_key) const;
+            //---------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @param String key
+            ///
+            /// @return String containing UTF8 codepoints that maps to this key
+            //---------------------------------------------------------------------
+            const std::string& GetText(const std::string& in_key) const;
 
 		private:
 

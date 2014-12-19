@@ -29,9 +29,9 @@
 #include <ChilliSource/Core/Base/AppConfig.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/Core/File/TaggedFilePathResolver.h>
+#include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
@@ -92,7 +92,7 @@ namespace ChilliSource
         void AppConfig::Load()
         {
             Json::Value root;
-            if(Utils::ReadJson(StorageLocation::k_package, k_configFilePath, &root) == true)
+            if(JsonUtils::ReadJson(StorageLocation::k_package, k_configFilePath, root) == true)
             {
                 m_displayableName = root.get("DisplayableName", k_defaultDisplayableName).asString();
                 m_preferredFPS = root.get("PreferredFPS", k_defaultPreferredFPS).asUInt();

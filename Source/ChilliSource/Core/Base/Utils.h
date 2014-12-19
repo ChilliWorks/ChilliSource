@@ -137,8 +137,6 @@ namespace ChilliSource
                 return (inValue << 1) | (inValue >> (sizeof(T)*8 -1));
             }
             
-            bool ReadJson(StorageLocation ineStorageLocation, const std::string & instrPath, Json::Value * outpJson);
-            
             bool          FileToString(StorageLocation ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent);
             FileStreamSPtr StringToFile(StorageLocation ineStorageLocation, const std::string & instrPath, const std::string& instrFileOut);
             

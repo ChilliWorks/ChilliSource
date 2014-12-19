@@ -35,7 +35,6 @@
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/DrawableUtils.h>
 
 namespace ChilliSource
@@ -44,18 +43,6 @@ namespace ChilliSource
     {
         namespace
         {
-            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
-            {
-                {PropertyType::k_string, "Type"},
-                {PropertyType::k_vec4, "UVs"},
-                {PropertyType::k_vec4, "Insets"},
-                {PropertyType::k_string, "TextureLocation"},
-                {PropertyType::k_string, "TexturePath"},
-                {PropertyType::k_string, "AtlasLocation"},
-                {PropertyType::k_string, "AtlasPath"},
-                {PropertyType::k_string, "AtlasId"}
-            };
-            
             //----------------------------------------------------------------------------------------
             /// Identifier for each patch in the 9 patch. Can be used as index look-ups into
             /// arrays of UVs, positions, etc.
@@ -388,6 +375,8 @@ namespace ChilliSource
                 return result;
             }
         }
+        
+        CS_DEFINE_NAMEDTYPE(NinePatchDrawable);
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         NinePatchDrawable::NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset)
@@ -408,46 +397,11 @@ namespace ChilliSource
             SetTextureAtlasId(in_atlasId);
             SetInsets(in_leftInset, in_rightInset, in_topInset, in_bottomInset);
         }
+                //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        NinePatchDrawable::NinePatchDrawable(const PropertyMap& in_properties)
+        bool NinePatchDrawable::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            Core::Vector4 uvs(in_properties.GetPropertyOrDefault("UVs", Core::Vector4(m_uvs.m_u, m_uvs.m_v, m_uvs.m_s, m_uvs.m_t)));
-            SetUVs(Rendering::UVs(uvs.x, uvs.y, uvs.z, uvs.w));
-            
-            Core::Vector4 insets(in_properties.GetPropertyOrDefault("Insets", Core::Vector4(m_leftInset, m_rightInset, m_topInset, m_bottomInset)));
-            SetInsets(insets.x, insets.y, insets.z, insets.w);
-            
-            std::string textureLocation(in_properties.GetPropertyOrDefault("TextureLocation", "Package"));
-            std::string texturePath(in_properties.GetPropertyOrDefault("TexturePath", ""));
-            
-            if(textureLocation.empty() == false && texturePath.empty() == false)
-            {
-                auto resPool = Core::Application::Get()->GetResourcePool();
-                SetTexture(resPool->LoadResource<Rendering::Texture>(Core::ParseStorageLocation(textureLocation), texturePath));
-            }
-            
-            std::string atlasLocation(in_properties.GetPropertyOrDefault("AtlasLocation", "Package"));
-            std::string atlasPath(in_properties.GetPropertyOrDefault("AtlasPath", ""));
-            
-            if(atlasLocation.empty() == false && atlasPath.empty() == false)
-            {
-                auto resPool = Core::Application::Get()->GetResourcePool();
-                SetTextureAtlas(resPool->LoadResource<Rendering::TextureAtlas>(Core::ParseStorageLocation(atlasLocation), atlasPath));
-                SetTextureAtlasId(in_properties.GetPropertyOrDefault("AtlasId", ""));
-            }
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        std::vector<PropertyMap::PropertyDesc> NinePatchDrawable::GetPropertyDescs()
-        {
-            return k_propertyDescs;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        DrawableType NinePatchDrawable::GetType() const
-        {
-            return DrawableType::k_ninePatch;
+            return (Drawable::InterfaceID == in_interfaceId || NinePatchDrawable::InterfaceID == in_interfaceId);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -489,6 +443,12 @@ namespace ChilliSource
             
             m_atlasFrame = DrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
             m_isPatchCatchValid = false;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void NinePatchDrawable::SetColour(const Core::Colour& in_colour)
+        {
+            m_colour = in_colour;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -537,7 +497,7 @@ namespace ChilliSource
             for(u32 i=0; i<k_numPatches; ++i)
             {
                 Core::Matrix3 patchTransform = Core::Matrix3::CreateTranslation(m_cachedPositions[i]);
-                in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
+                in_renderer->DrawBox(patchTransform * in_transform, m_cachedSizes[i], m_cachedOffsetTL, m_texture, m_cachedUvs[i], in_absColour * m_colour, Rendering::AlignmentAnchor::k_middleCentre);
             }
         }
     }

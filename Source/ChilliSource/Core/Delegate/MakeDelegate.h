@@ -93,7 +93,7 @@ namespace ChilliSource
         /// @return Delegate
         //------------------------------------------------------------------
         template <typename TDelegate, typename TSender, typename TReturnType, typename... TArgTypes>
-        std::function<TReturnType(TArgTypes...)> MakeDelegate(TSender* in_sender, TReturnType (TDelegate::*in_func)(TArgTypes...) const)
+        std::function<TReturnType(TArgTypes...)> MakeDelegate(const TSender* in_sender, TReturnType (TDelegate::*in_func)(TArgTypes...) const)
         {
             return [=](TArgTypes... in_args) -> TReturnType { return (in_sender->*in_func)(in_args...); };
         }

@@ -28,11 +28,27 @@
 
 #include <ChilliSource/UI/Base/WidgetParserUtils.h>
 
-#include <ChilliSource/UI/Drawable/DrawableType.h>
-#include <ChilliSource/UI/Drawable/IDrawable.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
+#include <ChilliSource/Core/Json/JsonUtils.h>
+#include <ChilliSource/Core/Localisation/LocalisedText.h>
+#include <ChilliSource/Core/Resource/ResourcePool.h>
+#include <ChilliSource/Core/String/StringParser.h>
+#include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
+#include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
+#include <ChilliSource/Rendering/Font/Font.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
+#include <ChilliSource/UI/Base/PropertyTypes.h>
+#include <ChilliSource/UI/Base/Widget.h>
+#include <ChilliSource/UI/Base/WidgetDef.h>
+#include <ChilliSource/UI/Base/WidgetDesc.h>
+#include <ChilliSource/UI/Base/WidgetFactory.h>
+#include <ChilliSource/UI/Base/WidgetTemplate.h>
+#include <ChilliSource/UI/Drawable/DrawableDef.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
+#include <ChilliSource/UI/Layout/LayoutDesc.h>
 #include <ChilliSource/UI/Layout/LayoutType.h>
-#include <ChilliSource/UI/Text/TextDrawable.h>
 
 #include <json/json.h>
 
@@ -43,85 +59,189 @@ namespace ChilliSource
         namespace WidgetParserUtils
         {
             //-------------------------------------------------------
+            /// Loads a storage location and file path from the given
+            /// json. If a storage location is not specified this
+            /// will use the resource is considered to be relative
+            /// to the given path and location.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The json object.
+            /// @param The relative storage location.
+            /// @param The relative directory path.
+            ///
+            /// @return a pair containing the storage location and
+            /// file path of the resource.
             //-------------------------------------------------------
-            PropertyMap ParseDrawableValues(const Json::Value& in_drawable, Core::StorageLocation in_location, const std::string& in_absPath)
+            std::pair<Core::StorageLocation, std::string> ParseResource(const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath)
             {
-                DrawableType type = ParseDrawableType(in_drawable["Type"].asString());
-                auto supportedProperties = IDrawable::GetPropertyDescs(type);
-                PropertyMap result(supportedProperties);
+                const char k_resourceFilePathKey[] = "Path";
+                const char k_resourceLocationKey[] = "Location";
                 
-                if(type != DrawableType::k_none)
+                CS_ASSERT(in_jsonValue.isObject(), "Resource json must be an object.");
+                CS_ASSERT(in_jsonValue.isMember(k_resourceFilePathKey) == true, "Resource json must contain a '" + std::string(k_resourceFilePathKey) + "' key.");
+                
+                const Json::Value& pathJson = in_jsonValue.get(k_resourceFilePathKey, Json::nullValue);
+                CS_ASSERT(pathJson.isString() == true, "'" + std::string(k_resourceFilePathKey) + "' must be a string.");
+                
+                std::string outputPath = pathJson.asString();
+                
+                Core::StorageLocation outputLocation;
+                if (in_jsonValue.isMember(k_resourceLocationKey) == true)
                 {
-                    bool relativeTexturePath = in_drawable.isMember("TextureLocation") == false;
-                    bool hasAtlas = in_drawable.isMember("AtlasPath") == true;
-                    bool relativeAtlasPath = hasAtlas == true && in_drawable.isMember("AtlasLocation") == false;
+                    const Json::Value& locationJson = in_jsonValue.get(k_resourceLocationKey, Json::nullValue);
+                    CS_ASSERT(locationJson.isString() == true, "'" + std::string(k_resourceLocationKey) + "' must be a string.");
+
+                    outputLocation = Core::ParseStorageLocation(locationJson.asString());
+                }
+                else
+                {
+                    outputLocation = in_relStorageLocation;
+                    outputPath = Core::StringUtils::StandardiseDirectoryPath(in_relDirectoryPath) + outputPath;
+                }
+                
+                return std::make_pair(outputLocation, outputPath);
+            }
+            //-------------------------------------------------------
+            //-------------------------------------------------------
+            void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath, Core::PropertyMap& out_propertyMap)
+            {
+                auto propertyType = out_propertyMap.GetType(in_propertyName);
+                
+                if (propertyType == PropertyTypes::Texture())
+                {
+                    auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
+                    auto texture = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Texture>(resourcePair.first, resourcePair.second);
+                    out_propertyMap.SetProperty(in_propertyName, texture);
+                }
+                else if (propertyType == PropertyTypes::TextureAtlas())
+                {
+                    auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
+                    auto textureAtlas = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::TextureAtlas>(resourcePair.first, resourcePair.second);
+                    out_propertyMap.SetProperty(in_propertyName, textureAtlas);
+                }
+                else if (propertyType == PropertyTypes::Font())
+                {
+                    auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
+                    auto font = Core::Application::Get()->GetResourcePool()->LoadResource<Rendering::Font>(resourcePair.first, resourcePair.second);
+                    out_propertyMap.SetProperty(in_propertyName, font);
+                }
+                else if (propertyType == PropertyTypes::LocalisedText())
+                {
+                    auto resourcePair = ParseResource(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
+                    auto localisedText = Core::Application::Get()->GetResourcePool()->LoadResource<Core::LocalisedText>(resourcePair.first, resourcePair.second);
+                    out_propertyMap.SetProperty(in_propertyName, localisedText);
+                }
+                else if (propertyType == PropertyTypes::DrawableDef())
+                {
+                    CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
+                    DrawableDefCSPtr drawableDef = DrawableDef::Create(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
+                    out_propertyMap.SetProperty(in_propertyName, drawableDef);
+                }
+                else if (propertyType == PropertyTypes::LayoutDesc())
+                {
+                    CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
+                    LayoutDesc layoutDesc(in_jsonValue);
+                    out_propertyMap.SetProperty(in_propertyName, layoutDesc);
+                }
+                else
+                {
+                    CS_ASSERT(in_jsonValue.isString(), "Value can only be specified as a string: " + in_propertyName);
+                    out_propertyMap.ParseProperty(in_propertyName, in_jsonValue.asString());
+                }
+            }
+            //-------------------------------------------------------
+            //-------------------------------------------------------
+            WidgetDesc ParseWidget(const Json::Value& in_template, const std::string& in_name, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath)
+            {
+                const char k_widgetTypeKey[] = "Type";
+                const char k_widgetChildrenKey[] = "Children";
+                const char k_widgetHierarchyKey[] = "Hierarchy";
+                const char k_templateTypeName[] = "Template";
+                const char k_templateFilePathKey[] = "TemplatePath";
+                const char k_templateLocationKey[] = "TemplateLocation";
+                const char k_nameKey[] = "Name";
+                
+                CS_ASSERT(in_template.isMember(k_widgetTypeKey) == true, "Widget must have '" + std::string(k_widgetTypeKey) + "' key.");
+                
+                std::string outputType = in_template[k_widgetTypeKey].asString();
+                Core::PropertyMap outputProperties;
+                std::vector<WidgetDesc> outputChildren;
+                
+                if(outputType == k_templateTypeName)
+                {
+                    //This type is a special case in which the property values are read from a separate template file
+                    CS_ASSERT(in_template.isMember(k_templateFilePathKey), "Link to template file must have '" + std::string(k_templateFilePathKey) + "' key.");
                     
-                    if(relativeTexturePath == true)
+                    bool relativePath = in_template.isMember(k_templateLocationKey) == false;
+                    Core::StorageLocation location = in_templateLocation;
+                    std::string path = in_template[k_templateFilePathKey].asString();
+                    
+                    if(relativePath == false)
                     {
-                        result.SetProperty(PropertyType::k_string, "TextureLocation", Core::ToString(in_location));
+                        location = Core::ParseStorageLocation(in_template[k_templateLocationKey].asString());
+                    }
+                    else
+                    {
+                        path = Core::StringUtils::ResolveParentedDirectories(in_templatePath + path);
                     }
                     
-                    if(relativeAtlasPath == true)
-                    {
-                        result.SetProperty(PropertyType::k_string, "AtlasLocation", Core::ToString(in_location));
-                    }
+                    //Template widgets need to be created as a hierarchy so that we can set properties such as layout
+                    //on the widget without affecting the contents of the template and vice-versa.
+                    outputType = "Widget";
+                    outputProperties = Core::PropertyMap(Widget::GetPropertyDescs());
+
+                    //TODO: this will not work with async loading.
+                    WidgetTemplateCSPtr widgetTemplate = Core::Application::Get()->GetResourcePool()->LoadResource<WidgetTemplate>(location, path);
+                    outputChildren.push_back(widgetTemplate->GetWidgetDesc());
+                }
+                else
+                {
+                    auto widgetFactory = Core::Application::Get()->GetWidgetFactory();
+                    WidgetDefCSPtr widgetDef = widgetFactory->GetDefinition(outputType);
+                    outputProperties = widgetDef->GetDefaultProperties();
+                }
+                
+                outputProperties.SetProperty(k_nameKey, in_name);
+                
+                for(auto it = in_template.begin(); it != in_template.end(); ++it)
+                {
+                    std::string propertyName = it.memberName();
                     
-                    for(const auto& propDesc : supportedProperties)
+                    if (propertyName == k_templateLocationKey || propertyName == k_templateFilePathKey || propertyName == k_widgetChildrenKey || propertyName == k_widgetHierarchyKey || propertyName == k_widgetTypeKey)
                     {
-                        if(in_drawable.isMember(propDesc.m_name) == true)
+                        //Ignore these as they are handled elsewhere but we do not want them to be included
+                        //in the properties list
+                    }
+                    else if (outputProperties.HasKey(propertyName) == true)
+                    {
+                        SetProperty(propertyName, (*it), in_templateLocation, in_templatePath, outputProperties);
+                    }
+                    else
+                    {
+                        CS_LOG_FATAL("Property with name does not exist: " + std::string(propertyName));
+                    }
+                }
+                
+                if(in_hierarchy.isNull() == false)
+                {
+                    if(in_hierarchy.isNull() == false && in_hierarchy.isArray() == true && in_children.isNull() == false)
+                    {
+                        for(u32 i=0; i<in_hierarchy.size(); ++i)
                         {
-                            std::string value = in_drawable[propDesc.m_name].asString();
+                            const Json::Value& hierarchyItem = in_hierarchy[i];
+                            std::string name = hierarchyItem[k_nameKey].asString();
                             
-                            if(propDesc.m_name == "TexturePath" && relativeTexturePath == true)
-                            {
-                                value = Core::StringUtils::ResolveParentedDirectories(in_absPath + value);
-                            }
-                            else if(propDesc.m_name == "AtlasPath" && relativeAtlasPath == true)
-                            {
-                                value = Core::StringUtils::ResolveParentedDirectories(in_absPath + value);
-                            }
+                            const Json::Value& hierarchyChildren = hierarchyItem[k_widgetChildrenKey];
+                            const Json::Value& widget = in_children[name];
                             
-                            result.SetProperty(propDesc.m_type, propDesc.m_name, value);
+                            WidgetDesc childDesc = ParseWidget(widget, name, in_children, hierarchyChildren, in_templateLocation, in_templatePath);
+                            outputChildren.push_back(childDesc);
                         }
                     }
                 }
                 
-                return result;
-            }
-            //-------------------------------------------------------
-            //-------------------------------------------------------
-            PropertyMap ParseLayoutValues(const Json::Value& in_layout)
-            {
-                LayoutType type = ParseLayoutType(in_layout["Type"].asString());
-                auto supportedProperties = ILayout::GetPropertyDescs(type);
-                PropertyMap result(supportedProperties);
-                
-                for(const auto& propDesc : supportedProperties)
-                {
-                    if(in_layout.isMember(propDesc.m_name) == true)
-                    {
-                        result.SetProperty(propDesc.m_type, propDesc.m_name, in_layout[propDesc.m_name].asString());
-                    }
-                }
-                
-                return result;
-            }
-            //-------------------------------------------------------
-            //-------------------------------------------------------
-            PropertyMap ParseTextDrawableValues(const Json::Value& in_layout)
-            {
-                auto supportedProperties = TextDrawable::GetPropertyDescs();
-                PropertyMap result(supportedProperties);
-                
-                for(const auto& propDesc : supportedProperties)
-                {
-                    if(in_layout.isMember(propDesc.m_name) == true)
-                    {
-                        result.SetProperty(propDesc.m_type, propDesc.m_name, in_layout[propDesc.m_name].asString());
-                    }
-                }
-                
-                return result;
+                return WidgetDesc(outputType, outputProperties, outputChildren);
             }
         }
 	}

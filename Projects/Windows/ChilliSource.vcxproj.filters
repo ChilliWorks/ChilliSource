@@ -142,17 +142,23 @@
     <Filter Include="ChilliSource\UI\Layout">
       <UniqueIdentifier>{2c083834-8e4f-4fc3-997f-8e3be2a1cb50}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ChilliSource\Scripting">
-      <UniqueIdentifier>{112d0e8c-31d9-489d-b40e-8c343e956eaa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ChilliSource\Scripting\Lua">
-      <UniqueIdentifier>{6486a3d5-5505-422f-af7f-5c617d7b948b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ChilliSource\Scripting\Lua\Function">
-      <UniqueIdentifier>{a53e67e2-5b1f-4591-93cc-7ec89215ed23}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ChilliSource\UI\Text">
       <UniqueIdentifier>{8b479988-1966-4721-9cd6-ad252a7a93ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\UI\Button">
+      <UniqueIdentifier>{337943d3-a449-48df-8bab-5e8f7be2bb92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\UI\ProgressBar">
+      <UniqueIdentifier>{8aa9612b-e390-4089-9a83-c1e5977b855b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\UI\Slider">
+      <UniqueIdentifier>{592281cc-ccc1-4408-8a70-4ccc77387113}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Container\Property">
+      <UniqueIdentifier>{c49f490b-685c-4314-bdad-6270ffdce019}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Core\Json">
+      <UniqueIdentifier>{5405f16c-5a39-4cbe-a99a-4e2dee3e79b3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -792,13 +798,28 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\RemoteNotificationSystem.cpp">
       <Filter>ChilliSource\Core\Notification</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.cpp">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Canvas.cpp">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyMap.cpp">
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\Component.cpp">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyType.cpp">
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\ComponentDesc.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\ComponentFactory.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyLink.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\PropertyTypes.cpp">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\SizePolicy.cpp">
@@ -813,13 +834,13 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDefProvider.cpp">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.cpp">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.cpp">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetParserUtils.cpp">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetProxy.cpp">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.cpp">
@@ -828,52 +849,46 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.cpp">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableProxy.cpp">
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\Drawable.cpp">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableType.cpp">
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableComponent.cpp">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableDef.cpp">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\DrawableUtils.cpp">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.cpp">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.cpp">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableProxy.cpp">
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableDef.cpp">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawable.cpp">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawableProxy.cpp">
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawableDef.cpp">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.cpp">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableProxy.cpp">
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableDef.cpp">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.cpp">
       <Filter>ChilliSource\UI\Layout</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridLayoutProxy.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListLayoutProxy.cpp">
       <Filter>ChilliSource\UI\Layout</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\ILayout.cpp">
       <Filter>ChilliSource\UI\Layout</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutProxy.cpp">
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutDesc.cpp">
       <Filter>ChilliSource\UI\Layout</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutType.cpp">
@@ -882,41 +897,38 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.cpp">
       <Filter>ChilliSource\UI\Layout</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayoutProxy.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Button\HighlightComponent.cpp">
+      <Filter>ChilliSource\UI\Button</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\LuaScript.cpp">
-      <Filter>ChilliSource\Scripting\Lua</Filter>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Button\ToggleHighlightComponent.cpp">
+      <Filter>ChilliSource\UI\Button</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSource.cpp">
-      <Filter>ChilliSource\Scripting\Lua</Filter>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Slider\SliderComponent.cpp">
+      <Filter>ChilliSource\UI\Slider</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSourceProvider.cpp">
-      <Filter>ChilliSource\Scripting\Lua</Filter>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Slider\SliderDirection.cpp">
+      <Filter>ChilliSource\UI\Slider</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSystem.cpp">
-      <Filter>ChilliSource\Scripting\Lua</Filter>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarComponent.cpp">
+      <Filter>ChilliSource\UI\ProgressBar</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\LuaUtils.cpp">
-      <Filter>ChilliSource\Scripting\Lua</Filter>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarDirection.cpp">
+      <Filter>ChilliSource\UI\ProgressBar</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\Function\ILuaFunction.cpp">
-      <Filter>ChilliSource\Scripting\Lua\Function</Filter>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarType.cpp">
+      <Filter>ChilliSource\UI\ProgressBar</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Scripting\Lua\Function\LuaFunctionUtils.cpp">
-      <Filter>ChilliSource\Scripting\Lua\Function</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\PointerProxy.cpp">
-      <Filter>ChilliSource\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Text\TextDrawable.cpp">
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Text\TextComponent.cpp">
       <Filter>ChilliSource\UI\Text</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Container\Property\PropertyMap.cpp">
+      <Filter>ChilliSource\Core\Container\Property</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Container\Property\PropertyTypes.cpp">
+      <Filter>ChilliSource\Core\Container\Property</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Json\JsonUtils.cpp">
+      <Filter>ChilliSource\Core\Json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1814,7 +1826,16 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\RemoteNotificationSystem.h">
       <Filter>ChilliSource\Core\Notification</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Button.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable.h">
@@ -1826,16 +1847,31 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout.h">
       <Filter>ChilliSource\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\ProgressBar.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Slider.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Text.h">
+      <Filter>ChilliSource\UI</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Canvas.h">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyAccessor.h">
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\Component.h">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyMap.h">
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\ComponentDesc.h">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyType.h">
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\ComponentFactory.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyLink.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\PropertyTypes.h">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\SizePolicy.h">
@@ -1850,16 +1886,13 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDefProvider.h">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetDesc.h">
+      <Filter>ChilliSource\UI\Base</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetFactory.h">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetHierarchyDesc.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetParserUtils.h">
-      <Filter>ChilliSource\UI\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetProxy.h">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplate.h">
@@ -1868,52 +1901,46 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Base\WidgetTemplateProvider.h">
       <Filter>ChilliSource\UI\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableProxy.h">
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\Drawable.h">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableType.h">
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableComponent.h">
+      <Filter>ChilliSource\UI\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableDef.h">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\DrawableUtils.h">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\IDrawable.h">
-      <Filter>ChilliSource\UI\Drawable</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawable.h">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableProxy.h">
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\NinePatchDrawableDef.h">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawable.h">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawableProxy.h">
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\StandardDrawableDef.h">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawable.h">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableProxy.h">
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableDef.h">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.h">
       <Filter>ChilliSource\UI\Layout</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridLayoutProxy.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\HListLayoutProxy.h">
       <Filter>ChilliSource\UI\Layout</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\ILayout.h">
       <Filter>ChilliSource\UI\Layout</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutProxy.h">
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutDesc.h">
       <Filter>ChilliSource\UI\Layout</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutType.h">
@@ -1922,56 +1949,59 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.h">
       <Filter>ChilliSource\UI\Layout</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListLayoutProxy.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Button\HighlightComponent.h">
+      <Filter>ChilliSource\UI\Button</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Scripting\ForwardDeclarations.h">
-      <Filter>ChilliSource\Scripting</Filter>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Button\ToggleHighlightComponent.h">
+      <Filter>ChilliSource\UI\Button</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua.h">
-      <Filter>ChilliSource\Scripting</Filter>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Slider\SliderComponent.h">
+      <Filter>ChilliSource\UI\Slider</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\Function.h">
-      <Filter>ChilliSource\Scripting\Lua</Filter>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Slider\SliderDirection.h">
+      <Filter>ChilliSource\UI\Slider</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaLibIncludes.h">
-      <Filter>ChilliSource\Scripting\Lua</Filter>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarComponent.h">
+      <Filter>ChilliSource\UI\ProgressBar</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaScript.h">
-      <Filter>ChilliSource\Scripting\Lua</Filter>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarDirection.h">
+      <Filter>ChilliSource\UI\ProgressBar</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSource.h">
-      <Filter>ChilliSource\Scripting\Lua</Filter>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarType.h">
+      <Filter>ChilliSource\UI\ProgressBar</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSourceProvider.h">
-      <Filter>ChilliSource\Scripting\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaSystem.h">
-      <Filter>ChilliSource\Scripting\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\LuaUtils.h">
-      <Filter>ChilliSource\Scripting\Lua</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\Function\ILuaFunction.h">
-      <Filter>ChilliSource\Scripting\Lua\Function</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\Function\LuaFunction.h">
-      <Filter>ChilliSource\Scripting\Lua\Function</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Scripting\Lua\Function\LuaFunctionUtils.h">
-      <Filter>ChilliSource\Scripting\Lua\Function</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Input\Pointer\PointerProxy.h">
-      <Filter>ChilliSource\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextDrawable.h">
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextComponent.h">
       <Filter>ChilliSource\UI\Text</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.h">
-      <Filter>ChilliSource\Rendering</Filter>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\Property\IProperty.h">
+      <Filter>ChilliSource\Core\Container\Property</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.h">
-      <Filter>ChilliSource\Rendering</Filter>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\Property\IPropertyType.h">
+      <Filter>ChilliSource\Core\Container\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\Property\Property.h">
+      <Filter>ChilliSource\Core\Container\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\Property\PropertyMap.h">
+      <Filter>ChilliSource\Core\Container\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\Property\PropertyType.h">
+      <Filter>ChilliSource\Core\Container\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\Property\PropertyTypes.h">
+      <Filter>ChilliSource\Core\Container\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\Property\ReferenceProperty.h">
+      <Filter>ChilliSource\Core\Container\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\Property\ValueProperty.h">
+      <Filter>ChilliSource\Core\Container\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\VectorUtils.h">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Json\JsonUtils.h">
+      <Filter>ChilliSource\Core\Json</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

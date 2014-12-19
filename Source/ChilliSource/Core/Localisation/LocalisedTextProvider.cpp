@@ -30,7 +30,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
-#include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 
@@ -61,7 +61,18 @@ namespace ChilliSource
                 LocalisedText* textResource((LocalisedText*)out_resource.get());
                 
                 Json::Value jsonRoot;
-                CSCore::Utils::ReadJson(in_storageLocation, in_filePath, &jsonRoot);
+                if (Core::JsonUtils::ReadJson(in_storageLocation, in_filePath, jsonRoot) == false)
+                {
+                    CS_LOG_ERROR("Cannot read cstext file: " + in_filePath);
+                    textResource->SetLoadState(Resource::LoadState::k_failed);
+                    if(in_delegate != nullptr)
+                    {
+                        Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    }
+                    return;
+                }
+                
+                
                 auto jsonVersion = jsonRoot.get("Version", Json::nullValue);
                 auto jsonText = jsonRoot.get("Text", Json::nullValue);
                 

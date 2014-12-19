@@ -30,7 +30,7 @@
 
 #include <ChilliSource/UI/Layout/GridLayout.h>
 #include <ChilliSource/UI/Layout/HListLayout.h>
-#include <ChilliSource/UI/Layout/LayoutType.h>
+#include <ChilliSource/UI/Layout/LayoutDesc.h>
 #include <ChilliSource/UI/Layout/VListLayout.h>
 
 namespace ChilliSource
@@ -39,24 +39,20 @@ namespace ChilliSource
     {
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        std::vector<PropertyMap::PropertyDesc> ILayout::GetPropertyDescs(LayoutType in_type)
+        ILayoutSPtr ILayout::Create(const LayoutDesc& in_desc)
         {
-            switch(in_type)
+            switch(in_desc.GetType())
             {
-                case LayoutType::k_none:
-                {
-                    CS_LOG_FATAL("Cannot get property descs for 'none' layout type.");
-                    return std::vector<PropertyMap::PropertyDesc>();
-                }
                 case LayoutType::k_grid:
-                    return GridLayout::GetPropertyDescs();
-                case LayoutType::k_vList:
-                    return VListLayout::GetPropertyDescs();
+                    return std::make_shared<GridLayout>(in_desc);
                 case LayoutType::k_hList:
-                    return HListLayout::GetPropertyDescs();
+                    return std::make_shared<HListLayout>(in_desc);
+                case LayoutType::k_vList:
+                    return std::make_shared<VListLayout>(in_desc);
+                default:
+                    CS_LOG_FATAL("Cannot create a widget layout instance: invalid type.");
+                    return nullptr;
             }
-            
-            return std::vector<PropertyMap::PropertyDesc>();
         }
     }
 }

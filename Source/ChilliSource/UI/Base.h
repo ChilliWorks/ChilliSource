@@ -32,8 +32,10 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/UI/Base/Canvas.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
-#include <ChilliSource/UI/Base/PropertyType.h>
+#include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Base/ComponentDesc.h>
+#include <ChilliSource/UI/Base/ComponentFactory.h>
+#include <ChilliSource/UI/Base/PropertyLink.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/WidgetDef.h>

@@ -1,38 +1,53 @@
 {
   "Type": "VerticalSlider",
-  "Properties": {
-    "SliderFraction": "Float"
-  },
-  "Defaults": {
-    "Name": "VerticalSlider",
-    "InputEnabled": "true",
-    "SliderFraction": "0"
-  },
-  "ChildProperties": {
-    "SliderRelSize": {
-      "Child": "Slider",
-      "Property": "RelSize"
+
+  "Components":[
+    {
+      "Type": "Drawable",
+      "Name": "Drawable"
     },
-    "SliderDrawable": {
-      "Child": "Slider",
-      "Property": "Drawable"
+    {
+      "Type": "Slider",
+      "Name": "Slider",
+      "SliderWidgetName": "Slider",
+      "SliderDirection": "Vertical"
     }
-  },
-  "Behaviour": {
-    "FilePath": "VerticalSlider.lua"
-  },
+  ],
+
   "Children": {
     "Slider": {
-      "Type": "Widget",
-      "RelSize": "1.1 0.1",
+      "Type": "Image",
+      "RelPosition": "0.0 0.5",
+      "RelSize": "1.0 0.0",
       "SizePolicy": "UseWidthMaintainingAspect",
       "ParentalAnchor": "BottomCentre",
       "OriginAnchor": "BottomCentre"
     }
   },
+
   "Hierarchy": [
     {
       "Name": "Slider"
     }
-  ]
+  ],
+
+  "ComponentProperties":{
+    "Drawable": "all",
+    "Slider":{
+      "SliderSize": "SliderSize",
+      "SliderPosition": "SliderPosition"
+    }
+  },
+
+  "ChildProperties": {
+    "Slider":
+    {
+      "SliderDrawable": "Drawable"
+    }
+  },
+
+  "Defaults": {
+    "Name": "VerticalSlider",
+    "InputEnabled": "true"
+  }
 }

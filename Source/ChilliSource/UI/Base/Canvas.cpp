@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Event/IConnectableEvent.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
+#include <ChilliSource/UI/Base/WidgetFactory.h>
 
 namespace ChilliSource
 {
@@ -59,7 +59,9 @@ namespace ChilliSource
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
             CS_ASSERT(m_screen != nullptr, "Canvas must have access to screen");
             
-			m_canvas = WidgetUPtr(new Widget(PropertyMap(Widget::GetPropertyDescs()), PropertyMap()));
+            WidgetFactory* widgetFactory = Core::Application::Get()->GetWidgetFactory();
+            
+            m_canvas = widgetFactory->CreateWidget();
             m_canvas->SetName("Canvas");
             m_canvas->SetAbsoluteSize(GetSize());
             m_canvas->SetCanvas(m_canvas.get());
@@ -109,15 +111,39 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
+        void Canvas::OnResume()
+        {
+            m_canvas->OnResume();
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void Canvas::OnForeground()
+        {
+            m_canvas->OnForeground();
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
         void Canvas::OnUpdate(f32 in_timeSinceLastUpdate)
         {
-            m_canvas->Update(in_timeSinceLastUpdate);
+            m_canvas->OnUpdate(in_timeSinceLastUpdate);
         }
         //----------------------------------------------------
         //----------------------------------------------------
         void Canvas::Draw(Rendering::CanvasRenderer* in_renderer) const
         {
-            m_canvas->Draw(in_renderer);
+            m_canvas->OnDraw(in_renderer);
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void Canvas::OnBackground()
+        {
+            m_canvas->OnBackground();
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        void Canvas::OnSuspend()
+        {
+            m_canvas->OnSuspend();
         }
         //----------------------------------------------------
         //----------------------------------------------------

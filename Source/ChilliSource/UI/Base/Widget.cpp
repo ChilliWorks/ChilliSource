@@ -29,16 +29,17 @@
 #include <ChilliSource/UI/Base/Widget.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/ConstMethodCast.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Scripting/Lua/LuaSystem.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
+#include <ChilliSource/Core/Container/Property/PropertyTypes.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
-#include <ChilliSource/UI/Base/WidgetProxy.h>
-#include <ChilliSource/UI/Drawable/NinePatchDrawableProxy.h>
-#include <ChilliSource/UI/Drawable/StandardDrawableProxy.h>
-#include <ChilliSource/UI/Drawable/ThreePatchDrawableProxy.h>
+#include <ChilliSource/UI/Base/PropertyTypes.h>
+#include <ChilliSource/UI/Drawable/Drawable.h>
+#include <ChilliSource/UI/Drawable/DrawableComponent.h>
+#include <ChilliSource/UI/Layout/LayoutDesc.h>
 
 namespace ChilliSource
 {
@@ -46,28 +47,43 @@ namespace ChilliSource
     {
         namespace
         {
-            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
+            const char k_properyNameName[] = "name";
+            const char k_properyNameRelPosition[] = "relposition";
+            const char k_properyNameAbsPosition[] = "absposition";
+            const char k_properyNameRelSize[] = "relsize";
+            const char k_properyNameAbsSize[] = "abssize";
+            const char k_properyNamePreferredSize[] = "preferredsize";
+            const char k_properyNameScale[] = "scale";
+            const char k_properyNameColour[] = "colour";
+            const char k_properyNameRotation[] = "rotation";
+            const char k_properyNameOriginAnchor[] = "originanchor";
+            const char k_properyNameParentalAnchor[] = "parentalanchor";
+            const char k_properyNameVisible[] = "visible";
+            const char k_properyNameClipChildren[] = "clipchildren";
+            const char k_properyNameInputEnabled[] = "inputenabled";
+            const char k_properyNameInputConsumeEnabled[] = "inputconsumeenabled";
+            const char k_properyNameSizePolicy[] = "sizepolicy";
+            const char k_properyNameLayout[] = "layout";
+            
+            const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
-                {PropertyType::k_string, "Type"},
-                {PropertyType::k_string, "Name"},
-                {PropertyType::k_vec2, "RelPosition"},
-                {PropertyType::k_vec2, "AbsPosition"},
-                {PropertyType::k_vec2, "RelSize",},
-                {PropertyType::k_vec2, "AbsSize"},
-                {PropertyType::k_vec2, "PreferredSize"},
-                {PropertyType::k_vec2, "Scale"},
-                {PropertyType::k_colour, "Colour"},
-                {PropertyType::k_float, "Rotation"},
-                {PropertyType::k_alignmentAnchor, "OriginAnchor"},
-                {PropertyType::k_alignmentAnchor, "ParentalAnchor"},
-                {PropertyType::k_bool, "Visible"},
-                {PropertyType::k_bool, "ClipChildren"},
-                {PropertyType::k_bool, "InputEnabled"},
-                {PropertyType::k_bool, "InputConsumeEnabled"},
-                {PropertyType::k_sizePolicy, "SizePolicy"},
-                {PropertyType::k_propertyMap, "Layout"},
-                {PropertyType::k_propertyMap, "Drawable"},
-                {PropertyType::k_propertyMap, "TextDrawable"}
+                {Core::PropertyTypes::String(), k_properyNameName},
+                {Core::PropertyTypes::Vector2(), k_properyNameRelPosition},
+                {Core::PropertyTypes::Vector2(), k_properyNameAbsPosition},
+                {Core::PropertyTypes::Vector2(), k_properyNameRelSize},
+                {Core::PropertyTypes::Vector2(), k_properyNameAbsSize},
+                {Core::PropertyTypes::Vector2(), k_properyNamePreferredSize},
+                {Core::PropertyTypes::Vector2(), k_properyNameScale},
+                {Core::PropertyTypes::Colour(), k_properyNameColour},
+                {Core::PropertyTypes::Float(), k_properyNameRotation},
+                {PropertyTypes::AlignmentAnchor(), k_properyNameOriginAnchor},
+                {PropertyTypes::AlignmentAnchor(), k_properyNameParentalAnchor},
+                {Core::PropertyTypes::Bool(), k_properyNameVisible},
+                {Core::PropertyTypes::Bool(), k_properyNameClipChildren},
+                {Core::PropertyTypes::Bool(), k_properyNameInputEnabled},
+                {Core::PropertyTypes::Bool(), k_properyNameInputConsumeEnabled},
+                {PropertyTypes::SizePolicy(), k_properyNameSizePolicy},
+                {PropertyTypes::LayoutDesc(), k_properyNameLayout},
             };
             
             //----------------------------------------------------------------------------------------
@@ -205,64 +221,174 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        Widget::Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties)
-        {
-            SetDefaultProperties(in_defaultProperties);
-            SetCustomProperties(in_customProperties);
-            
-            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        std::vector<PropertyMap::PropertyDesc> Widget::GetPropertyDescs()
+        std::vector<Core::PropertyMap::PropertyDesc> Widget::GetPropertyDescs()
         {
             return k_propertyDescs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetDefaultProperties(const PropertyMap& in_defaultProperties)
+        Widget::Widget(const Core::PropertyMap& in_properties, std::vector<ComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
+                       const std::vector<PropertyLink>& in_childPropertyLinks)
         {
-            SetName(in_defaultProperties.GetPropertyOrDefault<std::string>("Name", ""));
-            SetRelativePosition(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("RelPosition", Core::Vector2()));
-            SetAbsolutePosition(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("AbsPosition", Core::Vector2()));
-            SetRelativeSize(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("RelSize", Core::Vector2(1.0f, 1.0f)));
-            SetAbsoluteSize(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("AbsSize", Core::Vector2()));
-            SetDefaultPreferredSize(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("PreferredSize", Core::Vector2(1.0f, 1.0f)));
-            ScaleTo(in_defaultProperties.GetPropertyOrDefault<Core::Vector2>("Scale", Core::Vector2(1.0f, 1.0f)));
-            SetColour(in_defaultProperties.GetPropertyOrDefault<Core::Colour>("Colour", Core::Colour(1.0f, 1.0f, 1.0f, 1.0f)));
-            RotateTo(in_defaultProperties.GetPropertyOrDefault<f32>("Rotation", 0.0f));
-            SetParentalAnchor(in_defaultProperties.GetPropertyOrDefault<Rendering::AlignmentAnchor>("ParentalAnchor", Rendering::AlignmentAnchor::k_middleCentre));
-            SetOriginAnchor(in_defaultProperties.GetPropertyOrDefault<Rendering::AlignmentAnchor>("OriginAnchor", Rendering::AlignmentAnchor::k_middleCentre));
-            SetVisible(in_defaultProperties.GetPropertyOrDefault<bool>("Visible", true));
-            SetClippingEnabled(in_defaultProperties.GetPropertyOrDefault<bool>("ClipChildren", false));
-            SetInputEnabled(in_defaultProperties.GetPropertyOrDefault<bool>("InputEnabled", false));
-            SetInputConsumeEnabled(in_defaultProperties.GetPropertyOrDefault<bool>("InputConsumeEnabled", true));
-            SetSizePolicy(in_defaultProperties.GetPropertyOrDefault<SizePolicy>("SizePolicy", SizePolicy::k_none));
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::SetCustomProperties(const PropertyMap& in_customProperties)
-        {
-            m_customProperties = in_customProperties;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::SetPropertyLinks(std::unordered_map<std::string, IPropertyAccessorUPtr>&& in_defaultLinks, std::unordered_map<std::string, std::pair<Widget*, std::string>>&& in_customLinks)
-        {
-            m_defaultPropertyLinks = std::move(in_defaultLinks);
-            m_customPropertyLinks = std::move(in_customLinks);
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::SetBehaviourScript(const Scripting::LuaSourceCSPtr& in_behaviourSource)
-        {
-            if(in_behaviourSource != nullptr)
+            m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            
+            //ensure the size policy delegate is correct.
+            SetSizePolicy(m_sizePolicy);
+            
+            InitBaseProperties();
+            InitComponents(std::move(in_components));
+            InitInternalWidgets(std::move(in_internalChildren));
+            InitPropertyLinks(in_componentPropertyLinks, in_childPropertyLinks);
+            InitPropertyValues(in_properties);
+            
+            for (const auto& component : m_components)
             {
-                auto luaSystem = Core::Application::Get()->GetSystem<Scripting::LuaSystem>();
-                m_behaviourScript = luaSystem->CreateScript(in_behaviourSource);
-                m_behaviourScript->RegisterVariable("this", this);
-                m_behaviourScript->Run();
+                component->OnInit();
             }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::InitBaseProperties()
+        {
+            m_baseProperties.emplace(k_properyNameName, Core::PropertyTypes::String()->CreateProperty(Core::MakeDelegate(this, &Widget::GetName), Core::MakeDelegate(this, &Widget::SetName)));
+            m_baseProperties.emplace(k_properyNameRelPosition, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRelativePosition), Core::MakeDelegate(this, &Widget::SetRelativePosition)));
+            m_baseProperties.emplace(k_properyNameAbsPosition, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalAbsolutePosition), Core::MakeDelegate(this, &Widget::SetAbsolutePosition)));
+            m_baseProperties.emplace(k_properyNameRelSize, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRelativeSize), Core::MakeDelegate(this, &Widget::SetRelativeSize)));
+            m_baseProperties.emplace(k_properyNameAbsSize, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalAbsoluteSize), Core::MakeDelegate(this, &Widget::SetAbsoluteSize)));
+            m_baseProperties.emplace(k_properyNamePreferredSize, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetPreferredSize), Core::MakeDelegate(this, &Widget::SetDefaultPreferredSize)));
+            m_baseProperties.emplace(k_properyNameScale, Core::PropertyTypes::Vector2()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalScale), Core::MakeDelegate(this, &Widget::ScaleTo)));
+            m_baseProperties.emplace(k_properyNameColour, Core::PropertyTypes::Colour()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalColour), Core::MakeDelegate(this, &Widget::SetColour)));
+            m_baseProperties.emplace(k_properyNameRotation, Core::PropertyTypes::Float()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLocalRotation), Core::MakeDelegate(this, &Widget::RotateTo)));
+            m_baseProperties.emplace(k_properyNameOriginAnchor, PropertyTypes::AlignmentAnchor()->CreateProperty(Core::MakeDelegate(this, &Widget::GetOriginAnchor), Core::MakeDelegate(this, &Widget::SetOriginAnchor)));
+            m_baseProperties.emplace(k_properyNameParentalAnchor, PropertyTypes::AlignmentAnchor()->CreateProperty(Core::MakeDelegate(this, &Widget::GetParentalAnchor), Core::MakeDelegate(this, &Widget::SetParentalAnchor)));
+            m_baseProperties.emplace(k_properyNameVisible, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsVisible), Core::MakeDelegate(this, &Widget::SetVisible)));
+            m_baseProperties.emplace(k_properyNameClipChildren, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsClippingEnabled), Core::MakeDelegate(this, &Widget::SetClippingEnabled)));
+            m_baseProperties.emplace(k_properyNameInputEnabled, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsInputEnabled), Core::MakeDelegate(this, &Widget::SetInputEnabled)));
+            m_baseProperties.emplace(k_properyNameInputConsumeEnabled, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsInputConsumeEnabled), Core::MakeDelegate(this, &Widget::SetInputConsumeEnabled)));
+            m_baseProperties.emplace(k_properyNameSizePolicy, PropertyTypes::SizePolicy()->CreateProperty(Core::MakeDelegate(this, &Widget::GetSizePolicy), Core::MakeDelegate(this, &Widget::SetSizePolicy)));
+            m_baseProperties.emplace(k_properyNameLayout, PropertyTypes::Layout()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLayout), Core::MakeDelegate(this, &Widget::SetLayout)));
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::InitComponents(std::vector<ComponentUPtr> in_components)
+        {
+            m_components = std::move(in_components);
+            
+            for (auto& component : m_components)
+            {
+                component->SetWidget(this);
+            }
+            
+#ifdef CS_ENABLE_DEBUG
+            //ensure there are no duplicate names
+            for (const auto& componentA : m_components)
+            {
+                for (const auto& componentB : m_components)
+                {
+                    if (componentA != componentB)
+                    {
+                        CS_ASSERT(componentA->GetName() != componentB->GetName(), "Duplicate widget component name '" + componentA->GetName() + "'.");
+                    }
+                }
+            }
+#endif
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::InitInternalWidgets(std::vector<WidgetUPtr> in_widgets)
+        {
+            for (auto& widget : in_widgets)
+            {
+                CS_ASSERT(widget->GetParent() == nullptr, "Cannot add a widget as a child of more than 1 parent");
+                
+                Widget* widgetRaw = widget.get();
+                m_internalChildren.push_back(std::move(widget));
+                widgetRaw->m_parent = this;
+                
+                if (m_canvas != nullptr)
+                {
+                    widgetRaw->SetCanvas(m_canvas);
+                }
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::InitPropertyLinks(const std::vector<PropertyLink>& in_componentPropertyLinks, const std::vector<PropertyLink>& in_childPropertyLinks)
+        {
+            //Hook up any links to our components
+            for(const auto& link : in_componentPropertyLinks)
+            {
+                CS_ASSERT(m_baseProperties.find(link.GetLinkName()) == m_baseProperties.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                CS_ASSERT(m_componentPropertyLinks.find(link.GetLinkName()) == m_componentPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                CS_ASSERT(m_childPropertyLinks.find(link.GetLinkName()) == m_childPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                
+                Component* component = GetComponentWithName(link.GetLinkedOwner());
+                CS_ASSERT(component != nullptr, "Cannot create property link for property '" + link.GetLinkName() + "' because target component '" + link.GetLinkedOwner() + "' doesn't exist.");
+                CS_ASSERT(component->HasProperty(link.GetLinkName()) == true, "Cannot create property link for property '" + link.GetLinkName() + "' because target component '" +
+                          link.GetLinkedOwner() + "' doesn't contain a property called '" + link.GetLinkedProperty() + "'.");
+                
+                std::string lowerLinkName = link.GetLinkName();
+                Core::StringUtils::ToLowerCase(lowerLinkName);
+                
+                m_componentPropertyLinks.emplace(lowerLinkName, std::make_pair(component, link.GetLinkedProperty()));
+            }
+            
+            //Hook up any links to our childrens properties
+            for(const auto& link : in_childPropertyLinks)
+            {
+                CS_ASSERT(m_baseProperties.find(link.GetLinkName()) == m_baseProperties.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                CS_ASSERT(m_componentPropertyLinks.find(link.GetLinkName()) == m_componentPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                CS_ASSERT(m_childPropertyLinks.find(link.GetLinkName()) == m_childPropertyLinks.end(), "Cannot add duplicate property: " + link.GetLinkName());
+                
+                Widget* childWidget = GetInternalWidgetRecursive(link.GetLinkedOwner());
+                CS_ASSERT(childWidget != nullptr, "Cannot create property link for property '" + link.GetLinkName() + "' because target widget '" + link.GetLinkedOwner() + "' doesn't exist.");
+                
+                std::string lowerLinkName = link.GetLinkName();
+                Core::StringUtils::ToLowerCase(lowerLinkName);
+                
+                m_childPropertyLinks.emplace(lowerLinkName, std::make_pair(childWidget, link.GetLinkedProperty()));
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::InitPropertyValues(const Core::PropertyMap& in_propertyMap)
+        {
+            for (const auto& key : in_propertyMap.GetKeys())
+            {
+                if (in_propertyMap.HasValue(key) == true)
+                {
+                    const Core::IPropertyType* type = in_propertyMap.GetType(key);
+                    
+                    if (type == PropertyTypes::LayoutDesc())
+                    {
+                        SetProperty(key, ILayout::Create(in_propertyMap.GetProperty<LayoutDesc>(key)));
+                    }
+                    else
+                    {
+                        SetProperty(key, in_propertyMap.GetPropertyObject(key));
+                    }
+                }
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Component* Widget::GetComponentWithName(const std::string& in_name)
+        {
+            return Core::ConstMethodCast(this, &Widget::GetComponentWithName, in_name);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        const Component* Widget::GetComponentWithName(const std::string& in_name) const
+        {
+            for (const auto& component : m_components)
+            {
+                if (component->GetName() == in_name)
+                {
+                    return component.get();
+                }
+            }
+            
+            return nullptr;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -308,49 +434,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetDrawable(IDrawableUPtr in_drawable)
+        void Widget::SetLayout(const ILayoutSPtr& in_layout)
         {
-            m_drawable = std::move(in_drawable);
-            
-            InvalidateTransformCache();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        IDrawable* Widget::GetDrawable()
-        {
-            return m_drawable.get();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        const IDrawable* Widget::GetDrawable() const
-        {
-            return m_drawable.get();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::SetTextDrawable(TextDrawableUPtr in_textDrawable)
-        {
-            m_textDrawable = std::move(in_textDrawable);
-            
-            InvalidateTransformCache();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        TextDrawable* Widget::GetTextDrawable()
-        {
-            return m_textDrawable.get();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        const TextDrawable* Widget::GetTextDrawable() const
-        {
-            return m_textDrawable.get();
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::SetLayout(ILayoutUPtr in_layout)
-        {
-            m_layout = std::move(in_layout);
+            m_layout = in_layout;
             
             if(m_layout != nullptr)
             {
@@ -361,22 +447,15 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        ILayout* Widget::GetLayout() const
+        const ILayoutSPtr& Widget::GetLayout()
         {
-            return m_layout.get();
+            return m_layout;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetInternalLayout(ILayoutUPtr in_layout)
+        ILayoutCSPtr Widget::GetLayout() const
         {
-            m_internalLayout = std::move(in_layout);
-            
-            if(m_internalLayout != nullptr)
-            {
-                m_internalLayout->SetWidget(this);
-            }
-            
-            OnLayoutChanged(m_internalLayout.get());
+            return m_layout;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -655,7 +734,11 @@ namespace ChilliSource
 
             m_children.push_back(in_widget);
             in_widget->m_parent = this;
-            in_widget->SetCanvas(m_canvas);
+            
+            if (m_canvas != nullptr)
+            {
+                in_widget->SetCanvas(m_canvas);
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -667,22 +750,16 @@ namespace ChilliSource
             {
                 if(it->get() == in_widget)
                 {
-                    (*it)->SetCanvas(nullptr);
+                    if (m_canvas != nullptr)
+                    {
+                        (*it)->SetCanvas(nullptr);
+                    }
+                    
                     (*it)->m_parent = nullptr;
                     m_children.erase(it);
                     return;
                 }
             }
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::AddInternalWidget(const WidgetSPtr& in_widget)
-        {
-            CS_ASSERT(in_widget->GetParent() == nullptr, "Cannot add a widget as a child of more than 1 parent");
-            
-            m_internalChildren.push_back(in_widget);
-            in_widget->m_parent = this;
-            in_widget->SetCanvas(m_canvas);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -922,8 +999,17 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::SetCanvas(const Widget* in_canvas)
         {
+            CS_ASSERT((in_canvas == nullptr && m_canvas != nullptr) || (in_canvas != nullptr && m_canvas == nullptr), "Cannot set canvas to null if already null or set to non-null if already not null.");
+            
             m_canvas = in_canvas;
             
+            if (m_canvas == nullptr)
+            {
+                for (const auto& component : m_components)
+                {
+                    component->OnRemovedFromCanvas();
+                }
+            }
             
             for(auto& child : m_internalChildren)
             {
@@ -935,19 +1021,15 @@ namespace ChilliSource
                 child->SetCanvas(m_canvas);
             }
             
-            InvalidateTransformCache();
-            
-            if(m_behaviourScript != nullptr)
+            if(m_canvas != nullptr)
             {
-                if(m_canvas != nullptr)
+                for (const auto& component : m_components)
                 {
-                    m_behaviourScript->CallFunction("onAddedToCanvas", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
-                }
-                else
-                {
-                    m_behaviourScript->CallFunction("onRemovedFromCanvas", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent);
+                    component->OnAddedToCanvas();
                 }
             }
+            
+            InvalidateTransformCache();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -959,15 +1041,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::SetCustomProperty(const std::string& in_name, const char* in_value)
+        void Widget::SetProperty(const std::string& in_name, const char* in_value)
         {
-            SetCustomProperty<std::string>(in_name, in_value);
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        const char* Widget::GetCustomProperty(const std::string& in_name) const
-        {
-            return GetCustomProperty<std::string>(in_name).c_str();
+            SetProperty<std::string>(in_name, in_value);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1156,9 +1232,17 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         Core::Vector2 Widget::GetPreferredSize() const
         {
-            if(m_drawable != nullptr)
+            //This should be improved to make the acquisition of preferred size from components
+            //more generic, i.e handled via an interface. This will allow other component types
+            //to also prefer sizes.
+            const DrawableComponent* drawableComponent = GetComponent<DrawableComponent>();
+            if(drawableComponent != nullptr)
             {
-                return m_drawable->GetPreferredSize();
+                auto drawable = drawableComponent->GetDrawable();
+                if (drawable != nullptr)
+                {
+                    return drawable->GetPreferredSize();
+                }
             }
             
             return m_preferredSize;
@@ -1228,20 +1312,37 @@ namespace ChilliSource
                 }
             }
             
-            if(layout == nullptr)
+            return std::make_pair(layout, childIndex);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property)
+        {
+            std::string lowerName = in_propertyName;
+            Core::StringUtils::ToLowerCase(lowerName);
+            
+            auto basePropIt = m_baseProperties.find(lowerName);
+            if(basePropIt != m_baseProperties.end())
             {
-                for(u32 i=0; i<m_internalChildren.size(); ++i)
-                {
-                    if(m_internalChildren[i].get() == in_child)
-                    {
-                        childIndex = (s32)i;
-                        layout = m_internalLayout.get();
-                        break;
-                    }
-                }
+                basePropIt->second->Set(in_property);
+                return;
             }
             
-            return std::make_pair(layout, childIndex);
+            auto componentPropIt = m_componentPropertyLinks.find(lowerName);
+            if(componentPropIt != m_componentPropertyLinks.end())
+            {
+                componentPropIt->second.first->SetProperty(componentPropIt->second.second, in_property);
+                return;
+            }
+            
+            auto childPropIt = m_childPropertyLinks.find(lowerName);
+            if(childPropIt != m_childPropertyLinks.end())
+            {
+                childPropIt->second.first->SetProperty(childPropIt->second.second, in_property);
+                return;
+            }
+            
+            CS_LOG_FATAL("Invalid property name for Widget: " + in_propertyName);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1255,11 +1356,6 @@ namespace ChilliSource
                 if(m_layout != nullptr)
                 {
                     m_layout->BuildLayout();
-                }
-                
-                if(m_internalLayout != nullptr)
-                {
-                    m_internalLayout->BuildLayout();
                 }
             }
             
@@ -1284,30 +1380,76 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::Update(f32 in_timeSinceLastUpdate)
+        void Widget::OnResume()
         {
-            if(m_behaviourScript != nullptr)
+            for (const auto& component : m_components)
             {
-                m_behaviourScript->CallFunction("onUpdate", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, in_timeSinceLastUpdate);
+                component->OnResume();
             }
             
             m_internalChildren.lock();
             for(auto& child : m_internalChildren)
             {
-                child->Update(in_timeSinceLastUpdate);
+                child->OnResume();
             }
             m_internalChildren.unlock();
             
             m_children.lock();
             for(auto& child : m_children)
             {
-                child->Update(in_timeSinceLastUpdate);
+                child->OnResume();
             }
             m_children.unlock();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::Draw(Rendering::CanvasRenderer* in_renderer)
+        void Widget::OnForeground()
+        {
+            for (const auto& component : m_components)
+            {
+                component->OnForeground();
+            }
+            
+            m_internalChildren.lock();
+            for(auto& child : m_internalChildren)
+            {
+                child->OnForeground();
+            }
+            m_internalChildren.unlock();
+            
+            m_children.lock();
+            for(auto& child : m_children)
+            {
+                child->OnForeground();
+            }
+            m_children.unlock();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::OnUpdate(f32 in_timeSinceLastUpdate)
+        {
+            for (const auto& component : m_components)
+            {
+                component->OnUpdate(in_timeSinceLastUpdate);
+            }
+            
+            m_internalChildren.lock();
+            for(auto& child : m_internalChildren)
+            {
+                child->OnUpdate(in_timeSinceLastUpdate);
+            }
+            m_internalChildren.unlock();
+            
+            m_children.lock();
+            for(auto& child : m_children)
+            {
+                child->OnUpdate(in_timeSinceLastUpdate);
+            }
+            m_children.unlock();
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::OnDraw(Rendering::CanvasRenderer* in_renderer)
         {
             if(m_isVisible == false)
             {
@@ -1316,16 +1458,11 @@ namespace ChilliSource
             
             Core::Vector2 finalSize(GetFinalSize());
             
-            if ((m_drawable != nullptr || m_textDrawable != nullptr) && ShouldCull(GetFinalPositionOfCentre(), finalSize, m_screen->GetResolution()) == false)
+            if (ShouldCull(GetFinalPositionOfCentre(), finalSize, m_screen->GetResolution()) == false)
             {
-                if (m_drawable != nullptr)
+                for (auto& component : m_components)
                 {
-                    m_drawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
-                }
-                
-                if (m_textDrawable != nullptr)
-                {
-                    m_textDrawable->Draw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
+                    component->OnDraw(in_renderer, GetFinalTransform(), finalSize, GetFinalColour());
                 }
             }
             
@@ -1340,14 +1477,14 @@ namespace ChilliSource
             m_internalChildren.lock();
             for(auto& child : m_internalChildren)
             {
-                child->Draw(in_renderer);
+                child->OnDraw(in_renderer);
             }
             m_internalChildren.unlock();
             
             m_children.lock();
             for(auto& child : m_children)
             {
-                child->Draw(in_renderer);
+                child->OnDraw(in_renderer);
             }
             m_children.unlock();
             
@@ -1358,18 +1495,57 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        void Widget::OnBackground()
+        {
+            m_children.lock();
+            for(auto& child : m_children)
+            {
+                child->OnBackground();
+            }
+            m_children.unlock();
+            
+            m_internalChildren.lock();
+            for(auto& child : m_internalChildren)
+            {
+                child->OnBackground();
+            }
+            m_internalChildren.unlock();
+            
+            for (const auto& component : m_components)
+            {
+                component->OnBackground();
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        void Widget::OnSuspend()
+        {
+            m_children.lock();
+            for(auto& child : m_children)
+            {
+                child->OnSuspend();
+            }
+            m_children.unlock();
+            
+            m_internalChildren.lock();
+            for(auto& child : m_internalChildren)
+            {
+                child->OnSuspend();
+            }
+            m_internalChildren.unlock();
+            
+            for (const auto& component : m_components)
+            {
+                component->OnSuspend();
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         void Widget::OnLayoutChanged(const ILayout* in_layout)
         {
             if(in_layout == m_layout.get())
             {
                 for(auto& child : m_children)
-                {
-                    child->OnParentTransformChanged();
-                }
-            }
-            else if(in_layout == m_internalLayout.get())
-            {
-                for(auto& child : m_internalChildren)
                 {
                     child->OnParentTransformChanged();
                 }
@@ -1427,11 +1603,6 @@ namespace ChilliSource
 					m_pressedInput.emplace(in_pointer.GetId(), inputTypeSet);
 				}
                 
-                if(m_behaviourScript != nullptr)
-                {
-                    m_behaviourScript->CallFunction("onPressedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
-                }
-                
                 m_pressedInsideEvent.NotifyConnections(this, in_pointer, in_inputType);
                 
                 if(m_isInputConsumeEnabled == true)
@@ -1468,20 +1639,10 @@ namespace ChilliSource
             
             if(containsPrevious == false && containsCurrent == true)
             {
-                if(m_behaviourScript != nullptr)
-                {
-                    m_behaviourScript->CallFunction("onMoveEntered", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
-                }
-                
                 m_moveEnteredEvent.NotifyConnections(this, in_pointer);
             }
             else if(containsPrevious == true && containsCurrent == false)
             {
-                if(m_behaviourScript != nullptr)
-                {
-                    m_behaviourScript->CallFunction("onMoveExited", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
-                }
-                
                 m_moveExitedEvent.NotifyConnections(this, in_pointer);
             }
             else if(containsPrevious == false && containsCurrent == false)
@@ -1489,11 +1650,6 @@ namespace ChilliSource
                 auto itPressedInput = m_pressedInput.find(in_pointer.GetId());
 				if (itPressedInput != m_pressedInput.end())
                 {
-                    if(m_behaviourScript != nullptr)
-                    {
-                        m_behaviourScript->CallFunction("onDraggedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
-                    }
-                    
                     m_draggedOutsideEvent.NotifyConnections(this, in_pointer);
                 }
             }
@@ -1502,11 +1658,6 @@ namespace ChilliSource
 				auto itPressedInput = m_pressedInput.find(in_pointer.GetId());
 				if (itPressedInput != m_pressedInput.end())
                 {
-                    if(m_behaviourScript != nullptr)
-                    {
-                        m_behaviourScript->CallFunction("onDraggedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp);
-                    }
-                    
                     m_draggedInsideEvent.NotifyConnections(this, in_pointer);
                 }
             }
@@ -1548,23 +1699,22 @@ namespace ChilliSource
 
 					if(Contains(in_pointer.GetPosition()) == true)
 					{
-						if(m_behaviourScript != nullptr)
-						{
-							m_behaviourScript->CallFunction("onReleasedInside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
-						}
-                    
 						m_releasedInsideEvent.NotifyConnections(this, in_pointer, in_inputType);
 					}
 					else
 					{
-						if(m_behaviourScript != nullptr)
-						{
-							m_behaviourScript->CallFunction("onReleasedOutside", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, &in_pointer, in_timestamp, in_inputType);
-						}
-                    
 						m_releasedOutsideEvent.NotifyConnections(this, in_pointer, in_inputType);
 					}
 				}
+            }
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        Widget::~Widget()
+        {
+            for (auto& component : m_components)
+            {
+                component->OnDestroy();
             }
         }
     }

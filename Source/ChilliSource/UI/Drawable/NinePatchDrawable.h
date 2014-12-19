@@ -31,10 +31,10 @@
 #define _CHILLISOURCE_UI_DRAWABLE_NINEPATCHDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
-#include <ChilliSource/UI/Drawable/IDrawable.h>
+#include <ChilliSource/UI/Drawable/Drawable.h>
 
 #include <array>
 
@@ -53,65 +53,24 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        class NinePatchDrawable final : public IDrawable
+        class NinePatchDrawable final : public Drawable
         {
         public:
-
-            static const u32 k_numPatches = 9;
+            CS_DECLARE_NAMEDTYPE(NinePatchDrawable);
             
+            static const u32 k_numPatches = 9;
             //----------------------------------------------------------------------------------------
-            /// Constructor
+            /// Allows querying of whether or not the component implements the interface associated
+            /// with the given interface Id. Typically this won't be called directly, instead the
+            /// templated version IsA<Interface>() should be used.
             ///
             /// @author Ian Copland
             ///
-            /// @param The texture.
-            /// @param The left inset.
-            /// @param The right inset.
-            /// @param The top inset.
-            /// @param The bottom inset.
-            //----------------------------------------------------------------------------------------
-            NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
-            //----------------------------------------------------------------------------------------
-            /// Constructor
+            /// @param The interface Id.
             ///
-            /// @author Ian Copland
-            ///
-            /// @param The texture.
-            /// @param The texture atlas.
-            /// @param The atlas id.
-            /// @param The left inset.
-            /// @param The right inset.
-            /// @param The top inset.
-            /// @param The bottom inset.
+            /// @return Whether the object implements the given interface.
             //----------------------------------------------------------------------------------------
-            NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
-            //----------------------------------------------------------------------------------------
-            /// Constructor that builds the drawable from key-value properties
-            ///
-            /// Properties:
-            ///
-            ///     - UVs - f32 f32 f32 f32 - U, V, S, T
-            ///     - Insets - f32 f32 f32 f32 - left, right, top, bottom insets
-            ///     - TextureLocation - StorageLocation String - The storage location of the texture
-            ///     - TexturePath - String - File path fo the texture relative to the location
-            ///
-            /// @author S Downie
-            ///
-            /// @param Key-value properties
-            //----------------------------------------------------------------------------------------
-            NinePatchDrawable(const PropertyMap& in_properties);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The list of properties supported by this drawable
-            //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The type of this drawable instance
-            //----------------------------------------------------------------------------------------
-            DrawableType GetType() const override;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------------------------------------------
             /// Set the texture that should be used in subsequent draws
             ///
@@ -148,6 +107,15 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetUVs(const Rendering::UVs& in_UVs) override;
             //----------------------------------------------------------------------------------------
+            /// Sets the colour of the drawable. The final colour of the drawable takes into account
+            /// the owning widgets colour and this colour.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The colour.
+            //----------------------------------------------------------------------------------------
+            void SetColour(const Core::Colour& in_colour) override;
+            //----------------------------------------------------------------------------------------
             /// Set the UV insets that should be used to create the patches. Insets are from the edge
             /// and therefore no negative numbers need to be specified for right and bottom insets.
             ///
@@ -183,6 +151,33 @@ namespace ChilliSource
             void Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) override;
             
         private:
+            friend class NinePatchDrawableDef;
+            //----------------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The texture.
+            /// @param The left inset.
+            /// @param The right inset.
+            /// @param The top inset.
+            /// @param The bottom inset.
+            //----------------------------------------------------------------------------------------
+            NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
+            //----------------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The texture.
+            /// @param The texture atlas.
+            /// @param The atlas id.
+            /// @param The left inset.
+            /// @param The right inset.
+            /// @param The top inset.
+            /// @param The bottom inset.
+            //----------------------------------------------------------------------------------------
+            NinePatchDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, f32 in_leftInset, f32 in_rightInset, f32 in_topInset, f32 in_bottomInset);
             
             Rendering::TextureCSPtr m_texture;
             Rendering::TextureAtlasCSPtr m_atlas;
@@ -195,6 +190,7 @@ namespace ChilliSource
             std::array<Core::Vector2, k_numPatches> m_cachedPositions;
             Core::Vector2 m_cachedOffsetTL;
             Core::Vector2 m_cachedWidgetSize;
+            Core::Colour m_colour;
             
             f32 m_leftInset = 0.01f;
             f32 m_rightInset = 0.01f;

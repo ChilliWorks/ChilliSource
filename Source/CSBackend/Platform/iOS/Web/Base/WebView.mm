@@ -254,7 +254,7 @@ namespace CSBackend
         //-----------------------------------------------
         void WebView::CreateWebview(const CSCore::UnifiedVector2& in_size)
         {
-            CS_ASSERT(m_webView == nil, "Cannot create webview becuase one already exists!");
+            CS_ASSERT(m_webView == nil, "Cannot create webview because one already exists!");
             
             CSCore::Vector2 dipsResolution = m_screen->GetResolution() * m_screen->GetInverseDensityScale();
             

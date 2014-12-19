@@ -53,9 +53,9 @@
 /// Casting macros
 //------------------------------------------------------------
 #ifdef CS_ENABLE_DEBUG
-#define CS_SMARTCAST(in_to, in_from) dynamic_cast<in_to>(in_from); CS_ASSERT(dynamic_cast<in_to>(in_from) != nullptr, "Smart cast failed.");
+#define CS_SMARTCAST(in_to, in_from, in_failureMessage) dynamic_cast<in_to>(in_from); CS_ASSERT(dynamic_cast<in_to>(in_from) != nullptr, in_failureMessage);
 #else
-#define CS_SMARTCAST(in_to, in_from) static_cast<in_to>(in_from);
+#define CS_SMARTCAST(in_to, in_from, in_failureMessage) static_cast<in_to>(in_from);
 #endif
 //------------------------------------------------------------
 /// Forward declaration macros.

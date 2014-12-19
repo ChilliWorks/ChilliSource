@@ -31,11 +31,11 @@
 #define _CHILLISOURCE_UI_DRAWABLE_STANADARDDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
-#include <ChilliSource/UI/Drawable/IDrawable.h>
+#include <ChilliSource/UI/Drawable/Drawable.h>
 
 namespace ChilliSource
 {
@@ -46,53 +46,22 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        class StandardDrawable final : public IDrawable
+        class StandardDrawable final : public Drawable
         {
         public:
+            CS_DECLARE_NAMEDTYPE(StandardDrawable);
             //----------------------------------------------------------------------------------------
-            /// Constructor
+            /// Allows querying of whether or not the component implements the interface associated
+            /// with the given interface Id. Typically this won't be called directly, instead the
+            /// templated version IsA<Interface>() should be used.
             ///
             /// @author Ian Copland
             ///
-            /// @param The texture.
-            //----------------------------------------------------------------------------------------
-            StandardDrawable(const Rendering::TextureCSPtr& in_texture);
-            //----------------------------------------------------------------------------------------
-            /// Constructor
+            /// @param The interface Id.
             ///
-            /// @author Ian Copland
-            ///
-            /// @param The texture.
-            /// @param The texture atlas.
-            /// @param The atlas id.
+            /// @return Whether the object implements the given interface.
             //----------------------------------------------------------------------------------------
-            StandardDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId);
-            //---------------------------------------------------------------------------------------
-            /// Constructor that builds the drawable from key-value properties
-            ///
-            /// Properties:
-            ///
-            ///     - UVs - f32 f32 f32 f32 - U, V, S, T
-            ///     - TextureLocation - StorageLocation String - The storage location of the texture
-            ///     - TexturePath - String - File path fo the texture relative to the location
-            ///
-            /// @author S Downie
-            ///
-            /// @param Key-value properties
-            //----------------------------------------------------------------------------------------
-            StandardDrawable(const PropertyMap& in_properties);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The list of properties supported by this drawable
-            //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The type of this drawable instance
-            //----------------------------------------------------------------------------------------
-            DrawableType GetType() const override;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------------------------------------------
             /// Set the texture that should be used in subsequent draws
             ///
@@ -129,6 +98,15 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetUVs(const Rendering::UVs& in_UVs) override;
             //----------------------------------------------------------------------------------------
+            /// Sets the colour of the drawable. The final colour of the drawable takes into account
+            /// the owning widgets colour and this colour.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The colour.
+            //----------------------------------------------------------------------------------------
+            void SetColour(const Core::Colour& in_colour) override;
+            //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @return The preferred size that the drawable wishes to de drawn at based on the
@@ -149,12 +127,32 @@ namespace ChilliSource
             void Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) override;
             
         private:
+            friend class StandardDrawableDef;
+            //----------------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The texture.
+            //----------------------------------------------------------------------------------------
+            StandardDrawable(const Rendering::TextureCSPtr& in_texture);
+            //----------------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The texture.
+            /// @param The texture atlas.
+            /// @param The atlas id.
+            //----------------------------------------------------------------------------------------
+            StandardDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId);
             
             Rendering::TextureCSPtr m_texture;
             Rendering::TextureAtlasCSPtr m_atlas;
             Rendering::TextureAtlas::Frame m_atlasFrame;
             Rendering::UVs m_uvs;
             std::string m_atlasId;
+            Core::Colour m_colour;
         };
     }
 }

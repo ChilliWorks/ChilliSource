@@ -29,8 +29,8 @@
 #include <ChilliSource/Rendering/Texture/CubemapProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Image/Image.h>
+#include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Texture/Cubemap.h>
@@ -187,7 +187,16 @@ namespace ChilliSource
         {
             //read the Cubemap JSON
             Json::Value jsonRoot;
-            Core::Utils::ReadJson(in_location, in_filePath, &jsonRoot);
+            if (Core::JsonUtils::ReadJson(in_location, in_filePath, jsonRoot) == false)
+            {
+                CS_LOG_ERROR("Could not read face Cubemap file '" + in_filePath + "'.");
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                if(in_delegate != nullptr)
+                {
+                    Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                }
+                return;
+            }
             
             const u32 k_numFaces = 6;
             const std::string k_faces[k_numFaces] = {"Right", "Left", "Top", "Bottom", "Front", "Back"};

@@ -31,22 +31,20 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/Base/ConstMethodCast.h>
 #include <ChilliSource/Core/Container/concurrent_vector.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Input/Base/Filter.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
-#include <ChilliSource/Scripting/Lua/LuaScript.h>
-#include <ChilliSource/UI/Base/PropertyAccessor.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
-#include <ChilliSource/UI/Base/PropertyType.h>
+#include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
+#include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Base/PropertyLink.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
-#include <ChilliSource/UI/Base/WidgetDef.h>
-#include <ChilliSource/UI/Drawable/IDrawable.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
-#include <ChilliSource/UI/Text/TextDrawable.h>
 
 #include <cassert>
 #include <functional>
@@ -58,14 +56,54 @@ namespace ChilliSource
     {
         //----------------------------------------------------------------------------------------
         /// The Widget class that holds the components for laying out, rendering and manipulating
-        /// UI widgets. A widget can be a single widget or a collection of widgets.
-        /// Widgets can be added to other widgets to create a hierarchy. Widgets are
-        /// layed out using a mixture of absolute and relative coordinates in which relative coordinates
-        /// are relative to the parent
+        /// UI widgets. A widget can be a single widget or a collection of widgets. Widgets can be
+        /// added to other widgets to create a hierarchy. Widgets are layed out using a mixture of
+        /// absolute and relative coordinates in which relative coordinates are relative to the
+        /// parent.
         ///
-        /// Note: Some widgets have private sub-widgets. These are not exposed through the API
-        /// and allow the widget to be treated as a solid black box while maintaining the flexibility
-        /// of building widgets from smaller blocks.
+        /// Some widgets have private 'internal' child widgets. These are not exposed through APIs
+        /// like GetWidget() and allow the widget to be treated as a solid black box while
+        /// maintaining the flexibility  of building widgets from smaller blocks.
+        ///
+        /// The default properties exposed to UI files are as follows:
+        ///
+        /// "Name": A string used to identity a widget.
+        ///
+        /// "RelPosition": A Vector2 describing the position of local anchor relative to parent
+        /// anchor and parent size.
+        ///
+        /// "AbsPosition" A Vector2 describing the absolute position of local anchor relative to
+        /// parent anchor.
+        ///
+        /// "RelSize": A Vector2 describing the size relative to the parent size.
+        ///
+        /// "AbsSize": A Vector2 describing the absolute size.
+        ///
+        /// "PreferredSize": A Vector2 describing the default prefered size. This may be overriden
+        /// by the prefered size of certain components.
+        ///
+        /// "Scale": A Vector2 describing the scale of the widget.
+        ///
+        /// "Rotation": A float describing the rotation of a widget in radians.
+        ///
+        /// "Colour": The colour of the widget.
+        ///
+        /// "Visible": A boolean describing whether or not the widget and it's children are visible.
+        ///
+        /// "ClipChildren": A boolean describing whether children that exceed bounds are clipped.
+        ///
+        /// "OriginAnchor": The anchor point of the widgets origin. Possible values are: 'TopLeft',
+        /// 'TopCentre', 'TopRight', 'MiddleLeft', 'MiddleCentre', 'MiddleRight', 'BottomLeft',
+        /// 'BottomCentre', 'BottomRight'
+        ///
+        /// "ParentalAnchor": The anchor in the parent that local coordinates are relative to.
+        /// Possible values are: 'TopLeft', 'TopCentre', 'TopRight', 'MiddleLeft', 'MiddleCentre',
+        /// 'MiddleRight', 'BottomLeft', 'BottomCentre', 'BottomRight'
+        ///
+        /// "SizePolicy": A description of how the widget will be sized if the aspect ratio of the
+        /// widget differs from the perferred size. The possible values are: 'None', 'UsePreferredSize',
+        /// 'UseWidthMaintainingAspect', 'UseHeightMaintainingAspect', 'FitMaintainingAspect',
+        /// 'FillMaintainingAspect'
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
@@ -74,7 +112,6 @@ namespace ChilliSource
         public:
 
             CS_DECLARE_NOCOPY(Widget);
-            
             //----------------------------------------------------------------------------------------
             /// Delegate for size policy functions.
             ///
@@ -106,39 +143,11 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             using InputMovedDelegate = std::function<void(Widget*, const Input::Pointer&)>;
             //----------------------------------------------------------------------------------------
-            /// Constructor that builds the widget from the given definition.
-            ///
-            /// Default properties exposed to UI files:
-            ///
-            ///     - Name - String - Identifying name
-            ///     - RelPosition - f32 f32 - Position of local anchor relative to parent anchor and parent size
-            ///     - AbsPosition - f32 f32 - Absolute position of local anchor relative to parent anchor
-            ///     - RelSize - f32 f32 - Size relative to the parent size
-            ///     - AbsSize - f32 f32 - Absolute size
-            ///     - PreferredSize - f32 f32 - Absolute preferred size
-            ///     - Scale - f32 f32 - Scale
-            ///     - Rotation - f32 - Rotation in radians
-            ///     - Colour - f32 f32 f32 f32 - Colour
-            ///     - Visible - "true"/"false" - Visiblity flag
-            ///     - ClipChildren - "true"/"false" - Whether children that exceed bounds are clipped
-            ///     - OriginAnchor - "TopLeft"/"TopCentre"/"TopRight"/"MiddleLeft"/"MiddleCentre"/"MiddleRight"/"BottomLeft"/"BottomCentre"/"BottomRight" - Origin anchor
-            ///     - ParentalAnchor - "TopLeft"/"TopCentre"/"TopRight"/"MiddleLeft"/"MiddleCentre"/"MiddleRight"/"BottomLeft"/"BottomCentre"/"BottomRight" - Parent anchor
-            ///     - SizePolicy - "None"/"UsePreferredSize"/"UseWidthMaintainingAspect"/"UseHeightMaintainingAspect"/"FitMaintainingAspect"/"FillMaintainingAspect" - Size policy
-            ///     - Drawable - Object - See *Drawable.h
-            ///     - Layout - Object - See *Layout.h
-            ///
-            /// @author S Downie
-            ///
-            /// @param Default property values
-            /// @param Custom property values
-            //----------------------------------------------------------------------------------------
-            Widget(const PropertyMap& in_defaultProperties, const PropertyMap& in_customProperties);
-            //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @return The list of properties supported by widget
             //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
+            static std::vector<Core::PropertyMap::PropertyDesc> GetPropertyDescs();
             //----------------------------------------------------------------------------------------
             /// Event triggered when a pointer is pressed inside the widget
             ///
@@ -202,52 +211,6 @@ namespace ChilliSource
             /// @return Connectable event
             //----------------------------------------------------------------------------------------
             Core::IConnectableEvent<InputMovedDelegate>& GetDraggedOutsideEvent();
-
-            //----------------------------------------------------------------------------------------
-            /// Set the drawable that handles how to render the widget. If this is null then the
-            /// widget will not be visible. The widget takes ownership of the drawable.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Drawable
-            //----------------------------------------------------------------------------------------
-            void SetDrawable(IDrawableUPtr in_drawable);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return A pointer to the drawable. This will return null if there is no drawable.
-            //----------------------------------------------------------------------------------------
-            IDrawable* GetDrawable();
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return A const pointer to the drawable. This will return null if there is no drawable.
-            //----------------------------------------------------------------------------------------
-            const IDrawable* GetDrawable() const;
-            //----------------------------------------------------------------------------------------
-            /// Sets the text drawable that describes how any text used by the widget should be
-            /// rendered. If this is null, no text will be displayed. Text will always display over
-            /// the drawable.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The text that should be added to this widget.
-            //----------------------------------------------------------------------------------------
-            void SetTextDrawable(TextDrawableUPtr in_textDrawable);
-            //----------------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return A pointer to the text drawable that will be rendered in this widget. This will
-            /// return null if there is no text drawable.
-            //----------------------------------------------------------------------------------------
-            TextDrawable* GetTextDrawable();
-            //----------------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return A const pointer to the text drawable that will be rendered in this widget. This
-            /// will return null if there is no text drawable.
-            //----------------------------------------------------------------------------------------
-            const TextDrawable* GetTextDrawable() const;
             //----------------------------------------------------------------------------------------
             /// Set the layout that handles how to layout the widget's subviews. If this is null then the
             /// subviews will retain their current size and position. Otherwise the size and position may
@@ -257,13 +220,19 @@ namespace ChilliSource
             ///
             /// @param Layout
             //----------------------------------------------------------------------------------------
-            void SetLayout(ILayoutUPtr in_layout);
+            void SetLayout(const ILayoutSPtr& in_layout);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
             /// @return Layout or null
             //----------------------------------------------------------------------------------------
-            ILayout* GetLayout() const;
+            const ILayoutSPtr& GetLayout();
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the layout, or null if there isn't one.
+            //----------------------------------------------------------------------------------------
+            ILayoutCSPtr GetLayout() const;
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -557,6 +526,19 @@ namespace ChilliSource
             /// @return Whether press and release input events are consumed
             //----------------------------------------------------------------------------------------
             bool IsInputConsumeEnabled() const;
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return the first component found of the specified type or nullptr if there isn't one.
+            //----------------------------------------------------------------------------------------
+            template <typename TComponentType> TComponentType* GetComponent();
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A const version of the first component found of the specified type or nullptr
+            /// if there isn't one.
+            //----------------------------------------------------------------------------------------
+            template <typename TComponentType> const TComponentType* GetComponent() const;
             //----------------------------------------------------------------------------------------
             /// Adds a widget as a child of this widget. The widget will be rendered as part of this
             /// hierarchy and any relative coordinates will now be in relation to this widget.
@@ -852,40 +834,30 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Name
+            /// @param Name. This is case insensitive.
             /// @param Value
             //----------------------------------------------------------------------------------------
-            template<typename TType> void SetCustomProperty(const std::string& in_name, TType&& in_value);
+            template<typename TType> void SetProperty(const std::string& in_name, TType&& in_value);
             //----------------------------------------------------------------------------------------
             /// Specialisation to store property value for const char* as a std::string
             ///
             /// @author S Downie
             ///
-            /// @param Property name
+            /// @param Property name. This is case insensitive.
             /// @param Property value
             //----------------------------------------------------------------------------------------
-            void SetCustomProperty(const std::string& in_name, const char* in_value);
+            void SetProperty(const std::string& in_name, const char* in_value);
             //----------------------------------------------------------------------------------------
             /// Get the value of the property with the given name. If no property exists
             /// with the name then it will assert.
             ///
             /// @author S Downie
             ///
-            /// @param Name
+            /// @param Name. This is case insensitive.
             ///
             /// @return Value
             //----------------------------------------------------------------------------------------
-            template<typename TType> TType GetCustomProperty(const std::string& in_name) const;
-            //----------------------------------------------------------------------------------------
-            /// Specialisation to return property value for const char* which is stored as a std::string
-            ///
-            /// @author S Downie
-            ///
-            /// @param Property name
-            ///
-            /// @return Property value
-            //----------------------------------------------------------------------------------------
-            const char* GetCustomProperty(const std::string& in_name) const;
+            template<typename TType> TType GetProperty(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
             /// Performs a calculation to check if the given position is within the OOBB
             /// of the widget
@@ -918,9 +890,92 @@ namespace ChilliSource
             /// @param The layout that changed
             //----------------------------------------------------------------------------------------
             void OnLayoutChanged(const ILayout* in_layout);
+            //----------------------------------------------------------------------------------------
+            /// Destructor. Sends the OnDestroy event to all components.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------------------
+            ~Widget();
         private:
             friend class Canvas;
             friend class WidgetFactory;
+            //----------------------------------------------------------------------------------------
+            /// Constructor that builds the widget from the given definition. The default properties
+            /// of a widget are described in the class documentation.
+            ///
+            /// @author S Downie
+            ///
+            /// @param The property map containing the initial values for properties.
+            /// @param The list of components.
+            /// @param The list of component property links.
+            /// @param The list of internal children.
+            /// @param The list of internal children property links.
+            //----------------------------------------------------------------------------------------
+            Widget(const Core::PropertyMap& in_properties, std::vector<ComponentUPtr> in_components, const std::vector<PropertyLink>& in_componentPropertyLinks, std::vector<WidgetUPtr> in_internalChildren,
+                   const std::vector<PropertyLink>& in_childPropertyLinks);
+            //----------------------------------------------------------------------------------------
+            /// Initialises the internal mapping to base properties. This allows base properties,
+            /// such as Relative Position or Size Policy to be set via the SetProperty method.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------------------
+            void InitBaseProperties();
+            //----------------------------------------------------------------------------------------
+            /// Initialises the widgets components. This can only be called once and each component
+            /// must have a unique name. If called a second time the app will be considered to be
+            /// in an irrecoverable state and will terminate.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The list of components.
+            //----------------------------------------------------------------------------------------
+            void InitComponents(std::vector<ComponentUPtr> in_components);
+            //----------------------------------------------------------------------------------------
+            /// Adds all of the internal widgets. The given widgets must not already have a parent,
+            /// if they do the app will be considered to be in an irrecoverable state and will
+            /// terminate.
+            ///
+            /// @author S Downie
+            ///
+            /// @param The list of widgets.
+            //----------------------------------------------------------------------------------------
+            void InitInternalWidgets(std::vector<WidgetUPtr> in_widgets);
+            //----------------------------------------------------------------------------------------
+            /// Set up the links so that this widget can access the properties of another via the
+            /// SetProperty and GetProperty
+            ///
+            /// @author S Downie
+            ///
+            /// @param Links to default properties of the specified widget
+            /// @param Links to custom properties of the specified widget
+            //----------------------------------------------------------------------------------------
+            void InitPropertyLinks(const std::vector<PropertyLink>& in_componentPropertyLinks, const std::vector<PropertyLink>& in_childPropertyLinks);
+            //----------------------------------------------------------------------------------------
+            /// Initialise the values of all properties from the given property map.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The property map.
+            //----------------------------------------------------------------------------------------
+            void InitPropertyValues(const Core::PropertyMap& in_propertyMap);
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The name of the component. There should only be one component with the name.
+            ///
+            /// @return The component with the given name. This will return nullptr is no component
+            /// could be found.
+            //----------------------------------------------------------------------------------------
+            Component* GetComponentWithName(const std::string& in_name);
+            //----------------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The name of the component. There should only be one component with the name.
+            ///
+            /// @return A const version of the component with the given name. This will return nullptr
+            /// is no component could be found.
+            //----------------------------------------------------------------------------------------
+            const Component* GetComponentWithName(const std::string& in_name) const;
             //----------------------------------------------------------------------------------------
             /// Set the pointer to the canvas
             ///
@@ -937,60 +992,6 @@ namespace ChilliSource
             /// @param Parent
             //----------------------------------------------------------------------------------------
             void SetParent(Widget* in_parent);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Default property values
-            //----------------------------------------------------------------------------------------
-            void SetDefaultProperties(const PropertyMap& in_defaultProperties);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Custom property values
-            //----------------------------------------------------------------------------------------
-            void SetCustomProperties(const PropertyMap& in_customProperties);
-            //----------------------------------------------------------------------------------------
-            /// Set up the links so that this widget can access the properties of another via the
-            /// SetProperty and GetProperty
-            ///
-            /// @author S Downie
-            ///
-            /// @param Links to default properties of the specified widget
-            /// @param Links to custom properties of the specified widget
-            //----------------------------------------------------------------------------------------
-            void SetPropertyLinks(std::unordered_map<std::string, IPropertyAccessorUPtr>&& in_defaultLinks, std::unordered_map<std::string, std::pair<Widget*, std::string>>&& in_customLinks);
-            //----------------------------------------------------------------------------------------
-            /// Sets the Lua script that controls the behaviour of this widget
-            ///
-            /// @author S Downie
-            ///
-            /// @param Lua script source
-            //----------------------------------------------------------------------------------------
-            void SetBehaviourScript(const Scripting::LuaSourceCSPtr& in_behaviourSource);
-            //----------------------------------------------------------------------------------------
-            /// Adds a widget as a child of this widget. The widget will be rendered as part of this
-            /// hierarchy and any relative coordinates will now be in relation to this widget.
-            ///
-            /// This widget is effectively a private implementation detail and is not affected by the
-            /// layout and is not returned when querying for widgets
-            ///
-            /// NOTE: Will assert if the widget already has a parent
-            ///
-            /// @author S Downie
-            ///
-            /// @param Widget to add
-            //----------------------------------------------------------------------------------------
-            void AddInternalWidget(const WidgetSPtr& in_widget);
-            //----------------------------------------------------------------------------------------
-            /// Set the layout that handles how to layout the widget's internal subviews. If this is null then the
-            /// subviews will retain their current size and position. Otherwise the size and position may
-            /// be manipulatd by the layout
-            ///
-            /// @author S Downie
-            ///
-            /// @param Layout
-            //----------------------------------------------------------------------------------------
-            void SetInternalLayout(ILayoutUPtr in_layout);
             //----------------------------------------------------------------------------------------
             /// Calculate the transform matrix of the object based on the local scale, rotation and
             /// position
@@ -1067,6 +1068,17 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             std::pair<ILayout*, s32> GetLayoutForChild(const Widget* in_child);
             //----------------------------------------------------------------------------------------
+            /// Sets the value of a property from another property. The given property must be of the
+            /// same type as the given property or the app will be considered to be in an irrecoverable
+            /// state and will terminate.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The property name.
+            /// @param The property used to set the value.
+            //----------------------------------------------------------------------------------------
+            void SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property);
+            //----------------------------------------------------------------------------------------
             /// Called when the out transform changes forcing this to update its caches
             ///
             /// @author S Downie
@@ -1079,21 +1091,53 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void OnParentTransformChanged();
             //----------------------------------------------------------------------------------------
+            /// Resumes the widget, its components and its children. This is called when the widget
+            /// is attached to the canvas and every time the state that owns the canvas is resumed while
+            /// the widget is attached.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------------------
+            void OnResume();
+            //----------------------------------------------------------------------------------------
+            /// Foregrounds the widget, its components and its children. This is called when the widget
+            /// is attached to the canvas and every time the state that owns the canvas is foregrounded
+            /// while the widget is attached.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------------------
+            void OnForeground();
+            //----------------------------------------------------------------------------------------
             /// Update this widget and any sub widgets
             ///
             /// @author S Downie
             ///
             /// @param Time in seconds since last update
             //----------------------------------------------------------------------------------------
-            void Update(f32 in_timeSinceLastUpdate);
+            void OnUpdate(f32 in_timeSinceLastUpdate);
             //----------------------------------------------------------------------------------------
-            /// Draw the view using the currently set drawable. Tell any subviews to draw.
+            /// Tells any components or child widgets to draw.
             ///
             /// @author S Downie
             ///
             /// @param Canvas renderer
             //----------------------------------------------------------------------------------------
-            void Draw(Rendering::CanvasRenderer* in_renderer);
+            void OnDraw(Rendering::CanvasRenderer* in_renderer);
+            //----------------------------------------------------------------------------------------
+            /// Backgrounds the widget, its components and its children. This is called when the widget
+            /// is removed from the canvas and every time the state that owns the canvas is backgrounded
+            /// while the widget is attached.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------------------
+            void OnBackground();
+            //----------------------------------------------------------------------------------------
+            /// Suspends the widget, its components and its children. This is called when the widget
+            /// is removed from the canvas and every time the state that owns the canvas is suspended
+            /// while the widget is attached.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------------------------------
+            void OnSuspend();
             //-----------------------------------------------------------
             /// Called when the canvas receives cursor/touch input
             ///
@@ -1127,9 +1171,9 @@ namespace ChilliSource
             
         private:
             
-            PropertyMap m_customProperties;
-            std::unordered_map<std::string, IPropertyAccessorUPtr> m_defaultPropertyLinks;
-            std::unordered_map<std::string, std::pair<Widget*, std::string>> m_customPropertyLinks;
+            std::unordered_map<std::string, CSCore::IPropertyUPtr> m_baseProperties;
+            std::unordered_map<std::string, std::pair<Component*, std::string>> m_componentPropertyLinks;
+            std::unordered_map<std::string, std::pair<Widget*, std::string>> m_childPropertyLinks;
             
             std::unordered_map<Input::Pointer::Id, std::set<Input::Pointer::InputType>> m_pressedInput;
             
@@ -1142,43 +1186,40 @@ namespace ChilliSource
             Core::Event<InputMovedDelegate> m_draggedOutsideEvent;
             
             Core::UnifiedVector2 m_localPosition;
-            Core::UnifiedVector2 m_localSize;
-            Core::Vector2 m_preferredSize;
-            Core::Vector2 m_localScale;
+            Core::UnifiedVector2 m_localSize = Core::UnifiedVector2(1.0f, 1.0f, 0.0f, 0.0f);
+            Core::Vector2 m_preferredSize = Core::Vector2::k_one;
+            Core::Vector2 m_localScale = Core::Vector2::k_one;
             Core::Colour m_localColour;
-            f32 m_localRotation;
+            f32 m_localRotation = 0.0f;
             
             mutable Core::Matrix3 m_cachedLocalTransform;
             mutable Core::Matrix3 m_cachedFinalTransform;
             mutable Core::Vector2 m_cachedFinalPosition;
             mutable Core::Vector2 m_cachedFinalSize;
             
-            SizePolicy m_sizePolicy;
+            SizePolicy m_sizePolicy = SizePolicy::k_none;
             SizePolicyDelegate m_sizePolicyDelegate;
             
-            Core::concurrent_vector<WidgetSPtr> m_internalChildren;
+            Core::concurrent_vector<WidgetUPtr> m_internalChildren;
             Core::concurrent_vector<WidgetSPtr> m_children;
             
             std::string m_name;
             
-            IDrawableUPtr m_drawable;
-            TextDrawableUPtr m_textDrawable;
-            ILayoutUPtr m_layout;
-            ILayoutUPtr m_internalLayout;
-            
-            Scripting::LuaScriptUPtr m_behaviourScript;
+            std::vector<ComponentUPtr> m_components;
+
+            ILayoutSPtr m_layout;
             
             Widget* m_parent = nullptr;
             const Widget* m_canvas = nullptr;
             
-            Rendering::AlignmentAnchor m_parentalAnchor;
-            Rendering::AlignmentAnchor m_originAnchor;
+            Rendering::AlignmentAnchor m_parentalAnchor = Rendering::AlignmentAnchor::k_middleCentre;
+            Rendering::AlignmentAnchor m_originAnchor = Rendering::AlignmentAnchor::k_middleCentre;
             Core::UnifiedVector2 m_originPosition;
             
-            bool m_isVisible;
-            bool m_isSubviewClippingEnabled;
-            bool m_isInputEnabled;
-            bool m_isInputConsumeEnabled;
+            bool m_isVisible = true;
+            bool m_isSubviewClippingEnabled = false;
+            bool m_isInputEnabled = false;
+            bool m_isInputConsumeEnabled = true;
             
             mutable bool m_isParentTransformCacheValid = false;
             mutable bool m_isLocalTransformCacheValid = false;
@@ -1187,52 +1228,87 @@ namespace ChilliSource
             
             mutable std::mutex m_sizeMutex;
     
-            Core::Screen* m_screen;
+            Core::Screen* m_screen = nullptr;
         };
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<typename TType> void Widget::SetCustomProperty(const std::string& in_name, TType&& in_value)
+        template <typename TComponentType> TComponentType* Widget::GetComponent()
         {
-            auto itDefault = m_defaultPropertyLinks.find(in_name);
-            if(itDefault != m_defaultPropertyLinks.end())
-            {
-                auto accessor = CS_SMARTCAST(PropertyAccessor<TType>*, itDefault->second.get());
-                accessor->Set(std::forward<TType>(in_value));
-                return;
-            }
-            
-            auto itCustom = m_customPropertyLinks.find(in_name);
-            if(itCustom != m_customPropertyLinks.end())
-            {
-                itCustom->second.first->SetCustomProperty<TType>(itCustom->second.second, std::forward<TType>(in_value));
-                return;
-            }
-            
-            m_customProperties.SetProperty(in_name, std::forward<TType>(in_value));
-            
-            if(m_behaviourScript != nullptr)
-            {
-                m_behaviourScript->CallFunction("onCustomPropertyChanged", Scripting::LuaScript::FunctionNotFoundPolicy::k_failSilent, in_name, std::forward<TType>(in_value));
-            }
+            return Core::ConstMethodCast(this, &Widget::GetComponent<TComponentType>);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        template<typename TType> TType Widget::GetCustomProperty(const std::string& in_name) const
+        template <typename TComponentType> const TComponentType* Widget::GetComponent() const
         {
-            auto itDefault = m_defaultPropertyLinks.find(in_name);
-            if(itDefault != m_defaultPropertyLinks.end())
+            for (const auto& component : m_components)
             {
-                auto accessor = CS_SMARTCAST(PropertyAccessor<TType>*, itDefault->second.get());
-                return accessor->Get();
+                if (component->IsA<TComponentType>() == true)
+                {
+                    return static_cast<const TComponentType*>(component.get());
+                }
             }
             
-            auto itCustom = m_customPropertyLinks.find(in_name);
-            if(itCustom != m_customPropertyLinks.end())
+            return nullptr;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        template<typename TType> void Widget::SetProperty(const std::string& in_name, TType&& in_value)
+        {
+            std::string lowerName = in_name;
+            Core::StringUtils::ToLowerCase(lowerName);
+            
+            auto basePropIt = m_baseProperties.find(lowerName);
+            if(basePropIt != m_baseProperties.end())
             {
-                return itCustom->second.first->GetCustomProperty<TType>(itCustom->second.second);
+                auto property = CS_SMARTCAST(Core::Property<TType>*, basePropIt->second.get(), "Incorrect type for property with name: " + in_name);
+                property->Set(std::forward<TType>(in_value));
+                return;
             }
             
-            return m_customProperties.GetProperty<TType>(in_name);
+            auto componentPropIt = m_componentPropertyLinks.find(lowerName);
+            if(componentPropIt != m_componentPropertyLinks.end())
+            {
+                componentPropIt->second.first->SetProperty<TType>(componentPropIt->second.second, std::forward<TType>(in_value));
+                return;
+            }
+            
+            auto childPropIt = m_childPropertyLinks.find(lowerName);
+            if(childPropIt != m_childPropertyLinks.end())
+            {
+                childPropIt->second.first->SetProperty<TType>(childPropIt->second.second, std::forward<TType>(in_value));
+                return;
+            }
+            
+            CS_LOG_FATAL("Invalid property name for Widget: " + in_name);
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        template<typename TType> TType Widget::GetProperty(const std::string& in_name) const
+        {
+            std::string lowerName = in_name;
+            Core::StringUtils::ToLowerCase(lowerName);
+            
+            auto basePropIt = m_baseProperties.find(lowerName);
+            if(basePropIt != m_baseProperties.end())
+            {
+                auto property = CS_SMARTCAST(Core::Property<TType>*, basePropIt->second.get(), "Incorrect type for property with name: " + in_name);
+                return property->Get();
+            }
+            
+            auto componentPropIt = m_componentPropertyLinks.find(lowerName);
+            if(componentPropIt != m_componentPropertyLinks.end())
+            {
+                return componentPropIt->second.first->GetProperty<TType>(componentPropIt->second.second);
+            }
+            
+            auto childPropIt = m_childPropertyLinks.find(lowerName);
+            if(childPropIt != m_childPropertyLinks.end())
+            {
+                return childPropIt->second.first->GetProperty<TType>(childPropIt->second.second);
+            }
+            
+            CS_LOG_FATAL("Invalid property name for Widget: " + in_name);
+            return TType();
         }
     }
 }

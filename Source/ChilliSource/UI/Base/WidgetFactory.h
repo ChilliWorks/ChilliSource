@@ -197,12 +197,12 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Hierarchy desc
-            /// @param Behaviour script source
+            /// @param The widget definition.
+            /// @param The widget description.
             ///
-            /// @return Widget
+            /// @return The output widget
             //---------------------------------------------------------------------------
-            WidgetUPtr CreateRecursive(const WidgetHierarchyDesc& in_hierarchyDesc, const Scripting::LuaSourceCSPtr& in_behaviourSource) const;
+            WidgetUPtr CreateRecursive(const WidgetDefCSPtr& in_widgetDef, const WidgetDesc& in_widgetDesc) const;
             //---------------------------------------------------------------------------
             /// Called when the system is destroyed and will release
             /// any memory held
@@ -213,6 +213,7 @@ namespace ChilliSource
             
         private:
             
+            ComponentFactory* m_componentFactory;
             std::unordered_map<std::string, WidgetDefCSPtr> m_widgetDefNameMap;
 		};
 	}

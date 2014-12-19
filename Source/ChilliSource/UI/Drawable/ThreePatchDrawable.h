@@ -31,11 +31,11 @@
 #define _CHILLISOURCE_UI_DRAWABLE_THREEPATCHDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
-#include <ChilliSource/UI/Drawable/IDrawable.h>
+#include <ChilliSource/UI/Drawable/Drawable.h>
 
 #include <array>
 #include <functional>
@@ -53,12 +53,12 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        class ThreePatchDrawable final : public IDrawable
+        class ThreePatchDrawable final : public Drawable
         {
         public:
-
-            static const u32 k_numPatches = 3;
+            CS_DECLARE_NAMEDTYPE(ThreePatchDrawable);
             
+            static const u32 k_numPatches = 3;
             //----------------------------------------------------------------------------------------
             /// The type of the 3-patch i.e. horizontal or vertical
             ///
@@ -70,61 +70,17 @@ namespace ChilliSource
                 k_vertical
             };
             //----------------------------------------------------------------------------------------
-            /// Constructor
+            /// Allows querying of whether or not the component implements the interface associated
+            /// with the given interface Id. Typically this won't be called directly, instead the
+            /// templated version IsA<Interface>() should be used.
             ///
             /// @author Ian Copland
             ///
-            /// @param The texture.
-            /// @param The direction the drawable will stretch.
-            /// @param The left inset if a horizontal 3-patch or the bottom inset if a vertical
-            /// 3-patch. This should be provided as a normalised fraction, 0.0 - 1.0.
-            /// @param The right inset if a horizontal 3-patch or the top inset if a vertical 3-patch.
-            /// This should be provided as a normalised fraction, 0.0 - 1.0.
-            //----------------------------------------------------------------------------------------
-            ThreePatchDrawable(const Rendering::TextureCSPtr& in_texture, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop);
-            //----------------------------------------------------------------------------------------
-            /// Constructor
+            /// @param The interface Id.
             ///
-            /// @author Ian Copland
-            ///
-            /// @param The texture.
-            /// @param The texture atlas.
-            /// @param The atlas id.
-            /// @param The direction the drawable will stretch.
-            /// @param The left inset if a horizontal 3-patch or the bottom inset if a vertical
-            /// 3-patch. This should be provided as a normalised fraction, 0.0 - 1.0.
-            /// @param The right inset if a horizontal 3-patch or the top inset if a vertical 3-patch.
-            /// This should be provided as a normalised fraction, 0.0 - 1.0.
+            /// @return Whether the object implements the given interface.
             //----------------------------------------------------------------------------------------
-            ThreePatchDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop);
-            //----------------------------------------------------------------------------------------
-            /// Constructor that builds the drawable from key-value properties
-            ///
-            /// Properties:
-            ///
-            ///     - Type - "Vertical"/"Horizontal" - Type of the 3-patch
-            ///     - UVs - f32 f32 f32 f32 - U, V, S, T
-            ///     - Insets - f32 f32 - left/bottom, right/top insets
-            ///     - TextureLocation - StorageLocation String - The storage location of the texture
-            ///     - TexturePath - String - File path fo the texture relative to the location
-            ///
-            /// @author S Downie
-            ///
-            /// @param Key-value properties
-            //----------------------------------------------------------------------------------------
-            ThreePatchDrawable(const PropertyMap& in_properties);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The list of properties supported by this drawable
-            //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The type of this drawable instance
-            //----------------------------------------------------------------------------------------
-            DrawableType GetType() const override;
+            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------------------------------------------
             /// Set the texture that should be used in subsequent draws
             ///
@@ -161,6 +117,15 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             void SetUVs(const Rendering::UVs& in_UVs) override;
             //----------------------------------------------------------------------------------------
+            /// Sets the colour of the drawable. The final colour of the drawable takes into account
+            /// the owning widgets colour and this colour.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The colour.
+            //----------------------------------------------------------------------------------------
+            void SetColour(const Core::Colour& in_colour) override;
+            //----------------------------------------------------------------------------------------
             /// Set the UV insets that should be used to create the patches. Insets are from the edge
             /// and therefore no negative numbers need to be specified for right and bottom insets.
             ///
@@ -194,6 +159,7 @@ namespace ChilliSource
             void Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) override;
             
         private:
+            friend class ThreePatchDrawableDef;
             
             //----------------------------------------------------------------------------------------
             /// Calculates the UVs for each patch.
@@ -245,6 +211,34 @@ namespace ChilliSource
             /// @return Offset from top left
             //----------------------------------------------------------------------------------------
             using CalculateOffsetDelegate = std::function<Core::Vector2(const Core::Vector2&, const Rendering::TextureAtlas::Frame&, f32, f32)>;
+            //----------------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The texture.
+            /// @param The direction the drawable will stretch.
+            /// @param The left inset if a horizontal 3-patch or the bottom inset if a vertical
+            /// 3-patch. This should be provided as a normalised fraction, 0.0 - 1.0.
+            /// @param The right inset if a horizontal 3-patch or the top inset if a vertical 3-patch.
+            /// This should be provided as a normalised fraction, 0.0 - 1.0.
+            //----------------------------------------------------------------------------------------
+            ThreePatchDrawable(const Rendering::TextureCSPtr& in_texture, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop);
+            //----------------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The texture.
+            /// @param The texture atlas.
+            /// @param The atlas id.
+            /// @param The direction the drawable will stretch.
+            /// @param The left inset if a horizontal 3-patch or the bottom inset if a vertical
+            /// 3-patch. This should be provided as a normalised fraction, 0.0 - 1.0.
+            /// @param The right inset if a horizontal 3-patch or the top inset if a vertical 3-patch.
+            /// This should be provided as a normalised fraction, 0.0 - 1.0.
+            //----------------------------------------------------------------------------------------
+            ThreePatchDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, Direction in_direction, f32 in_leftOrBottom, f32 in_rightOrTop);
             
             CalculateUVsDelegate m_uvCalculationDelegate;
             CalculateSizesDelegate m_sizeCalculationDelegate;
@@ -256,6 +250,7 @@ namespace ChilliSource
             Rendering::TextureAtlas::Frame m_atlasFrame;
             Rendering::UVs m_uvs;
             std::string m_atlasId;
+            Core::Colour m_colour;
             
             std::array<Rendering::UVs, k_numPatches> m_cachedUvs;
             std::array<Core::Vector2, k_numPatches> m_cachedSizes;

@@ -30,7 +30,8 @@
 #define _CHILLISOURCE_UI_BASE_WIDGETPARSERUTILS_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
+#include <ChilliSource/Core/Container/Property/PropertyMap.h>
+#include <ChilliSource/Core/File/StorageLocation.h>
 
 #include <json/forwards.h>
 
@@ -41,42 +42,51 @@ namespace ChilliSource
         namespace WidgetParserUtils
         {
             //-------------------------------------------------------
-            /// From the given JSON value parse the values of the drawable
-            /// types into a property map. Drawables can be specified
-            /// with a relative path and this needs conversion to an
-            /// absolute path
-            ///
-            /// @author S Downie
-            ///
-            /// @param Json drawable
-            /// @param Absolute storage location
-            /// @param Absolute file path (no file name)
-            ///
-            /// @return Property values
-            //-------------------------------------------------------
-            PropertyMap ParseDrawableValues(const Json::Value& in_drawable, Core::StorageLocation in_location, const std::string& in_absPath);
-            //-------------------------------------------------------
-            /// From the given JSON value parse the values of the layout
-            /// types into a property map
-            ///
-            /// @author S Downie
-            ///
-            /// @param Json layout
-            ///
-            /// @return Property values
-            //-------------------------------------------------------
-            PropertyMap ParseLayoutValues(const Json::Value& in_layout);
-            //-------------------------------------------------------
-            /// From the given JSON value parse the values of the text
-            /// types into a property map
+            /// Loads a storage location and file path from the given
+            /// json. If a storage location is not specified this
+            /// will use the resource is considered to be relative
+            /// to the given path and location.
             ///
             /// @author Ian Copland
             ///
-            /// @param Json layout
+            /// @param The json object.
+            /// @param [Optional] The relative storage location.
+            /// @param [Optional] The relative directory path.
             ///
-            /// @return Property values
+            /// @return a pair containing the storage location and
+            /// file path of the resource.
             //-------------------------------------------------------
-            PropertyMap ParseTextDrawableValues(const Json::Value& in_layout);
+            std::pair<Core::StorageLocation, std::string> ParseResource(const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation = Core::StorageLocation::k_package, const std::string& in_relDirectoryPath = "");
+            //-------------------------------------------------------
+            /// Sets a property in a property map from a json value.
+            /// The value type must be a string or a json object or
+            /// this will assert.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The property name.
+            /// @param The json value.
+            /// @param [Out] The output property map.
+            //-------------------------------------------------------
+            void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath, Core::PropertyMap& out_propertyMap);
+            //-------------------------------------------------------
+            /// From the given JSON value parse the values of the property
+            /// types into the given container. Some of the properties
+            /// require conversion from relative to absolute paths
+            /// hence the definition path info.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Json template
+            /// @param Name of instance
+            /// @param Json widget children
+            /// @param Json hierarchy
+            /// @param Template location
+            /// @param Template path (no file name)
+            ///
+            /// @return The output widget description.
+            //-------------------------------------------------------
+            WidgetDesc ParseWidget(const Json::Value& in_template, const std::string& in_name, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath);
         }
 	}
 }

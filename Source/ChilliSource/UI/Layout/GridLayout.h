@@ -33,7 +33,6 @@
 #include <ChilliSource/ChilliSource.h>
 
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/UI/Base/PropertyMap.h>
 #include <ChilliSource/UI/Layout/ILayout.h>
 
 namespace ChilliSource
@@ -41,8 +40,8 @@ namespace ChilliSource
     namespace UI
     {
         //----------------------------------------------------------------------------------------
-        /// Lays out widgets in a grid where each widget has a single cell. The cells
-        /// have spacing between them and the entire grid has a surrounding margin.
+        /// Lays out widgets in a grid where each widget has a single cell. The cells have spacing
+        /// between them and the entire grid has a surrounding margin.
         ///
         /// The grid size is fixed and will not expand
         ///
@@ -74,31 +73,15 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             GridLayout() = default;
             //----------------------------------------------------------------------------------------
-            /// Constructor that builds the layout from key-value properties
+            /// Constructor that builds the layout from the given Layout Description. This will fatal
+            /// log if the given description is not a grid. The properties used here are described in
+            /// the class documentation for LayoutDesc.
             ///
-            /// Properties:
+            /// @author Ian Copland
             ///
-            ///     - NumRows - u32 - Number of columns
-            ///     - NumCols - u32 - Number of rows
-            ///     - RelHSpacing - f32 - Relative spacing horizontally
-            ///     - RelVSpacing - f32 - Relative spacing vertically
-            ///     - AbsHSpacing - f32 - Absolute spacing horizontally
-            ///     - AbsVSpacing - f32 - Absolute spacing vertically
-            ///     - RelMargins - f32 f32 f32 f32 - Relative margins top, right, bottom, left
-            ///     - AbsMargins - f32 f32 f32 f32 - Absolute margins top, right, bottom, left
-            ///     - CellOrder - "ColMajor"/"RowMajor" - Order in which cells are laid out
-            ///
-            /// @author S Downie
-            ///
-            /// @param Key-value properties
+            /// @param The layout description.
             //----------------------------------------------------------------------------------------
-            GridLayout(const PropertyMap& in_properties);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The list of properties supported by this layout
-            //----------------------------------------------------------------------------------------
-            static std::vector<PropertyMap::PropertyDesc> GetPropertyDescs();
+            GridLayout(const LayoutDesc& in_layoutDesc);
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///

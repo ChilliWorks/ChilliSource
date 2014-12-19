@@ -1,0 +1,52 @@
+{
+  "Type": "HorizontalFillProgressBar",
+
+  "Components":[
+    {
+      "Type": "Drawable",
+      "Name": "Drawable"
+    },
+    {
+      "Type": "ProgressBar",
+      "Name": "ProgressBar",
+      "BarWidgetName": "Bar",
+      "BarDirection": "Horizontal",
+      "BarType": "Fill"
+    }
+  ],
+
+  "Children": {
+    "Bar": {
+      "Type": "Image",
+      "RelSize": "0.0 1.0",
+      "ParentalAnchor": "MiddleLeft",
+      "OriginAnchor": "MiddleLeft"
+    }
+  },
+
+  "Hierarchy": [
+    {
+      "Name": "Bar"
+    }
+  ],
+
+  "ComponentProperties":{
+    "Drawable": "all",
+    "ProgressBar":
+    {
+      "RelBarSize": "RelBarSize",
+      "Progress": "Progress"
+    }
+  },
+
+  "ChildProperties": {
+    "Bar":
+    {
+      "BarDrawable": "Drawable"
+    }
+  },
+
+  "Defaults": {
+    "Name": "HorizontalFillProgressBar"
+  }
+}

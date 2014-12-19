@@ -1,0 +1,16 @@
+{
+	"Type" : "Label",
+
+	"Components":
+	[
+		{
+			"Type": "Text",
+			"Name": "Text"
+		}
+	],
+
+	"ComponentProperties":
+	{
+		"Text": "all"
+	}
+}

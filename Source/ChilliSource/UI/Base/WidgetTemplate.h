@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/Resource.h>
-#include <ChilliSource/UI/Base/WidgetHierarchyDesc.h>
+#include <ChilliSource/UI/Base/WidgetDesc.h>
 
 namespace ChilliSource
 {
@@ -67,15 +67,15 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Hierarchy desc
+            /// @param The widget description.
             //-------------------------------------------------------
-            void Build(const WidgetHierarchyDesc& in_desc);
+            void Build(const WidgetDesc& in_desc);
             //-------------------------------------------------------
             /// @author S Downie
             ///
             /// @return Hierarchy description
             //-------------------------------------------------------
-            const WidgetHierarchyDesc& GetHierarchyDesc() const;
+            const WidgetDesc& GetWidgetDesc() const;
             
         private:
             
@@ -93,11 +93,11 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //-------------------------------------------------------
-            WidgetTemplate() = default;
+            WidgetTemplate();
             
         private:
             
-            WidgetHierarchyDesc m_desc;
+            WidgetDesc m_desc;
         };
     }
 }

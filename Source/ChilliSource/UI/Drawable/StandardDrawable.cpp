@@ -33,26 +33,13 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/UI/Drawable/DrawableType.h>
 #include <ChilliSource/UI/Drawable/DrawableUtils.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
-        namespace
-        {
-            const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
-            {
-                {PropertyType::k_string, "Type"},
-                {PropertyType::k_vec4, "UVs"},
-                {PropertyType::k_string, "TextureLocation"},
-                {PropertyType::k_string, "TexturePath"},
-                {PropertyType::k_string, "AtlasLocation"},
-                {PropertyType::k_string, "AtlasPath"},
-                {PropertyType::k_string, "AtlasId"}
-            };
-        }
+        CS_DEFINE_NAMEDTYPE(StandardDrawable);
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         StandardDrawable::StandardDrawable(const Rendering::TextureCSPtr& in_texture)
@@ -72,41 +59,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        StandardDrawable::StandardDrawable(const PropertyMap& in_properties)
+        bool StandardDrawable::IsA(Core::InterfaceIDType in_interfaceId) const
         {
-            Core::Vector4 uvs(in_properties.GetPropertyOrDefault("UVs", Core::Vector4(m_uvs.m_u, m_uvs.m_v, m_uvs.m_s, m_uvs.m_t)));
-            SetUVs(Rendering::UVs(uvs.x, uvs.y, uvs.z, uvs.w));
-            
-            std::string textureLocation(in_properties.GetPropertyOrDefault("TextureLocation", "Package"));
-            std::string texturePath(in_properties.GetPropertyOrDefault("TexturePath", ""));
-            
-            if(textureLocation.empty() == false && texturePath.empty() == false)
-            {
-                auto resPool = Core::Application::Get()->GetResourcePool();
-                SetTexture(resPool->LoadResource<Rendering::Texture>(Core::ParseStorageLocation(textureLocation), texturePath));
-            }
-            
-            std::string atlasLocation(in_properties.GetPropertyOrDefault("AtlasLocation", "Package"));
-            std::string atlasPath(in_properties.GetPropertyOrDefault("AtlasPath", ""));
-            
-            if(atlasLocation.empty() == false && atlasPath.empty() == false)
-            {
-                auto resPool = Core::Application::Get()->GetResourcePool();
-                SetTextureAtlas(resPool->LoadResource<Rendering::TextureAtlas>(Core::ParseStorageLocation(atlasLocation), atlasPath));
-                SetTextureAtlasId(in_properties.GetPropertyOrDefault("AtlasId", ""));
-            }
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        std::vector<PropertyMap::PropertyDesc> StandardDrawable::GetPropertyDescs()
-        {
-            return k_propertyDescs;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        DrawableType StandardDrawable::GetType() const
-        {
-            return DrawableType::k_standard;
+            return (Drawable::InterfaceID == in_interfaceId || StandardDrawable::InterfaceID == in_interfaceId);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -147,6 +102,12 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
+        void StandardDrawable::SetColour(const Core::Colour& in_colour)
+        {
+            m_colour = in_colour;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
         Core::Vector2 StandardDrawable::GetPreferredSize() const
         {
             return m_atlasFrame.m_originalSize;
@@ -166,7 +127,7 @@ namespace ChilliSource
             offsetTL = in_absSize/m_atlasFrame.m_originalSize * offsetTL;
             Core::Vector2 size = in_absSize/m_atlasFrame.m_originalSize * m_atlasFrame.m_croppedSize;
             
-            in_renderer->DrawBox(in_transform, size, offsetTL, m_texture, m_atlasFrame.m_uvs, in_absColour, Rendering::AlignmentAnchor::k_middleCentre);
+            in_renderer->DrawBox(in_transform, size, offsetTL, m_texture, m_atlasFrame.m_uvs, in_absColour * m_colour, Rendering::AlignmentAnchor::k_middleCentre);
         }
     }
 }
