@@ -1,7 +1,8 @@
 === Chilli Source Change Log ===
 
 Version 1.2.1, 2014-11-17:
-	- Replaced the iOS HTTP connection system internals with NSURLConnection. This resulted in removal of GetBytesRead() from the HTTP interface.
+	- Models exported from Blender can now be converted to CSModel format using the ColladaToCSModel tool.
+	- Improved the HTTP Request System API. Also replaced the iOS HTTP Request System internals with NSURLConnection. This resulted in removal of GetBytesRead() from the HTTP interface.
 	- Updated iOS Facebook SDK.
 	- ContentDownloader now allows a custom hashing delegate to be provided rather than being explicitly MD5.
 	- ContentDownloader now defaults to using SHA-1 hash.
