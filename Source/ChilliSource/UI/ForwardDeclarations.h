@@ -86,7 +86,7 @@ namespace ChilliSource
         enum class ProgressBarDirection;
         enum class ProgressBarType;
         //---------------------------------------------------------
-        /// Progress Bar
+        /// Slider
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(SliderComponent);
         enum class SliderDirection;
