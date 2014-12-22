@@ -28,123 +28,149 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#ifndef _CSBACKEND_PLATFORM_IOS_HTTP_HTTPREQUESTSYSTEM_H_
-#define _CSBACKEND_PLATFORM_IOS_HTTP_HTTPREQUESTSYSTEM_H_
-
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/iOS/ForwardDeclarations.h>
+#import <CSBackend/Platform/iOS/Networking/Http/HttpRequest.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
-#include <unordered_map>
-#include <vector>
+#import <CoreFoundation/CoreFoundation.h>
 
-#include <CoreFoundation/CoreFoundation.h>
+#include <vector>
 
 namespace CSBackend
 {
 	namespace iOS
 	{
-        //--------------------------------------------------------------------------------------------------
-        /// iOS implementation of the http connection system. Reponsible for making http requests to remote
-        /// urls and managing the lifetime of the requests and the connections. Uses the CFNetworking library
+        //-------------------------------------------------------------------------
+        /// iOS implementation of the http connection system. Reponsible for making
+        /// http requests to remote urls and managing the lifetime of the requests
+        /// and the connections. Uses the CFNetworking library.
         ///
         /// @author S Downie
-        //--------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------
 		class HttpRequestSystem final : public CSNetworking::HttpRequestSystem
 		{
 		public:
-            
-            typedef u32 ConnectionId;
-            
             CS_DECLARE_NAMEDTYPE(HttpRequestSystem);
-			
-			//--------------------------------------------------------------------------------------------------
+            
+			//------------------------------------------------------------------
 			/// @author S Downie
 			///
 			/// @param Interface ID
             ///
 			/// @return Whether object if of argument type
-			//--------------------------------------------------------------------------------------------------
+			//------------------------------------------------------------------
             bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //--------------------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param The number of seconds that will elapse before a request is deemed to have timed out
-            /// on connection
-            //--------------------------------------------------------------------------------------------------
-            void SetConnectionTimeout(u32 in_timeoutSecs) override;
-            //--------------------------------------------------------------------------------------------------
-            /// Causes the system to issue a request with the given details.
+            /// Causes the system to issue an Http GET request.
             ///
             /// @author S Downie
             ///
-            /// @param A descriptor detailing the request params
-			/// @param A function to call when the request is completed. Note that the request can be completed with failure as well as success.
+            /// @param URL
+            /// @param Delegate that is called on request completed. Completion can be failure as well as success
+            /// @param Request timeout in seconds
             ///
-            /// @return A pointer to the request. The system owns this pointer. Returns nullptr if the request cannot be created.
+            /// @return A pointer to the request. The system owns this pointer.
             //--------------------------------------------------------------------------------------------------
-            CSNetworking::HttpRequest* MakeRequest(const CSNetworking::HttpRequest::Desc& in_requestDesc, const CSNetworking::HttpRequest::Delegate& in_delegate) override;
-			//--------------------------------------------------------------------------------------------------
-            /// Equivalent to calling cancel on every incomplete request in progress.
+            HttpRequest* MakeGetRequest(const std::string& in_url, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) override;
+            //--------------------------------------------------------------------------------------------------
+            /// Causes the system to issue an Http GET request.
             ///
             /// @author S Downie
+            ///
+            /// @param URL
+            /// @param Key value headers to attach to the request
+            /// @param Delegate that is called on request completed. Completion can be failure as well as success
+            /// @param Request timeout in seconds
+            ///
+            /// @return A pointer to the request. The system owns this pointer.
             //--------------------------------------------------------------------------------------------------
+            HttpRequest* MakeGetRequest(const std::string& in_url, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) override;
+            //--------------------------------------------------------------------------------------------------
+            /// Causes the system to issue an Http POST request with the given body.
+            ///
+            /// @author S Downie
+            ///
+            /// @param URL
+            /// @param POST body
+            /// @param Delegate that is called on request completed. Completion can be failure as well as success
+            /// @param Request timeout in seconds
+            ///
+            /// @return A pointer to the request. The system owns this pointer.
+            //--------------------------------------------------------------------------------------------------
+            HttpRequest* MakePostRequest(const std::string& in_url, const std::string& in_body, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) override;
+            //--------------------------------------------------------------------------------------------------
+            /// Causes the system to issue an Http POST request with the given body.
+            ///
+            /// @author S Downie
+            ///
+            /// @param URL
+            /// @param POST body
+            /// @param Key value headers to attach to the request
+            /// @param Delegate that is called on request completed. Completion can be failure as well as success
+            /// @param Request timeout in seconds
+            ///
+            /// @return A pointer to the request. The system owns this pointer.
+            //--------------------------------------------------------------------------------------------------
+            HttpRequest* MakePostRequest(const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) override;
+			//------------------------------------------------------------------
+            /// Equivalent to calling cancel on every incomplete request in
+            /// progress.
+            ///
+            /// @author S Downie
+            //------------------------------------------------------------------
             void CancelAllRequests() override;
-            //--------------------------------------------------------------------------------------------------
+            //------------------------------------------------------------------
             /// Checks if the device is internet ready
             ///
             /// @author S Downie
             ///
             /// @return Success if net available
-            //--------------------------------------------------------------------------------------------------
+            //------------------------------------------------------------------
             bool CheckReachability() const override;
-            
         private:
-            
             friend CSNetworking::HttpRequestSystemUPtr CSNetworking::HttpRequestSystem::Create();
-            //--------------------------------------------------------------------------------------------------
+            //------------------------------------------------------------------
             /// Private constructor to fore use of factory method
             ///
             /// @author S Downie
-            //--------------------------------------------------------------------------------------------------
+            //------------------------------------------------------------------
             HttpRequestSystem() = default;
-            //--------------------------------------------------------------------------------------------------
+            //------------------------------------------------------------------
+            /// Concrete method to which all MakeRequest overloads feed.
+            ///
+            /// @author S Downie
+            ///
+            /// @param Type (POST or GET)
+            /// @param Url
+            /// @param Body (POST only)
+            /// @param Headers
+            /// @param Completion delegate
+            /// @param Request timeout in seconds
+            ///
+            /// @return Request. Owned by the system.
+            //------------------------------------------------------------------
+            HttpRequest* MakeRequest(HttpRequest::Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs);
+            //------------------------------------------------------------------
             /// Poll the connection on active requests
             ///
             /// @author S Downie
             ///
             /// @param Time since last update in seconds
-            //--------------------------------------------------------------------------------------------------
+            //------------------------------------------------------------------
             void OnUpdate(f32 in_timeSinceLastUpdate) override;
-            //--------------------------------------------------------------------------------------------------
+            //------------------------------------------------------------------
             /// Called when the system is destroyed. Cancels all pending requests
             ///
             /// @author S Downie
-            //--------------------------------------------------------------------------------------------------
+            //------------------------------------------------------------------
             void OnDestroy() override;
         
         private:
-            
-            struct ConnectionInfo
-            {
-                TimeIntervalSecs m_connectionOpenTime;
-                ConnectionId m_streamId;
-                ConnectionId m_connectionId;
-                CFReadStreamRef m_readStream;
-            };
-            
-			std::vector<HttpRequest*> m_requests;
-            
-            std::unordered_map<ConnectionId, ConnectionInfo> m_unusedConnections;
-            std::unordered_map<HttpRequest*, ConnectionInfo> m_activeConnections;
-            
-            u32 m_totalNumConnectionsEstablished = 0;
-            u32 m_connectionTimeoutSecs = 15;
+			std::vector<HttpRequestUPtr> m_requests;
+            std::vector<const CSNetworking::HttpRequest*> m_finishedRequests;
 		};
 	}
-    
 }
-
-#endif
 
 #endif

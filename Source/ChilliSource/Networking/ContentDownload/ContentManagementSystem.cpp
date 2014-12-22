@@ -35,6 +35,7 @@
 #include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/File/FileStream.h>
 #include <ChilliSource/Core/File/AppDataStore.h>
+#include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <minizip/unzip.h>
@@ -99,8 +100,8 @@ namespace ChilliSource
         //-----------------------------------------------------------
         //-----------------------------------------------------------
         ContentManagementSystem::ContentManagementSystem(IContentDownloader* in_contentDownloader)
-            : m_contentDownloader(in_contentDownloader), m_serverManifest(nullptr),  m_runningToDownloadTotal(0),
-            m_runningDownloadedTotal(0), m_dlcCachePurged(false)
+        :m_contentDownloader(in_contentDownloader)
+        ,m_serverManifest(nullptr)
         {
         }
         //------------------------------------------------------------
@@ -136,18 +137,25 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        std::string ContentManagementSystem::GetManifestChecksumForFile(const std::string& in_filename)
+        std::string ContentManagementSystem::GetManifestChecksumForFile(const std::string& in_filename) const
         {
             return CalculateChecksum(Core::StorageLocation::k_DLC, in_filename);
         }
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		std::string ContentManagementSystem::CalculateChecksum(Core::StorageLocation in_location, const std::string& in_filePath)
+		std::string ContentManagementSystem::CalculateChecksum(Core::StorageLocation in_location, const std::string& in_filePath) const
 		{
-            std::string strMD5Checksum = Core::Application::Get()->GetFileSystem()->GetFileChecksumMD5(in_location, in_filePath);
-			std::string strBase64Encoded = Core::BaseEncoding::Base64Encode(strMD5Checksum);
-			Core::StringUtils::ChopTrailingChars(strBase64Encoded, '=');
-			return strBase64Encoded;
+            if(m_checksumDelegate)
+            {
+                // Custom checksum calculation
+                return m_checksumDelegate(in_location, in_filePath);
+            }
+            
+            std::string checksum = Core::Application::Get()->GetFileSystem()->GetFileChecksumSHA1(in_location, in_filePath);
+            CSCore::StringUtils::ToLowerCase(checksum);
+			std::string base64Encoded = Core::BaseEncoding::Base64Encode(checksum);
+			Core::StringUtils::ChopTrailingChars(base64Encoded, '=');
+			return base64Encoded;
 		}
         //-----------------------------------------------------------
         //-----------------------------------------------------------
@@ -292,7 +300,6 @@ namespace ChilliSource
             {
                 case IContentDownloader::Result::k_succeeded:
                 {
-                    
                     if(SavePackageToFile(m_packageDetails[m_currentPackageDownload], in_data, true))
                     {
                         m_runningDownloadedTotal += m_packageDetails[m_currentPackageDownload].m_size;
@@ -623,15 +630,15 @@ namespace ChilliSource
         }
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		u32 ContentManagementSystem::GetRunningTotalToDownload()
+		u32 ContentManagementSystem::GetRunningTotalToDownload() const
 		{
 			return m_runningToDownloadTotal;
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		u32 ContentManagementSystem::GetRunningTotalDownloaded()
+		u32 ContentManagementSystem::GetRunningTotalDownloaded() const
 		{
-			return m_runningDownloadedTotal + m_contentDownloader->GetCurrentDownloadedBytes();
+			return m_runningDownloadedTotal;
 		}
         //-----------------------------------------------------------
         //-----------------------------------------------------------
@@ -641,7 +648,13 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        bool ContentManagementSystem::DoesFileExist(const std::string& in_filename, const std::string in_checksum, bool in_checkOnlyBundle)
+        void ContentManagementSystem::SetChecksumDelegate(const ChecksumDelegate& in_delegate)
+        {
+            m_checksumDelegate = in_delegate;
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        bool ContentManagementSystem::DoesFileExist(const std::string& in_filename, const std::string in_checksum, bool in_checkOnlyBundle) const
         {
             if(in_checkOnlyBundle)
             {

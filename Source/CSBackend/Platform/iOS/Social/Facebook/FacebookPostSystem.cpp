@@ -40,8 +40,6 @@
 #include <UIKit/UIKit.h>
 #include <Social/Social.h>
 #include <CSBackend/Platform/iOS/Social/Facebook/FacebookUtils.h>
-#include <CSBackend/Platform/iOS/Social/Facebook/FacebookUtils.h>
-#include <CSBackend/Platform/iOS/Social/Facebook/FacebookUtils.h>
 #endif
 
 namespace CSBackend
@@ -89,9 +87,7 @@ namespace CSBackend
 		FacebookPostSystem::FacebookPostSystem(CSSocial::FacebookAuthenticationSystem* in_authSystem)
         : m_authSystem(in_authSystem)
 		{
-#if CS_ENABLE_DEBUG
-            [FBSettings enableBetaFeature:FBBetaFeaturesShareDialog];
-#endif
+
 		}
 		//----------------------------------------------------
         //----------------------------------------------------
@@ -108,18 +104,7 @@ namespace CSBackend
             
             m_postCompleteDelegateConnection = std::move(in_delegateConnection);
 			
-            //Currently the iOS native dialog does not provide all the functionality of the web based one so we
-            //cannot use it
-            bool canPostNatively = false;//([[[UIDevice currentDevice] systemVersion] floatValue] >= 6.0f);
-            
-            if(canPostNatively)
-            {
-                PostNative(in_desc);
-            }
-            else
-            {
-                PostWeb(in_desc);
-            }
+            PostWeb(in_desc);
         }
         //----------------------------------------------------
         //----------------------------------------------------
@@ -209,52 +194,6 @@ namespace CSBackend
                 [description release];
                 [caption release];
             }
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void FacebookPostSystem::PostNative(const PostDesc& in_desc)
-        {
-            NSString* initialText = [NSStringUtils newNSStringWithUTF8String:in_desc.m_name + " " + in_desc.m_description];
-            NSString* url = [NSStringUtils newNSStringWithUTF8String:in_desc.m_url];
-            
-            [FBDialogs presentOSIntegratedShareDialogModallyFrom:[UIApplication sharedApplication].keyWindow.rootViewController initialText:initialText image:nil url:[NSURL URLWithString:url]
-                                                         handler:^(FBOSIntegratedShareDialogResult result, NSError *error)
-            {
-                if (error)
-                {
-                    NSLog(@"%@", error.localizedDescription);
-
-                    if(m_postCompleteDelegateConnection)
-                    {
-                         auto delegateConnection = std::move(m_postCompleteDelegateConnection);
-                         m_postCompleteDelegateConnection = nullptr;
-                         delegateConnection->Call(CSSocial::FacebookPostSystem::PostResult::k_failed);
-                    }
-                }
-                else if(m_postCompleteDelegateConnection)
-                {
-                    CSSocial::FacebookPostSystem::PostResult convertedResult;
-                    switch(result)
-                    {
-                    case FBNativeDialogResultSucceeded:
-                        convertedResult = CSSocial::FacebookPostSystem::PostResult::k_success;
-                        break;
-                    case FBNativeDialogResultCancelled:
-                        convertedResult = CSSocial::FacebookPostSystem::PostResult::k_cancelled;
-                        break;
-                    case FBNativeDialogResultError:
-                        convertedResult = CSSocial::FacebookPostSystem::PostResult::k_failed;
-                        break;
-                    }
-             
-                     auto delegateConnection = std::move(m_postCompleteDelegateConnection);
-                     m_postCompleteDelegateConnection = nullptr;
-                     delegateConnection->Call(convertedResult);
-                }
-            }];
-            
-            [initialText release];
-            [url release];
         }
         //----------------------------------------------------
         //----------------------------------------------------

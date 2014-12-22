@@ -104,12 +104,6 @@ namespace CSBackend
             //----------------------------------------------------
             FacebookPostSystem(CSSocial::FacebookAuthenticationSystem* in_authSystem);
             //----------------------------------------------------
-            /// Post to wall using the native iOS view
-            ///
-            /// @param Post description
-            //----------------------------------------------------
-            void PostNative(const PostDesc& in_desc);
-            //----------------------------------------------------
             /// Post to wall using the native web view
             ///
             /// @param Post description

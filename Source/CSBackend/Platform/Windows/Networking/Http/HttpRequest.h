@@ -34,6 +34,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Windows/ForwardDeclarations.h>
 #include <ChilliSource/Networking/Http/HttpRequest.h>
+#include <ChilliSource/Networking/Http/HttpResponse.h>
 
 #include <list>
 #include <mutex>
@@ -55,47 +56,66 @@ namespace CSBackend
 		{
 		public:
 			//----------------------------------------------------------------------------------------
-			/// Constructor
-			///
 			/// @author S Downie
 			///
-			/// @param Request description
-			/// @param WinHTTP request handle
-			/// @param WinHTTP connection handle
-			/// @param Max buffer size before flush required
-			/// @param Completion delegate
+			/// @return The type of the request (POST or GET)
 			//----------------------------------------------------------------------------------------
-			HttpRequest(const Desc& in_requestDesc, HINTERNET in_requestHandle, HINTERNET in_connectionHandle, u32 in_bufferFlushSize, const Delegate& in_delegate);
+			Type GetType() const override;
+			//----------------------------------------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return The original url to which the request was sent
+			//----------------------------------------------------------------------------------------
+			const std::string& GetUrl() const override;
+			//----------------------------------------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return The body of the POST request (GET request will return empty)
+			//----------------------------------------------------------------------------------------
+			const std::string& GetBody() const override;
+			//----------------------------------------------------------------------------------------
+			/// @author S Downie
+			///
+			/// @return The original headers of the request as keys/values
+			//----------------------------------------------------------------------------------------
+			const CSCore::ParamDictionary& GetHeaders() const override;
 			//----------------------------------------------------------------------------------------
 			/// Close the request. Note: The completion delegate is not invoked
 			///
 			/// @author S Downie
 			//----------------------------------------------------------------------------------------
 			void Cancel() override;
+
+		private:
+			friend class HttpRequestSystem;
 			//----------------------------------------------------------------------------------------
+			/// Constructor
+			///
 			/// @author S Downie
 			///
-			/// @return The original request details (i.e. whether it is post/get the body and header)
+			/// @param Type (POST or GET)
+			/// @param Url to send request to
+			/// @param POST body
+			/// @param Headers
+			/// @param Timeout in seconds
+			/// @param WinHTTP request handle
+			/// @param WinHTTP connection handle
+			/// @param Max buffer size before flush required
+			/// @param Completion delegate
 			//----------------------------------------------------------------------------------------
-			const Desc& GetDescription() const override;
+			HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs,
+				HINTERNET in_requestHandle, HINTERNET in_connectionHandle, u32 in_bufferFlushSize, const Delegate& in_delegate);
 			//----------------------------------------------------------------------------------------
+			/// Reads data from the open stream when it becomes available
+			/// buffers the data flags on complete
+			///
 			/// @author S Downie
 			///
-			/// @return The contents of the response as a string. This could be binary data
+			/// @param Request handle
+			/// @param Connection handle
+			/// @param Mutex that manages the critical section of the HTTP system being shutdown
 			//----------------------------------------------------------------------------------------
-			const std::string& GetResponse() const override;
-			//----------------------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return HTTP response code (i.e. 200 = OK, 400 = Error)
-			//----------------------------------------------------------------------------------------
-			u32 GetResponseCode() const override;
-			//----------------------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return Number of bytes read til now
-			//----------------------------------------------------------------------------------------
-			u32 GetBytesRead() const override;
+			void PollReadStream(HINTERNET inRequestHandle, HINTERNET inConnectionHandle, std::shared_ptr<std::mutex> in_destroyingMutex);
 			//----------------------------------------------------------------------------------------
 			/// Checks the stream to see if any data is available for reading
 			/// and reads this into a buffer. Once all the data is read
@@ -120,38 +140,29 @@ namespace CSBackend
 			static void Shutdown();
 
 		private:
-			//----------------------------------------------------------------------------------------
-			/// Reads data from the open stream when it becomes available
-			/// buffers the data flags on complete
-			///
-			/// @author S Downie
-			///
-			/// @param Request handle
-			/// @param Connection handle
-			/// @param Mutex that manages the critical section of the HTTP system being shutdown
-			//----------------------------------------------------------------------------------------
-			void PollReadStream(HINTERNET inRequestHandle, HINTERNET inConnectionHandle, std::shared_ptr<std::mutex> in_destroyingMutex);
-
-		private:
 
 			static std::mutex s_addingMutexesMutex;
 			static std::list<std::shared_ptr<std::mutex>> s_destroyingMutexes;
 			static bool s_isDestroying;
 
-			Delegate m_completionDelegate;
-			Desc m_desc;
+			const Type m_type;
+			const std::string m_url;
+			const std::string m_body;
+			const CSCore::ParamDictionary m_headers;
+			const Delegate m_completionDelegate;
+			const u32 m_bufferFlushSize;
 
 			std::string m_responseData;
-			u32 m_responseCode;
+			u32 m_responseCode = 0;
+			CSNetworking::HttpResponse::Result m_requestResult = CSNetworking::HttpResponse::Result::k_failed;
 
-			Result m_requestResult;
+			u32 m_totalBytesRead = 0;
+			
+			bool m_shouldKillThread = false;
+			bool m_isPollingComplete = false;
+			bool m_isRequestComplete = false;
 
-			u32 m_totalBytesRead;
-			u32 m_bufferFlushSize;
-
-			bool m_shouldKillThread;
-			bool m_isPollingComplete;
-			bool m_isRequestComplete;
+			CSCore::TaskScheduler* m_taskScheduler;
 		};
 	}
 }

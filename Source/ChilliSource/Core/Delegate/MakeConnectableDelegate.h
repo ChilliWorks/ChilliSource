@@ -63,9 +63,9 @@ namespace ChilliSource
         /// @return Delegate
         //------------------------------------------------------------------
         template <typename TDelegate, typename TReturnType, typename... TArgTypes>
-        ConnectableDelegate<TReturnType(TArgTypes...)>&& MakeConnectableDelegate(TReturnType (TDelegate::*in_func)(TArgTypes...))
+        ConnectableDelegate<TReturnType(TArgTypes...)> MakeConnectableDelegate(TReturnType (TDelegate::*in_func)(TArgTypes...))
         {
-            return std::move(ConnectableDelegate<TReturnType(TArgTypes...)>(std::function<TReturnType(TArgTypes...)>(in_func)));
+            return ConnectableDelegate<TReturnType(TArgTypes...)>(std::function<TReturnType(TArgTypes...)>(in_func));
         }
         //------------------------------------------------------------------
         /// Constructs a connectable delegate to a member function with a signature that
@@ -79,9 +79,9 @@ namespace ChilliSource
         /// @return Delegate
         //------------------------------------------------------------------
         template <typename TDelegate, typename TSender, typename TReturnType, typename... TArgTypes>
-        ConnectableDelegate<TReturnType(TArgTypes...)>&& MakeConnectableDelegate(TSender* in_sender, TReturnType (TDelegate::*in_func)(TArgTypes...))
+        ConnectableDelegate<TReturnType(TArgTypes...)> MakeConnectableDelegate(TSender* in_sender, TReturnType (TDelegate::*in_func)(TArgTypes...))
         {
-            return std::move(ConnectableDelegate<TReturnType(TArgTypes...)>([=](TArgTypes... in_args) { return (in_sender->*in_func)(in_args...); }));
+            return ConnectableDelegate<TReturnType(TArgTypes...)>([=](TArgTypes... in_args) { return (in_sender->*in_func)(in_args...); });
         }
         //------------------------------------------------------------------
         /// Constructs a connectable delegate to a const member function with a signature
@@ -95,9 +95,9 @@ namespace ChilliSource
         /// @return Delegate
         //------------------------------------------------------------------
         template <typename TDelegate, typename TSender, typename TReturnType, typename... TArgTypes>
-        ConnectableDelegate<TReturnType(TArgTypes...)>&& MakeConnectableDelegate(TSender* in_sender, TReturnType (TDelegate::*in_func)(TArgTypes...) const)
+        ConnectableDelegate<TReturnType(TArgTypes...)> MakeConnectableDelegate(TSender* in_sender, TReturnType (TDelegate::*in_func)(TArgTypes...) const)
         {
-            return std::move(ConnectableDelegate<TReturnType(TArgTypes...)>([=](TArgTypes... in_args) { return (in_sender->*in_func)(in_args...); }));
+            return ConnectableDelegate<TReturnType(TArgTypes...)>([=](TArgTypes... in_args) { return (in_sender->*in_func)(in_args...); });
         }
 	}
 }

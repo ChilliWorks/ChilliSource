@@ -1,5 +1,16 @@
 === Chilli Source Change Log ===
 
+Version 1.2.1, 2014-11-17:
+	- Models exported from Blender can now be converted to CSModel format using the ColladaToCSModel tool.
+	- Improved the HTTP Request System API. Also replaced the iOS HTTP Request System internals with NSURLConnection. This resulted in removal of GetBytesRead() from the HTTP interface.
+	- Updated iOS Facebook SDK.
+	- ContentDownloader now allows a custom hashing delegate to be provided rather than being explicitly MD5.
+	- ContentDownloader now defaults to using SHA-1 hash.
+	- Fixed a bug in the font maker tool which resulted in different characters that were identical being rendered incorrectly.
+	- Fixed a bug that prevented the font maker tool runnning on windows.
+	- Fixed a bug with state system that could result in resume/suspend being called out of order causing an assertion.
+	- Fix for MakeConnectableDelegate which was crashing due to implicit move.
+
 Version 1.2.0, 2014-11-07:
 	- Replaced the existing Font Builder tool with a new version. Unlike the previous tool this can be run on Windows, OSX and Linux, and fonts can be generated from command line. Fonts can also have a number of effects applied including outlines, glow and drop shadows.
 	- Font rendering has been significantly improved. This involved updating the font format so any existing fonts will need to be rebuilt. 

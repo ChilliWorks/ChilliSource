@@ -130,7 +130,13 @@ namespace ChilliSource
 		Entity* Entity::GetParent() 
 		{ 
 			return m_parent;
-		}
+        }
+        //------------------------------------------------------------------
+        //------------------------------------------------------------------
+        const Entity* Entity::GetParent() const
+        {
+            return m_parent;
+        }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
         const EntitySPtr& Entity::GetEntityWithName(const std::string& in_name) const
@@ -335,6 +341,12 @@ namespace ChilliSource
 		//-------------------------------------------------------------
 		void Entity::SetName(const std::string& in_name)
 		{
+            if(in_name == "Comp 1")
+            {
+                int i = 9;
+                ++i;
+            }
+            
 			m_name = in_name;
 		}
 		//-------------------------------------------------------------

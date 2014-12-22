@@ -28,155 +28,120 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 
-#ifndef _CSBACKEND_PLATFORM_IOS_HTTP_HTTPREQUEST_H_
-#define _CSBACKEND_PLATFORM_IOS_HTTP_HTTPREQUEST_H_
-
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/iOS/ForwardDeclarations.h>
 #include <ChilliSource/Networking/Http/HttpRequest.h>
+#include <ChilliSource/Networking/Http/HttpResponse.h>
 
-#include <CoreFoundation/CoreFoundation.h>
+#import <Foundation/Foundation.h>
 
-#include <vector>
+@class HttpDelegate;
 
 namespace CSBackend
 {
 	namespace iOS
 	{
-        //----------------------------------------------------------------------------------------
-        /// Concrete implementation of iOS http request using the CFNetworking library. Requests
-        /// are performed on a background thread.
+        //-------------------------------------------------------------------------
+        /// Concrete implementation of an Http request using iOS NSURLConnection
         ///
         /// @author S Downie
-        //----------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------
         class HttpRequest final : public CSNetworking::HttpRequest
         {
         public:
             //----------------------------------------------------------------------------------------
-            /// Constructor
-            ///
             /// @author S Downie
             ///
-            /// @param Request description
-            /// @param Timeout in seconds
-            /// @param Max buffer size before flush required
-            /// @param Completion delegate
+            /// @return The type of the request (POST or GET)
             //----------------------------------------------------------------------------------------
-            HttpRequest(const Desc& in_requestDesc, u32 in_timeoutSecs, u32 in_bufferFlushSize, const Delegate& in_delegate);
+            Type GetType() const override;
             //----------------------------------------------------------------------------------------
-            /// Begin the request
-            ///
             /// @author S Downie
             ///
-            /// @param Read stream to pull from
+            /// @return The original url to which the request was sent
             //----------------------------------------------------------------------------------------
-            void Start(CFReadStreamRef in_readStream);
+            const std::string& GetUrl() const override;
             //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The body of the POST request (GET request will return empty)
+            //----------------------------------------------------------------------------------------
+            const std::string& GetBody() const override;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The original headers of the request as keys/values
+            //----------------------------------------------------------------------------------------
+            const CSCore::ParamDictionary& GetHeaders() const override;
+            //------------------------------------------------------------------
             /// Close the request. Note: The completion delegate is not invoked
             ///
             /// @author S Downie
-            //----------------------------------------------------------------------------------------
+            //------------------------------------------------------------------
             void Cancel() override;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
+            //------------------------------------------------------------------
+            /// Called by the Http Delegate once the request has complete. This
+            /// is for internal use only and should not be called by the user.
             ///
-            /// @return The original request details (i.e. whether it is post/get the body and header)
-            //----------------------------------------------------------------------------------------
-            const Desc& GetDescription() const override;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
+            /// @author Ian Copland
             ///
-            /// @return The contents of the response as a string. This could be binary data
-            //----------------------------------------------------------------------------------------
-            const std::string& GetResponse() const override;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
+            /// @param The result.
+            /// @param The response code.
+            /// @param The data in string form.
+            //------------------------------------------------------------------
+            void OnComplete(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data);
+            //------------------------------------------------------------------
+            /// Called by the Http Delegate when the max buffer size is exceeded
+            /// and it flushes the current data.
             ///
-            /// @return HTTP response code (i.e. 200 = OK, 400 = Error)
-            //----------------------------------------------------------------------------------------
-            u32 GetResponseCode() const override;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Number of bytes read til now
-            //----------------------------------------------------------------------------------------
-            u32 GetBytesRead() const override;
-            //----------------------------------------------------------------------------------------
-            /// Checks the stream to see if any data is available for reading
-            /// and reads this into a buffer. Once all the data is read
-            /// the request will call the complete delegate
+            /// This is for internal use only and should not be called by the user.
             ///
             /// @author S Downie
             ///
-            /// @param Time since last update in seconds
-            //----------------------------------------------------------------------------------------
-            void Update(f32 in_timeSinceLastUpdate);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
+            /// @param The result.
+            /// @param The response code.
+            /// @param The partial data in string form.
+            //------------------------------------------------------------------
+            void OnFlushed(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data);
+            //------------------------------------------------------------------
+            /// Destructor.
             ///
-            /// @return Whether the request has completed - regardless of success or failure
-            //----------------------------------------------------------------------------------------
-            bool HasCompleted() const;
+            /// @author Ian Copland
+            //------------------------------------------------------------------
+            ~HttpRequest();
             
         private:
             
-            //----------------------------------------------------------------------------------------
-            /// Reads data from the open stream when it becomes available
-            /// and buffers it to the request response
+            friend class HttpRequestSystem;
+            //------------------------------------------------------------------
+            /// Constructor. Can only be created via HttpRequestSystem
             ///
             /// @author S Downie
             ///
-            /// @param Read stream
-            //----------------------------------------------------------------------------------------
-            void PollReadStream(CFReadStreamRef inReadStreamRef);
-            //----------------------------------------------------------------------------------------
-            /// Blocking call that will poll the read stream until a connection has been
-            /// established
-            ///
-            /// @author S Downie
-            ///
-            /// @param Read stream
-            //----------------------------------------------------------------------------------------
-            void BlockingPollForConnection(CFReadStreamRef in_readStream);
-            //----------------------------------------------------------------------------------------
-            /// Blocking call that will poll the read stream until all the data has been read or an
-            /// error occurs
-            ///
-            /// @author S Downie
-            ///
-            /// @param Read stream
-            /// @param Write stream to fill
-            ///
-            /// @return Success or failure
-            //----------------------------------------------------------------------------------------
-            bool BlockingReadData(CFReadStreamRef in_readStream, std::stringstream& out_streamBuffer);
+            /// @param Type (POST or GET)
+            /// @param Url to send request to
+            /// @param POST body
+            /// @param Headers
+            /// @param Timeout in seconds
+            /// @param Max buffer size in bytes
+            /// @param Completion delegate
+            //------------------------------------------------------------------
+            HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate);
             
         private:
             
-            Delegate m_completionDelegate;
-            Desc m_desc;
+            const Type m_type;
+            const std::string m_url;
+            const std::string m_body;
+            const CSCore::ParamDictionary m_headers;
+            const Delegate m_completionDelegate;
             
-            std::string m_responseData;
+            bool m_complete = false;
             
-            f32 m_connectingTime;
-            const u32 m_timeoutSecs;
-            const u32 m_bufferFlushSize;
-            
-            Result m_result;
-            
-            u32 m_totalBytesRead;
-            u32 m_totalBytesReadThisBlock;
-            u32 m_responseCode;
-            
-            bool m_isConnectionEstablished;
-            bool m_isPollingCompleted;
-            bool m_isRequestCompleted;
-            bool m_shouldKillThread;
+            NSURLConnection* m_connection = nil;
+            HttpDelegate* m_httpDelegate = nil;
         };
 	}
-    
 }
-
-#endif
 
 #endif

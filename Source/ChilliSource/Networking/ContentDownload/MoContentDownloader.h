@@ -37,7 +37,7 @@ namespace ChilliSource
 {
     namespace Networking
     {
-        class MoContentDownloader : public IContentDownloader
+        class MoContentDownloader final : public IContentDownloader
         {
         public:
             //----------------------------------------------------------------
@@ -68,12 +68,6 @@ namespace ChilliSource
             //----------------------------------------------------------------
             void DownloadPackage(const std::string& instrURL, const Delegate& inDelegate);
             //----------------------------------------------------------------
-            /// Get CurrentDownloaded Bytes
-            ///
-            /// @return The amount of bytes read by the current request, if any
-            //----------------------------------------------------------------
-            u32 GetCurrentDownloadedBytes() const;
-            //----------------------------------------------------------------
             /// Get Tags
             ///
             /// @return The current tags of this downloader
@@ -88,23 +82,23 @@ namespace ChilliSource
             
         private:
             //----------------------------------------------------------------
-            /// On Content Manifest Download Complete
-            ///
             /// Triggered when the manifest download has completed
             ///
-            /// @param Request response
-            /// @param Request result
-            //----------------------------------------------------------------
-            void OnContentManifestDownloadComplete(HttpRequest* inpRequest, HttpRequest::Result ineResult);
-            //----------------------------------------------------------------
-            /// On Content Download Complete
+            /// @author S Downie
             ///
+            /// @param Original request
+            /// @param Request response
+            //----------------------------------------------------------------
+            void OnContentManifestDownloadComplete(const HttpRequest* in_request, const HttpResponse& in_response);
+            //----------------------------------------------------------------
             /// Triggered when a package download has completed
             ///
+            /// @author S Downie
+            ///
+            /// @param Original request
             /// @param Request response
-            /// @param Request result
             //----------------------------------------------------------------
-            void OnContentDownloadComplete(HttpRequest* inpRequest, HttpRequest::Result ineResult);
+            void OnContentDownloadComplete(const HttpRequest* in_request, const HttpResponse& in_response);
             
         private:
             
