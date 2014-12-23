@@ -116,11 +116,11 @@ namespace ChilliSource
 				m_emissionScale = Core::Vector3::Lerp(prevEntityScale, in_emitterScale, t);
 				m_emissionOrientation = Core::Quaternion::Slerp(prevOrientation, in_emitterOrientation, t);
 
-				const f32 normalisedPlaybackTime = m_emissionTime / particleEffect->GetDuration();
-				u32 particlesPerEmission = m_emitterDef->GetParticlesPerEmissionProperty()->GenerateValue(normalisedPlaybackTime);
+				const f32 normalisedEmissionTime = m_emissionTime / particleEffect->GetDuration();
+				u32 particlesPerEmission = m_emitterDef->GetParticlesPerEmissionProperty()->GenerateValue(normalisedEmissionTime);
 				for (u32 i = 0; i < particlesPerEmission; ++i)
 				{
-					f32 chanceOfEmission = m_emitterDef->GetEmissionChanceProperty()->GenerateValue(normalisedPlaybackTime);
+					f32 chanceOfEmission = m_emitterDef->GetEmissionChanceProperty()->GenerateValue(normalisedEmissionTime);
 					f32 random = Core::Random::GenerateReal<f32>();
 					if (random <= chanceOfEmission)
 					{

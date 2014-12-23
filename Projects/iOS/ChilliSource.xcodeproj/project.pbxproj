@@ -22,6 +22,42 @@
 		81B729121A41C00100AC6619 /* HttpResponse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B729111A41C00100AC6619 /* HttpResponse.cpp */; };
 		81CF34A119CC297600B9D0B1 /* DragGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CF349F19CC297600B9D0B1 /* DragGesture.cpp */; };
 		81CF34A419CC67AC00B9D0B1 /* HoldGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */; };
+		81D2AB991A49B35400E8687D /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2AB971A49B35400E8687D /* Random.cpp */; };
+		81D2ABE91A49B37800E8687D /* AccelerationParticleAffector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2AB9D1A49B37800E8687D /* AccelerationParticleAffector.cpp */; };
+		81D2ABEA1A49B37800E8687D /* AccelerationParticleAffectorDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2AB9F1A49B37800E8687D /* AccelerationParticleAffectorDef.cpp */; };
+		81D2ABEB1A49B37800E8687D /* AngularAccelerationParticleAffector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABA11A49B37800E8687D /* AngularAccelerationParticleAffector.cpp */; };
+		81D2ABEC1A49B37800E8687D /* AngularAccelerationParticleAffectorDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABA31A49B37800E8687D /* AngularAccelerationParticleAffectorDef.cpp */; };
+		81D2ABED1A49B37800E8687D /* ColourOverLifetimeParticleAffector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABA51A49B37800E8687D /* ColourOverLifetimeParticleAffector.cpp */; };
+		81D2ABEE1A49B37800E8687D /* ColourOverLifetimeParticleAffectorDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABA71A49B37800E8687D /* ColourOverLifetimeParticleAffectorDef.cpp */; };
+		81D2ABEF1A49B37800E8687D /* ParticleAffector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABA91A49B37800E8687D /* ParticleAffector.cpp */; };
+		81D2ABF01A49B37800E8687D /* ParticleAffectorDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABAB1A49B37800E8687D /* ParticleAffectorDef.cpp */; };
+		81D2ABF11A49B37800E8687D /* ParticleAffectorDefFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABAD1A49B37800E8687D /* ParticleAffectorDefFactory.cpp */; };
+		81D2ABF21A49B37800E8687D /* ScaleOverLifetimeParticleAffector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABAF1A49B37800E8687D /* ScaleOverLifetimeParticleAffector.cpp */; };
+		81D2ABF31A49B37800E8687D /* ScaleOverLifetimeParticleAffectorDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABB11A49B37800E8687D /* ScaleOverLifetimeParticleAffectorDef.cpp */; };
+		81D2ABF41A49B37800E8687D /* ConcurrentParticleData.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABB31A49B37800E8687D /* ConcurrentParticleData.cpp */; };
+		81D2ABF51A49B37800E8687D /* CSParticleProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABB51A49B37800E8687D /* CSParticleProvider.cpp */; };
+		81D2ABF61A49B37800E8687D /* ParticleDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABB81A49B37800E8687D /* ParticleDrawable.cpp */; };
+		81D2ABF71A49B37800E8687D /* ParticleDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABBA1A49B37800E8687D /* ParticleDrawableDef.cpp */; };
+		81D2ABF81A49B37800E8687D /* ParticleDrawableDefFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABBC1A49B37800E8687D /* ParticleDrawableDefFactory.cpp */; };
+		81D2ABF91A49B37800E8687D /* StaticBillboardParticleDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABBE1A49B37800E8687D /* StaticBillboardParticleDrawable.cpp */; };
+		81D2ABFA1A49B37800E8687D /* StaticBillboardParticleDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABC01A49B37800E8687D /* StaticBillboardParticleDrawableDef.cpp */; };
+		81D2ABFB1A49B37800E8687D /* CircleParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABC31A49B37800E8687D /* CircleParticleEmitter.cpp */; };
+		81D2ABFC1A49B37800E8687D /* CircleParticleEmitterDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABC51A49B37800E8687D /* CircleParticleEmitterDef.cpp */; };
+		81D2ABFD1A49B37800E8687D /* Cone2DParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABC71A49B37800E8687D /* Cone2DParticleEmitter.cpp */; };
+		81D2ABFE1A49B37800E8687D /* Cone2DParticleEmitterDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABC91A49B37800E8687D /* Cone2DParticleEmitterDef.cpp */; };
+		81D2ABFF1A49B37800E8687D /* ConeParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABCB1A49B37800E8687D /* ConeParticleEmitter.cpp */; };
+		81D2AC001A49B37800E8687D /* ConeParticleEmitterDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABCD1A49B37800E8687D /* ConeParticleEmitterDef.cpp */; };
+		81D2AC011A49B37800E8687D /* ParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABCF1A49B37800E8687D /* ParticleEmitter.cpp */; };
+		81D2AC021A49B37800E8687D /* ParticleEmitterDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABD11A49B37800E8687D /* ParticleEmitterDef.cpp */; };
+		81D2AC031A49B37800E8687D /* ParticleEmitterDefFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABD31A49B37800E8687D /* ParticleEmitterDefFactory.cpp */; };
+		81D2AC041A49B37800E8687D /* PointParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABD51A49B37800E8687D /* PointParticleEmitter.cpp */; };
+		81D2AC051A49B37800E8687D /* PointParticleEmitterDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABD71A49B37800E8687D /* PointParticleEmitterDef.cpp */; };
+		81D2AC061A49B37800E8687D /* SphereParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABD91A49B37800E8687D /* SphereParticleEmitter.cpp */; };
+		81D2AC071A49B37800E8687D /* SphereParticleEmitterDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABDB1A49B37800E8687D /* SphereParticleEmitterDef.cpp */; };
+		81D2AC081A49B37800E8687D /* ParticleEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABDE1A49B37800E8687D /* ParticleEffect.cpp */; };
+		81D2AC091A49B37800E8687D /* ParticleEffectComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABE01A49B37800E8687D /* ParticleEffectComponent.cpp */; };
+		81D2AC0A1A49B37800E8687D /* ParticlePropertyFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABE41A49B37800E8687D /* ParticlePropertyFactory.cpp */; };
+		81D2AC151A49C3F300E8687D /* RNGContainer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81D2AC141A49C3F300E8687D /* RNGContainer.mm */; };
 		81D8ACF91962CEDC0010DA84 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8ACF81962CEDC0010DA84 /* Foundation.framework */; };
 		81D8B1E61962D1B90010DA84 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1CF1962D1B90010DA84 /* Accounts.framework */; };
 		81D8B1E71962D1B90010DA84 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1D01962D1B90010DA84 /* AddressBook.framework */; };
@@ -184,20 +220,6 @@
 		81D8B4851962E0EC0010DA84 /* SkinnedAnimationGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3A11962E0EC0010DA84 /* SkinnedAnimationGroup.cpp */; };
 		81D8B4861962E0EC0010DA84 /* StaticMeshComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3A31962E0EC0010DA84 /* StaticMeshComponent.cpp */; };
 		81D8B4871962E0EC0010DA84 /* SubMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3A51962E0EC0010DA84 /* SubMesh.cpp */; };
-		81D8B4881962E0EC0010DA84 /* ColourChangerParticleAffector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3A91962E0EC0010DA84 /* ColourChangerParticleAffector.cpp */; };
-		81D8B4891962E0EC0010DA84 /* LinearForceParticleAffector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3AB1962E0EC0010DA84 /* LinearForceParticleAffector.cpp */; };
-		81D8B48A1962E0EC0010DA84 /* ParticleAffectorFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3AE1962E0EC0010DA84 /* ParticleAffectorFactory.cpp */; };
-		81D8B48B1962E0EC0010DA84 /* ScalerParticleAffector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3B01962E0EC0010DA84 /* ScalerParticleAffector.cpp */; };
-		81D8B48C1962E0EC0010DA84 /* SpinnerParticleAffector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3B21962E0EC0010DA84 /* SpinnerParticleAffector.cpp */; };
-		81D8B48D1962E0EC0010DA84 /* CSParticleEffectProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3B41962E0EC0010DA84 /* CSParticleEffectProvider.cpp */; };
-		81D8B48E1962E0EC0010DA84 /* ConeParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3B71962E0EC0010DA84 /* ConeParticleEmitter.cpp */; };
-		81D8B48F1962E0EC0010DA84 /* ParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3B91962E0EC0010DA84 /* ParticleEmitter.cpp */; };
-		81D8B4901962E0EC0010DA84 /* ParticleEmitterFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3BB1962E0EC0010DA84 /* ParticleEmitterFactory.cpp */; };
-		81D8B4911962E0EC0010DA84 /* PointParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3BD1962E0EC0010DA84 /* PointParticleEmitter.cpp */; };
-		81D8B4921962E0EC0010DA84 /* RingParticleEmitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3BF1962E0EC0010DA84 /* RingParticleEmitter.cpp */; };
-		81D8B4931962E0EC0010DA84 /* ParticleComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3C11962E0EC0010DA84 /* ParticleComponent.cpp */; };
-		81D8B4941962E0EC0010DA84 /* ParticleEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3C31962E0EC0010DA84 /* ParticleEffect.cpp */; };
-		81D8B4951962E0EC0010DA84 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3C51962E0EC0010DA84 /* ParticleSystem.cpp */; };
 		81D8B4961962E0EC0010DA84 /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3C81962E0EC0010DA84 /* Shader.cpp */; };
 		81D8B4971962E0EC0010DA84 /* DynamicSpriteBatcher.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3CB1962E0EC0010DA84 /* DynamicSpriteBatcher.cpp */; };
 		81D8B4981962E0EC0010DA84 /* SpriteBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D8B3CD1962E0EC0010DA84 /* SpriteBatch.cpp */; };
@@ -337,7 +359,6 @@
 		8158E4B2196AE035005FF0A8 /* Lighting.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lighting.h; sourceTree = "<group>"; };
 		8158E4B3196AE042005FF0A8 /* Material.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
 		8158E4B4196AE04B005FF0A8 /* Model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
-		8158E4B5196AE055005FF0A8 /* Particles.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Particles.h; sourceTree = "<group>"; };
 		8158E4B6196AE05F005FF0A8 /* Shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
 		8158E4B7196AE06B005FF0A8 /* Sprite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
 		8158E4B8196AE074005FF0A8 /* Texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
@@ -373,6 +394,84 @@
 		81CF34A019CC297600B9D0B1 /* DragGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragGesture.h; sourceTree = "<group>"; };
 		81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HoldGesture.cpp; sourceTree = "<group>"; };
 		81CF34A319CC67AC00B9D0B1 /* HoldGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HoldGesture.h; sourceTree = "<group>"; };
+		81D2AB971A49B35400E8687D /* Random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Random.cpp; sourceTree = "<group>"; };
+		81D2AB981A49B35400E8687D /* Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
+		81D2AB9A1A49B36500E8687D /* dynamic_array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dynamic_array.h; sourceTree = "<group>"; };
+		81D2AB9D1A49B37800E8687D /* AccelerationParticleAffector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AccelerationParticleAffector.cpp; sourceTree = "<group>"; };
+		81D2AB9E1A49B37800E8687D /* AccelerationParticleAffector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerationParticleAffector.h; sourceTree = "<group>"; };
+		81D2AB9F1A49B37800E8687D /* AccelerationParticleAffectorDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AccelerationParticleAffectorDef.cpp; sourceTree = "<group>"; };
+		81D2ABA01A49B37800E8687D /* AccelerationParticleAffectorDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerationParticleAffectorDef.h; sourceTree = "<group>"; };
+		81D2ABA11A49B37800E8687D /* AngularAccelerationParticleAffector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AngularAccelerationParticleAffector.cpp; sourceTree = "<group>"; };
+		81D2ABA21A49B37800E8687D /* AngularAccelerationParticleAffector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AngularAccelerationParticleAffector.h; sourceTree = "<group>"; };
+		81D2ABA31A49B37800E8687D /* AngularAccelerationParticleAffectorDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AngularAccelerationParticleAffectorDef.cpp; sourceTree = "<group>"; };
+		81D2ABA41A49B37800E8687D /* AngularAccelerationParticleAffectorDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AngularAccelerationParticleAffectorDef.h; sourceTree = "<group>"; };
+		81D2ABA51A49B37800E8687D /* ColourOverLifetimeParticleAffector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColourOverLifetimeParticleAffector.cpp; sourceTree = "<group>"; };
+		81D2ABA61A49B37800E8687D /* ColourOverLifetimeParticleAffector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColourOverLifetimeParticleAffector.h; sourceTree = "<group>"; };
+		81D2ABA71A49B37800E8687D /* ColourOverLifetimeParticleAffectorDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColourOverLifetimeParticleAffectorDef.cpp; sourceTree = "<group>"; };
+		81D2ABA81A49B37800E8687D /* ColourOverLifetimeParticleAffectorDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColourOverLifetimeParticleAffectorDef.h; sourceTree = "<group>"; };
+		81D2ABA91A49B37800E8687D /* ParticleAffector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleAffector.cpp; sourceTree = "<group>"; };
+		81D2ABAA1A49B37800E8687D /* ParticleAffector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleAffector.h; sourceTree = "<group>"; };
+		81D2ABAB1A49B37800E8687D /* ParticleAffectorDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleAffectorDef.cpp; sourceTree = "<group>"; };
+		81D2ABAC1A49B37800E8687D /* ParticleAffectorDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleAffectorDef.h; sourceTree = "<group>"; };
+		81D2ABAD1A49B37800E8687D /* ParticleAffectorDefFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleAffectorDefFactory.cpp; sourceTree = "<group>"; };
+		81D2ABAE1A49B37800E8687D /* ParticleAffectorDefFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleAffectorDefFactory.h; sourceTree = "<group>"; };
+		81D2ABAF1A49B37800E8687D /* ScaleOverLifetimeParticleAffector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScaleOverLifetimeParticleAffector.cpp; sourceTree = "<group>"; };
+		81D2ABB01A49B37800E8687D /* ScaleOverLifetimeParticleAffector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScaleOverLifetimeParticleAffector.h; sourceTree = "<group>"; };
+		81D2ABB11A49B37800E8687D /* ScaleOverLifetimeParticleAffectorDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScaleOverLifetimeParticleAffectorDef.cpp; sourceTree = "<group>"; };
+		81D2ABB21A49B37800E8687D /* ScaleOverLifetimeParticleAffectorDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScaleOverLifetimeParticleAffectorDef.h; sourceTree = "<group>"; };
+		81D2ABB31A49B37800E8687D /* ConcurrentParticleData.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConcurrentParticleData.cpp; sourceTree = "<group>"; };
+		81D2ABB41A49B37800E8687D /* ConcurrentParticleData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConcurrentParticleData.h; sourceTree = "<group>"; };
+		81D2ABB51A49B37800E8687D /* CSParticleProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSParticleProvider.cpp; sourceTree = "<group>"; };
+		81D2ABB61A49B37800E8687D /* CSParticleProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSParticleProvider.h; sourceTree = "<group>"; };
+		81D2ABB81A49B37800E8687D /* ParticleDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleDrawable.cpp; sourceTree = "<group>"; };
+		81D2ABB91A49B37800E8687D /* ParticleDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleDrawable.h; sourceTree = "<group>"; };
+		81D2ABBA1A49B37800E8687D /* ParticleDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleDrawableDef.cpp; sourceTree = "<group>"; };
+		81D2ABBB1A49B37800E8687D /* ParticleDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleDrawableDef.h; sourceTree = "<group>"; };
+		81D2ABBC1A49B37800E8687D /* ParticleDrawableDefFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleDrawableDefFactory.cpp; sourceTree = "<group>"; };
+		81D2ABBD1A49B37800E8687D /* ParticleDrawableDefFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleDrawableDefFactory.h; sourceTree = "<group>"; };
+		81D2ABBE1A49B37800E8687D /* StaticBillboardParticleDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticBillboardParticleDrawable.cpp; sourceTree = "<group>"; };
+		81D2ABBF1A49B37800E8687D /* StaticBillboardParticleDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticBillboardParticleDrawable.h; sourceTree = "<group>"; };
+		81D2ABC01A49B37800E8687D /* StaticBillboardParticleDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StaticBillboardParticleDrawableDef.cpp; sourceTree = "<group>"; };
+		81D2ABC11A49B37800E8687D /* StaticBillboardParticleDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticBillboardParticleDrawableDef.h; sourceTree = "<group>"; };
+		81D2ABC31A49B37800E8687D /* CircleParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CircleParticleEmitter.cpp; sourceTree = "<group>"; };
+		81D2ABC41A49B37800E8687D /* CircleParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleParticleEmitter.h; sourceTree = "<group>"; };
+		81D2ABC51A49B37800E8687D /* CircleParticleEmitterDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CircleParticleEmitterDef.cpp; sourceTree = "<group>"; };
+		81D2ABC61A49B37800E8687D /* CircleParticleEmitterDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleParticleEmitterDef.h; sourceTree = "<group>"; };
+		81D2ABC71A49B37800E8687D /* Cone2DParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cone2DParticleEmitter.cpp; sourceTree = "<group>"; };
+		81D2ABC81A49B37800E8687D /* Cone2DParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cone2DParticleEmitter.h; sourceTree = "<group>"; };
+		81D2ABC91A49B37800E8687D /* Cone2DParticleEmitterDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Cone2DParticleEmitterDef.cpp; sourceTree = "<group>"; };
+		81D2ABCA1A49B37800E8687D /* Cone2DParticleEmitterDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cone2DParticleEmitterDef.h; sourceTree = "<group>"; };
+		81D2ABCB1A49B37800E8687D /* ConeParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConeParticleEmitter.cpp; sourceTree = "<group>"; };
+		81D2ABCC1A49B37800E8687D /* ConeParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConeParticleEmitter.h; sourceTree = "<group>"; };
+		81D2ABCD1A49B37800E8687D /* ConeParticleEmitterDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConeParticleEmitterDef.cpp; sourceTree = "<group>"; };
+		81D2ABCE1A49B37800E8687D /* ConeParticleEmitterDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConeParticleEmitterDef.h; sourceTree = "<group>"; };
+		81D2ABCF1A49B37800E8687D /* ParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleEmitter.cpp; sourceTree = "<group>"; };
+		81D2ABD01A49B37800E8687D /* ParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleEmitter.h; sourceTree = "<group>"; };
+		81D2ABD11A49B37800E8687D /* ParticleEmitterDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleEmitterDef.cpp; sourceTree = "<group>"; };
+		81D2ABD21A49B37800E8687D /* ParticleEmitterDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleEmitterDef.h; sourceTree = "<group>"; };
+		81D2ABD31A49B37800E8687D /* ParticleEmitterDefFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleEmitterDefFactory.cpp; sourceTree = "<group>"; };
+		81D2ABD41A49B37800E8687D /* ParticleEmitterDefFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleEmitterDefFactory.h; sourceTree = "<group>"; };
+		81D2ABD51A49B37800E8687D /* PointParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PointParticleEmitter.cpp; sourceTree = "<group>"; };
+		81D2ABD61A49B37800E8687D /* PointParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointParticleEmitter.h; sourceTree = "<group>"; };
+		81D2ABD71A49B37800E8687D /* PointParticleEmitterDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PointParticleEmitterDef.cpp; sourceTree = "<group>"; };
+		81D2ABD81A49B37800E8687D /* PointParticleEmitterDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointParticleEmitterDef.h; sourceTree = "<group>"; };
+		81D2ABD91A49B37800E8687D /* SphereParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SphereParticleEmitter.cpp; sourceTree = "<group>"; };
+		81D2ABDA1A49B37800E8687D /* SphereParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SphereParticleEmitter.h; sourceTree = "<group>"; };
+		81D2ABDB1A49B37800E8687D /* SphereParticleEmitterDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SphereParticleEmitterDef.cpp; sourceTree = "<group>"; };
+		81D2ABDC1A49B37800E8687D /* SphereParticleEmitterDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SphereParticleEmitterDef.h; sourceTree = "<group>"; };
+		81D2ABDD1A49B37800E8687D /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
+		81D2ABDE1A49B37800E8687D /* ParticleEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleEffect.cpp; sourceTree = "<group>"; };
+		81D2ABDF1A49B37800E8687D /* ParticleEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleEffect.h; sourceTree = "<group>"; };
+		81D2ABE01A49B37800E8687D /* ParticleEffectComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleEffectComponent.cpp; sourceTree = "<group>"; };
+		81D2ABE11A49B37800E8687D /* ParticleEffectComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleEffectComponent.h; sourceTree = "<group>"; };
+		81D2ABE31A49B37800E8687D /* ParticleProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleProperty.h; sourceTree = "<group>"; };
+		81D2ABE41A49B37800E8687D /* ParticlePropertyFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticlePropertyFactory.cpp; sourceTree = "<group>"; };
+		81D2ABE51A49B37800E8687D /* ParticlePropertyFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticlePropertyFactory.h; sourceTree = "<group>"; };
+		81D2ABE61A49B37800E8687D /* RandomParticleProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomParticleProperty.h; sourceTree = "<group>"; };
+		81D2ABE71A49B37800E8687D /* StaticParticleProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticParticleProperty.h; sourceTree = "<group>"; };
+		81D2ABE81A49B37800E8687D /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
+		81D2AC131A49C3F300E8687D /* RNGContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGContainer.h; sourceTree = "<group>"; };
+		81D2AC141A49C3F300E8687D /* RNGContainer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RNGContainer.mm; sourceTree = "<group>"; };
 		81D8ACF51962CEDC0010DA84 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81D8ACF81962CEDC0010DA84 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		81D8AD061962CEDC0010DA84 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -723,35 +822,6 @@
 		81D8B3A41962E0EC0010DA84 /* StaticMeshComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticMeshComponent.h; sourceTree = "<group>"; };
 		81D8B3A51962E0EC0010DA84 /* SubMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SubMesh.cpp; sourceTree = "<group>"; };
 		81D8B3A61962E0EC0010DA84 /* SubMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubMesh.h; sourceTree = "<group>"; };
-		81D8B3A91962E0EC0010DA84 /* ColourChangerParticleAffector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColourChangerParticleAffector.cpp; sourceTree = "<group>"; };
-		81D8B3AA1962E0EC0010DA84 /* ColourChangerParticleAffector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColourChangerParticleAffector.h; sourceTree = "<group>"; };
-		81D8B3AB1962E0EC0010DA84 /* LinearForceParticleAffector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LinearForceParticleAffector.cpp; sourceTree = "<group>"; };
-		81D8B3AC1962E0EC0010DA84 /* LinearForceParticleAffector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinearForceParticleAffector.h; sourceTree = "<group>"; };
-		81D8B3AD1962E0EC0010DA84 /* ParticleAffector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleAffector.h; sourceTree = "<group>"; };
-		81D8B3AE1962E0EC0010DA84 /* ParticleAffectorFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleAffectorFactory.cpp; sourceTree = "<group>"; };
-		81D8B3AF1962E0EC0010DA84 /* ParticleAffectorFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleAffectorFactory.h; sourceTree = "<group>"; };
-		81D8B3B01962E0EC0010DA84 /* ScalerParticleAffector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScalerParticleAffector.cpp; sourceTree = "<group>"; };
-		81D8B3B11962E0EC0010DA84 /* ScalerParticleAffector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScalerParticleAffector.h; sourceTree = "<group>"; };
-		81D8B3B21962E0EC0010DA84 /* SpinnerParticleAffector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpinnerParticleAffector.cpp; sourceTree = "<group>"; };
-		81D8B3B31962E0EC0010DA84 /* SpinnerParticleAffector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpinnerParticleAffector.h; sourceTree = "<group>"; };
-		81D8B3B41962E0EC0010DA84 /* CSParticleEffectProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSParticleEffectProvider.cpp; sourceTree = "<group>"; };
-		81D8B3B51962E0EC0010DA84 /* CSParticleEffectProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSParticleEffectProvider.h; sourceTree = "<group>"; };
-		81D8B3B71962E0EC0010DA84 /* ConeParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConeParticleEmitter.cpp; sourceTree = "<group>"; };
-		81D8B3B81962E0EC0010DA84 /* ConeParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConeParticleEmitter.h; sourceTree = "<group>"; };
-		81D8B3B91962E0EC0010DA84 /* ParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleEmitter.cpp; sourceTree = "<group>"; };
-		81D8B3BA1962E0EC0010DA84 /* ParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleEmitter.h; sourceTree = "<group>"; };
-		81D8B3BB1962E0EC0010DA84 /* ParticleEmitterFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleEmitterFactory.cpp; sourceTree = "<group>"; };
-		81D8B3BC1962E0EC0010DA84 /* ParticleEmitterFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleEmitterFactory.h; sourceTree = "<group>"; };
-		81D8B3BD1962E0EC0010DA84 /* PointParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PointParticleEmitter.cpp; sourceTree = "<group>"; };
-		81D8B3BE1962E0EC0010DA84 /* PointParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PointParticleEmitter.h; sourceTree = "<group>"; };
-		81D8B3BF1962E0EC0010DA84 /* RingParticleEmitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RingParticleEmitter.cpp; sourceTree = "<group>"; };
-		81D8B3C01962E0EC0010DA84 /* RingParticleEmitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RingParticleEmitter.h; sourceTree = "<group>"; };
-		81D8B3C11962E0EC0010DA84 /* ParticleComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleComponent.cpp; sourceTree = "<group>"; };
-		81D8B3C21962E0EC0010DA84 /* ParticleComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleComponent.h; sourceTree = "<group>"; };
-		81D8B3C31962E0EC0010DA84 /* ParticleEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleEffect.cpp; sourceTree = "<group>"; };
-		81D8B3C41962E0EC0010DA84 /* ParticleEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleEffect.h; sourceTree = "<group>"; };
-		81D8B3C51962E0EC0010DA84 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystem.cpp; sourceTree = "<group>"; };
-		81D8B3C61962E0EC0010DA84 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystem.h; sourceTree = "<group>"; };
 		81D8B3C81962E0EC0010DA84 /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
 		81D8B3C91962E0EC0010DA84 /* Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
 		81D8B3CB1962E0EC0010DA84 /* DynamicSpriteBatcher.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DynamicSpriteBatcher.cpp; sourceTree = "<group>"; };
@@ -980,6 +1050,126 @@
 			path = TextEntry;
 			sourceTree = "<group>";
 		};
+		81D2AB9B1A49B37800E8687D /* Particle */ = {
+			isa = PBXGroup;
+			children = (
+				81D2AB9C1A49B37800E8687D /* Affector */,
+				81D2ABB31A49B37800E8687D /* ConcurrentParticleData.cpp */,
+				81D2ABB41A49B37800E8687D /* ConcurrentParticleData.h */,
+				81D2ABB51A49B37800E8687D /* CSParticleProvider.cpp */,
+				81D2ABB61A49B37800E8687D /* CSParticleProvider.h */,
+				81D2ABB71A49B37800E8687D /* Drawable */,
+				81D2ABC21A49B37800E8687D /* Emitter */,
+				81D2ABDD1A49B37800E8687D /* Particle.h */,
+				81D2ABDE1A49B37800E8687D /* ParticleEffect.cpp */,
+				81D2ABDF1A49B37800E8687D /* ParticleEffect.h */,
+				81D2ABE01A49B37800E8687D /* ParticleEffectComponent.cpp */,
+				81D2ABE11A49B37800E8687D /* ParticleEffectComponent.h */,
+				81D2ABE21A49B37800E8687D /* Property */,
+			);
+			path = Particle;
+			sourceTree = "<group>";
+		};
+		81D2AB9C1A49B37800E8687D /* Affector */ = {
+			isa = PBXGroup;
+			children = (
+				81D2AB9D1A49B37800E8687D /* AccelerationParticleAffector.cpp */,
+				81D2AB9E1A49B37800E8687D /* AccelerationParticleAffector.h */,
+				81D2AB9F1A49B37800E8687D /* AccelerationParticleAffectorDef.cpp */,
+				81D2ABA01A49B37800E8687D /* AccelerationParticleAffectorDef.h */,
+				81D2ABA11A49B37800E8687D /* AngularAccelerationParticleAffector.cpp */,
+				81D2ABA21A49B37800E8687D /* AngularAccelerationParticleAffector.h */,
+				81D2ABA31A49B37800E8687D /* AngularAccelerationParticleAffectorDef.cpp */,
+				81D2ABA41A49B37800E8687D /* AngularAccelerationParticleAffectorDef.h */,
+				81D2ABA51A49B37800E8687D /* ColourOverLifetimeParticleAffector.cpp */,
+				81D2ABA61A49B37800E8687D /* ColourOverLifetimeParticleAffector.h */,
+				81D2ABA71A49B37800E8687D /* ColourOverLifetimeParticleAffectorDef.cpp */,
+				81D2ABA81A49B37800E8687D /* ColourOverLifetimeParticleAffectorDef.h */,
+				81D2ABA91A49B37800E8687D /* ParticleAffector.cpp */,
+				81D2ABAA1A49B37800E8687D /* ParticleAffector.h */,
+				81D2ABAB1A49B37800E8687D /* ParticleAffectorDef.cpp */,
+				81D2ABAC1A49B37800E8687D /* ParticleAffectorDef.h */,
+				81D2ABAD1A49B37800E8687D /* ParticleAffectorDefFactory.cpp */,
+				81D2ABAE1A49B37800E8687D /* ParticleAffectorDefFactory.h */,
+				81D2ABAF1A49B37800E8687D /* ScaleOverLifetimeParticleAffector.cpp */,
+				81D2ABB01A49B37800E8687D /* ScaleOverLifetimeParticleAffector.h */,
+				81D2ABB11A49B37800E8687D /* ScaleOverLifetimeParticleAffectorDef.cpp */,
+				81D2ABB21A49B37800E8687D /* ScaleOverLifetimeParticleAffectorDef.h */,
+			);
+			path = Affector;
+			sourceTree = "<group>";
+		};
+		81D2ABB71A49B37800E8687D /* Drawable */ = {
+			isa = PBXGroup;
+			children = (
+				81D2ABB81A49B37800E8687D /* ParticleDrawable.cpp */,
+				81D2ABB91A49B37800E8687D /* ParticleDrawable.h */,
+				81D2ABBA1A49B37800E8687D /* ParticleDrawableDef.cpp */,
+				81D2ABBB1A49B37800E8687D /* ParticleDrawableDef.h */,
+				81D2ABBC1A49B37800E8687D /* ParticleDrawableDefFactory.cpp */,
+				81D2ABBD1A49B37800E8687D /* ParticleDrawableDefFactory.h */,
+				81D2ABBE1A49B37800E8687D /* StaticBillboardParticleDrawable.cpp */,
+				81D2ABBF1A49B37800E8687D /* StaticBillboardParticleDrawable.h */,
+				81D2ABC01A49B37800E8687D /* StaticBillboardParticleDrawableDef.cpp */,
+				81D2ABC11A49B37800E8687D /* StaticBillboardParticleDrawableDef.h */,
+			);
+			path = Drawable;
+			sourceTree = "<group>";
+		};
+		81D2ABC21A49B37800E8687D /* Emitter */ = {
+			isa = PBXGroup;
+			children = (
+				81D2ABC31A49B37800E8687D /* CircleParticleEmitter.cpp */,
+				81D2ABC41A49B37800E8687D /* CircleParticleEmitter.h */,
+				81D2ABC51A49B37800E8687D /* CircleParticleEmitterDef.cpp */,
+				81D2ABC61A49B37800E8687D /* CircleParticleEmitterDef.h */,
+				81D2ABC71A49B37800E8687D /* Cone2DParticleEmitter.cpp */,
+				81D2ABC81A49B37800E8687D /* Cone2DParticleEmitter.h */,
+				81D2ABC91A49B37800E8687D /* Cone2DParticleEmitterDef.cpp */,
+				81D2ABCA1A49B37800E8687D /* Cone2DParticleEmitterDef.h */,
+				81D2ABCB1A49B37800E8687D /* ConeParticleEmitter.cpp */,
+				81D2ABCC1A49B37800E8687D /* ConeParticleEmitter.h */,
+				81D2ABCD1A49B37800E8687D /* ConeParticleEmitterDef.cpp */,
+				81D2ABCE1A49B37800E8687D /* ConeParticleEmitterDef.h */,
+				81D2ABCF1A49B37800E8687D /* ParticleEmitter.cpp */,
+				81D2ABD01A49B37800E8687D /* ParticleEmitter.h */,
+				81D2ABD11A49B37800E8687D /* ParticleEmitterDef.cpp */,
+				81D2ABD21A49B37800E8687D /* ParticleEmitterDef.h */,
+				81D2ABD31A49B37800E8687D /* ParticleEmitterDefFactory.cpp */,
+				81D2ABD41A49B37800E8687D /* ParticleEmitterDefFactory.h */,
+				81D2ABD51A49B37800E8687D /* PointParticleEmitter.cpp */,
+				81D2ABD61A49B37800E8687D /* PointParticleEmitter.h */,
+				81D2ABD71A49B37800E8687D /* PointParticleEmitterDef.cpp */,
+				81D2ABD81A49B37800E8687D /* PointParticleEmitterDef.h */,
+				81D2ABD91A49B37800E8687D /* SphereParticleEmitter.cpp */,
+				81D2ABDA1A49B37800E8687D /* SphereParticleEmitter.h */,
+				81D2ABDB1A49B37800E8687D /* SphereParticleEmitterDef.cpp */,
+				81D2ABDC1A49B37800E8687D /* SphereParticleEmitterDef.h */,
+			);
+			path = Emitter;
+			sourceTree = "<group>";
+		};
+		81D2ABE21A49B37800E8687D /* Property */ = {
+			isa = PBXGroup;
+			children = (
+				81D2ABE31A49B37800E8687D /* ParticleProperty.h */,
+				81D2ABE41A49B37800E8687D /* ParticlePropertyFactory.cpp */,
+				81D2ABE51A49B37800E8687D /* ParticlePropertyFactory.h */,
+				81D2ABE61A49B37800E8687D /* RandomParticleProperty.h */,
+				81D2ABE71A49B37800E8687D /* StaticParticleProperty.h */,
+			);
+			path = Property;
+			sourceTree = "<group>";
+		};
+		81D2AC121A49C3F300E8687D /* Math */ = {
+			isa = PBXGroup;
+			children = (
+				81D2AC131A49C3F300E8687D /* RNGContainer.h */,
+				81D2AC141A49C3F300E8687D /* RNGContainer.mm */,
+			);
+			path = Math;
+			sourceTree = "<group>";
+		};
 		81D8ACEC1962CEDC0010DA84 = {
 			isa = PBXGroup;
 			children = (
@@ -1162,6 +1352,7 @@
 		81D8B2461962E0EB0010DA84 /* Container */ = {
 			isa = PBXGroup;
 			children = (
+				81D2AB9A1A49B36500E8687D /* dynamic_array.h */,
 				8141DFF21A02439100F3D9DF /* concurrent_blocking_queue.h */,
 				816B0C1719CC2E7000520B50 /* concurrent_vector.h */,
 				8154B74619D0274100F9F5B9 /* concurrent_vector_const_forward_iterator.h */,
@@ -1296,6 +1487,8 @@
 		81D8B28E1962E0EB0010DA84 /* Math */ = {
 			isa = PBXGroup;
 			children = (
+				81D2AB971A49B35400E8687D /* Random.cpp */,
+				81D2AB981A49B35400E8687D /* Random.h */,
 				81D8B28F1962E0EB0010DA84 /* Geometry */,
 				81D8B2961962E0EB0010DA84 /* MathUtils.cpp */,
 				81D8B2971962E0EB0010DA84 /* MathUtils.h */,
@@ -1729,6 +1922,8 @@
 		81D8B3521962E0EC0010DA84 /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
+				81D2AB9B1A49B37800E8687D /* Particle */,
+				81D2ABE81A49B37800E8687D /* Particle.h */,
 				81D8B3531962E0EC0010DA84 /* Base */,
 				81D8B3751962E0EC0010DA84 /* Camera */,
 				81D8B37C1962E0EC0010DA84 /* Font */,
@@ -1736,7 +1931,6 @@
 				81D8B3821962E0EC0010DA84 /* Lighting */,
 				81D8B38B1962E0EC0010DA84 /* Material */,
 				81D8B3921962E0EC0010DA84 /* Model */,
-				81D8B3A71962E0EC0010DA84 /* Particles */,
 				81D8B3C71962E0EC0010DA84 /* Shader */,
 				81D8B3CA1962E0EC0010DA84 /* Sprite */,
 				81D8B3D11962E0EC0010DA84 /* Texture */,
@@ -1746,7 +1940,6 @@
 				8158E4B2196AE035005FF0A8 /* Lighting.h */,
 				8158E4B3196AE042005FF0A8 /* Material.h */,
 				8158E4B4196AE04B005FF0A8 /* Model.h */,
-				8158E4B5196AE055005FF0A8 /* Particles.h */,
 				8158E4B6196AE05F005FF0A8 /* Shader.h */,
 				8158E4B7196AE06B005FF0A8 /* Sprite.h */,
 				8158E4B8196AE074005FF0A8 /* Texture.h */,
@@ -1871,58 +2064,6 @@
 				81D8B3A61962E0EC0010DA84 /* SubMesh.h */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		81D8B3A71962E0EC0010DA84 /* Particles */ = {
-			isa = PBXGroup;
-			children = (
-				81D8B3A81962E0EC0010DA84 /* Affectors */,
-				81D8B3B41962E0EC0010DA84 /* CSParticleEffectProvider.cpp */,
-				81D8B3B51962E0EC0010DA84 /* CSParticleEffectProvider.h */,
-				81D8B3B61962E0EC0010DA84 /* Emitters */,
-				81D8B3C11962E0EC0010DA84 /* ParticleComponent.cpp */,
-				81D8B3C21962E0EC0010DA84 /* ParticleComponent.h */,
-				81D8B3C31962E0EC0010DA84 /* ParticleEffect.cpp */,
-				81D8B3C41962E0EC0010DA84 /* ParticleEffect.h */,
-				81D8B3C51962E0EC0010DA84 /* ParticleSystem.cpp */,
-				81D8B3C61962E0EC0010DA84 /* ParticleSystem.h */,
-			);
-			path = Particles;
-			sourceTree = "<group>";
-		};
-		81D8B3A81962E0EC0010DA84 /* Affectors */ = {
-			isa = PBXGroup;
-			children = (
-				81D8B3A91962E0EC0010DA84 /* ColourChangerParticleAffector.cpp */,
-				81D8B3AA1962E0EC0010DA84 /* ColourChangerParticleAffector.h */,
-				81D8B3AB1962E0EC0010DA84 /* LinearForceParticleAffector.cpp */,
-				81D8B3AC1962E0EC0010DA84 /* LinearForceParticleAffector.h */,
-				81D8B3AD1962E0EC0010DA84 /* ParticleAffector.h */,
-				81D8B3AE1962E0EC0010DA84 /* ParticleAffectorFactory.cpp */,
-				81D8B3AF1962E0EC0010DA84 /* ParticleAffectorFactory.h */,
-				81D8B3B01962E0EC0010DA84 /* ScalerParticleAffector.cpp */,
-				81D8B3B11962E0EC0010DA84 /* ScalerParticleAffector.h */,
-				81D8B3B21962E0EC0010DA84 /* SpinnerParticleAffector.cpp */,
-				81D8B3B31962E0EC0010DA84 /* SpinnerParticleAffector.h */,
-			);
-			path = Affectors;
-			sourceTree = "<group>";
-		};
-		81D8B3B61962E0EC0010DA84 /* Emitters */ = {
-			isa = PBXGroup;
-			children = (
-				81D8B3B71962E0EC0010DA84 /* ConeParticleEmitter.cpp */,
-				81D8B3B81962E0EC0010DA84 /* ConeParticleEmitter.h */,
-				81D8B3B91962E0EC0010DA84 /* ParticleEmitter.cpp */,
-				81D8B3BA1962E0EC0010DA84 /* ParticleEmitter.h */,
-				81D8B3BB1962E0EC0010DA84 /* ParticleEmitterFactory.cpp */,
-				81D8B3BC1962E0EC0010DA84 /* ParticleEmitterFactory.h */,
-				81D8B3BD1962E0EC0010DA84 /* PointParticleEmitter.cpp */,
-				81D8B3BE1962E0EC0010DA84 /* PointParticleEmitter.h */,
-				81D8B3BF1962E0EC0010DA84 /* RingParticleEmitter.cpp */,
-				81D8B3C01962E0EC0010DA84 /* RingParticleEmitter.h */,
-			);
-			path = Emitters;
 			sourceTree = "<group>";
 		};
 		81D8B3C71962E0EC0010DA84 /* Shader */ = {
@@ -2082,6 +2223,7 @@
 		81D8B5821962E0F60010DA84 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				81D2AC121A49C3F300E8687D /* Math */,
 				81D8B5831962E0F60010DA84 /* Base */,
 				81D8B58E1962E0F60010DA84 /* DialogueBox */,
 				81D8B5931962E0F60010DA84 /* File */,
@@ -2436,9 +2578,11 @@
 				81D8B3FD1962E0EC0010DA84 /* Application.cpp in Sources */,
 				81D8B4581962E0EC0010DA84 /* VerticalEndcappedProgressBar.cpp in Sources */,
 				81D8B6AA1962E0F70010DA84 /* DeviceButtonSystem.mm in Sources */,
+				81D2AC031A49B37800E8687D /* ParticleEmitterDefFactory.cpp in Sources */,
 				81D8B46D1962E0EC0010DA84 /* RenderComponentFactory.cpp in Sources */,
 				81D8B4301962E0EC0010DA84 /* State.cpp in Sources */,
 				81D8B43E1962E0EC0010DA84 /* XMLUtils.cpp in Sources */,
+				81D2AC011A49B37800E8687D /* ParticleEmitter.cpp in Sources */,
 				81D8B6B21962E0F70010DA84 /* StoreKitIAPSystem.mm in Sources */,
 				81D8B6D71962E0F70010DA84 /* Texture.cpp in Sources */,
 				81D8B4121962E0EC0010DA84 /* EventConnection.cpp in Sources */,
@@ -2450,22 +2594,27 @@
 				81D8B6B71962E0F70010DA84 /* FacebookPostSystem.cpp in Sources */,
 				81D8B6D31962E0F70010DA84 /* RenderTarget.cpp in Sources */,
 				81D8B6B51962E0F70010DA84 /* FacebookAppDelegate.mm in Sources */,
+				81D2ABF71A49B37800E8687D /* ParticleDrawableDef.cpp in Sources */,
 				81D8B6A21962E0F70010DA84 /* DialogueBoxSystem.mm in Sources */,
 				81D8B4A81962E0EC0010DA84 /* VideoPlayer.cpp in Sources */,
 				81D8B4A31962E0EC0010DA84 /* EmailComposer.cpp in Sources */,
+				81D2ABF51A49B37800E8687D /* CSParticleProvider.cpp in Sources */,
 				81D8B40C1962E0EC0010DA84 /* HashSHA1.cpp in Sources */,
+				81D2ABFF1A49B37800E8687D /* ConeParticleEmitter.cpp in Sources */,
 				81D8B47C1962E0EC0010DA84 /* MaterialFactory.cpp in Sources */,
+				81D2ABEA1A49B37800E8687D /* AccelerationParticleAffectorDef.cpp in Sources */,
 				81D8B4271962E0EC0010DA84 /* RemoteNotificationSystem.cpp in Sources */,
 				81D8B6A51962E0F70010DA84 /* LocalNotificationSystem.cpp in Sources */,
 				81B729121A41C00100AC6619 /* HttpResponse.cpp in Sources */,
 				81D8B44F1962E0EC0010DA84 /* StretchableImage.cpp in Sources */,
-				81D8B48F1962E0EC0010DA84 /* ParticleEmitter.cpp in Sources */,
+				81D2AC0A1A49B37800E8687D /* ParticlePropertyFactory.cpp in Sources */,
 				81D8B42B1962E0EC0010DA84 /* Registry.cpp in Sources */,
 				81D8B4281962E0EC0010DA84 /* Instance.cpp in Sources */,
 				81D8B6A61962E0F70010DA84 /* NSNotificationAdapter.mm in Sources */,
 				81D8B4011962E0EC0010DA84 /* Device.cpp in Sources */,
 				81D8B4621962E0EC0010DA84 /* MoContentDownloader.cpp in Sources */,
 				81D8B40D1962E0EC0010DA84 /* OAuth.cpp in Sources */,
+				81D2AB991A49B35400E8687D /* Random.cpp in Sources */,
 				81D8B4381962E0EC0010DA84 /* ThreadPool.cpp in Sources */,
 				81D8B4A41962E0EC0010DA84 /* FacebookAuthenticationSystem.cpp in Sources */,
 				81D8B4681962E0EC0010DA84 /* CullingPredicates.cpp in Sources */,
@@ -2473,6 +2622,7 @@
 				81D8B46E1962E0EC0010DA84 /* Renderer.cpp in Sources */,
 				81D8B6D81962E0F70010DA84 /* TextureUnitSystem.cpp in Sources */,
 				81D8B49C1962E0EC0010DA84 /* CubemapResourceOptions.cpp in Sources */,
+				81D2AC061A49B37800E8687D /* SphereParticleEmitter.cpp in Sources */,
 				81D8B6A11962E0F70010DA84 /* DialogueBoxListener.mm in Sources */,
 				81D8B4761962E0EC0010DA84 /* FontProvider.cpp in Sources */,
 				81D8B4501962E0EC0010DA84 /* VerticalStretchableImage.cpp in Sources */,
@@ -2491,6 +2641,7 @@
 				81D8B4511962E0EC0010DA84 /* EditableLabel.cpp in Sources */,
 				81D8B4191962E0EC0010DA84 /* Image.cpp in Sources */,
 				81D8B6B61962E0F70010DA84 /* FacebookAuthenticationSystem.cpp in Sources */,
+				81D2ABE91A49B37800E8687D /* AccelerationParticleAffector.cpp in Sources */,
 				81D8B42C1962E0EC0010DA84 /* Resource.cpp in Sources */,
 				81D8B46F1962E0EC0010DA84 /* RendererSortPredicates.cpp in Sources */,
 				81D8B4211962E0EC0010DA84 /* Shapes.cpp in Sources */,
@@ -2498,7 +2649,6 @@
 				81D8B45F1962E0EC0010DA84 /* Keyboard.cpp in Sources */,
 				81D8B49B1962E0EC0010DA84 /* CubemapProvider.cpp in Sources */,
 				81D8B4831962E0EC0010DA84 /* Skeleton.cpp in Sources */,
-				81D8B4921962E0EC0010DA84 /* RingParticleEmitter.cpp in Sources */,
 				81D8B6BA1962E0F70010DA84 /* VideoOverlayView.mm in Sources */,
 				81D8B49A1962E0EC0010DA84 /* Cubemap.cpp in Sources */,
 				81D8B45C1962E0EC0010DA84 /* Accelerometer.cpp in Sources */,
@@ -2514,6 +2664,8 @@
 				81D8B40E1962E0EC0010DA84 /* DialogueBoxSystem.cpp in Sources */,
 				81D8B4551962E0EC0010DA84 /* HorizontalEndcappedProgressBar.cpp in Sources */,
 				81D8B4161962E0EC0010DA84 /* TaggedFilePathResolver.cpp in Sources */,
+				81D2AC001A49B37800E8687D /* ConeParticleEmitterDef.cpp in Sources */,
+				81D2ABF41A49B37800E8687D /* ConcurrentParticleData.cpp in Sources */,
 				81D8B6CE1962E0F70010DA84 /* ContextRestorer.cpp in Sources */,
 				81D8B4721962E0EC0010DA84 /* CameraComponent.cpp in Sources */,
 				81D8B4A11962E0EC0010DA84 /* TextureResourceOptions.cpp in Sources */,
@@ -2526,7 +2678,6 @@
 				81D8B42D1962E0EC0010DA84 /* ResourcePool.cpp in Sources */,
 				81D8B6AE1962E0F70010DA84 /* Main.cpp in Sources */,
 				81D8B4A61962E0EC0010DA84 /* CSSubtitlesProvider.cpp in Sources */,
-				81D8B48C1962E0EC0010DA84 /* SpinnerParticleAffector.cpp in Sources */,
 				81D8B4531962E0EC0010DA84 /* Label.cpp in Sources */,
 				81D8B69E1962E0F70010DA84 /* Device.mm in Sources */,
 				81FB634419FFA86C009D6894 /* CSBinaryInputStream.cpp in Sources */,
@@ -2537,6 +2688,7 @@
 				81AE299619D072800053FCB6 /* PinchGesture.cpp in Sources */,
 				81D8B44D1962E0EC0010DA84 /* HorizontalStretchableImage.cpp in Sources */,
 				81D8B40B1962E0EC0010DA84 /* HashMD5.cpp in Sources */,
+				81D2ABEB1A49B37800E8687D /* AngularAccelerationParticleAffector.cpp in Sources */,
 				81D8B4791962E0EC0010DA84 /* LightComponent.cpp in Sources */,
 				81D8B43A1962E0EC0010DA84 /* PerformanceTimer.cpp in Sources */,
 				81D8B4081962E0EC0010DA84 /* AESEncrypt.cpp in Sources */,
@@ -2545,10 +2697,12 @@
 				81D8B6B41962E0F70010DA84 /* EmailComposerDelegate.mm in Sources */,
 				81D8B4461962E0EC0010DA84 /* HighlightButton.cpp in Sources */,
 				81D8B49D1962E0EC0010DA84 /* Texture.cpp in Sources */,
-				81D8B48A1962E0EC0010DA84 /* ParticleAffectorFactory.cpp in Sources */,
 				81D8B6B31962E0F70010DA84 /* EmailComposer.mm in Sources */,
 				81D8B4181962E0EC0010DA84 /* ETC1ImageProvider.cpp in Sources */,
+				81D2ABF01A49B37800E8687D /* ParticleAffectorDef.cpp in Sources */,
+				81D2ABEF1A49B37800E8687D /* ParticleAffector.cpp in Sources */,
 				81D8B69D1962E0F70010DA84 /* CSGLViewController.mm in Sources */,
+				81D2ABED1A49B37800E8687D /* ColourOverLifetimeParticleAffector.cpp in Sources */,
 				81D8B4331962E0EC0010DA84 /* StringUtils.cpp in Sources */,
 				81D8B4671962E0EC0010DA84 /* CanvasRenderer.cpp in Sources */,
 				81D8B43C1962E0EC0010DA84 /* VolumeComponent.cpp in Sources */,
@@ -2564,6 +2718,7 @@
 				819630B21A3A0D5400475D76 /* HttpDelegate.mm in Sources */,
 				81D8B4261962E0EC0010DA84 /* NotificationManager.cpp in Sources */,
 				81D8B4801962E0EC0010DA84 /* CSModelProvider.cpp in Sources */,
+				81D2ABF91A49B37800E8687D /* StaticBillboardParticleDrawable.cpp in Sources */,
 				81D8B4A91962E0EC0010DA84 /* WebView.cpp in Sources */,
 				81D8B6A71962E0F70010DA84 /* RemoteNotificationSystem.cpp in Sources */,
 				81D8B4591962E0EC0010DA84 /* HorizontalSliderBar.cpp in Sources */,
@@ -2573,33 +2728,43 @@
 				81D8B42A1962E0EC0010DA84 /* Property.cpp in Sources */,
 				81D8B4851962E0EC0010DA84 /* SkinnedAnimationGroup.cpp in Sources */,
 				81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */,
-				81D8B4881962E0EC0010DA84 /* ColourChangerParticleAffector.cpp in Sources */,
+				81D2ABF31A49B37800E8687D /* ScaleOverLifetimeParticleAffectorDef.cpp in Sources */,
 				81D8B4401962E0EC0010DA84 /* DebugStatsView.cpp in Sources */,
+				81D2ABF61A49B37800E8687D /* ParticleDrawable.cpp in Sources */,
 				81D8B4871962E0EC0010DA84 /* SubMesh.cpp in Sources */,
 				81D8B47A1962E0EC0010DA84 /* PointLightComponent.cpp in Sources */,
 				81D8B3FC1962E0EC0010DA84 /* AppConfig.cpp in Sources */,
 				81D8B6AF1962E0F70010DA84 /* HttpRequest.mm in Sources */,
 				81D8B4141962E0EC0010DA84 /* FileStream.cpp in Sources */,
+				81D2ABF21A49B37800E8687D /* ScaleOverLifetimeParticleAffector.cpp in Sources */,
 				81D8B44E1962E0EC0010DA84 /* ImageView.cpp in Sources */,
 				81D8B4611962E0EC0010DA84 /* ContentManagementSystem.cpp in Sources */,
 				81D8B4031962E0EC0010DA84 /* PlatformSystem.cpp in Sources */,
+				81D2ABF81A49B37800E8687D /* ParticleDrawableDefFactory.cpp in Sources */,
 				81D8B4521962E0EC0010DA84 /* FormattedLabel.cpp in Sources */,
 				81D8B4421962E0EC0010DA84 /* GUIViewFactory.cpp in Sources */,
 				81D8B4021962E0EC0010DA84 /* Logging.cpp in Sources */,
+				81D2ABFD1A49B37800E8687D /* Cone2DParticleEmitter.cpp in Sources */,
+				81D2ABFA1A49B37800E8687D /* StaticBillboardParticleDrawableDef.cpp in Sources */,
 				81D8B4491962E0EC0010DA84 /* GridView.cpp in Sources */,
 				81D8B4341962E0EC0010DA84 /* ToString.cpp in Sources */,
 				81D8B6B11962E0F70010DA84 /* IAPSystem.mm in Sources */,
 				81D8B47F1962E0EC0010DA84 /* CSAnimProvider.cpp in Sources */,
 				81D8B6A01962E0F70010DA84 /* Screen.mm in Sources */,
+				81D2AC081A49B37800E8687D /* ParticleEffect.cpp in Sources */,
 				81D8B4A51962E0EC0010DA84 /* FacebookPostSystem.cpp in Sources */,
+				81D2ABFE1A49B37800E8687D /* Cone2DParticleEmitterDef.cpp in Sources */,
+				81D2AC041A49B37800E8687D /* PointParticleEmitter.cpp in Sources */,
 				81D8B69F1962E0F70010DA84 /* PlatformSystem.mm in Sources */,
+				81D2ABEE1A49B37800E8687D /* ColourOverLifetimeParticleAffectorDef.cpp in Sources */,
 				81D8B4571962E0EC0010DA84 /* ProgressBar.cpp in Sources */,
 				81D8B4201962E0EC0010DA84 /* ShapeIntersection.cpp in Sources */,
 				81D8B4131962E0EC0010DA84 /* AppDataStore.cpp in Sources */,
 				81D8B4641962E0EC0010DA84 /* IAPSystem.cpp in Sources */,
+				81D2ABEC1A49B37800E8687D /* AngularAccelerationParticleAffectorDef.cpp in Sources */,
 				81D8B41C1962E0EC0010DA84 /* PVRImageProvider.cpp in Sources */,
-				81D8B4911962E0EC0010DA84 /* PointParticleEmitter.cpp in Sources */,
 				81D8B4731962E0EC0010DA84 /* OrthographicCameraComponent.cpp in Sources */,
+				81D2AC071A49B37800E8687D /* SphereParticleEmitterDef.cpp in Sources */,
 				81D8B44B1962E0EC0010DA84 /* ScrollView.cpp in Sources */,
 				81D8B44C1962E0EC0010DA84 /* VerticalList.cpp in Sources */,
 				81D8B4451962E0EC0010DA84 /* Button.cpp in Sources */,
@@ -2609,14 +2774,13 @@
 				81D8B6A81962E0F70010DA84 /* NSStringUtils.mm in Sources */,
 				81D8B42F1962E0EC0010DA84 /* Scene.cpp in Sources */,
 				81D8B42E1962E0EC0010DA84 /* ResourceProvider.cpp in Sources */,
-				81D8B4951962E0EC0010DA84 /* ParticleSystem.cpp in Sources */,
 				81D8B4471962E0EC0010DA84 /* StretchableHighlightButton.cpp in Sources */,
 				811B181819D19AF400B06B5D /* RotationGesture.cpp in Sources */,
 				81D8B46A1962E0EC0010DA84 /* MeshBuffer.cpp in Sources */,
 				81D8B4541962E0EC0010DA84 /* HorizontalClippingProgressBar.cpp in Sources */,
-				81D8B4931962E0EC0010DA84 /* ParticleComponent.cpp in Sources */,
 				81D8B4071962E0EC0010DA84 /* ParamDictionarySerialiser.cpp in Sources */,
 				81D8B6CF1962E0F70010DA84 /* GLError.cpp in Sources */,
+				81D2ABFB1A49B37800E8687D /* CircleParticleEmitter.cpp in Sources */,
 				81D8B44A1962E0EC0010DA84 /* HorizontalList.cpp in Sources */,
 				81D8B4561962E0EC0010DA84 /* HorizontalProgressBar.cpp in Sources */,
 				81D8B4101962E0EC0010DA84 /* Entity.cpp in Sources */,
@@ -2624,47 +2788,47 @@
 				81D8B4821962E0EC0010DA84 /* MeshDescriptor.cpp in Sources */,
 				81D8B4751962E0EC0010DA84 /* Font.cpp in Sources */,
 				81D8B6AD1962E0F70010DA84 /* PointerSystem.mm in Sources */,
-				81D8B48D1962E0EC0010DA84 /* CSParticleEffectProvider.cpp in Sources */,
 				81D8B4601962E0EC0010DA84 /* PointerSystem.cpp in Sources */,
 				81D8B47D1962E0EC0010DA84 /* MaterialProvider.cpp in Sources */,
+				81D2AC051A49B37800E8687D /* PointParticleEmitterDef.cpp in Sources */,
 				81D8B4701962E0EC0010DA84 /* RenderSystem.cpp in Sources */,
 				81D8B6D41962E0F70010DA84 /* GLSLShaderProvider.cpp in Sources */,
 				81D8B4481962E0EC0010DA84 /* ToggleButton.cpp in Sources */,
 				81D8B49E1962E0EC0010DA84 /* TextureAtlas.cpp in Sources */,
 				81D8B46B1962E0EC0010DA84 /* RenderCapabilities.cpp in Sources */,
 				81D8B4061962E0EC0010DA84 /* ParamDictionary.cpp in Sources */,
-				81D8B4891962E0EC0010DA84 /* LinearForceParticleAffector.cpp in Sources */,
 				81D8B4171962E0EC0010DA84 /* CSImageProvider.cpp in Sources */,
 				81D8B3FF1962E0EC0010DA84 /* Colour.cpp in Sources */,
 				81D8B4041962E0EC0010DA84 /* Screen.cpp in Sources */,
-				81D8B48B1962E0EC0010DA84 /* ScalerParticleAffector.cpp in Sources */,
 				81D8B4781962E0EC0010DA84 /* DirectionalLightComponent.cpp in Sources */,
+				81D2ABF11A49B37800E8687D /* ParticleAffectorDefFactory.cpp in Sources */,
 				81D8B4091962E0EC0010DA84 /* BaseEncoding.cpp in Sources */,
-				81D8B4941962E0EC0010DA84 /* ParticleEffect.cpp in Sources */,
 				81D8B4291962E0EC0010DA84 /* MetaClass.cpp in Sources */,
 				81D8B49F1962E0EC0010DA84 /* TextureAtlasProvider.cpp in Sources */,
 				81D8B6D61962E0F70010DA84 /* Cubemap.cpp in Sources */,
 				81D8B4371962E0EC0010DA84 /* TaskScheduler.cpp in Sources */,
 				81FB634719FFB723009D6894 /* CSBinaryChunk.cpp in Sources */,
-				81D8B48E1962E0EC0010DA84 /* ConeParticleEmitter.cpp in Sources */,
 				81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */,
 				81D8B43B1962E0EC0010DA84 /* Timer.cpp in Sources */,
 				81D8B4391962E0EC0010DA84 /* CoreTimer.cpp in Sources */,
 				81D8B4361962E0EC0010DA84 /* StateSystem.cpp in Sources */,
+				81D2AC091A49B37800E8687D /* ParticleEffectComponent.cpp in Sources */,
 				81D8B69C1962E0F70010DA84 /* CSAppDelegate.mm in Sources */,
 				81D8B4991962E0EC0010DA84 /* SpriteComponent.cpp in Sources */,
 				81D8B4631962E0EC0010DA84 /* HttpRequestSystem.cpp in Sources */,
 				81D8B6B01962E0F70010DA84 /* HttpRequestSystem.mm in Sources */,
 				81D8B6D51962E0F70010DA84 /* Shader.cpp in Sources */,
 				81D8B4231962E0EC0010DA84 /* UnifiedCoordinates.cpp in Sources */,
-				81D8B4901962E0EC0010DA84 /* ParticleEmitterFactory.cpp in Sources */,
 				81D8B6D11962E0F70010DA84 /* RenderCapabilities.cpp in Sources */,
 				81D8B4981962E0EC0010DA84 /* SpriteBatch.cpp in Sources */,
+				81D2AC021A49B37800E8687D /* ParticleEmitterDef.cpp in Sources */,
+				81D2AC151A49C3F300E8687D /* RNGContainer.mm in Sources */,
 				81AAFBBB19C9C18100CD4A14 /* Gesture.cpp in Sources */,
 				81D8B4411962E0EC0010DA84 /* GUIView.cpp in Sources */,
 				81D8B6D21962E0F70010DA84 /* RenderSystem.cpp in Sources */,
 				81D8B4861962E0EC0010DA84 /* StaticMeshComponent.cpp in Sources */,
 				81D8B41E1962E0EC0010DA84 /* LocalisedTextProvider.cpp in Sources */,
+				81D2ABFC1A49B37800E8687D /* CircleParticleEmitterDef.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
