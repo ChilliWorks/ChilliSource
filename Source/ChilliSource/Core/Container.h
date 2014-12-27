@@ -36,5 +36,6 @@
 #include <ChilliSource/Core/Container/dynamic_array.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
+#include <ChilliSource/Core/Container/random_access_iterator.h>
 
 #endif

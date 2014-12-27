@@ -56,8 +56,9 @@ namespace ChilliSource
         template <typename TKey, typename TValue> class HashedArray;
         template <typename TType> class ObjectPool;
 		template <typename TType> class concurrent_blocking_queue;
-		template <typename TType> class concurrent_vector;
-		template <typename TType> class dynamic_array;
+        template <typename TType> class concurrent_vector;
+        template <typename TType> class dynamic_array;
+        template <typename TType> class random_access_iterator;
         //---------------------------------------------------------
         /// Delegate
         //---------------------------------------------------------
