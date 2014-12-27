@@ -76,18 +76,19 @@ namespace ChilliSource
             const char k_rngKey[] = "_threadLocalRNG";
             
 #elif defined (CS_TARGETPLATFORM_WINDOWS)
-//TODO:
-//            //----------------------------------------------------------------
-//            /// Visual C++ doesn't support thread_local yet, so the compiler
-//            /// specific version should be used instead.
-//            ///
-//            /// @author Ian Copland
-//            //----------------------------------------------------------------
-//            struct RNGContainer
-//            {
-//                std::mt19937 m_randomNumberGenerator = std::mt19937(GenerateSeed());
-//            };
-//            __declspec( thread ) RNGContainer g_rngContainer;
+            //----------------------------------------------------------------
+            /// Visual C++ doesn't support thread_local yet, so the compiler
+            /// specific version should be used instead. This doesn't support
+			/// storage of objects that have a contructor so we are storing 
+			/// the RNG as a pointer and allocating it lazily when it's first 
+			/// used. To ensure that the RNG is cleaned up when the thread is 
+			/// destroyed, placement new is used to store the RNG in an array.
+			/// The RNG doesn't have a destructor, so this should be safe.
+            ///
+            /// @author Ian Copland
+            //----------------------------------------------------------------
+			__declspec(thread) u8 g_rngMemory[sizeof(std::mt19937)];
+			__declspec(thread) std::mt19937* g_randomNumberGenerator = nullptr;
             
 #else
 			thread_local std::mt19937 g_randomNumberGenerator(GenerateSeed());
@@ -118,15 +119,14 @@ namespace ChilliSource
                     return [rngContainer rng];
                 }
 #elif CS_TARGETPLATFORM_WINDOWS
-//TODO:
-//				if (g_randomNumberGenerator == nullptr)
-//				{
-//					g_randomNumberGenerator = new std::mt19937(GenerateSeed());
-//				}
-//
-//				return *g_randomNumberGenerator;
+				if (g_randomNumberGenerator == nullptr)
+				{
+					g_randomNumberGenerator = new (g_rngMemory) std::mt19937(GenerateSeed());
+				}
+
+				return *g_randomNumberGenerator;
 #else
-              return g_randomNumberGenerator;
+				return g_randomNumberGenerator;
 #endif
 			}
 		}
