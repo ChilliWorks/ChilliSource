@@ -89,10 +89,8 @@ namespace ChilliSource
 				Core::Vector3 max = CSCore::Vector3(-std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max(), -std::numeric_limits<f32>::max());
 
 				bool anyActive = false;
-				for (u32 i = 0; i < in_particleArray->size(); ++i)
+				for (const auto& particle : *in_particleArray)
 				{
-					const auto& particle = in_particleArray->at(i);
-
 					if (particle.m_isActive == true)
 					{
 						anyActive = true;
@@ -156,9 +154,8 @@ namespace ChilliSource
 				CS_ASSERT(in_concurrentParticleData != nullptr, "Cannot update particles with null concurrent particle data.");
 
 				//update the particles
-				for (u32 i = 0; i < in_particleArray->size(); ++i)
+				for (auto& particle : *in_particleArray)
 				{
-					Particle& particle = (*in_particleArray)[i];
 					if (particle.m_isActive == true)
 					{
 						particle.m_energy -= in_deltaTime;
@@ -531,9 +528,9 @@ namespace ChilliSource
 			if (m_concurrentParticleData->StartUpdate() == true)
 			{
 				//intialise the particles by disabling them all.
-				for (u32 i = 0; i < m_particleArray->size(); ++i)
+				for (auto& particle : *m_particleArray)
 				{
-					m_particleArray->at(i).m_isActive = false;
+					particle.m_isActive = false;
 				}
 				m_concurrentParticleData->CommitParticleData(m_particleArray.get(), std::vector<u32>(), Core::AABB(), Core::Sphere());
 

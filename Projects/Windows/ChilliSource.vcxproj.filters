@@ -130,6 +130,48 @@
     <Filter Include="ChilliSource\Core\Math\Geometry">
       <UniqueIdentifier>{a0340f0c-841e-42ee-b080-a3c981501186}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ChilliSource\Rendering\Base">
+      <UniqueIdentifier>{41113333-4c15-4379-a4b3-5c8a320845f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Camera">
+      <UniqueIdentifier>{9c55d866-3720-414c-87cb-208848902990}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Font">
+      <UniqueIdentifier>{d344ba63-245e-4bc2-a1b5-dfb8db15918f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Lighting">
+      <UniqueIdentifier>{cd6519d3-8e9e-4dbe-989d-7cf0b10842a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Material">
+      <UniqueIdentifier>{cfee2e89-2cb6-4e49-afa7-016c2b2e92b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Model">
+      <UniqueIdentifier>{f48370ad-1c49-42ac-a118-bd6faf620844}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Particle">
+      <UniqueIdentifier>{a7f32df3-dd02-43a7-9c3b-1e8cecb8ee19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Shader">
+      <UniqueIdentifier>{c32482fb-34aa-44fc-9da3-134c4a89d8fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Sprite">
+      <UniqueIdentifier>{48b066ce-33c2-48bb-97d0-dffe10fed580}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Texture">
+      <UniqueIdentifier>{b2160ddf-925e-4484-8857-eb20b2258ed0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Particle\Affector">
+      <UniqueIdentifier>{ede54abd-074b-4144-99c5-2ed5e1af2a79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Particle\Drawable">
+      <UniqueIdentifier>{38a4c6ee-3f6e-4ed8-b667-35b4e90830d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Particle\Emitter">
+      <UniqueIdentifier>{ff912d0f-0715-4d78-93a7-a1749475f7cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChilliSource\Rendering\Particle\Property">
+      <UniqueIdentifier>{42abe568-4d76-4f37-a305-e58016287992}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.cpp">
@@ -338,192 +380,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Social\Communications\EmailComposer.cpp">
       <Filter>ChilliSource\Social</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CullingPredicates.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBuffer.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponent.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RendererSortPredicates.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderSystem.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\OrthographicCameraComponent.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\PerspectiveCameraComponent.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Font\Font.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Font\FontProvider.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\AmbientLightComponent.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\DirectionalLightComponent.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\LightComponent.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\PointLightComponent.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\Material.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\MaterialFactory.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Mesh.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\MeshDescriptor.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\StaticMeshComponent.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SubMesh.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\CSParticleEffectProvider.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\ParticleComponent.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\ParticleEffect.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\ParticleSystem.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\ConeParticleEmitter.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\ParticleEmitter.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\ParticleEmitterFactory.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\PointParticleEmitter.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\RingParticleEmitter.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ColourChangerParticleAffector.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\LinearForceParticleAffector.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ParticleAffectorFactory.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ScalerParticleAffector.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\SpinnerParticleAffector.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\Shader.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\DynamicSpriteBatcher.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteBatch.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteComponent.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Texture.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureAtlas.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureAtlasProvider.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureProvider.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureResourceOptions.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.cpp">
-      <Filter>ChilliSource\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.cpp">
       <Filter>CSBackend\Platform\Windows</Filter>
@@ -770,6 +626,255 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Networking\Http\HttpResponse.cpp">
       <Filter>ChilliSource\Networking</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Random.cpp">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CullingPredicates.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\MeshBuffer.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponent.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RendererSortPredicates.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\RenderSystem.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.cpp">
+      <Filter>ChilliSource\Rendering\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\OrthographicCameraComponent.cpp">
+      <Filter>ChilliSource\Rendering\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Camera\PerspectiveCameraComponent.cpp">
+      <Filter>ChilliSource\Rendering\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Font\Font.cpp">
+      <Filter>ChilliSource\Rendering\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Font\FontProvider.cpp">
+      <Filter>ChilliSource\Rendering\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\AmbientLightComponent.cpp">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\DirectionalLightComponent.cpp">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\LightComponent.cpp">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Lighting\PointLightComponent.cpp">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\Material.cpp">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\MaterialFactory.cpp">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.cpp">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Mesh.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\MeshDescriptor.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\StaticMeshComponent.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SubMesh.cpp">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.cpp">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.cpp">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.cpp">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\Texture.cpp">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureAtlas.cpp">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureAtlasProvider.cpp">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureProvider.cpp">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\TextureResourceOptions.cpp">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.cpp">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\DynamicSpriteBatcher.cpp">
+      <Filter>ChilliSource\Rendering\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteBatch.cpp">
+      <Filter>ChilliSource\Rendering\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteComponent.cpp">
+      <Filter>ChilliSource\Rendering\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\Shader.cpp">
+      <Filter>ChilliSource\Rendering\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ConcurrentParticleData.cpp">
+      <Filter>ChilliSource\Rendering\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\CSParticleProvider.cpp">
+      <Filter>ChilliSource\Rendering\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffect.cpp">
+      <Filter>ChilliSource\Rendering\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffectComponent.cpp">
+      <Filter>ChilliSource\Rendering\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffector.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffectorDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AngularAccelerationParticleAffector.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AngularAccelerationParticleAffectorDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ColourOverLifetimeParticleAffector.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ColourOverLifetimeParticleAffectorDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ParticleAffector.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ParticleAffectorDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ParticleAffectorDefFactory.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ScaleOverLifetimeParticleAffector.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ScaleOverLifetimeParticleAffectorDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawable.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawableDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawableDefFactory.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\StaticBillboardParticleDrawable.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\StaticBillboardParticleDrawableDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitter.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitterDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitter.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitterDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitter.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitterDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitter.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitterDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitterDefFactory.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitter.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitterDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\SphereParticleEmitter.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\SphereParticleEmitterDef.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactory.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1018,219 +1123,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Social\Communications\EmailComposer.h">
       <Filter>ChilliSource\Social</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\ForwardDeclarations.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\BlendMode.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullFace.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullingPredicates.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\DepthTestComparison.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBuffer.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponent.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RendererSortPredicates.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderSystem.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderTarget.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ShaderPass.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SurfaceFormat.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexLayouts.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\OrthographicCameraComponent.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\PerspectiveCameraComponent.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Font\Font.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Font\FontProvider.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\AmbientLightComponent.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\DirectionalLightComponent.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\LightComponent.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\PointLightComponent.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\Material.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialFactory.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\Mesh.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\MeshDescriptor.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\StaticMeshComponent.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SubMesh.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\CSParticleEffectProvider.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\ParticleComponent.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\ParticleEffect.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\ParticleSystem.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\ConeParticleEmitter.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\ParticleEmitter.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\ParticleEmitterFactory.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\PointParticleEmitter.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\RingParticleEmitter.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ColourChangerParticleAffector.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\LinearForceParticleAffector.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ParticleAffector.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ParticleAffectorFactory.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ScalerParticleAffector.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\SpinnerParticleAffector.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\Shader.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\DynamicSpriteBatcher.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteBatch.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteComponent.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Texture.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureAtlas.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureAtlasProvider.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureProvider.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureResourceOptions.h">
-      <Filter>ChilliSource\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.h">
-      <Filter>ChilliSource\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\SFML\Base\SFMLWindow.h">
       <Filter>CSBackend\Platform\Windows</Filter>
@@ -1669,6 +1561,324 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Networking\Http\HttpResponse.h">
       <Filter>ChilliSource\Networking</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\dynamic_array.h">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\random_access_iterator.h">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Random.h">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Font.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\ForwardDeclarations.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture.h">
+      <Filter>ChilliSource\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\BlendMode.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullFace.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullingPredicates.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\DepthTestComparison.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBatch.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\MeshBuffer.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderCapabilities.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponent.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderComponentFactory.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\Renderer.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RendererSortPredicates.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderSystem.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\RenderTarget.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\ShaderPass.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\SurfaceFormat.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.h">
+      <Filter>ChilliSource\Rendering\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\OrthographicCameraComponent.h">
+      <Filter>ChilliSource\Rendering\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\PerspectiveCameraComponent.h">
+      <Filter>ChilliSource\Rendering\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Font\Font.h">
+      <Filter>ChilliSource\Rendering\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Font\FontProvider.h">
+      <Filter>ChilliSource\Rendering\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\AmbientLightComponent.h">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\DirectionalLightComponent.h">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\LightComponent.h">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\PointLightComponent.h">
+      <Filter>ChilliSource\Rendering\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\Material.h">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialFactory.h">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.h">
+      <Filter>ChilliSource\Rendering\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\Mesh.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\MeshDescriptor.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\StaticMeshComponent.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SubMesh.h">
+      <Filter>ChilliSource\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Texture.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureAtlas.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureAtlasProvider.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureProvider.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureResourceOptions.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.h">
+      <Filter>ChilliSource\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\DynamicSpriteBatcher.h">
+      <Filter>ChilliSource\Rendering\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteBatch.h">
+      <Filter>ChilliSource\Rendering\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteComponent.h">
+      <Filter>ChilliSource\Rendering\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\Shader.h">
+      <Filter>ChilliSource\Rendering\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\ConcurrentParticleData.h">
+      <Filter>ChilliSource\Rendering\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\CSParticleProvider.h">
+      <Filter>ChilliSource\Rendering\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Particle.h">
+      <Filter>ChilliSource\Rendering\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffect.h">
+      <Filter>ChilliSource\Rendering\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffectComponent.h">
+      <Filter>ChilliSource\Rendering\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffector.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffectorDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AngularAccelerationParticleAffector.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AngularAccelerationParticleAffectorDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ColourOverLifetimeParticleAffector.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ColourOverLifetimeParticleAffectorDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ParticleAffector.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ParticleAffectorDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ParticleAffectorDefFactory.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ScaleOverLifetimeParticleAffector.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ScaleOverLifetimeParticleAffectorDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Affector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawable.h">
+      <Filter>ChilliSource\Rendering\Particle\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawableDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawableDefFactory.h">
+      <Filter>ChilliSource\Rendering\Particle\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\StaticBillboardParticleDrawable.h">
+      <Filter>ChilliSource\Rendering\Particle\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\StaticBillboardParticleDrawableDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitter.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitterDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitter.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitterDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitter.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitterDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitter.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitterDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitterDefFactory.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitter.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitterDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\SphereParticleEmitter.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\SphereParticleEmitterDef.h">
+      <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticleProperty.h">
+      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactory.h">
+      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomParticleProperty.h">
+      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\StaticParticleProperty.h">
+      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

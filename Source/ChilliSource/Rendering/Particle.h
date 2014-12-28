@@ -1,5 +1,5 @@
 //
-//  Particles.h
+//  Particle.h
 //  Chilli Source
 //  Created by Ian Copland on 07/07/2014.
 //
@@ -26,9 +26,8 @@
 //  THE SOFTWARE.
 //
 
-
-#ifndef _CHILLISOURCE_RENDERING_PARTICLES_H_
-#define _CHILLISOURCE_RENDERING_PARTICLES_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLE_H_
+#define _CHILLISOURCE_RENDERING_PARTICLE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particle/CSParticleProvider.h>

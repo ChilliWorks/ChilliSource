@@ -37,9 +37,10 @@ namespace ChilliSource
 	namespace Core
 	{
 		//------------------------------------------------------------------------------
-		/// A fixed size array with a size that is decided at runtime. This is
-        /// essentially a wrapper around std::unique_ptr<TType[]> which also keeps track
-        /// of the array count.
+		/// A fixed size array with a size that is decided at runtime. This is heavily
+		/// based on std::dynarray that was initially intended to be included in the 
+		/// C++14 standard library. This will likely be removed if std::dynarray is 
+		/// ever introduced as a standard part of the language.
 		/// 
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
@@ -231,12 +232,6 @@ namespace ChilliSource
             /// @return A const reverse iterator at the end of the array.
             //------------------------------------------------------------------------------
             const_reverse_iterator crend() const;
-			//------------------------------------------------------------------------------
-			/// Destructor.
-			///
-			/// @author Ian Copland
-			//------------------------------------------------------------------------------
-			~dynamic_array() {};
 		private:
 			const size_type m_size;
 			std::unique_ptr<value_type[]> m_array;
@@ -341,13 +336,13 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         template <typename TType> typename dynamic_array<TType>::const_iterator dynamic_array<TType>::begin() const
         {
-            return iterator(&front());
+			return const_iterator(&front());
         }
         //---------------------------------------------------------------
         //------------------------------------------------------------------------------
         template <typename TType> typename dynamic_array<TType>::const_iterator dynamic_array<TType>::cbegin() const
         {
-            return iterator(&front());
+			return const_iterator(&front());
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -359,49 +354,49 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         template <typename TType> typename dynamic_array<TType>::const_iterator dynamic_array<TType>::end() const
         {
-            return iterator((&back()) + 1);
+			return const_iterator((&back()) + 1);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         template <typename TType> typename dynamic_array<TType>::const_iterator dynamic_array<TType>::cend() const
         {
-            return iterator((&back()) + 1);
+			return const_iterator((&back()) + 1);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         template <typename TType> typename dynamic_array<TType>::reverse_iterator dynamic_array<TType>::rbegin()
         {
-            return iterator(&back());
+			return reverse_iterator(&back());
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         template <typename TType> typename dynamic_array<TType>::const_reverse_iterator dynamic_array<TType>::rbegin() const
         {
-            return iterator(&back());
+			return const_reverse_iterator(&back());
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         template <typename TType> typename dynamic_array<TType>::const_reverse_iterator dynamic_array<TType>::crbegin() const
         {
-            return iterator(&back());
+			return const_reverse_iterator(&back());
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         template <typename TType> typename dynamic_array<TType>::reverse_iterator dynamic_array<TType>::rend()
         {
-            return iterator((&front() - 1));
+			return reverse_iterator((&front() - 1));
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         template <typename TType> typename dynamic_array<TType>::const_reverse_iterator dynamic_array<TType>::rend() const
         {
-            return iterator((&front() - 1));
+			return const_reverse_iterator((&front() - 1));
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         template <typename TType> typename dynamic_array<TType>::const_reverse_iterator dynamic_array<TType>::crend() const
         {
-            return iterator((&front() - 1));
+			return const_reverse_iterator((&front() - 1));
         }
 	}
 }
