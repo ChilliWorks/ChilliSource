@@ -22,6 +22,7 @@
 		81B729121A41C00100AC6619 /* HttpResponse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81B729111A41C00100AC6619 /* HttpResponse.cpp */; };
 		81CF34A119CC297600B9D0B1 /* DragGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CF349F19CC297600B9D0B1 /* DragGesture.cpp */; };
 		81CF34A419CC67AC00B9D0B1 /* HoldGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */; };
+		81D004791A51A98E00F37FEF /* ParticlePropertyCurveFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D004771A51A98E00F37FEF /* ParticlePropertyCurveFunctions.cpp */; };
 		81D2AB991A49B35400E8687D /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2AB971A49B35400E8687D /* Random.cpp */; };
 		81D2ABE91A49B37800E8687D /* AccelerationParticleAffector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2AB9D1A49B37800E8687D /* AccelerationParticleAffector.cpp */; };
 		81D2ABEA1A49B37800E8687D /* AccelerationParticleAffectorDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2AB9F1A49B37800E8687D /* AccelerationParticleAffectorDef.cpp */; };
@@ -397,6 +398,9 @@
 		81CF34A319CC67AC00B9D0B1 /* HoldGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HoldGesture.h; sourceTree = "<group>"; };
 		81D004741A518A5700F37FEF /* ParticlePropertyFactoryImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParticlePropertyFactoryImpl.h; sourceTree = "<group>"; };
 		81D004751A51971300F37FEF /* ComponentwiseRandomConstantParticleProperty.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComponentwiseRandomConstantParticleProperty.h; sourceTree = "<group>"; };
+		81D004761A51A34E00F37FEF /* CurveParticleProperty.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CurveParticleProperty.h; sourceTree = "<group>"; };
+		81D004771A51A98E00F37FEF /* ParticlePropertyCurveFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticlePropertyCurveFunctions.cpp; sourceTree = "<group>"; };
+		81D004781A51A98E00F37FEF /* ParticlePropertyCurveFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticlePropertyCurveFunctions.h; sourceTree = "<group>"; };
 		81D2AB971A49B35400E8687D /* Random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Random.cpp; sourceTree = "<group>"; };
 		81D2AB981A49B35400E8687D /* Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
 		81D2AB9A1A49B36500E8687D /* dynamic_array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dynamic_array.h; sourceTree = "<group>"; };
@@ -1162,6 +1166,9 @@
 				81D004741A518A5700F37FEF /* ParticlePropertyFactoryImpl.h */,
 				81D2ABE61A49B37800E8687D /* RandomConstantParticleProperty.h */,
 				81D004751A51971300F37FEF /* ComponentwiseRandomConstantParticleProperty.h */,
+				81D004761A51A34E00F37FEF /* CurveParticleProperty.h */,
+				81D004771A51A98E00F37FEF /* ParticlePropertyCurveFunctions.cpp */,
+				81D004781A51A98E00F37FEF /* ParticlePropertyCurveFunctions.h */,
 			);
 			path = Property;
 			sourceTree = "<group>";
@@ -2711,6 +2718,7 @@
 				81D2ABED1A49B37800E8687D /* ColourOverLifetimeParticleAffector.cpp in Sources */,
 				81D8B4331962E0EC0010DA84 /* StringUtils.cpp in Sources */,
 				81D8B4671962E0EC0010DA84 /* CanvasRenderer.cpp in Sources */,
+				81D004791A51A98E00F37FEF /* ParticlePropertyCurveFunctions.cpp in Sources */,
 				81D8B43C1962E0EC0010DA84 /* VolumeComponent.cpp in Sources */,
 				81D8B4441962E0EC0010DA84 /* Window.cpp in Sources */,
 				81AAFBBC19C9C18100CD4A14 /* GestureSystem.cpp in Sources */,

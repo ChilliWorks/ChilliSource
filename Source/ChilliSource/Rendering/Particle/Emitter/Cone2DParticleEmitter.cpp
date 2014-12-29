@@ -122,11 +122,10 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void Cone2DParticleEmitter::GenerateEmission(f32 in_emissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
+		void Cone2DParticleEmitter::GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
 		{
-			const f32 normalisedEmissionTime = in_emissionTime / m_coneParticleEmitterDef->GetParticleEffect()->GetDuration();
-			f32 radius = m_coneParticleEmitterDef->GetRadiusProperty()->GenerateValue(normalisedEmissionTime);
-			f32 angle = m_coneParticleEmitterDef->GetAngleProperty()->GenerateValue(normalisedEmissionTime);
+			f32 radius = m_coneParticleEmitterDef->GetRadiusProperty()->GenerateValue(in_normalisedEmissionTime);
+			f32 angle = m_coneParticleEmitterDef->GetAngleProperty()->GenerateValue(in_normalisedEmissionTime);
 
 			//calculate the position.
 			switch (m_coneParticleEmitterDef->GetEmitFromType())

@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Rendering/Particle/Property/ComponentwiseRandomConstantParticleProperty.h>
 #include <ChilliSource/Rendering/Particle/Property/ConstantParticleProperty.h>
+#include <ChilliSource/Rendering/Particle/Property/CurveParticleProperty.h>
 #include <ChilliSource/Rendering/Particle/Property/RandomConstantParticleProperty.h>
 
 #include <json/json.h>
@@ -63,12 +64,24 @@ namespace ChilliSource
                 static const char k_valueKey[] = "Value";
                 static const char k_lowerValueKey[] = "LowerValue";
                 static const char k_upperValueKey[] = "UpperValue";
+                static const char k_startValueKey[] = "StartValue";
+                static const char k_endValueKey[] = "EndValue";
                 static const char k_startLowerValueKey[] = "StartLowerValue";
                 static const char k_startUpperValueKey[] = "StartUpperValue";
                 static const char k_endLowerValueKey[] = "EndLowerValue";
                 static const char k_endUpperValueKey[] = "EndUpperValue";
                 static const char k_curveKey[] = "Curve";
                 
+                //------------------------------------------------------------------------------
+                /// Parse the curve function.
+                ///
+                /// @author Ian Copland
+                ///
+                /// @param The string name of the curve.
+                ///
+                /// @return The
+                //------------------------------------------------------------------------------
+                std::function<f32(f32)> ParseCurveFunction(const std::string& in_curveName);
                 //------------------------------------------------------------------------------
                 /// A templated method for parsing values from a string.
                 ///
@@ -157,6 +170,32 @@ namespace ChilliSource
                     CS_ASSERT(upperValue.isString(), "'" + std::string(k_upperValueKey) + "' in '" + std::string(k_randomConstantType) + "' property must be a string.");
                     
                     return ParticlePropertyUPtr<TType>(new ComponentwiseRandomConstantParticleProperty<TType>(ParseValue<TType>(lowerValue.asString()), ParseValue<TType>(upperValue.asString())));
+                }
+                //------------------------------------------------------------------------------
+                /// Creates a new curve particle property with the value described in the given
+                /// json.
+                ///
+                /// @author Ian Copland
+                ///
+                /// @param The json value.
+                ///
+                /// @return The output particle property.
+                //------------------------------------------------------------------------------
+                template <typename TType> ParticlePropertyUPtr<TType> CreateCurveProperty(const Json::Value& in_json)
+                {
+                    Json::Value curve = in_json.get(k_curveKey, Json::nullValue);
+                    CS_ASSERT(curve != Json::nullValue, "Must supply '" + std::string(k_curveKey) + "' in '" + std::string(k_curveType) + "' property.");
+                    CS_ASSERT(curve.isString(), "'" + std::string(k_curveKey) + "' in '" + std::string(k_curveType) + "' property must be a string.");
+                    
+                    Json::Value startValue = in_json.get(k_startValueKey, Json::nullValue);
+                    CS_ASSERT(startValue != Json::nullValue, "Must supply '" + std::string(k_startValueKey) + "' in '" + std::string(k_curveType) + "' property.");
+                    CS_ASSERT(startValue.isString(), "'" + std::string(k_startValueKey) + "' in '" + std::string(k_curveType) + "' property must be a string.");
+                    
+                    Json::Value endValue = in_json.get(k_endValueKey, Json::nullValue);
+                    CS_ASSERT(endValue != Json::nullValue, "Must supply '" + std::string(k_endValueKey) + "' in '" + std::string(k_curveType) + "' property.");
+                    CS_ASSERT(endValue.isString(), "'" + std::string(k_endValueKey) + "' in '" + std::string(k_curveType) + "' property must be a string.");
+                    
+                    return ParticlePropertyUPtr<TType>(new CurveParticleProperty<TType>(ParseValue<TType>(startValue.asString()), ParseValue<TType>(endValue.asString()), ParseCurveFunction(curve.asString())));
                 }
                 //------------------------------------------------------------------------------
                 /// Specialisation for parsing u32 values.
@@ -311,6 +350,10 @@ namespace ChilliSource
                     else if (typeString == Impl::k_componentwiseRandomConstantType)
                     {
                         return Impl::CreateComponentwiseRandomConstantProperty<TType>(in_json);
+                    }
+                    else if (typeString == Impl::k_curveType)
+                    {
+                        return Impl::CreateCurveProperty<TType>(in_json);
                     }
                 }
                 

@@ -28,6 +28,9 @@
 
 #include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
+#include <ChilliSource/Rendering/Particle/Property/ParticlePropertyCurveFunctions.h>
+
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
@@ -38,6 +41,61 @@ namespace ChilliSource
 		{
             namespace Impl
             {
+                namespace
+                {
+                    const char k_linearCurveName[] = "linear";
+                    const char k_easeInQuadCurveName[] = "easeinquad";
+                    const char k_easeOutQuadCurveName[] = "easeoutquad";
+                    const char k_smoothStepCurveName[] = "smoothstep";
+                    const char k_linearPingPongCurveName[] = "linearpingpong";
+                    const char k_easeInQuadPingPongCurveName[] = "easeinquadpingpong";
+                    const char k_easeOutQuadPingPongCurveName[] = "easeoutquadpingpong";
+                    const char k_smoothStepPingPongCurveName[] = "smoothsteppingpong";
+                }
+                
+                //------------------------------------------------------------------------------
+                //------------------------------------------------------------------------------
+                std::function<f32(f32)> ParseCurveFunction(const std::string& in_curveName)
+                {
+                    std::string nameLower = in_curveName;
+                    Core::StringUtils::ToLowerCase(nameLower);
+                    
+                    if (nameLower == k_linearCurveName)
+                    {
+                        return Core::MakeDelegate(&ParticlePropertyCurveFunctions::Linear);
+                    }
+                    else if (nameLower == k_easeInQuadCurveName)
+                    {
+                        return Core::MakeDelegate(&ParticlePropertyCurveFunctions::EaseInQuad);
+                    }
+                    else if (nameLower == k_easeOutQuadCurveName)
+                    {
+                        return Core::MakeDelegate(&ParticlePropertyCurveFunctions::EaseOutQuad);
+                    }
+                    else if (nameLower == k_smoothStepCurveName)
+                    {
+                        return Core::MakeDelegate(&ParticlePropertyCurveFunctions::SmoothStep);
+                    }
+                    else if (nameLower == k_linearPingPongCurveName)
+                    {
+                        return Core::MakeDelegate(&ParticlePropertyCurveFunctions::LinearPingPong);
+                    }
+                    else if (nameLower == k_easeInQuadPingPongCurveName)
+                    {
+                        return Core::MakeDelegate(&ParticlePropertyCurveFunctions::EaseInQuadPingPong);
+                    }
+                    else if (nameLower == k_easeOutQuadPingPongCurveName)
+                    {
+                        return Core::MakeDelegate(&ParticlePropertyCurveFunctions::EaseOutQuadPingPong);
+                    }
+                    else if (nameLower == k_smoothStepPingPongCurveName)
+                    {
+                        return Core::MakeDelegate(&ParticlePropertyCurveFunctions::SmoothStepPingPong);
+                    }
+                    
+                    CS_LOG_FATAL("Invalid curve function: " + in_curveName);
+                    return nullptr;
+                }
                 //------------------------------------------------------------------------------
                 //------------------------------------------------------------------------------
                 template <> u32 ParseValue(const std::string& in_value)

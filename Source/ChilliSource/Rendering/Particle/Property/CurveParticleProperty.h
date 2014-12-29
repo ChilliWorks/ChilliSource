@@ -1,5 +1,5 @@
 //
-//  ComponentwiseRandomConstantParticleProperty.h
+//  CurveParticleProperty.h
 //  Chilli Source
 //  Created by Ian Copland on 29/12/2014.
 //
@@ -26,11 +26,10 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_COMPONENTWISERANDOMCONSTANTPARTICLEPROPERTY_H_
-#define _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_COMPONENTWISERANDOMCONSTANTPARTICLEPROPERTY_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_CURVEPARTICLEPROPERTY_H_
+#define _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_CURVEPARTICLEPROPERTY_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/Random.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
 
 namespace ChilliSource
@@ -38,51 +37,67 @@ namespace ChilliSource
     namespace Rendering
     {
         //------------------------------------------------------------------------------
-        /// A particle property for getting a random value between the given lower and
-        /// upper value. If the value has multiple components (i.e Vector2, Matrix4,
-        /// Colour, etc) then each component will be randomised individually.
+        /// A particle property describing a value which changes over the lifetime of
+        /// the particle effect. The curve function is described by a delegate provided
+        /// in the constructor.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------------
-        template <typename TPropertyType> class ComponentwiseRandomConstantParticleProperty final : public ParticleProperty<TPropertyType>
+        template <typename TPropertyType> class CurveParticleProperty final : public ParticleProperty<TPropertyType>
         {
         public:
+            //------------------------------------------------------------------------------
+            /// A delegate for a function which describes the curve. This must accept values
+            /// in the range 0.0 - 1.0 and output values in the range 0.0 - 1.0.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The current normalised (0.0 - 1.0) particle effect progress.
+            ///
+            /// @return The interpolation factor.
+            //------------------------------------------------------------------------------
+            using CurveFunction = std::function<f32(f32)>;
             //------------------------------------------------------------------------------
             /// Constructor.
             ///
             /// @author Ian Copland
             ///
-            /// @param The lower value.
-            /// @param The upper value.
+            /// @param The start value.
+            /// @param The end value.
+            /// @param The curve function.
             //------------------------------------------------------------------------------
-            ComponentwiseRandomConstantParticleProperty(TPropertyType in_lowerValue, TPropertyType in_upperValue);
+            CurveParticleProperty(TPropertyType in_startValue, TPropertyType in_endValue, const CurveFunction& in_curveFunction);
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @param The normalised (0.0 - 1.0) particle effect playback progress. This is
-            /// ignored for a random property.
+            /// @param The normalised (0.0 - 1.0) particle effect playback progress.
             ///
-            /// @return a random value between the lower and upper values the property was
-            /// created with.
+            /// @return The generated value.
             //------------------------------------------------------------------------------
             TPropertyType GenerateValue(f32 in_playbackProgress) const override;
             
         private:
-            TPropertyType m_lowerValue;
-            TPropertyType m_upperValue;
+            TPropertyType m_startValue;
+            TPropertyType m_endValue;
+            CurveFunction m_curveFunction;
         };
         
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        template <typename TPropertyType> ComponentwiseRandomConstantParticleProperty<TPropertyType>::ComponentwiseRandomConstantParticleProperty(TPropertyType in_lowerValue, TPropertyType in_upperValue)
-        : m_lowerValue(in_lowerValue), m_upperValue(in_upperValue)
+        template <typename TPropertyType> CurveParticleProperty<TPropertyType>::CurveParticleProperty(TPropertyType in_startValue, TPropertyType in_endValue, const CurveFunction& in_curveFunction)
+            : m_startValue(in_startValue), m_endValue(in_endValue), m_curveFunction(in_curveFunction)
         {
+            CS_ASSERT(m_curveFunction != nullptr, "A curve function must be provided.");
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        template <typename TPropertyType> TPropertyType ComponentwiseRandomConstantParticleProperty<TPropertyType>::GenerateValue(f32 in_playbackProgress) const
+        template <typename TPropertyType> TPropertyType CurveParticleProperty<TPropertyType>::GenerateValue(f32 in_playbackProgress) const
         {
-            return Core::Random::GenerateInRangeComponentwise(m_lowerValue, m_upperValue);
+            CS_ASSERT(in_playbackProgress >= 0.0f && in_playbackProgress <= 1.0f, "Playback progress must be in the range 0.0 to 1.0.");
+            
+            f32 interpolationFactor = m_curveFunction(in_playbackProgress);
+            
+            return m_startValue + interpolationFactor * (m_endValue - m_startValue);
         }
     }
 }

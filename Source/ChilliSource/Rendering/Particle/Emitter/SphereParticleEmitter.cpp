@@ -64,10 +64,9 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void SphereParticleEmitter::GenerateEmission(f32 in_emissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
+		void SphereParticleEmitter::GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
 		{
-			const f32 normalisedEmissionTime = in_emissionTime / m_sphereParticleEmitterDef->GetParticleEffect()->GetDuration();
-			f32 radius = m_sphereParticleEmitterDef->GetRadiusProperty()->GenerateValue(normalisedEmissionTime);
+			f32 radius = m_sphereParticleEmitterDef->GetRadiusProperty()->GenerateValue(in_normalisedEmissionTime);
 
 			//calculate the position.
 			switch (m_sphereParticleEmitterDef->GetEmitFromType())

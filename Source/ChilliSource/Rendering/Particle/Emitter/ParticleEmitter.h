@@ -99,11 +99,11 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			///
-			/// @param The playback time of the emission.
+			/// @param The normalised playback time of the emission.
 			/// @param [Out] The generated position in local space.
 			/// @param [Out] The generate direction in local space.
 			//----------------------------------------------------------------
-			virtual void GenerateEmission(f32 in_emissionTime, Core::Vector3& out_position, Core::Vector3& out_direction) = 0;
+			virtual void GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction) = 0;
 		private:
 			//----------------------------------------------------------------
 			/// Tries to emit new particles in stream mode.
@@ -133,7 +133,7 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			/// 
-			/// @param The playback time of emission.
+			/// @param The normalised playback time of emission.
 			/// @param The world space position of the emitter at the time
 			/// of emission.
 			/// @param The world space scale of the emitter at the time
@@ -145,7 +145,7 @@ namespace ChilliSource
 			///
 			/// @param The index of the emitted particle. 
 			//----------------------------------------------------------------
-			void Emit(f32 in_emissionTime, const Core::Vector3& in_emissionPosition, const Core::Vector3& in_emissionScale, const Core::Quaternion& in_emissionOrientation, std::vector<u32>& inout_emittedParticles);
+			void Emit(f32 in_normalisedEmissionTime, const Core::Vector3& in_emissionPosition, const Core::Vector3& in_emissionScale, const Core::Quaternion& in_emissionOrientation, std::vector<u32>& inout_emittedParticles);
 
 			const ParticleEmitterDef* m_emitterDef = nullptr;
 			Core::dynamic_array<Particle>* m_particleArray = nullptr;

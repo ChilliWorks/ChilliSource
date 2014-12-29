@@ -58,7 +58,7 @@ namespace ChilliSource
 			///
 			/// @param The normalised (0.0 - 1.0) particle effect playback progress.
 			///
-			/// @param simply returns the static value.
+			/// @return simply returns the static value.
 			//------------------------------------------------------------------------------
 			TPropertyType GenerateValue(f32 in_playbackProgress) const override;
             

@@ -62,10 +62,9 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void CircleParticleEmitter::GenerateEmission(f32 in_emissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
+		void CircleParticleEmitter::GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
 		{
-			const f32 normalisedEmissionTime = in_emissionTime / m_circleParticleEmitterDef->GetParticleEffect()->GetDuration();
-			f32 radius = m_circleParticleEmitterDef->GetRadiusProperty()->GenerateValue(normalisedEmissionTime);
+			f32 radius = m_circleParticleEmitterDef->GetRadiusProperty()->GenerateValue(in_normalisedEmissionTime);
 
 			//calculate the position.
 			switch (m_circleParticleEmitterDef->GetEmitFromType())

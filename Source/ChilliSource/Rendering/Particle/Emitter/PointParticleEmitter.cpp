@@ -44,7 +44,7 @@ namespace ChilliSource
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		void PointParticleEmitter::GenerateEmission(f32 in_emissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
+		void PointParticleEmitter::GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
 		{
 			out_position = Core::Vector3::k_zero;
 			out_direction = Core::Random::GenerateDirection3D<f32>();

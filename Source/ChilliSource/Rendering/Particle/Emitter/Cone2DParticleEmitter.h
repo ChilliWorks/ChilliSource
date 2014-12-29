@@ -56,11 +56,11 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			///
-			/// @param The emission playback time.
+			/// @param The normalised emission playback time.
 			/// @param [Out] The generated position in local space.
 			/// @param [Out] The generate direction in local space.
 			//----------------------------------------------------------------
-			void GenerateEmission(f32 in_emissionTime, Core::Vector3& out_position, Core::Vector3& out_direction) override;
+			void GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction) override;
 		private:
 			friend class Cone2DParticleEmitterDef;
 			//----------------------------------------------------------------
