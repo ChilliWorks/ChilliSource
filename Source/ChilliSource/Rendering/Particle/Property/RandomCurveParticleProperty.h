@@ -1,5 +1,5 @@
 //
-//  CurveParticleProperty.h
+//  RandomCurveParticleProperty.h
 //  Chilli Source
 //  Created by Ian Copland on 29/12/2014.
 //
@@ -26,10 +26,11 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_CURVEPARTICLEPROPERTY_H_
-#define _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_CURVEPARTICLEPROPERTY_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_RANDOMCURVEPARTICLEPROPERTY_H_
+#define _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_RANDOMCURVEPARTICLEPROPERTY_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Random.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
 
 namespace ChilliSource
@@ -37,13 +38,13 @@ namespace ChilliSource
     namespace Rendering
     {
         //------------------------------------------------------------------------------
-        /// A particle property describing a value which changes over the lifetime of
-        /// the particle effect. The curve function is described by a delegate provided
-        /// in the constructor.
+        /// A particle property describing a value which is randomly generated between
+        /// bounds. The bounds changes over the lifetime of the particle effect. The
+        /// curve function is described by a delegate provided in the constructor.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------------
-        template <typename TPropertyType> class CurveParticleProperty final : public ParticleProperty<TPropertyType>
+        template <typename TPropertyType> class RandomCurveParticleProperty final : public ParticleProperty<TPropertyType>
         {
         public:
             //------------------------------------------------------------------------------
@@ -62,11 +63,13 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
-            /// @param The start value.
-            /// @param The end value.
+            /// @param The start lower value.
+            /// @param The start upper value.
+            /// @param The end lower value.
+            /// @param The end upper value.
             /// @param The curve function.
             //------------------------------------------------------------------------------
-            CurveParticleProperty(TPropertyType in_startValue, TPropertyType in_endValue, const CurveFunction& in_curveFunction);
+            RandomCurveParticleProperty(TPropertyType in_startLowerValue, TPropertyType in_startUpperValue, TPropertyType in_endLowerValue, TPropertyType in_endUpperValue, const CurveFunction& in_curveFunction);
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -77,27 +80,33 @@ namespace ChilliSource
             TPropertyType GenerateValue(f32 in_playbackProgress) const override;
             
         private:
-            TPropertyType m_startValue;
-            TPropertyType m_endValue;
+            TPropertyType m_startLowerValue;
+            TPropertyType m_startUpperValue;
+            TPropertyType m_endLowerValue;
+            TPropertyType m_endUpperValue;
             CurveFunction m_curveFunction;
         };
         
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        template <typename TPropertyType> CurveParticleProperty<TPropertyType>::CurveParticleProperty(TPropertyType in_startValue, TPropertyType in_endValue, const CurveFunction& in_curveFunction)
-            : m_startValue(in_startValue), m_endValue(in_endValue), m_curveFunction(in_curveFunction)
+        template <typename TPropertyType> RandomCurveParticleProperty<TPropertyType>::RandomCurveParticleProperty(TPropertyType in_startLowerValue, TPropertyType in_startUpperValue, TPropertyType in_endLowerValue,
+                                                                                                                  TPropertyType in_endUpperValue, const CurveFunction& in_curveFunction)
+            : m_startLowerValue(in_startLowerValue), m_startUpperValue(in_startUpperValue), m_endLowerValue(in_endLowerValue), m_endUpperValue(in_endUpperValue), m_curveFunction(in_curveFunction)
         {
             CS_ASSERT(m_curveFunction != nullptr, "A curve function must be provided.");
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        template <typename TPropertyType> TPropertyType CurveParticleProperty<TPropertyType>::GenerateValue(f32 in_playbackProgress) const
+        template <typename TPropertyType> TPropertyType RandomCurveParticleProperty<TPropertyType>::GenerateValue(f32 in_playbackProgress) const
         {
             CS_ASSERT(in_playbackProgress >= 0.0f && in_playbackProgress <= 1.0f, "Playback progress must be in the range 0.0 to 1.0.");
             
             f32 interpolationFactor = m_curveFunction(in_playbackProgress);
             
-            return m_startValue + (m_endValue - m_startValue) * interpolationFactor;
+            TPropertyType lowerBound = m_startLowerValue + (m_endLowerValue - m_startLowerValue) * interpolationFactor;
+            TPropertyType upperBound = m_startUpperValue + (m_endUpperValue - m_startUpperValue) * interpolationFactor;
+            
+            return Core::Random::GenerateInRange(lowerBound, upperBound);
         }
     }
 }

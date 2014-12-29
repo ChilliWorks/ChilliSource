@@ -401,6 +401,8 @@
 		81D004761A51A34E00F37FEF /* CurveParticleProperty.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CurveParticleProperty.h; sourceTree = "<group>"; };
 		81D004771A51A98E00F37FEF /* ParticlePropertyCurveFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticlePropertyCurveFunctions.cpp; sourceTree = "<group>"; };
 		81D004781A51A98E00F37FEF /* ParticlePropertyCurveFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticlePropertyCurveFunctions.h; sourceTree = "<group>"; };
+		81D0047A1A51BC0500F37FEF /* RandomCurveParticleProperty.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RandomCurveParticleProperty.h; sourceTree = "<group>"; };
+		81D0047B1A51C00A00F37FEF /* ComponentwiseRandomCurveParticleProperty.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComponentwiseRandomCurveParticleProperty.h; sourceTree = "<group>"; };
 		81D2AB971A49B35400E8687D /* Random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Random.cpp; sourceTree = "<group>"; };
 		81D2AB981A49B35400E8687D /* Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
 		81D2AB9A1A49B36500E8687D /* dynamic_array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dynamic_array.h; sourceTree = "<group>"; };
@@ -1169,6 +1171,8 @@
 				81D004761A51A34E00F37FEF /* CurveParticleProperty.h */,
 				81D004771A51A98E00F37FEF /* ParticlePropertyCurveFunctions.cpp */,
 				81D004781A51A98E00F37FEF /* ParticlePropertyCurveFunctions.h */,
+				81D0047A1A51BC0500F37FEF /* RandomCurveParticleProperty.h */,
+				81D0047B1A51C00A00F37FEF /* ComponentwiseRandomCurveParticleProperty.h */,
 			);
 			path = Property;
 			sourceTree = "<group>";

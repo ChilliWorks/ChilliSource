@@ -32,9 +32,11 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Rendering/Particle/Property/ComponentwiseRandomConstantParticleProperty.h>
+#include <ChilliSource/Rendering/Particle/Property/ComponentwiseRandomCurveParticleProperty.h>
 #include <ChilliSource/Rendering/Particle/Property/ConstantParticleProperty.h>
 #include <ChilliSource/Rendering/Particle/Property/CurveParticleProperty.h>
 #include <ChilliSource/Rendering/Particle/Property/RandomConstantParticleProperty.h>
+#include <ChilliSource/Rendering/Particle/Property/RandomCurveParticleProperty.h>
 
 #include <json/json.h>
 
@@ -162,12 +164,12 @@ namespace ChilliSource
                 template <typename TType> ParticlePropertyUPtr<TType> CreateComponentwiseRandomConstantProperty(const Json::Value& in_json)
                 {
                     Json::Value lowerValue = in_json.get(k_lowerValueKey, Json::nullValue);
-                    CS_ASSERT(lowerValue != Json::nullValue, "Must supply '" + std::string(k_lowerValueKey) + "' in '" + std::string(k_randomConstantType) + "' property.");
-                    CS_ASSERT(lowerValue.isString(), "'" + std::string(k_lowerValueKey) + "' in '" + std::string(k_randomConstantType) + "' property must be a string.");
+                    CS_ASSERT(lowerValue != Json::nullValue, "Must supply '" + std::string(k_lowerValueKey) + "' in '" + std::string(k_componentwiseRandomConstantType) + "' property.");
+                    CS_ASSERT(lowerValue.isString(), "'" + std::string(k_lowerValueKey) + "' in '" + std::string(k_componentwiseRandomConstantType) + "' property must be a string.");
                     
                     Json::Value upperValue = in_json.get(k_upperValueKey, Json::nullValue);
-                    CS_ASSERT(upperValue != Json::nullValue, "Must supply '" + std::string(k_upperValueKey) + "' in '" + std::string(k_randomConstantType) + "' property.");
-                    CS_ASSERT(upperValue.isString(), "'" + std::string(k_upperValueKey) + "' in '" + std::string(k_randomConstantType) + "' property must be a string.");
+                    CS_ASSERT(upperValue != Json::nullValue, "Must supply '" + std::string(k_upperValueKey) + "' in '" + std::string(k_componentwiseRandomConstantType) + "' property.");
+                    CS_ASSERT(upperValue.isString(), "'" + std::string(k_upperValueKey) + "' in '" + std::string(k_componentwiseRandomConstantType) + "' property must be a string.");
                     
                     return ParticlePropertyUPtr<TType>(new ComponentwiseRandomConstantParticleProperty<TType>(ParseValue<TType>(lowerValue.asString()), ParseValue<TType>(upperValue.asString())));
                 }
@@ -196,6 +198,76 @@ namespace ChilliSource
                     CS_ASSERT(endValue.isString(), "'" + std::string(k_endValueKey) + "' in '" + std::string(k_curveType) + "' property must be a string.");
                     
                     return ParticlePropertyUPtr<TType>(new CurveParticleProperty<TType>(ParseValue<TType>(startValue.asString()), ParseValue<TType>(endValue.asString()), ParseCurveFunction(curve.asString())));
+                }
+                //------------------------------------------------------------------------------
+                /// Creates a new random curve particle property with the value described in the
+                /// given json.
+                ///
+                /// @author Ian Copland
+                ///
+                /// @param The json value.
+                ///
+                /// @return The output particle property.
+                //------------------------------------------------------------------------------
+                template <typename TType> ParticlePropertyUPtr<TType> CreateRandomCurveProperty(const Json::Value& in_json)
+                {
+                    Json::Value curve = in_json.get(k_curveKey, Json::nullValue);
+                    CS_ASSERT(curve != Json::nullValue, "Must supply '" + std::string(k_curveKey) + "' in '" + std::string(k_randomCurveType) + "' property.");
+                    CS_ASSERT(curve.isString(), "'" + std::string(k_curveKey) + "' in '" + std::string(k_randomCurveType) + "' property must be a string.");
+                    
+                    Json::Value startLowerValue = in_json.get(k_startLowerValueKey, Json::nullValue);
+                    CS_ASSERT(startLowerValue != Json::nullValue, "Must supply '" + std::string(k_startLowerValueKey) + "' in '" + std::string(k_randomCurveType) + "' property.");
+                    CS_ASSERT(startLowerValue.isString(), "'" + std::string(k_startLowerValueKey) + "' in '" + std::string(k_randomCurveType) + "' property must be a string.");
+                    
+                    Json::Value startUpperValue = in_json.get(k_startUpperValueKey, Json::nullValue);
+                    CS_ASSERT(startUpperValue != Json::nullValue, "Must supply '" + std::string(k_startUpperValueKey) + "' in '" + std::string(k_randomCurveType) + "' property.");
+                    CS_ASSERT(startUpperValue.isString(), "'" + std::string(k_startUpperValueKey) + "' in '" + std::string(k_randomCurveType) + "' property must be a string.");
+                    
+                    Json::Value endLowerValue = in_json.get(k_endLowerValueKey, Json::nullValue);
+                    CS_ASSERT(endLowerValue != Json::nullValue, "Must supply '" + std::string(k_endLowerValueKey) + "' in '" + std::string(k_randomCurveType) + "' property.");
+                    CS_ASSERT(endLowerValue.isString(), "'" + std::string(k_endLowerValueKey) + "' in '" + std::string(k_randomCurveType) + "' property must be a string.");
+                    
+                    Json::Value endUpperValue = in_json.get(k_endUpperValueKey, Json::nullValue);
+                    CS_ASSERT(endUpperValue != Json::nullValue, "Must supply '" + std::string(k_endUpperValueKey) + "' in '" + std::string(k_randomCurveType) + "' property.");
+                    CS_ASSERT(endUpperValue.isString(), "'" + std::string(k_endUpperValueKey) + "' in '" + std::string(k_randomCurveType) + "' property must be a string.");
+                    
+                    return ParticlePropertyUPtr<TType>(new RandomCurveParticleProperty<TType>(ParseValue<TType>(startLowerValue.asString()), ParseValue<TType>(startUpperValue.asString()),
+                        ParseValue<TType>(endLowerValue.asString()), ParseValue<TType>(endUpperValue.asString()), ParseCurveFunction(curve.asString())));
+                }
+                //------------------------------------------------------------------------------
+                /// Creates a new componentwise random curve particle property with the value
+                /// described in the given json.
+                ///
+                /// @author Ian Copland
+                ///
+                /// @param The json value.
+                ///
+                /// @return The output particle property.
+                //------------------------------------------------------------------------------
+                template <typename TType> ParticlePropertyUPtr<TType> CreateComponentwiseRandomCurveProperty(const Json::Value& in_json)
+                {
+                    Json::Value curve = in_json.get(k_curveKey, Json::nullValue);
+                    CS_ASSERT(curve != Json::nullValue, "Must supply '" + std::string(k_curveKey) + "' in '" + std::string(k_componentwiseRandomCurveType) + "' property.");
+                    CS_ASSERT(curve.isString(), "'" + std::string(k_curveKey) + "' in '" + std::string(k_componentwiseRandomCurveType) + "' property must be a string.");
+                    
+                    Json::Value startLowerValue = in_json.get(k_startLowerValueKey, Json::nullValue);
+                    CS_ASSERT(startLowerValue != Json::nullValue, "Must supply '" + std::string(k_startLowerValueKey) + "' in '" + std::string(k_componentwiseRandomCurveType) + "' property.");
+                    CS_ASSERT(startLowerValue.isString(), "'" + std::string(k_startLowerValueKey) + "' in '" + std::string(k_componentwiseRandomCurveType) + "' property must be a string.");
+                    
+                    Json::Value startUpperValue = in_json.get(k_startUpperValueKey, Json::nullValue);
+                    CS_ASSERT(startUpperValue != Json::nullValue, "Must supply '" + std::string(k_startUpperValueKey) + "' in '" + std::string(k_componentwiseRandomCurveType) + "' property.");
+                    CS_ASSERT(startUpperValue.isString(), "'" + std::string(k_startUpperValueKey) + "' in '" + std::string(k_componentwiseRandomCurveType) + "' property must be a string.");
+                    
+                    Json::Value endLowerValue = in_json.get(k_endLowerValueKey, Json::nullValue);
+                    CS_ASSERT(endLowerValue != Json::nullValue, "Must supply '" + std::string(k_endLowerValueKey) + "' in '" + std::string(k_componentwiseRandomCurveType) + "' property.");
+                    CS_ASSERT(endLowerValue.isString(), "'" + std::string(k_endLowerValueKey) + "' in '" + std::string(k_componentwiseRandomCurveType) + "' property must be a string.");
+                    
+                    Json::Value endUpperValue = in_json.get(k_endUpperValueKey, Json::nullValue);
+                    CS_ASSERT(endUpperValue != Json::nullValue, "Must supply '" + std::string(k_endUpperValueKey) + "' in '" + std::string(k_componentwiseRandomCurveType) + "' property.");
+                    CS_ASSERT(endUpperValue.isString(), "'" + std::string(k_endUpperValueKey) + "' in '" + std::string(k_componentwiseRandomCurveType) + "' property must be a string.");
+                    
+                    return ParticlePropertyUPtr<TType>(new ComponentwiseRandomCurveParticleProperty<TType>(ParseValue<TType>(startLowerValue.asString()), ParseValue<TType>(startUpperValue.asString()),
+                        ParseValue<TType>(endLowerValue.asString()), ParseValue<TType>(endUpperValue.asString()), ParseCurveFunction(curve.asString())));
                 }
                 //------------------------------------------------------------------------------
                 /// Specialisation for parsing u32 values.
@@ -354,6 +426,14 @@ namespace ChilliSource
                     else if (typeString == Impl::k_curveType)
                     {
                         return Impl::CreateCurveProperty<TType>(in_json);
+                    }
+                    else if (typeString == Impl::k_randomCurveType)
+                    {
+                        return Impl::CreateRandomCurveProperty<TType>(in_json);
+                    }
+                    else if (typeString == Impl::k_componentwiseRandomCurveType)
+                    {
+                        return Impl::CreateComponentwiseRandomCurveProperty<TType>(in_json);
                     }
                 }
                 

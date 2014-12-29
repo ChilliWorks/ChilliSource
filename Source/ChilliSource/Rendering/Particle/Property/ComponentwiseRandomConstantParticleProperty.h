@@ -75,7 +75,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         template <typename TPropertyType> ComponentwiseRandomConstantParticleProperty<TPropertyType>::ComponentwiseRandomConstantParticleProperty(TPropertyType in_lowerValue, TPropertyType in_upperValue)
-        : m_lowerValue(in_lowerValue), m_upperValue(in_upperValue)
+            : m_lowerValue(in_lowerValue), m_upperValue(in_upperValue)
         {
         }
         //------------------------------------------------------------------------------
