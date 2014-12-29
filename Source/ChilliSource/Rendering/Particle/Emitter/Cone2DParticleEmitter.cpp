@@ -52,7 +52,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			Core::Vector2 GenerateDirectionWithinAngle(f32 in_angle)
 			{
-				f32 angle = Core::MathUtils::k_pi * 0.5f + Core::Random::GenerateReal<f32>() * in_angle - 0.5f * in_angle;
+				f32 angle = Core::MathUtils::k_pi * 0.5f + Core::Random::GenerateFloat<f32>() * in_angle - 0.5f * in_angle;
 				Core::Vector2 direction(std::cos(angle), std::sin(angle));
 				return direction;
 			}
@@ -92,7 +92,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			Core::Vector2 GeneratePositionInUnitCone2D(f32 in_angle)
 			{
-				f32 dist = std::sqrt(Core::Random::GenerateReal<f32>());
+				f32 dist = std::sqrt(Core::Random::GenerateFloat<f32>());
 				return GenerateDirectionWithinAngle(in_angle) * dist;
 			}
 			//----------------------------------------------------------------
@@ -107,7 +107,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			Core::Vector2 GeneratePositionOnUnitCone2D(f32 in_angle)
 			{
-				f32 dist = std::sqrt(Core::Random::GenerateReal<f32>());
+				f32 dist = std::sqrt(Core::Random::GenerateFloat<f32>());
 				return GenerateDirectionWithAngle(in_angle) * dist;
 			}
 		}

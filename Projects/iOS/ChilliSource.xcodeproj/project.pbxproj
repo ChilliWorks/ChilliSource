@@ -56,7 +56,7 @@
 		81D2AC071A49B37800E8687D /* SphereParticleEmitterDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABDB1A49B37800E8687D /* SphereParticleEmitterDef.cpp */; };
 		81D2AC081A49B37800E8687D /* ParticleEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABDE1A49B37800E8687D /* ParticleEffect.cpp */; };
 		81D2AC091A49B37800E8687D /* ParticleEffectComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABE01A49B37800E8687D /* ParticleEffectComponent.cpp */; };
-		81D2AC0A1A49B37800E8687D /* ParticlePropertyFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABE41A49B37800E8687D /* ParticlePropertyFactory.cpp */; };
+		81D2AC0A1A49B37800E8687D /* ParticlePropertyFactoryImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81D2ABE41A49B37800E8687D /* ParticlePropertyFactoryImpl.cpp */; };
 		81D2AC151A49C3F300E8687D /* RNGContainer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81D2AC141A49C3F300E8687D /* RNGContainer.mm */; };
 		81D8ACF91962CEDC0010DA84 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8ACF81962CEDC0010DA84 /* Foundation.framework */; };
 		81D8B1E61962D1B90010DA84 /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D8B1CF1962D1B90010DA84 /* Accounts.framework */; };
@@ -395,6 +395,8 @@
 		81CF34A019CC297600B9D0B1 /* DragGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragGesture.h; sourceTree = "<group>"; };
 		81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HoldGesture.cpp; sourceTree = "<group>"; };
 		81CF34A319CC67AC00B9D0B1 /* HoldGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HoldGesture.h; sourceTree = "<group>"; };
+		81D004741A518A5700F37FEF /* ParticlePropertyFactoryImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ParticlePropertyFactoryImpl.h; sourceTree = "<group>"; };
+		81D004751A51971300F37FEF /* ComponentwiseRandomConstantParticleProperty.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ComponentwiseRandomConstantParticleProperty.h; sourceTree = "<group>"; };
 		81D2AB971A49B35400E8687D /* Random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Random.cpp; sourceTree = "<group>"; };
 		81D2AB981A49B35400E8687D /* Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Random.h; sourceTree = "<group>"; };
 		81D2AB9A1A49B36500E8687D /* dynamic_array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dynamic_array.h; sourceTree = "<group>"; };
@@ -466,10 +468,10 @@
 		81D2ABE01A49B37800E8687D /* ParticleEffectComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleEffectComponent.cpp; sourceTree = "<group>"; };
 		81D2ABE11A49B37800E8687D /* ParticleEffectComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleEffectComponent.h; sourceTree = "<group>"; };
 		81D2ABE31A49B37800E8687D /* ParticleProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleProperty.h; sourceTree = "<group>"; };
-		81D2ABE41A49B37800E8687D /* ParticlePropertyFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticlePropertyFactory.cpp; sourceTree = "<group>"; };
+		81D2ABE41A49B37800E8687D /* ParticlePropertyFactoryImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticlePropertyFactoryImpl.cpp; sourceTree = "<group>"; };
 		81D2ABE51A49B37800E8687D /* ParticlePropertyFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticlePropertyFactory.h; sourceTree = "<group>"; };
-		81D2ABE61A49B37800E8687D /* RandomParticleProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomParticleProperty.h; sourceTree = "<group>"; };
-		81D2ABE71A49B37800E8687D /* StaticParticleProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaticParticleProperty.h; sourceTree = "<group>"; };
+		81D2ABE61A49B37800E8687D /* RandomConstantParticleProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomConstantParticleProperty.h; sourceTree = "<group>"; };
+		81D2ABE71A49B37800E8687D /* ConstantParticleProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstantParticleProperty.h; sourceTree = "<group>"; };
 		81D2ABE81A49B37800E8687D /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
 		81D2AC131A49C3F300E8687D /* RNGContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGContainer.h; sourceTree = "<group>"; };
 		81D2AC141A49C3F300E8687D /* RNGContainer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RNGContainer.mm; sourceTree = "<group>"; };
@@ -1153,11 +1155,13 @@
 		81D2ABE21A49B37800E8687D /* Property */ = {
 			isa = PBXGroup;
 			children = (
+				81D2ABE71A49B37800E8687D /* ConstantParticleProperty.h */,
 				81D2ABE31A49B37800E8687D /* ParticleProperty.h */,
-				81D2ABE41A49B37800E8687D /* ParticlePropertyFactory.cpp */,
 				81D2ABE51A49B37800E8687D /* ParticlePropertyFactory.h */,
-				81D2ABE61A49B37800E8687D /* RandomParticleProperty.h */,
-				81D2ABE71A49B37800E8687D /* StaticParticleProperty.h */,
+				81D2ABE41A49B37800E8687D /* ParticlePropertyFactoryImpl.cpp */,
+				81D004741A518A5700F37FEF /* ParticlePropertyFactoryImpl.h */,
+				81D2ABE61A49B37800E8687D /* RandomConstantParticleProperty.h */,
+				81D004751A51971300F37FEF /* ComponentwiseRandomConstantParticleProperty.h */,
 			);
 			path = Property;
 			sourceTree = "<group>";
@@ -1924,26 +1928,26 @@
 		81D8B3521962E0EC0010DA84 /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
-				81D2AB9B1A49B37800E8687D /* Particle */,
-				81D2ABE81A49B37800E8687D /* Particle.h */,
 				81D8B3531962E0EC0010DA84 /* Base */,
+				8158E4AF196AE019005FF0A8 /* Base.h */,
 				81D8B3751962E0EC0010DA84 /* Camera */,
+				8158E4B0196AE022005FF0A8 /* Camera.h */,
 				81D8B37C1962E0EC0010DA84 /* Font */,
+				8158E4B1196AE02C005FF0A8 /* Font.h */,
 				81D8B3811962E0EC0010DA84 /* ForwardDeclarations.h */,
 				81D8B3821962E0EC0010DA84 /* Lighting */,
-				81D8B38B1962E0EC0010DA84 /* Material */,
-				81D8B3921962E0EC0010DA84 /* Model */,
-				81D8B3C71962E0EC0010DA84 /* Shader */,
-				81D8B3CA1962E0EC0010DA84 /* Sprite */,
-				81D8B3D11962E0EC0010DA84 /* Texture */,
-				8158E4AF196AE019005FF0A8 /* Base.h */,
-				8158E4B0196AE022005FF0A8 /* Camera.h */,
-				8158E4B1196AE02C005FF0A8 /* Font.h */,
 				8158E4B2196AE035005FF0A8 /* Lighting.h */,
+				81D8B38B1962E0EC0010DA84 /* Material */,
 				8158E4B3196AE042005FF0A8 /* Material.h */,
+				81D8B3921962E0EC0010DA84 /* Model */,
 				8158E4B4196AE04B005FF0A8 /* Model.h */,
+				81D2AB9B1A49B37800E8687D /* Particle */,
+				81D2ABE81A49B37800E8687D /* Particle.h */,
+				81D8B3C71962E0EC0010DA84 /* Shader */,
 				8158E4B6196AE05F005FF0A8 /* Shader.h */,
+				81D8B3CA1962E0EC0010DA84 /* Sprite */,
 				8158E4B7196AE06B005FF0A8 /* Sprite.h */,
+				81D8B3D11962E0EC0010DA84 /* Texture */,
 				8158E4B8196AE074005FF0A8 /* Texture.h */,
 			);
 			path = Rendering;
@@ -2609,7 +2613,7 @@
 				81D8B6A51962E0F70010DA84 /* LocalNotificationSystem.cpp in Sources */,
 				81B729121A41C00100AC6619 /* HttpResponse.cpp in Sources */,
 				81D8B44F1962E0EC0010DA84 /* StretchableImage.cpp in Sources */,
-				81D2AC0A1A49B37800E8687D /* ParticlePropertyFactory.cpp in Sources */,
+				81D2AC0A1A49B37800E8687D /* ParticlePropertyFactoryImpl.cpp in Sources */,
 				81D8B42B1962E0EC0010DA84 /* Registry.cpp in Sources */,
 				81D8B4281962E0EC0010DA84 /* Instance.cpp in Sources */,
 				81D8B6A61962E0F70010DA84 /* NSNotificationAdapter.mm in Sources */,

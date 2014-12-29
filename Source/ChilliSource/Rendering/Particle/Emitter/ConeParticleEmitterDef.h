@@ -188,8 +188,8 @@ namespace ChilliSource
 		private:
 			EmitFromType m_emitFromType = EmitFromType::k_base;
 			EmitDirectionType m_emitDirectionType = EmitDirectionType::k_awayFromBase;
-			ParticlePropertyUPtr<f32> m_radiusProperty = ParticlePropertyUPtr<f32>(new StaticParticleProperty<f32>(1.0f));
-			ParticlePropertyUPtr<f32> m_angleProperty = ParticlePropertyUPtr<f32>(new StaticParticleProperty<f32>(Core::MathUtils::k_pi / 4.0f));
+			ParticlePropertyUPtr<f32> m_radiusProperty = ParticlePropertyUPtr<f32>(new ConstantParticleProperty<f32>(1.0f));
+			ParticlePropertyUPtr<f32> m_angleProperty = ParticlePropertyUPtr<f32>(new ConstantParticleProperty<f32>(Core::MathUtils::k_pi / 4.0f));
 		};
 	}
 }

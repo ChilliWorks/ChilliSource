@@ -1,5 +1,5 @@
 //
-//  StaticParticleProperty.h
+//  ConstantParticleProperty.h
 //  Chilli Source
 //  Created by Ian Copland on 06/10/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_STATICPARTICLEPROPERTY_H_
-#define _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_STATICPARTICLEPROPERTY_H_
+#ifndef _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_CONSTANTPARTICLEPROPERTY_H_
+#define _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_CONSTANTPARTICLEPROPERTY_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
@@ -36,43 +36,45 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
-		//-----------------------------------------------------------------------
-		/// A simple particle property for containing a single static value.
+		//------------------------------------------------------------------------------
+		/// A simple particle property for containing a value that remains constant over
+        /// the lifetime of a particle effect.
 		///
 		/// @author Ian Copland
-		//-----------------------------------------------------------------------
-		template <typename TPropertyType> class StaticParticleProperty final : public ParticleProperty<TPropertyType>
+		//------------------------------------------------------------------------------
+		template <typename TPropertyType> class ConstantParticleProperty final : public ParticleProperty<TPropertyType>
 		{
 		public:
-			//----------------------------------------------------------------
+			//------------------------------------------------------------------------------
 			/// Constructor.
 			///
 			/// @author Ian Copland
 			///
 			/// @param The static value.
-			//----------------------------------------------------------------
-			StaticParticleProperty(TPropertyType in_value);
-			//----------------------------------------------------------------
+			//------------------------------------------------------------------------------
+			ConstantParticleProperty(TPropertyType in_value);
+			//------------------------------------------------------------------------------
 			/// @author Ian Copland
 			///
-			/// @param The normalised (0.0 - 1.0) particle effect playback 
-			/// progress.
+			/// @param The normalised (0.0 - 1.0) particle effect playback progress.
 			///
 			/// @param simply returns the static value.
-			//----------------------------------------------------------------
+			//------------------------------------------------------------------------------
 			TPropertyType GenerateValue(f32 in_playbackProgress) const override;
+            
 		private:
 			TPropertyType m_value;
 		};
-		//--------------------------------------------------
-		//--------------------------------------------------
-		template <typename TPropertyType> StaticParticleProperty<TPropertyType>::StaticParticleProperty(TPropertyType in_value)
+        
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		template <typename TPropertyType> ConstantParticleProperty<TPropertyType>::ConstantParticleProperty(TPropertyType in_value)
 			: m_value(in_value)
 		{
 		}
-		//--------------------------------------------------
-		//--------------------------------------------------
-		template <typename TPropertyType> TPropertyType StaticParticleProperty<TPropertyType>::GenerateValue(f32 in_playbackProgress) const
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		template <typename TPropertyType> TPropertyType ConstantParticleProperty<TPropertyType>::GenerateValue(f32 in_playbackProgress) const
 		{
 			return m_value;
 		}

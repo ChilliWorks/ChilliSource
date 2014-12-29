@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
-#include <ChilliSource/Rendering/Particle/Property/StaticParticleProperty.h>
+#include <ChilliSource/Rendering/Particle/Property/ConstantParticleProperty.h>
 
 #include <json/json.h>
 
@@ -191,9 +191,9 @@ namespace ChilliSource
 
 			const ParticleEffect* m_particleEffect = nullptr;
 			EmissionMode m_emissionMode = EmissionMode::k_stream;
-			ParticlePropertyUPtr<f32> m_emissionRateProperty = ParticlePropertyUPtr<f32>(new StaticParticleProperty<f32>(10.0f));
-			ParticlePropertyUPtr<u32> m_particlesPerEmissionProperty = ParticlePropertyUPtr<u32>(new StaticParticleProperty<u32>(1));
-			ParticlePropertyUPtr<f32> m_emissionChanceProperty = ParticlePropertyUPtr<f32>(new StaticParticleProperty<f32>(1.0f));
+			ParticlePropertyUPtr<f32> m_emissionRateProperty = ParticlePropertyUPtr<f32>(new ConstantParticleProperty<f32>(10.0f));
+			ParticlePropertyUPtr<u32> m_particlesPerEmissionProperty = ParticlePropertyUPtr<u32>(new ConstantParticleProperty<u32>(1));
+			ParticlePropertyUPtr<f32> m_emissionChanceProperty = ParticlePropertyUPtr<f32>(new ConstantParticleProperty<f32>(1.0f));
 		};
 	}
 }

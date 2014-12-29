@@ -49,7 +49,7 @@ namespace ChilliSource
 			{
 				const f32 oneOverThree = 1.0f / 3.0f;
 
-				f32 dist = std::pow(Core::Random::GenerateReal<f32>(), oneOverThree);
+				f32 dist = std::pow(Core::Random::GenerateFloat<f32>(), oneOverThree);
 				return Core::Random::GenerateDirection3D<f32>() * dist;
 			}
 		}

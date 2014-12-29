@@ -76,7 +76,7 @@ namespace ChilliSource
 			///
 			/// @return A value within the range.
 			//----------------------------------------------------------------
-			template <typename TType> TType GenerateReal(TType in_min = TType(0), TType in_max = TType(1));
+			template <typename TType> TType GenerateFloat(TType in_min = TType(0), TType in_max = TType(1));
 			//----------------------------------------------------------------
 			/// Generates a psuedo-random direction vector in 2 dimensions with
 			/// uniform distribution. 
@@ -121,21 +121,120 @@ namespace ChilliSource
 			/// @return A direction vector.
 			//----------------------------------------------------------------
 			template <typename TType> GenericVector4<TType> GenerateDirection4D();
-			//----------------------------------------------------------------
-			/// Generates a psuedo-random value between the two given values. 
-			/// This will work for any type that can be reasonably be multiplied 
-			/// by a real number.
-			///
-			/// This is thread-safe.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The first value.
-			/// @param The second value.
-			///
-			/// @return A direction vector.
-			//----------------------------------------------------------------
-			template <typename TType> TType GenerateInRange(TType in_first, TType in_second);
+            //----------------------------------------------------------------
+            /// Generates a psuedo-random value between the two given values.
+            /// This will work for any type that can be reasonably be multiplied
+            /// by a real number.
+            ///
+            /// This is thread-safe.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The lower value, inclusive.
+            /// @param The upper value, inclusive.
+            ///
+            /// @return The value within the given range.
+            //----------------------------------------------------------------
+            template <typename TType> TType GenerateInRange(TType in_lower, TType in_upper);
+            //----------------------------------------------------------------
+            /// Generates a psuedo-random value between the two given values.
+            /// If the value has multiple components, each will be randomised
+            /// individually, otherwise this is identical to GenerateInRange().
+            ///
+            /// This is thread-safe.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The lower value, inclusive.
+            /// @param The upper value, inclusive.
+            ///
+            /// @return The value in the given range.
+            //----------------------------------------------------------------
+            template <typename TType> TType GenerateInRangeComponentwise(TType in_lower, TType in_upper);
+            //----------------------------------------------------------------
+            /// Specialisation of GenerateInRangeComponentwise() for values
+            /// of type Vector2.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The lower value, inclusive.
+            /// @param The upper value, inclusive.
+            ///
+            /// @return The value in the given range.
+            //----------------------------------------------------------------
+            template <> Vector2 GenerateInRangeComponentwise(Vector2 in_lower, Vector2 in_upper);
+            //----------------------------------------------------------------
+            /// Specialisation of GenerateInRangeComponentwise() for values
+            /// of type Vector3.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The lower value, inclusive.
+            /// @param The upper value, inclusive.
+            ///
+            /// @return The value in the given range.
+            //----------------------------------------------------------------
+            template <> Vector3 GenerateInRangeComponentwise(Vector3 in_lower, Vector3 in_upper);
+            //----------------------------------------------------------------
+            /// Specialisation of GenerateInRangeComponentwise() for values
+            /// of type Vector4.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The lower value, inclusive.
+            /// @param The upper value, inclusive.
+            ///
+            /// @return The value in the given range.
+            //----------------------------------------------------------------
+            template <> Vector4 GenerateInRangeComponentwise(Vector4 in_lower, Vector4 in_upper);
+            //----------------------------------------------------------------
+            /// Specialisation of GenerateInRangeComponentwise() for values
+            /// of type Matrix3.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The lower value, inclusive.
+            /// @param The upper value, inclusive.
+            ///
+            /// @return The value in the given range.
+            //----------------------------------------------------------------
+            template <> Matrix3 GenerateInRangeComponentwise(Matrix3 in_lower, Matrix3 in_upper);
+            //----------------------------------------------------------------
+            /// Specialisation of GenerateInRangeComponentwise() for values
+            /// of type Matrix4.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The lower value, inclusive.
+            /// @param The upper value, inclusive.
+            ///
+            /// @return The value in the given range.
+            //----------------------------------------------------------------
+            template <> Matrix4 GenerateInRangeComponentwise(Matrix4 in_lower, Matrix4 in_upper);
+            //----------------------------------------------------------------
+            /// Specialisation of GenerateInRangeComponentwise() for values
+            /// of type Quaternion.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The lower value, inclusive.
+            /// @param The upper value, inclusive.
+            ///
+            /// @return The value in the given range.
+            //----------------------------------------------------------------
+            template <> Quaternion GenerateInRangeComponentwise(Quaternion in_lower, Quaternion in_upper);
+            //----------------------------------------------------------------
+            /// Specialisation of GenerateInRangeComponentwise() for values
+            /// of type Colour.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The lower value, inclusive.
+            /// @param The upper value, inclusive.
+            ///
+            /// @return The value in the given range.
+            //----------------------------------------------------------------
+            template <> Colour GenerateInRangeComponentwise(Colour in_lower, Colour in_upper);
 			//----------------------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -153,7 +252,7 @@ namespace ChilliSource
 			}
 			//----------------------------------------------------------------
 			//----------------------------------------------------------------
-			template <typename TType> TType GenerateReal(TType in_min, TType in_max)
+			template <typename TType> TType GenerateFloat(TType in_min, TType in_max)
 			{
 				std::uniform_real_distribution<TType> distribution(in_min, in_max);
 				return distribution(GetRandomNumberGenerator());
@@ -193,10 +292,16 @@ namespace ChilliSource
 			}
 			//----------------------------------------------------------------
 			//----------------------------------------------------------------
-			template <typename TType> TType GenerateInRange(TType in_first, TType in_second)
+			template <typename TType> TType GenerateInRange(TType in_lower, TType in_upper)
 			{
-				return in_first + (in_second - in_first) * GenerateReal<f32>();
+				return in_lower + (in_upper - in_lower) * GenerateFloat<f32>();
 			}
+            //----------------------------------------------------------------
+            //----------------------------------------------------------------
+            template <typename TType> TType GenerateInRangeComponentwise(TType in_lower, TType in_upper)
+            {
+                return GenerateInRange(in_lower, in_upper);
+            }
 		}
 	}
 }

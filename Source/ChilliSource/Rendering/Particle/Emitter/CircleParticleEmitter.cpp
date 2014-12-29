@@ -47,7 +47,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			Core::Vector2 GeneratePointInUnitCircle()
 			{
-				f32 dist = std::sqrt(Core::Random::GenerateReal<f32>());
+				f32 dist = std::sqrt(Core::Random::GenerateFloat<f32>());
 				return Core::Random::GenerateDirection2D<f32>() * dist;
 			}
 		}

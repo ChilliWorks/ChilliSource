@@ -142,8 +142,13 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(Cone2DParticleEmitterDef);
 		template <typename TPropertyType> class ParticleProperty;
 		template <typename TPropertyType> using ParticlePropertyUPtr = std::unique_ptr<ParticleProperty<TPropertyType>>;
-		template <typename TPropertyType> using ParticlePropertyCUPtr = std::unique_ptr<const ParticleProperty<TPropertyType>>;
-		template <typename TPropertyType> class StaticParticleProperty;
+        template <typename TPropertyType> using ParticlePropertyCUPtr = std::unique_ptr<const ParticleProperty<TPropertyType>>;
+        template <typename TPropertyType> class ConstantParticleProperty;
+        template <typename TPropertyType> class RandomConstantParticleProperty;
+        template <typename TPropertyType> class ComponentwiseRandomConstantParticleProperty;
+        template <typename TPropertyType> class CurveParticleProperty;
+        template <typename TPropertyType> class RandomCurveParticleProperty;
+        template <typename TPropertyType> class ComponentwiseRandomCurveParticleProperty;
         //------------------------------------------------------------
         /// Shader
         //------------------------------------------------------------

@@ -121,7 +121,7 @@ namespace ChilliSource
 				for (u32 i = 0; i < particlesPerEmission; ++i)
 				{
 					f32 chanceOfEmission = m_emitterDef->GetEmissionChanceProperty()->GenerateValue(normalisedEmissionTime);
-					f32 random = Core::Random::GenerateReal<f32>();
+					f32 random = Core::Random::GenerateFloat<f32>();
 					if (random <= chanceOfEmission)
 					{
 						Emit(m_emissionTime, m_emissionPosition, m_emissionScale, m_emissionOrientation, emittedParticles);
@@ -152,7 +152,7 @@ namespace ChilliSource
 				for (u32 i = 0; i < particlesPerEmission; ++i)
 				{
 					f32 chanceOfEmission = m_emitterDef->GetEmissionChanceProperty()->GenerateValue(normalisedPlaybackTime);
-					f32 random = Core::Random::GenerateReal<f32>();
+					f32 random = Core::Random::GenerateFloat<f32>();
 					if (random <= chanceOfEmission)
 					{
 						Emit(m_emissionTime, m_emissionPosition, m_emissionScale, m_emissionOrientation, emittedParticles);

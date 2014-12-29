@@ -172,7 +172,7 @@ namespace ChilliSource
 		private:
 			EmitFromType m_emitFromType = EmitFromType::k_inside;
 			EmitDirectionType m_emitDirectionType = EmitDirectionType::k_awayFromCentre;
-			ParticlePropertyUPtr<f32> m_radiusProperty = ParticlePropertyUPtr<f32>(new StaticParticleProperty<f32>(1.0f));
+			ParticlePropertyUPtr<f32> m_radiusProperty = ParticlePropertyUPtr<f32>(new ConstantParticleProperty<f32>(1.0f));
 		};
 	}
 }
