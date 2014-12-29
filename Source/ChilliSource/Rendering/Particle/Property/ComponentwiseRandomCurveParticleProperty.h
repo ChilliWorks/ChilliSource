@@ -33,6 +33,8 @@
 #include <ChilliSource/Core/Math/Random.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
 
+#include <functional>
+
 namespace ChilliSource
 {
     namespace Rendering

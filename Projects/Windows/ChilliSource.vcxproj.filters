@@ -873,7 +873,10 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\SphereParticleEmitterDef.cpp">
       <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactory.cpp">
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyCurveFunctions.cpp">
+      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactoryImpl.cpp">
       <Filter>ChilliSource\Rendering\Particle\Property</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1868,16 +1871,34 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\SphereParticleEmitterDef.h">
       <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ComponentwiseRandomConstantParticleProperty.h">
+      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ComponentwiseRandomCurveParticleProperty.h">
+      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ConstantParticleProperty.h">
+      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\CurveParticleProperty.h">
+      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticleProperty.h">
+      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyCurveFunctions.h">
       <Filter>ChilliSource\Rendering\Particle\Property</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactory.h">
       <Filter>ChilliSource\Rendering\Particle\Property</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomParticleProperty.h">
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactoryImpl.h">
       <Filter>ChilliSource\Rendering\Particle\Property</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\StaticParticleProperty.h">
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomConstantParticleProperty.h">
+      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomCurveParticleProperty.h">
       <Filter>ChilliSource\Rendering\Particle\Property</Filter>
     </ClInclude>
   </ItemGroup>
