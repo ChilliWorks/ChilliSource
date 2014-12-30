@@ -1,11 +1,11 @@
 //
-//  ForwardDeclarations.h
+//  CricketAudio.h
 //  Chilli Source
-//  Created by Ian Copland on 27/02/2014.
+//  Created by Ian Copland on 30/12/2014.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2014 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,28 +26,17 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_AUDIO_FORWARDDECLARATIONS_H_
-#define _CHILLISOURCE_AUDIO_FORWARDDECLARATIONS_H_
 
-#include <ChilliSource/Core/Base/StandardMacros.h>
+#ifndef _CHILLISOURCE_AUDIO_CRICKETAUDIO_H_
+#define _CHILLISOURCE_AUDIO_CRICKETAUDIO_H_
 
-#include <memory>
-
-namespace ChilliSource 
-{
-	namespace Audio
-	{
-		//------------------------------------------------------------------------------
-		/// Cricket Audio
-		//------------------------------------------------------------------------------
-		CS_FORWARDDECLARE_CLASS(CkAudio);
-		CS_FORWARDDECLARE_CLASS(CkAudioPlayer);
-		CS_FORWARDDECLARE_CLASS(CkBank);
-		CS_FORWARDDECLARE_CLASS(CkBankProvider);
-		CS_FORWARDDECLARE_CLASS(CkStream);
-		CS_FORWARDDECLARE_CLASS(CkStreamProvider);
-		CS_FORWARDDECLARE_CLASS(CkSystem);
-	}
-}
+#include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Audio/CricketAudio/CkAudio.h>
+#include <ChilliSource/Audio/CricketAudio/CkAudioPlayer.h>
+#include <ChilliSource/Audio/CricketAudio/CkBank.h>
+#include <ChilliSource/Audio/CricketAudio/CkBankProvider.h>
+#include <ChilliSource/Audio/CricketAudio/CkStream.h>
+#include <ChilliSource/Audio/CricketAudio/CkStreamProvider.h>
+#include <ChilliSource/Audio/CricketAudio/CkSystem.h>
 
 #endif
