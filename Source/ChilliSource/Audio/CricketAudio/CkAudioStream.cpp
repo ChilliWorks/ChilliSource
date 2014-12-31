@@ -1,5 +1,5 @@
 //
-//  CkBankProvider.cpp
+//  CkAudioStream.cpp
 //  Chilli Source
 //  Created by Ian Copland on 30/12/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Audio/CricketAudio/CkBankProvider.h>
+#include <ChilliSource/Audio/CricketAudio/CkAudioStream.h>
 
 namespace ChilliSource
 {

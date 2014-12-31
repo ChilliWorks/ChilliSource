@@ -1,5 +1,5 @@
 //
-//  CkSystem.h
+//  CkAudioBank.h
 //  Chilli Source
 //  Created by Ian Copland on 30/12/2014.
 //
@@ -26,47 +26,32 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_AUDIO_CRICKETAUDIO_CKSYSTEM_H_
-#define _CHILLISOURCE_AUDIO_CRICKETAUDIO_CKSYSTEM_H_
+#ifndef _CHILLISOURCE_AUDIO_CRICKETAUDIO_CKAUDIOBANK_H_
+#define _CHILLISOURCE_AUDIO_CRICKETAUDIO_CKAUDIOBANK_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Resource/Resource.h>
+#include <ChilliSource/Audio/CricketAudio/CkForwardDeclarations.h>
 
-#include <ChilliSource/Core/System/AppSystem.h>
-
-namespace ChilliSource 
+namespace ChilliSource
 {
 	namespace Audio
 	{
 		//------------------------------------------------------------------------------
-		/// The Cricket Audio system. This manages the underlying cricket audio system,
-		/// initialising it and destroying when needed. Typically this does not need
-		/// to be dealt with directly, instead audio is played via CkAudio or the
-		/// CkAudioPlayer.
+		/// A Cricket Audio bank resource. This contains a group of sounds which are
+		/// loaded as a batch. Individual sounds can be played by creating a CkAudio
+		/// with a bank or through the CkAudioPlayer.
 		///
-		/// Cricket Technology has kindly allows us to include the Cricket Audio SDK 
-		/// in the engine under the free license, which can be found at the following
-		/// link: http://www.crickettechnology.com/free_license. To comply with the
-		/// license there are two things you must do:
+		/// Cricket Technology has kindly allows us to include the Cricket Audio SDK
+		/// in the engine under the free license. For more information see the
+		/// documentation for CkSystem.
 		///
-		/// - You must display the following somewhere in your application:
-		///   
-		///                       Built with Cricket Audio
-		///                       www.crickettechnology.com
-		///
-		/// - You must let Cricket Technology know when you release your game, so they
-		///   can include you in their customer list.
-		///
-		/// This, and the other Cricket Audio systems, are not added to Application by 
-		/// default. If you intend to use Cricket Audio you will need to add CkSystem,
-		/// CkStreamProvider and CkBankProvider during the Application::AddSystems()
-		/// life cycle event.
-		///
-		/// @author Ian Copland
+		/// @author S Downie
 		//------------------------------------------------------------------------------
-		class CkSystem final : public Core::AppSystem
+		class CkAudioBank final : public Core::Resource
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(CkSystem);
+			CS_DECLARE_NAMEDTYPE(CkAudioBank);
 			//------------------------------------------------------------------------------
 			/// Allows querying of whether or not this system implements the interface
 			/// described by the given interface Id. Typically this is not called directly
@@ -78,56 +63,57 @@ namespace ChilliSource
 			///
 			/// @return Whether or not the interface is implmented.
 			//------------------------------------------------------------------------------
-			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+			//------------------------------------------------------------------------------
+			/// Populates the resource with the Cricket Audio bank that it represents. This
+			/// can only be called once, if a call to this is repeated the app is considered
+			/// to be in an irrecoverable state and will terminate.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The cricket audio sound bank that this resource represents. Cannot
+			/// be null. This will take ownership of the bank and release it when it has
+			/// finished with it.
+			//------------------------------------------------------------------------------
+			void Build(CkBank* in_ckBank);
+			//------------------------------------------------------------------------------
+			/// @author Ian Copland
+			///
+			/// @return A pointer to the underlying sound bank. This retains ownership of the
+			/// bank so it must not be destroyed.
+			//------------------------------------------------------------------------------
+			CkBank* GetBank();
+			//------------------------------------------------------------------------------
+			/// @author Ian Copland
+			///
+			/// @return A constant pointer to the underlying sound bank.
+			//------------------------------------------------------------------------------
+			const CkBank* GetBank() const;
+			//------------------------------------------------------------------------------
+			/// Destructor.
+			///
+			/// @author Ian Copland
+			//------------------------------------------------------------------------------
+			~CkAudioBank();
 		private:
-			friend class CSCore::Application;
+			friend class Core::ResourcePool;
 			//------------------------------------------------------------------------------
-			/// A factory method for creating new instances of the Cricket Audio System.
-			///
-			/// @author Ian Copland
-			//------------------------------------------------------------------------------
-			static CkSystemUPtr Create();
-			//------------------------------------------------------------------------------
-			/// Default constructor. Declared private to ensure this can only be created
-			/// through Application::CreateSystem<CkSystem>().
-			///
-			/// @author Ian Copland
-			//------------------------------------------------------------------------------
-			CkSystem() = default;
-			//------------------------------------------------------------------------------
-			/// Initialises the Cricket Audio system.
-			///
-			/// @author Ian Copland
-			//------------------------------------------------------------------------------
-			void OnInit() override;
-			//------------------------------------------------------------------------------
-			/// Resumes the Cricket Audio system, resuming any audio that was paused during
-			/// a suspend.
-			///
-			/// @author Ian Copland
-			//------------------------------------------------------------------------------
-			void OnResume() override;
-			//------------------------------------------------------------------------------
-			/// Updates the Cricket Audio system.
+			/// Factory method for creating a new instance of the resource. 
 			///
 			/// @author Ian Copland
 			///
-			/// @param The delta time.
+			/// @return The new resource instance.
 			//------------------------------------------------------------------------------
-			void OnUpdate(f32 in_deltaTime) override;
+			static CkAudioBankUPtr Create();
 			//------------------------------------------------------------------------------
-			/// Suspends the cricket audio system. This ensures that all audio is currectly
-			/// paused while the app is not active.
+			/// Default constructor. This is declared private to ensure this is only ever
+			/// created via the Resource Pool.
 			///
-			/// @author Ian Copland
+			/// @author S Downie
 			//------------------------------------------------------------------------------
-			void OnSuspend() override;
-			//------------------------------------------------------------------------------
-			/// Shuts down the cricket audio system.
-			///
-			/// @author Ian Copland
-			///------------------------------------------------------------------------------
-			void OnDestroy() override;
+			CkAudioBank() = default;
+
+			CkBank* m_bank = nullptr;
 		};
 	}
 }

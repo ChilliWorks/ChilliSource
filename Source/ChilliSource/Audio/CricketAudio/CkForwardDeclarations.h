@@ -1,7 +1,7 @@
 //
-//  CkStreamProvider.cpp
+//  CkForwardDeclarations.h
 //  Chilli Source
-//  Created by Ian Copland on 30/12/2014.
+//  Created by Ian Copland on 31/12/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,12 +26,12 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Audio/CricketAudio/CkStreamProvider.h>
+#ifndef _CHILLISOURCE_AUDIO_CRICKETAUDIO_CKFORWARDDECLARATIONS_H_
+#define _CHILLISOURCE_AUDIO_CRICKETAUDIO_CKFORWARDDECLARATIONS_H_
 
-namespace ChilliSource
-{
-	namespace Audio
-	{
+#include <ChilliSource/Core/Base/StandardMacros.h>
 
-	}
-}
+class CkBank;
+class CkSound;
+
+#endif

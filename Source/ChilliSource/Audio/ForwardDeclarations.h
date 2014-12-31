@@ -41,11 +41,11 @@ namespace ChilliSource
 		/// Cricket Audio
 		//------------------------------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(CkAudio);
+		CS_FORWARDDECLARE_CLASS(CkAudioBank);
+		CS_FORWARDDECLARE_CLASS(CkAudioBankProvider);
 		CS_FORWARDDECLARE_CLASS(CkAudioPlayer);
-		CS_FORWARDDECLARE_CLASS(CkBank);
-		CS_FORWARDDECLARE_CLASS(CkBankProvider);
-		CS_FORWARDDECLARE_CLASS(CkStream);
-		CS_FORWARDDECLARE_CLASS(CkStreamProvider);
+		CS_FORWARDDECLARE_CLASS(CkAudioStream);
+		CS_FORWARDDECLARE_CLASS(CkAudioStreamProvider);
 		CS_FORWARDDECLARE_CLASS(CkSystem);
 	}
 }
