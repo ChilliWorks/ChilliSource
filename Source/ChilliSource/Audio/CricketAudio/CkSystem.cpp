@@ -28,6 +28,9 @@
 
 #include <ChilliSource/Audio/CricketAudio/CkSystem.h>
 
+#include <ChilliSource/Audio/CricketAudio/CkAudio.h>
+#include <ChilliSource/Core/Container/VectorUtils.h>
+
 #include <ck/ck.h>
 #include <ck/config.h>
 
@@ -47,6 +50,20 @@ namespace ChilliSource
 		bool CkSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
 			return (CkSystem::InterfaceID == in_interfaceId);
+		}
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		void CkSystem::Register(CkAudio* in_ckAudio)
+		{
+			CS_ASSERT(Core::VectorUtils::Contains(m_ckAudioList, in_ckAudio) == false, "The given CkAudio is already registered with the CkSystem!");
+
+			m_ckAudioList.push_back(in_ckAudio);
+		}
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		void CkSystem::Deregister(CkAudio* in_ckAudio)
+		{
+			Core::VectorUtils::Remove(m_ckAudioList, in_ckAudio);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
@@ -75,6 +92,11 @@ namespace ChilliSource
 		void CkSystem::OnUpdate(f32 in_deltaTime)
 		{
 			CkUpdate();
+
+			for (auto& ckAudio : m_ckAudioList)
+			{
+				ckAudio->OnUpdate();
+			}
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------

@@ -59,15 +59,7 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		CkBank* CkAudioBank::GetBank()
-		{
-			CS_ASSERT(m_bank != nullptr, "Bank has not yet been built!");
-
-			return m_bank;
-		}
-		//------------------------------------------------------------------------------
-		//------------------------------------------------------------------------------
-		const CkBank* CkAudioBank::GetBank() const
+		CkBank* CkAudioBank::GetBank() const
 		{
 			CS_ASSERT(m_bank != nullptr, "Bank has not yet been built!");
 

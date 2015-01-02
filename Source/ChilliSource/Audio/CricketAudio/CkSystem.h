@@ -39,9 +39,7 @@ namespace ChilliSource
 	{
 		//------------------------------------------------------------------------------
 		/// The Cricket Audio system. This manages the underlying cricket audio system,
-		/// initialising it and destroying when needed. Typically this does not need
-		/// to be dealt with directly, instead audio is played via CkAudio or the
-		/// CkAudioPlayer.
+		/// initialising it and destroying when needed. 
 		///
 		/// Cricket Technology has kindly allows us to include the Cricket Audio SDK 
 		/// in the engine under the free license, which can be found at the following
@@ -81,6 +79,7 @@ namespace ChilliSource
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 		private:
 			friend class CSCore::Application;
+			friend class CkAudio;
 			//------------------------------------------------------------------------------
 			/// A factory method for creating new instances of the Cricket Audio System.
 			///
@@ -94,6 +93,23 @@ namespace ChilliSource
 			/// @author Ian Copland
 			//------------------------------------------------------------------------------
 			CkSystem() = default;
+			//------------------------------------------------------------------------------
+			/// Registers a CkAudio with the system so that it receives update events.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The pointer to the CkAudio.
+			//------------------------------------------------------------------------------
+			void Register(CkAudio* in_ckAudio);
+			//------------------------------------------------------------------------------
+			/// De-registers a CkAudio from the system so that it no longer receives update
+			/// events.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The pointer to the CkAudio.
+			//------------------------------------------------------------------------------
+			void Deregister(CkAudio* in_ckAudio);
 			//------------------------------------------------------------------------------
 			/// Initialises the Cricket Audio system.
 			///
@@ -128,6 +144,8 @@ namespace ChilliSource
 			/// @author Ian Copland
 			///------------------------------------------------------------------------------
 			void OnDestroy() override;
+
+			std::vector<CkAudio*> m_ckAudioList;
 		};
 	}
 }

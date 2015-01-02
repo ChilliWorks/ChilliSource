@@ -1721,5 +1721,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioBank.h">
       <Filter>ChilliSource\Audio\CricketAudio</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\VectorUtils.h">
+      <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

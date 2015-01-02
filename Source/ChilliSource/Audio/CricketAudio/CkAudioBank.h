@@ -46,7 +46,7 @@ namespace ChilliSource
 		/// in the engine under the free license. For more information see the
 		/// documentation for CkSystem.
 		///
-		/// @author S Downie
+		/// @author Ian Copland
 		//------------------------------------------------------------------------------
 		class CkAudioBank final : public Core::Resource
 		{
@@ -82,13 +82,7 @@ namespace ChilliSource
 			/// @return A pointer to the underlying sound bank. This retains ownership of the
 			/// bank so it must not be destroyed.
 			//------------------------------------------------------------------------------
-			CkBank* GetBank();
-			//------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return A constant pointer to the underlying sound bank.
-			//------------------------------------------------------------------------------
-			const CkBank* GetBank() const;
+			CkBank* GetBank() const;
 			//------------------------------------------------------------------------------
 			/// Destructor.
 			///
@@ -109,7 +103,7 @@ namespace ChilliSource
 			/// Default constructor. This is declared private to ensure this is only ever
 			/// created via the Resource Pool.
 			///
-			/// @author S Downie
+			/// @author Ian Copland
 			//------------------------------------------------------------------------------
 			CkAudioBank() = default;
 
