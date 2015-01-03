@@ -85,17 +85,31 @@ namespace ChilliSource
 			/// @param A pointer to the finished audio.
 			//------------------------------------------------------------------------------
 			using FinishedDelegate = std::function<void(const CkAudio* in_ckAudio)>;
-			//------------------------------------------------------------------------------
-			/// Constructor. Creates this with a peice of audio from an audio bank. Audio
-			/// is created in the stopped state, call Play() to begin playback.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The audio bank. Cannot be null.
-			/// @param The name of the audio within the bank. If this not in the bank the
-			/// app is considered to be in an irrecoverable state and will terminate.
-			//------------------------------------------------------------------------------
-			CkAudio(const CkAudioBankCSPtr& in_audioBank, const std::string& in_audioName);
+            //------------------------------------------------------------------------------
+            /// Creates a new CkAudio with audio from a bank. CkAudio is created in the
+            /// stopped state, call Play() to begin playback.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The audio bank. Cannot be null.
+            /// @param The name of the audio within the bank. If this not in the bank the
+            /// app is considered to be in an irrecoverable state and will terminate.
+            ///
+            /// @return The new CkAudio instance.
+            //------------------------------------------------------------------------------
+            static CkAudioUPtr CreateFromBank(const CkAudioBankCSPtr& in_audioBank, const std::string& in_audioName);
+            //------------------------------------------------------------------------------
+            /// Creates a new CkAudio from an audio stream. CkAudio is created in the
+            /// stopped state, call Play() to begin playback. Declared private to force the
+            /// use of the factory methods.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The storage location of the stream.
+            /// @param The file path of the stream. If the stream doesn't exist the app is
+            /// considered to be in an irrecoverable state and will terminate.
+            //------------------------------------------------------------------------------
+            static CkAudioUPtr CreateFromStream(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath);
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -201,6 +215,30 @@ namespace ChilliSource
 			~CkAudio();
 		private:
 			friend class CkSystem;
+            //------------------------------------------------------------------------------
+            /// Constructor. Creates this with a peice of audio from an audio bank. Audio
+            /// is created in the stopped state, call Play() to begin playback. Declared
+            /// private to force the use of the factory methods.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The audio bank. Cannot be null.
+            /// @param The name of the audio within the bank. If this not in the bank the
+            /// app is considered to be in an irrecoverable state and will terminate.
+            //------------------------------------------------------------------------------
+            CkAudio(const CkAudioBankCSPtr& in_audioBank, const std::string& in_audioName);
+            //------------------------------------------------------------------------------
+            /// Constructor. Creates this with a peice of audio from a stream. Audio
+            /// is created in the stopped state, call Play() to begin playback. Declared
+            /// private to force the use of the factory methods.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The storage location of the stream.
+            /// @param The file path of the stream. If the stream doesn't exist the app is
+            /// considered to be in an irrecoverable state and will terminate.
+            //------------------------------------------------------------------------------
+            CkAudio(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath);
 			//------------------------------------------------------------------------------
 			/// Updates the playback state of the CkAudio based on the current state of the
 			/// underlying CkSound. This should only be called by CkSystem.

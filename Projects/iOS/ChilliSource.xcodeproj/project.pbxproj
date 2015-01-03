@@ -13,8 +13,6 @@
 		8138A8F51A5804AA00C81462 /* CkAudioBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8E61A5804AA00C81462 /* CkAudioBank.cpp */; };
 		8138A8F61A5804AA00C81462 /* CkAudioBankProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8E81A5804AA00C81462 /* CkAudioBankProvider.cpp */; };
 		8138A8F71A5804AA00C81462 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8EA1A5804AA00C81462 /* CkAudioPlayer.cpp */; };
-		8138A8F81A5804AA00C81462 /* CkAudioStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8EC1A5804AA00C81462 /* CkAudioStream.cpp */; };
-		8138A8F91A5804AA00C81462 /* CkAudioStreamProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8EE1A5804AA00C81462 /* CkAudioStreamProvider.cpp */; };
 		8138A8FA1A5804AA00C81462 /* CkSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8F11A5804AA00C81462 /* CkSystem.cpp */; };
 		8138A90F1A5806A300C81462 /* libck.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8138A90E1A5806A300C81462 /* libck.a */; };
 		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
@@ -301,10 +299,6 @@
 		8138A8E91A5804AA00C81462 /* CkAudioBankProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkAudioBankProvider.h; sourceTree = "<group>"; };
 		8138A8EA1A5804AA00C81462 /* CkAudioPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkAudioPlayer.cpp; sourceTree = "<group>"; };
 		8138A8EB1A5804AA00C81462 /* CkAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkAudioPlayer.h; sourceTree = "<group>"; };
-		8138A8EC1A5804AA00C81462 /* CkAudioStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkAudioStream.cpp; sourceTree = "<group>"; };
-		8138A8ED1A5804AA00C81462 /* CkAudioStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkAudioStream.h; sourceTree = "<group>"; };
-		8138A8EE1A5804AA00C81462 /* CkAudioStreamProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkAudioStreamProvider.cpp; sourceTree = "<group>"; };
-		8138A8EF1A5804AA00C81462 /* CkAudioStreamProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkAudioStreamProvider.h; sourceTree = "<group>"; };
 		8138A8F01A5804AA00C81462 /* CkForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkForwardDeclarations.h; sourceTree = "<group>"; };
 		8138A8F11A5804AA00C81462 /* CkSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkSystem.cpp; sourceTree = "<group>"; };
 		8138A8F21A5804AA00C81462 /* CkSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkSystem.h; sourceTree = "<group>"; };
@@ -1028,10 +1022,6 @@
 				8138A8E91A5804AA00C81462 /* CkAudioBankProvider.h */,
 				8138A8EA1A5804AA00C81462 /* CkAudioPlayer.cpp */,
 				8138A8EB1A5804AA00C81462 /* CkAudioPlayer.h */,
-				8138A8EC1A5804AA00C81462 /* CkAudioStream.cpp */,
-				8138A8ED1A5804AA00C81462 /* CkAudioStream.h */,
-				8138A8EE1A5804AA00C81462 /* CkAudioStreamProvider.cpp */,
-				8138A8EF1A5804AA00C81462 /* CkAudioStreamProvider.h */,
 				8138A8F01A5804AA00C81462 /* CkForwardDeclarations.h */,
 				8138A8F11A5804AA00C81462 /* CkSystem.cpp */,
 				8138A8F21A5804AA00C81462 /* CkSystem.h */,
@@ -2710,7 +2700,6 @@
 				81D8B4301962E0EC0010DA84 /* State.cpp in Sources */,
 				81D8B43E1962E0EC0010DA84 /* XMLUtils.cpp in Sources */,
 				81D8B6B21962E0F70010DA84 /* StoreKitIAPSystem.mm in Sources */,
-				8138A8F91A5804AA00C81462 /* CkAudioStreamProvider.cpp in Sources */,
 				81D8B6D71962E0F70010DA84 /* Texture.cpp in Sources */,
 				81D8B4121962E0EC0010DA84 /* EventConnection.cpp in Sources */,
 				81D8B4241962E0EC0010DA84 /* AppNotificationSystem.cpp in Sources */,
@@ -2834,7 +2823,6 @@
 				81D8B6D01962E0F70010DA84 /* MeshBuffer.cpp in Sources */,
 				81D8B47E1962E0EC0010DA84 /* AnimatedMeshComponent.cpp in Sources */,
 				81D8B46C1962E0EC0010DA84 /* RenderComponent.cpp in Sources */,
-				8138A8F81A5804AA00C81462 /* CkAudioStream.cpp in Sources */,
 				819630B21A3A0D5400475D76 /* HttpDelegate.mm in Sources */,
 				81D8B4261962E0EC0010DA84 /* NotificationManager.cpp in Sources */,
 				81D8B4801962E0EC0010DA84 /* CSModelProvider.cpp in Sources */,

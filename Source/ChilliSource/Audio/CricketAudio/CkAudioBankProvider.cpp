@@ -76,12 +76,13 @@ namespace ChilliSource
 		//------------------------------------------------------------------------------
 		void CkAudioBankProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
 		{
+            CkBank* bank = nullptr;
+            
 #if CS_TARGETPLATFORM_ANDROID
-            std::string packageLocation = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package));
-            CkBank* bank = CkBank::newBank((packageLocation + in_filePath).c_str(), kCkPathType_FileSystem);
+            //TODO:
 #else 
             std::string packageLocation = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_storageLocation));
-            CkBank* bank = CkBank::newBank((packageLocation + in_filePath).c_str(), kCkPathType_FileSystem);
+            bank = CkBank::newBank((packageLocation + in_filePath).c_str(), kCkPathType_FileSystem);
 #endif
             if (bank == nullptr)
             {

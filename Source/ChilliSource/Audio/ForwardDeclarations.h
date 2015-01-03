@@ -44,8 +44,6 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(CkAudioBank);
 		CS_FORWARDDECLARE_CLASS(CkAudioBankProvider);
 		CS_FORWARDDECLARE_CLASS(CkAudioPlayer);
-		CS_FORWARDDECLARE_CLASS(CkAudioStream);
-		CS_FORWARDDECLARE_CLASS(CkAudioStreamProvider);
 		CS_FORWARDDECLARE_CLASS(CkSystem);
 	}
 }

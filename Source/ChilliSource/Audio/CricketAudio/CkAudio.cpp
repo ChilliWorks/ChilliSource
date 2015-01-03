@@ -39,22 +39,51 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		//------------------------------------------------------------------------------
-		//------------------------------------------------------------------------------
-		CkAudio::CkAudio(const CkAudioBankCSPtr& in_audioBank, const std::string& in_audioName)
-			: m_audioBank(in_audioBank)
-		{
-			CS_ASSERT(m_audioBank != nullptr, "Cannot create CkAudio with null audio bank.");
-			CS_ASSERT(m_audioBank->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot create CkAudio with an audio bank that hasn't been loaded: " + m_audioBank->GetName());
-
-			m_sound = CkSound::newBankSound(m_audioBank->GetBank(), in_audioName.c_str());
-			CS_ASSERT(m_sound != nullptr, "Could not create CkAudio becuase sound '" + in_audioName + "' doesn't exist in the bank '" + m_audioBank->GetName() + "'");
-
-			m_ckSystem = CSCore::Application::Get()->GetSystem<CkSystem>();
-			CS_ASSERT(m_ckSystem != nullptr, "CkAudio requires missing system: CkSystem.");
-
-			m_ckSystem->Register(this);
-		}
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        CkAudioUPtr CkAudio::CreateFromBank(const CkAudioBankCSPtr& in_audioBank, const std::string& in_audioName)
+        {
+            return CkAudioUPtr(new CkAudio(in_audioBank, in_audioName));
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        CkAudioUPtr CkAudio::CreateFromStream(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath)
+        {
+            return CkAudioUPtr(new CkAudio(in_streamStorageLocation, in_streamFilePath));
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        CkAudio::CkAudio(const CkAudioBankCSPtr& in_audioBank, const std::string& in_audioName)
+        : m_audioBank(in_audioBank)
+        {
+            CS_ASSERT(m_audioBank != nullptr, "Cannot create CkAudio with null audio bank.");
+            CS_ASSERT(m_audioBank->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot create CkAudio with an audio bank that hasn't been loaded: " + m_audioBank->GetName());
+            
+            m_sound = CkSound::newBankSound(m_audioBank->GetBank(), in_audioName.c_str());
+            CS_ASSERT(m_sound != nullptr, "Could not create CkAudio becuase sound '" + in_audioName + "' doesn't exist in the bank '" + m_audioBank->GetName() + "'.");
+            
+            m_ckSystem = CSCore::Application::Get()->GetSystem<CkSystem>();
+            CS_ASSERT(m_ckSystem != nullptr, "CkAudio requires missing system: CkSystem.");
+            
+            m_ckSystem->Register(this);
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        CkAudio::CkAudio(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath)
+        {
+#if CS_TARGETPLATFORM_ANDROID
+            //TODO:
+#else
+            std::string packageLocation = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_streamStorageLocation));
+            m_sound = CkSound::newStreamSound((packageLocation + in_streamFilePath).c_str(), kCkPathType_FileSystem);
+#endif
+            CS_ASSERT(m_sound != nullptr, "Could not create CkAudio becuase audio stream '" + in_streamFilePath + "' doesn't exist.");
+            
+            m_ckSystem = CSCore::Application::Get()->GetSystem<CkSystem>();
+            CS_ASSERT(m_ckSystem != nullptr, "CkAudio requires missing system: CkSystem.");
+            
+            m_ckSystem->Register(this);
+        }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         f32 CkAudio::GetVolume() const

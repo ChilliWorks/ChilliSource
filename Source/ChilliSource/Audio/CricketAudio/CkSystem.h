@@ -56,8 +56,9 @@ namespace ChilliSource
 		///
 		/// This, and the other Cricket Audio systems, are not added to Application by 
 		/// default. If you intend to use Cricket Audio you will need to add CkSystem,
-		/// CkStreamProvider and CkBankProvider during the Application::AddSystems()
-		/// life cycle event.
+		/// and CkBankProvider during the Application::AddSystems() life cycle event.
+        /// You will also need to add CkAudioPlayer during the State::AddSystems() life
+        /// cycle event for any states in which you wish to use it.
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
