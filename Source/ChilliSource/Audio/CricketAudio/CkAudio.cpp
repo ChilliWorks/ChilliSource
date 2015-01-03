@@ -32,6 +32,10 @@
 #include <ChilliSource/Audio/CricketAudio/CkSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+#include <CSBackend/Platform/Android/Core/File/FileSystem.h>
+#endif
+
 #include <ck/ck.h>
 #include <ck/sound.h>
 
@@ -72,12 +76,30 @@ namespace ChilliSource
         CkAudio::CkAudio(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath)
         {
 #if CS_TARGETPLATFORM_ANDROID
-            //TODO:
+        	switch (in_streamStorageLocation)
+			{
+				case Core::StorageLocation::k_package:
+				{
+					m_sound = CkSound::newStreamSound((CSBackend::Android::FileSystem::k_packageAPKDir + in_streamFilePath).c_str());
+					break;
+				}
+				case Core::StorageLocation::k_chilliSource:
+				{
+					m_sound = CkSound::newStreamSound((CSBackend::Android::FileSystem::k_csAPKDir + in_streamFilePath).c_str());
+					break;
+				}
+				default:
+				{
+					std::string locationPath = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_streamStorageLocation));
+					m_sound = CkSound::newStreamSound((locationPath + in_streamFilePath).c_str(), kCkPathType_FileSystem);
+					break;
+				}
+			}
 #else
-            std::string packageLocation = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_streamStorageLocation));
-            m_sound = CkSound::newStreamSound((packageLocation + in_streamFilePath).c_str(), kCkPathType_FileSystem);
+            std::string locationPath = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_streamStorageLocation));
+            m_sound = CkSound::newStreamSound((locationPath + in_streamFilePath).c_str(), kCkPathType_FileSystem);
 #endif
-            CS_ASSERT(m_sound != nullptr, "Could not create CkAudio becuase audio stream '" + in_streamFilePath + "' doesn't exist.");
+            CS_ASSERT(m_sound != nullptr, "Could not create CkAudio because audio stream '" + in_streamFilePath + "' doesn't exist.");
             
             m_ckSystem = CSCore::Application::Get()->GetSystem<CkSystem>();
             CS_ASSERT(m_ckSystem != nullptr, "CkAudio requires missing system: CkSystem.");

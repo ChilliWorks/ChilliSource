@@ -31,6 +31,11 @@
 #include <ChilliSource/Audio/CricketAudio/CkAudio.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+#include <CSBackend/Platform/Android/Core/Base/CoreJavaInterface.h>
+#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#endif
+
 #include <ck/ck.h>
 #include <ck/config.h>
 
@@ -70,10 +75,11 @@ namespace ChilliSource
 		void CkSystem::OnInit()
 		{
 #if CS_TARGETPLATFORM_ANDROID
-			//TODO: !?
-			//auto activityInfoSystem = CSCore::Application::Get()->GetSystem<BUAndroid::Common::ActivityInfoSystem>();
-			//CkConfig config(CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr(), activityInfoSystem->GetActivity());
-			//CkInit(&config);
+			auto coreJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>();
+			CS_ASSERT(coreJI != nullptr, "Must have access to the core native interface to setup Cricket Audio.");
+
+			CkConfig config(CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr(), coreJI->GetActivity());
+			CkInit(&config);
 #else 
 			CkConfig config;
 			CkInit(&config);

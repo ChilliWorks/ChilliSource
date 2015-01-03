@@ -262,6 +262,7 @@ namespace CSBackend
 			CreateMethodReference("forceQuit", "()V");
 			CreateMethodReference("getSystemTimeInMilliseconds", "()J");
 			CreateMethodReference("setPreferredFPS", "(I)V");
+			CreateMethodReference("getActivity", "()Landroid/app/Activity;");
 		}
 		//--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
@@ -287,6 +288,13 @@ namespace CSBackend
 		CSCore::Application* CoreJavaInterface::GetApplication()
 		{
 			return m_application;
+		}
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		jobject CoreJavaInterface::GetActivity() const
+		{
+			JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			return pEnv->CallObjectMethod(GetJavaObject(), GetMethodID("getActivity"));
 		}
 		//-----------------------------------------
 		//-----------------------------------------

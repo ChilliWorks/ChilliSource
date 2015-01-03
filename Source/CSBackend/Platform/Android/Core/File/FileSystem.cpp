@@ -364,6 +364,10 @@ namespace CSBackend
 		}
 
 		CS_DEFINE_NAMEDTYPE(FileSystem);
+
+		const std::string FileSystem::k_packageAPKDir = "AppResources/";
+		const std::string FileSystem::k_csAPKDir = "CSResources/";
+
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
 		FileSystem::FileSystem()
@@ -862,8 +866,8 @@ namespace CSBackend
 				CS_LOG_FATAL("File System: Failed to open APK.");
 			}
 
-			std::string appAssetsPath = k_assetsPath + "AppResources/";
-			std::string csAssetsPath = k_assetsPath + "CSResources/";
+			std::string appAssetsPath = k_assetsPath + k_packageAPKDir;
+			std::string csAssetsPath = k_assetsPath + k_csAPKDir;
 
 			s32 status = unzGoToFirstFile(unzipper);
 			while (status == UNZ_OK)
