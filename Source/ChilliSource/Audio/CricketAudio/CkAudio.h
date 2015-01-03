@@ -96,16 +96,70 @@ namespace ChilliSource
 			/// app is considered to be in an irrecoverable state and will terminate.
 			//------------------------------------------------------------------------------
 			CkAudio(const CkAudioBankCSPtr& in_audioBank, const std::string& in_audioName);
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The current volume of the audio.
+            //------------------------------------------------------------------------------
+            f32 GetVolume() const;
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The current pitch shift of the audio in half-steps.
+            //------------------------------------------------------------------------------
+            f32 GetPitchShift() const;
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The current playback position of the audio in seconds.
+            //------------------------------------------------------------------------------
+            f32 GetPlaybackPosition() const;
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The playback length of the audio in seconds. Note that this may
+            /// return -1 for streams if the length is unknown or the length has not yet
+            /// been calculated.
+            //------------------------------------------------------------------------------
+            f32 GetLength() const;
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The current playback state of the audio.
+            //------------------------------------------------------------------------------
+            PlaybackState GetPlaybackState() const;
+            //------------------------------------------------------------------------------
+            /// Sets the current volume of the audio. This can be called both before the
+            /// audio is playing and during.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The volume.
+            //------------------------------------------------------------------------------
+            void SetVolume(f32 in_volume);
+            //------------------------------------------------------------------------------
+            /// Sets the pitch shift of the effect in half-steps. This also changes playback
+            /// speed. This can be called both before the audio is playing and during. Note
+            /// that this doesn't work for streams that are not in cks or ogg format.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The pitch shift in half-steps.
+            //------------------------------------------------------------------------------
+            void SetPitchShift(f32 in_pitchHalfSteps);
+            //------------------------------------------------------------------------------
+            /// Sets the playback position of the audio in seconds. This can be called
+            /// before the effect is playing to start at an offset, or during to skip.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The position through the audio in seconds.
+            //------------------------------------------------------------------------------
+            void SetPlaybackPosition(f32 in_playbackPosition);
 			//------------------------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return The current playback state of the audio.
-			//------------------------------------------------------------------------------
-			PlaybackState GetPlaybackState() const;
-			//------------------------------------------------------------------------------
-			/// Plays the audio from the beginning. If this is called when the audio is 
-			/// paused or already playing the app is considered to be in an irrecoverable
-			/// state and will terminate.
+			/// Plays the audio from the beginning, or from the playback position if one
+            /// was set. If this is called when the audio is paused or already playing the
+            /// app is considered to be in an irrecoverable state and will terminate.
 			///
 			/// @author Ian Copland
 			///
@@ -129,13 +183,13 @@ namespace ChilliSource
 			/// @author Ian Copland
 			//------------------------------------------------------------------------------
 			void Pause();
-			//------------------------------------------------------------------------------
-			/// Stops the audio if it is currently playing or paused, otherwise the app is 
-			/// considered to be in an irrecoverable state and will terminate.
-			///
-			/// @author Ian Copland
-			//------------------------------------------------------------------------------
-			void Stop();
+            //------------------------------------------------------------------------------
+            /// Stops the audio if it is currently playing or paused, otherwise the app is
+            /// considered to be in an irrecoverable state and will terminate.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void Stop();
 			//------------------------------------------------------------------------------
 			/// Destructor. Cleans up the underlying CkSound. All CkAudio instances must
 			/// be destroyed before the end of the application OnDestroy() event, otherwise

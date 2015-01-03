@@ -76,23 +76,21 @@ namespace ChilliSource
 		//------------------------------------------------------------------------------
 		void CkAudioBankProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
 		{
-			//TODO: !? Handle other storage locations
-			CS_ASSERT(in_storageLocation == Core::StorageLocation::k_package, "Only Package is currently supported!");
-
-#if CS_TARGETPLATFORM_WINDOWS
-			std::string packageLocation = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package));
-			CkBank* bank = CkBank::newBank((packageLocation + in_filePath).c_str(), kCkPathType_FileSystem);
-			if (bank == nullptr)
-			{
-				out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-				return;
-			}
-
-			static_cast<CkAudioBank*>(out_resource.get())->Build(bank);
-			out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+#if CS_TARGETPLATFORM_ANDROID
+            std::string packageLocation = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package));
+            CkBank* bank = CkBank::newBank((packageLocation + in_filePath).c_str(), kCkPathType_FileSystem);
 #else 
-			//TODO: !? Handle other platforms.
+            std::string packageLocation = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_storageLocation));
+            CkBank* bank = CkBank::newBank((packageLocation + in_filePath).c_str(), kCkPathType_FileSystem);
 #endif
+            if (bank == nullptr)
+            {
+                out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                return;
+            }
+            
+            static_cast<CkAudioBank*>(out_resource.get())->Build(bank);
+            out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
