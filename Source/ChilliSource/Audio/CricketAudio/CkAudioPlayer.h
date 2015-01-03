@@ -130,6 +130,33 @@ namespace ChilliSource
             {
                 CkAudioUPtr m_effect;
                 f32 m_volume = 0.0f;
+
+				//------------------------------------------------------------------------------
+				/// Default constructor
+				///
+				/// @author Ian Copland
+				//------------------------------------------------------------------------------
+				EffectInfo() = default;
+				//------------------------------------------------------------------------------
+				/// Move Constructor. This is required because it is not automatically generated 
+				/// in Visual C++ 12.
+				///
+				/// @author Ian Copland
+				///
+				/// @param The value to move.
+				//------------------------------------------------------------------------------
+				EffectInfo(EffectInfo&& in_moveable);
+				//------------------------------------------------------------------------------
+				/// Move operator. This is required because it is not automatically generated 
+				/// in Visual C++ 12.
+				///
+				/// @author Ian Copland
+				///
+				/// @param The value to move.
+				///
+				/// @param A reference to this.
+				//------------------------------------------------------------------------------
+				EffectInfo& operator=(EffectInfo&& in_moveable);
             };
             //------------------------------------------------------------------------------
             /// A factory method for creating new instances of the system.

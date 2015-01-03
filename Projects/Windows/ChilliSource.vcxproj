@@ -15,8 +15,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioBank.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioBankProvider.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioStream.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioStreamProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\AppConfig.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Application.cpp" />
@@ -239,8 +237,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioBank.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioBankProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkForwardDeclarations.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioStream.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioStreamProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Audio\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\ChilliSource.h" />

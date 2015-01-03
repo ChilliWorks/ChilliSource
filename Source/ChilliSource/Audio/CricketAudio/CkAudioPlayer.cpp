@@ -176,5 +176,27 @@ namespace ChilliSource
             m_effects.clear();
             m_effectsToRemove.clear();
         }
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		CkAudioPlayer::EffectInfo::EffectInfo(EffectInfo&& in_moveable)
+		{
+			m_volume = in_moveable.m_volume;
+			m_effect = std::move(in_moveable.m_effect);
+
+			in_moveable.m_volume = 0.0f;
+			in_moveable.m_effect = nullptr;
+		}
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		CkAudioPlayer::EffectInfo& CkAudioPlayer::EffectInfo::operator=(CkAudioPlayer::EffectInfo&& in_moveable)
+		{
+			m_volume = in_moveable.m_volume;
+			m_effect = std::move(in_moveable.m_effect);
+
+			in_moveable.m_volume = 0.0f;
+			in_moveable.m_effect = nullptr;
+
+			return *this;
+		}
 	}
 }
