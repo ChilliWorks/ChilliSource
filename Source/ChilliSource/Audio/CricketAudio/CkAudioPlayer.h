@@ -70,6 +70,23 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The volume of the player.
+            //------------------------------------------------------------------------------
+            f32 GetVolume() const;
+            //------------------------------------------------------------------------------
+            /// Sets the volume of the player, changing the volume of all effects and music.
+            /// This takes into account the volume that effects or music were initially
+            /// played with, i.e, if the player's volume is 0.5 and the effect is played
+            /// with a volume of 0.5 the actual volume the effect is played at will be 0.25.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The volume.
+            //------------------------------------------------------------------------------
+            void SetVolume(f32 in_volume);
+            //------------------------------------------------------------------------------
             /// Plays the requested sound effect from the given bank once, with the given
             /// volume. The effect will be automatically cleaned up once finished. If the
             /// requested effect doesn't exist the app is considered to be in an
@@ -104,6 +121,16 @@ namespace ChilliSource
             
         private:
             friend class CSCore::State;
+            //------------------------------------------------------------------------------
+            /// A container for information on a playing effect.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            struct EffectInfo
+            {
+                CkAudioUPtr m_effect;
+                f32 m_volume = 0.0f;
+            };
             //------------------------------------------------------------------------------
             /// A factory method for creating new instances of the system.
             ///
@@ -150,9 +177,11 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             void OnDestroy() override;
             
-            std::vector<CkAudioUPtr> m_effects;
+            std::vector<EffectInfo> m_effects;
             std::vector<const CkAudio*> m_effectsToRemove;
             CkAudioUPtr m_music;
+            f32 m_musicVolume = 1.0f;
+            f32 m_playerVolume = 1.0f;
         };
 	}
 }
