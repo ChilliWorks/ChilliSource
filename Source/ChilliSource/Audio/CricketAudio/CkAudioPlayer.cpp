@@ -28,10 +28,126 @@
 
 #include <ChilliSource/Audio/CricketAudio/CkAudioPlayer.h>
 
+#include <ChilliSource/Audio/CricketAudio/CkAudio.h>
+#include <ChilliSource/Audio/CricketAudio/CkSystem.h>
+#include <ChilliSource/Core/Base/Application.h>
+
 namespace ChilliSource
 {
 	namespace Audio
 	{
+        CS_DEFINE_NAMEDTYPE(CkAudioPlayer);
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        CkAudioPlayerUPtr CkAudioPlayer::Create()
+        {
+            return CkAudioPlayerUPtr(new CkAudioPlayer());
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        bool CkAudioPlayer::IsA(CSCore::InterfaceIDType in_interfaceId) const
+        {
+            return (CkAudioPlayer::InterfaceID == in_interfaceId);
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void CkAudioPlayer::PlayEffect(const CkAudioBankCSPtr& in_bank, const std::string& in_effectName, f32 in_volume)
+        {
+            auto effect = CkAudio::CreateFromBank(in_bank, in_effectName);
+            auto effectRaw = effect.get();
+            m_effects.push_back(std::move(effect));
+            
+            effectRaw->SetVolume(in_volume);
+            effectRaw->Play(CkAudio::PlaybackMode::k_once, [=](const CkAudio* in_audio)
+            {
+                m_effectsToRemove.push_back(in_audio);
+            });
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void CkAudioPlayer::PlayMusic(Core::StorageLocation in_storageLocation, const std::string& in_filePath, f32 in_volume)
+        {
+            m_music = CkAudio::CreateFromStream(in_storageLocation, in_filePath);
+            m_music->SetVolume(in_volume);
+            m_music->Play();
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void CkAudioPlayer::StopMusic()
+        {
+            if (m_music != nullptr)
+            {
+                m_music.reset();
+            }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void CkAudioPlayer::OnInit()
+        {
+            CS_ASSERT(Core::Application::Get()->GetSystem<CkSystem>() != nullptr, "CkAudioPlayer missing required system: CkSystem.");
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void CkAudioPlayer::OnResume()
+        {
+            for (auto& effect : m_effects)
+            {
+                if (effect->GetPlaybackState() == CkAudio::PlaybackState::k_paused)
+                {
+                    effect->Resume();
+                }
+            }
+            
+            if (m_music != nullptr && m_music->GetPlaybackState() == CkAudio::PlaybackState::k_paused)
+            {
+                m_music->Resume();
+            }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void CkAudioPlayer::OnUpdate(f32 in_deltaTime)
+        {
+            for (auto& removable : m_effectsToRemove)
+            {
+                for (auto it = m_effects.begin(); it != m_effects.end();)
+                {
+                    if (it->get() == removable)
+                    {
+                        it = m_effects.erase(it);
+                        break;
+                    }
+                    else
+                    {
+                        ++it;
+                    }
+                }
+            }
+            m_effectsToRemove.clear();
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void CkAudioPlayer::OnSuspend()
+        {
+            if (m_music != nullptr && m_music->GetPlaybackState() == CkAudio::PlaybackState::k_playing)
+            {
+                m_music->Pause();
+            }
+            
+            for (auto& effect : m_effects)
+            {
+                if (effect->GetPlaybackState() == CkAudio::PlaybackState::k_playing)
+                {
+                    effect->Pause();
+                }
+            }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void CkAudioPlayer::OnDestroy()
+        {
+            m_effects.clear();
+            m_effectsToRemove.clear();
+        }
 
 	}
 }

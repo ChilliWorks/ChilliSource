@@ -41,24 +41,13 @@ namespace ChilliSource
 		/// The Cricket Audio system. This manages the underlying cricket audio system,
 		/// initialising it and destroying when needed. 
 		///
-		/// Cricket Technology has kindly allows us to include the Cricket Audio SDK 
-		/// in the engine under the free license, which can be found at the following
-		/// link: http://www.crickettechnology.com/free_license. To comply with the
-		/// license there are two things you must do:
-		///
-		/// - You must display the following somewhere in your application:
-		///   
-		///                       Built with Cricket Audio
-		///                       www.crickettechnology.com
-		///
-		/// - You must let Cricket Technology know when you release your game, so they
-		///   can include you in their customer list.
-		///
-		/// This, and the other Cricket Audio systems, are not added to Application by 
-		/// default. If you intend to use Cricket Audio you will need to add CkSystem,
-		/// and CkBankProvider during the Application::AddSystems() life cycle event.
+        /// The Cricket Audio systems, including this, are not added to Application by
+        /// default. If you intend to use Cricket Audio you will need to add CkSystem,
+        /// and CkBankProvider during the Application::AddSystems() life cycle event.
         /// You will also need to add CkAudioPlayer during the State::AddSystems() life
         /// cycle event for any states in which you wish to use it.
+        ///
+		/// //TODO: Add cricket license information here.
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------

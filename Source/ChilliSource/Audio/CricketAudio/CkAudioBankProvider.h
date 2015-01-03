@@ -30,6 +30,8 @@
 #define _CHILLISOURCE_AUDIO_CRICKETAUDIO_CKAUDIOBANKPROVIDER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Audio/CricketAudio/CkForwardDeclarations.h>
+#include <ChilliSource/Core/Container/concurrent_vector.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
 namespace ChilliSource
@@ -42,13 +44,13 @@ namespace ChilliSource
 		/// sounds within a bank can be played by creating a CkAudio with the bank, or 
 		/// through the CKAudioPlayer.
 		///
+        /// This is not added to Application by default. If you need to load bank
+        /// resources you will have to add this during the Application::AddSystems()
+        /// life cycle event.
+        ///
 		/// Cricket Technology has kindly allows us to include the Cricket Audio SDK
 		/// in the engine under the free license. For more information see the
 		/// documentation for CkSystem.
-		///
-		/// This is not added to Application by default. If you need to load bank 
-		/// resources you will have to add this during the Application::AddSystems()
-		/// life cycle event.
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
@@ -115,7 +117,18 @@ namespace ChilliSource
 			void CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
 
 		private:
-			friend class Core::Application;
+            friend class Core::Application;
+            //------------------------------------------------------------------------------
+            /// A container for information needed for asynchonous load requests.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            struct AsyncRequest
+            {
+                CkBank* m_bank = nullptr;
+                CkAudioBankSPtr m_bankResource;
+                AsyncLoadDelegate m_delegate;
+            };
 			//------------------------------------------------------------------------------
 			/// A factory method for creating a new instance of the system.
 			///
@@ -131,13 +144,23 @@ namespace ChilliSource
 			/// @author Ian Copland
 			//------------------------------------------------------------------------------
 			CkAudioBankProvider() = default;
-			//------------------------------------------------------------------------------
-			/// Called when app systems are initialised. This simply confirms that the 
-			/// CkSystem exists.
-			///
-			/// @author Ian Copland
-			//------------------------------------------------------------------------------
-			void OnInit() override;
+            //------------------------------------------------------------------------------
+            /// Called when app systems are initialised. This simply confirms that the
+            /// CkSystem exists.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void OnInit() override;
+            //------------------------------------------------------------------------------
+            /// Polls to check if background loaded banks are finished loading.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The delta time.
+            //------------------------------------------------------------------------------
+            void OnUpdate(f32 in_deltaTime) override;
+            
+            Core::concurrent_vector<AsyncRequest> m_asyncRequests;
 		};
 	}
 }

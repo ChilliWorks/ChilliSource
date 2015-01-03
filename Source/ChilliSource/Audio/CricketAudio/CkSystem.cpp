@@ -78,8 +78,8 @@ namespace ChilliSource
 			CkConfig config;
 			CkInit(&config);
 #endif
-			CS_LOG_VERBOSE(" ** Using Cricket Audio with the free licence. **");
-			CS_LOG_VERBOSE("//TODO: !? fill in rest of message.");
+            //TODO: Add license info here.
+			CS_LOG_VERBOSE(" ** Add Cricket Audio License here... **");
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
