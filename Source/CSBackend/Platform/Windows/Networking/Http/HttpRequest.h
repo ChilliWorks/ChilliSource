@@ -161,6 +161,7 @@ namespace CSBackend
 			bool m_shouldKillThread = false;
 			bool m_isPollingComplete = false;
 			bool m_isRequestComplete = false;
+			bool m_isRequestCancelled = false;
 
 			CSCore::TaskScheduler* m_taskScheduler;
 		};

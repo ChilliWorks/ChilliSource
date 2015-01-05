@@ -57,7 +57,7 @@ namespace CSBackend
 			{
                 m_isRequestComplete = true;
 
-				if(m_requestResult != CSNetworking::HttpResponse::Result::k_cancelled)
+				if(m_isRequestCancelled == false)
 				{
 					m_completionDelegate(this, CSNetworking::HttpResponse(m_requestResult, m_responseCode, m_responseData));
 				}
@@ -108,7 +108,7 @@ namespace CSBackend
 		void HttpRequest::Cancel()
 		{
             m_shouldKillThread = true;
-            m_requestResult = CSNetworking::HttpResponse::Result::k_cancelled;
+            m_isRequestCancelled = true;
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------

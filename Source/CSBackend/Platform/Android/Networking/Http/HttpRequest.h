@@ -142,6 +142,7 @@ namespace CSBackend
 			bool m_shouldKillThread = false;
 			bool m_isPollingComplete = false;
 			bool m_isRequestComplete = false;
+			bool m_isRequestCancelled = false;
 
 			std::string m_responseData;
 			CSNetworking::HttpResponse::Result m_requestResult = CSNetworking::HttpResponse::Result::k_failed;

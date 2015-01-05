@@ -136,7 +136,6 @@ namespace ChilliSource
                 }
                 case HttpResponse::Result::k_timeout:
                 case HttpResponse::Result::k_failed:
-                case HttpResponse::Result::k_cancelled:
                 {
                     mOnContentManifestDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
                     break;
@@ -187,7 +186,6 @@ namespace ChilliSource
                 }
                 case HttpResponse::Result::k_timeout:
                 case HttpResponse::Result::k_failed:
-                case HttpResponse::Result::k_cancelled:
                 {
                     mOnContentDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
                     break;

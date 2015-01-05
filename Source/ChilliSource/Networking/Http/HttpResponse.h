@@ -54,7 +54,6 @@ namespace ChilliSource
             {
                 k_completed,    //The request completed (response data is available)
                 k_failed,       //The request failed (no response data available)
-                k_cancelled,    //The request was cancelled (no response data available)
                 k_timeout,      //The request timed out (no response data available)
                 k_flushed       //The request buffer is full and has been flushed. (response data is partial and more will follow)
             };
