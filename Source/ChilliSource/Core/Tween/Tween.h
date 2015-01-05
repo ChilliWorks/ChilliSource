@@ -174,8 +174,10 @@ namespace ChilliSource
 			/// @author S Downie
 			///
 			/// @param Time in seconds since last update
+			///
+			/// @return Interpolated value at end of update
 			//-----------------------------------------------------------------------
-			void Update(f32 in_timeSinceLastUpdate);
+			auto Update(f32 in_timeSinceLastUpdate) -> decltype(std::declval<TInterpFunc>()(f32()));
 			//-----------------------------------------------------------------------
 			/// @author S Downie
 			///
@@ -260,13 +262,13 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Tween<TInterpFunc>::SetEndDelay(f32 in_delay)
+		template <typename TInterpFunc> void Tween<TInterpFunc>::SetStartDelay(f32 in_delay)
 		{
 			m_startDelay = in_delay;
 		}
         //-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Tween<TInterpFunc>::SetStartDelay(f32 in_delay)
+		template <typename TInterpFunc> void Tween<TInterpFunc>::SetEndDelay(f32 in_delay)
 		{
 			m_endDelay = in_delay;
 		}
@@ -379,11 +381,11 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
-		template <typename TInterpFunc> void Tween<TInterpFunc>::Update(f32 in_timeSinceLastUpdate)
+		template <typename TInterpFunc> auto Tween<TInterpFunc>::Update(f32 in_timeSinceLastUpdate) -> decltype(std::declval<TInterpFunc>()(f32()))
 		{
 			if (m_isPlaying == false)
 			{
-				return;
+				return GetValue();
 			}
 
 			in_timeSinceLastUpdate *= m_timeScaler;
@@ -395,7 +397,7 @@ namespace ChilliSource
 				m_currentStartDelay -= in_timeSinceLastUpdate;
 				if (m_currentStartDelay > 0.0f)
 				{
-					return;
+					return GetValue();
 				}
 
 				m_isStarted = true;
@@ -425,7 +427,7 @@ namespace ChilliSource
                 m_currentEndDelay -= in_timeSinceLastUpdate;
                 if(m_currentEndDelay > 0.0f)
                 {
-                    return;
+					return GetValue();
                 }
 				m_currentStep++;
 
@@ -451,6 +453,8 @@ namespace ChilliSource
 					m_currentTime = 0.0f;
 				}
 			}
+
+			return GetValue();
 		}
 		//-----------------------------------------------------------------------
 		//-----------------------------------------------------------------------
