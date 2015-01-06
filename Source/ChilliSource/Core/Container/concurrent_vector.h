@@ -294,8 +294,7 @@ namespace ChilliSource
             ///
             /// @param Iterator
             ///
-            /// @return Iterator (Same iterator as it is not invalidate but returning
-            /// it is consistent with STL)
+            /// @return The next iterator.
             //--------------------------------------------------------------------
             iterator erase(const iterator& in_itErase);
             //--------------------------------------------------------------------
@@ -306,8 +305,7 @@ namespace ChilliSource
             ///
             /// @param Iterator
             ///
-            /// @return Iterator (Same iterator as it is not invalidate but returning
-            /// it is consistent with STL)
+            /// @return The next iterator.
             //--------------------------------------------------------------------
             reverse_iterator erase(const reverse_iterator& in_itErase);
             //--------------------------------------------------------------------
@@ -628,7 +626,9 @@ namespace ChilliSource
             
             m_size--;
             
-            return in_itErase;
+            auto itCopy = in_itErase;
+            ++itCopy;
+            return itCopy;
         }
         //--------------------------------------------------------------------
 		/// This uses the 
@@ -648,7 +648,9 @@ namespace ChilliSource
             
             m_size--;
             
-            return in_itErase;
+            auto itCopy = in_itErase;
+            ++itCopy;
+            return itCopy;
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------

@@ -11,6 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkBank.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkBankProvider.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkSound.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\AppConfig.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Application.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ByteColour.cpp" />
@@ -226,6 +231,13 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkBank.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkBankProvider.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkForwardDeclarations.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkSound.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Audio\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\ChilliSource.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base.h" />
@@ -253,6 +265,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\HashedArray.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ParamDictionary.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ParamDictionarySerialiser.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\VectorUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\AESEncrypt.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\BaseEncoding.h" />
@@ -553,14 +566,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\Libraries\Core\Windows\Libs\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\;$(ProjectDir)..\..\Libraries\CricketAudio\Windows\Headers\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\csbin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\csobj\$(Configuration)\a\b\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\Libraries\Core\Windows\Libs\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\;$(ProjectDir)..\..\Libraries\CricketAudio\Windows\Headers\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\csbin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\csobj\$(Configuration)\a\b\</IntDir>
   </PropertyGroup>

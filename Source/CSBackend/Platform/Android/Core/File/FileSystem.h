@@ -53,6 +53,10 @@ namespace CSBackend
 		{
 		public:
 			CS_DECLARE_NAMEDTYPE(FileSystem);
+
+			static const std::string k_packageAPKDir;
+			static const std::string k_csAPKDir;
+
 			//-----------------------------------------------------------
 			/// A container for the information on a file within the APK.
 			///

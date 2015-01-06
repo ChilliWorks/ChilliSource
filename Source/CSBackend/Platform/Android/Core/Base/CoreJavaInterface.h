@@ -79,6 +79,12 @@ namespace CSBackend
 			/// @return returns the global instance of the Chilli Source application.
 			//--------------------------------------------------------------------------------------
 			CSCore::Application* GetApplication();
+			//------------------------------------------------------------------------------
+			/// @author Ian Copland
+			///
+			/// @return The current activity.
+			//------------------------------------------------------------------------------
+			jobject GetActivity() const;
 			//-----------------------------------------
 			/// @author Ian Copland
 			///
