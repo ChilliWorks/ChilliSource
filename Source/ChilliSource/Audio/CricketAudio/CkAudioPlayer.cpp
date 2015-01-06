@@ -97,7 +97,7 @@ namespace ChilliSource
             m_musicVolume = in_volume;
             m_music = CkSound::CreateFromStream(in_storageLocation, in_filePath);
             m_music->SetVolume(m_musicVolume * m_playerVolume);
-            m_music->Play();
+            m_music->Play(CkSound::PlaybackMode::k_loop);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
