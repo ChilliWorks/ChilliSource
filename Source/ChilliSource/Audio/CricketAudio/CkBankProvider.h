@@ -50,7 +50,7 @@ namespace ChilliSource
         ///
 		/// Cricket Technology has kindly allows us to include the Cricket Audio SDK
 		/// in the engine under the free license. For more information see the
-		/// documentation for CkSystem.
+		/// documentation for CricketAudioSystem.
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
@@ -146,7 +146,7 @@ namespace ChilliSource
 			CkBankProvider() = default;
             //------------------------------------------------------------------------------
             /// Called when app systems are initialised. This simply confirms that the
-            /// CkSystem exists.
+            /// CricketAudioSystem exists.
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------------------

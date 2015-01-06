@@ -46,7 +46,7 @@ namespace ChilliSource
 		///
 		/// Cricket Technology has kindly allows us to include the Cricket Audio SDK
 		/// in the engine under the free license. For more information see the
-		/// documentation for CkSystem.
+		/// documentation for CricketAudioSystem.
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
@@ -214,7 +214,7 @@ namespace ChilliSource
 			//------------------------------------------------------------------------------
 			~CkSound();
 		private:
-			friend class CkSystem;
+			friend class CricketAudioSystem;
             //------------------------------------------------------------------------------
             /// Constructor. Creates this with a peice of audio from an audio bank. Audio
             /// is created in the stopped state, call Play() to begin playback. Declared
@@ -241,13 +241,13 @@ namespace ChilliSource
             CkSound(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath);
 			//------------------------------------------------------------------------------
 			/// Updates the playback state of the CkSound based on the current state of the
-			/// underlying CkSound. This should only be called by CkSystem.
+			/// underlying CkSound. This should only be called by CricketAudioSystem.
 			///
 			/// @author Ian Copland
 			//------------------------------------------------------------------------------
 			void OnUpdate();
 
-			CkSystem* m_ckSystem = nullptr;
+			CricketAudioSystem* m_ckSystem = nullptr;
 			CkBankCSPtr m_audioBank;
 			::CkSound* m_sound = nullptr;
 

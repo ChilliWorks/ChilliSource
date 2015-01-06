@@ -13,7 +13,7 @@
 		8138A8F51A5804AA00C81462 /* CkBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8E61A5804AA00C81462 /* CkBank.cpp */; };
 		8138A8F61A5804AA00C81462 /* CkBankProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8E81A5804AA00C81462 /* CkBankProvider.cpp */; };
 		8138A8F71A5804AA00C81462 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8EA1A5804AA00C81462 /* CkAudioPlayer.cpp */; };
-		8138A8FA1A5804AA00C81462 /* CkSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8F11A5804AA00C81462 /* CkSystem.cpp */; };
+		8138A8FA1A5804AA00C81462 /* CricketAudioSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8F11A5804AA00C81462 /* CricketAudioSystem.cpp */; };
 		8138A90F1A5806A300C81462 /* libck.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8138A90E1A5806A300C81462 /* libck.a */; };
 		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
 		819630B21A3A0D5400475D76 /* HttpDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 819630B11A3A0D5400475D76 /* HttpDelegate.mm */; };
@@ -300,8 +300,8 @@
 		8138A8EA1A5804AA00C81462 /* CkAudioPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkAudioPlayer.cpp; sourceTree = "<group>"; };
 		8138A8EB1A5804AA00C81462 /* CkAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkAudioPlayer.h; sourceTree = "<group>"; };
 		8138A8F01A5804AA00C81462 /* CkForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkForwardDeclarations.h; sourceTree = "<group>"; };
-		8138A8F11A5804AA00C81462 /* CkSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkSystem.cpp; sourceTree = "<group>"; };
-		8138A8F21A5804AA00C81462 /* CkSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkSystem.h; sourceTree = "<group>"; };
+		8138A8F11A5804AA00C81462 /* CricketAudioSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CricketAudioSystem.cpp; sourceTree = "<group>"; };
+		8138A8F21A5804AA00C81462 /* CricketAudioSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CricketAudioSystem.h; sourceTree = "<group>"; };
 		8138A8F31A5804AA00C81462 /* CricketAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CricketAudio.h; sourceTree = "<group>"; };
 		8138A8FE1A5806A300C81462 /* attenuationmode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = attenuationmode.h; sourceTree = "<group>"; };
 		8138A8FF1A5806A300C81462 /* bank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bank.h; sourceTree = "<group>"; };
@@ -1023,8 +1023,8 @@
 				8138A8EA1A5804AA00C81462 /* CkAudioPlayer.cpp */,
 				8138A8EB1A5804AA00C81462 /* CkAudioPlayer.h */,
 				8138A8F01A5804AA00C81462 /* CkForwardDeclarations.h */,
-				8138A8F11A5804AA00C81462 /* CkSystem.cpp */,
-				8138A8F21A5804AA00C81462 /* CkSystem.h */,
+				8138A8F11A5804AA00C81462 /* CricketAudioSystem.cpp */,
+				8138A8F21A5804AA00C81462 /* CricketAudioSystem.h */,
 			);
 			path = CricketAudio;
 			sourceTree = "<group>";
@@ -2833,7 +2833,7 @@
 				81D8B4151962E0EC0010DA84 /* FileSystem.cpp in Sources */,
 				81D8B43F1962E0EC0010DA84 /* DebugStats.cpp in Sources */,
 				81AAFBBD19C9C18100CD4A14 /* TapGesture.cpp in Sources */,
-				8138A8FA1A5804AA00C81462 /* CkSystem.cpp in Sources */,
+				8138A8FA1A5804AA00C81462 /* CricketAudioSystem.cpp in Sources */,
 				81D8B42A1962E0EC0010DA84 /* Property.cpp in Sources */,
 				81D8B4851962E0EC0010DA84 /* SkinnedAnimationGroup.cpp in Sources */,
 				81B1D2D6196C2410000F13DD /* TextEntry.cpp in Sources */,

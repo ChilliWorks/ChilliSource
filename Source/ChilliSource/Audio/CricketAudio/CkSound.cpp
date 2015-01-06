@@ -29,7 +29,7 @@
 #include <ChilliSource/Audio/CricketAudio/CkSound.h>
 
 #include <ChilliSource/Audio/CricketAudio/CkBank.h>
-#include <ChilliSource/Audio/CricketAudio/CkSystem.h>
+#include <ChilliSource/Audio/CricketAudio/CricketAudioSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
@@ -72,8 +72,8 @@ namespace ChilliSource
             m_sound = ::CkSound::newBankSound(m_audioBank->GetBank(), in_audioName.c_str());
             CS_ASSERT(m_sound != nullptr, "Could not create " + std::string(k_className) + " because sound '" + in_audioName + "' doesn't exist in the bank '" + m_audioBank->GetName() + "'.");
             
-            m_ckSystem = CSCore::Application::Get()->GetSystem<CkSystem>();
-            CS_ASSERT(m_ckSystem != nullptr, std::string(k_className) + " requires missing system: " + CkSystem::TypeName);
+            m_ckSystem = CSCore::Application::Get()->GetSystem<CricketAudioSystem>();
+            CS_ASSERT(m_ckSystem != nullptr, std::string(k_className) + " requires missing system: " + CricketAudioSystem::TypeName);
             
             m_ckSystem->Register(this);
         }
@@ -107,8 +107,8 @@ namespace ChilliSource
 #endif
             CS_ASSERT(m_sound != nullptr, "Could not create " + std::string(k_className) + " because audio stream '" + in_streamFilePath + "' doesn't exist.");
             
-            m_ckSystem = CSCore::Application::Get()->GetSystem<CkSystem>();
-            CS_ASSERT(m_ckSystem != nullptr, std::string(k_className) + " requires missing system: " + CkSystem::TypeName);
+            m_ckSystem = CSCore::Application::Get()->GetSystem<CricketAudioSystem>();
+            CS_ASSERT(m_ckSystem != nullptr, std::string(k_className) + " requires missing system: " + CricketAudioSystem::TypeName);
             
             m_ckSystem->Register(this);
         }

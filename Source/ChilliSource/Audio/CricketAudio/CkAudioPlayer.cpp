@@ -29,7 +29,7 @@
 #include <ChilliSource/Audio/CricketAudio/CkAudioPlayer.h>
 
 #include <ChilliSource/Audio/CricketAudio/CkSound.h>
-#include <ChilliSource/Audio/CricketAudio/CkSystem.h>
+#include <ChilliSource/Audio/CricketAudio/CricketAudioSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 namespace ChilliSource
@@ -112,7 +112,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void CkAudioPlayer::OnInit()
         {
-            CS_ASSERT(Core::Application::Get()->GetSystem<CkSystem>() != nullptr, "CkAudioPlayer missing required system: CkSystem.");
+            CS_ASSERT(Core::Application::Get()->GetSystem<CricketAudioSystem>() != nullptr, "CkAudioPlayer missing required system: CricketAudioSystem.");
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------

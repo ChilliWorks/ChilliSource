@@ -44,7 +44,7 @@ namespace ChilliSource
 		CS_FORWARDDECLARE_CLASS(CkBank);
 		CS_FORWARDDECLARE_CLASS(CkBankProvider);
 		CS_FORWARDDECLARE_CLASS(CkAudioPlayer);
-		CS_FORWARDDECLARE_CLASS(CkSystem);
+		CS_FORWARDDECLARE_CLASS(CricketAudioSystem);
 	}
 }
 

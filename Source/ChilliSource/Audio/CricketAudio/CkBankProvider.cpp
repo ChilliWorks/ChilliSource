@@ -29,7 +29,7 @@
 #include <ChilliSource/Audio/CricketAudio/CkBankProvider.h>
 
 #include <ChilliSource/Audio/CricketAudio/CkBank.h>
-#include <ChilliSource/Audio/CricketAudio/CkSystem.h>
+#include <ChilliSource/Audio/CricketAudio/CricketAudioSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
@@ -163,7 +163,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------------
 		void CkBankProvider::OnInit()
 		{
-			CS_ASSERT(Core::Application::Get()->GetSystem<CkSystem>() != nullptr, "'CkSystem' is missing and is required by 'CkBankProvider'!");
+			CS_ASSERT(Core::Application::Get()->GetSystem<CricketAudioSystem>() != nullptr, "'CricketAudioSystem' is missing and is required by 'CkBankProvider'!");
 		}
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------

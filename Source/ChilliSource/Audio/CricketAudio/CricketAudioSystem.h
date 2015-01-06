@@ -1,5 +1,5 @@
 //
-//  CkSystem.h
+//  CricketAudioSystem.h
 //  Chilli Source
 //  Created by Ian Copland on 30/12/2014.
 //
@@ -42,7 +42,7 @@ namespace ChilliSource
 		/// initialising it and destroying when needed. 
 		///
         /// The Cricket Audio systems, including this, are not added to Application by
-        /// default. If you intend to use Cricket Audio you will need to add CkSystem,
+        /// default. If you intend to use Cricket Audio you will need to add CricketAudioSystem,
         /// and CkBankProvider during the Application::AddSystems() life cycle event.
         /// You will also need to add CkAudioPlayer during the State::AddSystems() life
         /// cycle event for any states in which you wish to use it.
@@ -82,10 +82,10 @@ namespace ChilliSource
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
-		class CkSystem final : public Core::AppSystem
+		class CricketAudioSystem final : public Core::AppSystem
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(CkSystem);
+			CS_DECLARE_NAMEDTYPE(CricketAudioSystem);
 			//------------------------------------------------------------------------------
 			/// Allows querying of whether or not this system implements the interface
 			/// described by the given interface Id. Typically this is not called directly
@@ -106,14 +106,14 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			//------------------------------------------------------------------------------
-			static CkSystemUPtr Create();
+			static CricketAudioSystemUPtr Create();
 			//------------------------------------------------------------------------------
 			/// Default constructor. Declared private to ensure this can only be created
-			/// through Application::CreateSystem<CkSystem>().
+			/// through Application::CreateSystem<CricketAudioSystem>().
 			///
 			/// @author Ian Copland
 			//------------------------------------------------------------------------------
-			CkSystem() = default;
+			CricketAudioSystem() = default;
 			//------------------------------------------------------------------------------
 			/// Registers a CkSound with the system so that it receives update events.
 			///

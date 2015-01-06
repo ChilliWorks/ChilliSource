@@ -1,5 +1,5 @@
 //
-//  CkSystem.cpp
+//  CricketAudioSystem.cpp
 //  Chilli Source
 //  Created by Ian Copland on 30/12/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Audio/CricketAudio/CkSystem.h>
+#include <ChilliSource/Audio/CricketAudio/CricketAudioSystem.h>
 
 #include <ChilliSource/Audio/CricketAudio/CkSound.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
@@ -43,36 +43,36 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		CS_DEFINE_NAMEDTYPE(CkSystem);
+		CS_DEFINE_NAMEDTYPE(CricketAudioSystem);
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		CkSystemUPtr CkSystem::Create()
+		CricketAudioSystemUPtr CricketAudioSystem::Create()
 		{
-			return CkSystemUPtr(new CkSystem());
+			return CricketAudioSystemUPtr(new CricketAudioSystem());
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		bool CkSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
+		bool CricketAudioSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
-			return (CkSystem::InterfaceID == in_interfaceId);
+			return (CricketAudioSystem::InterfaceID == in_interfaceId);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkSystem::Register(CkSound* in_ckAudio)
+		void CricketAudioSystem::Register(CkSound* in_ckAudio)
 		{
-			CS_ASSERT(Core::VectorUtils::Contains(m_ckAudioList, in_ckAudio) == false, "The given CkSound is already registered with the CkSystem!");
+			CS_ASSERT(Core::VectorUtils::Contains(m_ckAudioList, in_ckAudio) == false, "The given CkSound is already registered with the CricketAudioSystem!");
 
 			m_ckAudioList.push_back(in_ckAudio);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkSystem::Deregister(CkSound* in_ckAudio)
+		void CricketAudioSystem::Deregister(CkSound* in_ckAudio)
 		{
 			Core::VectorUtils::Remove(m_ckAudioList, in_ckAudio);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkSystem::OnInit()
+		void CricketAudioSystem::OnInit()
 		{
 #if CS_TARGETPLATFORM_ANDROID
 			auto coreJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>();
@@ -90,9 +90,9 @@ namespace ChilliSource
             CS_LOG_VERBOSE("=================");
             CS_LOG_VERBOSE(" ");
             CS_LOG_VERBOSE("Chilli Source has obtained special permission to include Cricket Audio as");
-            CS_LOG_VERBOSE("part of the engine. See the documentation on CkSystem for details on how");
-            CS_LOG_VERBOSE("to use Cricket Audio. You are free to use Cricket Audio as part of Chilli");
-            CS_LOG_VERBOSE("Source within your app subject to the Cricket Audio free license");
+            CS_LOG_VERBOSE("part of the engine. See the documentation on CricketAudioSystem for details ");
+            CS_LOG_VERBOSE("on how to use Cricket Audio. You are free to use Cricket Audio as part of ");
+            CS_LOG_VERBOSE("Chilli Source within your app subject to the Cricket Audio free license");
             CS_LOG_VERBOSE("(http://www.crickettechnology.com/free_license) as outline below:");
             CS_LOG_VERBOSE(" ");
             CS_LOG_VERBOSE("Cricket Audio free license");
@@ -126,13 +126,13 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkSystem::OnResume()
+		void CricketAudioSystem::OnResume()
 		{
 			CkResume();
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkSystem::OnUpdate(f32 in_deltaTime)
+		void CricketAudioSystem::OnUpdate(f32 in_deltaTime)
 		{
 			CkUpdate();
 
@@ -143,13 +143,13 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkSystem::OnSuspend()
+		void CricketAudioSystem::OnSuspend()
 		{
 			CkSuspend();
 		}
 		//------------------------------------------------------------------------------
 		///-----------------------------------------------------------------------------
-		void CkSystem::OnDestroy()
+		void CricketAudioSystem::OnDestroy()
 		{
 			CkShutdown();
 		}

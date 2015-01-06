@@ -35,6 +35,6 @@
 #include <ChilliSource/Audio/CricketAudio/CkAudioPlayer.h>
 #include <ChilliSource/Audio/CricketAudio/CkBank.h>
 #include <ChilliSource/Audio/CricketAudio/CkBankProvider.h>
-#include <ChilliSource/Audio/CricketAudio/CkSystem.h>
+#include <ChilliSource/Audio/CricketAudio/CricketAudioSystem.h>
 
 #endif
