@@ -1,5 +1,5 @@
 //
-//  CkAudio.cpp
+//  CkSound.cpp
 //  Chilli Source
 //  Created by Ian Copland on 30/12/2014.
 //
@@ -26,9 +26,9 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Audio/CricketAudio/CkAudio.h>
+#include <ChilliSource/Audio/CricketAudio/CkSound.h>
 
-#include <ChilliSource/Audio/CricketAudio/CkAudioBank.h>
+#include <ChilliSource/Audio/CricketAudio/CkBank.h>
 #include <ChilliSource/Audio/CricketAudio/CkSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 
@@ -43,122 +43,128 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        CkAudioUPtr CkAudio::CreateFromBank(const CkAudioBankCSPtr& in_audioBank, const std::string& in_audioName)
+        namespace
         {
-            return CkAudioUPtr(new CkAudio(in_audioBank, in_audioName));
+            const char k_className[] = "CkSound";
+            const f32 k_secondsPerMillisecond = 1.0f / 1000.0f;
+        }
+        
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        CkSoundUPtr CkSound::CreateFromBank(const CkBankCSPtr& in_audioBank, const std::string& in_audioName)
+        {
+            return CkSoundUPtr(new CkSound(in_audioBank, in_audioName));
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        CkAudioUPtr CkAudio::CreateFromStream(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath)
+        CkSoundUPtr CkSound::CreateFromStream(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath)
         {
-            return CkAudioUPtr(new CkAudio(in_streamStorageLocation, in_streamFilePath));
+            return CkSoundUPtr(new CkSound(in_streamStorageLocation, in_streamFilePath));
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        CkAudio::CkAudio(const CkAudioBankCSPtr& in_audioBank, const std::string& in_audioName)
+        CkSound::CkSound(const CkBankCSPtr& in_audioBank, const std::string& in_audioName)
         : m_audioBank(in_audioBank)
         {
-            CS_ASSERT(m_audioBank != nullptr, "Cannot create CkAudio with null audio bank.");
-            CS_ASSERT(m_audioBank->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot create CkAudio with an audio bank that hasn't been loaded: " + m_audioBank->GetName());
+            CS_ASSERT(m_audioBank != nullptr, "Cannot create " + std::string(k_className) + " with null audio bank.");
+            CS_ASSERT(m_audioBank->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot create CkSound with an audio bank that hasn't been loaded: " + m_audioBank->GetName());
             
-            m_sound = CkSound::newBankSound(m_audioBank->GetBank(), in_audioName.c_str());
-            CS_ASSERT(m_sound != nullptr, "Could not create CkAudio becuase sound '" + in_audioName + "' doesn't exist in the bank '" + m_audioBank->GetName() + "'.");
+            m_sound = ::CkSound::newBankSound(m_audioBank->GetBank(), in_audioName.c_str());
+            CS_ASSERT(m_sound != nullptr, "Could not create " + std::string(k_className) + " because sound '" + in_audioName + "' doesn't exist in the bank '" + m_audioBank->GetName() + "'.");
             
             m_ckSystem = CSCore::Application::Get()->GetSystem<CkSystem>();
-            CS_ASSERT(m_ckSystem != nullptr, "CkAudio requires missing system: CkSystem.");
+            CS_ASSERT(m_ckSystem != nullptr, std::string(k_className) + " requires missing system: " + CkSystem::TypeName);
             
             m_ckSystem->Register(this);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        CkAudio::CkAudio(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath)
+        CkSound::CkSound(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath)
         {
 #if CS_TARGETPLATFORM_ANDROID
         	switch (in_streamStorageLocation)
 			{
 				case Core::StorageLocation::k_package:
 				{
-					m_sound = CkSound::newStreamSound((CSBackend::Android::FileSystem::k_packageAPKDir + in_streamFilePath).c_str());
+					m_sound = ::CkSound::newStreamSound((CSBackend::Android::FileSystem::k_packageAPKDir + in_streamFilePath).c_str());
 					break;
 				}
 				case Core::StorageLocation::k_chilliSource:
 				{
-					m_sound = CkSound::newStreamSound((CSBackend::Android::FileSystem::k_csAPKDir + in_streamFilePath).c_str());
+					m_sound = ::CkSound::newStreamSound((CSBackend::Android::FileSystem::k_csAPKDir + in_streamFilePath).c_str());
 					break;
 				}
 				default:
 				{
 					std::string locationPath = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_streamStorageLocation));
-					m_sound = CkSound::newStreamSound((locationPath + in_streamFilePath).c_str(), kCkPathType_FileSystem);
+					m_sound = ::CkSound::newStreamSound((locationPath + in_streamFilePath).c_str(), kCkPathType_FileSystem);
 					break;
 				}
 			}
 #else
             std::string locationPath = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_streamStorageLocation));
-            m_sound = CkSound::newStreamSound((locationPath + in_streamFilePath).c_str(), kCkPathType_FileSystem);
+            m_sound = ::CkSound::newStreamSound((locationPath + in_streamFilePath).c_str(), kCkPathType_FileSystem);
 #endif
-            CS_ASSERT(m_sound != nullptr, "Could not create CkAudio because audio stream '" + in_streamFilePath + "' doesn't exist.");
+            CS_ASSERT(m_sound != nullptr, "Could not create " + std::string(k_className) + " because audio stream '" + in_streamFilePath + "' doesn't exist.");
             
             m_ckSystem = CSCore::Application::Get()->GetSystem<CkSystem>();
-            CS_ASSERT(m_ckSystem != nullptr, "CkAudio requires missing system: CkSystem.");
+            CS_ASSERT(m_ckSystem != nullptr, std::string(k_className) + " requires missing system: " + CkSystem::TypeName);
             
             m_ckSystem->Register(this);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        f32 CkAudio::GetVolume() const
+        f32 CkSound::GetVolume() const
         {
             return m_sound->getVolume();
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        f32 CkAudio::GetPitchShift() const
+        f32 CkSound::GetPitchShift() const
         {
             return m_sound->getPitchShift();
         }
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		CkAudio::PlaybackState CkAudio::GetPlaybackState() const
+		CkSound::PlaybackState CkSound::GetPlaybackState() const
 		{
 			return m_playbackState;
 		}
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        f32 CkAudio::GetLength() const
+        f32 CkSound::GetLength() const
         {
-            return m_sound->getLengthMs() / 1000.0f;
+            return m_sound->getLengthMs() * k_secondsPerMillisecond;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        f32 CkAudio::GetPlaybackPosition() const
+        f32 CkSound::GetPlaybackPosition() const
         {
-            return m_sound->getPlayPositionMs() / 1000.0f;
+            return m_sound->getPlayPositionMs() * k_secondsPerMillisecond;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void CkAudio::SetVolume(f32 in_volume)
+        void CkSound::SetVolume(f32 in_volume)
         {
             m_sound->setVolume(in_volume);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void CkAudio::SetPitchShift(f32 in_pitchHalfSteps)
+        void CkSound::SetPitchShift(f32 in_pitchHalfSteps)
         {
             m_sound->setPitchShift(in_pitchHalfSteps);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void CkAudio::SetPlaybackPosition(f32 in_playbackPosition)
+        void CkSound::SetPlaybackPosition(f32 in_playbackPosition)
         {
             m_sound->setPlayPositionMs(in_playbackPosition * 1000.0f);
         }
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkAudio::Play(PlaybackMode in_playbackMode, const FinishedDelegate& in_finishedDelegate)
+		void CkSound::Play(PlaybackMode in_playbackMode, const FinishedDelegate& in_finishedDelegate)
 		{
-			CS_ASSERT(m_playbackState == PlaybackState::k_stopped, "CkAudio is already playing.");
+			CS_ASSERT(m_playbackState == PlaybackState::k_stopped, std::string(k_className) + " is already playing.");
 
 			m_playbackState = PlaybackState::k_playing;
 			m_finishedDelegate = in_finishedDelegate;
@@ -180,27 +186,27 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkAudio::Resume()
+		void CkSound::Resume()
 		{
-			CS_ASSERT(m_playbackState == PlaybackState::k_paused, "CkAudio cannot be resumed when it is not paused.");
+			CS_ASSERT(m_playbackState == PlaybackState::k_paused, std::string(k_className) + " cannot be resumed when it is not paused.");
 
 			m_playbackState = PlaybackState::k_playing;
 			m_sound->setPaused(false);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkAudio::Pause()
+		void CkSound::Pause()
 		{
-			CS_ASSERT(m_playbackState == PlaybackState::k_playing, "CkAudio can only be paused while playing.");
+			CS_ASSERT(m_playbackState == PlaybackState::k_playing, std::string(k_className) + " can only be paused while playing.");
 
 			m_playbackState = PlaybackState::k_paused;
 			m_sound->setPaused(true);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkAudio::Stop()
+		void CkSound::Stop()
 		{
-			CS_ASSERT(m_playbackState != PlaybackState::k_stopped, "CkAudio is already stopped.");
+			CS_ASSERT(m_playbackState != PlaybackState::k_stopped, std::string(k_className) + " is already stopped.");
 
 			if (m_sound->isPlaying() == true)
 			{
@@ -218,7 +224,7 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkAudio::OnUpdate()
+		void CkSound::OnUpdate()
 		{
 			if (m_playbackState == PlaybackState::k_playing)
 			{
@@ -230,7 +236,7 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		CkAudio::~CkAudio()
+		CkSound::~CkSound()
 		{
 			m_ckSystem->Deregister(this);
 

@@ -47,7 +47,38 @@ namespace ChilliSource
         /// You will also need to add CkAudioPlayer during the State::AddSystems() life
         /// cycle event for any states in which you wish to use it.
         ///
-		/// //TODO: Add cricket license information here.
+        /// Chilli Source has obtained special permission to include Cricket Audio as
+        /// part of the engine. You are free to use Cricket Audio as part of Chilli
+        /// Source within your app subject to the Cricket Audio free license
+        /// (http://www.crickettechnology.com/free_license) as outline below:
+        ///
+        /// Cricket Audio free license
+        ///
+        /// Cricket Audio is available FREE in binary form for iOS, Android, Windows
+        /// Phone 8, OS X, Windows, and Linux.
+        ///
+        /// This free license has a few requirements:
+        ///
+        /// * Include the following message somewhere in your app, visible to users
+        ///   (for example, on a credits screen):
+        ///                     Built with Cricket Audio
+        ///                     www.crickettechnology.com
+        ///
+        /// * You may optionally include our logo (available in .svg or .png format).
+        ///
+        /// * Do not distribute our software to anyone, or post it for download on any
+        ///   site; refer them to our website instead. This license does not permit
+        ///   you to distribute Cricket Audio in an SDK, library, or other software
+        ///   development product. Contact us at info@crickettechnology.com for
+        ///   additional licensing options.
+        ///
+        /// * If you release an app that uses Cricket Audio, you must let Cricket
+        ///   Technology know. Cricket Technology will include a link to it on our
+        ///   customers page.
+        ///
+        /// If you do not want to include the credit in your app, or if you do not want
+        /// to notify us of your app's release, or if you want the source code, you can
+        /// purchase a source code license (http://www.crickettechnology.com/source_license).
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
@@ -69,7 +100,7 @@ namespace ChilliSource
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 		private:
 			friend class CSCore::Application;
-			friend class CkAudio;
+			friend class CkSound;
 			//------------------------------------------------------------------------------
 			/// A factory method for creating new instances of the Cricket Audio System.
 			///
@@ -84,22 +115,22 @@ namespace ChilliSource
 			//------------------------------------------------------------------------------
 			CkSystem() = default;
 			//------------------------------------------------------------------------------
-			/// Registers a CkAudio with the system so that it receives update events.
+			/// Registers a CkSound with the system so that it receives update events.
 			///
 			/// @author Ian Copland
 			///
-			/// @param The pointer to the CkAudio.
+			/// @param The pointer to the CkSound.
 			//------------------------------------------------------------------------------
-			void Register(CkAudio* in_ckAudio);
+			void Register(CkSound* in_ckAudio);
 			//------------------------------------------------------------------------------
-			/// De-registers a CkAudio from the system so that it no longer receives update
+			/// De-registers a CkSound from the system so that it no longer receives update
 			/// events.
 			///
 			/// @author Ian Copland
 			///
-			/// @param The pointer to the CkAudio.
+			/// @param The pointer to the CkSound.
 			//------------------------------------------------------------------------------
-			void Deregister(CkAudio* in_ckAudio);
+			void Deregister(CkSound* in_ckAudio);
 			//------------------------------------------------------------------------------
 			/// Initialises the Cricket Audio system.
 			///
@@ -135,7 +166,7 @@ namespace ChilliSource
 			///------------------------------------------------------------------------------
 			void OnDestroy() override;
 
-			std::vector<CkAudio*> m_ckAudioList;
+			std::vector<CkSound*> m_ckAudioList;
 		};
 	}
 }

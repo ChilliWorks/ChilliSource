@@ -488,7 +488,7 @@ namespace CSBackend
 			CS_ASSERT(in_sourceFilePaths.size() == in_destinationFilePaths.size(), "File System: Mismatch number of source paths and dest paths when copying files");
 			CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
 
-			//check if we're loading from DLC, and insure that the file exists in the dlc cache. if it does not, fall back on package.
+			//check if we're loading from DLC, and ensure that the file exists in the dlc cache. if it does not, fall back on package.
 			if (in_sourceStorageLocation == CSCore::StorageLocation::k_package)
 			{
 				std::vector<std::string> filePaths;

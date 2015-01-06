@@ -9,9 +9,9 @@
 /* Begin PBXBuildFile section */
 		8113673019C99A2E00D9AEDC /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8113672D19C99A2E00D9AEDC /* Filter.cpp */; };
 		811B181819D19AF400B06B5D /* RotationGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 811B181619D19AF400B06B5D /* RotationGesture.cpp */; };
-		8138A8F41A5804AA00C81462 /* CkAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8E41A5804AA00C81462 /* CkAudio.cpp */; };
-		8138A8F51A5804AA00C81462 /* CkAudioBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8E61A5804AA00C81462 /* CkAudioBank.cpp */; };
-		8138A8F61A5804AA00C81462 /* CkAudioBankProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8E81A5804AA00C81462 /* CkAudioBankProvider.cpp */; };
+		8138A8F41A5804AA00C81462 /* CkSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8E41A5804AA00C81462 /* CkSound.cpp */; };
+		8138A8F51A5804AA00C81462 /* CkBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8E61A5804AA00C81462 /* CkBank.cpp */; };
+		8138A8F61A5804AA00C81462 /* CkBankProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8E81A5804AA00C81462 /* CkBankProvider.cpp */; };
 		8138A8F71A5804AA00C81462 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8EA1A5804AA00C81462 /* CkAudioPlayer.cpp */; };
 		8138A8FA1A5804AA00C81462 /* CkSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8F11A5804AA00C81462 /* CkSystem.cpp */; };
 		8138A90F1A5806A300C81462 /* libck.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8138A90E1A5806A300C81462 /* libck.a */; };
@@ -291,12 +291,12 @@
 		8113672F19C99A2E00D9AEDC /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		811B181619D19AF400B06B5D /* RotationGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RotationGesture.cpp; sourceTree = "<group>"; };
 		811B181719D19AF400B06B5D /* RotationGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotationGesture.h; sourceTree = "<group>"; };
-		8138A8E41A5804AA00C81462 /* CkAudio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkAudio.cpp; sourceTree = "<group>"; };
-		8138A8E51A5804AA00C81462 /* CkAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkAudio.h; sourceTree = "<group>"; };
-		8138A8E61A5804AA00C81462 /* CkAudioBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkAudioBank.cpp; sourceTree = "<group>"; };
-		8138A8E71A5804AA00C81462 /* CkAudioBank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkAudioBank.h; sourceTree = "<group>"; };
-		8138A8E81A5804AA00C81462 /* CkAudioBankProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkAudioBankProvider.cpp; sourceTree = "<group>"; };
-		8138A8E91A5804AA00C81462 /* CkAudioBankProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkAudioBankProvider.h; sourceTree = "<group>"; };
+		8138A8E41A5804AA00C81462 /* CkSound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkSound.cpp; sourceTree = "<group>"; };
+		8138A8E51A5804AA00C81462 /* CkSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkSound.h; sourceTree = "<group>"; };
+		8138A8E61A5804AA00C81462 /* CkBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkBank.cpp; sourceTree = "<group>"; };
+		8138A8E71A5804AA00C81462 /* CkBank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkBank.h; sourceTree = "<group>"; };
+		8138A8E81A5804AA00C81462 /* CkBankProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkBankProvider.cpp; sourceTree = "<group>"; };
+		8138A8E91A5804AA00C81462 /* CkBankProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkBankProvider.h; sourceTree = "<group>"; };
 		8138A8EA1A5804AA00C81462 /* CkAudioPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkAudioPlayer.cpp; sourceTree = "<group>"; };
 		8138A8EB1A5804AA00C81462 /* CkAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkAudioPlayer.h; sourceTree = "<group>"; };
 		8138A8F01A5804AA00C81462 /* CkForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkForwardDeclarations.h; sourceTree = "<group>"; };
@@ -1014,12 +1014,12 @@
 		8138A8E31A5804AA00C81462 /* CricketAudio */ = {
 			isa = PBXGroup;
 			children = (
-				8138A8E41A5804AA00C81462 /* CkAudio.cpp */,
-				8138A8E51A5804AA00C81462 /* CkAudio.h */,
-				8138A8E61A5804AA00C81462 /* CkAudioBank.cpp */,
-				8138A8E71A5804AA00C81462 /* CkAudioBank.h */,
-				8138A8E81A5804AA00C81462 /* CkAudioBankProvider.cpp */,
-				8138A8E91A5804AA00C81462 /* CkAudioBankProvider.h */,
+				8138A8E41A5804AA00C81462 /* CkSound.cpp */,
+				8138A8E51A5804AA00C81462 /* CkSound.h */,
+				8138A8E61A5804AA00C81462 /* CkBank.cpp */,
+				8138A8E71A5804AA00C81462 /* CkBank.h */,
+				8138A8E81A5804AA00C81462 /* CkBankProvider.cpp */,
+				8138A8E91A5804AA00C81462 /* CkBankProvider.h */,
 				8138A8EA1A5804AA00C81462 /* CkAudioPlayer.cpp */,
 				8138A8EB1A5804AA00C81462 /* CkAudioPlayer.h */,
 				8138A8F01A5804AA00C81462 /* CkForwardDeclarations.h */,
@@ -2767,7 +2767,7 @@
 				81B1D2D1196C0167000F13DD /* Pointer.cpp in Sources */,
 				81D8B4771962E0EC0010DA84 /* AmbientLightComponent.cpp in Sources */,
 				81D8B4351962E0EC0010DA84 /* UTF8StringUtils.cpp in Sources */,
-				8138A8F61A5804AA00C81462 /* CkAudioBankProvider.cpp in Sources */,
+				8138A8F61A5804AA00C81462 /* CkBankProvider.cpp in Sources */,
 				81D8B4221962E0EC0010DA84 /* MathUtils.cpp in Sources */,
 				81D8B47B1962E0EC0010DA84 /* Material.cpp in Sources */,
 				81D8B4691962E0EC0010DA84 /* MeshBatch.cpp in Sources */,
@@ -2826,7 +2826,7 @@
 				819630B21A3A0D5400475D76 /* HttpDelegate.mm in Sources */,
 				81D8B4261962E0EC0010DA84 /* NotificationManager.cpp in Sources */,
 				81D8B4801962E0EC0010DA84 /* CSModelProvider.cpp in Sources */,
-				8138A8F41A5804AA00C81462 /* CkAudio.cpp in Sources */,
+				8138A8F41A5804AA00C81462 /* CkSound.cpp in Sources */,
 				81D8B4A91962E0EC0010DA84 /* WebView.cpp in Sources */,
 				81D8B6A71962E0F70010DA84 /* RemoteNotificationSystem.cpp in Sources */,
 				81D8B4591962E0EC0010DA84 /* HorizontalSliderBar.cpp in Sources */,
@@ -2890,7 +2890,7 @@
 				81D8B6AD1962E0F70010DA84 /* PointerSystem.mm in Sources */,
 				81D8B48D1962E0EC0010DA84 /* CSParticleEffectProvider.cpp in Sources */,
 				81D8B4601962E0EC0010DA84 /* PointerSystem.cpp in Sources */,
-				8138A8F51A5804AA00C81462 /* CkAudioBank.cpp in Sources */,
+				8138A8F51A5804AA00C81462 /* CkBank.cpp in Sources */,
 				81D8B47D1962E0EC0010DA84 /* MaterialProvider.cpp in Sources */,
 				81D8B4701962E0EC0010DA84 /* RenderSystem.cpp in Sources */,
 				81D8B6D41962E0F70010DA84 /* GLSLShaderProvider.cpp in Sources */,

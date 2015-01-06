@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Audio/CricketAudio/CkAudioPlayer.h>
 
-#include <ChilliSource/Audio/CricketAudio/CkAudio.h>
+#include <ChilliSource/Audio/CricketAudio/CkSound.h>
 #include <ChilliSource/Audio/CricketAudio/CkSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 
@@ -63,27 +63,27 @@ namespace ChilliSource
             
             for (auto& effectInfo : m_effects)
             {
-                if (effectInfo.m_effect->GetPlaybackState() == CkAudio::PlaybackState::k_playing)
+                if (effectInfo.m_effect->GetPlaybackState() == CkSound::PlaybackState::k_playing)
                 {
                     effectInfo.m_effect->SetVolume(m_playerVolume * effectInfo.m_volume);
                 }
             }
             
-            if (m_music != nullptr && m_music->GetPlaybackState() == CkAudio::PlaybackState::k_playing)
+            if (m_music != nullptr && m_music->GetPlaybackState() == CkSound::PlaybackState::k_playing)
             {
                 m_music->SetVolume(m_playerVolume * m_musicVolume);
             }
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void CkAudioPlayer::PlayEffect(const CkAudioBankCSPtr& in_bank, const std::string& in_effectName, f32 in_volume)
+        void CkAudioPlayer::PlayEffect(const CkBankCSPtr& in_bank, const std::string& in_effectName, f32 in_volume)
         {
             EffectInfo effectInfo;
             effectInfo.m_volume = in_volume;
-            effectInfo.m_effect = CkAudio::CreateFromBank(in_bank, in_effectName);
+            effectInfo.m_effect = CkSound::CreateFromBank(in_bank, in_effectName);
             
             effectInfo.m_effect->SetVolume(effectInfo.m_volume * m_playerVolume);
-            effectInfo.m_effect->Play(CkAudio::PlaybackMode::k_once, [=](const CkAudio* in_audio)
+            effectInfo.m_effect->Play(CkSound::PlaybackMode::k_once, [=](const CkSound* in_audio)
             {
                 m_effectsToRemove.push_back(in_audio);
             });
@@ -95,7 +95,7 @@ namespace ChilliSource
         void CkAudioPlayer::PlayMusic(Core::StorageLocation in_storageLocation, const std::string& in_filePath, f32 in_volume)
         {
             m_musicVolume = in_volume;
-            m_music = CkAudio::CreateFromStream(in_storageLocation, in_filePath);
+            m_music = CkSound::CreateFromStream(in_storageLocation, in_filePath);
             m_music->SetVolume(m_musicVolume * m_playerVolume);
             m_music->Play();
         }
@@ -120,13 +120,13 @@ namespace ChilliSource
         {
             for (auto& effectInfo : m_effects)
             {
-                if (effectInfo.m_effect->GetPlaybackState() == CkAudio::PlaybackState::k_paused)
+                if (effectInfo.m_effect->GetPlaybackState() == CkSound::PlaybackState::k_paused)
                 {
                     effectInfo.m_effect->Resume();
                 }
             }
             
-            if (m_music != nullptr && m_music->GetPlaybackState() == CkAudio::PlaybackState::k_paused)
+            if (m_music != nullptr && m_music->GetPlaybackState() == CkSound::PlaybackState::k_paused)
             {
                 m_music->Resume();
             }
@@ -156,14 +156,14 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void CkAudioPlayer::OnSuspend()
         {
-            if (m_music != nullptr && m_music->GetPlaybackState() == CkAudio::PlaybackState::k_playing)
+            if (m_music != nullptr && m_music->GetPlaybackState() == CkSound::PlaybackState::k_playing)
             {
                 m_music->Pause();
             }
             
             for (auto& effectInfo : m_effects)
             {
-                if (effectInfo.m_effect->GetPlaybackState() == CkAudio::PlaybackState::k_playing)
+                if (effectInfo.m_effect->GetPlaybackState() == CkSound::PlaybackState::k_playing)
                 {
                     effectInfo.m_effect->Pause();
                 }

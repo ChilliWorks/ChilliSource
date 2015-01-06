@@ -1,5 +1,5 @@
 //
-//  CkAudioBank.cpp
+//  CkBank.cpp
 //  Chilli Source
 //  Created by Ian Copland on 30/12/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Audio/CricketAudio/CkAudioBank.h>
+#include <ChilliSource/Audio/CricketAudio/CkBank.h>
 
 #include <ck/ck.h>
 #include <ck/bank.h>
@@ -35,31 +35,31 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-		CS_DEFINE_NAMEDTYPE(CkAudioBank);
+		CS_DEFINE_NAMEDTYPE(CkBank);
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		CkAudioBankUPtr CkAudioBank::Create()
+		CkBankUPtr CkBank::Create()
 		{
-			return CkAudioBankUPtr(new CkAudioBank());
+			return CkBankUPtr(new CkBank());
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		bool CkAudioBank::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool CkBank::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (CkAudioBank::InterfaceID == in_interfaceId);
+			return (CkBank::InterfaceID == in_interfaceId);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkAudioBank::Build(CkBank* in_CkAudioBank)
+		void CkBank::Build(::CkBank* in_CkAudioBank)
 		{
-			CS_ASSERT(m_bank == nullptr, "Cannot call Build() on a CkAudioBank more than once.");
-			CS_ASSERT(in_CkAudioBank != nullptr, "Cannot Build() a CkAudioBank with a null bank pointer.");
+			CS_ASSERT(m_bank == nullptr, "Cannot call Build() on a CkBank more than once.");
+			CS_ASSERT(in_CkAudioBank != nullptr, "Cannot Build() a CkBank with a null bank pointer.");
 
 			m_bank = in_CkAudioBank;
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		CkBank* CkAudioBank::GetBank() const
+		::CkBank* CkBank::GetBank() const
 		{
 			CS_ASSERT(m_bank != nullptr, "Bank has not yet been built!");
 
@@ -67,7 +67,7 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		CkAudioBank::~CkAudioBank()
+		CkBank::~CkBank()
 		{
 			if (m_bank != nullptr)
 			{

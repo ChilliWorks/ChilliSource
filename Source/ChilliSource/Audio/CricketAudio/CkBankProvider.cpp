@@ -1,5 +1,5 @@
 //
-//  CkAudioBankProvider.cpp
+//  CkBankProvider.cpp
 //  Chilli Source
 //  Created by Ian Copland on 30/12/2014.
 //
@@ -26,9 +26,9 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Audio/CricketAudio/CkAudioBankProvider.h>
+#include <ChilliSource/Audio/CricketAudio/CkBankProvider.h>
 
-#include <ChilliSource/Audio/CricketAudio/CkAudioBank.h>
+#include <ChilliSource/Audio/CricketAudio/CkBank.h>
 #include <ChilliSource/Audio/CricketAudio/CkSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 
@@ -48,28 +48,28 @@ namespace ChilliSource
 			const char k_bankExtension[] = "ckb";
 		}
 
-		CS_DEFINE_NAMEDTYPE(CkAudioBankProvider);
+		CS_DEFINE_NAMEDTYPE(CkBankProvider);
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		CkAudioBankProviderUPtr CkAudioBankProvider::Create()
+		CkBankProviderUPtr CkBankProvider::Create()
 		{
-			return CkAudioBankProviderUPtr(new CkAudioBankProvider());
+			return CkBankProviderUPtr(new CkBankProvider());
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		bool CkAudioBankProvider::IsA(Core::InterfaceIDType in_interfaceId) const
+		bool CkBankProvider::IsA(Core::InterfaceIDType in_interfaceId) const
 		{
-			return (Core::ResourceProvider::InterfaceID == in_interfaceId || CkAudioBankProvider::InterfaceID == in_interfaceId);
+			return (Core::ResourceProvider::InterfaceID == in_interfaceId || CkBankProvider::InterfaceID == in_interfaceId);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		Core::InterfaceIDType CkAudioBankProvider::GetResourceType() const
+		Core::InterfaceIDType CkBankProvider::GetResourceType() const
 		{
-			return CkAudioBank::InterfaceID;
+			return CkBank::InterfaceID;
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		bool CkAudioBankProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
+		bool CkBankProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
 		{
 			std::string lowerExtension = in_extension;
 			Core::StringUtils::ToLowerCase(lowerExtension);
@@ -78,33 +78,33 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkAudioBankProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
+		void CkBankProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
 		{
-            CkBank* bank = nullptr;
+            ::CkBank* bank = nullptr;
             
 #if CS_TARGETPLATFORM_ANDROID
             switch (in_storageLocation)
             {
 				case Core::StorageLocation::k_package:
 				{
-					bank = CkBank::newBank((CSBackend::Android::FileSystem::k_packageAPKDir + in_filePath).c_str());
+					bank = ::CkBank::newBank((CSBackend::Android::FileSystem::k_packageAPKDir + in_filePath).c_str());
 					break;
 				}
 				case Core::StorageLocation::k_chilliSource:
 				{
-					bank = CkBank::newBank((CSBackend::Android::FileSystem::k_csAPKDir + in_filePath).c_str());
+					bank = ::CkBank::newBank((CSBackend::Android::FileSystem::k_csAPKDir + in_filePath).c_str());
 					break;
 				}
 				default:
 				{
 					std::string locationPath = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_storageLocation));
-					bank = CkBank::newBank((locationPath + in_filePath).c_str(), kCkPathType_FileSystem);
+					bank = ::CkBank::newBank((locationPath + in_filePath).c_str(), kCkPathType_FileSystem);
 					break;
 				}
             }
 #else 
             std::string locationPath = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_storageLocation));
-            bank = CkBank::newBank((locationPath + in_filePath).c_str(), kCkPathType_FileSystem);
+            bank = ::CkBank::newBank((locationPath + in_filePath).c_str(), kCkPathType_FileSystem);
 #endif
             if (bank == nullptr)
             {
@@ -112,43 +112,43 @@ namespace ChilliSource
                 return;
             }
             
-            static_cast<CkAudioBank*>(out_resource.get())->Build(bank);
+            static_cast<CkBank*>(out_resource.get())->Build(bank);
             out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkAudioBankProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+		void CkBankProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 		{
-            CkBank* bank = nullptr;
+            ::CkBank* bank = nullptr;
             
 #if CS_TARGETPLATFORM_ANDROID
             switch (in_storageLocation)
 			{
 				case Core::StorageLocation::k_package:
 				{
-					bank = CkBank::newBankAsync((CSBackend::Android::FileSystem::k_packageAPKDir + in_filePath).c_str());
+					bank = ::CkBank::newBankAsync((CSBackend::Android::FileSystem::k_packageAPKDir + in_filePath).c_str());
 					break;
 				}
 				case Core::StorageLocation::k_chilliSource:
 				{
-					bank = CkBank::newBankAsync((CSBackend::Android::FileSystem::k_csAPKDir + in_filePath).c_str());
+					bank = ::CkBank::newBankAsync((CSBackend::Android::FileSystem::k_csAPKDir + in_filePath).c_str());
 					break;
 				}
 				default:
 				{
 					std::string locationPath = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_storageLocation));
-					bank = CkBank::newBankAsync((locationPath + in_filePath).c_str(), kCkPathType_FileSystem);
+					bank = ::CkBank::newBankAsync((locationPath + in_filePath).c_str(), kCkPathType_FileSystem);
 					break;
 				}
 			}
 #else
             std::string locationPath = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_storageLocation));
-            bank = CkBank::newBankAsync((locationPath + in_filePath).c_str(), kCkPathType_FileSystem);
+            bank = ::CkBank::newBankAsync((locationPath + in_filePath).c_str(), kCkPathType_FileSystem);
 #endif
             if (bank != nullptr)
             {
                 AsyncRequest request;
-                request.m_bankResource = std::static_pointer_cast<CkAudioBank>(out_resource);
+                request.m_bankResource = std::static_pointer_cast<CkBank>(out_resource);
                 request.m_bank = bank;
                 request.m_delegate = in_delegate;
                 m_asyncRequests.push_back(request);
@@ -161,13 +161,13 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkAudioBankProvider::OnInit()
+		void CkBankProvider::OnInit()
 		{
-			CS_ASSERT(Core::Application::Get()->GetSystem<CkSystem>() != nullptr, "'CkSystem' is missing and is required by 'CkAudioBankProvider'!");
+			CS_ASSERT(Core::Application::Get()->GetSystem<CkSystem>() != nullptr, "'CkSystem' is missing and is required by 'CkBankProvider'!");
 		}
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void CkAudioBankProvider::OnUpdate(f32 in_deltaTime)
+        void CkBankProvider::OnUpdate(f32 in_deltaTime)
         {
             if(m_asyncRequests.empty() == false)
             {

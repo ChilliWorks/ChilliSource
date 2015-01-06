@@ -98,7 +98,7 @@ namespace ChilliSource
             /// @param The name of the sound effect.
             /// @param [Optional] The volume of the sound effect. Defaults to 1.0.
             //------------------------------------------------------------------------------
-            void PlayEffect(const CkAudioBankCSPtr& in_bank, const std::string& in_effectName, f32 in_volume = 1.0f);
+            void PlayEffect(const CkBankCSPtr& in_bank, const std::string& in_effectName, f32 in_volume = 1.0f);
             //------------------------------------------------------------------------------
             /// Plays the requested music stream. This will loop until a new music track
             /// is played or StopMusic() is called. If the requested stream doesn't exist
@@ -128,7 +128,7 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             struct EffectInfo
             {
-                CkAudioUPtr m_effect;
+                CkSoundUPtr m_effect;
                 f32 m_volume = 0.0f;
 
 				//------------------------------------------------------------------------------
@@ -205,8 +205,8 @@ namespace ChilliSource
             void OnDestroy() override;
             
             std::vector<EffectInfo> m_effects;
-            std::vector<const CkAudio*> m_effectsToRemove;
-            CkAudioUPtr m_music;
+            std::vector<const CkSound*> m_effectsToRemove;
+            CkSoundUPtr m_music;
             f32 m_musicVolume = 1.0f;
             f32 m_playerVolume = 1.0f;
         };

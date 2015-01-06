@@ -1,5 +1,5 @@
 //
-//  CkAudioBankProvider.h
+//  CkBankProvider.h
 //  Chilli Source
 //  Created by Ian Copland on 30/12/2014.
 //
@@ -41,7 +41,7 @@ namespace ChilliSource
 		//------------------------------------------------------------------------------
 		/// The resource provider for Cricket Audio sound banks. An audio bank contains
 		/// a number of audio effects that are loaded into memory as a batch. Specific 
-		/// sounds within a bank can be played by creating a CkAudio with the bank, or 
+		/// sounds within a bank can be played by creating a CkSound with the bank, or 
 		/// through the CKAudioPlayer.
 		///
         /// This is not added to Application by default. If you need to load bank
@@ -54,10 +54,10 @@ namespace ChilliSource
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
-		class CkAudioBankProvider final : public Core::ResourceProvider
+		class CkBankProvider final : public Core::ResourceProvider
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(CkAudioBankProvider);
+			CS_DECLARE_NAMEDTYPE(CkBankProvider);
 			//------------------------------------------------------------------------------
 			/// Allows querying of whether or not this system implements the interface
 			/// described by the given interface Id. Typically this is not called directly
@@ -125,8 +125,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             struct AsyncRequest
             {
-                CkBank* m_bank = nullptr;
-                CkAudioBankSPtr m_bankResource;
+                ::CkBank* m_bank = nullptr;
+                CkBankSPtr m_bankResource;
                 AsyncLoadDelegate m_delegate;
             };
 			//------------------------------------------------------------------------------
@@ -136,14 +136,14 @@ namespace ChilliSource
 			///
 			/// @return The new instance.
 			//------------------------------------------------------------------------------
-			static CkAudioBankProviderUPtr Create();
+			static CkBankProviderUPtr Create();
 			//------------------------------------------------------------------------------
 			/// Default Constructor. This is private to ensure this can only be created
 			/// through Application::CreateSystem().
 			///
 			/// @author Ian Copland
 			//------------------------------------------------------------------------------
-			CkAudioBankProvider() = default;
+			CkBankProvider() = default;
             //------------------------------------------------------------------------------
             /// Called when app systems are initialised. This simply confirms that the
             /// CkSystem exists.

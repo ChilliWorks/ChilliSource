@@ -28,7 +28,7 @@
 
 #include <ChilliSource/Audio/CricketAudio/CkSystem.h>
 
-#include <ChilliSource/Audio/CricketAudio/CkAudio.h>
+#include <ChilliSource/Audio/CricketAudio/CkSound.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
@@ -58,15 +58,15 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkSystem::Register(CkAudio* in_ckAudio)
+		void CkSystem::Register(CkSound* in_ckAudio)
 		{
-			CS_ASSERT(Core::VectorUtils::Contains(m_ckAudioList, in_ckAudio) == false, "The given CkAudio is already registered with the CkSystem!");
+			CS_ASSERT(Core::VectorUtils::Contains(m_ckAudioList, in_ckAudio) == false, "The given CkSound is already registered with the CkSystem!");
 
 			m_ckAudioList.push_back(in_ckAudio);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkSystem::Deregister(CkAudio* in_ckAudio)
+		void CkSystem::Deregister(CkSound* in_ckAudio)
 		{
 			Core::VectorUtils::Remove(m_ckAudioList, in_ckAudio);
 		}
@@ -84,8 +84,45 @@ namespace ChilliSource
 			CkConfig config;
 			CkInit(&config);
 #endif
-            //TODO: Add license info here.
-			CS_LOG_VERBOSE(" ** Add Cricket Audio License here... **");
+            //Print the license info.
+			CS_LOG_VERBOSE("=================");
+            CS_LOG_VERBOSE("= Cricket Audio =");
+            CS_LOG_VERBOSE("=================");
+            CS_LOG_VERBOSE(" ");
+            CS_LOG_VERBOSE("Chilli Source has obtained special permission to include Cricket Audio as");
+            CS_LOG_VERBOSE("part of the engine. See the documentation on CkSystem for details on how");
+            CS_LOG_VERBOSE("to use Cricket Audio. You are free to use Cricket Audio as part of Chilli");
+            CS_LOG_VERBOSE("Source within your app subject to the Cricket Audio free license");
+            CS_LOG_VERBOSE("(http://www.crickettechnology.com/free_license) as outline below:");
+            CS_LOG_VERBOSE(" ");
+            CS_LOG_VERBOSE("Cricket Audio free license");
+            CS_LOG_VERBOSE(" ");
+            CS_LOG_VERBOSE("Cricket Audio is available FREE in binary form for iOS, Android, Windows");
+            CS_LOG_VERBOSE("Phone 8, OS X, Windows, and Linux.");
+            CS_LOG_VERBOSE(" ");
+            CS_LOG_VERBOSE("This free license has a few requirements:");
+            CS_LOG_VERBOSE(" ");
+            CS_LOG_VERBOSE(" * Include the following message somewhere in your app, visible to users");
+            CS_LOG_VERBOSE("   (for example, on a credits screen):");
+            CS_LOG_VERBOSE("                     Built with Cricket Audio");
+            CS_LOG_VERBOSE("                     www.crickettechnology.com");
+            CS_LOG_VERBOSE(" ");
+            CS_LOG_VERBOSE(" * You may optionally include our logo (available in .svg or .png format).");
+            CS_LOG_VERBOSE(" ");
+            CS_LOG_VERBOSE(" * Do not distribute our software to anyone, or post it for download on any");
+            CS_LOG_VERBOSE("   site; refer them to our website instead. This license does not permit");
+            CS_LOG_VERBOSE("   you to distribute Cricket Audio in an SDK, library, or other software");
+            CS_LOG_VERBOSE("   development product. Contact us at info@crickettechnology.com for");
+            CS_LOG_VERBOSE("   additional licensing options.");
+            CS_LOG_VERBOSE(" ");
+            CS_LOG_VERBOSE(" * If you release an app that uses Cricket Audio, you must let Cricket");
+            CS_LOG_VERBOSE("   Technology know. Cricket Technology will include a link to it on our");
+            CS_LOG_VERBOSE("   customers page.");
+            CS_LOG_VERBOSE(" ");
+            CS_LOG_VERBOSE("If you do not want to include the credit in your app, or if you do not want");
+            CS_LOG_VERBOSE("to notify us of your app's release, or if you want the source code, you can");
+            CS_LOG_VERBOSE("purchase a source code license (http://www.crickettechnology.com/source_license).");
+            CS_LOG_VERBOSE(" ");
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------

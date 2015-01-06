@@ -31,10 +31,10 @@
 #define _CHILLISOURCE_AUDIO_CRICKETAUDIO_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Audio/CricketAudio/CkAudio.h>
+#include <ChilliSource/Audio/CricketAudio/CkSound.h>
 #include <ChilliSource/Audio/CricketAudio/CkAudioPlayer.h>
-#include <ChilliSource/Audio/CricketAudio/CkAudioBank.h>
-#include <ChilliSource/Audio/CricketAudio/CkAudioBankProvider.h>
+#include <ChilliSource/Audio/CricketAudio/CkBank.h>
+#include <ChilliSource/Audio/CricketAudio/CkBankProvider.h>
 #include <ChilliSource/Audio/CricketAudio/CkSystem.h>
 
 #endif

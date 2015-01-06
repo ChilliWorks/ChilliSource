@@ -774,19 +774,19 @@
     <ClCompile Include="..\..\Source\ChilliSource\Networking\Http\HttpResponse.cpp">
       <Filter>ChilliSource\Networking</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudio.cpp">
-      <Filter>ChilliSource\Audio\CricketAudio</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.cpp">
       <Filter>ChilliSource\Audio\CricketAudio</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkSystem.cpp">
       <Filter>ChilliSource\Audio\CricketAudio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioBankProvider.cpp">
+    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkBank.cpp">
       <Filter>ChilliSource\Audio\CricketAudio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioBank.cpp">
+    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkBankProvider.cpp">
+      <Filter>ChilliSource\Audio\CricketAudio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkSound.cpp">
       <Filter>ChilliSource\Audio\CricketAudio</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1688,9 +1688,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Networking\Http\HttpResponse.h">
       <Filter>ChilliSource\Networking</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudio.h">
-      <Filter>ChilliSource\Audio\CricketAudio</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">
       <Filter>ChilliSource\Audio\CricketAudio</Filter>
     </ClInclude>
@@ -1703,14 +1700,17 @@
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkForwardDeclarations.h">
       <Filter>ChilliSource\Audio\CricketAudio</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioBankProvider.h">
-      <Filter>ChilliSource\Audio\CricketAudio</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioBank.h">
-      <Filter>ChilliSource\Audio\CricketAudio</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\VectorUtils.h">
       <Filter>ChilliSource\Core\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkBank.h">
+      <Filter>ChilliSource\Audio\CricketAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkBankProvider.h">
+      <Filter>ChilliSource\Audio\CricketAudio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkSound.h">
+      <Filter>ChilliSource\Audio\CricketAudio</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

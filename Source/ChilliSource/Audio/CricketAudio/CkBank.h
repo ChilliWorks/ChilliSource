@@ -1,5 +1,5 @@
 //
-//  CkAudioBank.h
+//  CkBank.h
 //  Chilli Source
 //  Created by Ian Copland on 30/12/2014.
 //
@@ -39,7 +39,7 @@ namespace ChilliSource
 	{
 		//------------------------------------------------------------------------------
 		/// A Cricket Audio bank resource. This contains a group of sounds which are
-		/// loaded as a batch. Individual sounds can be played by creating a CkAudio
+		/// loaded as a batch. Individual sounds can be played by creating a CkSound
 		/// with a bank or through the CkAudioPlayer.
 		///
 		/// Cricket Technology has kindly allows us to include the Cricket Audio SDK
@@ -48,10 +48,10 @@ namespace ChilliSource
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
-		class CkAudioBank final : public Core::Resource
+		class CkBank final : public Core::Resource
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(CkAudioBank);
+			CS_DECLARE_NAMEDTYPE(CkBank);
 			//------------------------------------------------------------------------------
 			/// Allows querying of whether or not this system implements the interface
 			/// described by the given interface Id. Typically this is not called directly
@@ -75,20 +75,20 @@ namespace ChilliSource
 			/// be null. This will take ownership of the bank and release it when it has
 			/// finished with it.
 			//------------------------------------------------------------------------------
-			void Build(CkBank* in_ckBank);
+			void Build(::CkBank* in_ckBank);
 			//------------------------------------------------------------------------------
 			/// @author Ian Copland
 			///
 			/// @return A pointer to the underlying sound bank. This retains ownership of the
 			/// bank so it must not be destroyed.
 			//------------------------------------------------------------------------------
-			CkBank* GetBank() const;
+			::CkBank* GetBank() const;
 			//------------------------------------------------------------------------------
 			/// Destructor.
 			///
 			/// @author Ian Copland
 			//------------------------------------------------------------------------------
-			~CkAudioBank();
+			~CkBank();
 		private:
 			friend class Core::ResourcePool;
 			//------------------------------------------------------------------------------
@@ -98,16 +98,16 @@ namespace ChilliSource
 			///
 			/// @return The new resource instance.
 			//------------------------------------------------------------------------------
-			static CkAudioBankUPtr Create();
+			static CkBankUPtr Create();
 			//------------------------------------------------------------------------------
 			/// Default constructor. This is declared private to ensure this is only ever
 			/// created via the Resource Pool.
 			///
 			/// @author Ian Copland
 			//------------------------------------------------------------------------------
-			CkAudioBank() = default;
+			CkBank() = default;
 
-			CkBank* m_bank = nullptr;
+			::CkBank* m_bank = nullptr;
 		};
 	}
 }

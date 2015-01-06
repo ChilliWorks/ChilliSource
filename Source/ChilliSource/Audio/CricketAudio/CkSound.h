@@ -1,5 +1,5 @@
 //
-//  CkAudio.h
+//  CkSound.h
 //  Chilli Source
 //  Created by Ian Copland on 30/12/2014.
 //
@@ -50,10 +50,10 @@ namespace ChilliSource
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
-		class CkAudio final
+		class CkSound final
 		{
 		public:
-			CS_DECLARE_NOCOPY(CkAudio);
+			CS_DECLARE_NOCOPY(CkSound);
 			//------------------------------------------------------------------------------
 			/// An enum that describes the current playback state of the audio.
 			///
@@ -84,9 +84,9 @@ namespace ChilliSource
 			///
 			/// @param A pointer to the finished audio.
 			//------------------------------------------------------------------------------
-			using FinishedDelegate = std::function<void(const CkAudio* in_ckAudio)>;
+			using FinishedDelegate = std::function<void(const CkSound* in_ckAudio)>;
             //------------------------------------------------------------------------------
-            /// Creates a new CkAudio with audio from a bank. CkAudio is created in the
+            /// Creates a new CkSound with audio from a bank. CkSound is created in the
             /// stopped state, call Play() to begin playback.
             ///
             /// @author Ian Copland
@@ -95,11 +95,11 @@ namespace ChilliSource
             /// @param The name of the audio within the bank. If this not in the bank the
             /// app is considered to be in an irrecoverable state and will terminate.
             ///
-            /// @return The new CkAudio instance.
+            /// @return The new CkSound instance.
             //------------------------------------------------------------------------------
-            static CkAudioUPtr CreateFromBank(const CkAudioBankCSPtr& in_audioBank, const std::string& in_audioName);
+            static CkSoundUPtr CreateFromBank(const CkBankCSPtr& in_audioBank, const std::string& in_audioName);
             //------------------------------------------------------------------------------
-            /// Creates a new CkAudio from an audio stream. CkAudio is created in the
+            /// Creates a new CkSound from an audio stream. CkSound is created in the
             /// stopped state, call Play() to begin playback. Declared private to force the
             /// use of the factory methods.
             ///
@@ -109,7 +109,7 @@ namespace ChilliSource
             /// @param The file path of the stream. If the stream doesn't exist the app is
             /// considered to be in an irrecoverable state and will terminate.
             //------------------------------------------------------------------------------
-            static CkAudioUPtr CreateFromStream(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath);
+            static CkSoundUPtr CreateFromStream(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath);
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -205,14 +205,14 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             void Stop();
 			//------------------------------------------------------------------------------
-			/// Destructor. Cleans up the underlying CkSound. All CkAudio instances must
+			/// Destructor. Cleans up the underlying CkSound. All CkSound instances must
 			/// be destroyed before the end of the application OnDestroy() event, otherwise
 			/// Bank and Stream resource references will still be held when destroying 
 			/// the resource pool.
 			///
 			/// @author Ian Copland
 			//------------------------------------------------------------------------------
-			~CkAudio();
+			~CkSound();
 		private:
 			friend class CkSystem;
             //------------------------------------------------------------------------------
@@ -226,7 +226,7 @@ namespace ChilliSource
             /// @param The name of the audio within the bank. If this not in the bank the
             /// app is considered to be in an irrecoverable state and will terminate.
             //------------------------------------------------------------------------------
-            CkAudio(const CkAudioBankCSPtr& in_audioBank, const std::string& in_audioName);
+            CkSound(const CkBankCSPtr& in_audioBank, const std::string& in_audioName);
             //------------------------------------------------------------------------------
             /// Constructor. Creates this with a peice of audio from a stream. Audio
             /// is created in the stopped state, call Play() to begin playback. Declared
@@ -238,9 +238,9 @@ namespace ChilliSource
             /// @param The file path of the stream. If the stream doesn't exist the app is
             /// considered to be in an irrecoverable state and will terminate.
             //------------------------------------------------------------------------------
-            CkAudio(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath);
+            CkSound(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath);
 			//------------------------------------------------------------------------------
-			/// Updates the playback state of the CkAudio based on the current state of the
+			/// Updates the playback state of the CkSound based on the current state of the
 			/// underlying CkSound. This should only be called by CkSystem.
 			///
 			/// @author Ian Copland
@@ -248,8 +248,8 @@ namespace ChilliSource
 			void OnUpdate();
 
 			CkSystem* m_ckSystem = nullptr;
-			CkAudioBankCSPtr m_audioBank;
-			CkSound* m_sound = nullptr;
+			CkBankCSPtr m_audioBank;
+			::CkSound* m_sound = nullptr;
 
 			PlaybackState m_playbackState = PlaybackState::k_stopped;
 			FinishedDelegate m_finishedDelegate = nullptr;
