@@ -1946,5 +1946,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Random.h">
       <Filter>ChilliSource\Core\Math</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\RandomImpl.h">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

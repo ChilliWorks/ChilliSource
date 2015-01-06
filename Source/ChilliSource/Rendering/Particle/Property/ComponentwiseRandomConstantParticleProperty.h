@@ -82,7 +82,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         template <typename TPropertyType> TPropertyType ComponentwiseRandomConstantParticleProperty<TPropertyType>::GenerateValue(f32 in_playbackProgress) const
         {
-            return Core::Random::GenerateInRangeComponentwise(m_lowerValue, m_upperValue);
+            return Core::Random::GenerateComponentwise(m_lowerValue, m_upperValue);
         }
     }
 }

@@ -58,7 +58,7 @@ namespace ChilliSource
 				//get a random point within the circle at the top of the cone. the square root of the
 				//random distance is used to acheive even distribution.
 				Core::Vector2 topDirection = Core::Random::GenerateDirection2D<f32>();
-				f32 dist = std::sqrt(Core::Random::GenerateFloat<f32>());
+				f32 dist = std::sqrt(Core::Random::GenerateNormalised<f32>());
 
 				//normalise this to get a direction vector.
 				Core::Vector3 output(topDirection.x * dist, y, topDirection.y * dist);
@@ -102,7 +102,7 @@ namespace ChilliSource
 			{
 				const f32 oneOverThree = 1.0f / 3.0f;
 
-				f32 dist = std::pow(Core::Random::GenerateFloat<f32>(), oneOverThree);
+				f32 dist = std::pow(Core::Random::GenerateNormalised<f32>(), oneOverThree);
 				return GenerateDirectionWithinAngle(in_angle) * dist;
 			}
 			//----------------------------------------------------------------
@@ -119,7 +119,7 @@ namespace ChilliSource
 			{
 				const f32 oneOverThree = 1.0f / 3.0f;
 
-				f32 dist = std::pow(Core::Random::GenerateFloat<f32>(), oneOverThree);
+				f32 dist = std::pow(Core::Random::GenerateNormalised<f32>(), oneOverThree);
 				return GenerateDirectionWithAngle(in_angle) * dist;
 			}
 		}

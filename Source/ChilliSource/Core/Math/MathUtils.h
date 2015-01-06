@@ -304,7 +304,7 @@ namespace ChilliSource
                 
 				for(u32 i=0; i < in_numSamples; ++i)
                 {
-                    result += Random::GenerateInRange(in_min, in_max);
+                    result += Random::Generate(in_min, in_max);
                 }
                 
                 return result /= in_numSamples;

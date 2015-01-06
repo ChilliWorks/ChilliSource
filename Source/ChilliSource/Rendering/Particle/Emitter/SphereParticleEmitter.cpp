@@ -47,7 +47,7 @@ namespace ChilliSource
 			//----------------------------------------------------------------
 			Core::Vector3 GeneratePointInUnitSphere()
 			{
-				f32 dist = std::pow(Core::Random::GenerateFloat<f32>(), (1.0f / 3.0f));
+				f32 dist = std::pow(Core::Random::GenerateNormalised<f32>(), (1.0f / 3.0f));
 				return Core::Random::GenerateDirection3D<f32>() * dist;
 			}
 		}

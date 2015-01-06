@@ -172,7 +172,7 @@ namespace ChilliSource
 				}
 				break;
 			case StaticBillboardParticleDrawableDef::ImageSelectionType::k_random:
-				m_particleBillboardIndices[in_index] = Core::Random::GenerateInt<u32>(0, m_billboards->size() - 1);
+				m_particleBillboardIndices[in_index] = Core::Random::Generate<u32>(0, m_billboards->size() - 1);
 				break;
 			default:
 				CS_LOG_FATAL("Invalid image selection type.");

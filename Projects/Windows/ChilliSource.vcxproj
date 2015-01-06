@@ -343,6 +343,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Matrix4.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Quaternion.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Random.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\RandomImpl.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\UnifiedCoordinates.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector2.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector3.h" />

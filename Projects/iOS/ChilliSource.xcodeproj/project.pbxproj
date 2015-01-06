@@ -551,6 +551,7 @@
 		81C925401A5C3C3500B3AE11 /* RNGContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNGContainer.h; sourceTree = "<group>"; };
 		81C925411A5C3C3500B3AE11 /* RNGContainer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RNGContainer.mm; sourceTree = "<group>"; };
 		81C925431A5C4A6000B3AE11 /* GenericFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericFactory.h; sourceTree = "<group>"; };
+		81C925451A5C6FCC00B3AE11 /* RandomImpl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RandomImpl.h; sourceTree = "<group>"; };
 		81CF349F19CC297600B9D0B1 /* DragGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DragGesture.cpp; sourceTree = "<group>"; };
 		81CF34A019CC297600B9D0B1 /* DragGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DragGesture.h; sourceTree = "<group>"; };
 		81CF34A219CC67AC00B9D0B1 /* HoldGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HoldGesture.cpp; sourceTree = "<group>"; };
@@ -1776,6 +1777,7 @@
 				81D8B29A1962E0EB0010DA84 /* Quaternion.h */,
 				81C9253C1A5C3B1800B3AE11 /* Random.cpp */,
 				81C9253D1A5C3B1800B3AE11 /* Random.h */,
+				81C925451A5C6FCC00B3AE11 /* RandomImpl.h */,
 				81D8B29B1962E0EB0010DA84 /* UnifiedCoordinates.cpp */,
 				81D8B29C1962E0EB0010DA84 /* UnifiedCoordinates.h */,
 				81D8B29D1962E0EB0010DA84 /* Vector2.h */,

@@ -106,7 +106,7 @@ namespace ChilliSource
             TPropertyType lowerBound = m_startLowerValue + (m_endLowerValue - m_startLowerValue) * interpolationFactor;
             TPropertyType upperBound = m_startUpperValue + (m_endUpperValue - m_startUpperValue) * interpolationFactor;
             
-            return Core::Random::GenerateInRange(lowerBound, upperBound);
+            return Core::Random::Generate(lowerBound, upperBound);
         }
     }
 }
