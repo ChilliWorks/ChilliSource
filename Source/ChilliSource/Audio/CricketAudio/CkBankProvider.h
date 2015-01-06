@@ -102,7 +102,7 @@ namespace ChilliSource
 			//------------------------------------------------------------------------------
 			void CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
 			//------------------------------------------------------------------------------
-			/// Creates a new Cricket Audio bank from the described file asynchonously. The 
+			/// Creates a new Cricket Audio bank from the described file asynchronously. The 
 			/// load state of the resource should be checked for success or failure.
 			///
 			/// @author Ian Copland

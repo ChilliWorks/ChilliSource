@@ -41,9 +41,6 @@ namespace ChilliSource
             {
                 const f32 k_degreesToRadians = 0.0174532925f;
                 const f32 k_radiansToDegrees = 57.2957795f;
-                
-                std::mt19937 g_randEngine((const uint32_t)std::time(0));
-                std::uniform_real_distribution<f32> g_frandDistribution(0.0f, 1.0f);
             }
             //---------------------------------------------------------
             //---------------------------------------------------------
@@ -70,12 +67,6 @@ namespace ChilliSource
             f32 RadToDeg(f32 infAngle)
             {
                 return infAngle * k_radiansToDegrees;
-            }
-            //---------------------------------------------------------
-            //---------------------------------------------------------
-            f32 FRand()
-            {
-                return g_frandDistribution(g_randEngine);
             }
         }
 	}

@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 #include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Math/Random.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>

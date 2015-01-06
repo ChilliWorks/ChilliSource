@@ -51,14 +51,14 @@
         return TypeName; \
     }
 
-#define CS_DEFINE_TEMPLATE_NAMEDTYPE(x) \
-    template <> const ::CSCore::InterfaceIDType x::InterfaceID = ::CSCore::QueryableInterface::InterfaceIDHash(#x); \
-    template <> const ::std::string x::TypeName = ::CSCore::StringUtils::StandardiseClassName(#x); \
-    template <> ::CSCore::InterfaceIDType x::GetInterfaceID() const \
+#define CS_DEFINE_NAMEDTYPETEMPLATED(in_templatedClass, in_templateParams) \
+	template <typename in_templateParams> const ::CSCore::InterfaceIDType in_templatedClass<in_templateParams>::InterfaceID = ::CSCore::QueryableInterface::InterfaceIDHash(#in_templatedClass#in_templateParams); \
+	template <typename in_templateParams> const ::std::string in_templatedClass<in_templateParams>::TypeName = #in_templatedClass#in_templateParams; \
+	template <typename in_templateParams> ::CSCore::InterfaceIDType in_templatedClass<in_templateParams>::GetInterfaceID() const \
     { \
     return InterfaceID; \
     } \
-    template <> const ::std::string& x::GetInterfaceTypeName() const \
+	template <typename in_templateParams> const ::std::string& in_templatedClass<in_templateParams>::GetInterfaceTypeName() const \
     { \
     return TypeName; \
     }

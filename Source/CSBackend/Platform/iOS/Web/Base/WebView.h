@@ -127,7 +127,7 @@ namespace CSBackend
             //---------------------------------------------------------
             WebView();
             //---------------------------------------------------------
-            /// Called when the the owning state is initialised.
+            /// Called when the owning state is initialised.
             ///
             /// @author Ian Copland
             //---------------------------------------------------------
@@ -168,7 +168,7 @@ namespace CSBackend
 			//---------------------------------------------------------
 			void RemoveActivityIndicator();
             //---------------------------------------------------------
-            /// Called when the the owning state is destroyed.
+            /// Called when the owning state is destroyed.
             ///
             /// @author Ian Copland
             //---------------------------------------------------------

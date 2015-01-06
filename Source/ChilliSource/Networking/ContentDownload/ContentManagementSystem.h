@@ -50,7 +50,7 @@ namespace ChilliSource
         public:
             CS_DECLARE_NAMEDTYPE(ContentManagementSystem);
             //--------------------------------------------------------
-            /// An enum descibing the possible results from a Check
+            /// An enum describing the possible results from a Check
             /// For Updates request.
             ///
             /// @author S Downie
@@ -64,7 +64,7 @@ namespace ChilliSource
                 k_notAvailable,          //There are no updates available
             };
             //--------------------------------------------------------
-            /// An enum descibing the possible results from a content
+            /// An enum describing the possible results from a content
             /// download request.
             ///
             /// @author S Downie
@@ -258,8 +258,7 @@ namespace ChilliSource
             //-----------------------------------------------------------
             void OnContentManifestDownloadComplete(IContentDownloader::Result in_result, const std::string& in_manifest);
             //-----------------------------------------------------------
-            /// The file has downloaded we can now save it to the the 
-            /// cache
+            /// The file has downloaded we can now save it to the cache
             ///
             /// @author S Downie
             ///
