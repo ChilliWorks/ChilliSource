@@ -226,6 +226,8 @@ namespace ChilliSource
             
         private:
             friend class GridLayoutDef;
+            friend class HListLayout;
+            friend class VListLayout;
             //------------------------------------------------------------------------------
             /// Constructor. Creates a grid layout with the given properties.
             ///

@@ -95,11 +95,10 @@ namespace ChilliSource
             {
                 case LayoutType::k_grid:
                     return LayoutDefCUPtr(new GridLayoutDef(in_json));
-                    //TODO: !?
-//                case LayoutType::k_hList:
-//                    return DrawableDefCUPtr(new HListLayoutDef(in_json));
-//                case LayoutType::k_vList:
-//                    return DrawableDefCUPtr(new VListLayout(in_json));
+                case LayoutType::k_hList:
+                    return LayoutDefCUPtr(new HListLayoutDef(in_json));
+                case LayoutType::k_vList:
+                    return LayoutDefCUPtr(new VListLayoutDef(in_json));
                 default:
                     CS_LOG_FATAL("Invalid layout def type.");
                     return nullptr;
