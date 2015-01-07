@@ -32,10 +32,13 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/UI/Layout/GridLayout.h>
+#include <ChilliSource/UI/Layout/GridLayoutDef.h>
 #include <ChilliSource/UI/Layout/HListLayout.h>
-#include <ChilliSource/UI/Layout/ILayout.h>
-#include <ChilliSource/UI/Layout/LayoutDesc.h>
-#include <ChilliSource/UI/Layout/LayoutType.h>
+#include <ChilliSource/UI/Layout/HListLayoutDef.h>
+#include <ChilliSource/UI/Layout/Layout.h>
+#include <ChilliSource/UI/Layout/LayoutComponent.h>
+#include <ChilliSource/UI/Layout/LayoutDef.h>
 #include <ChilliSource/UI/Layout/VListLayout.h>
+#include <ChilliSource/UI/Layout/VListLayoutDef.h>
 
 #endif

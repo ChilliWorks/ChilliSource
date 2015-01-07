@@ -73,12 +73,15 @@ namespace ChilliSource
         //---------------------------------------------------------
         /// Layout
         //---------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(ILayout);
+        CS_FORWARDDECLARE_CLASS(Layout);
+        CS_FORWARDDECLARE_CLASS(LayoutComponent);
+        CS_FORWARDDECLARE_CLASS(LayoutDef);
         CS_FORWARDDECLARE_CLASS(GridLayout);
+        CS_FORWARDDECLARE_CLASS(GridLayoutDef);
         CS_FORWARDDECLARE_CLASS(HListLayout);
+        CS_FORWARDDECLARE_CLASS(HListLayoutDef);
         CS_FORWARDDECLARE_CLASS(VListLayout);
-        CS_FORWARDDECLARE_CLASS(LayoutDesc);
-        enum class LayoutType;
+        CS_FORWARDDECLARE_CLASS(VListLayoutDef);
         //---------------------------------------------------------
         /// Progress Bar
         //---------------------------------------------------------

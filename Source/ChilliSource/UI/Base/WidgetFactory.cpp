@@ -44,7 +44,6 @@
 #include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
 #include <ChilliSource/UI/Layout/GridLayout.h>
 #include <ChilliSource/UI/Layout/HListLayout.h>
-#include <ChilliSource/UI/Layout/LayoutType.h>
 #include <ChilliSource/UI/Layout/VListLayout.h>
 
 namespace ChilliSource
@@ -90,6 +89,9 @@ namespace ChilliSource
             
             WidgetDefCSPtr imageDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Image.csuidef");
             RegisterDefinition(imageDef);
+            
+            WidgetDefCSPtr layoutDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/Layout.csuidef");
+            RegisterDefinition(layoutDef);
             
             WidgetDefCSPtr highlightButtonDef = resPool->LoadResource<WidgetDef>(Core::StorageLocation::k_chilliSource, "Widgets/HighlightButton.csuidef");
             RegisterDefinition(highlightButtonDef);

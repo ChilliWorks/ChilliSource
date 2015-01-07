@@ -1,7 +1,7 @@
 //
-//  LayoutType.cpp
+//  ILayout.cpp
 //  Chilli Source
-//  Created by Scott Downie on 25/07/2014.
+//  Created by Scott Downie on 18/04/2014.
 //
 //  The MIT License (MIT)
 //
@@ -26,28 +26,25 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Layout/LayoutType.h>
-
-#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/UI/Layout/Layout.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        LayoutType ParseLayoutType(const std::string& in_type)
+        CS_DEFINE_NAMEDTYPE(Layout);
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        Layout::Layout(LayoutComponent* in_layoutComponent)
+            : m_component(in_layoutComponent)
         {
-            std::string lowerCase = in_type;
-            Core::StringUtils::ToLowerCase(lowerCase);
-            
-            if(lowerCase == "none") return LayoutType::k_none;
-            if(lowerCase == "grid") return LayoutType::k_grid;
-            if(lowerCase == "hlist") return LayoutType::k_hList;
-            if(lowerCase == "vlist") return LayoutType::k_vList;
-            
-            CS_LOG_FATAL("Cannot parse layout type: " + in_type);
-            return LayoutType::k_none;
+            CS_ASSERT(m_component != nullptr, "A layout must have an owning component.");
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        LayoutComponent* Layout::GetComponent()
+        {
+            return m_component;
         }
     }
 }

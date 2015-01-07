@@ -35,7 +35,6 @@
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
-#include <ChilliSource/UI/Layout/LayoutDesc.h>
 
 
 namespace ChilliSource
@@ -95,16 +94,7 @@ namespace ChilliSource
             {
                 if (in_properties.HasValue(key) == true)
                 {
-                    const Core::IPropertyType* type = in_properties.GetType(key);
-                    
-                    if (type == PropertyTypes::LayoutDesc())
-                    {
-                        SetProperty(key, ILayout::Create(in_properties.GetProperty<LayoutDesc>(key)));
-                    }
-                    else
-                    {
-                        SetProperty(key, in_properties.GetPropertyObject(key));
-                    }
+                    SetProperty(key, in_properties.GetPropertyObject(key));
                 }
             }
         }

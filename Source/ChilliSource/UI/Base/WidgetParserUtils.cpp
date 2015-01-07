@@ -46,9 +46,7 @@
 #include <ChilliSource/UI/Base/WidgetFactory.h>
 #include <ChilliSource/UI/Base/WidgetTemplate.h>
 #include <ChilliSource/UI/Drawable/DrawableDef.h>
-#include <ChilliSource/UI/Layout/ILayout.h>
-#include <ChilliSource/UI/Layout/LayoutDesc.h>
-#include <ChilliSource/UI/Layout/LayoutType.h>
+#include <ChilliSource/UI/Layout/LayoutDef.h>
 
 #include <json/json.h>
 
@@ -138,11 +136,11 @@ namespace ChilliSource
                     DrawableDefCSPtr drawableDef = DrawableDef::Create(in_jsonValue, in_relStorageLocation, in_relDirectoryPath);
                     out_propertyMap.SetProperty(in_propertyName, drawableDef);
                 }
-                else if (propertyType == PropertyTypes::LayoutDesc())
+                else if (propertyType == PropertyTypes::LayoutDef())
                 {
                     CS_ASSERT(in_jsonValue.isObject(), "Value can only be specified as an object: " + in_propertyName);
-                    LayoutDesc layoutDesc(in_jsonValue);
-                    out_propertyMap.SetProperty(in_propertyName, layoutDesc);
+                    LayoutDefCSPtr layoutDef = LayoutDef::Create(in_jsonValue);
+                    out_propertyMap.SetProperty(in_propertyName, layoutDef);
                 }
                 else
                 {

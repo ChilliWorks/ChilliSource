@@ -44,7 +44,6 @@
 #include <ChilliSource/UI/Base/Component.h>
 #include <ChilliSource/UI/Base/PropertyLink.h>
 #include <ChilliSource/UI/Base/SizePolicy.h>
-#include <ChilliSource/UI/Layout/ILayout.h>
 
 #include <cassert>
 #include <functional>
@@ -211,28 +210,6 @@ namespace ChilliSource
             /// @return Connectable event
             //----------------------------------------------------------------------------------------
             Core::IConnectableEvent<InputMovedDelegate>& GetDraggedOutsideEvent();
-            //----------------------------------------------------------------------------------------
-            /// Set the layout that handles how to layout the widget's subviews. If this is null then the
-            /// subviews will retain their current size and position. Otherwise the size and position may
-            /// be manipulatd by the layout
-            ///
-            /// @author S Downie
-            ///
-            /// @param Layout
-            //----------------------------------------------------------------------------------------
-            void SetLayout(const ILayoutSPtr& in_layout);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Layout or null
-            //----------------------------------------------------------------------------------------
-            const ILayoutSPtr& GetLayout();
-            //----------------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return A const pointer to the layout, or null if there isn't one.
-            //----------------------------------------------------------------------------------------
-            ILayoutCSPtr GetLayout() const;
             //----------------------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -883,13 +860,11 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::Vector2 ToLocalSpace(const Core::Vector2& in_point, Rendering::AlignmentAnchor in_alignmentAnchor) const;
             //----------------------------------------------------------------------------------------
-            /// Called when the layout changes forcing this to update its children
+            /// Forces the widget to updat its children.
             ///
-            /// @author S Downie
-            ///
-            /// @param The layout that changed
+            /// @author Ian Copland
             //----------------------------------------------------------------------------------------
-            void OnLayoutChanged(const ILayout* in_layout);
+            void ForceLayoutChildren();
             //----------------------------------------------------------------------------------------
             /// Destructor. Sends the OnDestroy event to all components.
             ///
@@ -1066,7 +1041,7 @@ namespace ChilliSource
             /// @return A pair containing the layout and index. The layout can be null if the the child
             /// is not in a layout.
             //----------------------------------------------------------------------------------------
-            std::pair<ILayout*, s32> GetLayoutForChild(const Widget* in_child);
+            std::pair<LayoutComponent*, s32> GetLayoutForChild(const Widget* in_child);
             //----------------------------------------------------------------------------------------
             /// Sets the value of a property from another property. The given property must be of the
             /// same type as the given property or the app will be considered to be in an irrecoverable
@@ -1207,7 +1182,7 @@ namespace ChilliSource
             
             std::vector<ComponentUPtr> m_components;
 
-            ILayoutSPtr m_layout;
+            LayoutComponent* m_layoutComponent = nullptr;
             
             Widget* m_parent = nullptr;
             const Widget* m_canvas = nullptr;

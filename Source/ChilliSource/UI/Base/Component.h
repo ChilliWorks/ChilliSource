@@ -61,6 +61,19 @@ namespace ChilliSource
             //----------------------------------------------------------------
             const std::string& GetName() const;
             //----------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A pointer to the widget that owns this component.
+            //----------------------------------------------------------------
+            Widget* GetWidget();
+            //----------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A constant pointer to the widget that owns this
+            /// component.
+            //----------------------------------------------------------------
+            const Widget* GetWidget() const;
+            //----------------------------------------------------------------
             /// Allows querying of whether or not the component has a property
             /// with the given name.
             ///
@@ -126,19 +139,6 @@ namespace ChilliSource
             /// @param The name of the component instance.
             //----------------------------------------------------------------
             Component(const std::string& in_name);
-            //----------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return A pointer to the widget that owns this component.
-            //----------------------------------------------------------------
-            Widget* GetWidget();
-            //----------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return A constant pointer to the widget that owns this
-            /// component.
-            //----------------------------------------------------------------
-            const Widget* GetWidget() const;
             //----------------------------------------------------------------
             /// This registers a property such that it can be called using the
             /// set property method. This takes two function pointers, one

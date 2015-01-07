@@ -39,7 +39,7 @@
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Drawable/Drawable.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
-#include <ChilliSource/UI/Layout/LayoutDesc.h>
+#include <ChilliSource/UI/Layout/LayoutComponent.h>
 
 namespace ChilliSource
 {
@@ -63,7 +63,6 @@ namespace ChilliSource
             const char k_properyNameInputEnabled[] = "inputenabled";
             const char k_properyNameInputConsumeEnabled[] = "inputconsumeenabled";
             const char k_properyNameSizePolicy[] = "sizepolicy";
-            const char k_properyNameLayout[] = "layout";
             
             const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
@@ -83,7 +82,6 @@ namespace ChilliSource
                 {Core::PropertyTypes::Bool(), k_properyNameInputEnabled},
                 {Core::PropertyTypes::Bool(), k_properyNameInputConsumeEnabled},
                 {PropertyTypes::SizePolicy(), k_properyNameSizePolicy},
-                {PropertyTypes::LayoutDesc(), k_properyNameLayout},
             };
             
             //----------------------------------------------------------------------------------------
@@ -245,6 +243,8 @@ namespace ChilliSource
             {
                 component->OnInit();
             }
+            
+            m_layoutComponent = GetComponent<LayoutComponent>();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -266,7 +266,6 @@ namespace ChilliSource
             m_baseProperties.emplace(k_properyNameInputEnabled, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsInputEnabled), Core::MakeDelegate(this, &Widget::SetInputEnabled)));
             m_baseProperties.emplace(k_properyNameInputConsumeEnabled, Core::PropertyTypes::Bool()->CreateProperty(Core::MakeDelegate(this, &Widget::IsInputConsumeEnabled), Core::MakeDelegate(this, &Widget::SetInputConsumeEnabled)));
             m_baseProperties.emplace(k_properyNameSizePolicy, PropertyTypes::SizePolicy()->CreateProperty(Core::MakeDelegate(this, &Widget::GetSizePolicy), Core::MakeDelegate(this, &Widget::SetSizePolicy)));
-            m_baseProperties.emplace(k_properyNameLayout, PropertyTypes::Layout()->CreateProperty(Core::MakeDelegate(this, &Widget::GetLayout), Core::MakeDelegate(this, &Widget::SetLayout)));
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -357,16 +356,7 @@ namespace ChilliSource
             {
                 if (in_propertyMap.HasValue(key) == true)
                 {
-                    const Core::IPropertyType* type = in_propertyMap.GetType(key);
-                    
-                    if (type == PropertyTypes::LayoutDesc())
-                    {
-                        SetProperty(key, ILayout::Create(in_propertyMap.GetProperty<LayoutDesc>(key)));
-                    }
-                    else
-                    {
-                        SetProperty(key, in_propertyMap.GetPropertyObject(key));
-                    }
+                    SetProperty(key, in_propertyMap.GetPropertyObject(key));
                 }
             }
         }
@@ -431,31 +421,6 @@ namespace ChilliSource
         Core::IConnectableEvent<Widget::InputMovedDelegate>& Widget::GetDraggedOutsideEvent()
         {
             return m_draggedOutsideEvent;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        void Widget::SetLayout(const ILayoutSPtr& in_layout)
-        {
-            m_layout = in_layout;
-            
-            if(m_layout != nullptr)
-            {
-                m_layout->SetWidget(this);
-            }
-            
-            OnLayoutChanged(m_layout.get());
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        const ILayoutSPtr& Widget::GetLayout()
-        {
-            return m_layout;
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        ILayoutCSPtr Widget::GetLayout() const
-        {
-            return m_layout;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1297,18 +1262,21 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        std::pair<ILayout*, s32> Widget::GetLayoutForChild(const Widget* in_child)
+        std::pair<LayoutComponent*, s32> Widget::GetLayoutForChild(const Widget* in_child)
         {
-            ILayout* layout = nullptr;
+            LayoutComponent* layout = nullptr;
             s32 childIndex = -1;
             
-            for(u32 i=0; i<m_children.size(); ++i)
+            if (m_layoutComponent != nullptr)
             {
-                if(m_children[i].get() == in_child)
+                for(u32 i=0; i<m_children.size(); ++i)
                 {
-                    childIndex = (s32)i;
-                    layout = m_layout.get();
-                    break;
+                    if(m_children[i].get() == in_child)
+                    {
+                        childIndex = (s32)i;
+                        layout = m_layoutComponent;
+                        break;
+                    }
                 }
             }
             
@@ -1353,9 +1321,9 @@ namespace ChilliSource
             
             if(m_canvas != nullptr)
             {
-                if(m_layout != nullptr)
+                if(m_layoutComponent != nullptr)
                 {
-                    m_layout->BuildLayout();
+                    m_layoutComponent->BuildLayout();
                 }
             }
             
@@ -1541,14 +1509,11 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::OnLayoutChanged(const ILayout* in_layout)
+        void Widget::ForceLayoutChildren()
         {
-            if(in_layout == m_layout.get())
+            for(auto& child : m_children)
             {
-                for(auto& child : m_children)
-                {
-                    child->OnParentTransformChanged();
-                }
+                child->OnParentTransformChanged();
             }
         }
         //-----------------------------------------------------------

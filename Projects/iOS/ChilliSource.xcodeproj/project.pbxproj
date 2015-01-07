@@ -319,12 +319,6 @@
 		81E258B01A5D38EF0020264E /* StandardDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258701A5D38EF0020264E /* StandardDrawableDef.cpp */; };
 		81E258B11A5D38EF0020264E /* ThreePatchDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258721A5D38EF0020264E /* ThreePatchDrawable.cpp */; };
 		81E258B21A5D38EF0020264E /* ThreePatchDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258741A5D38EF0020264E /* ThreePatchDrawableDef.cpp */; };
-		81E258B31A5D38EF0020264E /* GridLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258791A5D38EF0020264E /* GridLayout.cpp */; };
-		81E258B41A5D38EF0020264E /* HListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E2587B1A5D38EF0020264E /* HListLayout.cpp */; };
-		81E258B51A5D38EF0020264E /* ILayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E2587D1A5D38EF0020264E /* ILayout.cpp */; };
-		81E258B61A5D38EF0020264E /* LayoutDesc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E2587F1A5D38EF0020264E /* LayoutDesc.cpp */; };
-		81E258B71A5D38EF0020264E /* LayoutType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258811A5D38EF0020264E /* LayoutType.cpp */; };
-		81E258B81A5D38EF0020264E /* VListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258831A5D38EF0020264E /* VListLayout.cpp */; };
 		81E258B91A5D38EF0020264E /* ProgressBarComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258871A5D38EF0020264E /* ProgressBarComponent.cpp */; };
 		81E258BA1A5D38EF0020264E /* ProgressBarDirection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258891A5D38EF0020264E /* ProgressBarDirection.cpp */; };
 		81E258BB1A5D38EF0020264E /* ProgressBarType.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E2588B1A5D38EF0020264E /* ProgressBarType.cpp */; };
@@ -336,6 +330,15 @@
 		81E258D01A5D39880020264E /* JsonUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258CD1A5D39880020264E /* JsonUtils.cpp */; };
 		81E258D51A5D39A00020264E /* HorizontalTextJustification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258D11A5D39A00020264E /* HorizontalTextJustification.cpp */; };
 		81E258D61A5D39A00020264E /* VerticalTextJustification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258D31A5D39A00020264E /* VerticalTextJustification.cpp */; };
+		81E258F01A5D43C20020264E /* GridLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258D91A5D43C20020264E /* GridLayout.cpp */; };
+		81E258F11A5D43C20020264E /* GridLayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258DB1A5D43C20020264E /* GridLayoutDef.cpp */; };
+		81E258F21A5D43C20020264E /* HListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258DD1A5D43C20020264E /* HListLayout.cpp */; };
+		81E258F31A5D43C20020264E /* HListLayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258DF1A5D43C20020264E /* HListLayoutDef.cpp */; };
+		81E258F41A5D43C20020264E /* Layout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258E11A5D43C20020264E /* Layout.cpp */; };
+		81E258F51A5D43C20020264E /* LayoutComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258E31A5D43C20020264E /* LayoutComponent.cpp */; };
+		81E258F61A5D43C20020264E /* LayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258E51A5D43C20020264E /* LayoutDef.cpp */; };
+		81E258F91A5D43C20020264E /* VListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258EC1A5D43C20020264E /* VListLayout.cpp */; };
+		81E258FA1A5D43C20020264E /* VListLayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258EE1A5D43C20020264E /* VListLayoutDef.cpp */; };
 		81FB634419FFA86C009D6894 /* CSBinaryInputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81FB634219FFA86C009D6894 /* CSBinaryInputStream.cpp */; };
 		81FB634719FFB723009D6894 /* CSBinaryChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81FB634519FFB723009D6894 /* CSBinaryChunk.cpp */; };
 /* End PBXBuildFile section */
@@ -1142,18 +1145,6 @@
 		81E258751A5D38EF0020264E /* ThreePatchDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreePatchDrawableDef.h; sourceTree = "<group>"; };
 		81E258761A5D38EF0020264E /* Drawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawable.h; sourceTree = "<group>"; };
 		81E258771A5D38EF0020264E /* ForwardDeclarations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForwardDeclarations.h; sourceTree = "<group>"; };
-		81E258791A5D38EF0020264E /* GridLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridLayout.cpp; sourceTree = "<group>"; };
-		81E2587A1A5D38EF0020264E /* GridLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridLayout.h; sourceTree = "<group>"; };
-		81E2587B1A5D38EF0020264E /* HListLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HListLayout.cpp; sourceTree = "<group>"; };
-		81E2587C1A5D38EF0020264E /* HListLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HListLayout.h; sourceTree = "<group>"; };
-		81E2587D1A5D38EF0020264E /* ILayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ILayout.cpp; sourceTree = "<group>"; };
-		81E2587E1A5D38EF0020264E /* ILayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ILayout.h; sourceTree = "<group>"; };
-		81E2587F1A5D38EF0020264E /* LayoutDesc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutDesc.cpp; sourceTree = "<group>"; };
-		81E258801A5D38EF0020264E /* LayoutDesc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutDesc.h; sourceTree = "<group>"; };
-		81E258811A5D38EF0020264E /* LayoutType.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutType.cpp; sourceTree = "<group>"; };
-		81E258821A5D38EF0020264E /* LayoutType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutType.h; sourceTree = "<group>"; };
-		81E258831A5D38EF0020264E /* VListLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListLayout.cpp; sourceTree = "<group>"; };
-		81E258841A5D38EF0020264E /* VListLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VListLayout.h; sourceTree = "<group>"; };
 		81E258851A5D38EF0020264E /* Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layout.h; sourceTree = "<group>"; };
 		81E258871A5D38EF0020264E /* ProgressBarComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProgressBarComponent.cpp; sourceTree = "<group>"; };
 		81E258881A5D38EF0020264E /* ProgressBarComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProgressBarComponent.h; sourceTree = "<group>"; };
@@ -1187,6 +1178,24 @@
 		81E258D21A5D39A00020264E /* HorizontalTextJustification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HorizontalTextJustification.h; sourceTree = "<group>"; };
 		81E258D31A5D39A00020264E /* VerticalTextJustification.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalTextJustification.cpp; sourceTree = "<group>"; };
 		81E258D41A5D39A00020264E /* VerticalTextJustification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalTextJustification.h; sourceTree = "<group>"; };
+		81E258D91A5D43C20020264E /* GridLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridLayout.cpp; sourceTree = "<group>"; };
+		81E258DA1A5D43C20020264E /* GridLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridLayout.h; sourceTree = "<group>"; };
+		81E258DB1A5D43C20020264E /* GridLayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GridLayoutDef.cpp; sourceTree = "<group>"; };
+		81E258DC1A5D43C20020264E /* GridLayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridLayoutDef.h; sourceTree = "<group>"; };
+		81E258DD1A5D43C20020264E /* HListLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HListLayout.cpp; sourceTree = "<group>"; };
+		81E258DE1A5D43C20020264E /* HListLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HListLayout.h; sourceTree = "<group>"; };
+		81E258DF1A5D43C20020264E /* HListLayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HListLayoutDef.cpp; sourceTree = "<group>"; };
+		81E258E01A5D43C20020264E /* HListLayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HListLayoutDef.h; sourceTree = "<group>"; };
+		81E258E11A5D43C20020264E /* Layout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Layout.cpp; sourceTree = "<group>"; };
+		81E258E21A5D43C20020264E /* Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Layout.h; sourceTree = "<group>"; };
+		81E258E31A5D43C20020264E /* LayoutComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutComponent.cpp; sourceTree = "<group>"; };
+		81E258E41A5D43C20020264E /* LayoutComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutComponent.h; sourceTree = "<group>"; };
+		81E258E51A5D43C20020264E /* LayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LayoutDef.cpp; sourceTree = "<group>"; };
+		81E258E61A5D43C20020264E /* LayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutDef.h; sourceTree = "<group>"; };
+		81E258EC1A5D43C20020264E /* VListLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListLayout.cpp; sourceTree = "<group>"; };
+		81E258ED1A5D43C20020264E /* VListLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VListLayout.h; sourceTree = "<group>"; };
+		81E258EE1A5D43C20020264E /* VListLayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListLayoutDef.cpp; sourceTree = "<group>"; };
+		81E258EF1A5D43C20020264E /* VListLayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VListLayoutDef.h; sourceTree = "<group>"; };
 		81FB634219FFA86C009D6894 /* CSBinaryInputStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSBinaryInputStream.cpp; sourceTree = "<group>"; };
 		81FB634319FFA86C009D6894 /* CSBinaryInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSBinaryInputStream.h; sourceTree = "<group>"; };
 		81FB634519FFB723009D6894 /* CSBinaryChunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSBinaryChunk.cpp; sourceTree = "<group>"; };
@@ -3062,18 +3071,24 @@
 		81E258781A5D38EF0020264E /* Layout */ = {
 			isa = PBXGroup;
 			children = (
-				81E258791A5D38EF0020264E /* GridLayout.cpp */,
-				81E2587A1A5D38EF0020264E /* GridLayout.h */,
-				81E2587B1A5D38EF0020264E /* HListLayout.cpp */,
-				81E2587C1A5D38EF0020264E /* HListLayout.h */,
-				81E2587D1A5D38EF0020264E /* ILayout.cpp */,
-				81E2587E1A5D38EF0020264E /* ILayout.h */,
-				81E2587F1A5D38EF0020264E /* LayoutDesc.cpp */,
-				81E258801A5D38EF0020264E /* LayoutDesc.h */,
-				81E258811A5D38EF0020264E /* LayoutType.cpp */,
-				81E258821A5D38EF0020264E /* LayoutType.h */,
-				81E258831A5D38EF0020264E /* VListLayout.cpp */,
-				81E258841A5D38EF0020264E /* VListLayout.h */,
+				81E258D91A5D43C20020264E /* GridLayout.cpp */,
+				81E258DA1A5D43C20020264E /* GridLayout.h */,
+				81E258DB1A5D43C20020264E /* GridLayoutDef.cpp */,
+				81E258DC1A5D43C20020264E /* GridLayoutDef.h */,
+				81E258DD1A5D43C20020264E /* HListLayout.cpp */,
+				81E258DE1A5D43C20020264E /* HListLayout.h */,
+				81E258DF1A5D43C20020264E /* HListLayoutDef.cpp */,
+				81E258E01A5D43C20020264E /* HListLayoutDef.h */,
+				81E258E11A5D43C20020264E /* Layout.cpp */,
+				81E258E21A5D43C20020264E /* Layout.h */,
+				81E258E31A5D43C20020264E /* LayoutComponent.cpp */,
+				81E258E41A5D43C20020264E /* LayoutComponent.h */,
+				81E258E51A5D43C20020264E /* LayoutDef.cpp */,
+				81E258E61A5D43C20020264E /* LayoutDef.h */,
+				81E258EC1A5D43C20020264E /* VListLayout.cpp */,
+				81E258ED1A5D43C20020264E /* VListLayout.h */,
+				81E258EE1A5D43C20020264E /* VListLayoutDef.cpp */,
+				81E258EF1A5D43C20020264E /* VListLayoutDef.h */,
 			);
 			path = Layout;
 			sourceTree = "<group>";
@@ -3295,10 +3310,12 @@
 				81C925211A5C3ADB00B3AE11 /* ConcurrentParticleData.cpp in Sources */,
 				81C9253E1A5C3B1800B3AE11 /* Random.cpp in Sources */,
 				81C925261A5C3ADB00B3AE11 /* StaticBillboardParticleDrawable.cpp in Sources */,
+				81E258FA1A5D43C20020264E /* VListLayoutDef.cpp in Sources */,
 				81D8B6BB1962E0F70010DA84 /* VideoPlayer.mm in Sources */,
 				81D8B4311962E0EC0010DA84 /* StateManager.cpp in Sources */,
 				81D8B40E1962E0EC0010DA84 /* DialogueBoxSystem.cpp in Sources */,
 				81D8B4551962E0EC0010DA84 /* HorizontalEndcappedProgressBar.cpp in Sources */,
+				81E258F41A5D43C20020264E /* Layout.cpp in Sources */,
 				81D8B4161962E0EC0010DA84 /* TaggedFilePathResolver.cpp in Sources */,
 				81D8B6CE1962E0F70010DA84 /* ContextRestorer.cpp in Sources */,
 				81D8B4721962E0EC0010DA84 /* CameraComponent.cpp in Sources */,
@@ -3338,6 +3355,7 @@
 				81D8B4181962E0EC0010DA84 /* ETC1ImageProvider.cpp in Sources */,
 				81D8B69D1962E0F70010DA84 /* CSGLViewController.mm in Sources */,
 				81D8B4331962E0EC0010DA84 /* StringUtils.cpp in Sources */,
+				81E258F01A5D43C20020264E /* GridLayout.cpp in Sources */,
 				81D8B4671962E0EC0010DA84 /* CanvasRenderer.cpp in Sources */,
 				81D8B43C1962E0EC0010DA84 /* VolumeComponent.cpp in Sources */,
 				81D8B4441962E0EC0010DA84 /* Window.cpp in Sources */,
@@ -3353,9 +3371,9 @@
 				81D8B6D01962E0F70010DA84 /* MeshBuffer.cpp in Sources */,
 				81D8B47E1962E0EC0010DA84 /* AnimatedMeshComponent.cpp in Sources */,
 				81D8B46C1962E0EC0010DA84 /* RenderComponent.cpp in Sources */,
+				81E258F61A5D43C20020264E /* LayoutDef.cpp in Sources */,
 				81C925231A5C3ADB00B3AE11 /* ParticleDrawable.cpp in Sources */,
 				819630B21A3A0D5400475D76 /* HttpDelegate.mm in Sources */,
-				81E258B51A5D38EF0020264E /* ILayout.cpp in Sources */,
 				81C925371A5C3ADB00B3AE11 /* ParticlePropertyCurveFunctions.cpp in Sources */,
 				81D8B4261962E0EC0010DA84 /* NotificationManager.cpp in Sources */,
 				81D8B4801962E0EC0010DA84 /* CSModelProvider.cpp in Sources */,
@@ -3369,7 +3387,7 @@
 				81AAFBBD19C9C18100CD4A14 /* TapGesture.cpp in Sources */,
 				8138A8FA1A5804AA00C81462 /* CricketAudioSystem.cpp in Sources */,
 				81D8B42A1962E0EC0010DA84 /* Property.cpp in Sources */,
-				81E258B81A5D38EF0020264E /* VListLayout.cpp in Sources */,
+				81E258F11A5D43C20020264E /* GridLayoutDef.cpp in Sources */,
 				81E258AA1A5D38EF0020264E /* DrawableComponent.cpp in Sources */,
 				81C9252C1A5C3ADB00B3AE11 /* ConeParticleEmitter.cpp in Sources */,
 				81D8B4851962E0EC0010DA84 /* SkinnedAnimationGroup.cpp in Sources */,
@@ -3390,6 +3408,7 @@
 				81E258981A5D38EF0020264E /* Canvas.cpp in Sources */,
 				81D8B4521962E0EC0010DA84 /* FormattedLabel.cpp in Sources */,
 				81D8B4421962E0EC0010DA84 /* GUIViewFactory.cpp in Sources */,
+				81E258F31A5D43C20020264E /* HListLayoutDef.cpp in Sources */,
 				81D8B4021962E0EC0010DA84 /* Logging.cpp in Sources */,
 				81D8B4491962E0EC0010DA84 /* GridView.cpp in Sources */,
 				81D8B4341962E0EC0010DA84 /* ToString.cpp in Sources */,
@@ -3423,11 +3442,10 @@
 				81D8B42F1962E0EC0010DA84 /* Scene.cpp in Sources */,
 				81D8B42E1962E0EC0010DA84 /* ResourceProvider.cpp in Sources */,
 				81D8B4471962E0EC0010DA84 /* StretchableHighlightButton.cpp in Sources */,
-				81E258B71A5D38EF0020264E /* LayoutType.cpp in Sources */,
 				811B181819D19AF400B06B5D /* RotationGesture.cpp in Sources */,
-				81E258B31A5D38EF0020264E /* GridLayout.cpp in Sources */,
 				81D8B46A1962E0EC0010DA84 /* MeshBuffer.cpp in Sources */,
 				81D8B4541962E0EC0010DA84 /* HorizontalClippingProgressBar.cpp in Sources */,
+				81E258F21A5D43C20020264E /* HListLayout.cpp in Sources */,
 				81D8B4071962E0EC0010DA84 /* ParamDictionarySerialiser.cpp in Sources */,
 				81D8B6CF1962E0F70010DA84 /* GLError.cpp in Sources */,
 				81D8B44A1962E0EC0010DA84 /* HorizontalList.cpp in Sources */,
@@ -3440,6 +3458,7 @@
 				81D8B4821962E0EC0010DA84 /* MeshDescriptor.cpp in Sources */,
 				81D8B4751962E0EC0010DA84 /* Font.cpp in Sources */,
 				81D8B6AD1962E0F70010DA84 /* PointerSystem.mm in Sources */,
+				81E258F91A5D43C20020264E /* VListLayout.cpp in Sources */,
 				81D8B4601962E0EC0010DA84 /* PointerSystem.cpp in Sources */,
 				8138A8F51A5804AA00C81462 /* CkBank.cpp in Sources */,
 				81D8B47D1962E0EC0010DA84 /* MaterialProvider.cpp in Sources */,
@@ -3448,6 +3467,7 @@
 				81D8B6D41962E0F70010DA84 /* GLSLShaderProvider.cpp in Sources */,
 				81D8B4481962E0EC0010DA84 /* ToggleButton.cpp in Sources */,
 				81D8B49E1962E0EC0010DA84 /* TextureAtlas.cpp in Sources */,
+				81E258F51A5D43C20020264E /* LayoutComponent.cpp in Sources */,
 				81E258A71A5D38EF0020264E /* HighlightComponent.cpp in Sources */,
 				81D8B46B1962E0EC0010DA84 /* RenderCapabilities.cpp in Sources */,
 				81D8B4061962E0EC0010DA84 /* ParamDictionary.cpp in Sources */,
@@ -3464,7 +3484,6 @@
 				81D8B6D61962E0F70010DA84 /* Cubemap.cpp in Sources */,
 				81D8B4371962E0EC0010DA84 /* TaskScheduler.cpp in Sources */,
 				81E2589B1A5D38EF0020264E /* ComponentFactory.cpp in Sources */,
-				81E258B61A5D38EF0020264E /* LayoutDesc.cpp in Sources */,
 				81FB634719FFB723009D6894 /* CSBinaryChunk.cpp in Sources */,
 				81B1D2DC196C2B31000F13DD /* TextEntry.mm in Sources */,
 				81E258A81A5D38EF0020264E /* ToggleHighlightComponent.cpp in Sources */,
@@ -3483,7 +3502,6 @@
 				81D8B4231962E0EC0010DA84 /* UnifiedCoordinates.cpp in Sources */,
 				81D8B6D11962E0F70010DA84 /* RenderCapabilities.cpp in Sources */,
 				81D8B4981962E0EC0010DA84 /* SpriteBatch.cpp in Sources */,
-				81E258B41A5D38EF0020264E /* HListLayout.cpp in Sources */,
 				81AAFBBB19C9C18100CD4A14 /* Gesture.cpp in Sources */,
 				81C925291A5C3ADB00B3AE11 /* CircleParticleEmitterDef.cpp in Sources */,
 				81C9251F1A5C3ADB00B3AE11 /* ScaleOverLifetimeParticleAffector.cpp in Sources */,

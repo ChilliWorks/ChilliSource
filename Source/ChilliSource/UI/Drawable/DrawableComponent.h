@@ -53,8 +53,8 @@ namespace ChilliSource
         /// A DrawableComponent contains the following properties:
         ///
         /// "Drawable": The description of the drawable that will be rendered. The
-        /// contents of a drawable description are described in the class
-        /// documentation for DrawableDesc.
+        /// contents of a drawable are described in each of the drawable def types
+        /// documentation.
         ///
         /// @author Ian Copland
         //--------------------------------------------------------------------------
@@ -93,8 +93,7 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @return A const pointer to the drawable object that performs the
-            /// rendering. This can be used to directly change properties such as
-            /// the UVs and colour of the rendered image.
+            /// rendering. 
             //-------------------------------------------------------------------
             const Drawable* GetDrawable() const;
             //-------------------------------------------------------------------

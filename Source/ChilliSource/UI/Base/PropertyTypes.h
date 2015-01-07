@@ -45,9 +45,8 @@ namespace ChilliSource
         {
             CS_DECLARE_PROPERTYTYPE(Rendering::AlignmentAnchor, AlignmentAnchor);
             CS_DECLARE_PROPERTYTYPE(SizePolicy, SizePolicy);
-            CS_DECLARE_PROPERTYTYPE(LayoutDesc, LayoutDesc);
-            CS_DECLARE_PROPERTYTYPE(ILayoutSPtr, Layout);
             CS_DECLARE_PROPERTYTYPE(DrawableDefCSPtr, DrawableDef);
+            CS_DECLARE_PROPERTYTYPE(LayoutDefCSPtr, LayoutDef);
             CS_DECLARE_PROPERTYTYPE(Rendering::TextureCSPtr, Texture);
             CS_DECLARE_PROPERTYTYPE(Rendering::TextureAtlasCSPtr, TextureAtlas);
             CS_DECLARE_PROPERTYTYPE(Rendering::FontCSPtr, Font);
