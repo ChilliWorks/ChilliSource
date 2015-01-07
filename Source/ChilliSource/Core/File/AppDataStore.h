@@ -51,7 +51,7 @@ namespace ChilliSource
         /// Note that keys beginning with an underscore '_' are reserved for
         /// internal engine use.
         ///
-        /// The ADS is thread-safe and is initialised prior to the the OnInit()
+        /// The ADS is thread-safe and is initialised prior to the OnInit()
         /// lifecycle event.
         ///
         /// @author S McGaw

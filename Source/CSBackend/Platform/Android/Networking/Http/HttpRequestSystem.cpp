@@ -30,8 +30,9 @@
 
 #include <CSBackend/Platform/Android/Networking/Http/HttpRequestSystem.h>
 
-#include <CSBackend/Platform/Android/Networking/Http/HttpRequest.h>
 #include <CSBackend/Platform/Android/Networking/Http/HttpRequestJavaInterface.h>
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace CSBackend
 {
@@ -47,18 +48,37 @@ namespace CSBackend
 		}
         //--------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------
-        void HttpRequestSystem::SetConnectionTimeout(u32 in_timeoutSecs)
+        HttpRequest* HttpRequestSystem::MakeGetRequest(const std::string& in_url, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
         {
-        	HttpRequestJavaInterface::SetConnectionTimeout(in_timeoutSecs);
+            return MakeRequest(HttpRequest::Type::k_get, in_url, "", CSCore::ParamDictionary(), in_delegate, in_timeoutSecs);
+        }
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        HttpRequest* HttpRequestSystem::MakeGetRequest(const std::string& in_url, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
+        {
+            return MakeRequest(HttpRequest::Type::k_get, in_url, "", in_headers, in_delegate, in_timeoutSecs);
+        }
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        HttpRequest* HttpRequestSystem::MakePostRequest(const std::string& in_url, const std::string& in_body, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
+        {
+            return MakeRequest(HttpRequest::Type::k_post, in_url, in_body, CSCore::ParamDictionary(), in_delegate, in_timeoutSecs);
+        }
+        //--------------------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------------------
+        HttpRequest* HttpRequestSystem::MakePostRequest(const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
+        {
+            return MakeRequest(HttpRequest::Type::k_post, in_url, in_body, in_headers, in_delegate, in_timeoutSecs);
         }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
-		CSNetworking::HttpRequest* HttpRequestSystem::MakeRequest(const CSNetworking::HttpRequest::Desc& in_requestDesc, const CSNetworking::HttpRequest::Delegate& in_delegate)
+        HttpRequest* HttpRequestSystem::MakeRequest(HttpRequest::Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs)
         {
-			CS_ASSERT(in_requestDesc.m_url.empty() == false, "Cannot make an http request to a blank url");
+        	CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Http requests can currently only be made on the main thread");
+        	CS_ASSERT(in_delegate != nullptr, "Cannot make an http request with a null delegate");
+			CS_ASSERT(in_url.empty() == false, "Cannot make an http request to a blank url");
 
-            //The ownership of the request is with the request itself
-			HttpRequest* request = new HttpRequest(in_requestDesc, GetMaxBufferSize(), in_delegate);
+			HttpRequest* request = new HttpRequest(in_type, in_url, in_body, in_headers, in_timeoutSecs, GetMaxBufferSize(), in_delegate);
             
 			m_requests.push_back(request);
 			return request;
@@ -67,6 +87,8 @@ namespace CSBackend
 		//--------------------------------------------------------------------------------------------------
 		void HttpRequestSystem::CancelAllRequests()
         {
+			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Http requests can currently only be made on the main thread");
+
 			for(u32 nRequest=0; nRequest<m_requests.size(); ++nRequest)
             {
 				m_requests[nRequest]->Cancel();

@@ -11,6 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkBank.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkBankProvider.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkSound.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Audio\CricketAudio\CricketAudioSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\AppConfig.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\Application.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Base\ByteColour.cpp" />
@@ -54,6 +59,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Geometry\ShapeIntersection.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Geometry\Shapes.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\MathUtils.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Random.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\UnifiedCoordinates.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\AppNotificationSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\LocalNotificationSystem.cpp" />
@@ -128,6 +134,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Networking\ContentDownload\ContentManagementSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\ContentDownload\MoContentDownloader.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\Http\HttpRequestSystem.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Networking\Http\HttpResponse.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Networking\IAP\IAPSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.cpp" />
@@ -166,20 +173,41 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\StaticMeshComponent.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SubMesh.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ColourChangerParticleAffector.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\LinearForceParticleAffector.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ParticleAffectorFactory.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ScalerParticleAffector.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\SpinnerParticleAffector.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\CSParticleEffectProvider.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\ConeParticleEmitter.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\ParticleEmitter.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\ParticleEmitterFactory.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\PointParticleEmitter.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\RingParticleEmitter.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\ParticleComponent.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\ParticleEffect.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particles\ParticleSystem.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffector.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffectorDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AngularAccelerationParticleAffector.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AngularAccelerationParticleAffectorDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ColourOverLifetimeParticleAffector.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ColourOverLifetimeParticleAffectorDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ParticleAffector.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ParticleAffectorDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ParticleAffectorDefFactory.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ScaleOverLifetimeParticleAffector.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ScaleOverLifetimeParticleAffectorDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ConcurrentParticleData.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\CSParticleProvider.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawable.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawableDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawableDefFactory.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\StaticBillboardParticleDrawable.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\StaticBillboardParticleDrawableDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitter.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitterDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitter.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitterDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitter.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitterDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitter.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitterDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitterDefFactory.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitter.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitterDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\SphereParticleEmitter.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\SphereParticleEmitterDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffect.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffectComponent.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyCurveFunctions.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactoryImpl.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\Shader.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\DynamicSpriteBatcher.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteBatch.cpp" />
@@ -269,6 +297,13 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkBank.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkBankProvider.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkForwardDeclarations.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkSound.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CricketAudioSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Audio\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\ChilliSource.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base.h" />
@@ -293,6 +328,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_const_reverse_iterator.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_forward_iterator.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\concurrent_vector_reverse_iterator.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\dynamic_array.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\HashedArray.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ParamDictionary.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\ParamDictionarySerialiser.h" />
@@ -304,6 +340,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\Property\PropertyTypes.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\Property\ReferenceProperty.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\Property\ValueProperty.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Container\random_access_iterator.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Container\VectorUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Cryptographic\AESEncrypt.h" />
@@ -346,6 +383,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Image\ImageFormatConverter.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Image\PNGImageProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Image\PVRImageProvider.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Json.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Json\JsonUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Localisation.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Localisation\LocalisedText.h" />
@@ -358,6 +396,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Matrix3.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Matrix4.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Quaternion.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Random.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\RandomImpl.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\UnifiedCoordinates.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector2.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector3.h" />
@@ -465,7 +505,9 @@
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\Http\HttpRequest.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\Http\HttpRequestSystem.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Networking\Http\HttpResponse.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\IAP\IAPSystem.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\BlendMode.h" />
@@ -488,19 +530,24 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexDeclaration.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VertexLayouts.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\VerticalTextJustification.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\CameraComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\OrthographicCameraComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Camera\PerspectiveCameraComponent.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Font.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Font\Font.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Font\FontProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\ForwardDeclarations.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\AmbientLightComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\DirectionalLightComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\LightComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Lighting\PointLightComponent.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\Material.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Material\MaterialProvider.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\AnimatedMeshComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSAnimProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.h" />
@@ -511,25 +558,58 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\StaticMeshComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SubMesh.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ColourChangerParticleAffector.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\LinearForceParticleAffector.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ParticleAffector.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ParticleAffectorFactory.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\ScalerParticleAffector.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Affectors\SpinnerParticleAffector.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\CSParticleEffectProvider.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\ConeParticleEmitter.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\ParticleEmitter.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\ParticleEmitterFactory.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\PointParticleEmitter.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\Emitters\RingParticleEmitter.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\ParticleComponent.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\ParticleEffect.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particles\ParticleSystem.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffector.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AccelerationParticleAffectorDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AngularAccelerationParticleAffector.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\AngularAccelerationParticleAffectorDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ColourOverLifetimeParticleAffector.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ColourOverLifetimeParticleAffectorDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ParticleAffector.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ParticleAffectorDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ParticleAffectorDefFactory.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ScaleOverLifetimeParticleAffector.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Affector\ScaleOverLifetimeParticleAffectorDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\ConcurrentParticleData.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\CSParticleProvider.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawable.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawableDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\ParticleDrawableDefFactory.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\StaticBillboardParticleDrawable.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Drawable\StaticBillboardParticleDrawableDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitter.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\CircleParticleEmitterDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitter.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\Cone2DParticleEmitterDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitter.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ConeParticleEmitterDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitter.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitterDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\ParticleEmitterDefFactory.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitter.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\PointParticleEmitterDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\SphereParticleEmitter.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\SphereParticleEmitterDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Particle.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffect.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffectComponent.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ComponentwiseRandomConstantParticleProperty.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ComponentwiseRandomCurveParticleProperty.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ConstantParticleProperty.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\CurveParticleProperty.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticleProperty.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyCurveFunctions.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactory.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactoryImpl.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomConstantParticleProperty.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomCurveParticleProperty.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Shader\Shader.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\DynamicSpriteBatcher.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteBatch.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Sprite\SpriteComponent.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\Cubemap.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\CubemapResourceOptions.h" />
@@ -654,14 +734,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\Libraries\Core\Windows\Libs\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\;$(ProjectDir)..\..\Libraries\CricketAudio\Windows\Headers\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\csbin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\csobj\$(Configuration)\a\b\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)..\..\Libraries\Core\Windows\Libs\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\;$(ProjectDir)..\..\Libraries\CricketAudio\Windows\Headers\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\csbin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\csobj\$(Configuration)\a\b\</IntDir>
   </PropertyGroup>

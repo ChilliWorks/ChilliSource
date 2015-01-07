@@ -364,6 +364,10 @@ namespace CSBackend
 		}
 
 		CS_DEFINE_NAMEDTYPE(FileSystem);
+
+		const std::string FileSystem::k_packageAPKDir = "AppResources/";
+		const std::string FileSystem::k_csAPKDir = "CSResources/";
+
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
 		FileSystem::FileSystem()
@@ -484,7 +488,7 @@ namespace CSBackend
 			CS_ASSERT(in_sourceFilePaths.size() == in_destinationFilePaths.size(), "File System: Mismatch number of source paths and dest paths when copying files");
 			CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
 
-			//check if we're loading from DLC, and insure that the file exists in the dlc cache. if it does not, fall back on package.
+			//check if we're loading from DLC, and ensure that the file exists in the dlc cache. if it does not, fall back on package.
 			if (in_sourceStorageLocation == CSCore::StorageLocation::k_package)
 			{
 				std::vector<std::string> filePaths;
@@ -862,8 +866,8 @@ namespace CSBackend
 				CS_LOG_FATAL("File System: Failed to open APK.");
 			}
 
-			std::string appAssetsPath = k_assetsPath + "AppResources/";
-			std::string csAssetsPath = k_assetsPath + "CSResources/";
+			std::string appAssetsPath = k_assetsPath + k_packageAPKDir;
+			std::string csAssetsPath = k_assetsPath + k_csAPKDir;
 
 			s32 status = unzGoToFirstFile(unzipper);
 			while (status == UNZ_OK)

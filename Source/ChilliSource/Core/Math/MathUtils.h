@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_CORE_MATH_MATHUTILS_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Random.h>
 
 #include <algorithm>
 #include <cmath>
@@ -73,24 +74,6 @@ namespace ChilliSource
             /// @return Angle in degrees
             //---------------------------------------------------------
 			f32 RadToDeg(f32 in_angle);
-            //---------------------------------------------------------
-            /// @author S McGaw
-            ///
-            /// @return Normalised random number between 0 and 1 (inclusive)
-            //---------------------------------------------------------
-			f32 FRand();
-            //---------------------------------------------------------
-            /// @author S McGaw
-            ///
-            /// @param The minimum number that can be returned (inclusive)
-            /// @param The maximum number that can be returned (inclusive)
-            ///
-            /// @return Random number within the range
-            //---------------------------------------------------------
-            template <typename TValueType> TValueType RandomInRange(TValueType in_min, TValueType in_max)
-            {
-                return in_min + (TValueType)(FRand()*(in_max - in_min));
-            }
             //---------------------------------------------------------
             /// @author A Glass
             ///
@@ -321,7 +304,7 @@ namespace ChilliSource
                 
 				for(u32 i=0; i < in_numSamples; ++i)
                 {
-					result += RandomInRange(in_min, in_max);
+                    result += Random::Generate(in_min, in_max);
                 }
                 
                 return result /= in_numSamples;

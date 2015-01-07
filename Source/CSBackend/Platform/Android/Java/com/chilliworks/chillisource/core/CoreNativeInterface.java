@@ -31,6 +31,7 @@ package com.chilliworks.chillisource.core;
 import com.chilliworks.chillisource.core.FileUtils;
 import com.chilliworks.chillisource.core.InterfaceIDType;
 
+import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -156,6 +157,15 @@ public class CoreNativeInterface extends INativeInterface
 	@Override public boolean IsA(InterfaceIDType in_interfaceType) 
 	{
 		return (in_interfaceType.Equals(InterfaceID));
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @return The activity.
+	 */
+	public Activity getActivity()
+	{
+		return CSApplication.get().getActivity();
 	}
 	/**
 	 * @author Ian Copland

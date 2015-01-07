@@ -72,8 +72,7 @@ namespace CSBackend
 //--------------------------------------------------------
 /// Setup View
 ///
-/// sets up the listener with the the view and
-/// the delegate
+/// sets up the listener with the view and the delegate
 ///
 /// @param the view.
 /// @param the tapped delegate.

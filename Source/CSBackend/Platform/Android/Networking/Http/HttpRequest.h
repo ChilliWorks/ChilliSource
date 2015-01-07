@@ -34,6 +34,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/ForwardDeclarations.h>
 #include <ChilliSource/Networking/Http/HttpRequest.h>
+#include <ChilliSource/Networking/Http/HttpResponse.h>
 
 namespace CSBackend
 {
@@ -48,40 +49,55 @@ namespace CSBackend
 		class HttpRequest final : public CSNetworking::HttpRequest
 		{
 		public:
-			//----------------------------------------------------------------------------------------
-			/// Constructor
-			///
-			/// @author Ian Copland
-			///
-            /// @param Request description
-            /// @param Max buffer size before flush required
-            /// @param Completion delegate
-			//----------------------------------------------------------------------------------------
-			HttpRequest(const Desc& in_requestDesc, u32 in_bufferFlushSize, const Delegate& in_delegate);
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The type of the request (POST or GET)
+            //----------------------------------------------------------------------------------------
+            Type GetType() const override;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The original url to which the request was sent
+            //----------------------------------------------------------------------------------------
+            const std::string& GetUrl() const override;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The body of the POST request (GET request will return empty)
+            //----------------------------------------------------------------------------------------
+            const std::string& GetBody() const override;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The original headers of the request as keys/values
+            //----------------------------------------------------------------------------------------
+            const CSCore::ParamDictionary& GetHeaders() const override;
             //----------------------------------------------------------------------------------------
             /// Close the request. Note: The completion delegate is not invoked
             ///
             /// @author Ian Copland
             //----------------------------------------------------------------------------------------
             void Cancel() override;
-            //----------------------------------------------------------------------------------------
-            /// @author Ian Copland
+
+		private:
+
+            friend class HttpRequestSystem;
+            friend class HttpRequestJavaInterface;
+            //------------------------------------------------------------------
+            /// Constructor. Can only be created via HttpRequestSystem
             ///
-            /// @return The original request details (i.e. whether it is post/get the body and header)
-            //----------------------------------------------------------------------------------------
-            const Desc& GetDescription() const override;
-            //----------------------------------------------------------------------------------------
-            /// @author Ian Copland
+            /// @author S Downie
             ///
-            /// @return The contents of the response as a string. This could be binary data
-            //----------------------------------------------------------------------------------------
-            const std::string& GetResponse() const override;
-            //----------------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return HTTP response code (i.e. 200 = OK, 400 = Error)
-            //----------------------------------------------------------------------------------------
-            u32 GetResponseCode() const override;
+            /// @param Type (POST or GET)
+            /// @param Url to send request to
+            /// @param POST body
+            /// @param Headers
+            /// @param Timeout in seconds
+            /// @param Max buffer size in bytes
+            /// @param Completion delegate
+            //------------------------------------------------------------------
+            HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate);
             //----------------------------------------------------------------------------------------
             /// Checks the stream to see if any data is available for reading
             /// and reads this into a buffer. Once all the data is read
@@ -96,28 +112,41 @@ namespace CSBackend
             /// @return Whether the request has completed - regardless of success or failure
             //----------------------------------------------------------------------------------------
             bool HasCompleted() const;
-
-		private:
-
 			//------------------------------------------------------------------
 			/// Perform Request
 			///
 			/// Sends the request
 			//------------------------------------------------------------------
 			void PerformRequest();
+			//--------------------------------------------------------------------------------------
+			/// Called by Java when the request contents exceed the max buffer size and are flushed.
+			/// This is called on the main thread.
+			///
+			/// @author S Downie
+			///
+			/// @param Partial data
+			/// @param Response code
+			//--------------------------------------------------------------------------------------
+			void OnFlushed(const std::string& in_data, u32 in_responseCode);
 
 		private:
 			
-			Delegate m_completionDelegate;
-			Desc m_desc;
+            const Type m_type;
+            const std::string m_url;
+            const std::string m_body;
+            const CSCore::ParamDictionary m_headers;
+			const Delegate m_completionDelegate;
+			const u32 m_timeoutSecs;
+			const u32 m_maxBufferSize;
 			
+			bool m_shouldKillThread = false;
+			bool m_isPollingComplete = false;
+			bool m_isRequestComplete = false;
+			bool m_isRequestCancelled = false;
+
 			std::string m_responseData;
-			u32 m_responseCode;
-			Result m_requestResult;
-			
-			bool m_shouldKillThread;
-			bool m_isPollingComplete;
-			bool m_isRequestComplete;
+			CSNetworking::HttpResponse::Result m_requestResult = CSNetworking::HttpResponse::Result::k_failed;
+			u32 m_responseCode = 0;
 		};
 	}
 }

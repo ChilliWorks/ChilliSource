@@ -53,7 +53,7 @@ namespace ChilliSource
 		public:
 			CS_DECLARE_NAMEDTYPE(DeviceButtons);
             //----------------------------------------------------
-			/// An enum descibing the possible Device Buttons.
+			/// An enum describing the possible Device Buttons.
             ///
             /// @author Ian Copland
 			//----------------------------------------------------

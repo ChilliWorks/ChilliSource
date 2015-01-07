@@ -36,59 +36,57 @@
 
 namespace ChilliSource
 {
-    namespace Core
-    {
-        //------------------------------------------------------------------------
-        /// A collection of convenience methods for working with vector from the
-        /// STL.
-        ///
-        /// @author Ian Copland
-        //------------------------------------------------------------------------
-        namespace VectorUtils
-        {
-            //------------------------------------------------------------------
-            /// Returns whether or not the given vector contains the given value.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The vector.
-            /// @param The value to check.
-            ///
-            /// @return Whether or not the given value is contained in the given
-            /// vector.
-            //------------------------------------------------------------------
-            template <typename TValueType> bool Contains(const std::vector<TValueType>& in_vector, TValueType in_value);
-            //------------------------------------------------------------------
-            /// Removes the first instance of the given value from the vector.
-            /// If the value doesn't exist in the vector the app is considered
-            /// to be in an irrecovereable state and will terminate. This
-            /// should not be called while iterating over a vector as it will
-            /// invalidate any iterators.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The vector.
-            /// @param The value to check.
-            //------------------------------------------------------------------
-            template <typename TValueType> void Remove(std::vector<TValueType>& in_vector, TValueType in_value);
-            
-            //------------------------------------------------------------------
-            //------------------------------------------------------------------
-            template <typename TValueType> bool Contains(const std::vector<TValueType>& in_vector, TValueType in_value)
-            {
-                return (std::find(in_vector.begin(), in_vector.end(), in_value) != in_vector.end());
-            }
-            //------------------------------------------------------------------
-            //------------------------------------------------------------------
-            template <typename TValueType> void Remove(std::vector<TValueType>& in_vector, TValueType in_value)
-            {
-                auto it = std::find(in_vector.begin(), in_vector.end(), in_value);
-                CS_ASSERT(it != in_vector.end(), "Cannot remove the given value from the vector becuase it doesn't exist.");
-                
-                in_vector.erase(it);
-            }
-        }
-    }
+	namespace Core
+	{
+		//------------------------------------------------------------------------------
+		/// A collection of convenience methods for working with vector from the
+		/// standard library.
+		///
+		/// @author Ian Copland
+		//------------------------------------------------------------------------------
+		namespace VectorUtils
+		{
+			//------------------------------------------------------------------------------
+			/// Returns whether or not the given vector contains the given value.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The vector.
+			/// @param The value to check.
+			///
+			/// @return Whether or not the given value is contained in the given vector.
+			//------------------------------------------------------------------------------
+			template <typename TValueType> bool Contains(const std::vector<TValueType>& in_vector, TValueType in_value);
+			//------------------------------------------------------------------------------
+			/// Removes the first instance of the given value from the vector. If the value 
+			/// doesn't exist in the vector the app is considered to be in an irrecovereable 
+			/// state and will terminate. This should not be called while iterating over a 
+			/// vector as it will invalidate any iterators.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The vector.
+			/// @param The value to check.
+			//------------------------------------------------------------------------------
+			template <typename TValueType> void Remove(std::vector<TValueType>& in_vector, TValueType in_value);
+
+			//------------------------------------------------------------------------------
+			//------------------------------------------------------------------------------
+			template <typename TValueType> bool Contains(const std::vector<TValueType>& in_vector, TValueType in_value)
+			{
+				return (std::find(in_vector.begin(), in_vector.end(), in_value) != in_vector.end());
+			}
+			//------------------------------------------------------------------------------
+			//------------------------------------------------------------------------------
+			template <typename TValueType> void Remove(std::vector<TValueType>& in_vector, TValueType in_value)
+			{
+				auto it = std::find(in_vector.begin(), in_vector.end(), in_value);
+				CS_ASSERT(it != in_vector.end(), "Cannot remove the given value from the vector becuase it doesn't exist.");
+
+				in_vector.erase(it);
+			}
+		}
+	}
 }
 
 #endif

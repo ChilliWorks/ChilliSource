@@ -70,13 +70,13 @@
 #include <ChilliSource/Rendering/Material/MaterialProvider.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 #include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Rendering/Particles/CSParticleEffectProvider.h>
-#include <ChilliSource/Rendering/Particles/ParticleSystem.h>
-#include <ChilliSource/Rendering/Particles/Affectors/ParticleAffectorFactory.h>
-#include <ChilliSource/Rendering/Particles/Emitters/ParticleEmitterFactory.h>
+#include <ChilliSource/Rendering/Particle/CSParticleProvider.h>
+#include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDefFactory.h>
+#include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDefFactory.h>
+#include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitterDefFactory.h>
 #include <ChilliSource/Rendering/Texture/CubemapProvider.h>
-#include <ChilliSource/Rendering/Texture/TextureProvider.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlasProvider.h>
+#include <ChilliSource/Rendering/Texture/TextureProvider.h>
 
 #include <ChilliSource/UI/Base/ComponentFactory.h>
 #include <ChilliSource/UI/Base/WidgetDefProvider.h>
@@ -416,10 +416,10 @@ namespace ChilliSource
             CreateSystem<Rendering::RenderComponentFactory>();
             
             //Particles
-            CreateSystem<Rendering::ParticleSystem>();
-            CreateSystem<Rendering::ParticleEmitterFactory>();
-            CreateSystem<Rendering::ParticleAffectorFactory>();
-            CreateSystem<Rendering::CSParticleEffectProvider>();
+            CreateSystem<Rendering::CSParticleProvider>();
+            CreateSystem<Rendering::ParticleAffectorDefFactory>();
+            CreateSystem<Rendering::ParticleDrawableDefFactory>();
+            CreateSystem<Rendering::ParticleEmitterDefFactory>();
             
             //UI
             CreateSystem<UI::ComponentFactory>();

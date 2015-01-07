@@ -158,9 +158,9 @@ namespace CSBackend
 		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
-		HttpRequest::HttpRequest(const Desc& in_requestDesc, HINTERNET in_requestHandle, HINTERNET in_connectionHandle, u32 in_bufferFlushSize, const Delegate& in_delegate)
-			: m_desc(in_requestDesc), m_bufferFlushSize(in_bufferFlushSize), m_completionDelegate(in_delegate), m_shouldKillThread(false), m_isPollingComplete(false), m_isRequestComplete(false),
-			m_responseCode(0), m_requestResult(Result::k_failed), m_totalBytesRead(0)
+		HttpRequest::HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, 
+			HINTERNET in_requestHandle, HINTERNET in_connectionHandle, u32 in_bufferFlushSize, const Delegate& in_delegate)
+			: m_url(in_url), m_type(in_type), m_headers(in_headers), m_body(in_body), m_bufferFlushSize(in_bufferFlushSize), m_completionDelegate(in_delegate)
 		{
 			CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
 
@@ -169,7 +169,13 @@ namespace CSBackend
 			std::unique_lock<std::mutex> lock(s_addingMutexesMutex);
 			s_destroyingMutexes.push_back(destroyingMutex);
 			lock.unlock();
-			CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&HttpRequest::PollReadStream, this, in_requestHandle, in_connectionHandle, destroyingMutex));
+
+			u32 connectTimeoutMilliSecs = in_timeoutSecs * 1000;
+			u32 readTimeoutMilliSecs = 60000;
+			::WinHttpSetTimeouts(in_requestHandle, connectTimeoutMilliSecs, connectTimeoutMilliSecs, readTimeoutMilliSecs, readTimeoutMilliSecs);
+
+			m_taskScheduler = CSCore::Application::Get()->GetTaskScheduler();
+			m_taskScheduler->ScheduleTask(std::bind(&HttpRequest::PollReadStream, this, in_requestHandle, in_connectionHandle, destroyingMutex));
 		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
@@ -180,12 +186,10 @@ namespace CSBackend
 			{
 				m_isRequestComplete = true;
 
-				if (m_requestResult != Result::k_cancelled)
+				if (m_isRequestCancelled == false)
 				{
-					m_completionDelegate(this, m_requestResult);
+					m_completionDelegate(this, CSNetworking::HttpResponse(m_requestResult, m_responseCode, m_responseData));
 				}
-
-				m_completionDelegate = nullptr;
 			}
 		}
 		//------------------------------------------------------------------
@@ -198,7 +202,7 @@ namespace CSBackend
 				return;
 
 			u32 bufferFlushSize = m_bufferFlushSize;
-			std::string body = m_desc.m_body;
+			std::string body = m_body;
 
 			lock.unlock();
 			BOOL sendRequestResult = WinHttpSendRequest(in_requestHandle, 0, WINHTTP_NO_REQUEST_DATA, (LPVOID)body.data(), body.length(), body.length(), NULL);
@@ -210,14 +214,14 @@ namespace CSBackend
 			if (sendRequestResult == FALSE)
 			{
 				DWORD error = GetLastError();
-				Result result;
+				CSNetworking::HttpResponse::Result result;
 				switch (error)
 				{
 				case ERROR_WINHTTP_TIMEOUT:
-					result = Result::k_timeout;
+					result = CSNetworking::HttpResponse::Result::k_timeout;
 					break;
 				default:
-					result = Result::k_failed;
+					result = CSNetworking::HttpResponse::Result::k_failed;
 					break;
 				}
 
@@ -238,14 +242,14 @@ namespace CSBackend
 			if (receiveResponseResult == FALSE)
 			{
 				DWORD error = GetLastError();
-				Result result;
+				CSNetworking::HttpResponse::Result result;
 				switch (error)
 				{
 				case ERROR_WINHTTP_TIMEOUT:
-					result = Result::k_timeout;
+					result = CSNetworking::HttpResponse::Result::k_timeout;
 					break;
 				default:
-					result = Result::k_failed;
+					result = CSNetworking::HttpResponse::Result::k_failed;
 					break;
 				}
 
@@ -261,16 +265,11 @@ namespace CSBackend
 			u32 responseCode = 0;
 			WinHttpQueryHeaders(in_requestHandle, WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER, nullptr, &responseCode, &headerSize, nullptr);
 
-			//Pull the headers and check for a redirect URL
-			std::string redirectUrl;
-			CSCore::ParamDictionary headers = GetHeaders(in_requestHandle);
-			headers.TryGetValue("Location", redirectUrl);
-
 			// Keep reading from the remote server until there's
 			// nothing left to read
 			DWORD bytesToBeRead = 0;
 			DWORD bytesRead = 0;
-			Result result = Result::k_failed;
+			CSNetworking::HttpResponse::Result result = CSNetworking::HttpResponse::Result::k_failed;
 			u32 totalBytesRead = 0;
 			u32 totalBytesReadThisBlock = 0;
 			s8 readBuffer[k_readBufferSize];
@@ -289,7 +288,7 @@ namespace CSBackend
 				{
 					WinHttpCloseHandle(in_requestHandle);
 					WinHttpCloseHandle(in_connectionHandle);
-					m_requestResult = Result::k_failed;
+					m_requestResult = CSNetworking::HttpResponse::Result::k_failed;
 					m_isPollingComplete = true;
 					return;
 				}
@@ -305,7 +304,7 @@ namespace CSBackend
 				{
 					WinHttpCloseHandle(in_requestHandle);
 					WinHttpCloseHandle(in_connectionHandle);
-					m_requestResult = Result::k_failed;
+					m_requestResult = CSNetworking::HttpResponse::Result::k_failed;
 					m_isPollingComplete = true;
 					return;
 				}
@@ -320,7 +319,7 @@ namespace CSBackend
 					if (bufferFlushSize != 0 && totalBytesReadThisBlock >= bufferFlushSize)
 					{
 						m_responseData = streamBuffer.str();
-						m_completionDelegate(this, Result::k_flushed);
+						m_taskScheduler->ScheduleMainThreadTask(std::bind(m_completionDelegate, this, CSNetworking::HttpResponse(m_requestResult, m_responseCode, m_responseData)));
 						streamBuffer.clear();
 						streamBuffer.str("");
 						totalBytesReadThisBlock = 0;
@@ -331,7 +330,7 @@ namespace CSBackend
 
 			if (m_shouldKillThread == false)
 			{
-				result = Result::k_completed;
+				result = CSNetworking::HttpResponse::Result::k_completed;
 			}
 
 			WinHttpCloseHandle(in_requestHandle);
@@ -341,14 +340,13 @@ namespace CSBackend
 			m_responseCode = responseCode;
 			m_totalBytesRead = totalBytesRead;
 			m_responseData = streamBuffer.str();
-			m_desc.m_redirectionUrl = redirectUrl;
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
 		void HttpRequest::Cancel()
 		{
 			m_shouldKillThread = true;
-			m_requestResult = Result::k_cancelled;
+			m_isRequestCancelled = true;
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
@@ -358,21 +356,27 @@ namespace CSBackend
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
-		const CSNetworking::HttpRequest::Desc& HttpRequest::GetDescription() const
+		HttpRequest::Type HttpRequest::GetType() const
 		{
-			return m_desc;
+			return m_type;
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
-		const std::string & HttpRequest::GetResponse() const
+		const std::string& HttpRequest::GetUrl() const
 		{
-			return m_responseData;
+			return m_url;
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
-		u32 HttpRequest::GetResponseCode() const 
+		const std::string& HttpRequest::GetBody() const
 		{
-			return m_responseCode;
+			return m_body;
+		}
+		//----------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------
+		const CSCore::ParamDictionary& HttpRequest::GetHeaders() const
+		{
+			return m_headers;
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------

@@ -122,7 +122,7 @@ namespace CSBackend
             //----------------------------------------------------
             EmailComposer();
             //------------------------------------------------------
-            /// Called when the the owning state is initialised.
+            /// Called when the owning state is initialised.
             ///
             /// @author Ian Copland
             //------------------------------------------------------
@@ -135,7 +135,7 @@ namespace CSBackend
             //----------------------------------------------------
             void Cleanup();
             //------------------------------------------------------
-            /// Called when the the owning state is destroyed.
+            /// Called when the owning state is destroyed.
             ///
             /// @author Ian Copland
             //------------------------------------------------------

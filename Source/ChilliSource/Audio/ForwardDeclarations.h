@@ -37,7 +37,14 @@ namespace ChilliSource
 {
 	namespace Audio
 	{
-
+		//------------------------------------------------------------------------------
+		/// Cricket Audio
+		//------------------------------------------------------------------------------
+		CS_FORWARDDECLARE_CLASS(CkSound);
+		CS_FORWARDDECLARE_CLASS(CkBank);
+		CS_FORWARDDECLARE_CLASS(CkBankProvider);
+		CS_FORWARDDECLARE_CLASS(CkAudioPlayer);
+		CS_FORWARDDECLARE_CLASS(CricketAudioSystem);
 	}
 }
 

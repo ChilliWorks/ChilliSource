@@ -39,13 +39,14 @@ CS_WARNINGS_DONTUSE := -Wno-reorder
 #setup the module names.
 CS_MODULENAME_CHILLISOURCE := ChilliSource
 CS_MODULENAME_CSBASE := CSBase-prebuilt
+CS_MODULENAME_CK := ck-prebuilt
 CS_MODULENAME_OUTPUT := Application
 
 #setup the build parameters
 CS_CXXFLAGS := -fsigned-char -std=c++11 -pthread -fexceptions -frtti -DCS_TARGETPLATFORM_ANDROID $(CS_WARNINGS_USE) $(CS_WARNINGS_DONTUSE) $(CS_CXXFLAGS_TARGET) $(CS_CXXFLAGS_EXTRA)
-CS_WHOLE_STATIC_LIBRARIES := $(CS_MODULENAME_CSBASE) $(CS_MODULENAME_CHILLISOURCE)
+CS_WHOLE_STATIC_LIBRARIES := $(CS_MODULENAME_CSBASE) $(CS_MODULENAME_CK) $(CS_MODULENAME_CHILLISOURCE) cpufeatures
 CS_LDLIBS := -fuse-ld=gold -lz -llog -lGLESv2
-CS_C_INCLUDES := ../../ChilliSource/Source/ ../../ChilliSource/Libraries/Core/Android/Headers/
+CS_C_INCLUDES := ../../ChilliSource/Source/ ../../ChilliSource/Libraries/Core/Android/Headers/ ../../ChilliSource/Libraries/CricketAudio/Android/Headers/
 
 #gather all files in the engine that should be built
 CS_SOURCEFILES_CHILLISOURCE := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '../../ChilliSource/Source/ChilliSource/' '--extensions' 'cpp,c,cc')
@@ -58,6 +59,11 @@ LOCAL_MODULE := $(CS_MODULENAME_CSBASE)
 LOCAL_SRC_FILES := ../../ChilliSource/Libraries/Core/Android/Libs/$(TARGET_ARCH_ABI)/libCSBase.a
 include $(PREBUILT_STATIC_LIBRARY)
 
+include $(CLEAR_VARS)
+LOCAL_MODULE := $(CS_MODULENAME_CK)
+LOCAL_SRC_FILES := ../../ChilliSource/Libraries/CricketAudio/Android/Libs/$(TARGET_ARCH_ABI)/libck.a
+include $(PREBUILT_STATIC_LIBRARY)
+
 #build the ChilliSource static library
 include $(CLEAR_VARS)
 LOCAL_MODULE := $(CS_MODULENAME_CHILLISOURCE)
@@ -65,3 +71,4 @@ LOCAL_CXXFLAGS := $(CS_CXXFLAGS)
 LOCAL_SRC_FILES := $(CS_SOURCEFILES_CHILLISOURCE) $(CS_SOURCEFILES_PLATFORM) $(CS_SOURCEFILES_RENDERING)
 LOCAL_C_INCLUDES := $(CS_C_INCLUDES)
 include $(BUILD_STATIC_LIBRARY)
+

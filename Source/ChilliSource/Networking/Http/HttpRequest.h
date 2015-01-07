@@ -40,8 +40,8 @@ namespace ChilliSource
     {
         //----------------------------------------------------------------------------------------
         /// Interface class to a platform dependent http request. A request can be issued
-        /// via the HttpRequestSystem. Requests can be of type post or get and will store
-        /// received data from the http connection. Requests are performed on a background thread.
+        /// via the HttpRequestSystem to a given URL. Requests can be of type POST or GET. The
+        /// request object can be used to cancel the request
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
@@ -62,41 +62,14 @@ namespace ChilliSource
                 k_post
             };
             //----------------------------------------------------------------------------------------
-            /// Result of the http request
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            enum class Result
-			{
-                k_completed,    //The request completed and returned a result
-                k_failed,       //The request failed
-                k_cancelled,    //The request was cancelled
-                k_timeout,      //The request timed out
-                k_flushed       //The request buffer is full and the buffer needs to be flushed
-			};
-            //----------------------------------------------------------------------------------------
-            /// Holds the description of the request
-            /// including the type, url and headers
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            struct Desc
-            {
-                Core::ParamDictionary m_headers;
-                std::string m_url;
-                std::string	m_body;
-                std::string m_redirectionUrl;
-                Type m_type;
-            };
-            //----------------------------------------------------------------------------------------
             /// Delegate called when the request completes (either with success of failure)
             ///
-            /// @param Request
-            /// @param Result
+            /// @param Original request
+            /// @param Request response
             ///
             /// @author S Downie
             //----------------------------------------------------------------------------------------
-			typedef std::function<void(HttpRequest*, Result)> Delegate;
+			typedef std::function<void(const HttpRequest*, const HttpResponse&)> Delegate;
 			//----------------------------------------------------------------------------------------
 			/// Constructor
 			///
@@ -106,21 +79,27 @@ namespace ChilliSource
 			//----------------------------------------------------------------------------------------
 			/// @author S Downie
 			///
-			/// @return The original request description (i.e. whether it is post/get the body and header)
+			/// @return The type of the request (POST or GET)
 			//----------------------------------------------------------------------------------------
-			virtual const Desc& GetDescription() const = 0;
-			//----------------------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The contents of the response as a string. (This could be binary data)
-			//----------------------------------------------------------------------------------------
-			virtual const std::string& GetResponse() const = 0;
-			//----------------------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return HTTP response code (i.e. 200 = OK, 400 = Error).
-			//----------------------------------------------------------------------------------------
-			virtual u32 GetResponseCode() const = 0;
+			virtual Type GetType() const = 0;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The original url to which the request was sent
+            //----------------------------------------------------------------------------------------
+            virtual const std::string& GetUrl() const = 0;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The body of the POST request (GET request will return empty)
+            //----------------------------------------------------------------------------------------
+            virtual const std::string& GetBody() const = 0;
+            //----------------------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return The original headers of the request as keys/values
+            //----------------------------------------------------------------------------------------
+            virtual const Core::ParamDictionary& GetHeaders() const = 0;
             //----------------------------------------------------------------------------------------
             /// Cancel the request. Does not invoke the completion delegate
             ///

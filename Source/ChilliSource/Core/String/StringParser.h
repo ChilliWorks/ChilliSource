@@ -55,7 +55,7 @@ namespace ChilliSource
         f32 ParseF32(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a 32 bit signed integer. If the string
-        /// cannot be be parsed this will return 0.
+        /// cannot be parsed this will return 0.
         ///
         /// @author Ian Copland
         ///
@@ -66,7 +66,7 @@ namespace ChilliSource
         s32 ParseS32(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a 32 bit unsigned integer. If the string
-        /// cannot be be parsed this will return 0.
+        /// cannot be parsed this will return 0.
         ///
         /// @author Ian Copland
         ///
@@ -77,7 +77,7 @@ namespace ChilliSource
         u32 ParseU32(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a 64 bit signed integer. If the string
-        /// cannot be be parsed this will return 0.
+        /// cannot be parsed this will return 0.
         ///
         /// @author Ian Copland
         ///
@@ -88,7 +88,7 @@ namespace ChilliSource
         s64 ParseS64(const std::string& in_string);
         //------------------------------------------------------------
         /// Parse a string to a 32 bit unsigned integer. If the string
-        /// cannot be be parsed this will return 0.
+        /// cannot be parsed this will return 0.
         ///
         /// @author Ian Copland
         ///

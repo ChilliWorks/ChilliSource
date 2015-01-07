@@ -33,8 +33,10 @@
 #include <ChilliSource/Core/Container/HashedArray.h>
 #include <ChilliSource/Core/Container/concurrent_vector.h>
 #include <ChilliSource/Core/Container/concurrent_blocking_queue.h>
+#include <ChilliSource/Core/Container/dynamic_array.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 #include <ChilliSource/Core/Container/ParamDictionarySerialiser.h>
+#include <ChilliSource/Core/Container/random_access_iterator.h>
 #include <ChilliSource/Core/Container/VectorUtils.h>
 #include <ChilliSource/Core/Container/Property/IProperty.h>
 #include <ChilliSource/Core/Container/Property/IPropertyType.h>

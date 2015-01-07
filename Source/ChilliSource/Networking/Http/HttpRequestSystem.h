@@ -48,17 +48,18 @@ namespace ChilliSource
             const u32 k_ok = 200;
             const u32 k_redirect = 301;
             const u32 k_movedTemporarily = 302;
-            const u32 k_duplicate = 304;
             const u32 k_redirectTemporarily = 307;
             const u32 k_notFound = 404;
-            const u32 k_CASFailure = 409;
+            const u32 k_conflict = 409;
             const u32 k_error = 500;
-            const u32 k_busy = 503;
+            const u32 k_unavailable = 503;
         }
         
         //--------------------------------------------------------------------------------------------------
         /// Base class for platform depended http request system. This system is responsible for making
-        /// http requests to a url and managing the lifetime of the requests and the connections
+        /// http requests to a url and managing the lifetime of the requests and the connections.
+        ///
+        /// NOTE: On certain platforms you cannot redirect from https to http. You have been warned!
         ///
         /// @author S Downie
         //--------------------------------------------------------------------------------------------------
@@ -67,6 +68,8 @@ namespace ChilliSource
 		public:
             
 			CS_DECLARE_NAMEDTYPE(HttpRequestSystem);
+            
+            static const u32 k_defaultTimeoutSecs = 15;
             
             //--------------------------------------------------------------------------------------------------
             /// Factory method
@@ -77,16 +80,57 @@ namespace ChilliSource
             //--------------------------------------------------------------------------------------------------
             static HttpRequestSystemUPtr Create();
             //--------------------------------------------------------------------------------------------------
-            /// Causes the system to issue a request with the given details.
+            /// Causes the system to issue an Http GET request.
             ///
             /// @author S Downie
             ///
-            /// @param A descriptor detailing the request params
-			/// @param A function to call when the request is completed. Note that the request can be completed with failure as well as success.
+            /// @param URL
+            /// @param Delegate that is called on request completed. Completion can be failure as well as success
+            /// @param Request timeout in seconds
             ///
-            /// @return A pointer to the request. The system owns this pointer. Returns nullptr if the request cannot be created.
+            /// @return A pointer to the request. The system owns this pointer.
             //--------------------------------------------------------------------------------------------------
-			virtual HttpRequest* MakeRequest(const HttpRequest::Desc& in_requestDesc, const HttpRequest::Delegate& in_delegate) = 0;
+            virtual HttpRequest* MakeGetRequest(const std::string& in_url, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
+            //--------------------------------------------------------------------------------------------------
+            /// Causes the system to issue an Http GET request.
+            ///
+            /// @author S Downie
+            ///
+            /// @param URL
+            /// @param Key value headers to attach to the request
+            /// @param Delegate that is called on request completed. Completion can be failure as well as success
+            /// @param Request timeout in seconds
+            ///
+            /// @return A pointer to the request. The system owns this pointer.
+            //--------------------------------------------------------------------------------------------------
+            virtual HttpRequest* MakeGetRequest(const std::string& in_url, const Core::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
+            //--------------------------------------------------------------------------------------------------
+            /// Causes the system to issue an Http POST request with the given body.
+            ///
+            /// @author S Downie
+            ///
+            /// @param URL
+            /// @param POST body
+            /// @param Delegate that is called on request completed. Completion can be failure as well as success
+            /// @param Request timeout in seconds
+            ///
+            /// @return A pointer to the request. The system owns this pointer.
+            //--------------------------------------------------------------------------------------------------
+            virtual HttpRequest* MakePostRequest(const std::string& in_url, const std::string& in_body, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
+            //--------------------------------------------------------------------------------------------------
+            /// Causes the system to issue an Http POST request with the given body.
+            ///
+            /// @author S Downie
+            ///
+            /// @param URL
+            /// @param POST body
+            /// @param Key value headers to attach to the request
+            /// @param Delegate that is called on request completed. Completion can be failure as well as success
+            /// @param Request timeout in seconds
+            ///
+            /// @return A pointer to the request. The system owns this pointer.
+            //--------------------------------------------------------------------------------------------------
+            virtual HttpRequest* MakePostRequest(const std::string& in_url, const std::string& in_body, const Core::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
 			//--------------------------------------------------------------------------------------------------
             /// Equivalent to calling cancel on every incomplete request in progress.
             ///
@@ -104,19 +148,9 @@ namespace ChilliSource
             //--------------------------------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param The number of bytes read before the buffer is flushed (0 is infinite)
+            /// @param The number of bytes read before the buffer is flushed (0 is unlimited)
             //--------------------------------------------------------------------------------------------------
-            inline void SetMaxBufferSize(u32 in_sizeInBytes)
-            {
-                m_maxBufferSize = in_sizeInBytes;
-            }
-            //--------------------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param The number of seconds that will elapse before a request is deemed to have timed out
-            /// on connection
-            //--------------------------------------------------------------------------------------------------
-            virtual void SetConnectionTimeout(u32 in_timeoutSecs) = 0;
+            void SetMaxBufferSize(u32 in_sizeInBytes);
             
         protected:
             
@@ -125,10 +159,7 @@ namespace ChilliSource
             ///
             /// @return The number of bytes read before the buffer is flushed
             //--------------------------------------------------------------------------------------------------
-            inline u32 GetMaxBufferSize() const
-            {
-                return m_maxBufferSize;
-            }
+            u32 GetMaxBufferSize() const;
             
         private:
             
