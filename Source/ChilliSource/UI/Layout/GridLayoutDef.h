@@ -44,7 +44,7 @@ namespace ChilliSource
         /// effectively an immutable container for the properties of a Grid Layout.
         ///
         /// A Grid Layout Def contains the following property in addition to those
-        /// defined in the Layouy Def base class documentation:
+        /// defined in the Layout Def base class documentation:
         ///
         /// "CellOrder": The order that cells will be placed: row or column major order.
         ///
@@ -113,7 +113,7 @@ namespace ChilliSource
             ///
             /// @param The interface Id.
             ///
-            /// @return Whether or not the interface is implmented.
+            /// @return Whether or not the interface is implemented.
             //------------------------------------------------------------------------------
             bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //------------------------------------------------------------------------------
@@ -180,7 +180,7 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             f32 GetAbsoluteVSpacing() const;
             
-        protected:
+        private:
             //------------------------------------------------------------------------------
             /// Creates a new instance of a grid layout as described by this definition.
             /// This should typically only be called by a layout component.

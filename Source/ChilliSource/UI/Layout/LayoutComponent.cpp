@@ -85,7 +85,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void LayoutComponent::ApplyLayoutDef(const LayoutDefCSPtr& in_layoutDef)
         {
-            CS_ASSERT(in_layoutDef != nullptr, "Cannot set null layotu def on a layout component.");
+            CS_ASSERT(in_layoutDef != nullptr, "Cannot set null layout def on a layout component.");
             
             m_layoutDef = in_layoutDef;
             m_layout = m_layoutDef->CreateLayout(this);

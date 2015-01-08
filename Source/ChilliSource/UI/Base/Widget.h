@@ -860,7 +860,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             Core::Vector2 ToLocalSpace(const Core::Vector2& in_point, Rendering::AlignmentAnchor in_alignmentAnchor) const;
             //----------------------------------------------------------------------------------------
-            /// Forces the widget to updat its children.
+            /// Forces the widget to update its children.
             ///
             /// @author Ian Copland
             //----------------------------------------------------------------------------------------
@@ -1038,7 +1038,7 @@ namespace ChilliSource
             ///
             /// @param The child widget.
             ///
-            /// @return A pair containing the layout and index. The layout can be null if the the child
+            /// @return A pair containing the layout and index. The layout can be null if the child
             /// is not in a layout.
             //----------------------------------------------------------------------------------------
             std::pair<LayoutComponent*, s32> GetLayoutForChild(const Widget* in_child);

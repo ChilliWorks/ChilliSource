@@ -67,7 +67,7 @@ namespace ChilliSource
 			///
 			/// @param The interface Id.
 			///
-			/// @return Whether or not the interface is implmented.
+			/// @return Whether or not the interface is implemented.
 			//------------------------------------------------------------------------------
 			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
 			//------------------------------------------------------------------------------

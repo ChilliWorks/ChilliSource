@@ -1,11 +1,11 @@
 //
-//  DrawableDef.h
+//  LayoutDef.h
 //  Chilli Source
-//  Created by Ian Copland on 21/11/2014.
+//  Created by Ian Copland on 08/05/2015.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2015 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_LAYOUTDEF_H_
-#define _CHILLISOURCE_UI_DRAWABLE_LAYOUTDEF_H_
+#ifndef _CHILLISOURCE_UI_LAYOUT_LAYOUTDEF_H_
+#define _CHILLISOURCE_UI_LAYOUT_LAYOUTDEF_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>

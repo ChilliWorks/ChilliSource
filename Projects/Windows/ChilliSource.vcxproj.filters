@@ -1023,24 +1023,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableDef.cpp">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\ILayout.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutDesc.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutType.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.cpp">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\Text\TextComponent.cpp">
       <Filter>ChilliSource\UI\Text</Filter>
     </ClCompile>
@@ -1058,6 +1040,33 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarType.cpp">
       <Filter>ChilliSource\UI\ProgressBar</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\GridLayoutDef.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\HListLayoutDef.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\Layout.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutComponent.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\LayoutDef.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayoutDef.cpp">
+      <Filter>ChilliSource\UI\Layout</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2252,24 +2261,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Drawable\ThreePatchDrawableDef.h">
       <Filter>ChilliSource\UI\Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\ILayout.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutDesc.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutType.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.h">
-      <Filter>ChilliSource\UI\Layout</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextComponent.h">
       <Filter>ChilliSource\UI\Text</Filter>
     </ClInclude>
@@ -2287,6 +2278,33 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\ProgressBar\ProgressBarType.h">
       <Filter>ChilliSource\UI\ProgressBar</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridLayout.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\GridLayoutDef.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\HListLayout.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\HListLayoutDef.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\Layout.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutComponent.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\LayoutDef.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListLayout.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListLayoutDef.h">
+      <Filter>ChilliSource\UI\Layout</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
