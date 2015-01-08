@@ -154,18 +154,19 @@ namespace ChilliSource
                 {
                     std::string propertyName = it.memberName();
                     
-                    if (propertyName == k_componentTypeKey || propertyName == k_componentNameKey)
+                    //ignore the type and name key since they're already handled
+                    if (propertyName != k_componentTypeKey && propertyName != k_componentNameKey)
                     {
-                        //ignore these has they're handled above.
+                        if (propertyMap.HasKey(propertyName) == true)
+                        {
+                            WidgetParserUtils::SetProperty(propertyName, (*it), in_definitionLocation, in_definitionPath, propertyMap);
+                        }
+                        else
+                        {
+                            CS_LOG_FATAL("Property '" + propertyName + "' in component '" + name + "' of type '" + type + "' does not exist.");
+                        }
                     }
-                    else if(propertyMap.HasKey(propertyName) == true)
-                    {
-                        WidgetParserUtils::SetProperty(propertyName, (*it), in_definitionLocation, in_definitionPath, propertyMap);
-                    }
-                    else
-                    {
-                        CS_LOG_FATAL("Property '" + propertyName + "' in component '" + name + "' of type '" + type + "' does not exist.");
-                    }
+                    
                 }
                 
                 return ComponentDesc(type, name, propertyMap);

@@ -202,18 +202,17 @@ namespace ChilliSource
                 {
                     std::string propertyName = it.memberName();
                     
-                    if (propertyName == k_templateLocationKey || propertyName == k_templateFilePathKey || propertyName == k_widgetChildrenKey || propertyName == k_widgetTypeKey)
+                    //ignore template properties, children and type since they're already handled.
+                    if (propertyName != k_templateLocationKey && propertyName != k_templateFilePathKey && propertyName != k_widgetChildrenKey && propertyName != k_widgetTypeKey)
                     {
-                        //Ignore these as they are handled elsewhere but we do not want them to be included
-                        //in the properties list
-                    }
-                    else if (outputProperties.HasKey(propertyName) == true)
-                    {
-                        SetProperty(propertyName, (*it), in_templateLocation, in_templatePath, outputProperties);
-                    }
-                    else
-                    {
-                        CS_LOG_FATAL("Property with name does not exist: " + std::string(propertyName));
+                        if (outputProperties.HasKey(propertyName) == true)
+                        {
+                            SetProperty(propertyName, (*it), in_templateLocation, in_templatePath, outputProperties);
+                        }
+                        else
+                        {
+                            CS_LOG_FATAL("Property with name does not exist: " + std::string(propertyName));
+                        }
                     }
                 }
                 
