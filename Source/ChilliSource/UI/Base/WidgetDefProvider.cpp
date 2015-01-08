@@ -213,13 +213,13 @@ namespace ChilliSource
             ///
             /// @return The child widget descriptions.
             //-------------------------------------------------------
-            std::vector<WidgetDesc> ParseChildWidgets(const Json::Value& in_childrenJson, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath)
+            std::vector<WidgetDesc> ParseChildWidgets(const Json::Value& in_children, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath)
             {
                 std::vector<WidgetDesc> output;
                 
-                for(u32 i = 0; i < in_childrenJson.size(); ++i)
+                for(u32 i = 0; i < in_children.size(); ++i)
                 {
-                    const Json::Value& childJson = in_childrenJson[i];
+                    const Json::Value& childJson = in_children[i];
                     WidgetDesc childDesc = WidgetParserUtils::ParseWidget(childJson, in_definitionLocation, in_definitionPath);
                     output.push_back(childDesc);
                 }
@@ -465,7 +465,7 @@ namespace ChilliSource
                 std::vector<WidgetDesc> childDescs;
                 if(childrenJson.isNull() == false)
                 {
-                    CS_ASSERT(childrenJson.isArray() == true, "'" + std::string(k_widgetChildrenKey) + "' in a Widet Def must be an array.");
+                    CS_ASSERT(childrenJson.isArray() == true, "'" + std::string(k_widgetChildrenKey) + "' in a Widget Def must be an array.");
                     childDescs = ParseChildWidgets(childrenJson, in_storageLocation, pathToDefinition);
                 }
                 
