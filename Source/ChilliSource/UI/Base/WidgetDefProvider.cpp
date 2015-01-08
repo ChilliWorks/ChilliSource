@@ -201,32 +201,26 @@ namespace ChilliSource
             }
             //-------------------------------------------------------
             /// From the given JSON value parse the hierarchy and
-            /// create definitions for all child widgets. Some of the properties
-            /// require conversion from relative to absolute paths
-            /// hence the definition path info.
+            /// create definitions for all child widgets. Some of the
+            /// properties require conversion from relative to absolute
+            /// paths hence the definition path info.
             ///
             /// @author S Downie
             ///
-            /// @param Json hierarchy
-            /// @param Json widgets
+            /// @param Json children.
             /// @param Definition location
             /// @param Defintion path (no file name)
             ///
             /// @return The child widget descriptions.
             //-------------------------------------------------------
-            std::vector<WidgetDesc> ParseChildWidgets(const Json::Value& in_hierarchy, const Json::Value& in_widgets, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath)
+            std::vector<WidgetDesc> ParseChildWidgets(const Json::Value& in_childrenJson, Core::StorageLocation in_definitionLocation, const std::string& in_definitionPath)
             {
-                const char k_hierarchyChildrenKey[] = "Children";
-                
                 std::vector<WidgetDesc> output;
                 
-                for(u32 i=0; i<in_hierarchy.size(); ++i)
+                for(u32 i = 0; i < in_childrenJson.size(); ++i)
                 {
-                    const Json::Value& hierarchyItem = in_hierarchy[i];
-                    std::string name = hierarchyItem[k_widgetNameKey].asString();
-                    const Json::Value& widget = in_widgets[name];
-                    const Json::Value& childrenHierarchy = hierarchyItem[k_hierarchyChildrenKey];
-                    WidgetDesc childDesc = WidgetParserUtils::ParseWidget(widget, name, in_widgets, childrenHierarchy, in_definitionLocation, in_definitionPath);
+                    const Json::Value& childJson = in_childrenJson[i];
+                    WidgetDesc childDesc = WidgetParserUtils::ParseWidget(childJson, in_definitionLocation, in_definitionPath);
                     output.push_back(childDesc);
                 }
                 
@@ -420,11 +414,10 @@ namespace ChilliSource
             {
                 const char k_widgetTypeKey[] = "Type";
                 const char k_widgetComponentsKey[] = "Components";
-                const char k_widgetComponentPropertiesKey[] = "ComponentProperties";
-                const char k_widgetHierarchyKey[] = "Hierarchy";
+                const char k_widgetComponentPropertiesKey[] = "ComponentPropertyLinks";
                 const char k_widgetChildrenKey[] = "Children";
-                const char k_widgetChildPropertiesKey[] = "ChildProperties";
-                const char k_widgetPropertyDefaultsKey[] = "Defaults";
+                const char k_widgetChildPropertiesKey[] = "ChildPropertyLinks";
+                const char k_widgetPropertyDefaultsKey[] = "DefaultPropertyValues";
                 
                 ComponentFactory* componentFactory = Core::Application::Get()->GetSystem<ComponentFactory>();
                 
@@ -468,12 +461,12 @@ namespace ChilliSource
                 }
                 
                 //parse children
-                const Json::Value& hierarchy = root[k_widgetHierarchyKey];
-                const Json::Value& children = root[k_widgetChildrenKey];
+                const Json::Value& childrenJson = root[k_widgetChildrenKey];
                 std::vector<WidgetDesc> childDescs;
-                if(hierarchy.isNull() == false && hierarchy.isArray() == true && children.isNull() == false)
+                if(childrenJson.isNull() == false)
                 {
-                    childDescs = ParseChildWidgets(hierarchy, children, in_storageLocation, pathToDefinition);
+                    CS_ASSERT(childrenJson.isArray() == true, "'" + std::string(k_widgetChildrenKey) + "' in a Widet Def must be an array.");
+                    childDescs = ParseChildWidgets(childrenJson, in_storageLocation, pathToDefinition);
                 }
                 
                 //parse child property links

@@ -1,7 +1,7 @@
 {
   "Type": "VerticalStretchProgressBar",
 
-  "Components":[
+  "Components": [
     {
       "Type": "Drawable",
       "Name": "Drawable"
@@ -15,38 +15,31 @@
     }
   ],
 
-  "Children": {
-    "Bar": {
+  "Children": [
+    {
       "Type": "Image",
+      "Name": "Bar",
       "RelSize": "0.0 1.0",
       "ParentalAnchor": "MiddleLeft",
       "OriginAnchor": "MiddleLeft"
     }
-  },
-
-  "Hierarchy": [
-    {
-      "Name": "Bar"
-    }
   ],
 
-  "ComponentProperties":{
+  "ComponentPropertyLinks": {
     "Drawable": "all",
-    "ProgressBar":
-    {
+    "ProgressBar": {
       "RelBarSize": "RelBarSize",
       "Progress": "Progress"
     }
   },
 
-  "ChildProperties": {
-    "Bar":
-    {
+  "ChildPropertLinks": {
+    "Bar": {
       "BarDrawable": "Drawable"
     }
   },
-
-  "Defaults": {
+  
+  "DefaultPropertyValues": {
     "Name": "VerticalStretchProgressBar"
   }
 }

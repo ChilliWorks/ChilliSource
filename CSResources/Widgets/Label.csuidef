@@ -1,16 +1,18 @@
 {
-	"Type" : "Label",
+  "Type": "Label",
 
-	"Components":
-	[
-		{
-			"Type": "Text",
-			"Name": "Text"
-		}
-	],
+  "Components": [
+    {
+      "Type": "Text",
+      "Name": "Text"
+    }
+  ],
 
-	"ComponentProperties":
-	{
-		"Text": "all"
-	}
+  "ComponentPropertyLinks": {
+    "Text": "all"
+  },
+  
+  "DefaultDefaultValues": {
+    "Name": "Label"
+  }
 }

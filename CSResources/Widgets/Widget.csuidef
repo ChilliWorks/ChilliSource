@@ -1,7 +1,7 @@
 {
   "Type": "Widget",
-
-  "Defaults": {
+  
+  "DefaultPropertyValues": {
     "Name": "Widget"
   }
 }

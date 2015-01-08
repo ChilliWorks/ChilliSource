@@ -1,24 +1,24 @@
 {
   "Type": "ToggleButton",
 
-  "Components":[
-  	{
-  		"Type": "Drawable",
-  		"Name": "Drawable"
-  	},
+  "Components": [
+    {
+      "Type": "Drawable",
+      "Name": "Drawable"
+    },
     {
       "Type": "ToggleHighlight",
       "Name": "ToggleHighlight"
     }
   ],
 
-  "ComponentProperties":{
-  	"Drawable": "none",
+  "ComponentPropertyLinks": {
+    "Drawable": "none",
     "ToggleHighlight": "all"
   },
-
-  "Defaults": {
+  
+  "DefaultPropertyValues": {
     "Name": "ToggleButton",
-    "InputEnabled": "true"
+    "InputConsumeEnabled": "true"
   }
 }

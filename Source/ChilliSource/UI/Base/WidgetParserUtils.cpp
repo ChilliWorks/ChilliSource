@@ -150,34 +150,32 @@ namespace ChilliSource
             }
             //-------------------------------------------------------
             //-------------------------------------------------------
-            WidgetDesc ParseWidget(const Json::Value& in_template, const std::string& in_name, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath)
+            WidgetDesc ParseWidget(const Json::Value& in_widget, Core::StorageLocation in_templateLocation, const std::string& in_templatePath)
             {
                 const char k_widgetTypeKey[] = "Type";
                 const char k_widgetChildrenKey[] = "Children";
-                const char k_widgetHierarchyKey[] = "Hierarchy";
                 const char k_templateTypeName[] = "Template";
                 const char k_templateFilePathKey[] = "TemplatePath";
                 const char k_templateLocationKey[] = "TemplateLocation";
-                const char k_nameKey[] = "Name";
                 
-                CS_ASSERT(in_template.isMember(k_widgetTypeKey) == true, "Widget must have '" + std::string(k_widgetTypeKey) + "' key.");
+                CS_ASSERT(in_widget.isMember(k_widgetTypeKey) == true, "Widget must have '" + std::string(k_widgetTypeKey) + "' key.");
                 
-                std::string outputType = in_template[k_widgetTypeKey].asString();
+                std::string outputType = in_widget[k_widgetTypeKey].asString();
                 Core::PropertyMap outputProperties;
                 std::vector<WidgetDesc> outputChildren;
                 
                 if(outputType == k_templateTypeName)
                 {
                     //This type is a special case in which the property values are read from a separate template file
-                    CS_ASSERT(in_template.isMember(k_templateFilePathKey), "Link to template file must have '" + std::string(k_templateFilePathKey) + "' key.");
+                    CS_ASSERT(in_widget.isMember(k_templateFilePathKey), "Link to template file must have '" + std::string(k_templateFilePathKey) + "' key.");
                     
-                    bool relativePath = in_template.isMember(k_templateLocationKey) == false;
+                    bool relativePath = in_widget.isMember(k_templateLocationKey) == false;
                     Core::StorageLocation location = in_templateLocation;
-                    std::string path = in_template[k_templateFilePathKey].asString();
+                    std::string path = in_widget[k_templateFilePathKey].asString();
                     
                     if(relativePath == false)
                     {
-                        location = Core::ParseStorageLocation(in_template[k_templateLocationKey].asString());
+                        location = Core::ParseStorageLocation(in_widget[k_templateLocationKey].asString());
                     }
                     else
                     {
@@ -200,13 +198,11 @@ namespace ChilliSource
                     outputProperties = widgetDef->GetDefaultProperties();
                 }
                 
-                outputProperties.SetProperty(k_nameKey, in_name);
-                
-                for(auto it = in_template.begin(); it != in_template.end(); ++it)
+                for(auto it = in_widget.begin(); it != in_widget.end(); ++it)
                 {
                     std::string propertyName = it.memberName();
                     
-                    if (propertyName == k_templateLocationKey || propertyName == k_templateFilePathKey || propertyName == k_widgetChildrenKey || propertyName == k_widgetHierarchyKey || propertyName == k_widgetTypeKey)
+                    if (propertyName == k_templateLocationKey || propertyName == k_templateFilePathKey || propertyName == k_widgetChildrenKey || propertyName == k_widgetTypeKey)
                     {
                         //Ignore these as they are handled elsewhere but we do not want them to be included
                         //in the properties list
@@ -221,21 +217,16 @@ namespace ChilliSource
                     }
                 }
                 
-                if(in_hierarchy.isNull() == false)
+                const Json::Value& childrenJson = in_widget.get(k_widgetChildrenKey, Json::nullValue);
+                if(childrenJson.isNull() == false)
                 {
-                    if(in_hierarchy.isNull() == false && in_hierarchy.isArray() == true && in_children.isNull() == false)
+                    CS_ASSERT(childrenJson.isArray() == true, "The '" + std::string(k_widgetChildrenKey) + "' must be in an array.");
+                    
+                    for(u32 i = 0; i < childrenJson.size(); ++i)
                     {
-                        for(u32 i=0; i<in_hierarchy.size(); ++i)
-                        {
-                            const Json::Value& hierarchyItem = in_hierarchy[i];
-                            std::string name = hierarchyItem[k_nameKey].asString();
-                            
-                            const Json::Value& hierarchyChildren = hierarchyItem[k_widgetChildrenKey];
-                            const Json::Value& widget = in_children[name];
-                            
-                            WidgetDesc childDesc = ParseWidget(widget, name, in_children, hierarchyChildren, in_templateLocation, in_templatePath);
-                            outputChildren.push_back(childDesc);
-                        }
+                        const Json::Value& childJson = childrenJson[i];
+                        WidgetDesc childDesc = ParseWidget(childJson, in_templateLocation, in_templatePath);
+                        outputChildren.push_back(childDesc);
                     }
                 }
                 

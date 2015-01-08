@@ -1193,8 +1193,8 @@ namespace ChilliSource
             
             bool m_isVisible = true;
             bool m_isSubviewClippingEnabled = false;
-            bool m_isInputEnabled = false;
-            bool m_isInputConsumeEnabled = true;
+            bool m_isInputEnabled = true;
+            bool m_isInputConsumeEnabled = false;
             
             mutable bool m_isParentTransformCacheValid = false;
             mutable bool m_isLocalTransformCacheValid = false;

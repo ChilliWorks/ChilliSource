@@ -77,11 +77,8 @@ namespace ChilliSource
                 std::string definitionFileName;
                 std::string pathToDefinition;
                 Core::StringUtils::SplitFilename(in_filepath, definitionFileName, pathToDefinition);
-
-                Json::Value hierarchy = root["Hierarchy"];
-                Json::Value children = root["Children"];
                 
-                WidgetDesc desc = WidgetParserUtils::ParseWidget(root, "", children, hierarchy, in_storageLocation, pathToDefinition);
+                WidgetDesc desc = WidgetParserUtils::ParseWidget(root, in_storageLocation, pathToDefinition);
                 
                 widgetTemplate->Build(desc);
                 

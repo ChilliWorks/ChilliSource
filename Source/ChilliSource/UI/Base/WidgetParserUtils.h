@@ -77,16 +77,13 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Json template
-            /// @param Name of instance
-            /// @param Json widget children
-            /// @param Json hierarchy
-            /// @param Template location
+            /// @param The widget json.
+            /// @param Template location.
             /// @param Template path (no file name)
             ///
             /// @return The output widget description.
             //-------------------------------------------------------
-            WidgetDesc ParseWidget(const Json::Value& in_template, const std::string& in_name, const Json::Value& in_children, const Json::Value& in_hierarchy, Core::StorageLocation in_templateLocation, const std::string& in_templatePath);
+            WidgetDesc ParseWidget(const Json::Value& in_widget, Core::StorageLocation in_templateLocation, const std::string& in_templatePath);
         }
 	}
 }
