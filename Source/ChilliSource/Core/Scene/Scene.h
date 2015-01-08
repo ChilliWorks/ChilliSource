@@ -117,27 +117,12 @@ namespace ChilliSource
             /// @author S Downie
 			//-------------------------------------------------------
 			void ResumeEntities();
-			//-------------------------------------------------------
-            /// The scene is now at the forefront and the window
-            /// should listen for input
-            ///
-            /// @author S Downie
-			//-------------------------------------------------------
-			void OnForeground() override;
             //-------------------------------------------------------
             /// Sends the foreground event on to the entities.
             ///
             /// @author Ian Copland
 			//-------------------------------------------------------
 			void ForegroundEntities();
-            //-------------------------------------------------------
-			/// Updates the root window
-            ///
-            /// @author S Downie
-			///
-			/// @param Time since last update in seconds
-			//-------------------------------------------------------
-			void OnUpdate(f32 in_timeSinceLastUpdate) override;
             //-------------------------------------------------------
 			/// Updates all entities.
             ///
@@ -160,13 +145,6 @@ namespace ChilliSource
             /// @author Ian Copland
 			//-------------------------------------------------------
 			void BackgroundEntities();
-			//-------------------------------------------------------
-            /// The scene is no longer at the forefront and the window
-            /// should not listen for input
-            ///
-            /// @author S Downie
-			//-------------------------------------------------------
-			void OnBackground() override;
             //-------------------------------------------------------
             /// Sends the suspend event on to the entities.
             ///
@@ -232,12 +210,6 @@ namespace ChilliSource
 					(*it)->GetComponents<TComponentType1, TComponentType2, TComponentType3>(out_components1, out_components2, out_components3);
 				}
 			}
-            //--------------------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-			/// @return The main window that all the scene's UI is attached to.
-			//--------------------------------------------------------------------------------------------------
-			GUI::Window* GetWindow();
             
         private:
             friend class Entity;
@@ -259,7 +231,6 @@ namespace ChilliSource
             
 		private:
 			
-			GUI::WindowUPtr m_rootWindow;
 			SharedEntityList m_entities;
             Colour m_clearColour;
             bool m_entitiesActive = false;

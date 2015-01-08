@@ -181,15 +181,6 @@ namespace ChilliSource
 			//----------------------------------------------------------
 			void Render(CameraComponent* inpCameraComponent, ShaderPass ineShaderPass, std::vector<RenderComponent*>& inaRenderables);
             //----------------------------------------------------------
-			/// Render UI
-            ///
-            /// Render the UI views to screen space
-            ///
-            /// @param Root window
-            /// @param Screen clear colour
-			//----------------------------------------------------------
-			void RenderUI(GUI::Window* inpWindow, const Core::Colour& in_clearColour);
-            //----------------------------------------------------------
             /// Render UI
             ///
             /// @param Canvas

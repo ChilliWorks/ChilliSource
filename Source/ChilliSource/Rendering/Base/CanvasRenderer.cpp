@@ -33,7 +33,6 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
-#include <ChilliSource/GUI/Label/Label.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
@@ -557,20 +556,6 @@ namespace ChilliSource
             CS_LOG_FATAL("CanvasRenderer: No GUI material created. Some logic has gone wrong");
             return nullptr;
         }
-        //----------------------------------------------------------------------------
-        //----------------------------------------------------------------------------
-		void CanvasRenderer::Render(GUI::GUIView* in_rootView)
-		{
-            CS_ASSERT(in_rootView != nullptr, "Canvas cannot render null view");
-
-            in_rootView->Draw(this);
-
-            m_overlayBatcher->DisableScissoring();
-			m_overlayBatcher->ForceRender();
-
-            m_materialGUICache.clear();
-            m_canvasSprite.pMaterial = nullptr;
-		}
         //----------------------------------------------------------
 		//----------------------------------------------------------
 		void CanvasRenderer::Render(UI::Canvas* in_canvas)
@@ -648,10 +633,6 @@ namespace ChilliSource
 			UpdateSpriteData(Convert2DTransformTo3D(in_transform), in_size, in_offset, in_UVs, in_colour, in_anchor, m_canvasSprite);
 
 			m_overlayBatcher->Render(m_canvasSprite);
-
-#ifdef CS_ENABLE_DEBUGSTATS
-            Core::Application::Get()->GetDebugStats()->AddToEvent("GUI", 1);
-#endif
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
@@ -756,10 +737,6 @@ namespace ChilliSource
                 UpdateSpriteData(matTransformedLocal, character.m_packedImageSize, Core::Vector2::k_zero, character.m_UVs, in_colour, AlignmentAnchor::k_topLeft, m_canvasSprite);
                 m_overlayBatcher->Render(m_canvasSprite);
 			}
-
-#ifdef CS_ENABLE_DEBUGSTATS
-            Core::Application::Get()->GetDebugStats()->AddToEvent("GUI", 1);
-#endif
 		}
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------

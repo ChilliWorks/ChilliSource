@@ -34,12 +34,6 @@
 #include <ChilliSource/Input/Gesture/Gesture.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
 
-#define CS_ENABLE_LEGACYGESTURECONSUMPTION
-#ifdef CS_ENABLE_LEGACYGESTURECONSUMPTION
-#include <ChilliSource/Core/State.h>
-#include <ChilliSource/GUI/Base/Window.h>
-#endif
-
 namespace ChilliSource
 {
     namespace Input
@@ -172,17 +166,10 @@ namespace ChilliSource
             Input::PointerSystem* pointerSystem = Core::Application::Get()->GetSystem<Input::PointerSystem>();
             CS_ASSERT(pointerSystem != nullptr, "Gesture system missing required system: Pointer System");
             
-#ifdef CS_ENABLE_LEGACYGESTURECONSUMPTION
-            CSGUI::Window* window = GetState()->GetScene()->GetWindow();
-            m_pointerDownConnection = window->GetPointerDownEvent().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerDownLegacy));
-            m_pointerMovedConnection = window->GetPointerMovedEvent().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerMoved));
-            m_pointerUpConnection = window->GetPointerUpEvent().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerUp));
-#else
             m_pointerDownConnection = pointerSystem->GetPointerDownEventInternal().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerDown));
             m_pointerMovedConnection = pointerSystem->GetPointerMovedEvent().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerMoved));
             m_pointerUpConnection = pointerSystem->GetPointerUpEvent().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerUp));
             m_pointerScrolledConnection = pointerSystem->GetPointerScrollEventInternal().OpenConnection(Core::MakeDelegate(this, &GestureSystem::OnPointerScrolled));
-#endif
         }
         //--------------------------------------------------------
         //--------------------------------------------------------

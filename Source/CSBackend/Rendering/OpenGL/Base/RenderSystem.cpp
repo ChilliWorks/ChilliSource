@@ -541,11 +541,6 @@ namespace CSBackend
         //----------------------------------------------------------
         void RenderSystem::RenderVertexBuffer(CSRendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumVerts, const CSCore::Matrix4& inmatWorld)
 		{
-#ifdef CS_ENABLE_DEBUGSTATS
-            CSCore::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
-			CSCore::Application::Get()->GetDebugStats()->AddToEvent("Verts", inudwNumVerts);
-#endif
-            
 			//Set the new model view matrix based on the camera view matrix and the object matrix
             static CSCore::Matrix4 matWorldViewProj;
 			matWorldViewProj = inmatWorld * mmatViewProj;
@@ -568,11 +563,6 @@ namespace CSBackend
         //----------------------------------------------------------
         void RenderSystem::RenderBuffer(CSRendering::MeshBuffer* inpBuffer, u32 inudwOffset, u32 inudwNumIndices, const CSCore::Matrix4& inmatWorld)
 		{
-#ifdef CS_ENABLE_DEBUGSTATS
-            CSCore::Application::Get()->GetDebugStats()->AddToEvent("DrawCalls", 1u);
-            CSCore::Application::Get()->GetDebugStats()->AddToEvent("Verts", inpBuffer->GetVertexCount());
-#endif
-            
 			//Set the new model view matrix based on the camera view matrix and the object matrix
             static CSCore::Matrix4 matWorldViewProj;
 			matWorldViewProj = inmatWorld * mmatViewProj;

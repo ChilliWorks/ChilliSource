@@ -34,14 +34,8 @@
     <Filter Include="ChilliSource\Rendering">
       <UniqueIdentifier>{b9383616-8fa0-4ece-8b64-1be2e738e1ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ChilliSource\GUI">
-      <UniqueIdentifier>{ac14c0b8-6867-4702-9d53-1a38769554dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ChilliSource\Networking">
       <UniqueIdentifier>{5a62c594-babd-456c-8cbb-e9b01263fe4c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ChilliSource\Debugging">
-      <UniqueIdentifier>{a872a30a-0aa9-4735-b425-936126dd3c08}</UniqueIdentifier>
     </Filter>
     <Filter Include="ChilliSource\Input">
       <UniqueIdentifier>{d6549567-84c9-49b7-a8a6-463f1af1ec46}</UniqueIdentifier>
@@ -93,9 +87,6 @@
     </Filter>
     <Filter Include="ChilliSource\Core\Notification">
       <UniqueIdentifier>{09d0c45c-fd8a-4e0d-af30-c533eb62ed3e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ChilliSource\Core\Reflection">
-      <UniqueIdentifier>{20c11674-c428-4878-b4f6-df19a6ce4593}</UniqueIdentifier>
     </Filter>
     <Filter Include="ChilliSource\Core\Resource">
       <UniqueIdentifier>{def66ffb-618b-4f68-b2fb-db30c27f5079}</UniqueIdentifier>
@@ -282,87 +273,6 @@
     <ClCompile Include="..\..\Source\CSBackend\Platform\Windows\Networking\Http\HttpRequestSystem.cpp">
       <Filter>CSBackend\Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Base\GUIView.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Base\GUIViewFactory.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Base\InputEvents.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Base\Window.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Button\Button.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Button\HighlightButton.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Button\StretchableHighlightButton.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Button\ToggleButton.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Container\GridView.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Container\HorizontalList.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Container\ScrollView.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Container\VerticalList.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Image\HorizontalStretchableImage.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Image\ImageView.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Image\StretchableImage.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Image\VerticalStretchableImage.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Label\EditableLabel.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Label\FormattedLabel.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\Label\Label.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\ProgressBar\HorizontalClippingProgressBar.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\ProgressBar\HorizontalEndcappedProgressBar.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\ProgressBar\HorizontalProgressBar.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\ProgressBar\ProgressBar.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\ProgressBar\VerticalEndcappedProgressBar.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\SliderBar\HorizontalSliderBar.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\SliderBar\SliderBar.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\GUI\SliderBar\VerticalSliderBar.cpp">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Networking\ContentDownload\ContentManagementSystem.cpp">
       <Filter>ChilliSource\Networking</Filter>
     </ClCompile>
@@ -374,12 +284,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Networking\IAP\IAPSystem.cpp">
       <Filter>ChilliSource\Networking</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Debugging\Base\DebugStats.cpp">
-      <Filter>ChilliSource\Debugging</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Debugging\Base\DebugStatsView.cpp">
-      <Filter>ChilliSource\Debugging</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Input\Pointer\PointerSystem.cpp">
       <Filter>ChilliSource\Input</Filter>
@@ -632,18 +536,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Resource\ResourceProvider.cpp">
       <Filter>ChilliSource\Core\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Reflection\Instance.cpp">
-      <Filter>ChilliSource\Core\Reflection</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Reflection\MetaClass.cpp">
-      <Filter>ChilliSource\Core\Reflection</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Reflection\Property.cpp">
-      <Filter>ChilliSource\Core\Reflection</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Reflection\Registry.cpp">
-      <Filter>ChilliSource\Core\Reflection</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\Notification\AppNotificationSystem.cpp">
       <Filter>ChilliSource\Core\Notification</Filter>
@@ -1154,90 +1046,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\ChilliSource.h">
       <Filter>ChilliSource</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Base\GUIView.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Base\GUIViewFactory.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Base\InputEvents.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Base\Window.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Button\Button.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Button\HighlightButton.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Button\StretchableHighlightButton.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Button\ToggleButton.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Container\GridView.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Container\HorizontalList.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Container\ScrollView.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Container\VerticalList.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Image\HorizontalStretchableImage.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Image\ImageView.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Image\StretchableImage.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Image\VerticalStretchableImage.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Label\EditableLabel.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Label\FormattedLabel.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\Label\Label.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\ProgressBar\HorizontalClippingProgressBar.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\ProgressBar\HorizontalEndcappedProgressBar.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\ProgressBar\HorizontalProgressBar.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\ProgressBar\ProgressBar.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\ProgressBar\VerticalEndcappedProgressBar.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\SliderBar\HorizontalSliderBar.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\SliderBar\SliderBar.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\SliderBar\VerticalSliderBar.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\GUI\ForwardDeclarations.h">
-      <Filter>ChilliSource\GUI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ForwardDeclarations.h">
       <Filter>ChilliSource\Networking</Filter>
     </ClInclude>
@@ -1258,15 +1066,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Networking\IAP\IAPSystem.h">
       <Filter>ChilliSource\Networking</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Debugging\ForwardDeclarations.h">
-      <Filter>ChilliSource\Debugging</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Debugging\Base\DebugStats.h">
-      <Filter>ChilliSource\Debugging</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Debugging\Base\DebugStatsView.h">
-      <Filter>ChilliSource\Debugging</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Input\ForwardDeclarations.h">
       <Filter>ChilliSource\Input</Filter>
@@ -1398,9 +1197,6 @@
       <Filter>ChilliSource\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Notification.h">
-      <Filter>ChilliSource\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection.h">
       <Filter>ChilliSource\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Resource.h">
@@ -1717,24 +1513,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Resource\ResourceProvider.h">
       <Filter>ChilliSource\Core\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\Instance.h">
-      <Filter>ChilliSource\Core\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\MetaClass.h">
-      <Filter>ChilliSource\Core\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\PropAccess.h">
-      <Filter>ChilliSource\Core\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\Property.h">
-      <Filter>ChilliSource\Core\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\Reflection.h">
-      <Filter>ChilliSource\Core\Reflection</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Reflection\Registry.h">
-      <Filter>ChilliSource\Core\Reflection</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Notification\AppNotificationSystem.h">
       <Filter>ChilliSource\Core\Notification</Filter>

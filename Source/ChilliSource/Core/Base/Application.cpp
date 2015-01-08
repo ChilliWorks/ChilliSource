@@ -51,8 +51,6 @@
 #include <ChilliSource/Debugging/Base/DebugStats.h>
 #endif
 
-#include <ChilliSource/GUI/Base/GUIViewFactory.h>
-
 #include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
@@ -173,8 +171,6 @@ namespace ChilliSource
             s_application = this;
             
 			Logging::Create();
-            
-            GUI::GUIViewFactory::RegisterDefaults();
 
             //Create all application systems.
             m_isSystemCreationAllowed = true;
@@ -391,10 +387,6 @@ namespace ChilliSource
             CreateSystem<PNGImageProvider>();
             CreateSystem<DialogueBoxSystem>();
             CreateSystem<LocalisedTextProvider>();
-            
-#ifdef CS_ENABLE_DEBUGSTATS
-            m_debugStats = CreateSystem<Debugging::DebugStats>();
-#endif
 
             //Input
             CreateSystem<Input::Keyboard>();
@@ -622,20 +614,6 @@ namespace ChilliSource
         {
             return m_widgetFactory;
         }
-#ifdef CS_ENABLE_DEBUGSTATS
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        Debugging::DebugStats* Application::GetDebugStats()
-        {
-            return m_debugStats;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        const Debugging::DebugStats* Application::GetDebugStats() const
-        {
-            return m_debugStats;
-        }
-#endif
         //----------------------------------------------------
         //----------------------------------------------------
 		Application::~Application()

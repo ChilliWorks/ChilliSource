@@ -101,12 +101,6 @@ namespace ChilliSource
             /// @return Whether the class implements the given interface
             //----------------------------------------------------------------------------
             bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-			//----------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @param Root view to draw
-			//----------------------------------------------------------------------------
-			void Render(GUI::GUIView* in_rootView);
             //----------------------------------------------------------
 			/// Render
 			///

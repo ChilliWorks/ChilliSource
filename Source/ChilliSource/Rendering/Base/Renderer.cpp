@@ -30,8 +30,9 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
-#include <ChilliSource/GUI/Base/Window.h>
+#include <ChilliSource/Core/Scene/Scene.h>
 #include <ChilliSource/Rendering/Base/BlendMode.h>
 #include <ChilliSource/Rendering/Base/CullingPredicates.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
@@ -239,7 +240,6 @@ namespace ChilliSource
 
                 mpRenderSystem->SetLight(nullptr);
 
-                RenderUI(inpScene->GetWindow(), inpScene->GetClearColour());
                 RenderUI(in_canvas, inpScene->GetClearColour());
 
                 //Present contents of buffer to screen
@@ -256,7 +256,6 @@ namespace ChilliSource
                 mpRenderSystem->BeginFrame(inpRenderTarget);
 
                 mpRenderSystem->SetLight(nullptr);
-                RenderUI(inpScene->GetWindow(), inpScene->GetClearColour());
                 RenderUI(in_canvas, inpScene->GetClearColour());
                     
                 //Present contents of buffer to screen
@@ -403,14 +402,6 @@ namespace ChilliSource
 
             //The final dynamic sprite batch needs to be flushed
             mpRenderSystem->GetDynamicSpriteBatchPtr()->ForceRender();
-        }
-        //----------------------------------------------------------
-        /// Render UI
-        //----------------------------------------------------------
-        void Renderer::RenderUI(GUI::Window* inpWindow, const Core::Colour& in_clearColour)
-        {
-            mpRenderSystem->ApplyCamera(Core::Vector3::k_zero, Core::Matrix4::k_identity, CreateOverlayProjection(inpWindow->GetAbsoluteSize()), in_clearColour);
-			m_canvas->Render(inpWindow);
         }
         //----------------------------------------------------------
         /// Render UI

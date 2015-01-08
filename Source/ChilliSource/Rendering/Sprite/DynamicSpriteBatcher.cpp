@@ -149,25 +149,9 @@ namespace ChilliSource
         {
             if(!maSpriteCache.empty())
             {
-#ifdef CS_ENABLE_DEBUGSTATS
-                if(!maRenderCommands.empty())
-                {
-                    RenderCommand &sLastCommand = maRenderCommands.back();
-                    if(sLastCommand.m_material != nullptr)
-                    {
-                        if(sLastCommand.m_material->IsTransparencyEnabled())
-                        {
-                            Core::Application::Get()->GetDebugStats()->AddToEvent("Sprites_Trans", (u32)maSpriteCache.size());
-                        }
-                        else
-                        {
-                            Core::Application::Get()->GetDebugStats()->AddToEvent("Sprites", (u32)maSpriteCache.size());
-                        }
-                    }
-                }
-#endif
                 //Close off the batch
                 InsertDrawCommand();
+                
                 //Copy geometry into the mesh buffer and render
                 BuildAndFlushBatch();
             }

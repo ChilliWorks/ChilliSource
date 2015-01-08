@@ -329,28 +329,6 @@ namespace ChilliSource
             /// @return A const pointer to the widget factory system.
             //-----------------------------------------------------
             const UI::WidgetFactory* GetWidgetFactory() const;
-#ifdef CS_ENABLE_DEBUGSTATS
-            //-----------------------------------------------------
-            /// Returns a pointer to the debug stats system. This
-            /// is only available when the debug stats preprocessor
-            /// flag CS_ENABLE_DEBUGSTATS is defined.
-            ///
-            /// @author I Copland
-            ///
-            /// @return Pointer to the debug stats system.
-            //-----------------------------------------------------
-            Debugging::DebugStats* GetDebugStats();
-            //-----------------------------------------------------
-            /// Returns a const pointer to the debug stats system.
-            /// This is only available when the debug stats
-            /// preprocessor flag CS_ENABLE_DEBUGSTATS is defined.
-            ///
-            /// @author I Copland
-            ///
-            /// @return A const pointer to the debug stats system.
-            //-----------------------------------------------------
-            const Debugging::DebugStats* GetDebugStats() const;
-#endif
             //----------------------------------------------------
 			/// Initialises the application and kicks off the update
             /// loop. This should not be called by a users application.
@@ -518,10 +496,6 @@ namespace ChilliSource
             Input::PointerSystem* m_pointerSystem = nullptr;
             AppConfig* m_appConfig = nullptr;
             UI::WidgetFactory* m_widgetFactory = nullptr;
-            
-#ifdef CS_ENABLE_DEBUGSTATS
-            Debugging::DebugStats* m_debugStats = nullptr;
-#endif
             
 			TimeIntervalSecs m_currentAppTime = 0;
 			f32 m_updateInterval;
