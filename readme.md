@@ -1,4 +1,4 @@
-Chilli Source v1.2.1
+Chilli Source v1.3.0
 ====================
 
 Chilli Source is an open source, cross-platform game engine designed by game developers for game developers. It is completely free to use, released under the MIT License.
@@ -17,5 +17,5 @@ If you encounter any bugs please report them using Github Issues. If you have an
 
 Contribution
 ------------
-Information on how to contribute will be coming soon!
+Information on how to contribute can be found on the [Website](http://chilli-works.com/).
 

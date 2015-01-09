@@ -1,5 +1,18 @@
 === Chilli Source Change Log ===
 
+Version 1.3.0, 2015-01-09:
+	- Added the new UI system.
+	- Added a new particle system.
+	- Added a Cricket audio system.
+	- Added a new property map for containing heterogeneous types.
+	- Added new dynamic_array which is based on std::dynarray which was originally proposed in the C++14 standard, but was later removed to be re-added at a later date.
+	- Added Random utilty class for thread-safe random number generation.
+	- Added new Json utility class, which provides convenience methods for working with Json.
+	- Improved the Tween API.
+	- Removed several features that have been superceeded by improved implementations: The old GUI system, the old particle system, MathUtils::FRand() and Utils::ReadJson().
+	- Removed the reflection functionality as it was incomplete and only used by the old GUI system.
+	- Removed Debug Stats as it relied heavily on the old GUI system. This will be re-implemented in the new system in the not too distant future.
+
 Version 1.2.1, 2014-11-17:
 	- Models exported from Blender can now be converted to CSModel format using the ColladaToCSModel tool.
 	- Improved the HTTP Request System API. Also replaced the iOS HTTP Request System internals with NSURLConnection. This resulted in removal of GetBytesRead() from the HTTP interface.
