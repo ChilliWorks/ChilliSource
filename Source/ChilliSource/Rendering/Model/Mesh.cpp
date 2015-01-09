@@ -34,10 +34,6 @@
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
-#ifdef CS_ENABLE_DEBUGSTATS
-#include <ChilliSource/Debugging/Base/DebugStats.h>
-#endif
-
 #include <algorithm>
 
 namespace ChilliSource

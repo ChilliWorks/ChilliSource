@@ -47,10 +47,6 @@
 #include <ChilliSource/Core/Time/CoreTimer.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-#ifdef CS_ENABLE_DEBUGSTATS
-#include <ChilliSource/Debugging/Base/DebugStats.h>
-#endif
-
 #include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
 #include <ChilliSource/Input/Pointer/PointerSystem.h>
@@ -229,11 +225,6 @@ namespace ChilliSource
             in_deltaTime = std::min(in_deltaTime, 0.5f);
 #endif
             
-#ifdef CS_ENABLE_DEBUGSTATS
-            m_debugStats->RecordEvent("FrameTime", in_deltaTime);
-			m_debugStats->RecordEvent("FPS", 1.0f / in_deltaTime);
-#endif
-            
 			//Update the app time since start
 			m_currentAppTime = in_timestamp;
             
@@ -280,10 +271,6 @@ namespace ChilliSource
             
             //Render the scene
             m_renderer->RenderToScreen(m_stateManager->GetActiveState()->GetScene(), m_stateManager->GetActiveState()->GetUICanvas());
-            
-#ifdef CS_ENABLE_DEBUGSTATS
-            m_debugStats->Clear();
-#endif
         }
         //----------------------------------------------------
         //----------------------------------------------------

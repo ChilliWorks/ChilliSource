@@ -1169,9 +1169,7 @@ namespace ChilliSource
             
             finalSize = m_sizePolicyDelegate(finalSize, GetPreferredSize()) * m_localScale;
             
-            std::unique_lock<std::mutex> lock(m_sizeMutex);
             m_cachedFinalSize = finalSize;
-            lock.unlock();
             
             m_isLocalSizeCacheValid = true;
             m_isParentSizeCacheValid = true;

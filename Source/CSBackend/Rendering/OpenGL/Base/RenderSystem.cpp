@@ -49,10 +49,6 @@
 #include <ChilliSource/Rendering/Base/DepthTestComparison.h>
 #include <ChilliSource/Rendering/Base/BlendMode.h>
 
-#ifdef CS_ENABLE_DEBUGSTATS
-#include <ChilliSource/Debugging/Base/DebugStats.h>
-#endif
-
 namespace CSBackend
 {
 	namespace OpenGL

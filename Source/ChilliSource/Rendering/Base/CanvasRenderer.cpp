@@ -39,10 +39,6 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/UI/Base/Canvas.h>
 
-#ifdef CS_ENABLE_DEBUGSTATS
-#include <ChilliSource/Debugging/Base/DebugStats.h>
-#endif
-
 #include <algorithm>
 
 namespace ChilliSource

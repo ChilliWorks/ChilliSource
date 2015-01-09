@@ -1200,8 +1200,6 @@ namespace ChilliSource
             mutable bool m_isLocalTransformCacheValid = false;
             mutable bool m_isLocalSizeCacheValid = false;
             mutable bool m_isParentSizeCacheValid = false;
-            
-            mutable std::mutex m_sizeMutex;
     
             Core::Screen* m_screen = nullptr;
         };

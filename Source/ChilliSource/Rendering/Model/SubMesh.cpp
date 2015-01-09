@@ -36,10 +36,6 @@
 #include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 
-#ifdef CS_ENABLE_DEBUGSTATS
-#include <ChilliSource/Debugging/Base/DebugStats.h>
-#endif
-
 #include <limits>
 
 namespace ChilliSource
