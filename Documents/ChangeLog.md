@@ -1,5 +1,9 @@
 === Chilli Source Change Log ===
 
+Version 1.3.1, 2015-01-09:
+	- Add convenience methods to Widget Factory for building all the in-built widget types.
+	- Added a creation method for creating Particle Effect Components to the Render Component Factory.
+
 Version 1.3.0, 2015-01-09:
 	- Added the new UI system.
 	- Added a new particle system.

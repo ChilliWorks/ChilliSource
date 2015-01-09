@@ -40,6 +40,7 @@
 #include <ChilliSource/Rendering/Lighting/PointLightComponent.h>
 #include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
 #include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
+#include <ChilliSource/Rendering/Particle/ParticleEffectComponent.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
@@ -148,6 +149,13 @@ namespace ChilliSource
         {
             PointLightComponentUPtr pLight(new PointLightComponent());
             return pLight;
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        ParticleEffectComponentUPtr RenderComponentFactory::CreateParticleEffectComponent(const ParticleEffectCSPtr& in_particleEffect) const
+        {
+            ParticleEffectComponentUPtr particleEffect(new ParticleEffectComponent(in_particleEffect));
+            return particleEffect;
         }
 	}
 }

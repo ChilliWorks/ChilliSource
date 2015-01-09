@@ -167,15 +167,24 @@ namespace ChilliSource
 			//---------------------------------------------------------------------------
 			DirectionalLightComponentUPtr CreateDirectionalLightComponent(u32 in_shadowMapRes = 0) const;
             //---------------------------------------------------------------------------
-			/// Create a new light component that is applied in the diffuse render pass.
+            /// Create a new light component that is applied in the diffuse render pass.
             /// This light simulates direct light from nearby light sources where the light
             /// is omni-directional
-			///
-			/// @author S Downie
+            ///
+            /// @author S Downie
             ///
             /// @return Ownership of new point light component
-			//---------------------------------------------------------------------------
+            //---------------------------------------------------------------------------
             PointLightComponentUPtr CreatePointLightComponent() const;
+            //---------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The particle effect the particle effect component should be
+            /// created with.
+            ///
+            /// @return A new particle effect component.
+            //---------------------------------------------------------------------------
+            ParticleEffectComponentUPtr CreateParticleEffectComponent(const ParticleEffectCSPtr& in_particleEffect) const;
             
         private:
             

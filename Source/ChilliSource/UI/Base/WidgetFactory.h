@@ -100,71 +100,77 @@ namespace ChilliSource
             //---------------------------------------------------------------------------
             WidgetUPtr Create(const WidgetTemplateCSPtr& in_template) const;
             //---------------------------------------------------------------------------
-            /// Creates a new widget with the behaviour of a standard widget.
-            ///
             /// @author S Downie
             ///
-            /// @return Widget with look and behaviour of a standard widget
+            /// @return A new standard widget.
             //---------------------------------------------------------------------------
             WidgetUPtr CreateWidget() const;
             //---------------------------------------------------------------------------
-            /// Creates a new widget with the behaviour of a highlight button.
-            /// A highlight button has the most common button behaviour of changing style
-            /// on press and release and notifying listeners of the trigger event.
+            /// @author Ian Copland
             ///
+            /// @return A new image widget.
+            //---------------------------------------------------------------------------
+            WidgetUPtr CreateImage() const;
+            //---------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return Widget with look and behaviour of highlight button
+            /// @return A new highlight button widget.
             //---------------------------------------------------------------------------
             WidgetUPtr CreateHighlightButton() const;
             //---------------------------------------------------------------------------
-            /// Creates a new widget with the behaviour of a toggle button.
-            /// A toggle button is toggled on or off on press depending on its current
-            /// state.
-            ///
             /// @author S Downie
             ///
-            /// @return Widget with look and behaviour of toggle button
+            /// @return A new toggle button widget.
             //---------------------------------------------------------------------------
             WidgetUPtr CreateToggleButton() const;
             //---------------------------------------------------------------------------
-            /// Creates a new widget with the behaviour of a vertical slider.
-            /// The slider can be dragged by the user
+            /// @author Ian Copland
             ///
+            /// @return A new label widget.
+            //---------------------------------------------------------------------------
+            WidgetUPtr CreateLabel() const;
+            //---------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A new layout widget.
+            //---------------------------------------------------------------------------
+            WidgetUPtr CreateLayout() const;
+            //---------------------------------------------------------------------------
             /// @author S Downie
             ///
-            /// @return Widget with look and behaviour of slider
-            //---------------------------------------------------------------------------
-            WidgetUPtr CreateVerticalSlider() const;
-            //---------------------------------------------------------------------------
-            /// Creates a new widget with the behaviour of a horizontal slider.
-            /// The slider can be dragged by the user
-            ///
-            /// @author S Downie
-            ///
-            /// @return Widget with look and behaviour of slider
+            /// @return A new horizontal slider widget.
             //---------------------------------------------------------------------------
             WidgetUPtr CreateHorizontalSlider() const;
             //---------------------------------------------------------------------------
-            /// Creates a new widget with the behaviour of a horizontal progress bar.
-            /// A progress bar has an internal bar that stretches to fill
-            /// the background based on the current progress.
-            ///
             /// @author S Downie
             ///
-            /// @return Widget with look and behaviour of progress bar
+            /// @return A new vertical slider widget.
             //---------------------------------------------------------------------------
-            WidgetUPtr CreateHorizontalProgressBar() const;
+            WidgetUPtr CreateVerticalSlider() const;
             //---------------------------------------------------------------------------
-            /// Creates a new widget with the behaviour of a vertical progress bar.
-            /// A progress bar has an internal bar that stretches to fill
-            /// the background based on the current progress.
-            ///
             /// @author S Downie
             ///
-            /// @return Widget with look and behaviour of progress bar
+            /// @return A new horizontal fill progress bar.
             //---------------------------------------------------------------------------
-            WidgetUPtr CreateVerticalProgressBar() const;
+            WidgetUPtr CreateHorizontalFillProgressBar() const;
+            //---------------------------------------------------------------------------
+            /// @author S Downie
+            ///
+            /// @return A new vertical fill progress bar.
+            //---------------------------------------------------------------------------
+            WidgetUPtr CreateVerticalFillProgressBar() const;
+            //---------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A new horizontal stretch progress bar.
+            //---------------------------------------------------------------------------
+            WidgetUPtr CreateHorizontalStretchProgressBar() const;
+            //---------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A new vertical stretch progress bar.
+            //---------------------------------------------------------------------------
+            WidgetUPtr CreateVerticalStretchProgressBar() const;
             
         private:
             

@@ -55,12 +55,17 @@ namespace ChilliSource
         namespace
         {
             const std::string k_widgetKey = "Widget";
+            const std::string k_imageKey = "Image";
             const std::string k_highlightButtonKey = "HighlightButton";
             const std::string k_toggleButtonKey = "ToggleButton";
+            const std::string k_labelKey = "Label";
+            const std::string k_layoutKey = "Layout";
             const std::string k_verticalSliderKey = "VerticalSlider";
             const std::string k_horizontalSliderKey = "HorizontalSlider";
-            const std::string k_horizontalProgressBarKey = "HorizontalProgressBar";
-            const std::string k_verticalProgressBarKey = "VerticalProgressBar";
+            const std::string k_verticalFillProgressBarKey = "VerticalFillProgressBar";
+            const std::string k_horizontalFillProgressBarKey = "HorizontalFillProgressBar";
+            const std::string k_verticalStretchProgressBarKey = "VerticalStretchProgressBar";
+            const std::string k_horizontalStretchProgressBarKey = "HorizontalStretchProgressBar";
         }
         
         //---------------------------------------------------------------------------
@@ -159,6 +164,12 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
+        WidgetUPtr WidgetFactory::CreateImage() const
+        {
+            return Create(m_widgetDefNameMap.find(k_imageKey)->second);
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
         WidgetUPtr WidgetFactory::CreateHighlightButton() const
         {
             return Create(m_widgetDefNameMap.find(k_highlightButtonKey)->second);
@@ -171,9 +182,15 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        WidgetUPtr WidgetFactory::CreateVerticalSlider() const
+        WidgetUPtr WidgetFactory::CreateLabel() const
         {
-            return Create(m_widgetDefNameMap.find(k_verticalSliderKey)->second);
+            return Create(m_widgetDefNameMap.find(k_labelKey)->second);
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetUPtr WidgetFactory::CreateLayout() const
+        {
+            return Create(m_widgetDefNameMap.find(k_layoutKey)->second);
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
@@ -183,15 +200,33 @@ namespace ChilliSource
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        WidgetUPtr WidgetFactory::CreateHorizontalProgressBar() const
+        WidgetUPtr WidgetFactory::CreateVerticalSlider() const
         {
-            return Create(m_widgetDefNameMap.find(k_horizontalProgressBarKey)->second);
+            return Create(m_widgetDefNameMap.find(k_verticalSliderKey)->second);
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
-        WidgetUPtr WidgetFactory::CreateVerticalProgressBar() const
+        WidgetUPtr WidgetFactory::CreateHorizontalFillProgressBar() const
         {
-            return Create(m_widgetDefNameMap.find(k_verticalProgressBarKey)->second);
+            return Create(m_widgetDefNameMap.find(k_horizontalFillProgressBarKey)->second);
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetUPtr WidgetFactory::CreateVerticalFillProgressBar() const
+        {
+            return Create(m_widgetDefNameMap.find(k_verticalFillProgressBarKey)->second);
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetUPtr WidgetFactory::CreateHorizontalStretchProgressBar() const
+        {
+            return Create(m_widgetDefNameMap.find(k_horizontalStretchProgressBarKey)->second);
+        }
+        //---------------------------------------------------------------------------
+        //---------------------------------------------------------------------------
+        WidgetUPtr WidgetFactory::CreateVerticalStretchProgressBar() const
+        {
+            return Create(m_widgetDefNameMap.find(k_verticalStretchProgressBarKey)->second);
         }
         //---------------------------------------------------------------------------
         //---------------------------------------------------------------------------
