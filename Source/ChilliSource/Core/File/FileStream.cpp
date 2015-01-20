@@ -53,7 +53,7 @@ namespace ChilliSource
             s32 dwCurrentPos = TellG();
             
             // Get file size
-            mFileStream.seekg(0, mFileStream.end);
+            SeekG(0, SeekDir::k_end);
             u32 udwLength = TellG();
             
             SeekG(0);
@@ -90,7 +90,7 @@ namespace ChilliSource
             s32 dwCurrentPos = TellG();
             
             // Get file size
-            mFileStream.seekg(0, mFileStream.end);
+            SeekG(0, SeekDir::k_end);
             u32 udwLength = TellG();
             
             SeekG(0);
@@ -104,6 +104,7 @@ namespace ChilliSource
             while(udwLength >= kudwChunkSize)
             {
                 Read(byData, kudwChunkSize);
+                
                 Hash.Update(reinterpret_cast<u8*>(byData), kudwChunkSize);
                 udwLength -= kudwChunkSize;
             }
