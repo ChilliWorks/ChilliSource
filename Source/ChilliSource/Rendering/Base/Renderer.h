@@ -105,7 +105,7 @@ namespace ChilliSource
             /// buffer will be created.
             ///
 			/// @param Scene to render
-            /// @param Canvas to render
+            /// @param Canvas to render. Can be null.
 			/// @param Texture to render colour to.
             /// @param Texture to render depth to.
 			//----------------------------------------------------------
