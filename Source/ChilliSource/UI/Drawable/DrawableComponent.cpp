@@ -84,10 +84,13 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void DrawableComponent::ApplyDrawableDef(const DrawableDefCSPtr& in_drawableDef)
         {
-            CS_ASSERT(in_drawableDef != nullptr, "Cannot set null drawable def on a drawable component.");
-            
+            m_drawable.reset();
             m_drawableDef = in_drawableDef;
-            m_drawable = m_drawableDef->CreateDrawable();
+            
+            if (m_drawableDef != nullptr)
+            {
+                m_drawable = m_drawableDef->CreateDrawable();
+            }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -99,9 +102,10 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void DrawableComponent::OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
         {
-            CS_ASSERT(m_drawable != nullptr, "Must set a drawable on a drawable component.");
-            
-            m_drawable->Draw(in_renderer, in_transform, in_absSize, in_absColour);
+            if (m_drawable != nullptr)
+            {
+                m_drawable->Draw(in_renderer, in_transform, in_absSize, in_absColour);
+            }
         }
     }
 }

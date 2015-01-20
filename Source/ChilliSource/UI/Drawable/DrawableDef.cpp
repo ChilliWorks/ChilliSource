@@ -98,6 +98,8 @@ namespace ChilliSource
                     return DrawableDefCUPtr(new ThreePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
                 case DrawableType::k_ninePatch:
                     return DrawableDefCUPtr(new NinePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
+                case DrawableType::k_none:
+                    return nullptr;
                 default:
                     CS_LOG_FATAL("Invalid drawable def type.");
                     return nullptr;
