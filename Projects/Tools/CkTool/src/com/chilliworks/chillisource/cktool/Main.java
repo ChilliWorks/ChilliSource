@@ -37,7 +37,7 @@ import com.chilliworks.chillisource.coreutils.Logging.LoggingLevel;
  * 
  * @author Ian Copland
  */
-public class Main 
+public final class Main 
 {
 	private static final String PARAM_ACTION = "--action";
 	private static final String PARAM_INPUT = "--input";
@@ -95,7 +95,7 @@ public class Main
 					options.m_action = ParseAction(arguments[i+1]);
 				else
 					Logging.logFatal("No action provided!");
-				i++;
+				++i;
 			}
 			
 			//Input param
@@ -105,7 +105,7 @@ public class Main
 					options.m_inputFilePath = arguments[i+1];
 				else
 					Logging.logFatal("No input file provided!");
-				i++;
+				++i;
 			}
 			
 			//output param
@@ -115,7 +115,7 @@ public class Main
 					options.m_outputFilePath = arguments[i+1];
 				else
 					Logging.logFatal("No output file provided!");
-				i++;
+				++i;
 			}
 			
 			//format param
@@ -125,7 +125,7 @@ public class Main
 					options.m_format = arguments[i+1];
 				else
 					Logging.logFatal("No format provided!");
-				i++;
+				++i;
 			}
 			
 			//volume param
@@ -135,7 +135,7 @@ public class Main
 					options.m_volume = arguments[i+1];
 				else
 					Logging.logFatal("No format provided!");
-				i++;
+				++i;
 			}
 			
 			//pan param
@@ -145,7 +145,7 @@ public class Main
 					options.m_pan = arguments[i+1];
 				else
 					Logging.logFatal("No pan provided!");
-				i++;
+				++i;
 			}
 			
 			//loop start param
@@ -155,7 +155,7 @@ public class Main
 					options.m_loopStart = arguments[i+1];
 				else
 					Logging.logFatal("No loop start provided!");
-				i++;
+				++i;
 			}
 			
 			//loop end param
@@ -165,7 +165,7 @@ public class Main
 					options.m_loopEnd = arguments[i+1];
 				else
 					Logging.logFatal("No loop end provided!");
-				i++;
+				++i;
 			}
 			
 			//loop count param
@@ -175,7 +175,7 @@ public class Main
 					options.m_loopCount = arguments[i+1];
 				else
 					Logging.logFatal("No loop count provided!");
-				i++;
+				++i;
 			}
 			
 			//help param
@@ -304,7 +304,7 @@ public class Main
 		Logging.logVerbose("CkTool is a simple cross-platform java wrapper around the Cricket Audio cktool. For further information see the Cricket");
 		Logging.logVerbose("Audio Documentation at: http://www.crickettechnology.com/");
 		Logging.logVerbose(" ");
-		Logging.logVerbose("Chilli Sorce has obtained special permission to include Cricket Audio as part of the engine. See the documentation on CricketAudioSystem for " +
+		Logging.logVerbose("Chilli Source has obtained special permission to include Cricket Audio as part of the engine. See the documentation on CricketAudioSystem for " +
 				"details on how to use Cricket Audio. You are free to use Cricket Audio as part of Chilli Source within your app subject to the Cricket Audio free license " +
 				"(http://www.crickettechnology.com/free_license) as outline below:");
 		Logging.logVerbose(" ");

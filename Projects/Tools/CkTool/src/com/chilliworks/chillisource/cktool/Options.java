@@ -33,7 +33,7 @@ package com.chilliworks.chillisource.cktool;
  * 
  * @author Ian Copland
  */
-public class Options 
+public final class Options 
 {
 	/**
 	 * The action to perform using the cktool.

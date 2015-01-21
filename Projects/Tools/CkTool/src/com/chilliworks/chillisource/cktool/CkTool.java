@@ -45,10 +45,10 @@ import com.chilliworks.chillisource.coreutils.StringUtils;
  * 
  * @author Ian Copland
  */
-public class CkTool 
+public final class CkTool 
 {
 	/**
-	 * Exectures CkTool using the given options.
+	 * Executes CkTool using the given options.
 	 * 
 	 * @author Ian Copland
 	 * 
