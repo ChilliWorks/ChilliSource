@@ -32,6 +32,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
+import java.util.List;
 
 //==================================================
 /// External Process
@@ -43,9 +44,9 @@ public class ExternalProcess
 	//------------------------------------------------------
 	/// Private member data
 	//------------------------------------------------------
-	private LinkedList<String> mstrMessages = new LinkedList<String>();
-	private LinkedList<String> mstrWarnings = new LinkedList<String>();
-	private LinkedList<String> mstrErrors = new LinkedList<String>();
+	private List<String> mstrMessages = new LinkedList<String>();
+	private List<String> mstrWarnings = new LinkedList<String>();
+	private List<String> mstrErrors = new LinkedList<String>();
 	//----------------------------------------------
 	/// Constructor
 	//----------------------------------------------
@@ -55,7 +56,7 @@ public class ExternalProcess
 	//----------------------------------------------
 	/// Constructor
 	//----------------------------------------------
-	public ExternalProcess(LinkedList<String> inastrCommands)
+	public ExternalProcess(List<String> inastrCommands)
 	{
 		run(inastrCommands);
 	}
@@ -66,7 +67,7 @@ public class ExternalProcess
 	///
 	/// @param the process that owns the input stream.
 	//------------------------------------------------------
-	public void run(LinkedList<String> inastrCommands)
+	public void run(List<String> inastrCommands)
 	{
 		try
 		{
@@ -105,7 +106,7 @@ public class ExternalProcess
 	///
 	/// @return all messages from the run application.
 	//------------------------------------------------------
-	public LinkedList<String> getMessages()
+	public List<String> getMessages()
 	{
 		return mstrMessages;
 	}
@@ -114,7 +115,7 @@ public class ExternalProcess
 	///
 	/// @return all warnings from the run application.
 	//------------------------------------------------------
-	public LinkedList<String> getWarnings()
+	public List<String> getWarnings()
 	{
 		return mstrWarnings;
 	}
@@ -123,7 +124,7 @@ public class ExternalProcess
 	///
 	/// @return all errors from the run application.
 	//------------------------------------------------------
-	public LinkedList<String> getErrors()
+	public List<String> getErrors()
 	{
 		return mstrErrors;
 	}
