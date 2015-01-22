@@ -39,7 +39,7 @@ import java.util.List;
 ///
 /// Runs external processes.
 //==================================================
-public class ExternalProcess 
+public final class ExternalProcess 
 {
 	//------------------------------------------------------
 	/// Private member data
