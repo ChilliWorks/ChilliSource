@@ -23,8 +23,9 @@ Information on how to contribute can be found on the [Website](http://chilli-wor
 
 
 ![alt link](Documents/Images/CricketLogo.png)
-Built with Cricket Audio
-[www.crickettechnology.com](www.crickettechnology.com)
 
-Usage of the Cricket Audio System is covered by the Cricket Audio free license (described at [http://www.crickettechnology.com/free_license](http://www.crickettechnology.com/free_license)).
-For other licensing options, please visit [http://www.crickettechnology.com/source_license](http://www.crickettechnology.com/source_license).
+Built with Cricket Audio
+<br>[www.crickettechnology.com](www.crickettechnology.com)
+
+Usage of the Cricket Audio System is covered by the Cricket Audio free license (described at [http://www.crickettechnology.com/free_license](http://www.crickettechnology.com/free_license)). 
+<br>For other licensing options, please visit [http://www.crickettechnology.com/source_license](http://www.crickettechnology.com/source_license).
