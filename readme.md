@@ -21,6 +21,7 @@ Contribution
 ------------
 Information on how to contribute can be found on the [Website](http://chilli-works.com/).
 
+---
 
 ![alt link](Documents/Images/CricketLogo.png)
 
