@@ -196,12 +196,10 @@ public final class CSProjectGenerator
 			"AppSource/App.h",
 			"AppSource/State.cpp",
 			"AppSource/State.h",
+			"Content/BuildAll.bat",
+			"Content/BuildAll.command",
+			"Content/BuildAll.sh",
 			"Content/AppResources/App.config",
-			"Content/PrebuiltResources/BuildAll.command",
-			"Content/PrebuiltResources/Scripts/model_builder.py",
-			"Content/PrebuiltResources/Scripts/text_builder.py",
-			"Content/PrebuiltResources/Scripts/texture_atlas_builder.py",
-			"Content/PrebuiltResources/Scripts/texture_builder.py",
 			"Projects/iOS/" + k_templateProjectName + ".xcodeproj/project.pbxproj",
 			"Projects/iOS/ProjectResources/" + k_templateProjectName + "-Info.plist",
 			"Projects/Windows/" + k_templateProjectName + ".sln",
@@ -211,7 +209,13 @@ public final class CSProjectGenerator
 			"Projects/Android/CSAndroidManifest.xml",
 			"Projects/Android/jni/Android.mk",
 			"Projects/Android/jni/Application.mk",
-			"Projects/Android/res/values/strings.xml"
+			"Projects/Android/res/values/strings.xml",
+			"Tools/Scripts/content_builder.py",
+			"Tools/Scripts/file_system_utils.py",
+			"Tools/Scripts/model_builder.py",
+			"Tools/Scripts/text_builder.py",
+			"Tools/Scripts/texture_atlas_builder.py",
+			"Tools/Scripts/texture_builder.py"
 		};
 		
 		updateFileContents(in_options, filesToUpdateContents);
