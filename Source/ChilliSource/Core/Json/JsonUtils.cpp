@@ -67,7 +67,7 @@ namespace ChilliSource
                 
                 if (fileStream == nullptr || fileStream->IsOpen() == false || fileStream->IsBad() == true)
                 {
-                    CS_LOG_ERROR("Could not open csparticle file: " + in_filePath);
+                    CS_LOG_ERROR("Could not open json file: " + in_filePath);
                     return false;
                 }
                 
