@@ -28,14 +28,14 @@
 
 #include <ChilliSource/Core/Container/Property/PropertyTypes.h>
 
-#include <ChillISource/Core/Base/Colour.h>
-#include <ChillISource/Core/File/StorageLocation.h>
-#include <ChillISource/Core/Math/Matrix3.h>
-#include <ChillISource/Core/Math/Matrix4.h>
-#include <ChillISource/Core/Math/Quaternion.h>
-#include <ChillISource/Core/Math/Vector2.h>
-#include <ChillISource/Core/Math/Vector3.h>
-#include <ChillISource/Core/Math/Vector4.h>
+#include <ChilliSource/Core/Base/Colour.h>
+#include <ChilliSource/Core/File/StorageLocation.h>
+#include <ChilliSource/Core/Math/Matrix3.h>
+#include <ChilliSource/Core/Math/Matrix4.h>
+#include <ChilliSource/Core/Math/Quaternion.h>
+#include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Core/Math/Vector3.h>
+#include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
 namespace ChilliSource
