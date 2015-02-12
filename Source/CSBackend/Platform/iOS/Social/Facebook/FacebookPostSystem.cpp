@@ -31,7 +31,9 @@
 #include <CSBackend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
 
 #include <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthenticationSystem.h>
 
 #include <FacebookSDK/FacebookSDK.h>
@@ -58,7 +60,7 @@ namespace CSBackend
             /// @param Post description
             /// @return Ownership of new dictionary
             //----------------------------------------------------
-            NSDictionary* CreateNSDisctionaryFromPostDesc(const CSSocial::FacebookPostSystem::PostDesc& in_desc)
+            NSDictionary* CreateNSDictionaryFromPostDesc(const CSSocial::FacebookPostSystem::PostDesc& in_desc)
             {
                 NSString* url = [NSStringUtils newNSStringWithUTF8String:in_desc.m_url];
                 NSString* picUrl = [NSStringUtils newNSStringWithUTF8String:in_desc.m_picUrl];
@@ -78,16 +80,48 @@ namespace CSBackend
                 
                 return postParams;
             }
+            
+            //----------------------------------------------------
+            /// Convert the post description to a newly allocated
+            /// FBLinkShareParams.
+            ///
+            /// @author T Kane
+            ///
+            /// @param Post description
+            /// @return FBLinkShareParams structure embodying Post description.
+            //----------------------------------------------------
+            FBLinkShareParams* CreateFBLinkShareParamsFromPostDesc(const CSSocial::FacebookPostSystem::PostDesc& in_desc)
+            {
+                NSString* linkString = [NSStringUtils newNSStringWithUTF8String:in_desc.m_url];
+                NSURL* link = [NSURL URLWithString:linkString];
+                NSString* picString = [NSStringUtils newNSStringWithUTF8String:in_desc.m_picUrl];
+                NSURL* picture = [NSURL URLWithString:picString];
+                NSString* name = [NSStringUtils newNSStringWithUTF8String:in_desc.m_name];
+                NSString* caption = [NSStringUtils newNSStringWithUTF8String:in_desc.m_caption];
+                NSString* description = [NSStringUtils newNSStringWithUTF8String:in_desc.m_description];
+                
+                FBLinkShareParams* params = [[FBLinkShareParams alloc] initWithLink:link
+                                                                               name:name
+                                                                            caption:caption
+                                                                        description:description
+                                                                            picture:picture];
+
+                [linkString release];
+                [picString release];
+                [name release];
+                [caption release];
+                [description release];
+                
+                return params;
+            }
         }
         
         CS_DEFINE_NAMEDTYPE(FacebookPostSystem);
         
         //----------------------------------------------------
         //----------------------------------------------------
-		FacebookPostSystem::FacebookPostSystem(CSSocial::FacebookAuthenticationSystem* in_authSystem)
-        : m_authSystem(in_authSystem)
+		FacebookPostSystem::FacebookPostSystem()
 		{
-
 		}
 		//----------------------------------------------------
         //----------------------------------------------------
@@ -97,21 +131,87 @@ namespace CSBackend
 		}
         //----------------------------------------------------
         //----------------------------------------------------
+        void FacebookPostSystem::OnInit()
+        {
+            // Cache the Facebook authentication system.
+            m_authSystem = CSCore::Application::Get()->GetSystem<CSSocial::FacebookAuthenticationSystem>();
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
 		void FacebookPostSystem::Post(const PostDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection)
 		{
             CS_ASSERT(m_postCompleteDelegateConnection == nullptr, "Cannot post more than once at a time");
-            CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to post");
-            
+            CSCore::TaskScheduler* taskScheduler = CSCore::Application::Get()->GetTaskScheduler();
+            CS_ASSERT(taskScheduler && taskScheduler->IsMainThread(), "You must post in the main thread");
+
             m_postCompleteDelegateConnection = std::move(in_delegateConnection);
 			
-            PostWeb(in_desc);
+            // See https://developers.facebook.com/docs/ios/share#sharedialog
+            // Facebook recommend attempting to post via the Share Dialog and fall back to the web-based Feed Dialog if the Facebook app is not installed on the device
+            if (!PostViaShareDialog(in_desc))
+            {
+                PostWeb(in_desc);
+            }
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
+        bool FacebookPostSystem::PostViaShareDialog(const PostDesc& in_desc)
+        {
+            bool triedToPost = false;
+
+            FBLinkShareParams* params = CreateFBLinkShareParamsFromPostDesc(in_desc);
+
+            // If the Facebook app is installed and we can present the share dialog
+            if ([FBDialogs canPresentShareDialogWithParams:params])
+            {
+                triedToPost = true;
+
+                [FBDialogs presentShareDialogWithParams:params
+                                            clientState:nil
+                                                handler:^(FBAppCall *call, NSDictionary *results, NSError *error)
+                  {
+                       if (error)
+                       {
+                           if (m_postCompleteDelegateConnection)
+                           {
+                               auto delegateConnection = std::move(m_postCompleteDelegateConnection);
+                               m_postCompleteDelegateConnection = nullptr;
+                               delegateConnection->Call(CSSocial::FacebookPostSystem::PostResult::k_failed);
+                           }
+                       }
+                       else
+                       {
+                           if (m_postCompleteDelegateConnection)
+                           {
+                               if ([(NSNumber*)[results valueForKey:@"didComplete"] boolValue] == YES && [(NSString *)[results valueForKey:@"completionGesture"] isEqualToString: @"post"])
+                               {
+                                   // Success conditions
+                                   auto delegateConnection = std::move(m_postCompleteDelegateConnection);
+                                   m_postCompleteDelegateConnection = nullptr;
+                                   delegateConnection->Call(CSSocial::FacebookPostSystem::PostResult::k_success);
+                               }
+                               else
+                               {
+                                   // Failure conditions
+                                   auto delegateConnection = std::move(m_postCompleteDelegateConnection);
+                                   m_postCompleteDelegateConnection = nullptr;
+                                   delegateConnection->Call(CSSocial::FacebookPostSystem::PostResult::k_cancelled);
+                               }
+                           }
+                       }
+                   }];
+                
+                // If the Facebook app is NOT installed and we can't present the share dialog
+            }
+            
+            return triedToPost;
         }
         //----------------------------------------------------
         //----------------------------------------------------
         void FacebookPostSystem::SendRequest(const RequestDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection)
         {
             CS_ASSERT(m_requestCompleteDelegateConnection == nullptr, "Cannot request more than once at a time");
-            CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to request");
+            CS_ASSERT(m_authSystem && m_authSystem->IsSignedIn() == true, "User must be authenticated to request");
             
             @autoreleasepool
             {
@@ -197,19 +297,22 @@ namespace CSBackend
         }
         //----------------------------------------------------
         //----------------------------------------------------
+        bool FacebookPostSystem::IsSignedIn() const
+        {
+            return FBSession.activeSession.isOpen;
+        }
+        //----------------------------------------------------
+        //----------------------------------------------------
         void FacebookPostSystem::PostWeb(const PostDesc& in_desc)
         {
-            //If the user is posting to nobody then they are posting to
-            //their own wall.
-            std::string toUser = "me";
-            if(!in_desc.m_to.empty())
+            NSDictionary* postParams = CreateNSDictionaryFromPostDesc(in_desc);
+            
+            if (!IsSignedIn())
             {
-                toUser = in_desc.m_to;
+                return;
             }
-            
-            NSDictionary* postParams = CreateNSDisctionaryFromPostDesc(in_desc);
-            
-            [FBWebDialogs presentFeedDialogModallyWithSession:nil
+
+            [FBWebDialogs presentFeedDialogModallyWithSession:FBSession.activeSession
                                                    parameters:postParams
                                                       handler:^(FBWebDialogResult result, NSURL *resultURL, NSError *error)
             {

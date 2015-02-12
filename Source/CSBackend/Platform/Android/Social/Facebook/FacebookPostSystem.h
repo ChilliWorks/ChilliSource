@@ -43,8 +43,6 @@ namespace CSBackend
 		/// Class for posting messages and request
 		/// to the Facebook wall via the Android Facebook SDK.
 		///
-		/// User must be authenticated prior to posting
-		///
 		/// @author R Henning
 		//----------------------------------------------------
 		class FacebookPostSystem final : public CSSocial::FacebookPostSystem
@@ -61,19 +59,10 @@ namespace CSBackend
             /// @return Whether the object has the same interface ID
             //----------------------------------------------------
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
-            //----------------------------------------------------
-            /// Called when the system is created allocating any
-			/// resources
-            ///
-            /// @author S Downie
-            //----------------------------------------------------
-            void OnInit() override;
 			//----------------------------------------------------
             /// Post the wall of the user specified in the post
             /// description. If no user is specified then post
             /// to the wall of the currently authenticated user.
-            ///
-            /// User must be authenticated
             ///
             /// Note: For the time being only one post can
             /// happen at a time
@@ -87,8 +76,6 @@ namespace CSBackend
             //---------------------------------------------------
             /// Send a request to a group of friends using the
             /// Android Facebook SDK
-            ///
-            /// User must be authenticated
             ///
             /// Note: For the time being only one request can
             /// happen at a time
@@ -119,25 +106,35 @@ namespace CSBackend
             /// @param Result
             //---------------------------------------------------
 			void OnPostRequestComplete(PostResult in_result);
-            //----------------------------------------------------
-            /// Called when the system is destroyed freeing any
-			/// resources
-            ///
-            /// @author S Downie
-            //----------------------------------------------------
-            void OnDestroy() override;
 
 		private:
-			friend CSSocial::FacebookPostSystemUPtr CSSocial::FacebookPostSystem::Create(CSSocial::FacebookAuthenticationSystem* in_authSystem);
+			friend CSSocial::FacebookPostSystemUPtr CSSocial::FacebookPostSystem::Create();
+            //------------------------------------------------
+            /// Initialisation method called at a time when
+            /// all App Systems have been created. System
+            /// initialisation occurs in the order they were
+            /// created.
+            ///
+            /// @author T Kane
+            //------------------------------------------------
+            void OnInit() override;
+            //------------------------------------------------
+            /// Called when the application is being destroyed.
+            /// This should be used to cleanup memory and
+            /// references to other systems. System destruction
+            /// occurs in the reverse order to which they
+            /// were created
+            ///
+            /// @author T Kane
+            //------------------------------------------------
+            void OnDestroy() override;
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.
             ///
             /// @author Ian Copland
-            ///
-            /// @param The facebook authentication system.
             //----------------------------------------------------
-            FacebookPostSystem(CSSocial::FacebookAuthenticationSystem* in_authSystem);
+            FacebookPostSystem();
 
 		private:
 

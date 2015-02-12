@@ -23,7 +23,10 @@
 
  @typedef NS_ENUM (NSUInteger, FBAppEventsFlushBehavior)
 
- @abstract Specifies when `FBAppEvents` sends log events to the server.
+ @abstract
+ Control when <FBAppEvents> sends log events to the server
+
+ @discussion
 
  */
 typedef NS_ENUM(NSUInteger, FBAppEventsFlushBehavior) {
@@ -473,6 +476,7 @@ FBSDK_EXTERN NSString *const FBAppEventParameterValueNo;
  @abstract
  Get the 'override' App ID for App Event logging.
 
+ @discussion
  @see setLoggingOverrideAppID:
 
  */

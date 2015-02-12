@@ -43,13 +43,24 @@ namespace CSBackend
 		class FacebookJavaInterface : public IJavaInterface
 		{
 		public:
-
-			FacebookJavaInterface();
-
 			CS_DECLARE_NAMEDTYPE(FacebookJavaInterface);
-			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
 
 			//--------------------------------------------------------------------------------------
+			/// Constructor
+			///
+			/// @author T Kane
+			//--------------------------------------------------------------------------------------
+			FacebookJavaInterface();
+            //--------------------------------------------------------------------------------------
+			/// Is A
+			///
+			/// Used for type-checking.
+			///
+			/// @param Interface ID to check against
+			/// @return true if this class is a class matched by interface ID
+			//--------------------------------------------------------------------------------------
+			bool IsA(CSCore::InterfaceIDType inInterfaceID) const;
+            //--------------------------------------------------------------------------------------
 			/// Set Authentication System
 			///
 			/// Used to callback into the auth system
@@ -121,14 +132,16 @@ namespace CSBackend
 		    /// Attempt to make a Graph API request to post to feed with the following
 		    /// path and key value array
 			//--------------------------------------------------------------------------------------
-		    void TryPostToFeed(const std::string& instrGraphPath, const std::vector<std::string>& inaKeyValues);
-			//--------------------------------------------------------------------------------------
-			/// Try Post To Feed
-			///
-		    /// Attempt to make a Graph API request to post to feed with the following
-		    /// path and key value array
-			//--------------------------------------------------------------------------------------
 		    void TryPostRequest(const std::vector<std::string>& inaKeyValues);
+            //----------------------------------------------------
+            /// Share.
+            ///
+            /// @author T Kane
+            ///
+            /// @param Graph path
+            /// @param Parameters for post
+            //----------------------------------------------------
+            void Post(const std::string& in_graphPath, const std::vector<std::string>& in_postParams);
 		};
 	}
 }

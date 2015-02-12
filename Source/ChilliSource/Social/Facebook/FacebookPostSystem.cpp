@@ -41,12 +41,12 @@ namespace ChilliSource
 		CS_DEFINE_NAMEDTYPE(FacebookPostSystem);
         //---------------------------------------------------
         //---------------------------------------------------
-        FacebookPostSystemUPtr FacebookPostSystem::Create(FacebookAuthenticationSystem* inpAuthSystem)
+        FacebookPostSystemUPtr FacebookPostSystem::Create()
         {
 #ifdef CS_TARGETPLATFORM_IOS
-            return FacebookPostSystemUPtr(new CSBackend::iOS::FacebookPostSystem(inpAuthSystem));
+            return FacebookPostSystemUPtr(new CSBackend::iOS::FacebookPostSystem());
 #elif CS_TARGETPLATFORM_ANDROID
-            return FacebookPostSystemUPtr(new CSBackend::Android::FacebookPostSystem(inpAuthSystem));
+            return FacebookPostSystemUPtr(new CSBackend::Android::FacebookPostSystem());
 #else
 			return FacebookPostSystemUPtr();
 #endif

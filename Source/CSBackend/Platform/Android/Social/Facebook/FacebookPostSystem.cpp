@@ -32,7 +32,10 @@
 
 #include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Social/Facebook/FacebookAuthenticationSystem.h>
+
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace CSBackend
 {
@@ -101,10 +104,8 @@ namespace CSBackend
 
 		//----------------------------------------------------
 		//----------------------------------------------------
-		FacebookPostSystem::FacebookPostSystem(CSSocial::FacebookAuthenticationSystem* in_authSystem)
-		: m_authSystem(in_authSystem)
+		FacebookPostSystem::FacebookPostSystem()
 		{
-
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
@@ -117,15 +118,26 @@ namespace CSBackend
 		void FacebookPostSystem::OnInit()
 		{
 			m_javaInterface = m_javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<FacebookJavaInterface>();
-			CS_ASSERT(m_javaInterface != nullptr, "Must have the auth system created");
+			CS_ASSERT(m_javaInterface != nullptr, "Must have the java interface created");
 			m_javaInterface->SetPostSystem(this);
+
+            // Cache the Facebook authentication system.
+            m_authSystem = CSCore::Application::Get()->GetSystem<CSSocial::FacebookAuthenticationSystem>();
 		}
+		//----------------------------------------------------
+		//----------------------------------------------------
+        void FacebookPostSystem::OnDestroy()
+        {
+			m_javaInterface->SetPostSystem(nullptr);
+			m_javaInterface = nullptr;
+        }
 		//----------------------------------------------------
 		//----------------------------------------------------
 		void FacebookPostSystem::Post(const PostDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection)
 		{
             CS_ASSERT(m_postCompleteDelegateConnection == nullptr, "Cannot post more than once at a time");
-            CS_ASSERT(m_authSystem->IsSignedIn() == true, "User must be authenticated to post");
+            CSCore::TaskScheduler* taskScheduler = CSCore::Application::Get()->GetTaskScheduler();
+            CS_ASSERT(taskScheduler && taskScheduler->IsMainThread(), "You must post in the main thread");
 
             m_postCompleteDelegateConnection = std::move(in_delegateConnection);
 
@@ -139,7 +151,9 @@ namespace CSBackend
 
             std::vector<std::string> postParamsKeyValue;
             PostDescToKeyValueArray(in_desc, postParamsKeyValue);
-            m_javaInterface->TryPostToFeed(graphPath, postParamsKeyValue);
+
+            // Post to the Java interface.
+            m_javaInterface->Post(graphPath, postParamsKeyValue);
 		}
 		//----------------------------------------------------
 		//----------------------------------------------------
@@ -179,13 +193,6 @@ namespace CSBackend
             auto delegateConnection = std::move(m_requestCompleteDelegateConnection);
             m_requestCompleteDelegateConnection = nullptr;
             delegateConnection->Call(in_result);
-		}
-		//----------------------------------------------------
-		//----------------------------------------------------
-		void FacebookPostSystem::OnDestroy()
-		{
-			m_javaInterface->SetPostSystem(nullptr);
-			m_javaInterface = nullptr;
 		}
 	}
 }

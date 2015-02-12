@@ -168,6 +168,8 @@ namespace CSBackend
 	{
 		CS_DEFINE_NAMEDTYPE(FacebookJavaInterface);
 
+        //--------------------------------------------------------------------------------------
+		//--------------------------------------------------------------------------------------
 		FacebookJavaInterface::FacebookJavaInterface()
 		{
 			CreateNativeInterface("com/chilliworks/chillisource/social/FacebookNativeInterface");
@@ -179,42 +181,28 @@ namespace CSBackend
 			CreateMethodReference("AuthoriseReadPermissions", "([Ljava/lang/String;)V");
 			CreateMethodReference("AuthoriseWritePermissions", "([Ljava/lang/String;)V");
 			CreateMethodReference("SignOut", "()V");
-			CreateMethodReference("MakePostToFeedRequest", "(Ljava/lang/String;[Ljava/lang/String;)V");
 			CreateMethodReference("MakeRequestToUser", "([Ljava/lang/String;)V");
+			CreateMethodReference("Post", "(Ljava/lang/String;[Ljava/lang/String;)V");
 		}
-
+        //--------------------------------------------------------------------------------------
+		//--------------------------------------------------------------------------------------
 		bool FacebookJavaInterface::IsA(CSCore::InterfaceIDType inInterfaceID) const
 		{
 			return inInterfaceID == FacebookJavaInterface::InterfaceID;
 		}
-
-		//--------------------------------------------------------------------------------------
-		/// Set Authentication System
-		///
-		/// Used to callback into the auth system
-		///
-		/// @param Auth system
+        //--------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------
 		void FacebookJavaInterface::SetAuthenticationSystem(FacebookAuthenticationSystem* inpAuthSystem)
 		{
 			gpAndroidAuthSystem = inpAuthSystem;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Set Post System
-		///
-		/// Used to callback into the post system
-		///
-		/// @param Post system
 		//--------------------------------------------------------------------------------------
 		void FacebookJavaInterface::SetPostSystem(FacebookPostSystem* inpPostSystem)
 		{
 			gpAndroidPostSystem = inpPostSystem;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Authenticate
-		///
-		/// Attempt to open an existing session or prompt the user to login if no
-		/// session exists
 		//--------------------------------------------------------------------------------------
 		void FacebookJavaInterface::Authenticate(const std::vector<std::string>& inaReadPerms)
 		{
@@ -237,9 +225,6 @@ namespace CSBackend
 	    	pEnv->DeleteLocalRef(jaPermissions);
 		}
 		//--------------------------------------------------------------------------------------
-		/// Is Signed In
-		///
-		/// @return Whether a session exists and is open
 		//--------------------------------------------------------------------------------------
 		bool FacebookJavaInterface::IsSignedIn()
 		{
@@ -247,9 +232,6 @@ namespace CSBackend
 			return pEnv->CallBooleanMethod(GetJavaObject(), GetMethodID("IsSignedIn"));
 		}
 		//--------------------------------------------------------------------------------------
-		/// Get Active Token
-		///
-		/// @return The access token of the active session
 		//--------------------------------------------------------------------------------------
 		std::string FacebookJavaInterface::GetActiveToken()
 		{
@@ -260,10 +242,6 @@ namespace CSBackend
 			return strToken;
 		}
 		//--------------------------------------------------------------------------------------
-		/// Has Permission
-		///
-		/// @param Permission ID
-	    /// @return Whether the current session user has given the permission
 		//--------------------------------------------------------------------------------------
 	    bool FacebookJavaInterface::HasPermission(const std::string& instrPermission)
 	    {
@@ -274,12 +252,6 @@ namespace CSBackend
 			return bHasPermission;
 	    }
 		//--------------------------------------------------------------------------------------
-		/// Authorise Read Permissions
-		///
-	    /// Prompt Facebook to ask the users to grant the given permissions.
-	    /// Calls into native with the result
-	    ///
-		/// @param List of read permissions IDs
 		//--------------------------------------------------------------------------------------
 	    void FacebookJavaInterface::AuthoriseReadPermissions(const std::vector<std::string>& inaReadPerms)
 	    {
@@ -302,12 +274,6 @@ namespace CSBackend
 	    	pEnv->DeleteLocalRef(jaPermissions);
 	    }
 		//--------------------------------------------------------------------------------------
-		/// Authorise Write Permissions
-		///
-	    /// Prompt Facebook to ask the users to grant the given permissions.
-	    /// Calls into native with the result
-	    ///
-		/// @param List of write permissions IDs
 		//--------------------------------------------------------------------------------------
 	    void FacebookJavaInterface::AuthoriseWritePermissions(const std::vector<std::string>& inaWritePerms)
 	    {
@@ -330,47 +296,38 @@ namespace CSBackend
 	    	pEnv->DeleteLocalRef(jaPermissions);
 	    }
 		//--------------------------------------------------------------------------------------
-		/// Sign Out
-		///
-	    /// If a session exists log the user out and destroy any cached tokens
-		//--------------------------------------------------------------------------------------
+	    //--------------------------------------------------------------------------------------
 	    void FacebookJavaInterface::SignOut()
 	    {
 			JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("SignOut"));
 	    }
-		//--------------------------------------------------------------------------------------
-		/// Try Post To Feed
-		///
-	    /// Attempt to make a Graph API request to post to feed with the following
-	    /// path and key value array
-		//--------------------------------------------------------------------------------------
-	    void FacebookJavaInterface::TryPostToFeed(const std::string& instrGraphPath, const std::vector<std::string>& inaKeyValues)
-	    {
-	    	JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrEmptyString = pEnv->NewStringUTF("");
-			jclass jStringClass = pEnv->FindClass("java/lang/String");
-	    	jobjectArray jaKeyValues = pEnv->NewObjectArray(inaKeyValues.size(), jStringClass, jstrEmptyString);
+        //----------------------------------------------------
+        //----------------------------------------------------
+        void FacebookJavaInterface::Post(const std::string& in_graphPath, const std::vector<std::string>& in_postParams)
+        {
+	    	JNIEnv* env = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
+			jstring emptyString = env->NewStringUTF("");
+			jclass stringClass = env->FindClass("java/lang/String");
+	    	jobjectArray keyValues = env->NewObjectArray(in_postParams.size(), stringClass, emptyString);
 	    	u32 i = 0;
-	    	for(std::vector<std::string>::const_iterator it = inaKeyValues.begin(); it != inaKeyValues.end(); ++it, ++i)
+	    	for (const auto& postParam : in_postParams)
 	    	{
-	    		jstring jstrElement = JavaInterfaceUtils::CreateJStringFromSTDString((*it));
-	    		pEnv->SetObjectArrayElement(jaKeyValues, i, jstrElement);
-	    		pEnv->DeleteLocalRef(jstrElement);
+	    		jstring element = JavaInterfaceUtils::CreateJStringFromSTDString(postParam);
+	    		env->SetObjectArrayElement(keyValues, i, element);
+	    		env->DeleteLocalRef(element);
+	    		++i;
 	    	}
 
-    		jstring jstrGraphPath = JavaInterfaceUtils::CreateJStringFromSTDString(instrGraphPath);
-    		pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("MakePostToFeedRequest"), jstrGraphPath, jaKeyValues);
-	    	pEnv->DeleteLocalRef(jaKeyValues);
-	    	pEnv->DeleteLocalRef(jstrGraphPath);
-	    	pEnv->DeleteLocalRef(jStringClass);
-	    	pEnv->DeleteLocalRef(jstrEmptyString);
-	    }
+    		jstring graphPath = JavaInterfaceUtils::CreateJStringFromSTDString(in_graphPath);
+    		env->CallVoidMethod(GetJavaObject(), GetMethodID("Post"), graphPath, keyValues);
+
+	    	env->DeleteLocalRef(keyValues);
+	    	env->DeleteLocalRef(graphPath);
+	    	env->DeleteLocalRef(stringClass);
+	    	env->DeleteLocalRef(emptyString);
+        }
 		//--------------------------------------------------------------------------------------
-		/// Try Post To Feed
-		///
-	    /// Attempt to make a Graph API request to post to feed with the following
-	    /// path and key value array
 		//--------------------------------------------------------------------------------------
 	    void FacebookJavaInterface::TryPostRequest(const std::vector<std::string>& inaKeyValues)
 	    {
