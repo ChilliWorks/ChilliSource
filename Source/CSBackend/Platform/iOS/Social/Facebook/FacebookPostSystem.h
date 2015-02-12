@@ -48,9 +48,7 @@ namespace CSBackend
 		class FacebookPostSystem final : public CSSocial::FacebookPostSystem
 		{
 		public:
-			
             CS_DECLARE_NAMEDTYPE(FacebookPostSystem);
-            
 			//----------------------------------------------------
             /// @author S McGaw
             ///
@@ -88,22 +86,23 @@ namespace CSBackend
             void SendRequest(const RequestDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection) override;
 
         private:
-            //------------------------------------------------
-            /// Initialisation method called at a time when
-            /// all App Systems have been created. System
-            /// initialisation occurs in the order they were
-            /// created.
-            ///
-            /// @author T Kane
-            //------------------------------------------------
-            void OnInit() override;
+            friend CSSocial::FacebookPostSystemUPtr CSSocial::FacebookPostSystem::Create();
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.
             ///
             /// @author Ian Copland
             //----------------------------------------------------
-            FacebookPostSystem();
+            FacebookPostSystem() = default;
+            //----------------------------------------------------
+            /// Initialisation method called at a time when
+            /// all App Systems have been created. System
+            /// initialisation occurs in the order they were
+            /// created.
+            ///
+            /// @author T Kane
+            //----------------------------------------------------
+            void OnInit() override;
             //----------------------------------------------------
             /// Share via the web-based Feed Dialog. Note that this
             /// does not support publishing Open Graph stories.
@@ -131,11 +130,8 @@ namespace CSBackend
             /// @return True if signed in. False otherwise.
             //----------------------------------------------------
             bool IsSignedIn() const;
-
-            friend CSSocial::FacebookPostSystemUPtr CSSocial::FacebookPostSystem::Create();
             
         private:
-            
             CSSocial::FacebookAuthenticationSystem* m_authSystem = nullptr;
             PostResultDelegate::Connection m_postCompleteDelegateConnection;
             PostResultDelegate::Connection m_requestCompleteDelegateConnection;

@@ -118,11 +118,6 @@ namespace CSBackend
         
         CS_DEFINE_NAMEDTYPE(FacebookPostSystem);
         
-        //----------------------------------------------------
-        //----------------------------------------------------
-		FacebookPostSystem::FacebookPostSystem()
-		{
-		}
 		//----------------------------------------------------
         //----------------------------------------------------
 		bool FacebookPostSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
@@ -306,11 +301,6 @@ namespace CSBackend
         void FacebookPostSystem::PostWeb(const PostDesc& in_desc)
         {
             NSDictionary* postParams = CreateNSDictionaryFromPostDesc(in_desc);
-            
-            if (!IsSignedIn())
-            {
-                return;
-            }
 
             [FBWebDialogs presentFeedDialogModallyWithSession:FBSession.activeSession
                                                    parameters:postParams

@@ -66,7 +66,7 @@ typedef NSUInteger FBRequestState __attribute__((deprecated));
  An `FBRequest` object may be reused to issue multiple connections to Facebook.
  However each <FBRequestConnection> instance will manage one connection.
 
- Class and instance methods prefixed with **start* ** can be used to perform the
+ Class and instance methods prefixed with **start** can be used to perform the
  request setup and initiate the connection in a single call.
 
  */
@@ -352,6 +352,24 @@ typedef NSUInteger FBRequestState __attribute__((deprecated));
  @param photo            A `UIImage` for the photo to upload.
  */
 + (FBRequest *)requestForUploadPhoto:(UIImage *)photo;
+
+/*!
+
+ @method
+
+ @abstract
+ Creates a request representing a Graph API call to upload a video to the app's album using the active session.
+
+ @discussion
+ Simplifies preparing a request to post a video.
+
+ This method does not initialize an <FBRequestConnection> object. To initiate the API
+ call first instantiate an <FBRequestConnection> object, add the request to this object,
+ then call the `start` method on the connection instance.
+
+ @param filePath            A `NSString` for the video file to upload.
+ */
++ (FBRequest *)requestForUploadVideo:(NSString *)filePath;
 
 /*!
  @method

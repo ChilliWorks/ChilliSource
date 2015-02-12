@@ -38,7 +38,7 @@
 
  See FBError.h and FBErrorUtility.h for error category and user message details.
  */
-typedef NS_ENUM(NSUInteger, FBRequestConnectionErrorBehavior) {
+typedef NS_OPTIONS(NSUInteger, FBRequestConnectionErrorBehavior) {
     /*! The default behavior of none */
     FBRequestConnectionErrorBehaviorNone                   = 0,
 
@@ -303,9 +303,7 @@ totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite;
  @attribute beta true
 
  @abstract Set the automatic error handling behaviors.
- @discussion
-
- This must be set before any requests are added.
+ @discussion This must be set before any requests are added.
 
  When using retry behaviors, note the FBRequestConnection instance
  passed to the FBRequestHandler may be a different instance that the
