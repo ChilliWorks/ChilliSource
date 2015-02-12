@@ -31,7 +31,9 @@
 #ifdef CS_TARGETPLATFORM_IOS
 #include <CSBackend/Platform/iOS/Social/Facebook/FacebookAuthenticationSystem.h>
 #elif CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Social/Facebook/FacebookAuthenticationSystem.h>
+#ifdef CS_ANDROIDEXTENSION_FACEBOOK
+#include <CSBackend/Platform/Android/Extensions/Facebook/FacebookAuthenticationSystem.h>
+#endif
 #endif
 
 namespace ChilliSource
@@ -47,9 +49,13 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_IOS
             return FacebookAuthenticationSystemUPtr(new CSBackend::iOS::FacebookAuthenticationSystem());
 #elif CS_TARGETPLATFORM_ANDROID
+#ifdef CS_ANDROIDEXTENSION_FACEBOOK
             return FacebookAuthenticationSystemUPtr(new CSBackend::Android::FacebookAuthenticationSystem());
 #else
-			return FacebookAuthenticationSystemUPtr();
+            return nullptr;
+#endif
+#else
+			return nullptr;
 #endif
         }
     }

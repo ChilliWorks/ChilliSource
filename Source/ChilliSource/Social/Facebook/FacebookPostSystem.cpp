@@ -31,7 +31,9 @@
 #ifdef CS_TARGETPLATFORM_IOS
 #include <CSBackend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
 #elif CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Social/Facebook/FacebookPostSystem.h>
+#ifdef CS_ANDROIDEXTENSION_FACEBOOK
+#include <CSBackend/Platform/Android/Extensions/Facebook/FacebookPostSystem.h>
+#endif
 #endif
 
 namespace ChilliSource
@@ -46,9 +48,13 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_IOS
             return FacebookPostSystemUPtr(new CSBackend::iOS::FacebookPostSystem());
 #elif CS_TARGETPLATFORM_ANDROID
+#ifdef CS_ANDROIDEXTENSION_FACEBOOK
             return FacebookPostSystemUPtr(new CSBackend::Android::FacebookPostSystem());
 #else
-			return FacebookPostSystemUPtr();
+            return nullptr;
+#endif
+#else
+			return nullptr;
 #endif
         }
 	};
