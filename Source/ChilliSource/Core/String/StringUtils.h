@@ -186,28 +186,6 @@ namespace ChilliSource
 			// Utility function for comparing two characters in a case insensitive way
             bool CaseInsensitiveCompare(const char & inA, const char & inB);
             
-            //-------------------------------------------------------
-            /// Inserts variables into the given string with the
-            /// values using basic markup. The markup is in the form
-            /// [var=VariablenName], and the value for the variable is
-            /// looked up in the given param dictionary.
-            ///
-            /// For example "Time remaining: [var=TimeRemaining]" with
-            /// a param dictionary containig "TimeRemaining"="12" will
-            /// become "Time Remaining: 12".
-            ///
-            /// The markup is also recursive, meaning that the
-            /// following is valid: "[var=TextValue[var=ValueIndex]]".
-			///
-            /// @param N Tanda
-            ///
-			/// @param The UTF-8 string which contains the markup.
-			/// @param The param dictionary containing the variables.
-            ///
-            /// @return The output formatted UTF-8 string.
-			//-------------------------------------------------------
-			std::string InsertVariables(const std::string& in_text, const Core::ParamDictionary& in_params);
-            
             /** Checks the std::string is a inValid number inValue. */
 			bool isNumber(const std::string& inVal);
             

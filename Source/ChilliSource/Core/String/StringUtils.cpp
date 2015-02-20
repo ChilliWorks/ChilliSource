@@ -49,87 +49,6 @@ namespace ChilliSource
                     "YYYY-MM-DD-HH:MM",
                 };
                 
-                //-------------------------------------------------------
-                /// Replace Variables Recursive
-                ///
-                /// Find any variable or nested variable mark-up and insert the
-                /// value of the variables
-                ///
-                /// For instance "My string contains [var =a] variable
-                /// and [var= b] variable called a and b
-                ///
-                /// Furthermore, [var= Var_[var= a]_b] has variables
-                /// called a, and e.g.  Var_12_b   (if a == "12")
-                ///
-                /// @param Params
-                /// @param Out: Text string (UTF-8)
-                /// @param Out: String iterator (UTF-8)
-                //-------------------------------------------------------
-                void ReplaceVariableRecursive(const Core::ParamDictionary& insParams, std::string& outstrText, std::string::const_iterator& it)
-                {
-                    //Found some mark-up. What type is it?
-                    std::string strType;
-                    UTF8Char byNextChar = '\0';
-                    
-                    while(byNextChar != '=')
-                    {
-                        byNextChar = UTF8StringUtils::Next(it);
-                        
-                        if(byNextChar != '=' && byNextChar != ' ')
-                        {
-                            strType += byNextChar;
-                        }
-                    }
-                    
-                    // Variable type has been located
-                    std::string strVarName;
-                    std::string strVarValue;
-                    
-                    // There may be some whitespace that we need to ignore
-                    byNextChar = UTF8StringUtils::Next(it);
-                    if(byNextChar != ' ')
-                    {
-                        strVarName += byNextChar;
-                    }
-                    
-                    // Find the closing bracket
-                    while(byNextChar != ']')
-                    {
-                        byNextChar = UTF8StringUtils::Next(it);
-                        
-                        if(byNextChar != ']' && byNextChar != '[' && byNextChar != ' ')
-                        {
-                            strVarName += byNextChar;
-                        }
-                        
-                        // Nested variable
-                        if(byNextChar == '[')
-                        {
-                            std::string strVariableName;
-                            ReplaceVariableRecursive(insParams, strVariableName, it);
-                            strVarName += strVariableName;
-                        }
-                    }
-                    
-                    bool bVariableReplaced = false;
-                    
-                    if(strType == "var")
-                    {
-                        if(insParams.TryGetValue(strVarName, strVarValue))
-                        {
-                            //Let's replace the mark-up with the value
-                            outstrText.append(strVarValue);
-                            bVariableReplaced = true;
-                        }
-                    }
-                    
-                    // If not, readd the [xxx= ]
-                    if(!bVariableReplaced)
-                    {
-                        outstrText.append("[" + strType + "= " + strVarName + "]");
-                    }
-                }
-                
                 /**
                  Converts the given time to a timestamp in seconds
                  */
@@ -648,32 +567,6 @@ namespace ChilliSource
                 return tolower(inA) == tolower(inB);
             }
             
-
-        
-            //-------------------------------------------------------
-            //-------------------------------------------------------
-            std::string InsertVariables(const std::string& in_text, const Core::ParamDictionary& in_params)
-            {
-                std::string output;
-                
-                auto it = in_text.begin();
-                while(it < in_text.end())
-                {
-                    auto character = UTF8StringUtils::Next(it);
-
-                    if(character != '[')
-                    {
-                        UTF8StringUtils::Append(character, output);
-                    }
-                    else
-                    {
-                        // Found a mark up, check it
-                        ReplaceVariableRecursive(in_params, output, it);
-                    }
-                }
-                
-                return output;
-            }
 
             //-- Private
             
