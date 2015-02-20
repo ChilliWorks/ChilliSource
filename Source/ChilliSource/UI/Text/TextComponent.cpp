@@ -35,6 +35,7 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Font/Font.h>
+#include <ChilliSource/Rendering/Texture.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 
 namespace ChilliSource
@@ -239,7 +240,8 @@ namespace ChilliSource
         {
             CS_ASSERT(m_localisedText != nullptr, "Cannot set text using a null localised text.");
             
-            m_text = Core::StringUtils::InsertVariables(m_localisedText->GetText(in_localisedTextId), in_params);
+            m_textVariables = in_params;
+            m_text = ReplaceVariables(m_localisedText->GetText(in_localisedTextId));
             
             m_invalidateCache = true;
         }
@@ -247,9 +249,28 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void TextComponent::SetText(const std::string& in_text)
         {
-            m_text = in_text;
+            // TODO: This is for testing only
+            {
+                ImageData imageData;
+                imageData.m_texturePath = "Textures/GUI/Icon_CarsonStanding.csimage";
+                std::unordered_map<std::string, ImageData> mapTest;
+                mapTest["test"] = imageData;
+                imageData.m_texturePath = "TextureAtlases/GUI/GUI.csimage";
+                imageData.m_atlasPath = "TextureAtlases/GUI/GUI.csatlas";
+                imageData.m_atlasID = "CameraPackLarge";
+                mapTest["test2"] = imageData;
+                SetImagesData(mapTest);
+            }
+            
+            m_text = ReplaceVariables(in_text);
             
             m_invalidateCache = true;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        void TextComponent::SetImagesData(const std::unordered_map<std::string, ImageData>& in_imagesData)
+        {
+            m_imagesData = in_imagesData;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -315,6 +336,159 @@ namespace ChilliSource
             
             m_invalidateCache = true;
         }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        std::string TextComponent::ReplaceVariables(const std::string& in_text)
+        {
+            std::string output;
+            u32 index = 0;
+            
+            auto it = in_text.begin();
+            while(it < in_text.end())
+            {
+                auto character = Core::UTF8StringUtils::Next(it);
+                
+                if(character != '[')
+                {
+                    Core::UTF8StringUtils::Append(character, output);
+                    if(character != ' ' && character != '\t' && character != '\n')
+                    {
+                        ++index;
+                    }
+                }
+                else
+                {
+                    // Found a mark up, check it
+                    ReplaceVariablesRecursive(it, index, output);
+                }
+            }
+            
+            return output;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        void TextComponent::ReplaceVariablesRecursive(std::string::const_iterator& out_iterator, u32& out_index, std::string& out_text)
+        {
+            // Found some mark-up. What type is it?
+            std::string type;
+            Core::UTF8Char nextChar = '\0';
+            
+            // Marker for images
+            const char k_marker = '-';
+            Rendering::Font::CharacterInfo markerInfo;
+            m_font->TryGetCharacterInfo(k_marker, markerInfo);
+            
+            // Spacing info
+            Rendering::Font::CharacterInfo spaceInfo;
+            m_font->TryGetCharacterInfo(' ', spaceInfo);
+            
+            while(nextChar != '=')
+            {
+                nextChar = Core::UTF8StringUtils::Next(out_iterator);
+                
+                if(nextChar != '=' && nextChar != ' ')
+                {
+                    type += nextChar;
+                }
+            }
+            
+            // Variable type has been located
+            std::string varName;
+            std::string varValue;
+            
+            // There may be some whitespace that we need to ignore
+            nextChar = Core::UTF8StringUtils::Next(out_iterator);
+            if(nextChar != ' ')
+            {
+                varName += nextChar;
+            }
+            
+            // Find the closing bracket
+            while(nextChar != ']')
+            {
+                nextChar = Core::UTF8StringUtils::Next(out_iterator);
+                
+                if(nextChar != ']' && nextChar != '[' && nextChar != ' ')
+                {
+                    varName += nextChar;
+                }
+                
+                // Nested variable
+                if(nextChar == '[')
+                {
+                    std::string variableName;
+                    ReplaceVariablesRecursive(out_iterator, out_index, variableName);
+                    varName += variableName;
+                }
+            }
+            
+            bool variableReplaced = false;
+            
+            if(type == "var")
+            {
+                if(m_textVariables.TryGetValue(varName, varValue))
+                {
+                    //Let's replace the mark-up with the value
+                    out_text.append(varValue);
+                    variableReplaced = true;
+                }
+            }
+            else if(type == "img")
+            {
+                // The image is known
+                if(m_imagesData.find(varName) != m_imagesData.end())
+                {
+                    const auto& imageData = m_imagesData.at(varName);
+                    
+                    auto resPool = Core::Application::Get()->GetResourcePool();
+                    auto texture = resPool->LoadResource<Rendering::Texture>(imageData.m_textureLocation, imageData.m_texturePath);
+                    f32 height = m_font->GetLineHeight();
+                    f32 aspectRatio = (f32)texture->GetWidth() / (f32)texture->GetHeight();
+                    f32 width = aspectRatio * height;
+                    
+                    // Create a cached image
+                    TextComponent::ImageInText image;
+                    image.m_characterIndex = out_index;
+                    image.m_texture = texture;
+                    image.m_uvs = Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f);
+                    image.m_size = Core::Vector2(width, height) * imageData.m_imageScale;
+                    
+                    if(!imageData.m_atlasPath.empty())
+                    {
+                        const auto& atlas = resPool->LoadResource<Rendering::TextureAtlas>(imageData.m_atlasLocation, imageData.m_atlasPath);
+                        image.m_uvs = atlas->GetFrameUVs(imageData.m_atlasID);
+                    }
+                    
+                    m_cachedImages.push_back(image);
+                    
+                    // Padding with spaces
+                    u32 spacesNeeded = 0;
+                    if(spaceInfo.m_advance > 0.0f)
+                    {
+                        spacesNeeded = std::ceil((image.m_size.x - markerInfo.m_size.x) / spaceInfo.m_advance);
+                        if(spacesNeeded % 2 == 1)
+                        {
+                            ++spacesNeeded;
+                        }
+                    }
+                    std::string padding;
+                    padding.append(&k_marker, 1);
+                    for(u32 i = 0; i < spacesNeeded / 2; ++i)
+                    {
+                        padding = " " + padding + " ";
+                    }
+                    out_text.append(padding);
+                    ++out_index;
+                    variableReplaced = true;
+                }
+            }
+            
+            // If not, readd the [xxx= ]
+            if(!variableReplaced)
+            {
+                out_text.append("[" + type + "= " + varName + "]");
+            }
+        }
         //-------------------------------------------------------------------
         //--------------------------------------------------------------------
         void TextComponent::OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
@@ -329,9 +503,26 @@ namespace ChilliSource
             {
                 m_invalidateCache = false;
                 m_cachedText = in_renderer->BuildText(m_text, m_font, in_absSize, m_textProperties);
+                
+                // Update images position
+                for(auto& image : m_cachedImages)
+                {
+                    u32 index = image.m_characterIndex;
+                    const Core::Vector2& charSize = m_cachedText.m_characters[index].m_packedImageSize;
+                    image.m_offset.x = m_cachedText.m_characters[index].m_position.x + charSize.x * 0.5f;
+                    image.m_offset.y = m_cachedText.m_characters[index].m_position.y - charSize.y * 0.5f;
+                }
             }
-        
+            
+            // Draw text
             in_renderer->DrawText(m_cachedText.m_characters, in_transform, m_textColour, m_font->GetTexture());
+            
+            // Draw images
+            for(const auto& image : m_cachedImages)
+            {
+                Core::Vector2 size = image.m_size * m_textProperties.m_textScale;
+                in_renderer->DrawBox(in_transform, size, image.m_offset, image.m_texture, image.m_uvs, Core::Colour::k_white, Rendering::AlignmentAnchor::k_middleCentre);
+            }
         }
     }
 }

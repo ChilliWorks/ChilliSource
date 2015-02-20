@@ -32,6 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
+#include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
@@ -232,7 +233,7 @@ namespace ChilliSource
             /// variable is looked up in the given param dictionary.
             ///
             /// For example "Time remaining: [var=TimeRemaining]" with a param
-            /// dictionary containig "TimeRemaining"="12" will become "Time
+            /// dictionary containing "TimeRemaining"="12" will become "Time
             /// Remaining: 12".
             ///
             /// The markup is also recursive, meaning that the following is valid:
@@ -256,6 +257,40 @@ namespace ChilliSource
             /// @param The text.
             //-------------------------------------------------------------------
             void SetText(const std::string& in_text);
+            //-------------------------------------------------------------------
+            /// Container for
+            ///
+            /// @author N Tanda
+            //-------------------------------------------------------------------
+            struct ImageData final
+            {
+                Core::StorageLocation m_textureLocation = Core::StorageLocation::k_package;
+                std::string m_texturePath;
+                Core::StorageLocation m_atlasLocation = Core::StorageLocation::k_package;
+                std::string m_atlasPath;
+                std::string m_atlasID;
+                f32 m_imageScale = 1.0f;
+            };
+            //-------------------------------------------------------------------
+            /// Sets the images data that will be used to replace images flags
+            /// in text with icons.
+            ///
+            /// For example "You have earned 100 [img=Currency]" with a map containing
+            /// the data for "Currency" will display an icon for it.
+            ///
+            /// This data will be used when the text is set (either directly or via
+            /// localised text). It can then be used with other markups too:
+            /// "You have earned [var=Amount][img=Currency]".
+            ///
+            /// The following is also valid:
+            /// "You have earned [var=Amount][img= [var=Currency]]".
+            ///
+            /// @author N Tanda
+            ///
+            /// @param The map which contains the values which should
+            /// be used for each image in the string.
+            //-------------------------------------------------------------------
+            void SetImagesData(const std::unordered_map<std::string, ImageData>& in_imagesData);
             //-------------------------------------------------------------------
             /// Sets the colour of the rendered text.
             ///
@@ -335,6 +370,19 @@ namespace ChilliSource
         private:
             friend class ComponentFactory;
             //-------------------------------------------------------------------
+            /// Container for the images that will be embedded in text
+            ///
+            /// @author N Tanda
+            //-------------------------------------------------------------------
+            struct ImageInText final
+            {
+                u32 m_characterIndex = 0;
+                Rendering::TextureCSPtr m_texture;
+                Core::Vector2 m_size;
+                Core::Vector2 m_offset;
+                Rendering::UVs m_uvs;
+            };
+            //-------------------------------------------------------------------
             /// Constructor that builds the text from key-value properties.
             /// The properties used to create the text are described in the
             /// class documentation.
@@ -345,6 +393,49 @@ namespace ChilliSource
             /// @param The property map.
             //-------------------------------------------------------------------
             TextComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
+            //-------------------------------------------------------------------
+            /// Inserts variables into the given string with the
+            /// values using basic markup. The markup is in the form
+            /// [var=VariableName], and the value for the variable is
+            /// looked up in the cached param dictionary.
+            ///
+            /// For example "Time remaining: [var=TimeRemaining]" with
+            /// a param dictionary containing "TimeRemaining"="12" will
+            /// become "Time Remaining: 12".
+            ///
+            /// The markup is also recursive, meaning that the
+            /// following is valid: "[var=TextValue[var=ValueIndex]]".
+            ///
+            /// This will also replace any [img= variable] flags with markers
+            /// and spacing for the TextComponent to draw icons using the
+            /// cached images data map.
+            ///
+            /// @author N Tanda
+            ///
+            /// @param The text containing mark-ups
+            /// @return The text containing the variables
+            //-------------------------------------------------------------------
+            std::string ReplaceVariables(const std::string& in_text);
+            //-------------------------------------------------------------------
+            /// Find any variable or nested variable mark-up and insert the
+            /// value of the variables
+            ///
+            /// For instance "My string contains [var =a] variable
+            /// and [var= b] variable called a and b
+            ///
+            /// Furthermore, [var= Var_[var= a]_b] has variables
+            /// called a, and e.g.  Var_12_b   (if a == "12")
+            ///
+            /// This will also replace any [img= variable] flags with actual icons,
+            /// using the cached images data map.
+            ///
+            /// @author N Tanda
+            ///
+            /// @param [OUT] The iterator going through the text
+            /// @param [OUT] The current index of the text
+            /// @param [OUT] The text output
+            //-------------------------------------------------------------------
+            void ReplaceVariablesRecursive(std::string::const_iterator& out_iterator, u32& out_index, std::string& out_text);
             //-------------------------------------------------------------------
             /// Render the text using the transform and size of the owning
             /// widget.
@@ -368,6 +459,10 @@ namespace ChilliSource
             bool m_invalidateCache = true;
             Core::Vector2 m_cachedSize;
             Rendering::CanvasRenderer::BuiltText m_cachedText;
+            
+            Core::ParamDictionary m_textVariables;
+            std::unordered_map<std::string, ImageData> m_imagesData;
+            std::vector<ImageInText> m_cachedImages;
         };
     }
 }
