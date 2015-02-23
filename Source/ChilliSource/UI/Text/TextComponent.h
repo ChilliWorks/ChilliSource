@@ -32,12 +32,12 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
-#include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/UI/Base/Component.h>
+#include <ChilliSource/UI/Text/TextImage.h>
 
 #include <vector>
 
@@ -95,6 +95,12 @@ namespace ChilliSource
         {
         public:
             CS_DECLARE_NAMEDTYPE(TextComponent);
+            //-------------------------------------------------------------------
+            /// Dictionary used to replace [img=Variable] flags with images
+            ///
+            /// @author Nicolas Tanda
+            //-------------------------------------------------------------------
+            using TextImageDictionary = std::unordered_map<std::string, TextImage>;
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -245,8 +251,10 @@ namespace ChilliSource
             /// in the localised text resource.
             /// @param The param dictionary which contains the values which should
             /// be used for each variable in the string.
+            /// @param The image data dictionary which contains the values which should
+            /// be used for each image in the string.
             //-------------------------------------------------------------------
-            void SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params);
+            void SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params, const TextImageDictionary& in_imageData = {});
             //-------------------------------------------------------------------
             /// Directly sets the text that will be rendered. This is not
             /// recommended, usually is it better to set the text using a
@@ -258,39 +266,22 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             void SetText(const std::string& in_text);
             //-------------------------------------------------------------------
-            /// Container for
+            /// Directly sets the text that will be rendered. This is not
+            /// recommended, usually is it better to set the text using a
+            /// localised text resource.
             ///
-            /// @author N Tanda
-            //-------------------------------------------------------------------
-            struct ImageData final
-            {
-                Core::StorageLocation m_textureLocation = Core::StorageLocation::k_package;
-                std::string m_texturePath;
-                Core::StorageLocation m_atlasLocation = Core::StorageLocation::k_package;
-                std::string m_atlasPath;
-                std::string m_atlasID;
-                f32 m_imageScale = 1.0f;
-            };
-            //-------------------------------------------------------------------
-            /// Sets the images data that will be used to replace images flags
-            /// in text with icons.
+            /// Will replace flags [img=Variable] with images.
             ///
             /// For example "You have earned 100 [img=Currency]" with a map containing
             /// the data for "Currency" will display an icon for it.
             ///
-            /// This data will be used when the text is set (either directly or via
-            /// localised text). It can then be used with other markups too:
-            /// "You have earned [var=Amount][img=Currency]".
+            /// @author Nicolas Tanda
             ///
-            /// The following is also valid:
-            /// "You have earned [var=Amount][img= [var=Currency]]".
-            ///
-            /// @author N Tanda
-            ///
-            /// @param The map which contains the values which should
+            /// @param The text.
+            /// @param The image data dictionary which contains the values which should
             /// be used for each image in the string.
             //-------------------------------------------------------------------
-            void SetImagesData(const std::unordered_map<std::string, ImageData>& in_imagesData);
+            void SetText(const std::string& in_text, const TextImageDictionary& in_imageData);
             //-------------------------------------------------------------------
             /// Sets the colour of the rendered text.
             ///
@@ -370,19 +361,6 @@ namespace ChilliSource
         private:
             friend class ComponentFactory;
             //-------------------------------------------------------------------
-            /// Container for the images that will be embedded in text
-            ///
-            /// @author N Tanda
-            //-------------------------------------------------------------------
-            struct ImageInText final
-            {
-                u32 m_characterIndex = 0;
-                Rendering::TextureCSPtr m_texture;
-                Core::Vector2 m_size;
-                Core::Vector2 m_offset;
-                Rendering::UVs m_uvs;
-            };
-            //-------------------------------------------------------------------
             /// Constructor that builds the text from key-value properties.
             /// The properties used to create the text are described in the
             /// class documentation.
@@ -410,12 +388,16 @@ namespace ChilliSource
             /// and spacing for the TextComponent to draw icons using the
             /// cached images data map.
             ///
-            /// @author N Tanda
+            /// @author Nicolas Tanda
             ///
             /// @param The text containing mark-ups
+            /// @param The param dictionary which contains the values which should
+            /// be used for each variable in the string.
+            /// @param The image data dictionary which contains the values which should
+            /// be used for each image in the string.
             /// @return The text containing the variables
             //-------------------------------------------------------------------
-            std::string ReplaceVariables(const std::string& in_text);
+            std::string ReplaceVariables(const std::string& in_text, const Core::ParamDictionary& in_params, const TextImageDictionary& in_imageData);
             //-------------------------------------------------------------------
             /// Find any variable or nested variable mark-up and insert the
             /// value of the variables
@@ -429,13 +411,17 @@ namespace ChilliSource
             /// This will also replace any [img= variable] flags with actual icons,
             /// using the cached images data map.
             ///
-            /// @author N Tanda
+            /// @author Nicolas Tanda
             ///
+            /// @param The param dictionary which contains the values which should
+            /// be used for each variable in the string.
+            /// @param The image data dictionary which contains the values which should
+            /// be used for each image in the string.
             /// @param [OUT] The iterator going through the text
             /// @param [OUT] The current index of the text
             /// @param [OUT] The text output
             //-------------------------------------------------------------------
-            void ReplaceVariablesRecursive(std::string::const_iterator& out_iterator, u32& out_index, std::string& out_text);
+            void ReplaceVariablesRecursive(const Core::ParamDictionary& in_params, const TextImageDictionary& in_imageData, std::string::const_iterator& out_iterator, u32& out_index, std::string& out_text);
             //-------------------------------------------------------------------
             /// Render the text using the transform and size of the owning
             /// widget.
@@ -460,9 +446,7 @@ namespace ChilliSource
             Core::Vector2 m_cachedSize;
             Rendering::CanvasRenderer::BuiltText m_cachedText;
             
-            Core::ParamDictionary m_textVariables;
-            std::unordered_map<std::string, ImageData> m_imagesData;
-            std::vector<ImageInText> m_cachedImages;
+            std::vector<TextImage> m_cachedImages;
         };
     }
 }

@@ -204,6 +204,7 @@ namespace ChilliSource
             }
 #endif
             
+            m_cachedImages.clear();
             m_localisedText = in_localisedText;
             
             if (m_localisedText != nullptr && m_localisedText->Contains(m_localisedTextId) == true)
@@ -221,6 +222,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void TextComponent::SetLocalisedTextId(const std::string& in_localisedTextId)
         {
+            m_cachedImages.clear();
             m_localisedTextId = in_localisedTextId;
             
             if (m_localisedText != nullptr && m_localisedText->Contains(m_localisedTextId) == true)
@@ -236,12 +238,12 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextComponent::SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params)
+        void TextComponent::SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params, const TextImageDictionary& in_imageData)
         {
             CS_ASSERT(m_localisedText != nullptr, "Cannot set text using a null localised text.");
             
-            m_textVariables = in_params;
-            m_text = ReplaceVariables(m_localisedText->GetText(in_localisedTextId));
+            m_cachedImages.clear();
+            m_text = ReplaceVariables(m_localisedText->GetText(in_localisedTextId), in_params, in_imageData);
             
             m_invalidateCache = true;
         }
@@ -249,28 +251,19 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void TextComponent::SetText(const std::string& in_text)
         {
-            // TODO: This is for testing only
-            {
-                ImageData imageData;
-                imageData.m_texturePath = "Textures/GUI/Icon_CarsonStanding.csimage";
-                std::unordered_map<std::string, ImageData> mapTest;
-                mapTest["test"] = imageData;
-                imageData.m_texturePath = "TextureAtlases/GUI/GUI.csimage";
-                imageData.m_atlasPath = "TextureAtlases/GUI/GUI.csatlas";
-                imageData.m_atlasID = "CameraPackLarge";
-                mapTest["test2"] = imageData;
-                SetImagesData(mapTest);
-            }
-            
-            m_text = ReplaceVariables(in_text);
+            m_cachedImages.clear();
+            m_text = in_text;
             
             m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextComponent::SetImagesData(const std::unordered_map<std::string, ImageData>& in_imagesData)
+        void TextComponent::SetText(const std::string& in_text, const TextImageDictionary& in_imageData)
         {
-            m_imagesData = in_imagesData;
+            m_cachedImages.clear();
+            m_text = ReplaceVariables(in_text, {}, in_imageData);
+            
+            m_invalidateCache = true;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -338,7 +331,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        std::string TextComponent::ReplaceVariables(const std::string& in_text)
+        std::string TextComponent::ReplaceVariables(const std::string& in_text, const Core::ParamDictionary& in_params, const TextImageDictionary& in_imageData)
         {
             std::string output;
             u32 index = 0;
@@ -359,7 +352,7 @@ namespace ChilliSource
                 else
                 {
                     // Found a mark up, check it
-                    ReplaceVariablesRecursive(it, index, output);
+                    ReplaceVariablesRecursive(in_params, in_imageData, it, index, output);
                 }
             }
             
@@ -367,7 +360,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextComponent::ReplaceVariablesRecursive(std::string::const_iterator& out_iterator, u32& out_index, std::string& out_text)
+        void TextComponent::ReplaceVariablesRecursive(const Core::ParamDictionary& in_params, const TextImageDictionary& in_imageData, std::string::const_iterator& out_iterator, u32& out_index, std::string& out_text)
         {
             // Found some mark-up. What type is it?
             std::string type;
@@ -417,7 +410,7 @@ namespace ChilliSource
                 if(nextChar == '[')
                 {
                     std::string variableName;
-                    ReplaceVariablesRecursive(out_iterator, out_index, variableName);
+                    ReplaceVariablesRecursive(in_params, in_imageData, out_iterator, out_index, variableName);
                     varName += variableName;
                 }
             }
@@ -426,7 +419,7 @@ namespace ChilliSource
             
             if(type == "var")
             {
-                if(m_textVariables.TryGetValue(varName, varValue))
+                if(in_params.TryGetValue(varName, varValue))
                 {
                     //Let's replace the mark-up with the value
                     out_text.append(varValue);
@@ -436,27 +429,23 @@ namespace ChilliSource
             else if(type == "img")
             {
                 // The image is known
-                if(m_imagesData.find(varName) != m_imagesData.end())
+                if(in_imageData.find(varName) != in_imageData.end())
                 {
-                    const auto& imageData = m_imagesData.at(varName);
+                    const auto& imageData = in_imageData.at(varName);
                     
-                    auto resPool = Core::Application::Get()->GetResourcePool();
-                    auto texture = resPool->LoadResource<Rendering::Texture>(imageData.m_textureLocation, imageData.m_texturePath);
                     f32 height = m_font->GetLineHeight();
-                    f32 aspectRatio = (f32)texture->GetWidth() / (f32)texture->GetHeight();
+                    f32 aspectRatio = (f32)imageData.GetTexture()->GetWidth() / (f32)imageData.GetTexture()->GetHeight();
                     f32 width = aspectRatio * height;
                     
                     // Create a cached image
-                    TextComponent::ImageInText image;
-                    image.m_characterIndex = out_index;
-                    image.m_texture = texture;
+                    TextImage image = imageData;
+                    image.m_indexInText = out_index;
                     image.m_uvs = Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f);
-                    image.m_size = Core::Vector2(width, height) * imageData.m_imageScale;
+                    image.m_size = Core::Vector2(width, height) * imageData.GetScale();
                     
-                    if(!imageData.m_atlasPath.empty())
+                    if(imageData.GetTextureAtlas())
                     {
-                        const auto& atlas = resPool->LoadResource<Rendering::TextureAtlas>(imageData.m_atlasLocation, imageData.m_atlasPath);
-                        image.m_uvs = atlas->GetFrameUVs(imageData.m_atlasID);
+                        image.m_uvs = imageData.GetTextureAtlas()->GetFrameUVs(imageData.GetTextureAtlasID());
                     }
                     
                     m_cachedImages.push_back(image);
@@ -507,7 +496,7 @@ namespace ChilliSource
                 // Update images position
                 for(auto& image : m_cachedImages)
                 {
-                    u32 index = image.m_characterIndex;
+                    u32 index = image.m_indexInText;
                     const Core::Vector2& charSize = m_cachedText.m_characters[index].m_packedImageSize;
                     image.m_offset.x = m_cachedText.m_characters[index].m_position.x + charSize.x * 0.5f;
                     image.m_offset.y = m_cachedText.m_characters[index].m_position.y - charSize.y * 0.5f;
@@ -521,7 +510,7 @@ namespace ChilliSource
             for(const auto& image : m_cachedImages)
             {
                 Core::Vector2 size = image.m_size * m_textProperties.m_textScale;
-                in_renderer->DrawBox(in_transform, size, image.m_offset, image.m_texture, image.m_uvs, Core::Colour::k_white, Rendering::AlignmentAnchor::k_middleCentre);
+                in_renderer->DrawBox(in_transform, size, image.m_offset, image.GetTexture(), image.GetUVs(), Core::Colour::k_white, Rendering::AlignmentAnchor::k_middleCentre);
             }
         }
     }
