@@ -32,6 +32,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/UI/Text/TextComponent.h>
-#include <ChilliSource/UI/Text/TextImage.h>
+#include <ChilliSource/UI/Text/TextIcon.h>
 
 #endif

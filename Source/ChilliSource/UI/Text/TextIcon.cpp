@@ -1,5 +1,5 @@
 //
-//  TextImage.cpp
+//  TextIcon.cpp
 //  Chilli Source
 //  Created by Nicolas Tanda on 23/02/2015.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Text/TextImage.h>
+#include <ChilliSource/UI/Text/TextIcon.h>
 
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
@@ -39,7 +39,7 @@ namespace ChilliSource
     {
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        TextImage::TextImage(const Rendering::TextureCSPtr& in_texture, f32 in_scale)
+        TextIcon::TextIcon(const Rendering::TextureCSPtr& in_texture, f32 in_scale)
         :m_texture(in_texture), m_scale(in_scale)
         {
             CS_ASSERT(in_texture != nullptr, "Need to provide a texture for a Text Image");
@@ -47,8 +47,8 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        TextImage::TextImage(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string in_atlasID, f32 in_scale)
-        :TextImage(in_texture, in_scale)
+        TextIcon::TextIcon(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasID, f32 in_scale)
+        :TextIcon(in_texture, in_scale)
         {
             CS_ASSERT(in_atlas != nullptr, "Need to provide a texture atlas for a Text Image");
             
@@ -62,49 +62,49 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const Rendering::TextureCSPtr& TextImage::GetTexture() const
+        const Rendering::TextureCSPtr& TextIcon::GetTexture() const
         {
             return m_texture;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const Rendering::TextureAtlasCSPtr& TextImage::GetTextureAtlas() const
+        const Rendering::TextureAtlasCSPtr& TextIcon::GetTextureAtlas() const
         {
             return m_atlas;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const std::string& TextImage::GetTextureAtlasID() const
+        const std::string& TextIcon::GetTextureAtlasID() const
         {
             return m_atlasID;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        f32 TextImage::GetScale() const
+        f32 TextIcon::GetScale() const
         {
             return m_scale;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const Rendering::UVs& TextImage::GetUVs() const
+        const Rendering::UVs& TextIcon::GetUVs() const
         {
             return m_uvs;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const Core::Vector2& TextImage::GetSize() const
+        const Core::Vector2& TextIcon::GetSize() const
         {
             return m_size;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        const Core::Vector2& TextImage::GetOffset() const
+        const Core::Vector2& TextIcon::GetOffset() const
         {
             return m_offset;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        u32 TextImage::GetIndex() const
+        u32 TextIcon::GetIndex() const
         {
             return m_indexInText;
         }

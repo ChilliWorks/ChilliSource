@@ -1,5 +1,5 @@
 //
-//  TextImage.h
+//  TextIcon.h
 //  Chilli Source
 //  Created by Nicolas Tanda on 23/02/2015.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_TEXT_TEXTIMAGE_H_
-#define _CHILLISOURCE_UI_TEXT_TEXTIMAGE_H_
+#ifndef _CHILLISOURCE_UI_TEXT_TEXTICON_H_
+#define _CHILLISOURCE_UI_TEXT_TEXTICON_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
@@ -44,7 +44,7 @@ namespace ChilliSource
         ///
         /// @author Nicolas Tanda
         //--------------------------------------------------------------------------
-        class TextImage final
+        class TextIcon final
         {
         public:
             //-------------------------------------------------------------------
@@ -52,14 +52,14 @@ namespace ChilliSource
             ///
             /// @author Nicolas Tanda
             //-------------------------------------------------------------------
-            TextImage() = default;
+            TextIcon() = default;
             //-------------------------------------------------------------------
             /// @author Nicolas Tanda
             ///
             /// @param Texture
             /// @param Scale of the image, relative to the text height
             //-------------------------------------------------------------------
-            TextImage(const Rendering::TextureCSPtr& in_texture, f32 in_scale = 1.0f);
+            TextIcon(const Rendering::TextureCSPtr& in_texture, f32 in_scale = 1.0f);
             //-------------------------------------------------------------------
             /// @author Nicolas Tanda
             ///
@@ -68,7 +68,7 @@ namespace ChilliSource
             /// @param Texture atlas ID
             /// @param Scale of the image, relative to the text height
             //-------------------------------------------------------------------
-            TextImage(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string in_atlasID, f32 in_scale = 1.0f);
+            TextIcon(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasID, f32 in_scale = 1.0f);
             
             //-------------------------------------------------------------------
             /// @author Nicolas Tanda

@@ -239,7 +239,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextComponent::SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params, const TextImageDictionary& in_imageData)
+        void TextComponent::SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData)
         {
             CS_ASSERT(m_localisedText != nullptr, "Cannot set text using a null localised text.");
             
@@ -259,7 +259,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextComponent::SetText(const std::string& in_text, const TextImageDictionary& in_imageData)
+        void TextComponent::SetText(const std::string& in_text, const TextIconDictionary& in_imageData)
         {
             m_cachedImages.clear();
             m_text = ReplaceVariables(in_text, {}, in_imageData);
@@ -332,7 +332,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
-        std::string TextComponent::ReplaceVariables(const std::string& in_text, const Core::ParamDictionary& in_params, const TextImageDictionary& in_imageData)
+        std::string TextComponent::ReplaceVariables(const std::string& in_text, const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData)
         {
             std::string output;
             u32 index = 0;
@@ -361,7 +361,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextComponent::ReplaceVariablesRecursive(const Core::ParamDictionary& in_params, const TextImageDictionary& in_imageData, std::string::const_iterator& out_iterator, u32& out_index, std::string& out_text)
+        void TextComponent::ReplaceVariablesRecursive(const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData, std::string::const_iterator& out_iterator, u32& out_index, std::string& out_text)
         {
             // Found some mark-up. What type is it?
             std::string type;
@@ -439,7 +439,7 @@ namespace ChilliSource
                     f32 width = aspectRatio * height;
                     
                     // Create a cached image
-                    TextImage image = imageData;
+                    TextIcon image = imageData;
                     image.m_indexInText = out_index;
                     image.m_uvs = Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f);
                     image.m_size = Core::Vector2(width, height) * imageData.GetScale();

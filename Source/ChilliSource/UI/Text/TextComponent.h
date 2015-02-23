@@ -37,7 +37,7 @@
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/UI/Base/Component.h>
-#include <ChilliSource/UI/Text/TextImage.h>
+#include <ChilliSource/UI/Text/TextIcon.h>
 
 #include <vector>
 
@@ -100,7 +100,7 @@ namespace ChilliSource
             ///
             /// @author Nicolas Tanda
             //-------------------------------------------------------------------
-            using TextImageDictionary = std::unordered_map<std::string, TextImage>;
+            using TextIconDictionary = std::unordered_map<std::string, TextIcon>;
             //-------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -254,7 +254,7 @@ namespace ChilliSource
             /// @param The image data dictionary which contains the values which should
             /// be used for each image in the string.
             //-------------------------------------------------------------------
-            void SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params, const TextImageDictionary& in_imageData = {});
+            void SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData = {});
             //-------------------------------------------------------------------
             /// Directly sets the text that will be rendered. This is not
             /// recommended, usually is it better to set the text using a
@@ -281,7 +281,7 @@ namespace ChilliSource
             /// @param The image data dictionary which contains the values which should
             /// be used for each image in the string.
             //-------------------------------------------------------------------
-            void SetText(const std::string& in_text, const TextImageDictionary& in_imageData);
+            void SetText(const std::string& in_text, const TextIconDictionary& in_imageData);
             //-------------------------------------------------------------------
             /// Sets the colour of the rendered text.
             ///
@@ -397,7 +397,7 @@ namespace ChilliSource
             /// be used for each image in the string.
             /// @return The text containing the variables
             //-------------------------------------------------------------------
-            std::string ReplaceVariables(const std::string& in_text, const Core::ParamDictionary& in_params, const TextImageDictionary& in_imageData);
+            std::string ReplaceVariables(const std::string& in_text, const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData);
             //-------------------------------------------------------------------
             /// Find any variable or nested variable mark-up and insert the
             /// value of the variables
@@ -421,7 +421,7 @@ namespace ChilliSource
             /// @param [OUT] The current index of the text
             /// @param [OUT] The text output
             //-------------------------------------------------------------------
-            void ReplaceVariablesRecursive(const Core::ParamDictionary& in_params, const TextImageDictionary& in_imageData, std::string::const_iterator& out_iterator, u32& out_index, std::string& out_text);
+            void ReplaceVariablesRecursive(const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData, std::string::const_iterator& out_iterator, u32& out_index, std::string& out_text);
             //-------------------------------------------------------------------
             /// Render the text using the transform and size of the owning
             /// widget.
@@ -446,7 +446,7 @@ namespace ChilliSource
             Core::Vector2 m_cachedSize;
             Rendering::CanvasRenderer::BuiltText m_cachedText;
             
-            std::vector<TextImage> m_cachedImages;
+            std::vector<TextIcon> m_cachedImages;
         };
     }
 }
