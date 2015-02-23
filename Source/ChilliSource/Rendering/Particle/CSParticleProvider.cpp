@@ -29,7 +29,7 @@
 #include <ChilliSource/Rendering/Particle/CSParticleProvider.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Base/Utils.h>
+#include <ChilliSource/Core/Json/JsonUtils.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
@@ -79,45 +79,6 @@ namespace ChilliSource
 
 				CS_LOG_FATAL("Invalid simulation space in particle effect: " + in_string);
 				return ParticleEffect::SimulationSpace::k_world;
-			}
-			//-----------------------------------------------------------------
-			/// Opens and reads the CSParticle file into a json object.
-			///
-			/// This is thread-safe.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The storage location of the csparticle json file.
-			/// @param The file path to the csparticle json file.
-			/// @param [Out] The json value which should be populated
-			//-----------------------------------------------------------------
-			bool OpenCSParticleFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Json::Value& out_jsonRoot)
-			{
-				Core::FileStreamSPtr fileStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_read);
-
-				if (fileStream == nullptr || fileStream->IsOpen() == false || fileStream->IsBad() == true)
-				{
-					CS_LOG_ERROR("Could not open csparticle file: " + in_filePath);
-					return false;
-				}
-
-				std::string fileContents;
-				fileStream->GetAll(fileContents);
-				fileStream->Close();
-
-				Json::Reader jsonReader;
-				if (jsonReader.parse(fileContents, out_jsonRoot) == false)
-				{
-					CS_LOG_FATAL("Could not parse csparticle file '" + in_filePath + "' due to errors: \n" + jsonReader.getFormatedErrorMessages());
-				}
-
-				if (out_jsonRoot.isNull())
-				{
-					CS_LOG_ERROR("Could not parse csparticle file: " + in_filePath);
-					return false;
-				}
-
-				return true;
 			}
 			//-----------------------------------------------------------------
 			/// Reads the base properties in the particle effect such as the
@@ -301,7 +262,7 @@ namespace ChilliSource
 				const ParticleEmitterDefFactory* in_emitterDefFactory, const ParticleAffectorDefFactory* in_affectorDefFactory, const ParticleEffectSPtr& out_particleEffect)
 			{
 				Json::Value jsonRoot;
-				if (OpenCSParticleFile(in_storageLocation, in_filePath, jsonRoot) == false)
+                if (Core::JsonUtils::ReadJson(in_storageLocation, in_filePath, jsonRoot) == false)
 				{
 					out_particleEffect->SetLoadState(Core::Resource::LoadState::k_failed);
 					return;
@@ -454,7 +415,7 @@ namespace ChilliSource
 				const ParticleEffectSPtr& out_particleEffect)
 			{
 				Json::Value jsonRoot;
-				if (OpenCSParticleFile(in_storageLocation, in_filePath, jsonRoot) == false)
+				if (Core::JsonUtils::ReadJson(in_storageLocation, in_filePath, jsonRoot) == false)
 				{
 					out_particleEffect->SetLoadState(Core::Resource::LoadState::k_failed);
 					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_particleEffect));

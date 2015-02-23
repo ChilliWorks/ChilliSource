@@ -30,3 +30,7 @@ Projects/Libraries/SFML/build
 Projects/Libraries/CSBase/build
 Projects/Libraries/CSBase/obj
 Projects/Libraries/CSBase/bin
+Libraries/Core/Android/Projects/facebook/bin
+Libraries/Core/Android/Projects/google-play-services_lib/bin
+Libraries/Core/Android/Projects/google-play-services_lib/gen
+Libraries/Core/Android/Projects/facebook/gen

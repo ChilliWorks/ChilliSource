@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_CORE_CONTAINER_PROPERTY_DEFAULTPROPERTYTYPES_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChillISource/Core/Container/Property/PropertyType.h>
+#include <ChilliSource/Core/Container/Property/PropertyType.h>
 
 namespace ChilliSource
 {

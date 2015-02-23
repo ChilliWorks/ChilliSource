@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		810B47CE1A8D16BF003F4984 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 810B47CD1A8D16BF003F4984 /* FacebookSDK.framework */; };
 		8113673019C99A2E00D9AEDC /* Filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8113672D19C99A2E00D9AEDC /* Filter.cpp */; };
 		811B181819D19AF400B06B5D /* RotationGesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 811B181619D19AF400B06B5D /* RotationGesture.cpp */; };
 		8138A8F41A5804AA00C81462 /* CkSound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8E41A5804AA00C81462 /* CkSound.cpp */; };
@@ -15,8 +16,7 @@
 		8138A8F71A5804AA00C81462 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8EA1A5804AA00C81462 /* CkAudioPlayer.cpp */; };
 		8138A8FA1A5804AA00C81462 /* CricketAudioSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8F11A5804AA00C81462 /* CricketAudioSystem.cpp */; };
 		8138A90F1A5806A300C81462 /* libck.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8138A90E1A5806A300C81462 /* libck.a */; };
-		814F24021A9B49F40053ADC5 /* TextImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814F24001A9B49F40053ADC5 /* TextImage.cpp */; };
-		81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81852A63196402D300EC15DE /* FacebookSDK.framework */; };
+		814F24051A9B6DF20053ADC5 /* TextImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814F24031A9B6DF20053ADC5 /* TextImage.cpp */; };
 		819630B21A3A0D5400475D76 /* HttpDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 819630B11A3A0D5400475D76 /* HttpDelegate.mm */; };
 		81AAFBBB19C9C18100CD4A14 /* Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB419C9C18100CD4A14 /* Gesture.cpp */; };
 		81AAFBBC19C9C18100CD4A14 /* GestureSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB619C9C18100CD4A14 /* GestureSystem.cpp */; };
@@ -324,6 +324,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		810B47CD1A8D16BF003F4984 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		8113672D19C99A2E00D9AEDC /* Filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Filter.cpp; sourceTree = "<group>"; };
 		8113672E19C99A2E00D9AEDC /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
 		8113672F19C99A2E00D9AEDC /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
@@ -397,8 +398,8 @@
 		8138A93F1A5806C100C81462 /* SHA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHA1.h; sourceTree = "<group>"; };
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
 		8141DFF21A02439100F3D9DF /* concurrent_blocking_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_blocking_queue.h; sourceTree = "<group>"; };
-		814F24001A9B49F40053ADC5 /* TextImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextImage.cpp; sourceTree = "<group>"; };
-		814F24011A9B49F40053ADC5 /* TextImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextImage.h; sourceTree = "<group>"; };
+		814F24031A9B6DF20053ADC5 /* TextImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextImage.cpp; sourceTree = "<group>"; };
+		814F24041A9B6DF20053ADC5 /* TextImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextImage.h; sourceTree = "<group>"; };
 		8154B74619D0274100F9F5B9 /* concurrent_vector_const_forward_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_const_forward_iterator.h; sourceTree = "<group>"; };
 		8154B74719D0274100F9F5B9 /* concurrent_vector_const_reverse_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_const_reverse_iterator.h; sourceTree = "<group>"; };
 		8158E483196ACB25005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
@@ -446,7 +447,6 @@
 		816B0C1719CC2E7000520B50 /* concurrent_vector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = concurrent_vector.h; sourceTree = "<group>"; };
 		816B0C1819CC48D300520B50 /* concurrent_vector_forward_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_forward_iterator.h; sourceTree = "<group>"; };
 		816B0C1919CC66E300520B50 /* concurrent_vector_reverse_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_reverse_iterator.h; sourceTree = "<group>"; };
-		81852A63196402D300EC15DE /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		819630B11A3A0D5400475D76 /* HttpDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HttpDelegate.mm; sourceTree = "<group>"; };
 		819630B31A3A0D6400475D76 /* HttpDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HttpDelegate.h; sourceTree = "<group>"; };
 		81AAFBB419C9C18100CD4A14 /* Gesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gesture.cpp; sourceTree = "<group>"; };
@@ -1120,8 +1120,8 @@
 				81D8B1F71962D1B90010DA84 /* QuartzCore.framework in Frameworks */,
 				81D8B1F81962D1B90010DA84 /* Security.framework in Frameworks */,
 				81D8B1F91962D1B90010DA84 /* Social.framework in Frameworks */,
-				81852A64196402D300EC15DE /* FacebookSDK.framework in Frameworks */,
 				81D8B1FA1962D1B90010DA84 /* StoreKit.framework in Frameworks */,
+				810B47CE1A8D16BF003F4984 /* FacebookSDK.framework in Frameworks */,
 				81D8B1FB1962D1B90010DA84 /* SystemConfiguration.framework in Frameworks */,
 				81D8B1FC1962D1B90010DA84 /* UIKit.framework in Frameworks */,
 				81D8ACF91962CEDC0010DA84 /* Foundation.framework in Frameworks */,
@@ -2688,7 +2688,7 @@
 		81D8B6D91962E1110010DA84 /* Libs */ = {
 			isa = PBXGroup;
 			children = (
-				81852A63196402D300EC15DE /* FacebookSDK.framework */,
+				810B47CD1A8D16BF003F4984 /* FacebookSDK.framework */,
 				81D8B6DB1962E1110010DA84 /* libCSBase.a */,
 			);
 			name = Libs;
@@ -2846,8 +2846,8 @@
 			children = (
 				81E258951A5D38EF0020264E /* TextComponent.cpp */,
 				81E258961A5D38EF0020264E /* TextComponent.h */,
-				814F24001A9B49F40053ADC5 /* TextImage.cpp */,
-				814F24011A9B49F40053ADC5 /* TextImage.h */,
+				814F24031A9B6DF20053ADC5 /* TextImage.cpp */,
+				814F24041A9B6DF20053ADC5 /* TextImage.h */,
 			);
 			path = Text;
 			sourceTree = "<group>";
@@ -2929,7 +2929,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				814F24021A9B49F40053ADC5 /* TextImage.cpp in Sources */,
+				814F24051A9B6DF20053ADC5 /* TextImage.cpp in Sources */,
 				81D8B3FD1962E0EC0010DA84 /* Application.cpp in Sources */,
 				81D8B6AA1962E0F70010DA84 /* DeviceButtonSystem.mm in Sources */,
 				81D8B46D1962E0EC0010DA84 /* RenderComponentFactory.cpp in Sources */,
@@ -3298,7 +3298,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/ChilliSource.dst;
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../../Libraries/Core/iOS/Libs";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../../Libraries/Core/iOS/Libs",
+					/Users/taggames/Work/Workspace/CSTest/ChilliSource/Libraries/Core/iOS/Libs,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
@@ -3326,7 +3329,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DSTROOT = /tmp/ChilliSource.dst;
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/../../Libraries/Core/iOS/Libs";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/../../Libraries/Core/iOS/Libs",
+					/Users/taggames/Work/Workspace/CSTest/ChilliSource/Libraries/Core/iOS/Libs,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				HEADER_SEARCH_PATHS = (

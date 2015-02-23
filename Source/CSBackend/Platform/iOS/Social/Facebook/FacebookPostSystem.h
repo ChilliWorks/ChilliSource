@@ -43,16 +43,12 @@ namespace CSBackend
         /// Class for posting messages and request
         /// to the Facebook wall via the iOS Facebook framework.
         ///
-        /// User must be authenticated prior to posting
-        ///
         /// @author S McGaw
         //----------------------------------------------------
 		class FacebookPostSystem final : public CSSocial::FacebookPostSystem
 		{
 		public:
-			
             CS_DECLARE_NAMEDTYPE(FacebookPostSystem);
-            
 			//----------------------------------------------------
             /// @author S McGaw
             ///
@@ -62,16 +58,12 @@ namespace CSBackend
             //----------------------------------------------------
             bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//----------------------------------------------------
-            /// Post the wall of the user specified in the post
-            /// description. If no user is specified then post
-            /// to the wall of the currently authenticated user.
-            ///
-            /// User must be authenticated
+            /// Share from the app to appear in the user's timeline and in their friends' News Feeds.
             ///
             /// Note: For the time being only one post can
             /// happen at a time
             ///
-            /// @author S McGaw
+            /// @author T Kane
             ///
             /// @param Post description
             /// @param Connection to result delegate
@@ -92,29 +84,55 @@ namespace CSBackend
             /// @param Connection to result delegate
             //---------------------------------------------------
             void SendRequest(const RequestDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection) override;
-			
-		private:
+
+        private:
+            friend CSSocial::FacebookPostSystemUPtr CSSocial::FacebookPostSystem::Create();
             //----------------------------------------------------
             /// Private constructor to force the use of the
             /// factory method.
             ///
             /// @author Ian Copland
+            //----------------------------------------------------
+            FacebookPostSystem() = default;
+            //----------------------------------------------------
+            /// Initialisation method called at a time when
+            /// all App Systems have been created. System
+            /// initialisation occurs in the order they were
+            /// created.
             ///
-            /// @param The facebook authentication system.
+            /// @author T Kane
             //----------------------------------------------------
-            FacebookPostSystem(CSSocial::FacebookAuthenticationSystem* in_authSystem);
+            void OnInit() override;
             //----------------------------------------------------
-            /// Post to wall using the native web view
+            /// Share via the web-based Feed Dialog. Note that this
+            /// does not support publishing Open Graph stories.
+            ///
+            /// @author T Kane
             ///
             /// @param Post description
             //----------------------------------------------------
             void PostWeb(const PostDesc& in_desc);
-			
-            friend CSSocial::FacebookPostSystemUPtr CSSocial::FacebookPostSystem::Create(CSSocial::FacebookAuthenticationSystem* in_authSystem);
+            //----------------------------------------------------
+            /// Attempt to share story via the Facebook app Share Dialog
+            ///
+            /// @author T Kane
+            ///
+            /// @param Post description
+            /// @return True if Facebook app is installed and sharing
+            ///         can be done via this method. False if not.
+            //----------------------------------------------------
+            bool PostViaShareDialog(const PostDesc& in_desc);
+            //----------------------------------------------------
+            /// Determines if we are signed in to Facebook or not.
+            ///
+            /// @author T Kane
+            ///
+            /// @return True if signed in. False otherwise.
+            //----------------------------------------------------
+            bool IsSignedIn() const;
             
         private:
-            
-            CSSocial::FacebookAuthenticationSystem* m_authSystem;
+            CSSocial::FacebookAuthenticationSystem* m_authSystem = nullptr;
             PostResultDelegate::Connection m_postCompleteDelegateConnection;
             PostResultDelegate::Connection m_requestCompleteDelegateConnection;
 		};

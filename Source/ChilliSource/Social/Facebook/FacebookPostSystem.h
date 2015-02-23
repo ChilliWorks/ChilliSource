@@ -47,8 +47,6 @@ namespace ChilliSource
         /// to the Facebook wall. The implementation is handled
         /// by the platform Facebook SDK.
         ///
-        /// User must be authenticated prior to posting
-        ///
         /// @author S McGaw
         //----------------------------------------------------
 		class FacebookPostSystem : public Core::AppSystem
@@ -116,24 +114,16 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
-            /// @param The facebook authentication system.
-            ///
             /// @return The new instance of the system.
             //---------------------------------------------------
-            static FacebookPostSystemUPtr Create(FacebookAuthenticationSystem* inpAuthSystem);
+            static FacebookPostSystemUPtr Create();
             //---------------------------------------------------
-            /// Post to the users wall using the backend Facebook
-            /// SDK. If the post description has no recipient
-            /// then it posts to the authenticated users wall.
+            /// Share something from the app to the user's
+            /// timeline and their friends' News Feeds.
             ///
-            /// User must be authenticated before posting and
-            /// must have granted publish permissions "publish_actions"
-            /// and "publish_stream"
+            /// @author T Kane
             ///
-            /// @author S McGaw
-            ///
-            /// @param Post description containing recipient
-            /// and post text.
+            /// @param Post description
             /// @param Connection to result delegate
             //---------------------------------------------------
 			virtual void Post(const PostDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection) = 0;
