@@ -52,7 +52,7 @@ namespace ChilliSource
             ///
             /// @author Nicolas Tanda
             //-------------------------------------------------------------------
-            TextImage();
+            TextImage() = default;
             //-------------------------------------------------------------------
             /// @author Nicolas Tanda
             ///
@@ -119,28 +119,9 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             u32 GetIndex() const;
             
-        protected:
-            friend class TextComponent;
-            //-------------------------------------------------------------------
-            /// @author Nicolas Tanda
-            ///
-            /// @param The size of the image
-            //-------------------------------------------------------------------
-            void SetSize(const Core::Vector2& in_size);
-            //-------------------------------------------------------------------
-            /// @author Nicolas Tanda
-            ///
-            /// @param The offset of the image
-            //-------------------------------------------------------------------
-            void SetOffset(const Core::Vector2& in_offset);
-            //-------------------------------------------------------------------
-            /// @author Nicolas Tanda
-            ///
-            /// @param The index of the character used to position the image in text
-            //-------------------------------------------------------------------
-            void SetIndex(u32 in_index);
-            
         private:
+            friend class TextComponent;
+            
             Rendering::TextureCSPtr m_texture;
             Rendering::TextureAtlasCSPtr m_atlas;
             std::string m_atlasID;

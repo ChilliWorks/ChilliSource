@@ -30,17 +30,13 @@
 
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
-#include <ChilliSource/Rendering/Texture.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
 namespace ChilliSource
 {
     namespace UI
     {
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        TextImage::TextImage()
-        {
-        }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         TextImage::TextImage(const Rendering::TextureCSPtr& in_texture, f32 in_scale)
@@ -96,33 +92,15 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextImage::SetSize(const Core::Vector2& in_size)
-        {
-            m_size = in_size;
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
         const Core::Vector2& TextImage::GetSize() const
         {
             return m_size;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextImage::SetOffset(const Core::Vector2& in_offset)
-        {
-            m_offset = in_offset;
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
         const Core::Vector2& TextImage::GetOffset() const
         {
             return m_offset;
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        void TextImage::SetIndex(u32 in_index)
-        {
-            m_indexInText = in_index;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------

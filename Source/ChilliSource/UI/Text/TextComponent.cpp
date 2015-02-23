@@ -35,7 +35,8 @@
 #include <ChilliSource/Core/Resource/ResourcePool.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Font/Font.h>
-#include <ChilliSource/Rendering/Texture.h>
+#include <ChilliSource/Rendering/Texture/Texture.h>
+#include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 
 namespace ChilliSource
