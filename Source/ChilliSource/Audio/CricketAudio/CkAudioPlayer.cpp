@@ -104,10 +104,10 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void CkAudioPlayer::PlayMusic(Core::StorageLocation in_storageLocation, const std::string& in_filePath, f32 in_volume)
+        void CkAudioPlayer::PlayMusic(Core::StorageLocation in_storageLocation, const std::string& in_filePath)
         {
             m_music = CkSound::CreateFromStream(in_storageLocation, in_filePath);
-            m_music->SetVolume(m_musicVolume * in_volume);
+            m_music->SetVolume(m_musicVolume);
             m_music->Play(CkSound::PlaybackMode::k_loop);
         }
         //------------------------------------------------------------------------------

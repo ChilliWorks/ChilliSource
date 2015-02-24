@@ -83,7 +83,7 @@ namespace ChilliSource
             ///
             /// @author Nicolas Tanda
             ///
-            /// @param The volume of the effects, between [0.0, 1.0]
+            /// @param The volume of the effects, between 0.0 and 1.0
             //------------------------------------------------------------------------------
             void SetEffectVolume(f32 in_volume);
             //------------------------------------------------------------------------------
@@ -93,14 +93,11 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             f32 GetMusicVolume() const;
             //------------------------------------------------------------------------------
-            /// Sets the global volume of music, affecting currently playing music.
-            /// This takes into account the volume that music was initially
-            /// played with, i.e, if the passed volume is 0.5 and the music is played
-            /// with a volume of 0.5 the actual volume the music is played at will be 0.25.
+            /// Sets the global volume of music, also affecting currently playing music.
             ///
             /// @author Nicolas Tanda
             ///
-            /// @param The volume of the music, between [0.0, 1.0]
+            /// @param The volume of the music, between 0.0 and 1.0
             //------------------------------------------------------------------------------
             void SetMusicVolume(f32 in_volume);
             //------------------------------------------------------------------------------
@@ -125,9 +122,8 @@ namespace ChilliSource
             ///
             /// @param The storage location of the music stream.
             /// @param The file path of the music stream.
-            /// @param [Optional] The volume of the sound effect. Defaults to 1.0.
             //------------------------------------------------------------------------------
-            void PlayMusic(Core::StorageLocation in_storageLocation, const std::string& in_filePath, f32 in_volume = 1.0f);
+            void PlayMusic(Core::StorageLocation in_storageLocation, const std::string& in_filePath);
             //------------------------------------------------------------------------------
             /// Stops the currently playing music track. Does nothing if there is no track
             /// playing.
