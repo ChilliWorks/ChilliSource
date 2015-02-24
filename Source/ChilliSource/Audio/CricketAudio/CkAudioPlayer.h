@@ -70,22 +70,36 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
             //------------------------------------------------------------------------------
-            /// @author Ian Copland
+            /// @author Nicolas Tanda
             ///
-            /// @param The volume of the player.
+            /// @return The current global volume of effects.
             //------------------------------------------------------------------------------
-            f32 GetVolume() const;
+            f32 GetEffectVolume() const;
             //------------------------------------------------------------------------------
-            /// Sets the volume of the player, changing the volume of all effects and music.
-            /// This takes into account the volume that effects or music were initially
-            /// played with, i.e, if the player's volume is 0.5 and the effect is played
+            /// Sets the global volume of effects, affecting currently playing effects.
+            /// This takes into account the volume that effects were initially
+            /// played with, i.e, if the passed volume is 0.5 and the effect is played
             /// with a volume of 0.5 the actual volume the effect is played at will be 0.25.
             ///
-            /// @author Ian Copland
+            /// @author Nicolas Tanda
             ///
-            /// @param The volume.
+            /// @param The volume of the effects, between 0.0 and 1.0
             //------------------------------------------------------------------------------
-            void SetVolume(f32 in_volume);
+            void SetEffectVolume(f32 in_volume);
+            //------------------------------------------------------------------------------
+            /// @author Nicolas Tanda
+            ///
+            /// @return The current volume of the music.
+            //------------------------------------------------------------------------------
+            f32 GetMusicVolume() const;
+            //------------------------------------------------------------------------------
+            /// Sets the global volume of music, also affecting currently playing music.
+            ///
+            /// @author Nicolas Tanda
+            ///
+            /// @param The volume of the music, between 0.0 and 1.0
+            //------------------------------------------------------------------------------
+            void SetMusicVolume(f32 in_volume);
             //------------------------------------------------------------------------------
             /// Plays the requested sound effect from the given bank once, with the given
             /// volume. The effect will be automatically cleaned up once finished. If the
@@ -108,9 +122,8 @@ namespace ChilliSource
             ///
             /// @param The storage location of the music stream.
             /// @param The file path of the music stream.
-            /// @param [Optional] The volume of the sound effect. Defaults to 1.0.
             //------------------------------------------------------------------------------
-            void PlayMusic(Core::StorageLocation in_storageLocation, const std::string& in_filePath, f32 in_volume = 1.0f);
+            void PlayMusic(Core::StorageLocation in_storageLocation, const std::string& in_filePath);
             //------------------------------------------------------------------------------
             /// Stops the currently playing music track. Does nothing if there is no track
             /// playing.
@@ -208,7 +221,7 @@ namespace ChilliSource
             std::vector<const CkSound*> m_effectsToRemove;
             CkSoundUPtr m_music;
             f32 m_musicVolume = 1.0f;
-            f32 m_playerVolume = 1.0f;
+            f32 m_effectVolume = 1.0f;
         };
 	}
 }
