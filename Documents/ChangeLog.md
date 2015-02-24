@@ -1,11 +1,12 @@
 === Chilli Source Change Log ===
 
 Version 1.3.3, 2015-02-24:
-	- Labels now support the inclusion of Icons in text.
-	- Updated to the latest version of the Facebook SDK on both iOS and Android and improved the Facebook Post system. On Android facebook functionality is now an Android Extension and must have the CS_ANDROIDEXTENSION_FACEBOOK comp
-	- The Google Play Services android library project is now included in the engine. This should be used instead of copying a new version into the workspace.
+	- Labels now support inclusion of Icons in text.
+	- Improved the Facebook Post system and updated to the latest version of the Facebook SDK on both iOS and Android. 
+	- Facebook on Android is now an Android Extension. To use it add CS_ANDROIDEXTENSION_FACEBOOK to the pre-processor definitions in Android.mk and import the Facebook library project into eclipse. This can be found in the engine in the Libraries/Android/Projects/ directory.
+	- The Google Play Services android library project is now included in the engine, and can be found in the Libraries/Android/Projects/ directory. This should be used instead of copying a new version into the workspace.
 	- The CkAudioPlayer now has separate setters for music and effect volume.
-	- Fixed Android compiler errors when building on a linux machine.
+	- Fixed Android compiler errors when building on a linux machine. This was caused by in-correct case in include paths.
     - Change errant log when failing to open file in JsonUtils.
 
 Version 1.3.2, 2015-01-23:
