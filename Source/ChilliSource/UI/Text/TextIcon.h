@@ -31,7 +31,6 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
-#include <ChilliSource/Rendering/Texture/UVs.h>
 
 #include <unordered_map>
 
@@ -91,47 +90,14 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             /// @author Nicolas Tanda
             ///
-            /// @return The UVs
-            //-------------------------------------------------------------------
-            const Rendering::UVs& GetUVs() const;
-            //-------------------------------------------------------------------
-            /// @author Nicolas Tanda
-            ///
             /// @return The scale of the image
             //-------------------------------------------------------------------
             f32 GetScale() const;
-            //-------------------------------------------------------------------
-            /// @author Nicolas Tanda
-            ///
-            /// @return The size of the image
-            //-------------------------------------------------------------------
-            const Core::Vector2& GetSize() const;
-            //-------------------------------------------------------------------
-            /// @author Nicolas Tanda
-            ///
-            /// @param The offset of the image
-            //-------------------------------------------------------------------
-            const Core::Vector2& GetOffset() const;
-            //-------------------------------------------------------------------
-            /// @author Nicolas Tanda
-            ///
-            /// @return The index of the character used to position the image in text
-            //-------------------------------------------------------------------
-            u32 GetIndex() const;
             
         private:
-            friend class TextComponent;
-            
             Rendering::TextureCSPtr m_texture;
             Rendering::TextureAtlasCSPtr m_atlas;
             std::string m_atlasID;
-            
-            Rendering::UVs m_uvs;
-            
-            Core::Vector2 m_size;
-            Core::Vector2 m_offset;
-            
-            u32 m_indexInText = 0;
             
             f32 m_scale = 1.0f;
         };

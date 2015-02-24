@@ -960,6 +960,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Layout\VListLayoutDef.cpp">
       <Filter>ChilliSource\UI\Layout</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\UI\Text\TextIcon.cpp">
+      <Filter>ChilliSource\UI\Text</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
@@ -2083,6 +2086,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\UI\Layout\VListLayoutDef.h">
       <Filter>ChilliSource\UI\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextIcon.h">
+      <Filter>ChilliSource\UI\Text</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

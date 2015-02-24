@@ -36,6 +36,7 @@
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/Rendering/Font/Font.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 #include <ChilliSource/UI/Base/Component.h>
 #include <ChilliSource/UI/Text/TextIcon.h>
 
@@ -254,7 +255,7 @@ namespace ChilliSource
             /// @param The image data dictionary which contains the values which should
             /// be used for each image in the string.
             //-------------------------------------------------------------------
-            void SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData = {});
+            void SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData = TextIconDictionary());
             //-------------------------------------------------------------------
             /// Directly sets the text that will be rendered. This is not
             /// recommended, usually is it better to set the text using a
@@ -361,6 +362,19 @@ namespace ChilliSource
         private:
             friend class ComponentFactory;
             //-------------------------------------------------------------------
+            /// A container for information on icons in the text.
+            ///
+            /// @author Ian Copland
+            //-------------------------------------------------------------------
+            struct TextIconData final
+            {
+                TextIcon m_icon;
+                Core::Vector2 m_size;
+                Core::Vector2 m_offset;
+                Rendering::UVs m_uvs;
+                u32 m_indexInText = 0;
+            };
+            //-------------------------------------------------------------------
             /// Constructor that builds the text from key-value properties.
             /// The properties used to create the text are described in the
             /// class documentation.
@@ -446,7 +460,7 @@ namespace ChilliSource
             Core::Vector2 m_cachedSize;
             Rendering::CanvasRenderer::BuiltText m_cachedText;
             
-            std::vector<TextIcon> m_cachedImages;
+            std::vector<TextIconData> m_cachedImages;
         };
     }
 }

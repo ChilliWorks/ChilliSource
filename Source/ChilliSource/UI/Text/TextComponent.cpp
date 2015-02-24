@@ -432,30 +432,32 @@ namespace ChilliSource
                 // The image is known
                 if(in_imageData.find(varName) != in_imageData.end())
                 {
-                    const auto& imageData = in_imageData.at(varName);
+                    // Create a cached image
+                    TextIconData iconData;
+                    iconData.m_icon = in_imageData.at(varName);
+                    iconData.m_indexInText = out_index;
                     
                     f32 height = m_font->GetLineHeight();
-                    f32 aspectRatio = (f32)imageData.GetTexture()->GetWidth() / (f32)imageData.GetTexture()->GetHeight();
+                    f32 aspectRatio = (f32)iconData.m_icon.GetTexture()->GetWidth() / (f32)iconData.m_icon.GetTexture()->GetHeight();
                     f32 width = aspectRatio * height;
+                    iconData.m_size = Core::Vector2(width, height) * iconData.m_icon.GetScale();
                     
-                    // Create a cached image
-                    TextIcon image = imageData;
-                    image.m_indexInText = out_index;
-                    image.m_uvs = Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f);
-                    image.m_size = Core::Vector2(width, height) * imageData.GetScale();
-                    
-                    if(imageData.GetTextureAtlas())
+                    if (iconData.m_icon.GetTextureAtlas() != nullptr)
                     {
-                        image.m_uvs = imageData.GetTextureAtlas()->GetFrameUVs(imageData.GetTextureAtlasID());
+                        iconData.m_uvs = iconData.m_icon.GetTextureAtlas()->GetFrameUVs(iconData.m_icon.GetTextureAtlasID());
+                    }
+                    else
+                    {
+                        iconData.m_uvs = Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f);
                     }
                     
-                    m_cachedImages.push_back(image);
+                    m_cachedImages.push_back(iconData);
                     
                     // Padding with spaces
                     u32 spacesNeeded = 0;
                     if(spaceInfo.m_advance > 0.0f)
                     {
-                        spacesNeeded = std::ceil((image.m_size.x - markerInfo.m_size.x) / spaceInfo.m_advance);
+                        spacesNeeded = std::ceil((iconData.m_size.x - markerInfo.m_size.x) / spaceInfo.m_advance);
                         if(spacesNeeded % 2 == 1)
                         {
                             ++spacesNeeded;
@@ -508,10 +510,10 @@ namespace ChilliSource
             in_renderer->DrawText(m_cachedText.m_characters, in_transform, m_textColour, m_font->GetTexture());
             
             // Draw images
-            for(const auto& image : m_cachedImages)
+            for(const auto& iconData : m_cachedImages)
             {
-                Core::Vector2 size = image.m_size * m_textProperties.m_textScale;
-                in_renderer->DrawBox(in_transform, size, image.m_offset, image.GetTexture(), image.GetUVs(), Core::Colour::k_white, Rendering::AlignmentAnchor::k_middleCentre);
+                Core::Vector2 size = iconData.m_size * m_textProperties.m_textScale;
+                in_renderer->DrawBox(in_transform, size, iconData.m_offset, iconData.m_icon.GetTexture(), iconData.m_uvs, Core::Colour::k_white, Rendering::AlignmentAnchor::k_middleCentre);
             }
         }
     }

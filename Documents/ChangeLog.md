@@ -1,7 +1,10 @@
 === Chilli Source Change Log ===
 
-Version 1.3.2, 2015-02-XX:
-
+Version 1.3.3, 2015-02-24:
+	- Labels now support the inclusion of Icons in text.
+	- Updated to the latest version of the Facebook SDK on both iOS and Android and improved the Facebook Post system. On Android facebook functionality is now an Android Extension and must have the CS_ANDROIDEXTENSION_FACEBOOK comp
+	- The Google Play Services android library project is now included in the engine. This should be used instead of copying a new version into the workspace.
+	- Fixed Android compiler errors when building on a linux machine.
     - Change errant log when failing to open file in JsonUtils.
 
 Version 1.3.2, 2015-01-23:

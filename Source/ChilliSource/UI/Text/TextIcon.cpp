@@ -42,23 +42,17 @@ namespace ChilliSource
         TextIcon::TextIcon(const Rendering::TextureCSPtr& in_texture, f32 in_scale)
         :m_texture(in_texture), m_scale(in_scale)
         {
-            CS_ASSERT(in_texture != nullptr, "Need to provide a texture for a Text Image");
-            m_uvs = Rendering::UVs(0.0f, 0.0f, 1.0f, 1.0f);
+            CS_ASSERT(in_texture != nullptr, "Need to provide a texture for a Text Icon");
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
         TextIcon::TextIcon(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasID, f32 in_scale)
         :TextIcon(in_texture, in_scale)
         {
-            CS_ASSERT(in_atlas != nullptr, "Need to provide a texture atlas for a Text Image");
+            CS_ASSERT(in_atlas != nullptr, "Need to provide a texture atlas for a Text Icon");
             
             m_atlas = in_atlas;
             m_atlasID = in_atlasID;
-            
-            if(!m_atlasID.empty())
-            {
-                m_uvs = m_atlas->GetFrameUVs(m_atlasID);
-            }
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -83,30 +77,6 @@ namespace ChilliSource
         f32 TextIcon::GetScale() const
         {
             return m_scale;
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        const Rendering::UVs& TextIcon::GetUVs() const
-        {
-            return m_uvs;
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        const Core::Vector2& TextIcon::GetSize() const
-        {
-            return m_size;
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        const Core::Vector2& TextIcon::GetOffset() const
-        {
-            return m_offset;
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        u32 TextIcon::GetIndex() const
-        {
-            return m_indexInText;
         }
     }
 }
