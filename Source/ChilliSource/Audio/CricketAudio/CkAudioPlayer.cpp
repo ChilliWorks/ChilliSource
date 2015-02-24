@@ -51,25 +51,23 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        f32 CkAudioPlayer::GetVolume() const
+        f32 CkAudioPlayer::GetEffectVolume() const
         {
-            return m_playerVolume;
+            return m_effectVolume;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void CkAudioPlayer::SetVolume(f32 in_volume)
+        void CkAudioPlayer::SetEffectVolume(f32 in_volume)
         {
-            m_playerVolume = in_volume;
+            m_effectVolume = in_volume;
             
             for (auto& effectInfo : m_effects)
             {
                 if (effectInfo.m_effect->GetPlaybackState() == CkSound::PlaybackState::k_playing)
                 {
-                    effectInfo.m_effect->SetVolume(m_playerVolume * effectInfo.m_volume);
+                    effectInfo.m_effect->SetVolume(m_effectVolume * effectInfo.m_volume);
                 }
             }
-            
-            UpdateMusicVolume();
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -83,15 +81,9 @@ namespace ChilliSource
         {
             m_musicVolume = in_volume;
             
-            UpdateMusicVolume();
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void CkAudioPlayer::UpdateMusicVolume()
-        {
             if (m_music != nullptr && m_music->GetPlaybackState() == CkSound::PlaybackState::k_playing)
             {
-                m_music->SetVolume(m_playerVolume * m_musicVolume);
+                m_music->SetVolume(m_musicVolume);
             }
         }
         //------------------------------------------------------------------------------
@@ -102,7 +94,7 @@ namespace ChilliSource
             effectInfo.m_volume = in_volume;
             effectInfo.m_effect = CkSound::CreateFromBank(in_bank, in_effectName);
             
-            effectInfo.m_effect->SetVolume(effectInfo.m_volume * m_playerVolume);
+            effectInfo.m_effect->SetVolume(m_effectVolume * effectInfo.m_volume);
             effectInfo.m_effect->Play(CkSound::PlaybackMode::k_once, [=](const CkSound* in_audio)
             {
                 m_effectsToRemove.push_back(in_audio);
@@ -114,9 +106,8 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void CkAudioPlayer::PlayMusic(Core::StorageLocation in_storageLocation, const std::string& in_filePath, f32 in_volume)
         {
-            m_musicVolume = in_volume;
             m_music = CkSound::CreateFromStream(in_storageLocation, in_filePath);
-            m_music->SetVolume(m_musicVolume * m_playerVolume);
+            m_music->SetVolume(m_musicVolume * in_volume);
             m_music->Play(CkSound::PlaybackMode::k_loop);
         }
         //------------------------------------------------------------------------------
