@@ -97,6 +97,7 @@ namespace ChilliSource
         /// Text
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(TextComponent);
+        CS_FORWARDDECLARE_CLASS(TextIcon);
 	}
 }
 

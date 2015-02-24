@@ -16,6 +16,7 @@
 		8138A8F71A5804AA00C81462 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8EA1A5804AA00C81462 /* CkAudioPlayer.cpp */; };
 		8138A8FA1A5804AA00C81462 /* CricketAudioSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8F11A5804AA00C81462 /* CricketAudioSystem.cpp */; };
 		8138A90F1A5806A300C81462 /* libck.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8138A90E1A5806A300C81462 /* libck.a */; };
+		814F240B1A9B96560053ADC5 /* TextIcon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814F24091A9B96560053ADC5 /* TextIcon.cpp */; };
 		819630B21A3A0D5400475D76 /* HttpDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 819630B11A3A0D5400475D76 /* HttpDelegate.mm */; };
 		81AAFBBB19C9C18100CD4A14 /* Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB419C9C18100CD4A14 /* Gesture.cpp */; };
 		81AAFBBC19C9C18100CD4A14 /* GestureSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB619C9C18100CD4A14 /* GestureSystem.cpp */; };
@@ -397,6 +398,8 @@
 		8138A93F1A5806C100C81462 /* SHA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHA1.h; sourceTree = "<group>"; };
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
 		8141DFF21A02439100F3D9DF /* concurrent_blocking_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_blocking_queue.h; sourceTree = "<group>"; };
+		814F24091A9B96560053ADC5 /* TextIcon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextIcon.cpp; sourceTree = "<group>"; };
+		814F240A1A9B96560053ADC5 /* TextIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextIcon.h; sourceTree = "<group>"; };
 		8154B74619D0274100F9F5B9 /* concurrent_vector_const_forward_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_const_forward_iterator.h; sourceTree = "<group>"; };
 		8154B74719D0274100F9F5B9 /* concurrent_vector_const_reverse_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_const_reverse_iterator.h; sourceTree = "<group>"; };
 		8158E483196ACB25005FF0A8 /* Base.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
@@ -2843,6 +2846,8 @@
 			children = (
 				81E258951A5D38EF0020264E /* TextComponent.cpp */,
 				81E258961A5D38EF0020264E /* TextComponent.h */,
+				814F24091A9B96560053ADC5 /* TextIcon.cpp */,
+				814F240A1A9B96560053ADC5 /* TextIcon.h */,
 			);
 			path = Text;
 			sourceTree = "<group>";
@@ -2968,6 +2973,7 @@
 				81D8B4681962E0EC0010DA84 /* CullingPredicates.cpp in Sources */,
 				81C925421A5C3C3500B3AE11 /* RNGContainer.mm in Sources */,
 				81D8B46E1962E0EC0010DA84 /* Renderer.cpp in Sources */,
+				814F240B1A9B96560053ADC5 /* TextIcon.cpp in Sources */,
 				81D8B6D81962E0F70010DA84 /* TextureUnitSystem.cpp in Sources */,
 				81D8B49C1962E0EC0010DA84 /* CubemapResourceOptions.cpp in Sources */,
 				81E258991A5D38EF0020264E /* Component.cpp in Sources */,
