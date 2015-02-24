@@ -69,6 +69,26 @@ namespace ChilliSource
                 }
             }
             
+            UpdateMusicVolume();
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        f32 CkAudioPlayer::GetMusicVolume() const
+        {
+            return m_musicVolume;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void CkAudioPlayer::SetMusicVolume(f32 in_volume)
+        {
+            m_musicVolume = in_volume;
+            
+            UpdateMusicVolume();
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void CkAudioPlayer::UpdateMusicVolume()
+        {
             if (m_music != nullptr && m_music->GetPlaybackState() == CkSound::PlaybackState::k_playing)
             {
                 m_music->SetVolume(m_playerVolume * m_musicVolume);

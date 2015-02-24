@@ -72,7 +72,7 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @param The volume of the player.
+            /// @return The volume of the player.
             //------------------------------------------------------------------------------
             f32 GetVolume() const;
             //------------------------------------------------------------------------------
@@ -86,6 +86,18 @@ namespace ChilliSource
             /// @param The volume.
             //------------------------------------------------------------------------------
             void SetVolume(f32 in_volume);
+            //------------------------------------------------------------------------------
+            /// @author Nicolas Tanda
+            ///
+            /// @return The current volume of the music.
+            //------------------------------------------------------------------------------
+            f32 GetMusicVolume() const;
+            //------------------------------------------------------------------------------
+            /// @author Nicolas Tanda
+            ///
+            /// @param The volume of the music.
+            //------------------------------------------------------------------------------
+            void SetMusicVolume(f32 in_volume);
             //------------------------------------------------------------------------------
             /// Plays the requested sound effect from the given bank once, with the given
             /// volume. The effect will be automatically cleaned up once finished. If the
@@ -203,6 +215,12 @@ namespace ChilliSource
             /// @author Ian Copland
             //------------------------------------------------------------------------------
             void OnDestroy() override;
+            //------------------------------------------------------------------------------
+            /// Update the music volume
+            ///
+            /// @author Nicolas Tanda
+            //------------------------------------------------------------------------------
+            void UpdateMusicVolume();
             
             std::vector<EffectInfo> m_effects;
             std::vector<const CkSound*> m_effectsToRemove;
