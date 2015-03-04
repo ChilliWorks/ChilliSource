@@ -86,7 +86,7 @@ namespace ChilliSource
             XML::Node* GetFirstChildNode(const XML::Node* in_node, const std::string& in_name)
             {
                 const s8* nameData = nullptr;
-                u32 nameSize = in_name.length();
+                auto nameSize = in_name.length();
                 if (nameSize > 0)
                 {
                     nameData = in_name.c_str();
@@ -99,7 +99,7 @@ namespace ChilliSource
             XML::Node* GetNextSiblingNode(const XML::Node* in_node, const std::string& in_name)
             {
                 const s8* nameData = nullptr;
-                u32 nameSize = in_name.length();
+                auto nameSize = in_name.length();
                 if (nameSize > 0)
                 {
                     nameData = in_name.c_str();
@@ -112,7 +112,7 @@ namespace ChilliSource
             XML::Node* GetFirstChildElement(const XML::Node* in_node, const std::string& in_name)
             {
                 const s8* nameData = nullptr;
-                u32 nameSize = in_name.length();
+                auto nameSize = in_name.length();
                 if (nameSize > 0)
                 {
                     nameData = in_name.c_str();
@@ -141,7 +141,7 @@ namespace ChilliSource
             XML::Node* GetNextSiblingElement(const XML::Node* in_node, const std::string& in_name)
             {
                 const s8* nameData = nullptr;
-                u32 nameSize = in_name.length();
+                auto nameSize = in_name.length();
                 if (nameSize > 0)
                 {
                     nameData = in_name.c_str();

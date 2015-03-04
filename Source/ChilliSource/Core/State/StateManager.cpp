@@ -405,7 +405,7 @@ namespace ChilliSource
 		//---------------------------------------------------------
 		u32 StateManager::GetNumStates() const
 		{
-			return m_states.size();
+			return static_cast<u32>(m_states.size());
 		}
 		//---------------------------------------------------------
 		//---------------------------------------------------------

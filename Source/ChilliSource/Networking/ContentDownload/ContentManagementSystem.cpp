@@ -81,7 +81,7 @@ namespace ChilliSource
             //--------------------------------------------------------
             std::string GetPathExcludingFileName(const std::string& instrPath)
             {
-                u32 udwOffset = instrPath.find_last_of("/");
+                auto udwOffset = instrPath.find_last_of("/");
                 if(udwOffset != std::string::npos)
                 {
                     return instrPath.substr(0, udwOffset);
@@ -90,6 +90,7 @@ namespace ChilliSource
                 return "";
             }
         }
+        
         CS_DEFINE_NAMEDTYPE(ContentManagementSystem);
         //--------------------------------------------------------
         //--------------------------------------------------------
@@ -600,10 +601,11 @@ namespace ChilliSource
                 //Get file information
                 unz_file_info FileInfo;
                 unzGetCurrentFileInfo(ZippedFile, &FileInfo, byaFileName, uddwFilenameLength, nullptr, 0, nullptr, 0);
+                CS_ASSERT(FileInfo.uncompressed_size < static_cast<uLong>(std::numeric_limits<u32>::max()), "File is too large. It cannot exceed " + CSCore::ToString(std::numeric_limits<u32>::max()) + " bytes.");
                 
                 //Load the file into memory and then save it out to the directory
                 s8* pbyDataBuffer =  new s8[FileInfo.uncompressed_size];
-                unzReadCurrentFile(ZippedFile, pbyDataBuffer, FileInfo.uncompressed_size);
+                unzReadCurrentFile(ZippedFile, pbyDataBuffer, static_cast<unsigned>(FileInfo.uncompressed_size));
                 
                 //Create new stuff
                 std::string strFilePath = std::string(byaFileName);
@@ -616,7 +618,7 @@ namespace ChilliSource
                 
                 if(IsFile(strFilePath))
                 {
-                    Core::Application::Get()->GetFileSystem()->WriteFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, FileInfo.uncompressed_size);
+                    Core::Application::Get()->GetFileSystem()->WriteFile(Core::StorageLocation::k_DLC, "/" + strFilePath, pbyDataBuffer, static_cast<u32>(FileInfo.uncompressed_size));
                 }
                 
                 //Close current file and jump to the next

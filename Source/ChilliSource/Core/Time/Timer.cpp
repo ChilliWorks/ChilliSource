@@ -96,7 +96,7 @@ namespace ChilliSource
                 
                 //Take a snapshot of the number of delegates so any new ones added
                 //during the notify loop aren't notified themseleves.
-                u32 numConnections = m_connections.size();
+                u32 numConnections = static_cast<u32>(m_connections.size());
                 for(u32 i=0; i<numConnections; ++i)
                 {
                     if(m_connections[i].m_connection != nullptr && (m_connections[i].m_elapsedSinceLastUpdate += in_dt) >= m_connections[i].m_updatePeriod)

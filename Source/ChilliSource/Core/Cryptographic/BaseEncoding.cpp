@@ -42,7 +42,10 @@ namespace ChilliSource
             //---------------------------------------------------------
             std::string Base64Encode(const std::string& in_value)
             {
-                return Base64Encode(in_value.c_str(), in_value.length());
+                CS_ASSERT(in_value.length() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "String is too long. It cannot exceed "
+                          + CSCore::ToString(std::numeric_limits<u32>::max()) + " characters.");
+                
+                return Base64Encode(in_value.c_str(), static_cast<u32>(in_value.length()));
             }
             //---------------------------------------------------------
             //---------------------------------------------------------

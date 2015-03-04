@@ -105,11 +105,14 @@ namespace CSBackend
         }
         //------------------------------------------------------
         //------------------------------------------------------
-        void DialogueBoxSystem::OnSystemConfirmDialogResult(u32 in_id, CSCore::DialogueBoxSystem::DialogueResult in_result)
+        void DialogueBoxSystem::OnSystemConfirmDialogResult(s64 in_id, CSCore::DialogueBoxSystem::DialogueResult in_result)
         {
             if(m_activeSysConfirmDelegate)
         	{
-        		m_activeSysConfirmDelegate(in_id, in_result);
+                //we know the Id is in the range of a u32 as we set it when the confirm dialogue was created meaning we can cast to that.
+                u32 dialogueId = static_cast<u32>(in_id);
+                
+        		m_activeSysConfirmDelegate(dialogueId, in_result);
         		m_activeSysConfirmDelegate = nullptr;
         	}
         }

@@ -143,7 +143,11 @@ namespace CSBackend
             transaction->m_transactionId = [NSStringUtils newUTF8StringWithNSString:in_skTransaction.transactionIdentifier];
             if(hasReceipt)
             {
-                transaction->m_receipt = CSCore::BaseEncoding::Base64Encode((s8*)[in_skTransaction.transactionReceipt bytes], [in_skTransaction.transactionReceipt length]);
+                CS_ASSERT([in_skTransaction.transactionReceipt length] < static_cast<NSUInteger>(std::numeric_limits<u32>::max()), "Transaction receipt is too large, cannot exceed "
+                          + CSCore::ToString(std::numeric_limits<u32>::max()) + " bytes.");
+                u32 length = static_cast<u32>([in_skTransaction.transactionReceipt length]);
+                
+                transaction->m_receipt = CSCore::BaseEncoding::Base64Encode((s8*)[in_skTransaction.transactionReceipt bytes], length);
             }
             
             m_transactionStatusDelegate(result, transaction);

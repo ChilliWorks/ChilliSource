@@ -53,8 +53,8 @@ namespace ChilliSource
             static const u32 EnumerateItems(const std::string& in_stringList)
             {
                 u32 itemCount = 0;
-                u32 i = 0;
-                const u32 size = in_stringList.size();
+                std::size_t i = 0;
+                const std::size_t size = in_stringList.size();
                 while(i < size)
                 {
                     if(in_stringList[i] != ' ')
@@ -80,13 +80,13 @@ namespace ChilliSource
         //------------------------------------------------------------
         s32 ParseS32(const std::string& in_string)
         {
-            return strtol(in_string.c_str(), nullptr, 10);
+            return static_cast<s32>(strtol(in_string.c_str(), nullptr, 10));
         }
         //------------------------------------------------------------
         //------------------------------------------------------------
         u32 ParseU32(const std::string& in_string)
         {
-            return strtoul(in_string.c_str(), nullptr, 10);
+            return static_cast<u32>(strtoul(in_string.c_str(), nullptr, 10));
         }
         //------------------------------------------------------------
         //------------------------------------------------------------

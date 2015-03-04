@@ -54,10 +54,9 @@ namespace ChilliSource
             
             m_canAddSystems = false;
             
-            u32 numSystems = m_systems.size();
-            for(u32 i=0; i<numSystems; ++i)
+            for(auto& system : m_systems)
             {
-                m_systems[i]->OnInit();
+                system->OnInit();
             }
             
             OnInit();
@@ -66,10 +65,9 @@ namespace ChilliSource
         //-----------------------------------------
         void State::Resume()
         {
-            u32 numSystems = m_systems.size();
-            for(u32 i=0; i<numSystems; ++i)
+            for(auto& system : m_systems)
             {
-                m_systems[i]->OnResume();
+                system->OnResume();
             }
             
             m_scene->ResumeEntities();
@@ -80,10 +78,9 @@ namespace ChilliSource
         //-----------------------------------------
         void State::Foreground()
         {
-            u32 numSystems = m_systems.size();
-            for(u32 i=0; i<numSystems; ++i)
+            for(auto& system : m_systems)
             {
-                m_systems[i]->OnForeground();
+                system->OnForeground();
             }
             
             m_scene->ForegroundEntities();
@@ -94,10 +91,9 @@ namespace ChilliSource
         //-----------------------------------------
         void State::Update(f32 in_timeSinceLastUpdate)
         {
-            u32 numSystems = m_systems.size();
-            for(u32 i=0; i<numSystems; ++i)
+            for(auto& system : m_systems)
             {
-                m_systems[i]->OnUpdate(in_timeSinceLastUpdate);
+                system->OnUpdate(in_timeSinceLastUpdate);
             }
             
             m_scene->UpdateEntities(in_timeSinceLastUpdate);
@@ -108,10 +104,9 @@ namespace ChilliSource
         //-----------------------------------------
         void State::FixedUpdate(f32 in_fixedTimeSinceLastUpdate)
         {
-            u32 numSystems = m_systems.size();
-            for(u32 i=0; i<numSystems; ++i)
+            for(auto& system : m_systems)
             {
-                m_systems[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
+                system->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
             }
             
             m_scene->FixedUpdateEntities(in_fixedTimeSinceLastUpdate);
@@ -126,10 +121,9 @@ namespace ChilliSource
             
             m_scene->BackgroundEntities();
             
-            s32 numSystems = m_systems.size();
-            for(s32 i=numSystems-1; i>=0; --i)
+            for (auto it = m_systems.rbegin(); it != m_systems.rend(); ++it)
             {
-                m_systems[i]->OnBackground();
+                (*it)->OnBackground();
             }
         }
         //-----------------------------------------
@@ -140,10 +134,9 @@ namespace ChilliSource
             
             m_scene->SuspendEntities();
             
-            s32 numSystems = m_systems.size();
-            for(s32 i=numSystems-1; i>=0; --i)
+            for(auto it = m_systems.rbegin(); it != m_systems.rend(); ++it)
             {
-                m_systems[i]->OnSuspend();
+                (*it)->OnSuspend();
             }
         }
         //-----------------------------------------
@@ -154,20 +147,18 @@ namespace ChilliSource
             
             m_scene->RemoveAllEntities();
             
-            s32 numSystems = m_systems.size();
-            for(s32 i=numSystems-1; i>=0; --i)
+            for(auto it = m_systems.rbegin(); it != m_systems.rend(); ++it)
             {
-                m_systems[i]->OnDestroy();
+                (*it)->OnDestroy();
             }
         }
         //------------------------------------------------
         //------------------------------------------------
         void State::MemoryWarning()
         {
-            u32 numSystems = m_systems.size();
-            for(u32 i=0; i<numSystems; ++i)
+            for(auto& system : m_systems)
             {
-                m_systems[i]->OnMemoryWarning();
+                system->OnMemoryWarning();
             }
         }
         //------------------------------------------

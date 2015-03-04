@@ -45,6 +45,8 @@ namespace ChilliSource
         {
         public:
             
+            using difference_type = typename std::iterator<std::forward_iterator_tag, TType>::difference_type;
+            
             //------------------------------------------------------------------------
             /// Constructor
             ///
@@ -142,7 +144,7 @@ namespace ChilliSource
             ///
             /// @return Updated iterator
             //------------------------------------------------------------------------
-            concurrent_vector_const_forward_iterator& operator+=(s32 in_stride)
+            concurrent_vector_const_forward_iterator& operator+=(difference_type in_stride)
             {
                 m_iterableIndex = find_next_occupied_index(m_iterableIndex + in_stride);
                 return *this;
@@ -157,7 +159,7 @@ namespace ChilliSource
             ///
             /// @return New iterator
             //------------------------------------------------------------------------
-            concurrent_vector_const_forward_iterator operator+(s32 in_stride)
+            concurrent_vector_const_forward_iterator operator+(difference_type in_stride)
             {
                 auto iterableIndex = find_next_occupied_index(m_iterableIndex + in_stride);
                 return concurrent_vector_const_forward_iterator(m_iterable, m_iterableMutex, iterableIndex);
@@ -256,7 +258,7 @@ namespace ChilliSource
             ///
             /// @param Element index that the iterate currently points to
             //------------------------------------------------------------------------
-            s32 get_index() const
+            difference_type get_index() const
             {
                 return m_iterableIndex;
             }
@@ -271,7 +273,7 @@ namespace ChilliSource
             /// @param Mutex used to protect the underlying iterable
             /// @param Initial index
             //------------------------------------------------------------------------
-            concurrent_vector_const_forward_iterator(const std::vector<std::pair<TType, bool>>* in_iterable, std::recursive_mutex* in_iterableMutex, s32 in_initialIndex)
+            concurrent_vector_const_forward_iterator(const std::vector<std::pair<TType, bool>>* in_iterable, std::recursive_mutex* in_iterableMutex, difference_type in_initialIndex)
             : m_iterable(in_iterable), m_iterableMutex(in_iterableMutex), m_iterableIndex(in_initialIndex)
             {
                 
@@ -286,12 +288,12 @@ namespace ChilliSource
             ///
             /// @return Index of next element (or end if none)
             //------------------------------------------------------------------------
-            s32 find_next_occupied_index(s32 in_beginIndex) const
+            difference_type find_next_occupied_index(difference_type in_beginIndex) const
             {
                 std::unique_lock<std::recursive_mutex> scopedLock(*m_iterableMutex);
                 auto size = m_iterable->size();
                 
-                for(u32 i=in_beginIndex; i<size; ++i)
+                for(auto i = in_beginIndex; i < size; ++i)
                 {
                     if((*m_iterable)[i].second == false)
                     {
@@ -304,7 +306,7 @@ namespace ChilliSource
             
         private:
             
-            s32 m_iterableIndex = 0;
+            difference_type m_iterableIndex = 0;
             const std::vector<std::pair<TType, bool>>* m_iterable;
             std::recursive_mutex* m_iterableMutex;
         };

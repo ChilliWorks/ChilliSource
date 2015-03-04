@@ -269,7 +269,7 @@ namespace CSBackend
                 }
             }
             
-            glUniform4fv(handle, in_vec4Values.size(), (GLfloat*)(&in_vec4Values[0]));
+            glUniform4fv(handle, static_cast<u32>(in_vec4Values.size()), (GLfloat*)(&in_vec4Values[0]));
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while setting uniform.");
         }

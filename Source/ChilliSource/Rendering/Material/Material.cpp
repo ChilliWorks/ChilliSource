@@ -128,7 +128,7 @@ namespace ChilliSource
 		//----------------------------------------------------------
 		u32 Material::GetNumTextures() const
 		{
-			return m_textures.size();
+			return static_cast<u32>(m_textures.size());
 		}
         //----------------------------------------------------------
         //----------------------------------------------------------

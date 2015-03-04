@@ -69,7 +69,7 @@ namespace ChilliSource
 		//------------------------------------------------------
 		void SpriteBatch::Build(const std::vector<SpriteData>& in_sprites)
 		{
-			const u32 udwNumSprites = in_sprites.size();
+			const u32 udwNumSprites = static_cast<u32>(in_sprites.size());
 			const u32 udwNumIndices = k_numSpriteIndices * udwNumSprites; 
 			
 			mpSpriteBuffer->Bind();

@@ -55,6 +55,8 @@ namespace ChilliSource
             CS_ASSERT(in_child != nullptr, "Cannot add null child");
             CS_ASSERT(in_child->GetParent() == nullptr, "Cannot add child with existing parent");
             CS_ASSERT(in_child->GetScene() == nullptr, "Cannot add child with existing scene");
+            CS_ASSERT(m_children.size() < static_cast<std::vector<EntitySPtr>::size_type>(std::numeric_limits<u32>::max()), "There are too many child entities. It cannot exceed "
+                      + CSCore::ToString(std::numeric_limits<u32>::max()) + ".");
             
             m_children.push_back(in_child);
             m_transform.AddChildTransform(&in_child->GetTransform());
@@ -175,13 +177,13 @@ namespace ChilliSource
         //------------------------------------------------------------------
         u32 Entity::GetNumEntities() const
         {
-            return m_children.size();
+            return static_cast<u32>(m_children.size());
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
         u32 Entity::GetNumComponents() const
         {
-            return m_components.size();
+            return static_cast<u32>(m_components.size());
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
@@ -201,6 +203,8 @@ namespace ChilliSource
 		{
             CS_ASSERT(in_component != nullptr, "Cannot add null component");
             CS_ASSERT(in_component->GetEntity() == nullptr, "Component cannot be attached to more than 1 entity at a time.");
+            CS_ASSERT(m_components.size() < static_cast<std::vector<ComponentSPtr>::size_type>(std::numeric_limits<u32>::max()), "There are too many components. It cannot exceed "
+                      + CSCore::ToString(std::numeric_limits<u32>::max()) + ".");
             
             m_components.push_back(in_component);
             
@@ -424,14 +428,14 @@ namespace ChilliSource
 		//-------------------------------------------------------------
 		void Entity::OnRemovedFromScene()
 		{
-            for (s32 i = m_children.size() - 1; i >= 0; --i)
+            for (auto it = m_children.rbegin(); it != m_children.rend(); ++it)
             {
-                m_scene->Remove(m_children[i].get());
+                m_scene->Remove((*it).get());
             }
             
-            for (s32 i = m_components.size() - 1; i >= 0; --i)
+            for (auto it = m_components.rbegin(); it != m_components.rend(); ++it)
             {
-                m_components[i]->OnRemovedFromScene();
+                (*it)->OnRemovedFromScene();
             }
 		}
         //----------------------------------------------------
@@ -450,9 +454,10 @@ namespace ChilliSource
             CS_ASSERT(m_appForegrounded == true, "Entity: Received background while already backgrounded.");
             
             m_appForegrounded = false;
-            for (s32 i = m_components.size() - 1; i >= 0; --i)
+            
+            for (auto it = m_components.rbegin(); it != m_components.rend(); ++it)
             {
-                m_components[i]->OnBackground();
+                (*it)->OnBackground();
             }
         }
         //-------------------------------------------------------------
@@ -462,9 +467,10 @@ namespace ChilliSource
             CS_ASSERT(m_appActive == true, "Entity: Received suspend while already suspended.");
             
             m_appActive = false;
-            for (s32 i = m_components.size() - 1; i >= 0; --i)
+            
+            for (auto it = m_components.rbegin(); it != m_components.rend(); ++it)
             {
-                m_components[i]->OnSuspend();
+                (*it)->OnSuspend();
             }
         }
         //------------------------------------------------------------------

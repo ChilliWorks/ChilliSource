@@ -204,8 +204,9 @@ namespace ChilliSource
                 
                 std::string abyData;
                 pImageFile->GetAll(abyData);
+                CS_ASSERT(abyData.size() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "File is too large. It cannot exceed " + CSCore::ToString(std::numeric_limits<u32>::max()) + " bytes.");
                 
-                CreatePVRImageFromFile(abyData.data(), abyData.size(), (Core::Image*)out_resource.get());
+                CreatePVRImageFromFile(abyData.data(), static_cast<u32>(abyData.size()), (Core::Image*)out_resource.get());
                 
                 out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
                 if(in_delegate != nullptr)

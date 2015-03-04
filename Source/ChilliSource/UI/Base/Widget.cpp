@@ -696,7 +696,9 @@ namespace ChilliSource
         void Widget::AddWidget(const WidgetSPtr& in_widget)
         {
             CS_ASSERT(in_widget->GetParent() == nullptr, "Cannot add a widget as a child of more than 1 parent");
-
+            CS_ASSERT(m_children.size() < static_cast<std::vector<WidgetSPtr>::size_type>(std::numeric_limits<u32>::max()), "There are too many widgets in the scene. It cannot exceed "
+                      + CSCore::ToString(std::numeric_limits<u32>::max()) + ".");
+            
             m_children.push_back(in_widget);
             in_widget->m_parent = this;
             
@@ -904,7 +906,7 @@ namespace ChilliSource
         {
             CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
             
-            s32 length = m_parent->m_children.size() - 1;
+            s32 length = static_cast<s32>(m_parent->m_children.size()) - 1;
             for(s32 i=0; i<length; ++i)
             {
                 if(m_parent->m_children[i].get() == this)
@@ -919,7 +921,7 @@ namespace ChilliSource
         {
             CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
             
-            s32 length = m_parent->m_children.size() - 1;
+            s32 length = static_cast<s32>(m_parent->m_children.size()) - 1;
             for(s32 i=0; i<length; ++i)
             {
                 if(m_parent->m_children[i].get() == this)
@@ -935,8 +937,8 @@ namespace ChilliSource
         {
             CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
             
-            u32 length = m_parent->m_children.size();
-            for(u32 i=1; i<length; ++i)
+            auto length = m_parent->m_children.size();
+            for(auto i=1; i<length; ++i)
             {
                 if(m_parent->m_children[i].get() == this)
                 {
@@ -951,8 +953,8 @@ namespace ChilliSource
         {
             CS_ASSERT(m_parent != nullptr, "Widget has no parent to rearrange from");
             
-            u32 length = m_parent->m_children.size();
-            for(u32 i=1; i<length; ++i)
+            auto length = m_parent->m_children.size();
+            for(auto i=1; i<length; ++i)
             {
                 if(m_parent->m_children[i].get() == this)
                 {

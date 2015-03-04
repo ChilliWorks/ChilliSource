@@ -55,6 +55,8 @@ namespace ChilliSource
         {
         public:
             
+            using size_type = std::size_t;
+            using difference_type = std::ptrdiff_t;
             using iterator = concurrent_vector_forward_iterator<TType>;
             using const_iterator = concurrent_vector_const_forward_iterator<TType>;
             using reverse_iterator = concurrent_vector_reverse_iterator<TType>;
@@ -159,7 +161,7 @@ namespace ChilliSource
             ///
             /// @return The object at the given index of the array (undefined if out of bounds)
             //--------------------------------------------------------------------
-            TType& at(u32 in_index);
+            TType& at(size_type in_index);
             //--------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -167,7 +169,7 @@ namespace ChilliSource
             ///
             /// @return The object at the given index of the array (undefined if out of bounds)
             //--------------------------------------------------------------------
-            const TType& at(u32 in_index) const;
+            const TType& at(size_type in_index) const;
             //--------------------------------------------------------------------
             /// Lock the array which prevents its contents being modified unsafely.
             ///
@@ -185,7 +187,7 @@ namespace ChilliSource
             ///
             /// @return The number of items currently in the vector
             //--------------------------------------------------------------------
-            u32 size() const;
+            size_type size() const;
             //--------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -277,7 +279,7 @@ namespace ChilliSource
             ///
             /// @return The object at the given index of the array (undefined if out of bounds)
             //--------------------------------------------------------------------
-            TType& operator[](u32 in_index);
+            TType& operator[](size_type in_index);
             //--------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -285,7 +287,7 @@ namespace ChilliSource
             ///
             /// @return The object at the given index of the array (undefined if out of bounds)
             //--------------------------------------------------------------------
-            const TType& operator[](u32 in_index) const;
+            const TType& operator[](size_type in_index) const;
             //--------------------------------------------------------------------
             /// Remove the object from the vector that is pointed to by the given
             /// iterator. Unlike STL this does not invalidate any iterators
@@ -328,7 +330,7 @@ namespace ChilliSource
             
             std::vector<std::pair<TType, bool>> m_container;
             
-            std::atomic<u32> m_size;
+            std::atomic<size_type> m_size;
             bool m_isLocked = false;
             bool m_requiresGC = false;
             
@@ -428,7 +430,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> TType& concurrent_vector<TType>::at(u32 in_index)
+        template <typename TType> TType& concurrent_vector<TType>::at(size_type in_index)
         {
             std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
             if(m_requiresGC == false)
@@ -437,10 +439,10 @@ namespace ChilliSource
             }
             else
             {
-                u32 size = m_container.size();
-                s32 count = -1;
-                u32 index = 0;
-                for(u32 i=0; i<size; ++i)
+                size_type size = m_container.size();
+                difference_type count = -1;
+                size_type index = 0;
+                for(size_type i=0; i<size; ++i)
                 {
                     if(m_container[i].second == false)
                     {
@@ -457,7 +459,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> const TType& concurrent_vector<TType>::at(u32 in_index) const
+        template <typename TType> const TType& concurrent_vector<TType>::at(size_type in_index) const
         {
             std::unique_lock<std::recursive_mutex> scopedLock(m_mutex);
             if(m_requiresGC == false)
@@ -466,10 +468,10 @@ namespace ChilliSource
             }
             else
             {
-                u32 size = m_container.size();
-                s32 count = -1;
-                u32 index = 0;
-                for(u32 i=0; i<size; ++i)
+                size_type size = m_container.size();
+                difference_type count = -1;
+                size_type index = 0;
+                for(size_type i=0; i<size; ++i)
                 {
                     if(m_container[i].second == false)
                     {
@@ -515,7 +517,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> u32 concurrent_vector<TType>::size() const
+        template <typename TType> typename concurrent_vector<TType>::size_type concurrent_vector<TType>::size() const
         {
             return m_size;
         }
@@ -599,13 +601,13 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> TType& concurrent_vector<TType>::operator[](u32 in_index)
+        template <typename TType> TType& concurrent_vector<TType>::operator[](size_type in_index)
         {
             return at(in_index);
         }
         //--------------------------------------------------------------------
         //--------------------------------------------------------------------
-        template <typename TType> const TType& concurrent_vector<TType>::operator[](u32 in_index) const
+        template <typename TType> const TType& concurrent_vector<TType>::operator[](size_type in_index) const
         {
             return at(in_index);
         }

@@ -55,7 +55,7 @@ namespace ChilliSource
         //----------------------------------------------
         u32 ThreadPool::GetNumQueuedTasks() const
         {
-            return m_tasks.size();
+            return static_cast<u32>(m_tasks.size());
         }
         //----------------------------------------------
         //----------------------------------------------

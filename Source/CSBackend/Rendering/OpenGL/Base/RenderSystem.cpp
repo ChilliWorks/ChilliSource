@@ -571,7 +571,7 @@ namespace CSBackend
             
 			//Render the buffer contents
 			EnableVertexAttributeForSemantic(inpBuffer);
-			glDrawElements(GetPrimitiveType(inpBuffer->GetPrimitiveType()), inudwNumIndices, GL_UNSIGNED_SHORT, (GLvoid*)inudwOffset);
+			glDrawElements(GetPrimitiveType(inpBuffer->GetPrimitiveType()), inudwNumIndices, GL_UNSIGNED_SHORT, reinterpret_cast<const GLvoid*>(inudwOffset));
             
             mbInvalidateAllCaches = false;
             
@@ -1009,7 +1009,7 @@ namespace CSBackend
                     eType = GL_UNSIGNED_BYTE;
                 }
                 
-                ApplyVertexAttributePointer(inpBuffer, attribName, uwNumComponents, eType, bNormalise, dwVertSize, (const GLvoid*)(s32)uwElementOffset);
+                ApplyVertexAttributePointer(inpBuffer, attribName, uwNumComponents, eType, bNormalise, dwVertSize, reinterpret_cast<const GLvoid*>(uwElementOffset));
             }
             
             CS_ASSERT_NOGLERROR("An OpenGL error occurred while enabling vertex attributes for semantics.");

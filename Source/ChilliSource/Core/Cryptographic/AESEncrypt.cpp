@@ -143,7 +143,9 @@ namespace ChilliSource
                     CS_LOG_FATAL("AES: Cannot set decryption key");
                 }
                 
-                const u32 terminatedStringSize = in_string.length() + 1;
+                CS_ASSERT(in_string.length() < static_cast<std::size_t>(std::numeric_limits<u32>::max()), "String is too long. It cannot exceed " + Core::ToString(std::numeric_limits<u32>::max()) + " characters.");
+                
+                const u32 terminatedStringSize = static_cast<u32>(in_string.length()) + 1;
                 const u32 encryptedDataSize = CalculateAlignedSize(terminatedStringSize);
                 const u32 numBlocks = encryptedDataSize / k_aesBlockSize;
                 

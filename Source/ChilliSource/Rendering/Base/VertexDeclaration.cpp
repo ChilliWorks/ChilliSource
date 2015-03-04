@@ -67,7 +67,7 @@ namespace ChilliSource
 		//-------------------------------------------------------
 		const u32 VertexDeclaration::GetNumElements() const
 		{
-			return mElements.size();
+			return static_cast<u32>(mElements.size());
 		}
 		//-------------------------------------------------------
 		/// Get Element At Index

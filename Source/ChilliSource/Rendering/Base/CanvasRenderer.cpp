@@ -668,7 +668,7 @@ namespace ChilliSource
 
             //Only build as many lines as we have been told to. If ZERO is specified
             //this means build all lines. We are also constrained by the size of the bounds
-            u32 numLines = (in_properties.m_maxNumLines == 0) ? linesOnBounds.size() : std::min((u32)linesOnBounds.size(), in_properties.m_maxNumLines);
+            u32 numLines = (in_properties.m_maxNumLines == 0) ? static_cast<u32>(linesOnBounds.size()) : std::min((u32)linesOnBounds.size(), in_properties.m_maxNumLines);
 
             f32 lineHeight = in_properties.m_lineSpacingScale * ((in_font->GetLineHeight() + in_properties.m_absLineSpacingOffset) * in_properties.m_textScale);
             f32 maxHeight = in_bounds.y;
@@ -687,7 +687,7 @@ namespace ChilliSource
 
             for(u32 lineIdx = 0; lineIdx < numLines; ++lineIdx)
             {
-                u32 lineStartIdx = result.m_characters.size();
+                u32 lineStartIdx = static_cast<u32>(result.m_characters.size());
 
                 auto characterIt = linesOnBounds[lineIdx].begin();
                 while(characterIt != linesOnBounds[lineIdx].end())
@@ -705,7 +705,7 @@ namespace ChilliSource
                 }
 
                 f32 lineWidth = cursorX - cursorXReturnPos;
-                ApplyHorizontalTextJustifications(in_properties.m_horizontalJustification, in_bounds.x, lineStartIdx, result.m_characters.size() - 1, lineWidth, result.m_characters);
+                ApplyHorizontalTextJustifications(in_properties.m_horizontalJustification, in_bounds.x, lineStartIdx, static_cast<u32>(result.m_characters.size()) - 1, lineWidth, result.m_characters);
 
                 result.m_width = std::max(lineWidth, result.m_width);
 

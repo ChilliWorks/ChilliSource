@@ -125,8 +125,10 @@ namespace ChilliSource
                 
                 sLastCommand.m_type = CommandType::k_draw;
                 sLastCommand.m_material = mpLastMaterial;
+                
                 //The offset of the indices for this batch
-                sLastCommand.m_offset = ((maSpriteCache.size() - mudwSpriteCommandCounter) * k_numSpriteIndices) * sizeof(s16);
+                sLastCommand.m_offset = ((static_cast<s32>(maSpriteCache.size()) - mudwSpriteCommandCounter) * k_numSpriteIndices) * sizeof(s16);
+                
                 //The number of indices in this batch
                 sLastCommand.m_stride = mudwSpriteCommandCounter * k_numSpriteIndices;
                 

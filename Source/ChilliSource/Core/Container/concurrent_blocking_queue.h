@@ -49,6 +49,9 @@ namespace ChilliSource
         template <typename TType> class concurrent_blocking_queue final
         {
         public:
+            
+            using size_type = std::size_t;
+            
             //---------------------------------------------------------
             /// Default constructor.
             ///
@@ -104,7 +107,7 @@ namespace ChilliSource
 			///
 			/// @return Size of queue
 			//---------------------------------------------------------
-			u32 size() const;
+			size_type size() const;
             //---------------------------------------------------------
             /// Thread safe method that will push an object onto the
             /// back of the queue
@@ -193,7 +196,7 @@ namespace ChilliSource
 		}
 		//-----------------------------------------------------------
 		//-----------------------------------------------------------
-		template <typename TType> u32 concurrent_blocking_queue<TType>::size() const
+        template <typename TType> typename concurrent_blocking_queue<TType>::size_type concurrent_blocking_queue<TType>::size() const
 		{
             std::unique_lock<std::mutex> queueLock(m_queueMutex);
             CS_ASSERT(m_finished == false, "Concurrent blocking queue is being queried after calling abort().");

@@ -238,7 +238,7 @@ namespace ChilliSource
                     memset(digest, 0, k_bufferSize);
                     
                     CHMAC_SHA1 objHMACSHA1;
-                    objHMACSHA1.HMAC_SHA1((u8*)sigBase.c_str(), sigBase.length(), (u8*)secretSigningKey.c_str(), secretSigningKey.length(), (u8*)digest);
+                    objHMACSHA1.HMAC_SHA1((u8*)sigBase.c_str(), static_cast<int>(sigBase.length()), (u8*)secretSigningKey.c_str(), static_cast<int>(secretSigningKey.length()), (u8*)digest);
                     
                     //Do a base64 encode of signature - SHA 1 digest is 160 bits
                     std::string base64String = BaseEncoding::Base64Encode((s8*)digest, 20);
