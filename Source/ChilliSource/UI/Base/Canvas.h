@@ -95,6 +95,59 @@ namespace ChilliSource
             /// @param Widget
             //----------------------------------------------------
             void RemoveWidget(Widget* in_widget);
+            //----------------------------------------------------
+            /// Searches the immediate children for a widget with
+            /// the given name and returns it.
+            /// If the child cannot be found this will return null.
+            /// If there are multiple children with the name,
+            /// the first with be returned.
+            ///
+            /// @author Nicolas Tanda
+            ///
+            /// @return The child with the given name or null if one doesn't exist.
+            //----------------------------------------------------
+            WidgetSPtr GetWidget(const std::string& in_name);
+            //----------------------------------------------------
+            /// Searches the immediate children for a widget with
+            /// the given name and returns a constant version it.
+            /// If the child cannot be found this will return null.
+            /// If there are multiple children with the name,
+            /// the first with be returned.
+            ///
+            /// @author Nicolas Tanda
+            ///
+            /// @return A constant version of the child with the
+            /// given name or null if one doesn't exist.
+            //----------------------------------------------------
+            WidgetCSPtr GetWidget(const std::string& in_name) const;
+            //----------------------------------------------------
+            /// Recurses through the widget hierarchy seaching for
+            /// a widget with the given name and returns it.
+            /// If the child cannot be found this will return null.
+            /// If there are multiple children with the same name,
+            /// the first found will be returned.
+            /// The hierarchy will be navigated breadth first.
+            ///
+            /// @author Nicolas Tanda
+            ///
+            /// @return The child with the given name or null if one doesn't exist.
+            //----------------------------------------------------
+            WidgetSPtr GetWidgetRecursive(const std::string& in_name);
+            //----------------------------------------------------
+            /// Recurses through the widget hierarchy seaching for
+            /// a widget with the given name and returns a constant
+            /// version of it. If the child cannot be found this will
+            /// return null.
+            /// If there are multiple children with the same name
+            /// the first found will be returned.
+            /// The hierarchy will be navigated breadth first.
+            ///
+            /// @author Nicolas Tanda
+            ///
+            /// @return A constant version of the child with the
+            /// given name or null if one doesn't exist.
+            //----------------------------------------------------
+            WidgetCSPtr GetWidgetRecursive(const std::string& in_name) const;
             
         private:
             friend class Core::State;

@@ -145,17 +145,41 @@ namespace ChilliSource
         {
             m_canvas->OnSuspend();
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //-------------------------------------------------------
+        //-------------------------------------------------------
         void Canvas::AddWidget(const WidgetSPtr& in_widget)
         {
             m_canvas->AddWidget(in_widget);
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //-------------------------------------------------------
+        //-------------------------------------------------------
         void Canvas::RemoveWidget(Widget* in_widget)
         {
             m_canvas->RemoveWidget(in_widget);
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        WidgetSPtr Canvas::GetWidget(const std::string& in_name)
+        {
+            return m_canvas->GetWidget(in_name);
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        WidgetCSPtr Canvas::GetWidget(const std::string& in_name) const
+        {
+            return m_canvas->GetWidget(in_name);
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        WidgetSPtr Canvas::GetWidgetRecursive(const std::string& in_name)
+        {
+            return m_canvas->GetWidgetRecursive(in_name);
+        }
+        //-------------------------------------------------------
+        //-------------------------------------------------------
+        WidgetCSPtr Canvas::GetWidgetRecursive(const std::string& in_name) const
+        {
+            return m_canvas->GetWidgetRecursive(in_name);
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
