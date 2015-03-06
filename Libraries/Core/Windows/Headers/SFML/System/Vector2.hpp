@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
+// Copyright (C) 2007-2014 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -36,7 +36,7 @@ namespace sf
 template <typename T>
 class Vector2
 {
-public :
+public:
 
     ////////////////////////////////////////////////////////////
     /// \brief Default constructor
@@ -280,7 +280,7 @@ typedef Vector2<float>        Vector2f;
 /// \li sf::Vector2<unsigned int> is sf::Vector2u
 ///
 /// The sf::Vector2 class has a small and simple interface, its x and y members
-/// can be accessed directly (there's no accessor like setX(), getX()) and it
+/// can be accessed directly (there are no accessors like setX(), getX()) and it
 /// contains no mathematical function like dot product, cross product, length, etc.
 ///
 /// Usage example:

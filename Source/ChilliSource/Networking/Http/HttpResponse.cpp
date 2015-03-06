@@ -28,6 +28,8 @@
 
 #include <ChilliSource/Networking/Http/HttpResponse.h>
 
+#include <limits>
+
 namespace ChilliSource
 {
     namespace Networking

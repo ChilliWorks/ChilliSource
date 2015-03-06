@@ -126,10 +126,9 @@ namespace ChilliSource
                 //are not fixed length but each character contains the 'trail' bytes bit pattern of 10xxxxxx.
                 //We can calculate the length by counting the number of 'trail' bytes
                 u32 length = 0;
-                while(in_begin < in_end)
+				for (auto it = in_begin; it != in_end; ++it)
                 {
-                    length += (*in_begin & 0xc0) != 0x80;
-                    ++in_begin;
+					length += ((*it) & 0xc0) != 0x80;
                 }
                 
                 return length;

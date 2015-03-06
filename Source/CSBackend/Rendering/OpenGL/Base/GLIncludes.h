@@ -41,7 +41,7 @@ typedef char GLchar;
 #include <OpenGLES/EAGL.h>
 #include <OpenGLES/EAGLDrawable.h>
 #elif defined CS_TARGETPLATFORM_WINDOWS
-#include <glew.h>
+#include <GL/glew.h>
 #include <SFML/OpenGL.hpp>
 #include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
 #else

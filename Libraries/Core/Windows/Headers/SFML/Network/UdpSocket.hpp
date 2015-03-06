@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
+// Copyright (C) 2007-2014 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -44,7 +44,7 @@ class Packet;
 ////////////////////////////////////////////////////////////
 class SFML_NETWORK_API UdpSocket : public Socket
 {
-public :
+public:
 
     ////////////////////////////////////////////////////////////
     // Constants
@@ -235,7 +235,7 @@ private:
 ///
 /// If the socket is bound to a port, it is automatically
 /// unbound from it when the socket is destroyed. However,
-/// you can unbind the socket explicitely with the Unbind
+/// you can unbind the socket explicitly with the Unbind
 /// function if necessary, to stop receiving messages or
 /// make the port available for other sockets.
 ///

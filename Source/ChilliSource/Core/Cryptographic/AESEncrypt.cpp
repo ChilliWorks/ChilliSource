@@ -30,6 +30,8 @@
 
 #include <aes/aes.h>
 
+#include <limits>
+
 namespace ChilliSource
 {
     namespace Core

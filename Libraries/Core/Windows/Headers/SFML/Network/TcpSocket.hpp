@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
+// Copyright (C) 2007-2014 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -45,7 +45,7 @@ class Packet;
 ////////////////////////////////////////////////////////////
 class SFML_NETWORK_API TcpSocket : public Socket
 {
-public :
+public:
 
     ////////////////////////////////////////////////////////////
     /// \brief Default constructor
@@ -244,7 +244,7 @@ private:
 /// class to get more details about how they work.
 ///
 /// The socket is automatically disconnected when it is destroyed,
-/// but if you want to explicitely close the connection while
+/// but if you want to explicitly close the connection while
 /// the socket instance is still alive, you can call disconnect.
 ///
 /// Usage example:

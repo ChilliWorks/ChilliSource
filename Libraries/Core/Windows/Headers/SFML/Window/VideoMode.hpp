@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
+// Copyright (C) 2007-2014 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -40,7 +40,7 @@ namespace sf
 ////////////////////////////////////////////////////////////
 class SFML_WINDOW_API VideoMode
 {
-public :
+public:
 
     ////////////////////////////////////////////////////////////
     /// \brief Default constructor
@@ -203,7 +203,7 @@ SFML_WINDOW_API bool operator >=(const VideoMode& left, const VideoMode& right);
 /// A custom video mode can also be checked directly for
 /// fullscreen compatibility with its isValid() function.
 ///
-/// Additionnally, sf::VideoMode provides a static function
+/// Additionally, sf::VideoMode provides a static function
 /// to get the mode currently used by the desktop: getDesktopMode().
 /// This allows to build windows with the same size or pixel
 /// depth as the current resolution.

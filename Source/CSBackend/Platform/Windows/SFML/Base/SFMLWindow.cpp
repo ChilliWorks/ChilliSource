@@ -36,7 +36,7 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 
-#include <glew.h>
+#include <GL/glew.h>
 #include <json/json.h>
 #include <SFML/OpenGL.hpp>
 
