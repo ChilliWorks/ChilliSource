@@ -183,7 +183,7 @@ namespace ChilliSource
                 //Take a snapshot of the number of delegates so any new ones added
                 //during the notify loop aren't notified themseleves.
                 auto numConnections = m_connections.size();
-				for (ConnectionList::size_type i = 0; i < numConnections; ++i)
+				for (typename ConnectionList::size_type i = 0; i < numConnections; ++i)
                 {
                     if(m_connections[i].m_connection != nullptr)
                     {
