@@ -38,6 +38,7 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
+#include <ChilliSource/UI/Base/Widget.h>
 
 namespace ChilliSource
 {
@@ -507,13 +508,13 @@ namespace ChilliSource
             }
             
             // Draw text
-            in_renderer->DrawText(m_cachedText.m_characters, in_transform, m_textColour, m_font->GetTexture());
+            in_renderer->DrawText(m_cachedText.m_characters, in_transform, m_textColour * GetWidget()->GetFinalColour(), m_font->GetTexture());
             
             // Draw images
             for(const auto& iconData : m_cachedImages)
             {
                 Core::Vector2 size = iconData.m_size * m_textProperties.m_textScale;
-                in_renderer->DrawBox(in_transform, size, iconData.m_offset, iconData.m_icon.GetTexture(), iconData.m_uvs, Core::Colour::k_white, Rendering::AlignmentAnchor::k_middleCentre);
+				in_renderer->DrawBox(in_transform, size, iconData.m_offset, iconData.m_icon.GetTexture(), iconData.m_uvs, Core::Colour::k_white * GetWidget()->GetFinalColour(), Rendering::AlignmentAnchor::k_middleCentre);
             }
         }
     }
