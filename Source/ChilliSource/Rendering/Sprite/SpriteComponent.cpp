@@ -501,7 +501,7 @@ namespace ChilliSource
             const Core::Matrix4& worldTransform = GetEntity()->GetTransform().GetWorldTransform();
             
 			Core::Vector2 vHalfSize(transformedSize.x * 0.5f, transformedSize.y * 0.5f);
-			Core::Vector2 vAlignedPos = GetAnchorPoint(m_originAlignment, vHalfSize);
+			Core::Vector2 vAlignedPos = -GetAnchorPoint(m_originAlignment, vHalfSize);
             
             Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
             Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
