@@ -668,7 +668,8 @@ namespace ChilliSource
 
             //Only build as many lines as we have been told to. If ZERO is specified
             //this means build all lines. We are also constrained by the size of the bounds
-            u32 numLines = (in_properties.m_maxNumLines == 0) ? static_cast<u32>(linesOnBounds.size()) : std::min((u32)linesOnBounds.size(), in_properties.m_maxNumLines);
+            u32 numLinesOnBounds = static_cast<u32>(linesOnBounds.size());
+            u32 numLines = (in_properties.m_maxNumLines == 0) ? numLinesOnBounds : std::min(numLinesOnBounds, in_properties.m_maxNumLines);
 
             f32 lineHeight = in_properties.m_lineSpacingScale * ((in_font->GetLineHeight() + in_properties.m_absLineSpacingOffset) * in_properties.m_textScale);
             f32 maxHeight = in_bounds.y;
