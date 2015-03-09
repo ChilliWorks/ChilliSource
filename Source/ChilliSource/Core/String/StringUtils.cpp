@@ -693,7 +693,9 @@ namespace ChilliSource
                 if(in_values.empty())
                     return;
                 
-                u32 numVals = in_values.size() - 1;
+                CS_ASSERT(in_values.size() < static_cast<std::size_t>(std::numeric_limits<u32>::max()), "Too many CSV items. It cannot exceed " + Core::ToString(std::numeric_limits<u32>::max()) + ".");
+                
+                u32 numVals = static_cast<u32>(in_values.size()) - 1;
                 for(u32 i=0; i<numVals; ++i)
                 {
                     out_csv += in_values[i];
@@ -709,7 +711,7 @@ namespace ChilliSource
             {
                 std::string strEscaped;
                 
-                u32 dwMax = instrURL.length();
+                u32 dwMax = static_cast<s32>(instrURL.length());
                 for(u32 i = 0; i < dwMax; i++)
                 {
                     if( (48 <= instrURL[i] && instrURL[i] <= 57) ||			// 0-9
@@ -737,7 +739,7 @@ namespace ChilliSource
                 // (0-9, A-F) are reserved for future extension"
                 
                 const unsigned char* pSrc = (const unsigned char*)instrSrc.c_str();
-                const int udwSourceLength = instrSrc.length();
+                const u32 udwSourceLength = static_cast<u32>(instrSrc.length());
                 const unsigned char* const pSourceEnd = pSrc + udwSourceLength;
                 // last decodable '%'
                 const unsigned char* const pSourceLastDecode = pSourceEnd - 2;

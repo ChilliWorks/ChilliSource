@@ -258,7 +258,7 @@ namespace ChilliSource
         //----------------------------------------------------------
         u32 SkinnedAnimationGroup::GetAnimationCount() const
         {
-            return mAnimations.size();
+            return static_cast<u32>(mAnimations.size());
         }
         //----------------------------------------------------------
         /// Is Prepared

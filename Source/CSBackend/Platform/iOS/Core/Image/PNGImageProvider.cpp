@@ -64,10 +64,10 @@ namespace CSBackend
                 CGDataProviderRef imgDataProvider = CGDataProviderCreateWithCFData(pData);
                 CGImageRef cgImage = CGImageCreateWithPNGDataProvider(imgDataProvider, nullptr, true, kCGRenderingIntentDefault);
                 
-                // Get the width and height of the image
-                u32 udwWidth = CGImageGetWidth(cgImage);
-                u32 udwHeight = CGImageGetHeight(cgImage);
-                u32 udwBitsPerComponent = CGImageGetBitsPerComponent(cgImage);
+                // Get the width and height of the image.
+                u32 udwWidth = static_cast<u32>(CGImageGetWidth(cgImage));
+                u32 udwHeight = static_cast<u32>(CGImageGetHeight(cgImage));
+                u32 udwBitsPerComponent = static_cast<u32>(CGImageGetBitsPerComponent(cgImage));
                 u32 udwBytesPerPixel = (udwBitsPerComponent * 4)/8;
                 u32 udwArea = udwWidth * udwHeight;
                 
@@ -154,7 +154,9 @@ namespace CSBackend
                 std::string abyData;
                 pImageFile->GetAll(abyData);
                 
-                CreatePNGImageFromFile(abyData.data(), abyData.size(), (CSCore::Image*)out_resource.get());
+                CS_ASSERT(abyData.size() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "Image is too large. It cannot exceed " + CSCore::ToString(std::numeric_limits<u32>::max()) + " bytes.");
+                u32 size = static_cast<u32>(abyData.size());
+                CreatePNGImageFromFile(abyData.data(), size, (CSCore::Image*)out_resource.get());
                 
                 out_resource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
                 if(in_delegate != nullptr)

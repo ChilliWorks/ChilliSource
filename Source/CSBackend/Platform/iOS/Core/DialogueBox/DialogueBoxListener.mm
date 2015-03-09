@@ -50,14 +50,16 @@
 {
     if (dialogueBoxSystem != nullptr)
     {
+        s64 tag = static_cast<s64>(alertView.tag);
+        
         // NO = 0, YES = 1
         if(buttonIndex == 0)
         {
-            dialogueBoxSystem->OnSystemConfirmDialogResult(alertView.tag, CSCore::DialogueBoxSystem::DialogueResult::k_cancel);
+            dialogueBoxSystem->OnSystemConfirmDialogResult(tag, CSCore::DialogueBoxSystem::DialogueResult::k_cancel);
         }
         else
         {
-            dialogueBoxSystem->OnSystemConfirmDialogResult(alertView.tag, CSCore::DialogueBoxSystem::DialogueResult::k_confirm);
+            dialogueBoxSystem->OnSystemConfirmDialogResult(tag, CSCore::DialogueBoxSystem::DialogueResult::k_confirm);
         }
     }
 }

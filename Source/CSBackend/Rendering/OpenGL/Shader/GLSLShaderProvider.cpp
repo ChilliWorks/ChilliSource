@@ -66,7 +66,7 @@ namespace CSBackend
             std::string GetChunk(const std::string& in_chunkTag, const std::string& in_text)
             {
                 //Find the chunk key
-                u32 tagStartIdx = in_text.find(in_chunkTag);
+                auto tagStartIdx = in_text.find(in_chunkTag);
                 if(tagStartIdx == in_text.npos)
                 {
                     CS_LOG_ERROR("Missing " + in_chunkTag + " tag from shader");
@@ -74,7 +74,7 @@ namespace CSBackend
                 }
                 
                 //Find the open brace
-                u32 openBraceLocation = in_text.find("{", tagStartIdx);
+                auto openBraceLocation = in_text.find("{", tagStartIdx);
                 if (openBraceLocation == in_text.npos)
                 {
                     CS_LOG_ERROR("Missing open brace in tag " + in_chunkTag);
@@ -82,9 +82,9 @@ namespace CSBackend
                 }
                 
                 //Grab all the data between the open and close braces
-                u32 closeBraceLocation = openBraceLocation;
+                auto closeBraceLocation = openBraceLocation;
                 u32 additionalOpenBraceCount = 0;
-                for (u32 i = openBraceLocation + 1; i < in_text.size(); ++i)
+                for (auto i = openBraceLocation + 1; i < in_text.size(); ++i)
                 {
                     bool shouldContinue = true;
                     switch (in_text[i])

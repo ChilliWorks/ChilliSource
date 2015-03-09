@@ -70,7 +70,7 @@
     
     m_data = [[NSMutableData alloc] init];
     
-    m_responseCode = ((NSHTTPURLResponse*)in_response).statusCode;
+    m_responseCode = static_cast<u32>(((NSHTTPURLResponse*)in_response).statusCode);
 }
 //-----------------------------------------------------------------------------
 /// Called when the next block of data is received. This should be appended to

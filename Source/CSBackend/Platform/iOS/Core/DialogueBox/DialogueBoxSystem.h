@@ -98,7 +98,7 @@ namespace CSBackend
             /// @param ID
             /// @param Result
             //------------------------------------------------------
-            void OnSystemConfirmDialogResult(u32 in_id, CSCore::DialogueBoxSystem::DialogueResult in_result);
+            void OnSystemConfirmDialogResult(s64 in_id, CSCore::DialogueBoxSystem::DialogueResult in_result);
             //----------------------------------------------------
 			/// Destructor.
             ///

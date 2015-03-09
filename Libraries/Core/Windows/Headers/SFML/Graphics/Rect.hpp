@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2013 Laurent Gomila (laurent.gom@gmail.com)
+// Copyright (C) 2007-2014 Laurent Gomila (laurent.gom@gmail.com)
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -41,7 +41,7 @@ namespace sf
 template <typename T>
 class Rect
 {
-public :
+public:
 
     ////////////////////////////////////////////////////////////
     /// \brief Default constructor
@@ -219,7 +219,7 @@ typedef Rect<float> FloatRect;
 /// don't intersect.
 ///
 /// sf::Rect is a template and may be used with any numeric type, but
-/// for simplicity the instanciations used by SFML are typedefed:
+/// for simplicity the instantiations used by SFML are typedef'd:
 /// \li sf::Rect<int> is sf::IntRect
 /// \li sf::Rect<float> is sf::FloatRect
 ///

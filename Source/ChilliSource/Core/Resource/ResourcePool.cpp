@@ -75,7 +75,7 @@ namespace ChilliSource
             std::string fileExtension;
             Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
             
-            u32 numProviders = in_desc.m_providers.size();
+            u32 numProviders = static_cast<u32>(in_desc.m_providers.size());
             for(u32 i=0; i<numProviders; ++i)
             {
                 if(in_desc.m_providers[i]->CanCreateResourceWithFileExtension(fileExtension))

@@ -93,9 +93,11 @@ namespace ChilliSource
                     return "";
                 }
                 
-                u32 codePointStart = std::string::npos;
-                u32 codePointLength = std::string::npos;
-                u32 numCodePoints = in_string.length();
+                std::size_t start = in_start;
+                std::size_t length = in_length;
+                std::size_t codePointStart = std::string::npos;
+                std::size_t codePointLength = std::string::npos;
+                std::size_t numCodePoints = in_string.length();
                 
                 u32 codePointIdx = 0;
                 for (u32 charIdx=0; charIdx<numCodePoints; ++charIdx, ++codePointIdx)
@@ -105,7 +107,7 @@ namespace ChilliSource
                         codePointStart = charIdx;
                     }
                     
-                    if (codePointIdx <= in_start + in_length || in_length == std::string::npos)
+                    if (codePointIdx <= start + length || length == std::string::npos)
                     {
                         codePointLength = charIdx;
                     }
@@ -133,7 +135,7 @@ namespace ChilliSource
                     }
                 }
                 
-                if (codePointIdx <= in_start + in_length || in_length == std::string::npos)
+                if (codePointIdx <= start + length || length == std::string::npos)
                 {
                     codePointLength = numCodePoints;
                 }

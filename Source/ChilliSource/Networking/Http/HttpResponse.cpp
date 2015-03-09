@@ -28,6 +28,8 @@
 
 #include <ChilliSource/Networking/Http/HttpResponse.h>
 
+#include <limits>
+
 namespace ChilliSource
 {
     namespace Networking
@@ -37,7 +39,8 @@ namespace ChilliSource
         HttpResponse::HttpResponse(Result in_result, u32 in_code, const std::string& in_data)
         : m_data(in_data), m_result(in_result), m_code(in_code)
         {
-            
+            CS_ASSERT(m_data.size() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "Response data is too large. Cannot exceed "
+                      + CSCore::ToString(std::numeric_limits<u32>::max()) + " bytes.");
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -55,7 +58,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         u32 HttpResponse::GetDataSize() const
         {
-            return m_data.size();
+            return static_cast<u32>(m_data.size());
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

@@ -136,8 +136,7 @@ namespace CSBackend
 		void FacebookPostSystem::Post(const PostDesc& in_desc, PostResultDelegate::Connection&& in_delegateConnection)
 		{
             CS_ASSERT(m_postCompleteDelegateConnection == nullptr, "Cannot post more than once at a time");
-            CSCore::TaskScheduler* taskScheduler = CSCore::Application::Get()->GetTaskScheduler();
-            CS_ASSERT(taskScheduler && taskScheduler->IsMainThread(), "You must post in the main thread");
+            CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread(), "You must post in the main thread");
 
             m_postCompleteDelegateConnection = std::move(in_delegateConnection);
 			

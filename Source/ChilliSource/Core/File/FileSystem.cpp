@@ -195,7 +195,7 @@ namespace ChilliSource
 			for (const std::string& filename : filenames)
 			{
                 std::string fileHash = GetFileChecksumMD5(in_storageLocation, in_directoryPath + filename);
-                std::string pathHash = HashMD5::GenerateBinaryHashCode(filename.c_str(), filename.length());
+                std::string pathHash = HashMD5::GenerateBinaryHashCode(filename.c_str(), static_cast<u32>(filename.length()));
                 hashes.push_back(fileHash);
                 hashes.push_back(pathHash);
 			}
@@ -214,7 +214,10 @@ namespace ChilliSource
             std::string strOutput = 0;
 			if (hashableDirectoryContents.length() > 0)
             {
-				strOutput = HashMD5::GenerateBinaryHashCode(hashableDirectoryContents.c_str(), hashableDirectoryContents.length());
+                CS_ASSERT(hashableDirectoryContents.length() < static_cast<std::vector<std::string>::size_type>(std::numeric_limits<u32>::max()), "Hashable directory contents too large. It cannot exceed "
+                          + CSCore::ToString(std::numeric_limits<u32>::max()) + " characters.");
+                
+				strOutput = HashMD5::GenerateBinaryHashCode(hashableDirectoryContents.c_str(), static_cast<u32>(hashableDirectoryContents.length()));
             }
             
 			return strOutput;
@@ -255,7 +258,7 @@ namespace ChilliSource
 			for (const std::string& filename : filenames)
 			{
 				u32 fileHash = GetFileChecksumCRC32(in_storageLocation, in_directoryPath + filename);
-				u32 pathHash = HashCRC32::GenerateHashCode(filename.c_str(), filename.length());
+				u32 pathHash = HashCRC32::GenerateHashCode(filename.c_str(), static_cast<u32>(filename.length()));
 				hashes.push_back(fileHash);
 				hashes.push_back(pathHash);
 			}
@@ -273,7 +276,12 @@ namespace ChilliSource
 			//return the hash of this as the output
 			u32 output = 0;
 			if (hashableDirectoryContents.length() > 0)
-				output = HashCRC32::GenerateHashCode(hashableDirectoryContents.c_str(), hashableDirectoryContents.length());
+            {
+                CS_ASSERT(hashableDirectoryContents.length() < static_cast<std::vector<std::string>::size_type>(std::numeric_limits<u32>::max()), "Hashable directory contents too large. It cannot exceed "
+                          + CSCore::ToString(std::numeric_limits<u32>::max()) + " characters.");
+                
+				output = HashCRC32::GenerateHashCode(hashableDirectoryContents.c_str(), static_cast<u32>(hashableDirectoryContents.length()));
+            }
 			return output;
 		}
         //--------------------------------------------------------------

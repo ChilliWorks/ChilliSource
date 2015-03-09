@@ -107,7 +107,7 @@ namespace ChilliSource
         //-------------------------------------------------------------------------
         u32 Skeleton::GetNumJoints() const
         {
-            return madwJoints.size();
+            return static_cast<u32>(madwJoints.size());
         }
 		//-------------------------------------------------------------------------
 		/// Get Nodes

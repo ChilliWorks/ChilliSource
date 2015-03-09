@@ -112,7 +112,7 @@ namespace CSBackend
         //--------------------------------------------------
         void RemoteNotificationSystem::OnRemoteTokenReceived(NSData* in_token)
         {
-            m_token = CSCore::BaseEncoding::Base64Encode((const s8*)[in_token bytes], in_token.length);
+            m_token = CSCore::BaseEncoding::Base64Encode((const s8*)[in_token bytes], static_cast<u32>(in_token.length));
             
             if(m_delegate != nullptr)
             {
