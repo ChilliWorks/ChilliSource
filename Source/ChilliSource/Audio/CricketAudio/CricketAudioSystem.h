@@ -98,6 +98,12 @@ namespace ChilliSource
 			/// @return Whether or not the interface is implemented.
 			//------------------------------------------------------------------------------
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+			//------------------------------------------------------------------------------
+			/// Destructor.
+			///
+			/// @author Ian Copland
+			//------------------------------------------------------------------------------
+			~CricketAudioSystem();
 		private:
 			friend class CSCore::Application;
 			friend class CkSound;
@@ -159,12 +165,6 @@ namespace ChilliSource
 			/// @author Ian Copland
 			//------------------------------------------------------------------------------
 			void OnSuspend() override;
-			//------------------------------------------------------------------------------
-			/// Shuts down the cricket audio system.
-			///
-			/// @author Ian Copland
-			///------------------------------------------------------------------------------
-			void OnDestroy() override;
 
 			std::vector<CkSound*> m_ckAudioList;
 		};

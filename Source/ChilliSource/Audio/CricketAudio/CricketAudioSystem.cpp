@@ -146,10 +146,14 @@ namespace ChilliSource
 		void CricketAudioSystem::OnSuspend()
 		{
 			CkSuspend();
-		}
+		}			
 		//------------------------------------------------------------------------------
-		///-----------------------------------------------------------------------------
-		void CricketAudioSystem::OnDestroy()
+		// The Cricket Audio system is shutdown in the destructor rather then OnDestroy
+		// becuase the resource cleanup phase is immediately after OnDestroy. If
+		// showdown occurs before this, any remaining CkBank resources will not be
+		// destroyed correctly.
+		//------------------------------------------------------------------------------
+		CricketAudioSystem::~CricketAudioSystem()
 		{
 			CkShutdown();
 		}
