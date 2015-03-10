@@ -104,16 +104,16 @@ namespace ChilliSource
             //-----------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param RHS of addition (scaler)
+            /// @param RHS of addition (scalar)
             ///
-            /// @return Scaler addition to this
+            /// @return scalar addition to this
             //-----------------------------------------------------------
-			inline const Colour& operator+=(f32 in_scaler)
+			inline const Colour& operator+=(f32 in_scalar)
             {
-                r += in_scaler;
-                g += in_scaler;
-                b += in_scaler;
-                a += in_scaler;
+                r += in_scalar;
+                g += in_scalar;
+                b += in_scalar;
+                a += in_scalar;
                 
                 return *this;
             }
@@ -136,16 +136,16 @@ namespace ChilliSource
             //-----------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param RHS of subtraction (scaler)
+            /// @param RHS of subtraction (scalar)
             ///
-            /// @return Scaler subtraction to this
+            /// @return scalar subtraction to this
             //-----------------------------------------------------------
-			inline const Colour& operator-=(f32 in_scaler)
+			inline const Colour& operator-=(f32 in_scalar)
             {
-                r -= in_scaler;
-                g -= in_scaler;
-                b -= in_scaler;
-                a -= in_scaler;
+                r -= in_scalar;
+                g -= in_scalar;
+                b -= in_scalar;
+                a -= in_scalar;
                 
                 return *this;
             }
@@ -168,16 +168,16 @@ namespace ChilliSource
             //-----------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param RHS of multiplication (scaler)
+            /// @param RHS of multiplication (scalar)
             ///
-            /// @return Scaler multiplication to this
+            /// @return scalar multiplication to this
             //-----------------------------------------------------------
-			inline const Colour& operator*=(f32 in_scaler)
+			inline const Colour& operator*=(f32 in_scalar)
             {
-                r *= in_scaler;
-                g *= in_scaler;
-                b *= in_scaler;
-                a *= in_scaler;
+                r *= in_scalar;
+                g *= in_scalar;
+                b *= in_scalar;
+                a *= in_scalar;
                 
                 return *this;
             }
@@ -200,16 +200,16 @@ namespace ChilliSource
             //-----------------------------------------------------------
             /// @author S Downie
             ///
-            /// @param RHS of division (scaler)
+            /// @param RHS of division (scalar)
             ///
-            /// @return Scaler division to this
+            /// @return scalar division to this
             //-----------------------------------------------------------
-			inline const Colour& operator/=(f32 in_scaler)
+			inline const Colour& operator/=(f32 in_scalar)
             {
-                r /= in_scaler;
-                g /= in_scaler;
-                b /= in_scaler;
-                a /= in_scaler;
+                r /= in_scalar;
+                g /= in_scalar;
+                b /= in_scalar;
+                a /= in_scalar;
                 
                 return *this;
             }
@@ -235,13 +235,25 @@ namespace ChilliSource
         /// @author S Downie
         ///
         /// @param LHS of addition (colour)
-        /// @param RHS of addition (scaler)
+        /// @param RHS of addition (scalar)
         ///
-        /// @return Scaler addition of colours
+        /// @return scalar addition of colours
         //-----------------------------------------------------------
-        inline Colour operator+(const Colour& in_colour, f32 in_scaler)
+        inline Colour operator+(const Colour& in_colour, f32 in_scalar)
         {
-            return Colour(in_colour.r + in_scaler, in_colour.g + in_scaler, in_colour.b + in_scaler, in_colour.a + in_scaler);
+            return Colour(in_colour.r + in_scalar, in_colour.g + in_scalar, in_colour.b + in_scalar, in_colour.a + in_scalar);
+        }
+        //-----------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @param LHS of addition (scalar)
+        /// @param RHS of addition (colour)
+        ///
+        /// @return The colour added to the scalar.
+        //-----------------------------------------------------------
+        inline Colour operator+(f32 in_scalar, const Colour& in_colour)
+        {
+            return in_colour + in_scalar;
         }
         //-----------------------------------------------------------
         /// @author S Downie
@@ -259,21 +271,33 @@ namespace ChilliSource
         /// @author S Downie
         ///
         /// @param LHS of subtraction (colour)
-        /// @param RHS of subtraction (scaler)
+        /// @param RHS of subtraction (scalar)
         ///
-        /// @return Scaler subtraction of colours
+        /// @return scalar subtraction of colours
         //-----------------------------------------------------------
-        inline Colour operator-(const Colour& in_colour, f32 in_scaler)
+        inline Colour operator-(const Colour& in_colour, f32 in_scalar)
         {
-            return Colour(in_colour.r - in_scaler, in_colour.g - in_scaler, in_colour.b - in_scaler, in_colour.a - in_scaler);
+            return Colour(in_colour.r - in_scalar, in_colour.g - in_scalar, in_colour.b - in_scalar, in_colour.a - in_scalar);
+        }
+        //-----------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @param LHS of subtraction (colour)
+        /// @param RHS of subtraction (scalar)
+        ///
+        /// @return The colour subtracted from the scalar.
+        //-----------------------------------------------------------
+        inline Colour operator-(f32 in_scalar, const Colour& in_colour)
+        {
+            return Colour(in_scalar - in_colour.r, in_scalar - in_colour.g, in_scalar - in_colour.b, in_scalar - in_colour.a);
         }
         //-----------------------------------------------------------
         /// @author S Downie
         ///
-        /// @param LHS of mulitplication
-        /// @param RHS of mulitplication
+        /// @param LHS of multiplication
+        /// @param RHS of multiplication
         ///
-        /// @return Component wise mulitplication of colours
+        /// @return Component wise multiplication of colours
         //-----------------------------------------------------------
         inline Colour operator*(const Colour& in_lhs, const Colour& in_rhs)
         {
@@ -282,14 +306,26 @@ namespace ChilliSource
         //-----------------------------------------------------------
         /// @author S Downie
         ///
-        /// @param LHS of mulitplication (colour)
-        /// @param RHS of mulitplication (scaler)
+        /// @param LHS of multiplication (colour)
+        /// @param RHS of multiplication (scalar)
         ///
-        /// @return Scaler mulitplication of colours
+        /// @return scalar multiplication of colours
         //-----------------------------------------------------------
-        inline Colour operator*(const Colour& in_colour, f32 in_scaler)
+        inline Colour operator*(const Colour& in_colour, f32 in_scalar)
         {
-            return Colour(in_colour.r * in_scaler, in_colour.g * in_scaler, in_colour.b * in_scaler, in_colour.a * in_scaler);
+            return Colour(in_colour.r * in_scalar, in_colour.g * in_scalar, in_colour.b * in_scalar, in_colour.a * in_scalar);
+        }
+        //-----------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @param LHS of multiplication (colour)
+        /// @param RHS of multiplication (scalar)
+        ///
+        /// @return The scalar multiplied by the colour.
+        //-----------------------------------------------------------
+        inline Colour operator*(f32 in_scalar, const Colour& in_colour)
+        {
+            return in_colour * in_scalar;
         }
         //-----------------------------------------------------------
         /// @author S Downie
@@ -307,13 +343,25 @@ namespace ChilliSource
         /// @author S Downie
         ///
         /// @param LHS of division (colour)
-        /// @param RHS of division (scaler)
+        /// @param RHS of division (scalar)
         ///
-        /// @return Scaler division of colours
+        /// @return scalar division of colours
         //-----------------------------------------------------------
-        inline Colour operator/(const Colour& in_colour, f32 in_scaler)
+        inline Colour operator/(const Colour& in_colour, f32 in_scalar)
         {
-            return Colour(in_colour.r / in_scaler, in_colour.g / in_scaler, in_colour.b / in_scaler, in_colour.a / in_scaler);
+            return Colour(in_colour.r / in_scalar, in_colour.g / in_scalar, in_colour.b / in_scalar, in_colour.a / in_scalar);
+        }
+        //-----------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @param LHS of division (colour)
+        /// @param RHS of division (scalar)
+        ///
+        /// @return The scalar divided by the colour.
+        //-----------------------------------------------------------
+        inline Colour operator/(f32 in_scalar, const Colour& in_colour)
+        {
+            return Colour(in_scalar / in_colour.r, in_scalar / in_colour.g, in_scalar / in_colour.b, in_scalar / in_colour.a);
         }
         //-----------------------------------------------------------
         /// @author S Downie
