@@ -85,11 +85,11 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @param The texture.
-            /// @param The UVs.
-            /// @param The colour.
             /// @param The insets.
+            /// @param [Optional] The colour. Defaults to white.
+            /// @param [Optional] The UVs. Defaults to (0, 0, 1, 1)
             //--------------------------------------------------------------
-            NinePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::UVs& in_uvs, const Core::Colour& in_colour, const Core::Vector4& in_insets);
+            NinePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Core::Vector4& in_insets, const Core::Colour& in_colour = Core::Colour::k_white, const Rendering::UVs& in_uvs = Rendering::UVs());
             //--------------------------------------------------------------
             /// Constructor. Creates a standard drawable definition from
             /// with a texture atlas.
@@ -99,12 +99,12 @@ namespace ChilliSource
             /// @param The texture.
             /// @param The texture atlas.
             /// @param The texture atlas id.
-            /// @param The UVs.
-            /// @param The colour.
             /// @param The insets.
+            /// @param [Optional] The colour. Defaults to white.
+            /// @param [Optional] The UVs. Defaults to (0, 0, 1, 1)
             //--------------------------------------------------------------
-            NinePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Rendering::UVs& in_uvs,
-                                  const Core::Colour& in_colour, const Core::Vector4& in_insets);
+            NinePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Core::Vector4& in_insets,
+                                 const Core::Colour& in_colour = Core::Colour::k_white, const Rendering::UVs& in_uvs = Rendering::UVs());
             //--------------------------------------------------------------
             /// Allows querying of whether or not the component implements
             /// the interface associated with the given interface Id.

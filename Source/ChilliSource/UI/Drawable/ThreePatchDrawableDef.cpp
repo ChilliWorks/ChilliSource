@@ -184,16 +184,16 @@ namespace ChilliSource
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        ThreePatchDrawableDef::ThreePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::UVs& in_uvs, const Core::Colour& in_colour, const Core::Vector2& in_insets, ThreePatchDrawable::Direction in_direction)
-            : m_texture(in_texture), m_uvs(in_uvs), m_colour(in_colour), m_insets(in_insets), m_direction(in_direction)
+        ThreePatchDrawableDef::ThreePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Core::Vector2& in_insets, ThreePatchDrawable::Direction in_direction, const Core::Colour& in_colour, const Rendering::UVs& in_uvs)
+            : m_texture(in_texture), m_insets(in_insets), m_direction(in_direction), m_colour(in_colour), m_uvs(in_uvs)
         {
             CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Three-Patch Drawable Def.");
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        ThreePatchDrawableDef::ThreePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Rendering::UVs& in_uvs,
-                                                     const Core::Colour& in_colour, const Core::Vector2& in_insets, ThreePatchDrawable::Direction in_direction)
-            : m_texture(in_texture), m_atlas(in_atlas), m_atlasId(in_atlasId), m_uvs(in_uvs), m_colour(in_colour), m_insets(in_insets), m_direction(in_direction)
+        ThreePatchDrawableDef::ThreePatchDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Core::Vector2& in_insets, ThreePatchDrawable::Direction in_direction,
+                                                     const Core::Colour& in_colour, const Rendering::UVs& in_uvs)
+            : m_texture(in_texture), m_atlas(in_atlas), m_atlasId(in_atlasId), m_insets(in_insets), m_direction(in_direction), m_colour(in_colour), m_uvs(in_uvs)
         {
             CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Three-Patch Drawable Def.");
             CS_ASSERT(m_atlas != nullptr, "Cannot specify a null texture atlas in a Three-Patch Drawable Def. Use the texture only constructor instead.");
