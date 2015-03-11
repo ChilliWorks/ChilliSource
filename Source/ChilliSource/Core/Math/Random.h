@@ -30,8 +30,8 @@
 #define _CHILLISOURCE_CORE_MATH_RANDOM_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/NumericLimits.h>
 
-#include <limits>
 #include <random>
 
 namespace ChilliSource
@@ -59,7 +59,7 @@ namespace ChilliSource
             ///
             /// @return A value within the range.
             //------------------------------------------------------------------------------
-            template <typename TType> TType Generate(TType in_lower = std::numeric_limits<TType>::lowest(), TType in_upper = std::numeric_limits<TType>::max());
+			template <typename TType> TType Generate(TType in_lower = NumericLimits::Lowest<TType>(), TType in_upper = NumericLimits::Highest<TType>());
 			//------------------------------------------------------------------------------
 			/// Generates a psuedo-random number in the range between 0.0 and 1.0 for the
             /// given type.
@@ -129,7 +129,7 @@ namespace ChilliSource
             ///
             /// @return The value in the given range.
             //------------------------------------------------------------------------------
-            template <typename TType> TType GenerateComponentwise(TType in_lower = std::numeric_limits<TType>::lowest(), TType in_upper = std::numeric_limits<TType>::max());
+			template <typename TType> TType GenerateComponentwise(TType in_lower = NumericLimits::Lowest<TType>(), TType in_upper = NumericLimits::Highest<TType>());
 		}
 	}
 }

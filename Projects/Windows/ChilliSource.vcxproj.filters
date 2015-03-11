@@ -2090,5 +2090,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextIcon.h">
       <Filter>ChilliSource\UI\Text</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\NumericLimits.h">
+      <Filter>ChilliSource\Core\Math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

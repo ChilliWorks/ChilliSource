@@ -330,6 +330,7 @@
 		8113672F19C99A2E00D9AEDC /* Base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base.h; sourceTree = "<group>"; };
 		811B181619D19AF400B06B5D /* RotationGesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RotationGesture.cpp; sourceTree = "<group>"; };
 		811B181719D19AF400B06B5D /* RotationGesture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotationGesture.h; sourceTree = "<group>"; };
+		813017BB1AAF44BA000C7B2E /* NumericLimits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NumericLimits.h; sourceTree = "<group>"; };
 		8138A8E41A5804AA00C81462 /* CkSound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkSound.cpp; sourceTree = "<group>"; };
 		8138A8E51A5804AA00C81462 /* CkSound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkSound.h; sourceTree = "<group>"; };
 		8138A8E61A5804AA00C81462 /* CkBank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkBank.cpp; sourceTree = "<group>"; };
@@ -1821,6 +1822,7 @@
 				81D8B2971962E0EB0010DA84 /* MathUtils.h */,
 				81D8B2981962E0EB0010DA84 /* Matrix3.h */,
 				81D8B2991962E0EB0010DA84 /* Matrix4.h */,
+				813017BB1AAF44BA000C7B2E /* NumericLimits.h */,
 				81D8B29A1962E0EB0010DA84 /* Quaternion.h */,
 				81C9253C1A5C3B1800B3AE11 /* Random.cpp */,
 				81C9253D1A5C3B1800B3AE11 /* Random.h */,
