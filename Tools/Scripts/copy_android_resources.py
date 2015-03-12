@@ -82,8 +82,8 @@ def copy_file_tree(src_path, dst_path):
 def copy_resources():
     file_system_utils.delete_directory("src/main/assets/")
 
-    app_src_path = "../../../Content/AppResources/"
-    cs_src_path = "../../../ChilliSource/CSResources/"
+    app_src_path = "../../../../Content/AppResources/"
+    cs_src_path = "../../../../ChilliSource/CSResources/"
 
     app_dst_path = "src/main/assets/AppResources/"
     cs_dst_path = "src/main/assets/CSResources/"
@@ -99,7 +99,7 @@ def copy_resources():
 # @param Project directory path
 #----------------------------------------------------------------------
 def copy_jars():
-    jars_src_path = "../../../ChilliSource/Libraries/Core/Android/Libs/jars/"
+    jars_src_path = "../../../../ChilliSource/Libraries/Core/Android/Libs/jars/"
     jars_dst_path = "src/main/libs/"
 
     file_system_utils.copy_directory(jars_src_path, jars_dst_path)
@@ -112,8 +112,8 @@ def copy_jars():
 # @param Project directory path
 #----------------------------------------------------------------------
 def premultiply_pngs():
-    jarFile = "../../../ChilliSource/Tools/PNGAlphaPremultiplier.jar"
-    png_files = file_system_utils.get_file_paths_with_extensions("assets", ["png"])
+    jarFile = "../../../../ChilliSource/Tools/PNGAlphaPremultiplier.jar"
+    png_files = file_system_utils.get_file_paths_with_extensions("src/main/assets/", ["png"])
 
     for png_file in png_files:
         subprocess.call(["java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarFile, "--input", png_file, "--output", png_file]);
