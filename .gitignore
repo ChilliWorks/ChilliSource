@@ -36,3 +36,5 @@ Libraries/Core/Android/Projects/google-play-services_lib/gen
 Libraries/Core/Android/Projects/facebook/gen
 CSBase.sdf
 CSBase.opensdf
+Projects/Android/chillisource/build
+Projects/Android/chillisource/src/main/obj

@@ -1,5 +1,5 @@
 #
-#  android_build_release.mk
+#  AndroidApplicationSettings.mk
 #  Chilli Source
 #  Created by Ian Copland on 19/06/2014.
 #
@@ -26,6 +26,8 @@
 #  THE SOFTWARE.
 #
 
-#call the android build with release target flags setup.
-CS_CXXFLAGS_TARGET := -O3 -DNDEBUG -DCS_LOGLEVEL_WARNING
-include ../../ChilliSource/Tools/Scripts/android_build.mk
+CS_NDK_TOOLCHAIN_VERSION := 4.9
+CS_APP_STL := gnustl_static
+CS_LOCAL_CPP_FEATURES := exceptions rtti
+CS_APP_PLATFORM = android-9
+CS_APP_ABI := armeabi-v7a

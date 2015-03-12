@@ -1,11 +1,11 @@
 #
-#  android_build_debug.mk
-#  Chilli Source
-#  Created by Ian Copland on 19/06/2014.
+#  Application.mk
+#  CSTest
+#  Created by Ian Copland on 12/03/2012
 #
 #  The MIT License (MIT)
 #
-#  Copyright (c) 2014 Tag Games Limited
+#  Copyright (c) 2012 Tag Games Limited
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a copy
 #  of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,11 @@
 #  THE SOFTWARE.
 #
 
-#call the android build with debug target flags setup.
-CS_CXXFLAGS_TARGET := -g -DDEBUG -DCS_ENABLE_DEBUG -DCS_LOGLEVEL_VERBOSE
-include ../../ChilliSource/Tools/Scripts/android_build.mk
+CS_PROJECT_ROOT=$(realpath ../../../../../../../)
+include $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts/AndroidApplicationSettings.mk
+
+NDK_TOOLCHAIN_VERSION := $(CS_NDK_TOOLCHAIN_VERSION)
+APP_STL := $(CS_APP_STL)
+LOCAL_CPP_FEATURES += $(CS_LOCAL_CPP_FEATURES)
+APP_PLATFORM := $(CS_APP_PLATFORM)
+APP_ABI := $(CS_APP_ABI)

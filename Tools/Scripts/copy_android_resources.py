@@ -79,14 +79,14 @@ def copy_file_tree(src_path, dst_path):
 #
 # @param Project directory path
 #----------------------------------------------------------------------
-def copy_resources(project_dir):
-    file_system_utils.delete_directory(os.path.join(project_dir, "assets"))
+def copy_resources():
+    file_system_utils.delete_directory("src/main/assets/")
 
-    app_src_path = os.path.join(project_dir, "..", "..", "Content", "AppResources")
-    cs_src_path = os.path.join(project_dir, "..", "..", "ChilliSource", "CSResources")
+    app_src_path = "../../../Content/AppResources/"
+    cs_src_path = "../../../ChilliSource/CSResources/"
 
-    app_dst_path = os.path.join(project_dir, "assets", "AppResources")
-    cs_dst_path = os.path.join(project_dir, "assets", "CSResources")
+    app_dst_path = "src/main/assets/AppResources/"
+    cs_dst_path = "src/main/assets/CSResources/"
 
     copy_file_tree(app_src_path, app_dst_path)
     copy_file_tree(cs_src_path, cs_dst_path)
@@ -98,9 +98,9 @@ def copy_resources(project_dir):
 #
 # @param Project directory path
 #----------------------------------------------------------------------
-def copy_jars(project_dir):
-    jars_src_path = os.path.join(project_dir, "..", "..", "ChilliSource", "Libraries", "Core", "Android", "Libs", "jars")
-    jars_dst_path = os.path.join(project_dir, "libs")
+def copy_jars():
+    jars_src_path = "../../../ChilliSource/Libraries/Core/Android/Libs/jars/"
+    jars_dst_path = "src/main/libs/"
 
     file_system_utils.copy_directory(jars_src_path, jars_dst_path)
 
@@ -111,9 +111,9 @@ def copy_jars(project_dir):
 #
 # @param Project directory path
 #----------------------------------------------------------------------
-def premultiply_pngs(project_dir):
-    jarFile = os.path.join(project_dir, "..", "..", "ChilliSource", "Tools", "PNGAlphaPremultiplier.jar")
-    png_files = file_system_utils.get_file_paths_with_extensions(os.path.join(project_dir, "assets"), ["png"])
+def premultiply_pngs():
+    jarFile = "../../../ChilliSource/Tools/PNGAlphaPremultiplier.jar"
+    png_files = file_system_utils.get_file_paths_with_extensions("assets", ["png"])
 
     for png_file in png_files:
         subprocess.call(["java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarFile, "--input", png_file, "--output", png_file]);
@@ -125,12 +125,13 @@ def premultiply_pngs(project_dir):
 #
 # @param Project directory path
 #----------------------------------------------------------------------
-def build_manifest(project_dir):
-    jarFile = os.path.join(project_dir, "..", "..", "ChilliSource", "Tools", "AndroidManifestBuilder.jar")
-    userManifest = os.path.join(project_dir, "CSAndroidManifest.xml")
-    templateManifest = os.path.join(project_dir, "..", "..", "ChilliSource", "Tools", "Scripts", "AndroidManifestTemplate.xml")
-    outputManifest = os.path.join(project_dir, "AndroidManifest.xml")
-    subprocess.call(["java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarFile, "--input", userManifest, "--template", templateManifest, "--output", outputManifest]);
+def build_manifest():
+    print ("TODO: Re-add automatic manifest generation.")
+    #jarFile = os.path.join(project_dir, "..", "..", "..", "ChilliSource", "Tools", "AndroidManifestBuilder.jar")
+    #userManifest = os.path.join(project_dir, "CSAndroidManifest.xml")
+    #templateManifest = os.path.join(project_dir, "..", "..", "ChilliSource", "Tools", "Scripts", "AndroidManifestTemplate.xml")
+    #outputManifest = os.path.join(project_dir, "AndroidManifest.xml")
+    #subprocess.call(["java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarFile, "--input", userManifest, "--template", templateManifest, "--output", outputManifest]);
 
 #----------------------------------------------------------------------
 # The entry point into the script.
@@ -140,15 +141,15 @@ def build_manifest(project_dir):
 # @param The list of arguments.
 #----------------------------------------------------------------------
 def main(args):
-    if not len(args) is 2:
-        print("ERROR: Missing project path")
-        return
+    #if not len(args) is 2:
+    #    print("ERROR: Missing project path")
+    #    return
 
-    project_dir = args[1]
-    copy_resources(project_dir)
-    copy_jars(project_dir)
-    premultiply_pngs(project_dir)
-    build_manifest(project_dir)
+    #project_dir = args[1]
+    copy_resources()
+    copy_jars()
+    premultiply_pngs()
+    build_manifest()
 
 if __name__ == "__main__":
     main(sys.argv)
