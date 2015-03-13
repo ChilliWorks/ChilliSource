@@ -33,18 +33,23 @@ import subprocess
 import os
 import shutil
 
-#----------------------------------------------------------------------
-# Copies the resource from CSResources and AppResources
-# into res and assets directories that are required by Android.
+#------------------------------------------------------------------------------
+# Copies the resource from CSResources and AppResources into the assets 
+# directory as required by Android. Any PNGs will also be pre-multiplied when
+# copied.
 #
-# Copies the jars into libs as required by Android.
+# This will also build the AndroidManifest.xml from the provided
+# CSAndroidManifest.xml file.
 #
-# Premulitplies all the PNGs in assets
+# The script takes two arguments: 
+#  1) The root of the ChilliSource project.
+#  2) The android project directory. i.e, the directory that contains the
+#     AndroidManifest.xml and assets/.
 #
-# @author S Downie
-#----------------------------------------------------------------------
+# @author Ian Copland
+#------------------------------------------------------------------------------
 
-#----------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Copies the files from src directory to dst directory but excludes
 # those that are tagged ".ios" or ".windows"
 #
@@ -52,7 +57,7 @@ import shutil
 #
 # @param Source path
 # @param Destination path
-#----------------------------------------------------------------------
+#------------------------------------------------------------------------------
 def copy_file_tree(src_path, dst_path):
     excludes = [".ios", ".windows", ".DS_Store"]
     includes = [".android"]
@@ -71,86 +76,76 @@ def copy_file_tree(src_path, dst_path):
             if filter_func(item):
                 shutil.copy2(src, dst)
 
-#----------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Copies the resource from ProjectResources, CSResources and AppResources
 # into res and assets directories that are required by Android.
 #
 # @author S Downie
 #
-# @param Project directory path
-#----------------------------------------------------------------------
-def copy_resources():
-    file_system_utils.delete_directory("src/main/assets/")
+# @param The path to the root of the ChilliSource project.
+# @param The path to the android project.
+#------------------------------------------------------------------------------
+def copy_resources(project_root_dir, project_android_dir):
+    file_system_utils.delete_directory(os.path.join(project_android_dir, "assets/"))
 
-    app_src_path = "../../../../Content/AppResources/"
-    cs_src_path = "../../../../ChilliSource/CSResources/"
+    app_src_path = os.path.join(project_root_dir, "Content/AppResources/")
+    cs_src_path = os.path.join(project_root_dir, "ChilliSource/CSResources/")
 
-    app_dst_path = "src/main/assets/AppResources/"
-    cs_dst_path = "src/main/assets/CSResources/"
+    app_dst_path = os.path.join(project_android_dir, "assets/AppResources/")
+    cs_dst_path = os.path.join(project_android_dir, "assets/CSResources/")
 
     copy_file_tree(app_src_path, app_dst_path)
     copy_file_tree(cs_src_path, cs_dst_path)
 
-#----------------------------------------------------------------------
-# Copies the jars into libs as required by Android.
-#
-# @author S Downie
-#
-# @param Project directory path
-#----------------------------------------------------------------------
-def copy_jars():
-    print ("TODO: Re-add automatic handling of Jars.")
-    #jars_src_path = "../../../../ChilliSource/Libraries/Core/Android/Libs/jars/"
-    #jars_dst_path = "src/main/libs/"
-
-    #file_system_utils.copy_directory(jars_src_path, jars_dst_path)
-
-#----------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Premulitplies all the PNGs in assets
 #
 # @author S Downie
 #
-# @param Project directory path
-#----------------------------------------------------------------------
-def premultiply_pngs():
-    jarFile = "../../../../ChilliSource/Tools/PNGAlphaPremultiplier.jar"
-    png_files = file_system_utils.get_file_paths_with_extensions("src/main/assets/", ["png"])
+# @param The path to the root of the ChilliSource project.
+# @param The path to the android project.
+#------------------------------------------------------------------------------
+def premultiply_pngs(project_root_dir, project_android_dir):
+    jarFile = os.path.join(project_root_dir, "ChilliSource/Tools/PNGAlphaPremultiplier.jar");
+    png_files = file_system_utils.get_file_paths_with_extensions(os.path.join(project_android_dir, "assets/"), ["png"])
 
     for png_file in png_files:
         subprocess.call(["java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarFile, "--input", png_file, "--output", png_file]);
 
-#----------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # Builds the android manifest.
 #
-# @author I Copland
+# @author Ian Copland
 #
-# @param Project directory path
-#----------------------------------------------------------------------
-def build_manifest():
-    print ("TODO: Re-add automatic manifest generation.")
-    #jarFile = os.path.join(project_dir, "..", "..", "..", "ChilliSource", "Tools", "AndroidManifestBuilder.jar")
-    #userManifest = os.path.join(project_dir, "CSAndroidManifest.xml")
-    #templateManifest = os.path.join(project_dir, "..", "..", "ChilliSource", "Tools", "Scripts", "AndroidManifestTemplate.xml")
-    #outputManifest = os.path.join(project_dir, "AndroidManifest.xml")
-    #subprocess.call(["java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarFile, "--input", userManifest, "--template", templateManifest, "--output", outputManifest]);
+# @param The path to the root of the ChilliSource project.
+# @param The path to the android project.
+#------------------------------------------------------------------------------
+def build_manifest(project_root_dir, project_android_dir):
+    jarFile = os.path.join(project_root_dir, "ChilliSource/Tools/AndroidManifestBuilder.jar")
+    userManifest = os.path.join(project_android_dir, "CSAndroidManifest.xml")
+    templateManifest = os.path.join(project_root_dir, "ChilliSource/Tools/Scripts/AndroidManifestTemplate.xml")
+    outputManifest = os.path.join(project_android_dir, "AndroidManifest.xml")
+    subprocess.call(["java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarFile, "--input", userManifest, "--template", templateManifest, "--output", outputManifest]);
 
-#----------------------------------------------------------------------
+#------------------------------------------------------------------------------
 # The entry point into the script.
 #
 # @author S Downie
 #
 # @param The list of arguments.
-#----------------------------------------------------------------------
+#------------------------------------------------------------------------------
 def main(args):
-    #if not len(args) is 2:
-    #    print("ERROR: Missing project path")
-    #    return
+    if not len(args) is 3:
+        print("ERROR: Incorrect arguments. The script takes two arguments: ")
+        print("  1) The root of the ChilliSource project.")
+        print("  2) The android project directory. i.e, the directory that contains the AndroidManifest.xml and assets/.") 
+        return
 
-    #project_dir = args[1]
-    copy_resources()
-    copy_jars()
-    premultiply_pngs()
-    build_manifest()
+    project_root_dir = args[1]
+    project_android_dir = args[2]
+    copy_resources(project_root_dir, project_android_dir)
+    premultiply_pngs(project_root_dir, project_android_dir)
+    build_manifest(project_root_dir, project_android_dir)
 
 if __name__ == "__main__":
     main(sys.argv)

@@ -1,5 +1,5 @@
 #
-#  AndroidPrepare.mk
+#  AndroidBuildInitialise.mk
 #  Chilli Source
 #  Created by Ian Copland on 12/03/2015.
 #
@@ -37,7 +37,7 @@
 # @author Ian Copland
 #------------------------------------------------------------------------------
 
-include $(call my-dir)/AndroidBuildSettings.mk
+include $(call my-dir)/AndroidBuildConfig.mk
 
 #copy pre-built static libraries
 include $(CLEAR_VARS)

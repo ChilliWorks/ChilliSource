@@ -1,11 +1,11 @@
 #
 #  Application.mk
-#  CSTest
-#  Created by Ian Copland on 12/03/2012
+#  Chilli Source
+#  Created by Ian Copland on 12/03/2015
 #
 #  The MIT License (MIT)
 #
-#  Copyright (c) 2012 Tag Games Limited
+#  Copyright (c) 2015 Tag Games Limited
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a copy
 #  of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@
 #
 
 CS_PROJECT_ROOT=$(realpath ../../../../../../../)
-include $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts/AndroidApplicationSettings.mk
+include $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts/AndroidApplicationConfig.mk
 
 NDK_TOOLCHAIN_VERSION := $(CS_NDK_TOOLCHAIN_VERSION)
 APP_STL := $(CS_APP_STL)

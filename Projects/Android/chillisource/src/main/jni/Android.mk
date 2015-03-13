@@ -28,7 +28,7 @@
 
 #prepare the ChilliSource libraries
 CS_PROJECT_ROOT=$(realpath ../../../../../../..)
-include $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts/AndroidBuildSettings.mk
+include $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts/AndroidBuildConfig.mk
 
 #gather all files in the engine that should be built
 CS_SOURCEFILES_CHILLISOURCE := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/ChilliSource/' '--extensions' 'cpp,c,cc')

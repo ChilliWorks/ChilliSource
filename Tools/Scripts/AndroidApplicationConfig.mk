@@ -1,5 +1,5 @@
 #
-#  AndroidApplicationSettings.mk
+#  AndroidApplicationConfig.mk
 #  Chilli Source
 #  Created by Ian Copland on 19/06/2014.
 #

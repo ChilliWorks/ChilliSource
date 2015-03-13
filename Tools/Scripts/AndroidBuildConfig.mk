@@ -1,5 +1,5 @@
 #
-#  AndroidBuildSettings.mk
+#  AndroidBuildConfig.mk
 #  Chilli Source
 #  Created by Ian Copland on 12/03/2015.
 #
@@ -27,8 +27,8 @@
 
 #------------------------------------------------------------------------------
 # This provides all of the standard build settings for a ChilliSource project.
-# This shouldn't be included directly in most cases, AndroidPrepare.mk should
-# be included instead.
+# This shouldn't be included directly in most cases, AndroidBuildInitialise.mk 
+# should be included instead.
 #
 # CS_PROJECT_ROOT must be set to the absolute path to the root of the project
 # prior to calling this.
