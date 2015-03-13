@@ -1,26 +1,5 @@
-import org.apache.tools.ant.taskdefs.condition.Os
-
 apply plugin: 'com.android.library'
-
-//This is taken from https://gist.github.com/eleventigers/e112fd76dd95e8e8ff5b
-def getPlatformNdkBuildCommand() {
-    def rootDir = project.rootDir
-    def localProperties = new File(rootDir, "local.properties")
-    if (localProperties.exists()) {
-        Properties properties = new Properties()
-        localProperties.withInputStream {
-            instr -> properties.load(instr)
-        }
-        def ndkDir = properties.getProperty('ndk.dir')
-        if (ndkDir == null) {
-            throw new GradleException("The ndk.dir property in local.propeties is not set")
-        }
-        def ndkBuild = Os.isFamily(Os.FAMILY_WINDOWS) ? "$ndkDir/ndk-build.cmd" : "$ndkDir/ndk-build"
-        return ndkBuild
-    } else {
-        throw new GradleException("The local.properties file does not exist")
-    }
-}
+apply from: '../../../Tools/Scripts/ndkpath.gradle'
 
 android {
     compileSdkVersion 21
@@ -53,7 +32,7 @@ android {
     }
     task ndkBuild(type: Exec) {
 
-        commandLine getPlatformNdkBuildCommand(), '-C', file('src/main/jni').absolutePath
+        commandLine ndkpath, '-C', file('src/main/jni').absolutePath
     }
 }
 
