@@ -99,10 +99,11 @@ def copy_resources():
 # @param Project directory path
 #----------------------------------------------------------------------
 def copy_jars():
-    jars_src_path = "../../../../ChilliSource/Libraries/Core/Android/Libs/jars/"
-    jars_dst_path = "src/main/libs/"
+    print ("TODO: Re-add automatic handling of Jars.")
+    #jars_src_path = "../../../../ChilliSource/Libraries/Core/Android/Libs/jars/"
+    #jars_dst_path = "src/main/libs/"
 
-    file_system_utils.copy_directory(jars_src_path, jars_dst_path)
+    #file_system_utils.copy_directory(jars_src_path, jars_dst_path)
 
 #----------------------------------------------------------------------
 # Premulitplies all the PNGs in assets
