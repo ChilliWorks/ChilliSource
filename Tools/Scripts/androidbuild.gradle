@@ -1,0 +1,205 @@
+//
+//  androidbuild.gradle
+//  Chilli Source
+//  Created by Ian Copland on 13/03/2015.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2015 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+import org.apache.tools.ant.taskdefs.condition.Os
+import java.lang.Runtime
+import java.lang.Process
+
+/**
+ * TODO
+ *
+ * @author Ian Copland
+ */
+def readStream(InputStream stream, boolean errorStream) {
+    try {
+        def bufferedInputReader = new BufferedReader(new InputStreamReader(stream));
+        String line = null;
+        while ((line = bufferedInputReader.readLine()) != null) {
+            if (errorStream == true) {
+                System.err.println(line);
+            } else {
+                System.out.println(line);
+            }
+        }
+    }
+    catch (Exception e) {
+        System.err.println(e.toString());
+        e.printStackTrace();
+    }
+}
+/**
+ * TODO
+ *
+ * @author Ian Copland
+ */
+def executeCommand(String[] commands) {
+    final def process = new ProcessBuilder(commands).start();
+    def inputRunnable = new Runnable() {
+        @Override public void run() {
+            readStream(process.getInputStream(), false);
+        }
+    };
+    def errorRunnable = new Runnable() {
+        @Override public void run() {
+            readStream(process.getErrorStream(), true);
+        }
+    };
+    def inputThread = new Thread(inputRunnable);
+    def errorThread = new Thread(errorRunnable);
+    inputThread.start();
+    errorThread.start();
+    inputThread.join();
+    errorThread.join();
+    process.waitFor();
+    process.destroy();
+}
+/**
+ * TODO
+ *
+ * @author Ian Copland
+ */
+def getNDKPath() {
+    def rootDir = project.rootDir
+    def localProperties = new File(rootDir, "local.properties")
+    if (localProperties.exists()) {
+        Properties properties = new Properties()
+        localProperties.withInputStream {
+            instr -> properties.load(instr)
+        }
+        def ndkDir = properties.getProperty('ndk.dir')
+        if (ndkDir == null) {
+            throw new GradleException("The ndk.dir property in local.propeties is not set")
+        }
+        def ndkBuild = Os.isFamily(Os.FAMILY_WINDOWS) ? "$ndkDir/ndk-build.cmd" : "$ndkDir/ndk-build"
+        return ndkBuild
+    } else {
+        throw new GradleException("The local.properties file does not exist")
+    }
+}
+/**
+ * TODO
+ *
+ * @author Ian Copland
+ */
+def buildNdk(boolean debug) {
+    def jniPath = file('src/main/jni').absolutePath
+    if (debug == true) {
+        String[] commands = [ getNDKPath(), "-C", jniPath, "NDK_DEBUG=1" ];
+        executeCommand(commands);
+    } else {
+        String[] commands = [ getNDKPath(), "-C", jniPath ];
+        executeCommand(commands);
+    }
+}
+/**
+ * TODO
+ *
+ * @author Ian Copland
+ */
+def buildResources() {
+    def scriptPath = file("$csProjectRoot/ChilliSource/Tools/Scripts/copy_android_resources.py").absolutePath
+    def csProjectPath = file(csProjectRoot).absolutePath
+    def androidProjectPath = file("src/main/").absolutePath
+    String[] commands = [ "python", scriptPath, csProjectPath, androidProjectPath ]
+    executeCommand(commands);
+}
+
+ext {
+    csProjectRoot = "../../../.."
+
+    /**
+     * TODO
+     *
+     * @author Ian Copland
+     */
+    task csCompileDebugNdk << {
+        buildNdk(true)
+    }
+    /**
+     * TODO
+     *
+     * @author Ian Copland
+     */
+    task csCompileReleaseNdk << {
+        buildNdk(false)
+    }
+    /**
+     * TODO
+     *
+     * @author Ian Copland
+     */
+    task csGenerateDebugResources(dependsOn: csCompileDebugNdk) << {
+        buildResources()
+    }
+    /**
+     * TODO
+     *
+     * @author Ian Copland
+     */
+    task csGenerateReleaseResources(dependsOn: csCompileReleaseNdk) << {
+        buildResources()
+    }
+    /**
+     * TODO
+     *
+     * @author Ian Copland
+     */
+    csInitLibrary = { tasks ->
+
+        //enable ndk build by piggybacking on the java compile task.
+        tasks.withType(JavaCompile) { task ->
+            def taskName = task.name.toLowerCase();
+            if (taskName.contains('debug') == true) {
+                task.dependsOn csCompileDebugNdk
+            } else {
+                task.dependsOn csCompileReleaseNdk
+            }
+        }
+    }
+    /**
+     * TODO
+     *
+     * @author Ian Copland
+     */
+    csInitApplication = { tasks ->
+
+        //enable ndk build by piggybacking on the java compile task.
+        tasks.withType(JavaCompile) { task ->
+            def taskName = task.name.toLowerCase();
+            if (taskName.contains('debug') == true) {
+                task.dependsOn csGenerateDebugResources
+            } else {
+                task.dependsOn csGenerateReleaseResources
+            }
+        }
+
+        //force the ChilliSource project to build first
+        csCompileDebugNdk.dependsOn ":chillisource:assembleDebug"
+        csCompileReleaseNdk.dependsOn ":chillisource:assembleRelease"
+    }
+}
