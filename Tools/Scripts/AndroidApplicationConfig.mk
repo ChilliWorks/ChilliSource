@@ -30,4 +30,3 @@ CS_NDK_TOOLCHAIN_VERSION := 4.9
 CS_APP_STL := gnustl_static
 CS_LOCAL_CPP_FEATURES := exceptions rtti
 CS_APP_PLATFORM = android-9
-CS_APP_ABI := armeabi-v7a

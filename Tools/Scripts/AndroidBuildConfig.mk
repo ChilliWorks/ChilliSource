@@ -47,11 +47,18 @@ CS_MODULENAME_CSBASE := CSBase-prebuilt
 CS_MODULENAME_CK := ck-prebuilt
 CS_MODULENAME_APPLICATION := Application
 
-#target specific build flags
+#debug or release specific build flags.
 ifeq ($(NDK_DEBUG),1)
 CS_CXXFLAGS_TARGET := -g -DDEBUG -DCS_ENABLE_DEBUG -DCS_LOGLEVEL_VERBOSE
 else
 CS_CXXFLAGS_TARGET := -O3 -DNDEBUG -DCS_LOGLEVEL_WARNING
+endif
+
+#add in the appropriate android extensions
+ifeq ($(CS_FLAVOUR_SKU), "googleplay")
+CS_CXXFLAGS_TARGET += -DCS_ANDROIDEXTENSION_GOOGLEPLAY
+else ifeq ($(CS_FLAVOUR_SKU), "amazon")
+CS_CXXFLAGS_TARGET += -DCS_ANDROIDEXTENSION_AMAZON
 endif
 
 #setup warnings

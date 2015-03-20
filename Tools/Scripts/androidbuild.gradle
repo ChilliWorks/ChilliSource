@@ -29,6 +29,7 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 import java.lang.Runtime
 import java.lang.Process
+org.gradle.api.artifacts.Dependency
 
 /**
  * TODO
@@ -83,6 +84,71 @@ def executeCommand(String[] commands) {
  *
  * @author Ian Copland
  */
+def isTestFromTaskName(String taskName) {
+    String lowerTaskName = taskName.toLowerCase()
+    if (lowerTaskName.contains('unittest') == true || lowerTaskName.contains('androidtest') == true) {
+        return true
+    }
+    return false
+}
+/**
+ * TODO
+ *
+ * @author Ian Copland
+ */
+def isDebugFromTaskName(String taskName)
+{
+    String lowerTaskName = taskName.toLowerCase()
+    if (lowerTaskName.contains('debug') == true) {
+        return true
+    } else if (lowerTaskName.contains('release') == true){
+        return false
+    } else {
+        System.err.println "Task '$taskName' does not specify release or debug."
+        return false
+    }
+}
+/**
+ * TODO
+ *
+ * @author Ian Copland
+ */
+def getAbiFromTaskName(String taskName)
+{
+    String lowerTaskName = taskName.toLowerCase()
+    if (lowerTaskName.contains('armv7') == true) {
+        return "armeabi-v7a"
+    } else if (lowerTaskName.contains('arm')){
+        return "armeabi"
+    } else if (lowerTaskName.contains('x86')){
+        return "x86"
+    } else {
+        System.err.println "Task '$taskName' does not specify an abi."
+        return "armeabi"
+    }
+}
+/**
+ * TODO
+ *
+ * @author Ian Copland
+ */
+def getSkuFromTaskName(String taskName)
+{
+    String lowerTaskName = taskName.toLowerCase()
+    if (lowerTaskName.toLowerCase().contains('googleplay') == true) {
+        return "googleplay"
+    } else if (lowerTaskName.contains('amazon')){
+        return "amazon"
+    } else {
+        System.err.println "Task '$taskName' does not specify a sku."
+        return "googleplay"
+    }
+}
+/**
+ * TODO
+ *
+ * @author Ian Copland
+ */
 def getNDKPath() {
     def rootDir = project.rootDir
     def localProperties = new File(rootDir, "local.properties")
@@ -106,13 +172,13 @@ def getNDKPath() {
  *
  * @author Ian Copland
  */
-def buildNdk(boolean debug) {
+def buildNdk(String sku, String abi, boolean debug) {
     def jniPath = file('src/main/jni').absolutePath
     if (debug == true) {
-        String[] commands = [ getNDKPath(), "-C", jniPath, "NDK_DEBUG=1" ];
+        String[] commands = [ getNDKPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$sku", "APP_ABI=$abi", "NDK_DEBUG=1" ];
         executeCommand(commands);
     } else {
-        String[] commands = [ getNDKPath(), "-C", jniPath ];
+        String[] commands = [ getNDKPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$sku", "APP_ABI=$abi" ];
         executeCommand(commands);
     }
 }
@@ -121,7 +187,17 @@ def buildNdk(boolean debug) {
  *
  * @author Ian Copland
  */
-def buildResources() {
+def cleanNdk() {
+    def jniPath = file('src/main/jni').absolutePath
+    String[] commands = [ getNDKPath(), "-C", jniPath, "clean", "APP_ABI=all" ];
+    executeCommand(commands);
+}
+/**
+ * TODO
+ *
+ * @author Ian Copland
+ */
+def generateResources() {
     def scriptPath = file("$csProjectRoot/ChilliSource/Tools/Scripts/copy_android_resources.py").absolutePath
     def csProjectPath = file(csProjectRoot).absolutePath
     def androidProjectPath = file("src/main/").absolutePath
@@ -137,32 +213,8 @@ ext {
      *
      * @author Ian Copland
      */
-    task csCompileDebugNdk << {
-        buildNdk(true)
-    }
-    /**
-     * TODO
-     *
-     * @author Ian Copland
-     */
-    task csCompileReleaseNdk << {
-        buildNdk(false)
-    }
-    /**
-     * TODO
-     *
-     * @author Ian Copland
-     */
-    task csGenerateDebugResources(dependsOn: csCompileDebugNdk) << {
-        buildResources()
-    }
-    /**
-     * TODO
-     *
-     * @author Ian Copland
-     */
-    task csGenerateReleaseResources(dependsOn: csCompileReleaseNdk) << {
-        buildResources()
+    task csCleanNdk << {
+        cleanNdk()
     }
     /**
      * TODO
@@ -171,16 +223,34 @@ ext {
      */
     csInitLibrary = { tasks ->
 
-        //enable ndk build by piggybacking on the java compile task.
-        tasks.withType(JavaCompile) { task ->
+        tasks.all() { task ->
             def taskName = task.name.toLowerCase();
-            if (taskName.contains('debug') == true) {
-                task.dependsOn csCompileDebugNdk
-            } else {
-                task.dependsOn csCompileReleaseNdk
+            if (taskName == "clean") {
+                task.dependsOn csCleanNdk
             }
         }
+
+        //configure the build by adding the appropriate build dependencies depending on the name
+        //of the compile task.
+        tasks.withType(JavaCompile) { compileTask ->
+
+            //exclude testing tasks
+            if (isTestFromTaskName(compileTask.name) == true) {
+                return;
+            }
+
+            def sku = getSkuFromTaskName compileTask.name
+            def abi = getAbiFromTaskName compileTask.name
+            def debug = isDebugFromTaskName compileTask.name
+            def debugText = (debug == true) ? "debug" : "release"
+
+            task "csCompileNdk_${sku}_${abi}_${debugText}" << {
+                buildNdk(sku, abi, debug)
+            }
+            compileTask.dependsOn "csCompileNdk_${sku}_${abi}_${debugText}"
+        }
     }
+
     /**
      * TODO
      *
@@ -188,18 +258,62 @@ ext {
      */
     csInitApplication = { tasks ->
 
-        //enable ndk build by piggybacking on the java compile task.
-        tasks.withType(JavaCompile) { task ->
+        tasks.all() { task ->
             def taskName = task.name.toLowerCase();
-            if (taskName.contains('debug') == true) {
-                task.dependsOn csGenerateDebugResources
-            } else {
-                task.dependsOn csGenerateReleaseResources
+            if (taskName == "clean") {
+                task.dependsOn csCleanNdk
             }
         }
 
-        //force the ChilliSource project to build first
-        csCompileDebugNdk.dependsOn ":chillisource:assembleDebug"
-        csCompileReleaseNdk.dependsOn ":chillisource:assembleRelease"
+        //configure the build by adding the appropriate build dependencies depending on the name
+        //of the compile task.
+        tasks.withType(JavaCompile) { compileTask ->
+
+            //exclude testing tasks
+            if (isTestFromTaskName(compileTask.name) == true) {
+                return;
+            }
+
+            def sku = getSkuFromTaskName(compileTask.name)
+            def abi = getAbiFromTaskName(compileTask.name)
+            def debug = isDebugFromTaskName(compileTask.name)
+            def debugText = (debug == true) ? "debug" : "release"
+
+            task "csCompileNdk_${sku}_${abi}_${debugText}" (dependsOn: ":chillisource:csCompileNdk_${sku}_${abi}_${debugText}") << {
+                buildNdk(sku, abi, debug)
+            }
+            task "csGenerateResources_${sku}_${abi}_${debugText}" (dependsOn: "csCompileNdk_${sku}_${abi}_${debugText}") << {
+                generateResources()
+            }
+            compileTask.dependsOn "csGenerateResources_${sku}_${abi}_${debugText}"
+        }
     }
+//    /**
+//     * TODO
+//     *
+//     * @author Ian Copland
+//     */
+//    csApplyDependandies = { configurations, customDeps ->
+//
+//        configurations.all() {config ->
+//            Dependency d = customDeps.get(config.name)
+//            if(d != null) {
+//                config.dependencies.add(d)
+//            }
+//        }
+//    }
+//    /**
+//     * TODO
+//     *
+//     * @author Ian Copland
+//     */
+//    csFixLibraryDependancies = { tasks ->
+//
+//        tasks.all() { task ->
+//            def taskName = task.name.toLowerCase()
+//            if (taskName.contains("unspecified") == true && taskName.contains("library") == true) {
+//                task.dependsOn.clear()
+//            }
+//        }
+//    }
 }
