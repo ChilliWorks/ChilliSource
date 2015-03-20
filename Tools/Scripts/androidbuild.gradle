@@ -189,7 +189,7 @@ def buildNdk(String sku, String abi, boolean debug) {
  */
 def cleanNdk() {
     def jniPath = file('src/main/jni').absolutePath
-    String[] commands = [ getNDKPath(), "-C", jniPath, "clean", "APP_ABI=all" ];
+    String[] commands = [ getNDKPath(), "-C", jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86" ];
     executeCommand(commands);
 }
 /**
