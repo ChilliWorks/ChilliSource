@@ -29,7 +29,7 @@
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Input/TextEntry/TextEntry.h>
+#include <CSBackend/Platform/Android/Main/JNI/Input/TextEntry/TextEntry.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS

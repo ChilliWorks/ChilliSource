@@ -34,9 +34,9 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 #ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
-#include <CSBackend/Platform/Android/Extensions/GooglePlay/GooglePlayIAPSystem.h>
+#include <CSBackend/Platform/Android/GooglePlay/JNI/Networking/IAP/GooglePlayIAPSystem.h>
 #elif defined(CS_ANDROIDEXTENSION_AMAZON)
-#include <CSBackend/Platform/Android/Extensions/Amazon/AmazonIAPSystem.h>
+#include <CSBackend/Platform/Android/Amazon/JNI/Networking/IAP/AmazonIAPSystem.h>
 #endif
 #endif
 

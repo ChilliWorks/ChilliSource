@@ -33,7 +33,7 @@
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Networking/Http/HttpRequestSystem.h>
+#include <CSBackend/Platform/Android/Main/JNI/Networking/Http/HttpRequestSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS

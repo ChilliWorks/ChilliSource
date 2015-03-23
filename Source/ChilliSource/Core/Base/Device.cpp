@@ -29,7 +29,7 @@
 #include <ChilliSource/Core/Base/Device.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Core/Base/Device.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Base/Device.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS

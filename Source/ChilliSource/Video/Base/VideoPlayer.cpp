@@ -33,7 +33,7 @@
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Video/Base/VideoPlayer.h>
+#include <CSBackend/Platform/Android/Main/JNI/Video/Base/VideoPlayer.h>
 #endif
 
 namespace ChilliSource

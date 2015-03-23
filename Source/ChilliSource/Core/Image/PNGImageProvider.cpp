@@ -33,7 +33,7 @@
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Core/Image/PNGImageProvider.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Image/PNGImageProvider.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS

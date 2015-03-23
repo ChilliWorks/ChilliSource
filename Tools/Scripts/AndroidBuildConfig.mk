@@ -55,9 +55,9 @@ CS_CXXFLAGS_TARGET := -O3 -DNDEBUG -DCS_LOGLEVEL_WARNING
 endif
 
 #add in the appropriate android extensions
-ifeq ($(CS_FLAVOUR_SKU), "googleplay")
+ifeq ($(CS_FLAVOUR_SKU), googleplay)
 CS_CXXFLAGS_TARGET += -DCS_ANDROIDEXTENSION_GOOGLEPLAY
-else ifeq ($(CS_FLAVOUR_SKU), "amazon")
+else ifeq ($(CS_FLAVOUR_SKU), amazon)
 CS_CXXFLAGS_TARGET += -DCS_ANDROIDEXTENSION_AMAZON
 endif
 

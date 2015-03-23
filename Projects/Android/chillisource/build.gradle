@@ -43,14 +43,14 @@ android {
 
     sourceSets {
         main {
-            java.srcDir '../../../Source/CSBackend/Platform/Android/Java/'
+            java.srcDir '../../../Source/CSBackend/Platform/Android/Main/Java/'
             jniLibs.srcDir 'src/main/libs'
         }
         googlePlay {
-            java.srcDir '../../../Source/CSBackend/Platform/Android/Extensions/GooglePlay/Java/'
+            java.srcDir '../../../Source/CSBackend/Platform/Android/GooglePlay/Java/'
         }
         amazon {
-            java.srcDir '../../../Source/CSBackend/Platform/Android/Extensions/Amazon/Java/'
+            java.srcDir '../../../Source/CSBackend/Platform/Android/Amazon/Java/'
         }
     }
 

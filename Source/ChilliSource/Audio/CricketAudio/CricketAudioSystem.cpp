@@ -32,8 +32,8 @@
 #include <ChilliSource/Core/Container/VectorUtils.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Core/Base/CoreJavaInterface.h>
-#include <CSBackend/Platform/Android/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Base/CoreJavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
 #endif
 
 #include <ck/ck.h>

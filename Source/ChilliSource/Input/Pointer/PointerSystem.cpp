@@ -35,7 +35,7 @@
 #include <algorithm>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Input/Pointer/PointerSystem.h>
+#include <CSBackend/Platform/Android/Main/JNI/Input/Pointer/PointerSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS

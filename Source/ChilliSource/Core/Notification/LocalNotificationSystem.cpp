@@ -35,7 +35,7 @@
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Core/Notification/LocalNotificationSystem.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Notification/LocalNotificationSystem.h>
 #endif
 
 namespace ChilliSource

@@ -33,7 +33,7 @@
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Web/Base/WebView.h>
+#include <CSBackend/Platform/Android/Main/JNI/Web/Base/WebView.h>
 #endif
 
 namespace ChilliSource

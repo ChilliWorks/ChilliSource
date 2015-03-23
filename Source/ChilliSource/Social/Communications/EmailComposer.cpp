@@ -33,7 +33,7 @@
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Social/Communications/EmailComposer.h>
+#include <CSBackend/Platform/Android/Main/JNI/Social/Communications/EmailComposer.h>
 #endif
 
 namespace ChilliSource

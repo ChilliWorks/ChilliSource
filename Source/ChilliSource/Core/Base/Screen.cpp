@@ -29,7 +29,7 @@
 #include <ChilliSource/Core/Base/Screen.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Core/Base/Screen.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Base/Screen.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS

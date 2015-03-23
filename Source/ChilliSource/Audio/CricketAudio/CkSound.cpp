@@ -33,7 +33,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Core/File/FileSystem.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/File/FileSystem.h>
 #endif
 
 #include <ck/ck.h>

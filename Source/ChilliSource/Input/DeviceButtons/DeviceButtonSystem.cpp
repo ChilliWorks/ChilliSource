@@ -29,7 +29,7 @@
 #include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Input/DeviceButtons/DeviceButtonSystem.h>
+#include <CSBackend/Platform/Android/Main/JNI/Input/DeviceButtons/DeviceButtonSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS

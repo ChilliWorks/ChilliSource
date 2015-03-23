@@ -33,7 +33,7 @@
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Core/DialogueBox/DialogueBoxSystem.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/DialogueBox/DialogueBoxSystem.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_WINDOWS

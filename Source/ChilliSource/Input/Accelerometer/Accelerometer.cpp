@@ -29,7 +29,7 @@
 #include <ChilliSource/Input/Accelerometer/Accelerometer.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#include <CSBackend/Platform/Android/Input/Accelerometer/Accelerometer.h>
+#include <CSBackend/Platform/Android/Main/JNI/Input/Accelerometer/Accelerometer.h>
 #endif
 
 #ifdef CS_TARGETPLATFORM_IOS
