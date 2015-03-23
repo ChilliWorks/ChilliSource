@@ -33,7 +33,7 @@
 #ifndef _CSBACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_REMOTENOTIFICATIONSYSTEM_H_
 #define _CSBACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_REMOTENOTIFICATIONSYSTEM_H_
 
-#include <CSBackend/Platform/Android/GooglePlay/JNI/Networking/IAP/GooglePlayRemoteNotificationJavaInterface.h>
+#include <CSBackend/Platform/Android/GooglePlay/JNI/Core/Notification/GooglePlayRemoteNotificationJavaInterface.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Notification/RemoteNotificationSystem.h>
 

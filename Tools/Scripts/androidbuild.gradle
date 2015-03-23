@@ -26,6 +26,7 @@
 //  THE SOFTWARE.
 //
 
+import com.sun.tools.classfile.Dependency
 import org.apache.tools.ant.taskdefs.condition.Os
 import java.lang.Runtime
 import java.lang.Process
@@ -189,8 +190,12 @@ def buildNdk(String sku, String abi, boolean debug) {
  */
 def cleanNdk() {
     def jniPath = file('src/main/jni').absolutePath
-    String[] commands = [ getNDKPath(), "-C", jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86" ];
-    executeCommand(commands);
+
+    String[] commandsRelease = [ getNDKPath(), "-C", jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86", "CS_CLEAN=1" ];
+    executeCommand(commandsRelease);
+
+    String[] commandsDebug = [ getNDKPath(), "-C", jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86", "NDK_DEBUG=1", "CS_CLEAN=1"  ];
+    executeCommand(commandsDebug);
 }
 /**
  * TODO
@@ -244,10 +249,20 @@ ext {
             def debug = isDebugFromTaskName compileTask.name
             def debugText = (debug == true) ? "debug" : "release"
 
-            task "csCompileNdk_${sku}_${abi}_${debugText}" << {
+            def csCompileTask = task "csCompileNdk_${sku}_${abi}_${debugText}" << {
                 buildNdk(sku, abi, debug)
             }
-            compileTask.dependsOn "csCompileNdk_${sku}_${abi}_${debugText}"
+
+            csCompileTask.onlyIf {
+                def taskGraph = gradle.taskGraph
+                for (def aTask : taskGraph.getAllTasks()) {
+                    if (aTask.project.name.equals("app") && aTask.name.equals(csCompileTask.name) == true) {
+                        return true
+                    }
+                }
+                return false
+            }
+            compileTask.dependsOn csCompileTask
         }
     }
 
@@ -288,32 +303,48 @@ ext {
             compileTask.dependsOn "csGenerateResources_${sku}_${abi}_${debugText}"
         }
     }
-//    /**
-//     * TODO
-//     *
-//     * @author Ian Copland
-//     */
-//    csApplyDependandies = { configurations, customDeps ->
-//
-//        configurations.all() {config ->
-//            Dependency d = customDeps.get(config.name)
-//            if(d != null) {
-//                config.dependencies.add(d)
-//            }
-//        }
-//    }
-//    /**
-//     * TODO
-//     *
-//     * @author Ian Copland
-//     */
-//    csFixLibraryDependancies = { tasks ->
-//
-//        tasks.all() { task ->
-//            def taskName = task.name.toLowerCase()
-//            if (taskName.contains("unspecified") == true && taskName.contains("library") == true) {
-//                task.dependsOn.clear()
-//            }
-//        }
-//    }
+    /**
+     * TODO
+     *
+     * @author Ian Copland
+     */
+    csAddDefaultDependencies = { dependencies ->
+        dependencies.compile 'com.android.support:appcompat-v7:21.0.3'
+        dependencies.compile 'com.google.android.gms:play-services:6.5.87'
+    }
+    /**
+     * TODO
+     *
+     * @author Ian Copland
+     */
+    csAddCSDependencies = { dependencies, configurations, csDependencyMap ->
+
+        def depsMap = new HashMap<String, Dependency>()
+        for (Map.Entry<String, String> entry : csDependencyMap) {
+            depsMap.put("${entry.getKey()}Compile", dependencies.project(path: ":chillisource", configuration: entry.getValue()))
+        }
+
+        configurations.all() { config ->
+            def dep = depsMap.get("${config.name}")
+            if(dep != null) {
+                config.dependencies.add(dep)
+            }
+        }
+    }
+    /**
+     * TODO
+     *
+     * @author Ian Copland
+     */
+    csFixDefaultLibraryDependancies = { tasks ->
+
+        tasks.all() { task ->
+
+            def taskName = task.name.toLowerCase()
+            if (taskName.equals("prepareComAndroidSupportAppcompatV72103Library") == true || taskName.contains("prepareComAndroidSupportSupportV42103Library") == true ||
+                taskName.equals("prepareComGoogleAndroidGmsPlayServices6587Library") == true) {
+                task.dependsOn.clear()
+            }
+        }
+    }
 }

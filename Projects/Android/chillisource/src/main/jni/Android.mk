@@ -37,9 +37,9 @@ CS_SOURCEFILES_RENDERING := $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS
 
 #add files for appropriate android skus
 ifeq ($(CS_FLAVOUR_SKU), googleplay)
-CS_SOURCEFILES_PLATFORM += $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Platform/Android/GooglePlay/JNI/' '--extensions' 'cpp,c,cc')
+CS_SOURCEFILES_PLATFORM +=$(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Platform/Android/GooglePlay/JNI/' '--extensions' 'cpp,c,cc')
 else ifeq ($(CS_FLAVOUR_SKU), amazon)
-CS_SOURCEFILES_PLATFORM += $(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Platform/Android/Amazon/JNI/' '--extensions' 'cpp,c,cc')
+CS_SOURCEFILES_PLATFORM +=$(shell 'python' '$(CS_SCRIPT_GETFILESWITHEXTENSIONS)' '--directory' '$(CS_PROJECT_ROOT)/ChilliSource/Source/CSBackend/Platform/Android/Amazon/JNI/' '--extensions' 'cpp,c,cc')
 endif
 
 #build the ChilliSource static library
