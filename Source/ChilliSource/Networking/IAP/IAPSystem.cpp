@@ -33,9 +33,9 @@
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
+#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
 #include <CSBackend/Platform/Android/GooglePlay/JNI/Networking/IAP/GooglePlayIAPSystem.h>
-#elif defined(CS_ANDROIDEXTENSION_AMAZON)
+#elif defined(CS_ANDROIDFLAVOUR_AMAZON)
 #include <CSBackend/Platform/Android/Amazon/JNI/Networking/IAP/AmazonIAPSystem.h>
 #endif
 #endif
@@ -52,9 +52,9 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_IOS
         	return IAPSystemUPtr(new CSBackend::iOS::IAPSystem());
 #elif defined(CS_TARGETPLATFORM_ANDROID)
-#	ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
+#	ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
         	return IAPSystemUPtr(new CSBackend::Android::GooglePlayIAPSystem(inParams));
-#	elif defined(CS_ANDROIDEXTENSION_AMAZON)
+#	elif defined(CS_ANDROIDFLAVOUR_AMAZON)
         	return IAPSystemUPtr(new CSBackend::Android::AmazonIAPSystem(inParams));
 #	endif
 #endif

@@ -28,7 +28,7 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
+#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
 
 #ifndef _CSBACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_GOOGLEPLAYIAPSYSTEM_H_
 #define _CSBACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_GOOGLEPLAYIAPSYSTEM_H_
@@ -49,7 +49,7 @@ namespace CSBackend
 		/// before any purchases are made as this can be called with previously incomplete
 		/// transactions.
 		///
-		/// Note: The CS pre-processor flag CS_ANDROIDEXTENSION_GOOGLEPLAY should be set for this to be used.
+		/// Note: The CS pre-processor flag CS_ANDROIDFLAVOUR_GOOGLEPLAY should be set for this to be used.
 		///
 		/// @author S Downie
 		//----------------------------------------------------------------------------------

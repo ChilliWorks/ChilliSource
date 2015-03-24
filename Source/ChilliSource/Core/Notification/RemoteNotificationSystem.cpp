@@ -33,7 +33,7 @@
 #endif
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-#ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
+#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
 #include <CSBackend/Platform/Android/GooglePlay/JNI/Core/Notification/GooglePlayRemoteNotificationSystem.h>
 #endif
 #endif
@@ -50,7 +50,7 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_IOS
         	return RemoteNotificationSystemUPtr(new CSBackend::iOS::RemoteNotificationSystem());
 #elif defined(CS_TARGETPLATFORM_ANDROID)
-#ifdef CS_ANDROIDEXTENSION_GOOGLEPLAY
+#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
         	return RemoteNotificationSystemUPtr(new CSBackend::Android::GooglePlayRemoteNotificationSystem());
 #endif
 #endif

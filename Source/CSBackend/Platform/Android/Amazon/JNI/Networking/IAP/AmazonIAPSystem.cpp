@@ -28,7 +28,7 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifdef CS_ANDROIDEXTENSION_AMAZON
+#ifdef CS_ANDROIDFLAVOUR_AMAZON
 
 #include <CSBackend/Platform/Android/Amazon/JNI/Networking/IAP/AmazonIAPSystem.h>
 
