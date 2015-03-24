@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.facebook;
+package com.chilliworks.chillisource.social;
 
 import java.util.ArrayList;
 import java.util.Arrays;

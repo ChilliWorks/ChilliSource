@@ -28,12 +28,10 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifdef CS_ANDROIDEXTENSION_FACEBOOK
-
-#include <CSBackend/Platform/Android/Extensions/Facebook/FacebookPostSystem.h>
+#include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookPostSystem.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Extensions/Facebook/FacebookAuthenticationSystem.h>
+#include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookAuthenticationSystem.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
@@ -197,7 +195,5 @@ namespace CSBackend
 		}
 	}
 }
-
-#endif
 
 #endif

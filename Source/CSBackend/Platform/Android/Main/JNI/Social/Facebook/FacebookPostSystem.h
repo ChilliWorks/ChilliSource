@@ -28,13 +28,11 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifdef CS_ANDROIDEXTENSION_FACEBOOK
-
 #ifndef _CHILLISOURCE_PLATFORM_ANDROID_EXTENSIONS_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 #define _CHILLISOURCE_PLATFORM_ANDROID_EXTENSIONS_FACEBOOK_FACEBOOKPOSTSYSTEM_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <CSBackend/Platform/Android/Extensions/Facebook/FacebookJavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookJavaInterface.h>
 #include <ChilliSource/Social/Facebook/FacebookPostSystem.h>
 
 namespace CSBackend
@@ -144,8 +142,6 @@ namespace CSBackend
 		};
 	}
 }
-
-#endif
 
 #endif
 

@@ -28,9 +28,7 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifdef CS_ANDROIDEXTENSION_FACEBOOK
-
-#include <CSBackend/Platform/Android/Extensions/Facebook/FacebookAuthenticationSystem.h>
+#include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookAuthenticationSystem.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
 
@@ -190,7 +188,5 @@ namespace CSBackend
         }
 	}
 }
-
-#endif
 
 #endif

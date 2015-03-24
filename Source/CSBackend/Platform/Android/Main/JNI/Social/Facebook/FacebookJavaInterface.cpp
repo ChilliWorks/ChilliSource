@@ -28,14 +28,12 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifdef CS_ANDROIDEXTENSION_FACEBOOK
-
-#include <CSBackend/Platform/Android/Extensions/Facebook/FacebookJavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookJavaInterface.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Extensions/Facebook/FacebookAuthenticationSystem.h>
-#include <CSBackend/Platform/Android/Extensions/Facebook/FacebookPostSystem.h>
+#include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookAuthenticationSystem.h>
+#include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookPostSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -47,11 +45,11 @@ CSBackend::Android::FacebookPostSystem* gpAndroidPostSystem = nullptr;
 //function definitions
 extern "C"
 {
-	void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnAuthenticationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
-	void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnReadAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
-	void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnWriteAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
-	void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnPostToFeedComplete(JNIEnv* inpEnv, jobject inpThis, s32 in_result);
-	void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnPostRequestComplete(JNIEnv* inpEnv, jobject inpThis, s32 in_result);
+	void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnAuthenticationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
+	void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnReadAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
+	void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnWriteAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess);
+	void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnPostToFeedComplete(JNIEnv* inpEnv, jobject inpThis, s32 in_result);
+	void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnPostRequestComplete(JNIEnv* inpEnv, jobject inpThis, s32 in_result);
 }
 
 //------------------------------------------------------------
@@ -63,7 +61,7 @@ extern "C"
 // @param The java object calling the function
 // @param The success of the authentication
 //------------------------------------------------------------
-void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnAuthenticationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
+void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnAuthenticationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
 {
 	if(gpAndroidAuthSystem)
 	{
@@ -79,7 +77,7 @@ void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnAuthen
 // @param The java object calling the function
 // @param The success of the authorised
 //------------------------------------------------------------
-void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnReadAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
+void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnReadAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
 {
 	if(gpAndroidAuthSystem)
 	{
@@ -95,7 +93,7 @@ void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnReadAu
 // @param The java object calling the function
 // @param The success of the authorised
 //------------------------------------------------------------
-void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnWriteAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
+void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnWriteAuthorisationComplete(JNIEnv* inpEnv, jobject inpThis, bool inbSuccess)
 {
 	if(gpAndroidAuthSystem)
 	{
@@ -111,7 +109,7 @@ void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnWriteA
 // @param The java object calling the function
 // @param The result of the authorised
 //------------------------------------------------------------
-void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnPostToFeedComplete(JNIEnv* inpEnv, jobject inpThis, s32 in_result)
+void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnPostToFeedComplete(JNIEnv* inpEnv, jobject inpThis, s32 in_result)
 {
 	if(gpAndroidPostSystem)
 	{
@@ -141,7 +139,7 @@ void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnPostTo
 // @param The java object calling the function
 // @param The result of the authorised
 //------------------------------------------------------------
-void Java_com_chilliworks_chillisource_facebook_FacebookNativeInterface_OnPostRequestComplete(JNIEnv* inpEnv, jobject inpThis, s32 in_result)
+void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnPostRequestComplete(JNIEnv* inpEnv, jobject inpThis, s32 in_result)
 {
 	if(gpAndroidPostSystem)
 	{
@@ -174,7 +172,7 @@ namespace CSBackend
 		//--------------------------------------------------------------------------------------
 		FacebookJavaInterface::FacebookJavaInterface()
 		{
-			CreateNativeInterface("com/chilliworks/chillisource/facebook/FacebookNativeInterface");
+			CreateNativeInterface("com/chilliworks/chillisource/social/FacebookNativeInterface");
 
 			CreateMethodReference("Authenticate", "([Ljava/lang/String;)V");
 			CreateMethodReference("IsSignedIn", "()Z");
@@ -352,7 +350,5 @@ namespace CSBackend
 	    }
 	}
 }
-
-#endif
 
 #endif

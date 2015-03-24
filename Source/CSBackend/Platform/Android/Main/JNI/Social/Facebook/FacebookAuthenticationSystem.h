@@ -28,12 +28,10 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifdef CS_ANDROIDEXTENSION_FACEBOOK
-
 #ifndef _CSBACKEND_PLATFORM_ANDROID_SOCIAL_FACEBOOKAUTHENTICATIONSYSTEM_H_
 #define _CSBACKEND_PLATFORM_ANDROID_SOCIAL_FACEBOOKAUTHENTICATIONSYSTEM_H_
 
-#include <CSBackend/Platform/Android/Extensions/Facebook/FacebookJavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookJavaInterface.h>
 #include <ChilliSource/Core/Delegate/ConnectableDelegate.h>
 #include <ChilliSource/Social/Facebook/FacebookAuthenticationSystem.h>
 
@@ -195,8 +193,6 @@ namespace CSBackend
 		};
 	}
 }
-
-#endif
 
 #endif
 

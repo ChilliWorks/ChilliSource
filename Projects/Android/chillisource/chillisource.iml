@@ -135,12 +135,14 @@
     <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="googleplayexpansiondownloader" level="project" />
+    <orderEntry type="library" exported="" name="facebook-android-sdk-3.23.1" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="play-services-6.5.87" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="googleplayexpansionunzipper" level="project" />
     <orderEntry type="library" exported="" name="googleplaylicensing" level="project" />
+    <orderEntry type="library" exported="" name="bolts-android-1.1.4" level="project" />
   </component>
 </module>
 
