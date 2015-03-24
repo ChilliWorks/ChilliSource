@@ -136,12 +136,6 @@ public final class AndroidManifestBuilder
 				output.m_orientation = orientationNode.getNodeValue();
 			}
 			
-			Node debuggableNode = root.getAttributes().getNamedItem("debuggable");
-			if (debuggableNode != null)
-			{
-				output.m_debuggable = debuggableNode.getNodeValue();
-			}
-			
 			Node facebookAppIdNode = root.getAttributes().getNamedItem("facebookAppId");
 			if (facebookAppIdNode != null)
 			{
@@ -205,7 +199,6 @@ public final class AndroidManifestBuilder
 		output = output.replace("[[MINSDKVERSION]]", in_userData.m_minSdkVersion);
 		output = output.replace("[[TARGETSDKVERSION]]", in_userData.m_targetSdkVersion);
 		output = output.replace("[[ORIENTATION]]", in_userData.m_orientation);
-		output = output.replace("[[DEBUGGABLE]]", in_userData.m_debuggable);
 		output = output.replace("[[GOOGLEPLAYPROJECTID]]", in_userData.m_googlePlayProjectId);
 		output = output.replace("[[FACEBOOKAPPID]]", in_userData.m_facebookAppId);
 		output = output.replace("[[MANIFESTEXTRA]]", in_userData.m_manifestExtra);

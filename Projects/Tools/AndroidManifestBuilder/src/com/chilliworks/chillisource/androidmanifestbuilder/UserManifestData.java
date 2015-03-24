@@ -41,7 +41,6 @@ public final class UserManifestData
 	public String m_minSdkVersion = "9";
 	public String m_targetSdkVersion = "19";
 	public String m_orientation = "sensor";
-	public String m_debuggable = "false";
 	public String m_facebookAppId = "";
 	public String m_googlePlayProjectId = "";
 	public String m_manifestExtra = "";
