@@ -39,3 +39,5 @@ CSBase.opensdf
 Projects/Android/chillisource/build
 Projects/Android/chillisource/src/main/obj
 Projects/Android/chillisource/src/main/libs/armeabi-v7a
+Projects/Android/chillisource/src/main/libs/armeabi
+Projects/Android/chillisource/src/main/libs/x86
