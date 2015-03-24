@@ -33,16 +33,19 @@ import java.lang.Process
 org.gradle.api.artifacts.Dependency
 
 /**
- * TODO
+ * Prints anything in the given buffered stream.
  *
  * @author Ian Copland
+ *
+ * @param in_stream - The input stream.
+ * @param in_printAsError - If true, any messages will be printed as an error message.
  */
-def readStream(InputStream stream, boolean errorStream) {
+def printStream(InputStream in_stream, boolean in_printAsError) {
     try {
-        def bufferedInputReader = new BufferedReader(new InputStreamReader(stream));
+        def bufferedInputReader = new BufferedReader(new InputStreamReader(in_stream));
         String line = null;
         while ((line = bufferedInputReader.readLine()) != null) {
-            if (errorStream == true) {
+            if (in_printAsError == true) {
                 System.err.println(line);
             } else {
                 System.out.println(line);
@@ -55,20 +58,23 @@ def readStream(InputStream stream, boolean errorStream) {
     }
 }
 /**
- * TODO
+ * Executes the given command line parameters. Outputs the contents of both the input stream
+ * and error stream to console.
  *
  * @author Ian Copland
+ *
+ * @param in_commands - The array of commands
  */
-def executeCommand(String[] commands) {
-    final def process = new ProcessBuilder(commands).start();
+def executeCommand(String[] in_commands) {
+    final def process = new ProcessBuilder(in_commands).start();
     def inputRunnable = new Runnable() {
         @Override public void run() {
-            readStream(process.getInputStream(), false);
+            printStream(process.getInputStream(), false);
         }
     };
     def errorRunnable = new Runnable() {
         @Override public void run() {
-            readStream(process.getErrorStream(), true);
+            printStream(process.getErrorStream(), true);
         }
     };
     def inputThread = new Thread(inputRunnable);
@@ -81,25 +87,29 @@ def executeCommand(String[] commands) {
     process.destroy();
 }
 /**
- * TODO
- *
  * @author Ian Copland
+ *
+ * @param in_taskName - The name of the task.
+ *
+ * @return Whether or not the given task name follows the convention set for Task tasks.
  */
-def isTestFromTaskName(String taskName) {
-    String lowerTaskName = taskName.toLowerCase()
+def isTestFromTaskName(String in_taskName) {
+    String lowerTaskName = in_taskName.toLowerCase()
     if (lowerTaskName.contains('unittest') == true || lowerTaskName.contains('androidtest') == true) {
         return true
     }
     return false
 }
 /**
- * TODO
- *
  * @author Ian Copland
+ *
+ * @param in_taskName - The name of the task.
+ *
+ * @return Whether or not the given task name follows the convent set for debug tasks.
  */
-def isDebugFromTaskName(String taskName)
+def isDebugFromTaskName(String in_taskName)
 {
-    String lowerTaskName = taskName.toLowerCase()
+    String lowerTaskName = in_taskName.toLowerCase()
     if (lowerTaskName.contains('debug') == true) {
         return true
     } else if (lowerTaskName.contains('release') == true){
@@ -110,13 +120,15 @@ def isDebugFromTaskName(String taskName)
     }
 }
 /**
- * TODO
- *
  * @author Ian Copland
+ *
+ * @param in_taskName - The name of the task.
+ *
+ * @return The name of the ABI the task relates to, based on the naming convention.
  */
-def getAbiFromTaskName(String taskName)
+def getAbiFromTaskName(String in_taskName)
 {
-    String lowerTaskName = taskName.toLowerCase()
+    String lowerTaskName = in_taskName.toLowerCase()
     if (lowerTaskName.contains('armv7') == true) {
         return "armeabi-v7a"
     } else if (lowerTaskName.contains('arm')){
@@ -129,13 +141,15 @@ def getAbiFromTaskName(String taskName)
     }
 }
 /**
- * TODO
- *
  * @author Ian Copland
+ *
+ * @param in_taskName - The name of the task.
+ *
+ * @return The name of the SKU the task relates to, based on the naming convention.
  */
-def getSkuFromTaskName(String taskName)
+def getSkuFromTaskName(String in_taskName)
 {
-    String lowerTaskName = taskName.toLowerCase()
+    String lowerTaskName = in_taskName.toLowerCase()
     if (lowerTaskName.toLowerCase().contains('googleplay') == true) {
         return "googleplay"
     } else if (lowerTaskName.contains('amazon')){
@@ -146,9 +160,11 @@ def getSkuFromTaskName(String taskName)
     }
 }
 /**
- * TODO
+ * Reads the local.properties file to get the location of the NDK.
  *
  * @author Ian Copland
+ *
+ * @return the location of the NDK.
  */
 def getNDKPath() {
     def rootDir = project.rootDir
@@ -169,22 +185,26 @@ def getNDKPath() {
     }
 }
 /**
- * TODO
+ * Builds native source using the NDK with the given settings.
  *
  * @author Ian Copland
+ *
+ * @param in_sku - The SKU which the source should be built for.
+ * @param in_abi - The ABI thes source should be built for.
+ * @param in_debug - Whether or not the build should have debug symbols.
  */
-def buildNdk(String sku, String abi, boolean debug) {
+def buildNdk(String in_sku, String in_abi, boolean in_debug) {
     def jniPath = file('src/main/jni').absolutePath
-    if (debug == true) {
-        String[] commands = [ getNDKPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$sku", "APP_ABI=$abi", "NDK_DEBUG=1" ];
+    if (in_debug == true) {
+        String[] commands = [ getNDKPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi", "NDK_DEBUG=1" ];
         executeCommand(commands);
     } else {
-        String[] commands = [ getNDKPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$sku", "APP_ABI=$abi" ];
+        String[] commands = [ getNDKPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi" ];
         executeCommand(commands);
     }
 }
 /**
- * TODO
+ * Cleans native source for all abis, skus and both debug and release.
  *
  * @author Ian Copland
  */
@@ -198,7 +218,7 @@ def cleanNdk() {
     executeCommand(commandsDebug);
 }
 /**
- * TODO
+ * Bundles the resources that should be copied to the APK.
  *
  * @author Ian Copland
  */
@@ -214,7 +234,7 @@ ext {
     csProjectRoot = "../../../.."
 
     /**
-     * TODO
+     * A task which will execute the NDK clean command.
      *
      * @author Ian Copland
      */
@@ -222,13 +242,15 @@ ext {
         cleanNdk()
     }
     /**
-     * TODO
+     * Adds task dependencies as required for building a ChilliSource library.
      *
      * @author Ian Copland
+     *
+     * @param in_tasks - The gradle tasks dependencies will be added to.
      */
-    csInitLibrary = { tasks ->
+    csInitLibrary = { in_tasks ->
 
-        tasks.all() { task ->
+        in_tasks.all() { task ->
             def taskName = task.name.toLowerCase();
             if (taskName == "clean") {
                 task.dependsOn csCleanNdk
@@ -237,7 +259,7 @@ ext {
 
         //configure the build by adding the appropriate build dependencies depending on the name
         //of the compile task.
-        tasks.withType(JavaCompile) { compileTask ->
+        in_tasks.withType(JavaCompile) { compileTask ->
 
             //exclude testing tasks
             if (isTestFromTaskName(compileTask.name) == true) {
@@ -253,6 +275,9 @@ ext {
                 buildNdk(sku, abi, debug)
             }
 
+            //This is a hack to ensure ChilliSource is only built for the ABI/SKU/config that the
+            //application is being built for. This has the draw-back that ChilliSource can no longer
+            //be built on its own, so hopefully a better solution presents itself in the future.
             csCompileTask.onlyIf {
                 def taskGraph = gradle.taskGraph
                 for (def aTask : taskGraph.getAllTasks()) {
@@ -265,15 +290,16 @@ ext {
             compileTask.dependsOn csCompileTask
         }
     }
-
     /**
-     * TODO
+     * Adds task dependencies as requires for building a ChilliSource application.
      *
      * @author Ian Copland
+     *
+     * @param in_tasks - The gradle tasks dependencies will be added to.
      */
-    csInitApplication = { tasks ->
+    csInitApplication = { in_tasks ->
 
-        tasks.all() { task ->
+        in_tasks.all() { task ->
             def taskName = task.name.toLowerCase();
             if (taskName == "clean") {
                 task.dependsOn csCleanNdk
@@ -282,7 +308,7 @@ ext {
 
         //configure the build by adding the appropriate build dependencies depending on the name
         //of the compile task.
-        tasks.withType(JavaCompile) { compileTask ->
+        in_tasks.withType(JavaCompile) { compileTask ->
 
             //exclude testing tasks
             if (isTestFromTaskName(compileTask.name) == true) {
@@ -304,28 +330,36 @@ ext {
         }
     }
     /**
-     * TODO
+     * Adds the default library dependencies required by ChilliSource.
      *
      * @author Ian Copland
+     *
+     * @param in_dependencies - The dependencies.
      */
-    csAddDefaultDependencies = { dependencies ->
-        dependencies.compile 'com.android.support:appcompat-v7:21.0.3'
-        dependencies.compile 'com.google.android.gms:play-services:6.5.87'
-        dependencies.compile 'com.facebook.android:facebook-android-sdk:3.23.1'
+    csAddDefaultDependencies = { in_dependencies ->
+        in_dependencies.compile 'com.android.support:appcompat-v7:21.0.3'
+        in_dependencies.compile 'com.google.android.gms:play-services:6.5.87'
+        in_dependencies.compile 'com.facebook.android:facebook-android-sdk:3.23.1'
     }
     /**
-     * TODO
+     * Android Gradle currently does not support dependencies for specific combinations of build
+     * type and product flavour. This provides a means to handle it, by mapping application
+     * build variant to a ChilliSource build variant.
      *
      * @author Ian Copland
+     *
+     * @param in_dependencies - The dependencies.
+     * @param in_configurations - The configurations.
+     * @param in_csDependencyMap - The map of application variants to ChilliSource variants.
      */
-    csAddCSDependencies = { dependencies, configurations, csDependencyMap ->
+    csAddCSDependencies = { in_dependencies, in_configurations, in_csDependencyMap ->
 
         def depsMap = new HashMap<String, Dependency>()
-        for (Map.Entry<String, String> entry : csDependencyMap) {
-            depsMap.put("${entry.getKey()}Compile", dependencies.project(path: ":chillisource", configuration: entry.getValue()))
+        for (Map.Entry<String, String> entry : in_csDependencyMap) {
+            depsMap.put("${entry.getKey()}Compile", in_dependencies.project(path: ":chillisource", configuration: entry.getValue()))
         }
 
-        configurations.all() { config ->
+        in_configurations.all() { config ->
             def dep = depsMap.get("${config.name}")
             if(dep != null) {
                 config.dependencies.add(dep)
@@ -333,17 +367,21 @@ ext {
         }
     }
     /**
-     * TODO
+     * External library projects are currently bugged such that they depend on all build variants
+     * in a project. This causes a number of issues (and long build times!) for native projects,
+     * so this can be used to solve the issue for the default dependencies.
      *
      * @author Ian Copland
+     *
+     * @param in_tasks - All tasks in the android project.
      */
-    csFixDefaultLibraryDependancies = { tasks ->
+    csFixDefaultLibraryDependancies = { in_tasks ->
 
-        tasks.all() { task ->
+        in_tasks.all() { task ->
 
             def taskName = task.name.toLowerCase()
             if (taskName.equals("prepareComAndroidSupportAppcompatV72103Library") == true || taskName.contains("prepareComAndroidSupportSupportV42103Library") == true ||
-                taskName.equals("prepareComGoogleAndroidGmsPlayServices6587Library") == true) {
+                taskName.equals("prepareComGoogleAndroidGmsPlayServices6587Library") == true || taskName.equals("prepareComFacebookAndroidFacebookAndroidSdk3231Library") == true) {
                 task.dependsOn.clear()
             }
         }
