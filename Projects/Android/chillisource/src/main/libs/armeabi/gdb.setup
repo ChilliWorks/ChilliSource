@@ -1,3 +1,0 @@
-set solib-search-path /Users/taggames/Work/Workspace/CSTest/ChilliSource/Projects/Android/chillisource/src/main/obj/local/armeabi
-source /Development/android-ndk-r10d/prebuilt/common/gdb/common.setup
-directory /Development/android-ndk-r10d/platforms/android-9/arch-arm/usr/include /Users/taggames/Work/Workspace/CSTest/ChilliSource/Source/ /Users/taggames/Work/Workspace/CSTest/ChilliSource/Libraries/Core/Android/Headers/ /Users/taggames/Work/Workspace/CSTest/ChilliSource/Libraries/CricketAudio/Android/Headers/ /Development/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.9/include /Development/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi/include /Development/android-ndk-r10d/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
