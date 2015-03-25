@@ -36,6 +36,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.util.ArrayList;
@@ -144,84 +146,20 @@ public class FileUtils
 	{
 		try
 		{
-			InputStream reader = new FileInputStream(in_inputFilePath);
-			OutputStream writer = new FileOutputStream(in_outputFilePath);
+			Path sourcePath = new File(in_inputFilePath).toPath();
+			Path destPath = new File(in_outputFilePath).toPath();
 			
-			byte[] abyBuffer = new byte[1024];
-			int dwLength;
-			while ((dwLength = reader.read(abyBuffer)) > 0) 
+			if (Files.isDirectory(sourcePath) == true || Files.isSymbolicLink(sourcePath) == true)
 			{
-				writer.write(abyBuffer, 0, dwLength);
+				Logging.logError("Could not copy file '" + in_inputFilePath + "' to '" + in_outputFilePath + "' becuase it is not a file.");
+				return false;
 			}
 			
-			reader.close();
-			writer.close();
+			Files.copy(sourcePath, destPath);
 		}
 		catch(Exception e)
 		{
 			Logging.logError("Failed to copy file '" + in_inputFilePath + "' to '" + in_outputFilePath + "'");
-			return false;
-		}
-		
-		return true;
-	}
-	/**
-	 * Copies a directory from one location to another.
-	 * 
-	 * @author Ian Copland
-	 * 
-	 * @param the input directory.
-	 * @param the output directory.
-	 * @param whether or not to ignore dot directories and files.
-	 * 
-	 * @return whether or not this was successful.
-	 */
-	public static boolean copyDirectory(String in_inputDirectoryPath, String in_outputDirectoryPath, LinkedList<String> in_directoryPathsToIgnore)
-	{
-		try
-		{
-			//ignore some dirs.
-			for (String strIgnore : in_directoryPathsToIgnore)
-			{
-				if (in_inputDirectoryPath.contains(strIgnore) == true)
-				{
-					//This doesn't count as failure as we are choosing to ignore these dirs.
-					return true;
-				}
-			}
-			
-			//if the directory doesn't exist, then create it!
-			File destinationDir = new File(in_outputDirectoryPath);
-			if (destinationDir.exists() == false)
-			{
-				destinationDir.mkdir();
-			}
-			
-			
-			//navigate the directory
-			File sourceDir = new File(in_inputDirectoryPath);
-			String[] astrList = sourceDir.list();
-			if (astrList != null) 
-			{
-				for (int i = 0; i < astrList.length; i++) 
-				{
-					File entry = new File(sourceDir, astrList[i]);
-					if (entry.isDirectory())
-					{
-						copyDirectory(StringUtils.standardiseDirectoryPath(in_inputDirectoryPath) + StringUtils.standardiseDirectoryPath(astrList[i]),
-								StringUtils.standardiseDirectoryPath(in_outputDirectoryPath) + StringUtils.standardiseDirectoryPath(astrList[i]), in_directoryPathsToIgnore);
-					}
-					else
-					{
-						copyFile(StringUtils.standardiseDirectoryPath(in_inputDirectoryPath) + StringUtils.standardiseFilePath(astrList[i]),
-								StringUtils.standardiseDirectoryPath(in_outputDirectoryPath) + StringUtils.standardiseFilePath(astrList[i]));
-					}
-				}
-			}
-		}
-		catch(Exception e)
-		{
-			Logging.logError("Failed to copy directory '" + in_inputDirectoryPath + "' to '" + in_outputDirectoryPath + "'");
 			return false;
 		}
 		
@@ -253,37 +191,6 @@ public class FileUtils
 		}
 		
 		if (currentFile.renameTo(newFile) == false)
-		{
-			return false;
-		}
-	    
-		return true;
-	}
-	/**
-	 * Renames a directory. If a file or directory already exists at the new location, this will fail.
-	 * 
-	 * @author Ian Copland
-	 * 
-	 * @param in_currentDirectoryPath - The directory path to the directory which should be renamed.
-	 * @param in_newDirectoryPath - The new directory path.
-	 * 
-	 * @return whether or not this was successful.
-	 */
-	public static boolean renameDirectory(String in_currentDirectoryPath, String in_newDirectoryPath)
-	{
-		File currentDirectory = new File(in_currentDirectoryPath);
-		if (currentDirectory.exists() == false || currentDirectory.isDirectory() == false)
-		{
-			return false;
-		}
-		
-		File newDirectory = new File(in_newDirectoryPath);
-		if (newDirectory.exists() == true)
-		{
-			return false;
-		}
-		
-		if (currentDirectory.renameTo(newDirectory) == false)
 		{
 			return false;
 		}
@@ -355,6 +262,103 @@ public class FileUtils
 		return true;
 	}
 	/**
+	 * Copies a directory from one location to another.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param the input directory.
+	 * @param the output directory.
+	 * @param whether or not to ignore dot directories and files.
+	 * 
+	 * @return whether or not this was successful.
+	 */
+	public static boolean copyDirectory(String in_inputDirectoryPath, String in_outputDirectoryPath, LinkedList<String> in_directoryPathsToIgnore)
+	{
+		try
+		{
+			//ignore some dirs.
+			for (String strIgnore : in_directoryPathsToIgnore)
+			{
+				if (in_inputDirectoryPath.contains(strIgnore) == true)
+				{
+					//This doesn't count as failure as we are choosing to ignore these dirs.
+					return true;
+				}
+			}
+			
+			//if the directory doesn't exist, then create it!
+			File destinationDir = new File(in_outputDirectoryPath);
+			if (destinationDir.exists() == false)
+			{
+				destinationDir.mkdir();
+			}
+			
+			//navigate the directory
+			File sourceDir = new File(in_inputDirectoryPath);
+			String[] astrList = sourceDir.list();
+			if (astrList != null) 
+			{
+				for (int i = 0; i < astrList.length; i++) 
+				{
+					File entry = new File(sourceDir, astrList[i]);
+					if (Files.isSymbolicLink(entry.toPath()) == true)
+					{
+						copySymbolicLink(StringUtils.standardiseDirectoryPath(in_inputDirectoryPath) + StringUtils.standardiseDirectoryPath(astrList[i]),
+								StringUtils.standardiseDirectoryPath(in_outputDirectoryPath) + StringUtils.standardiseDirectoryPath(astrList[i]));
+					}
+					else if (entry.isDirectory())
+					{
+						copyDirectory(StringUtils.standardiseDirectoryPath(in_inputDirectoryPath) + StringUtils.standardiseDirectoryPath(astrList[i]),
+								StringUtils.standardiseDirectoryPath(in_outputDirectoryPath) + StringUtils.standardiseDirectoryPath(astrList[i]), in_directoryPathsToIgnore);
+					}
+					else
+					{
+						copyFile(StringUtils.standardiseDirectoryPath(in_inputDirectoryPath) + StringUtils.standardiseFilePath(astrList[i]),
+								StringUtils.standardiseDirectoryPath(in_outputDirectoryPath) + StringUtils.standardiseFilePath(astrList[i]));
+					}
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			Logging.logError("Failed to copy directory '" + in_inputDirectoryPath + "' to '" + in_outputDirectoryPath + "'");
+			return false;
+		}
+		
+		return true;
+	}
+	/**
+	 * Renames a directory. If a file or directory already exists at the new location, this will fail.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_currentDirectoryPath - The directory path to the directory which should be renamed.
+	 * @param in_newDirectoryPath - The new directory path.
+	 * 
+	 * @return whether or not this was successful.
+	 */
+	public static boolean renameDirectory(String in_currentDirectoryPath, String in_newDirectoryPath)
+	{
+		File currentDirectory = new File(in_currentDirectoryPath);
+		if (currentDirectory.exists() == false || currentDirectory.isDirectory() == false)
+		{
+			return false;
+		}
+		
+		File newDirectory = new File(in_newDirectoryPath);
+		if (newDirectory.exists() == true)
+		{
+			return false;
+		}
+		
+		if (currentDirectory.renameTo(newDirectory) == false)
+		{
+			return false;
+		}
+	    
+		return true;
+	}
+	/**
 	 * Deletes a directory and all its contents.
 	 * 
 	 * @author Ian Copland
@@ -390,6 +394,63 @@ public class FileUtils
 			}
 		}
 		return directory.delete();
+	}
+	/**
+	 * Creates a new symlink
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_linkPath - The location of the symlink
+	 * @param in_targetDirectoryPath - The target location of the symlink. This can be relative or absolute.
+	 * 
+	 * @return Whether or not the creation was successful.
+	 */
+	public static boolean createSymbolicLink(String in_linkDirectoryPath, String in_targetDirectoryPath)
+	{
+		try
+		{
+			Path linkPath = new File(in_linkDirectoryPath).toPath();
+			Path targetPath = new File(in_targetDirectoryPath).toPath();
+			Files.createSymbolicLink(linkPath, targetPath);
+			return true;
+		}
+		catch (Exception e)
+		{
+			Logging.logError("Failed to create symlink at '" + in_linkDirectoryPath + "'");
+			return false;
+		}
+	}
+	/**
+	 * Copies an existing symbolic link to a new location.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_sourceLinkPath - The path to the source symlink.
+	 * @param in_destLinkPath - The path to the destination symlink.
+	 * 
+	 * @return Whether or not the creation was successful.
+	 */
+	public static boolean copySymbolicLink(String in_sourceLinkPath, String in_destLinkPath)
+	{
+		try
+		{
+			Path sourcePath = new File(in_sourceLinkPath).toPath();
+			Path destPath = new File(in_destLinkPath).toPath();
+			
+			if (Files.isSymbolicLink(sourcePath) != true)
+			{
+				Logging.logError("Could not copy symlink '" + in_sourceLinkPath + "' to '" + in_destLinkPath + "' becuase it is not a symlink.");
+				return false;
+			}
+			
+			Files.copy(sourcePath, destPath, LinkOption.NOFOLLOW_LINKS);
+			return true;
+		}
+		catch (Exception e)
+		{
+			Logging.logError("Failed to copy symlink '" + in_sourceLinkPath + "' to '" + in_destLinkPath + "'");
+			return false;
+		}
 	}
 	/**
 	 * Returns all the file paths in the given directory.

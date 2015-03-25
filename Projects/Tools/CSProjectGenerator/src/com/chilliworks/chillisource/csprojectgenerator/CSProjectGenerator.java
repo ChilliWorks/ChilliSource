@@ -66,6 +66,7 @@ public final class CSProjectGenerator
 	{
 		validateOptions(in_options);
 		unzipProject(in_options);
+		createSymlink(in_options);
 		updateProjectFiles(in_options);
 		copyChilliSource(in_options);
 		copyToOutput(in_options);
@@ -152,6 +153,24 @@ public final class CSProjectGenerator
 	    }
 	}
 	/**
+	 * The Android Studio project requires a symlink to access the source. It isn't correctly unzipped, so we
+	 * create it here instead.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_options - The options with which to create the new project.
+	 */
+	private static void createSymlink(Options in_options)
+	{
+		String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
+		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(tempDirectoryPath + k_templateProjectName);
+		
+		String linkPath = StringUtils.standardiseFilePath(tempProjectDirectory + "Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/AppSource");
+		String linkTarget = "../../../../AppSource"	;
+		
+		FileUtils.createSymbolicLink(linkPath, linkTarget);
+	}
+	/**
 	 * Get the directory path that contains this jar file
 	 * 
 	 * @author S Downie
@@ -204,12 +223,14 @@ public final class CSProjectGenerator
 			"Projects/iOS/ProjectResources/" + k_templateProjectName + "-Info.plist",
 			"Projects/Windows/" + k_templateProjectName + ".sln",
 			"Projects/Windows/" + k_templateProjectName + ".vcxproj",
-			"Projects/Android/.project",
-			"Projects/Android/AndroidManifest.xml",
-			"Projects/Android/CSAndroidManifest.xml",
-			"Projects/Android/jni/Android.mk",
-			"Projects/Android/jni/Application.mk",
-			"Projects/Android/res/values/strings.xml",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/build.gradle",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/settings.gradle",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/build.gradle",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/proguard-rules.pro",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/AndroidManifest.xml",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/CSAndroidManifest.xml",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/jni/Android.mk",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/jni/Application.mk",
 			"Tools/Scripts/content_builder.py",
 			"Tools/Scripts/file_system_utils.py",
 			"Tools/Scripts/model_builder.py",
@@ -225,13 +246,15 @@ public final class CSProjectGenerator
 			"Projects/iOS/ProjectResources/" + k_templateProjectName + "-Info.plist",
 			"Projects/Windows/" + k_templateProjectName + ".sln",
 			"Projects/Windows/" + k_templateProjectName + ".vcxproj",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/" + k_templateProjectName.toLowerCase() + ".iml"
 		};
 		
 		updateFileNames(in_options, filesToUpdateFileName);
 		
 		String[] directoriesToUpdateDirectoryName = new String[]
 		{
-			"Projects/iOS/" + k_templateProjectName + ".xcodeproj"
+			"Projects/iOS/" + k_templateProjectName + ".xcodeproj",
+			"Projects/Android/" + k_templateProjectName.toLowerCase()
 		};
 		
 		updateDirectoryNames(in_options, directoriesToUpdateDirectoryName);
@@ -262,9 +285,10 @@ public final class CSProjectGenerator
 				cleanupTemp(in_options);
 				Logging.logFatal("Could not read file: " + filePath);
 			}
-			
-			fileContents = fileContents.replace(k_templateProjectName, in_options.m_projectName);
+
 			fileContents = fileContents.replace(k_templatePackageName, in_options.m_packageName);
+			fileContents = fileContents.replace(k_templateProjectName.toLowerCase(), in_options.m_projectName.toLowerCase());
+			fileContents = fileContents.replace(k_templateProjectName, in_options.m_projectName);
 			
 			if (FileUtils.writeFile(fullFilePath, fileContents) == false)
 			{
@@ -292,11 +316,15 @@ public final class CSProjectGenerator
 		{
 			Logging.logVerbose("Updating file name: " + currentFilePath);
 			
-			String newFilePath = currentFilePath.replace(k_templateProjectName, in_options.m_projectName);
-			newFilePath = newFilePath.replace(k_templatePackageName, in_options.m_packageName);
+			String fileName = StringUtils.getFileName(currentFilePath);
+			String directory = StringUtils.getDirectory(currentFilePath);
+			
+			String newFileName = fileName.replace(k_templatePackageName, in_options.m_packageName);
+			newFileName = newFileName.replace(k_templateProjectName.toLowerCase(), in_options.m_projectName.toLowerCase());
+			newFileName = newFileName.replace(k_templateProjectName, in_options.m_projectName);
 			
 			String currentFullFilePath = StringUtils.standardiseFilePath(tempProjectDirectory + currentFilePath);
-			String newFullFilePath = StringUtils.standardiseFilePath(tempProjectDirectory + newFilePath);
+			String newFullFilePath = StringUtils.standardiseFilePath(tempProjectDirectory + directory + newFileName);
 			
 			if (FileUtils.renameFile(currentFullFilePath, newFullFilePath) == false)
 			{
@@ -323,9 +351,10 @@ public final class CSProjectGenerator
 		for (String currentDirectoryPath : in_directoryPaths)
 		{
 			Logging.logVerbose("Updating directory name: " + currentDirectoryPath);
-			
-			String newDirectoryPath = currentDirectoryPath.replace(k_templateProjectName, in_options.m_projectName);
-			newDirectoryPath = newDirectoryPath.replace(k_templatePackageName, in_options.m_packageName);
+
+			String newDirectoryPath = currentDirectoryPath.replace(k_templatePackageName, in_options.m_packageName);
+			newDirectoryPath = newDirectoryPath.replace(k_templateProjectName.toLowerCase(), in_options.m_projectName.toLowerCase());
+			newDirectoryPath = newDirectoryPath.replace(k_templateProjectName, in_options.m_projectName);
 			
 			String currentFullDirectoryPath = StringUtils.standardiseFilePath(tempProjectDirectory + currentDirectoryPath);
 			String newFullDirectoryPath = StringUtils.standardiseFilePath(tempProjectDirectory + newDirectoryPath);
