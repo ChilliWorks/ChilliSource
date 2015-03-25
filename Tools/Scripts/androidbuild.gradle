@@ -30,7 +30,6 @@ import com.sun.tools.classfile.Dependency
 import org.apache.tools.ant.taskdefs.condition.Os
 import java.lang.Runtime
 import java.lang.Process
-org.gradle.api.artifacts.Dependency
 
 /**
  * Prints anything in the given buffered stream.
@@ -115,7 +114,7 @@ def isDebugFromTaskName(String in_taskName)
     } else if (lowerTaskName.contains('release') == true){
         return false
     } else {
-        System.err.println "Task '$taskName' does not specify release or debug."
+        System.err.println("Task '$taskName' does not specify release or debug.")
         return false
     }
 }
@@ -136,7 +135,7 @@ def getAbiFromTaskName(String in_taskName)
     } else if (lowerTaskName.contains('x86')){
         return "x86"
     } else {
-        System.err.println "Task '$taskName' does not specify an abi."
+        System.err.println("Task '$taskName' does not specify an abi.")
         return "armeabi"
     }
 }
@@ -155,7 +154,7 @@ def getSkuFromTaskName(String in_taskName)
     } else if (lowerTaskName.contains('amazon')){
         return "amazon"
     } else {
-        System.err.println "Task '$taskName' does not specify a sku."
+        System.err.println("Task '$taskName' does not specify a sku.")
         return "googleplay"
     }
 }
@@ -172,16 +171,16 @@ def getNDKPath() {
     if (localProperties.exists()) {
         Properties properties = new Properties()
         localProperties.withInputStream {
-            instr -> properties.load(instr)
+            stream -> properties.load(stream)
         }
         def ndkDir = properties.getProperty('ndk.dir')
         if (ndkDir == null) {
-            throw new GradleException("The ndk.dir property in local.propeties is not set")
+            throw new Exception("The ndk.dir property in local.propeties is not set")
         }
         def ndkBuild = Os.isFamily(Os.FAMILY_WINDOWS) ? "$ndkDir/ndk-build.cmd" : "$ndkDir/ndk-build"
         return ndkBuild
     } else {
-        throw new GradleException("The local.properties file does not exist")
+        throw new Exception("The local.properties file does not exist")
     }
 }
 /**
@@ -250,44 +249,45 @@ ext {
      */
     csInitLibrary = { in_tasks ->
 
-        in_tasks.all() { task ->
-            def taskName = task.name.toLowerCase();
+        in_tasks.all() { currentTask ->
+            def taskName = currentTask.name.toLowerCase();
+
+            //If it is the "clean" task also hook in the ChilliSource clean event.
             if (taskName == "clean") {
-                task.dependsOn csCleanNdk
-            }
-        }
+                currentTask.dependsOn(csCleanNdk)
 
-        //configure the build by adding the appropriate build dependencies depending on the name
-        //of the compile task.
-        in_tasks.withType(JavaCompile) { compileTask ->
+            //if it is a ndk compile task, replace it with the ChilliSource ndk compile task.
+            } else if (taskName.startsWith("compile") == true && taskName.endsWith("ndk") == true) {
 
-            //exclude testing tasks
-            if (isTestFromTaskName(compileTask.name) == true) {
-                return;
-            }
+                currentTask.dependsOn.clear();
+                currentTask.deleteAllActions();
 
-            def sku = getSkuFromTaskName compileTask.name
-            def abi = getAbiFromTaskName compileTask.name
-            def debug = isDebugFromTaskName compileTask.name
-            def debugText = (debug == true) ? "debug" : "release"
+                //exclude test tasks to avoid duplicate version of the created task.
+                if (isTestFromTaskName(taskName) == false) {
+                    def sku = getSkuFromTaskName(taskName)
+                    def abi = getAbiFromTaskName(taskName)
+                    def debug = isDebugFromTaskName(taskName)
+                    def debugText = (debug == true) ? "debug" : "release"
 
-            def csCompileTask = task "csCompileNdk_${sku}_${abi}_${debugText}" << {
-                buildNdk(sku, abi, debug)
-            }
-
-            //This is a hack to ensure ChilliSource is only built for the ABI/SKU/config that the
-            //application is being built for. This has the draw-back that ChilliSource can no longer
-            //be built on its own, so hopefully a better solution presents itself in the future.
-            csCompileTask.onlyIf {
-                def taskGraph = gradle.taskGraph
-                for (def aTask : taskGraph.getAllTasks()) {
-                    if (aTask.project.name.equals("app") && aTask.name.equals(csCompileTask.name) == true) {
-                        return true
+                    def csCompileTask = task("csCompileNdk_${sku}_${abi}_${debugText}") << {
+                        buildNdk(sku, abi, debug)
                     }
+
+                    //This is a hack to ensure ChilliSource is only built for the ABI/SKU/config that the
+                    //application is being built for. This has the draw-back that ChilliSource can no longer
+                    //be built on its own, so hopefully a better solution presents itself in the future.
+                    csCompileTask.onlyIf {
+                        def taskGraph = gradle.taskGraph
+                        for (def aTask : taskGraph.getAllTasks()) {
+                            if (aTask.project.name.equals("app") && aTask.name.equals(csCompileTask.name) == true) {
+                                return true
+                            }
+                        }
+                        return false
+                    }
+                    currentTask.dependsOn(csCompileTask)
                 }
-                return false
             }
-            compileTask.dependsOn csCompileTask
         }
     }
     /**
@@ -299,34 +299,35 @@ ext {
      */
     csInitApplication = { in_tasks ->
 
-        in_tasks.all() { task ->
-            def taskName = task.name.toLowerCase();
+        in_tasks.all() { currentTask ->
+            def taskName = currentTask.name.toLowerCase();
+
+            //if it is the 'clean' task also hook in the ChilliSource clean event.
             if (taskName == "clean") {
-                task.dependsOn csCleanNdk
-            }
-        }
+                currentTask.dependsOn(csCleanNdk)
 
-        //configure the build by adding the appropriate build dependencies depending on the name
-        //of the compile task.
-        in_tasks.withType(JavaCompile) { compileTask ->
+            //if it is a ndk compile task, replace it with the ChilliSource ndk compile task.
+            } else if (taskName.startsWith("compile") == true && taskName.endsWith("ndk") == true) {
 
-            //exclude testing tasks
-            if (isTestFromTaskName(compileTask.name) == true) {
-                return;
-            }
+                currentTask.dependsOn.clear();
+                currentTask.deleteAllActions();
 
-            def sku = getSkuFromTaskName(compileTask.name)
-            def abi = getAbiFromTaskName(compileTask.name)
-            def debug = isDebugFromTaskName(compileTask.name)
-            def debugText = (debug == true) ? "debug" : "release"
+                //exclude test tasks to avoid duplicate version of the created task.
+                if (isTestFromTaskName(taskName) == false) {
+                    def sku = getSkuFromTaskName(taskName)
+                    def abi = getAbiFromTaskName(taskName)
+                    def debug = isDebugFromTaskName(taskName)
+                    def debugText = (debug == true) ? "debug" : "release"
 
-            task "csCompileNdk_${sku}_${abi}_${debugText}" (dependsOn: ":chillisource:csCompileNdk_${sku}_${abi}_${debugText}") << {
-                buildNdk(sku, abi, debug)
+                    task "csCompileNdk_${sku}_${abi}_${debugText}" (dependsOn: ":chillisource:csCompileNdk_${sku}_${abi}_${debugText}") << {
+                        buildNdk(sku, abi, debug)
+                    }
+                    task "csGenerateResources_${sku}_${abi}_${debugText}" (dependsOn: "csCompileNdk_${sku}_${abi}_${debugText}") << {
+                        generateResources()
+                    }
+                    currentTask.dependsOn("csGenerateResources_${sku}_${abi}_${debugText}")
+                }
             }
-            task "csGenerateResources_${sku}_${abi}_${debugText}" (dependsOn: "csCompileNdk_${sku}_${abi}_${debugText}") << {
-                generateResources()
-            }
-            compileTask.dependsOn "csGenerateResources_${sku}_${abi}_${debugText}"
         }
     }
     /**
@@ -337,9 +338,9 @@ ext {
      * @param in_dependencies - The dependencies.
      */
     csAddDefaultDependencies = { in_dependencies ->
-        in_dependencies.compile 'com.android.support:appcompat-v7:21.0.3'
-        in_dependencies.compile 'com.google.android.gms:play-services:6.5.87'
-        in_dependencies.compile 'com.facebook.android:facebook-android-sdk:3.23.1'
+        in_dependencies.compile('com.android.support:appcompat-v7:21.0.3')
+        in_dependencies.compile('com.google.android.gms:play-services:6.5.87')
+        in_dependencies.compile('com.facebook.android:facebook-android-sdk:3.23.1')
     }
     /**
      * Android Gradle currently does not support dependencies for specific combinations of build

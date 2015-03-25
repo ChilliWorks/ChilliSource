@@ -44,13 +44,16 @@ android {
     sourceSets {
         main {
             java.srcDir '../../../Source/CSBackend/Platform/Android/Main/Java/'
+            jni.srcDir '../../../Source/ChilliSource'
             jniLibs.srcDir 'src/main/libs'
         }
         googlePlay {
             java.srcDir '../../../Source/CSBackend/Platform/Android/GooglePlay/Java/'
+            jni.srcDir '../../../Source/CSBackend/Platform/Android/GooglePlay/JNI/'
         }
         amazon {
             java.srcDir '../../../Source/CSBackend/Platform/Android/Amazon/Java/'
+            jni.srcDir '../../../Source/CSBackend/Platform/Android/Amazon/JNI/'
         }
     }
 

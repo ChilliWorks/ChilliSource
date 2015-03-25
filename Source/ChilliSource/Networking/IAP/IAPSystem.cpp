@@ -34,9 +34,9 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 #ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
-#include <CSBackend/Platform/Android/GooglePlay/JNI/Networking/IAP/GooglePlayIAPSystem.h>
+#include <CSBackend/Platform/Android/GooglePlay/JNI/GooglePlay/Networking/IAP/GooglePlayIAPSystem.h>
 #elif defined(CS_ANDROIDFLAVOUR_AMAZON)
-#include <CSBackend/Platform/Android/Amazon/JNI/Networking/IAP/AmazonIAPSystem.h>
+#include <CSBackend/Platform/Android/Amazon/JNI/Amazon/Networking/IAP/AmazonIAPSystem.h>
 #endif
 #endif
 
