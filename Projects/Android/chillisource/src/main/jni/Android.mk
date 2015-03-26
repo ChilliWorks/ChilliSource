@@ -27,7 +27,7 @@
 #
 
 #prepare the ChilliSource libraries
-CS_PROJECT_ROOT=$(realpath ../../../../../../..)
+CS_PROJECT_ROOT=../../../../../../..
 include $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts/AndroidBuildConfig.mk
 
 #gather all files in the engine that should be built

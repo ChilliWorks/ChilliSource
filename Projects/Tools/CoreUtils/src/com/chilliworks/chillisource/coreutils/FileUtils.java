@@ -36,13 +36,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.List;
 
 public class FileUtils 
 {
@@ -272,7 +271,7 @@ public class FileUtils
 	 * 
 	 * @return whether or not this was successful.
 	 */
-	public static boolean copyDirectory(String in_inputDirectoryPath, String in_outputDirectoryPath, LinkedList<String> in_directoryPathsToIgnore)
+	public static boolean copyDirectory(String in_inputDirectoryPath, String in_outputDirectoryPath, List<String> in_directoryPathsToIgnore)
 	{
 		try
 		{
@@ -301,12 +300,7 @@ public class FileUtils
 				for (int i = 0; i < astrList.length; i++) 
 				{
 					File entry = new File(sourceDir, astrList[i]);
-					if (Files.isSymbolicLink(entry.toPath()) == true)
-					{
-						copySymbolicLink(StringUtils.standardiseDirectoryPath(in_inputDirectoryPath) + StringUtils.standardiseDirectoryPath(astrList[i]),
-								StringUtils.standardiseDirectoryPath(in_outputDirectoryPath) + StringUtils.standardiseDirectoryPath(astrList[i]));
-					}
-					else if (entry.isDirectory())
+					if (entry.isDirectory())
 					{
 						copyDirectory(StringUtils.standardiseDirectoryPath(in_inputDirectoryPath) + StringUtils.standardiseDirectoryPath(astrList[i]),
 								StringUtils.standardiseDirectoryPath(in_outputDirectoryPath) + StringUtils.standardiseDirectoryPath(astrList[i]), in_directoryPathsToIgnore);
@@ -394,63 +388,6 @@ public class FileUtils
 			}
 		}
 		return directory.delete();
-	}
-	/**
-	 * Creates a new symlink
-	 * 
-	 * @author Ian Copland
-	 * 
-	 * @param in_linkPath - The location of the symlink
-	 * @param in_targetDirectoryPath - The target location of the symlink. This can be relative or absolute.
-	 * 
-	 * @return Whether or not the creation was successful.
-	 */
-	public static boolean createSymbolicLink(String in_linkDirectoryPath, String in_targetDirectoryPath)
-	{
-		try
-		{
-			Path linkPath = new File(in_linkDirectoryPath).toPath();
-			Path targetPath = new File(in_targetDirectoryPath).toPath();
-			Files.createSymbolicLink(linkPath, targetPath);
-			return true;
-		}
-		catch (Exception e)
-		{
-			Logging.logError("Failed to create symlink at '" + in_linkDirectoryPath + "'");
-			return false;
-		}
-	}
-	/**
-	 * Copies an existing symbolic link to a new location.
-	 * 
-	 * @author Ian Copland
-	 * 
-	 * @param in_sourceLinkPath - The path to the source symlink.
-	 * @param in_destLinkPath - The path to the destination symlink.
-	 * 
-	 * @return Whether or not the creation was successful.
-	 */
-	public static boolean copySymbolicLink(String in_sourceLinkPath, String in_destLinkPath)
-	{
-		try
-		{
-			Path sourcePath = new File(in_sourceLinkPath).toPath();
-			Path destPath = new File(in_destLinkPath).toPath();
-			
-			if (Files.isSymbolicLink(sourcePath) != true)
-			{
-				Logging.logError("Could not copy symlink '" + in_sourceLinkPath + "' to '" + in_destLinkPath + "' becuase it is not a symlink.");
-				return false;
-			}
-			
-			Files.copy(sourcePath, destPath, LinkOption.NOFOLLOW_LINKS);
-			return true;
-		}
-		catch (Exception e)
-		{
-			Logging.logError("Failed to copy symlink '" + in_sourceLinkPath + "' to '" + in_destLinkPath + "'");
-			return false;
-		}
 	}
 	/**
 	 * Returns all the file paths in the given directory.

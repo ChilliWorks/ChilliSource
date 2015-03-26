@@ -34,7 +34,9 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.CodeSource;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import com.chilliworks.chillisource.coreutils.FileUtils;
 import com.chilliworks.chillisource.coreutils.Logging;
@@ -66,7 +68,6 @@ public final class CSProjectGenerator
 	{
 		validateOptions(in_options);
 		unzipProject(in_options);
-		createSymlink(in_options);
 		updateProjectFiles(in_options);
 		copyChilliSource(in_options);
 		copyToOutput(in_options);
@@ -153,24 +154,6 @@ public final class CSProjectGenerator
 	    }
 	}
 	/**
-	 * The Android Studio project requires a symlink to access the source. It isn't correctly unzipped, so we
-	 * create it here instead.
-	 * 
-	 * @author Ian Copland
-	 * 
-	 * @param in_options - The options with which to create the new project.
-	 */
-	private static void createSymlink(Options in_options)
-	{
-		String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
-		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(tempDirectoryPath + k_templateProjectName);
-		
-		String linkPath = StringUtils.standardiseFilePath(tempProjectDirectory + "Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/AppSource");
-		String linkTarget = "../../../../AppSource"	;
-		
-		FileUtils.createSymbolicLink(linkPath, linkTarget);
-	}
-	/**
 	 * Get the directory path that contains this jar file
 	 * 
 	 * @author S Downie
@@ -225,12 +208,16 @@ public final class CSProjectGenerator
 			"Projects/Windows/" + k_templateProjectName + ".vcxproj",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/build.gradle",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/settings.gradle",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/.idea/.name",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/.idea/modules.xml",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/app.iml",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/build.gradle",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/proguard-rules.pro",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/AndroidManifest.xml",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/CSAndroidManifest.xml",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/jni/Android.mk",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/jni/Application.mk",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/res/values/strings.xml",
 			"Tools/Scripts/content_builder.py",
 			"Tools/Scripts/file_system_utils.py",
 			"Tools/Scripts/model_builder.py",
@@ -381,7 +368,11 @@ public final class CSProjectGenerator
 		String csDestinationPath = StringUtils.standardiseDirectoryPath(tempProjectDirectory + k_csDestinationDirectoryPath);
 		
 		Logging.logVerbose("Copying Chilli Source into the project.");
-		if (FileUtils.copyDirectory(csSourcePath, csDestinationPath, new LinkedList<String>()) == false)
+		
+		
+		List<String> ignore = new ArrayList<>();
+		Collections.addAll(ignore, "bin", "obj");
+		if (FileUtils.copyDirectory(csSourcePath, csDestinationPath, ignore) == false)
 		{
 			cleanupTemp(in_options);
 			Logging.logFatal("Could not copy Chilli Source into project.");
@@ -401,7 +392,10 @@ public final class CSProjectGenerator
 		String outputProjectDirectory = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + in_options.m_projectName);
 		
 		Logging.logVerbose("Copying project to output directory: " + outputProjectDirectory);
-		if (FileUtils.copyDirectory(tempProjectDirectory, outputProjectDirectory, new LinkedList<String>()) == false)
+		
+		List<String> ignore = new ArrayList<>();
+		Collections.addAll(ignore, "bin", "obj");
+		if (FileUtils.copyDirectory(tempProjectDirectory, outputProjectDirectory, ignore) == false)
 		{
 			cleanupTemp(in_options);
 			Logging.logFatal("Could not copy to output directory: " + outputProjectDirectory);

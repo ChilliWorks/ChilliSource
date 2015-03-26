@@ -36,7 +36,7 @@
 # @author Ian Copland
 #------------------------------------------------------------------------------
 
-LOCAL_PATH = $(CS_PROJECT_ROOT)
+LOCAL_PATH = .
 
 #store the location of the Get Files script
 CS_SCRIPT_GETFILESWITHEXTENSIONS := $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts/get_file_paths_with_extensions.py
