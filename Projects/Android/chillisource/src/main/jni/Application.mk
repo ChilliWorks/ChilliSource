@@ -26,7 +26,7 @@
 #  THE SOFTWARE.
 #
 
-CS_PROJECT_ROOT=$(realpath ../../../../../../../)
+CS_PROJECT_ROOT=../../../../../../..
 include $(CS_PROJECT_ROOT)/ChilliSource/Tools/Scripts/AndroidApplicationConfig.mk
 
 NDK_TOOLCHAIN_VERSION := $(CS_NDK_TOOLCHAIN_VERSION)

@@ -177,8 +177,7 @@ def getNDKPath() {
         if (ndkDir == null) {
             throw new Exception("The ndk.dir property in local.propeties is not set")
         }
-        def ndkBuild = Os.isFamily(Os.FAMILY_WINDOWS) ? "$ndkDir/ndk-build.cmd" : "$ndkDir/ndk-build"
-        return ndkBuild
+        return ndkDir
     } else {
         throw new Exception("The local.properties file does not exist")
     }
@@ -193,14 +192,17 @@ def getNDKPath() {
  * @param in_debug - Whether or not the build should have debug symbols.
  */
 def buildNdk(String in_sku, String in_abi, boolean in_debug) {
+    def ndkPath = getNDKPath()
     def jniPath = file('src/main/jni').absolutePath
+    def scriptPath = file("$csProjectRoot/ChilliSource/Tools/Scripts/android_ndk_build.py").absolutePath
+    String[] commands;
     if (in_debug == true) {
-        String[] commands = [ getNDKPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi", "NDK_DEBUG=1" ];
-        executeCommand(commands);
-    } else {
-        String[] commands = [ getNDKPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi" ];
-        executeCommand(commands);
+        commands = [ "python", scriptPath, ndkPath, jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi", "NDK_DEBUG=1" ]
     }
+    else {
+        commands = [ "python", scriptPath, ndkPath, jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi" ]
+    }
+    executeCommand(commands)
 }
 /**
  * Cleans native source for all abis, skus and both debug and release.
@@ -208,13 +210,15 @@ def buildNdk(String in_sku, String in_abi, boolean in_debug) {
  * @author Ian Copland
  */
 def cleanNdk() {
+    def ndkPath = getNDKPath()
     def jniPath = file('src/main/jni').absolutePath
+    def scriptPath = file("$csProjectRoot/ChilliSource/Tools/Scripts/android_ndk_build.py").absolutePath
 
-    String[] commandsRelease = [ getNDKPath(), "-C", jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86", "CS_CLEAN=1" ];
-    executeCommand(commandsRelease);
+    String[] commandsRelease = [ "python", scriptPath, ndkPath, jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86", "CS_CLEAN=1" ]
+    executeCommand(commandsRelease)
 
-    String[] commandsDebug = [ getNDKPath(), "-C", jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86", "NDK_DEBUG=1", "CS_CLEAN=1"  ];
-    executeCommand(commandsDebug);
+    String[] commandsDebug = [ "python", scriptPath, ndkPath, jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86", "NDK_DEBUG=1", "CS_CLEAN=1"  ]
+    executeCommand(commandsDebug)
 }
 /**
  * Bundles the resources that should be copied to the APK.

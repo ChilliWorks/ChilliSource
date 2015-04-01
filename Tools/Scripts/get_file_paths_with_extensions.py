@@ -62,7 +62,9 @@ def main(args):
         if first == False:
             output += " "
         first = False
-        output += directory_prefix + file_path
+        addition = directory_prefix + file_path
+        addition = addition.replace('\\', '/')
+        output += addition
 
     print(output)
 

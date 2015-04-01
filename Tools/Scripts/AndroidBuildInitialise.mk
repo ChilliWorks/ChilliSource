@@ -31,7 +31,7 @@
 # The android build settings are also included, so this is the only thing that
 # a makefile building a ChilliSource shared library will need to include. 
 # 
-# Prior to including this, CS_PROJECT_ROOT must be set to the absolute path to
+# Prior to including this, CS_PROJECT_ROOT must be set to the relative path to
 # the root of the project, i.e, the directory ChilliSource is located in.
 #
 # @author Ian Copland
