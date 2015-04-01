@@ -54,7 +54,7 @@ include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := $(CS_MODULENAME_CHILLISOURCE)
-LOCAL_SRC_FILES := $(CS_PROJECT_ROOT)/ChilliSource/Projects/Android/chillisource/src/main/obj/local/$(TARGET_ARCH_ABI)/libChilliSource.a
+LOCAL_SRC_FILES := $(CS_PROJECT_ROOT)/ChilliSource/Projects/Android/chillisource/src/main/libs/$(TARGET_ARCH_ABI)/libChilliSource.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 endif

@@ -95,7 +95,7 @@ android {
         }
     }
 
-    csInitLibrary tasks
+    csInitLibrary tasks, "ChilliSource"
 }
 
 dependencies {
