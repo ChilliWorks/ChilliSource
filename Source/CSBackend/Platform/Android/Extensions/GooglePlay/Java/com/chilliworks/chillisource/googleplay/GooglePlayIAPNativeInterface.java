@@ -51,14 +51,14 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 	//--------------------------------------------------------------
 	public static InterfaceIDType InterfaceID = new InterfaceIDType("CGooglePlayIAPNativeInterface");
 	
+	private static final int k_maxProductIDsPerRequest = 20;
+	
 	private IabHelper mIABHelper = null;
 	private boolean mbCancelProductDescRequest = false;
 	private boolean mbIsPurchasingEnabled = false;
 	private boolean mbRequestDescriptionsInProgress = false;
 	private List<Purchase> mCurrentPendingTransactions = new ArrayList<Purchase>();
 	private Inventory mInventory = null;
-	
-	private final int k_maxProductIDsPerRequest = 20;
 	
 	//---------------------------------------------------------------------
 	/// Native Methods
@@ -117,6 +117,15 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 	///
 	/// @param Array of product IDs
 	//---------------------------------------------------------------
+	/**
+	 * Request Product Descriptions
+	 * 
+	 * Request the descriptions of all the products on the store
+	 * 
+	 * @author HMcLaughlin
+	 * 
+	 * @param inProductIDs
+	 */
 	public void RequestProductDescriptions(final String[] inProductIDs)
 	{
 		if(mbRequestDescriptionsInProgress && mbCancelProductDescRequest) // previously requested cancel but new request incoming
@@ -140,7 +149,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 		mbCancelProductDescRequest = false;
 		mbRequestDescriptionsInProgress = true;
 			
-		CSApplication.get().scheduleUIThreadTask(new Runnable()
+		Thread descriptionRequestThread = new Thread(new Runnable()
 		{
 			@Override public void run() 
 			{
@@ -168,7 +177,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 						}
 						else 
 						{
-							Logging.logFatal("Could not retrieve batch items - " + idBatch);
+							Logging.logError("Could not retrieve batch items - " + idBatch);
 						}
 					}
 					
@@ -189,22 +198,21 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 				}
 			}
 		});
-    }
-	//---------------------------------------------------------------
-    /// Merges the contents of two Inventories
-    ///
-	/// @author HMcLaughlin
-    /// @param Inventory to be merged
-	/// @param Inventory to be merged
-	/// @return Merged Inventory
-    //---------------------------------------------------------------
-	private Inventory MergeInventories(final Inventory in_lhs, final Inventory in_rhs)
-	{
-		if(in_lhs == null && in_rhs == null)
-		{
-			return null;
-		}
 		
+		descriptionRequestThread.start();
+    }
+	/**
+	 * Merges the contents of two Inventories
+	 * 
+	 * @author HMcLaughlin
+	 * 
+	 * @param Inventory to combine
+	 * @param Inventory to combine
+	 * 
+	 * @return Merged Inventory
+	 */
+	private Inventory MergeInventories(Inventory in_lhs, Inventory in_rhs)
+	{
 		Inventory mergedInventory = new Inventory();
 		
 		if(in_lhs != null)
