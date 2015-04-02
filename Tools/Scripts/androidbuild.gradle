@@ -214,21 +214,21 @@ def getBuildDirectory() {
  */
 def ndkBuild(String in_sku, String in_abi, boolean in_debug) {
     def jniPath = file('src/main/jni').absolutePath
-    String[] commands
+    ArrayList<String> commands
     if (in_debug == true) {
-        commands = [ getNDKBuildScriptPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi", "NDK_DEBUG=1" ];
+        commands = [ getNDKBuildScriptPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi", "NDK_DEBUG=1" ] as ArrayList<String>
     }
     else {
-        commands = [ getNDKBuildScriptPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi" ];
+        commands = [ getNDKBuildScriptPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi" ] as ArrayList<String>
     }
 
     if (Os.isFamily(Os.FAMILY_WINDOWS) == true) {
         def buildDir = getBuildDirectory()
-        commands.append("NDK_OUT=" + buildDir)
+        commands.add("NDK_OUT=" + buildDir)
         Files.createDirectories(Paths.get(buildDir))
     }
 
-    executeCommand(commands)
+    executeCommand(commands as String[])
 }
 /**
  * Builds native source for the given sku, abi and debug mode and also copies the static library
@@ -266,11 +266,16 @@ def ndkBuildStatic(String in_sku, String in_abi, boolean in_debug, String in_lib
 def ndkBuildClean() {
     def jniPath = file('src/main/jni').absolutePath
 
-    String[] commandsRelease = [ getNDKBuildScriptPath(), "-C", jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86", "CS_CLEAN=1" ]
-    executeCommand(commandsRelease)
+    def commands = [ getNDKBuildScriptPath(), "-C", jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86", "CS_CLEAN=1" ]
+    if (Os.isFamily(Os.FAMILY_WINDOWS) == true) {
+        def buildDir = getBuildDirectory()
+        Files.createDirectories(Paths.get(buildDir))
+        commands.add("NDK_OUT=" + buildDir)
+    }
+    executeCommand(commands as String[])
 
-    String[] commandsDebug = [ getNDKBuildScriptPath(), "-C", jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86", "NDK_DEBUG=1", "CS_CLEAN=1"  ]
-    executeCommand(commandsDebug)
+    commands.add("NDK_DEBUG=1")
+    executeCommand(commands as String[])
 }
 /**
  * Performs a clean build of all native source and removes the built static libraries from the libs
