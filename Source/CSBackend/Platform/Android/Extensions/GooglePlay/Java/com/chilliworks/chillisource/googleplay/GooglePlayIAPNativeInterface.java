@@ -58,6 +58,8 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 	private List<Purchase> mCurrentPendingTransactions = new ArrayList<Purchase>();
 	private Inventory mInventory = null;
 	
+	private final int k_maxProductIDsPerRequest = 20;
+	
 	//---------------------------------------------------------------------
 	/// Native Methods
 	//---------------------------------------------------------------------
@@ -142,32 +144,77 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 		{
 			@Override public void run() 
 			{
-				final List<String> productIDs = new ArrayList<String>(Arrays.asList(inProductIDs));
-
-				mIABHelper.queryInventoryAsync(true, productIDs, new IabHelper.QueryInventoryFinishedListener() 
+				List<String> productIDs = new ArrayList<String>(Arrays.asList(inProductIDs));
+				
+				try 
 				{
-					@Override public void onQueryInventoryFinished(IabResult result, Inventory inventory) 
+					Inventory itemsInventory = null;
+					
+					while(productIDs.size() > 0)
 					{
-						mbRequestDescriptionsInProgress = false;
+						//Gets a sublist of max size|listsize
+						ArrayList<String> idBatch = new ArrayList<String>(productIDs.subList(0, Math.min(k_maxProductIDsPerRequest, productIDs.size())));
 						
-						if(mbCancelProductDescRequest)
-							return;
+						//Remove the sublist from the master list
+						productIDs.removeAll(idBatch);
 						
-						mInventory = inventory;
+						//Make request with the sublist, this is a blocking call
+						Inventory batchItems = mIABHelper.queryInventory(true, idBatch);
 						
-						if(result.isFailure())
+						if(batchItems != null)
 						{
-							Logging.logError("Cannot query Google IAB inventory: " + result.getMessage());
-							OnProductsRequestComplete(null, inProductIDs);
-							return;
+							if(itemsInventory != null)
+							{
+								//Merge the inventory contents
+								itemsInventory = MergeInventories(itemsInventory, batchItems);
+							}
+							else 
+							{
+								itemsInventory = batchItems;
+							}
 						}
-
-						OnProductsRequestComplete(mInventory, inProductIDs);
+						else 
+						{
+							Logging.logFatal("Could not retrieve batch items - " + idBatch);
+						}
 					}
-				});
+					
+					mbRequestDescriptionsInProgress = false;
+					
+					if(mbCancelProductDescRequest)
+						return;
+					
+					mInventory = itemsInventory;
+					
+					OnProductsRequestComplete(mInventory, inProductIDs);
+				} 
+				catch (IabException in_exception) 
+				{
+					Logging.logError("Cannot query Google IAB inventory: " + in_exception.getMessage());
+					OnProductsRequestComplete(null, inProductIDs);
+					return;
+				}
 			}
 		});
     }
+	//---------------------------------------------------------------
+    /// Merges the contents of two Inventories
+    ///
+	/// @author HMcLaughlin
+    /// @param Inventory to be merged
+	/// @param Inventory to be merged
+	/// @return Merged Inventory
+    //---------------------------------------------------------------
+	private Inventory MergeInventories(final Inventory in_lhs, final Inventory in_rhs)
+	{
+		Inventory mergedInventory = new Inventory();
+		mergedInventory.mPurchaseMap.putAll(in_lhs.mPurchaseMap);
+		mergedInventory.mPurchaseMap.putAll(in_rhs.mPurchaseMap);
+		mergedInventory.mSkuMap.putAll(in_lhs.mSkuMap);
+		mergedInventory.mSkuMap.putAll(in_rhs.mSkuMap);
+		
+		return mergedInventory;
+	}
     //---------------------------------------------------------------
     /// On Products Request Complete
     ///
