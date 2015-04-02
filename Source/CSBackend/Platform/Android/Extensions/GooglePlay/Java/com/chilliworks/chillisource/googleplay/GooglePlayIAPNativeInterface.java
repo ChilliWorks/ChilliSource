@@ -163,15 +163,8 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 						
 						if(batchItems != null)
 						{
-							if(itemsInventory != null)
-							{
-								//Merge the inventory contents
-								itemsInventory = MergeInventories(itemsInventory, batchItems);
-							}
-							else 
-							{
-								itemsInventory = batchItems;
-							}
+							//Merge the inventory contents
+							itemsInventory = MergeInventories(itemsInventory, batchItems);
 						}
 						else 
 						{
@@ -207,11 +200,24 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
     //---------------------------------------------------------------
 	private Inventory MergeInventories(final Inventory in_lhs, final Inventory in_rhs)
 	{
+		if(in_lhs == null && in_rhs == null)
+		{
+			return null;
+		}
+		
 		Inventory mergedInventory = new Inventory();
-		mergedInventory.mPurchaseMap.putAll(in_lhs.mPurchaseMap);
-		mergedInventory.mPurchaseMap.putAll(in_rhs.mPurchaseMap);
-		mergedInventory.mSkuMap.putAll(in_lhs.mSkuMap);
-		mergedInventory.mSkuMap.putAll(in_rhs.mSkuMap);
+		
+		if(in_lhs != null)
+		{
+			mergedInventory.mPurchaseMap.putAll(in_lhs.mPurchaseMap);
+			mergedInventory.mSkuMap.putAll(in_lhs.mSkuMap);
+		}
+		
+		if(in_rhs != null)
+		{
+			mergedInventory.mPurchaseMap.putAll(in_rhs.mPurchaseMap);
+			mergedInventory.mSkuMap.putAll(in_rhs.mSkuMap);
+		}
 		
 		return mergedInventory;
 	}
