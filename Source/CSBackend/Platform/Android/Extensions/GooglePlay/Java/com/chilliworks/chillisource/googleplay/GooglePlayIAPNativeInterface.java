@@ -49,74 +49,74 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 	//--------------------------------------------------------------
 	/// Member data
 	//--------------------------------------------------------------
-	public static InterfaceIDType InterfaceID = new InterfaceIDType("CGooglePlayIAPNativeInterface");
+	public static InterfaceIDType InterfaceID = new InterfaceIDType("GooglePlayIAPNativeInterface");
 	
 	private static final int k_maxProductIDsPerRequest = 20;
 	
-	private IabHelper mIABHelper = null;
-	private boolean mbCancelProductDescRequest = false;
-	private boolean mbIsPurchasingEnabled = false;
-	private boolean mbRequestDescriptionsInProgress = false;
-	private List<Purchase> mCurrentPendingTransactions = new ArrayList<Purchase>();
-	private Inventory mInventory = null;
+	private IabHelper m_IABHelper = null;
+	private boolean m_cancelProductDescRequest = false;
+	private boolean m_isPurchasingEnabled = false;
+	private boolean m_requestDescriptionsInProgress = false;
+	private List<Purchase> m_currentPendingTransactions = new ArrayList<Purchase>();
+	private Inventory m_inventory = null;
 	
 	//---------------------------------------------------------------------
 	/// Native Methods
 	//---------------------------------------------------------------------
-	public native void NativeOnProductsDescriptionsRequestComplete(String[] inIDs, String[] inNames, String[] inDescriptions, String[] inFormattedPrices);
-	public native void NativeOnTransactionStatusUpdated(int inResult, String inProductID, String inTransactionID, String inReceipt);
-	public native void NativeOnTransactionClosed(String inProductID, String inTransactionID, boolean in_success);
+	public native void NativeOnProductsDescriptionsRequestComplete(String[] in_IDs, String[] in_names, String[] in_descriptions, String[] in_formattedPrices);
+	public native void NativeOnTransactionStatusUpdated(int in_result, String in_productID, String in_transactionID, String in_receipt);
+	public native void NativeOnTransactionClosed(String in_productID, String in_transactionID, boolean in_success);
 	
-	//---------------------------------------------------------------------
-	/// Constructor
-	//---------------------------------------------------------------------
+	/**
+	 * Constructor
+	 * 
+	 * @author Scott Downie
+	 */
 	public GooglePlayIAPNativeInterface()
 	{
 	}
-	//---------------------------------------------------------------------
-	/// Is A
-	///
-	/// @param Interface ID
-	/// @return Whether the system implements the given interface
-	//---------------------------------------------------------------------
-	@Override public boolean IsA(InterfaceIDType inInterfaceType) 
+	/**
+	 * Is A
+	 * 
+	 * @author Scott Downie
+	 * 
+	 * @param Interface ID
+	 * 
+	 * @return Whether the system implements the given interface
+	 */
+	@Override public boolean IsA(InterfaceIDType in_interfaceType) 
 	{
-		return (inInterfaceType == InterfaceID);
+		return (in_interfaceType == InterfaceID);
 	}
-	//---------------------------------------------------------------------
-	/// Init
-	///
-	/// Prepares and starts the IAB system. This should be the first method
-	/// called and it should only be called once. 
-	///
-	/// @param The public key.
-	//---------------------------------------------------------------------
-	public void Init(final String instrPublicKey)
+	/**
+	 * Init
+	 * 
+	 * Prepares and starts the IAB system. This should be the first method
+	 * called and it should only be called once. 
+	 * 
+	 * @author Scott Downie
+	 * 
+	 * @param The public key
+	 */
+	public void Init(final String in_publicKey)
 	{
-		mIABHelper = new IabHelper(CSApplication.get().getActivityContext(), instrPublicKey);
-		mIABHelper.startSetup(new IabHelper.OnIabSetupFinishedListener()
+		m_IABHelper = new IabHelper(CSApplication.get().getActivityContext(), in_publicKey);
+		m_IABHelper.startSetup(new IabHelper.OnIabSetupFinishedListener()
 		{
 			@Override public void onIabSetupFinished(IabResult result) 
 			{
 				if(result.isSuccess())
 				{
-					mbIsPurchasingEnabled = true;
+					m_isPurchasingEnabled = true;
 				}
 				else
 				{
-					mbIsPurchasingEnabled = false;
+					m_isPurchasingEnabled = false;
 					Logging.logError("Cannot setup Google Play IAB: " + result.getMessage());
 				}
 			}
 		});
 	}
-    //---------------------------------------------------------------
-	/// Request Product Descriptions
-	///
-	/// Request the descriptions of all the products on the store
-	///
-	/// @param Array of product IDs
-	//---------------------------------------------------------------
 	/**
 	 * Request Product Descriptions
 	 * 
@@ -124,36 +124,36 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 	 * 
 	 * @author HMcLaughlin
 	 * 
-	 * @param inProductIDs
+	 * @param in_productIDs
 	 */
-	public void RequestProductDescriptions(final String[] inProductIDs)
+	public void RequestProductDescriptions(final String[] in_productIDs)
 	{
-		if(mbRequestDescriptionsInProgress && mbCancelProductDescRequest) // previously requested cancel but new request incoming
+		if(m_requestDescriptionsInProgress && m_cancelProductDescRequest) // previously requested cancel but new request incoming
 		{
 			//This this will cause the system to received the previously requested product descriptions. This
 			//means it will only work if the new request is identical to the previous one. 
-			mbCancelProductDescRequest = false;
+			m_cancelProductDescRequest = false;
 			return;
 		}
-		else if(mbRequestDescriptionsInProgress) // just called twice, bail
+		else if(m_requestDescriptionsInProgress) // just called twice, bail
 			return;
 		
 		
-		if(mInventory != null)
+		if(m_inventory != null)
 		{
-			OnProductsRequestComplete(mInventory, inProductIDs);
+			OnProductsRequestComplete(m_inventory, in_productIDs);
 			return;
 		}
 		
 		// default flags for new request
-		mbCancelProductDescRequest = false;
-		mbRequestDescriptionsInProgress = true;
+		m_cancelProductDescRequest = false;
+		m_requestDescriptionsInProgress = true;
 			
 		Thread descriptionRequestThread = new Thread(new Runnable()
 		{
 			@Override public void run() 
 			{
-				List<String> productIDs = new ArrayList<String>(Arrays.asList(inProductIDs));
+				List<String> productIDs = new ArrayList<String>(Arrays.asList(in_productIDs));
 				
 				try 
 				{
@@ -168,7 +168,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 						productIDs.removeAll(idBatch);
 						
 						//Make request with the sublist, this is a blocking call
-						Inventory batchItems = mIABHelper.queryInventory(true, idBatch);
+						Inventory batchItems = m_IABHelper.queryInventory(true, idBatch);
 						
 						if(batchItems != null)
 						{
@@ -181,19 +181,19 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 						}
 					}
 					
-					mbRequestDescriptionsInProgress = false;
+					m_requestDescriptionsInProgress = false;
 					
-					if(mbCancelProductDescRequest)
+					if(m_cancelProductDescRequest)
 						return;
 					
-					mInventory = itemsInventory;
+					m_inventory = itemsInventory;
 					
-					OnProductsRequestComplete(mInventory, inProductIDs);
+					OnProductsRequestComplete(m_inventory, in_productIDs);
 				} 
 				catch (IabException in_exception) 
 				{
 					Logging.logError("Cannot query Google IAB inventory: " + in_exception.getMessage());
-					OnProductsRequestComplete(null, inProductIDs);
+					OnProductsRequestComplete(null, in_productIDs);
 					return;
 				}
 			}
@@ -229,23 +229,25 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 		
 		return mergedInventory;
 	}
-    //---------------------------------------------------------------
-    /// On Products Request Complete
-    ///
-    /// Triggered when the products description request completes
-    ///
-    /// @param Inventory
-	/// @param Product IDs
-    //---------------------------------------------------------------
-    public void OnProductsRequestComplete(Inventory inInventory, final String[] inProductIDs) 
+	/**
+	 * On Products Request Complete
+	 * 
+	 * Triggered when the products description request completes
+	 * 
+	 * @author Scott Downie
+	 * 
+	 * @param Inventory
+	 * @param Product IDs
+	 */
+    public void OnProductsRequestComplete(Inventory in_inventory, final String[] in_productIDs) 
     {
-		List<IAPProductDescription> aResults = new ArrayList<IAPProductDescription>();
+		List<IAPProductDescription> results = new ArrayList<IAPProductDescription>();
 		
-		if(mInventory != null)
+		if(m_inventory != null)
 		{
-			for(int i=0; i<inProductIDs.length; ++i)
+			for(int i=0; i<in_productIDs.length; ++i)
 			{
-				SkuDetails details = inInventory.getSkuDetails(inProductIDs[i]);
+				SkuDetails details = in_inventory.getSkuDetails(in_productIDs[i]);
 				if(details != null)
 				{
 					IAPProductDescription desc = new IAPProductDescription();
@@ -254,69 +256,78 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 					desc.Description = details.getDescription();
 					desc.FormattedPrice = details.getPrice();
 
-					aResults.add(desc);
+					results.add(desc);
 				}
 			}
 		}
 		
-    	String[] ids = new String[aResults.size()];
-    	String[] names = new String[aResults.size()];
-    	String[] descriptions = new String[aResults.size()];
-    	String[] prices = new String[aResults.size()];
+    	String[] ids = new String[results.size()];
+    	String[] names = new String[results.size()];
+    	String[] descriptions = new String[results.size()];
+    	String[] prices = new String[results.size()];
     	
-    	for(int i=0; i<aResults.size(); ++i)
+    	for(int i=0; i<results.size(); ++i)
     	{
-    		ids[i] = aResults.get(i).ID;
-    		names[i] = aResults.get(i).Name;
-    		descriptions[i] = aResults.get(i).Description;
-    		prices[i] = aResults.get(i).FormattedPrice;
+    		ids[i] = results.get(i).ID;
+    		names[i] = results.get(i).Name;
+    		descriptions[i] = results.get(i).Description;
+    		prices[i] = results.get(i).FormattedPrice;
     	}
   
     	NativeOnProductsDescriptionsRequestComplete(ids, names, descriptions, prices);
     }
-    //---------------------------------------------------------------
-    /// Cancel Product Descriptions Request
-    ///
-    /// Prevent the delegate being called with descriptions and
-    /// attempt to cancel the pending request
-    //---------------------------------------------------------------
+    /**
+	 * Cancel Product Descriptions Request
+	 * 
+	 * Prevent the delegate being called with descriptions and
+     * attempt to cancel the pending request
+	 * 
+	 * @author Scott Downie
+	 */
     public void CancelProductDescriptionsRequest()
     {
-    	mbCancelProductDescRequest = true;
+    	m_cancelProductDescRequest = true;
     }
-	//---------------------------------------------------------------------
-	/// Is Purchasing Enabled
-	///
-	/// @return whether or not IAB V3 is supported on this device/OS
-	//---------------------------------------------------------------------
+    /**
+	 * Is Purchasing Enabled
+	 * 
+	 * @author Scott Downie
+	 * 
+	 * @return whether or not IAB V3 is supported on this device/OS
+	 */
 	public boolean IsPurchasingEnabled()
 	{
-		return mbIsPurchasingEnabled;
+		return m_isPurchasingEnabled;
 	}
-	//---------------------------------------------------------------------
-	/// Get Purchase From Inventory
-	///
-	/// @param Product ID
-	/// @return The product if owned by the user or null
-	//---------------------------------------------------------------------
-	private Purchase GetPurchaseFromInventory(String inProductID)
+	 /**
+	 * Get Purchase From Inventory
+	 * 
+	 * @author Scott Downie
+	 * 
+	 * @param Product ID
+	 * 
+	 * @return The product if owned by the user or null
+	 */
+	private Purchase GetPurchaseFromInventory(String in_productID)
 	{
-		if(mInventory == null)
+		if(m_inventory == null)
 			return null;
 		
-		return mInventory.getPurchase(inProductID);
+		return m_inventory.getPurchase(in_productID);
 	}
-	//---------------------------------------------------------------------
-	/// Request Product Purchase
-	///
-	/// Start a transaction of an object with the given product ID.
-	/// The transaction listener will receive updates on the transaction
-	/// status
-	///
-	/// @param Product ID
-	/// @param Type (managed = 0 or unmanaged = 1 (from java interface))
-	//---------------------------------------------------------------------
-	public void RequestProductPurchase(final String inProductID, final int inType)
+	/**
+	 * Request Product Purchase
+	 * 
+	 * Start a transaction of an object with the given product ID.
+	 * The transaction listener will receive updates on the transaction
+	 * status
+	 *  
+	 * @author Scott Downie
+	 * 
+	 * @param Product ID
+	 * @param Type (managed = 0 or unmanaged = 1 (from java interface))
+	 */
+	public void RequestProductPurchase(final String in_productID, final int in_type)
 	{
 		CSApplication.get().scheduleUIThreadTask(new Runnable()
 		{
@@ -324,15 +335,15 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 			{
 				IabHelper.OnIabPurchaseFinishedListener listener = new IabHelper.OnIabPurchaseFinishedListener()
 				{
-					@Override public void onIabPurchaseFinished(IabResult result, Purchase info) 
+					@Override public void onIabPurchaseFinished(IabResult in_result, Purchase in_info) 
 					{
 						int resultStatus = IAPTransactionDescription.SUCCEEDED;
 
-						if(result.isFailure())
+						if(in_result.isFailure())
 						{
-							Logging.logError("Google IAB purchase error: " + result.getMessage() + " for product: " + inProductID);
+							Logging.logError("Google IAB purchase error: " + in_result.getMessage() + " for product: " + in_productID);
 
-							switch(result.getResponse())
+							switch(in_result.getResponse())
 							{
 							case IabHelper.BILLING_RESPONSE_RESULT_USER_CANCELED:
 							case IabHelper.IABHELPER_USER_CANCELLED:
@@ -340,12 +351,12 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 								break;
 							case IabHelper.BILLING_RESPONSE_RESULT_ITEM_ALREADY_OWNED:
 								resultStatus = IAPTransactionDescription.FAILED;
-								info = GetPurchaseFromInventory(inProductID);
+								in_info = GetPurchaseFromInventory(in_productID);
 
-								if(info != null)
+								if(in_info != null)
 								{
 									//If this is a managed purchase then we are simply restoring the item
-									if(info.getDeveloperPayload().compareTo("managed") == 0)
+									if(in_info.getDeveloperPayload().compareTo("managed") == 0)
 										resultStatus = IAPTransactionDescription.RESTORED;
 									//If this is unmanaged then we are resuming an incomplete purchase
 									else
@@ -359,7 +370,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 							}
 						}
 
-						OnTransactionStatusUpdated(resultStatus, info, inProductID);
+						OnTransactionStatusUpdated(resultStatus, in_info, in_productID);
 					}
 				};
 				
@@ -368,7 +379,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 				final int UNMANAGED = 1;
 				
 				String payload = "unmanaged";
-				switch(inType)
+				switch(in_type)
 				{
 					case MANAGED:
 						payload = "managed";
@@ -378,110 +389,116 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 						break;
 				}
 				
-				mIABHelper.launchPurchaseFlow(CSApplication.get().getActivity(), inProductID, 250102680, listener, payload);
+				m_IABHelper.launchPurchaseFlow(CSApplication.get().getActivity(), in_productID, 250102680, listener, payload);
 			}
 		});
 	}
-	//---------------------------------------------------------------------
-	/// On Transaction Status Updated
-	///
-	/// Is triggered whenever the status of a transaction changes i.e.
-	/// completes or fails. This can be called at any point once the
-	/// listener is attached and can be used to push through older 
-	/// outstanding transactions
-	///
-	/// @param Result
-	/// @param Purchase
-	/// @param Product ID
-	//---------------------------------------------------------------------
-	public void OnTransactionStatusUpdated(int inResult, Purchase inPurchase, String inProductID) 
+	/**
+	 * On Transaction Status Updated
+	 * 
+	 * Is triggered whenever the status of a transaction changes i.e.
+	 * completes or fails. This can be called at any point once the
+	 * listener is attached and can be used to push through older 
+	 * outstanding transactions
+	 *  
+	 * @author Scott Downie
+	 * 
+	 * @param Result
+	 * @param Purchase
+	 * @param Product ID
+	 */
+	public void OnTransactionStatusUpdated(int in_result, Purchase in_purchase, String in_productID) 
 	{
-		if(inPurchase != null)
+		if(in_purchase != null)
 		{
-			mCurrentPendingTransactions.add(inPurchase);
+			m_currentPendingTransactions.add(in_purchase);
 			
 			JSONObject jsonSig = new JSONObject();
         	try 
         	{
-        		jsonSig.put("SignedData", inPurchase.getOriginalJson());
-				jsonSig.put("Signature", inPurchase.getSignature());
+        		jsonSig.put("SignedData", in_purchase.getOriginalJson());
+				jsonSig.put("Signature", in_purchase.getSignature());
 			}
         	catch (JSONException e) 
 			{
 				e.printStackTrace();
 			}
      
-			NativeOnTransactionStatusUpdated(inResult, inProductID, inPurchase.getOrderId(), jsonSig.toString());
+			NativeOnTransactionStatusUpdated(in_result, in_productID, in_purchase.getOrderId(), jsonSig.toString());
 		}
 		else
 		{
-			NativeOnTransactionStatusUpdated(inResult, inProductID, "", "");
+			NativeOnTransactionStatusUpdated(in_result, in_productID, "", "");
 		}
 	}
-	//---------------------------------------------------------------------
-	/// Close Transaction
-	///
-	/// Consumes the transaction from the purchase list so that it may
-	/// be purchased again
-	///
-	/// @param Product ID
-	/// @param Transaction ID
-	//---------------------------------------------------------------------
-	public void CloseTransaction(final String inProductID, final String inTransactionID)
+	/**
+	 * Close Transaction
+	 * 
+	 * Consumes the transaction from the purchase list so that it may
+	 * be purchased again
+	 *  
+	 * @author Scott Downie
+	 * 
+	 * @param Product ID
+	 * @param Transaction ID
+	 */
+	public void CloseTransaction(final String in_productID, final String in_transactionID)
 	{
 		CSApplication.get().scheduleUIThreadTask(new Runnable()
 		{
 			@Override public void run() 
 			{
 				int count = 0;
-				for(Purchase purchase : mCurrentPendingTransactions)
+				for(Purchase purchase : m_currentPendingTransactions)
 				{
-					if(purchase.getOrderId().compareTo(inTransactionID) == 0)
+					if(purchase.getOrderId().compareTo(in_transactionID) == 0)
 					{
 						//Only consume consumables
 						if(purchase.getDeveloperPayload().compareTo("unmanaged") == 0)
 						{
-							mIABHelper.consumeAsync(purchase, new IabHelper.OnConsumeFinishedListener()
+							m_IABHelper.consumeAsync(purchase, new IabHelper.OnConsumeFinishedListener()
 							{
-								@Override public void onConsumeFinished(Purchase purchase, IabResult result) 
+								@Override public void onConsumeFinished(Purchase in_purchase, IabResult in_result) 
 								{
-									boolean success = result.isFailure() == false;
+									boolean success = in_result.isFailure() == false;
 									if(success == false)
 									{
-										Logging.logError("Google IAB consume error: " + result.getMessage() + " for product: " + purchase.getSku());
+										Logging.logError("Google IAB consume error: " + in_result.getMessage() + " for product: " + in_purchase.getSku());
 									}
 									
-									NativeOnTransactionClosed(inProductID, inTransactionID, success);
+									NativeOnTransactionClosed(in_productID, in_transactionID, success);
 								}
 							});
 						}
 
-						mCurrentPendingTransactions.remove(count);
+						m_currentPendingTransactions.remove(count);
 						return;
 					}
 
 					count++;
 				}
 				
-				NativeOnTransactionClosed(inProductID, inTransactionID, true);
+				NativeOnTransactionClosed(in_productID, in_transactionID, true);
 			}
 		});
 	}
-	//---------------------------------------------------------------------
-	/// Restore Pending Managed Transactions
-	///
-	/// Restore any pending transactions from the last session
-	///
-	/// @param List of managed pending transactions
-	//---------------------------------------------------------------------
-	public void RestorePendingManagedTransactions(final String[] inPendingManagedTransactionIDs)
+	/**
+	 * Restore Pending Managed Transactions
+	 * 
+	 * Restore any pending transactions from the last session
+	 *  
+	 * @author Scott Downie
+	 * 
+	 * @param List of managed pending transactions
+	 */
+	public void RestorePendingManagedTransactions(final String[] in_pendingManagedTransactionIDs)
 	{
-		if(mInventory == null)
+		if(m_inventory == null)
 			return;
 		
-		for(String transactionID : inPendingManagedTransactionIDs)
+		for(String transactionID : in_pendingManagedTransactionIDs)
 		{
-			List<Purchase> purchases = mInventory.getAllPurchases();
+			List<Purchase> purchases = m_inventory.getAllPurchases();
 			
 			Purchase pendingPurchase = null;
 			
@@ -500,25 +517,27 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 			}
 		}
 	}
-	//---------------------------------------------------------------------
-	/// Restore Pending Unmanaged Transactions
-	///
-	/// Restore any pending transactions from the last session
-	//---------------------------------------------------------------------
+	/**
+	 * Restore Pending Unmanaged Transactions
+	 * 
+	 * Restore any pending transactions from the last session
+	 *  
+	 * @author Scott Downie
+	 */
 	public void RestorePendingUnmanagedTransactions()
 	{
 		//Loop through the purchase list and pass on any managed products as new transactions but with the original receipts
-		if(mInventory == null)
+		if(m_inventory == null)
 			return;
 		
-		List<Purchase> purchases = mInventory.getAllPurchases();
+		List<Purchase> purchases = m_inventory.getAllPurchases();
 		
 		for(Purchase purchase : purchases)
 		{
 			//If any consumables are in the list then they have no been consumed and are pending
 			if(purchase.getDeveloperPayload().compareTo("unmanaged") == 0)
 			{
-				mCurrentPendingTransactions.add(purchase);
+				m_currentPendingTransactions.add(purchase);
 
 				//Apparently 0 is good, 1 is cancelled and 2 is refunded
 				switch(purchase.getPurchaseState())
@@ -536,22 +555,24 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 			}
 		}
 	}
-	//---------------------------------------------------------------------
-	/// Restore Managed Purchases
-	///
-	/// Restores all previous managed purchase by injecting them as new
-	/// transactions
-	//---------------------------------------------------------------------
+	/**
+	 * Restore Managed Purchases
+	 * 
+	 * Restores all previous managed purchase by injecting them as new
+	 * transactions
+	 *  
+	 * @author Scott Downie
+	 */
 	public void RestoreManagedPurchases()
 	{
 		//Loop through the purchase list and pass on any managed products as new transactions but with the original receipts
-		if(mInventory == null)
+		if(m_inventory == null)
 		{
 			Logging.logError("IAPSystem: Products must be registered and requested before any other actions");
 			throw new NullPointerException("Products must be registered and requested before any other actions");
 		}
 		
-		List<Purchase> purchases = mInventory.getAllPurchases();
+		List<Purchase> purchases = m_inventory.getAllPurchases();
 		
 		for(Purchase purchase : purchases)
 		{
@@ -573,29 +594,33 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 			}
 		}
 	}
-	//---------------------------------------------------------------------
-	/// On Destroy
-	///
-	/// Called when the Chilli Source activity is destroyed.
-	//---------------------------------------------------------------------
+	/**
+	 * On Destroy
+	 * 
+	 * Called when the Chilli Source activity is destroyed.
+	 *  
+	 * @author Scott Downie
+	 */
 	@Override public void onActivityDestroy() 
 	{
-		if(mIABHelper != null)
+		if(m_IABHelper != null)
 		{
-			mIABHelper.dispose();
-			mIABHelper = null;
+			m_IABHelper.dispose();
+			m_IABHelper = null;
 		}
 	}
-	//---------------------------------------------------------------------
-	/// On Activity Result
-	///
-	/// Called when the Chilli Source activity is "onActivityResult" is called.
-	//---------------------------------------------------------------------
+	/**
+	 * On Activity Result
+	 * 
+	 * Called when the Chilli Source activity is "onActivityResult" is called.
+	 *  
+	 * @author Scott Downie
+	 */
 	@Override public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
-		if(mIABHelper != null)
+		if(m_IABHelper != null)
 		{
-			mIABHelper.handleActivityResult(requestCode, resultCode, data);
+			m_IABHelper.handleActivityResult(requestCode, resultCode, data);
 		}
 	}
 }
