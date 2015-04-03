@@ -16,7 +16,7 @@ Getting Started
 ---------------
 The [Project Setup](http://www.chilli-works.com/learn/tutorials-2/project-setup/) tutorial provides a good starting point for working with ChilliSource. It demonstrates how to create and build a new project. Also check out the other tutorials for more information.
 
-If you have any development questions or suggestions for improvements to the engine post them on the [Chilli Source Forum](http://forums.chilli-works.com/). Any bugs encountered should be reported using [Github Issues](https://github.com/chilliworks/chillisource/issues).
+If you have any development questions or suggestions for the engine please post them on the [Chilli Source Forum](http://forums.chilli-works.com/). Any bugs encountered should be reported using [Github Issues](https://github.com/chilliworks/chillisource/issues).
 
 Contribution
 ------------

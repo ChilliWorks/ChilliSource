@@ -16,6 +16,8 @@ Version 1.4.0, 2015-04-03:
 	- Fixed: CkBank resources are now correctly cleaned up if they still exist during the Application::OnDestroy lifecycle event.
 	- Fixed: Projects created by the Project Generator on Windows can now be correctly built in XCode.
 	- Fixed: IAP will no longer fail on Android if there are more than 20 available products.
+	- Fixed: A compiler error on Windows caused by the lack of virtual destructor in the Event interfaces.
+	- Fixed: The project generator no longer leaves git remnants in generated projects.
 
 Version 1.3.3, 2015-02-24:
 	- Labels now support inclusion of Icons in text.

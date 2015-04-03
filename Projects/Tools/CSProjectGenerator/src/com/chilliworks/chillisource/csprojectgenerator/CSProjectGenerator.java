@@ -31,6 +31,7 @@ package com.chilliworks.chillisource.csprojectgenerator;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.CodeSource;
@@ -376,6 +377,18 @@ public final class CSProjectGenerator
 		{
 			cleanupTemp(in_options);
 			Logging.logFatal("Could not copy Chilli Source into project.");
+		}
+		
+		//remove any remnants of the git project.
+		try
+		{
+			Files.deleteIfExists(Paths.get(csDestinationPath + ".git"));
+			Files.deleteIfExists(Paths.get(csDestinationPath + ".gitignore"));
+		}
+		catch (Exception e)
+		{
+			cleanupTemp(in_options);
+			Logging.logFatal("Could not delete git remnants.");
 		}
 	}
 	/**

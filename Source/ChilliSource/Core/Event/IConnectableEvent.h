@@ -75,6 +75,12 @@ namespace ChilliSource
             /// @return Scoped connection
             //-------------------------------------------------------------
             virtual EventConnectionUPtr OpenConnection(const TDelegateType& in_delegate) = 0;
+			//-------------------------------------------------------------
+			/// Virtual destructor
+			///
+			/// @author Ian Copland
+			//-------------------------------------------------------------
+			virtual ~IConnectableEvent() {};
         };
     }
 }

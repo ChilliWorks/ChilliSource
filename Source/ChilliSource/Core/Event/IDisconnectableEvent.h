@@ -68,6 +68,12 @@ namespace ChilliSource
             /// @param Connection to close
             //-------------------------------------------------------------
             virtual void CloseConnection(EventConnection* in_connection) = 0;
+			//-------------------------------------------------------------
+			/// Virtual destructor
+			///
+			/// @author Ian Copland
+			//-------------------------------------------------------------
+			virtual ~IDisconnectableEvent() {};
         };
     }
 }
