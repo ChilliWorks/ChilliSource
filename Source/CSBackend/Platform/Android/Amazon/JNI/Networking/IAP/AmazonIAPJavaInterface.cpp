@@ -30,7 +30,7 @@
 
 #ifdef CS_ANDROIDFLAVOUR_AMAZON
 
-#include <CSBackend/Platform/Android/Amazon/JNI/Amazon/Networking/IAP/AmazonIAPJavaInterface.h>
+#include <CSBackend/Platform/Android/Amazon/JNI/Networking/IAP/AmazonIAPJavaInterface.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>

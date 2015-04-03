@@ -30,10 +30,10 @@
 
 #ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
 
-#include <CSBackend/Platform/Android/GooglePlay/JNI/GooglePlay/Core/Notification/GooglePlayRemoteNotificationSystem.h>
+#include <CSBackend/Platform/Android/GooglePlay/JNI/Core/Notification/GooglePlayRemoteNotificationSystem.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/GooglePlay/JNI/GooglePlay/Core/Notification/GooglePlayRemoteNotificationJavaInterface.h>
+#include <CSBackend/Platform/Android/GooglePlay/JNI/Core/Notification/GooglePlayRemoteNotificationJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Notification/Notification.h>

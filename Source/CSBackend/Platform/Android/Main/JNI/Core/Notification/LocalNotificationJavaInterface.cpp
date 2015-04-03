@@ -209,14 +209,14 @@ namespace CSBackend
 		void LocalNotificationJavaInterface::CancelByID(u32 in_id)
 		{
 			JNIEnv* environment = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			return environment->CallVoidMethod(GetJavaObject(), GetMethodID("cancelByID"), in_id);
+			environment->CallVoidMethod(GetJavaObject(), GetMethodID("cancelByID"), in_id);
 		}
 		//--------------------------------------------------------
 		//--------------------------------------------------------
 		void LocalNotificationJavaInterface::CancelAll()
 		{
 			JNIEnv* environment = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			return environment->CallVoidMethod(GetJavaObject(), GetMethodID("cancelAll"));
+			environment->CallVoidMethod(GetJavaObject(), GetMethodID("cancelAll"));
 		}
 	}
 }

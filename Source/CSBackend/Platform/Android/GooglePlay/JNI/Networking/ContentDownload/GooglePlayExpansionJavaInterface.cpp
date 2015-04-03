@@ -30,9 +30,9 @@
 
 #ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
 
-#include <CSBackend/Platform/Android/GooglePlay/JNI/GooglePlay/Networking/ContentDownload/GooglePlayExpansionJavaInterface.h>
+#include <CSBackend/Platform/Android/GooglePlay/JNI/Networking/ContentDownload/GooglePlayExpansionJavaInterface.h>
 
-#include <CSBackend/Platform/Android/GooglePlay/JNI/GooglePlay/Networking/ContentDownload/GooglePlayExpansionSystem.h>
+#include <CSBackend/Platform/Android/GooglePlay/JNI/Networking/ContentDownload/GooglePlayExpansionSystem.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
 

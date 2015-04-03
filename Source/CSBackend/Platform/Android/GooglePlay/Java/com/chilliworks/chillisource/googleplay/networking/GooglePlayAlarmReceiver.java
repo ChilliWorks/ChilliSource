@@ -34,7 +34,6 @@ public class GooglePlayAlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-    	System.out.println("OnRecieve::In GooglePlayAlarmReceiver");
         try {
             DownloaderClientMarshaller.startDownloadServiceIfRequired(context, intent, GooglePlayDownloaderService.class);
         } catch (NameNotFoundException e) {

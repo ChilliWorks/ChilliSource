@@ -34,7 +34,7 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 #ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
-#include <CSBackend/Platform/Android/GooglePlay/JNI/GooglePlay/Core/Notification/GooglePlayRemoteNotificationSystem.h>
+#include <CSBackend/Platform/Android/GooglePlay/JNI/Core/Notification/GooglePlayRemoteNotificationSystem.h>
 #endif
 #endif
 

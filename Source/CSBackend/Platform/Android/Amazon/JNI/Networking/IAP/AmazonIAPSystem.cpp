@@ -30,7 +30,7 @@
 
 #ifdef CS_ANDROIDFLAVOUR_AMAZON
 
-#include <CSBackend/Platform/Android/Amazon/JNI/Amazon/Networking/IAP/AmazonIAPSystem.h>
+#include <CSBackend/Platform/Android/Amazon/JNI/Networking/IAP/AmazonIAPSystem.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
 #include <ChilliSource/Core/Base/Application.h>

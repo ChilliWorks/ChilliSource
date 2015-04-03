@@ -83,13 +83,13 @@ THE SOFTWARE.
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
         <!-- Google Play downloader -->
-        <service android:name="com.chilliworks.chillisource.googleplay.GooglePlayDownloaderService" />
+        <service android:name="com.chilliworks.chillisource.googleplay.networking.GooglePlayDownloaderService" />
+        <receiver android:name="com.chilliworks.chillisource.googleplay.networking.GooglePlayAlarmReceiver" />
 
         <!-- Google Play remote notifications -->
         <meta-data android:name="GoogleProjectID" android:value="[[GOOGLEPLAYPROJECTID]]" />
-        <service android:name="com.chilliworks.chillisource.googleplay.CRemoteNotificationService" />
-        <receiver android:name="com.chilliworks.chillisource.googleplay.GooglePlayAlarmReceiver" />
-        <receiver android:name="com.chilliworks.chillisource.googleplay.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+        <service android:name="com.chilliworks.chillisource.googleplay.core.CRemoteNotificationService" />
+        <receiver android:name="com.chilliworks.chillisource.googleplay.core.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name="[[PACKAGE]]" />

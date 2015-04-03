@@ -38,6 +38,10 @@
 -keep public class * extends android.content.BroadcastReceiver
 -keep public class * extends android.content.ContentProvider
 
+#keep everthing in R
+-keep public class **.R { public *; }
+-keep public class **.R$* { public *; }
+
 #Keep all classes with public methods
 -keepclasseswithmembers class * {
     native <methods>;
@@ -52,6 +56,9 @@
 
 #keep Local Notification, as it is accessed from native
 -keep public class com.chilliworks.chillisource.core.LocalNotification { public *; }
+
+#keep facebook
+-keep class com.facebook.** { *; }
 
 #keep amazon classes
 -dontwarn com.amazon.**
