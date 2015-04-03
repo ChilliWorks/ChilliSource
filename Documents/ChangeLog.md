@@ -1,5 +1,22 @@
 === Chilli Source Change Log ===
 
+Version 1.4.0, 2015-04-03:
+	- Added: Support for Android Studio. All projects created by the Project Generator now provide an Android Studio project instead of Eclipse ADT.
+	- Added: Support for 64-bit builds to Windows and iOS projects. 64-bit Android projects will be coming soon!
+	- Added: Double2, Double3, and Double4 math vector types.
+	- Removed: Support for Eclipse ADT builds. Eclipse is no longer officially supported as an Android development IDE.
+	- Improved: The widget hierarchy is now accessible through Canvas.
+	- Improved: DrawableDef no longer requires colour and UVs in their constructor.
+	- Improved: Restructured the Android backend to mirror the structure used for different product flavours in Android Studio.
+	- Improved: It is now much easier to build Kindle builds.
+	- Fixed: Sprite anchors now work correctly.
+	- Fixed: Text now correctly changes colour when the parent widget's colour changes.
+	- Fixed: Colour can now be pre-multiplied/divided/subtracted/added by a scalar.
+	- Fixed: A compiler error on Windows when using the Math::Random::Generate() default parameters.
+	- Fixed: CkBank resources are now correctly cleaned up if they still exist during the Application::OnDestroy lifecycle event.
+	- Fixed: Projects created by the Project Generator on Windows can now be correctly built in XCode.
+	- Fixed: IAP will no longer fail on Android if there are more than 20 available products.
+
 Version 1.3.3, 2015-02-24:
 	- Labels now support inclusion of Icons in text.
 	- Improved the Facebook Post system and updated to the latest version of the Facebook SDK on both iOS and Android. 
@@ -17,7 +34,7 @@ Version 1.3.2, 2015-01-23:
 	- Fix: It's now possible to have a null drawable on a ui widget.
 
 Version 1.3.1, 2015-01-09:
-	- Add convenience methods to Widget Factory for building all the in-built widget types.
+	- Added convenience methods to Widget Factory for building all the in-built widget types.
 	- Added a creation method for creating Particle Effect Components to the Render Component Factory.
 	- Fixed a crash bug on Android.
 
