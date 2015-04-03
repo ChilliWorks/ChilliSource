@@ -59,6 +59,7 @@
 
 #keep facebook
 -keep class com.facebook.** { *; }
+-keepattributes Signature
 
 #keep amazon classes
 -dontwarn com.amazon.**

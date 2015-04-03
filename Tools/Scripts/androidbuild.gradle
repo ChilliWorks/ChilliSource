@@ -458,9 +458,14 @@ ext {
 
         in_tasks.all() { task ->
 
+            def androidSupportLibV7TaskName = "prepareComAndroidSupportAppcompatV72103Library"
+            def androidSupportLibV4TaskName = "prepareComAndroidSupportSupportV42103Library"
+            def googlePlayServicesLibTaskName = "prepareComGoogleAndroidGmsPlayServices6587Library"
+            def facebookLibTaskName = "prepareComFacebookAndroidFacebookAndroidSdk3231Library"
+
             def taskName = task.name.toLowerCase()
-            if (taskName.equals("prepareComAndroidSupportAppcompatV72103Library") == true || taskName.contains("prepareComAndroidSupportSupportV42103Library") == true ||
-                taskName.equals("prepareComGoogleAndroidGmsPlayServices6587Library") == true || taskName.equals("prepareComFacebookAndroidFacebookAndroidSdk3231Library") == true) {
+            if (taskName.equals(androidSupportLibV7TaskName) == true || taskName.contains(androidSupportLibV4TaskName) == true ||
+                taskName.equals(googlePlayServicesLibTaskName) == true || taskName.equals(facebookLibTaskName) == true) {
                 task.dependsOn.clear()
             }
         }
