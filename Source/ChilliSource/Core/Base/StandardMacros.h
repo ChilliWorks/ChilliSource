@@ -29,6 +29,10 @@
 #ifndef _CHILLISOURCE_CORE_BASE_STANDARDMACROS_H_
 #define _CHILLISOURCE_CORE_BASE_STANDARDMACROS_H_
 
+#ifdef CS_ENABLE_DEBUG
+#include <cassert>
+#endif
+
 //------------------------------------------------------------
 /// Memory macros
 //------------------------------------------------------------
@@ -45,7 +49,7 @@
 /// Assertion macros
 //------------------------------------------------------------
 #ifdef CS_ENABLE_DEBUG
-#define CS_ASSERT(in_query, in_message) if((in_query) == 0){CSCore::Logging::Get()->LogFatal(in_message);}
+#define CS_ASSERT(in_query, in_message) if((in_query) == 0) {CSCore::Logging::Get()->LogFatal(in_message); assert(in_query);}
 #else
 #define CS_ASSERT(in_query, in_message)
 #endif
