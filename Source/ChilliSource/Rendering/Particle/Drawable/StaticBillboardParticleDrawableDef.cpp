@@ -168,10 +168,10 @@ namespace ChilliSource
 			}
 
 			//Particle size
-			jsonValue = in_paramsJson.get("ParticleSize", Json::nullValue);
+			jsonValue = in_paramsJson.get("Size", Json::nullValue);
 			if (jsonValue.isNull() == false)
 			{
-				CS_ASSERT(jsonValue.isString(), "particle size must be a string.");
+				CS_ASSERT(jsonValue.isString(), "Particle size must be a string.");
 				m_particleSize = Core::ParseVector2(jsonValue.asString());
 			}
 
@@ -179,7 +179,7 @@ namespace ChilliSource
 			jsonValue = in_paramsJson.get("SizePolicy", Json::nullValue);
 			if (jsonValue.isNull() == false)
 			{
-				CS_ASSERT(jsonValue.isString(), "size policy must be a string.");
+				CS_ASSERT(jsonValue.isString(), "Size policy must be a string.");
 				m_sizePolicy = ParseSizePolicy(jsonValue.asString());
 			}
 
