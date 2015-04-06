@@ -73,6 +73,18 @@ namespace CSBackend
             /// @return The original headers of the request as keys/values
             //----------------------------------------------------------------------------------------
             const CSCore::ParamDictionary& GetHeaders() const override;
+            //----------------------------------------------------------------------------------------
+            /// @author N Tanda
+            ///
+            /// @return The expected total size of the request
+            //----------------------------------------------------------------------------------------
+            u64 GetExpectedTotalSize() const override;
+            //----------------------------------------------------------------------------------------
+            /// @author N Tanda
+            ///
+            /// @return The current transferred size of the request
+            //----------------------------------------------------------------------------------------
+            u64 GetCurrentSize() const override;
             //------------------------------------------------------------------
             /// Close the request. Note: The completion delegate is not invoked
             ///

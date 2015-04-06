@@ -101,6 +101,18 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             virtual const Core::ParamDictionary& GetHeaders() const = 0;
             //----------------------------------------------------------------------------------------
+            /// @author N Tanda
+            ///
+            /// @return The expected total size of the request
+            //----------------------------------------------------------------------------------------
+            virtual u64 GetExpectedTotalSize() const = 0;
+            //----------------------------------------------------------------------------------------
+            /// @author N Tanda
+            ///
+            /// @return The current transferred size of the request
+            //----------------------------------------------------------------------------------------
+            virtual u64 GetCurrentSize() const = 0;
+            //----------------------------------------------------------------------------------------
             /// Cancel the request. Does not invoke the completion delegate
             ///
             /// @author S Downie

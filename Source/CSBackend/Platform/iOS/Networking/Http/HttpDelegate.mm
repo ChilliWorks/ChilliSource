@@ -45,6 +45,7 @@
         m_request = in_request;
         m_responseCode = 0;
         m_maxBufferSize = in_bufferSize;
+        m_expectedSize = 0;
         CS_ASSERT(m_request != nullptr, "Request must be supplied to Http Delegate.");
         return self;
     }
@@ -71,6 +72,7 @@
     m_data = [[NSMutableData alloc] init];
     
     m_responseCode = static_cast<u32>(((NSHTTPURLResponse*)in_response).statusCode);
+    m_expectedSize = in_response.expectedContentLength;
 }
 //-----------------------------------------------------------------------------
 /// Called when the next block of data is received. This should be appended to
@@ -83,7 +85,7 @@
 //-----------------------------------------------------------------------------
 - (void) connection:(NSURLConnection*)in_connection didReceiveData:(NSData *)in_data
 {
-    CS_ASSERT(m_data != nil, "Cannot receive data before connection is estabilished!");
+    CS_ASSERT(m_data != nil, "Cannot receive data before connection is established!");
     
     if(m_maxBufferSize > 0)
     {
@@ -95,10 +97,25 @@
             m_request->OnFlushed(CSNetworking::HttpResponse::Result::k_flushed, m_responseCode, data);
             [m_data setLength:0];
         }
-        
     }
     
     [m_data appendData:in_data];
+}
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+- (u64) GetExpectedSize
+{
+    return m_expectedSize;
+}
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+- (u64) GetReceivedData
+{
+    if(m_data != nil)
+    {
+        return [m_data length];
+    }
+    return 0;
 }
 //-----------------------------------------------------------------------------
 /// Called when the connection has finished sending data.
@@ -109,7 +126,7 @@
 //-----------------------------------------------------------------------------
 - (void) connectionDidFinishLoading:(NSURLConnection*)in_connection
 {
-    CS_ASSERT(m_data != nil, "Cannot finish before connection is estabilished!");
+    CS_ASSERT(m_data != nil, "Cannot finish before connection is established!");
     
     std::string data(reinterpret_cast<const s8*>([m_data bytes]), (s32)[m_data length]);
     [m_data release];

@@ -103,6 +103,25 @@ namespace CSBackend
         {
             return m_headers;
         }
+        //----------------------------------------------------------------------------------------
+        u64 HttpRequest::GetExpectedTotalSize() const
+        {
+            if(m_httpDelegate)
+            {
+                return [m_httpDelegate GetExpectedSize];
+            }
+            return 0;
+        }
+        //----------------------------------------------------------------------------------------
+        //----------------------------------------------------------------------------------------
+        u64 HttpRequest::GetCurrentSize() const
+        {
+            if(m_httpDelegate)
+            {
+                return [m_httpDelegate GetReceivedData];
+            }
+            return 0;
+        }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
 		void HttpRequest::Cancel()

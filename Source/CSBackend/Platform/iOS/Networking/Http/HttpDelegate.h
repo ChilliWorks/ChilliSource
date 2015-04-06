@@ -44,6 +44,7 @@
     CSBackend::iOS::HttpRequest* m_request;
     u32 m_responseCode;
     u32 m_maxBufferSize;
+    u64 m_expectedSize;
     NSMutableData* m_data;
 }
 //---------------------------------------------------------------------------
@@ -62,6 +63,18 @@
 /// @author Ian Copland
 //---------------------------------------------------------------------------
 -(void) dealloc;
+//-----------------------------------------------
+/// @author N Tanda
+///
+/// @return Expected size of the request
+//-----------------------------------------------
+- (u64) GetExpectedSize;
+//-----------------------------------------------
+/// @author N Tanda
+///
+/// @return The current length of the received data
+//-----------------------------------------------
+- (u64) GetReceivedData;
 
 @end
 
