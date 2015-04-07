@@ -32,7 +32,10 @@
 #define _CSBACKEND_PLATFORM_WINDOWS_INPUT_KEYBOARD_KEYBOARD_H_
 
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
+#include <ChilliSource/Input/Keyboard/KeyCode.h>
 #include <CSBackend/Platform/Windows/SFML/Base/SFMLWindow.h>
+
+#include <array>
 
 namespace CSBackend
 {
@@ -148,6 +151,8 @@ namespace CSBackend
 
 			CSCore::EventConnectionUPtr m_keyPressedConnection;
 			CSCore::EventConnectionUPtr m_keyReleasedConnection;
+
+			std::array<bool, static_cast<u32>(CSInput::KeyCode::k_total)> m_keysDown;
 		};
 	}
 }

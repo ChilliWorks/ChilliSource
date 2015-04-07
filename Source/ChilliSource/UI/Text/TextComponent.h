@@ -65,7 +65,7 @@ namespace ChilliSource
         ///
         /// "TextColour": The colour of the text. Defaults to white.
         ///
-        /// "HorizonalJustification": The justification of the text horizontally.
+        /// "HorizontalJustification": The justification of the text horizontally.
         /// This can be set to "Left", "Centre" or "Right". Defaults to "Centre".
         ///
         /// "VerticalJustification": The justification of the text vertically. This

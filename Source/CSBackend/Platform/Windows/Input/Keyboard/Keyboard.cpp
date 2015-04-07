@@ -294,6 +294,11 @@ namespace CSBackend
 		//-------------------------------------------------------
 		void Keyboard::OnInit()
 		{
+			for (auto& flag : m_keysDown)
+			{
+				flag = false;
+			}
+
 			m_keyPressedConnection = SFMLWindow::Get()->GetKeyPressedEvent().OpenConnection(CSCore::MakeDelegate(this, &Keyboard::OnKeyPressed));
 			m_keyReleasedConnection = SFMLWindow::Get()->GetKeyReleasedEvent().OpenConnection(CSCore::MakeDelegate(this, &Keyboard::OnKeyReleased));
 		}
@@ -301,39 +306,52 @@ namespace CSBackend
 		//-------------------------------------------------------
 		void Keyboard::OnKeyPressed(sf::Keyboard::Key in_code, const sf::Event::KeyEvent& in_event)
 		{
-			std::vector<CSInput::ModifierKeyCode> modifiers;
-			modifiers.reserve((u32)CSInput::ModifierKeyCode::k_total);
+			auto keyCode = SFMLKeyCodeToCSKeyCode(in_code);
 
-			if (in_event.alt == true)
+			if (IsKeyDown(keyCode) == false)
 			{
-				modifiers.push_back(CSInput::ModifierKeyCode::k_alt);
-			}
-			if (in_event.control == true)
-			{
-				modifiers.push_back(CSInput::ModifierKeyCode::k_ctrl);
-			}
-			if (in_event.shift == true)
-			{
-				modifiers.push_back(CSInput::ModifierKeyCode::k_shift);
-			}
-			if (in_event.system == true)
-			{
-				modifiers.push_back(CSInput::ModifierKeyCode::k_system);
-			}
+				m_keysDown[static_cast<u32>(keyCode)] = true;
 
-			m_keyPressedEvent.NotifyConnections(SFMLKeyCodeToCSKeyCode(in_code), modifiers);
+				std::vector<CSInput::ModifierKeyCode> modifiers;
+				modifiers.reserve((u32)CSInput::ModifierKeyCode::k_total);
+
+				if (in_event.alt == true)
+				{
+					modifiers.push_back(CSInput::ModifierKeyCode::k_alt);
+				}
+				if (in_event.control == true)
+				{
+					modifiers.push_back(CSInput::ModifierKeyCode::k_ctrl);
+				}
+				if (in_event.shift == true)
+				{
+					modifiers.push_back(CSInput::ModifierKeyCode::k_shift);
+				}
+				if (in_event.system == true)
+				{
+					modifiers.push_back(CSInput::ModifierKeyCode::k_system);
+				}
+
+				m_keyPressedEvent.NotifyConnections(keyCode, modifiers);
+			}
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		void Keyboard::OnKeyReleased(sf::Keyboard::Key in_code)
 		{
-			m_keyReleasedEvent.NotifyConnections(SFMLKeyCodeToCSKeyCode(in_code));
+			auto keyCode = SFMLKeyCodeToCSKeyCode(in_code);
+			if (IsKeyDown(keyCode) == true)
+			{
+				m_keysDown[static_cast<u32>(keyCode)] = false;
+
+				m_keyReleasedEvent.NotifyConnections(keyCode);
+			}
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
 		bool Keyboard::IsKeyDown(CSInput::KeyCode in_code) const
 		{
-			return sf::Keyboard::isKeyPressed(CSKeyCodeToSFMLKeyCode(in_code)) == true;
+			return m_keysDown[static_cast<u32>(in_code)];
 		}
 		//-------------------------------------------------------
 		//-------------------------------------------------------
@@ -353,6 +371,11 @@ namespace CSBackend
 		{
 			m_keyPressedConnection.reset();
 			m_keyReleasedConnection.reset();
+
+			for (auto& flag : m_keysDown)
+			{
+				flag = false;
+			}
 		}
 	}
 }
