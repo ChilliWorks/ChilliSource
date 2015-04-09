@@ -174,7 +174,7 @@ namespace ChilliSource
             //Clear any stale data from last update check
             ClearDownloadData();
             
-            //Have the downloader request the manifest in it's own way
+            //Have the downloader request the manifest in its own way
             if(m_contentDownloader->DownloadContentManifest(Core::MakeDelegate(this, &ContentManagementSystem::OnContentManifestDownloadComplete)))
             {
                 //The request has started successfully
