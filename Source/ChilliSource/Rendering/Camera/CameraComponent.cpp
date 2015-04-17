@@ -218,13 +218,13 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void CameraComponent::OnRemovedFromScene()
         {
-            m_transformChangedConnection.reset();
+            m_resolutionChangedConnection.reset();
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         void CameraComponent::OnRemovedFromEntity()
         {
-            m_resolutionChangedConnection.reset();
+            m_transformChangedConnection.reset();
         }
 	}
 }
