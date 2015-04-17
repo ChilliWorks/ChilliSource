@@ -3,9 +3,10 @@ Chilli Source Change Log
 
 Version 1.4.1, 2015-04-17
 -------------------------
+* Improved: Updated the ChangeLog.md to correct markdown syntax
 * Fixed: The project generator no longer fails if there is a ".git" directory in the ChilliSource directory
 * Fixed: Windows builds no longer fail during the asset copy python script if there is a space in the path name
-* Fixed: Updated the ChangeLog.md to correct markdown syntax
+* Fixed: The view frustum is now correctly updated when the screen resolution changes. This fixed an issue with on screen objects being culled.
 
 Version 1.4.0, 2015-04-03
 -------------------------
