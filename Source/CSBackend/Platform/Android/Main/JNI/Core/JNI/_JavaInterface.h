@@ -46,6 +46,9 @@ namespace CSBackend
 			jclass mClassID;
 		};
 
+        //--------------------------------------------------------------------------------------
+        /// This is deprecated in favour of JavaClass.
+        //--------------------------------------------------------------------------------------
 		class _IJavaInterface
 		{
 			_IJavaInterface();

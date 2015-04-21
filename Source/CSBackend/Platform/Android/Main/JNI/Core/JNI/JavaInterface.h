@@ -47,6 +47,8 @@ namespace CSBackend
 		///
 		/// Handles all of the java interfaces and provides an
 		/// interface to access them.
+		///
+		/// This is deprecated in favour of JavaClass.
 		//========================================================
 		class IJavaInterface : public CSCore::QueryableInterface
 		{

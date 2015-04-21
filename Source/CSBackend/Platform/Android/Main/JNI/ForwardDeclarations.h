@@ -42,6 +42,8 @@ namespace CSBackend
 		//------------------------------------------------------
 		/// Core
 		//------------------------------------------------------
+		CS_FORWARDDECLARE_CLASS(JavaClass);
+		CS_FORWARDDECLARE_CLASS(JavaClassDef);
 		CS_FORWARDDECLARE_CLASS(JavaInterfaceManager);
 		CS_FORWARDDECLARE_CLASS(IJavaInterface);
 		CS_FORWARDDECLARE_CLASS(CoreJavaInterface);

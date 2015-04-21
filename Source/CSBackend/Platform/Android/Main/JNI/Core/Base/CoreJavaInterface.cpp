@@ -35,6 +35,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/DialogueBox/DialogueBoxSystem.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaVirtualMachine.h>
 #include <CSBackend/Platform/Android/Main/JNI/Input/Pointer/TouchInputJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Networking/Http/HttpRequestJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Web/Base/WebViewJavaInterface.h>
@@ -157,9 +158,9 @@ extern "C"
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_create(JNIEnv* in_env, jobject in_this)
 {
 	//get the java VM and init the Java Interface Manager
-	JavaVM* javaVM;
+	JavaVM* javaVM = nullptr;
 	in_env->GetJavaVM(&javaVM);
-
+	CSBackend::Android::JavaVirtualMachine::Create(javaVM);
 	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->Initialise(javaVM);
 
 	//add the core native interface
@@ -214,6 +215,8 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_suspend(JNIEnv* 
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroy(JNIEnv* in_env, jobject in_this)
 {
 	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>()->DestroyApplication();
+
+	CSBackend::Android::JavaVirtualMachine::Destroy();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
