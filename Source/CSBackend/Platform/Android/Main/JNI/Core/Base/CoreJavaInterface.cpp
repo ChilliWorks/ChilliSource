@@ -33,9 +33,9 @@
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/Screen.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/DialogueBox/DialogueBoxSystem.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaVirtualMachine.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
 #include <CSBackend/Platform/Android/Main/JNI/Input/Pointer/TouchInputJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Networking/Http/HttpRequestJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Web/Base/WebViewJavaInterface.h>
@@ -313,7 +313,7 @@ namespace CSBackend
 			std::string sdCardRootPath = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring externalStorageDir = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getExternalStorageDirectory")));
-			sdCardRootPath = JavaInterfaceUtils::CreateSTDStringFromJString(externalStorageDir);
+			sdCardRootPath = JavaUtils::CreateSTDStringFromJString(externalStorageDir);
 			env->DeleteLocalRef(externalStorageDir);
 			return sdCardRootPath;
 		}
@@ -324,7 +324,7 @@ namespace CSBackend
 			std::string appName = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrName = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getApplicationName")));
-			appName = JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
+			appName = JavaUtils::CreateSTDStringFromJString(jstrName);
 			env->DeleteLocalRef(jstrName);
 			return appName;
 		}
@@ -342,7 +342,7 @@ namespace CSBackend
 			std::string appVersion = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrName = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getApplicationVersionName")));
-			appVersion = JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
+			appVersion = JavaUtils::CreateSTDStringFromJString(jstrName);
 			env->DeleteLocalRef(jstrName);
 			return appVersion;
 		}
@@ -353,7 +353,7 @@ namespace CSBackend
 			std::string packageName = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrName = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getPackageName")));
-			packageName = JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
+			packageName = JavaUtils::CreateSTDStringFromJString(jstrName);
 			env->DeleteLocalRef(jstrName);
 			return packageName;
 		}
@@ -364,7 +364,7 @@ namespace CSBackend
 			std::string apkRootPath = " ";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrAkpPath = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getAPKDirectory")));
-			apkRootPath = JavaInterfaceUtils::CreateSTDStringFromJString(jstrAkpPath);
+			apkRootPath = JavaUtils::CreateSTDStringFromJString(jstrAkpPath);
 			env->DeleteLocalRef(jstrAkpPath);
 			return apkRootPath;
 		}

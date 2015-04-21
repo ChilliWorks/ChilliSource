@@ -32,7 +32,7 @@
 
 #include <CSBackend/Platform/Android/Amazon/JNI/Networking/IAP/AmazonIAPSystem.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
 

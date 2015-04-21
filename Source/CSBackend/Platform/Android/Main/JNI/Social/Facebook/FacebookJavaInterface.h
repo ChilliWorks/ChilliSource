@@ -31,7 +31,7 @@
 #ifndef _CHILLISOURCE_PLATFORM_EXTENSIONS_FACEBOOK_JAVA_INTERFACE_
 #define _CHILLISOURCE_PLATFORM_EXTENSIONS_FACEBOOK_JAVA_INTERFACE_
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterface.h>
 
 namespace CSBackend
 {

@@ -30,7 +30,7 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Networking/Http/HttpRequestJavaInterface.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <CSBackend/Platform/Android/Main/JNI/Networking/Http/HttpRequest.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -60,7 +60,7 @@ extern "C"
 //-----------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_networking_HttpRequestNativeInterface_OnBufferFlushed(JNIEnv* in_env, jobject in_this, jbyteArray in_data, jint in_dataLength, jint in_responseCode, jint in_requestId)
 {
-	std::string data = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJByteArray(in_data, in_dataLength);
+	std::string data = CSBackend::Android::JavaUtils::CreateSTDStringFromJByteArray(in_data, in_dataLength);
 	CSBackend::Android::HttpRequestJavaInterface::OnFlushed(data, (u32)in_responseCode, in_requestId);
 }
 

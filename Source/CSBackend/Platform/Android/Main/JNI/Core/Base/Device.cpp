@@ -31,7 +31,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/Device.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/DeviceJavaInterface.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 
 namespace CSBackend
 {

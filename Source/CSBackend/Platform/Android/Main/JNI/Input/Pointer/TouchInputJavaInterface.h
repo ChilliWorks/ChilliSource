@@ -33,7 +33,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/_JavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/_JavaInterface.h>
 
 #include <jni.h>
 #include <map>

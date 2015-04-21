@@ -32,7 +32,7 @@
 #define _CHILLISOURCE_PLATFORM_ANDROID_INPUT_TEXTENTRY_TEXTENTRYJAVAINTERFACE_H_
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterface.h>
 #include <ChilliSource/Input/TextEntry/TextEntry.h>
 
 namespace CSBackend

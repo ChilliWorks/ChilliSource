@@ -32,7 +32,7 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/CoreJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/File/FileStreamAPK.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>

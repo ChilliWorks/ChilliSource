@@ -30,7 +30,7 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Video/Base/VideoPlayer.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Video/Base/VideoPlayerJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>

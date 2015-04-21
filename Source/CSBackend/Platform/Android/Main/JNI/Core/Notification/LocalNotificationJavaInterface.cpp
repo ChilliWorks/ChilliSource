@@ -30,8 +30,8 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Notification/LocalNotificationJavaInterface.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Notification/LocalNotificationSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Notification/Notification.h>
@@ -55,8 +55,8 @@ void Java_com_chilliworks_chillisource_core_LocalNotificationNativeInterface_nat
 		jstring keyJava = (jstring)in_environment->GetObjectArrayElement(in_keys, keyIndex);
 		jstring valueJava =  (jstring)in_environment->GetObjectArrayElement(in_values, keyIndex);
 
-		std::string key = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(keyJava);
-		std::string value = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(valueJava);
+		std::string key = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(keyJava);
+		std::string value = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(valueJava);
 
 		params.SetValue(key, value);
 
@@ -118,8 +118,8 @@ namespace CSBackend
 			u32 paramCount = 0;
 			for(auto it = in_params.begin(); it != in_params.end(); ++it)
 			{
-				jstring key = JavaInterfaceUtils::CreateJStringFromSTDString(it->first);
-				jstring value = JavaInterfaceUtils::CreateJStringFromSTDString(it->second);
+				jstring key = JavaUtils::CreateJStringFromSTDString(it->first);
+				jstring value = JavaUtils::CreateJStringFromSTDString(it->second);
 				environment->SetObjectArrayElement(keys, paramCount, key);
 				environment->SetObjectArrayElement(values, paramCount, value);
 				environment->DeleteLocalRef(key);
@@ -183,8 +183,8 @@ namespace CSBackend
 						jstring keyJNI = static_cast<jstring>(environment->GetObjectArrayElement(keysJNI, paramIndex));
 						jstring valueJNI = static_cast<jstring>(environment->GetObjectArrayElement(valuesJNI, paramIndex));
 
-						std::string key = JavaInterfaceUtils::CreateSTDStringFromJString(keyJNI);
-						std::string value = JavaInterfaceUtils::CreateSTDStringFromJString(valueJNI);
+						std::string key = JavaUtils::CreateSTDStringFromJString(keyJNI);
+						std::string value = JavaUtils::CreateSTDStringFromJString(valueJNI);
 
 						notification->m_params.SetValue(key, value);
 

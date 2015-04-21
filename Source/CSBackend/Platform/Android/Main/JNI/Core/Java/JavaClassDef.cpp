@@ -1,5 +1,5 @@
 //
-//  JavaVirtualMachine.cpp
+//  JavaClassDef.cpp
 //  Chilli Source
 //  Created by Ian Copland on 21/04/2015.
 //
@@ -28,7 +28,7 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaVirtualMachine.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClassDef.h>
 
 namespace CSBackend
 {
@@ -36,22 +36,29 @@ namespace CSBackend
 	{
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        JavaVirtualMachine::JavaVirtualMachine(JavaVM* in_javaVirtualMachine)
-            : m_javaVirtualMachine(in_javaVirtualMachine)
+        JavaClassDef::JavaClassDef(const std::string& in_className)
+            : m_className(in_className)
         {
-            CS_ASSERT(m_javaVirtualMachine != nullptr, "The java virtual machine cannot be null.");
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        JNIEnv* JavaVirtualMachine::GetJNIEnvironment() const
+        void JavaClassDef::AddMethod(const std::string& in_methodName, const std::string& in_methodSignature)
         {
-            CS_ASSERT(m_javaVirtualMachine != nullptr, "The java virtual machine cannot be null.");
+            CS_ASSERT((m_methods.find(in_methodName) == m_methods.end()), "Cannot add method '" + in_methodName + "' to class definition '" + m_className + "' because the method name already exists.");
 
-            JNIEnv* environment = nullptr;
-        	m_javaVirtualMachine->AttachCurrentThread(&environment, nullptr);
-        	CS_ASSERT(environment != nullptr, "The jni environment cannot be null.");
-
-        	return environment;
+            m_methods.emplace(in_methodName, in_methodSignature);
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        const std::string& JavaClassDef::GetClassName() const
+        {
+            return m_className;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        const JavaClassDef::MethodMap& JavaClassDef::GetMethods() const
+        {
+            return m_methods;
         }
 	}
 }

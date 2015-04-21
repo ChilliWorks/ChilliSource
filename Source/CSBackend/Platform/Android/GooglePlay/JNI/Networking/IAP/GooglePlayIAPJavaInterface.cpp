@@ -33,8 +33,8 @@
 #include <CSBackend/Platform/Android/GooglePlay/JNI/Networking/IAP/GooglePlayIAPJavaInterface.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/File/FileSystem.h>
@@ -100,16 +100,16 @@ void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNative
 		{
 			CSNetworking::IAPSystem::ProductDesc desc;
 			jstring id = (jstring)in_env->GetObjectArrayElement(in_productIds, i);
-			desc.m_id = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(id);
+			desc.m_id = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(id);
 
 			jstring name = (jstring)in_env->GetObjectArrayElement(in_names, i);
-			desc.m_name = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(name);
+			desc.m_name = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(name);
 
 			jstring description = (jstring)in_env->GetObjectArrayElement(in_descs, i);
-			desc.m_description = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(description);
+			desc.m_description = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(description);
 
 			jstring price = (jstring)in_env->GetObjectArrayElement(in_prices, i);
-			desc.m_formattedPrice = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(price);
+			desc.m_formattedPrice = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(price);
 
 			products.push_back(desc);
 		}
@@ -125,9 +125,9 @@ void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNative
 	if (javaInterface != nullptr)
 	{
 		CSNetworking::IAPSystem::Transaction transaction;
-		transaction.m_productId = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
-		transaction.m_transactionId = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
-		transaction.m_receipt = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_receipt);
+		transaction.m_productId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_productId);
+		transaction.m_transactionId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_transactionId);
+		transaction.m_receipt = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_receipt);
 
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::GooglePlayIAPJavaInterface::OnTransactionStatusUpdated, javaInterface.get(), in_result, transaction));
 	}
@@ -139,8 +139,8 @@ void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNative
 	CSBackend::Android::GooglePlayIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::GooglePlayIAPJavaInterface>();
 	if (javaInterface != nullptr)
 	{
-		std::string productId = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
-		std::string transactionId = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
+		std::string productId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_productId);
+		std::string transactionId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_transactionId);
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::GooglePlayIAPJavaInterface::OnTransactionClosed, javaInterface.get(), productId, transactionId, in_success));
 	}
 }
@@ -207,7 +207,7 @@ namespace CSBackend
 
 			//initialise the system
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring publicKey = JavaInterfaceUtils::CreateJStringFromSTDString(in_publicKey);
+			jstring publicKey = JavaUtils::CreateJStringFromSTDString(in_publicKey);
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("Init"), publicKey);
 			env->DeleteLocalRef(publicKey);
 		}
@@ -244,7 +244,7 @@ namespace CSBackend
         		u32 index = 0;
         		for(Json::Value::Members::const_iterator it = members.begin(); it != members.end(); ++it, ++index)
         		{
-    				jstring jtransactionId = JavaInterfaceUtils::CreateJStringFromSTDString(*it);
+    				jstring jtransactionId = JavaUtils::CreateJStringFromSTDString(*it);
     				env->SetObjectArrayElement(transactionIDs, index, jtransactionId);
     				env->DeleteLocalRef(jtransactionId);
         		}
@@ -279,7 +279,7 @@ namespace CSBackend
 			u32 productIDIndex = 0;
 			for(std::vector<std::string>::const_iterator it = in_productIds.begin(); it != in_productIds.end(); ++it)
 			{
-				jstring jproductId = JavaInterfaceUtils::CreateJStringFromSTDString(*it);
+				jstring jproductId = JavaUtils::CreateJStringFromSTDString(*it);
 				env->SetObjectArrayElement(productIDs, productIDIndex, jproductId);
 				env->DeleteLocalRef(jproductId);
 				productIDIndex++;
@@ -327,7 +327,7 @@ namespace CSBackend
         	}
 
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jproductId = JavaInterfaceUtils::CreateJStringFromSTDString(in_productId);
+			jstring jproductId = JavaUtils::CreateJStringFromSTDString(in_productId);
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("RequestProductPurchase"), jproductId, type);
 			env->DeleteLocalRef(jproductId);
         }
@@ -388,8 +388,8 @@ namespace CSBackend
         	m_transactionCloseDelegate = in_delegate;
 
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jproductId = JavaInterfaceUtils::CreateJStringFromSTDString(in_productId);
-			jstring jtransactionId = JavaInterfaceUtils::CreateJStringFromSTDString(in_transactionId);
+			jstring jproductId = JavaUtils::CreateJStringFromSTDString(in_productId);
+			jstring jtransactionId = JavaUtils::CreateJStringFromSTDString(in_transactionId);
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("CloseTransaction"), jproductId, jtransactionId);
 			env->DeleteLocalRef(jproductId);
 			env->DeleteLocalRef(jtransactionId);

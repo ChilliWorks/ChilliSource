@@ -30,8 +30,8 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Video/Base/VideoPlayerJavaInterface.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -127,7 +127,7 @@ namespace CSBackend
 			}
 
 			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrFilename = JavaInterfaceUtils::CreateJStringFromSTDString(instrFilename);
+			jstring jstrFilename = JavaUtils::CreateJStringFromSTDString(instrFilename);
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Present"), inbInAPK, jstrFilename, inbCanDismissWithTap, bHasSubtitles, inBackgroundColour.r, inBackgroundColour.g, inBackgroundColour.b, inBackgroundColour.a);
 			pEnv->DeleteLocalRef(jstrFilename);
 		}
@@ -167,9 +167,9 @@ namespace CSBackend
 		s64 VideoPlayerJavaInterface::CreateSubtitle(const std::string& inText, const std::string& instrFontName, u32 inudwFontSize, const std::string& instrAlignment, f32 infX, f32 infY, f32 infWidth, f32 infHeight)
 		{
 			JNIEnv* pEnv = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrText = JavaInterfaceUtils::CreateJStringFromSTDString(inText);
-			jstring jstrFontName = JavaInterfaceUtils::CreateJStringFromSTDString(instrFontName);
-			jstring jstrAlignment = JavaInterfaceUtils::CreateJStringFromSTDString(instrAlignment);
+			jstring jstrText = JavaUtils::CreateJStringFromSTDString(inText);
+			jstring jstrFontName = JavaUtils::CreateJStringFromSTDString(instrFontName);
+			jstring jstrAlignment = JavaUtils::CreateJStringFromSTDString(instrAlignment);
 			s64 lwSubtitleID = pEnv->CallLongMethod(GetJavaObject(), GetMethodID("CreateSubtitle"), jstrText, jstrFontName, inudwFontSize, jstrAlignment, infX, infY, infWidth, infHeight);
 			pEnv->DeleteLocalRef(jstrText);
 			pEnv->DeleteLocalRef(jstrFontName);

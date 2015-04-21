@@ -31,8 +31,8 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/DeviceJavaInterface.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 
 namespace CSBackend
 {
@@ -68,7 +68,7 @@ namespace CSBackend
 			{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				jstring jstrLocalCode = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getDefaultLocaleCode")));
-				m_localeCode = JavaInterfaceUtils::CreateSTDStringFromJString(jstrLocalCode);
+				m_localeCode = JavaUtils::CreateSTDStringFromJString(jstrLocalCode);
 				env->DeleteLocalRef(jstrLocalCode);
 			}
 			return m_localeCode;
@@ -81,7 +81,7 @@ namespace CSBackend
 			{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				jstring jstrDeviceModel = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getDeviceModel")));
-				m_deviceModel = JavaInterfaceUtils::CreateSTDStringFromJString(jstrDeviceModel);
+				m_deviceModel = JavaUtils::CreateSTDStringFromJString(jstrDeviceModel);
 				env->DeleteLocalRef(jstrDeviceModel);
 			}
 			return m_deviceModel;
@@ -94,7 +94,7 @@ namespace CSBackend
 			{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				jstring jstrDeviceModelType = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getDeviceModelType")));
-				m_deviceModelType = JavaInterfaceUtils::CreateSTDStringFromJString(jstrDeviceModelType);
+				m_deviceModelType = JavaUtils::CreateSTDStringFromJString(jstrDeviceModelType);
 				env->DeleteLocalRef(jstrDeviceModelType);
 			}
 			return m_deviceModelType;
@@ -107,7 +107,7 @@ namespace CSBackend
 			{
 				JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 				jstring jstrDeviceManufacturer = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getDeviceManufacturer")));
-				m_deviceManufacturer = JavaInterfaceUtils::CreateSTDStringFromJString(jstrDeviceManufacturer);
+				m_deviceManufacturer = JavaUtils::CreateSTDStringFromJString(jstrDeviceManufacturer);
 				env->DeleteLocalRef(jstrDeviceManufacturer);
 			}
 			return m_deviceManufacturer;
@@ -141,7 +141,7 @@ namespace CSBackend
 			std::string output = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring adId = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getUniqueId")));
-			output = JavaInterfaceUtils::CreateSTDStringFromJString(adId);
+			output = JavaUtils::CreateSTDStringFromJString(adId);
 			env->DeleteLocalRef(adId);
 			return output;
 		}

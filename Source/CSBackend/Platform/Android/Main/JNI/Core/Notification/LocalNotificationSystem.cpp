@@ -30,7 +30,7 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Notification/LocalNotificationSystem.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Notification/LocalNotificationJavaInterface.h>
 
 namespace CSBackend

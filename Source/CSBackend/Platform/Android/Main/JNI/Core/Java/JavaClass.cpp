@@ -28,7 +28,7 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaClass.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClass.h>
 
 namespace CSBackend
 {
@@ -41,7 +41,7 @@ namespace CSBackend
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
 
             m_className = in_javaClassDef.GetClassName();
-            jclass jClass = environment->FindClass(m_className);
+            jclass jClass = environment->FindClass(m_className.c_str());
             CS_ASSERT(jClass != nullptr, "Could not find Java class: '" + m_className + "'");
 
             jmethodID jConstructor = environment->GetMethodID(jClass, "<init>", "()V");
@@ -69,36 +69,40 @@ namespace CSBackend
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void JavaClass::CheckJavaExceptions(const std::string& in_errorMessage)
+        void JavaClass::CheckJavaExceptions(const std::string& in_errorMessage) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
 
-            jthrowable exception = pEnv->ExceptionOccurred();
+            jthrowable exception = environment->ExceptionOccurred();
             if (exception != nullptr)
             {
-                pEnv->ExceptionDescribe();
-                pEnv->ExceptionClear();
+                environment->ExceptionDescribe();
+                environment->ExceptionClear();
 
                 CS_LOG_FATAL(in_errorMessage);
             }
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        JavaClass::MethodType JavaClass::CalcMethodType(const std::string& in_methodSignature)
+        JavaClass::MethodType JavaClass::CalcMethodType(const std::string& in_methodSignature) const
         {
             //TODO:
             return MethodType::k_void;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        u32 JavaClass::CalcNumArguments(const std::string& in_methodSignature)
+        u32 JavaClass::CalcNumArguments(const std::string& in_methodSignature) const
         {
             //TODO:
             return 0;
         }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        JavaClass::~JavaClass()
+        {
+            //TODO: Clean up!
+        }
     }
 }
-
-#endif
 
 #endif

@@ -34,7 +34,7 @@
 #define _CSBACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_NETWORKING_GOOGLEPLAYIAPJAVAINTERFACE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterface.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 namespace CSBackend

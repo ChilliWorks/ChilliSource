@@ -33,8 +33,8 @@
 #include <CSBackend/Platform/Android/Amazon/JNI/Networking/IAP/AmazonIAPJavaInterface.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Utils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -97,16 +97,16 @@ void Java_com_chilliworks_chillisource_amazon_networking_AmazonIAPNativeInterfac
 		{
 			CSNetworking::IAPSystem::ProductDesc desc;
 			jstring id = (jstring)in_env->GetObjectArrayElement(in_productIds, i);
-			desc.m_id = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(id);
+			desc.m_id = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(id);
 
 			jstring name = (jstring)in_env->GetObjectArrayElement(in_names, i);
-			desc.m_name = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(name);
+			desc.m_name = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(name);
 
 			jstring description = (jstring)in_env->GetObjectArrayElement(in_descs, i);
-			desc.m_description = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(description);
+			desc.m_description = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(description);
 
 			jstring price = (jstring)in_env->GetObjectArrayElement(in_prices, i);
-			desc.m_formattedPrice = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(price);
+			desc.m_formattedPrice = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(price);
 
 			products.push_back(desc);
 		}
@@ -122,9 +122,9 @@ void Java_com_chilliworks_chillisource_amazon_networking_AmazonIAPNativeInterfac
 	if (javaInterface != nullptr)
 	{
 		CSNetworking::IAPSystem::Transaction transaction;
-		transaction.m_productId = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
-		transaction.m_transactionId = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
-		transaction.m_receipt = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_receipt);
+		transaction.m_productId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_productId);
+		transaction.m_transactionId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_transactionId);
+		transaction.m_receipt = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_receipt);
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::AmazonIAPJavaInterface::OnTransactionStatusUpdated, javaInterface.get(), in_result, transaction));
 	}
 }
@@ -135,8 +135,8 @@ void Java_com_chilliworks_chillisource_amazon_networking_AmazonIAPNativeInterfac
 	CSBackend::Android::AmazonIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::AmazonIAPJavaInterface>();
 	if (javaInterface != nullptr)
 	{
-		std::string productId = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_productId);
-		std::string transactionId = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_transactionId);
+		std::string productId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_productId);
+		std::string transactionId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_transactionId);
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::AmazonIAPJavaInterface::OnTransactionClosed, javaInterface.get(), productId, transactionId));
 	}
 }
@@ -163,8 +163,8 @@ namespace CSBackend
 
 			//initialise the system
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring privateKey = JavaInterfaceUtils::CreateJStringFromSTDString(in_privateKey);
-			jstring udid = JavaInterfaceUtils::CreateJStringFromSTDString(in_udid);
+			jstring privateKey = JavaUtils::CreateJStringFromSTDString(in_privateKey);
+			jstring udid = JavaUtils::CreateJStringFromSTDString(in_udid);
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("Init"), privateKey, udid);
 			env->DeleteLocalRef(privateKey);
 			env->DeleteLocalRef(udid);
@@ -221,7 +221,7 @@ namespace CSBackend
         	u32 productIDIndex = 0;
         	for(std::vector<std::string>::const_iterator it = in_productIds.begin(); it != in_productIds.end(); ++it)
         	{
-        		jstring productID = JavaInterfaceUtils::CreateJStringFromSTDString(*it);
+        		jstring productID = JavaUtils::CreateJStringFromSTDString(*it);
         		env->SetObjectArrayElement(productIDs, productIDIndex, productID);
         		env->DeleteLocalRef(productID);
         		productIDIndex++;
@@ -254,7 +254,7 @@ namespace CSBackend
         void AmazonIAPJavaInterface::RequestProductPurchase(const std::string& in_productId)
         {
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring productID = JavaInterfaceUtils::CreateJStringFromSTDString(in_productId);
+			jstring productID = JavaUtils::CreateJStringFromSTDString(in_productId);
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("RequestProductPurchase"), productID);
 			env->DeleteLocalRef(productID);
         }
@@ -308,8 +308,8 @@ namespace CSBackend
         	m_transactionCloseDelegate = in_delegate;
 
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring productId = JavaInterfaceUtils::CreateJStringFromSTDString(in_productId);
-			jstring transactionId = JavaInterfaceUtils::CreateJStringFromSTDString(in_transactionId);
+			jstring productId = JavaUtils::CreateJStringFromSTDString(in_productId);
+			jstring transactionId = JavaUtils::CreateJStringFromSTDString(in_transactionId);
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("CloseTransaction"), productId, transactionId);
 			env->DeleteLocalRef(productId);
 			env->DeleteLocalRef(transactionId);

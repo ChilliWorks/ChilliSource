@@ -33,7 +33,7 @@
 #ifndef _CSBACKEND_PLATFORM_ANDROID__EXTENSIONS_AMAZON_AMAZONIAPJAVAINTERFACE_H_
 #define _CSBACKEND_PLATFORM_ANDROID__EXTENSIONS_AMAZON_AMAZONIAPJAVAINTERFACE_H_
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterface.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
 
 namespace CSBackend

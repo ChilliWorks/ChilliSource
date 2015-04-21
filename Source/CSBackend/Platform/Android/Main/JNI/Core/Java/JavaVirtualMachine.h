@@ -28,8 +28,8 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifndef _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JNI_JAVAVIRTUALMACHINE_H_
-#define _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JNI_JAVAVIRTUALMACHINE_H_
+#ifndef _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_JAVAVIRTUALMACHINE_H_
+#define _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_JAVAVIRTUALMACHINE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Singleton.h>
@@ -68,7 +68,7 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			JavaVirtualMachine(JavaVM* in_javaVirtualMachine);
 
-			const JavaVM* m_javaVirtualMachine;
+			JavaVM* m_javaVirtualMachine;
 		};
 	}
 }

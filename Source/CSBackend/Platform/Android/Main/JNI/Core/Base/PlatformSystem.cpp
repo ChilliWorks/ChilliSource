@@ -31,7 +31,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/PlatformSystem.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/CoreJavaInterface.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #include <CSBackend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 #include <ChilliSource/Core/Image/ETC1ImageProvider.h>

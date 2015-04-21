@@ -29,7 +29,7 @@
 #ifdef CS_TARGETPLATFORM_ANDROID
 
 //includes
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/_JavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/_JavaInterface.h>
 
 namespace CSBackend
 {

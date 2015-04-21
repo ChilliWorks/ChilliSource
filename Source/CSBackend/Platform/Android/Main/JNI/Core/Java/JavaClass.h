@@ -28,15 +28,17 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifndef _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JNI_JAVACLASS_H_
-#define _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JNI_JAVACLASS_H_
+#ifndef _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_JAVACLASS_H_
+#define _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_JAVACLASS_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaClassDef.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaVirtualMachine.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClassDef.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
 
 #include <jni.h>
+
+#include <unordered_map>
 
 namespace CSBackend
 {
@@ -82,6 +84,12 @@ namespace CSBackend
             /// @param ... - The arguments to the method.
             //------------------------------------------------------------------------------
             template <typename... TArgs> void CallVoidMethod(const std::string& in_methodName, TArgs&&... in_args) const;
+            //------------------------------------------------------------------------------
+            /// Destructor.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            ~JavaClass();
 
         private:
             //------------------------------------------------------------------------------
@@ -113,35 +121,36 @@ namespace CSBackend
             ///
             /// @param in_errorMessage - The error message to print if an exception occurred.
             //------------------------------------------------------------------------------
-            void CheckJavaExceptions(const std::string& in_errorMessage);
+            void CheckJavaExceptions(const std::string& in_errorMessage) const;
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return The method type for the given method signature.
             //------------------------------------------------------------------------------
-            MethodType CalcMethodType(const std::string& in_methodSignature);
+            MethodType CalcMethodType(const std::string& in_methodSignature) const;
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return The number of parameters the method described by the given signature
             /// takes.
             //------------------------------------------------------------------------------
-            u32 CalcNumArguments(const std::string& in_methodSignature);
+            u32 CalcNumArguments(const std::string& in_methodSignature) const;
 
             std::string m_className;
             jobject m_javaObject = nullptr;
-            std::map<std::string, MethodInfo> m_methods;
+            std::unordered_map<std::string, MethodInfo> m_methods;
 		};
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         template <typename... TArgs> void JavaClass::CallVoidMethod(const std::string& in_methodName, TArgs&&... in_args) const
         {
-            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-
             auto methodInfoIt = m_methods.find(in_methodName);
             CS_ASSERT(methodInfoIt != m_methods.end(), "Could not find method '" + in_methodName + "' in Java class '" + m_className + "'");
-            CS_ASSERT(methodInfoIt->m_methodType == MethodType::k_void, "Cannot call method '" + in_methodName + "' in Java class '" + m_className + "' as it is not a void method.");
-            CS_ASSERT(methodInfoIt->m_numArguments == sizeof...(in_args), "Cannot call method '" + in_methodName + "' in Java class '" + m_className + "' because too few arguments were supplied.");
+            CS_ASSERT(methodInfoIt->second.m_methodType == MethodType::k_void, "Cannot call method '" + in_methodName + "' in Java class '" + m_className + "' as it is not a void method.");
+            CS_ASSERT(methodInfoIt->second.m_numArguments == sizeof...(TArgs), "Cannot call method '" + in_methodName + "' in Java class '" + m_className + "' because too few arguments were supplied.");
+
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            environment->CallVoidMethod(m_javaObject, methodInfoIt->second.m_methodId, std::forward<TArgs>(in_args)...);
         }
 	}
 }

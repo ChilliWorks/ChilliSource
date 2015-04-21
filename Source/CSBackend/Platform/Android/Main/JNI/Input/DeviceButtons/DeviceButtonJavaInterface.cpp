@@ -30,8 +30,8 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Input/DeviceButtons/DeviceButtonJavaInterface.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
