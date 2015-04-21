@@ -92,8 +92,6 @@ public class ExpansionDownloaderNativeInterface extends INativeInterface impleme
 	{	
 		//Construct this projects resource file package name and set it in the downloader library 
 		String strPackage = CSApplication.get().getActivityContext().getPackageName() + ".R";
-		Helpers.REMOTE_PACKAGE_NAME = strPackage;
-		
 		int keyStringID = ResourceHelper.GetDynamicResourceIDForField(CSApplication.get().getActivityContext(), ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "GooglePlayPublicKey");
 		if(keyStringID > 0)
 		{
