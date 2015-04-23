@@ -1,5 +1,5 @@
 /**
- * InterfaceIDType.java
+ * InterfaceID.java
  * Chilli Source
  * Created by Ian Copland on 09/08/2012.
  * 
@@ -28,36 +28,13 @@
 
 package com.chilliworks.chillisource.core;
 
-//=========================================================
-/// Interface ID Type
-///
-/// A Wrapper class for containing the interface ID. This
-/// allows us to change the ID type for optimisation later
-/// on. (e.g, convert to a hashed value rather than a 
-/// string compare).
-//=========================================================
-public class InterfaceIDType
+/**
+ * A simple type used to define a "named type" which is used to check the type of classes
+ * which implement IQueryableInterface. A class implementing IQueryableInterface should
+ * create a static instance of this which can be passed to the isA() method.
+ *
+ * @author Ian Copland
+ */
+public class InterfaceID
 {
-	//----------------------------------------------------
-	/// Private Member Data
-	//----------------------------------------------------
-	private String mstrID;
-	//----------------------------------------------------
-	/// Constructor
-	//----------------------------------------------------
-	public InterfaceIDType(String instrInterfaceName)
-	{
-		mstrID = instrInterfaceName;
-	}
-	//----------------------------------------------------
-	/// Equals
-	//----------------------------------------------------
-	public boolean Equals(InterfaceIDType inOther)
-	{
-		if (mstrID.equals(inOther.mstrID) == true)
-		{
-			return true;
-		}
-		return false;
-	}
 }

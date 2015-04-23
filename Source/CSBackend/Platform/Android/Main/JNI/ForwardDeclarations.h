@@ -44,6 +44,7 @@ namespace CSBackend
 		//------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(JavaClass);
 		CS_FORWARDDECLARE_CLASS(JavaClassDef);
+		CS_FORWARDDECLARE_CLASS(JavaSystem);
 		CS_FORWARDDECLARE_CLASS(JavaVirtualMachine);
 		CS_FORWARDDECLARE_CLASS(JavaInterfaceManager);
 		CS_FORWARDDECLARE_CLASS(IJavaInterface);

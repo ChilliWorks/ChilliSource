@@ -59,7 +59,7 @@ public class CSApplication
 	
 	private static CSApplication m_singleton = null;
 	
-	private ArrayList<INativeInterface> m_systems;
+	private ArrayList<System> m_systems;
 	private CSActivity m_activeActivity;
 	private RelativeLayout m_rootViewContainer;
 	private CoreNativeInterface m_coreSystem;
@@ -68,6 +68,7 @@ public class CSApplication
 	private long m_elapsedAppTime = 0;
 	private boolean m_resetTimeSinceLastUpdate = false;
 	private boolean m_isActive = false;
+    private boolean m_isForegrounded = false;
 	
 	private boolean m_initLifecycleEventOccurred = false;
 	private boolean m_resumeLifecycleEventOccurred = false;
@@ -109,7 +110,7 @@ public class CSApplication
 		//Cannot create app with a null activity
 		assert in_activeActivity != null;
 		
-		//Cannot init app more than once
+		//Cannot initApplication app more than once
 		assert m_singleton == null;
 		
 		m_singleton = new CSApplication(in_activeActivity);
@@ -125,7 +126,7 @@ public class CSApplication
 	{
 		m_activeActivity = in_activeActivity;
 		
-		m_systems = new ArrayList<INativeInterface>();
+		m_systems = new ArrayList<System>();
 		
     	//create the root view container that other Android UI is added to
 		//and make it the root of the app activity
@@ -160,9 +161,9 @@ public class CSApplication
 		
 		synchronized(m_systems)
 		{
-			for (INativeInterface system : m_systems)
+			for (System system : m_systems)
 			{
-				system.onActivityResume();
+				system.onResume();
 			}
 		}
 	}
@@ -173,13 +174,15 @@ public class CSApplication
 	 */
 	public void foreground()
 	{
+        m_isForegrounded = true;
+
 		m_foregroundLifecycleEventOccurred = true;
 		
 		synchronized(m_systems)
 		{
-			for (INativeInterface system : m_systems)
+			for (System system : m_systems)
 			{
-				system.onActivityForeground();
+				system.onForeground();
 			}
 		}
 	}
@@ -195,7 +198,7 @@ public class CSApplication
     	//has elapsed.
     	try
     	{
-    		long currentTime = System.currentTimeMillis();
+    		long currentTime = java.lang.System.currentTimeMillis();
     		long elapsedTime = currentTime - m_previousUpdateTime;
     		if (elapsedTime < m_milliSecsPerUpdate)
     		{
@@ -210,13 +213,13 @@ public class CSApplication
     	//if we are resuming, or this is the first frame then ensure the delta time will be 0.
       	if (m_resetTimeSinceLastUpdate  == true)
         {
-      		m_previousUpdateTime = System.currentTimeMillis();
+      		m_previousUpdateTime = java.lang.System.currentTimeMillis();
       		m_resetTimeSinceLastUpdate = false;
         }
     	
         //calculate delta time. Hopefully this will be kMillisecondsPerFrame in most 
     	//circumstances.
-        long currentTime = System.currentTimeMillis();
+        long currentTime = java.lang.System.currentTimeMillis();
     	float deltaTime = ((float)(currentTime - m_previousUpdateTime)) * 0.001f;
     	m_elapsedAppTime += deltaTime;
     	m_previousUpdateTime = currentTime;
@@ -234,9 +237,9 @@ public class CSApplication
 		if(m_initLifecycleEventOccurred == true && m_currentAppLifecycleState == LifecycleState.k_notInitialised)
 		{
 			CoreNativeInterface.create();
-			m_coreSystem = (CoreNativeInterface)getSystem(CoreNativeInterface.InterfaceID);
+			m_coreSystem = (CoreNativeInterface)getSystem(CoreNativeInterface.INTERFACE_ID);
 			assert m_coreSystem != null;
-			m_coreSystem.init();
+			m_coreSystem.initApplication();
 			
 			m_initLifecycleEventOccurred = false;
 			m_currentAppLifecycleState = LifecycleState.k_inactive;
@@ -257,7 +260,7 @@ public class CSApplication
 		{
 			synchronized(m_systems)
 			{
-				for (INativeInterface system : m_systems)
+				for (System system : m_systems)
 				{
 					system.onLaunchIntentReceived(m_receivedIntent);
 				}
@@ -286,15 +289,17 @@ public class CSApplication
 		{
 			synchronized(m_systems)
 			{
-				for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+				for (ListIterator<System> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();)
 				{
-					INativeInterface system = iterator.previous();
-					system.onActivityBackground();
+					System system = iterator.previous();
+					system.onBackground();
 				}
 			}
 
 			m_backgroundLifecycleEventOccurred = true;
 		}
+
+        m_isForegrounded = false;
 	}
 	/**
 	 * Triggered when the app is no longer the active one
@@ -309,10 +314,10 @@ public class CSApplication
 		{
 			synchronized(m_systems)
 			{
-				for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+				for (ListIterator<System> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();)
 				{
-					INativeInterface system = iterator.previous();
-					system.onActivityBackground();
+					System system = iterator.previous();
+					system.onBackground();
 				}
 			}
 		}
@@ -322,21 +327,21 @@ public class CSApplication
 		{
 			@Override public void run() 
 			{
-				//Often suspend is triggered by Android before background. We need to ensure it is not!
-				if(shouldBackground)
-				{
-					m_coreSystem.background();
-					m_backgroundLifecycleEventOccurred = false;
-					m_currentAppLifecycleState = LifecycleState.k_active;
-				}
-				
-				m_coreSystem.suspend();
-				m_currentAppLifecycleState = LifecycleState.k_inactive;
-				
-				synchronized(this)
-				{
-					notifyAll();
-				}
+                //Often suspend is triggered by Android before background. We need to ensure it is not!
+                if(shouldBackground)
+                {
+                    m_coreSystem.background();
+                    m_backgroundLifecycleEventOccurred = false;
+                    m_currentAppLifecycleState = LifecycleState.k_active;
+                }
+
+                m_coreSystem.suspend();
+                m_currentAppLifecycleState = LifecycleState.k_inactive;
+
+                synchronized(this)
+                {
+                    notifyAll();
+                }
 			}
 		};
 		
@@ -359,32 +364,31 @@ public class CSApplication
 		
 		synchronized(m_systems)
 		{
-			for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+			for (ListIterator<System> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();)
 			{
-				INativeInterface system = iterator.previous();
-				system.onActivitySuspend();
+				System system = iterator.previous();
+				system.onSuspend();
 			}
 		}
 		
 		m_isActive = false;
 	}
 	/**
-	 * Triggered when the app is terminated. This will destroy the singleton application
+	 * Triggered when the app is terminated. This will destroyApplication the singleton application
 	 * 
 	 * @author S Downie
 	 */
 	public void destroy()
 	{
 		//Make sure the core system is handled first
-		m_coreSystem.destroy();
+		m_coreSystem.destroyApplication();
 		m_currentAppLifecycleState = LifecycleState.k_notInitialised;
 		
 		synchronized(m_systems)
 		{
-			for (ListIterator<INativeInterface> iterator = m_systems.listIterator(m_systems.size()); iterator.hasPrevious();) 
+			while (m_systems.size() > 0)
 			{
-				INativeInterface system = iterator.previous();
-				system.onActivityDestroy();
+				m_systems.get(m_systems.size() - 1).destroy();
 			}
 		}
 		
@@ -407,7 +411,7 @@ public class CSApplication
 	{
 		synchronized(m_systems)
 		{
-			for (INativeInterface system : m_systems)
+			for (System system : m_systems)
 			{
 				system.onActivityResult(in_requestCode, in_resultCode, in_data);
 			}
@@ -425,7 +429,7 @@ public class CSApplication
     {
 		synchronized(m_systems)
 		{
-			for (INativeInterface system : m_systems)
+			for (System system : m_systems)
 			{
 				system.onActivityConfigurationChanged(in_config);
 			}
@@ -447,12 +451,31 @@ public class CSApplication
 	 * 
 	 * @param System 
 	 */
-	public void addSystem(INativeInterface in_system)
+	public void addSystem(final System in_system)
 	{
 		synchronized(m_systems)
 		{
+            assert (m_systems.contains(in_system) == false) : "System already added to application!";
 			m_systems.add(in_system);
 		}
+
+        scheduleUIThreadTask(new Runnable()
+        {
+            @Override public void run()
+            {
+                in_system.onInit();
+
+                if (m_isActive == true)
+                {
+                    in_system.onResume();
+
+                    if (m_isForegrounded == true)
+                    {
+                        in_system.onForeground();
+                    }
+                }
+            }
+        });
 	}
 	/**
 	 * @author S Downie
@@ -461,11 +484,11 @@ public class CSApplication
 	 * 
 	 * @return The first system that implements the given interface ID.
 	 */
-	public INativeInterface getSystem(InterfaceIDType in_interfaceId)
+	public System getSystem(InterfaceID in_interfaceId)
 	{
 		synchronized(m_systems)
 		{
-			for (INativeInterface system : m_systems)
+			for (System system : m_systems)
 			{
 				if (system.IsA(in_interfaceId))
 				{
@@ -476,6 +499,39 @@ public class CSApplication
 		
 		return null;
 	}
+    /**
+     * Removes the system fro
+     *
+     * @author Ian Copland
+     *
+     * @param in_system - The system to remove.
+     */
+    public void removeSystem(final System in_system)
+    {
+        scheduleUIThreadTask(new Runnable()
+        {
+            @Override public void run()
+            {
+                if (m_isActive == true)
+                {
+                    if (m_isForegrounded == true)
+                    {
+                        in_system.onBackground();
+                    }
+
+                    in_system.onSuspend();
+                }
+
+                in_system.onDestroy();
+
+                synchronized(m_systems)
+                {
+                    assert (m_systems.contains(in_system) == false) : "System already added to application!";
+                    m_systems.remove(in_system);
+                }
+            }
+        });
+    }
 	/**
 	 * @author S Downie
 	 * 
@@ -619,7 +675,7 @@ public class CSApplication
 				
 				for (String strAdditionalLibrary : astrAdditionalLibraries)
 				{
-					System.loadLibrary(strAdditionalLibrary);
+					java.lang.System.loadLibrary(strAdditionalLibrary);
 				}
 			}
 		}
@@ -629,6 +685,6 @@ public class CSApplication
 		}
 		
 		//load the default libraries
-		System.loadLibrary("Application");
+		java.lang.System.loadLibrary("Application");
 	}
 }

@@ -29,8 +29,8 @@
 package com.chilliworks.chillisource.googleplay.core;
 
 import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.INativeInterface;
-import com.chilliworks.chillisource.core.InterfaceIDType;
+import com.chilliworks.chillisource.core.InterfaceID;
+import com.chilliworks.chillisource.core.System;
 import com.chilliworks.chillisource.core.Logging;
 
 import android.app.PendingIntent;
@@ -39,12 +39,12 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 
-public class RemoteNotificationNativeInterface extends INativeInterface
+public class RemoteNotificationNativeInterface extends System
 {
 	//--------------------------------------------------------------
 	/// Static Member Data
 	//--------------------------------------------------------------
-	public static InterfaceIDType InterfaceID = new InterfaceIDType("CRemoteNotificationNativeInterface");
+    public static InterfaceID INTERFACE_ID = new InterfaceID();
 	//--------------------------------------------------------------
 	/// Native methods
 	//--------------------------------------------------------------
@@ -55,14 +55,22 @@ public class RemoteNotificationNativeInterface extends INativeInterface
 	//--------------------------------------------------------------
 	public RemoteNotificationNativeInterface()
 	{
+        init();
 	}
-	//--------------------------------------------------------------
-	/// Constructor
-	//--------------------------------------------------------------
-	@Override public boolean IsA(InterfaceIDType inInterfaceType)
-	{
-		return (inInterfaceType == InterfaceID);
-	}
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean IsA(com.chilliworks.chillisource.core.InterfaceID in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
 	//---------------------------------------------------------------------
 	/// Register
 	///

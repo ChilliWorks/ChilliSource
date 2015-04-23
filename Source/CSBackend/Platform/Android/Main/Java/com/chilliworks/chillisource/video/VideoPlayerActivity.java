@@ -191,7 +191,7 @@ public class VideoPlayerActivity extends Activity
   	//------------------------------------------------------------------------
     @Override protected synchronized void onDestroy()
     {
-		VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
+		VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.INTERFACE_ID);
 		if (mediaPlayerNI != null)
 		{
 			mediaPlayerNI.OnVideoComplete();

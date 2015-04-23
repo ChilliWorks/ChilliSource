@@ -1,7 +1,7 @@
 //
-//  ApkExpansionDownloader.cpp
+//  JavaSystem.cpp
 //  Chilli Source
-//  Created by Ian Copland on 22/04/2015.
+//  Created by Ian Copland on 21/04/2015.
 //
 //  The MIT License (MIT)
 //
@@ -28,47 +28,37 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaSystem.h>
 
-#include <CSBackend/Platform/Android/GooglePlay/JNI/Networking/ApkExpansion/ApkExpansionDownloader.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClassDef.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
 
 namespace CSBackend
 {
 	namespace Android
 	{
-        CS_DEFINE_NAMEDTYPE(ApkExpansionDownloader);
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        ApkExpansionDownloaderUPtr ApkExpansionDownloader::Create()
+        JavaSystem::JavaSystem(const JavaClassDef& in_javaClassDef)
         {
-            return ApkExpansionDownloaderUPtr(new ApkExpansionDownloader());
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        bool ApkExpansionDownloader::IsA(CSCore::InterfaceIDType in_interfaceId) const
-        {
-            return (ApkExpansionDownloader::InterfaceID == in_interfaceId);
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void ApkExpansionDownloader::OnInit()
-        {
-            //define and create the java class.
-            JavaClassDef classDef("com/chilliworks/chillisource/googleplay/networking/ApkExpansionDownloader");
-            m_javaSystem = JavaSystemUPtr(new JavaSystem(classDef));
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void ApkExpansionDownloader::OnDestroy()
-        {
-            m_javaSystem.reset();
-        }
-	}
-}
+            JavaClassDef updatedDef(in_javaClassDef.GetClassName());
+            updatedDef.AddMethod("init", "()V");
+            updatedDef.AddMethod("destroy", "()V");
+            for (const auto& methodInfo : in_javaClassDef.GetMethods())
+            {
+                updatedDef.AddMethod(methodInfo.first, methodInfo.second);
+            }
+            m_javaClass = JavaClassUPtr(new JavaClass(updatedDef));
 
-#endif
+            m_javaClass->CallVoidMethod("init");
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        JavaSystem::~JavaSystem()
+        {
+            m_javaClass->CallVoidMethod("destroy");
+            m_javaClass.reset();
+        }
+    }
+}
 
 #endif

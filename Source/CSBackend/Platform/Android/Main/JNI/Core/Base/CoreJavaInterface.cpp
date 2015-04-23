@@ -63,7 +63,7 @@ extern "C"
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
 	//--------------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject in_this);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_initApplication(JNIEnv* in_env, jobject in_this);
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is resumed.
 	///
@@ -110,7 +110,7 @@ extern "C"
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
 	//--------------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroy(JNIEnv* in_env, jobject in_this);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroyApplication(JNIEnv* in_env, jobject in_this);
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is updated
 	///
@@ -168,7 +168,7 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_create(JNIEnv* i
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject in_this)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_initApplication(JNIEnv* in_env, jobject in_this)
 {
 	//get the java VM and init the Java Interface Manager
 	JavaVM* javaVM;
@@ -212,7 +212,7 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_suspend(JNIEnv* 
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroy(JNIEnv* in_env, jobject in_this)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroyApplication(JNIEnv* in_env, jobject in_this)
 {
 	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>()->DestroyApplication();
 

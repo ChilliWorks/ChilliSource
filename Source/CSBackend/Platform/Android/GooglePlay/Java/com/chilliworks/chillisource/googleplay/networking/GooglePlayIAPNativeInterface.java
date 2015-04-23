@@ -37,19 +37,16 @@ import org.json.JSONObject;
 
 import android.content.Intent;
 
-import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.INativeInterface;
-import com.chilliworks.chillisource.core.InterfaceIDType;
-import com.chilliworks.chillisource.core.Logging;
+import com.chilliworks.chillisource.core.*;
 import com.chilliworks.chillisource.networking.IAPProductDescription;
 import com.chilliworks.chillisource.networking.IAPTransactionDescription;
 
-public class GooglePlayIAPNativeInterface  extends INativeInterface
+public class GooglePlayIAPNativeInterface  extends com.chilliworks.chillisource.core.System
 {
 	//--------------------------------------------------------------
 	/// Member data
 	//--------------------------------------------------------------
-	public static InterfaceIDType InterfaceID = new InterfaceIDType("GooglePlayIAPNativeInterface");
+    public static InterfaceID INTERFACE_ID = new InterfaceID();
 	
 	private static final int k_maxProductIDsPerRequest = 20;
 	
@@ -74,20 +71,22 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 	 */
 	public GooglePlayIAPNativeInterface()
 	{
+        init();
 	}
-	/**
-	 * Is A
-	 * 
-	 * @author Scott Downie
-	 * 
-	 * @param Interface ID
-	 * 
-	 * @return Whether the system implements the given interface
-	 */
-	@Override public boolean IsA(InterfaceIDType in_interfaceType) 
-	{
-		return (in_interfaceType == InterfaceID);
-	}
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean IsA(InterfaceID in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
 	/**
 	 * Init
 	 * 
@@ -601,7 +600,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 	 *  
 	 * @author Scott Downie
 	 */
-	@Override public void onActivityDestroy() 
+	@Override public void onDestroy()
 	{
 		if(m_IABHelper != null)
 		{

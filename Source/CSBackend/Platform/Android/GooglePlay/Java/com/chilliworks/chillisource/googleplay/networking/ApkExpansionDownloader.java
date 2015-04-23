@@ -28,18 +28,17 @@
 
 package com.chilliworks.chillisource.googleplay.networking;
 
-import com.chilliworks.chillisource.core.INativeInterface;
-import com.chilliworks.chillisource.core.InterfaceIDType;
-import com.chilliworks.chillisource.core.Logging;
+import com.chilliworks.chillisource.core.*;
+import com.chilliworks.chillisource.core.System;
 
 /**
  * TODO
  *
  * @author Ian Copland
  */
-public class ApkExpansionDownloader extends INativeInterface
+public class ApkExpansionDownloader extends System
 {
-    public static InterfaceIDType InterfaceID = new InterfaceIDType("GooglePlayIAPNativeInterface");
+    public static InterfaceID INTERFACE_ID = new InterfaceID();
 
     /**
      * Allows querying of whether or not the system implements the interface described by the
@@ -51,8 +50,8 @@ public class ApkExpansionDownloader extends INativeInterface
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean IsA(InterfaceIDType in_interfaceId)
+    @Override public boolean IsA(InterfaceID in_interfaceId)
     {
-        return (in_interfaceId == InterfaceID);
+        return (in_interfaceId == INTERFACE_ID);
     }
 }

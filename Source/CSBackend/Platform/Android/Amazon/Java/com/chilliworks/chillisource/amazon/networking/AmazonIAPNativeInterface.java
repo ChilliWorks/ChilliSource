@@ -46,20 +46,14 @@ import com.amazon.inapp.purchasing.PurchaseUpdatesResponse;
 import com.amazon.inapp.purchasing.PurchasingManager;
 import com.amazon.inapp.purchasing.Receipt;
 import com.chilliworks.chillisource.amazon.networking.PurchaseTransaction.ProductType;
-import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.ExceptionUtils;
-import com.chilliworks.chillisource.core.HashCRC32;
-import com.chilliworks.chillisource.core.INativeInterface;
-import com.chilliworks.chillisource.core.InterfaceIDType;
-import com.chilliworks.chillisource.core.Logging;
-import com.chilliworks.chillisource.core.StringUtils;
+import com.chilliworks.chillisource.core.*;
 
 //===========================================================
 /// Amazon IAP Native Interface
 ///
 /// A native interface for the Amazon IAP system. 
 //===========================================================
-public class AmazonIAPNativeInterface extends INativeInterface
+public class AmazonIAPNativeInterface extends com.chilliworks.chillisource.core.System
 {
 	//-----------------------------------------------------
 	/// State
@@ -77,7 +71,7 @@ public class AmazonIAPNativeInterface extends INativeInterface
 	//-----------------------------------------------------
 	/// Constants
 	//-----------------------------------------------------
-	public static InterfaceIDType InterfaceID = new InterfaceIDType("CAmazonIAPNativeInterface");
+	public static InterfaceID INTERFACE_ID = new InterfaceID();
 	private static String kstrCacheNamePrefix = "AmazonIAP-";
 	private static String kstrCacheExtension = ".iapcache";
 	private static String kstrReceiptUserIDKey = "UserID";
@@ -100,18 +94,22 @@ public class AmazonIAPNativeInterface extends INativeInterface
 	//-----------------------------------------------------
 	public AmazonIAPNativeInterface()
 	{
+        init();
 	}
-	//-----------------------------------------------------
-	/// Is A
-	///
-	/// @param Interface ID
-	/// @return Whether the system implements the given 
-	/// interface
-	//-----------------------------------------------------
-	@Override synchronized public boolean IsA(InterfaceIDType inInterfaceType) 
-	{
-		return (inInterfaceType == InterfaceID);
-	}
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean IsA(InterfaceID in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
 	//-----------------------------------------------------
 	/// Init
 	///
@@ -152,7 +150,7 @@ public class AmazonIAPNativeInterface extends INativeInterface
 	/// foreground. This requests an update to the users
 	/// ID.
 	//-----------------------------------------------------
-	@Override synchronized public void onActivityResume() 
+	@Override synchronized public void onResume()
 	{
 		//if a user ID has already been requested it may now be out of date, so update it.
 		if (meState != State.UNINITIALISED && meState != State.REGISTERING_OBSERVER)

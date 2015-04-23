@@ -76,7 +76,7 @@ public class SubtitlesView extends ViewGroup
 	public SubtitlesView(Context context) 
 	{
 		super(context);
-		mVideoPlayerNativeInterface = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.InterfaceID);
+		mVideoPlayerNativeInterface = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.INTERFACE_ID);
 		if (mVideoPlayerNativeInterface == null)
 		{
 			Logging.logError("Could not get the video player native interface!");

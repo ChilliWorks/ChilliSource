@@ -36,9 +36,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.view.WindowManager;
 
-import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.INativeInterface;
-import com.chilliworks.chillisource.core.InterfaceIDType;
+import com.chilliworks.chillisource.core.*;
 
 //=============================================================
 /// Video Player Native Interface
@@ -46,7 +44,7 @@ import com.chilliworks.chillisource.core.InterfaceIDType;
 /// A native interface for interfacing with the Android 
 /// accelerometer from native code.
 //=============================================================
-public class AccelerometerNativeInterface extends INativeInterface implements SensorEventListener
+public class AccelerometerNativeInterface extends com.chilliworks.chillisource.core.System implements SensorEventListener
 {
 	//-----------------------------------------------------
 	/// Axis Swap
@@ -75,7 +73,8 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 	//-----------------------------------------------------
 	/// Member data
 	//-----------------------------------------------------
-	public static InterfaceIDType InterfaceID = new InterfaceIDType("CAccelerometerNativeInterface");
+    public static InterfaceID INTERFACE_ID = new InterfaceID();
+
 	boolean mbListening = false;
 	boolean mbHasAccelerometer = false;
 	AxisSwap[] m_axisSwapForRotation = null;
@@ -84,6 +83,8 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 	//-----------------------------------------------------
 	public AccelerometerNativeInterface()
 	{
+        init();
+
 		PackageManager manager = CSApplication.get().getActivityContext().getPackageManager();
 		mbHasAccelerometer = manager.hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER);
 		
@@ -95,16 +96,20 @@ public class AccelerometerNativeInterface extends INativeInterface implements Se
 			new AxisSwap( 1, 1, 1, 0) 		// ROTATION_270
 		}; 
 	}
-	//-----------------------------------------------------
-	/// Is A
-	///
-	/// @return whether or not this implements the given 
-	/// interface.
-	//-----------------------------------------------------
-	@Override public boolean IsA(InterfaceIDType inInterfaceType) 
-	{
-		return (inInterfaceType.Equals(InterfaceID));
-	}
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean IsA(InterfaceID in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
 	//---------------------------------------------------
 	/// Is Available
 	///

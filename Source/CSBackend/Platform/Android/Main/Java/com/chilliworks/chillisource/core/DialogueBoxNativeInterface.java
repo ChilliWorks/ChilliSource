@@ -36,29 +36,33 @@ import android.widget.Toast;
  * A native interface for communication with native in reference
  * to system dialogue box functionality.
  */
-public class DialogueBoxNativeInterface extends INativeInterface
-{	
-	/**
-	 * Member data
-	 */
-	public static InterfaceIDType InterfaceID = new InterfaceIDType("DialogueBoxNativeInterface");
-	/**
+public class DialogueBoxNativeInterface extends System
+{
+    public static InterfaceID INTERFACE_ID = new InterfaceID();
+
+    /**
 	 * Constructor
-	 * 
+	 *
 	 * @author Ian Copland
 	 */
 	public DialogueBoxNativeInterface()
 	{
+        init();
 	}
-	/**
-	 * @author Ian Copland
-	 * 
-	 * @return Whether or not this implements the given interface.
-	 */
-	@Override public boolean IsA(InterfaceIDType inInterfaceType) 
-	{
-		return (inInterfaceType.Equals(InterfaceID));
-	}
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean IsA(InterfaceID in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
 	/**
 	 * Display a toast notification with the given text
 	 * 

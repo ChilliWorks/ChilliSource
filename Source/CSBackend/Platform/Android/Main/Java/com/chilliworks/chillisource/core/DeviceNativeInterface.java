@@ -49,23 +49,36 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
  * 
  * @author S Downie
  */
-public final class DeviceNativeInterface extends INativeInterface
+public final class DeviceNativeInterface extends System
 {
-	public static InterfaceIDType InterfaceID = new InterfaceIDType("DeviceNativeInterface");
+    public static InterfaceID INTERFACE_ID = new InterfaceID();
+
 	private static final String k_preferencesKey = "CSPreferences";
 	private static final String k_udidKey = "UDID";
-	
-	/**
-	 * @author S Downie
-	 * 
-	 * @param Java system interface ID
-	 * 
-	 * @return Whether the system implements the ID
-	 */
-	@Override public boolean IsA(InterfaceIDType in_interfaceType) 
-	{
-		return (in_interfaceType.Equals(InterfaceID));
-	}
+
+    /**
+     * Constructor.
+     *
+     * @author Ian Copland
+     */
+    public DeviceNativeInterface()
+    {
+        init();
+    }
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean IsA(InterfaceID in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
 	/**
 	 * @author Ian Copland
 	 * 

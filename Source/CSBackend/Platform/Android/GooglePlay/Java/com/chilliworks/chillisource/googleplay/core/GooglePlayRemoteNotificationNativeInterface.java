@@ -32,14 +32,11 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 
-import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.INativeInterface;
-import com.chilliworks.chillisource.core.InterfaceIDType;
-import com.chilliworks.chillisource.core.Logging;
+import com.chilliworks.chillisource.core.*;
 
-public class GooglePlayRemoteNotificationNativeInterface extends INativeInterface
+public class GooglePlayRemoteNotificationNativeInterface extends com.chilliworks.chillisource.core.System
 {
-	public static InterfaceIDType InterfaceID = new InterfaceIDType("CGooglePlayRemoteNotificationsNativeInterface");
+    public static InterfaceID INTERFACE_ID = new InterfaceID();
 	
 	//---------------------------------------------------------------------
 	/// Native On Remote Token Received
@@ -64,17 +61,22 @@ public class GooglePlayRemoteNotificationNativeInterface extends INativeInterfac
 	//---------------------------------------------------------------------
 	public GooglePlayRemoteNotificationNativeInterface()
 	{
+        init();
 	}
-	//---------------------------------------------------------------------
-	/// Is A
-	///
-	/// @param Interface ID
-	/// @return Whether the system implements the given interface
-	//---------------------------------------------------------------------
-	@Override public boolean IsA(InterfaceIDType inInterfaceType)
-	{
-		return (inInterfaceType == InterfaceID);
-	}
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean IsA(InterfaceID in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
 	//---------------------------------------------------------------------
 	/// Request Remote Token
 	///

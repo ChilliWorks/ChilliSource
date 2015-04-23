@@ -28,9 +28,6 @@
 
 package com.chilliworks.chillisource.core;
 
-import com.chilliworks.chillisource.core.FileUtils;
-import com.chilliworks.chillisource.core.InterfaceIDType;
-
 import android.app.Activity;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -43,20 +40,12 @@ import android.util.DisplayMetrics;
 * 
 * @author Ian Copland
 */
-public class CoreNativeInterface extends INativeInterface
-{	
-	//--------------------------------------------------------------
-	/// Static Member Data
-	//--------------------------------------------------------------
-	public static InterfaceIDType InterfaceID = new InterfaceIDType("CoreNativeInterface");
+public class CoreNativeInterface extends System
+{
+	public static InterfaceID INTERFACE_ID = new InterfaceID();
 
-	//--------------------------------------------------------------
-	/// Member Data
-	//--------------------------------------------------------------
 	private PackageInfo m_packageInfo;
-	//--------------------------------------------------------------
-	/// Native methods
-	//--------------------------------------------------------------
+
 	/**
 	 * Force the native interface to create this system
 	 * 
@@ -65,15 +54,15 @@ public class CoreNativeInterface extends INativeInterface
 	public static native void create();
 	/**
 	 * Triggered when the application is launched
-	 * This doesn't override from INativeInterface in
+	 * This doesn't override from System in
 	 * order to ensure that core is called after all other interfaces
 	 * 
 	 * @author S Downie
 	 */
-	public native void init();
+	public native void initApplication();
 	/**
 	 * Triggered when the application is resumed after launch or suspension.
-	 * This doesn't override from INativeInterface in
+	 * This doesn't override from System in
 	 * order to ensure that core is called before all other interfaces
 	 * 
 	 * @author S Downie
@@ -82,7 +71,7 @@ public class CoreNativeInterface extends INativeInterface
 	/**
 	 * Triggered when the application is brought
 	 * to the foreground after being in the background.
-	 * This doesn't override from INativeInterface in
+	 * This doesn't override from System in
 	 * order to ensure that core is called before all other interfaces
 	 * 
 	 * @author S Downie
@@ -100,7 +89,7 @@ public class CoreNativeInterface extends INativeInterface
 	/**
 	 * Triggered when the application is sent
 	 * to the background after being in the foreground
-	 * This doesn't override from INativeInterface in
+	 * This doesn't override from System in
 	 * order to ensure that core is called after all other interfaces
 	 * 
 	 * @author S Downie
@@ -108,7 +97,7 @@ public class CoreNativeInterface extends INativeInterface
 	public native void background();
 	/**
 	 * Triggered when the application is suspended
-	 * This doesn't override from INativeInterface in
+	 * This doesn't override from System in
 	 * order to ensure that core is called after all other interfaces
 	 * 
 	 * @author S Downie
@@ -116,12 +105,12 @@ public class CoreNativeInterface extends INativeInterface
 	public native void suspend();
 	/**
 	 * Triggered when the application is terminated
-	 * This doesn't override from INativeInterface in
+	 * This doesn't override from System in
 	 * order to ensure that core is called after all other interfaces
 	 * 
 	 * @author S Downie
 	 */
-	public native void destroy();
+	public native void destroyApplication();
 	/**
 	 * Triggered when the app is low on memory to tell native
 	 * to clean itself up
@@ -145,19 +134,23 @@ public class CoreNativeInterface extends INativeInterface
 	 */
 	public CoreNativeInterface() throws NameNotFoundException
 	{
+        init();
 		m_packageInfo = CSApplication.get().getAppContext().getPackageManager().getPackageInfo(CSApplication.get().getActivityContext().getPackageName(), PackageManager.GET_ACTIVITIES);
 	}
-	/**
-	 * @author Ian Copland
-	 * 
-	 * @param Java system interface ID
-	 * 
-	 * @return Whether the system implements the ID
-	 */
-	@Override public boolean IsA(InterfaceIDType in_interfaceType) 
-	{
-		return (in_interfaceType.Equals(InterfaceID));
-	}
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean IsA(InterfaceID in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
 	/**
 	 * @author Ian Copland
 	 * 
@@ -298,6 +291,6 @@ public class CoreNativeInterface extends INativeInterface
 	 */
     public long getSystemTimeInMilliseconds()
     {
-    	return System.currentTimeMillis(); 
+    	return java.lang.System.currentTimeMillis();
     }
 }

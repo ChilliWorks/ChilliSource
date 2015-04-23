@@ -31,38 +31,41 @@ package com.chilliworks.chillisource.video;
 import android.content.Intent;
 
 import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.INativeInterface;
-import com.chilliworks.chillisource.core.InterfaceIDType;
-import com.chilliworks.chillisource.video.SubtitlesView;
-import com.chilliworks.chillisource.video.VideoPlayerActivity;
-import com.chilliworks.chillisource.video.VideoPlayerView;
+import com.chilliworks.chillisource.core.InterfaceID;
+import com.chilliworks.chillisource.core.System;
 
 //=============================================================
 /// Video Player Native Interface
 ///
 /// Native interface for playing videos.
 //=============================================================
-public class VideoPlayerNativeInterface extends INativeInterface
+public class VideoPlayerNativeInterface extends System
 {
 	//--------------------------------------------------------------
 	/// Static Member Data
 	//--------------------------------------------------------------
-	public static InterfaceIDType InterfaceID = new InterfaceIDType("CVideoPlayerNativeInterface");
+    public static InterfaceID INTERFACE_ID = new InterfaceID();
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
 	public VideoPlayerNativeInterface()
 	{
+        init();
 	}
-	//--------------------------------------------------------------
-	/// Is A
-	///
-	/// @return whether or not this implements the given interface.
-	//--------------------------------------------------------------
-	@Override public boolean IsA(InterfaceIDType inInterfaceType) 
-	{
-		return (inInterfaceType.Equals(InterfaceID));
-	}
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean IsA(InterfaceID in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
 	//--------------------------------------------------------------
 	/// Present
 	///

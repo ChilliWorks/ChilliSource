@@ -37,7 +37,7 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClass.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaSystem.h>
 #include <CSBackend/Platform/Android/GooglePlay/JNI/ForwardDeclarations.h>
 
 namespace CSBackend
@@ -92,7 +92,7 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             void OnDestroy() override;
 
-            JavaClassUPtr m_javaClass;
+            JavaSystemUPtr m_javaSystem;
 		};
 	}
 }
