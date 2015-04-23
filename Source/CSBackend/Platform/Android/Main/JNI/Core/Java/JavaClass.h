@@ -32,13 +32,19 @@
 #define _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_JAVACLASS_H_
 
 #include <ChilliSource/ChilliSource.h>
+
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClassDef.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
 
 #include <jni.h>
 
 #include <unordered_map>
+
+//REMOVE ME!
+#include <typeinfo>
+//////
 
 namespace CSBackend
 {
@@ -50,10 +56,10 @@ namespace CSBackend
 		///
 		/// TODO: Further usage description
 		///
-		/// Use of JavaClass is preferred over the older JavaInterface method of
-		/// communication with Java classes.
-		///
-		/// JavaClass is immutable after construction.
+		/// JavaClass is immutable after construction, meaning it can safely be called
+		/// from multiple threads at the same time. Care still needs to be taken to
+		/// ensure the Java and Native classes that are using this are thread-safe,
+		/// however.
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
@@ -85,6 +91,136 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             template <typename... TArgs> void CallVoidMethod(const std::string& in_methodName, TArgs&&... in_args) const;
             //------------------------------------------------------------------------------
+            /// Calls a boolean java method.
+            ///
+            /// The method will be checked to ensure the method type is correct. Exceptions
+            /// thrown from Java are treated as fatal errors and the application will be
+            /// terminated.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_methodName - The name of the method to call.
+            /// @param ... - The arguments to the method.
+            //------------------------------------------------------------------------------
+            template <typename... TArgs> bool CallBoolMethod(const std::string& in_methodName, TArgs&&... in_args) const;
+            //------------------------------------------------------------------------------
+            /// Calls a byte java method.
+            ///
+            /// The method will be checked to ensure the method type is correct. Exceptions
+            /// thrown from Java are treated as fatal errors and the application will be
+            /// terminated.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_methodName - The name of the method to call.
+            /// @param ... - The arguments to the method.
+            //------------------------------------------------------------------------------
+            template <typename... TArgs> u8 CallByteMethod(const std::string& in_methodName, TArgs&&... in_args) const;
+            //------------------------------------------------------------------------------
+            /// Calls a char java method.
+            ///
+            /// The method will be checked to ensure the method type is correct. Exceptions
+            /// thrown from Java are treated as fatal errors and the application will be
+            /// terminated.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_methodName - The name of the method to call.
+            /// @param ... - The arguments to the method.
+            //------------------------------------------------------------------------------
+            template <typename... TArgs> u16 CallCharMethod(const std::string& in_methodName, TArgs&&... in_args) const;
+            //------------------------------------------------------------------------------
+            /// Calls a short java method.
+            ///
+            /// The method will be checked to ensure the method type is correct. Exceptions
+            /// thrown from Java are treated as fatal errors and the application will be
+            /// terminated.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_methodName - The name of the method to call.
+            /// @param ... - The arguments to the method.
+            //------------------------------------------------------------------------------
+            template <typename... TArgs> s16 CallShortMethod(const std::string& in_methodName, TArgs&&... in_args) const;
+            //------------------------------------------------------------------------------
+            /// Calls an int java method.
+            ///
+            /// The method will be checked to ensure the method type is correct. Exceptions
+            /// thrown from Java are treated as fatal errors and the application will be
+            /// terminated.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_methodName - The name of the method to call.
+            /// @param ... - The arguments to the method.
+            //------------------------------------------------------------------------------
+            template <typename... TArgs> s32 CallIntMethod(const std::string& in_methodName, TArgs&&... in_args) const;
+            //------------------------------------------------------------------------------
+            /// Calls a long java method.
+            ///
+            /// The method will be checked to ensure the method type is correct. Exceptions
+            /// thrown from Java are treated as fatal errors and the application will be
+            /// terminated.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_methodName - The name of the method to call.
+            /// @param ... - The arguments to the method.
+            //------------------------------------------------------------------------------
+            template <typename... TArgs> s64 CallLongMethod(const std::string& in_methodName, TArgs&&... in_args) const;
+            //------------------------------------------------------------------------------
+            /// Calls a float java method.
+            ///
+            /// The method will be checked to ensure the method type is correct. Exceptions
+            /// thrown from Java are treated as fatal errors and the application will be
+            /// terminated.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_methodName - The name of the method to call.
+            /// @param ... - The arguments to the method.
+            //------------------------------------------------------------------------------
+            template <typename... TArgs> f32 CallFloatMethod(const std::string& in_methodName, TArgs&&... in_args) const;
+            //------------------------------------------------------------------------------
+            /// Calls a double java method.
+            ///
+            /// The method will be checked to ensure the method type is correct. Exceptions
+            /// thrown from Java are treated as fatal errors and the application will be
+            /// terminated.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_methodName - The name of the method to call.
+            /// @param ... - The arguments to the method.
+            //------------------------------------------------------------------------------
+            template <typename... TArgs> f64 CallDoubleMethod(const std::string& in_methodName, TArgs&&... in_args) const;
+            //------------------------------------------------------------------------------
+            /// Calls an object java method.
+            ///
+            /// The method will be checked to ensure the method type is correct. Exceptions
+            /// thrown from Java are treated as fatal errors and the application will be
+            /// terminated.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_methodName - The name of the method to call.
+            /// @param ... - The arguments to the method.
+            //------------------------------------------------------------------------------
+            template <typename... TArgs> jobject CallObjectMethod(const std::string& in_methodName, TArgs&&... in_args) const;
+            //------------------------------------------------------------------------------
+            /// Calls an string java method. This is a special case of CallObjectMethod()
+            ///
+            /// The method will be checked to ensure the method type is correct. Exceptions
+            /// thrown from Java are treated as fatal errors and the application will be
+            /// terminated.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_methodName - The name of the method to call.
+            /// @param ... - The arguments to the method.
+            //------------------------------------------------------------------------------
+            template <typename... TArgs> std::string CallStringMethod(const std::string& in_methodName, TArgs&&... in_args) const;
+            //------------------------------------------------------------------------------
             /// Destructor.
             ///
             /// @author Ian Copland
@@ -93,14 +229,24 @@ namespace CSBackend
 
         private:
             //------------------------------------------------------------------------------
-            /// An enum describing the various method types which can be called through
-            /// JavaClass.
+            /// An enum describing the various return types for methods  which can be called
+            /// through JavaClass.
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------------------
-            enum class MethodType
+            enum class ReturnType
             {
-                k_void
+                k_void,
+                k_bool,
+                k_byte,
+                k_char,
+                k_short,
+                k_int,
+                k_long,
+                k_float,
+                k_double,
+                k_object,
+                k_string
             };
             //------------------------------------------------------------------------------
             /// A struct containing information on a single Java method.
@@ -110,7 +256,7 @@ namespace CSBackend
             struct MethodInfo
             {
                 jmethodID m_methodId = nullptr;
-                MethodType m_methodType = MethodType::k_void;
+                ReturnType m_returnType = ReturnType::k_void;
                 u32 m_numArguments = 0;
             };
             //------------------------------------------------------------------------------
@@ -125,9 +271,9 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return The method type for the given method signature.
+            /// @return The return type for the given method signature.
             //------------------------------------------------------------------------------
-            MethodType CalcMethodType(const std::string& in_methodSignature) const;
+            ReturnType CalcReturnType(const std::string& in_methodSignature) const;
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -135,6 +281,22 @@ namespace CSBackend
             /// takes.
             //------------------------------------------------------------------------------
             u32 CalcNumArguments(const std::string& in_methodSignature) const;
+            //------------------------------------------------------------------------------
+            /// Finds the method with the given name and performs some checks to mitigate
+            /// mistakes when calling the JNI. This includes that the method has the
+            /// correct return type and has the correct number of arguments.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return The method info for the given name, type and number of arguments.
+            ///
+            /// @param in_methodName - The name of the method.
+            /// @param in_returnType - The type of the method.
+            /// @param in_numArguments - The number of arguments the method should have.
+            ///
+            /// @return The method info.
+            //------------------------------------------------------------------------------
+            jmethodID GetMethodId(const std::string& in_methodName, ReturnType in_returnType, u32 in_numArguments) const;
 
             std::string m_className;
             jobject m_javaObject = nullptr;
@@ -144,13 +306,134 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         template <typename... TArgs> void JavaClass::CallVoidMethod(const std::string& in_methodName, TArgs&&... in_args) const
         {
-            auto methodInfoIt = m_methods.find(in_methodName);
-            CS_ASSERT(methodInfoIt != m_methods.end(), "Could not find method '" + in_methodName + "' in Java class '" + m_className + "'");
-            CS_ASSERT(methodInfoIt->second.m_methodType == MethodType::k_void, "Cannot call method '" + in_methodName + "' in Java class '" + m_className + "' as it is not a void method.");
-            CS_ASSERT(methodInfoIt->second.m_numArguments == sizeof...(TArgs), "Cannot call method '" + in_methodName + "' in Java class '" + m_className + "' because too few arguments were supplied.");
-
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-            environment->CallVoidMethod(m_javaObject, methodInfoIt->second.m_methodId, std::forward<TArgs>(in_args)...);
+            auto methodId = GetMethodId(in_methodName, ReturnType::k_void, sizeof...(TArgs));
+
+            environment->CallVoidMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
+            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename... TArgs> bool JavaClass::CallBoolMethod(const std::string& in_methodName, TArgs&&... in_args) const
+        {
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            auto methodId = GetMethodId(in_methodName, ReturnType::k_bool, sizeof...(TArgs));
+
+            auto output = environment->CallBooleanMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
+            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+
+            return output;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename... TArgs> u8 JavaClass::CallByteMethod(const std::string& in_methodName, TArgs&&... in_args) const
+        {
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            auto methodId = GetMethodId(in_methodName, ReturnType::k_byte, sizeof...(TArgs));
+
+            auto output = environment->CallByteMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
+            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+
+            return output;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename... TArgs> u16 JavaClass::CallCharMethod(const std::string& in_methodName, TArgs&&... in_args) const
+        {
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            auto methodId = GetMethodId(in_methodName, ReturnType::k_char, sizeof...(TArgs));
+
+            auto output = environment->CallCharMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
+            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+
+            return output;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename... TArgs> s16 JavaClass::CallShortMethod(const std::string& in_methodName, TArgs&&... in_args) const
+        {
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            auto methodId = GetMethodId(in_methodName, ReturnType::k_short, sizeof...(TArgs));
+
+            auto output = environment->CallShortMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
+            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+
+            return output;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename... TArgs> s32 JavaClass::CallIntMethod(const std::string& in_methodName, TArgs&&... in_args) const
+        {
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            auto methodId = GetMethodId(in_methodName, ReturnType::k_int, sizeof...(TArgs));
+
+            auto output = environment->CallIntMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
+            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+
+            return output;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename... TArgs> s64 JavaClass::CallLongMethod(const std::string& in_methodName, TArgs&&... in_args) const
+        {
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            auto methodId = GetMethodId(in_methodName, ReturnType::k_long, sizeof...(TArgs));
+
+            auto output = environment->CallLongMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
+            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+
+            return output;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename... TArgs> f32 JavaClass::CallFloatMethod(const std::string& in_methodName, TArgs&&... in_args) const
+        {
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            auto methodId = GetMethodId(in_methodName, ReturnType::k_float, sizeof...(TArgs));
+
+            f32 output = environment->CallFloatMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
+            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+
+            return output;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename... TArgs> f64 JavaClass::CallDoubleMethod(const std::string& in_methodName, TArgs&&... in_args) const
+        {
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            auto methodId = GetMethodId(in_methodName, ReturnType::k_double, sizeof...(TArgs));
+
+            auto output = environment->CallDoubleMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
+            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+
+            return output;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename... TArgs> jobject JavaClass::CallObjectMethod(const std::string& in_methodName, TArgs&&... in_args) const
+        {
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            auto methodId = GetMethodId(in_methodName, ReturnType::k_object, sizeof...(TArgs));
+
+            auto output = environment->CallObjectMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
+            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+
+            return output;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename... TArgs> std::string JavaClass::CallStringMethod(const std::string& in_methodName, TArgs&&... in_args) const
+        {
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            auto methodId = GetMethodId(in_methodName, ReturnType::k_string, sizeof...(TArgs));
+
+            auto jString = static_cast<jstring>(environment->CallObjectMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...));
+            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+
+            std::string output = JavaUtils::CreateSTDStringFromJString(jString);
+            environment->DeleteLocalRef(jString);
+
+            return output;
         }
 	}
 }

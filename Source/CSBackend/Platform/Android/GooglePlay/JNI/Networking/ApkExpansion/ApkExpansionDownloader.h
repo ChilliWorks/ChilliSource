@@ -1,7 +1,7 @@
 //
-//  JavaClassDef.h
+//  ApkExpansionDownloader.h
 //  Chilli Source
-//  Created by Ian Copland on 21/04/2015.
+//  Created by Ian Copland on 22/04/2015.
 //
 //  The MIT License (MIT)
 //
@@ -28,68 +28,76 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifndef _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_JAVACLASSDEF_H_
-#define _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_JAVACLASSDEF_H_
+#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
+
+#ifndef _CSBACKEND_PLATFORM_ANDROID_GOOGLEPLAY_JNI_NETWORKING_APKEXPANSION_APKEXPANSIONDOWNLOADER_H_
+#define _CSBACKEND_PLATFORM_ANDROID_GOOGLEPLAY_JNI_NETWORKING_APKEXPANSION_APKEXPANSIONDOWNLOADER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/System/AppSystem.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
-
-#include <unordered_map>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClass.h>
+#include <CSBackend/Platform/Android/GooglePlay/JNI/ForwardDeclarations.h>
 
 namespace CSBackend
 {
 	namespace Android
 	{
 		//------------------------------------------------------------------------------
-		/// Defines a java class which is accessible through JavaClass.
-		///
-		/// TODO: Further usage description
+		/// TODO
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
-		class JavaClassDef final
+		class ApkExpansionDownloader final : public CSCore::AppSystem
 		{
 		public:
-		    using MethodMap = std::unordered_map<std::string, std::string>;
+            CS_DECLARE_NAMEDTYPE(ApkExpansionDownloader);
             //------------------------------------------------------------------------------
-            /// Constructor.
+            /// @author S Downie
             ///
-            /// @author Ian Copland
+            /// @param Interface ID to compare
             ///
-            /// @param in_className - The fully qualified name of the class this refers to.
+            /// @return Whether the class is of the given type
             //------------------------------------------------------------------------------
-            JavaClassDef(const std::string& in_className);
-            //------------------------------------------------------------------------------
-            /// Adds a new method definition. Note that multiple overloaded methods are
-            /// not supported.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_methodName - The name of the method.
-            /// @param in_methodSignature - The signature of the method. This is in the
-            /// form described in the JNI documentation.
-            //------------------------------------------------------------------------------
-            void AddMethod(const std::string& in_methodName, const std::string& in_methodSignature);
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The fully qualified class name.
-            //------------------------------------------------------------------------------
-            const std::string& GetClassName() const;
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The map of methods names and signatures.
-            //------------------------------------------------------------------------------
-            const MethodMap& GetMethods() const;
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 
-        private:
-            const std::string m_className;
-            MethodMap m_methods;
+		private:
+		    friend class CSCore::Application;
+            //------------------------------------------------------------------------------
+            /// A factory method for creating a new instance of the system. Declared private
+            /// to ensure this can only be created through Application::CreateSystem().
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return The new instance.
+            //------------------------------------------------------------------------------
+            static ApkExpansionDownloaderUPtr Create();
+            //------------------------------------------------------------------------------
+            /// Default constructor. Declared private to ensure the factory method is used.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+			ApkExpansionDownloader() = default;
+            //------------------------------------------------------------------------------
+            /// Initialises the system during the Application On Init life cycle event.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void OnInit() override;
+            //------------------------------------------------------------------------------
+            /// Cleans up the system during the application On Destroy life cycle event.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void OnDestroy() override;
+
+            JavaClassUPtr m_javaClass;
 		};
 	}
 }
+
+#endif
 
 #endif
 

@@ -33,6 +33,10 @@
 #ifndef _CHILLISOURCE_PLATFORM_ANDROID_GOOGLEPLAY_CORE_GOOGLEPLAYREMOTENOTIFICATIONJAVAINTERFACE_H_
 #define _CHILLISOURCE_PLATFORM_ANDROID_GOOGLEPLAY_CORE_GOOGLEPLAYREMOTENOTIFICATIONJAVAINTERFACE_H_
 
+#include <ChilliSource/ChilliSource.h>
+
+#include <CSBackend/Platform/Android/GooglePlay/JNI/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterface.h>
 
 namespace CSBackend

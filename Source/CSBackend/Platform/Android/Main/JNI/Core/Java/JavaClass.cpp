@@ -30,6 +30,10 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClass.h>
 
+#include <ChilliSource/Core/String/StringUtils.h>
+
+#include <regex>
+
 namespace CSBackend
 {
 	namespace Android
@@ -40,31 +44,37 @@ namespace CSBackend
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
 
+            //Get the class
             m_className = in_javaClassDef.GetClassName();
             jclass jClass = environment->FindClass(m_className.c_str());
+
             CS_ASSERT(jClass != nullptr, "Could not find Java class: '" + m_className + "'");
 
+            //create an instance of the class
             jmethodID jConstructor = environment->GetMethodID(jClass, "<init>", "()V");
             jobject jClassInstance = environment->NewObject(jClass, jConstructor);
+
             CheckJavaExceptions("A java exception occurred during construction of Java class: '" + m_className + "'");
             CS_ASSERT(jClassInstance != nullptr, "Could not create instance of Java class: '" + m_className + "'");
 
             m_javaObject = environment->NewGlobalRef(jClassInstance);
-            environment->DeleteLocalRef(jClassInstance);
 
+            //setup the method references
             for (const auto& method : in_javaClassDef.GetMethods())
             {
                 CS_ASSERT(m_methods.find(method.first) == m_methods.end(), "Method '" + method.first + "' has already been added to Java class '" + m_className + "'");
 
                 MethodInfo info;
-                info.m_methodType = CalcMethodType(method.second);
+                info.m_returnType = CalcReturnType(method.second);
                 info.m_numArguments = CalcNumArguments(method.second);
                 info.m_methodId = environment->GetMethodID(jClass, method.first.c_str(), method.second.c_str());
+
                 CS_ASSERT(info.m_methodId != nullptr, "Could not find method '" + method.first + "' in Java Class '" + m_className + "'");
 
                 m_methods.emplace(method.first, info);
             }
 
+            environment->DeleteLocalRef(jClassInstance);
             environment->DeleteLocalRef(jClass);
         }
         //------------------------------------------------------------------------------
@@ -84,23 +94,128 @@ namespace CSBackend
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        JavaClass::MethodType JavaClass::CalcMethodType(const std::string& in_methodSignature) const
+        JavaClass::ReturnType JavaClass::CalcReturnType(const std::string& in_methodSignature) const
         {
-            //TODO:
-            return MethodType::k_void;
+            std::regex argsExpression("\\([a-zA-Z0-9/;\\[]*\\)");
+            auto outputType = std::regex_replace(in_methodSignature, argsExpression, "");
+
+            if (outputType == "V")
+            {
+                return ReturnType::k_void;
+            }
+            else if (outputType == "Z")
+            {
+                return ReturnType::k_bool;
+            }
+            else if (outputType == "B")
+            {
+                return ReturnType::k_byte;
+            }
+            else if (outputType == "C")
+            {
+                return ReturnType::k_char;
+            }
+            else if (outputType == "S")
+            {
+                return ReturnType::k_short;
+            }
+            else if (outputType == "I")
+            {
+                return ReturnType::k_int;
+            }
+            else if (outputType == "J")
+            {
+                return ReturnType::k_long;
+            }
+            else if (outputType == "F")
+            {
+                return ReturnType::k_float;
+            }
+            else if (outputType == "D")
+            {
+                return ReturnType::k_double;
+            }
+            else if (outputType == "Ljava/lang/String;")
+            {
+                return ReturnType::k_string;
+            }
+            else
+            {
+                std::regex objectExpression("L[a-zA-Z0-9/]*;");
+                std::regex primitiveArrayExpression("\\[[ZBCSIJFD]");
+                std::regex objectArrayExpression("\\[L[a-zA-Z0-9/]*;");
+
+                if (std::regex_match(outputType, objectExpression) == true || std::regex_match(outputType, primitiveArrayExpression) == true ||
+                    std::regex_match(outputType, objectArrayExpression) == true)
+                {
+                    return ReturnType::k_object;
+                }
+            }
+
+            CS_LOG_FATAL("Could not determine return type for JavaClass method signature: '" + in_methodSignature + "'");
+            return JavaClass::ReturnType::k_void;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         u32 JavaClass::CalcNumArguments(const std::string& in_methodSignature) const
         {
-            //TODO:
-            return 0;
+            std::smatch match;
+            std::regex argsExpression("\\([a-zA-Z0-9/;\\[]*\\)");
+            std::regex_search(in_methodSignature, match, argsExpression);
+
+            std::regex bracketsExpression("\\(|\\)");
+            auto arguments = std::regex_replace(match.str(), bracketsExpression, "");
+
+            u32 count = 0;
+            bool isClassName = false;
+            for (auto character : arguments)
+            {
+                if (isClassName == false)
+                {
+                    if (character == 'Z' || character == 'B' || character == 'C' || character == 'S' || character == 'I' || character == 'J' || character == 'F' || character == 'D')
+                    {
+                        ++count;
+                    }
+                    else if (character == 'L')
+                    {
+                        isClassName = true;
+                    }
+                    else if (character != '[')
+                    {
+                        CS_LOG_FATAL("Could not calculate number of arguments for JavaClass method signature '" + in_methodSignature + "' due to invalid character: '" + character + "'");
+                    }
+                }
+                else if (character == ';')
+                {
+                    isClassName = false;
+                    ++count;
+                }
+            }
+
+            return count;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        jmethodID JavaClass::GetMethodId(const std::string& in_methodName, ReturnType in_returnType, u32 in_numArguments) const
+        {
+            auto methodInfoIt = m_methods.find(in_methodName);
+            if (methodInfoIt == m_methods.end())
+            {
+                CS_LOG_FATAL("Could not find method '" + in_methodName + "' in Java class '" + m_className + "'");
+            }
+
+            CS_ASSERT(methodInfoIt->second.m_returnType == in_returnType, "Cannot call method '" + in_methodName + "' in Java class '" + m_className + "' because the wrong return type was specified.");
+            CS_ASSERT(methodInfoIt->second.m_numArguments == in_numArguments, "Cannot call method '" + in_methodName + "' in Java class '" + m_className + "' because an incorrect number of arguments were supplied.");
+
+            return methodInfoIt->second.m_methodId;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         JavaClass::~JavaClass()
         {
-            //TODO: Clean up!
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            environment->DeleteGlobalRef(m_javaObject);
+            m_javaObject = nullptr;
         }
     }
 }

@@ -30,11 +30,16 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/PlatformSystem.h>
 
+#include <ChilliSource/Core/Image/ETC1ImageProvider.h>
+
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/CoreJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #include <CSBackend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
-#include <ChilliSource/Core/Image/ETC1ImageProvider.h>
+
+#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
+#include <CSBackend/Platform/Android/GooglePlay/JNI/Networking/ApkExpansion/ApkExpansionDownloader.h>
+#endif
 
 namespace CSBackend 
 {
@@ -54,6 +59,10 @@ namespace CSBackend
 			in_application->CreateSystem<CSBackend::OpenGL::GLSLShaderProvider>();
 			in_application->CreateSystem<CSCore::ETC1ImageProvider>();
 			in_application->CreateSystem<CSBackend::OpenGL::TextureUnitSystem>();
+
+#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
+			in_application->CreateSystem<ApkExpansionDownloader>();
+#endif
 		}
         //-----------------------------------------
         //-----------------------------------------

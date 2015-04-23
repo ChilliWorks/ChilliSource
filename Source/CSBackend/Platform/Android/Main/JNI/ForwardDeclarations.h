@@ -44,6 +44,7 @@ namespace CSBackend
 		//------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(JavaClass);
 		CS_FORWARDDECLARE_CLASS(JavaClassDef);
+		CS_FORWARDDECLARE_CLASS(JavaVirtualMachine);
 		CS_FORWARDDECLARE_CLASS(JavaInterfaceManager);
 		CS_FORWARDDECLARE_CLASS(IJavaInterface);
 		CS_FORWARDDECLARE_CLASS(CoreJavaInterface);
@@ -60,17 +61,6 @@ namespace CSBackend
 		CS_FORWARDDECLARE_CLASS(LocalNotificationScheduler);
         CS_FORWARDDECLARE_CLASS(Device);
         CS_FORWARDDECLARE_CLASS(Screen);
-		//------------------------------------------------------
-		/// Extensions
-		//------------------------------------------------------
-		CS_FORWARDDECLARE_CLASS(AmazonIAPJavaInterface);
-		CS_FORWARDDECLARE_CLASS(AmazonIAPSystem);
-		CS_FORWARDDECLARE_CLASS(GooglePlayExpansionSystem);
-		CS_FORWARDDECLARE_CLASS(GooglePlayExpansionJavaInterface);
-		CS_FORWARDDECLARE_CLASS(GooglePlayIAPJavaInterface);
-		CS_FORWARDDECLARE_CLASS(GooglePlayIAPSystem);
-		CS_FORWARDDECLARE_CLASS(GooglePlayRemoteNotificationSystem);
-		CS_FORWARDDECLARE_CLASS(GooglePlayRemoteNotificationJavaInterface);
 		//------------------------------------------------------
 		/// Input
 		//------------------------------------------------------

@@ -33,6 +33,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Singleton.h>
+
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 
 #include <jni.h>

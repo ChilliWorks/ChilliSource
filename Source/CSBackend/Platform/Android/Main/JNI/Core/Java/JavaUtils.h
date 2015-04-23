@@ -33,6 +33,8 @@
 
 #include <ChilliSource/ChilliSource.h>
 
+#include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
+
 #include <jni.h>
 
 #include <string>
@@ -49,7 +51,8 @@ namespace CSBackend
 		namespace JavaUtils
 		{
 			//------------------------------------------------------------------------------
-			/// Converts a std string into a JString.
+			/// Converts a std string into a JString. The JString will need to be manually
+			/// released with ReleaseLocalRef() once it has been finished with.
 			///
 			/// @author Ian Copland
 			///
