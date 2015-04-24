@@ -1,7 +1,7 @@
 /**
  * ApkExpansionDownloader.java
  * ChilliSource
- * Created by Ian Copland on 22/04/2015.
+ * Created by Ian Copland on 21/04/2015.
  *
  * The MIT License (MIT)
  *
@@ -28,17 +28,29 @@
 
 package com.chilliworks.chillisource.googleplay.networking;
 
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Messenger;
+
 import com.chilliworks.chillisource.core.*;
 import com.chilliworks.chillisource.core.System;
+import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
+import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
+import com.google.android.vending.expansion.downloader.Helpers;
+import com.google.android.vending.expansion.downloader.IDownloaderClient;
+import com.google.android.vending.expansion.downloader.IStub;
 
 /**
  * TODO
  *
  * @author Ian Copland
  */
-public class ApkExpansionDownloader extends System
+public final class ApkExpansionDownloader extends System implements IDownloaderClient
 {
     public static InterfaceID INTERFACE_ID = new InterfaceID();
+
+    private IStub m_downloaderClientStub = null;
 
     /**
      * Allows querying of whether or not the system implements the interface described by the
@@ -54,4 +66,88 @@ public class ApkExpansionDownloader extends System
     {
         return (in_interfaceId == INTERFACE_ID);
     }
+    /**
+     * This can be called on any thread.
+     *
+     * @author Ian Copland
+     *
+     * @return Whether or not a download is required.
+     */
+    public boolean isDownloadRequired()
+    {
+        int fileVersion = 0; //TODO: Do properly!
+        int fileSize = 0; //TODO: Do propertly!
+        String fileName = Helpers.getExpansionAPKFileName(CSApplication.get().getActivity(), true, fileVersion);
+        return Helpers.doesFileExist(CSApplication.get().getActivity(), fileName, fileSize, false);
+    }
+    /**
+     * Tries to download the APK expansion file.
+     *
+     * @author Ian Copland
+     */
+    public void startDownload()
+    {
+        Logging.logError(">>> Starting Download <<<");
+
+        Intent notifierIntent = new Intent(CSApplication.get().getActivity(), CSApplication.get().getActivity().getClass());
+        notifierIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(CSApplication.get().getActivity(), 0, notifierIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        int startResult = 0;
+        try
+        {
+            startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(CSApplication.get().getActivity(), pendingIntent, ApkExpansionDownloaderService.class);
+        }
+        catch (PackageManager.NameNotFoundException e)
+        {
+            Logging.logFatal(ExceptionUtils.ConvertToString(e));
+        }
+
+        if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
+        {
+            m_downloaderClientStub = DownloaderClientMarshaller.CreateStub(this, ApkExpansionDownloaderService.class);
+        }
+        else
+        {
+            //TODO: ERROR? :S
+        }
+    }
+
+    @Override public void onResume()
+    {
+        if (null != m_downloaderClientStub)
+        {
+            m_downloaderClientStub.connect(CSApplication.get().getActivity());
+        }
+
+        super.onResume();
+    }
+
+    @Override public void onServiceConnected(Messenger in_messenger)
+    {
+        //TODO: Maybe send down current state and progress?
+    }
+
+    @Override public void onDownloadStateChanged(int in_newState)
+    {
+        //TODO: call down to native on state change
+    }
+
+    @Override public void onDownloadProgress(DownloadProgressInfo in_progress)
+    {
+        //TODO: call down to native on download progress
+    }
+
+    @Override public void onSuspend()
+    {
+        if (null != m_downloaderClientStub)
+        {
+            m_downloaderClientStub.disconnect(CSApplication.get().getActivity());
+        }
+
+        super.onSuspend();
+    }
+
+    private native void onStateChanged(int in_newState);
+    private native void onStateChanged(int in_newState);
 }

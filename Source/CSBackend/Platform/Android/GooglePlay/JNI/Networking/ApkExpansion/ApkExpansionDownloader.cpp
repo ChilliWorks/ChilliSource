@@ -58,7 +58,21 @@ namespace CSBackend
         {
             //define and create the java class.
             JavaClassDef classDef("com/chilliworks/chillisource/googleplay/networking/ApkExpansionDownloader");
+            classDef.AddMethod("isDownloadRequired", "()Z");
+            classDef.AddMethod("startDownload", "()V");
             m_javaSystem = JavaSystemUPtr(new JavaSystem(classDef));
+
+            //Start the download if required
+            if (m_javaSystem->CallBoolMethod("isDownloadRequired") == true)
+            {
+                m_javaSystem->CallVoidMethod("startDownload");
+
+                //TODO: Present downloader UI
+            }
+            else
+            {
+                //TODO: Progress!
+            }
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------

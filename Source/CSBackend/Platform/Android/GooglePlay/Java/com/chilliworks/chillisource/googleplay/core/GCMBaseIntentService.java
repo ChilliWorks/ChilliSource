@@ -258,7 +258,7 @@ public abstract class GCMBaseIntentService extends IntentService {
             String className) {
         synchronized (LOCK) {
             if (sWakeLock == null) {
-                // This is called from BroadcastReceiver, there is no initApplication.
+                // This is called from BroadcastReceiver, there is no init.
                 PowerManager pm = (PowerManager)
                         context.getSystemService(Context.POWER_SERVICE);
                 sWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,

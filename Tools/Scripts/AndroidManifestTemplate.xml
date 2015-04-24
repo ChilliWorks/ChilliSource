@@ -83,8 +83,8 @@ THE SOFTWARE.
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
         <!-- Google Play downloader -->
-        <service android:name="com.chilliworks.chillisource.googleplay.networking.GooglePlayDownloaderService" />
-        <receiver android:name="com.chilliworks.chillisource.googleplay.networking.GooglePlayAlarmReceiver" />
+        <service android:name="com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloaderService" />
+        <receiver android:name="com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloaderAlarmRecveiver" />
 
         <!-- Google Play remote notifications -->
         <meta-data android:name="GoogleProjectID" android:value="[[GOOGLEPLAYPROJECTID]]" />
