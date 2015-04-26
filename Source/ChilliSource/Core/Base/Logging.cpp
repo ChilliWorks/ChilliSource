@@ -138,9 +138,6 @@ namespace ChilliSource
 #ifdef CS_TARGETPLATFORM_ANDROID
             exit(1);
 #else
-#ifdef CS_ENABLE_DEBUG
-            assert(false);
-#endif
 #endif
         }
         //-----------------------------------------------------
