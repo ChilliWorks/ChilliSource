@@ -330,8 +330,6 @@ namespace CSBackend
 
 			std::string m_title;
 
-			CSCore::Integer2 m_windowSize;
-
 			sf::ContextSettings m_contextSettings;
 
 			u32 m_preferredRGBADepth = 32;
