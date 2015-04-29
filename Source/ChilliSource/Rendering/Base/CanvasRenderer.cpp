@@ -48,7 +48,7 @@ namespace ChilliSource
         namespace
         {
             const u32 k_autoScaleMaxIterations = 10;//Max recursive iterations for AutoScaled text
-            const u32 k_autoScaleMinDiffForRecurse = 0.002f;//Min difference in max/min scaling to warrent further recursion for AutoScaled text
+            const u32 k_autoScaleMinDiffForRecurse = 0.002f;//Min difference in max/min scaling to warrant further recursion for AutoScaled text
             
             //------------------------------------------------------
             /// Converts a 2D transformation matrix to a 3D
@@ -552,7 +552,6 @@ namespace ChilliSource
                 else
                 {
                     idealScale = (totalSize /textWidth) * in_requestedScale;
-                    
                 }
 
                 return idealScale;
@@ -583,6 +582,182 @@ namespace ChilliSource
                 }
                 
                 return true;
+            }
+            //----------------------------------------------------------------------------
+            /// Formats the text string into a vector representing each line of the text,
+            /// constrained in the bounds
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_text - Text to convert to display characters (UTF-8)
+            /// @param in_textScale - Text Scale
+            /// @param in_font - Font to use
+            /// @param in_bounds - Max bounds to fit the text
+            /// @param in_properties - The text properties.
+            ///
+            /// @return Vector where each entry is a line of in_text,
+            ///         constrained by the in_bounds
+            //----------------------------------------------------------------------------
+            CanvasRenderer::BoundedLines GetBoundedLines(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const CanvasRenderer::TextProperties& in_properties)
+            {
+                //NOTE: | denotes the bounds of the box
+                //- |The quick brown fox| jumped over\nthe ferocious honey badger
+                
+                //Split the string into lines by the forced line breaks (i.e. the \n)
+                //- |The quick brown fox| jumped over
+                //- |the ferocious honey| badger
+                std::vector<std::string> linesOnNewLine;
+                SplitByNewLine(in_text, linesOnNewLine);
+                
+                //Split the lines further based on the line width, breakable characters and the bounds
+                //- |The quick brown fox|
+                //- |jumped over        |
+                //- |the ferocious honey|
+                //- |badger             |
+                CanvasRenderer::BoundedLines linesOnBounds;
+                for(const auto& line : linesOnNewLine)
+                {
+                    SplitByBounds(line, in_font, in_properties.m_absCharSpacingOffset, in_textScale, in_bounds, linesOnBounds);
+                }
+                
+                return linesOnBounds;
+            }
+            //----------------------------------------------------------------------------
+            /// Build the descriptions for all characters. The descriptions can then be
+            /// passed into the draw method for rendering. The characters will be
+            /// built to fit into the given bounds and will wrap and then clip in
+            /// order to fit. This will return if the text can fit into the bounds given
+            /// with the text scale provided
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_text - Text to convert to display characters (UTF-8)
+            /// @param in_textScale - Text Scale
+            /// @param in_font - Font to use
+            /// @param in_bounds - Max bounds to fit the text
+            /// @param in_properties - The text properties.
+            /// @param out_builtText - Built text
+            //----------------------------------------------------------------------------
+            void BuildTextInternal(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const CanvasRenderer::TextProperties& in_properties, CanvasRenderer::BuiltText& out_builtText)
+            {
+                f32 lineHeight = in_properties.m_lineSpacingScale * ((in_font->GetLineHeight() + in_properties.m_absLineSpacingOffset) * in_textScale);
+                f32 maxHeight = in_bounds.y;
+                
+                CanvasRenderer::BoundedLines linesOnBounds = GetBoundedLines(in_text, in_textScale, in_font, in_bounds, in_properties);
+                
+                u32 numLines = 0;
+                bool doesFit = DoesBoundedLinesFit(linesOnBounds, in_properties, maxHeight, lineHeight, numLines);
+                
+                //add an ellipsis if the text doesn't fit.
+                if (!doesFit)
+                {
+                    linesOnBounds[numLines-1] = AppendEllipsis(linesOnBounds[numLines-1], in_font, in_properties.m_absCharSpacingOffset, in_textScale, in_bounds.x);
+                }
+                
+                //The middle of the text label is 0,0. We want to be starting at the top left.
+                f32 cursorXReturnPos = -in_bounds.x * 0.5f;
+                f32 cursorX = cursorXReturnPos;
+                f32 cursorY = in_bounds.y * 0.5f;
+                
+                for(u32 lineIdx = 0; lineIdx < numLines; ++lineIdx)
+                {
+                    u32 lineStartIdx = static_cast<u32>(out_builtText.m_characters.size());
+                    
+                    auto characterIt = linesOnBounds[lineIdx].begin();
+                    while(characterIt != linesOnBounds[lineIdx].end())
+                    {
+                        auto character = Core::UTF8StringUtils::Next(characterIt);
+                        auto builtCharacter(BuildCharacter(character, in_font, cursorX, cursorY, in_textScale, in_properties.m_absCharSpacingOffset));
+                        
+                        cursorX += builtCharacter.m_advance;
+                        
+                        if(builtCharacter.m_packedImageSize.y > 0.0f)
+                        {
+                            //No point rendering whitespaces
+                            out_builtText.m_characters.push_back(builtCharacter);
+                        }
+                    }
+                    
+                    f32 lineWidth = cursorX - cursorXReturnPos;
+                    ApplyHorizontalTextJustifications(in_properties.m_horizontalJustification, in_bounds.x, lineStartIdx, static_cast<u32>(out_builtText.m_characters.size()) - 1, lineWidth, out_builtText.m_characters);
+                    
+                    out_builtText.m_width = std::max(lineWidth, out_builtText.m_width);
+                    
+                    cursorX = cursorXReturnPos;
+                    cursorY -= lineHeight;
+                }
+                
+                out_builtText.m_height = numLines * lineHeight;
+                ApplyVerticalTextJustifications(in_properties.m_verticalJustification, in_bounds.y, out_builtText.m_height, out_builtText.m_characters);
+            }
+            //----------------------------------------------------------------------------
+            /// Recursively calculates the closest correct scale of text.
+            /// Performs a binary search to find the closest correct approximation within
+            /// a maximum number of recursions.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_text - Text to convert to display characters (UTF-8)
+            /// @param in_properties - The text properties.
+            /// @param in_font - Font to use
+            /// @param in_bounds - Max bounds to fit the text
+            /// @param in_lineHeight - Line Height
+            /// @param in_minMax - Min/Max scales to search
+            /// @param in_currentIteration - Current depth of recursion
+            ///
+            /// @return Close to best case fitting scale
+            //----------------------------------------------------------------------------
+            f32 GetBoundedTextScaleRecursive(const std::string& in_text, const CanvasRenderer::TextProperties& in_properties, const FontCSPtr& in_font, const CSCore::Vector2& in_bounds, f32 in_lineHeight, const CSCore::Vector2& in_minMax, u32 in_currentIteration = 0)
+            {
+                f32 min = in_minMax.x;
+                f32 max = in_minMax.y;
+                
+                if(min == max)
+                {
+                    return min;
+                }
+                
+                CS_ASSERT(min < max, "GetBoundedTextScaleRecursive::Min is greater than the max!");
+                
+                //Choose a midpoint value between the max and the min
+                f32 difference = max - min;
+                f32 midpointScale = min + (difference * 0.5f);
+                
+                //Check if the midpoint value is valid
+                const auto& boundedLines = GetBoundedLines(in_text, midpointScale, in_font, in_bounds, in_properties);
+                
+                u32 numLinesUsed = 0;
+                bool doesFit = DoesBoundedLinesFit(boundedLines, in_properties, in_bounds.y, in_lineHeight, numLinesUsed);
+                
+                //Increase the current iteration
+                ++in_currentIteration;
+                
+                if(doesFit)
+                {
+                    if(difference <= k_autoScaleMinDiffForRecurse || in_currentIteration >= k_autoScaleMaxIterations)
+                    {
+                        //Reached an acceptable level of granularity or max iterations, return the current midpoint
+                        return midpointScale;
+                    }
+                    else
+                    {
+                        //We recurse further, the valid midpoint scale is now used as the min value
+                        return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, in_lineHeight, CSCore::Vector2(midpointScale, max), in_currentIteration);
+                    }
+                }
+                else
+                {
+                    if(in_currentIteration >= k_autoScaleMaxIterations)
+                    {
+                        return min;
+                    }
+                    else
+                    {
+                        //Recurse further, the midpoint value is used as the max value for this recursion
+                        //This is based on the assumption that the min value is always a valid fitting scale
+                        return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, in_lineHeight, CSCore::Vector2(min, midpointScale), in_currentIteration);
+                    }
+                }
             }
         }
 
@@ -729,7 +904,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        CanvasRenderer::BuiltText CanvasRenderer::BuildText(const std::string& in_text, const FontCSPtr& in_font, const Core::Vector2& in_bounds, TextProperties& inout_properties) const
+        CanvasRenderer::BuiltText CanvasRenderer::BuildText(const std::string& in_text, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& inout_properties, f32& out_textScale) const
         {
             BuiltText result;
             result.m_width = 0.0f;
@@ -747,7 +922,7 @@ namespace ChilliSource
             
             result.m_characters.reserve(in_text.size());
 
-            if(inout_properties.m_isAutoScaled)
+            if(inout_properties.m_shouldAutoScale)
             {
                 //Calculate a textscale that will allow the string to fit within the current bounds
                 textScale = CalculateIdealTextScalingValue(in_text, in_font, inout_properties.m_absCharSpacingOffset, lineHeight, textScale, in_bounds);
@@ -782,148 +957,15 @@ namespace ChilliSource
                         textScale = GetBoundedTextScaleRecursive(in_text, inout_properties, in_font, in_bounds, lineHeight, CSCore::Vector2(inout_properties.m_minTextScale, textScale));
                     }
                 }
-                
-                inout_properties.m_textAutoScale = textScale;
             }
+            
+            //Update the final scale
+            out_textScale = textScale;
             
             //Carry out the building of the text with the resolved scale
             BuildTextInternal(in_text, textScale, in_font, in_bounds, inout_properties, result);
             
             return result;
-        }
-        //----------------------------------------------------------------------------
-        //----------------------------------------------------------------------------
-        void CanvasRenderer::BuildTextInternal(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& in_properties, CanvasRenderer::BuiltText& out_builtText) const
-        {
-            f32 lineHeight = in_properties.m_lineSpacingScale * ((in_font->GetLineHeight() + in_properties.m_absLineSpacingOffset) * in_textScale);
-            f32 maxHeight = in_bounds.y;
-            
-            CanvasRenderer::BoundedLines linesOnBounds = GetBoundedLines(in_text, in_textScale, in_font, in_bounds, in_properties);
-            
-            u32 numLines = 0;
-            bool doesFit = DoesBoundedLinesFit(linesOnBounds, in_properties, maxHeight, lineHeight, numLines);
-            
-            //add an ellipsis if the text doesn't fit.
-            if (!doesFit)
-            {
-                linesOnBounds[numLines-1] = AppendEllipsis(linesOnBounds[numLines-1], in_font, in_properties.m_absCharSpacingOffset, in_textScale, in_bounds.x);
-            }
-
-            //The middle of the text label is 0,0. We want to be starting at the top left.
-            f32 cursorXReturnPos = -in_bounds.x * 0.5f;
-            f32 cursorX = cursorXReturnPos;
-            f32 cursorY = in_bounds.y * 0.5f;
-            
-            for(u32 lineIdx = 0; lineIdx < numLines; ++lineIdx)
-            {
-                u32 lineStartIdx = static_cast<u32>(out_builtText.m_characters.size());
-                
-                auto characterIt = linesOnBounds[lineIdx].begin();
-                while(characterIt != linesOnBounds[lineIdx].end())
-                {
-                    auto character = Core::UTF8StringUtils::Next(characterIt);
-                    auto builtCharacter(BuildCharacter(character, in_font, cursorX, cursorY, in_textScale, in_properties.m_absCharSpacingOffset));
-                    
-                    cursorX += builtCharacter.m_advance;
-                    
-                    if(builtCharacter.m_packedImageSize.y > 0.0f)
-                    {
-                        //No point rendering whitespaces
-                        out_builtText.m_characters.push_back(builtCharacter);
-                    }
-                }
-                
-                f32 lineWidth = cursorX - cursorXReturnPos;
-                ApplyHorizontalTextJustifications(in_properties.m_horizontalJustification, in_bounds.x, lineStartIdx, static_cast<u32>(out_builtText.m_characters.size()) - 1, lineWidth, out_builtText.m_characters);
-                
-                out_builtText.m_width = std::max(lineWidth, out_builtText.m_width);
-                
-                cursorX = cursorXReturnPos;
-                cursorY -= lineHeight;
-            }
-            
-            out_builtText.m_height = numLines * lineHeight;
-            ApplyVerticalTextJustifications(in_properties.m_verticalJustification, in_bounds.y, out_builtText.m_height, out_builtText.m_characters);
-        }
-        //----------------------------------------------------------------------------
-        //----------------------------------------------------------------------------
-        CanvasRenderer::BoundedLines CanvasRenderer::GetBoundedLines(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& in_properties) const
-        {
-            //NOTE: | denotes the bounds of the box
-            //- |The quick brown fox| jumped over\nthe ferocious honey badger
-            
-            //Split the string into lines by the forced line breaks (i.e. the \n)
-            //- |The quick brown fox| jumped over
-            //- |the ferocious honey| badger
-            std::vector<std::string> linesOnNewLine;
-            SplitByNewLine(in_text, linesOnNewLine);
-            
-            //Split the lines further based on the line width, breakable characters and the bounds
-            //- |The quick brown fox|
-            //- |jumped over        |
-            //- |the ferocious honey|
-            //- |badger             |
-            CanvasRenderer::BoundedLines linesOnBounds;
-            for(const auto& line : linesOnNewLine)
-            {
-                SplitByBounds(line, in_font, in_properties.m_absCharSpacingOffset, in_textScale, in_bounds, linesOnBounds);
-            }
-            
-            return linesOnBounds;
-        }
-        //----------------------------------------------------------------------------
-        //----------------------------------------------------------------------------
-        f32 CanvasRenderer::GetBoundedTextScaleRecursive(const std::string& in_text, const CanvasRenderer::TextProperties& in_properties, const FontCSPtr& in_font, const CSCore::Vector2& in_bounds, f32 in_lineHeight, const CSCore::Vector2& in_minMax, u32 in_currentIteration) const
-        {
-            f32 min = in_minMax.x;
-            f32 max = in_minMax.y;
-            
-            if(min == max)
-            {
-                return min;
-            }
-            
-            CS_ASSERT(min < max, "GetBoundedTextScaleRecursive::Min is greater than the max!");
-            
-            //Choose a midpoint value between the max and the min
-            f32 difference = max - min;
-            f32 midpointScale = min + (difference * 0.5f);
-            
-            //Check if the midpoint value is valid
-            const auto& boundedLines = GetBoundedLines(in_text, midpointScale, in_font, in_bounds, in_properties);
-            
-            u32 numLinesUsed = 0;
-            bool doesFit = DoesBoundedLinesFit(boundedLines, in_properties, in_bounds.y, in_lineHeight, numLinesUsed);
-            
-            //Increase the current iteration
-            ++in_currentIteration;
-            
-            if(doesFit)
-            {
-                if(difference <= k_autoScaleMinDiffForRecurse || in_currentIteration >= k_autoScaleMaxIterations)
-                {
-                    //Reached an acceptable level of granularity or max iterations, return the current midpoint
-                    return midpointScale;
-                }
-                else
-                {
-                    //We recurse further, the valid midpoint scale is now used as the min value
-                    return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, in_lineHeight, CSCore::Vector2(midpointScale, max), in_currentIteration);
-                }
-            }
-            else
-            {
-                if(in_currentIteration >= k_autoScaleMaxIterations)
-                {
-                    return min;
-                }
-                else
-                {
-                    //Recurse further, the midpoint value is used as the max value for this recursion
-                    //This is based on the assumption that the min value is always a valid fitting scale
-                    return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, in_lineHeight, CSCore::Vector2(min, midpointScale), in_currentIteration);
-                }
-            }
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------

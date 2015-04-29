@@ -62,13 +62,12 @@ namespace ChilliSource
             {
                 f32 m_textScale = 1.0f;
                 f32 m_minTextScale = 1.0f;
-                f32 m_textAutoScale = 1.0f;
                 f32 m_absCharSpacingOffset = 0.0f;
                 f32 m_absLineSpacingOffset = 0.0f;
                 f32 m_lineSpacingScale = 1.0f;
                 u32 m_maxNumLines = 0;
                 
-                bool m_isAutoScaled = false;
+                bool m_shouldAutoScale = false;
                 
                 HorizontalTextJustification m_horizontalJustification = HorizontalTextJustification::k_centre;
                 VerticalTextJustification m_verticalJustification = VerticalTextJustification::k_centre;
@@ -157,14 +156,15 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Text to convert to display characters (UTF-8)
-            /// @param Font
-            /// @param Max bounds
-            /// @param The text properties.
+            /// @param in_text - Text to convert to display characters (UTF-8)
+            /// @param in_font - Font to use
+            /// @param in_bounds - Max bounds
+            /// @param in_textProperties - The text properties used to build.
+            /// @param out_textScale - Final scale that should be used
             ///
             /// @return Built text struct containing all the character infos
             //----------------------------------------------------------------------------
-            BuiltText BuildText(const std::string& in_text, const FontCSPtr& in_font, const Core::Vector2& in_bounds, TextProperties& in_textProperties) const;
+            BuiltText BuildText(const std::string& in_text, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& in_textProperties, f32& out_textScale) const;
             //----------------------------------------------------------------------------
             /// Build the sprites for each given character and render them to screen.
             ///
@@ -213,54 +213,7 @@ namespace ChilliSource
             /// texture
             //----------------------------------------------------------------------------
             MaterialCSPtr GetGUIMaterialForTexture(const TextureCSPtr& in_texture);
-            //----------------------------------------------------------------------------
-            /// Build the descriptions for all characters. The descriptions can then be
-            /// passed into the draw method for rendering. The characters will be
-            /// build to fit into the given bounds and will wrap and then clip in
-            /// order to fit. This will return if the text can fit into the bounds given with the
-            /// text scale provided
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @param Text to convert to display characters (UTF-8)
-            /// @param Text Scale
-            /// @param Font
-            /// @param Max bounds
-            /// @param The text properties.
-            /// @param [Out] Built text
-            //----------------------------------------------------------------------------
-            void BuildTextInternal(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& in_properties, CanvasRenderer::BuiltText& out_builtText) const;
-            //----------------------------------------------------------------------------
-            /// Formats the text string into a vector representing each line of the text, constrained in the bounds
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @param Text to convert to display characters (UTF-8)
-            /// @param Text Scale
-            /// @param Font
-            /// @param Max bounds
-            /// @param The text properties.
-            ///
-            /// @return Vector were each entry is a line of in_text, constrained by the in_bounds
-            //----------------------------------------------------------------------------
-            BoundedLines GetBoundedLines(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& in_properties) const;
-            //----------------------------------------------------------------------------
-            /// Recursively calculates the closest correct scale of text, performs a binary search to find the closest correct approximation.
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @param Text to convert to display characters (UTF-8)
-            /// @param The text properties.
-            /// @param Font
-            /// @param Max bounds
-            /// @param Line Height
-            /// @param Min/Max Vector
-            /// @param Current Iteration
-            ///
-            /// @return Close to best case fitting scale
-            //----------------------------------------------------------------------------
-            f32 GetBoundedTextScaleRecursive(const std::string& in_text, const CanvasRenderer::TextProperties& in_properties, const FontCSPtr& in_font, const CSCore::Vector2& in_bounds, f32 in_lineHeight, const CSCore::Vector2& in_minMax, u32 in_currentIteration = 0) const;
-            
+
 		private:
             
 			SpriteBatch::SpriteData m_canvasSprite;

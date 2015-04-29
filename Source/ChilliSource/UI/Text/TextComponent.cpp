@@ -60,7 +60,7 @@ namespace ChilliSource
             const char k_lineSpacingScaleKey[] = "LineSpacingScale";
             const char k_maxNumberOfLinesKey[] = "MaxNumberOfLines";
             const char k_textScaleKey[] = "TextScale";
-            const char k_minTextScaleKey[] = "MinTextScale";
+            const char k_minTextScaleKey[] = "MinTextAutoScale";
             const char k_enableAutoScaledTextKey[] = "EnableAutoTextScale";
             
             
@@ -111,7 +111,7 @@ namespace ChilliSource
             RegisterProperty<s32>(Core::PropertyTypes::Int(), k_maxNumberOfLinesKey, CSCore::MakeDelegate(this, &TextComponent::GetMaxNumberOfLines), CSCore::MakeDelegate(this, &TextComponent::SetMaxNumberOfLines));
             RegisterProperty<f32>(Core::PropertyTypes::Float(), k_textScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetTextScale), CSCore::MakeDelegate(this, &TextComponent::SetTextScale));
             RegisterProperty<f32>(Core::PropertyTypes::Float(), k_minTextScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetMinTextScale), CSCore::MakeDelegate(this, &TextComponent::SetMinTextScale));
-            RegisterProperty<bool>(Core::PropertyTypes::Bool(), k_enableAutoScaledTextKey, CSCore::MakeDelegate(this, &TextComponent::IsAutoTextScaleEnabled), CSCore::MakeDelegate(this, &TextComponent::EnableAutoTextScale));
+            RegisterProperty<bool>(Core::PropertyTypes::Bool(), k_enableAutoScaledTextKey, CSCore::MakeDelegate(this, &TextComponent::IsTextAutoScaleEnabled), CSCore::MakeDelegate(this, &TextComponent::SetTextAutoScaleEnabled));
             
             ApplyRegisteredProperties(in_properties);
         }
@@ -201,9 +201,9 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        bool TextComponent::IsAutoTextScaleEnabled() const
+        bool TextComponent::IsTextAutoScaleEnabled() const
         {
-            return m_textProperties.m_isAutoScaled;
+            return m_textProperties.m_shouldAutoScale;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -364,9 +364,9 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextComponent::EnableAutoTextScale(bool in_enable)
+        void TextComponent::SetTextAutoScaleEnabled(bool in_enable)
         {
-            m_textProperties.m_isAutoScaled = in_enable;
+            m_textProperties.m_shouldAutoScale = in_enable;
             
             m_invalidateCache = true;
         }
@@ -534,7 +534,7 @@ namespace ChilliSource
             if (m_invalidateCache == true)
             {
                 m_invalidateCache = false;
-                m_cachedText = in_renderer->BuildText(m_text, m_font, in_absSize, m_textProperties);
+                m_cachedText = in_renderer->BuildText(m_text, m_font, in_absSize, m_textProperties, m_cachedTextScale);
                 
                 // Update images position
                 for(auto& image : m_cachedImages)
@@ -549,12 +549,10 @@ namespace ChilliSource
             // Draw text
             in_renderer->DrawText(m_cachedText.m_characters, in_transform, m_textColour * GetWidget()->GetFinalColour(), m_font->GetTexture());
             
-            f32 finalTextScale = m_textProperties.m_isAutoScaled ? m_textProperties.m_textAutoScale : m_textProperties.m_textScale;
-            
             // Draw images
             for(const auto& iconData : m_cachedImages)
             {
-                Core::Vector2 size = iconData.m_size * finalTextScale;
+                Core::Vector2 size = iconData.m_size * m_cachedTextScale;
 				in_renderer->DrawBox(in_transform, size, iconData.m_offset, iconData.m_icon.GetTexture(), iconData.m_uvs, Core::Colour::k_white * GetWidget()->GetFinalColour(), Rendering::AlignmentAnchor::k_middleCentre);
             }
         }
