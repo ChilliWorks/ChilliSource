@@ -208,6 +208,20 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             f32 GetTextScale() const;
             //-------------------------------------------------------------------
+            /// @author HMcLaughlin
+            ///
+            /// @return The minimum text scale that will be used when auto scaling text. Scaling text significantly reduces the
+            /// quality of the text rendered so this should only be used when
+            /// absolutely necessary.
+            //-------------------------------------------------------------------
+            f32 GetMinTextScale() const;
+            //-------------------------------------------------------------------
+            /// @author HMcLaughlin
+            ///
+            /// @return If auto text scaling is enabled
+            //-------------------------------------------------------------------
+            bool IsAutoTextScaleEnabled() const;
+            //-------------------------------------------------------------------
             /// Sets the font that will be used to render the text.
             ///
             /// @author Ian Copland
@@ -358,6 +372,25 @@ namespace ChilliSource
             /// @param The scale factor.
             //-------------------------------------------------------------------
             void SetTextScale(f32 in_scale);
+            //-------------------------------------------------------------------
+            /// Sets the minimum text scale that will be used in scale calculations if EnableAutoTextScale is true. Scaling text significantly reduces the
+            /// quality of the text rendered so this should only be used when
+            /// absolutely necessary.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param The scale factor. (Must be <= TextScale)
+            //-------------------------------------------------------------------
+            void SetMinTextScale(f32 in_scale);
+            //-------------------------------------------------------------------
+            /// Sets if this text component should attempt to auto scale the text to fit into the labels bounds. This will achieve approximate best case
+            /// fit scaling for the current string and label size. Note: This will only attempt to scale downwards
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param Enable
+            //-------------------------------------------------------------------
+            void EnableAutoTextScale(bool in_enable);
             
         private:
             friend class ComponentFactory;
