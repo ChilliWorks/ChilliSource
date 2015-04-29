@@ -47,8 +47,8 @@ namespace ChilliSource
 	{
         namespace
         {
-            const u32 k_autoScaleMaxIterations = 10;
-            const u32 k_autoScaleMinDiffForRecurse = 0.002f;
+            const u32 k_autoScaleMaxIterations = 10;//Max recursive iterations for AutoScaled text
+            const u32 k_autoScaleMinDiffForRecurse = 0.002f;//Min difference in max/min scaling to warrent further recursion for AutoScaled text
             
             //------------------------------------------------------
             /// Converts a 2D transformation matrix to a 3D
@@ -544,8 +544,6 @@ namespace ChilliSource
                 
                 f32 totalSize = numLines * in_bounds.x;
                 
-                CS_LOG_VERBOSE("Total Size - " + CSCore::ToString(totalSize) + ", Text size - " + CSCore::ToString(textWidth));
-                
                 //Calculate the scaling ratio
                 if(textWidth < totalSize)
                 {
@@ -556,8 +554,6 @@ namespace ChilliSource
                     idealScale = (totalSize /textWidth) * in_requestedScale;
                     
                 }
-                
-                CS_LOG_VERBOSE("Current Scale - " + CSCore::ToString(in_requestedScale) + ", Ideal Scale - " + CSCore::ToString(idealScale));
 
                 return idealScale;
             }
@@ -758,7 +754,7 @@ namespace ChilliSource
                 
                 if(textScale < inout_properties.m_minTextScale)
                 {
-                    CS_LOG_WARNING("CanvasRenderer::BuildText::Ideal text scale is lower than MinTextScale");
+                    CS_LOG_WARNING("CanvasRenderer::BuildText::Ideal text scale is lower than MinTextScale, using min scale - " + CSCore::ToString(inout_properties.m_minTextScale));
                     textScale = inout_properties.m_minTextScale;
                 }
 
