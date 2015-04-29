@@ -47,8 +47,7 @@ namespace ChilliSource
 	{
         namespace
         {
-            const u32 k_autoScaleMaxIterations = 10;//Max recursive iterations for AutoScaled text
-            const u32 k_autoScaleMinDiffForRecurse = 0.002f;//Min difference in max/min scaling to warrant further recursion for AutoScaled text
+            const f32 k_autoScaleTolerance = 0.002f;//Min difference in max/min scaling to warrant further recursion for AutoScaled text
             
             //------------------------------------------------------
             /// Converts a 2D transformation matrix to a 3D
@@ -693,7 +692,7 @@ namespace ChilliSource
             //----------------------------------------------------------------------------
             /// Recursively calculates the closest correct scale of text.
             /// Performs a binary search to find the closest correct approximation within
-            /// a maximum number of recursions.
+            /// a tolerance.
             ///
             /// @author HMcLaughlin
             ///
@@ -703,11 +702,10 @@ namespace ChilliSource
             /// @param in_bounds - Max bounds to fit the text
             /// @param in_lineHeight - Line Height
             /// @param in_minMax - Min/Max scales to search
-            /// @param in_currentIteration - Current depth of recursion
             ///
             /// @return Close to best case fitting scale
             //----------------------------------------------------------------------------
-            f32 GetBoundedTextScaleRecursive(const std::string& in_text, const CanvasRenderer::TextProperties& in_properties, const FontCSPtr& in_font, const CSCore::Vector2& in_bounds, f32 in_lineHeight, const CSCore::Vector2& in_minMax, u32 in_currentIteration = 0)
+            f32 GetBoundedTextScaleRecursive(const std::string& in_text, const CanvasRenderer::TextProperties& in_properties, const FontCSPtr& in_font, const CSCore::Vector2& in_bounds, f32 in_lineHeight, const CSCore::Vector2& in_minMax)
             {
                 f32 min = in_minMax.x;
                 f32 max = in_minMax.y;
@@ -729,34 +727,22 @@ namespace ChilliSource
                 u32 numLinesUsed = 0;
                 bool doesFit = DoesBoundedLinesFit(boundedLines, in_properties, in_bounds.y, in_lineHeight, numLinesUsed);
                 
-                //Increase the current iteration
-                ++in_currentIteration;
+                if(difference <= k_autoScaleTolerance)
+                {
+                    //Reached a value below the tolerance, return the current valid scale
+                    return doesFit ? midpointScale : min;
+                }
                 
                 if(doesFit)
                 {
-                    if(difference <= k_autoScaleMinDiffForRecurse || in_currentIteration >= k_autoScaleMaxIterations)
-                    {
-                        //Reached an acceptable level of granularity or max iterations, return the current midpoint
-                        return midpointScale;
-                    }
-                    else
-                    {
-                        //We recurse further, the valid midpoint scale is now used as the min value
-                        return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, in_lineHeight, CSCore::Vector2(midpointScale, max), in_currentIteration);
-                    }
+                    //We recurse further, the valid midpoint scale is now used as the min value
+                    return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, in_lineHeight, CSCore::Vector2(midpointScale, max));
                 }
                 else
                 {
-                    if(in_currentIteration >= k_autoScaleMaxIterations)
-                    {
-                        return min;
-                    }
-                    else
-                    {
-                        //Recurse further, the midpoint value is used as the max value for this recursion
-                        //This is based on the assumption that the min value is always a valid fitting scale
-                        return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, in_lineHeight, CSCore::Vector2(min, midpointScale), in_currentIteration);
-                    }
+                    //Recurse further, the midpoint value is used as the max value for this recursion
+                    //This is based on the assumption that the min value is always a valid fitting scale
+                    return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, in_lineHeight, CSCore::Vector2(min, midpointScale));
                 }
             }
         }
