@@ -102,7 +102,7 @@ namespace ChilliSource
             ///
             /// @author HMcLaughlin
             //----------------------------------------------------------------------------
-            using BoundedLines = std::vector<std::string>;
+            using WrappedText = std::vector<std::string>;
             
             //----------------------------------------------------------------------------
             /// @author S Downie

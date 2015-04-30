@@ -47,7 +47,7 @@ namespace ChilliSource
 	{
         namespace
         {
-            const f32 k_autoScaleTolerance = 0.002f;//Min difference in max/min scaling to warrant further recursion for AutoScaled text
+            const f32 k_autoScaleTolerance = 0.01f;//Min difference in max/min scaling to warrant further recursion for AutoScaled text
             
             //------------------------------------------------------
             /// Converts a 2D transformation matrix to a 3D
@@ -174,7 +174,7 @@ namespace ChilliSource
             /// @param Bounds
             /// @param [Out] Array of lines split to fit in bounds
             //----------------------------------------------------------------------------
-            void SplitByBounds(const std::string& in_text, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_textScale, const Core::Vector2& in_bounds, CanvasRenderer::BoundedLines& out_lines)
+            void SplitByBounds(const std::string& in_text, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_textScale, const Core::Vector2& in_bounds, CanvasRenderer::WrappedText& out_lines)
             {
                 f32 maxLineWidth = in_bounds.x;
 
@@ -531,7 +531,7 @@ namespace ChilliSource
             ///
             /// @return Best case text scaling value
             //----------------------------------------------------------------------------
-            f32 CalculateIdealTextScaling(const std::string& in_text, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_lineHeight, f32 in_requestedScale, const CSCore::Vector2& in_bounds)
+            f32 CalculateIdealTextScale(const std::string& in_text, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_lineHeight, f32 in_requestedScale, const CSCore::Vector2& in_bounds)
             {
                 f32 idealScale = in_requestedScale;
                 
@@ -561,7 +561,7 @@ namespace ChilliSource
             ///
             /// @author HMcLaughlin
             ///
-            /// @param in_boundedLines - Vector of Bounded Lines
+            /// @param in_wrappedText - Vector of wrapped lines
             /// @param in_properties - The text properties.
             /// @param in_maxHeight - Absolute Bounded Height
             /// @param in_lineHeight - Absolute Line Height
@@ -569,14 +569,14 @@ namespace ChilliSource
             ///
             /// @return If the bounded lines fit
             //----------------------------------------------------------------------------
-            bool DoBoundedLinesFit(const CanvasRenderer::BoundedLines& in_boundedLines, const CanvasRenderer::TextProperties& in_properties, f32 in_maxHeight, f32 in_lineHeight, u32& out_numLines)
+            bool DoesWrappedTextFit(const CanvasRenderer::WrappedText& in_wrappedText, const CanvasRenderer::TextProperties& in_properties, f32 in_maxHeight, f32 in_lineHeight, u32& out_numLines)
             {
-                u32 numLinesOnBounds = static_cast<u32>(in_boundedLines.size());
+                u32 numLinesOnBounds = static_cast<u32>(in_wrappedText.size());
                 u32 numLines = (in_properties.m_maxNumLines == 0) ? numLinesOnBounds : std::min(numLinesOnBounds, in_properties.m_maxNumLines);
                 
                 out_numLines = std::min(numLines, (u32)(in_maxHeight/in_lineHeight));
                 
-                if (in_boundedLines.size() > out_numLines && out_numLines > 0)
+                if (in_wrappedText.size() > out_numLines && out_numLines > 0)
                 {
                     return false;
                 }
@@ -598,7 +598,7 @@ namespace ChilliSource
             /// @return Vector where each entry is a line of in_text,
             ///         constrained by the in_bounds
             //----------------------------------------------------------------------------
-            CanvasRenderer::BoundedLines GetBoundedLines(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const CanvasRenderer::TextProperties& in_properties)
+            CanvasRenderer::WrappedText GetWrappedText(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const CanvasRenderer::TextProperties& in_properties)
             {
                 //NOTE: | denotes the bounds of the box
                 //- |The quick brown fox| jumped over\nthe ferocious honey badger
@@ -614,7 +614,7 @@ namespace ChilliSource
                 //- |jumped over        |
                 //- |the ferocious honey|
                 //- |badger             |
-                CanvasRenderer::BoundedLines linesOnBounds;
+                CanvasRenderer::WrappedText linesOnBounds;
                 for(const auto& line : linesOnNewLine)
                 {
                     SplitByBounds(line, in_font, in_properties.m_absCharSpacingOffset, in_textScale, in_bounds, linesOnBounds);
@@ -643,12 +643,12 @@ namespace ChilliSource
                 f32 lineHeight = in_properties.m_lineSpacingScale * ((in_font->GetLineHeight() + in_properties.m_absLineSpacingOffset) * in_textScale);
                 f32 maxHeight = in_bounds.y;
                 
-                CanvasRenderer::BoundedLines linesOnBounds = GetBoundedLines(in_text, in_textScale, in_font, in_bounds, in_properties);
+                CanvasRenderer::WrappedText linesOnBounds = GetWrappedText(in_text, in_textScale, in_font, in_bounds, in_properties);
                 
                 u32 numLines = 0;
 
                 //add an ellipsis if the text doesn't fit.
-                if (DoBoundedLinesFit(linesOnBounds, in_properties, maxHeight, lineHeight, numLines) == false)
+                if (DoesWrappedTextFit(linesOnBounds, in_properties, maxHeight, lineHeight, numLines) == false)
                 {
                     linesOnBounds[numLines-1] = AppendEllipsis(linesOnBounds[numLines-1], in_font, in_properties.m_absCharSpacingOffset, in_textScale, in_bounds.x);
                 }
@@ -722,10 +722,10 @@ namespace ChilliSource
                 f32 midpointScale = min + (difference * 0.5f);
                 
                 //Check if the midpoint value is valid
-                const auto& boundedLines = GetBoundedLines(in_text, midpointScale, in_font, in_bounds, in_properties);
+                const auto& wrappedText = GetWrappedText(in_text, midpointScale, in_font, in_bounds, in_properties);
                 
                 u32 numLinesUsed = 0;
-                bool doesFit = DoBoundedLinesFit(boundedLines, in_properties, in_bounds.y, in_lineHeight, numLinesUsed);
+                bool doesFit = DoesWrappedTextFit(wrappedText, in_properties, in_bounds.y, in_lineHeight, numLinesUsed);
                 
                 if(difference <= k_autoScaleTolerance)
                 {
@@ -913,7 +913,7 @@ namespace ChilliSource
                 CS_ASSERT(in_properties.m_minTextScale <= in_properties.m_textScale, "CanvasRenderer::BuildText::Cannot autoscale as the MinTextAutoScale is more than the TextScale property!");
                 
                 //Calculate a textscale that will allow the string to fit within the current bounds
-                textScale = CalculateIdealTextScaling(in_text, in_font, in_properties.m_absCharSpacingOffset, lineHeight, textScale, in_bounds);
+                textScale = CalculateIdealTextScale(in_text, in_font, in_properties.m_absCharSpacingOffset, lineHeight, textScale, in_bounds);
                 
                 if(textScale < in_properties.m_minTextScale)
                 {
@@ -924,15 +924,15 @@ namespace ChilliSource
                 u32 numLines = 0;
                 
                 //Check to see if the text fits at ideal scale
-                auto idealBoundedLines = GetBoundedLines(in_text, textScale, in_font, in_bounds, in_properties);
-                doesFit = DoBoundedLinesFit(idealBoundedLines, in_properties, in_bounds.y, lineHeight, numLines);
+                auto idealWrappedText = GetWrappedText(in_text, textScale, in_font, in_bounds, in_properties);
+                doesFit = DoesWrappedTextFit(idealWrappedText, in_properties, in_bounds.y, lineHeight, numLines);
                 
                 //If the ideal doesn't fit then attempt the minimum, if that doesn't fit then there is nothing we can do scale-wise
                 if(!doesFit && textScale != in_properties.m_minTextScale)
                 {
                     //Check to see if the text can fit at the smallest scale
-                    auto minBoundedLines = GetBoundedLines(in_text, in_properties.m_minTextScale, in_font, in_bounds, in_properties);
-                    doesFit = DoBoundedLinesFit(minBoundedLines, in_properties, in_bounds.y, lineHeight, numLines);
+                    auto minWrappedText = GetWrappedText(in_text, in_properties.m_minTextScale, in_font, in_bounds, in_properties);
+                    doesFit = DoesWrappedTextFit(minWrappedText, in_properties, in_bounds.y, lineHeight, numLines);
                     
                     if(!doesFit)
                     {
