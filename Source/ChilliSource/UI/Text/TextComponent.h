@@ -210,7 +210,8 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             /// @author HMcLaughlin
             ///
-            /// @return The minimum text scale that will be used when auto scaling text. Scaling text significantly reduces the
+            /// @return The minimum text scale that will be used when auto
+            /// scaling text. Scaling text significantly reduces the
             /// quality of the text rendered so this should only be used when
             /// absolutely necessary.
             //-------------------------------------------------------------------

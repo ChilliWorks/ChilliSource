@@ -491,7 +491,8 @@ namespace ChilliSource
                 return outputText;
             }
             //----------------------------------------------------------------------------
-            /// Gets the unformatted width of a string. This will ignore newlines in the size calculations
+            /// Gets the unformatted width of a string. This will ignore newlines in the
+            /// size calculations
             ///
             /// @author HMcLaughlin
             ///
@@ -516,8 +517,8 @@ namespace ChilliSource
                 return width;
             }
             //----------------------------------------------------------------------------
-            /// Try to calculate the ideal scaling amount given a string and label bounds. Assumes best case
-            /// scenario when comes to text wrapping
+            /// Try to calculate the ideal scaling amount given a string and label bounds.
+            /// Assumes best case scenario when comes to text wrapping
             ///
             /// @author HMcLaughlin
             ///
@@ -910,6 +911,8 @@ namespace ChilliSource
 
             if(inout_properties.m_shouldAutoScale)
             {
+                CS_ASSERT(inout_properties.m_minTextScale <= inout_properties.m_textScale, "CanvasRenderer::BuildText::Cannot autoscale as the MinTextAutoScale is more than the TextScale property!");
+                
                 //Calculate a textscale that will allow the string to fit within the current bounds
                 textScale = CalculateIdealTextScalingValue(in_text, in_font, inout_properties.m_absCharSpacingOffset, lineHeight, textScale, in_bounds);
                 

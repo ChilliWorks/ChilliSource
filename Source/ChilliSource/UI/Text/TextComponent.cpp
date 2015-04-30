@@ -356,8 +356,6 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void TextComponent::SetMinTextScale(f32 in_scale)
         {
-            CS_ASSERT(in_scale <= m_textProperties.m_textScale, "TextComponent::SetMinTextScale::Cannot set a min text scale higher than the text scale!");
-            
             m_textProperties.m_minTextScale = in_scale;
             
             m_invalidateCache = true;
