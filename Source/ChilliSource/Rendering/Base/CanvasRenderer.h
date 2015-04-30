@@ -61,7 +61,7 @@ namespace ChilliSource
             struct TextProperties
             {
                 f32 m_textScale = 1.0f;
-                f32 m_minTextScale = 1.0f;
+                f32 m_minTextScale = 0.75f;
                 f32 m_absCharSpacingOffset = 0.0f;
                 f32 m_absLineSpacingOffset = 0.0f;
                 f32 m_lineSpacingScale = 1.0f;

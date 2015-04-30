@@ -917,7 +917,6 @@ namespace ChilliSource
                 
                 if(textScale < in_properties.m_minTextScale)
                 {
-                    CS_LOG_WARNING("CanvasRenderer::BuildText::Ideal text scale is lower than MinTextScale, using min scale - " + CSCore::ToString(in_properties.m_minTextScale));
                     textScale = in_properties.m_minTextScale;
                 }
 
@@ -937,7 +936,7 @@ namespace ChilliSource
                     
                     if(!doesFit)
                     {
-                        CS_LOG_WARNING("CanvasRenderer::BuildText::Doesn't fit at min scale, consider resizing the label manually to fit the text better!");
+                        CS_LOG_WARNING("Doesn't fit at min scale, consider resizing the label manually to fit the text better!");
                     }
                     else
                     {
