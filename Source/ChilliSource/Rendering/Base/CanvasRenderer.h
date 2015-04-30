@@ -160,7 +160,7 @@ namespace ChilliSource
             /// @param in_font - Font to use
             /// @param in_bounds - Max bounds
             /// @param in_textProperties - The text properties used to build.
-            /// @param out_textScale - Final scale that should be used
+            /// @param [Out] out_textScale - Final scale that should be used
             ///
             /// @return Built text struct containing all the character infos
             //----------------------------------------------------------------------------

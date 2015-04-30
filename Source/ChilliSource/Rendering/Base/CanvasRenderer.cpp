@@ -565,7 +565,7 @@ namespace ChilliSource
             /// @param in_properties - The text properties.
             /// @param in_maxHeight - Absolute Bounded Height
             /// @param in_lineHeight - Absolute Line Height
-            /// @param out_numLines [Out] - Number of lines used
+            /// @param [Out] out_numLines - Number of lines used
             ///
             /// @return If the bounded lines fit
             //----------------------------------------------------------------------------
