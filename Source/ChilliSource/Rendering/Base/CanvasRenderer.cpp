@@ -496,10 +496,10 @@ namespace ChilliSource
             ///
             /// @author HMcLaughlin
             ///
-            /// @param Text to measure
-            /// @param Font
-            /// @param The absolute character spacing offset.
-            /// @param The text scale factor.
+            /// @param in_text - Text to measure
+            /// @param in_font - Font
+            /// @param in_absCharSpacingOffset - The absolute character spacing offset.
+            /// @param in_textScale - The text scale factor.
             ///
             /// @return Absolute width of the unformatted text
             //----------------------------------------------------------------------------
@@ -522,16 +522,16 @@ namespace ChilliSource
             ///
             /// @author HMcLaughlin
             ///
-            /// @param Text
-            /// @param The font the string will be renderered with.
-            /// @param The absolute pixel offset to regular character spacing.
-            /// @param The absolute line height
-            /// @param The text scale factor.
-            /// @param The bounds of the Text.
+            /// @param in_text - Text
+            /// @param in_font - The font the string will be renderered with.
+            /// @param in_absCharSpacingOffset - The absolute pixel offset to regular character spacing.
+            /// @param in_lineHeight - The absolute line height
+            /// @param in_requestedScale - The text scale factor.
+            /// @param in_bounds - The bounds of the Text.
             ///
             /// @return Best case text scaling value
             //----------------------------------------------------------------------------
-            f32 CalculateIdealTextScalingValue(const std::string& in_text, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_lineHeight, f32 in_requestedScale, const CSCore::Vector2& in_bounds)
+            f32 CalculateIdealTextScaling(const std::string& in_text, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_lineHeight, f32 in_requestedScale, const CSCore::Vector2& in_bounds)
             {
                 f32 idealScale = in_requestedScale;
                 
@@ -551,25 +551,25 @@ namespace ChilliSource
                 }
                 else
                 {
-                    idealScale = (totalSize /textWidth) * in_requestedScale;
+                    idealScale = (totalSize / textWidth) * in_requestedScale;
                 }
 
                 return idealScale;
             }
             //----------------------------------------------------------------------------
-            /// Gets if Bounded Lines will fit
+            /// Returns if the given lines will fit completely in the number of allowed lines/bounds
             ///
             /// @author HMcLaughlin
             ///
-            /// @param Vector of Bounded Lines
-            /// @param The text properties.
-            /// @param Absolute Bounded Height
-            /// @param Absolute Line Height
-            /// @param [Out] Number of lines used
+            /// @param in_boundedLines - Vector of Bounded Lines
+            /// @param in_properties - The text properties.
+            /// @param in_maxHeight - Absolute Bounded Height
+            /// @param in_lineHeight - Absolute Line Height
+            /// @param out_numLines [Out] - Number of lines used
             ///
             /// @return If the bounded lines fit
             //----------------------------------------------------------------------------
-            bool DoesBoundedLinesFit(const CanvasRenderer::BoundedLines& in_boundedLines, const CanvasRenderer::TextProperties& in_properties, f32 in_maxHeight, f32 in_lineHeight, u32& out_numLines)
+            bool DoBoundedLinesFit(const CanvasRenderer::BoundedLines& in_boundedLines, const CanvasRenderer::TextProperties& in_properties, f32 in_maxHeight, f32 in_lineHeight, u32& out_numLines)
             {
                 u32 numLinesOnBounds = static_cast<u32>(in_boundedLines.size());
                 u32 numLines = (in_properties.m_maxNumLines == 0) ? numLinesOnBounds : std::min(numLinesOnBounds, in_properties.m_maxNumLines);
@@ -638,7 +638,7 @@ namespace ChilliSource
             /// @param in_properties - The text properties.
             /// @param out_builtText - Built text
             //----------------------------------------------------------------------------
-            void BuildTextInternal(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const CanvasRenderer::TextProperties& in_properties, CanvasRenderer::BuiltText& out_builtText)
+            void BuildText(const std::string& in_text, f32 in_textScale, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const CanvasRenderer::TextProperties& in_properties, CanvasRenderer::BuiltText& out_builtText)
             {
                 f32 lineHeight = in_properties.m_lineSpacingScale * ((in_font->GetLineHeight() + in_properties.m_absLineSpacingOffset) * in_textScale);
                 f32 maxHeight = in_bounds.y;
@@ -646,10 +646,9 @@ namespace ChilliSource
                 CanvasRenderer::BoundedLines linesOnBounds = GetBoundedLines(in_text, in_textScale, in_font, in_bounds, in_properties);
                 
                 u32 numLines = 0;
-                bool doesFit = DoesBoundedLinesFit(linesOnBounds, in_properties, maxHeight, lineHeight, numLines);
-                
+
                 //add an ellipsis if the text doesn't fit.
-                if (!doesFit)
+                if (DoBoundedLinesFit(linesOnBounds, in_properties, maxHeight, lineHeight, numLines) == false)
                 {
                     linesOnBounds[numLines-1] = AppendEllipsis(linesOnBounds[numLines-1], in_font, in_properties.m_absCharSpacingOffset, in_textScale, in_bounds.x);
                 }
@@ -726,7 +725,7 @@ namespace ChilliSource
                 const auto& boundedLines = GetBoundedLines(in_text, midpointScale, in_font, in_bounds, in_properties);
                 
                 u32 numLinesUsed = 0;
-                bool doesFit = DoesBoundedLinesFit(boundedLines, in_properties, in_bounds.y, in_lineHeight, numLinesUsed);
+                bool doesFit = DoBoundedLinesFit(boundedLines, in_properties, in_bounds.y, in_lineHeight, numLinesUsed);
                 
                 if(difference <= k_autoScaleTolerance)
                 {
@@ -891,13 +890,13 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
-        CanvasRenderer::BuiltText CanvasRenderer::BuildText(const std::string& in_text, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& inout_properties, f32& out_textScale) const
+        CanvasRenderer::BuiltText CanvasRenderer::BuildText(const std::string& in_text, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& in_properties, f32& out_textScale) const
         {
             BuiltText result;
             result.m_width = 0.0f;
             result.m_height = 0.0f;
             
-            f32 textScale = inout_properties.m_textScale;
+            f32 textScale = in_properties.m_textScale;
             
             //Don't build the text if scale is invalid
             if(textScale <= 0.0f)
@@ -905,36 +904,36 @@ namespace ChilliSource
                 return result;
             }
             
-            f32 lineHeight = inout_properties.m_lineSpacingScale * ((in_font->GetLineHeight() + inout_properties.m_absLineSpacingOffset) * textScale);
+            f32 lineHeight = in_properties.m_lineSpacingScale * ((in_font->GetLineHeight() + in_properties.m_absLineSpacingOffset) * textScale);
             
             result.m_characters.reserve(in_text.size());
 
-            if(inout_properties.m_shouldAutoScale)
+            if(in_properties.m_shouldAutoScale)
             {
-                CS_ASSERT(inout_properties.m_minTextScale <= inout_properties.m_textScale, "CanvasRenderer::BuildText::Cannot autoscale as the MinTextAutoScale is more than the TextScale property!");
+                CS_ASSERT(in_properties.m_minTextScale <= in_properties.m_textScale, "CanvasRenderer::BuildText::Cannot autoscale as the MinTextAutoScale is more than the TextScale property!");
                 
                 //Calculate a textscale that will allow the string to fit within the current bounds
-                textScale = CalculateIdealTextScalingValue(in_text, in_font, inout_properties.m_absCharSpacingOffset, lineHeight, textScale, in_bounds);
+                textScale = CalculateIdealTextScaling(in_text, in_font, in_properties.m_absCharSpacingOffset, lineHeight, textScale, in_bounds);
                 
-                if(textScale < inout_properties.m_minTextScale)
+                if(textScale < in_properties.m_minTextScale)
                 {
-                    CS_LOG_WARNING("CanvasRenderer::BuildText::Ideal text scale is lower than MinTextScale, using min scale - " + CSCore::ToString(inout_properties.m_minTextScale));
-                    textScale = inout_properties.m_minTextScale;
+                    CS_LOG_WARNING("CanvasRenderer::BuildText::Ideal text scale is lower than MinTextScale, using min scale - " + CSCore::ToString(in_properties.m_minTextScale));
+                    textScale = in_properties.m_minTextScale;
                 }
 
                 bool doesFit = false;
                 u32 numLines = 0;
                 
                 //Check to see if the text fits at ideal scale
-                auto idealBoundedLines = GetBoundedLines(in_text, textScale, in_font, in_bounds, inout_properties);
-                doesFit = DoesBoundedLinesFit(idealBoundedLines, inout_properties, in_bounds.y, lineHeight, numLines);
+                auto idealBoundedLines = GetBoundedLines(in_text, textScale, in_font, in_bounds, in_properties);
+                doesFit = DoBoundedLinesFit(idealBoundedLines, in_properties, in_bounds.y, lineHeight, numLines);
                 
                 //If the ideal doesn't fit then attempt the minimum, if that doesn't fit then there is nothing we can do scale-wise
-                if(!doesFit && textScale != inout_properties.m_minTextScale)
+                if(!doesFit && textScale != in_properties.m_minTextScale)
                 {
                     //Check to see if the text can fit at the smallest scale
-                    auto minBoundedLines = GetBoundedLines(in_text, inout_properties.m_minTextScale, in_font, in_bounds, inout_properties);
-                    doesFit = DoesBoundedLinesFit(minBoundedLines, inout_properties, in_bounds.y, lineHeight, numLines);
+                    auto minBoundedLines = GetBoundedLines(in_text, in_properties.m_minTextScale, in_font, in_bounds, in_properties);
+                    doesFit = DoBoundedLinesFit(minBoundedLines, in_properties, in_bounds.y, lineHeight, numLines);
                     
                     if(!doesFit)
                     {
@@ -943,7 +942,7 @@ namespace ChilliSource
                     else
                     {
                         //We should search for a more optimal scale between the min and the ideal, while still fitting
-                        textScale = GetBoundedTextScaleRecursive(in_text, inout_properties, in_font, in_bounds, lineHeight, CSCore::Vector2(inout_properties.m_minTextScale, textScale));
+                        textScale = GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, lineHeight, CSCore::Vector2(in_properties.m_minTextScale, textScale));
                     }
                 }
             }
@@ -952,7 +951,7 @@ namespace ChilliSource
             out_textScale = textScale;
             
             //Carry out the building of the text with the resolved scale
-            BuildTextInternal(in_text, textScale, in_font, in_bounds, inout_properties, result);
+            CSRendering::BuildText(in_text, textScale, in_font, in_bounds, in_properties, result);
             
             return result;
         }
