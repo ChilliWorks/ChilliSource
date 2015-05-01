@@ -650,7 +650,7 @@ namespace ChilliSource
                     return min;
                 }
                 
-                CS_ASSERT(min < max, "GetBoundedTextScaleRecursive::Min is greater than the max!");
+                CS_ASSERT(min < max, "Min is greater than the max!");
                 
                 //Choose a midpoint value between the max and the min
                 f32 difference = max - min;
@@ -850,7 +850,7 @@ namespace ChilliSource
 
             if(in_properties.m_shouldAutoScale)
             {
-                CS_ASSERT(in_properties.m_minTextScale <= in_properties.m_textScale, "CanvasRenderer::BuildText::Cannot autoscale as the MinTextAutoScale is more than the TextScale property!");
+                CS_ASSERT(in_properties.m_minTextScale <= in_properties.m_textScale, "Cannot autoscale as the MinTextAutoScale is more than the TextScale property!");
 
                 bool doesFit = false;
                 u32 numLines = 0;
