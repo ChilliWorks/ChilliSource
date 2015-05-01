@@ -1,12 +1,20 @@
 Chilli Source Change Log
 ========================
 
+Version 1.4.2, 2015-05-01
+-------------------------
+* Added: Label now supports auto sizing to ensure text will fit inside the label bounds
+* Fixed: Issues with resolution on iPhone 6 Plus
+* Fixed: Changing resolution on windows in code now correctly fires the On Resolution Changed event
+* Fixed: It is no longer possible to try and run in fullscreen mode with an invalid resolution on Windows
+* Fixed: The ChilliSource android project no longer runs proguard, which was causing issues in projects which contain their own Java source.
+
 Version 1.4.1, 2015-04-17
 -------------------------
 * Improved: Updated the ChangeLog.md to correct markdown syntax
 * Fixed: The project generator no longer fails if there is a ".git" directory in the ChilliSource directory
 * Fixed: Windows builds no longer fail during the asset copy python script if there is a space in the path name
-* Fixed: The view frustum is now correctly updated when the screen resolution changes. This fixed an issue with on screen objects being culled.
+* Fixed: The view frustum is now correctly updated when the screen resolution changes. This fixed an issue with on screen objects being culled
 
 Version 1.4.0, 2015-04-03
 -------------------------
