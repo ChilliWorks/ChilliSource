@@ -91,6 +91,7 @@ namespace CSBackend
 		void Screen::SetResolution(const CSCore::Integer2& in_size)
 		{
 			SFMLWindow::Get()->SetSize(in_size);
+			OnResolutionChanged(in_size);
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------

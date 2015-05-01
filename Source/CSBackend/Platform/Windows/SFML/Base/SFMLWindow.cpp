@@ -33,6 +33,7 @@
 #include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
 #include <ChilliSource/Core/Base/AppConfig.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/Container/VectorUtils.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Base/SurfaceFormat.h>
 
@@ -238,11 +239,21 @@ namespace CSBackend
 		//-------------------------------------------------
 		void SFMLWindow::SetSize(const CSCore::Integer2& in_size)
 		{
+			if (m_displayMode == DisplayMode::k_fullscreen)
+			{
+				CS_ASSERT(CSCore::VectorUtils::Contains(GetSupportedResolutions(), in_size) == true, "Resolution not supported in fullscreen mode.");
+			}
+
 			//Clamp to the actual screen size
-			m_windowSize = CSCore::Integer2::Max(in_size, CSCore::Integer2::k_one);
+			auto windowSize = CSCore::Integer2::Max(in_size, CSCore::Integer2::k_one);
 
 			//This will trigger an SFML resize event
-			m_window.setSize(sf::Vector2u(m_windowSize.x, m_windowSize.y));
+			m_window.setSize(sf::Vector2u(windowSize.x, windowSize.y));
+
+			if (m_displayMode == DisplayMode::k_fullscreen)
+			{
+				SetFullscreen();
+			}
 		}
 		//-------------------------------------------------
 		//-------------------------------------------------
@@ -267,13 +278,16 @@ namespace CSBackend
 		//-------------------------------------------------
 		void SFMLWindow::SetFullscreen()
 		{
+			CS_ASSERT(CSCore::VectorUtils::Contains(GetSupportedResolutions(), GetWindowSize()) == true, "Resolution not supported in fullscreen mode.");
+
 			//Pick the best fit RGBA depth based on the supported depths
 			for (auto it = sf::VideoMode::getFullscreenModes().rbegin(); it != sf::VideoMode::getFullscreenModes().rend(); ++it)
 			{
 				s32 bpp = it->bitsPerPixel;
 				if (bpp >= m_preferredRGBADepth)
 				{
-					m_window.create(sf::VideoMode(m_windowSize.x, m_windowSize.y, bpp), m_title, sf::Style::Fullscreen, m_contextSettings);
+					auto windowSize = GetWindowSize();
+					m_window.create(sf::VideoMode(windowSize.x, windowSize.y, bpp), m_title, sf::Style::Fullscreen, m_contextSettings);
 					m_windowDisplayModeEvent.NotifyConnections(DisplayMode::k_fullscreen);
 					break;
 				}
@@ -283,7 +297,8 @@ namespace CSBackend
 		//-------------------------------------------------
 		void SFMLWindow::SetWindowed()
 		{
-			m_window.create(sf::VideoMode(m_windowSize.x, m_windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), m_title, sf::Style::Default, m_contextSettings);
+			auto windowSize = GetWindowSize();
+			m_window.create(sf::VideoMode(windowSize.x, windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), m_title, sf::Style::Default, m_contextSettings);
 			m_windowDisplayModeEvent.NotifyConnections(DisplayMode::k_windowed);
 		}
 		//----------------------------------------------------------
@@ -295,7 +310,11 @@ namespace CSBackend
 
 			for (const auto& mode : sf::VideoMode::getFullscreenModes())
 			{
-				result.push_back(CSCore::Integer2((s32)mode.width, (s32)mode.height));
+				CSCore::Integer2 resolution((s32)mode.width, (s32)mode.height);
+				if (CSCore::VectorUtils::Contains(result, resolution) == false)
+				{
+					result.push_back(resolution);
+				}
 			}
 
 			return result;
@@ -390,9 +409,8 @@ namespace CSBackend
 			m_contextSettings = CreateContextSettings(surfaceFormat, msaaFormat);
 			m_preferredRGBADepth = ReadRGBAPixelDepth(surfaceFormat);
 
-			m_windowSize.x = (s32)((f32)sf::VideoMode::getDesktopMode().width * 0.8f);
-			m_windowSize.y = (s32)((f32)sf::VideoMode::getDesktopMode().height * 0.8f);
-			m_window.create(sf::VideoMode((u32)m_windowSize.x, (u32)m_windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), "", sf::Style::Default, m_contextSettings);
+			CSCore::Integer2 windowSize(s32(f32(sf::VideoMode::getDesktopMode().width) * 0.8f), s32(f32(sf::VideoMode::getDesktopMode().height) * 0.8f));
+			m_window.create(sf::VideoMode((u32)windowSize.x, (u32)windowSize.y, sf::VideoMode::getDesktopMode().bitsPerPixel), "", sf::Style::Default, m_contextSettings);
 
 			GLenum glewError = glewInit();
 			if (GLEW_OK != glewError)
@@ -441,9 +459,7 @@ namespace CSBackend
 							app->Quit();
 							return;
 						case sf::Event::Resized:
-							m_windowSize.x = (s32)event.size.width;
-							m_windowSize.y = (s32)event.size.height;
-							m_windowResizeEvent.NotifyConnections(m_windowSize);
+							m_windowResizeEvent.NotifyConnections(CSCore::Integer2(s32(event.size.width), s32(event.size.height)));
 							break;
 						case sf::Event::GainedFocus:
 							if (m_isFocused == false)
