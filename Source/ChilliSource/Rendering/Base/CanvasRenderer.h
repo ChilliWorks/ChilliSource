@@ -61,10 +61,14 @@ namespace ChilliSource
             struct TextProperties
             {
                 f32 m_textScale = 1.0f;
+                f32 m_minTextScale = 0.75f;
                 f32 m_absCharSpacingOffset = 0.0f;
                 f32 m_absLineSpacingOffset = 0.0f;
                 f32 m_lineSpacingScale = 1.0f;
                 u32 m_maxNumLines = 0;
+                
+                bool m_shouldAutoScale = false;
+                
                 HorizontalTextJustification m_horizontalJustification = HorizontalTextJustification::k_centre;
                 VerticalTextJustification m_verticalJustification = VerticalTextJustification::k_centre;
             };
@@ -93,6 +97,13 @@ namespace ChilliSource
                 f32 m_width;
                 f32 m_height;
             };
+            //----------------------------------------------------------------------------
+            /// Defines a type for a vector of bounded lines
+            ///
+            /// @author HMcLaughlin
+            //----------------------------------------------------------------------------
+            using WrappedText = std::vector<std::string>;
+            
             //----------------------------------------------------------------------------
             /// @author S Downie
             ///
@@ -145,14 +156,15 @@ namespace ChilliSource
             ///
             /// @author S Downie
             ///
-            /// @param Text to convert to display characters (UTF-8)
-            /// @param Font
-            /// @param Max bounds
-            /// @param The text properties.
+            /// @param in_text - Text to convert to display characters (UTF-8)
+            /// @param in_font - Font to use
+            /// @param in_bounds - Max bounds
+            /// @param in_textProperties - The text properties used to build.
+            /// @param [Out] out_textScale - Final scale that should be used
             ///
             /// @return Built text struct containing all the character infos
             //----------------------------------------------------------------------------
-            BuiltText BuildText(const std::string& in_text, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& in_textProperties) const;
+            BuiltText BuildText(const std::string& in_text, const FontCSPtr& in_font, const Core::Vector2& in_bounds, const TextProperties& in_textProperties, f32& out_textScale) const;
             //----------------------------------------------------------------------------
             /// Build the sprites for each given character and render them to screen.
             ///

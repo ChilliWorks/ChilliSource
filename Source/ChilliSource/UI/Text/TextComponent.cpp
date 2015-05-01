@@ -46,6 +46,8 @@ namespace ChilliSource
     {
         namespace
         {
+            const char k_imageReplacementKey = ':';
+            
             const char k_fontKey[] = "Font";
             const char k_localisedTextKey[] = "LocalisedText";
             const char k_localisedTextIdKey[] = "LocalisedTextId";
@@ -58,6 +60,9 @@ namespace ChilliSource
             const char k_lineSpacingScaleKey[] = "LineSpacingScale";
             const char k_maxNumberOfLinesKey[] = "MaxNumberOfLines";
             const char k_textScaleKey[] = "TextScale";
+            const char k_minTextScaleKey[] = "MinTextAutoScale";
+            const char k_enableAutoScaledTextKey[] = "EnableAutoTextScale";
+            
             
             const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
@@ -72,7 +77,9 @@ namespace ChilliSource
                 {Core::PropertyTypes::Float(), k_absLineSpacingOffsetKey},
                 {Core::PropertyTypes::Float(), k_lineSpacingScaleKey},
                 {Core::PropertyTypes::Int(), k_maxNumberOfLinesKey},
-                {Core::PropertyTypes::Float(), k_textScaleKey}
+                {Core::PropertyTypes::Float(), k_textScaleKey},
+                {Core::PropertyTypes::Float(), k_minTextScaleKey},
+                {Core::PropertyTypes::Bool(), k_enableAutoScaledTextKey}
             };
         }
         
@@ -103,6 +110,8 @@ namespace ChilliSource
             RegisterProperty<f32>(Core::PropertyTypes::Float(), k_lineSpacingScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetLineSpacingScale), CSCore::MakeDelegate(this, &TextComponent::SetLineSpacingScale));
             RegisterProperty<s32>(Core::PropertyTypes::Int(), k_maxNumberOfLinesKey, CSCore::MakeDelegate(this, &TextComponent::GetMaxNumberOfLines), CSCore::MakeDelegate(this, &TextComponent::SetMaxNumberOfLines));
             RegisterProperty<f32>(Core::PropertyTypes::Float(), k_textScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetTextScale), CSCore::MakeDelegate(this, &TextComponent::SetTextScale));
+            RegisterProperty<f32>(Core::PropertyTypes::Float(), k_minTextScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetMinAutoTextScale), CSCore::MakeDelegate(this, &TextComponent::SetMinAutoTextScale));
+            RegisterProperty<bool>(Core::PropertyTypes::Bool(), k_enableAutoScaledTextKey, CSCore::MakeDelegate(this, &TextComponent::IsTextAutoScaleEnabled), CSCore::MakeDelegate(this, &TextComponent::SetTextAutoScaleEnabled));
             
             ApplyRegisteredProperties(in_properties);
         }
@@ -183,6 +192,18 @@ namespace ChilliSource
         f32 TextComponent::GetTextScale() const
         {
             return m_textProperties.m_textScale;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        f32 TextComponent::GetMinAutoTextScale() const
+        {
+            return m_textProperties.m_minTextScale;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        bool TextComponent::IsTextAutoScaleEnabled() const
+        {
+            return m_textProperties.m_shouldAutoScale;
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
@@ -331,6 +352,22 @@ namespace ChilliSource
             
             m_invalidateCache = true;
         }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        void TextComponent::SetMinAutoTextScale(f32 in_scale)
+        {
+            m_textProperties.m_minTextScale = in_scale;
+            
+            m_invalidateCache = true;
+        }
+        //-------------------------------------------------------------------
+        //-------------------------------------------------------------------
+        void TextComponent::SetTextAutoScaleEnabled(bool in_enable)
+        {
+            m_textProperties.m_shouldAutoScale = in_enable;
+            
+            m_invalidateCache = true;
+        }
         //-------------------------------------------------------
         //-------------------------------------------------------
         std::string TextComponent::ReplaceVariables(const std::string& in_text, const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData)
@@ -369,7 +406,7 @@ namespace ChilliSource
             Core::UTF8Char nextChar = '\0';
             
             // Marker for images
-            const char k_marker = '-';
+            const char k_marker = k_imageReplacementKey;
             Rendering::Font::CharacterInfo markerInfo;
             m_font->TryGetCharacterInfo(k_marker, markerInfo);
             
@@ -495,7 +532,7 @@ namespace ChilliSource
             if (m_invalidateCache == true)
             {
                 m_invalidateCache = false;
-                m_cachedText = in_renderer->BuildText(m_text, m_font, in_absSize, m_textProperties);
+                m_cachedText = in_renderer->BuildText(m_text, m_font, in_absSize, m_textProperties, m_cachedTextScale);
                 
                 // Update images position
                 for(auto& image : m_cachedImages)
@@ -513,7 +550,7 @@ namespace ChilliSource
             // Draw images
             for(const auto& iconData : m_cachedImages)
             {
-                Core::Vector2 size = iconData.m_size * m_textProperties.m_textScale;
+                Core::Vector2 size = iconData.m_size * m_cachedTextScale;
 				in_renderer->DrawBox(in_transform, size, iconData.m_offset, iconData.m_icon.GetTexture(), iconData.m_uvs, Core::Colour::k_white * GetWidget()->GetFinalColour(), Rendering::AlignmentAnchor::k_middleCentre);
             }
         }
