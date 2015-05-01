@@ -215,7 +215,7 @@ namespace ChilliSource
             /// quality of the text rendered so this should only be used when
             /// absolutely necessary.
             //-------------------------------------------------------------------
-            f32 GetMinTextScale() const;
+            f32 GetMinAutoTextScale() const;
             //-------------------------------------------------------------------
             /// @author HMcLaughlin
             ///
@@ -381,9 +381,9 @@ namespace ChilliSource
             ///
             /// @author HMcLaughlin
             ///
-            /// @param The scale factor. (Must be <= TextScale)
+            /// @param in_scale - The scale factor. (Must be <= TextScale)
             //-------------------------------------------------------------------
-            void SetMinTextScale(f32 in_scale);
+            void SetMinAutoTextScale(f32 in_scale);
             //-------------------------------------------------------------------
             /// Sets if this text component should attempt to auto scale the
             /// text to fit into the labels bounds. This will achieve approximate
@@ -392,7 +392,7 @@ namespace ChilliSource
             ///
             /// @author HMcLaughlin
             ///
-            /// @param Enable
+            /// @param in_enable - Enable auto scaling text
             //-------------------------------------------------------------------
             void SetTextAutoScaleEnabled(bool in_enable);
             

@@ -110,7 +110,7 @@ namespace ChilliSource
             RegisterProperty<f32>(Core::PropertyTypes::Float(), k_lineSpacingScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetLineSpacingScale), CSCore::MakeDelegate(this, &TextComponent::SetLineSpacingScale));
             RegisterProperty<s32>(Core::PropertyTypes::Int(), k_maxNumberOfLinesKey, CSCore::MakeDelegate(this, &TextComponent::GetMaxNumberOfLines), CSCore::MakeDelegate(this, &TextComponent::SetMaxNumberOfLines));
             RegisterProperty<f32>(Core::PropertyTypes::Float(), k_textScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetTextScale), CSCore::MakeDelegate(this, &TextComponent::SetTextScale));
-            RegisterProperty<f32>(Core::PropertyTypes::Float(), k_minTextScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetMinTextScale), CSCore::MakeDelegate(this, &TextComponent::SetMinTextScale));
+            RegisterProperty<f32>(Core::PropertyTypes::Float(), k_minTextScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetMinAutoTextScale), CSCore::MakeDelegate(this, &TextComponent::SetMinAutoTextScale));
             RegisterProperty<bool>(Core::PropertyTypes::Bool(), k_enableAutoScaledTextKey, CSCore::MakeDelegate(this, &TextComponent::IsTextAutoScaleEnabled), CSCore::MakeDelegate(this, &TextComponent::SetTextAutoScaleEnabled));
             
             ApplyRegisteredProperties(in_properties);
@@ -195,7 +195,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        f32 TextComponent::GetMinTextScale() const
+        f32 TextComponent::GetMinAutoTextScale() const
         {
             return m_textProperties.m_minTextScale;
         }
@@ -354,7 +354,7 @@ namespace ChilliSource
         }
         //-------------------------------------------------------------------
         //-------------------------------------------------------------------
-        void TextComponent::SetMinTextScale(f32 in_scale)
+        void TextComponent::SetMinAutoTextScale(f32 in_scale)
         {
             m_textProperties.m_minTextScale = in_scale;
             

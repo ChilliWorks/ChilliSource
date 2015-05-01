@@ -47,6 +47,7 @@ namespace ChilliSource
 	{
         namespace
         {
+            const f32 k_maxAutoScaleIterations = 10.0f;//Max number of recursions to find the correct scale
             const f32 k_autoScaleTolerance = 0.01f;//Min difference in max/min scaling to warrant further recursion for AutoScaled text
             
             //------------------------------------------------------
@@ -491,72 +492,6 @@ namespace ChilliSource
                 return outputText;
             }
             //----------------------------------------------------------------------------
-            /// Gets the unformatted width of a string. This will ignore newlines in the
-            /// size calculations
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @param in_text - Text to measure
-            /// @param in_font - Font
-            /// @param in_absCharSpacingOffset - The absolute character spacing offset.
-            /// @param in_textScale - The text scale factor.
-            ///
-            /// @return Absolute width of the unformatted text
-            //----------------------------------------------------------------------------
-            f32 GetTextWidth(const std::string& in_text, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_textScale)
-            {
-                f32 width = 0.0f;
-             
-                auto it = in_text.begin();
-                while(it < in_text.end())
-                {
-                    auto character = Core::UTF8StringUtils::Next(it);
-                    width += GetCharacterWidth(character, in_font, in_absCharSpacingOffset, in_textScale);
-                }
-                
-                return width;
-            }
-            //----------------------------------------------------------------------------
-            /// Try to calculate the ideal scaling amount given a string and label bounds.
-            /// Assumes best case scenario when comes to text wrapping
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @param in_text - Text
-            /// @param in_font - The font the string will be renderered with.
-            /// @param in_absCharSpacingOffset - The absolute pixel offset to regular character spacing.
-            /// @param in_lineHeight - The absolute line height
-            /// @param in_requestedScale - The text scale factor.
-            /// @param in_bounds - The bounds of the Text.
-            ///
-            /// @return Best case text scaling value
-            //----------------------------------------------------------------------------
-            f32 CalculateIdealTextScale(const std::string& in_text, const FontCSPtr& in_font, f32 in_absCharSpacingOffset, f32 in_lineHeight, f32 in_requestedScale, const CSCore::Vector2& in_bounds)
-            {
-                f32 idealScale = in_requestedScale;
-                
-                //First measure the text total width
-                f32 textWidth = GetTextWidth(in_text, in_font, in_absCharSpacingOffset, in_requestedScale);
-                
-                //Now measure the total size of the labels bounds
-                f32 maxHeight = in_bounds.y;
-                u32 numLines = std::floor(maxHeight / in_lineHeight);
-                
-                f32 totalSize = numLines * in_bounds.x;
-                
-                //Calculate the scaling ratio
-                if(textWidth < totalSize)
-                {
-                    idealScale = in_requestedScale;
-                }
-                else
-                {
-                    idealScale = (totalSize / textWidth) * in_requestedScale;
-                }
-
-                return idealScale;
-            }
-            //----------------------------------------------------------------------------
             /// Returns if the given lines will fit completely in the number of allowed lines/bounds
             ///
             /// @author HMcLaughlin
@@ -700,12 +635,12 @@ namespace ChilliSource
             /// @param in_properties - The text properties.
             /// @param in_font - Font to use
             /// @param in_bounds - Max bounds to fit the text
-            /// @param in_lineHeight - Line Height
             /// @param in_minMax - Min/Max scales to search
+            /// @param in_currentIteration - Current level of recursion
             ///
             /// @return Close to best case fitting scale
             //----------------------------------------------------------------------------
-            f32 GetBoundedTextScaleRecursive(const std::string& in_text, const CanvasRenderer::TextProperties& in_properties, const FontCSPtr& in_font, const CSCore::Vector2& in_bounds, f32 in_lineHeight, const CSCore::Vector2& in_minMax)
+            f32 GetBoundedTextScaleRecursive(const std::string& in_text, const CanvasRenderer::TextProperties& in_properties, const FontCSPtr& in_font, const CSCore::Vector2& in_bounds, const CSCore::Vector2& in_minMax, u32 in_currentIteration = 0)
             {
                 f32 min = in_minMax.x;
                 f32 max = in_minMax.y;
@@ -724,25 +659,30 @@ namespace ChilliSource
                 //Check if the midpoint value is valid
                 const auto& wrappedText = GetWrappedText(in_text, midpointScale, in_font, in_bounds, in_properties);
                 
-                u32 numLinesUsed = 0;
-                bool doesFit = DoesWrappedTextFit(wrappedText, in_properties, in_bounds.y, in_lineHeight, numLinesUsed);
+                f32 lineHeight = in_properties.m_lineSpacingScale * ((in_font->GetLineHeight() + in_properties.m_absLineSpacingOffset) * midpointScale);
                 
-                if(difference <= k_autoScaleTolerance)
+                u32 numLinesUsed = 0;
+                bool doesFit = DoesWrappedTextFit(wrappedText, in_properties, in_bounds.y, lineHeight, numLinesUsed);
+                
+                //Increment current iteration
+                ++in_currentIteration;
+                
+                if(difference <= k_autoScaleTolerance || in_currentIteration >= k_maxAutoScaleIterations)
                 {
-                    //Reached a value below the tolerance, return the current valid scale
+                    //Reached a value below the tolerance/max iterations, return the current valid scale
                     return doesFit ? midpointScale : min;
                 }
                 
                 if(doesFit)
                 {
                     //We recurse further, the valid midpoint scale is now used as the min value
-                    return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, in_lineHeight, CSCore::Vector2(midpointScale, max));
+                    return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, CSCore::Vector2(midpointScale, max), in_currentIteration);
                 }
                 else
                 {
                     //Recurse further, the midpoint value is used as the max value for this recursion
                     //This is based on the assumption that the min value is always a valid fitting scale
-                    return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, in_lineHeight, CSCore::Vector2(min, midpointScale));
+                    return GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, CSCore::Vector2(min, midpointScale), in_currentIteration);
                 }
             }
         }
@@ -911,18 +851,13 @@ namespace ChilliSource
             if(in_properties.m_shouldAutoScale)
             {
                 CS_ASSERT(in_properties.m_minTextScale <= in_properties.m_textScale, "CanvasRenderer::BuildText::Cannot autoscale as the MinTextAutoScale is more than the TextScale property!");
-                
-                //Calculate a textscale that will allow the string to fit within the current bounds
-                textScale = CalculateIdealTextScale(in_text, in_font, in_properties.m_absCharSpacingOffset, lineHeight, textScale, in_bounds);
-                
-                if(textScale < in_properties.m_minTextScale)
-                {
-                    textScale = in_properties.m_minTextScale;
-                }
 
                 bool doesFit = false;
                 u32 numLines = 0;
                 
+				//Recalculate line height for the ideal scale
+				lineHeight = in_properties.m_lineSpacingScale * ((in_font->GetLineHeight() + in_properties.m_absLineSpacingOffset) * textScale);
+
                 //Check to see if the text fits at ideal scale
                 auto idealWrappedText = GetWrappedText(in_text, textScale, in_font, in_bounds, in_properties);
                 doesFit = DoesWrappedTextFit(idealWrappedText, in_properties, in_bounds.y, lineHeight, numLines);
@@ -930,6 +865,9 @@ namespace ChilliSource
                 //If the ideal doesn't fit then attempt the minimum, if that doesn't fit then there is nothing we can do scale-wise
                 if(!doesFit && textScale != in_properties.m_minTextScale)
                 {
+					//Recalculate line height for the minimum
+					lineHeight = in_properties.m_lineSpacingScale * ((in_font->GetLineHeight() + in_properties.m_absLineSpacingOffset) * in_properties.m_minTextScale);
+
                     //Check to see if the text can fit at the smallest scale
                     auto minWrappedText = GetWrappedText(in_text, in_properties.m_minTextScale, in_font, in_bounds, in_properties);
                     doesFit = DoesWrappedTextFit(minWrappedText, in_properties, in_bounds.y, lineHeight, numLines);
@@ -937,15 +875,16 @@ namespace ChilliSource
                     if(!doesFit)
                     {
                         CS_LOG_WARNING("Doesn't fit at min scale, consider resizing the label manually to fit the text better!");
+						textScale = in_properties.m_minTextScale;
                     }
                     else
                     {
                         //We should search for a more optimal scale between the min and the ideal, while still fitting
-                        textScale = GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, lineHeight, CSCore::Vector2(in_properties.m_minTextScale, textScale));
+                        textScale = GetBoundedTextScaleRecursive(in_text, in_properties, in_font, in_bounds, CSCore::Vector2(in_properties.m_minTextScale, textScale));
                     }
                 }
             }
-            
+
             //Update the final scale
             out_textScale = textScale;
             
