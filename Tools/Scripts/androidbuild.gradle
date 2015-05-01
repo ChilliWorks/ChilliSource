@@ -397,10 +397,10 @@ ext {
                     def debug = isDebugFromTaskName(taskName)
                     def debugText = (debug == true) ? "debug" : "release"
 
-                    task "csCompileNdk_${sku}_${abi}_${debugText}" (dependsOn: ":chillisource:csCompileNdk_${sku}_${abi}_${debugText}") << {
+                    task "csCompileNdk_${sku}_${abi}_${debugText}" (dependsOn: ":chillisource:csCompileNdk_${sku}_${abi}_${debugText}", overwrite: true) << {
                         ndkBuild(sku, abi, debug)
                     }
-                    task "csGenerateResources_${sku}_${abi}_${debugText}" (dependsOn: "csCompileNdk_${sku}_${abi}_${debugText}") << {
+                    task "csGenerateResources_${sku}_${abi}_${debugText}" (dependsOn: "csCompileNdk_${sku}_${abi}_${debugText}", overwrite: true) << {
                         generateResources()
                     }
                     currentTask.dependsOn("csGenerateResources_${sku}_${abi}_${debugText}")
