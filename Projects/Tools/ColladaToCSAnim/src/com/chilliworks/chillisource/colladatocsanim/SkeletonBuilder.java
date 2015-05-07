@@ -35,7 +35,6 @@ import com.chilliworks.chillisource.colladaparserutils.colladadata.*;
 import com.chilliworks.chillisource.colladaparserutils.colladadata.ColladaNode.COLLADA_NODE_TYPE;
 import com.chilliworks.chillisource.colladatocsanim.csanim.*;
 import com.chilliworks.chillisource.coreutils.Logging;
-import com.chilliworks.chillisource.coreutils.Matrix4;
 
 public class SkeletonBuilder 
 {

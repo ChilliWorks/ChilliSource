@@ -118,8 +118,8 @@ public class LibraryAnimationsParser
 		
 		mCurrentAnimation = new ColladaAnimation();
 		
-		if (mCollada.mAnimation != null)
-			mCollada.mAnimation = mCurrentAnimation;
+		if (mCollada.m_animations != null)
+			mCollada.m_animations.add(mCurrentAnimation);
 		else
 			Logging.logFatal("mCurrentAnimation is null!");
 		
