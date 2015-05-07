@@ -30,6 +30,8 @@ package com.chilliworks.chillisource.colladaparserutils.colladadata;
 
 import java.util.Hashtable;
 
+import com.chilliworks.chillisource.coreutils.Matrix4;
+
 public class ColladaNode 
 {
 	public enum COLLADA_NODE_TYPE
@@ -47,20 +49,19 @@ public class ColladaNode
 	public String mstrName;
 	public String mstrType;
 	public String mstrSId;
-	public ColladaMatrix mMatrix;
 	public COLLADA_NODE_TYPE meType;
 	public ColladaInstanceLight mInstanceLight;
 	public ColladaInstanceGeometry mInstanceGeometry;
 	public ColladaInstanceController mInstanceController;
 	public ColladaInstanceCamera mInstanceCamera;
 	public ColladaExtra mExtra;
+	public Matrix4 m_transform = Matrix4.IDENTITY;
 	
 	public ColladaNode()
 	{
 		mChildNodes = new Hashtable<String, ColladaNode>();
 		mstrId = new String();
 		mstrName = new String();
-		mMatrix = new ColladaMatrix();
 		meType = COLLADA_NODE_TYPE.BASE;
 		mInstanceLight = new ColladaInstanceLight();
 		mInstanceGeometry = new ColladaInstanceGeometry();

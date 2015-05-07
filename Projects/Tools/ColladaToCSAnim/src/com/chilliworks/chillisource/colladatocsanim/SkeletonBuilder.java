@@ -230,12 +230,7 @@ public class SkeletonBuilder
 			newSkeletonNode.mstrParentId = inParent.mstrId;
 		}
 		
-		float[][] matData = inNode.mMatrix.maafValues;
-		
-		newSkeletonNode.mInitialPoseMatrix = new Matrix4(matData[0][0], matData[1][0], matData[2][0], matData[3][0],
-			matData[0][1], matData[1][1], matData[2][1], matData[3][1],
-			matData[0][2], matData[1][2], matData[2][2], matData[3][2],
-			matData[0][3], matData[1][3], matData[2][3], matData[3][3]);
+		newSkeletonNode.mInitialPoseMatrix = inNode.m_transform;
 		
 		//add the joint
 		inModel.mSkeleton.mNodeList.add(newSkeletonNode);

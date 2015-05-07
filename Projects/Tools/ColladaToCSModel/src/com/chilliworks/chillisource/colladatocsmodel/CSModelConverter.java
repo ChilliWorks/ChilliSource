@@ -183,16 +183,7 @@ public class CSModelConverter
 		boolean bShouldExport = inbParentExported;
 		
 		//calculate the world position of this node.
-		Matrix4 localMat = Matrix4.IDENTITY;
-		if (inNode.mMatrix != null && inNode.mMatrix.maafValues != null && inNode.mMatrix.maafValues != null)
-		{
-			float[][] matData = inNode.mMatrix.maafValues;
-			
-			localMat = new Matrix4(matData[0][0], matData[1][0], matData[2][0], matData[3][0],
-				matData[0][1], matData[1][1], matData[2][1], matData[3][1],
-				matData[0][2], matData[1][2], matData[2][2], matData[3][2],
-				matData[0][3], matData[1][3], matData[2][3], matData[3][3]);
-		}
+		Matrix4 localMat = inNode.m_transform;
 		
 		Matrix4 worldMat = Matrix4.multiply(localMat, mMatrixStack.peek());
 		mMatrixStack.push(worldMat);
