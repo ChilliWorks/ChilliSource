@@ -57,7 +57,7 @@ public final class Matrix4
 	{
 		return new Matrix4(1.0, 0.0, 0.0, 0.0,
 				0.0, 1.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, 1.0, 0.0,
 				in_translation.getX(), in_translation.getY(), in_translation.getZ(), 1.0);
 	}
 	/**
@@ -148,20 +148,24 @@ public final class Matrix4
 	 */
 	public static Matrix4 createRotation(Quaternion in_orientation)
 	{
-		double cosW = Math.cos(in_orientation.getW());
-		double sinW = Math.sin(in_orientation.getW());
+		Quaternion q = Quaternion.normalise(in_orientation);
+
+		double wSquared = q.getW() * q.getW();
+		double xSquared = q.getX() * q.getX();
+		double ySquared = q.getY() * q.getY();
+		double zSquared = q.getZ() * q.getZ();
+
+		double a0 = wSquared + xSquared - ySquared - zSquared;
+		double a1 = 2.0 * q.getX() * q.getY() + 2.0 * q.getW() * q.getZ();
+		double a2 = 2.0 * q.getX() * q.getZ() - 2.0 * q.getW() * q.getY();
 		
-		double a0 = cosW + (1 - cosW) * (in_orientation.getX() * in_orientation.getX());
-		double a1 = (1 - cosW) * (in_orientation.getX() * in_orientation.getY()) + (sinW * in_orientation.getZ());
-		double a2 = (1 - cosW) * (in_orientation.getX() * in_orientation.getZ()) - (sinW * in_orientation.getY());
-
-		double b0 = (1 - cosW) * (in_orientation.getX() * in_orientation.getY()) - (sinW * in_orientation.getZ());
-		double b1 = cosW + (1 - cosW) * (in_orientation.getY() * in_orientation.getY());
-		double b2 = (1 - cosW) * (in_orientation.getY() * in_orientation.getZ()) + (sinW * in_orientation.getX());
-
-		double c0 = (1 - cosW) * (in_orientation.getX() * in_orientation.getZ()) + (sinW * in_orientation.getY());
-		double c1 = (1 - cosW) * (in_orientation.getY() * in_orientation.getZ()) - (sinW * in_orientation.getX());
-		double c2 = cosW + (1 - cosW) * (in_orientation.getZ() * in_orientation.getZ());
+		double b0 = 2.0 * q.getX() * q.getY() - 2.0 * q.getW() * q.getZ();
+		double b1 = wSquared - xSquared + ySquared - zSquared;
+		double b2 = 2.0 * q.getY() * q.getZ() + 2.0 * q.getW() * q.getX();
+		
+		double c0 = 2.0 * q.getX() * q.getZ() + 2.0 * q.getW() * q.getY();
+		double c1 = 2.0 * q.getY() * q.getZ() - 2.0 * q.getW() * q.getX();
+		double c2 = wSquared - xSquared - ySquared + zSquared;
 	
 		return new Matrix4(a0, a1, a2, 0.0,
 				b0, b1, b2, 0.0,
