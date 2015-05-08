@@ -78,7 +78,17 @@ public class SkeletonBuilder
 		//if this should be exported, then see if it can be
 		if (bShouldExport == true && inNode.meType == ColladaNode.COLLADA_NODE_TYPE.CONTROLLER)
 		{
-			String skeletonName = inNode.mInstanceController.mSkeleton.mstrValue.substring(1);
+			if (inNode.mInstanceController.m_skeletons.size() == 0)
+			{
+				Logging.logFatal("Cannot create animation becuase the model has no skeleton.");
+			}
+			
+			if (inNode.mInstanceController.m_skeletons.size() > 1)
+			{
+				Logging.logFatal("Cannot create animation becuase the model has more than one skeleton.");
+			}
+			
+			String skeletonName = inNode.mInstanceController.m_skeletons.get(0).mstrValue.substring(1);
 
 			//export this node if possible
 			if (skeletonName.length() > 0)

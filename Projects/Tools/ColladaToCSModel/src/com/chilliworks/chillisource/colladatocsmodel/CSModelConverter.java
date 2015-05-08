@@ -213,8 +213,18 @@ public class CSModelConverter
 			
 			if (inNode.meType == ColladaNode.COLLADA_NODE_TYPE.CONTROLLER)
 			{
+				if (inNode.mInstanceController.m_skeletons.size() == 0)
+				{
+					Logging.logFatal("Cannot create model becuase the model has no skeleton.");
+				}
+				
+				if (inNode.mInstanceController.m_skeletons.size() > 1)
+				{
+					Logging.logFatal("Cannot create model becuase the model has more than one skeleton.");
+				}
+				
 				controllerName = inNode.mInstanceController.mstrUrl.substring(1);
-				skeletonName = inNode.mInstanceController.mSkeleton.mstrValue.substring(1);
+				skeletonName = inNode.mInstanceController.m_skeletons.get(0).mstrValue.substring(1);
 				geomName = inCollada.mLibraryControllers.get(inNode.mInstanceController.mstrUrl.substring(1)).mSkin.mstrSource.substring(1);
 				
 				for (int i = 0; i < inNode.mInstanceController.mBindMaterial.mTechniqueCommon.mInstanceMaterialList.size(); i++)

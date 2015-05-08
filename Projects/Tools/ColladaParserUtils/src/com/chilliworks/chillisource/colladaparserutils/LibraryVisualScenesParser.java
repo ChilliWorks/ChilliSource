@@ -297,7 +297,7 @@ public class LibraryVisualScenesParser
 			values[0][2], values[1][2], values[2][2], values[3][2],
 			values[0][3], values[1][3], values[2][3], values[3][3]);
 		
-		mNodeStack.peek().m_transform = Matrix4.multiply(mNodeStack.peek().m_transform, matrix);
+		mNodeStack.peek().m_transform = Matrix4.multiply(matrix, mNodeStack.peek().m_transform);
 	}
 	/**
 	 * Pushes a new translate element. This assumes the element is part of the Collada Node that is top of the
@@ -341,7 +341,7 @@ public class LibraryVisualScenesParser
 		}
 		
 		Vector3 translation = new Vector3(values[0], values[1], values[2]);
-		mNodeStack.peek().m_transform = Matrix4.multiply(mNodeStack.peek().m_transform, Matrix4.createTranslation(translation));
+		mNodeStack.peek().m_transform = Matrix4.multiply(Matrix4.createTranslation(translation), mNodeStack.peek().m_transform);
 	}
 	/**
 	 * Pushes a new rotate element. This assumes the element is part of the Collada Node that is top of the
@@ -385,7 +385,7 @@ public class LibraryVisualScenesParser
 		}
 		
 		Quaternion rotation = new Quaternion(new Vector3(values[0], values[1], values[2]), values[3]);
-		mNodeStack.peek().m_transform = Matrix4.multiply(mNodeStack.peek().m_transform, Matrix4.createRotation(rotation));
+		mNodeStack.peek().m_transform = Matrix4.multiply(Matrix4.createRotation(rotation), mNodeStack.peek().m_transform);
 	}
 	/**
 	 * Pushes a new scale element. This assumes the element is part of the Collada Node that is top of the
@@ -429,7 +429,7 @@ public class LibraryVisualScenesParser
 		}
 		
 		Vector3 scale = new Vector3(values[0], values[1], values[2]);
-		mNodeStack.peek().m_transform = Matrix4.multiply(mNodeStack.peek().m_transform, Matrix4.createScale(scale));
+		mNodeStack.peek().m_transform = Matrix4.multiply(Matrix4.createScale(scale), mNodeStack.peek().m_transform);
 	}
 	//--------------------------------------------------------------
 	/// Push Instance Controller
@@ -473,7 +473,7 @@ public class LibraryVisualScenesParser
 		mCurrentSkeleton = new ColladaSkeleton();
 		
 		if (mCurrentInstanceController != null)
-			mCurrentInstanceController.mSkeleton = mCurrentSkeleton;
+			mCurrentInstanceController.m_skeletons.add(mCurrentSkeleton);
 		else
 			Logging.logFatal("mCurrentInstanceController is null!");
 		

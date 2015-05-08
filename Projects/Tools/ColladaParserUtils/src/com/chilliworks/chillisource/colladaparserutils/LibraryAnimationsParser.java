@@ -117,11 +117,7 @@ public class LibraryAnimationsParser
 		if (mdwIgnoreStack > 0 ) return false;
 		
 		mCurrentAnimation = new ColladaAnimation();
-		
-		if (mCollada.m_animations != null)
-			mCollada.m_animations.add(mCurrentAnimation);
-		else
-			Logging.logFatal("mCurrentAnimation is null!");
+		mCollada.m_animations.add(mCurrentAnimation);
 		
 		return false;
 	}
