@@ -7,7 +7,8 @@ Version 1.4.2, 2015-05-01
 * Fixed: Issues with resolution on iPhone 6 Plus
 * Fixed: Changing resolution on windows in code now correctly fires the On Resolution Changed event
 * Fixed: It is no longer possible to try and run in fullscreen mode with an invalid resolution on Windows
-* Fixed: The ChilliSource android project no longer runs proguard, which was causing issues in projects which contain their own Java source.
+* Fixed: The ChilliSource android project no longer runs proguard, which was causing issues in projects which contain their own Java source
+* Fixed: Animated Collada files exported from Blender should now be correctly converted by the collada conversion tools
 
 Version 1.4.1, 2015-04-17
 -------------------------
