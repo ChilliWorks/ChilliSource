@@ -1568,6 +1568,9 @@ namespace ChilliSource
 					m_pressedInput.emplace(in_pointer.GetId(), inputTypeSet);
 				}
                 
+                CS_ASSERT(m_containedPointers.find(in_pointer.GetId()) == m_containedPointers.end(), "Pointer already exists in widget.");
+                m_containedPointers.insert(in_pointer.GetId());
+                
                 m_pressedInsideEvent.NotifyConnections(this, in_pointer, in_inputType);
                 
                 if(m_isInputConsumeEnabled == true)
@@ -1599,15 +1602,19 @@ namespace ChilliSource
             }
             m_internalChildren.unlock();
             
-            bool containsPrevious = Contains(in_pointer.GetPreviousPosition());
+            bool containsPrevious = (m_containedPointers.find(in_pointer.GetId()) != m_containedPointers.end());
             bool containsCurrent = Contains(in_pointer.GetPosition());
             
             if(containsPrevious == false && containsCurrent == true)
             {
+                m_containedPointers.insert(in_pointer.GetId());
+                
                 m_moveEnteredEvent.NotifyConnections(this, in_pointer);
             }
             else if(containsPrevious == true && containsCurrent == false)
             {
+                m_containedPointers.erase(m_containedPointers.find(in_pointer.GetId()));
+                
                 m_moveExitedEvent.NotifyConnections(this, in_pointer);
             }
             else if(containsPrevious == false && containsCurrent == false)
@@ -1664,6 +1671,12 @@ namespace ChilliSource
 
 					if(Contains(in_pointer.GetPosition()) == true)
 					{
+                        //This assumes that the position of the pointer can't have moved since the last pointer moved event. For now
+                        //this is indeed the case, but if it changes in the future, the assertion will catch it.
+                        auto pointerIt = m_containedPointers.find(in_pointer.GetId());
+                        CS_ASSERT(pointerIt != m_containedPointers.end(), "Pointer doesn't exists in widget.");
+                        m_containedPointers.erase(pointerIt);
+                        
 						m_releasedInsideEvent.NotifyConnections(this, in_pointer, in_inputType);
 					}
 					else
