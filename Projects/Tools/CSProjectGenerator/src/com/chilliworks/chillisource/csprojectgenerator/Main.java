@@ -135,10 +135,10 @@ public final class Main
 		Logging.logVerbose("Usage: java -jar CSProjectGenerator.jar " + k_paramProjectName + " <project name> " + k_paramPackageName + " <package name> " + k_paramOutputDirectory + 
 				" <directory path> [" + Logging.PARAM_LOGGING_LEVEL + " <level>] [" + k_paramHelp + "]");
 		Logging.logVerbose("Parameters:");
-		Logging.logVerbose(" " + k_paramProjectName + "(" + k_shortParamProjectName + "): The file path to the user manifest.");
-		Logging.logVerbose(" " + k_paramPackageName + "(" + k_shortParamPackageName + "): The file path to the template manifest.");
-		Logging.logVerbose(" " + k_paramOutputDirectory + "(" + k_shortParamOutputDirectory + "): [Optional] The file path to the output the project. By default the project is created in the present working directory.");
-		Logging.logVerbose(" " + Logging.PARAM_LOGGING_LEVEL + "(" + Logging.SHORT_PARAM_LOGGING_LEVEL + "): [Optional] The level of messages to log.");
+		Logging.logVerbose(" " + k_paramProjectName + "(" + k_shortParamProjectName + "): The name of the project. This will be the name of the project directory on disk, as well as the default window or app name.");
+		Logging.logVerbose(" " + k_paramPackageName + "(" + k_shortParamPackageName + "): The package name of the project on relevant platforms. This should be in the form 'ext.company.projectname'.");
+		Logging.logVerbose(" " + k_paramOutputDirectory + "(" + k_shortParamOutputDirectory + "): [Optional] The path to the directory which the project will be created in. By default the project is created in the current working directory.");
+		Logging.logVerbose(" " + Logging.PARAM_LOGGING_LEVEL + "(" + Logging.SHORT_PARAM_LOGGING_LEVEL + "): [Optional] The level of messages to log. Defaults to 'warning'.");
 		Logging.logVerbose(" " + k_paramHelp + "(" + k_shortParamHelp + "): [Optional] Display this help message.");
 		Logging.logVerbose("Logging Levels:");
 		Logging.logVerbose(" " + Logging.LOGGING_LEVEL_NONE + ": No logging.");

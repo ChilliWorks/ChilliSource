@@ -183,16 +183,7 @@ public class CSModelConverter
 		boolean bShouldExport = inbParentExported;
 		
 		//calculate the world position of this node.
-		Matrix4 localMat = Matrix4.IDENTITY;
-		if (inNode.mMatrix != null && inNode.mMatrix.maafValues != null && inNode.mMatrix.maafValues != null)
-		{
-			float[][] matData = inNode.mMatrix.maafValues;
-			
-			localMat = new Matrix4(matData[0][0], matData[1][0], matData[2][0], matData[3][0],
-				matData[0][1], matData[1][1], matData[2][1], matData[3][1],
-				matData[0][2], matData[1][2], matData[2][2], matData[3][2],
-				matData[0][3], matData[1][3], matData[2][3], matData[3][3]);
-		}
+		Matrix4 localMat = inNode.m_transform;
 		
 		Matrix4 worldMat = Matrix4.multiply(localMat, mMatrixStack.peek());
 		mMatrixStack.push(worldMat);
@@ -222,8 +213,18 @@ public class CSModelConverter
 			
 			if (inNode.meType == ColladaNode.COLLADA_NODE_TYPE.CONTROLLER)
 			{
+				if (inNode.mInstanceController.m_skeletons.size() == 0)
+				{
+					Logging.logFatal("Cannot create model becuase the model has no skeleton.");
+				}
+				
+				if (inNode.mInstanceController.m_skeletons.size() > 1)
+				{
+					Logging.logFatal("Cannot create model becuase the model has more than one skeleton.");
+				}
+				
 				controllerName = inNode.mInstanceController.mstrUrl.substring(1);
-				skeletonName = inNode.mInstanceController.mSkeleton.mstrValue.substring(1);
+				skeletonName = inNode.mInstanceController.m_skeletons.get(0).mstrValue.substring(1);
 				geomName = inCollada.mLibraryControllers.get(inNode.mInstanceController.mstrUrl.substring(1)).mSkin.mstrSource.substring(1);
 				
 				for (int i = 0; i < inNode.mInstanceController.mBindMaterial.mTechniqueCommon.mInstanceMaterialList.size(); i++)

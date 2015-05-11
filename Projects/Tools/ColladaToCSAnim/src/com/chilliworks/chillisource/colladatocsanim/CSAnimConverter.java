@@ -74,9 +74,12 @@ public class CSAnimConverter
 		}
 		
 		//iterate through all animation channels
-		for (ColladaChannel channel: inCollada.mAnimation.mChannelList)
+		for (ColladaAnimation animation : inCollada.m_animations)
 		{
-			TryAddChannel(inCollada, inMoAnim, allowedNodes, channel);
+			for (ColladaChannel channel: animation.mChannelList)
+			{
+				TryAddChannel(inCollada, inMoAnim, allowedNodes, animation, channel);
+			}
 		}
 		
 		//convert the animation data, intro frame data.
@@ -123,9 +126,10 @@ public class CSAnimConverter
 	 * Adds the animation described by the input channel if the channel is targeting an allowed node.
 	 * @param inCollada
 	 * @param inAllowedNodes
+	 * @param in_animation - The animation
 	 * @param inChannel
 	 */
-	private void TryAddChannel(Collada inCollada, CSAnim inMoAnim, LinkedList<String> inAllowedNodes, ColladaChannel inChannel)
+	private void TryAddChannel(Collada inCollada, CSAnim inMoAnim, LinkedList<String> inAllowedNodes, ColladaAnimation in_animation, ColladaChannel inChannel)
 	{
 		//get the targeted node name.
 		String[] strSplitTarget = inChannel.mstrTarget.split("/");
@@ -136,12 +140,12 @@ public class CSAnimConverter
 			if (nodeName.equalsIgnoreCase(strTargetNode) == true)
 			{
 				//if this channel should indeed be used then get the sampler
-				ColladaSampler sampler = inCollada.mAnimation.mSamplerTable.get(inChannel.mstrSource.substring(1));
+				ColladaSampler sampler = in_animation.mSamplerTable.get(inChannel.mstrSource.substring(1));
 				
 				//use the sampler to get the sources
-				ColladaSource timelineSource = inCollada.mAnimation.mSourceTable.get(sampler.mInputTable.get("INPUT").mstrSource.substring(1));
-				ColladaSource transformSource = inCollada.mAnimation.mSourceTable.get(sampler.mInputTable.get("OUTPUT").mstrSource.substring(1));
-				ColladaSource interpolationSource = inCollada.mAnimation.mSourceTable.get(sampler.mInputTable.get("INTERPOLATION").mstrSource.substring(1));
+				ColladaSource timelineSource = in_animation.mSourceTable.get(sampler.mInputTable.get("INPUT").mstrSource.substring(1));
+				ColladaSource transformSource = in_animation.mSourceTable.get(sampler.mInputTable.get("OUTPUT").mstrSource.substring(1));
+				ColladaSource interpolationSource = in_animation.mSourceTable.get(sampler.mInputTable.get("INTERPOLATION").mstrSource.substring(1));
 
 				//get the skeleton node name
 				ColladaNode node = GetNodeWithID(new LinkedList<ColladaNode>(

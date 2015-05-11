@@ -35,6 +35,9 @@ import org.xml.sax.SAXException;
 
 import com.chilliworks.chillisource.colladaparserutils.colladadata.*;
 import com.chilliworks.chillisource.coreutils.Logging;
+import com.chilliworks.chillisource.coreutils.Matrix4;
+import com.chilliworks.chillisource.coreutils.Quaternion;
+import com.chilliworks.chillisource.coreutils.Vector3;
 
 public class LibraryVisualScenesParser 
 {
@@ -43,7 +46,6 @@ public class LibraryVisualScenesParser
 	//--------------------------------------------------------------
 	private Collada mCollada;
 	private ColladaVisualScene mCurrentVisualScene;
-	private ColladaMatrix mCurrentMatrix;
 	private ColladaInstanceController mCurrentInstanceController;
 	private ColladaSkeleton mCurrentSkeleton;
 	private ColladaBindMaterial mCurrentBindMaterial;
@@ -77,6 +79,12 @@ public class LibraryVisualScenesParser
 			return PushInstanceLight(inAttributes);
 		else if (instrQName.equalsIgnoreCase("matrix"))
 			return PushMatrix(inAttributes);
+		else if (instrQName.equalsIgnoreCase("translate"))
+			return pushTranslate(inAttributes);
+		else if (instrQName.equalsIgnoreCase("rotate"))
+			return pushRotate(inAttributes);
+		else if (instrQName.equalsIgnoreCase("scale"))
+			return pushScale(inAttributes);
 		else if (instrQName.equalsIgnoreCase("instance_controller"))
 			return PushInstanceController(inAttributes);
 		else if (instrQName.equalsIgnoreCase("skeleton"))
@@ -119,6 +127,12 @@ public class LibraryVisualScenesParser
 			PopInstanceLight(inData);
 		else if (instrQName.equalsIgnoreCase("matrix"))
 			PopMatrix(inData);
+		else if (instrQName.equalsIgnoreCase("translate"))
+			popTranslate(inData);
+		else if (instrQName.equalsIgnoreCase("rotate"))
+			popRotate(inData);
+		else if (instrQName.equalsIgnoreCase("scale"))
+			popScale(inData);
 		else if (instrQName.equalsIgnoreCase("instance_controller"))
 			PopInstanceController(inData);
 		else if (instrQName.equalsIgnoreCase("skeleton"))
@@ -253,13 +267,10 @@ public class LibraryVisualScenesParser
 	//--------------------------------------------------------------
 	private boolean PushMatrix(Attributes inAttributes)
 	{
-		mCurrentMatrix= new ColladaMatrix();
-		mCurrentMatrix.mstrSId = ColladaUtils.GetStringAttributeOrEmpty(inAttributes, "sid");
-		
-		if (mNodeStack.size() > 0)
-			mNodeStack.peek().mMatrix = mCurrentMatrix;
-		else
+		if (mNodeStack.size() < 1)
+		{
 			Logging.logFatal("mNodeStack is empty!");
+		}
 		
 		return true;
 	}
@@ -272,16 +283,153 @@ public class LibraryVisualScenesParser
 	{
 		String[] astrSplitBuffer = ColladaUtils.SplitOnWhitespace(inData);
 		
-		mCurrentMatrix.maafValues = new float[4][4];
+		float[][] values = new float[4][4];
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 4; j++)
 			{
-				mCurrentMatrix.maafValues[i][j] = Float.parseFloat(astrSplitBuffer[i * 4 + j]);
+				values[i][j] = Float.parseFloat(astrSplitBuffer[i * 4 + j]);
 			}
 		}
 		
-		mCurrentMatrix = null;
+		Matrix4 matrix = new Matrix4(values[0][0], values[1][0], values[2][0], values[3][0],
+			values[0][1], values[1][1], values[2][1], values[3][1],
+			values[0][2], values[1][2], values[2][2], values[3][2],
+			values[0][3], values[1][3], values[2][3], values[3][3]);
+		
+		mNodeStack.peek().m_transform = Matrix4.multiply(matrix, mNodeStack.peek().m_transform);
+	}
+	/**
+	 * Pushes a new translate element. This assumes the element is part of the Collada Node that is top of the
+	 * Collada Node stack, applying the translation to its transform.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_attributes - The attributes of the element.
+	 */
+	private boolean pushTranslate(Attributes in_attributes)
+	{
+		if (mNodeStack.size() < 1)
+		{
+			Logging.logFatal("The collada node stack is empty - no node to apply the translation to.");
+		}
+		
+		return true;
+	}
+	/**
+	 * Pops a translate element. This assumes the element is part of the Collada Node that is top of the
+	 * Collada Node stack, applying the translation to its transform.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_data - The text between the element tags.
+	 */
+	private void popTranslate(String in_data)
+	{
+		final int k_numComponents = 3;
+		
+		String[] split = ColladaUtils.SplitOnWhitespace(in_data);
+		if (split.length != k_numComponents)
+		{
+			Logging.logFatal("Could not read <translate> node.");
+		}
+		
+		float[] values = new float[k_numComponents];
+		for (int i = 0; i < k_numComponents; i++)
+		{
+			values[i] = Float.parseFloat(split[i]);
+		}
+		
+		Vector3 translation = new Vector3(values[0], values[1], values[2]);
+		mNodeStack.peek().m_transform = Matrix4.multiply(Matrix4.createTranslation(translation), mNodeStack.peek().m_transform);
+	}
+	/**
+	 * Pushes a new rotate element. This assumes the element is part of the Collada Node that is top of the
+	 * Collada Node stack, applying the rotation to its transform.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_attributes - The attributes of the element.
+	 */
+	private boolean pushRotate(Attributes in_attributes)
+	{
+		if (mNodeStack.size() < 1)
+		{
+			Logging.logFatal("The collada node stack is empty - no node to apply the translation to.");
+		}
+		
+		return true;
+	}
+	/**
+	 * Pops a rotate element. This assumes the element is part of the Collada Node that is top of the
+	 * Collada Node stack, applying the rotation to its transform.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_data - The text between the element tags.
+	 */
+	private void popRotate(String in_data)
+	{
+		final int k_numComponents = 4;
+		
+		String[] split = ColladaUtils.SplitOnWhitespace(in_data);
+		if (split.length != k_numComponents)
+		{
+			Logging.logFatal("Could not read <rotate> node.");
+		}
+		
+		float[] values = new float[k_numComponents];
+		for (int i = 0; i < k_numComponents; i++)
+		{
+			values[i] = Float.parseFloat(split[i]);
+		}
+		
+		Quaternion rotation = new Quaternion(new Vector3(values[0], values[1], values[2]), values[3]);
+		mNodeStack.peek().m_transform = Matrix4.multiply(Matrix4.createRotation(rotation), mNodeStack.peek().m_transform);
+	}
+	/**
+	 * Pushes a new scale element. This assumes the element is part of the Collada Node that is top of the
+	 * Collada Node stack, applying the scale to its transform.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_attributes - The attributes of the element.
+	 */
+	private boolean pushScale(Attributes in_attributes)
+	{
+		if (mNodeStack.size() < 1)
+		{
+			Logging.logFatal("The collada node stack is empty - no node to apply the translation to.");
+		}
+		
+		return true;
+	}
+	/**
+	 * Pops a scale element. This assumes the element is part of the Collada Node that is top of the
+	 * Collada Node stack, applying the scale to its transform.
+	 * 
+	 * @author Ian Copland
+	 * 
+	 * @param in_data - The text between the element tags.
+	 */
+	private void popScale(String in_data)
+	{
+		final int k_numComponents = 3;
+		
+		String[] split = ColladaUtils.SplitOnWhitespace(in_data);
+		if (split.length != k_numComponents)
+		{
+			Logging.logFatal("Could not read <scale> node.");
+		}
+		
+		float[] values = new float[k_numComponents];
+		for (int i = 0; i < k_numComponents; i++)
+		{
+			values[i] = Float.parseFloat(split[i]);
+		}
+		
+		Vector3 scale = new Vector3(values[0], values[1], values[2]);
+		mNodeStack.peek().m_transform = Matrix4.multiply(Matrix4.createScale(scale), mNodeStack.peek().m_transform);
 	}
 	//--------------------------------------------------------------
 	/// Push Instance Controller
@@ -325,7 +473,7 @@ public class LibraryVisualScenesParser
 		mCurrentSkeleton = new ColladaSkeleton();
 		
 		if (mCurrentInstanceController != null)
-			mCurrentInstanceController.mSkeleton = mCurrentSkeleton;
+			mCurrentInstanceController.m_skeletons.add(mCurrentSkeleton);
 		else
 			Logging.logFatal("mCurrentInstanceController is null!");
 		

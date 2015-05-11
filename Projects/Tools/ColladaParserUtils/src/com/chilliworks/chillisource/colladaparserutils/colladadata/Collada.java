@@ -28,7 +28,9 @@
 
 package com.chilliworks.chillisource.colladaparserutils.colladadata;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 public class Collada 
 {
@@ -39,7 +41,7 @@ public class Collada
 	public Hashtable<String, ColladaEffect> mLibraryEffects;
 	public Hashtable<String, ColladaVisualScene> mLibraryVisualScenes;
 	public Hashtable<String, ColladaController> mLibraryControllers;
-	public ColladaAnimation mAnimation;
+	public List<ColladaAnimation> m_animations = new ArrayList<>();
 	public ColladaScene mScene;
 	
 	public Collada()
@@ -51,7 +53,6 @@ public class Collada
 		mLibraryEffects = new Hashtable<String, ColladaEffect>();
 		mLibraryControllers = new Hashtable<String, ColladaController>();
 		mLibraryVisualScenes = new Hashtable<String, ColladaVisualScene>();
-		mAnimation = new ColladaAnimation();
 		mScene = new ColladaScene();
 	}
 }
