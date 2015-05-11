@@ -1196,6 +1196,8 @@ namespace ChilliSource
             bool m_isInputEnabled = true;
             bool m_isInputConsumeEnabled = false;
             
+            std::set<Input::Pointer::Id> m_containedPointers;
+            
             mutable bool m_isParentTransformCacheValid = false;
             mutable bool m_isLocalTransformCacheValid = false;
             mutable bool m_isLocalSizeCacheValid = false;

@@ -97,7 +97,7 @@ namespace ChilliSource
             /// Update method. This is called once for every
             /// update frame that the owning state is active.
             /// Systems update is called in the order the
-            /// systems where created.
+            /// systems were created.
             ///
             /// @author Ian Copland
             ///
@@ -108,7 +108,7 @@ namespace ChilliSource
             /// An update method called at a fixed interval
             /// while the owning state is active. The time between
             /// fixed updates is defined in Application. System
-            /// update is called in the order the systems where
+            /// update is called in the order the systems were
             /// created.
             ///
             /// @author Ian Copland

@@ -92,7 +92,7 @@ namespace ChilliSource
             //------------------------------------------------
             /// Update method. This is called once for every
             /// update frame. Systems update is called in the
-            /// order the systems where created.
+            /// order the systems were created.
             ///
             /// @author Ian Copland
             ///
@@ -103,7 +103,7 @@ namespace ChilliSource
             /// An update method called at a fixed interval.
             /// The time between fixed updates is defined in
             /// Application. System update is called in the
-            /// order the systems where created.
+            /// order the systems were created.
             ///
             /// @author Ian Copland
             ///
