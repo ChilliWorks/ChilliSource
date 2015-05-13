@@ -1420,7 +1420,10 @@ namespace ChilliSource
                 child->OnParentTransformChanged();
             }
             
-            UpdateContainedPointers();
+			if (m_canvas != nullptr)
+			{
+				UpdateContainedPointers();
+			}
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
