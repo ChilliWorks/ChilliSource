@@ -51,8 +51,8 @@ namespace ChilliSource
     namespace Input
     {
         CS_DEFINE_NAMEDTYPE(PointerSystem);
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         PointerSystemUPtr PointerSystem::Create()
         {
 #if defined CS_TARGETPLATFORM_ANDROID
@@ -65,74 +65,86 @@ namespace ChilliSource
             return nullptr;
 #endif
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         PointerSystem::PointerSystem()
             : m_nextUniqueId(0)
         {
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        Core::IConnectableEvent<PointerSystem::PointerAddedDelegate>& PointerSystem::GetPointerAddedEvent()
+        {
+            return m_pointerAddedEvent;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         Core::IConnectableEvent<PointerSystem::PointerDownDelegate>& PointerSystem::GetPointerDownEvent()
         {
             return m_pointerDownEvent;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         Core::IConnectableEvent<PointerSystem::PointerMovedDelegate>& PointerSystem::GetPointerMovedEvent()
         {
             return m_pointerMovedEvent;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         Core::IConnectableEvent<PointerSystem::PointerUpDelegate>& PointerSystem::GetPointerUpEvent()
         {
             return m_pointerUpEvent;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         Core::IConnectableEvent<PointerSystem::PointerScrollDelegate>& PointerSystem::GetPointerScrollEvent()
         {
             return m_pointerScrolledEvent;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         Core::IConnectableEvent<PointerSystem::PointerDownDelegate>& PointerSystem::GetPointerDownEventFiltered()
         {
             return m_pointerDownEventFiltered;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         Core::IConnectableEvent<PointerSystem::PointerUpDelegate>& PointerSystem::GetPointerUpEventFiltered()
         {
             return m_pointerUpEventFiltered;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         Core::IConnectableEvent<PointerSystem::PointerScrollDelegate>& PointerSystem::GetPointerScrollEventFiltered()
         {
             return m_pointerScrolledEventFiltered;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         Core::IConnectableEvent<PointerSystem::PointerDownDelegateInternal>& PointerSystem::GetPointerDownEventInternal()
         {
             return m_pointerDownEventInternal;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         Core::IConnectableEvent<PointerSystem::PointerScrollDelegateInternal>& PointerSystem::GetPointerScrollEventInternal()
         {
             return m_pointerScrolledEventInternal;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        Core::IConnectableEvent<PointerSystem::PointerRemovedDelegate>& PointerSystem::GetPointerRemovedEvent()
+        {
+            return m_pointerRemovedEvent;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         std::vector<Pointer> PointerSystem::GetPointers() const
         {
             return m_pointers;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         bool PointerSystem::TryGetPointerWithId(Pointer::Id in_uniqueId, Pointer& out_pointer) const
         {
             for (const Pointer& pointer : m_pointers)
@@ -146,8 +158,8 @@ namespace ChilliSource
             
             return false;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         bool PointerSystem::TryGetPointerWithIndex(u32 in_index, Pointer& out_pointer) const
         {
             for (const Pointer& pointer : m_pointers)
@@ -161,8 +173,8 @@ namespace ChilliSource
             
             return false;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         void PointerSystem::ProcessQueuedInput()
         {
             std::unique_lock<std::mutex> lock(m_mutex);
@@ -180,7 +192,7 @@ namespace ChilliSource
                 switch (event.m_type)
                 {
                     case PointerEventType::k_add:
-                        CreatePointer(event.m_pointerUniqueId, event.m_position);
+                        CreatePointer(event.m_pointerUniqueId, event.m_timestamp, event.m_position);
                         break;
                     case PointerEventType::k_down:
                         PointerDown(event.m_pointerUniqueId, event.m_timestamp, event.m_InputType);
@@ -195,7 +207,7 @@ namespace ChilliSource
                         PointerScrolled(event.m_pointerUniqueId, event.m_timestamp, event.m_position);
                         break;
                     case PointerEventType::k_remove:
-                        RemovePointer(event.m_pointerUniqueId);
+                        RemovePointer(event.m_pointerUniqueId, event.m_timestamp);
                         break;
                     default:
                         CS_LOG_FATAL("Something has gone very wrong while processing buffered input");
@@ -205,8 +217,8 @@ namespace ChilliSource
                 eventQueue.pop();
             }
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         Pointer::Id PointerSystem::AddPointerCreateEvent(const Core::Vector2& in_position)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
@@ -222,8 +234,8 @@ namespace ChilliSource
             
             return event.m_pointerUniqueId;
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         void PointerSystem::AddPointerDownEvent(Pointer::Id in_pointerUniqueId, Pointer::InputType in_inputType)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
@@ -237,8 +249,8 @@ namespace ChilliSource
             
             m_eventQueue.push(event);
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         void PointerSystem::AddPointerMovedEvent(Pointer::Id in_pointerUniqueId, const Core::Vector2& in_position)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
@@ -252,8 +264,8 @@ namespace ChilliSource
             
             m_eventQueue.push(event);
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         void PointerSystem::AddPointerUpEvent(Pointer::Id in_pointerUniqueId, Pointer::InputType in_inputType)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
@@ -267,8 +279,8 @@ namespace ChilliSource
             
             m_eventQueue.push(event);
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         void PointerSystem::AddPointerScrollEvent(Pointer::Id in_pointerUniqueId, const Core::Vector2& in_delta)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
@@ -282,8 +294,8 @@ namespace ChilliSource
             
             m_eventQueue.push(event);
         }
-        //----------------------------------------------------
-        //-----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------
         void PointerSystem::AddPointerRemoveEvent(Pointer::Id in_pointerUniqueId)
         {
             std::unique_lock<std::mutex> lock(m_mutex);
@@ -297,8 +309,8 @@ namespace ChilliSource
             
             m_eventQueue.push(event);
         }
-        //----------------------------------------------------
-        //----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         void PointerSystem::RemoveAllPointers()
         {
             std::unique_lock<std::mutex> lock(m_mutex);
@@ -312,9 +324,9 @@ namespace ChilliSource
             
             m_pointers.clear();
         }
-        //----------------------------------------------------
-        //-----------------------------------------------------
-        void PointerSystem::CreatePointer(Pointer::Id in_uniqueId, const Core::Vector2& in_initialPosition)
+        //------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------
+        void PointerSystem::CreatePointer(Pointer::Id in_uniqueId, f64 in_timestamp, const Core::Vector2& in_initialPosition)
         {
             //Find the first free index
             u32 index = 0;
@@ -346,9 +358,11 @@ namespace ChilliSource
             //create the filtered input set.
             CS_ASSERT(m_filteredPointerInput.find(pointer.m_uniqueId) == m_filteredPointerInput.end(), "Filtered input already exists!");
             m_filteredPointerInput.emplace(pointer.m_uniqueId, std::set<Pointer::InputType>());
+            
+            m_pointerAddedEvent.NotifyConnections(pointer, in_timestamp);
         }
-        //----------------------------------------------------
-        //-----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------
         void PointerSystem::PointerDown(Pointer::Id in_uniqueId, f64 in_timestamp, Pointer::InputType in_inputType)
         {
             auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
@@ -388,8 +402,8 @@ namespace ChilliSource
                 CS_LOG_FATAL("PointerSystem: Received pointer down event for unknown pointer Id.");
             }
         }
-        //----------------------------------------------------
-        //-----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------
         void PointerSystem::PointerMoved(Pointer::Id in_uniqueId, f64 in_timestamp, const Core::Vector2& in_newPosition)
         {
             auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
@@ -411,8 +425,8 @@ namespace ChilliSource
                 CS_LOG_FATAL("PointerSystem: Received pointer moved event for unknown pointer Id.");
             }
         }
-        //----------------------------------------------------
-        //-----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------
         void PointerSystem::PointerUp(Pointer::Id in_uniqueId, f64 in_timestamp, Pointer::InputType in_inputType)
         {
             auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
@@ -447,8 +461,8 @@ namespace ChilliSource
                 CS_LOG_FATAL("PointerSystem: Received pointer down event for unknown pointer Id.");
             }
         }
-        //----------------------------------------------------
-        //-----------------------------------------------------
+        //------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------
         void PointerSystem::PointerScrolled(Pointer::Id in_uniqueId, f64 in_timestamp, const Core::Vector2& in_delta)
         {
             auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
@@ -478,9 +492,9 @@ namespace ChilliSource
                 CS_LOG_FATAL("PointerSystem: Received pointer scroll event for unknown pointer Id.");
             }
         }
-        //----------------------------------------------------
-        //-----------------------------------------------------
-        void PointerSystem::RemovePointer(Pointer::Id in_uniqueId)
+        //------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------
+        void PointerSystem::RemovePointer(Pointer::Id in_uniqueId, f64 in_timestamp)
         {
             //remove the filtered input set.
             auto filteredInputIt = m_filteredPointerInput.find(in_uniqueId);
@@ -488,12 +502,15 @@ namespace ChilliSource
             
             m_filteredPointerInput.erase(filteredInputIt);
             
-            //remove the pointer.
+            //find the pointer.
             auto pointerIt = std::find_if(m_pointers.begin(), m_pointers.end(), [in_uniqueId](const Pointer& in_pointer)
             {
                 return (in_uniqueId == in_pointer.GetId());
             });
             
+            auto pointer = *pointerIt;
+            
+            //remove the pointer
             if (pointerIt != m_pointers.end())
             {
                 m_pointers.erase(pointerIt);
@@ -502,6 +519,8 @@ namespace ChilliSource
             {
                 CS_LOG_FATAL("PointerSystem: Received remove pointer event for unknown pointer Id.");
             }
+            
+            m_pointerRemovedEvent.NotifyConnections(pointer, in_timestamp);
         }
     }
 }

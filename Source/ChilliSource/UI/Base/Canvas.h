@@ -26,7 +26,6 @@
 //  THE SOFTWARE.
 //
 
-
 #ifndef _CHILLISOURCE_UI_BASE_CANVAS_H_
 #define _CHILLISOURCE_UI_BASE_CANVAS_H_
 
@@ -218,44 +217,64 @@ namespace ChilliSource
             /// @param The new resolution
 			//-----------------------------------------------------------
 			void OnScreenResolutionChanged(const Core::Vector2& in_resolution);
-            //-----------------------------------------------------------
+            //------------------------------------------------------------------------------
+            /// Called when a new pointer is added to the canvas.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_pointer - The pointer.
+            /// @param in_timestamp - The timestamp.
+            //------------------------------------------------------------------------------
+            void OnPointerAdded(const Input::Pointer& in_pointer, f64 in_timestamp);
+            //------------------------------------------------------------------------------
             /// Called when the canvas receives cursor/touch input
             ///
             /// @author S Downie
             ///
-            /// @param The pointer
-            /// @param The timestamp.
-            /// @param The press type.
-            /// @param Filter object to check if the event has been filtered or to filter it
-            //-----------------------------------------------------------
+            /// @param in_pointer - The pointer
+            /// @param in_timestamp - The timestamp.
+            /// @param in_inputType - The press type.
+            /// @param in_filter - Filter object to check if the event has been filtered or to filter it
+            //------------------------------------------------------------------------------
             void OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter);
-            //-----------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// Called when the canvas receives cursor/touch move input
             ///
             /// @author S Downie
             ///
-            /// @param The pointer
-            /// @param The timestamp.
-            //-----------------------------------------------------------
+            /// @param in_pointer - The pointer
+            /// @param in_timestamp - The timestamp.
+            //------------------------------------------------------------------------------
             void OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp);
-            //-----------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// Called when the canvas receiving cursor/touch release input
             ///
             /// @author S Downie
             ///
-            /// @param The pointer
-            /// @param The timestamp.
-            /// @param The press type.
-            //-----------------------------------------------------------
+            /// @param in_pointer - The pointer
+            /// @param in_timestamp - The timestamp.
+            /// @param in_inputType - The press type.
+            //------------------------------------------------------------------------------
             void OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType);
+            //------------------------------------------------------------------------------
+            /// Called when an existing pointer is removed to the canvas.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_pointer - The pointer.
+            /// @param in_timestamp - The timestamp.
+            //------------------------------------------------------------------------------
+            void OnPointerRemoved(const Input::Pointer& in_pointer, f64 in_timestamp);
             
         private:
             
             WidgetUPtr m_canvas;
             Core::EventConnectionUPtr m_screenResizedConnection;
+            Core::EventConnectionUPtr m_pointerAddedConnection;
             Core::EventConnectionUPtr m_pointerDownConnection;
             Core::EventConnectionUPtr m_pointerMovedConnection;
             Core::EventConnectionUPtr m_pointerUpConnection;
+            Core::EventConnectionUPtr m_pointerRemovedConnection;
             
             Core::Screen* m_screen;
 		};
