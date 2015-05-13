@@ -681,7 +681,7 @@ namespace ChilliSource
             {
                 if (wasEnabled == false && m_isInputEnabled == true)
                 {
-                    UpdateContainedPointers();
+                    UpdateAllContainedPointers();
                 }
                 else if (wasEnabled == true && m_isInputEnabled == false)
                 {
@@ -1018,7 +1018,7 @@ namespace ChilliSource
                 
                 if (m_isInputEnabled == true)
                 {
-                    UpdateContainedPointers();
+                    UpdateAllContainedPointers();
                 }
             }
             
@@ -1371,7 +1371,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void Widget::UpdateContainedPointers()
+        void Widget::UpdateAllContainedPointers()
         {
             auto pointers = m_pointerSystem->GetPointers();
             for (const auto& pointer : pointers)
@@ -1420,9 +1420,9 @@ namespace ChilliSource
                 child->OnParentTransformChanged();
             }
             
-			if (m_canvas != nullptr)
+			if (m_canvas != nullptr && m_isInputEnabled == true)
 			{
-				UpdateContainedPointers();
+				UpdateAllContainedPointers();
 			}
         }
         //----------------------------------------------------------------------------------------

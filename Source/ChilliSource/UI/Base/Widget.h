@@ -1075,6 +1075,8 @@ namespace ChilliSource
             /// input is enabled.
             ///
             /// @author Ian Copland
+            ///
+            /// @param in_pointer - The pointer to check.
             //------------------------------------------------------------------------------
             void RemoveContainedPointer(const Input::Pointer& in_pointer);
             //------------------------------------------------------------------------------
@@ -1087,7 +1089,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------------------
-            void UpdateContainedPointers();
+            void UpdateAllContainedPointers();
             //------------------------------------------------------------------------------
             /// Removes all pointers from the contained pointers set. Pointer exited events
             /// will be fired for those that are removed.
@@ -1098,13 +1100,17 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// Checks the contained pointer set to confirm if this pointer is contained
             /// within the widget. Note that the set is not updated by this method and
-            /// UpdateContainedPointer() or UpdateContainedPointers() will need to be
+            /// UpdateContainedPointer() or UpdateAllContainedPointers() will need to be
             /// called prior to this to ensure it is up to date.
             ///
             /// This doesn't handle whether or not input is enabled - only call this if
             /// input is enabled.
             ///
             /// @author Ian Copland
+            ///
+            /// @param in_pointer - The pointer which should be checked.
+            ///
+            /// @return Whether or not the pointer is within the bounds.
             //------------------------------------------------------------------------------
             bool IsContainedPointer(const Input::Pointer& in_pointer);
             //----------------------------------------------------------------------------------------
