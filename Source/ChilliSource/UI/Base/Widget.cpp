@@ -33,6 +33,7 @@
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 #include <ChilliSource/Core/Container/Property/PropertyTypes.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Input/Pointer/PointerSystem.h>
 #include <ChilliSource/Rendering/Base/AlignmentAnchors.h>
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
@@ -229,6 +230,7 @@ namespace ChilliSource
                        const std::vector<PropertyLink>& in_childPropertyLinks)
         {
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
+            m_pointerSystem = Core::Application::Get()->GetSystem<Input::PointerSystem>();
             
             //ensure the size policy delegate is correct.
             SetSizePolicy(m_sizePolicy);
@@ -671,7 +673,21 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::SetInputEnabled(bool in_input)
         {
+            bool wasEnabled = m_isInputEnabled;
+            
             m_isInputEnabled = in_input;
+            
+            if (m_canvas != nullptr)
+            {
+                if (wasEnabled == false && m_isInputEnabled == true)
+                {
+                    UpdateAllContainedPointers();
+                }
+                else if (wasEnabled == true && m_isInputEnabled == false)
+                {
+                    RemoveAllContainedPointers();
+                }
+            }
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -972,6 +988,11 @@ namespace ChilliSource
             
             if (m_canvas == nullptr)
             {
+                if (m_isInputEnabled == true)
+                {
+                    RemoveAllContainedPointers();
+                }
+                
                 for (const auto& component : m_components)
                 {
                     component->OnRemovedFromCanvas();
@@ -993,6 +1014,11 @@ namespace ChilliSource
                 for (const auto& component : m_components)
                 {
                     component->OnAddedToCanvas();
+                }
+                
+                if (m_isInputEnabled == true)
+                {
+                    UpdateAllContainedPointers();
                 }
             }
             
@@ -1312,6 +1338,63 @@ namespace ChilliSource
             
             CS_LOG_FATAL("Invalid property name for Widget: " + in_propertyName);
         }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void Widget::UpdateContainedPointer(const Input::Pointer& in_pointer)
+        {
+            auto pointerIdIt = m_containedPointers.find(in_pointer.GetId());
+            
+            bool wasContained = (pointerIdIt != m_containedPointers.end());
+            bool isContained = Contains(in_pointer.GetPosition());
+            
+            if (wasContained == false && isContained == true)
+            {
+                m_containedPointers.insert(in_pointer.GetId());
+                m_moveEnteredEvent.NotifyConnections(this, in_pointer);
+            }
+            else if (wasContained == true && isContained == false)
+            {
+                m_containedPointers.erase(pointerIdIt);
+                m_moveExitedEvent.NotifyConnections(this, in_pointer);
+            }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void Widget::RemoveContainedPointer(const Input::Pointer& in_pointer)
+        {
+            auto pointerIdIt = m_containedPointers.find(in_pointer.GetId());
+            if (pointerIdIt != m_containedPointers.end())
+            {
+                m_containedPointers.erase(pointerIdIt);
+                m_moveExitedEvent.NotifyConnections(this, in_pointer);
+            }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void Widget::UpdateAllContainedPointers()
+        {
+            auto pointers = m_pointerSystem->GetPointers();
+            for (const auto& pointer : pointers)
+            {
+                UpdateContainedPointer(pointer);
+            }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void Widget::RemoveAllContainedPointers()
+        {
+            auto pointers = m_pointerSystem->GetPointers();
+            for (const auto& pointer : pointers)
+            {
+                RemoveContainedPointer(pointer);
+            }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        bool Widget::IsContainedPointer(const Input::Pointer& in_pointer)
+        {
+            return (m_containedPointers.find(in_pointer.GetId()) != m_containedPointers.end());
+        }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         void Widget::InvalidateTransformCache()
@@ -1336,6 +1419,11 @@ namespace ChilliSource
             {
                 child->OnParentTransformChanged();
             }
+            
+			if (m_canvas != nullptr && m_isInputEnabled == true)
+			{
+				UpdateAllContainedPointers();
+			}
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1516,12 +1604,34 @@ namespace ChilliSource
                 child->OnParentTransformChanged();
             }
         }
-        //-----------------------------------------------------------
-        /// UI can filter input events to prevent them from being
-        /// forwarded to the external app. Input events are
-        /// notified from the front most child widget to the back most
-        /// and can be consumed.
-        //-----------------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void Widget::OnPointerAdded(const Input::Pointer& in_pointer, f64 in_timestamp)
+        {
+            if(m_isInputEnabled == false)
+                return;
+            
+            m_children.lock();
+            for(auto it = m_children.rbegin(); it != m_children.rend(); ++it)
+            {
+                (*it)->OnPointerAdded(in_pointer, in_timestamp);
+            }
+            m_children.unlock();
+            
+            m_internalChildren.lock();
+            for(auto it = m_internalChildren.rbegin(); it != m_internalChildren.rend(); ++it)
+            {
+                (*it)->OnPointerAdded(in_pointer, in_timestamp);
+            }
+            m_internalChildren.unlock();
+            
+            UpdateContainedPointer(in_pointer);
+        }
+        //------------------------------------------------------------------------------
+        /// UI can filter input events to prevent them from being forwarded to the
+        /// external app. Input events are notified from the front most child widget to
+        /// the back most and can be consumed.
+        //------------------------------------------------------------------------------
         void Widget::OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter)
         {
             if(m_isInputEnabled == false)
@@ -1553,7 +1663,8 @@ namespace ChilliSource
             }
             m_internalChildren.unlock();
             
-            if(Contains(in_pointer.GetPosition()) == true)
+            UpdateContainedPointer(in_pointer);
+            if(IsContainedPointer(in_pointer) == true)
             {
                 //Track the input that is down on the widget as
                 //this will effect how we trigger the release events
@@ -1568,9 +1679,6 @@ namespace ChilliSource
 					m_pressedInput.emplace(in_pointer.GetId(), inputTypeSet);
 				}
                 
-                CS_ASSERT(m_containedPointers.find(in_pointer.GetId()) == m_containedPointers.end(), "Pointer already exists in widget.");
-                m_containedPointers.insert(in_pointer.GetId());
-                
                 m_pressedInsideEvent.NotifyConnections(this, in_pointer, in_inputType);
                 
                 if(m_isInputConsumeEnabled == true)
@@ -1579,10 +1687,10 @@ namespace ChilliSource
                 }
             }
         }
-        //-----------------------------------------------------------
-        /// UI can filter input events to prevent them from being
-        /// forwarded to the external app.
-        //-----------------------------------------------------------
+        //------------------------------------------------------------------------------
+        /// UI can filter input events to prevent them from being forwarded to the
+        /// external app.
+        //------------------------------------------------------------------------------
         void Widget::OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp)
         {
             if(m_isInputEnabled == false)
@@ -1602,22 +1710,11 @@ namespace ChilliSource
             }
             m_internalChildren.unlock();
             
-            bool containsPrevious = (m_containedPointers.find(in_pointer.GetId()) != m_containedPointers.end());
-            bool containsCurrent = Contains(in_pointer.GetPosition());
+            bool containsPrevious = IsContainedPointer(in_pointer);
+            UpdateContainedPointer(in_pointer);
+            bool containsCurrent = IsContainedPointer(in_pointer);
             
-            if(containsPrevious == false && containsCurrent == true)
-            {
-                m_containedPointers.insert(in_pointer.GetId());
-                
-                m_moveEnteredEvent.NotifyConnections(this, in_pointer);
-            }
-            else if(containsPrevious == true && containsCurrent == false)
-            {
-                m_containedPointers.erase(m_containedPointers.find(in_pointer.GetId()));
-                
-                m_moveExitedEvent.NotifyConnections(this, in_pointer);
-            }
-            else if(containsPrevious == false && containsCurrent == false)
+            if (containsPrevious == false && containsCurrent == false)
             {
                 auto itPressedInput = m_pressedInput.find(in_pointer.GetId());
 				if (itPressedInput != m_pressedInput.end())
@@ -1625,7 +1722,7 @@ namespace ChilliSource
                     m_draggedOutsideEvent.NotifyConnections(this, in_pointer);
                 }
             }
-            else // Equivalent to if(containsPrevious == true && containsCurrent == true)
+            else if (containsPrevious == true && containsCurrent == true)
             {
 				auto itPressedInput = m_pressedInput.find(in_pointer.GetId());
 				if (itPressedInput != m_pressedInput.end())
@@ -1634,10 +1731,10 @@ namespace ChilliSource
                 }
             }
         }
-        //-----------------------------------------------------------
-        /// UI can filter input events to prevent them from being
-        /// forwarded to the external app.
-        //-----------------------------------------------------------
+        //------------------------------------------------------------------------------
+        /// UI can filter input events to prevent them from being forwarded to the
+        /// external app.
+        //------------------------------------------------------------------------------
         void Widget::OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType)
         {
             if(m_isInputEnabled == false)
@@ -1657,6 +1754,7 @@ namespace ChilliSource
             }
             m_internalChildren.unlock();
             
+            UpdateContainedPointer(in_pointer);
             auto itPressedInput = m_pressedInput.find(in_pointer.GetId());
 			if (itPressedInput != m_pressedInput.end())
             {
@@ -1669,14 +1767,8 @@ namespace ChilliSource
 						m_pressedInput.erase(itPressedInput);
 					}
 
-					if(Contains(in_pointer.GetPosition()) == true)
+					if(IsContainedPointer(in_pointer) == true)
 					{
-                        //This assumes that the position of the pointer can't have moved since the last pointer moved event. For now
-                        //this is indeed the case, but if it changes in the future, the assertion will catch it.
-                        auto pointerIt = m_containedPointers.find(in_pointer.GetId());
-                        CS_ASSERT(pointerIt != m_containedPointers.end(), "Pointer doesn't exists in widget.");
-                        m_containedPointers.erase(pointerIt);
-                        
 						m_releasedInsideEvent.NotifyConnections(this, in_pointer, in_inputType);
 					}
 					else
@@ -1685,6 +1777,29 @@ namespace ChilliSource
 					}
 				}
             }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void Widget::OnPointerRemoved(const Input::Pointer& in_pointer, f64 in_timestamp)
+        {
+            if(m_isInputEnabled == false)
+                return;
+            
+            m_children.lock();
+            for(auto it = m_children.rbegin(); it != m_children.rend(); ++it)
+            {
+                (*it)->OnPointerRemoved(in_pointer, in_timestamp);
+            }
+            m_children.unlock();
+            
+            m_internalChildren.lock();
+            for(auto it = m_internalChildren.rbegin(); it != m_internalChildren.rend(); ++it)
+            {
+                (*it)->OnPointerRemoved(in_pointer, in_timestamp);
+            }
+            m_internalChildren.unlock();
+            
+            RemoveContainedPointer(in_pointer);
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

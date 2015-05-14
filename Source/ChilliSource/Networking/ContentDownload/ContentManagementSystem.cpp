@@ -511,11 +511,13 @@ namespace ChilliSource
             Core::XML::Node* pFileEl = Core::XMLUtils::GetFirstChildElement(in_packageEl, "File");
             while(pFileEl)
             {
-                std::string strFileName = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Name", "");
-                std::string strChecksum = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Checksum", "");
-                std::string strPackageID = Core::XMLUtils::GetAttributeValue<std::string>(in_packageEl, "ID", "");
+                const std::string& strFileName = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Name", "");
+                const std::string& strLocation = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Location", "");
+                const std::string& strChecksum = Core::XMLUtils::GetAttributeValue<std::string>(pFileEl, "Checksum", "");
+                const std::string& strPackageID = Core::XMLUtils::GetAttributeValue<std::string>(in_packageEl, "ID", "");
                 
-                if(!DoesFileExist(strPackageID + "/" + strFileName, strChecksum, true))
+                std::string filePath = strLocation.empty() ? strPackageID + "/" + strFileName : strLocation;
+                if(!DoesFileExist(filePath, strChecksum, true))
                 {
                     //It doesn't exist in the bundle either!
                     std::string strPackageUrl = Core::XMLUtils::GetAttributeValue<std::string>(in_packageEl, "URL", "");
@@ -537,7 +539,7 @@ namespace ChilliSource
                 {
                     //It exists in the bundle let's remove the old version from DLC cache
                     //Remove old content
-                    Core::Application::Get()->GetFileSystem()->DeleteFile(Core::StorageLocation::k_DLC, strPackageID + "/" + strFileName);
+                    Core::Application::Get()->GetFileSystem()->DeleteFile(Core::StorageLocation::k_DLC, filePath);
                     
                     //On to the next file
                     pFileEl = Core::XMLUtils::GetNextSiblingElement(pFileEl, "File");
