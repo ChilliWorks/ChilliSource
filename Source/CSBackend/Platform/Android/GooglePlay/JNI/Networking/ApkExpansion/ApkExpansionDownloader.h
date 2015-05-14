@@ -34,18 +34,28 @@
 #define _CSBACKEND_PLATFORM_ANDROID_GOOGLEPLAY_JNI_NETWORKING_APKEXPANSION_APKEXPANSIONDOWNLOADER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaSystem.h>
 #include <CSBackend/Platform/Android/GooglePlay/JNI/ForwardDeclarations.h>
 
+#include <functional>
+
 namespace CSBackend
 {
 	namespace Android
 	{
 		//------------------------------------------------------------------------------
-		/// TODO
+		/// A system which manages downloading of Google Play APK Expansion files. This
+		/// will automatically start the download of expansion files if they are not
+		/// present. A manifest of the contents of the files will be generated when they
+		/// are first downloaded, this can be used by other systems to find files within
+		/// the expansion. "Patch" expansion files are not supported.
+		///
+		/// The initial state provided in application should not be pushed until the
+		/// expansion APK files and the manifest are present.
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
@@ -54,16 +64,66 @@ namespace CSBackend
 		public:
             CS_DECLARE_NAMEDTYPE(ApkExpansionDownloader);
             //------------------------------------------------------------------------------
-            /// @author S Downie
+            /// An delegate which will be called when expansion downloading completes.
             ///
-            /// @param Interface ID to compare
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            using DownloadedDelegate = std::function<void()>;
+            //------------------------------------------------------------------------------
+            /// Allows querying of whether or not this system implements the interface
+            /// described by the given interface Id. Typically this is not called directly
+            /// as the templated equivalent IsA<Interface>() is preferred.
             ///
-            /// @return Whether the class is of the given type
+            /// @author Ian Copland
+            ///
+            /// @param in_interfaceId - The interface Id.
+            ///
+            /// @return Whether or not the interface is implemented.
             //------------------------------------------------------------------------------
             bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return Whether or not the most up to date expansion files are currently
+            /// available.
+            //------------------------------------------------------------------------------
+            bool IsExpansionAvailable() const;
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The current progress of the download.
+            //------------------------------------------------------------------------------
+            f32 GetDownloadProgress() const;
+            //------------------------------------------------------------------------------
+            /// Pauses the download if currently downloading. If no download is currently
+            /// in progress the app is considered to be in irrecoverable state and will
+            /// terminate.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_paused - Whether or not the download should be paused.
+            //------------------------------------------------------------------------------
+            void SetDownloadPaused(bool in_paused);
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return An event when is called when the downloader completes.
+            //------------------------------------------------------------------------------
+            CSCore::IConnectableEvent<DownloadedDelegate>& GetDownloadedEvent();
 
 		private:
 		    friend class CSCore::Application;
+            //------------------------------------------------------------------------------
+            /// An enum describing the current state of the downloader.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            enum State
+            {
+                k_uninitialised,
+                k_downloading,
+                k_downloaded
+            }
             //------------------------------------------------------------------------------
             /// A factory method for creating a new instance of the system. Declared private
             /// to ensure this can only be created through Application::CreateSystem().
@@ -93,6 +153,8 @@ namespace CSBackend
             void OnDestroy() override;
 
             JavaSystemUPtr m_javaSystem;
+            State m_state = State::k_uninitialised;
+            CSCore::Event<DownloadedDelegate> m_downloadedEvent;
 		};
 	}
 }

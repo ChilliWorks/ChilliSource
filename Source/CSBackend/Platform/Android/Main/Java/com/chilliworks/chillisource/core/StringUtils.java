@@ -30,65 +30,164 @@ package com.chilliworks.chillisource.core;
 
 import java.nio.charset.Charset;
 
-//=================================================================
-/// String Utils
-///
-/// A series of convenience methods for working with strings. This
-/// includes functionality like conversions to and from byte arrays.
-//=================================================================
-public class StringUtils 
+/**
+ * A collection of convenience methods for working with Strings.
+ *
+ * @author Ian Copland
+ */
+public class StringUtils
 {
-	//-------------------------------------------------------
-	/// Constants
-	//-------------------------------------------------------
-	private static final Charset kUTF8Charset = Charset.forName("UTF-8");
-	//-------------------------------------------------------
-	/// String To UTF8 Byte Array
-	///
-	/// Converts a string in UTF-16 format to a UTF8 byte array. 
-	///
-	/// @param The string to convert.
-	/// @return The output byte array in UTF-8 format.
-	//-------------------------------------------------------
-	public static byte[] StringToUTF8ByteArray(final String instrString)
-	{
-		return instrString.getBytes(kUTF8Charset);
-	}
-	//-------------------------------------------------------
-	/// UTF8 Byte Array To String
-	///
-	/// Converts UTF-8 byte array to a string in UTF-16 format.
-	///
-	/// @param The byte array to convert.
-	/// @return The output string.
-	//-------------------------------------------------------
-	public static String UTF8ByteArrayToString(final byte[] inabyUTF8)
-	{
-		return new String(inabyUTF8, kUTF8Charset);
-	}
-	//-------------------------------------------------------
-	/// Standardise Path
-	///
-	/// @param The file path to standardise.
-	/// @param The standardised file path. The standardised
-	/// path will use forward slashes as the path separator
-	/// and will end in a forward slash if it is a directory.
-	//-------------------------------------------------------
-	public static String StandardisePath(final String instrPath)
-	{
-		String strOutput = instrPath.replace("\\", "/");
-		
-		int dwLastSlash = strOutput.lastIndexOf("/");
-		if (dwLastSlash == -1)
-		{
-			dwLastSlash = 0;
-		}
-		
-		if (strOutput.length() > 0 && strOutput.substring(dwLastSlash).contains(".") == false)
-		{
-			strOutput += "/";
-		}
-		
-		return strOutput;
-	}
+    private static final Charset UTF8_CHARSET = Charset.forName("UTF-8");
+
+    /**
+     * Converts a string in UTF-16 format to a UTF8 byte array.
+     *
+     * @author Ian Copland
+     *
+     * @param in_string - The string to convert.
+     *
+     * @return The output byte array in UTF-8 format.
+     */
+    public static byte[] stringToUTF8Bytes(String in_string)
+    {
+        return in_string.getBytes(UTF8_CHARSET);
+    }
+    /**
+     * Converts UTF-8 byte array to a string in UTF-16 format.
+     *
+     * @param in_utf8Bytes - The byte array to convert.
+     *
+     * @return The output string.
+     */
+    public static String utf8BytesToString(final byte[] in_utf8Bytes)
+    {
+        return new String(in_utf8Bytes, UTF8_CHARSET);
+    }
+    /**
+     * Standardised the path to a file.
+     *
+     * @author Ian Copland
+     *
+     * @param The file path.
+     *
+     * @return The standardised file path.
+     */
+    public static String standardiseFilePath(String in_filePath)
+    {
+        String standardisedPath = in_filePath.replace("\\", "/");
+        standardisedPath = standardisedPath.replace("//", "/");
+        if (standardisedPath.endsWith("/") == true)
+        {
+            standardisedPath = standardisedPath.substring(0, standardisedPath.length() - 1);
+        }
+        return standardisedPath;
+    }
+    /**
+     * Standardised the path to a file.
+     *
+     * @author Ian Copland
+     *
+     * @param The file path.
+     *
+     * @return The standardised file path.
+     */
+    public static String standardiseDirectoryPath(String in_directoryPath)
+    {
+        String standardisedPath = in_directoryPath.replace("\\", "/");
+        standardisedPath = in_directoryPath.replace("//", "/");
+        if (standardisedPath.endsWith("/") == false)
+        {
+            standardisedPath += "/";
+        }
+        return standardisedPath;
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @param in_filePath - The file path.
+     *
+     * @return The extension of a file path string.
+     */
+    public static String getExtension(String in_filePath)
+    {
+        int dwIndex = in_filePath.lastIndexOf(".");
+        if (dwIndex != -1)
+            return in_filePath.substring(dwIndex + 1);
+        return "";
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @param in_filePath - The file path.
+     *
+     * @return The file path without the extension.
+     */
+    public static String removeExtension(String in_filePath)
+    {
+        int index = in_filePath.lastIndexOf(".");
+
+        if (index != -1)
+        {
+            return in_filePath.substring(0, index);
+        }
+
+        return in_filePath;
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @param in_filePath - The file path.
+     *
+     * @return The directory path part of the given file name.
+     * This will be standardised.
+     */
+    public static String getDirectory(String in_filePath)
+    {
+        String standardisedFilePath = StringUtils.standardiseFilePath(in_filePath);
+        int index = standardisedFilePath.lastIndexOf("/");
+
+        if (index != -1)
+        {
+            return standardisedFilePath.substring(0, index + 1);
+        }
+
+        return "";
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @param in_filePath - The file path.
+     *
+     * @return The file name part of the file path.
+     */
+    public static String getFileName(String in_filePath)
+    {
+        String standardisedFilePath = StringUtils.standardiseFilePath(in_filePath);
+        int index = standardisedFilePath.lastIndexOf("/");
+
+        if (index != -1)
+        {
+            standardisedFilePath = standardisedFilePath.substring(index + 1);
+        }
+
+        return standardisedFilePath;
+    }
+    /**
+     * Removes all spaces, line returns and tabs from the given string.
+     *
+     * @author Ian Copland
+     *
+     * @param in_string - The input string with whitespace.
+     *
+     * @return The input string minus whitespace.
+     */
+    public static String removeWhitespace(String in_string)
+    {
+        String strOutput = new String(in_string);
+        strOutput = strOutput.replace(" ", "");
+        strOutput = strOutput.replace("\n", "");
+        strOutput = strOutput.replace("\r", "");
+        strOutput = strOutput.replace("\t", "");
+        return strOutput;
+    }
 }
