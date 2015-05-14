@@ -75,7 +75,7 @@ namespace CSBackend
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            void Present(CSCore::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap = true,
+            void Present(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap = true,
                          const CSCore::Colour& in_backgroundColour = CSCore::Colour::k_black) override;
             //--------------------------------------------------------
             /// Begin streaming the video from file with subtitles.
@@ -91,7 +91,7 @@ namespace CSBackend
             /// @param [Optional] The video background colour. Defaults
             /// to black.
             //--------------------------------------------------------
-            void PresentWithSubtitles(CSCore::StorageLocation in_storageLocation, const std::string& in_fileName, const CSVideo::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
+            void PresentWithSubtitles(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSVideo::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
                                       bool in_dismissWithTap, const CSCore::Colour& in_backgroundColour = CSCore::Colour::k_black) override;
         private:
             friend CSVideo::VideoPlayerUPtr CSVideo::VideoPlayer::Create();

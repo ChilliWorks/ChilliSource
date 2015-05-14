@@ -1225,10 +1225,13 @@ namespace CSBackend
 
                 if(directoryInfo.m_storageLocation == CSCore::StorageLocation::k_package || directoryInfo.m_storageLocation == CSCore::StorageLocation::k_chilliSource)
                 {
-                	std::vector<std::string> paths = GetPathsInAPK(directoryInfo.m_storageLocation, path, in_recursive);
-                	output.insert(output.end(), paths.begin(), paths.end());
+                    if (DoesDirectoryExistInAPK(directoryInfo.m_storageLocation, path) == true)
+                    {
+                        std::vector<std::string> paths = GetPathsInAPK(directoryInfo.m_storageLocation, path, in_recursive);
+                        output.insert(output.end(), paths.begin(), paths.end());
+                    }
                 }
-                else
+                else if (CSBackend::Android::DoesDirectoryExist(path) == true)
                 {
                 	std::vector<std::string> paths = GetAllPaths(path, in_recursive);
                 	output.insert(output.end(), paths.begin(), paths.end());
