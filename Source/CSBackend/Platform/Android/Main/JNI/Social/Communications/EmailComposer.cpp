@@ -35,6 +35,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/File/TaggedFilePathResolver.h>
 
 namespace CSBackend
 {
@@ -77,23 +78,27 @@ namespace CSBackend
 			m_isPresented = true;
 			m_resultDelegate = in_callback;
 
-			std::string filename;
-			CSCore::FileSystem* fileSystem = CSCore::Application::Get()->GetFileSystem();
+
+			std::string attachmentAbsFilePath;
 			if (in_attachment.m_filename.size() > 0)
 			{
-				if (in_attachment.m_storageLocation == CSCore::StorageLocation::k_package || (in_attachment.m_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_attachment.m_filename) == false))
+			    CSCore::FileSystem* fileSystem = CSCore::Application::Get()->GetFileSystem();
+			    std::string attachmentTaggedFilePath = CSCore::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_attachment.m_storageLocation, in_attachment.m_filename);
+
+				if (in_attachment.m_storageLocation == CSCore::StorageLocation::k_package || in_attachment.m_storageLocation == CSCore::StorageLocation::k_chilliSource ||
+				    (in_attachment.m_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(attachmentTaggedFilePath) == false))
 				{
 					fileSystem->CreateDirectoryPath(CSCore::StorageLocation::k_cache, k_tempAttachmentDirectory);
-					fileSystem->CopyFile(in_attachment.m_storageLocation, in_attachment.m_filename, CSCore::StorageLocation::k_cache, k_tempAttachmentDirectory + in_attachment.m_filename);
-					filename = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_cache) + k_tempAttachmentDirectory + in_attachment.m_filename;
+					fileSystem->CopyFile(in_attachment.m_storageLocation, attachmentTaggedFilePath, CSCore::StorageLocation::k_cache, k_tempAttachmentDirectory + attachmentTaggedFilePath);
+					attachmentAbsFilePath = fileSystem->GetAbsolutePathToFile(CSCore::StorageLocation::k_cache, k_tempAttachmentDirectory + attachmentTaggedFilePath);
 				}
 				else
 				{
-					filename = fileSystem->GetAbsolutePathToStorageLocation(in_attachment.m_storageLocation) + in_attachment.m_filename;
+					attachmentAbsFilePath = fileSystem->GetAbsolutePathToFile(in_attachment.m_storageLocation, attachmentTaggedFilePath);
 				}
 			}
 
-			m_javaInterface->Present(in_recipientAddresses, in_subject, in_contents, (in_contentFormat == ContentFormat::k_html), filename, CSCore::MakeDelegate(this, &EmailComposer::OnEmailClosed));
+			m_javaInterface->Present(in_recipientAddresses, in_subject, in_contents, (in_contentFormat == ContentFormat::k_html), attachmentAbsFilePath, CSCore::MakeDelegate(this, &EmailComposer::OnEmailClosed));
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------

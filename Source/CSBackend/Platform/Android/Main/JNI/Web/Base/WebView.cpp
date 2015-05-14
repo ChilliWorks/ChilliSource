@@ -131,7 +131,12 @@ namespace CSBackend
             {
                 case CSCore::StorageLocation::k_package:
                 {
-                	fullFilePath = "file:///android_asset/" + fullFilePath;
+                	fullFilePath = "file:///android_asset/" + FileSystem::k_packageAPKDir + fullFilePath;
+                    break;
+                }
+                case CSCore::StorageLocation::k_chilliSource:
+                {
+                    fullFilePath = "file:///android_asset/" + FileSystem::k_csAPKDir + fullFilePath;
                     break;
                 }
                 case CSCore::StorageLocation::k_DLC:
@@ -142,7 +147,7 @@ namespace CSBackend
                 	}
                 	else
                 	{
-                		fullFilePath = "file:///android_asset/" + fullFilePath;
+                		fullFilePath = "file:///android_asset/" + FileSystem::k_packageAPKDir + fullFilePath;
                 	}
                     break;
                 }

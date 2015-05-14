@@ -31,6 +31,7 @@
 #include <ChilliSource/Audio/CricketAudio/CkBank.h>
 #include <ChilliSource/Audio/CricketAudio/CricketAudioSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/File/TaggedFilePathResolver.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 #include <CSBackend/Platform/Android/Main/JNI/Core/File/FileSystem.h>
@@ -81,30 +82,29 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         CkSound::CkSound(Core::StorageLocation in_streamStorageLocation, const std::string& in_streamFilePath)
         {
+            auto fileSystem = Core::Application::Get()->GetFileSystem();
+            auto taggedFilePath = Core::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_streamStorageLocation, in_streamFilePath);
+            auto absFilePath = fileSystem->GetAbsolutePathToFile(in_streamStorageLocation, taggedFilePath);
+
 #if CS_TARGETPLATFORM_ANDROID
-        	switch (in_streamStorageLocation)
-			{
-				case Core::StorageLocation::k_package:
-				{
-					m_sound = ::CkSound::newStreamSound((CSBackend::Android::FileSystem::k_packageAPKDir + in_streamFilePath).c_str());
-					break;
-				}
-				case Core::StorageLocation::k_chilliSource:
-				{
-					m_sound = ::CkSound::newStreamSound((CSBackend::Android::FileSystem::k_csAPKDir + in_streamFilePath).c_str());
-					break;
-				}
-				default:
-				{
-					std::string locationPath = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_streamStorageLocation));
-					m_sound = ::CkSound::newStreamSound((locationPath + in_streamFilePath).c_str(), kCkPathType_FileSystem);
-					break;
-				}
-			}
+            if (in_streamStorageLocation == Core::StorageLocation::k_package || (in_streamStorageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
+            {
+                absFilePath = CSBackend::Android::FileSystem::k_packageAPKDir + absFilePath;
+                m_sound = ::CkSound::newStreamSound(absFilePath.c_str());
+            }
+            else if (in_streamStorageLocation == Core::StorageLocation::k_chilliSource)
+            {
+                absFilePath = CSBackend::Android::FileSystem::k_csAPKDir + absFilePath;
+                m_sound = ::CkSound::newStreamSound(absFilePath.c_str());
+            }
+            else
+            {
+                m_sound = ::CkSound::newStreamSound(absFilePath.c_str(), kCkPathType_FileSystem);
+            }
 #else
-            std::string locationPath = CSCore::StringUtils::StandardiseDirectoryPath(CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_streamStorageLocation));
-            m_sound = ::CkSound::newStreamSound((locationPath + in_streamFilePath).c_str(), kCkPathType_FileSystem);
+            m_sound = ::CkSound::newStreamSound(absFilePath.c_str(), kCkPathType_FileSystem);
 #endif
+
             CS_ASSERT(m_sound != nullptr, "Could not create " + std::string(k_className) + " because audio stream '" + in_streamFilePath + "' doesn't exist.");
             
             m_ckSystem = CSCore::Application::Get()->GetSystem<CricketAudioSystem>();
