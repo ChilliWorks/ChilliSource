@@ -1231,7 +1231,7 @@ namespace CSBackend
                         output.insert(output.end(), paths.begin(), paths.end());
                     }
                 }
-                else if (CSBackend::Android::DoesDirectoryExist(GetAbsolutePathToStorageLocation(directoryInfo.m_storageLocation) + path) == true)
+                else if (CSBackend::Android::DoesDirectoryExist(path) == true)
                 {
                 	std::vector<std::string> paths = GetAllPaths(path, in_recursive);
                 	output.insert(output.end(), paths.begin(), paths.end());
