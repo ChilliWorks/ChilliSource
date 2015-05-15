@@ -64,11 +64,39 @@ namespace CSBackend
 		public:
             CS_DECLARE_NAMEDTYPE(ApkExpansionDownloader);
             //------------------------------------------------------------------------------
-            /// An delegate which will be called when expansion downloading completes.
+            /// An enum describing state changes passed to the system from Java. This is
+            /// for internal use.
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------------------
-            using DownloadedDelegate = std::function<void()>;
+            enum class StateChange
+            {
+                k_downloading,
+                k_complete,
+                k_failed,
+                k_failedNoStorage,
+                k_paused,
+                k_pausedNoWifi
+            };
+            //------------------------------------------------------------------------------
+            /// An enum describing the result of the download.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            enum class Result
+            {
+                k_success,
+                k_failed,
+                k_failedNoStorage
+            };
+            //------------------------------------------------------------------------------
+            /// An delegate which will be called when expansion downloading completes.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_result - Whether or not the the download was successful.
+            //------------------------------------------------------------------------------
+            using DownloadedDelegate = std::function<void(Result in_result)>;
             //------------------------------------------------------------------------------
             /// Allows querying of whether or not this system implements the interface
             /// described by the given interface Id. Typically this is not called directly
@@ -110,7 +138,15 @@ namespace CSBackend
             /// @return An event when is called when the downloader completes.
             //------------------------------------------------------------------------------
             CSCore::IConnectableEvent<DownloadedDelegate>& GetDownloadedEvent();
-
+            //------------------------------------------------------------------------------
+            /// Called from the Java system when the downloader state changes. This is for
+            /// internal use only and should not be called by the user.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_stageChange - The state the downloader as changed to.
+            //------------------------------------------------------------------------------
+            void OnDownloadStateChanged(StateChange in_stateChange);
 		private:
 		    friend class CSCore::Application;
             //------------------------------------------------------------------------------
@@ -118,12 +154,14 @@ namespace CSBackend
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------------------
-            enum State
+            enum class State
             {
                 k_uninitialised,
+                k_paused,
                 k_downloading,
-                k_downloaded
-            }
+                k_downloaded,
+                k_failed
+            };
             //------------------------------------------------------------------------------
             /// A factory method for creating a new instance of the system. Declared private
             /// to ensure this can only be created through Application::CreateSystem().

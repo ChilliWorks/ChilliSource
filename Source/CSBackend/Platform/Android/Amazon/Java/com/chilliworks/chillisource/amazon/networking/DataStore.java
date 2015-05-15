@@ -246,7 +246,7 @@ public class DataStore
 				byte[] abyJson = AESEncryption.Decrypt(abyEncryptedJson, CalculateSaltedPrivateKey());
 				if (abyJson != null)
 				{
-					String strJson = StringUtils.UTF8ByteArrayToString(abyJson);
+					String strJson = StringUtils.utf8BytesToString(abyJson);
 					JSONObject root = new JSONObject(strJson);
 					
 					//read the purchase update offset
@@ -323,7 +323,7 @@ public class DataStore
 			root.put(kstrPendingPurchaseTransactionsArrayKey, transactionArray);
 			
 			String strJson = root.toString();
-			byte[] abyEncryptedJson = AESEncryption.Encrypt(StringUtils.StringToUTF8ByteArray(strJson), CalculateSaltedPrivateKey());
+			byte[] abyEncryptedJson = AESEncryption.Encrypt(StringUtils.stringToUTF8Bytes(strJson), CalculateSaltedPrivateKey());
 			if (abyEncryptedJson != null)
 			{
 				FileUtils.writeBinaryFile(FileUtils.StorageLocation.k_internalStorage, mstrCacheFilename, abyEncryptedJson);
@@ -348,7 +348,7 @@ public class DataStore
 	//---------------------------------------------
 	private byte[] CalculateSaltedPrivateKey()
 	{
-		byte[] abySaltedPrivateKey = HashSHA256.Generate(StringUtils.StringToUTF8ByteArray(mstrPrivateKey + mstrUDID + mstrUserID));
+		byte[] abySaltedPrivateKey = HashSHA256.Generate(StringUtils.stringToUTF8Bytes(mstrPrivateKey + mstrUDID + mstrUserID));
 		return abySaltedPrivateKey;
 	}
 }

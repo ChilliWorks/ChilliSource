@@ -34,6 +34,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/File/FileSystem.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClassDef.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
@@ -71,35 +72,73 @@ extern "C"
 //------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onStateChangedDownloading(JNIEnv* in_environment, jobject in_this)
 {
-    auto apkExpansionSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::ApkExpansionDownloader>();
-    CS_ASSERT(apkExpansionSystem != nullptr, "No expansion system accessible.");
+    CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask([]
+    {
+        auto apkExpansionDownloader = CSCore::Application::Get()->GetSystem<CSBackend::Android::ApkExpansionDownloader>();
+        CS_ASSERT(apkExpansionDownloader != nullptr, "Cannot get the ApkExpansionDownloader system from Application.");
 
-    apkExpansionSystem->TODO
+        apkExpansionDownloader->OnDownloadStateChanged(CSBackend::Android::ApkExpansionDownloader::StateChange::k_downloading);
+    });
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedComplete(JNIEnv* in_environment, jobject in_this)
 {
+    CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask([]
+    {
+        auto apkExpansionDownloader = CSCore::Application::Get()->GetSystem<CSBackend::Android::ApkExpansionDownloader>();
+        CS_ASSERT(apkExpansionDownloader != nullptr, "Cannot get the ApkExpansionDownloader system from Application.");
+
+        apkExpansionDownloader->OnDownloadStateChanged(CSBackend::Android::ApkExpansionDownloader::StateChange::k_complete);
+    });
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedFailed(JNIEnv* in_environment, jobject in_this)
 {
+    CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask([]
+    {
+        auto apkExpansionDownloader = CSCore::Application::Get()->GetSystem<CSBackend::Android::ApkExpansionDownloader>();
+        CS_ASSERT(apkExpansionDownloader != nullptr, "Cannot get the ApkExpansionDownloader system from Application.");
+
+        apkExpansionDownloader->OnDownloadStateChanged(CSBackend::Android::ApkExpansionDownloader::StateChange::k_failed);
+    });
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedFailedNoStorage(JNIEnv* in_environment, jobject in_this)
 {
+    CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask([]
+    {
+        auto apkExpansionDownloader = CSCore::Application::Get()->GetSystem<CSBackend::Android::ApkExpansionDownloader>();
+        CS_ASSERT(apkExpansionDownloader != nullptr, "Cannot get the ApkExpansionDownloader system from Application.");
+
+        apkExpansionDownloader->OnDownloadStateChanged(CSBackend::Android::ApkExpansionDownloader::StateChange::k_failedNoStorage);
+    });
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedPaused(JNIEnv* in_environment, jobject in_this)
 {
+    CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask([]
+    {
+        auto apkExpansionDownloader = CSCore::Application::Get()->GetSystem<CSBackend::Android::ApkExpansionDownloader>();
+        CS_ASSERT(apkExpansionDownloader != nullptr, "Cannot get the ApkExpansionDownloader system from Application.");
+
+        apkExpansionDownloader->OnDownloadStateChanged(CSBackend::Android::ApkExpansionDownloader::StateChange::k_paused);
+    });
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedPausedNoWiFi(JNIEnv* in_environment, jobject in_this)
 {
+    CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask([]
+    {
+        auto apkExpansionDownloader = CSCore::Application::Get()->GetSystem<CSBackend::Android::ApkExpansionDownloader>();
+        CS_ASSERT(apkExpansionDownloader != nullptr, "Cannot get the ApkExpansionDownloader system from Application.");
+
+        apkExpansionDownloader->OnDownloadStateChanged(CSBackend::Android::ApkExpansionDownloader::StateChange::k_pausedNoWifi);
+    });
 }
 
 namespace CSBackend
@@ -108,9 +147,10 @@ namespace CSBackend
 	{
 	    namespace
 	    {
-	        char[] k_startDownloadIfRequiredMethod = "startDownloadIfRequired";
-	        char[] k_setDownloadPausedMethod = "setDownloadPaused";
-	        char[] k_getDownloadProgressMethod = "getDownloadProgress";
+	        char k_isDownloadRequiredMethod[] = "isDownloadRequired";
+	        char k_startDownloadMethod[] = "startDownload";
+	        char k_setDownloadPausedMethod[] = "setDownloadPaused";
+	        char k_getDownloadProgressMethod[] = "getDownloadProgress";
 	    }
 
         CS_DEFINE_NAMEDTYPE(ApkExpansionDownloader);
@@ -168,19 +208,29 @@ namespace CSBackend
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
+        void ApkExpansionDownloader::OnDownloadStateChanged(StateChange in_stateChange)
+        {
+            //CS_ASSERT(m_state m_state == State::k_downloading || m_state == State::k_paused, "Received a state change while in an invalid state.");
+
+            CS_LOG_VERBOSE("Changed to state: " + CSCore::ToString(static_cast<u32>(in_stateChange)));
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         void ApkExpansionDownloader::OnInit()
         {
             //define and create the java class.
             JavaClassDef classDef("com/chilliworks/chillisource/googleplay/networking/ApkExpansionDownloader");
-            classDef.AddMethod(k_startDownloadIfRequiredMethod, "()Z");
+            classDef.AddMethod(k_isDownloadRequiredMethod, "()Z");
+            classDef.AddMethod(k_startDownloadMethod, "()V");
             classDef.AddMethod(k_setDownloadPausedMethod, "(Z)V");
             classDef.AddMethod(k_getDownloadProgressMethod, "()F");
             m_javaSystem = JavaSystemUPtr(new JavaSystem(classDef));
 
             //Start the download if required.
-            if (m_javaSystem->CallBoolMethod(k_startDownloadIfRequiredMethod) == true)
+            if (m_javaSystem->CallBoolMethod(k_isDownloadRequiredMethod) == true)
             {
                 m_state = State::k_downloading;
+                m_javaSystem->CallVoidMethod(k_startDownloadMethod);
             }
             else
             {

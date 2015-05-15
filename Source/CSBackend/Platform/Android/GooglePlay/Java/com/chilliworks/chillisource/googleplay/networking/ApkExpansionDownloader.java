@@ -97,7 +97,8 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
             return true;
         }
 
-        if (expansion.m_fileSize != calcExpansionFileSize(versionCode))
+        long fileSize = calcExpansionFileSize(versionCode);
+        if (expansion.m_fileSize != fileSize)
         {
             return true;
         }
@@ -105,39 +106,44 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         return false;
     }
     /**
-     * Starts the expansion files downloading if they do not already exist. If they do already exist,
-     * then false is returned.
+     * Starts the expansion downloader on the main thread. Prior to calling this,
+     * isDownloadRequired() should be called to check if the download is required.
      *
      * This can be called from any thread.
      *
      * @author Ian Copland
      */
-    public boolean startDownloadIfRequired()
+    public void startDownload()
     {
-        Intent notifierIntent = new Intent(CSApplication.get().getActivity(), CSApplication.get().getActivity().getClass());
-        notifierIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(CSApplication.get().getActivity(), 0, notifierIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        final ApkExpansionDownloader apkExpansionDownloader = this;
+        CSApplication.get().scheduleUIThreadTask(new Runnable()
+        {
+            @Override  public void run()
+            {
+                Intent notifierIntent = new Intent(CSApplication.get().getActivity(), CSApplication.get().getActivity().getClass());
+                notifierIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                PendingIntent pendingIntent = PendingIntent.getActivity(CSApplication.get().getActivity(), 0, notifierIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        int startResult = 0;
-        try
-        {
-            startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(CSApplication.get().getActivity(), pendingIntent, ApkExpansionDownloaderService.class);
-        }
-        catch (PackageManager.NameNotFoundException e)
-        {
-            Logging.logFatal(ExceptionUtils.ConvertToString(e));
-        }
+                int startResult = 0;
+                try
+                {
+                    startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(CSApplication.get().getActivity(), pendingIntent, ApkExpansionDownloaderService.class);
+                }
+                catch (PackageManager.NameNotFoundException e)
+                {
+                    Logging.logFatal(ExceptionUtils.ConvertToString(e));
+                }
 
-        if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
-        {
-            m_downloaderClientStub = DownloaderClientMarshaller.CreateStub(this, ApkExpansionDownloaderService.class);
-            return true;
-        }
-        else
-        {
-            m_downloadProgress = 1.0f;
-            return false;
-        }
+                if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
+                {
+                    m_downloaderClientStub = DownloaderClientMarshaller.CreateStub(apkExpansionDownloader, ApkExpansionDownloaderService.class);
+                }
+                else
+                {
+                    completeDownload();
+                }
+            }
+        });
     }
     /**
      * Sets whether or not the download should be paused.
@@ -368,7 +374,7 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
     private long calcExpansionFileSize(int in_versionCode)
     {
         String filePath = getExpansionFilePath(in_versionCode);
-        return FileUtils.getFileSize(FileUtils.StorageLocation.k_externalStorage, filePath);
+        return FileUtils.getFileSize(FileUtils.StorageLocation.k_root, filePath);
     }
     /**
      * TODO
@@ -377,6 +383,8 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
      */
     private void completeDownload()
     {
+        m_downloadProgress = 1.0f;
+
         ApkExpansion apkExpansion = new ApkExpansion();
         apkExpansion.m_versionCode = calcExpansionVersionCodeFromFile();
         apkExpansion.m_fileSize = calcExpansionFileSize(apkExpansion.m_versionCode);
@@ -402,25 +410,25 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
      *
      * @author Ian Copland
      */
-    private native void onStateChangedPausedNoWifi();
-    /**
-     * TODO
-     *
-     * @author Ian Copland
-     */
     private native void onStateChangedPaused();
     /**
      * TODO
      *
      * @author Ian Copland
      */
-    private native void onStateChangedFailedNoStorage();
+    private native void onStateChangedPausedNoWifi();
     /**
      * TODO
      *
      * @author Ian Copland
      */
     private native void onStateChangedFailed();
+    /**
+     * TODO
+     *
+     * @author Ian Copland
+     */
+    private native void onStateChangedFailedNoStorage();
     /**
      * TODO
      *

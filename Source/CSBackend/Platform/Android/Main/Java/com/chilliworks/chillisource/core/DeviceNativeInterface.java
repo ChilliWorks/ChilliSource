@@ -192,7 +192,7 @@ public final class DeviceNativeInterface extends System
 		String macAddress = getMacAddress();
 		if (macAddress.equals("") == false)
 		{
-			macAddress = HashMD5.generateHex(StringUtils.StringToUTF8ByteArray(macAddress));
+			macAddress = HashMD5.generateHex(StringUtils.stringToUTF8Bytes(macAddress));
 			SharedPreferencesNativeInterface.SetString(k_preferencesKey, k_udidKey, macAddress);
 			return macAddress;
 		}
@@ -201,7 +201,7 @@ public final class DeviceNativeInterface extends System
 		String androidId = getAndroidID();
 		if (androidId.equals("") == false)
 		{
-			androidId = HashMD5.generateHex(StringUtils.StringToUTF8ByteArray(androidId));
+			androidId = HashMD5.generateHex(StringUtils.stringToUTF8Bytes(androidId));
 			SharedPreferencesNativeInterface.SetString(k_preferencesKey, k_udidKey, androidId);
 			return androidId;
 		}
@@ -210,13 +210,13 @@ public final class DeviceNativeInterface extends System
 		String telephonyId = getTelephonyDeviceID();
 		if (telephonyId.equals("") == false)
 		{
-			telephonyId = HashMD5.generateHex(StringUtils.StringToUTF8ByteArray(telephonyId));
+			telephonyId = HashMD5.generateHex(StringUtils.stringToUTF8Bytes(telephonyId));
 			SharedPreferencesNativeInterface.SetString(k_preferencesKey, k_udidKey, telephonyId);
 			return telephonyId;
 		}
 
 		//--if all this fails, fall back on generating a random hash.
-		String randomId = HashMD5.generateHex(StringUtils.StringToUTF8ByteArray(UUID.randomUUID().toString()));
+		String randomId = HashMD5.generateHex(StringUtils.stringToUTF8Bytes(UUID.randomUUID().toString()));
 		SharedPreferencesNativeInterface.SetString(k_preferencesKey, k_udidKey, randomId);
 		return randomId;
 	}

@@ -550,7 +550,7 @@ public class AmazonIAPNativeInterface extends com.chilliworks.chillisource.core.
 	//-----------------------------------------------------
 	private synchronized void RefreshDataStore()
 	{
-		String strUserIDHash = Integer.toString(Math.abs(HashCRC32.Generate(StringUtils.StringToUTF8ByteArray(mstrUserID))));
+		String strUserIDHash = Integer.toString(Math.abs(HashCRC32.Generate(StringUtils.stringToUTF8Bytes(mstrUserID))));
 		mDataStore = new DataStore(kstrCacheNamePrefix + strUserIDHash + kstrCacheExtension, mstrPrivateKey, mstrUDID, mstrUserID);
 	}
 	//-----------------------------------------------------
@@ -705,7 +705,7 @@ public class AmazonIAPNativeInterface extends com.chilliworks.chillisource.core.
 					return;
 			}
 			
-			String strUserIDHash = "" + Math.abs(HashCRC32.Generate(StringUtils.StringToUTF8ByteArray(instrUserID)));
+			String strUserIDHash = "" + Math.abs(HashCRC32.Generate(StringUtils.stringToUTF8Bytes(instrUserID)));
 			DataStore dataStore = new DataStore(kstrCacheNamePrefix + strUserIDHash + kstrCacheExtension, mstrPrivateKey, mstrUDID, instrUserID);
 	         
 			//get the purchase receipt

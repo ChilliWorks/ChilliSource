@@ -34,7 +34,6 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.chilliworks.chillisource.core.CSPowerManager;
 import com.chilliworks.chillisource.core.SharedPreferencesNativeInterface;
 import com.chilliworks.chillisource.input.DeviceButtonNativeInterface;
 import com.chilliworks.chillisource.input.DeviceButtonNativeInterface.DeviceButton;
@@ -83,7 +82,6 @@ public class CSActivity extends Activity
         	HttpRequestNativeInterface.Setup(this);
         	SharedPreferencesNativeInterface.Setup(this);
             WebViewNativeInterface.Setup(this);
-            CSPowerManager.Setup(this);
         }
         catch (Exception e)
         {
@@ -102,8 +100,6 @@ public class CSActivity extends Activity
     	
         m_surface.onResume();
 
-        CSPowerManager.RequestWakeLock(CSPowerManager.LOCK_TYPE.SCREEN_DIM_LOCK);
-        
         CSApplication.get().resume();
         
         if(m_appConfig.isGooglePlayServicesRequired() == true)
@@ -158,7 +154,6 @@ public class CSActivity extends Activity
     	CSApplication.get().suspend();
     	
     	m_surface.onPause();
-        CSPowerManager.ReleaseLock(CSPowerManager.LOCK_TYPE.SCREEN_DIM_LOCK);
        
         super.onPause();
     }

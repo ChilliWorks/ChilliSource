@@ -37,13 +37,25 @@ import com.google.android.vending.expansion.downloader.impl.DownloaderService;
  */
 public final class ApkExpansionDownloaderService extends DownloaderService
 {
-    public static final String BASE64_PUBLIC_KEY = "!!!!!TODO!!!!";
-
     private static final byte[] SALT = new byte[]
     {
-            1, 43, -12, -1, 34, 68, -16, -12, 43, 2, -8, -4, 9, 5, -106, 108, -36, 45, -10, 32
+            1, 43, -12, -1, -34, 68, -16, -12, 43, 2, -8, -4, 9, 5, -106, 107, -36, 45, -10, 32
     };
 
+    private static String s_publicKey = "";
+
+    /**
+     * Sets the Google Play LVL public key. This can only be called once in an app, once set it
+     * can't be changed.
+     *
+     * @author Ian Copland
+     *
+     * @param in_publicKey - The google play LVL public key.
+     */
+    public void setPublicKey(String in_publicKey)
+    {
+        s_publicKey = in_publicKey;
+    }
     /**
      * @author Ian Copland
      *
@@ -51,7 +63,9 @@ public final class ApkExpansionDownloaderService extends DownloaderService
      */
     @Override public String getPublicKey()
     {
-        return BASE64_PUBLIC_KEY;
+        assert (s_publicKey != "") : "The google play public key has not been set!";
+
+        return s_publicKey;
     }
     /**
      * @author Ian Copland
