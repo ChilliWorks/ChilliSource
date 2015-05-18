@@ -36,8 +36,8 @@ namespace CSBackend
 	{
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        JavaClassDef::JavaClassDef(const std::string& in_className)
-            : m_className(in_className)
+        JavaClassDef::JavaClassDef(const std::string& in_className, const std::string& in_constructorSignature)
+            : m_className(in_className), m_constructorSignature(in_constructorSignature)
         {
         }
         //------------------------------------------------------------------------------
@@ -53,6 +53,12 @@ namespace CSBackend
         const std::string& JavaClassDef::GetClassName() const
         {
             return m_className;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        const std::string& JavaClassDef::GetConstructorSignature() const
+        {
+            return m_constructorSignature;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------

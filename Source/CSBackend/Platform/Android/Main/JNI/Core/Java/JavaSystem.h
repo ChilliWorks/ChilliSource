@@ -58,7 +58,7 @@ namespace CSBackend
             ///
             /// @param in_javaClassDef - The definition for this java system.
             //------------------------------------------------------------------------------
-            JavaSystem(const JavaClassDef& in_javaClassDef);
+            template <typename... TArgs> JavaSystem(const JavaClassDef& in_javaClassDef, TArgs&&... in_args);
             //------------------------------------------------------------------------------
             /// Calls a void java method.
             ///
@@ -213,6 +213,21 @@ namespace CSBackend
 
             JavaClassUPtr m_javaClass;
 		};
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename... TArgs> JavaSystem::JavaSystem(const JavaClassDef& in_javaClassDef, TArgs&&... in_args)
+        {
+            JavaClassDef updatedDef(in_javaClassDef.GetClassName(), in_javaClassDef.GetConstructorSignature());
+            updatedDef.AddMethod("init", "()V");
+            updatedDef.AddMethod("destroy", "()V");
+            for (const auto& methodInfo : in_javaClassDef.GetMethods())
+            {
+                updatedDef.AddMethod(methodInfo.first, methodInfo.second);
+            }
+            m_javaClass = JavaClassUPtr(new JavaClass(updatedDef, std::forward<TArgs>(in_args)...));
+
+            m_javaClass->CallVoidMethod("init");
+        }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         template <typename... TArgs> void JavaSystem::CallVoidMethod(const std::string& in_methodName, TArgs&&... in_args) const

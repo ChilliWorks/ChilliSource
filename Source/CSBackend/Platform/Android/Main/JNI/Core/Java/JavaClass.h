@@ -42,10 +42,6 @@
 
 #include <unordered_map>
 
-//REMOVE ME!
-#include <typeinfo>
-//////
-
 namespace CSBackend
 {
 	namespace Android
@@ -58,7 +54,7 @@ namespace CSBackend
 		///
 		/// JavaClass is immutable after construction, meaning it can safely be called
 		/// from multiple threads at the same time. Care still needs to be taken to
-		/// ensure the Java and Native classes that are using this are thread-safe,
+		/// ensure the Java and Native classes that are using it are thread-safe,
 		/// however.
 		///
 		/// @author Ian Copland
@@ -75,8 +71,9 @@ namespace CSBackend
             /// @author Ian Copland
             ///
             /// @param in_javaClassDef - The definition for this java class.
+            /// @param ... - The arguments to the constructor.
             //------------------------------------------------------------------------------
-            JavaClass(const JavaClassDef& in_javaClassDef);
+            template <typename... TArgs> JavaClass(const JavaClassDef& in_javaClassDef, TArgs&&... in_args);
             //------------------------------------------------------------------------------
             /// Calls a void java method.
             ///
@@ -302,6 +299,49 @@ namespace CSBackend
             jobject m_javaObject = nullptr;
             std::unordered_map<std::string, MethodInfo> m_methods;
 		};
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename... TArgs> JavaClass::JavaClass(const JavaClassDef& in_javaClassDef, TArgs&&... in_args)
+        {
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+
+            //Get the class
+            m_className = in_javaClassDef.GetClassName();
+            jclass jClass = environment->FindClass(m_className.c_str());
+
+            CS_ASSERT(jClass != nullptr, "Could not find Java class: '" + m_className + "'");
+
+            //create an instance of the class
+            CS_ASSERT(CalcReturnType(in_javaClassDef.GetConstructorSignature()) == ReturnType::k_void, "Cannot call constructor for Java class '" + m_className + "' because a non-void return type was specified.");
+            CS_ASSERT(CalcNumArguments(in_javaClassDef.GetConstructorSignature()) == sizeof...(TArgs), "Cannot call constructor for Java class '" + m_className + "' because an incorrect number of arguments were supplied.");
+
+            jmethodID jConstructor = environment->GetMethodID(jClass, "<init>", in_javaClassDef.GetConstructorSignature().c_str());
+            CS_ASSERT(jConstructor != nullptr, "Could not find constructor with signature '" + in_javaClassDef.GetConstructorSignature()+ "' in java class '" + m_className + "'");
+            jobject jClassInstance = environment->NewObject(jClass, jConstructor, std::forward<TArgs>(in_args)...);
+
+            CheckJavaExceptions("A java exception occurred during construction of Java class: '" + m_className + "'");
+            CS_ASSERT(jClassInstance != nullptr, "Could not create instance of Java class: '" + m_className + "'");
+
+            m_javaObject = environment->NewGlobalRef(jClassInstance);
+
+            //setup the method references
+            for (const auto& method : in_javaClassDef.GetMethods())
+            {
+                CS_ASSERT(m_methods.find(method.first) == m_methods.end(), "Method '" + method.first + "' has already been added to Java class '" + m_className + "'");
+
+                MethodInfo info;
+                info.m_returnType = CalcReturnType(method.second);
+                info.m_numArguments = CalcNumArguments(method.second);
+                info.m_methodId = environment->GetMethodID(jClass, method.first.c_str(), method.second.c_str());
+
+                CS_ASSERT(info.m_methodId != nullptr, "Could not find method '" + method.first + "' in Java Class '" + m_className + "'");
+
+                m_methods.emplace(method.first, info);
+            }
+
+            environment->DeleteLocalRef(jClassInstance);
+            environment->DeleteLocalRef(jClass);
+        }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         template <typename... TArgs> void JavaClass::CallVoidMethod(const std::string& in_methodName, TArgs&&... in_args) const

@@ -43,29 +43,65 @@
 extern "C"
 {
     //------------------------------------------------------------------------------
-    /// TODO:
+    /// Called from Java to notify the system that the download state has changed
+    /// to Downloading
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param in_environment - The JNI Environment.
+    /// @param in_this - The calling object.
     //------------------------------------------------------------------------------
 	void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onStateChangedDownloading(JNIEnv* in_environment, jobject in_this);
     //------------------------------------------------------------------------------
-    /// TODO:
+    /// Called from Java to notify the system that the download state has changed
+    /// to Complete
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param in_environment - The JNI Environment.
+    /// @param in_this - The calling object.
     //------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedComplete(JNIEnv* in_environment, jobject in_this);
+	void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onStateChangedComplete(JNIEnv* in_environment, jobject in_this);
     //------------------------------------------------------------------------------
-    /// TODO:
+    /// Called from Java to notify the system that the download state has changed
+    /// to Failed
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param in_environment - The JNI Environment.
+    /// @param in_this - The calling object.
     //------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedFailed(JNIEnv* in_environment, jobject in_this);
+	void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onStateChangedFailed(JNIEnv* in_environment, jobject in_this);
     //------------------------------------------------------------------------------
-    /// TODO:
+    /// Called from Java to notify the system that the download state has changed
+    /// to Failed No Storage
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param in_environment - The JNI Environment.
+    /// @param in_this - The calling object.
     //------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedFailedNoStorage(JNIEnv* in_environment, jobject in_this);
+	void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onStateChangedFailedNoStorage(JNIEnv* in_environment, jobject in_this);
     //------------------------------------------------------------------------------
-    /// TODO:
+    /// Called from Java to notify the system that the download state has changed
+    /// to Paused
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param in_environment - The JNI Environment.
+    /// @param in_this - The calling object.
     //------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedPaused(JNIEnv* in_environment, jobject in_this);
+    void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onStateChangedPaused(JNIEnv* in_environment, jobject in_this);
     //------------------------------------------------------------------------------
-    /// TODO:
+    /// Called from Java to notify the system that the download state has changed
+    /// to Paused No Wifi
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param in_environment - The JNI Environment.
+    /// @param in_this - The calling object.
     //------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedPausedNoWiFi(JNIEnv* in_environment, jobject in_this);
+    void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onStateChangedPausedNoWiFi(JNIEnv* in_environment, jobject in_this);
 }
 
 //------------------------------------------------------------------------------
@@ -82,7 +118,7 @@ void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloa
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedComplete(JNIEnv* in_environment, jobject in_this)
+void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onStateChangedComplete(JNIEnv* in_environment, jobject in_this)
 {
     CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask([]
     {
@@ -94,7 +130,7 @@ void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloa
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedFailed(JNIEnv* in_environment, jobject in_this)
+void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onStateChangedFailed(JNIEnv* in_environment, jobject in_this)
 {
     CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask([]
     {
@@ -106,7 +142,7 @@ void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloa
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedFailedNoStorage(JNIEnv* in_environment, jobject in_this)
+void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onStateChangedFailedNoStorage(JNIEnv* in_environment, jobject in_this)
 {
     CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask([]
     {
@@ -118,7 +154,7 @@ void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloa
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedPaused(JNIEnv* in_environment, jobject in_this)
+void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onStateChangedPaused(JNIEnv* in_environment, jobject in_this)
 {
     CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask([]
     {
@@ -130,7 +166,7 @@ void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloa
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onDownloadStateChangedPausedNoWiFi(JNIEnv* in_environment, jobject in_this)
+void Java_com_chilliworks_chillisource_googleplay_networking_ApkExpansionDownloader_onStateChangedPausedNoWiFi(JNIEnv* in_environment, jobject in_this)
 {
     CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask([]
     {
@@ -210,21 +246,24 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         void ApkExpansionDownloader::OnDownloadStateChanged(StateChange in_stateChange)
         {
+            //TODO:
             //CS_ASSERT(m_state m_state == State::k_downloading || m_state == State::k_paused, "Received a state change while in an invalid state.");
 
-            CS_LOG_VERBOSE("Changed to state: " + CSCore::ToString(static_cast<u32>(in_stateChange)));
+            CS_LOG_ERROR(" >> Changed to state: " + CSCore::ToString(static_cast<u32>(in_stateChange)));
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         void ApkExpansionDownloader::OnInit()
         {
+            jstring lvlPublicKey = JavaUtils::CreateJStringFromSTDString(CSCore::Application::Get()->GetGooglePlayLvlPublicKey());
+
             //define and create the java class.
-            JavaClassDef classDef("com/chilliworks/chillisource/googleplay/networking/ApkExpansionDownloader");
+            JavaClassDef classDef("com/chilliworks/chillisource/googleplay/networking/ApkExpansionDownloader", "(Ljava/lang/String;)V");
             classDef.AddMethod(k_isDownloadRequiredMethod, "()Z");
             classDef.AddMethod(k_startDownloadMethod, "()V");
             classDef.AddMethod(k_setDownloadPausedMethod, "(Z)V");
             classDef.AddMethod(k_getDownloadProgressMethod, "()F");
-            m_javaSystem = JavaSystemUPtr(new JavaSystem(classDef));
+            m_javaSystem = JavaSystemUPtr(new JavaSystem(classDef, lvlPublicKey));
 
             //Start the download if required.
             if (m_javaSystem->CallBoolMethod(k_isDownloadRequiredMethod) == true)
@@ -236,6 +275,9 @@ namespace CSBackend
             {
                 m_state = State::k_downloaded;
             }
+
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+            environment->DeleteLocalRef(lvlPublicKey);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------

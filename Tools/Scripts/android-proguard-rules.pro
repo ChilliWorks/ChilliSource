@@ -48,8 +48,8 @@
 }
 
 #Keep all Native Interfaces
--keep public class com.chilliworks.chillisource.core.INativeInterface { public *; }
--keep public class * extends com.chilliworks.chillisource.core.INativeInterface { public *; }
+-keep public class com.chilliworks.chillisource.core.System { public *; }
+-keep public class * extends com.chilliworks.chillisource.core.System { public *; }
 
 #also keep old-style Native Interfaces. This will be removed in the future
 -keep public class **NativeInterface { *; }

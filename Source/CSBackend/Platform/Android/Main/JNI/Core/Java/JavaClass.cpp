@@ -40,45 +40,6 @@ namespace CSBackend
 	{
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        JavaClass::JavaClass(const JavaClassDef& in_javaClassDef)
-        {
-            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-
-            //Get the class
-            m_className = in_javaClassDef.GetClassName();
-            jclass jClass = environment->FindClass(m_className.c_str());
-
-            CS_ASSERT(jClass != nullptr, "Could not find Java class: '" + m_className + "'");
-
-            //create an instance of the class
-            jmethodID jConstructor = environment->GetMethodID(jClass, "<init>", "()V");
-            jobject jClassInstance = environment->NewObject(jClass, jConstructor);
-
-            CheckJavaExceptions("A java exception occurred during construction of Java class: '" + m_className + "'");
-            CS_ASSERT(jClassInstance != nullptr, "Could not create instance of Java class: '" + m_className + "'");
-
-            m_javaObject = environment->NewGlobalRef(jClassInstance);
-
-            //setup the method references
-            for (const auto& method : in_javaClassDef.GetMethods())
-            {
-                CS_ASSERT(m_methods.find(method.first) == m_methods.end(), "Method '" + method.first + "' has already been added to Java class '" + m_className + "'");
-
-                MethodInfo info;
-                info.m_returnType = CalcReturnType(method.second);
-                info.m_numArguments = CalcNumArguments(method.second);
-                info.m_methodId = environment->GetMethodID(jClass, method.first.c_str(), method.second.c_str());
-
-                CS_ASSERT(info.m_methodId != nullptr, "Could not find method '" + method.first + "' in Java Class '" + m_className + "'");
-
-                m_methods.emplace(method.first, info);
-            }
-
-            environment->DeleteLocalRef(jClassInstance);
-            environment->DeleteLocalRef(jClass);
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
         void JavaClass::CheckJavaExceptions(const std::string& in_errorMessage) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();

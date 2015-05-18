@@ -47,7 +47,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * TODO
+ * A system for managing the downloading of Apk Expansion files. The provides a means to check
+ * if the Apk Expansion files already exist and are up to date, and download it if not.
+ *
+ * Only main expansion files are supported.
  *
  * @author Ian Copland
  */
@@ -62,6 +65,18 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
     private IDownloaderService m_remoteService = null;
     private volatile float m_downloadProgress = 0.0f;
 
+    /**
+     * Constructor. Sets the google play LVL public key. Note that, as the public key can only be
+     * set once, there can only ever be one instance of this class.
+     *
+     * @author Ian Copland
+     *
+     * @param in_lvlPublicKey - The Google Play LVL public key
+     */
+    public ApkExpansionDownloader(String in_lvlPublicKey)
+    {
+        ApkExpansionDownloaderService.setPublicKey(in_lvlPublicKey);
+    }
     /**
      * Allows querying of whether or not the system implements the interface described by the
      * given interface id.
@@ -116,30 +131,26 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
     public void startDownload()
     {
         final ApkExpansionDownloader apkExpansionDownloader = this;
-        CSApplication.get().scheduleUIThreadTask(new Runnable()
-        {
-            @Override  public void run()
-            {
+        CSApplication.get().scheduleUIThreadTask(new Runnable() {
+            @Override
+            public void run() {
                 Intent notifierIntent = new Intent(CSApplication.get().getActivity(), CSApplication.get().getActivity().getClass());
                 notifierIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 PendingIntent pendingIntent = PendingIntent.getActivity(CSApplication.get().getActivity(), 0, notifierIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 int startResult = 0;
-                try
-                {
+                try {
                     startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(CSApplication.get().getActivity(), pendingIntent, ApkExpansionDownloaderService.class);
-                }
-                catch (PackageManager.NameNotFoundException e)
-                {
+                } catch (PackageManager.NameNotFoundException e) {
                     Logging.logFatal(ExceptionUtils.ConvertToString(e));
                 }
 
-                if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
-                {
+                if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED) {
                     m_downloaderClientStub = DownloaderClientMarshaller.CreateStub(apkExpansionDownloader, ApkExpansionDownloaderService.class);
-                }
-                else
-                {
+                    if (CSApplication.get().isActive() == true) {
+                        m_downloaderClientStub.connect(CSApplication.get().getActivity());
+                    }
+                } else {
                     completeDownload();
                 }
             }
@@ -170,7 +181,8 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         return m_downloadProgress;
     }
     /**
-     * TODO
+     * Called when the application is resumed. The downloader client stub will be reconnected
+     * if appropriate.
      *
      * @author Ian Copland
      */
@@ -184,9 +196,11 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         super.onResume();
     }
     /**
-     * TODO
+     * Called when the service is connected.
      *
      * @author Ian Copland
+     *
+     * @param in_messenger - The class which forwards on messages.
      */
     @Override public void onServiceConnected(Messenger in_messenger)
     {
@@ -194,9 +208,11 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         m_remoteService.onClientUpdated(m_downloaderClientStub.getMessenger());
     }
     /**
-     * TODO
+     * Called when the download state changes.
      *
      * @author Ian Copland
+     *
+     * @param in_newState - The state which the system has changed to.
      */
     @Override public void onDownloadStateChanged(int in_newState)
     {
@@ -229,16 +245,19 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         }
     }
     /**
-     * TODO
+     * Called when download progress updates.
      *
      * @author Ian Copland
+     *
+     * @param in_progress - A container for information on the progress of the download.
      */
     @Override public void onDownloadProgress(DownloadProgressInfo in_progress)
     {
         m_downloadProgress = (float)in_progress.mOverallProgress / (float)in_progress.mOverallTotal;
     }
     /**
-     * TODO
+     * Called when the application resumes. Disconnects the downloader client stub where
+     * appropriate.
      *
      * @author Ian Copland
      */
@@ -252,9 +271,9 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         super.onSuspend();
     }
     /**
-     * TODO
-     *
      * @author Ian Copland
+     *
+     * @return The path to the expansion cache file.
      */
     private String getExpansionCacheFilePath()
     {
@@ -262,9 +281,11 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         return FileUtils.getSaveDataDirectory(CSApplication.get().getActivity().getPackageName()) + MANIFEST_FILE_NAME;
     }
     /**
-     * TODO
-     *
      * @author Ian Copland
+     *
+     * @param in_versionCode - The version code of the expansion file.
+     *
+     * @return The file path to the main apk expansion file.
      */
     private String getExpansionFilePath(int in_versionCode)
     {
@@ -273,9 +294,12 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         return StringUtils.standardiseDirectoryPath(expansionDirectory) + expansionFileName;
     }
     /**
-     * TODO
+     * Reads the contents of the expansion cache and returns the contained information. If the
+     * cache couldn't be read or doesn't exist, null is returned.
      *
      * @author Ian Copland
+     *
+     * @return The information in the cache, or null.
      */
     private ApkExpansion readExpansionCache()
     {
@@ -303,9 +327,11 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         return null;
     }
     /**
-     * TODO
+     * Writes the given information to the expansion cache.
      *
      * @author Ian Copland
+     *
+     * @param in_expansion - The expansion cache.
      */
     private void writeExpansionCache(ApkExpansion in_expansion)
     {
@@ -327,9 +353,10 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         FileUtils.writeTextFile(FileUtils.StorageLocation.k_externalStorage, filePath, fileContents);
     }
     /**
-     * TODO
-     *
      * @author Ian Copland
+     *
+     * @return The intended version code, as described by the activity. This information originates
+     * in the AndroidManifest.xml.
      */
     private int calcExpansionVersionCodeFromActivity()
     {
@@ -348,12 +375,15 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         return versionCode;
     }
     /**
-     * TODO
-     *
      * @author Ian Copland
+     *
+     * @return The current version code, i.e the version in the file name of the current Apk
+     * Expansion file.
      */
     private int calcExpansionVersionCodeFromFile()
     {
+        //TODO: !?
+
         int versionCode = 0;
         try
         {
@@ -367,9 +397,11 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         return versionCode;
     }
     /**
-     * TODO
-     *
      * @author Ian Copland
+     *
+     * @param in_versionCode - The version code of the expansion file.
+     *
+     * @return The size of the expansion file in bytes. Zero is returned if the file doesn't exist.
      */
     private long calcExpansionFileSize(int in_versionCode)
     {
@@ -377,7 +409,8 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         return FileUtils.getFileSize(FileUtils.StorageLocation.k_root, filePath);
     }
     /**
-     * TODO
+     * Finishes the download, writing the Apk Expansion info to cache and calls the completion
+     * delegate.
      *
      * @author Ian Copland
      */
@@ -394,43 +427,43 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
     }
 
     /**
-     * TODO
+     * Notifies the native side of the app that the state has changed to Downloading.
      *
      * @author Ian Copland
      */
     private native void onStateChangedDownloading();
     /**
-     * TODO
+     * Notifies the native side of the app that the state has changed to Complete.
      *
      * @author Ian Copland
      */
     private native void onStateChangedComplete();
     /**
-     * TODO
+     * Notifies the native side of the app that the state has changed to Paused.
      *
      * @author Ian Copland
      */
     private native void onStateChangedPaused();
     /**
-     * TODO
+     * Notifies the native side of the app that the state has changed to Paused No Wifi.
      *
      * @author Ian Copland
      */
     private native void onStateChangedPausedNoWifi();
     /**
-     * TODO
+     * Notifies the native side of the app that the state has changed to Failed.
      *
      * @author Ian Copland
      */
     private native void onStateChangedFailed();
     /**
-     * TODO
+     * Notifies the native side of the app that the state has changed to Failed No Storage.
      *
      * @author Ian Copland
      */
     private native void onStateChangedFailedNoStorage();
     /**
-     * TODO
+     * A container for information on a single Apk Expansion file.
      *
      * @author Ian Copland
      */

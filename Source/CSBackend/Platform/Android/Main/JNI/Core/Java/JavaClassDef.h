@@ -59,7 +59,7 @@ namespace CSBackend
             ///
             /// @param in_className - The fully qualified name of the class this refers to.
             //------------------------------------------------------------------------------
-            JavaClassDef(const std::string& in_className);
+            JavaClassDef(const std::string& in_className, const std::string& in_constructorSignature = "()V");
             //------------------------------------------------------------------------------
             /// Adds a new method definition. Note that multiple overloaded methods are
             /// not supported.
@@ -80,12 +80,19 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
+            /// @return The constructor method signature.
+            //------------------------------------------------------------------------------
+            const std::string& GetConstructorSignature() const;
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
             /// @return The map of methods names and signatures.
             //------------------------------------------------------------------------------
             const MethodMap& GetMethods() const;
 
         private:
             const std::string m_className;
+            const std::string m_constructorSignature;
             MethodMap m_methods;
 		};
 	}

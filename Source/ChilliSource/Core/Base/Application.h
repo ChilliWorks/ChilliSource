@@ -199,6 +199,19 @@ namespace ChilliSource
 			/// @param Scaler to speed up or slow down update time.
 			//-----------------------------------------------------
 			void SetUpdateSpeed(f32 in_speed);
+            //------------------------------------------------------------------------------
+            /// Returns the Google Play Lvl Public Key. This is required for most of the
+            /// Google Play specific systems on Android and must be implemented in any
+            /// Google Play build.
+            ///
+            /// Systems that rely on this include:
+            ///  - ApkExpansionDownloader
+            ///  - IAPSystem
+            ///  - RemoteNotificationSystem
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            virtual std::string GetGooglePlayLvlPublicKey() const;
             //-----------------------------------------------------
             /// Stop the application and exit gracefully
             ///
@@ -507,6 +520,8 @@ namespace ChilliSource
             bool m_isFirstFrame = true;
             bool m_isSuspending = false;
             bool m_isSystemCreationAllowed = false;
+
+            std::string m_googlePlayLvlPublicKey;
             
             static Application* s_application;
 		};

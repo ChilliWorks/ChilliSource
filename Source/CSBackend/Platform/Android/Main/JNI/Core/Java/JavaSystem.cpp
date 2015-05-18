@@ -38,21 +38,6 @@ namespace CSBackend
 	{
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        JavaSystem::JavaSystem(const JavaClassDef& in_javaClassDef)
-        {
-            JavaClassDef updatedDef(in_javaClassDef.GetClassName());
-            updatedDef.AddMethod("init", "()V");
-            updatedDef.AddMethod("destroy", "()V");
-            for (const auto& methodInfo : in_javaClassDef.GetMethods())
-            {
-                updatedDef.AddMethod(methodInfo.first, methodInfo.second);
-            }
-            m_javaClass = JavaClassUPtr(new JavaClass(updatedDef));
-
-            m_javaClass->CallVoidMethod("init");
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
         JavaSystem::~JavaSystem()
         {
             m_javaClass->CallVoidMethod("destroy");
