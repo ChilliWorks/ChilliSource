@@ -63,8 +63,6 @@ public final class ApkExpansionDownloaderService extends DownloaderService
             assert (s_publicKey == "") : "The google play public key cannot be changed!";
 
             s_publicKey = in_publicKey;
-
-            Logging.logError(">> PUBLIC KEY: " + in_publicKey);
         }
     }
     /**

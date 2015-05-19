@@ -50,7 +50,14 @@ namespace CSBackend
 		/// Provides a means to create an instance of a class in java and call its
 		/// methods.
 		///
-		/// TODO: Further usage description
+		/// This is essentially a wrapper around the JNI functions for calling methods
+		/// on a class instance. Methods references are cached for the sake of
+		/// performance and there are a number of sanity checks to assist debugging of
+		/// issues including confirming that the correct number of parameters have
+		/// been provided and that the method is being called with the correct return
+		/// type. Exceptions are also checked for after every method call, avoiding
+		/// difficult to debug issues where native execution continues until the next
+		/// java call when an exception is thrown.
 		///
 		/// JavaClass is immutable after construction, meaning it can safely be called
 		/// from multiple threads at the same time. Care still needs to be taken to

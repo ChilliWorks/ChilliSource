@@ -123,6 +123,14 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             f32 GetDownloadProgress() const;
             //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return Whether or not the download is currently paused. The download can
+            /// be paused manually through calling SetDownloadPaused() or if there is no
+            /// available Wifi connection.
+            //------------------------------------------------------------------------------
+            bool IsDownloadPaused() const;
+            //------------------------------------------------------------------------------
             /// Pauses the download if currently downloading. If no download is currently
             /// in progress the app is considered to be in irrecoverable state and will
             /// terminate.

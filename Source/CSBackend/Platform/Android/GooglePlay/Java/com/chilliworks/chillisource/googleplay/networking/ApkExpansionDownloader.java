@@ -151,7 +151,7 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
                         m_downloaderClientStub.connect(CSApplication.get().getActivity());
                     }
                 } else {
-                    completeDownload();
+                    downloadComplete();
                 }
             }
         });
@@ -225,7 +225,7 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         case IDownloaderClient.STATE_FAILED:
         case IDownloaderClient.STATE_FAILED_FETCHING_URL:
         case IDownloaderClient.STATE_FAILED_UNLICENSED:
-            onStateChangedFailed();
+            downloadFailed();
             break;
         case IDownloaderClient.STATE_PAUSED_BY_REQUEST:
             onStateChangedPaused();
@@ -237,10 +237,10 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
             break;
         case IDownloaderClient.STATE_FAILED_SDCARD_FULL:
         case IDownloaderClient.STATE_PAUSED_SDCARD_UNAVAILABLE:
-            onStateChangedFailedNoStorage();
+            downloadFailedNoStorage();
             break;
         case IDownloaderClient.STATE_COMPLETED:
-            completeDownload();
+            downloadComplete();
             break;
         }
     }
@@ -306,15 +306,15 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         String filePath = getExpansionCacheFilePath();
         if (FileUtils.doesFileExist(FileUtils.StorageLocation.k_externalStorage, filePath) == true)
         {
-            String fileContents = FileUtils.readTextFile(FileUtils.StorageLocation.k_externalStorage, filePath);
+            String fileContents = FileUtils.readTextFile(FileUtils.StorageLocation.k_apk, filePath);
             if (fileContents.length() > 0)
             {
                 try
                 {
                     JSONObject jsonRoot = new JSONObject(fileContents);
                     ApkExpansion expansion = new ApkExpansion();
-                    expansion.m_versionCode = jsonRoot.optInt(CACHE_VERSION_CODE_TAG, 0);
-                    expansion.m_fileSize = jsonRoot.optLong(CACHE_FILE_SIZE_TAG, 0);
+                    expansion.m_versionCode = jsonRoot.getInt(CACHE_VERSION_CODE_TAG);
+                    expansion.m_fileSize = jsonRoot.getLong(CACHE_FILE_SIZE_TAG);
                     return expansion;
                 }
                 catch (JSONException e)
@@ -414,7 +414,7 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
      *
      * @author Ian Copland
      */
-    private void completeDownload()
+    private void downloadComplete()
     {
         m_downloadProgress = 1.0f;
 
@@ -423,9 +423,59 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         apkExpansion.m_fileSize = calcExpansionFileSize(apkExpansion.m_versionCode);
         writeExpansionCache(apkExpansion);
 
+        cleanupClientStub();
+
         onStateChangedComplete();
     }
+    /**
+     * Flags the download as failed and cleans up the downloader.
+     *
+     * @author Ian Copland
+     */
+    private void downloadFailed()
+    {
+        m_downloadProgress = 0.0f;
 
+        String filePath = getExpansionCacheFilePath();
+        FileUtils.removeFile(FileUtils.StorageLocation.k_externalStorage, filePath);
+
+        cleanupClientStub();
+
+        onStateChangedFailed();
+    }
+    /**
+     * Flags the download as failed and cleans up the downloader.
+     *
+     * @author Ian Copland
+     */
+    private void downloadFailedNoStorage()
+    {
+        m_downloadProgress = 0.0f;
+
+        String filePath = getExpansionCacheFilePath();
+        FileUtils.removeFile(FileUtils.StorageLocation.k_externalStorage, filePath);
+
+        cleanupClientStub();
+
+        onStateChangedFailedNoStorage();
+    }
+    /**
+     * Disconnects the client stub if appropriate and the sets to null.
+     *
+     * @author Ian Copland
+     */
+    private void cleanupClientStub()
+    {
+        if (m_downloaderClientStub != null)
+        {
+            if (CSApplication.get().isActive() == true)
+            {
+                m_downloaderClientStub.disconnect(CSApplication.get().getActivity());
+            }
+
+            m_downloaderClientStub = null;
+        }
+    }
     /**
      * Notifies the native side of the app that the state has changed to Downloading.
      *
