@@ -46,6 +46,8 @@ import com.google.android.vending.expansion.downloader.IStub;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+
 /**
  * A system for managing the downloading of Apk Expansion files. The provides a means to check
  * if the Apk Expansion files already exist and are up to date, and download it if not.
@@ -92,6 +94,10 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         return (in_interfaceId == INTERFACE_ID);
     }
     /**
+     * Reads the Apk Expansion Config file and checks its contents versus the Expansion file on
+     * disk. If they are the same, no download is required. No download is required if there is
+     * no Apk Expansion config file.
+     *
      * This can be called from any thread.
      *
      * @author Ian Copland
@@ -100,22 +106,20 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
      */
     public boolean isDownloadRequired()
     {
-        ApkExpansion expansion = readExpansionCache();
-        if (expansion == null)
+        ApkExpansionConfig expansion = readApkExpansionConfig();
+        if (expansion != null)
         {
-            return true;
-        }
+            int versionCode = calcExpansionVersionCode();
+            if (expansion.m_versionCode != versionCode)
+            {
+                return true;
+            }
 
-        int versionCode = calcExpansionVersionCodeFromActivity();
-        if (expansion.m_versionCode != versionCode)
-        {
-            return true;
-        }
-
-        long fileSize = calcExpansionFileSize(versionCode);
-        if (expansion.m_fileSize != fileSize)
-        {
-            return true;
+            long fileSize = calcExpansionFileSize(versionCode);
+            if (expansion.m_fileSize != fileSize)
+            {
+                return true;
+            }
         }
 
         return false;
@@ -131,26 +135,33 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
     public void startDownload()
     {
         final ApkExpansionDownloader apkExpansionDownloader = this;
-        CSApplication.get().scheduleUIThreadTask(new Runnable() {
-            @Override
-            public void run() {
+        CSApplication.get().scheduleUIThreadTask(new Runnable()
+        {
+            @Override public void run()
+            {
                 Intent notifierIntent = new Intent(CSApplication.get().getActivity(), CSApplication.get().getActivity().getClass());
                 notifierIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 PendingIntent pendingIntent = PendingIntent.getActivity(CSApplication.get().getActivity(), 0, notifierIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                 int startResult = 0;
-                try {
+                try
+                {
                     startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(CSApplication.get().getActivity(), pendingIntent, ApkExpansionDownloaderService.class);
-                } catch (PackageManager.NameNotFoundException e) {
+                } catch (PackageManager.NameNotFoundException e)
+                {
                     Logging.logFatal(ExceptionUtils.ConvertToString(e));
                 }
 
-                if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED) {
+                if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
+                {
                     m_downloaderClientStub = DownloaderClientMarshaller.CreateStub(apkExpansionDownloader, ApkExpansionDownloaderService.class);
-                    if (CSApplication.get().isActive() == true) {
+                    if (CSApplication.get().isActive() == true)
+                    {
                         m_downloaderClientStub.connect(CSApplication.get().getActivity());
                     }
-                } else {
+                }
+                else
+                {
                     downloadComplete();
                 }
             }
@@ -165,9 +176,25 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
      *
      * @param in_pause - Whether to pause or un-pause the download.
      */
-    public void setDownloadPaused(boolean in_pause)
+    public void setDownloadPaused(final boolean in_pause)
     {
-        //TODO: pause download from UI Thread.
+        CSApplication.get().scheduleUIThreadTask(new Runnable()
+        {
+            @Override public void run()
+            {
+                if (m_remoteService != null)
+                {
+                    if (in_pause == true)
+                    {
+                        m_remoteService.requestPauseDownload();
+                    }
+                    else
+                    {
+                        m_remoteService.requestContinueDownload();
+                    }
+                }
+            }
+        });
     }
     /**
      * This can be called from any thread.
@@ -273,12 +300,12 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
     /**
      * @author Ian Copland
      *
-     * @return The path to the expansion cache file.
+     * @return The directory which Apk Expansion files are stored in.
      */
-    private String getExpansionCacheFilePath()
+    private String getExpansionDirectoryPath()
     {
-        final String MANIFEST_FILE_NAME = "_ApkExpansion.cache";
-        return FileUtils.getSaveDataDirectory(CSApplication.get().getActivity().getPackageName()) + MANIFEST_FILE_NAME;
+        String expansionDirectory = Helpers.getSaveFilePath(CSApplication.get().getActivityContext());
+        return StringUtils.standardiseDirectoryPath(expansionDirectory);
     }
     /**
      * @author Ian Copland
@@ -289,22 +316,23 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
      */
     private String getExpansionFilePath(int in_versionCode)
     {
-        String expansionDirectory = Helpers.getSaveFilePath(CSApplication.get().getActivityContext());
         String expansionFileName = Helpers.getExpansionAPKFileName(CSApplication.get().getActivityContext(), true, in_versionCode);
-        return StringUtils.standardiseDirectoryPath(expansionDirectory) + expansionFileName;
+        return getExpansionDirectoryPath() + expansionFileName;
     }
     /**
-     * Reads the contents of the expansion cache and returns the contained information. If the
+     * Reads the contents of the apk expansion config and returns the contained information. If the
      * cache couldn't be read or doesn't exist, null is returned.
      *
      * @author Ian Copland
      *
-     * @return The information in the cache, or null.
+     * @return The information in the config, or null.
      */
-    private ApkExpansion readExpansionCache()
+    private ApkExpansionConfig readApkExpansionConfig()
     {
-        String filePath = getExpansionCacheFilePath();
-        if (FileUtils.doesFileExist(FileUtils.StorageLocation.k_externalStorage, filePath) == true)
+        //TODO: Move into APK root!
+
+        String filePath = "AppResources/ApkExpansion.config";
+        if (FileUtils.doesFileExist(FileUtils.StorageLocation.k_apk, filePath) == true)
         {
             String fileContents = FileUtils.readTextFile(FileUtils.StorageLocation.k_apk, filePath);
             if (fileContents.length() > 0)
@@ -312,10 +340,10 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
                 try
                 {
                     JSONObject jsonRoot = new JSONObject(fileContents);
-                    ApkExpansion expansion = new ApkExpansion();
-                    expansion.m_versionCode = jsonRoot.getInt(CACHE_VERSION_CODE_TAG);
-                    expansion.m_fileSize = jsonRoot.getLong(CACHE_FILE_SIZE_TAG);
-                    return expansion;
+                    ApkExpansionConfig config = new ApkExpansionConfig();
+                    config.m_versionCode = jsonRoot.getInt(CACHE_VERSION_CODE_TAG);
+                    config.m_fileSize = jsonRoot.getLong(CACHE_FILE_SIZE_TAG);
+                    return config;
                 }
                 catch (JSONException e)
                 {
@@ -327,71 +355,61 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
         return null;
     }
     /**
-     * Writes the given information to the expansion cache.
-     *
      * @author Ian Copland
      *
-     * @param in_expansion - The expansion cache.
+     * @return The version code of the current expansion file. If the file doesn't exist, then
+     * this will return -1;
      */
-    private void writeExpansionCache(ApkExpansion in_expansion)
+    private int calcExpansionVersionCode()
     {
-        String fileContents = "";
-        try
+        File directory = new File(getExpansionDirectoryPath());
+
+        if (directory.exists() == false)
         {
-            JSONObject jsonRoot = new JSONObject();
-            jsonRoot.put(CACHE_VERSION_CODE_TAG, in_expansion.m_versionCode);
-            jsonRoot.put(CACHE_FILE_SIZE_TAG, in_expansion.m_fileSize);
-            fileContents = jsonRoot.toString();
-        }
-        catch (JSONException e)
-        {
-            Logging.logFatal(ExceptionUtils.ConvertToString(e));
+            return -1;
         }
 
-        String filePath = getExpansionCacheFilePath();
-        FileUtils.removeFile(FileUtils.StorageLocation.k_externalStorage, filePath);
-        FileUtils.writeTextFile(FileUtils.StorageLocation.k_externalStorage, filePath, fileContents);
-    }
-    /**
-     * @author Ian Copland
-     *
-     * @return The intended version code, as described by the activity. This information originates
-     * in the AndroidManifest.xml.
-     */
-    private int calcExpansionVersionCodeFromActivity()
-    {
-        //TODO: Check android manifest.
+        File[] contents = directory.listFiles();
+        if (contents.length != 1)
+        {
+            if (contents.length > 1)
+            {
+                Logging.logError("The Apk Expansion directory contains more than 1 file!");
+            }
+            return -1;
+        }
 
+        if (contents[0].isFile() == false)
+        {
+            Logging.logError("The Apk Expansion directory contains a directory.");
+            return -1;
+        }
+        String fileName = contents[0].getName();
+
+        if (fileName.startsWith("main.") == false)
+        {
+            Logging.logError("The Apk Expansion directory contains a file which is not the main expansion file.");
+            return -1;
+        }
+
+        int nextPeriod = fileName.indexOf(".", 5);
+        if (nextPeriod == -1)
+        {
+            Logging.logError("The Apk Expansion file has an invalid file name.");
+            return -1;
+        }
+
+        String versionCodeString = fileName.substring(5, nextPeriod);
         int versionCode = 0;
+
         try
         {
-            versionCode = CSApplication.get().getActivityContext().getPackageManager().getPackageInfo(CSApplication.get().getActivityContext().getPackageName(), 0).versionCode;
+            versionCode = Integer.parseInt(versionCodeString);
         }
-        catch (PackageManager.NameNotFoundException e)
+        catch (NumberFormatException e)
         {
-            Logging.logFatal(ExceptionUtils.ConvertToString(e));
-        }
-
-        return versionCode;
-    }
-    /**
-     * @author Ian Copland
-     *
-     * @return The current version code, i.e the version in the file name of the current Apk
-     * Expansion file.
-     */
-    private int calcExpansionVersionCodeFromFile()
-    {
-        //TODO: !?
-
-        int versionCode = 0;
-        try
-        {
-            versionCode = CSApplication.get().getActivityContext().getPackageManager().getPackageInfo(CSApplication.get().getActivityContext().getPackageName(), 0).versionCode;
-        }
-        catch (PackageManager.NameNotFoundException e)
-        {
-            Logging.logFatal(ExceptionUtils.ConvertToString(e));
+            Logging.logError("Could not parse Apk Expansion file version code.");
+            return -1;
         }
 
         return versionCode;
@@ -417,12 +435,6 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
     private void downloadComplete()
     {
         m_downloadProgress = 1.0f;
-
-        ApkExpansion apkExpansion = new ApkExpansion();
-        apkExpansion.m_versionCode = calcExpansionVersionCodeFromFile();
-        apkExpansion.m_fileSize = calcExpansionFileSize(apkExpansion.m_versionCode);
-        writeExpansionCache(apkExpansion);
-
         cleanupClientStub();
 
         onStateChangedComplete();
@@ -435,10 +447,6 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
     private void downloadFailed()
     {
         m_downloadProgress = 0.0f;
-
-        String filePath = getExpansionCacheFilePath();
-        FileUtils.removeFile(FileUtils.StorageLocation.k_externalStorage, filePath);
-
         cleanupClientStub();
 
         onStateChangedFailed();
@@ -451,10 +459,6 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
     private void downloadFailedNoStorage()
     {
         m_downloadProgress = 0.0f;
-
-        String filePath = getExpansionCacheFilePath();
-        FileUtils.removeFile(FileUtils.StorageLocation.k_externalStorage, filePath);
-
         cleanupClientStub();
 
         onStateChangedFailedNoStorage();
@@ -475,6 +479,8 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
 
             m_downloaderClientStub = null;
         }
+
+        m_remoteService = null;
     }
     /**
      * Notifies the native side of the app that the state has changed to Downloading.
@@ -513,11 +519,11 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
      */
     private native void onStateChangedFailedNoStorage();
     /**
-     * A container for information on a single Apk Expansion file.
+     * A container for information stored in the Apk Expansion Config file.
      *
      * @author Ian Copland
      */
-    private static class ApkExpansion
+    private static class ApkExpansionConfig
     {
         public int m_versionCode = 0;
         public long m_fileSize = 0;

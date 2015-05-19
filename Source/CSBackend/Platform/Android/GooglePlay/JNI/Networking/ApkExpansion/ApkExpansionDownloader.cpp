@@ -260,41 +260,35 @@ namespace CSBackend
             {
                 case StateChange::k_downloading:
                 {
-                    CS_LOG_ERROR("[ApkExpansionDownloader] State -> Downloading...");
                     m_state = State::k_downloading;
                     break;
                 }
                 case StateChange::k_complete:
                 {
-                    CS_LOG_ERROR("[ApkExpansionDownloader] State -> Complete!");
                     m_state = State::k_downloaded;
                     m_downloadedEvent.NotifyConnections(Result::k_success);
                     break;
                 }
                 case StateChange::k_failed:
                 {
-                    CS_LOG_ERROR("[ApkExpansionDownloader] State -> Failed!");
                     m_state = State::k_failed;
                     m_downloadedEvent.NotifyConnections(Result::k_failed);
                     break;
                 }
                 case StateChange::k_failedNoStorage:
                 {
-                    CS_LOG_ERROR("[ApkExpansionDownloader] State -> Out of Storage!");
                     m_state = State::k_failed;
                     m_downloadedEvent.NotifyConnections(Result::k_failedNoStorage);
                     break;
                 }
                 case StateChange::k_paused:
                 {
-                    CS_LOG_ERROR("[ApkExpansionDownloader] State -> ...Paused...");
                     CS_ASSERT(m_state == State::k_downloading, "Invalid Apk Expansion Download state change: Paused.");
                     m_state = State::k_paused;
                     break;
                 }
                 case StateChange::k_pausedNoWifi:
                 {
-                    CS_LOG_ERROR("[ApkExpansionDownloader] State -> ...No Wifi...");
                     CS_ASSERT(m_state == State::k_downloading, "Invalid Apk Expansion Download state change: Paued No Wifi.");
                     m_state = State::k_paused;
                     break;

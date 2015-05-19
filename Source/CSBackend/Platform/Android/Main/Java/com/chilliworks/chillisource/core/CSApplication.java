@@ -103,7 +103,7 @@ public class CSApplication
 	 * 
 	 * @author S Downie
 	 * 
-	 * @param Chilli source activity
+	 * @param in_activeActivity - ChilliSource activity
 	 */
 	public static void create(CSActivity in_activeActivity)
 	{
@@ -120,7 +120,7 @@ public class CSApplication
 	 * 
 	 * @author S Downie
 	 * 
-	 * @param Chilli source activity
+	 * @param in_activeActivity - ChilliSource activity
 	 */
 	private CSApplication(CSActivity in_activeActivity)
 	{
@@ -403,9 +403,9 @@ public class CSApplication
 	 * 
 	 * @author S Downie
 	 * 
-	 * @param Request code that it started with
-	 * @param Result code it returned
-	 * @param Any additional data returned
+	 * @param in_requestCode - Request code that it started with
+	 * @param in_resultCode - Result code it returned
+	 * @param in_data - Any additional data returned
 	 */
 	public void activityResult(int in_requestCode, int in_resultCode, Intent in_data)
 	{
@@ -423,7 +423,7 @@ public class CSApplication
 	 * 
 	 * @author S Downie
 	 * 
-	 * @param New config
+	 * @param in_config- New config
 	 */
     public void activityConfigurationChanged(Configuration in_config)
     {
@@ -440,7 +440,7 @@ public class CSApplication
 	 * 
 	 * @author S Downie
 	 * 
-	 * @param Intent
+	 * @param in_intent - Intent
 	 */
 	public void activityIntent(Intent in_intent)
 	{
@@ -449,7 +449,7 @@ public class CSApplication
 	/**
 	 * @author S Downie
 	 * 
-	 * @param System 
+	 * @param in_system - System
 	 */
 	public void addSystem(final System in_system)
 	{
@@ -480,7 +480,7 @@ public class CSApplication
 	/**
 	 * @author S Downie
 	 * 
-	 * @param Interface ID of system to find 
+	 * @param in_interfaceId - Interface ID of system to find
 	 * 
 	 * @return The first system that implements the given interface ID.
 	 */
@@ -526,7 +526,7 @@ public class CSApplication
 
                 synchronized(m_systems)
                 {
-                    assert (m_systems.contains(in_system) == false) : "System already added to application!";
+                    assert (m_systems.contains(in_system) == false) : "System doesn't exist in application!";
                     m_systems.remove(in_system);
                 }
             }
@@ -574,7 +574,7 @@ public class CSApplication
 	/**
 	 * @author S Downie
 	 * 
-	 * param Android UI to add to app root view 
+	 * @param in_view - Android UI to add to app root view
 	 */
 	public void addView(View in_view)
 	{
@@ -583,7 +583,7 @@ public class CSApplication
 	/**
 	 * @author S Downie
 	 * 
-	 * param Android UI to remove from app root view 
+	 * @param in_view - Android UI to remove from app root view
 	 */
 	public void removeView(View in_view)
 	{
@@ -592,7 +592,7 @@ public class CSApplication
 	/**
 	 * @author S Downie
 	 * 
-	 * @param Max update frequency in seconds
+	 * @param in_maxFPS - Max update frequency in seconds
 	 */
 	public void setPreferredFPS(int in_maxFPS)
 	{
@@ -603,7 +603,7 @@ public class CSApplication
 	 * 
 	 * @author S Downie
 	 * 
-	 * @param Task
+	 * @param in_task - Task
 	 */
 	public void scheduleMainThreadTask(Runnable in_task)
 	{
@@ -616,7 +616,7 @@ public class CSApplication
 	 * 
 	 * @author S Downie
 	 * 
-	 * @param Task
+	 * @param in_task - Task
 	 */
 	public void scheduleUIThreadTask(Runnable in_task)
 	{
@@ -628,8 +628,6 @@ public class CSApplication
 	 * Terminate the application
 	 * 
 	 * @author S Downie
-	 * 
-	 * @param Task
 	 */
 	public void quit()
 	{
@@ -657,8 +655,6 @@ public class CSApplication
 	 * in the AdditionalSharedLibraries application meta-data
 	 * 
 	 * @author Ian Copland
-	 * 
-	 * @param Task
 	 */
 	private void loadSharedLibraries()
 	{

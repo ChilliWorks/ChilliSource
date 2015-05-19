@@ -58,7 +58,7 @@ public abstract class System implements IQueryableInterface
      * Cleans up the system, calling appropriate life cycle events, then removes it from the
      * application system list.
      *
-     * This *must* be the last method called on the system..
+     * This *must* be the last method called on the system.
      *
      * This can be called from any thread.
      *
@@ -123,7 +123,7 @@ public abstract class System implements IQueryableInterface
 	 * 
 	 * @author S Downie
 	 * 
-	 * @param Intent
+	 * @param in_intent - Intent
 	 */
     protected void onLaunchIntentReceived(Intent in_intent) {}
 	/**
@@ -133,9 +133,9 @@ public abstract class System implements IQueryableInterface
 	 * 
 	 * @author S Downie
 	 * 
-	 * @param Request code that it started with
-	 * @param Result code it returned
-	 * @param Any additional data returned
+	 * @param in_requestCode - Request code that it started with
+	 * @param in_resultCode - Result code it returned
+	 * @param in_data - Any additional data returned
 	 */
     protected void onActivityResult(int in_requestCode, int in_resultCode, Intent in_data) {}
 	/**
@@ -145,7 +145,7 @@ public abstract class System implements IQueryableInterface
 	 * 
 	 * @author S Downie
 	 * 
-	 * @param New config
+	 * @param in_config - New config
 	 */
     protected void onActivityConfigurationChanged(Configuration in_config) {}
 }

@@ -42,9 +42,11 @@ namespace CSBackend
 	namespace Android
 	{
 		//------------------------------------------------------------------------------
-		/// Defines a java class which is accessible through JavaClass.
+		/// Defines the class which will be instantiated, and the methods which will
+		/// be accessible when using JavaClass.
 		///
-		/// TODO: Further usage description
+		/// Although JavaClass uses this for setup, it isn't retained, so it can be
+		/// further modified and passed to additional JavaClass instances.
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------

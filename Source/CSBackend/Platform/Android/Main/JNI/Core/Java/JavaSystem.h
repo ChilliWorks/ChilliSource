@@ -44,7 +44,8 @@ namespace CSBackend
 	{
 		//------------------------------------------------------------------------------
 		/// A specialised version of JavaSystem, specifically for accessing classes which
-		/// extend System.
+		/// extend System. This ensures the init() and destroy() methods will be called
+		/// as appropriate for the system.
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
