@@ -911,7 +911,7 @@ namespace ChilliSource
             {
                 if(m_parent->m_children[i].get() == this)
                 {
-                    std::swap(m_parent->m_children[i], m_parent->m_children[i+1]);
+                    std::swap(m_parent->m_children[i], m_parent->m_children[length]);
                 }
             }
         }
