@@ -477,14 +477,22 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void Transform::SetWorldTransform(const Matrix4& inmatTransform)
         {
-            inmatTransform.Decompose(mvWorldPosition, mvWorldScale, mqWorldOrientation);
-            
-            mmatWorldTransform = inmatTransform;
-            
+            //Change the local transform to match the given world matrix
+            if (mpParentTransform)
+            {
+                mmatTransform = inmatTransform * CSCore::Matrix4::Inverse(mpParentTransform->GetWorldTransform());
+            }
+            else
+            {
+                mmatTransform = inmatTransform;
+            }
+
+            mmatTransform.Decompose(mvPosition, mvScale, mqOrientation);
+
             OnTransformChanged();
-            
+
             mbIsTransformCacheValid = true;
-            mbIsParentTransformCacheValid = true;
+            mbIsParentTransformCacheValid = false;
         }
         //----------------------------------------------------------------
         /// Set Local Transform
