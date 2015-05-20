@@ -490,7 +490,7 @@ public class CSApplication
 		{
 			for (System system : m_systems)
 			{
-				if (system.IsA(in_interfaceId))
+				if (system.isA(in_interfaceId))
 				{
 					return system;
 				}
@@ -500,7 +500,10 @@ public class CSApplication
 		return null;
 	}
     /**
-     * Removes the system fro
+     * Removes the system from the application.
+	 *
+	 * This is thread-safe, however calling this on a thread other than the UI thread will not
+	 * necessarily remove the system immediately.
      *
      * @author Ian Copland
      *
@@ -535,7 +538,8 @@ public class CSApplication
 	/**
 	 * @author S Downie
 	 * 
-	 * @return Whether the application
+	 * @return Whether the application is "active" - i.e between the onResume() and onStop()
+	 * life cycle events.
 	 */
 	public boolean isActive()
 	{

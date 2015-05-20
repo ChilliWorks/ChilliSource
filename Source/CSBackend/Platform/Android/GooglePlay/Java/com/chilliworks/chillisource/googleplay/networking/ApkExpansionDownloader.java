@@ -89,7 +89,7 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean IsA(InterfaceID in_interfaceId)
+    @Override public boolean isA(InterfaceID in_interfaceId)
     {
         return (in_interfaceId == INTERFACE_ID);
     }
@@ -147,7 +147,8 @@ public final class ApkExpansionDownloader extends System implements IDownloaderC
                 try
                 {
                     startResult = DownloaderClientMarshaller.startDownloadServiceIfRequired(CSApplication.get().getActivity(), pendingIntent, ApkExpansionDownloaderService.class);
-                } catch (PackageManager.NameNotFoundException e)
+                }
+                catch (PackageManager.NameNotFoundException e)
                 {
                     Logging.logFatal(ExceptionUtils.ConvertToString(e));
                 }

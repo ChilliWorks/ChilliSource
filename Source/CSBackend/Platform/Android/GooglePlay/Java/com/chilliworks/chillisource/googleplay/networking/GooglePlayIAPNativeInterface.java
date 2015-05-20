@@ -83,7 +83,7 @@ public class GooglePlayIAPNativeInterface  extends com.chilliworks.chillisource.
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean IsA(InterfaceID in_interfaceId)
+    @Override public boolean isA(InterfaceID in_interfaceId)
     {
         return (in_interfaceId == INTERFACE_ID);
     }

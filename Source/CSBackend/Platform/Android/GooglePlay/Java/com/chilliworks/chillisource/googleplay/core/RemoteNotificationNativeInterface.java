@@ -67,7 +67,7 @@ public class RemoteNotificationNativeInterface extends System
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean IsA(com.chilliworks.chillisource.core.InterfaceID in_interfaceId)
+    @Override public boolean isA(com.chilliworks.chillisource.core.InterfaceID in_interfaceId)
     {
         return (in_interfaceId == INTERFACE_ID);
     }
