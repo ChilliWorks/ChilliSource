@@ -366,8 +366,8 @@ namespace ChilliSource
             
             m_invalidateCache = true;
         }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         void TextComponent::ReplaceVariables(const Rendering::FontCSPtr& in_font, const std::string& in_text, const Core::ParamDictionary& in_params, const TextIconDictionary& in_iconDictionary,
                                              std::string& out_text, std::vector<TextIconIndex>& out_iconIndices)
         {
@@ -508,7 +508,6 @@ namespace ChilliSource
                 f32 aspectRatio = iconIndex.m_icon.GetOriginalSize().x / iconIndex.m_icon.GetOriginalSize().y;
                 f32 width = aspectRatio * in_font->GetLineHeight() * iconIndex.m_icon.GetScale();
                 
-                
                 u32 spacesNeeded = 0;
                 if(in_spaceInfo.m_advance > 0.0f)
                 {
@@ -567,7 +566,7 @@ namespace ChilliSource
             return output;
         }
         //------------------------------------------------------------------------------
-        //-------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         void TextComponent::OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
         {
             if (m_cachedSize != in_absSize)
