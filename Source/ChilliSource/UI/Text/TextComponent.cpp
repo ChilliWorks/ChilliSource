@@ -552,12 +552,17 @@ namespace ChilliSource
                     f32 croppedIconAspectRatio = iconIndex.m_icon.GetCroppedSize().x / iconIndex.m_icon.GetCroppedSize().y;
                     f32 width = croppedIconAspectRatio * height;
                     
+                    //calculate the offset from the centre of the original image quad to cropped
+                    f32 croppedOffsetFromCentreX = iconIndex.m_icon.GetOffset().x + iconIndex.m_icon.GetCroppedSize().x * 0.5f - iconIndex.m_icon.GetOriginalSize().x * 0.5f;
+                    f32 croppedOffsetFromCentreY = -(iconIndex.m_icon.GetOffset().y + iconIndex.m_icon.GetCroppedSize().y * 0.5f - iconIndex.m_icon.GetOriginalSize().y * 0.5f);
+                    auto croppedOffset = Core::Vector2(croppedOffsetFromCentreX, croppedOffsetFromCentreY) * iconIndex.m_icon.GetScale() * in_textScale;
+                    
                     TextIconCachedData iconData;
                     iconData.m_texture = iconIndex.m_icon.GetTexture();
                     iconData.m_size = Core::Vector2(width, height);
                     iconData.m_uvs = iconIndex.m_icon.GetUVs();
-                    iconData.m_offset.x = iconIndex.m_icon.GetOffset().x + charPosX;
-                    iconData.m_offset.y = iconIndex.m_icon.GetOffset().y + charPosY;
+                    iconData.m_offset.x = croppedOffset.x + charPosX;
+                    iconData.m_offset.y = croppedOffset.y + charPosY;
                     
                     output.push_back(iconData);
                 }
