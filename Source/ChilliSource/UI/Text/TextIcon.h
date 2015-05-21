@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Vector2.h>
+#include <ChilliSource/Rendering/Texture/UVs.h>
 
 #include <unordered_map>
 
@@ -38,61 +39,88 @@ namespace ChilliSource
 {
     namespace UI
     {
-        //--------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         /// A text specific image data
         ///
         /// @author Nicolas Tanda
-        //--------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         class TextIcon final
         {
         public:
-            //-------------------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// Default constructor
             ///
             /// @author Nicolas Tanda
-            //-------------------------------------------------------------------
+            //------------------------------------------------------------------------------
             TextIcon() = default;
-            //-------------------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// @author Nicolas Tanda
             ///
-            /// @param Texture
-            /// @param Scale of the image, relative to the text height
-            //-------------------------------------------------------------------
+            /// @param in_texture - Texture
+            /// @param in_scale - [Optional] Scale of the image, relative to the text height
+            //------------------------------------------------------------------------------
             TextIcon(const Rendering::TextureCSPtr& in_texture, f32 in_scale = 1.0f);
-            //-------------------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// @author Nicolas Tanda
             ///
-            /// @param Texture
-            /// @param Texture atlas
-            /// @param Texture atlas ID
-            /// @param Scale of the image, relative to the text height
-            //-------------------------------------------------------------------
+            /// @param in_texture - Texture
+            /// @param in_atlas - Texture atlas
+            /// @param in_atlasID - Texture atlas ID
+            /// @param in_scale - [Optional] Scale of the image, relative to the text height
+            //------------------------------------------------------------------------------
             TextIcon(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasID, f32 in_scale = 1.0f);
             
-            //-------------------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// @author Nicolas Tanda
             ///
             /// @return The texture of the image
-            //-------------------------------------------------------------------
+            //------------------------------------------------------------------------------
             const Rendering::TextureCSPtr& GetTexture() const;
-            //-------------------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// @author Nicolas Tanda
             ///
             /// @return The texture atlas of the image
-            //-------------------------------------------------------------------
+            //------------------------------------------------------------------------------
             const Rendering::TextureAtlasCSPtr& GetTextureAtlas() const;
-            //-------------------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// @author Nicolas Tanda
             ///
             /// @return The texture atlas ID of the image
-            //-------------------------------------------------------------------
+            //------------------------------------------------------------------------------
             const std::string& GetTextureAtlasID() const;
-            //-------------------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// @author Nicolas Tanda
             ///
             /// @return The scale of the image
-            //-------------------------------------------------------------------
+            //------------------------------------------------------------------------------
             f32 GetScale() const;
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The full size of the image prior to cropping.
+            //------------------------------------------------------------------------------
+            const Core::Vector2& GetOriginalSize() const;
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The size of the image after cropping. Icons which are not part of a
+            /// texture atlas will return the same as GetOriginalSize().
+            //------------------------------------------------------------------------------
+            const Core::Vector2& GetCroppedSize() const;
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The "cropping" offset of the image. Icons which are not part of a
+            /// texture atlas this will always return [0.0, 0.0].
+            //------------------------------------------------------------------------------
+            const Core::Vector2& GetOffset() const;
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The UVs of the image. Icons which are not part of a texture atlas
+            /// will always return [0.0, 0.0, 1.0, 1.0].
+            //------------------------------------------------------------------------------
+            const Rendering::UVs& GetUVs() const;
             
         private:
             Rendering::TextureCSPtr m_texture;
@@ -100,6 +128,11 @@ namespace ChilliSource
             std::string m_atlasID;
             
             f32 m_scale = 1.0f;
+            
+            Core::Vector2 m_originalSize;
+            Core::Vector2 m_croppedSize;
+            Core::Vector2 m_offset;
+            Rendering::UVs m_uvs;
         };
     }
 }
