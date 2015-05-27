@@ -48,6 +48,7 @@
 #include <cassert>
 #include <functional>
 #include <mutex>
+#include <unordered_set>
 
 namespace ChilliSource
 {
@@ -1053,6 +1054,65 @@ namespace ChilliSource
             /// @param The property used to set the value.
             //----------------------------------------------------------------------------------------
             void SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property);
+            //------------------------------------------------------------------------------
+            /// Checks the given pointer and updates the contained pointer set accordingly.
+            /// If the pointer has changed state a pointer entered or exited event will be
+            /// fired.
+            ///
+            /// This doesn't handle whether or not input is enabled - only call this if
+            /// input is enabled.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_pointer - The pointer to check.
+            //------------------------------------------------------------------------------
+            void UpdateContainedPointer(const Input::Pointer& in_pointer);
+            //------------------------------------------------------------------------------
+            /// Removes the given pointer from the contained pointer set if it is present.
+            /// If removed, the pointer exited event will be fired.
+            ///
+            /// This doesn't handle whether or not input is enabled - only call this if
+            /// input is enabled.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_pointer - The pointer to check.
+            //------------------------------------------------------------------------------
+            void RemoveContainedPointer(const Input::Pointer& in_pointer);
+            //------------------------------------------------------------------------------
+            /// Checks all existing pointers and updates the contained pointer set
+            /// accordingly. For each pointer which has changed state a pointer exited or
+            /// entered event will be fired.
+            ///
+            /// This doesn't handle whether or not input is enabled - only call this if
+            /// input is enabled.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void UpdateAllContainedPointers();
+            //------------------------------------------------------------------------------
+            /// Removes all pointers from the contained pointers set. Pointer exited events
+            /// will be fired for those that are removed.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void RemoveAllContainedPointers();
+            //------------------------------------------------------------------------------
+            /// Checks the contained pointer set to confirm if this pointer is contained
+            /// within the widget. Note that the set is not updated by this method and
+            /// UpdateContainedPointer() or UpdateAllContainedPointers() will need to be
+            /// called prior to this to ensure it is up to date.
+            ///
+            /// This doesn't handle whether or not input is enabled - only call this if
+            /// input is enabled.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_pointer - The pointer which should be checked.
+            ///
+            /// @return Whether or not the pointer is within the bounds.
+            //------------------------------------------------------------------------------
+            bool IsContainedPointer(const Input::Pointer& in_pointer);
             //----------------------------------------------------------------------------------------
             /// Called when the out transform changes forcing this to update its caches
             ///
@@ -1113,36 +1173,55 @@ namespace ChilliSource
             /// @author Ian Copland
             //----------------------------------------------------------------------------------------
             void OnSuspend();
-            //-----------------------------------------------------------
+            //------------------------------------------------------------------------------
+            /// Called whenever a new pointer is added to the canvas.
+            ///
+            /// @author Ian Copland.
+            ///
+            /// @param in_pointer - The new pointer which was added.
+            /// @param in_timestamp - The time the new pointer was added.
+            //------------------------------------------------------------------------------
+            void OnPointerAdded(const Input::Pointer& in_pointer, f64 in_timestamp);
+            //------------------------------------------------------------------------------
             /// Called when the canvas receives cursor/touch input
             ///
             /// @author S Downie
             ///
-            /// @param The pointer
-            /// @param The timestamp.
-            /// @param The press type.
-            /// @param Filter object to check if the event has been filtered or to filter it
-            //-----------------------------------------------------------
+            /// @param in_pointer - The pointer
+            /// @param in_timestamp - The timestamp.
+            /// @param in_inputType - The press type.
+            /// @param in_filter - Filter object to check if the event has been filtered or
+            /// to filter it
+            //------------------------------------------------------------------------------
             void OnPointerDown(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType, Input::Filter& in_filter);
-            //-----------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// Called when the canvas receives cursor/touch move input
             ///
             /// @author S Downie
             ///
-            /// @param The pointer
-            /// @param The timestamp.
-            //-----------------------------------------------------------
+            /// @param in_pointer - The pointer
+            /// @param in_timestamp - The timestamp.
+            //------------------------------------------------------------------------------
             void OnPointerMoved(const Input::Pointer& in_pointer, f64 in_timestamp);
             //-----------------------------------------------------------
             /// Called when the canvas receiving cursor/touch release input
             ///
             /// @author S Downie
             ///
-            /// @param The pointer
-            /// @param The timestamp.
-            /// @param The press type.
-            //-----------------------------------------------------------
+            /// @param in_pointer - The pointer
+            /// @param in_timestamp - The timestamp.
+            /// @param in_inputType - The input type.
+            //------------------------------------------------------------------------------
             void OnPointerUp(const Input::Pointer& in_pointer, f64 in_timestamp, Input::Pointer::InputType in_inputType);
+            //------------------------------------------------------------------------------
+            /// Called whenever an existing pointer is removed from the canvas.
+            ///
+            /// @author Ian Copland.
+            ///
+            /// @param in_pointer - The new pointer which was removed.
+            /// @param in_timestamp - The time the pointer was removed.
+            //------------------------------------------------------------------------------
+            void OnPointerRemoved(const Input::Pointer& in_pointer, f64 in_timestamp);
             
         private:
             
@@ -1151,6 +1230,7 @@ namespace ChilliSource
             std::unordered_map<std::string, std::pair<Widget*, std::string>> m_childPropertyLinks;
             
             std::unordered_map<Input::Pointer::Id, std::set<Input::Pointer::InputType>> m_pressedInput;
+            std::unordered_set<Input::Pointer::Id> m_containedPointers;
             
             Core::Event<InputDelegate> m_pressedInsideEvent;
             Core::Event<InputDelegate> m_releasedInsideEvent;
@@ -1202,6 +1282,7 @@ namespace ChilliSource
             mutable bool m_isParentSizeCacheValid = false;
     
             Core::Screen* m_screen = nullptr;
+            Input::PointerSystem* m_pointerSystem = nullptr;
         };
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------

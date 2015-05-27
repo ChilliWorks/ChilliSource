@@ -101,7 +101,7 @@ namespace CSBackend
             //----------------------------------------------------
             void ShowCursor() override {};
         private:
-            friend CSInput::PointerSystemUPtr CSInput::PointerSystem::Create();
+            friend class CSInput::PointerSystem;
 
             //------------------------------------------------
             /// Default constructor. Declared private to force

@@ -31,12 +31,14 @@
 #include <CSBackend/Platform/Android/Main/JNI/Video/Base/VideoPlayer.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/File/FileSystem.h>
 #include <CSBackend/Platform/Android/Main/JNI/Video/Base/VideoPlayerJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Base/Screen.h>
-#include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/File/TaggedFilePathResolver.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
+#include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
@@ -60,7 +62,7 @@ namespace CSBackend
 		}
         //--------------------------------------------------------------
         //--------------------------------------------------------------
-        void VideoPlayer::Present(CSCore::StorageLocation in_storageLocation, const std::string& in_fileName, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap,
+        void VideoPlayer::Present(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap,
         		const CSCore::Colour& in_backgroundColour)
         {
         	CS_ASSERT(m_isPlaying == false, "Cannot present a video while one is already playing.");
@@ -68,44 +70,33 @@ namespace CSBackend
 
             m_completionDelegateConnection = std::move(in_delegateConnection);
 
-        	//calculate the storage location and full filename.
-        	bool isPackage = false;
-        	std::string fileName;
-        	if (in_storageLocation == CSCore::StorageLocation::k_package)
-        	{
-        		isPackage = true;
-        		fileName = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(CSCore::StorageLocation::k_package, in_fileName);
-        	}
-        	else if (in_storageLocation == CSCore::StorageLocation::k_DLC)
-			{
-        		if (CSCore::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(in_fileName) == true)
-        		{
-        			isPackage = false;
-        			fileName = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_fileName;
-        		}
-        		else
-        		{
-        			isPackage = true;
-        			fileName = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(CSCore::StorageLocation::k_package, CSCore::Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_fileName);
-        		}
-			}
-        	else
-        	{
-        		isPackage = false;
-        		fileName = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_storageLocation) + in_fileName;
-        	}
+            auto fileSystem = CSCore::Application::Get()->GetFileSystem();
+            auto taggedFilePath = CSCore::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, in_filePath);
+            std::string absFilePath = fileSystem->GetAbsolutePathToFile(in_storageLocation, taggedFilePath);
+
+            bool isPackage = false;
+            if (in_storageLocation == CSCore::StorageLocation::k_package || (in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
+            {
+                isPackage = true;
+                absFilePath = FileSystem::k_packageAPKDir + absFilePath;
+            }
+            else if (in_storageLocation == CSCore::StorageLocation::k_chilliSource)
+            {
+                isPackage = true;
+                absFilePath = FileSystem::k_csAPKDir + absFilePath;
+            }
 
         	//start the video
-        	m_javaInterface->Present(isPackage, fileName, in_dismissWithTap, in_backgroundColour, CSCore::MakeDelegate(this, &VideoPlayer::OnVideoComplete));
+        	m_javaInterface->Present(isPackage, absFilePath, in_dismissWithTap, in_backgroundColour, CSCore::MakeDelegate(this, &VideoPlayer::OnVideoComplete));
         }
         //--------------------------------------------------------------
 		//--------------------------------------------------------------
-		void VideoPlayer::PresentWithSubtitles(CSCore::StorageLocation in_storageLocation, const std::string& in_fileName, const CSVideo::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
+		void VideoPlayer::PresentWithSubtitles(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSVideo::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
                 bool in_dismissWithTap, const CSCore::Colour& in_backgroundColour)
 		{
 			m_subtitles = in_subtitles;
 			m_javaInterface->SetUpdateSubtitlesDelegate(CSCore::MakeDelegate(this, &VideoPlayer::OnUpdateSubtitles));
-			Present(in_storageLocation, in_fileName, std::move(in_delegateConnection), in_dismissWithTap, in_backgroundColour);
+			Present(in_storageLocation, in_filePath, std::move(in_delegateConnection), in_dismissWithTap, in_backgroundColour);
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------

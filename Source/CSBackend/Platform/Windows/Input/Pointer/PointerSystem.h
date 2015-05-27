@@ -75,9 +75,9 @@ namespace CSBackend
 			/// @author S Downie
 			//----------------------------------------------------
 			void ShowCursor() override;
-		private:
-			friend CSInput::PointerSystemUPtr CSInput::PointerSystem::Create();
 
+		private:
+			friend class CSInput::PointerSystem;
 			//----------------------------------------------
 			/// Triggered by SFML when the cursor moves
 			///

@@ -382,7 +382,15 @@ public final class CSProjectGenerator
 		//remove any remnants of the git project.
 		try
 		{
-			Files.deleteIfExists(Paths.get(csDestinationPath + ".git"));
+			Path gitPath = Paths.get(csDestinationPath + ".git");
+			if (Files.isDirectory(gitPath) == true)
+			{
+				FileUtils.deleteDirectory(gitPath.toString());
+			}
+			else
+			{
+				Files.deleteIfExists(gitPath);
+			}
 			Files.deleteIfExists(Paths.get(csDestinationPath + ".gitignore"));
 		}
 		catch (Exception e)

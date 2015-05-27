@@ -30,7 +30,7 @@
 
 #ifdef CS_TARGETPLATFORM_IOS
 #include <CSBackend/Platform/iOS/Social/Facebook/FacebookPostSystem.h>
-#elif CS_TARGETPLATFORM_ANDROID
+#elif defined(CS_TARGETPLATFORM_ANDROID)
 #include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookPostSystem.h>
 #endif
 

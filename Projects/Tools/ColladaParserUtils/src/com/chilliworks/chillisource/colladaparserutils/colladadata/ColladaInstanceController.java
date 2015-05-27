@@ -28,16 +28,18 @@
 
 package com.chilliworks.chillisource.colladaparserutils.colladadata;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ColladaInstanceController 
 {
 	public String mstrUrl;
-	public ColladaSkeleton mSkeleton;
+	public List<ColladaSkeleton> m_skeletons = new ArrayList<>();
 	public ColladaBindMaterial mBindMaterial;
 	
 	public ColladaInstanceController()
 	{
 		mstrUrl = new String();
-		mSkeleton = new ColladaSkeleton();
 		mBindMaterial = new ColladaBindMaterial();
 	}
 }

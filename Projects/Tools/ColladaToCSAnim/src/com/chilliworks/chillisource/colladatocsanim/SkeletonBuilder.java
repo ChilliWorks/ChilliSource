@@ -35,7 +35,6 @@ import com.chilliworks.chillisource.colladaparserutils.colladadata.*;
 import com.chilliworks.chillisource.colladaparserutils.colladadata.ColladaNode.COLLADA_NODE_TYPE;
 import com.chilliworks.chillisource.colladatocsanim.csanim.*;
 import com.chilliworks.chillisource.coreutils.Logging;
-import com.chilliworks.chillisource.coreutils.Matrix4;
 
 public class SkeletonBuilder 
 {
@@ -79,7 +78,17 @@ public class SkeletonBuilder
 		//if this should be exported, then see if it can be
 		if (bShouldExport == true && inNode.meType == ColladaNode.COLLADA_NODE_TYPE.CONTROLLER)
 		{
-			String skeletonName = inNode.mInstanceController.mSkeleton.mstrValue.substring(1);
+			if (inNode.mInstanceController.m_skeletons.size() == 0)
+			{
+				Logging.logFatal("Cannot create animation becuase the model has no skeleton.");
+			}
+			
+			if (inNode.mInstanceController.m_skeletons.size() > 1)
+			{
+				Logging.logFatal("Cannot create animation becuase the model has more than one skeleton.");
+			}
+			
+			String skeletonName = inNode.mInstanceController.m_skeletons.get(0).mstrValue.substring(1);
 
 			//export this node if possible
 			if (skeletonName.length() > 0)
@@ -230,12 +239,7 @@ public class SkeletonBuilder
 			newSkeletonNode.mstrParentId = inParent.mstrId;
 		}
 		
-		float[][] matData = inNode.mMatrix.maafValues;
-		
-		newSkeletonNode.mInitialPoseMatrix = new Matrix4(matData[0][0], matData[1][0], matData[2][0], matData[3][0],
-			matData[0][1], matData[1][1], matData[2][1], matData[3][1],
-			matData[0][2], matData[1][2], matData[2][2], matData[3][2],
-			matData[0][3], matData[1][3], matData[2][3], matData[3][3]);
+		newSkeletonNode.mInitialPoseMatrix = inNode.m_transform;
 		
 		//add the joint
 		inModel.mSkeleton.mNodeList.add(newSkeletonNode);
