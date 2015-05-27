@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_NETWORKING_MO_CONTENT_DOWNLOADER_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Time.h>
 #include <ChilliSource/Networking/ContentDownload/IContentDownloader.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
@@ -59,14 +60,15 @@ namespace ChilliSource
             //----------------------------------------------------------------
             bool DownloadContentManifest(const Delegate& inDelegate);
             //----------------------------------------------------------------
-            /// Download Package
-            ///
             /// Download the package file from the given URL
             ///
-            /// @param URL string
-            /// @param Delegate
+            /// @author HMcLaughlin
+            ///
+            /// @param in_url - Url to download
+            /// @param in_delegate - Delegate to call on completion
+            /// @param in_progressDelegate - Download Progress Delegate
             //----------------------------------------------------------------
-            void DownloadPackage(const std::string& instrURL, const Delegate& inDelegate);
+            void DownloadPackage(const std::string& in_url, const Delegate& in_delegate, const DownloadProgressDelegate& in_progressDelegate);
             //----------------------------------------------------------------
             /// Get Tags
             ///
@@ -79,6 +81,12 @@ namespace ChilliSource
             /// Set the tags for this downloader
             //----------------------------------------------------------------
             inline void SetTags(const std::vector<std::string>& inastrTags) { mastrTags = inastrTags; }
+            //------------------------------------------------------------
+            /// @author HMcLaughlin
+            ///
+            /// @return The progress of the current package
+            //------------------------------------------------------------
+            f32 GetDownloadProgress();
             
         private:
             //----------------------------------------------------------------
@@ -111,6 +119,9 @@ namespace ChilliSource
             HttpRequestSystem* mpHttpRequestSystem;
             
             HttpRequest* mpCurrentRequest;
+            
+            CSCore::TimerSPtr m_downloadProgressUpdateTimer;
+            CSCore::EventConnectionUPtr m_downloadProgressEventConnection;
         };
     }
 }

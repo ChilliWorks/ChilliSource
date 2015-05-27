@@ -39,26 +39,16 @@ namespace ChilliSource
 {
     namespace Networking
     {
+        const f32 k_downloadProgressUpdateIntervalDefault = 1.0f / 30.0f;
+        
         //----------------------------------------------------------------
-        /// Constructor
-        ///
-        /// @param HTTP request system
-        /// @param Asset server URL
-        /// @param Dynamic array of tags that determine content
         //----------------------------------------------------------------
         MoContentDownloader::MoContentDownloader(HttpRequestSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags)
         : mpHttpRequestSystem(inpRequestSystem), mstrAssetServerURL(instrAssetServerURL), mastrTags(inastrTags)
         {
-            
+            m_downloadProgressUpdateTimer = CSCore::TimerSPtr(new CSCore::Timer());
         }
         //----------------------------------------------------------------
-        /// Download Content Manifest
-        ///
-        /// Pull the .moman file from the server and callback when
-        /// the download is complete
-        ///
-        /// @param Delegate
-        /// @return Whether the manifest download has begun
         //----------------------------------------------------------------
         bool MoContentDownloader::DownloadContentManifest(const Delegate& inDelegate)
         {
@@ -95,17 +85,23 @@ namespace ChilliSource
             }
         }
         //----------------------------------------------------------------
-        /// Download Package
-        ///
-        /// Download the package file from the given URL
-        ///
-        /// @param URL string
-        /// @param Delegate
         //----------------------------------------------------------------
-        void MoContentDownloader::DownloadPackage(const std::string& instrURL, const Delegate& inDelegate)
+        void MoContentDownloader::DownloadPackage(const std::string& in_url, const Delegate& in_delegate, const DownloadProgressDelegate& in_progressDelegate)
         {
-            mOnContentDownloadCompleteDelegate = inDelegate;
-            mpCurrentRequest = mpHttpRequestSystem->MakeGetRequest(instrURL, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
+            mOnContentDownloadCompleteDelegate = in_delegate;
+            mpCurrentRequest = mpHttpRequestSystem->MakeGetRequest(in_url, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
+            
+            //Reset the timer
+            m_downloadProgressUpdateTimer->Reset();
+            m_downloadProgressEventConnection = m_downloadProgressUpdateTimer->OpenConnection(k_downloadProgressUpdateIntervalDefault, [=]()
+            {
+                if(in_progressDelegate)
+                {
+                    in_progressDelegate(in_url, GetDownloadProgress());
+                }
+            });
+            
+            m_downloadProgressUpdateTimer->Start();
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
@@ -170,6 +166,12 @@ namespace ChilliSource
             if(mpCurrentRequest == in_request)
                 mpCurrentRequest = nullptr;
             
+            if(m_downloadProgressUpdateTimer)
+            {
+                m_downloadProgressEventConnection->Close();
+                m_downloadProgressUpdateTimer->Stop();
+            }
+            
             switch(in_response.GetResult())
             {
                 case HttpResponse::Result::k_completed:
@@ -196,6 +198,28 @@ namespace ChilliSource
                     break;
                 }
             }
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        f32 MoContentDownloader::GetDownloadProgress()
+        {
+            f32 progress = 0.0f;
+            
+            // Check if there is an active request
+            if(mpCurrentRequest)
+            {
+                if(mpCurrentRequest->GetExpectedTotalSize() > 0)
+                {
+                    // Calculate current scene download progress
+                    progress = (f32)mpCurrentRequest->GetCurrentSize() / (f32)mpCurrentRequest->GetExpectedTotalSize();
+                }
+                else
+                {
+                    progress = 1.0f;
+                }
+            }
+            
+            return progress;
         }
     }
 }

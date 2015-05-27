@@ -75,6 +75,30 @@ namespace ChilliSource
                 k_failed
             };
             //--------------------------------------------------------
+            /// A struct containing information on download progress
+            ///
+            /// @author HMcLaughlin
+            //--------------------------------------------------------
+            struct DownloadProgress
+            {
+                std::string m_packageName;
+                f32 m_downloadProgress = 0.0f;
+                
+                //--------------------------------------------------------
+                /// Constructor
+                ///
+                /// @author HMcLaughlin
+                ///
+                /// @param in_packageName - Package name being downloaded
+                /// @param in_progress - Current progress
+                //--------------------------------------------------------
+                DownloadProgress(const std::string& in_packageName, f32 in_progress)
+                :m_packageName(in_packageName)
+                ,m_downloadProgress(in_progress)
+                {
+                }
+            };
+            //--------------------------------------------------------
             /// A delegate used for receiving the result of a Check
             /// For Updates request.
             ///
@@ -92,6 +116,14 @@ namespace ChilliSource
             /// @param The result.
             //--------------------------------------------------------
             using CompleteDelegate = std::function<void(Result)>;
+            //--------------------------------------------------------
+            /// A delegate used for receiving updates on the progress of a download
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param The Download Progress.
+            //--------------------------------------------------------
+            using DownloadProgressDelegate = std::function<void(DownloadProgress)>;
             //-----------------------------------------------------------
             /// Called when a checksum needs to be calculated.
             ///
@@ -149,8 +181,9 @@ namespace ChilliSource
             /// @author S Downie
             ///
             /// @param Delegate to call when download is complete
+            /// @param Delegate to call when download is progressed
             //-----------------------------------------------------------
-            void DownloadUpdates(const CompleteDelegate& in_delegate);
+            void DownloadUpdates(const CompleteDelegate& in_delegate, const DownloadProgressDelegate& in_progressDelegate);
             //-----------------------------------------------------------
             /// Having downloaded the update packages this method
             /// unzips the packages and overwrites any old assets
@@ -345,6 +378,15 @@ namespace ChilliSource
             /// @author S Downie
             //-----------------------------------------------------------
             void DownloadNextPackage();
+            //-----------------------------------------------------------
+            /// Callback for package download progress
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_url - Url of downloading package
+            /// @param in_progress - Progress through download (0.0f - 1.0f)
+            //-----------------------------------------------------------
+            void OnContentDownloadProgress(const std::string& in_url, f32 in_progress);
             
         private:
             std::vector<std::string> m_removePackageIds;
@@ -359,6 +401,7 @@ namespace ChilliSource
             
             CheckForUpdateDelegate m_onUpdateCheckCompleteDelegate;
             CompleteDelegate m_onDownloadCompleteDelegate;
+            DownloadProgressDelegate m_onDownloadProgressDelegate;
             ChecksumDelegate m_checksumDelegate;
             
             std::string m_serverManifestData;

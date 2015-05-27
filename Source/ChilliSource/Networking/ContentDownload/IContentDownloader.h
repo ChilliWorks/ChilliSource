@@ -70,6 +70,16 @@ namespace ChilliSource
             //----------------------------------------------------------
             typedef std::function<void(Result, const std::string&)> Delegate;
             //----------------------------------------------------------
+            /// A delegate that can be used to report the progress of a
+            /// download
+            ///
+            /// @param The url of the request
+            /// @param Progress.
+            ///
+            /// @author HMcLaughlin
+            //----------------------------------------------------------
+            typedef std::function<void(const std::string&, f32)> DownloadProgressDelegate;
+            //----------------------------------------------------------
             /// Pull the .csman file from the server and callback when
             /// the download is complete
             ///
@@ -86,8 +96,9 @@ namespace ChilliSource
             ///
             /// @param URL string
             /// @param Delegate
+            /// @param Download Progress Delegate
             //---------------------------------------------------------
-            virtual void DownloadPackage(const std::string& in_url, const Delegate& in_delegate) = 0;
+            virtual void DownloadPackage(const std::string& in_url, const Delegate& in_delegate, const DownloadProgressDelegate& in_progressDelegate) = 0;
             //---------------------------------------------------------
             /// The destructor.
             ///

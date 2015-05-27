@@ -196,9 +196,11 @@ namespace ChilliSource
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
-        void ContentManagementSystem::DownloadUpdates(const ContentManagementSystem::CompleteDelegate& in_delegate)
+        void ContentManagementSystem::DownloadUpdates(const ContentManagementSystem::CompleteDelegate& in_delegate, const DownloadProgressDelegate& in_progressDelegate)
         {
         	m_onDownloadCompleteDelegate = in_delegate;
+            m_onDownloadProgressDelegate = in_progressDelegate;
+            
             m_currentPackageDownload = 0;
             
             if(!m_packageDetails.empty())
@@ -206,7 +208,9 @@ namespace ChilliSource
             	//Add a temp directory so that the packages are stored atomically and only overwrite
                 //the originals on full success
                 Core::Application::Get()->GetFileSystem()->CreateDirectoryPath(Core::StorageLocation::k_DLC, "Temp");
-                m_contentDownloader->DownloadPackage(m_packageDetails[m_currentPackageDownload].m_url, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete));
+                m_contentDownloader->DownloadPackage(m_packageDetails[m_currentPackageDownload].m_url, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete),
+                                                     Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadProgress));
+                
             }
             else
             {
@@ -218,7 +222,8 @@ namespace ChilliSource
         void ContentManagementSystem::DownloadNextPackage()
         {
             m_currentPackageDownload++;
-            m_contentDownloader->DownloadPackage(m_packageDetails[m_currentPackageDownload].m_url, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete));
+            m_contentDownloader->DownloadPackage(m_packageDetails[m_currentPackageDownload].m_url, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete),
+                                                 Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadProgress));
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
@@ -686,6 +691,20 @@ namespace ChilliSource
         void ContentManagementSystem::DeleteDirectory(const std::string& in_directory) const
         {
             CSCore::Application::Get()->GetFileSystem()->DeleteDirectory(Core::StorageLocation::k_DLC, in_directory);
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        void ContentManagementSystem::OnContentDownloadProgress(const std::string& in_url, f32 in_progress)
+        {
+            if(m_onDownloadProgressDelegate)
+            {
+                CS_ASSERT(m_packageDetails.size() > m_currentPackageDownload,
+                          "Current package index out of range - " + CSCore::ToString(m_currentPackageDownload) + ", " + CSCore::ToString((u32)m_packageDetails.size()));
+                
+                f32 increment = 1.0f / m_packageDetails.size();
+                f32 totalProgress = m_currentPackageDownload * increment + (in_progress * increment);
+                m_onDownloadProgressDelegate(DownloadProgress(m_packageDetails[m_currentPackageDownload].m_id, totalProgress));
+            }
         }
     }
 }
