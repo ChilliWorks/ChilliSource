@@ -165,7 +165,7 @@ namespace CSBackend
             /// requested from the store via RequestProductDescriptions or
             /// RequestAllProductDescriptions before being available so there
             /// is no guarantee that a particular product will be available.
-            /// It is the applications responsibility to ensure the correct
+            /// It is the application's responsibility to ensure the correct
             /// data has been requested up front
             //---------------------------------------------------------------
             NSArray* GetNativeStoreProductData();
