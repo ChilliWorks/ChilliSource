@@ -155,6 +155,20 @@ namespace CSBackend
             /// @author S Downie
             //---------------------------------------------------------------
             void RestoreManagedPurchases() override;
+            //---------------------------------------------------------------
+            /// Get Native Store Product Data
+            ///
+            /// @author N Tanda
+            ///
+            /// Returns an array for products that have been retained
+            /// after being returned from the store. Products must be
+            /// requested from the store via RequestProductDescriptions or
+            /// RequestAllProductDescriptions before being available so there
+            /// is no guarantee that a particular product will be available.
+            /// It is the applications responsibility to ensure the correct
+            /// data has been requested up front
+            //---------------------------------------------------------------
+            NSArray* GetNativeStoreProductData();
             
         private:
             

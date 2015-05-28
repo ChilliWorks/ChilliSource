@@ -130,6 +130,15 @@ namespace StoreKitIAP
 //---------------------------------------------------------------
 -(void) restoreNonConsumablePurchases;
 
+//---------------------------------------------------------------
+/// Get Native Store Data
+///
+/// Returns native store data as return from Apple
+///
+/// @return Array of native store product obejcts
+//---------------------------------------------------------------
+-(NSArray*) getNativeStoreData;
+
 @end
 
 #endif

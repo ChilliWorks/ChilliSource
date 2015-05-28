@@ -271,6 +271,12 @@ namespace CSBackend
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
+        NSArray* IAPSystem::GetNativeStoreProductData()
+        {
+            return [m_storeKitSystem getNativeStoreData];
+        }
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
         void IAPSystem::OnDestroy()
         {
             [m_storeKitSystem release];

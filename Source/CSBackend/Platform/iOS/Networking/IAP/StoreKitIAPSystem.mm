@@ -284,6 +284,13 @@
     
     NSLog(@"ERROR: IAP: Close Transaction - Cannot find transaction with ID: %@", inTransactionID);
 }
+//---------------------------------------------------------------
+/// Get Native Store Data
+//---------------------------------------------------------------
+-(NSArray*) getNativeStoreData
+{
+    return [[mProducts retain] autorelease];
+}
 //-------------------------------------------------------
 /// dealloc
 //-------------------------------------------------------
