@@ -68,7 +68,7 @@ public class StringUtils
      *
      * @author Ian Copland
      *
-     * @param The file path.
+     * @param in_filePath - The file path.
      *
      * @return The standardised file path.
      */
@@ -87,7 +87,7 @@ public class StringUtils
      *
      * @author Ian Copland
      *
-     * @param The file path.
+     * @param in_directoryPath - The directory path.
      *
      * @return The standardised file path.
      */

@@ -1,5 +1,5 @@
 /**
- * ApkExpansionDownloaderService.java
+ * ApkExpansionDownloadService.java
  * ChilliSource
  * Created by Ian Copland on 22/04/2015.
  *
@@ -28,7 +28,7 @@
 
 package com.chilliworks.chillisource.googleplay.networking;
 
-import com.chilliworks.chillisource.core.Logging;
+import com.chilliworks.chillisource.googleplay.core.GooglePlayLicensing;
 import com.google.android.vending.expansion.downloader.impl.DownloaderService;
 
 /**
@@ -36,48 +36,21 @@ import com.google.android.vending.expansion.downloader.impl.DownloaderService;
  *
  * @author Ian Copland
  */
-public final class ApkExpansionDownloaderService extends DownloaderService
+public final class ApkExpansionDownloadService extends DownloaderService
 {
     private static final byte[] SALT = new byte[]
     {
             1, 43, -12, -1, -34, 68, -16, -12, 43, 2, -8, -4, 9, 5, -106, 107, -36, 45, -10, 32
     };
 
-    private static Object s_mutex = new Object();
-    private static String s_publicKey = "";
-
-    /**
-     * Sets the Google Play LVL public key. This can only be called once in an app, once set it
-     * can't be changed.
-     *
-     * This can be called on any thread.
-     *
-     * @author Ian Copland
-     *
-     * @param in_publicKey - The google play LVL public key.
-     */
-    protected static void setPublicKey(String in_publicKey)
-    {
-        synchronized (s_mutex)
-        {
-            assert (s_publicKey == "") : "The google play public key cannot be changed!";
-
-            s_publicKey = in_publicKey;
-        }
-    }
     /**
      * @author Ian Copland
      *
-     * @return The public key
+     * @return The public key.
      */
     @Override public String getPublicKey()
     {
-        synchronized (s_mutex)
-        {
-            assert (s_publicKey != "") : "The google play public key has not been set!";
-
-            return s_publicKey;
-        }
+        return GooglePlayLicensing.getLvlPublicKey();
     }
     /**
      * @author Ian Copland
@@ -95,6 +68,6 @@ public final class ApkExpansionDownloaderService extends DownloaderService
      */
     @Override public String getAlarmReceiverClassName()
     {
-        return ApkExpansionAlarmReceiver.class.getName();
+        return ApkExpansionDownloadAlarmReceiver.class.getName();
     }
 }

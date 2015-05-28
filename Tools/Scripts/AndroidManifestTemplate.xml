@@ -52,6 +52,15 @@ THE SOFTWARE.
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:configChanges="orientation|mcc|mnc|locale|touchscreen|navigation|fontScale|screenSize">
+
+        </activity>
+
+        <!-- Google Play Expansion Downloader -->
+        <activity android:name="com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloadActivity"
+            android:screenOrientation="[[ORIENTATION]]"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|mcc|mnc|locale|touchscreen|navigation|fontScale|screenSize">
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -59,6 +68,9 @@ THE SOFTWARE.
             </intent-filter>
 
         </activity>
+
+        <service android:name="com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloadService" />
+        <receiver android:name="com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloadAlarmReceiver" />
 
         <!-- Chilli Source video player -->
         <activity android:name="com.chilliworks.chillisource.video.VideoPlayerActivity" 
@@ -68,7 +80,6 @@ THE SOFTWARE.
             android:configChanges="keyboard|keyboardHidden|orientation|mcc|mnc|locale|touchscreen|navigation|fontScale|screenSize" />
 
         <!-- Chilli Source local notifications -->
-        <service android:name="com.chilliworks.chillisource.core.LocalNotificationService" />
         <receiver android:exported="false" android:name="com.chilliworks.chillisource.core.LocalNotificationReceiver">
             <intent-filter>
                 <action android:name="com.chilliworks.chillisource.core.ALARM_NOTIFICATION_INTENT" />
@@ -82,13 +93,8 @@ THE SOFTWARE.
         <!-- Google Play services -->
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
-        <!-- Google Play downloader -->
-        <service android:name="com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloaderService" />
-        <receiver android:name="com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloaderAlarmRecveiver" />
-
         <!-- Google Play remote notifications -->
         <meta-data android:name="GoogleProjectID" android:value="[[GOOGLEPLAYPROJECTID]]" />
-        <service android:name="com.chilliworks.chillisource.googleplay.core.CRemoteNotificationService" />
         <receiver android:name="com.chilliworks.chillisource.googleplay.core.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />

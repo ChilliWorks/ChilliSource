@@ -1,5 +1,5 @@
 /**
- * ApkExpansionAlarmReceiver.java
+ * ApkExpansionDownloadAlarmReceiver.java
  * ChilliSource
  * Created by Ian Copland on 23/04/2015.
  *
@@ -42,7 +42,7 @@ import com.google.android.vending.expansion.downloader.DownloaderClientMarshalle
  *
  * @author Ian Copland
  */
-public class ApkExpansionAlarmReceiver extends BroadcastReceiver
+public class ApkExpansionDownloadAlarmReceiver extends BroadcastReceiver
 {
     /**
      * @author Ian Copland
@@ -54,7 +54,7 @@ public class ApkExpansionAlarmReceiver extends BroadcastReceiver
     {
         try
         {
-            DownloaderClientMarshaller.startDownloadServiceIfRequired(in_context, in_intent, ApkExpansionDownloaderService.class);
+            DownloaderClientMarshaller.startDownloadServiceIfRequired(in_context, in_intent, ApkExpansionDownloadService.class);
         }
         catch (PackageManager.NameNotFoundException e)
         {

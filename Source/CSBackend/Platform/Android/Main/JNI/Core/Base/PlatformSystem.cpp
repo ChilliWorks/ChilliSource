@@ -37,10 +37,6 @@
 #include <CSBackend/Rendering/OpenGL/Shader/GLSLShaderProvider.h>
 #include <CSBackend/Rendering/OpenGL/Texture/TextureUnitSystem.h>
 
-#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
-#include <CSBackend/Platform/Android/GooglePlay/JNI/Networking/ApkExpansion/ApkExpansionDownloader.h>
-#endif
-
 namespace CSBackend 
 {
 	namespace Android
@@ -59,10 +55,6 @@ namespace CSBackend
 			in_application->CreateSystem<CSBackend::OpenGL::GLSLShaderProvider>();
 			in_application->CreateSystem<CSCore::ETC1ImageProvider>();
 			in_application->CreateSystem<CSBackend::OpenGL::TextureUnitSystem>();
-
-#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
-			in_application->CreateSystem<ApkExpansionDownloader>();
-#endif
 		}
         //-----------------------------------------
         //-----------------------------------------

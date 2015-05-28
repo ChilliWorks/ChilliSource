@@ -136,7 +136,7 @@ public class CSApplication
 		
 		m_currentAppLifecycleState = LifecycleState.k_notInitialised;
 		
-		loadSharedLibraries();
+		NativeLibraryLoader.load(m_activeActivity);
 	}
 	/**
 	 * Triggered when the app is launched
@@ -652,39 +652,5 @@ public class CSApplication
 		};
 
 		scheduleUIThreadTask(task);
-	}
-	/**
-	 * Load the shared Java libraries required by the engine
-	 * and the application. Application libs are provided
-	 * in the AdditionalSharedLibraries application meta-data
-	 * 
-	 * @author Ian Copland
-	 */
-	private void loadSharedLibraries()
-	{
-		assert m_activeActivity != null;
-		
-		//load additional shared libraries
-		try
-		{
-			Bundle bundle = m_activeActivity.getPackageManager().getApplicationInfo(m_activeActivity.getPackageName(), PackageManager.GET_META_DATA).metaData;
-			String strAdditionalLibraries = bundle.getString("AdditionalSharedLibraries");
-			if (strAdditionalLibraries != null)
-			{
-				String[] astrAdditionalLibraries = strAdditionalLibraries.split(" ");
-				
-				for (String strAdditionalLibrary : astrAdditionalLibraries)
-				{
-					java.lang.System.loadLibrary(strAdditionalLibrary);
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			Logging.logError("Could not load additional libraries!");
-		}
-		
-		//load the default libraries
-		java.lang.System.loadLibrary("Application");
 	}
 }

@@ -49,7 +49,6 @@ namespace CSBackend
         //------------------------------------------------------------------------------
         /// Networking
         //------------------------------------------------------------------------------
-        CS_FORWARDDECLARE_CLASS(ApkExpansionDownloader);
 		CS_FORWARDDECLARE_CLASS(GooglePlayIAPJavaInterface);
 		CS_FORWARDDECLARE_CLASS(GooglePlayIAPSystem);
 	}
