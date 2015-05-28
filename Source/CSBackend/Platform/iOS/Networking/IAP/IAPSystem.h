@@ -156,11 +156,9 @@ namespace CSBackend
             //---------------------------------------------------------------
             void RestoreManagedPurchases() override;
             //---------------------------------------------------------------
-            /// Get Native Store Product Data
-            ///
             /// @author N Tanda
             ///
-            /// Returns an array for products that have been retained
+            /// @return An array for products that have been retained
             /// after being returned from the store. Products must be
             /// requested from the store via RequestProductDescriptions or
             /// RequestAllProductDescriptions before being available so there

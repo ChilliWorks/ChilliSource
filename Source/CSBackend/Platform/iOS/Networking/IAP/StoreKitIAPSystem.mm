@@ -32,9 +32,8 @@
 
 @implementation StoreKitIAPSystem
 
-//-------------------------------------------------------
-/// Init
-//-------------------------------------------------------
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 -(StoreKitIAPSystem*) init
 {
     if ((self = [super init]))
@@ -49,16 +48,14 @@
     
 	return self;
 }
-//-------------------------------------------------------
-/// Is Purchasing Enabled
-//-------------------------------------------------------
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 -(BOOL) isPurchasingEnabled
 {
     return [SKPaymentQueue canMakePayments];
 }
-//-------------------------------------------------------
-/// Request Products Fore Delegate
-//-------------------------------------------------------
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 -(void) requestProducts:(NSSet*)inProductIDs forDelegate:(const StoreKitIAP::ProductsDelegate&) inDelegate
 {
     //If we are already requesting the products then cancel and request the new product IDs instead
@@ -98,9 +95,8 @@
     mProductsRequest.delegate = self;
     [mProductsRequest start];
 }
-//-------------------------------------------------------
-/// Cancel Products Request
-//-------------------------------------------------------
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 -(void) cancelProductsRequest 
 {
     if(mProductsRequest != nil)
@@ -111,9 +107,8 @@
     mProductsRequest = nil;
 	mProductsDelegate = nullptr;
 }
-//-------------------------------------------------------
-/// Products Request Did Receive Response
-//-------------------------------------------------------
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 - (void)productsRequest:(SKProductsRequest*) inRequest didReceiveResponse:(SKProductsResponse *) inResponse
 {
     //Clean up the product request as we allocated it on starting the request
@@ -134,9 +129,8 @@
     mProductsDelegate(mProducts);
     mProductsDelegate = nullptr;
 }
-//-------------------------------------------------------
-/// Start Listening For Transactions
-//-------------------------------------------------------
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 -(void) startListeningForTransactions:(const StoreKitIAP::TransactionUpdateDelegate&) inDelegate
 {
     [self stopListeningForTransactions];
@@ -144,17 +138,15 @@
     mTransactionUpdateDelegate = inDelegate;
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
 }
-//-------------------------------------------------------
-/// Stop Listening For Transactions
-//-------------------------------------------------------
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 -(void) stopListeningForTransactions
 {
     mTransactionUpdateDelegate = nullptr;
     [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
 }
-//-------------------------------------------------------
-/// Request Purchase With Product ID and Quantity
-//-------------------------------------------------------
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 -(void) requestPurchaseWithProductID:(NSString*)inProductID andQuantity:(u32)inQuantity
 {
     CS_ASSERT([mOpenTransactions count] == 0 && [mUserPurchasedProductIDs count] == 0, "IAPSystem: Cannot make multiple purchases at same time");
@@ -180,9 +172,8 @@
         mTransactionUpdateDelegate(inProductID, StoreKitIAP::TransactionResult::k_failed, nil);
     }
 }
-//-------------------------------------------------------
-/// Payment Queue Updated Transactions
-//-------------------------------------------------------
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 - (void)paymentQueue:(SKPaymentQueue *)inQueue updatedTransactions:(NSArray*)inTransactions
 {
     if(mTransactionUpdateDelegate == nullptr)
@@ -228,37 +219,26 @@
 	}
 }
 //---------------------------------------------------------------
-/// Restore Non Consumable Purchases
-///
-/// Request that the store trigger new purchase requests for
-/// owned non-consumable items
 //---------------------------------------------------------------
 -(void) restoreNonConsumablePurchases
 {
     [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
 }
-//-------------------------------------------------------
-/// Payment Queue Restore Completed Transactions Failed With Error
-//-------------------------------------------------------
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 - (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error
 {
     NSLog(@"restoreCompletedTransactionsFailedWithError:");
     NSLog(@"%@", [error localizedDescription]);
 }
-//-------------------------------------------------------
-/// Payment Queue Restore Completed Transactions Finished
-//-------------------------------------------------------
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 - (void)paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue
 {
     NSLog(@"paymentQueueRestoreCompletedTransactionsFinished:");
 }
-//-------------------------------------------------------
-/// Close Transaction With ID
-///
-/// Close the transaction with the given transaction ID
-///
-/// @param Transaction ID
-//-------------------------------------------------------
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 -(void) closeTransactionWithID:(NSString*)inTransactionID
 {
     for(SKPaymentTransaction* pTransaction in mOpenTransactions)
@@ -285,15 +265,13 @@
     NSLog(@"ERROR: IAP: Close Transaction - Cannot find transaction with ID: %@", inTransactionID);
 }
 //---------------------------------------------------------------
-/// Get Native Store Data
 //---------------------------------------------------------------
 -(NSArray*) getNativeStoreData
 {
     return [[mProducts retain] autorelease];
 }
-//-------------------------------------------------------
-/// dealloc
-//-------------------------------------------------------
+//---------------------------------------------------------------
+//---------------------------------------------------------------
 -(void) dealloc
 {
     if(mProducts != nil)
