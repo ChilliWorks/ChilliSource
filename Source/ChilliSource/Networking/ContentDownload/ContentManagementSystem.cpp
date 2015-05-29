@@ -210,7 +210,6 @@ namespace ChilliSource
                 Core::Application::Get()->GetFileSystem()->CreateDirectoryPath(Core::StorageLocation::k_DLC, "Temp");
                 m_contentDownloader->DownloadPackage(m_packageDetails[m_currentPackageDownload].m_url, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete),
                                                      Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadProgress));
-                
             }
             else
             {
