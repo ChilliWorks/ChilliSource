@@ -28,9 +28,6 @@
 
 package com.chilliworks.chillisource.googleplay.networking;
 
-import android.app.ActionBar;
-import android.util.AttributeSet;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
@@ -68,11 +65,17 @@ public final class DefaultApkExpansionDownloadView extends ApkExpansionDownloadV
      */
     @Override protected void onInit()
     {
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+        final float MARGIN_PERCENTAGE = 0.25f;
+
+        //This is using a deprecated method: getWidth(). This should be changed to getSize() when the minimum SDK target is changed to API Level 13 or higher.
+        int margin = (int)Math.round(((float)getActivity().getWindowManager().getDefaultDisplay().getWidth()) * MARGIN_PERCENTAGE);
+
+        RelativeLayout.LayoutParams progressBarLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+        progressBarLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+        progressBarLayoutParams.setMargins(margin, 0, margin, 0);
 
         m_progressBar = new ProgressBar(getActivity(), null, android.R.attr.progressBarStyleHorizontal);
-        m_progressBar.setLayoutParams(layoutParams);
+        m_progressBar.setLayoutParams(progressBarLayoutParams);
 
         m_layout = new RelativeLayout(getActivity());
         m_layout.addView(m_progressBar);
