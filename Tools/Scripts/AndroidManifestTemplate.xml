@@ -53,24 +53,12 @@ THE SOFTWARE.
             android:launchMode="singleTask"
             android:configChanges="orientation|mcc|mnc|locale|touchscreen|navigation|fontScale|screenSize">
 
-        </activity>
-
-        <!-- Google Play Expansion Downloader -->
-        <activity android:name="com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloadActivity"
-            android:screenOrientation="[[ORIENTATION]]"
-            android:label="@string/app_name"
-            android:launchMode="singleTask"
-            android:configChanges="orientation|mcc|mnc|locale|touchscreen|navigation|fontScale|screenSize">
-            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
         </activity>
-
-        <service android:name="com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloadService" />
-        <receiver android:name="com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloadAlarmReceiver" />
 
         <!-- Chilli Source video player -->
         <activity android:name="com.chilliworks.chillisource.video.VideoPlayerActivity" 
@@ -92,6 +80,16 @@ THE SOFTWARE.
         
         <!-- Google Play services -->
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+
+        <!-- Google Play Expansion Downloader -->
+        <activity android:name="com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloadActivity"
+            android:screenOrientation="[[ORIENTATION]]"
+            android:label="@string/app_name"
+            android:configChanges="orientation|mcc|mnc|locale|touchscreen|navigation|fontScale|screenSize">
+        </activity>
+
+        <service android:name="com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloadService" />
+        <receiver android:name="com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloadAlarmReceiver" />
 
         <!-- Google Play remote notifications -->
         <meta-data android:name="GoogleProjectID" android:value="[[GOOGLEPLAYPROJECTID]]" />

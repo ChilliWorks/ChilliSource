@@ -72,8 +72,10 @@ public abstract class ApkExpansionDownloadView
      * @author Ian Copland
      *
      * @param in_state - The new state of the download.
+     * @param in_stateDescription - A user presentable description of the current download state.
+     * This is typically used to present useful error messages to users.
      */
-    protected abstract void onStateChanged(ApkExpansionDownloadState in_state);
+    protected abstract void onStateChanged(ApkExpansionDownloadState in_state, String in_stateDescription);
     /**
      * Called as the download progress updates.
      *

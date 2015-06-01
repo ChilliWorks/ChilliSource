@@ -59,41 +59,39 @@ public final class NativeLibraryLoader
      *
      * All additional libraries will be loaded prior to libApplication.so.
      *
-     * This can be called on any thread.
+     * This can only be called on the UI thread.
      *
      * @author Ian Copland
      *
      * @param in_activity - Any Activity in the application. This is required to get the meta data.
      */
-    public static synchronized void load(Activity in_activity)
+    public static void load(Activity in_activity)
     {
         assert in_activity != null : "Cannot load libraries with a null activity.";
+        assert s_librariesLoaded == false : "Cannot initialise the libraries more than once.";
 
-        if (s_librariesLoaded == false)
+        s_librariesLoaded = true;
+
+        try
         {
-            s_librariesLoaded = true;
-
-            try
+            Bundle bundle = in_activity.getPackageManager().getApplicationInfo(in_activity.getPackageName(), PackageManager.GET_META_DATA).metaData;
+            String strAdditionalLibraries = bundle.getString(ADDITIONAL_LIBRARIES_KEY);
+            if (strAdditionalLibraries != null)
             {
-                Bundle bundle = in_activity.getPackageManager().getApplicationInfo(in_activity.getPackageName(), PackageManager.GET_META_DATA).metaData;
-                String strAdditionalLibraries = bundle.getString(ADDITIONAL_LIBRARIES_KEY);
-                if (strAdditionalLibraries != null)
-                {
-                    String[] astrAdditionalLibraries = strAdditionalLibraries.split(" ");
+                String[] astrAdditionalLibraries = strAdditionalLibraries.split(" ");
 
-                    for (String strAdditionalLibrary : astrAdditionalLibraries)
-                    {
-                        java.lang.System.loadLibrary(strAdditionalLibrary);
-                    }
+                for (String strAdditionalLibrary : astrAdditionalLibraries)
+                {
+                    java.lang.System.loadLibrary(strAdditionalLibrary);
                 }
             }
-            catch (Exception e)
-            {
-                Logging.logFatal("Could not load additional libraries!");
-            }
-
-            //load the default libraries
-            java.lang.System.loadLibrary(APPLICATION_LIBRARY);
         }
+        catch (Exception e)
+        {
+            Logging.logFatal("Could not load additional libraries!");
+        }
+
+        //load the default libraries
+        java.lang.System.loadLibrary(APPLICATION_LIBRARY);
     }
 }

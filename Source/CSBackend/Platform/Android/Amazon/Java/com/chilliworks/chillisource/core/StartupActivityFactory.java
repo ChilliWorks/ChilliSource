@@ -1,7 +1,7 @@
 /**
- * ApkExpansionDownloadState.java
+ * StartupActivityFactory.java
  * ChilliSource
- * Created by Ian Copland on 22/04/2015.
+ * Created by Ian Copland on 01/06/2015.
  *
  * The MIT License (MIT)
  *
@@ -26,20 +26,31 @@
  * THE SOFTWARE.
  */
 
+package com.chilliworks.chillisource.core;
 
-package com.chilliworks.chillisource.googleplay.networking;
+import android.app.Activity;
 
 /**
- * A basic enum describing the different states of the Apk Expansion Download.
+ * A factory class for creating a flavour specific Activity which is presented prior to the
+ * CSActivity. There is no start up activity for Amazon builds so no activity will be
+ * created by this factory.
  *
  * @author Ian Copland
  */
-public enum ApkExpansionDownloadState
+public final class StartupActivityFactory
 {
-    DOWNLOADING,
-    COMPLETE,
-    FAILED,
-    FAILED_NO_STORAGE,
-    PAUSED,
-    PAUSED_NO_WIFI
+    /**
+     * Amazon builds do not require a start up activity, so this will never start an activity
+     * and will always return false.
+     *
+     * @author Ian Copland
+     *
+     * @param in_currentActivity - The currently active activity, typically the CSActivity.
+     *
+     * @return Always returns false.
+     */
+    public static boolean tryStartActivity(Activity in_currentActivity)
+    {
+        return false;
+    }
 }

@@ -135,8 +135,6 @@ public class CSApplication
 		m_rootViewContainer.addView(m_activeActivity.getSurface());
 		
 		m_currentAppLifecycleState = LifecycleState.k_notInitialised;
-		
-		NativeLibraryLoader.load(m_activeActivity);
 	}
 	/**
 	 * Triggered when the app is launched
