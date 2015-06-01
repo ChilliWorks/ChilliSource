@@ -58,12 +58,12 @@ extern "C"
     /// @param in_environment - The JNI Environment.
     /// @param in_this - The java object that called the method.
     //------------------------------------------------------------------------------
-	jstring Java_com_chilliworks_chillisource_googleplay_core_GooglePlayLicensing_calcLvlPublicKey(JNIEnv* in_environment, jobject in_this);
+	jstring Java_com_chilliworks_chillisource_core_GooglePlayLicensing_calcLvlPublicKey(JNIEnv* in_environment, jobject in_this);
 }
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-jstring Java_com_chilliworks_chillisource_googleplay_core_GooglePlayLicensing_calcLvlPublicKey(JNIEnv* in_environment, jobject in_this)
+jstring Java_com_chilliworks_chillisource_core_GooglePlayLicensing_calcLvlPublicKey(JNIEnv* in_environment, jobject in_this)
 {
     auto publicKey = GetGooglePlayLvlPublicKey();
 

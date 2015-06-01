@@ -26,15 +26,12 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.googleplay.networking;
+package com.chilliworks.chillisource.networking;
 
 import android.view.Gravity;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.chilliworks.chillisource.core.Logging;
-import com.google.android.vending.expansion.downloader.Helpers;
 
 /**
  * A default, basic implementation of the Apk Expansion Download View. This simply presents a black

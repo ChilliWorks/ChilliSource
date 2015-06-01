@@ -1,7 +1,7 @@
 /**
- * GooglePlayLicensing.java
+ * ApkExpansionDownloadService.java
  * ChilliSource
- * Created by Ian Copland on 27/05/2015.
+ * Created by Ian Copland on 22/04/2015.
  *
  * The MIT License (MIT)
  *
@@ -26,46 +26,48 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.googleplay.core;
+package com.chilliworks.chillisource.networking;
+
+import com.chilliworks.chillisource.core.GooglePlayLicensing;
+import com.google.android.vending.expansion.downloader.impl.DownloaderService;
 
 /**
- * Provides a unified means for systems to access the Google Play LVL Public Key supplied by the
- * user of the engine.
+ * The APK expansion downloader service.
  *
  * @author Ian Copland
  */
-public final class GooglePlayLicensing
+public final class ApkExpansionDownloadService extends DownloaderService
 {
-    static private volatile String s_publicKey = "";
-
-    /**
-     * This can be called on any thread.
-     *
-     * @author Ian Copland
-     *
-     * @return The Public Key used by each of the google play systems to verify the app license.
-     */
-    public static String getLvlPublicKey()
+    private static final byte[] SALT = new byte[]
     {
-        synchronized (s_publicKey)
-        {
-            if (s_publicKey.isEmpty() == true)
-            {
-                s_publicKey = calcLvlPublicKey();
-                assert (s_publicKey != "") : "The google play public key has not been set!";
-            }
-
-            return s_publicKey;
-        }
-    }
-
+            1, 43, -12, -1, -34, 68, -16, -12, 43, 2, -8, -4, 9, 5, -106, 107, -36, 45, -10, 32
+    };
 
     /**
-     * Gets the lvl public key from native.
-     *
      * @author Ian Copland
      *
-     * @return The Public Key used by each of the google play systems to verify the app license.
+     * @return The public key.
      */
-    public static native String calcLvlPublicKey();
+    @Override public String getPublicKey()
+    {
+        return GooglePlayLicensing.getLvlPublicKey();
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @return The salt
+     */
+    @Override public byte[] getSALT()
+    {
+        return SALT;
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @return The Alarm Receiver name.
+     */
+    @Override public String getAlarmReceiverClassName()
+    {
+        return ApkExpansionDownloadAlarmReceiver.class.getName();
+    }
 }

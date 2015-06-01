@@ -30,8 +30,8 @@ package com.chilliworks.chillisource.core;
 
 import android.content.Intent;
 
-import com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloadActivity;
-import com.chilliworks.chillisource.googleplay.networking.ApkExpansionDownloadValidator;
+import com.chilliworks.chillisource.networking.ApkExpansionDownloadActivity;
+import com.chilliworks.chillisource.networking.ApkExpansionDownloadValidator;
 
 /**
  * A factory class for creating a flavour specific Activity which is presented prior to the

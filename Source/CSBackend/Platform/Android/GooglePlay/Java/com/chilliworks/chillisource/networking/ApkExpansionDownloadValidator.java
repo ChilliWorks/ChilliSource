@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.googleplay.networking;
+package com.chilliworks.chillisource.networking;
 
 import android.app.Activity;
 

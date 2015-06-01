@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.googleplay.core;
+package com.chilliworks.chillisource.core;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -40,10 +40,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-
-import com.chilliworks.chillisource.core.CSActivity;
-import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.ResourceHelper;
 
 //=============================================================
 /// Remote Notification Service

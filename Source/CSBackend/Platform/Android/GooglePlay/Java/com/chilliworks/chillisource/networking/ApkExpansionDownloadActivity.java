@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.googleplay.networking;
+package com.chilliworks.chillisource.networking;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -40,10 +40,8 @@ import android.view.WindowManager;
 
 import com.chilliworks.chillisource.core.CSActivity;
 import com.chilliworks.chillisource.core.ExceptionUtils;
-import com.chilliworks.chillisource.core.FileUtils;
 import com.chilliworks.chillisource.core.Logging;
 import com.chilliworks.chillisource.core.NativeLibraryLoader;
-import com.chilliworks.chillisource.core.StringUtils;
 import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
 import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
 import com.google.android.vending.expansion.downloader.DownloaderServiceMarshaller;
@@ -51,11 +49,6 @@ import com.google.android.vending.expansion.downloader.Helpers;
 import com.google.android.vending.expansion.downloader.IDownloaderClient;
 import com.google.android.vending.expansion.downloader.IDownloaderService;
 import com.google.android.vending.expansion.downloader.IStub;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
 
 /**
  * An activity which is presented prior to the CSActivity in Google Play builds which checks

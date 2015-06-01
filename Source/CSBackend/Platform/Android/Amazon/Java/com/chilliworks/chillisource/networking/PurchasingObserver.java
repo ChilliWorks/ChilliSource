@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.amazon.networking;
+package com.chilliworks.chillisource.networking;
 
 import android.content.Context;
 

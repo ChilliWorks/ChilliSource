@@ -32,7 +32,6 @@
 
 #include <CSBackend/Platform/Android/Amazon/JNI/Networking/IAP/AmazonIAPJavaInterface.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
@@ -57,7 +56,7 @@ extern "C"
 	/// @param Array of product Descriptions
 	/// @param Array of product Prices
 	//--------------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_amazon_networking_AmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices);
+	void Java_com_chilliworks_chillisource_networking_AmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices);
 	//--------------------------------------------------------------------------------------
 	/// Called by Java when a transaction status changes
 	///
@@ -70,7 +69,7 @@ extern "C"
 	/// @param Transaction ID
 	/// @param Receipt
 	//--------------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_amazon_networking_AmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint inudwResult, jstring in_productId, jstring in_transactionId, jstring in_receipt);
+	void Java_com_chilliworks_chillisource_networking_AmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint inudwResult, jstring in_productId, jstring in_transactionId, jstring in_receipt);
 	//--------------------------------------------------------------------------------------
 	/// Called by Java when a transaction complete request completes
 	///
@@ -79,12 +78,12 @@ extern "C"
 	/// @param JNI Environment
 	/// @param Pointer to the calling function
 	//--------------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_amazon_networking_AmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId);
+	void Java_com_chilliworks_chillisource_networking_AmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId);
 }
 
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_amazon_networking_AmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices)
+void Java_com_chilliworks_chillisource_networking_AmazonIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices)
 {
 	CSBackend::Android::AmazonIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::AmazonIAPJavaInterface>();
 	if (javaInterface != nullptr)
@@ -116,7 +115,7 @@ void Java_com_chilliworks_chillisource_amazon_networking_AmazonIAPNativeInterfac
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_amazon_networking_AmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint in_result, jstring in_productId, jstring in_transactionId, jstring in_receipt)
+void Java_com_chilliworks_chillisource_networking_AmazonIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint in_result, jstring in_productId, jstring in_transactionId, jstring in_receipt)
 {
 	CSBackend::Android::AmazonIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::AmazonIAPJavaInterface>();
 	if (javaInterface != nullptr)
@@ -130,7 +129,7 @@ void Java_com_chilliworks_chillisource_amazon_networking_AmazonIAPNativeInterfac
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_amazon_networking_AmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId)
+void Java_com_chilliworks_chillisource_networking_AmazonIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId)
 {
 	CSBackend::Android::AmazonIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::AmazonIAPJavaInterface>();
 	if (javaInterface != nullptr)
@@ -150,7 +149,7 @@ namespace CSBackend
 		//--------------------------------------------------------------
 		AmazonIAPJavaInterface::AmazonIAPJavaInterface(const std::string& in_privateKey, const std::string& in_udid)
 		{
-			CreateNativeInterface("com/chilliworks/chillisource/amazon/networking/AmazonIAPNativeInterface");
+			CreateNativeInterface("com/chilliworks/chillisource/networking/AmazonIAPNativeInterface");
 			CreateMethodReference("Init", "(Ljava/lang/String;Ljava/lang/String;)V");
 			CreateMethodReference("IsPurchasingEnabled", "()Z");
 			CreateMethodReference("RequestProductDescriptions", "([Ljava/lang/String;)V");

@@ -63,7 +63,7 @@ namespace CSBackend
 			///
 			/// @param Google Play Store public key
 			//--------------------------------------------------------------
-			GooglePlayIAPJavaInterface(const std::string& in_publicKey);
+			GooglePlayIAPJavaInterface();
 			//--------------------------------------------------------------
 			/// @author S Downie
 			///

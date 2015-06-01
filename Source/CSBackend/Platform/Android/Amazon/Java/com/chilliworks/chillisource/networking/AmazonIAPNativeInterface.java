@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.amazon.networking;
+package com.chilliworks.chillisource.networking;
 
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -45,7 +45,7 @@ import com.amazon.inapp.purchasing.PurchaseResponse.PurchaseRequestStatus;
 import com.amazon.inapp.purchasing.PurchaseUpdatesResponse;
 import com.amazon.inapp.purchasing.PurchasingManager;
 import com.amazon.inapp.purchasing.Receipt;
-import com.chilliworks.chillisource.amazon.networking.PurchaseTransaction.ProductType;
+import com.chilliworks.chillisource.networking.PurchaseTransaction.ProductType;
 import com.chilliworks.chillisource.core.*;
 
 //===========================================================

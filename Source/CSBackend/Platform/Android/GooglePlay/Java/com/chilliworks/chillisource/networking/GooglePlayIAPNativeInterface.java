@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.googleplay.networking;
+package com.chilliworks.chillisource.networking;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,8 +38,6 @@ import org.json.JSONObject;
 import android.content.Intent;
 
 import com.chilliworks.chillisource.core.*;
-import com.chilliworks.chillisource.networking.IAPProductDescription;
-import com.chilliworks.chillisource.networking.IAPTransactionDescription;
 
 public class GooglePlayIAPNativeInterface  extends com.chilliworks.chillisource.core.System
 {
@@ -94,12 +92,10 @@ public class GooglePlayIAPNativeInterface  extends com.chilliworks.chillisource.
 	 * called and it should only be called once. 
 	 * 
 	 * @author Scott Downie
-	 * 
-	 * @param The public key
 	 */
-	public void Init(final String in_publicKey)
+	public void Init()
 	{
-		m_IABHelper = new IabHelper(CSApplication.get().getActivityContext(), in_publicKey);
+		m_IABHelper = new IabHelper(CSApplication.get().getActivityContext(), GooglePlayLicensing.getLvlPublicKey());
 		m_IABHelper.startSetup(new IabHelper.OnIabSetupFinishedListener()
 		{
 			@Override public void onIabSetupFinished(IabResult result) 

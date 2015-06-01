@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.chilliworks.chillisource.googleplay.networking;
+package com.chilliworks.chillisource.networking;
 
 import java.util.ArrayList;
 import java.util.HashMap;

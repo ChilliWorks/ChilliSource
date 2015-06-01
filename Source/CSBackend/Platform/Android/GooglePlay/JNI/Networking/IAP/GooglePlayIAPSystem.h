@@ -195,7 +195,6 @@ namespace CSBackend
             std::vector<ProductRegInfo> m_productRegInfos;
 
             GooglePlayIAPJavaInterfaceSPtr m_javaInterface;
-            std::string m_publicKey;
 		};
 	}
 }

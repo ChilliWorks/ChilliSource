@@ -1,7 +1,7 @@
 /**
- * ApkExpansionDownloadAlarmReceiver.java
+ * GooglePlayLicensing.java
  * ChilliSource
- * Created by Ian Copland on 23/04/2015.
+ * Created by Ian Copland on 27/05/2015.
  *
  * The MIT License (MIT)
  *
@@ -26,39 +26,46 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.googleplay.networking;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-
-import com.chilliworks.chillisource.core.ExceptionUtils;
-import com.chilliworks.chillisource.core.Logging;
-import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
+package com.chilliworks.chillisource.core;
 
 /**
- * An alarm receiver for the Apk Expansion Downloader.
+ * Provides a unified means for systems to access the Google Play LVL Public Key supplied by the
+ * user of the engine.
  *
  * @author Ian Copland
  */
-public class ApkExpansionDownloadAlarmReceiver extends BroadcastReceiver
+public final class GooglePlayLicensing
 {
+    static private volatile String s_publicKey = "";
+
     /**
+     * This can be called on any thread.
+     *
      * @author Ian Copland
      *
-     * @param in_context - The context
-     * @param in_intent - The intent
+     * @return The Public Key used by each of the google play systems to verify the app license.
      */
-    @Override public void onReceive(Context in_context, Intent in_intent)
+    public static String getLvlPublicKey()
     {
-        try
+        synchronized (s_publicKey)
         {
-            DownloaderClientMarshaller.startDownloadServiceIfRequired(in_context, in_intent, ApkExpansionDownloadService.class);
-        }
-        catch (PackageManager.NameNotFoundException e)
-        {
-            Logging.logFatal(ExceptionUtils.ConvertToString(e));
+            if (s_publicKey.isEmpty() == true)
+            {
+                s_publicKey = calcLvlPublicKey();
+                assert (s_publicKey != "") : "The google play public key has not been set!";
+            }
+
+            return s_publicKey;
         }
     }
+
+
+    /**
+     * Gets the lvl public key from native.
+     *
+     * @author Ian Copland
+     *
+     * @return The Public Key used by each of the google play systems to verify the app license.
+     */
+    public static native String calcLvlPublicKey();
 }

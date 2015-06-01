@@ -26,7 +26,7 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.amazon.networking;
+package com.chilliworks.chillisource.networking;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,7 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.amazon.inapp.purchasing.Offset;
-import com.chilliworks.chillisource.amazon.networking.PurchaseTransaction.ProductType;
+import com.chilliworks.chillisource.networking.PurchaseTransaction.ProductType;
 import com.chilliworks.chillisource.core.AESEncryption;
 import com.chilliworks.chillisource.core.ExceptionUtils;
 import com.chilliworks.chillisource.core.FileUtils;

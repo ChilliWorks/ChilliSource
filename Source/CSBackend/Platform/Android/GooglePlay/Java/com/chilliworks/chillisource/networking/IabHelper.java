@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package com.chilliworks.chillisource.googleplay.networking;
+package com.chilliworks.chillisource.networking;
 
 import android.app.Activity;
 import android.app.PendingIntent;

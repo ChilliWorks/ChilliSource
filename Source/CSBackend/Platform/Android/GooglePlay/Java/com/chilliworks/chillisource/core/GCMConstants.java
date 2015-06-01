@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.chilliworks.chillisource.googleplay.core;
+package com.chilliworks.chillisource.core;
 
 
 /**

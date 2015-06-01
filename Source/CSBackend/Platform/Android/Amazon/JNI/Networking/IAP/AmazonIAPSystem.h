@@ -33,8 +33,12 @@
 #ifndef _CSBACKEND_PLATFORM_ANDROID_EXTENSIONS_AMAZON_AMAZONIAPSYSTEM_H_
 #define _CSBACKEND_PLATFORM_ANDROID_EXTENSIONS_AMAZON_AMAZONIAPSYSTEM_H_
 
-#include <CSBackend/Platform/Android/Amazon/JNI/Networking/IAP/AmazonIAPJavaInterface.h>
+#include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Networking/IAP/IAPSystem.h>
+
+#include <CSBackend/Platform/Android/Amazon/JNI/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/Amazon/JNI/Networking/IAP/AmazonIAPJavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 
 namespace CSBackend
 {

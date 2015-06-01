@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.chilliworks.chillisource.googleplay.core;
+package com.chilliworks.chillisource.core;
 
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -120,12 +120,12 @@ public final class GCMRegistrar {
      *    <li>It defines at least one {@link BroadcastReceiver} with category
      *      {@code PACKAGE_NAME}.
      *    <li>The {@link BroadcastReceiver}(s) uses the
-     *      {@value com.chillisource.googleplay.remotenotifications.GCMConstants#PERMISSION_GCM_INTENTS}
+     *      {@value com.chilliworks.chillisource.core.GCMConstants#PERMISSION_GCM_INTENTS}
      *      permission.
      *    <li>The {@link BroadcastReceiver}(s) handles the 2 GCM intents
-     *      ({@value com.chillisource.googleplay.remotenotifications.GCMConstants#INTENT_FROM_GCM_MESSAGE}
+     *      ({@value com.chilliworks.chillisource.core.GCMConstants#INTENT_FROM_GCM_MESSAGE}
      *      and
-     *      {@value com.chillisource.googleplay.remotenotifications.GCMConstants#INTENT_FROM_GCM_REGISTRATION_CALLBACK}).
+     *      {@value com.chilliworks.chillisource.core.GCMConstants#INTENT_FROM_GCM_REGISTRATION_CALLBACK}).
      * </ol>
      * ...where {@code PACKAGE_NAME} is the application package.
      * <p>
@@ -417,7 +417,7 @@ public final class GCMRegistrar {
         editor.putBoolean(PROPERTY_ON_SERVER, flag);
         // set the flag's expiration date
         long lifespan = getRegisterOnServerLifespan(context);
-        long expirationTime = System.currentTimeMillis() + lifespan;
+        long expirationTime = java.lang.System.currentTimeMillis() + lifespan;
         Log.v(TAG, "Setting registeredOnServer status as " + flag + " until " +
                 new Timestamp(expirationTime));
         editor.putLong(PROPERTY_ON_SERVER_EXPIRATION_TIME, expirationTime);
@@ -441,7 +441,7 @@ public final class GCMRegistrar {
             // checks if the information is not stale
             long expirationTime =
                     prefs.getLong(PROPERTY_ON_SERVER_EXPIRATION_TIME, -1);
-            if (System.currentTimeMillis() > expirationTime) {
+            if (java.lang.System.currentTimeMillis() > expirationTime) {
                 Log.v(TAG, "flag expired on: " + new Timestamp(expirationTime));
                 return false;
             }

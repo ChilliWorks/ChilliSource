@@ -1,5 +1,5 @@
 /**
- * ApkExpansionDownloadService.java
+ * ApkExpansionDownloadState.java
  * ChilliSource
  * Created by Ian Copland on 22/04/2015.
  *
@@ -26,48 +26,20 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.googleplay.networking;
 
-import com.chilliworks.chillisource.googleplay.core.GooglePlayLicensing;
-import com.google.android.vending.expansion.downloader.impl.DownloaderService;
+package com.chilliworks.chillisource.networking;
 
 /**
- * The APK expansion downloader service.
+ * A basic enum describing the different states of the Apk Expansion Download.
  *
  * @author Ian Copland
  */
-public final class ApkExpansionDownloadService extends DownloaderService
+public enum ApkExpansionDownloadState
 {
-    private static final byte[] SALT = new byte[]
-    {
-            1, 43, -12, -1, -34, 68, -16, -12, 43, 2, -8, -4, 9, 5, -106, 107, -36, 45, -10, 32
-    };
-
-    /**
-     * @author Ian Copland
-     *
-     * @return The public key.
-     */
-    @Override public String getPublicKey()
-    {
-        return GooglePlayLicensing.getLvlPublicKey();
-    }
-    /**
-     * @author Ian Copland
-     *
-     * @return The salt
-     */
-    @Override public byte[] getSALT()
-    {
-        return SALT;
-    }
-    /**
-     * @author Ian Copland
-     *
-     * @return The Alarm Receiver name.
-     */
-    @Override public String getAlarmReceiverClassName()
-    {
-        return ApkExpansionDownloadAlarmReceiver.class.getName();
-    }
+    DOWNLOADING,
+    COMPLETE,
+    FAILED,
+    FAILED_NO_STORAGE,
+    PAUSED,
+    PAUSED_NO_WIFI
 }

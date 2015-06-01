@@ -1,7 +1,7 @@
 /**
- * ApkExpansionDownloadState.java
+ * ApkExpansionDownloadAlarmReceiver.java
  * ChilliSource
- * Created by Ian Copland on 22/04/2015.
+ * Created by Ian Copland on 23/04/2015.
  *
  * The MIT License (MIT)
  *
@@ -26,20 +26,39 @@
  * THE SOFTWARE.
  */
 
+package com.chilliworks.chillisource.networking;
 
-package com.chilliworks.chillisource.googleplay.networking;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+
+import com.chilliworks.chillisource.core.ExceptionUtils;
+import com.chilliworks.chillisource.core.Logging;
+import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
 
 /**
- * A basic enum describing the different states of the Apk Expansion Download.
+ * An alarm receiver for the Apk Expansion Downloader.
  *
  * @author Ian Copland
  */
-public enum ApkExpansionDownloadState
+public class ApkExpansionDownloadAlarmReceiver extends BroadcastReceiver
 {
-    DOWNLOADING,
-    COMPLETE,
-    FAILED,
-    FAILED_NO_STORAGE,
-    PAUSED,
-    PAUSED_NO_WIFI
+    /**
+     * @author Ian Copland
+     *
+     * @param in_context - The context
+     * @param in_intent - The intent
+     */
+    @Override public void onReceive(Context in_context, Intent in_intent)
+    {
+        try
+        {
+            DownloaderClientMarshaller.startDownloadServiceIfRequired(in_context, in_intent, ApkExpansionDownloadService.class);
+        }
+        catch (PackageManager.NameNotFoundException e)
+        {
+            Logging.logFatal(ExceptionUtils.ConvertToString(e));
+        }
+    }
 }

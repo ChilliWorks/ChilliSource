@@ -26,13 +26,11 @@
  * THE SOFTWARE.
  */
 
-package com.chilliworks.chillisource.googleplay.core;
+package com.chilliworks.chillisource.core;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-
-import com.chilliworks.chillisource.core.*;
 
 public class GooglePlayRemoteNotificationNativeInterface extends com.chilliworks.chillisource.core.System
 {
@@ -85,26 +83,7 @@ public class GooglePlayRemoteNotificationNativeInterface extends com.chilliworks
 	//---------------------------------------------------------------------
 	public void RequestRemoteToken()
 	{
-		PackageManager manager = CSApplication.get().getActivityContext().getPackageManager();
-		ApplicationInfo info;
-		try 
-		{
-			info = manager.getApplicationInfo(CSApplication.get().getActivityContext().getPackageName(), PackageManager.GET_META_DATA);
-		} 
-		catch (NameNotFoundException e) 
-		{
-			Logging.logError("CRemoteNotificationNativeInterface: Failed to get 'GoogleProjectID' from the metadata");
-			e.printStackTrace();
-			return;
-		}
-		
-	    String strProjectID = info.metaData.getString("GoogleProjectID");
-	    
-		if(strProjectID == null || strProjectID.length() == 0)
-		{
-			Logging.logError("CRemoteNotificationNativeInterface: Failed to get 'GoogleProjectID' from the metadata");
-			return;
-		}
+	    String strProjectID = GooglePlayLicensing.getLvlPublicKey();
 		
 		// Make sure the device has the proper dependencies.
 		GCMService.SetSenderID(strProjectID);
