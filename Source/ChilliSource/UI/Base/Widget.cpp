@@ -1805,10 +1805,31 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         Widget::~Widget()
         {
-            for (auto& component : m_components)
+            //First destroy children in reverse order
+            while (m_children.rbegin() != m_children.rend())
             {
-                component->OnDestroy();
+                RemoveWidget((*m_children.rbegin()).get());
             }
+            
+            //Then Call onDestroy on components in reverse order
+            for (auto componentIter = m_components.rbegin(); componentIter != m_components.rend(); ++componentIter)
+            {
+                (*componentIter)->OnDestroy();
+            }
+            
+            //Then we remove the internal widgets
+            for(auto internalChildIter = m_internalChildren.rbegin(); internalChildIter != m_internalChildren.rend(); ++internalChildIter)
+            {
+                if (m_canvas != nullptr)
+                {
+                    (*internalChildIter)->SetCanvas(nullptr);
+                }
+                
+                (*internalChildIter)->m_parent = nullptr;
+                m_internalChildren.erase(internalChildIter);
+            }
+            
+            m_components.clear();
         }
     }
 }
