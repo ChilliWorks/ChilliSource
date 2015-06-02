@@ -1805,6 +1805,8 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         Widget::~Widget()
         {
+            CS_ASSERT(m_canvas == this || m_canvas == nullptr, "Canvas should be null at this point!");
+            
             //First destroy children in reverse order
             while (m_children.rbegin() != m_children.rend())
             {
