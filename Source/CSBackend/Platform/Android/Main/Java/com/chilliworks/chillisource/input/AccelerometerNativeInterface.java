@@ -37,6 +37,7 @@ import android.hardware.SensorManager;
 import android.view.WindowManager;
 
 import com.chilliworks.chillisource.core.*;
+import com.chilliworks.chillisource.core.System;
 
 //=============================================================
 /// Video Player Native Interface
@@ -44,7 +45,7 @@ import com.chilliworks.chillisource.core.*;
 /// A native interface for interfacing with the Android 
 /// accelerometer from native code.
 //=============================================================
-public class AccelerometerNativeInterface extends com.chilliworks.chillisource.core.System implements SensorEventListener
+public class AccelerometerNativeInterface extends System implements SensorEventListener
 {
 	//-----------------------------------------------------
 	/// Axis Swap
@@ -73,7 +74,7 @@ public class AccelerometerNativeInterface extends com.chilliworks.chillisource.c
 	//-----------------------------------------------------
 	/// Member data
 	//-----------------------------------------------------
-    public static InterfaceID INTERFACE_ID = new InterfaceID();
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
 
 	boolean mbListening = false;
 	boolean mbHasAccelerometer = false;
@@ -106,7 +107,7 @@ public class AccelerometerNativeInterface extends com.chilliworks.chillisource.c
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean isA(InterfaceID in_interfaceId)
+    @Override public boolean isA(InterfaceId in_interfaceId)
     {
         return (in_interfaceId == INTERFACE_ID);
     }

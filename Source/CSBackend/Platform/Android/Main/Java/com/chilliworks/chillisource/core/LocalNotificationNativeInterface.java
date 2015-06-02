@@ -47,7 +47,7 @@ import android.content.Intent;
  */
 public class LocalNotificationNativeInterface extends System
 {
-    public static InterfaceID INTERFACE_ID = new InterfaceID();
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
 
 	private final static String k_sharedPrefsName = "LocalNotifications";
 	private final static long k_notificationTimeLimitMs = 500 * 1000; 
@@ -81,7 +81,7 @@ public class LocalNotificationNativeInterface extends System
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean isA(InterfaceID in_interfaceId)
+    @Override public boolean isA(InterfaceId in_interfaceId)
     {
         return (in_interfaceId == INTERFACE_ID);
     }

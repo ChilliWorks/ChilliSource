@@ -40,8 +40,10 @@ import android.view.WindowManager;
 
 import com.chilliworks.chillisource.core.CSActivity;
 import com.chilliworks.chillisource.core.ExceptionUtils;
+import com.chilliworks.chillisource.core.FileUtils;
 import com.chilliworks.chillisource.core.Logging;
 import com.chilliworks.chillisource.core.NativeLibraryLoader;
+import com.chilliworks.chillisource.core.StringUtils;
 import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
 import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
 import com.google.android.vending.expansion.downloader.DownloaderServiceMarshaller;
@@ -49,6 +51,8 @@ import com.google.android.vending.expansion.downloader.Helpers;
 import com.google.android.vending.expansion.downloader.IDownloaderClient;
 import com.google.android.vending.expansion.downloader.IDownloaderService;
 import com.google.android.vending.expansion.downloader.IStub;
+
+import java.io.File;
 
 /**
  * An activity which is presented prior to the CSActivity in Google Play builds which checks
@@ -106,8 +110,6 @@ public class ApkExpansionDownloadActivity extends Activity implements IDownloade
 
         //Set black background.
         getWindow().getDecorView().setBackgroundColor(Color.BLACK);
-
-        NativeLibraryLoader.load(this);
 
         if (ApkExpansionDownloadValidator.isDownloadRequired(this) == true)
         {
@@ -232,6 +234,7 @@ public class ApkExpansionDownloadActivity extends Activity implements IDownloade
      */
     private void startDownload()
     {
+        deleteExpansionDirectory();
         createView();
 
         Intent notifierIntent = new Intent(this, getClass());
@@ -261,7 +264,6 @@ public class ApkExpansionDownloadActivity extends Activity implements IDownloade
             startCSActivity();
         }
     }
-
     /**
      * Disconnects the client stub if appropriate and the sets to null.
      *
@@ -278,6 +280,17 @@ public class ApkExpansionDownloadActivity extends Activity implements IDownloade
         m_remoteService = null;
     }
     /**
+     * Deletes the expansion directory and its contents if it exists, to be sure that there won't
+     * end up being multiple expansion files after the download.
+     *
+     * @author Ian Copland
+     */
+    private void deleteExpansionDirectory()
+    {
+        String expansionDirectory = StringUtils.standardiseDirectoryPath(Helpers.getSaveFilePath(this));
+        FileUtils.removeDirectory(FileUtils.StorageLocation.k_root, expansionDirectory);
+    }
+    /**
      * Creates the view which will render download progress, and send it the onInit() event.
      *
      * @author Ian Copland
@@ -290,7 +303,7 @@ public class ApkExpansionDownloadActivity extends Activity implements IDownloade
         m_view.onInit();
     }
     /**
-     * Destroies the view, sending the onDestroy() event and setting to null.
+     * Destroys the view, sending the onDestroy() event and setting to null.
      *
      * @author Ian Copland
      */

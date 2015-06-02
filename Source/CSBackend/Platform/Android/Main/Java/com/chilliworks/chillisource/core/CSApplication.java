@@ -34,9 +34,7 @@ import java.util.ListIterator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -482,7 +480,7 @@ public class CSApplication
 	 * 
 	 * @return The first system that implements the given interface ID.
 	 */
-	public System getSystem(InterfaceID in_interfaceId)
+	public System getSystem(InterfaceId in_interfaceId)
 	{
 		synchronized(m_systems)
 		{

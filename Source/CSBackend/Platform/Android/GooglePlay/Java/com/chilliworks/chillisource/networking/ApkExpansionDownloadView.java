@@ -65,7 +65,7 @@ public abstract class ApkExpansionDownloadView
      */
     protected abstract void onInit();
     /**
-     * Called whenever the download state changes. The impementing class can use this to
+     * Called whenever the download state changes. The implementing class can use this to
      * update the view to reflect the state of the download, i.e display failure, or a pause
      * screen.
      *
@@ -85,7 +85,7 @@ public abstract class ApkExpansionDownloadView
      */
     protected abstract void onProgressUpdated(double in_progress);
     /**
-     * Called when the view is is dismissed. This should perform any cleanup required by the view.
+     * Called when the view is dismissed. This should perform any cleanup required by the view.
      *
      * @author Ian Copland
      */

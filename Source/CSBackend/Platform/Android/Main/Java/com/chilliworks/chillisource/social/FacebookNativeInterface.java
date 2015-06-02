@@ -39,7 +39,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.chilliworks.chillisource.core.InterfaceID;
+import com.chilliworks.chillisource.core.InterfaceId;
 import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.Session.NewPermissionsRequest;
@@ -61,7 +61,7 @@ import com.chilliworks.chillisource.core.Logging;
 
 public class FacebookNativeInterface extends System
 {
-    public static InterfaceID INTERFACE_ID = new InterfaceID();
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
 	
 	private static final int RESULT_SUCCESS = 0;
 	private static final int RESULT_CANCEL = 1;
@@ -110,7 +110,7 @@ public class FacebookNativeInterface extends System
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean isA(InterfaceID in_interfaceId)
+    @Override public boolean isA(InterfaceId in_interfaceId)
     {
         return (in_interfaceId == INTERFACE_ID);
     }

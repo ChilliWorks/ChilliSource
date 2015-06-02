@@ -43,7 +43,7 @@ namespace CSBackend
 	namespace Android
 	{
 		//------------------------------------------------------------------------------
-		/// A specialised version of JavaSystem, specifically for accessing classes which
+		/// A specialised version of JavaClass, specifically for accessing classes which
 		/// extend System. This ensures the init() and destroy() methods will be called
 		/// as appropriate for the system.
 		///

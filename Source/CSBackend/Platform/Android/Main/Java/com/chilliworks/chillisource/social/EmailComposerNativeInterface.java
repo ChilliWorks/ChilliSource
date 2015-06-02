@@ -31,7 +31,7 @@ package com.chilliworks.chillisource.social;
 import java.io.File;
 
 import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.InterfaceID;
+import com.chilliworks.chillisource.core.InterfaceId;
 import com.chilliworks.chillisource.core.System;
 import com.chilliworks.chillisource.core.Logging;
 
@@ -52,7 +52,7 @@ public class EmailComposerNativeInterface extends System
 	//--------------------------------------------------------------
 	/// Member Data
 	//--------------------------------------------------------------
-    public static InterfaceID INTERFACE_ID = new InterfaceID();
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
 
 	private static final int EMAIL_RETURN_REQUEST = 0;
 	private boolean mbActive = false;
@@ -73,7 +73,7 @@ public class EmailComposerNativeInterface extends System
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean isA(InterfaceID in_interfaceId)
+    @Override public boolean isA(InterfaceId in_interfaceId)
     {
         return (in_interfaceId == INTERFACE_ID);
     }

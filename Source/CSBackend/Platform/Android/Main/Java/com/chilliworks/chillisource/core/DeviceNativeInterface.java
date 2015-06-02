@@ -51,7 +51,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
  */
 public final class DeviceNativeInterface extends System
 {
-    public static InterfaceID INTERFACE_ID = new InterfaceID();
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
 
 	private static final String k_preferencesKey = "CSPreferences";
 	private static final String k_udidKey = "UDID";
@@ -75,7 +75,7 @@ public final class DeviceNativeInterface extends System
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean isA(InterfaceID in_interfaceId)
+    @Override public boolean isA(InterfaceId in_interfaceId)
     {
         return (in_interfaceId == INTERFACE_ID);
     }

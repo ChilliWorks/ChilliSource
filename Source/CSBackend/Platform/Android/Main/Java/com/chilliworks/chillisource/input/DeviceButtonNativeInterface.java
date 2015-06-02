@@ -28,7 +28,7 @@
 
 package com.chilliworks.chillisource.input;
 
-import com.chilliworks.chillisource.core.InterfaceID;
+import com.chilliworks.chillisource.core.InterfaceId;
 import com.chilliworks.chillisource.core.System;
 
 /**
@@ -40,7 +40,7 @@ import com.chilliworks.chillisource.core.System;
  */
 public final class DeviceButtonNativeInterface extends System
 {
-    public static InterfaceID INTERFACE_ID = new InterfaceID();
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
 	
 	/**
 	 * An enum describing the different possible device buttons. This
@@ -72,7 +72,7 @@ public final class DeviceButtonNativeInterface extends System
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean isA(InterfaceID in_interfaceId)
+    @Override public boolean isA(InterfaceId in_interfaceId)
     {
         return (in_interfaceId == INTERFACE_ID);
     }

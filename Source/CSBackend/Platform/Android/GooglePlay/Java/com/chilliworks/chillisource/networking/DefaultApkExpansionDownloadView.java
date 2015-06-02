@@ -127,7 +127,7 @@ public final class DefaultApkExpansionDownloadView extends ApkExpansionDownloadV
         m_progressBar.setProgress((int)(in_progress * 100.0f));
     }
     /**
-     * Called when the view is is dismissed. Cleans up the view.
+     * Called when the view is dismissed. Cleans up the view.
      *
      * @author Ian Copland
      */

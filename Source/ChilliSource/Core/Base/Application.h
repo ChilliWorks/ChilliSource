@@ -507,8 +507,6 @@ namespace ChilliSource
             bool m_isFirstFrame = true;
             bool m_isSuspending = false;
             bool m_isSystemCreationAllowed = false;
-
-            std::string m_googlePlayLvlPublicKey;
             
             static Application* s_application;
 		};

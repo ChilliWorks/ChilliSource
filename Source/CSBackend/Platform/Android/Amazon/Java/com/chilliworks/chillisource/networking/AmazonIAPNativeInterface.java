@@ -71,7 +71,7 @@ public class AmazonIAPNativeInterface extends com.chilliworks.chillisource.core.
 	//-----------------------------------------------------
 	/// Constants
 	//-----------------------------------------------------
-	public static InterfaceID INTERFACE_ID = new InterfaceID();
+	public static InterfaceId INTERFACE_ID = new InterfaceId();
 	private static String kstrCacheNamePrefix = "AmazonIAP-";
 	private static String kstrCacheExtension = ".iapcache";
 	private static String kstrReceiptUserIDKey = "UserID";
@@ -106,7 +106,7 @@ public class AmazonIAPNativeInterface extends com.chilliworks.chillisource.core.
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean isA(InterfaceID in_interfaceId)
+    @Override public boolean isA(InterfaceId in_interfaceId)
     {
         return (in_interfaceId == INTERFACE_ID);
     }

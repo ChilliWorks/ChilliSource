@@ -35,6 +35,6 @@ package com.chilliworks.chillisource.core;
  *
  * @author Ian Copland
  */
-public class InterfaceID
+public class InterfaceId
 {
 }

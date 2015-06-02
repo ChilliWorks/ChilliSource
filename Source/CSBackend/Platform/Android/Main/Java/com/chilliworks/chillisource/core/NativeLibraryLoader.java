@@ -50,8 +50,8 @@ public final class NativeLibraryLoader
      * loaded this will simply do nothing.
      *
      * By default this is just libApplication.so, however an application can add additional
-     * libraries by specifying  meta-data with the key AdditionalSharedLibraries in
-     * AndroidManifest.xml. This is a  space delimited list of libraries, and the 'lib' prefix and
+     * libraries by specifying meta-data with the key AdditionalSharedLibraries in
+     * AndroidManifest.xml. This is a space delimited list of libraries, and the 'lib' prefix and
      * '.so' suffix should be omitted. For example to load both libLibraryOne.so and
      * libLibraryTwo.so the following would be required:
      *

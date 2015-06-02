@@ -44,8 +44,8 @@ namespace CSBackend
 	    //------------------------------------------------------------------------------
 	    /// Core
 	    //------------------------------------------------------------------------------
-		CS_FORWARDDECLARE_CLASS(GooglePlayRemoteNotificationSystem);
 		CS_FORWARDDECLARE_CLASS(GooglePlayRemoteNotificationJavaInterface);
+		CS_FORWARDDECLARE_CLASS(GooglePlayRemoteNotificationSystem);
         //------------------------------------------------------------------------------
         /// Networking
         //------------------------------------------------------------------------------

@@ -234,14 +234,14 @@ public final class FileUtils
     }
 	/**
 	 * Deletes the given file from the given storage location. If the file doesn't exist this will
-     * still return success. it will only return an error if the file still exists after this has
-     * been called.
-	 * 
+	 * still return success. it will only return an error if the file still exists after this has
+	 * been called.
+	 *
 	 * @author Ian Copland
-	 * 
+	 *
 	 * @param in_storageLocation - The storage location.
 	 * @param in_filePath - The filename.
-	 * 
+	 *
 	 * @return Whether or not the file removal was successful.
 	 */
 	public static boolean removeFile(StorageLocation in_storageLocation, String in_filePath)
@@ -254,6 +254,37 @@ public final class FileUtils
 				return removeFile(StringUtils.standardiseDirectoryPath(getExternalStorageDirectory()) + in_filePath);
 			case k_internalStorage:
 				return removeFileInternal(in_filePath);
+			case k_apk:
+				Logging.logFatal("FileUtils: Cannot remove file from APK.");
+				return false;
+			default:
+				Logging.logFatal("FileUtils: Invalid storage location.");
+				return false;
+		}
+	}
+	/**
+	 * Removes the given directory and all of it's contents. If the directory doesn't exist this
+	 * will still return success - an error will only be returned if the directory still exists
+	 * after this is called.
+	 *
+	 * @author Ian Copland
+	 *
+	 * @param in_storageLocation - The storage location.
+	 * @param in_directoryPath - The directory path to remove.
+	 *
+	 * @return Whether or not the file removal was successful.
+	 */
+	public static boolean removeDirectory(StorageLocation in_storageLocation, String in_directoryPath)
+	{
+		switch (in_storageLocation)
+		{
+			case k_root:
+				return removeDirectory(in_directoryPath);
+			case k_externalStorage:
+				return removeDirectory(StringUtils.standardiseDirectoryPath(getExternalStorageDirectory()) + in_directoryPath);
+			case k_internalStorage:
+				Logging.logFatal("FileUtils: Cannot remove directory from internal storage.");
+				return false;
 			case k_apk:
 				Logging.logFatal("FileUtils: Cannot remove file from APK.");
 				return false;
@@ -405,15 +436,31 @@ public final class FileUtils
     }
 	/**
 	 * @author Ian Copland
-	 * 
+	 *
 	 * @param in_filePath - The file path.
-	 * 
+	 *
 	 * @return whether or not the given path exists.
 	 */
 	private static boolean doesFileExist(String in_filePath)
 	{
 		File file = new File(in_filePath);
 		if (file.exists() == true && file.isFile() == true)
+		{
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @param in_directoryPath - The path to the directory to check.
+	 *
+	 * @return whether or not the given path exists.
+	 */
+	private static boolean doesDirectoryExist(String in_directoryPath)
+	{
+		File directory = new File(in_directoryPath);
+		if (directory.exists() == true && directory.isDirectory() == true)
 		{
 			return true;
 		}
@@ -515,13 +562,13 @@ public final class FileUtils
 	}
 	/**
 	 * Deletes the given file on disk if it exists. If the file doesn't exist this will still
-     * return successful, it will only return an error if the file still exists after this
+	 * return successful, it will only return an error if the file still exists after this
 	 * has been called.
-	 * 
+	 *
 	 * @author Ian Copland
-	 * 
+	 *
 	 * @param in_filePath - The filename.
-	 * 
+	 *
 	 * @return Whether or not this was successful.
 	 */
 	private static boolean removeFile(String in_filePath)
@@ -531,6 +578,56 @@ public final class FileUtils
 			File file = new File(in_filePath);
 			return file.delete();
 		}
+		return true;
+	}
+	/**
+	 * Deletes the given directory and all of its contents on disk if it exists. If the directory
+	 * doesn't exist this will still return successful, it will only return an error if the
+	 * directory still exists after this has been called.
+	 *
+	 * @author Ian Copland
+	 *
+	 * @param in_directoryPath - The path to the directory to remove.
+	 *
+	 * @return Whether or not this was successful.
+	 */
+	private static boolean removeDirectory(String in_directoryPath)
+	{
+		String directoryPath = StringUtils.standardiseDirectoryPath(in_directoryPath);
+
+		if (doesDirectoryExist(directoryPath) == true)
+		{
+			File directory = new File(directoryPath);
+
+			String[] directoryContents = directory.list();
+			for (String directoryItemString : directoryContents)
+			{
+				File directoryItem = new File(directoryPath + directoryItemString);
+
+				if (directoryItem.isDirectory() == true)
+				{
+					if (removeDirectory(directoryItem.getPath()) == false)
+					{
+						return false;
+					}
+				}
+				else if (directoryItem.isFile() == true)
+				{
+					if (directoryItem.delete() == false)
+					{
+						return false;
+					}
+				}
+				else
+				{
+					//Unknown item in directory, return false.
+					return false;
+				}
+			}
+
+			return directory.delete();
+		}
+
 		return true;
 	}
     /**

@@ -42,7 +42,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.InterfaceID;
+import com.chilliworks.chillisource.core.InterfaceId;
 import com.chilliworks.chillisource.core.System;
 import com.chilliworks.chillisource.core.Logging;
 
@@ -56,7 +56,7 @@ import com.chilliworks.chillisource.core.Logging;
  */
 public final class TextEntryNativeInterface extends System implements TextWatcher, OnEditorActionListener
 {
-    public static InterfaceID INTERFACE_ID = new InterfaceID();
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
 
 	private int m_keyboardTypeFlags = 0;
 	private int m_keyboardCapitalisationFlags = 0;
@@ -110,7 +110,7 @@ public final class TextEntryNativeInterface extends System implements TextWatche
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean isA(InterfaceID in_interfaceId)
+    @Override public boolean isA(InterfaceId in_interfaceId)
     {
         return (in_interfaceId == INTERFACE_ID);
     }

@@ -31,7 +31,7 @@ package com.chilliworks.chillisource.video;
 import android.content.Intent;
 
 import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.InterfaceID;
+import com.chilliworks.chillisource.core.InterfaceId;
 import com.chilliworks.chillisource.core.System;
 
 //=============================================================
@@ -44,7 +44,7 @@ public class VideoPlayerNativeInterface extends System
 	//--------------------------------------------------------------
 	/// Static Member Data
 	//--------------------------------------------------------------
-    public static InterfaceID INTERFACE_ID = new InterfaceID();
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
 	//--------------------------------------------------------------
 	/// Constructor
 	//--------------------------------------------------------------
@@ -62,7 +62,7 @@ public class VideoPlayerNativeInterface extends System
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean isA(InterfaceID in_interfaceId)
+    @Override public boolean isA(InterfaceId in_interfaceId)
     {
         return (in_interfaceId == INTERFACE_ID);
     }

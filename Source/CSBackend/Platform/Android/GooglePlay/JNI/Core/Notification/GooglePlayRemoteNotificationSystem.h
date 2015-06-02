@@ -33,7 +33,6 @@
 #ifndef _CSBACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_CORE_REMOTENOTIFICATIONSYSTEM_H_
 #define _CSBACKEND_PLATFORM_ANDROID_EXTENSIONS_GOOGLEPLAY_CORE_REMOTENOTIFICATIONSYSTEM_H_
 
-
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Notification/RemoteNotificationSystem.h>
@@ -41,8 +40,6 @@
 #include <CSBackend/Platform/Android/GooglePlay/JNI/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/GooglePlay/JNI/Core/Notification/GooglePlayRemoteNotificationJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
-
-
 
 namespace CSBackend
 {

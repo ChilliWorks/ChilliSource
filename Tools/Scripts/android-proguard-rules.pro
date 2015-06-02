@@ -42,7 +42,7 @@
 -keep public class **.R { public *; }
 -keep public class **.R$* { public *; }
 
-#Keep all classes with public methods
+#Keep all classes with native methods
 -keepclasseswithmembers class * {
     native <methods>;
 }
@@ -60,6 +60,9 @@
 #keep facebook
 -keep class com.facebook.** { *; }
 -keepattributes Signature
+
+#keep google play classes
+-keep class com.google.android.vending.expansion.downloader.impl.DownloadsDB
 
 #keep amazon classes
 -dontwarn com.amazon.**

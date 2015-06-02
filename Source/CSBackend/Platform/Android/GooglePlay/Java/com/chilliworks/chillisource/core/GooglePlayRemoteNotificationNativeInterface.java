@@ -28,13 +28,9 @@
 
 package com.chilliworks.chillisource.core;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-
 public class GooglePlayRemoteNotificationNativeInterface extends com.chilliworks.chillisource.core.System
 {
-    public static InterfaceID INTERFACE_ID = new InterfaceID();
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
 	
 	//---------------------------------------------------------------------
 	/// Native On Remote Token Received
@@ -71,7 +67,7 @@ public class GooglePlayRemoteNotificationNativeInterface extends com.chilliworks
      *
      * @return Whether the system implements the given interface
      */
-    @Override public boolean isA(InterfaceID in_interfaceId)
+    @Override public boolean isA(InterfaceId in_interfaceId)
     {
         return (in_interfaceId == INTERFACE_ID);
     }

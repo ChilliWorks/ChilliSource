@@ -50,6 +50,7 @@ public final class ApkExpansionDownloadValidator
 {
     private static final String CACHE_VERSION_CODE_TAG = "VersionCode";
     private static final String CACHE_FILE_SIZE_TAG = "FileSize";
+    private static final String MAIN_EXPANSION_PREFIX = "main.";
 
     /**
      * Reads the Apk Expansion Config file and checks its contents versus the Expansion file on
@@ -150,10 +151,10 @@ public final class ApkExpansionDownloadValidator
     /**
      * @author Ian Copland
      *
-     * @param in_activity - Any of the applications activities.
+     * @param in_activity - The active Activity.
      *
      * @return The version code of the current expansion file. If the file doesn't exist, then
-     * this will return -1;
+     * this will return -1.
      */
     private static int calcExpansionVersionCode(Activity in_activity)
     {
@@ -179,24 +180,17 @@ public final class ApkExpansionDownloadValidator
             Logging.logError("The Apk Expansion directory contains a directory.");
             return -1;
         }
-        String fileName = contents[0].getName();
 
-        if (fileName.startsWith("main.") == false)
+        String fileName = contents[0].getName();
+        if (isMainExpansionFileName(in_activity, fileName) == false)
         {
             Logging.logError("The Apk Expansion directory contains a file which is not the main expansion file.");
             return -1;
         }
 
-        int nextPeriod = fileName.indexOf(".", 5);
-        if (nextPeriod == -1)
-        {
-            Logging.logError("The Apk Expansion file has an invalid file name.");
-            return -1;
-        }
-
-        String versionCodeString = fileName.substring(5, nextPeriod);
+        //this is safe becuase it wouldn't have passed the previous check otherwise.
+        String versionCodeString = fileName.substring(MAIN_EXPANSION_PREFIX.length(), fileName.indexOf(".", MAIN_EXPANSION_PREFIX.length()));
         int versionCode = 0;
-
         try
         {
             versionCode = Integer.parseInt(versionCodeString);
@@ -208,6 +202,48 @@ public final class ApkExpansionDownloadValidator
         }
 
         return versionCode;
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @param in_activity - The active Activity.
+     * @param in_fileName - The file name.
+     *
+     * @return Whether or not the given file name is a valid name for main expansion file.
+     */
+    private static boolean isMainExpansionFileName(Activity in_activity, String in_fileName)
+    {
+        if (in_fileName.startsWith(MAIN_EXPANSION_PREFIX) == false)
+        {
+            return false;
+        }
+
+        int nextPeriod = in_fileName.indexOf(".", MAIN_EXPANSION_PREFIX.length());
+        if (nextPeriod == -1)
+        {
+            return false;
+        }
+
+        //check that the version code contains a valid integer.
+        String versionCodeString = in_fileName.substring(MAIN_EXPANSION_PREFIX.length(), nextPeriod);
+        if (versionCodeString.matches("^-?\\d+$") == false)
+        {
+            return false;
+        }
+
+        if (in_fileName.length() <= nextPeriod + 1)
+        {
+            return false;
+        }
+
+        String suffix = in_fileName.substring(nextPeriod + 1);
+        String intendedSuffix = in_activity.getPackageName() + ".obb";
+        if (suffix.equals(intendedSuffix) == false)
+        {
+            return false;
+        }
+
+        return true;
     }
     /**
      * @author Ian Copland

@@ -47,5 +47,5 @@ interface IQueryableInterface
      *
      * @return Whether or not the interface is implemented.
      */
-	boolean isA(InterfaceID in_interfaceId);
+	boolean isA(InterfaceId in_interfaceId);
 }

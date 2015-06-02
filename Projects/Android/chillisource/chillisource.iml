@@ -8,14 +8,14 @@
     </facet>
     <facet type="android" name="Android">
       <configuration>
-        <option name="SELECTED_BUILD_VARIANT" value="amazonArmv7Debug" />
+        <option name="SELECTED_BUILD_VARIANT" value="googlePlayArmv7Debug" />
         <option name="SELECTED_TEST_ARTIFACT" value="_android_test_" />
-        <option name="ASSEMBLE_TASK_NAME" value="assembleAmazonArmv7Debug" />
-        <option name="COMPILE_JAVA_TASK_NAME" value="compileAmazonArmv7DebugSources" />
-        <option name="SOURCE_GEN_TASK_NAME" value="generateAmazonArmv7DebugSources" />
-        <option name="ASSEMBLE_TEST_TASK_NAME" value="assembleAmazonArmv7DebugAndroidTest" />
-        <option name="COMPILE_JAVA_TEST_TASK_NAME" value="compileAmazonArmv7DebugAndroidTestSources" />
-        <option name="TEST_SOURCE_GEN_TASK_NAME" value="generateAmazonArmv7DebugAndroidTestSources" />
+        <option name="ASSEMBLE_TASK_NAME" value="assembleGooglePlayArmv7Debug" />
+        <option name="COMPILE_JAVA_TASK_NAME" value="compileGooglePlayArmv7DebugSources" />
+        <option name="SOURCE_GEN_TASK_NAME" value="generateGooglePlayArmv7DebugSources" />
+        <option name="ASSEMBLE_TEST_TASK_NAME" value="assembleGooglePlayArmv7DebugAndroidTest" />
+        <option name="COMPILE_JAVA_TEST_TASK_NAME" value="compileGooglePlayArmv7DebugAndroidTestSources" />
+        <option name="TEST_SOURCE_GEN_TASK_NAME" value="generateGooglePlayArmv7DebugAndroidTestSources" />
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
         <option name="RES_FOLDER_RELATIVE_PATH" value="/src/main/res" />
@@ -26,50 +26,50 @@
     </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
-    <output url="file://$MODULE_DIR$/build/intermediates/classes/amazonarmv7/debug" />
-    <output-test url="file://$MODULE_DIR$/build/intermediates/classes/androidTest/amazonarmv7/debug" />
+    <output url="file://$MODULE_DIR$/build/intermediates/classes/googlePlayarmv7/debug" />
+    <output-test url="file://$MODULE_DIR$/build/intermediates/classes/androidTest/googlePlayarmv7/debug" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/amazonarmv7/debug" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/amazonarmv7/debug" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/amazonarmv7/debug" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/amazonarmv7/debug" isTestSource="false" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/amazonarmv7/debug" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/generated/amazonarmv7/debug" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7Debug/res" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7Debug/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7Debug/assets" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7Debug/aidl" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7Debug/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7Debug/jni" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7Debug/rs" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7/res" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7/assets" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7/aidl" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7/jni" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazonArmv7/rs" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/amazonarmv7/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/amazonarmv7/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/amazonarmv7/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/amazonarmv7/debug" isTestSource="true" generated="true" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/amazonarmv7/debug" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/generated/androidTest/amazonarmv7/debug" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazon/res" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazon/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazon/assets" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazon/aidl" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazon/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazon/jni" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/amazon/rs" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestAmazon/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestAmazon/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestAmazon/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestAmazon/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestAmazon/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestAmazon/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTestAmazon/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/googlePlayarmv7/debug" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/googlePlayarmv7/debug" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/googlePlayarmv7/debug" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/googlePlayarmv7/debug" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/googlePlayarmv7/debug" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/generated/googlePlayarmv7/debug" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7Debug/res" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7Debug/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7Debug/assets" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7Debug/aidl" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7Debug/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7Debug/jni" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7Debug/rs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7/res" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7/assets" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7/aidl" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7/jni" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlayArmv7/rs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/r/androidTest/googlePlayarmv7/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/aidl/androidTest/googlePlayarmv7/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/buildConfig/androidTest/googlePlayarmv7/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/source/rs/androidTest/googlePlayarmv7/debug" isTestSource="true" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/rs/androidTest/googlePlayarmv7/debug" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/build/generated/res/generated/androidTest/googlePlayarmv7/debug" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlay/res" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlay/resources" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlay/assets" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlay/aidl" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlay/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlay/jni" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/googlePlay/rs" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestGooglePlay/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestGooglePlay/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestGooglePlay/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestGooglePlay/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestGooglePlay/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestGooglePlay/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTestGooglePlay/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/armv7/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/armv7/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/armv7/assets" type="java-resource" />
@@ -130,20 +130,21 @@
     <content url="file://$MODULE_DIR$/../../../Source">
       <sourceFolder url="file://$MODULE_DIR$/../../../Source" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../Source/CSBackend/Platform/Android/Amazon/Java">
-      <sourceFolder url="file://$MODULE_DIR$/../../../Source/CSBackend/Platform/Android/Amazon/Java" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../Source/CSBackend/Platform/Android/GooglePlay/Java">
+      <sourceFolder url="file://$MODULE_DIR$/../../../Source/CSBackend/Platform/Android/GooglePlay/Java" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/../../../Source/CSBackend/Platform/Android/Main/Java">
       <sourceFolder url="file://$MODULE_DIR$/../../../Source/CSBackend/Platform/Android/Main/Java" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="AmazonIAP" level="project" />
     <orderEntry type="library" exported="" name="facebook-android-sdk-3.23.1" level="project" />
-    <orderEntry type="library" exported="" name="appcompat-v7-21.0.3" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-22.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-6.5.87" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-22.0.0" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-22.0.0" level="project" />
     <orderEntry type="library" exported="" name="bolts-android-1.1.4" level="project" />
+    <orderEntry type="module" module-name="playapkexpansion" exported="" />
+    <orderEntry type="module" module-name="playlicensing" exported="" />
   </component>
 </module>
