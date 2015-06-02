@@ -1812,21 +1812,20 @@ namespace ChilliSource
             }
             
             //Then Call onDestroy on components in reverse order
-            for (auto componentIter = m_components.rbegin(); componentIter != m_components.rend(); ++componentIter)
+            for (auto componentIt = m_components.rbegin(); componentIt != m_components.rend(); ++componentIt)
             {
-                (*componentIter)->OnDestroy();
+                (*componentIt)->OnDestroy();
             }
             
             //Then we remove the internal widgets
-            for(auto internalChildIter = m_internalChildren.rbegin(); internalChildIter != m_internalChildren.rend(); ++internalChildIter)
+            while (m_internalChildren.rbegin() != m_internalChildren.rend())
             {
-                if (m_canvas != nullptr)
-                {
-                    (*internalChildIter)->SetCanvas(nullptr);
-                }
+                auto internalChildIt = m_internalChildren.rbegin();
+
+                (*internalChildIt)->m_canvas = nullptr;
+                (*internalChildIt)->m_parent = nullptr;
                 
-                (*internalChildIter)->m_parent = nullptr;
-                m_internalChildren.erase(internalChildIter);
+                m_internalChildren.erase(internalChildIt);
             }
             
             m_components.clear();
