@@ -277,7 +277,7 @@ namespace ChilliSource
             ///
             /// @param Element index that the iterate currently points to
             //------------------------------------------------------------------------
-            difference_type GetIndex() const
+            difference_type get_index() const
             {
                 return m_iterableIndex;
             }
