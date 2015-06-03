@@ -42,7 +42,7 @@ import com.google.android.vending.expansion.downloader.DownloaderClientMarshalle
  *
  * @author Ian Copland
  */
-public class ApkExpansionDownloadAlarmReceiver extends BroadcastReceiver
+public final class ApkExpansionDownloadAlarmReceiver extends BroadcastReceiver
 {
     /**
      * @author Ian Copland

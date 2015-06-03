@@ -40,7 +40,7 @@ public final class ApkExpansionDownloadService extends DownloaderService
 {
     private static final byte[] SALT = new byte[]
     {
-            1, 43, -12, -1, -34, 68, -16, -12, 43, 2, -8, -4, 9, 5, -106, 107, -36, 45, -10, 32
+        1, 43, -12, -1, -34, 68, -16, -12, 43, 2, -8, -4, 9, 5, -106, 107, -36, 45, -10, 32
     };
 
     /**

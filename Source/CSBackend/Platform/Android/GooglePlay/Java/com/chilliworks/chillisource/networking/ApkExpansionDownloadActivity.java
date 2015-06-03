@@ -64,7 +64,7 @@ import java.io.File;
  *
  * @author Ian Copland
  */
-public class ApkExpansionDownloadActivity extends Activity implements IDownloaderClient
+public final class ApkExpansionDownloadActivity extends Activity implements IDownloaderClient
 {
     private IStub m_downloaderClientStub = null;
     private IDownloaderService m_remoteService = null;
