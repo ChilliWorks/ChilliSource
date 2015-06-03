@@ -1,5 +1,5 @@
 /**
- * InterfaceID.java
+ * InterfaceId.java
  * Chilli Source
  * Created by Ian Copland on 09/08/2012.
  * 
