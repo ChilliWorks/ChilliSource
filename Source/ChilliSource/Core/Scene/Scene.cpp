@@ -237,8 +237,7 @@ namespace ChilliSource
                 in_entity->OnRemovedFromScene();
                 in_entity->SetScene(nullptr);
                 
-                it->swap(m_entities.back());
-                m_entities.pop_back();
+                m_entities.erase(it);
             }
         }
 		//--------------------------------------------------------------------------------------------------

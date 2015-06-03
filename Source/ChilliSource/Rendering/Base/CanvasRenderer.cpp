@@ -511,7 +511,7 @@ namespace ChilliSource
                 
                 out_numLines = std::min(numLines, (u32)(in_maxHeight/in_lineHeight));
                 
-                if (in_wrappedText.size() > out_numLines && out_numLines > 0)
+                if (in_wrappedText.size() > out_numLines)
                 {
                     return false;
                 }
@@ -582,8 +582,8 @@ namespace ChilliSource
                 
                 u32 numLines = 0;
 
-                //add an ellipsis if the text doesn't fit.
-                if (DoesWrappedTextFit(linesOnBounds, in_properties, maxHeight, lineHeight, numLines) == false)
+                //add an ellipsis if the text doesn't fit, unless there is no room for the ellipsis itself.
+                if (DoesWrappedTextFit(linesOnBounds, in_properties, maxHeight, lineHeight, numLines) == false && numLines > 0)
                 {
                     linesOnBounds[numLines-1] = AppendEllipsis(linesOnBounds[numLines-1], in_font, in_properties.m_absCharSpacingOffset, in_textScale, in_bounds.x);
                 }

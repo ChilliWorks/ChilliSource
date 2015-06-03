@@ -1,6 +1,17 @@
 Chilli Source Change Log
 ========================
 
+Version 1.4.3, 2015-05-21
+-------------------------
+* Removed: The GUI model and animation converter it had a number of issues and was windows specific. It will be replaced with a cross platform equivalent at some point in the future, but for now the command line tools should be used.
+* Fixed: A label which contains icons in the text will no longer crash if label is too small to fit one of the icons.
+* Fixed: Icons in labels are now correctly sized if the icon is from a texture altas.
+* Fixed: SetWorldTransform() in Transform now works correctly.
+* Fixed: An issue where Widgets could receive incorrect input events when moving.
+* Fixed: The Cricket Audio system now correctly works with assets in the DLC storage location.
+* Fixed: The Cricket Audio system, Android Video Player, Android WebView, and Android Email Composer now all work correctly with tagged assets.
+* Fixed: An issue in the Content Management System where some packages would re-downloaded unnecessarily.
+
 Version 1.4.2, 2015-05-01
 -------------------------
 * Added: Label now supports auto sizing to ensure text will fit inside the label bounds
@@ -45,7 +56,7 @@ Version 1.3.3, 2015-02-24
 * The Google Play Services android library project is now included in the engine, and can be found in the Libraries/Android/Projects/ directory. This should be used instead of copying a new version into the workspace.
 * The CkAudioPlayer now has separate setters for music and effect volume.
 * Fixed Android compiler errors when building on a linux machine. This was caused by in-correct case in include paths.
-    - Change errant log when failing to open file in JsonUtils.
+* Change errant log when failing to open file in JsonUtils.
 
 Version 1.3.2, 2015-01-23
 -------------------------

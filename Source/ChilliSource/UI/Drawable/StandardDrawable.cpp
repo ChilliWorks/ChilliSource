@@ -51,7 +51,7 @@ namespace ChilliSource
         StandardDrawable::StandardDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId)
         {
             CS_ASSERT(in_atlas != nullptr, "The given texture atlas cannot be null.");
-            CS_ASSERT(in_atlas->HasFrameWithId(in_atlasId) == true, "The texture atlas id must exist in the atlas.");
+            CS_ASSERT(in_atlas->HasFrameWithId(in_atlasId) == true, "The texture atlas id \"" + in_atlasId + "\" must exist in the atlas.");
             
             SetTexture(in_texture);
             SetTextureAtlas(in_atlas);
