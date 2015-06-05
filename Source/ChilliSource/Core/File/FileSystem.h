@@ -248,28 +248,28 @@ namespace ChilliSource
             /// @return Whether or not it exists.
             //--------------------------------------------------------------
             virtual bool DoesFileExist(StorageLocation in_storageLocation, const std::string& in_filePath) const = 0;
-			//--------------------------------------------------------------
-			/// Returns whether or not the file exists in the Cached DLC
+            //--------------------------------------------------------------
+            /// Returns whether or not the file exists in the Cached DLC
             /// directory.
             ///
             /// @author Ian Copland
-			///
-			/// @param The file path.
             ///
-			/// @return Whether or not it is in the cached DLC.
-			//--------------------------------------------------------------
-			virtual bool DoesFileExistInCachedDLC(const std::string& in_filePath) const = 0;
-			//--------------------------------------------------------------
-			/// Returns whether or not the file exists in the package DLC
+            /// @param The file path.
+            ///
+            /// @return Whether or not it is in the cached DLC.
+            //--------------------------------------------------------------
+            virtual bool DoesFileExistInCachedDLC(const std::string& in_filePath) const = 0;
+            //--------------------------------------------------------------
+            /// Returns whether or not the file exists in the package DLC
             /// directory.
             ///
             /// @author Ian Copland
-			///
-			/// @param The file path.
             ///
-			/// @return Whether or not it is in the package DLC.
-			//--------------------------------------------------------------
-			virtual bool DoesFileExistInPackageDLC(const std::string& in_filePath) const = 0;
+            /// @param The file path.
+            ///
+            /// @return Whether or not it is in the package DLC.
+            //--------------------------------------------------------------
+            virtual bool DoesFileExistInPackageDLC(const std::string& in_filePath) const = 0;
             //--------------------------------------------------------------
             /// Returns whether or not the given directory exists.
             ///
@@ -281,6 +281,28 @@ namespace ChilliSource
             /// @return Whether or not it exists.
             //--------------------------------------------------------------
             virtual bool DoesDirectoryExist(StorageLocation in_storageLocation, const std::string& in_directoryPath) const = 0;
+            //--------------------------------------------------------------
+            /// Returns whether or not the directory exists in the Cached
+            /// DLC directory.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_directoryPath - The directory path.
+            ///
+            /// @return Whether or not it is in the cached DLC.
+            //--------------------------------------------------------------
+            virtual bool DoesDirectoryExistInCachedDLC(const std::string& in_directoryPath) const = 0;
+            //--------------------------------------------------------------
+            /// Returns whether or not the directory exists in the package
+            /// DLC directory.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_directoryPath - The directory path.
+            ///
+            /// @return Whether or not it is in the package DLC.
+            //--------------------------------------------------------------
+            virtual bool DoesDirectoryExistInPackageDLC(const std::string& in_directoryPath) const = 0;
 			//--------------------------------------------------------------
 			/// Returns the absolute path to the given storage location. The
             /// value this returns is platform specific and use of this

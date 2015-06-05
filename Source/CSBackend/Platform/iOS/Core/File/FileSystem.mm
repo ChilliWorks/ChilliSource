@@ -600,6 +600,18 @@ namespace CSBackend
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
+        bool FileSystem::DoesDirectoryExistInCachedDLC(const std::string& in_directoryPath) const
+        {
+            return DoesItemExistInDLCCache(in_directoryPath, true);
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
+        bool FileSystem::DoesDirectoryExistInPackageDLC(const std::string& in_directoryPath) const
+        {
+            return DoesDirectoryExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
+        }
+        //--------------------------------------------------------------
+        //--------------------------------------------------------------
         std::string FileSystem::GetAbsolutePathToStorageLocation(CSCore::StorageLocation in_storageLocation) const
         {
             //get the storage location path

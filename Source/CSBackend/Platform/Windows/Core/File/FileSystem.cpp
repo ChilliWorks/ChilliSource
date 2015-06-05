@@ -90,6 +90,7 @@ namespace CSBackend
 			{
 				std::wstring filePath = WindowsStringUtils::ConvertStandardPathToWindows(in_filePath);
 				DWORD attributes = GetFileAttributes(filePath.c_str());
+
 				return (attributes != INVALID_FILE_ATTRIBUTES && !(attributes & FILE_ATTRIBUTE_DIRECTORY));
 			}
 			//--------------------------------------------------------------
@@ -103,6 +104,7 @@ namespace CSBackend
 			{
 				std::wstring directoryPath = WindowsStringUtils::ConvertStandardPathToWindows(in_directoryPath);
 				DWORD attributes = GetFileAttributes(directoryPath.c_str());
+
 				return (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY));
 			}
 			//--------------------------------------------------------------
@@ -118,7 +120,7 @@ namespace CSBackend
 
 				WIN32_FIND_DATA fileData;
 				HANDLE fileHandle = WindowsFileUtils::WindowsFindFirstFile(directoryQuery.c_str(), &fileData);
-				if (fileHandle == INVALID_HANDLE_VALUE || GetLastError() == ERROR_FILE_NOT_FOUND)
+				if (fileHandle == INVALID_HANDLE_VALUE)
 				{
 					return false;
 				}
@@ -184,7 +186,7 @@ namespace CSBackend
 
 				WIN32_FIND_DATA fileData;
 				HANDLE fileHandle = WindowsFileUtils::WindowsFindFirstFile(directoryQuery.c_str(), &fileData);
-				if (fileHandle == INVALID_HANDLE_VALUE || GetLastError() == ERROR_FILE_NOT_FOUND)
+				if (fileHandle == INVALID_HANDLE_VALUE)
 				{
 					return false;
 				}
@@ -376,18 +378,14 @@ namespace CSBackend
 		{
 			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to delete from a read only storage location.");
 
-			std::string directoryPath = GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath);
-			if (directoryPath != "")
+			std::string directoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
+			if (CSBackend::Windows::DeleteDirectory(directoryPath) == false)
 			{
-				if (CSBackend::Windows::DeleteDirectory(directoryPath) == false)
-				{
-					CS_LOG_ERROR("File System: Failed to delete directory '" + in_directoryPath + "'");
-					return false;
-				}
-				return true;
+				CS_LOG_ERROR("File System: Failed to delete directory '" + in_directoryPath + "'");
+				return false;
 			}
 
-			return false;
+			return true;
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
@@ -459,6 +457,18 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
+		bool FileSystem::DoesFileExistInCachedDLC(const std::string& in_filePath) const
+		{
+			return DoesItemExistInDLCCache(in_filePath, false);
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesFileExistInPackageDLC(const std::string& in_filePath) const
+		{
+			return DoesFileExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
 		bool FileSystem::DoesDirectoryExist(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
 		{
 			switch (in_storageLocation)
@@ -481,15 +491,15 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExistInCachedDLC(const std::string& in_filePath) const
+		bool FileSystem::DoesDirectoryExistInCachedDLC(const std::string& in_directoryPath) const
 		{
-			return DoesItemExistInDLCCache(in_filePath, false);
+			return DoesItemExistInDLCCache(in_directoryPath, true);
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExistInPackageDLC(const std::string& in_filePath) const
+		bool FileSystem::DoesDirectoryExistInPackageDLC(const std::string& in_directoryPath) const
 		{
-			return DoesFileExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+			return DoesDirectoryExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------

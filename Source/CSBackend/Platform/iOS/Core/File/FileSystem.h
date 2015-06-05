@@ -213,6 +213,28 @@ namespace CSBackend
             /// @return Whether or not it exists.
             //--------------------------------------------------------------
             bool DoesDirectoryExist(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
+            //--------------------------------------------------------------
+            /// Returns whether or not the directory exists in the Cached
+            /// DLC directory.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_directoryPath - The directory path.
+            ///
+            /// @return Whether or not it is in the cached DLC.
+            //--------------------------------------------------------------
+            bool DoesDirectoryExistInCachedDLC(const std::string& in_directoryPath) const override;
+            //--------------------------------------------------------------
+            /// Returns whether or not the directory exists in the package
+            /// DLC directory.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_directoryPath - The directory path.
+            ///
+            /// @return Whether or not it is in the package DLC.
+            //--------------------------------------------------------------
+            bool DoesDirectoryExistInPackageDLC(const std::string& in_directoryPath) const override;
 			//--------------------------------------------------------------
 			/// Returns the absolute path to the given storage location. The
             /// value this returns is platform specific and use of this
