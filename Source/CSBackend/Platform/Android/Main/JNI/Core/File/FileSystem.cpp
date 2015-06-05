@@ -718,7 +718,7 @@ namespace CSBackend
 		//--------------------------------------------------------------
 		bool FileSystem::DoesFileExistInPackageDLC(const std::string& in_filePath) const
 		{
-			return DoesFileExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);;
+			return DoesFileExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
@@ -741,6 +741,18 @@ namespace CSBackend
             {
             	return CSBackend::Android::DoesDirectoryExist(CSCore::StringUtils::StandardiseDirectoryPath(GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath));
             }
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesDirectoryExistInCachedDLC(const std::string& in_directoryPath) const
+		{
+			return CSBackend::Android::DoesDirectoryExist(CSCore::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath));
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesDirectoryExistInPackageDLC(const std::string& in_directoryPath) const
+		{
+			return DoesDirectoryExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
