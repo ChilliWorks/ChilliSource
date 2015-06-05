@@ -219,7 +219,7 @@ namespace ChilliSource
                 }
                 else
                 {
-                    progress = 1.0f;
+                    progress = 0.0f;
                 }
             }
             
