@@ -75,15 +75,11 @@ namespace CSBackend
             std::string absFilePath = fileSystem->GetAbsolutePathToFile(in_storageLocation, taggedFilePath);
 
             bool isPackage = false;
-            if (in_storageLocation == CSCore::StorageLocation::k_package || (in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
+            if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_package ||
+            	(in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
             {
+                //TODO: OBB?
                 isPackage = true;
-                absFilePath = FileSystem::k_packageAPKDir + absFilePath;
-            }
-            else if (in_storageLocation == CSCore::StorageLocation::k_chilliSource)
-            {
-                isPackage = true;
-                absFilePath = FileSystem::k_csAPKDir + absFilePath;
             }
 
         	//start the video

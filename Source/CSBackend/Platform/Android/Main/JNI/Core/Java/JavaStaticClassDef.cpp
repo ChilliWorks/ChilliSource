@@ -1,7 +1,7 @@
 //
-//  JavaClassDef.cpp
+//  JavaStaticClassDef.cpp
 //  ChilliSource
-//  Created by Ian Copland on 21/04/2015.
+//  Created by Ian Copland on 08/06/2015.
 //
 //  The MIT License (MIT)
 //
@@ -28,7 +28,7 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClassDef.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaStaticClassDef.h>
 
 namespace CSBackend
 {
@@ -36,33 +36,27 @@ namespace CSBackend
 	{
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        JavaClassDef::JavaClassDef(const std::string& in_className, const std::string& in_constructorSignature)
-            : m_className(in_className), m_constructorSignature(in_constructorSignature)
+        JavaStaticClassDef::JavaStaticClassDef(const std::string& in_className)
+            : m_className(in_className)
         {
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void JavaClassDef::AddMethod(const std::string& in_methodName, const std::string& in_methodSignature)
+        void JavaStaticClassDef::AddMethod(const std::string& in_methodName, const std::string& in_methodSignature)
         {
-            CS_ASSERT((m_methods.find(in_methodName) == m_methods.end()), "Cannot add method '" + in_methodName + "' to class definition '" + m_className + "' because the method name already exists.");
+            CS_ASSERT((m_methods.find(in_methodName) == m_methods.end()), "Cannot add method '" + in_methodName + "' to static class definition '" + m_className + "' because the method name already exists.");
 
             m_methods.emplace(in_methodName, in_methodSignature);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        const std::string& JavaClassDef::GetClassName() const
+        const std::string& JavaStaticClassDef::GetClassName() const
         {
             return m_className;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        const std::string& JavaClassDef::GetConstructorSignature() const
-        {
-            return m_constructorSignature;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        const JavaClassDef::MethodMap& JavaClassDef::GetMethods() const
+        const JavaStaticClassDef::MethodMap& JavaStaticClassDef::GetMethods() const
         {
             return m_methods;
         }

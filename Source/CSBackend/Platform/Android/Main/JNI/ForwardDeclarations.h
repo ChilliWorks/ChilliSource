@@ -44,6 +44,8 @@ namespace CSBackend
 		//------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(JavaClass);
 		CS_FORWARDDECLARE_CLASS(JavaClassDef);
+		CS_FORWARDDECLARE_CLASS(JavaStaticClass);
+		CS_FORWARDDECLARE_CLASS(JavaStaticClassDef);
 		CS_FORWARDDECLARE_CLASS(JavaSystem);
 		CS_FORWARDDECLARE_CLASS(JavaVirtualMachine);
 		CS_FORWARDDECLARE_CLASS(JavaInterfaceManager);
@@ -53,9 +55,9 @@ namespace CSBackend
 		CS_FORWARDDECLARE_CLASS(PlatformSystem);
 		CS_FORWARDDECLARE_CLASS(DialogueBoxJavaInterface);
 		CS_FORWARDDECLARE_CLASS(DialogueBoxSystem);
-		CS_FORWARDDECLARE_CLASS(FileStream);
 		CS_FORWARDDECLARE_CLASS(FileStreamAPK);
 		CS_FORWARDDECLARE_CLASS(FileSystem);
+		CS_FORWARDDECLARE_CLASS(ZippedFileSystem);
 		CS_FORWARDDECLARE_CLASS(PngImage);
 		CS_FORWARDDECLARE_CLASS(PNGImageProvider);
 		CS_FORWARDDECLARE_CLASS(LocalNotificationJavaInterface);

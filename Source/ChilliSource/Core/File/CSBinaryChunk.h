@@ -42,7 +42,7 @@ namespace ChilliSource
         ///
         /// CSBinaryChunk is thread agnostic and can be used and accessed on any
         /// thread but it is not thread-safe, so a single instance should not
-        /// be shared accross different threads at the same time.
+        /// be shared across different threads at the same time.
         ///
         /// @author Ian Copland
         //----------------------------------------------------------------------

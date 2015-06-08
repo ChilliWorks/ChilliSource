@@ -30,6 +30,7 @@ package com.chilliworks.chillisource.networking;
 
 import android.app.Activity;
 
+import com.chilliworks.chillisource.core.ApkExpansionInfo;
 import com.chilliworks.chillisource.core.ExceptionUtils;
 import com.chilliworks.chillisource.core.FileUtils;
 import com.chilliworks.chillisource.core.Logging;
@@ -48,8 +49,6 @@ import java.io.File;
  */
 public final class ApkExpansionDownloadValidator
 {
-    private static final String CACHE_VERSION_CODE_TAG = "VersionCode";
-    private static final String CACHE_FILE_SIZE_TAG = "FileSize";
     private static final String MAIN_EXPANSION_PREFIX = "main.";
 
     /**
@@ -67,86 +66,19 @@ public final class ApkExpansionDownloadValidator
      */
     public static boolean isDownloadRequired(Activity in_activity)
     {
-        ApkExpansionConfig expansion = readApkExpansionConfig(in_activity);
-        if (expansion != null)
+        int versionCode = calcExpansionVersionCode(in_activity);
+        if (ApkExpansionInfo.getVersionCode() != versionCode)
         {
-            int versionCode = calcExpansionVersionCode(in_activity);
-            if (expansion.m_versionCode != versionCode)
-            {
-                return true;
-            }
+            return true;
+        }
 
-            long fileSize = calcExpansionFileSize(in_activity, versionCode);
-            if (expansion.m_fileSize != fileSize)
-            {
-                return true;
-            }
+        long fileSize = calcExpansionFileSize(in_activity, versionCode);
+        if (ApkExpansionInfo.getFileSize() != fileSize)
+        {
+            return true;
         }
 
         return false;
-    }
-    /**
-     * @author Ian Copland
-     *
-     * @param in_activity - Any of the applications activities.
-     *
-     * @return The directory which Apk Expansion files are stored in.
-     */
-    private static String getExpansionDirectoryPath(Activity in_activity)
-    {
-        String expansionDirectory = Helpers.getSaveFilePath(in_activity);
-        return StringUtils.standardiseDirectoryPath(expansionDirectory);
-    }
-    /**
-     * @author Ian Copland
-     *
-     * @param in_activity - Any of the applications activities.
-     * @param in_versionCode - The version code of the expansion file.
-     *
-     * @return The file path to the main apk expansion file.
-     */
-    private static String getExpansionFilePath(Activity in_activity, int in_versionCode)
-    {
-        String expansionFileName = Helpers.getExpansionAPKFileName(in_activity, true, in_versionCode);
-        return getExpansionDirectoryPath(in_activity) + expansionFileName;
-    }
-    /**
-     * Reads the contents of the apk expansion config and returns the contained information. If the
-     * cache couldn't be read or doesn't exist, null is returned.
-     *
-     * @author Ian Copland
-     *
-     * @param in_activity - Any of the applications activities.
-     *
-     * @return The information in the config, or null.
-     */
-    private static ApkExpansionConfig readApkExpansionConfig(Activity in_activity)
-    {
-        //TODO: Move into APK root!
-
-        String filePath = "AppResources/ApkExpansion.config";
-        if (FileUtils.doesFileExistAPK(in_activity, filePath) == true)
-        {
-            byte[] fileContentsBytes = FileUtils.readFileAPK(in_activity, filePath);
-            String fileContents = StringUtils.utf8BytesToString(fileContentsBytes);
-            if (fileContents.length() > 0)
-            {
-                try
-                {
-                    JSONObject jsonRoot = new JSONObject(fileContents);
-                    ApkExpansionConfig config = new ApkExpansionConfig();
-                    config.m_versionCode = jsonRoot.getInt(CACHE_VERSION_CODE_TAG);
-                    config.m_fileSize = jsonRoot.getLong(CACHE_FILE_SIZE_TAG);
-                    return config;
-                }
-                catch (JSONException e)
-                {
-                    Logging.logFatal(ExceptionUtils.ConvertToString(e));
-                }
-            }
-        }
-
-        return null;
     }
     /**
      * @author Ian Copland
@@ -158,7 +90,7 @@ public final class ApkExpansionDownloadValidator
      */
     private static int calcExpansionVersionCode(Activity in_activity)
     {
-        File directory = new File(getExpansionDirectoryPath(in_activity));
+        File directory = new File(ApkExpansionInfo.getDirectoryPath());
 
         if (directory.exists() == false)
         {
@@ -255,17 +187,7 @@ public final class ApkExpansionDownloadValidator
      */
     private static long calcExpansionFileSize(Activity in_activity, int in_versionCode)
     {
-        String filePath = getExpansionFilePath(in_activity, in_versionCode);
+        String filePath = ApkExpansionInfo.getFilePath();
         return FileUtils.getFileSize(FileUtils.StorageLocation.k_root, filePath);
-    }
-    /**
-     * A container for information stored in the Apk Expansion Config file.
-     *
-     * @author Ian Copland
-     */
-    private static class ApkExpansionConfig
-    {
-        public int m_versionCode = 0;
-        public long m_fileSize = 0;
     }
 }

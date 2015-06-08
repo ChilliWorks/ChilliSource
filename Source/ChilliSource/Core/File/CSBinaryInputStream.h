@@ -99,14 +99,14 @@ namespace ChilliSource
             CSBinaryInputStream(StorageLocation in_storageLocation, const std::string& in_filePath);
             //--------------------------------------------------------------
             /// Returns whether or not the stream has successfully been
-            /// created and is read for use. This should be checked prior
+            /// created and is ready for use. This should be checked prior
             /// to any other action on the stream. If it returns false, the
             /// stream should be discarded and no further action performed on
             /// it.
             ///
             /// @author Ian Copland
             ///
-            /// @return Whether or not the stream was succesfully created.
+            /// @return Whether or not the stream was successfully created.
             //--------------------------------------------------------------
             bool IsValid() const;
             //--------------------------------------------------------------

@@ -88,14 +88,10 @@ namespace ChilliSource
             auto absFilePath = fileSystem->GetAbsolutePathToFile(in_storageLocation, taggedFilePath);
 
 #if CS_TARGETPLATFORM_ANDROID
-            if (in_storageLocation == Core::StorageLocation::k_package || (in_storageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
+            if (in_storageLocation == Core::StorageLocation::k_package || in_storageLocation == Core::StorageLocation::k_chilliSource ||
+                (in_storageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
             {
-                absFilePath = CSBackend::Android::FileSystem::k_packageAPKDir + absFilePath;
-                bank = ::CkBank::newBank(absFilePath.c_str());
-            }
-            else if (in_storageLocation == Core::StorageLocation::k_chilliSource)
-            {
-                absFilePath = CSBackend::Android::FileSystem::k_csAPKDir + absFilePath;
+                //TODO: OBB?
                 bank = ::CkBank::newBank(absFilePath.c_str());
             }
             else
@@ -126,14 +122,10 @@ namespace ChilliSource
             auto absFilePath = fileSystem->GetAbsolutePathToFile(in_storageLocation, taggedFilePath);
 
 #if CS_TARGETPLATFORM_ANDROID
-            if (in_storageLocation == Core::StorageLocation::k_package || (in_storageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
+            if (in_storageLocation == Core::StorageLocation::k_package || in_storageLocation == Core::StorageLocation::k_chilliSource ||
+                (in_storageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
             {
-                absFilePath = CSBackend::Android::FileSystem::k_packageAPKDir + absFilePath;
-                bank = ::CkBank::newBankAsync(absFilePath.c_str());
-            }
-            else if (in_storageLocation == Core::StorageLocation::k_chilliSource)
-            {
-                absFilePath = CSBackend::Android::FileSystem::k_csAPKDir + absFilePath;
+                //TODO: OBB?
                 bank = ::CkBank::newBankAsync(absFilePath.c_str());
             }
             else

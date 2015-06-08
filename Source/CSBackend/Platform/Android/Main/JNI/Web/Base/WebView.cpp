@@ -126,37 +126,16 @@ namespace CSBackend
 			htmlFile.reset();
 
 			std::string fullFilePath = fileSystem->GetAbsolutePathToFile(in_storageLocation, filePath);
-
-            switch(in_storageLocation)
-            {
-                case CSCore::StorageLocation::k_package:
-                {
-                	fullFilePath = "file:///android_asset/" + FileSystem::k_packageAPKDir + fullFilePath;
-                    break;
-                }
-                case CSCore::StorageLocation::k_chilliSource:
-                {
-                    fullFilePath = "file:///android_asset/" + FileSystem::k_csAPKDir + fullFilePath;
-                    break;
-                }
-                case CSCore::StorageLocation::k_DLC:
-                {
-                	if(fileSystem->DoesFileExistInCachedDLC(filePath) == true)
-                	{
-                		fullFilePath = "file://" + fullFilePath;
-                	}
-                	else
-                	{
-                		fullFilePath = "file:///android_asset/" + FileSystem::k_packageAPKDir + fullFilePath;
-                	}
-                    break;
-                }
-                default:
-                {
-                	fullFilePath = "file://" + fullFilePath;
-            		break;
-                }
-            }
+			if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_package ||
+            	(in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(fullFilePath) == false))
+			{
+				//TODO: OBB
+				fullFilePath = "file:///android_asset/" + fullFilePath;
+			}
+			else
+			{
+				fullFilePath = "file://" + fullFilePath;
+			}
 
 			u32 offset = fullFilePath.find_last_of("/");
 			if(offset != std::string::npos)

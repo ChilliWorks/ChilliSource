@@ -54,6 +54,8 @@ public final class StartupActivityFactory
      */
     public static boolean tryStartActivity(CSActivity in_currentActivity)
     {
+        ApkExpansionInfo.calcInfo(in_currentActivity);
+
         if (ApkExpansionDownloadValidator.isDownloadRequired(in_currentActivity) == true)
         {
             Intent in = new Intent(in_currentActivity, ApkExpansionDownloadActivity.class);

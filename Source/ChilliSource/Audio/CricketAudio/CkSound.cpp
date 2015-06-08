@@ -87,14 +87,9 @@ namespace ChilliSource
             auto absFilePath = fileSystem->GetAbsolutePathToFile(in_streamStorageLocation, taggedFilePath);
 
 #if CS_TARGETPLATFORM_ANDROID
-            if (in_streamStorageLocation == Core::StorageLocation::k_package || (in_streamStorageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
+            if (in_streamStorageLocation == Core::StorageLocation::k_package || in_streamStorageLocation == Core::StorageLocation::k_chilliSource ||
+            (in_streamStorageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
             {
-                absFilePath = CSBackend::Android::FileSystem::k_packageAPKDir + absFilePath;
-                m_sound = ::CkSound::newStreamSound(absFilePath.c_str());
-            }
-            else if (in_streamStorageLocation == Core::StorageLocation::k_chilliSource)
-            {
-                absFilePath = CSBackend::Android::FileSystem::k_csAPKDir + absFilePath;
                 m_sound = ::CkSound::newStreamSound(absFilePath.c_str());
             }
             else

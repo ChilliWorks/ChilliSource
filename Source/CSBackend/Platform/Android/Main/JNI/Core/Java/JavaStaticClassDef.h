@@ -1,7 +1,7 @@
 //
-//  JavaClassDef.h
+//  JavaStaticClassDef.h
 //  ChilliSource
-//  Created by Ian Copland on 21/04/2015.
+//  Created by Ian Copland on 08/06/2015.
 //
 //  The MIT License (MIT)
 //
@@ -28,8 +28,8 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifndef _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_JAVACLASSDEF_H_
-#define _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_JAVACLASSDEF_H_
+#ifndef _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_JAVASTATICCLASSDEF_H_
+#define _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_JAVASTATICCLASSDEF_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -42,15 +42,15 @@ namespace CSBackend
 	namespace Android
 	{
 		//------------------------------------------------------------------------------
-		/// Defines the class which will be instantiated, and the methods which will
-		/// be accessible when using JavaClass.
+		/// Defines the static class and the methods which will be accessible when
+		/// using JavaStaticClass.
 		///
-		/// Although JavaClass uses this for setup, it isn't retained, so it can be
-		/// further modified and passed to additional JavaClass instances.
+		/// Although JavaStaticClass uses this for setup, it isn't retained, so it can
+		/// be further modified and passed to additional JavaStaticClass instances.
 		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
-		class JavaClassDef final
+		class JavaStaticClassDef final
 		{
 		public:
 		    using MethodMap = std::unordered_map<std::string, std::string>;
@@ -59,9 +59,10 @@ namespace CSBackend
             ///
             /// @author Ian Copland
             ///
-            /// @param in_className - The fully qualified name of the class this refers to.
+            /// @param in_className - The fully qualified name of the static class this
+            /// refers to.
             //------------------------------------------------------------------------------
-            JavaClassDef(const std::string& in_className, const std::string& in_constructorSignature = "()V");
+            JavaStaticClassDef(const std::string& in_className);
             //------------------------------------------------------------------------------
             /// Adds a new method definition. Note that multiple overloaded methods are
             /// not supported.
@@ -82,19 +83,12 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
-            /// @return The constructor method signature.
-            //------------------------------------------------------------------------------
-            const std::string& GetConstructorSignature() const;
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
             /// @return The map of methods names and signatures.
             //------------------------------------------------------------------------------
             const MethodMap& GetMethods() const;
 
         private:
             const std::string m_className;
-            const std::string m_constructorSignature;
             MethodMap m_methods;
 		};
 	}

@@ -1,6 +1,6 @@
 //
 //  JavaClass.cpp
-//  ChilliSource
+//  Chilli Source
 //  Created by Ian Copland on 21/04/2015.
 //
 //  The MIT License (MIT)
@@ -28,7 +28,7 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClass.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaStaticClass.h>
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
@@ -40,7 +40,36 @@ namespace CSBackend
 	{
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void JavaClass::CheckJavaExceptions(const std::string& in_errorMessage) const
+        JavaStaticClass::JavaStaticClass(const JavaStaticClassDef& in_javaStaticClassDef)
+        {
+            auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+
+            //Get the class
+            m_className = in_javaStaticClassDef.GetClassName();
+            jclass jClass = environment->FindClass(m_className.c_str());
+            CS_ASSERT(jClass != nullptr, "Could not find Java class: '" + m_className + "'");
+
+            m_javaClass = static_cast<jclass>(environment->NewGlobalRef(jClass));
+            environment->DeleteLocalRef(jClass);
+
+            //setup the method references
+            for (const auto& method : in_javaStaticClassDef.GetMethods())
+            {
+                CS_ASSERT(m_methods.find(method.first) == m_methods.end(), "Method '" + method.first + "' has already been added to Java static class '" + m_className + "'");
+
+                MethodInfo info;
+                info.m_returnType = CalcReturnType(method.second);
+                info.m_numArguments = CalcNumArguments(method.second);
+                info.m_methodId = environment->GetStaticMethodID(m_javaClass, method.first.c_str(), method.second.c_str());
+
+                CS_ASSERT(info.m_methodId != nullptr, "Could not find method '" + method.first + "' in Java static class '" + m_className + "'");
+
+                m_methods.emplace(method.first, info);
+            }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void JavaStaticClass::CheckJavaExceptions(const std::string& in_errorMessage) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
 
@@ -55,7 +84,7 @@ namespace CSBackend
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        JavaClass::ReturnType JavaClass::CalcReturnType(const std::string& in_methodSignature) const
+        JavaStaticClass::ReturnType JavaStaticClass::CalcReturnType(const std::string& in_methodSignature) const
         {
             std::regex argsExpression("\\([a-zA-Z0-9/;\\[]*\\)");
             auto outputType = std::regex_replace(in_methodSignature, argsExpression, "");
@@ -113,12 +142,12 @@ namespace CSBackend
                 }
             }
 
-            CS_LOG_FATAL("Could not determine return type for JavaClass method signature: '" + in_methodSignature + "'");
-            return JavaClass::ReturnType::k_void;
+            CS_LOG_FATAL("Could not determine return type for JavaStaticClass method signature: '" + in_methodSignature + "'");
+            return ReturnType::k_void;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        u32 JavaClass::CalcNumArguments(const std::string& in_methodSignature) const
+        u32 JavaStaticClass::CalcNumArguments(const std::string& in_methodSignature) const
         {
             std::smatch match;
             std::regex argsExpression("\\([a-zA-Z0-9/;\\[]*\\)");
@@ -143,7 +172,7 @@ namespace CSBackend
                     }
                     else if (character != '[')
                     {
-                        CS_LOG_FATAL("Could not calculate number of arguments for JavaClass method signature '" + in_methodSignature + "' due to invalid character: '" + character + "'");
+                        CS_LOG_FATAL("Could not calculate number of arguments for JavaStaticClass method signature '" + in_methodSignature + "' due to invalid character: '" + character + "'");
                     }
                 }
                 else if (character == ';')
@@ -157,26 +186,26 @@ namespace CSBackend
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        jmethodID JavaClass::GetMethodId(const std::string& in_methodName, ReturnType in_returnType, u32 in_numArguments) const
+        jmethodID JavaStaticClass::GetMethodId(const std::string& in_methodName, ReturnType in_returnType, u32 in_numArguments) const
         {
             auto methodInfoIt = m_methods.find(in_methodName);
             if (methodInfoIt == m_methods.end())
             {
-                CS_LOG_FATAL("Could not find method '" + in_methodName + "' in Java class '" + m_className + "'");
+                CS_LOG_FATAL("Could not find method '" + in_methodName + "' in Java static class '" + m_className + "'");
             }
 
-            CS_ASSERT(methodInfoIt->second.m_returnType == in_returnType, "Cannot call method '" + in_methodName + "' in Java class '" + m_className + "' because the wrong return type was specified.");
-            CS_ASSERT(methodInfoIt->second.m_numArguments == in_numArguments, "Cannot call method '" + in_methodName + "' in Java class '" + m_className + "' because an incorrect number of arguments were supplied.");
+            CS_ASSERT(methodInfoIt->second.m_returnType == in_returnType, "Cannot call method '" + in_methodName + "' in Java static class '" + m_className + "' because the wrong return type was specified.");
+            CS_ASSERT(methodInfoIt->second.m_numArguments == in_numArguments, "Cannot call method '" + in_methodName + "' in Java static class '" + m_className + "' because an incorrect number of arguments were supplied.");
 
             return methodInfoIt->second.m_methodId;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        JavaClass::~JavaClass()
+        JavaStaticClass::~JavaStaticClass()
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-            environment->DeleteGlobalRef(m_javaObject);
-            m_javaObject = nullptr;
+            environment->DeleteGlobalRef(m_javaClass);
+            m_javaClass = nullptr;
         }
     }
 }
