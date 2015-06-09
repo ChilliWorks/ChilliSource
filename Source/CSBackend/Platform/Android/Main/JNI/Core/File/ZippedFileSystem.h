@@ -46,10 +46,10 @@ namespace CSBackend
         /// This includes operations such as creation of (virtual) file streams, copying
         /// a file and listing the contents of a directory.
         ///
-        /// This is thread-safe, however some operations can only be performed by one
-        /// thread at a time causing others to block. Such operations include creating
-        /// file streams or copying files. Other operations, such as checking if a file
-        /// exists, can occur concurrently.
+        /// This is thread-safe and many operations can be performed without locking.
+        /// This isn't possible for some operations, however, such as creating a file
+        /// stream or copying files. In these cases care needs to be taken to avoid
+        /// negatively hurting performance.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------------
@@ -73,6 +73,16 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             ZippedFileSystem(const std::string& in_zipFilePath, const std::string& in_rootDirectoryPath = "");
             //------------------------------------------------------------------------------
+            /// This should be checked prior to using any of the other methods. If this
+            /// returns false the ZippedFileSystem should be discarded.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return Whether or not the zip has been successfully opened and is ready
+            /// for use.
+            //------------------------------------------------------------------------------
+            bool IsValid() const;
+            //------------------------------------------------------------------------------
             /// Creates a new "virtual" file stream to a file within the zip. The zipped
             /// file is inflated in full and stored in memory. The "virtual" file stream
             /// then treats this memory as if it were a file on disk.
@@ -94,7 +104,7 @@ namespace CSBackend
             ///
             /// @return The file stream.
             //------------------------------------------------------------------------------
-            CSCore::FileStreamUPtr CreateFileStream(const std::string& in_filePath, CSCore::FileMode in_fileMode);
+            CSCore::FileStreamUPtr CreateFileStream(const std::string& in_filePath, CSCore::FileMode in_fileMode) const;
             //------------------------------------------------------------------------------
             /// Copies a single file from inside the zip file to a real file path on disk.
             ///
@@ -111,7 +121,7 @@ namespace CSBackend
             ///
             /// @return Whether or not the file was copied successfully.
             //------------------------------------------------------------------------------
-            bool CopyFile(const std::string& in_sourceFilePath, const std::string& in_destinationFilePath);
+            bool CopyFile(const std::string& in_sourceFilePath, const std::string& in_destinationFilePath) const;
             //------------------------------------------------------------------------------
             /// Copies multiple files inside the zip to real file paths on disk. This is
             /// more efficient that multiple calls to copy file as it avoids repeated
@@ -127,7 +137,7 @@ namespace CSBackend
             /// @param in_filePaths - Pairs of file paths, the first being the source path
             /// within the zip, the second being the destination path on disk.
             //------------------------------------------------------------------------------
-            bool CopyFiles(const std::vector<std::pair<std::string, std::string>>& in_filePaths);
+            bool CopyFiles(const std::vector<std::pair<std::string, std::string>>& in_filePaths) const;
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -136,7 +146,7 @@ namespace CSBackend
             ///
             /// @return Whether or not the file path exists.
             //------------------------------------------------------------------------------
-            bool DoesFileExist(const std::string& in_filePath);
+            bool DoesFileExist(const std::string& in_filePath) const;
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -145,7 +155,7 @@ namespace CSBackend
             ///
             /// @return Whether or not the directory path exists.
             //------------------------------------------------------------------------------
-            bool DoesDirectoryExist(const std::string& in_directoryPath);
+            bool DoesDirectoryExist(const std::string& in_directoryPath) const;
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -155,7 +165,7 @@ namespace CSBackend
             ///
             /// @return A list of all files within the given directory path.
             //------------------------------------------------------------------------------
-            std::vector<std::string> GetFilePaths(const std::string& in_directoryPath, bool in_recursive);
+            std::vector<std::string> GetFilePaths(const std::string& in_directoryPath, bool in_recursive) const;
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -165,7 +175,66 @@ namespace CSBackend
             ///
             /// @return A list of all directories within the given directory path.
             //------------------------------------------------------------------------------
-            std::vector<std::string> GetDirectoryPaths(const std::string& in_directoryPath, bool in_recursive);
+            std::vector<std::string> GetDirectoryPaths(const std::string& in_directoryPath, bool in_recursive) const;
+
+        private:
+            //------------------------------------------------------------------------------
+            /// A container for the information on a item within the zip file.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            struct ManifestItem
+            {
+                u32 m_pathHash = 0;
+                std::string m_path;
+                bool m_isFile = false;
+                unz_file_pos m_zipPosition;
+            };
+            //------------------------------------------------------------------------------
+            /// Builds a manifest of the contents of the given root directory within the
+            /// zip file. If the entire zip is required then an empty root directory path
+            /// should be given.
+            ///
+            /// This *must* only be called from the constructor. The class needs to be
+            /// immutable after construction to allow lockless thread-safety on many of
+            /// the methods. Building the manifest after construction would violate this.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void BuildManifest(const std::string& in_rootDirectoryPath);
+            //------------------------------------------------------------------------------
+            /// Adds a new item to the manifest. If the directory path the manifest is
+            /// located in (or any parent directories) doesn't exist in the manifest then
+            /// they will be added as well.
+            ///
+            /// This *must* only be called during construction. The class needs to be
+            /// immutable after construction to allow lockless thread-safety on many of
+            /// the methods. Building the manifest after construction would violate this.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_filePath - The file path which should be added to the manifest.
+            /// @param in_zipPosition - The position of the file inside the zip.
+            //------------------------------------------------------------------------------
+            void AddItemToManifest(const std::string& in_filePath, unz_file_pos in_zipPosition);
+            //------------------------------------------------------------------------------
+            /// Searches the manifest item list for the manifest item with the given path.
+            /// if it is found true is returned and the output manifest item is set. If it
+            /// is not found false is returned and no value is set ofr the output manifest
+            /// item.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_path - The file or directory path to look up.
+            /// @param out_manifestItem - [Out] The manifest item if successful.
+            ///
+            /// @return Whether or not the look up was successful.
+            //------------------------------------------------------------------------------
+            bool TryGetManifestItem(const std::string& in_path, ManifestItem& out_manifestItem) const;
+
+            std::string m_filePath;
+            bool m_isValid = false;
+            std::vector<ManifestItem> m_manifestItems;
         };
     }
 }

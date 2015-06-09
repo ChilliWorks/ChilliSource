@@ -342,6 +342,10 @@ namespace CSBackend
 			CS_ASSERT(CSBackend::Android::DoesDirectoryExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC)) == true, "Could not create DLC storage location.");
 
             m_zippedFileSystem = CreateZippedFileSystem();
+            if (m_zippedFileSystem->IsValid() == false)
+            {
+            	CS_LOG_FATAL("File system cannot read Package.");
+            }
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
