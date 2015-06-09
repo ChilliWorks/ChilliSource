@@ -35,6 +35,7 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClassDef.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaMethodSignature.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
 
@@ -233,26 +234,6 @@ namespace CSBackend
 
         private:
             //------------------------------------------------------------------------------
-            /// An enum describing the various return types for methods  which can be called
-            /// through JavaClass.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------------------
-            enum class ReturnType
-            {
-                k_void,
-                k_bool,
-                k_byte,
-                k_char,
-                k_short,
-                k_int,
-                k_long,
-                k_float,
-                k_double,
-                k_object,
-                k_string
-            };
-            //------------------------------------------------------------------------------
             /// A struct containing information on a single Java method.
             ///
             /// @author Ian Copland
@@ -260,31 +241,9 @@ namespace CSBackend
             struct MethodInfo
             {
                 jmethodID m_methodId = nullptr;
-                ReturnType m_returnType = ReturnType::k_void;
+                JavaMethodSignature::ReturnType m_returnType = JavaMethodSignature::ReturnType::k_void;
                 u32 m_numArguments = 0;
             };
-            //------------------------------------------------------------------------------
-            /// Checks for java exceptions. If an exception has occurred it is treated as
-            /// a fatal error and the application will be terminated.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_errorMessage - The error message to print if an exception occurred.
-            //------------------------------------------------------------------------------
-            void CheckJavaExceptions(const std::string& in_errorMessage) const;
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The return type for the given method signature.
-            //------------------------------------------------------------------------------
-            ReturnType CalcReturnType(const std::string& in_methodSignature) const;
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The number of parameters the method described by the given signature
-            /// takes.
-            //------------------------------------------------------------------------------
-            u32 CalcNumArguments(const std::string& in_methodSignature) const;
             //------------------------------------------------------------------------------
             /// Finds the method with the given name and performs some checks to mitigate
             /// mistakes when calling the JNI. This includes that the method has the
@@ -300,7 +259,7 @@ namespace CSBackend
             ///
             /// @return The method info.
             //------------------------------------------------------------------------------
-            jmethodID GetMethodId(const std::string& in_methodName, ReturnType in_returnType, u32 in_numArguments) const;
+            jmethodID GetMethodId(const std::string& in_methodName, JavaMethodSignature::ReturnType in_returnType, u32 in_numArguments) const;
 
             std::string m_className;
             jobject m_javaObject = nullptr;
@@ -319,14 +278,14 @@ namespace CSBackend
             CS_ASSERT(jClass != nullptr, "Could not find Java class: '" + m_className + "'");
 
             //create an instance of the class
-            CS_ASSERT(CalcReturnType(in_javaClassDef.GetConstructorSignature()) == ReturnType::k_void, "Cannot call constructor for Java class '" + m_className + "' because a non-void return type was specified.");
-            CS_ASSERT(CalcNumArguments(in_javaClassDef.GetConstructorSignature()) == sizeof...(TArgs), "Cannot call constructor for Java class '" + m_className + "' because an incorrect number of arguments were supplied.");
+            CS_ASSERT(JavaMethodSignature::CalcReturnType(in_javaClassDef.GetConstructorSignature()) == JavaMethodSignature::ReturnType::k_void, "Cannot call constructor for Java class '" + m_className + "' because a non-void return type was specified.");
+            CS_ASSERT(JavaMethodSignature::CalcNumArguments(in_javaClassDef.GetConstructorSignature()) == sizeof...(TArgs), "Cannot call constructor for Java class '" + m_className + "' because an incorrect number of arguments were supplied.");
 
             jmethodID jConstructor = environment->GetMethodID(jClass, "<init>", in_javaClassDef.GetConstructorSignature().c_str());
             CS_ASSERT(jConstructor != nullptr, "Could not find constructor with signature '" + in_javaClassDef.GetConstructorSignature()+ "' in java class '" + m_className + "'");
             jobject jClassInstance = environment->NewObject(jClass, jConstructor, std::forward<TArgs>(in_args)...);
 
-            CheckJavaExceptions("A java exception occurred during construction of Java class: '" + m_className + "'");
+            JavaUtils::CheckJavaExceptions("A java exception occurred during construction of Java class: '" + m_className + "'");
             CS_ASSERT(jClassInstance != nullptr, "Could not create instance of Java class: '" + m_className + "'");
 
             m_javaObject = environment->NewGlobalRef(jClassInstance);
@@ -337,8 +296,8 @@ namespace CSBackend
                 CS_ASSERT(m_methods.find(method.first) == m_methods.end(), "Method '" + method.first + "' has already been added to Java class '" + m_className + "'");
 
                 MethodInfo info;
-                info.m_returnType = CalcReturnType(method.second);
-                info.m_numArguments = CalcNumArguments(method.second);
+                info.m_returnType = JavaMethodSignature::CalcReturnType(method.second);
+                info.m_numArguments = JavaMethodSignature::CalcNumArguments(method.second);
                 info.m_methodId = environment->GetMethodID(jClass, method.first.c_str(), method.second.c_str());
 
                 CS_ASSERT(info.m_methodId != nullptr, "Could not find method '" + method.first + "' in Java Class '" + m_className + "'");
@@ -354,20 +313,20 @@ namespace CSBackend
         template <typename... TArgs> void JavaClass::CallVoidMethod(const std::string& in_methodName, TArgs&&... in_args) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-            auto methodId = GetMethodId(in_methodName, ReturnType::k_void, sizeof...(TArgs));
+            auto methodId = GetMethodId(in_methodName, JavaMethodSignature::ReturnType::k_void, sizeof...(TArgs));
 
             environment->CallVoidMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
-            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+            JavaUtils::CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         template <typename... TArgs> bool JavaClass::CallBoolMethod(const std::string& in_methodName, TArgs&&... in_args) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-            auto methodId = GetMethodId(in_methodName, ReturnType::k_bool, sizeof...(TArgs));
+            auto methodId = GetMethodId(in_methodName, JavaMethodSignature::ReturnType::k_bool, sizeof...(TArgs));
 
             auto output = environment->CallBooleanMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
-            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+            JavaUtils::CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
 
             return output;
         }
@@ -376,10 +335,10 @@ namespace CSBackend
         template <typename... TArgs> u8 JavaClass::CallByteMethod(const std::string& in_methodName, TArgs&&... in_args) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-            auto methodId = GetMethodId(in_methodName, ReturnType::k_byte, sizeof...(TArgs));
+            auto methodId = GetMethodId(in_methodName, JavaMethodSignature::ReturnType::k_byte, sizeof...(TArgs));
 
             auto output = environment->CallByteMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
-            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+            JavaUtils::CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
 
             return output;
         }
@@ -388,10 +347,10 @@ namespace CSBackend
         template <typename... TArgs> u16 JavaClass::CallCharMethod(const std::string& in_methodName, TArgs&&... in_args) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-            auto methodId = GetMethodId(in_methodName, ReturnType::k_char, sizeof...(TArgs));
+            auto methodId = GetMethodId(in_methodName, JavaMethodSignature::ReturnType::k_char, sizeof...(TArgs));
 
             auto output = environment->CallCharMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
-            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+            JavaUtils::CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
 
             return output;
         }
@@ -400,10 +359,10 @@ namespace CSBackend
         template <typename... TArgs> s16 JavaClass::CallShortMethod(const std::string& in_methodName, TArgs&&... in_args) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-            auto methodId = GetMethodId(in_methodName, ReturnType::k_short, sizeof...(TArgs));
+            auto methodId = GetMethodId(in_methodName, JavaMethodSignature::ReturnType::k_short, sizeof...(TArgs));
 
             auto output = environment->CallShortMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
-            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+            JavaUtils::CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
 
             return output;
         }
@@ -412,10 +371,10 @@ namespace CSBackend
         template <typename... TArgs> s32 JavaClass::CallIntMethod(const std::string& in_methodName, TArgs&&... in_args) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-            auto methodId = GetMethodId(in_methodName, ReturnType::k_int, sizeof...(TArgs));
+            auto methodId = GetMethodId(in_methodName, JavaMethodSignature::ReturnType::k_int, sizeof...(TArgs));
 
             auto output = environment->CallIntMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
-            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+            JavaUtils::CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
 
             return output;
         }
@@ -424,10 +383,10 @@ namespace CSBackend
         template <typename... TArgs> s64 JavaClass::CallLongMethod(const std::string& in_methodName, TArgs&&... in_args) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-            auto methodId = GetMethodId(in_methodName, ReturnType::k_long, sizeof...(TArgs));
+            auto methodId = GetMethodId(in_methodName, JavaMethodSignature::ReturnType::k_long, sizeof...(TArgs));
 
             auto output = environment->CallLongMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
-            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+            JavaUtils::CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
 
             return output;
         }
@@ -436,10 +395,10 @@ namespace CSBackend
         template <typename... TArgs> f32 JavaClass::CallFloatMethod(const std::string& in_methodName, TArgs&&... in_args) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-            auto methodId = GetMethodId(in_methodName, ReturnType::k_float, sizeof...(TArgs));
+            auto methodId = GetMethodId(in_methodName, JavaMethodSignature::ReturnType::k_float, sizeof...(TArgs));
 
             f32 output = environment->CallFloatMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
-            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+            JavaUtils::CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
 
             return output;
         }
@@ -448,10 +407,10 @@ namespace CSBackend
         template <typename... TArgs> f64 JavaClass::CallDoubleMethod(const std::string& in_methodName, TArgs&&... in_args) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-            auto methodId = GetMethodId(in_methodName, ReturnType::k_double, sizeof...(TArgs));
+            auto methodId = GetMethodId(in_methodName, JavaMethodSignature::ReturnType::k_double, sizeof...(TArgs));
 
             auto output = environment->CallDoubleMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
-            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+            JavaUtils::CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
 
             return output;
         }
@@ -460,10 +419,10 @@ namespace CSBackend
         template <typename... TArgs> jobject JavaClass::CallObjectMethod(const std::string& in_methodName, TArgs&&... in_args) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-            auto methodId = GetMethodId(in_methodName, ReturnType::k_object, sizeof...(TArgs));
+            auto methodId = GetMethodId(in_methodName, JavaMethodSignature::ReturnType::k_object, sizeof...(TArgs));
 
             auto output = environment->CallObjectMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...);
-            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+            JavaUtils::CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
 
             return output;
         }
@@ -472,10 +431,10 @@ namespace CSBackend
         template <typename... TArgs> std::string JavaClass::CallStringMethod(const std::string& in_methodName, TArgs&&... in_args) const
         {
             auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
-            auto methodId = GetMethodId(in_methodName, ReturnType::k_string, sizeof...(TArgs));
+            auto methodId = GetMethodId(in_methodName, JavaMethodSignature::ReturnType::k_string, sizeof...(TArgs));
 
             auto jString = static_cast<jstring>(environment->CallObjectMethod(m_javaObject, methodId, std::forward<TArgs>(in_args)...));
-            CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
+            JavaUtils::CheckJavaExceptions("An exception was thrown while calling method '" + in_methodName + "' in Java class '" + m_className + "'.");
 
             std::string output = JavaUtils::CreateSTDStringFromJString(jString);
             environment->DeleteLocalRef(jString);

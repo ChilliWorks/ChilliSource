@@ -1,6 +1,6 @@
 //
 //  JavaUtils.h
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 09/08/2012.
 //
 //  The MIT License (MIT)
@@ -95,6 +95,18 @@ namespace CSBackend
 			/// @return The integer value.
 			//------------------------------------------------------------------------------
 			s32 GetIntElementFromJArray(jintArray in_array, u32 in_index);
+			//------------------------------------------------------------------------------
+			/// Checks for java exceptions. If an exception has occurred it is treated as
+			/// a fatal error and the application will be terminated.
+			///
+			/// This rarely needs to be called manually as JavaClass and JavaStaticClass
+			/// both call it internally immediately after every java call.
+			///
+			/// @author Ian Copland
+			///
+			/// @param in_errorMessage - The error message to print if an exception occurred.
+			//------------------------------------------------------------------------------
+			void CheckJavaExceptions(const std::string& in_errorMessage);
 		}
 	}
 }

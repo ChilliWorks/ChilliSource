@@ -1,6 +1,6 @@
 //
 //  JavaVirtualMachine.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 21/04/2015.
 //
 //  The MIT License (MIT)

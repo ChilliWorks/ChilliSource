@@ -31,6 +31,7 @@
 #ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
 
 #include <ChilliSource/ChilliSource.h>
+
 #include <jni.h>
 
 //------------------------------------------------------------------------------

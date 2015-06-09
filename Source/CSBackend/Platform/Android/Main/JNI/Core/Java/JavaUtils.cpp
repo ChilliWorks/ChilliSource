@@ -1,6 +1,6 @@
 //
 //  JavaUtils.cpp
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 09/08/2012.
 //
 //  The MIT License (MIT)
@@ -98,6 +98,21 @@ namespace CSBackend
                 environment->ReleaseIntArrayElements(in_array, integers, 0);
 
                 return output;
+			}
+			//------------------------------------------------------------------------------
+			//------------------------------------------------------------------------------
+			void CheckJavaExceptions(const std::string& in_errorMessage)
+			{
+				auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+
+				jthrowable exception = environment->ExceptionOccurred();
+				if (exception != nullptr)
+				{
+					environment->ExceptionDescribe();
+					environment->ExceptionClear();
+
+					CS_LOG_FATAL(in_errorMessage);
+				}
 			}
 		}
 	}
