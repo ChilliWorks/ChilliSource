@@ -122,7 +122,6 @@ namespace CSBackend
 			std::string htmlFileContents;
 			CSCore::FileStreamUPtr htmlFile = fileSystem->CreateFileStream(in_storageLocation, filePath, CSCore::FileMode::k_read);
 			htmlFile->GetAll(htmlFileContents);
-			htmlFile->Close();
 			htmlFile.reset();
 
 			std::string fullFilePath = fileSystem->GetAbsolutePathToFile(in_storageLocation, filePath);

@@ -106,9 +106,8 @@ namespace CSBackend
 			CSCore::FileStreamSPtr stream = CSCore::Application::Get()->GetFileSystem()->CreateFileStream(ineLocation, instrFilename, CSCore::FileMode::k_readBinary);
 
 			//insure the stream is not broken
-			if (stream == CSCore::FileStreamSPtr() || stream->IsBad() == true || stream->IsOpen() == false)
+			if (stream == nullptr)
 			{
-				stream->Close();
 				return;
 			}
 
@@ -117,9 +116,6 @@ namespace CSBackend
 			{
 				mbIsLoaded = true;
 			}
-
-			//close the stream
-			stream->Close();
 		}
 		//----------------------------------------------------------------------------------
 		/// Release

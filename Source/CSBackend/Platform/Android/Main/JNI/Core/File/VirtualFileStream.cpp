@@ -1,11 +1,11 @@
 //
-//  FileStream.cpp
+//  VirtualFileStream.cpp
 //  Chilli Source
-//  Created by Scott Downie on 16/05/2012.
+//  Created by Ian Copland on 25/03/2011.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2012 Tag Games Limited
+//  Copyright (c) 2011 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,295 +26,190 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Core/File/FileStream.h>
+#ifdef CS_TARGETPLATFORM_ANDROID
 
-#include <md5/md5.h>
-#include <SHA1/SHA1.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/File/VirtualFileStream.h>
 
-#include <sstream>
-
-#ifdef CS_TARGETPLATFORM_WINDOWS
-#include <CSBackend/Platform/Windows/Core/String/WindowsStringUtils.h>
-#endif
-
-namespace ChilliSource
+namespace CSBackend
 {
-    namespace Core
-    {
+	namespace Android 
+	{
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		FileStream::FileStream(const std::string& in_filePath, FileMode in_fileMode)
+		VirtualFileStream::VirtualFileStream(std::unique_ptr<u8[]> in_buffer, u32 in_bufferSize, CSCore::FileMode in_fileMode)
 		{
-			mstrFilename = in_filePath;
-			meFileMode = in_fileMode;
+			CS_ASSERT(in_fileMode == CSCore::FileMode::k_read || in_fileMode == CSCore::FileMode::k_readBinary, "Virtual file stream only supports read file modes.");
+            CS_ASSERT(in_buffer != nullptr, "Cannot create a virtual file stream with a null buffer.");
+            CS_ASSERT(in_bufferSize > 0, "Invalid buffer size.");
 
-			mFileStream.open(mstrFilename.c_str(), GetFileMode());
+			m_buffer = std::move(in_buffer);
+			m_stream.rdbuf()->pubsetbuf(reinterpret_cast<s8*>(m_buffer.get()), in_bufferSize);
 
-			m_isValid = mFileStream.is_open() == true && (mFileStream.bad() || mFileStream.fail());
+			m_isValid = true;
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		bool FileStream::IsValid() const
+		bool VirtualFileStream::IsValid() const
 		{
 			return m_isValid;
 		}
-        //--------------------------------------------------------------
-        /// Get MD5 Checksum 
-        ///
-        /// Calculate the MD5 checksum of the file 
-        ///
-        /// @return MD5 checksum
-        //--------------------------------------------------------------
-        std::string FileStream::GetMD5Checksum()
-        {
-        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
-
-            s32 dwCurrentPos = TellG();
-            
-            // Get file size
-            SeekG(0, SeekDir::k_end);
-            u32 udwLength = TellG();
-            
-            SeekG(0);
-            
-            const u32 kudwChunkSize = 256;
-            s8 byData[kudwChunkSize];
-            
-            MD5 Hash;
-            
-            while(udwLength >= kudwChunkSize)
-            {
-                Read(byData, kudwChunkSize);
-                Hash.update(byData, kudwChunkSize);
-                udwLength -= kudwChunkSize;
-            }
-            
-            // Last chunk
-            if(udwLength > 0)
-            {
-                Read(byData, udwLength);
-                Hash.update(byData, udwLength);
-            }
-            
-            SeekG(dwCurrentPos);
-            
-            Hash.finalize();
-            return Hash.binarydigest();
-        }
-        //--------------------------------------------------------------
-        /// Get SHA1 Checksum
-        //--------------------------------------------------------------
-        std::string FileStream::GetSHA1Checksum(CSHA1::REPORT_TYPE ineReportType)
-        {
-        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
-
-            s32 dwCurrentPos = TellG();
-            
-            // Get file size
-            SeekG(0, SeekDir::k_end);
-            u32 udwLength = TellG();
-            
-            SeekG(0);
-            
-            const u32 kudwChunkSize = 256;
-            s8 byData[kudwChunkSize];
-            
-            CSHA1 Hash;
-            Hash.Reset();
-            
-            while(udwLength >= kudwChunkSize)
-            {
-                Read(byData, kudwChunkSize);
-                
-                Hash.Update(reinterpret_cast<u8*>(byData), kudwChunkSize);
-                udwLength -= kudwChunkSize;
-            }
-            
-            // Last chunk
-            if(udwLength > 0)
-            {
-                Read(byData, udwLength);
-                Hash.Update(reinterpret_cast<u8*>(byData), udwLength);
-            }
-            
-            SeekG(dwCurrentPos);
-            
-            Hash.Final();
-            
-            const u32 kudwMaxSHA1Length = 80;
-
-#ifdef CS_TARGETPLATFORM_WINDOWS
-            TCHAR cHash[kudwMaxSHA1Length];
-            memset(cHash, 0, kudwMaxSHA1Length);
-            Hash.ReportHash(cHash, ineReportType);
-            return CSBackend::Windows::WindowsStringUtils::UTF16ToUTF8(std::wstring(cHash));
-#else
-			char cHash[kudwMaxSHA1Length];
-			memset(cHash, 0, kudwMaxSHA1Length);
-			Hash.ReportHash(cHash, ineReportType);
-			return std::string(cHash);
-#endif
-        }
 		//--------------------------------------------------------------------------------------------------
 		/// End Of File
 		//--------------------------------------------------------------------------------------------------
-		bool FileStream::EndOfFile()
+		bool VirtualFileStream::EndOfFile()
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			return mFileStream.eof();
+			return m_stream.eof();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		s32 FileStream::Get()
+		s32 VirtualFileStream::Get()
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			return mFileStream.get();
+			return m_stream.get();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::Get(s8 & outbyChar)
+		void VirtualFileStream::Get(s8 & outbyChar)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			mFileStream.get(outbyChar);
+			m_stream.get(outbyChar);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::Get(s8 * outpbyString, s32 indwStreamSize)
+		void VirtualFileStream::Get(s8 * outpbyString, s32 indwStreamSize)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			mFileStream.get(outpbyString, indwStreamSize);
+			m_stream.get(outpbyString, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::Get(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
+		void VirtualFileStream::Get(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			mFileStream.get(outpbyString, indwStreamSize, inbyDelim);
+			m_stream.get(outpbyString, indwStreamSize, inbyDelim);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Line
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::GetLine(std::string &outstrString)
+		void VirtualFileStream::GetLine(std::string &outstrString)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			mFileStream >> outstrString;
+			m_stream >> outstrString;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get All
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::GetAll(std::string &outstrString)
+		void VirtualFileStream::GetAll(std::string &outstrString)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			std::stringstream cStream;
-			cStream << mFileStream.rdbuf();
-			
-			outstrString = cStream.str();
+			outstrString = m_stream.str().substr(m_stream.tellg());
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::Get(std::stringstream &outstrStringStream)
+		void VirtualFileStream::Get(std::stringstream &outstrStringStream)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			outstrStringStream << mFileStream.rdbuf();
+			outstrStringStream << m_stream.rdbuf();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Line
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::GetLine(s8 * outpbyString, s32 indwStreamSize)
+		void VirtualFileStream::GetLine(s8 * outpbyString, s32 indwStreamSize)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			mFileStream.getline(outpbyString, indwStreamSize);
+			m_stream.getline(outpbyString, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get Line
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::GetLine(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
+		void VirtualFileStream::GetLine(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			mFileStream.getline(outpbyString, indwStreamSize, inbyDelim);
+			m_stream.getline(outpbyString, indwStreamSize, inbyDelim);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Ignore
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::Ignore(s32 indwStreamSize, s8 inbyDelim)
+		void VirtualFileStream::Ignore(s32 indwStreamSize, s8 inbyDelim)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			mFileStream.ignore(indwStreamSize, inbyDelim);
+			m_stream.ignore(indwStreamSize, inbyDelim);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Peek
 		//--------------------------------------------------------------------------------------------------
-		s32 FileStream::Peek()
+		s32 VirtualFileStream::Peek()
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			return mFileStream.peek();
+			return m_stream.peek();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Read
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::Read(s8* inpbyBuffer, s32 indwStreamSize)
+		void VirtualFileStream::Read(s8* inpbyBuffer, s32 indwStreamSize)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			mFileStream.read(inpbyBuffer, indwStreamSize);
+			m_stream.read(inpbyBuffer, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Put Back
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::PutBack(s8 inbyChar)
+		void VirtualFileStream::PutBack(s8 inbyChar)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			mFileStream.putback(inbyChar);
+			m_stream.putback(inbyChar);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Unget
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::Unget()
+		void VirtualFileStream::Unget()
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			mFileStream.unget();
+			m_stream.unget();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// TellG
 		//--------------------------------------------------------------------------------------------------
-		s32 FileStream::TellG()
+		s32 VirtualFileStream::TellG()
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			return (s32)mFileStream.tellg();
+			return m_stream.tellg();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// SeekG
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::SeekG(s32 indwPosition)
+		void VirtualFileStream::SeekG(s32 indwPosition)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
-			mFileStream.seekg(indwPosition);
+			m_stream.seekg(indwPosition, std::ios_base::beg);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// SeekG
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::SeekG(s32 indwPosition, Core::SeekDir ineDir)
+		void VirtualFileStream::SeekG(s32 indwPosition, CSCore::SeekDir ineDir)
 		{
         	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
 
@@ -322,143 +217,89 @@ namespace ChilliSource
 			switch (ineDir)
 			{
 				default:
-				case Core::SeekDir::k_beginning:
+				case CSCore::SeekDir::k_beginning:
 					dir = std::ios_base::beg;
 					break;
-				case Core::SeekDir::k_current:
+				case CSCore::SeekDir::k_current:
 					dir = std::ios_base::cur;
 					break;
-				case Core::SeekDir::k_end:
+				case CSCore::SeekDir::k_end:
 					dir = std::ios_base::end;
 					break;
 			}
-			mFileStream.seekg(indwPosition,dir);
+			m_stream.seekg(indwPosition, dir);
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Sync
 		//--------------------------------------------------------------------------------------------------
-		s32 FileStream::Sync()
+		s32 VirtualFileStream::Sync()
 		{
-        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+        	CS_LOG_FATAL("Cannot sync a virtual file stream.");
 
-			return mFileStream.sync();
+        	return 0;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Put
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::Put(s8 inbyChar)
+		void VirtualFileStream::Put(s8 inbyChar)
 		{
-        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
-
-			mFileStream.put(inbyChar);
+        	CS_LOG_FATAL("Cannot write to a virtual file stream.");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Write
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::Write(const s8* inpbyChar, s32 indwStreamSize)
+		void VirtualFileStream::Write(const s8* inpbyChar, s32 indwStreamSize)
 		{
-        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
-
-			mFileStream.write(inpbyChar, indwStreamSize);
+        	CS_LOG_FATAL("Cannot write to a virtual file stream.");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Write
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::Write(const std::string& _instrString)
+		void VirtualFileStream::Write(const std::string& _instrString)
 		{
-        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
-
-			mFileStream.write(_instrString.c_str(), _instrString.length());
+        	CS_LOG_FATAL("Cannot write to a virtual file stream.");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// TellP
 		//--------------------------------------------------------------------------------------------------
-		s32 FileStream::TellP()
+		s32 VirtualFileStream::TellP()
 		{
-        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+			CS_LOG_FATAL("A virtual file stream does not have a 'put' position to get.");
 
-			return (s32)mFileStream.tellp();
+			return 0;
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// SeekP
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::SeekP(s32 indwPosition)
+		void VirtualFileStream::SeekP(s32 indwPosition)
 		{
-        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
-
-			mFileStream.seekp(indwPosition);
+        	CS_LOG_FATAL("A virtual file stream does not have a 'put' position to seek.");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// SeekP
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::SeekP(s32 indwPosition, Core::SeekDir ineDir)
+		void VirtualFileStream::SeekP(s32 indwPosition, CSCore::SeekDir ineDir)
 		{
-        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
-
-			std::ios_base::seekdir dir;
-			switch (ineDir)
-			{
-				default:
-				case Core::SeekDir::k_beginning:
-					dir = std::ios_base::beg;
-					break;
-				case Core::SeekDir::k_current:
-					dir = std::ios_base::cur;
-					break;
-				case Core::SeekDir::k_end:
-					dir = std::ios_base::end;
-					break;
-			}
-			mFileStream.seekp(indwPosition, dir);
+        	CS_LOG_FATAL("A virtual file stream does not have a 'put' position to seek.");
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Flush
 		//--------------------------------------------------------------------------------------------------
-		void FileStream::Flush()
+		void VirtualFileStream::Flush()
 		{
-        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
-
-			mFileStream.flush();
+        	CS_LOG_FATAL("Cannot flush a virtual file stream.");
 		}
-        //--------------------------------------------------------------------------------------------------
-		/// Get File Mode
-		//--------------------------------------------------------------------------------------------------
-		std::ios_base::openmode FileStream::GetFileMode() const
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		VirtualFileStream::~VirtualFileStream()
 		{
-			switch (meFileMode)
+			if(IsValid() == true)
 			{
-				case Core::FileMode::k_read:
-					return (std::ios_base::in);
-				case Core::FileMode::k_readBinary:
-					return (std::ios_base::in | std::ios_base::binary);
-				case Core::FileMode::k_write:
-					return (std::ios_base::out);
-				case Core::FileMode::k_writeAppend:
-					return (std::ios_base::out | std::ios_base::app);
-				case Core::FileMode::k_writeAtEnd:
-					return (std::ios_base::out | std::ios_base::ate);
-				case Core::FileMode::k_writeTruncate:
-					return (std::ios_base::out | std::ios_base::trunc);
-				case Core::FileMode::k_writeBinary:
-					return (std::ios_base::out | std::ios_base::binary);
-				case Core::FileMode::k_writeBinaryAppend:
-					return (std::ios_base::out | std::ios_base::binary | std::ios_base::app);
-				case Core::FileMode::k_writeBinaryAtEnd:
-					return (std::ios_base::out | std::ios_base::binary | std::ios_base::ate);
-				case Core::FileMode::k_writeBinaryTruncate:
-					return (std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
-				default:
-					return (std::ios_base::in);
+			    m_stream.str(std::string());
+			    m_buffer.reset();
 			}
 		}
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        FileStream::~FileStream()
-        {
-            if (IsValid() == true)
-            {
-                mFileStream.close();
-            }
-        }
 	}
 }
+
+#endif

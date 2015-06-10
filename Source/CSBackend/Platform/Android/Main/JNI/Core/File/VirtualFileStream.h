@@ -1,6 +1,6 @@
 //
-//  FileStreamAPK.h
-//  Chilli Source
+//  VirtualFileStream.h
+//  ChilliSource
 //  Created by Ian Copland on 25/03/2011.
 //
 //  The MIT License (MIT)
@@ -28,60 +28,54 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifndef _CHILLISOURCE_PLATFORM_ANDROID_FILEIO_FILE_STREAM_ANDROID_APK_
-#define _CHILLISOURCE_PLATFORM_ANDROID_FILEIO_FILE_STREAM_ANDROID_APK_
+#ifndef _CSBACKEND_PLATFORM_ANDROID_MAIN_CORE_FILE_VIRTUALFILESTREAM_H_
+#define _CSBACKEND_PLATFORM_ANDROID_MAIN_CORE_FILE_VIRTUALFILESTREAM_H_
 
 #include <ChilliSource/Core/File/FileStream.h>
 
-#include <minizip/unzip.h>
-
 #include <fstream>
 #include <ios>
-#include <mutex>
 #include <sstream>
 
 namespace CSBackend
 {
 	namespace Android
 	{
-		//======================================================================================================
-		/// CFileStreamAPK
-		///
+		//--------------------------------------------------------------------------------------------------
 		/// A filestream is used for all reading and writing of files. This will emulate the functionality
 		/// of fstream and allows for cross platform filereading.
-		//======================================================================================================
-		class FileStreamAPK : public CSCore::FileStream
+		//--------------------------------------------------------------------------------------------------
+		class VirtualFileStream final : public CSCore::FileStream
 		{
 		public:
-			//--------------------------------------------------------------------------------------------------
-			/// Destructor
-			//--------------------------------------------------------------------------------------------------
-			virtual ~FileStreamAPK();
-			//--------------------------------------------------------------------------------------------------
-			/// Is Open
+			//------------------------------------------------------------------------------
+			/// Constructor. Creates a new file stream into the given memory blob.
 			///
-			/// @return whether or not the stream is open
-			//--------------------------------------------------------------------------------------------------
-			bool IsOpen() override;
-			//--------------------------------------------------------------------------------------------------
-			/// Is Bad
+			/// @author Ian Copland
 			///
-			/// @return Checks that the file stream is not corrupt. this calls both fstream::fail() and
-			///			fstream::bad()
-			//--------------------------------------------------------------------------------------------------
-			bool IsBad() override;
+			/// @param in_buffer - The memory buffer which will be used as a "virtual"
+			/// file.
+			/// @param in_bufferSize - The size of the memory buffer.
+			/// @param in_fileMode - The file mode with which the "file" should be opened.
+			//------------------------------------------------------------------------------
+			VirtualFileStream(std::unique_ptr<u8[]> in_buffer, u32 in_bufferSize, CSCore::FileMode in_fileMode);
+			//------------------------------------------------------------------------------
+			/// This should be called immediately after construction, before calling any
+			/// other file stream methods. If this returns false the FileStream should be
+			/// discarded, no other methods should be called.
+			///
+			/// @author Ian Copland
+			///
+			/// @return Whether or not the file was successfully opened on construction and
+			/// is now ready to be read from.
+			//------------------------------------------------------------------------------
+			bool IsValid() const override;
 			//--------------------------------------------------------------------------------------------------
 			/// End Of File
 			///
 			/// @return Checks whether the end of the file has been reached.
 			//--------------------------------------------------------------------------------------------------
 			bool EndOfFile() override;
-			//--------------------------------------------------------------------------------------------------
-			/// Close
-			///
-			/// Closes the filestream.
-			//--------------------------------------------------------------------------------------------------
-			void Close() override;
 			//--------------------------------------------------------------------------------------------------
 			/// Get
 			///
@@ -285,51 +279,17 @@ namespace CSBackend
 			/// Synchronises the associated buffer with the stream.
 			//--------------------------------------------------------------------------------------------------
 			void Flush() override;
-		protected:
-			//--------------------------------------------------------------------------------------------------
-			/// Constructor
+			//------------------------------------------------------------------------------
+			/// Destructor. Closes the file stream if it was succesfully opened.
 			///
-			/// This is defined protected so that only the FileSystem can create it.
-			//--------------------------------------------------------------------------------------------------
-			FileStreamAPK(std::mutex* inpMinizipMutex);
-			//--------------------------------------------------------------------------------------------------
-			/// OpenFromAPK
-			///
-			/// Opens the apk using minizip and opens a filestream.
-			///
-			/// @param The path to the zip file
-			/// @param The zip file position.
-			/// @param File mode
-			//--------------------------------------------------------------------------------------------------
-			void OpenFromAPK(const std::string& instrApkPath, const unz_file_pos& inFilePos, CSCore::FileMode ineMode);
-			//--------------------------------------------------------------------------------------------------
-			/// Open
-			///
-			/// Opens the filestream with the specified file mode.
-			///
-			/// @param The zip file position.
-			/// @param The file mode with which the file should be opened.
-			//--------------------------------------------------------------------------------------------------
-			void Open(const unz_file_pos& inFilePos, CSCore::FileMode ineMode);
-			//--------------------------------------------------------------------------------------------------
-			/// Get File Mode
-			///
-			/// Converts the FileMode enum into a ios_base::openmode for opening the file.
-			///
-			/// @return the STL openmode.
-			//--------------------------------------------------------------------------------------------------
-			std::ios_base::openmode GetFileMode();
-			
-			friend class FileSystem;
-		private:
-			std::mutex* mpMinizipMutex;
-			unzFile mUnzipper;
-			bool mbError;
-			bool mbOpen;
+			/// @author Ian Copland
+			//------------------------------------------------------------------------------
+			virtual ~VirtualFileStream();
 
-			s8 * mpDataBuffer;
-			CSCore::FileMode meFileMode;
-			std::stringstream mStringStream;
+		private:
+
+			std::unique_ptr<u8[]> m_buffer;
+			std::stringstream m_stream;
 		};
 	}
 }

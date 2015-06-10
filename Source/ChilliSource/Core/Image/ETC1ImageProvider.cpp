@@ -72,7 +72,7 @@ namespace ChilliSource
             {
                 FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
                 
-                if(pImageFile == nullptr || pImageFile->IsBad() == true)
+                if(pImageFile == nullptr)
                 {
                     out_resource->SetLoadState(Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
@@ -111,7 +111,8 @@ namespace ChilliSource
                 //read the rest of the data
                 u8* pData = new u8[dwDataSize];
                 pImageFile->Read((s8*)pData, dwDataSize);
-                pImageFile->Close();
+                pImageFile.reset();
+
                 Image::ImageDataUPtr imageData(pData);
                 
                 //setup the output image

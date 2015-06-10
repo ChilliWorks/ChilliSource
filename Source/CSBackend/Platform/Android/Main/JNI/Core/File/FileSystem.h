@@ -76,7 +76,8 @@ namespace CSBackend
 			/// @param in_filePath - The file path.
 			/// @param in_fileMode - The file mode.
 			///
-			/// @return The new file stream.
+			/// @return The new file stream. If the stream cannot be created or is invalid,
+			/// null be be returned.
 			//------------------------------------------------------------------------------
 			CSCore::FileStreamUPtr CreateFileStream(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, CSCore::FileMode in_fileMode) const override;
 			//------------------------------------------------------------------------------
@@ -235,12 +236,16 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			std::string GetAbsolutePathToStorageLocation(CSCore::StorageLocation in_storageLocation) const override;
             //------------------------------------------------------------------------------
-			/// Returns the absolute path to the file in the given storage location. The
-			/// file must exist otherwise an empty string will be returned. The result of
-			/// this is platform specific so care should be taken when using this in cross
-			/// platform projects.
+			/// Calculates the full path to the file by appending the path to the storage
+			/// location path. If the path is in the DLC storage location the Cached DLC
+			/// will first be checked to see if the file exists. If it does this path is
+			/// returned, otherwise the Package DLC path is given. The file at the returned
+			/// path doesn't necessarily exist.
+			///
+			/// The result of this is platform specific so care should be taken when using
+			/// it in cross platform projects.
             ///
-            /// @author S Downie
+            /// @author Ian Copland
 			///
             /// @param in_storageLocation - The storage location for the file.
             /// @param in_path - The file path relative to the storage location.
@@ -249,12 +254,16 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			std::string GetAbsolutePathToFile(CSCore::StorageLocation in_storageLocation, const std::string& in_path) const override;
             //------------------------------------------------------------------------------
-			/// Returns the absolute path to the directory in the given storage location.
-			/// The directory must exist otherwise an empty string will be returned. The
-			/// result of this is platform specific so care should be taken when using this
-			/// in cross platform projects.
+			/// Calculates the full path to the directory by appending the path to the
+			/// storage location path. If the path is in the DLC storage location the Cached
+			/// DLC will first be checked to see if the directory exists. If it does this
+			/// path is returned, otherwise the Package DLC path is given. The directory at
+			/// the returned path doesn't necessarily exist.
+			///
+			/// The result of this is platform specific so care should be taken when using
+			/// it in cross platform projects.
             ///
-            /// @author S Downie
+            /// @author Ian Copland
 			///
             /// @param in_storageLocation - The storage location for the directory.
             /// @param in_path - The directory path relative to the storage location.

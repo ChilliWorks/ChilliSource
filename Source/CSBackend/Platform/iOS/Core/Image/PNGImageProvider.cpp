@@ -139,9 +139,9 @@ namespace CSBackend
             //-----------------------------------------------------------
             void LoadImage(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate, const CSCore::ResourceSPtr& out_resource)
             {
-                CSCore::FileStreamSPtr pImageFile = CSCore::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, CSCore::FileMode::k_readBinary);
+                CSCore::FileStreamUPtr pImageFile = CSCore::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, CSCore::FileMode::k_readBinary);
                 
-                if(pImageFile == nullptr || pImageFile->IsBad() == true)
+                if(pImageFile == nullptr)
                 {
                     out_resource->SetLoadState(CSCore::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)

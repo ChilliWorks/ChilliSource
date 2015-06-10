@@ -153,9 +153,9 @@ namespace CSBackend
                 }
 
                 std::string strHTMLFileContents;
-                CSCore::FileStreamSPtr pHTMLFile = fileSystem->CreateFileStream(in_storageLocation, in_filePath, CSCore::FileMode::k_read);
+                CSCore::FileStreamUPtr pHTMLFile = fileSystem->CreateFileStream(in_storageLocation, in_filePath, CSCore::FileMode::k_read);
                 pHTMLFile->GetAll(strHTMLFileContents);
-                pHTMLFile->Close();
+                pHTMLFile.reset();
                 
                 NSString* pstrHTML = [NSStringUtils newNSStringWithUTF8String:strHTMLFileContents];
                 NSString* urlString = [NSStringUtils newNSStringWithUTF8String:fullFilePath];

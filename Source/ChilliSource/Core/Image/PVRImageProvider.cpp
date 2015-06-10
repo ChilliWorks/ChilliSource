@@ -192,7 +192,7 @@ namespace ChilliSource
             {
                 Core::FileStreamSPtr pImageFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_readBinary);
                 
-                if(pImageFile == nullptr || pImageFile->IsBad() == true)
+                if(pImageFile == nullptr)
                 {
                     out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)

@@ -30,10 +30,13 @@
 #define _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_FILE_ZIPPEDFILESYSTEM_H_
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/File/FileStreamApk.h>
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/File/FileStream.h>
 
+#include <minizip/unzip.h>
+
+#include <mutex>
 #include <vector>
 #include <utility>
 
@@ -235,6 +238,8 @@ namespace CSBackend
             std::string m_filePath;
             bool m_isValid = false;
             std::vector<ManifestItem> m_manifestItems;
+
+            mutable std::mutex m_mutex;
         };
     }
 }

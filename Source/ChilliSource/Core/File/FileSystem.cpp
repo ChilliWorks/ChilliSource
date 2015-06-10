@@ -84,14 +84,12 @@ namespace ChilliSource
         bool FileSystem::ReadFile(StorageLocation in_storageLocation, const std::string& in_directory, std::string& out_contents) const
         {
             Core::FileStreamUPtr fileStream = CreateFileStream(in_storageLocation, in_directory, Core::FileMode::k_read);
-			
-            if (fileStream.get() == nullptr || fileStream->IsOpen() == false || fileStream->IsBad() == true)
+            if (fileStream == nullptr)
             {
                 return false;
             }
             
             fileStream->GetAll(out_contents);
-            fileStream->Close();
             
             return true;
         }
@@ -100,14 +98,12 @@ namespace ChilliSource
         bool FileSystem::WriteFile(StorageLocation in_storageLocation, const std::string& in_directory, const std::string& in_contents) const
         {
             Core::FileStreamUPtr fileStream = CreateFileStream(in_storageLocation, in_directory, Core::FileMode::k_writeBinary);
-			
-            if (fileStream.get() == nullptr || fileStream->IsOpen() == false || fileStream->IsBad() == true)
+            if (fileStream.get() == nullptr)
             {
                 return false;
             }
             
             fileStream->Write(in_contents);
-            fileStream->Close();
             
             return true;
         }
@@ -116,14 +112,12 @@ namespace ChilliSource
         bool FileSystem::WriteFile(StorageLocation in_storageLocation, const std::string& in_directory, const s8* in_data, u32 in_dataSize) const
         {
             Core::FileStreamUPtr fileStream = CreateFileStream(in_storageLocation, in_directory, Core::FileMode::k_writeBinary);
-			
-            if (fileStream.get() == nullptr || fileStream->IsOpen() == false || fileStream->IsBad() == true)
+            if (fileStream.get() == nullptr)
             {
                 return false;
             }
             
             fileStream->Write(in_data, (s32)in_dataSize);
-            fileStream->Close();
             
             return true;
         }
@@ -230,7 +224,7 @@ namespace ChilliSource
 
 			//open the file
 			FileStreamUPtr file = CreateFileStream(in_storageLocation, in_filePath, FileMode::k_readBinary);
-			if (file != nullptr && file->IsOpen() == true && file->IsBad() == false)
+			if (file != nullptr)
 			{
 				//get the length of the file
 				file->SeekG(0, SeekDir::k_end);
@@ -245,6 +239,7 @@ namespace ChilliSource
 				output = HashCRC32::GenerateHashCode(contents, length);
 				CS_SAFEDELETE_ARRAY(contents);
 			}
+
 			return output;
 		}
         //--------------------------------------------------------------
@@ -290,12 +285,11 @@ namespace ChilliSource
 		{
 			//open the file
 			FileStreamUPtr file = CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
-			if (file->IsOpen() == true && file->IsBad() == false)
+			if (file != nullptr)
 			{
 				//get the length of the file
 				file->SeekG(0, SeekDir::k_end);
 				s32 dwLength = file->TellG();
-				file->Close();
 				return dwLength;
 			}
 

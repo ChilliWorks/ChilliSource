@@ -40,9 +40,9 @@ namespace ChilliSource
         {
             bool FileToString(StorageLocation ineStorageLocation, const std::string & instrPath, std::string & outstrFileContent)
             {
-                FileStreamSPtr pFile = Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_read);
+                FileStreamUPtr pFile = Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_read);
                 
-                if(!pFile || pFile->IsOpen() == false)
+                if(pFile == nullptr)
                 {
                     CS_LOG_WARNING("Utils::FileToString: Could not open file: " + instrPath);
                     return false;
@@ -57,7 +57,7 @@ namespace ChilliSource
             {
                 FileStreamSPtr pFile = Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrPath, FileMode::k_write);
                 
-                if(!pFile || pFile->IsOpen() == false)
+                if(pFile == nullptr)
                 {
                     CS_LOG_WARNING("Utils::StringToFile: Could not open file: " + instrPath);
                     return FileStreamSPtr();
