@@ -50,7 +50,7 @@ namespace ChilliSource
 
 			mFileStream.open(mstrFilename.c_str(), GetFileMode());
 
-			m_isValid = mFileStream.is_open() == true && (mFileStream.bad() || mFileStream.fail());
+			m_isValid = mFileStream.is_open() == true && mFileStream.bad() == false && mFileStream.fail() == false;
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------

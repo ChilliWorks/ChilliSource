@@ -353,11 +353,15 @@ namespace CSBackend
 		//------------------------------------------------------------------------------
 		CSCore::FileStreamUPtr FileSystem::CreateFileStream(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, CSCore::FileMode in_fileMode) const
 		{
-		    CS_LOG_VERBOSE("Creating file stream '" + in_filePath + "' in storage location '" + CSCore::ToString(in_storageLocation) + "'");
-
 			if (IsWriteMode(in_fileMode) == true)
 			{
-			    //TODO: Write mode.
+			    CS_ASSERT(IsStorageLocationWritable(in_storageLocation) == true, "Cannot open write mode file stream in read-only storage location.");
+
+		        CSCore::FileStreamUPtr output(new CSCore::FileStream(GetAbsolutePathToFile(in_storageLocation, in_filePath), in_fileMode));
+                if (output->IsValid() == true)
+                {
+                    return output;
+                }
 			}
 			else
 			{
@@ -365,12 +369,16 @@ namespace CSBackend
 			        (in_storageLocation == CSCore::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == false))
 			    {
 			        //TODO: Cache DLC file existance race condition.
-			        auto filePathInZip = GetAbsolutePathToFile(in_storageLocation, in_filePath);
-			        return m_zippedFileSystem->CreateFileStream(filePathInZip, in_fileMode);
+			        return m_zippedFileSystem->CreateFileStream(GetAbsolutePathToFile(in_storageLocation, in_filePath), in_fileMode);
 			    }
 			    else
 			    {
-			        //TODO: non-zip read streams
+			        //TODO: Cache DLC file existance race condition.
+			        CSCore::FileStreamUPtr output(new CSCore::FileStream(GetAbsolutePathToFile(in_storageLocation, in_filePath), in_fileMode));
+                    if (output->IsValid() == true)
+                    {
+                        return output;
+                    }
 			    }
 			}
 
@@ -380,8 +388,26 @@ namespace CSBackend
 		//------------------------------------------------------------------------------
 		bool FileSystem::CreateDirectoryPath(CSCore::StorageLocation in_storageLocation, const std::string& in_directory) const
 		{
-			//TODO: !?
-			return false;
+			CS_ASSERT(IsStorageLocationWritable(in_storageLocation) == true, "Cannot create directory in read-only storage location.");
+
+            std::string path = GetAbsolutePathToStorageLocation(in_storageLocation);
+
+            //get each level of the new directory seperately
+            std::string relativePath = CSCore::StringUtils::StandardiseDirectoryPath(in_directory);
+            std::vector<std::string> relativePathSections = CSCore::StringUtils::Split(relativePath, "/");
+
+            //iterate through each section of the path and try and create it.
+            for (const std::string& relativePathSection : relativePathSections)
+            {
+                path += relativePathSection + "/";
+
+                if (CSBackend::Android::CreateDirectory(path) == false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
@@ -403,29 +429,70 @@ namespace CSBackend
 		//------------------------------------------------------------------------------
 		bool FileSystem::DeleteFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath) const
 		{
-			//TODO: !?
-			return false;
+			CS_ASSERT(IsStorageLocationWritable(in_storageLocation) == true, "Cannot delete file from read-only storage location.");
+
+            std::string filePath = GetAbsolutePathToFile(in_storageLocation, in_filePath);
+            s32 error = unlink(filePath.c_str());
+            if (error != 0)
+            {
+                s32 errorType = errno;
+                if (errorType != ENOENT)
+                {
+                    CS_LOG_ERROR("File System: Error deleting file '" + in_filePath + "': " + GetFileErrorString(errorType));
+                    return false;
+                }
+            }
+
+            return true;
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
 		bool FileSystem::DeleteDirectory(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
 		{
-			//TODO: !?
-			return false;
+			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "Cannot delete directory from read-only storage location.");
+
+            std::string directoryPath = GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath);
+            if (directoryPath != "")
+            {
+                CSBackend::Android::DeleteDirectory(directoryPath);
+                return true;
+            }
+
+            return false;
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
 		std::vector<std::string> FileSystem::GetFilePaths(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath, bool in_recursive) const
 		{
-            //TODO: !?
-            return std::vector<std::string>();
+			switch (in_storageLocation)
+			{
+			    case CSCore::StorageLocation::k_package:
+			    case CSCore::StorageLocation::k_chilliSource:
+			        return m_zippedFileSystem->GetFilePaths(GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath), in_recursive);
+			    case CSCore::StorageLocation::k_DLC:
+			        //TODO: !?
+			        return std::vector<std::string>();
+                default:
+                    //TODO: !?
+                    return std::vector<std::string>();
+			}
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
 		std::vector<std::string> FileSystem::GetDirectoryPaths(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const
 		{
-            //TODO: !?
-            return std::vector<std::string>();
+            switch (in_storageLocation)
+            {
+                case CSCore::StorageLocation::k_package:
+                case CSCore::StorageLocation::k_chilliSource:
+                    return m_zippedFileSystem->GetDirectoryPaths(GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath), in_recursive);
+                case CSCore::StorageLocation::k_DLC:
+                    //TODO: !?
+                    return std::vector<std::string>();
+                default:
+                    //TODO: !?
+                    return std::vector<std::string>();
+            }
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------

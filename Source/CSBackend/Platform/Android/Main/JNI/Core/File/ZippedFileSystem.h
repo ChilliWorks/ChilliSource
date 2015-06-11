@@ -218,8 +218,9 @@ namespace CSBackend
             ///
             /// @param in_filePath - The file path which should be added to the manifest.
             /// @param in_zipPosition - The position of the file inside the zip.
+            /// @param in_isFile - Whether or not the entry is a file.
             //------------------------------------------------------------------------------
-            void AddItemToManifest(const std::string& in_filePath, unz_file_pos in_zipPosition);
+            void AddItemToManifest(const std::string& in_filePath, unz_file_pos in_zipPosition, bool in_isFile);
             //------------------------------------------------------------------------------
             /// Searches the manifest item list for the manifest item with the given path.
             /// if it is found true is returned and the output manifest item is set. If it

@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
 #include <algorithm>
+#include <sys/stat.h>
 
 namespace CSBackend
 {
@@ -42,6 +43,23 @@ namespace CSBackend
         namespace
         {
             const u32 k_filePathLength = 32 * 1024;
+
+            //------------------------------------------------------------------------------
+            /// Returns whether or not the given unz_file_info represents a file or a
+            /// directory. The struct doesn't directly contain this information (though it
+            /// can be present in 'external_fa', but only if the zip was created on a posix
+            /// based platform). To get around this, the uncompressed file size is used -
+            /// if 0 it's considered a directory. Obviously there is the possibility of
+            /// false negatives if the file has no size, but since this is contained in read
+            /// only storage and a zero-size file is almost useless it unlikely to be a
+            /// problem.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            bool IsFile(const unz_file_info& in_fileInfo)
+            {
+                return (in_fileInfo.uncompressed_size > 0);
+            }
         }
 
         //------------------------------------------------------------------------------
@@ -166,8 +184,21 @@ namespace CSBackend
         {
             CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
 
-            //TODO: !?
-            return std::vector<std::string>();
+            std::vector<std::string> output;
+            auto directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
+            for (const auto& item : m_manifestItems)
+            {
+                if (item.m_isFile == true && CSCore::StringUtils::StartsWith(item.m_path, directoryPath, false) == true)
+                {
+                    auto relativeFilePath = item.m_path.substr(directoryPath.length());
+                    if (in_recursive == true || relativeFilePath.find('/') == std::string::npos)
+                    {
+                        output.push_back(relativeFilePath);
+                    }
+                }
+            }
+
+            return output;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -175,8 +206,21 @@ namespace CSBackend
         {
             CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
 
-            //TODO: !?
-            return std::vector<std::string>();
+            std::vector<std::string> output;
+            auto directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
+            for (const auto& item : m_manifestItems)
+            {
+                if (item.m_isFile == false && item.m_path != directoryPath && CSCore::StringUtils::StartsWith(item.m_path, directoryPath, false) == true)
+                {
+                    auto relativeDirectoryPath = item.m_path.substr(directoryPath.length());
+                    if (in_recursive == true || relativeDirectoryPath.find('/') == relativeDirectoryPath.length() - 1)
+                    {
+                        output.push_back(relativeDirectoryPath);
+                    }
+                }
+            }
+
+            return output;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -198,8 +242,8 @@ namespace CSBackend
             {
                 unz_file_info info;
                 unzGetCurrentFileInfo(unzipper, &info, filePathBytes, k_filePathLength, nullptr, 0, nullptr, 0);
-
                 std::string filePath = CSCore::StringUtils::StandardiseFilePath(filePathBytes);
+
                 if (in_rootDirectoryPath.empty() == true || CSCore::StringUtils::StartsWith(filePath, rootDirectoryPath, false) == true)
                 {
                     if (rootDirectoryPath.empty() == false)
@@ -209,7 +253,7 @@ namespace CSBackend
 
                     unz_file_pos filePos;
                     unzGetFilePos(unzipper, &filePos);
-                    AddItemToManifest(filePath, filePos);
+                    AddItemToManifest(filePath, filePos, IsFile(info));
                 }
 
                 status = unzGoToNextFile(unzipper);
@@ -225,7 +269,7 @@ namespace CSBackend
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void ZippedFileSystem::AddItemToManifest(const std::string& in_filePath, unz_file_pos in_zipPosition)
+        void ZippedFileSystem::AddItemToManifest(const std::string& in_filePath, unz_file_pos in_zipPosition, bool in_isFile)
         {
             std::string filePath = CSCore::StringUtils::StandardiseFilePath(in_filePath);
 
@@ -262,7 +306,7 @@ namespace CSBackend
 			ManifestItem item;
 			item.m_path = filePath;
 			item.m_pathHash = CSCore::HashCRC32::GenerateHashCode(item.m_path);
-			item.m_isFile = true;
+			item.m_isFile = in_isFile;
 			item.m_zipPosition = in_zipPosition;
 			m_manifestItems.push_back(item);
         }
