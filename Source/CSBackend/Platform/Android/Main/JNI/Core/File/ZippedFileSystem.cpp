@@ -50,19 +50,6 @@ namespace CSBackend
             : m_filePath(in_zipFilePath)
         {
             BuildManifest(in_rootDirectoryPath);
-
-            CS_LOG_VERBOSE("Manifest for zip file '" + in_zipFilePath + "' with root directory '" + in_rootDirectoryPath + "' is: ");
-            for (const auto& item : m_manifestItems)
-            {
-                if (item.m_isFile)
-                {
-                    CS_LOG_VERBOSE(" File: '" + item.m_path + "'");
-                }
-                else
-                {
-                    CS_LOG_VERBOSE(" Directory: '" + item.m_path + "'");
-                }
-            }
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -75,8 +62,6 @@ namespace CSBackend
         CSCore::FileStreamUPtr ZippedFileSystem::CreateFileStream(const std::string& in_filePath, CSCore::FileMode in_fileMode) const
         {
             CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
-
-            CS_LOG_VERBOSE("Creating virtual file stream to '" + in_filePath + "' from inside zip file '" + m_filePath + "'");
 
             //Get the manifest item describing the location of the file within the zip.
             ManifestItem item;
@@ -165,7 +150,7 @@ namespace CSBackend
             CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
 
             ManifestItem item;
-            if (TryGetManifestItem(CSCore::StringUtils::StandardiseFilePath(in_directoryPath), item) == true)
+            if (TryGetManifestItem(CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath), item) == true)
             {
                 if (item.m_isFile == false)
                 {
@@ -199,15 +184,11 @@ namespace CSBackend
         {
             CS_ASSERT(m_isValid == false, "Cannot re-build manifest.");
 
-            CS_LOG_VERBOSE(" >> Opening zip '" + m_filePath + "' << ");
-
             unzFile unzipper = unzOpen(m_filePath.c_str());
             if (unzipper == nullptr)
             {
                 return;
             }
-
-            CS_LOG_VERBOSE(" >> Zip opened << ");
 
             char filePathBytes[k_filePathLength];
             auto rootDirectoryPath = CSCore::StringUtils::StandardiseFilePath(in_rootDirectoryPath);
@@ -219,13 +200,8 @@ namespace CSBackend
                 unzGetCurrentFileInfo(unzipper, &info, filePathBytes, k_filePathLength, nullptr, 0, nullptr, 0);
 
                 std::string filePath = CSCore::StringUtils::StandardiseFilePath(filePathBytes);
-
-                CS_LOG_VERBOSE(" >> Found file '" + filePath + "' << ");
-
                 if (in_rootDirectoryPath.empty() == true || CSCore::StringUtils::StartsWith(filePath, rootDirectoryPath, false) == true)
                 {
-                    CS_LOG_VERBOSE(" >> Adding to manifest file << ");
-
                     if (rootDirectoryPath.empty() == false)
                     {
                         filePath = filePath.erase(0, rootDirectoryPath.size());
@@ -253,31 +229,33 @@ namespace CSBackend
         {
             std::string filePath = CSCore::StringUtils::StandardiseFilePath(in_filePath);
 
-            std::string directory, fileName;
-            CSCore::StringUtils::SplitFilename(filePath, fileName, directory);
+            std::string directoryPath, fileName;
+            CSCore::StringUtils::SplitFilename(filePath, fileName, directoryPath);
 
-            std::vector<std::string> directoriesSections = CSCore::StringUtils::Split(directory, "/");
-            std::string directoryPath;
-            ManifestItem directoryManifestItem;
-            for (const auto& directorySection : directoriesSections)
+            std::vector<std::string> directoryPathSections = CSCore::StringUtils::Split(directoryPath, "/");
+            std::string currDirectoryPath;
+            for (const auto& directorySection : directoryPathSections)
             {
-                directoryPath += CSCore::StringUtils::StandardiseDirectoryPath(directorySection);
-                u32 directoryHash = CSCore::HashCRC32::GenerateHashCode(directoryPath);
-
-                //check to see if this directory has previously been seen. The usual
-                auto it = std::find_if(m_manifestItems.begin(), m_manifestItems.end(), [=](const ManifestItem& in_item)
+                currDirectoryPath += CSCore::StringUtils::StandardiseDirectoryPath(directorySection);
+                if (currDirectoryPath.empty() == false)
                 {
-                    return (in_item.m_pathHash == directoryHash && in_item.m_path == directoryPath);
-                });
+                    u32 currDirectoryHash = CSCore::HashCRC32::GenerateHashCode(currDirectoryPath);
 
-                if (directoryPath.size() != 0 && it != m_manifestItems.end())
-                {
-                    ManifestItem item;
-                    item.m_path = directoryPath;
-                    item.m_pathHash = directoryHash;
-                    item.m_isFile = false;
-                    item.m_zipPosition = in_zipPosition;
-                    m_manifestItems.push_back(item);
+                    //check to see if this directory has previously been seen. The usual
+                    auto it = std::find_if(m_manifestItems.begin(), m_manifestItems.end(), [=](const ManifestItem& in_item)
+                    {
+                        return (in_item.m_pathHash == currDirectoryHash && in_item.m_path == currDirectoryPath);
+                    });
+
+                    if (it == m_manifestItems.end())
+                    {
+                        ManifestItem item;
+                        item.m_path = currDirectoryPath;
+                        item.m_pathHash = currDirectoryHash;
+                        item.m_isFile = false;
+                        item.m_zipPosition = in_zipPosition;
+                        m_manifestItems.push_back(item);
+                    }
                 }
             }
 
