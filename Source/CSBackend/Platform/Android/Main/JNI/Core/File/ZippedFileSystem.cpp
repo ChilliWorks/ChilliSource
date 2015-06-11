@@ -30,6 +30,8 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/File/VirtualFileStream.h>
 
+#include <ChilliSource/Core/Base/Application.h>
+#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
@@ -97,9 +99,12 @@ namespace CSBackend
             //read the contents of the zip file.
             std::unique_lock<std::mutex> lock(m_mutex);
 
-            CSCore::FileStreamUPtr output;
-
             unzFile unzipper = unzOpen(m_filePath.c_str());
+            if (unzipper == nullptr)
+            {
+                return nullptr;
+            }
+
             s32 result = unzGoToFilePos(unzipper, &item.m_zipPosition);
             if (result == UNZ_OK)
             {
@@ -128,21 +133,72 @@ namespace CSBackend
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        bool ZippedFileSystem::CopyFile(const std::string& in_sourceFilePath, const std::string& in_destinationFilePath) const
+        bool ZippedFileSystem::CopyFiles(const std::unordered_map<std::string, std::string>& in_filePaths) const
         {
             CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
 
-            std::vector<std::pair<std::string, std::string>> filePaths = { std::make_pair(in_sourceFilePath, in_destinationFilePath) };
-            return CopyFiles(filePaths);
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        bool ZippedFileSystem::CopyFiles(const std::vector<std::pair<std::string, std::string>>& in_filePaths) const
-        {
-            CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
+            std::unique_lock<std::mutex> lock(m_mutex);
 
-            //TODO: !?
-            return false;
+            unzFile unzipper = unzOpen(m_filePath.c_str());
+            if (unzipper == nullptr)
+            {
+                return false;
+            }
+
+            auto fileSystem = CSCore::Application::Get()->GetFileSystem();
+
+            bool success = true;
+            char filePathBuffer[k_filePathLength];
+            ManifestItem item;
+            unz_file_info info;
+            for (const auto& filePathPair : in_filePaths)
+            {
+                auto sourceFilePath = CSCore::StandardiseFilePath(filePathPair.first);
+                if (TryGetManifestItem(sourceFilePath, item) == false)
+                {
+                    success = false;
+                    break;
+                }
+
+                if (item.m_isFile == false)
+                {
+                    success = false;
+                    break;
+                }
+
+                s32 result = unzGoToFilePos(unzipper, &item.m_zipPosition);
+                if (result != UNZ_OK)
+                {
+                    success = false;
+                    break;
+                }
+
+                result = unzOpenCurrentFile(unzipper);
+                if (result != UNZ_OK)
+                {
+                    success = false;
+                    break;
+                }
+
+                unzGetCurrentFileInfo(unzipper, &info, filePath, k_filePathLength, nullptr, 0, nullptr, 0);
+
+                std::unique_ptr<u8[]> buffer(new u8[info.uncompressed_size]);
+
+                unzReadCurrentFile(unzipper, (voidp)buffer.get(), info.uncompressed_size);
+                unzCloseCurrentFile(unzipper);
+
+                //TODO: Continue here!
+//                if (fileSystem->WriteFile() == false)
+//                {
+//                    success = false;
+//                    break;
+//                }
+            }
+
+
+            unzClose(unzipper);
+
+            return success;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------

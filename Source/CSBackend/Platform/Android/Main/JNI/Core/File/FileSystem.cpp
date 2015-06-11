@@ -72,9 +72,11 @@ namespace CSBackend
                 JavaStaticClassDef apkExpansionInfoDef("com/chilliworks/chillisource/core/ApkExpansionInfo");
                 apkExpansionInfoDef.AddMethod("getFilePath", "()Ljava/lang/String;");
                 JavaStaticClass apkExpansionInfo(apkExpansionInfoDef);
+
                 return ZippedFileSystemUPtr(new ZippedFileSystem(apkExpansionInfo.CallStringMethod("getFilePath")));
 #elif defined(CS_ANDROIDFLAVOUR_AMAZON)
                 auto* coreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
+
                 return ZippedFileSystemUPtr(new ZippedFileSystem(coreJI->GetApkDirectory(), "assets/"));
 #else
                 CS_LOG_FATAL("File System does not support this Android Flavour.");
@@ -179,58 +181,6 @@ namespace CSBackend
     			return false;
     		}
 			//------------------------------------------------------------------------------
-			/// Copies a file from one location to another.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The source directory.
-			/// @param The destination directory.
-			///
-			/// @return Whether or not the file was successfully copied.
-			//------------------------------------------------------------------------------
-			bool CopyFile(const std::string& in_sourceFilePath, const std::string& in_destinationFilePath)
-			{
-				const s32 k_chunkSize = 32 * 1024;
-
-				//open the source file
-				CSCore::FileStreamSPtr sourceStream = CSCore::FileStreamSPtr(new CSCore::FileStream(in_sourceFilePath, CSCore::FileMode::k_readBinary));
-				if (sourceStream->IsValid() == false)
-				{
-					return false;
-				}
-
-				//open the destination file
-				CSCore::FileStreamSPtr destinationStream = CSCore::FileStreamSPtr(new CSCore::FileStream(in_destinationFilePath, CSCore::FileMode::k_writeBinary));
-				if (destinationStream->IsValid() == false)
-				{
-					return false;
-				}
-
-				//find the length of the source stream
-				sourceStream->SeekG(0, CSCore::SeekDir::k_end);
-				s32 length = sourceStream->TellG();
-				sourceStream->SeekG(0, CSCore::SeekDir::k_beginning);
-
-				s32 progress = 0;
-				while (progress < length)
-				{
-					//get the amount to copy
-					s32 copySize = length - progress;
-					if (copySize > k_chunkSize)
-						copySize = k_chunkSize;
-
-					//copy
-					s8 byData[copySize];
-					sourceStream->Read(byData, copySize);
-					destinationStream->Write(byData, copySize);
-
-					//update progress
-					progress += copySize;
-				}
-
-				return true;
-			}
-			//------------------------------------------------------------------------------
 			/// Deletes a directory and all its contents.
 			///
 			/// @author Ian Copland
@@ -242,13 +192,6 @@ namespace CSBackend
 			bool DeleteDirectory(const std::string& in_directoryPath)
 			{
 				std::string directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
-
-				//this has the potential to have a path with a dot in it - make sure that it will always have a "/" on the end.
-				if (directoryPath[directoryPath.size() - 1] != '/')
-				{
-					directoryPath += '/';
-				}
-
 				if (DoesDirectoryExist(directoryPath) == false)
 				{
 					return false;
@@ -264,34 +207,29 @@ namespace CSBackend
 				while ((directoryItem = readdir(directory)) != nullptr)
 				{
 					std::string itemName = directoryItem->d_name;
-
-					//filter out "." and ".."
 					if (itemName == "." || itemName == "..")
 					{
 						continue;
 					}
 
-					//check to see if the item is a directory. if it is, then recurse into it. if its not, unlink it.
 					struct stat itemStats;
 					std::string itemPath = directoryPath + itemName + "\0";
-					if (stat(itemPath.c_str(), &itemStats) == 0)
+					if (stat(itemPath.c_str(), &itemStats) != 0)
 					{
-						if (S_ISDIR(itemStats.st_mode) == true)
-						{
-							if (DeleteDirectory(itemPath) == false)
-							{
-								return false;
-							}
-						}
-						else
-						{
-							unlink(itemPath.c_str());
-						}
+					    return false;
 					}
-					else
-					{
-						return false;
-					}
+
+                    if (S_ISDIR(itemStats.st_mode) == true)
+                    {
+                        if (DeleteDirectory(itemPath) == false)
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        unlink(itemPath.c_str());
+                    }
 				}
 				closedir(directory);
 
@@ -302,6 +240,89 @@ namespace CSBackend
 				}
 
 				return true;
+			}
+            //------------------------------------------------------------------------------
+            /// Builds a list of either file or directories paths in the directory at the
+            /// given path, optionally recursing into sub-directories. Whether or not this
+            /// searched for files or directories is denoted by the in_searchForDirectories
+            /// flag.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param out_directoryPaths - [Output] The output directory path list. This
+            /// is not cleared prior to further informating being added, so care needs to
+            /// be taken to ensure the list is empty prior to calling.
+            /// @param in_directoryPath - The path to search for directories in.
+            /// @param in_searchForDirectories - Whether we are looking for directories
+            /// or files.
+            /// @param in_recursive - Whether or not to recurse into sub-directories.
+            /// @param in_relativeParentDirectory - [Optional] The path to be prefixed to
+            /// each path found in this directory. This is mostly used for recursion into
+            /// sub-directories and shouldn't otherwise be set.
+            ///
+            /// @return Whether or not this was successful.
+            //------------------------------------------------------------------------------
+			bool GetPaths(std::vector<std::string>& out_directoryPaths, const std::string& in_directoryPath, bool in_searchForDirectories,
+			    bool in_recursive, const std::string& in_relativeParentDirectory = "")
+			{
+			    std::string directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_relativeParentDirectory);
+			    std::string relativeParentDirectory = CSCore::StringUtils::StandardiseDirectoryPath(in_relativeParentDirectory);
+
+                DIR* directory = opendir(directoryPath.c_str());
+                if(directory == nullptr)
+                {
+                    CS_LOG_ERROR("File System: Error getting paths in directory '" + in_directoryPath + "': " + GetFileErrorString(errno));
+                    return false;
+                }
+
+                bool success = true;
+                struct dirent* item;
+                while ((item = readdir(directory)) != nullptr && success == true)
+                {
+                    std::string itemName(item->d_name);
+                    std::string fullItemPath = directoryPath + itemName;
+
+                    if (itemName == "." || itemName == "..")
+                    {
+                        continue;
+                    }
+
+                    struct stat dirStats;
+                    if (stat(itemPath.c_str(), &dirStats) != 0)
+                    {
+                        CS_LOG_ERROR("Error: Failed to stat path '" + itemPath + "'");
+                        success = false;
+                        break;
+                    }
+
+                    if (S_ISDIR(dirStats.st_mode) == true)
+                    {
+                        std::string relativeItemPath = relativeParentDirectory + CSCore::StringUtils::StandardiseDirectoryPath(itemName);
+                        if (in_searchForDirectories == true)
+                        {
+                            out_directoryPaths.push_back(relativeItemPath);
+                        }
+
+                        if (in_recursive == true)
+                        {
+                            fullItemPath = CSCore::StringUtils::StandardiseDirectoryPath(fullItemPath);
+                            if (GetDirectoryPaths(out_directoryPaths, fullItemPath, in_searchForDirectories, true, relativeItemPath) == false)
+                            {
+                                success = false;
+                                break;
+                            }
+                        }
+                    }
+                    else if (in_searchForDirectories == false)
+                    {
+                        std::string relativeItemPath = relativeParentDirectory + CSCore::StringUtils::StandardiseFilePath(itemName);
+                        out_directoryPaths.push_back(relativeItemPath);
+                    }
+                }
+
+                closedir(directory);
+
+                return success;
 			}
 		}
 
@@ -414,16 +435,112 @@ namespace CSBackend
 		bool FileSystem::CopyFile(CSCore::StorageLocation in_sourceStorageLocation, const std::string& in_sourceFilePath,
 								  CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationFilePath) const
 		{
-            //TODO: !?
-            return false;
+		    CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation) == true, "Cannot copy a file to a read-only storage location.");
+
+            const s32 k_chunkSize = 32 * 1024;
+
+            auto sourceStream = CreateFileStream(in_sourceStorageLocation, in_sourceFilePath, CSCore::FileMode::k_readBinary);
+            if (sourceStream == nullptr)
+            {
+                return false;
+            }
+
+            auto destinationStream = CreateFileStream(in_destinationStorageLocation, in_destinationFilePath, CSCore::FileMode::k_writeBinary);
+            if (destinationStream == nullptr)
+            {
+                return false;
+            }
+
+            sourceStream->SeekG(0, CSCore::SeekDir::k_end);
+            s32 length = sourceStream->TellG();
+            sourceStream->SeekG(0, CSCore::SeekDir::k_beginning);
+
+            s32 progress = 0;
+            s8 buffer[k_chunkSize];
+            while (progress < length)
+            {
+                s32 copySize = length - progress;
+                if (copySize > k_chunkSize)
+                {
+                    copySize = k_chunkSize;
+                }
+
+                sourceStream->Read(buffer, copySize);
+                destinationStream->Write(buffer, copySize);
+
+                progress += copySize;
+            }
+
+            return true;
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
 		bool FileSystem::CopyDirectory(CSCore::StorageLocation in_sourceStorageLocation, const std::string& in_sourceDirectoryPath,
 						   CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationDirectoryPath) const
 		{
-			//TODO: !?
-			return false;
+			CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation) == true, "Cannot copy a directory to a read-only storage location.");
+
+            std::string sourceDirectoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_sourceDirectoryPath);
+            std::string destinationDirectoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_destinationDirectoryPath);
+
+			//create all of the required directories.
+			CreateDirectoryPath(in_destinationStorageLocation, destinationDirectoryPath);
+			std::vector<std::string> subDirectoryPaths = GetDirectoryPaths(in_sourceStorageLocation, in_sourceDirectoryPath);
+			for (const auto& subDirectoryPath : subDirectoryPaths)
+			{
+			    CreateDirectoryPath(in_destinationStorageLocation, destinationDirectoryPath + subDirectoryPaths);
+			}
+
+			//Get all of the files that need to be copied.
+			std::vector<std::string> filePaths = GetFilePaths(in_sourceStorageLocation, in_sourceDirectoryPath);
+
+			//Copy each of the files to the destination.
+			switch (in_sourceStorageLocation)
+			{
+			    case CSCore::StorageLocation::k_package:
+                case CSCore::StorageLocation::k_chilliSource:
+                {
+                    //This could be handled by simply calling CopyFile() for each of the required
+                    //files, however this is pretty inefficient when reading from the zip as it's
+                    //repeatedly opened and closed. For the sake of performance we use the batch
+                    //copy method when copying from the zip.
+
+                    std::string absSourceDirectoryPath = GetAbsolutePathToStorageLocation(in_sourceStorageLocation) + sourceDirectoryPath + filePath;
+                    std::string absDestinationDirectoryPath = GetAbsolutePathToStorageLocation(in_destinationStorageLocation) + destinationDirectoryPath + filePath;
+
+                    std::unordered_map<std::string, std::string> filesToCopy;
+                    for (const auto& filePath : filePaths)
+                    {
+                        std::unordered_map.emplace(absSourceDirectoryPath + filePath, absDestinationDirectoryPath + filePath);
+                    }
+
+                    if (m_zippedFileSystem->CopyFiles(filesToCopy) == false)
+                    {
+                        return false;
+                    }
+
+                    break;
+                }
+                case CSCore::StorageLocation::k_DLC:
+                {
+                    //TODO: !?
+                    break;
+                }
+                default:
+                {
+                    for (const auto& filePath : filePaths)
+                    {
+                        if (CopyFile(in_sourceStorageLocation, sourceDirectoryPath + filePath, in_destinationStorageLocation, destinationDirectoryPath + filePath) == false)
+                        {
+                            return false;
+                        }
+                    }
+
+                    break;
+                }
+			}
+
+			return true;
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
@@ -473,8 +590,9 @@ namespace CSBackend
 			        //TODO: !?
 			        return std::vector<std::string>();
                 default:
-                    //TODO: !?
-                    return std::vector<std::string>();
+                    std::vector<std::string> filePaths;
+                    GetPaths(filePaths, GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath), false, in_recursive);
+                    return filePaths;
 			}
 		}
 		//------------------------------------------------------------------------------
@@ -490,8 +608,9 @@ namespace CSBackend
                     //TODO: !?
                     return std::vector<std::string>();
                 default:
-                    //TODO: !?
-                    return std::vector<std::string>();
+                    std::vector<std::string> directoryPaths;
+                    GetPaths(directoryPaths, GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath), true, in_recursive);
+                    return directoryPaths;
             }
 		}
 		//------------------------------------------------------------------------------

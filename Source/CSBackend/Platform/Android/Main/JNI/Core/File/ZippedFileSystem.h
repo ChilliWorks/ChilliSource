@@ -37,6 +37,7 @@
 #include <minizip/unzip.h>
 
 #include <mutex>
+#include <unordered_map>
 #include <vector>
 #include <utility>
 
@@ -109,26 +110,10 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             CSCore::FileStreamUPtr CreateFileStream(const std::string& in_filePath, CSCore::FileMode in_fileMode) const;
             //------------------------------------------------------------------------------
-            /// Copies a single file from inside the zip file to a real file path on disk.
-            ///
-            /// This can only be called by one thread at a time meaning others will block
-            /// until it is finished. This can be a slow operation if copying a large
-            /// file, so care needs to be taken to ensure this doesn't cause visible
-            /// stutters on the main thread.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_sourceFilePath - The source file path inside the zip, relative to
-            /// the "root diectory path".
-            /// @param in_destinationFilePath - The destination file path on disk.
-            ///
-            /// @return Whether or not the file was copied successfully.
-            //------------------------------------------------------------------------------
-            bool CopyFile(const std::string& in_sourceFilePath, const std::string& in_destinationFilePath) const;
-            //------------------------------------------------------------------------------
             /// Copies multiple files inside the zip to real file paths on disk. This is
-            /// more efficient that multiple calls to copy file as it avoids repeated
-            /// opening and closing of the zip file.
+            /// more efficient that multiple standard file copies (i.e creating a
+            /// FileStream for each) as it avoids repeated opening and closing of the zip
+            /// file.
             ///
             /// This can only be called by one thread at a time meaning others will block
             /// until it is finished. This can be a slow operation if copying large files,
@@ -140,7 +125,7 @@ namespace CSBackend
             /// @param in_filePaths - Pairs of file paths, the first being the source path
             /// within the zip, the second being the destination path on disk.
             //------------------------------------------------------------------------------
-            bool CopyFiles(const std::vector<std::pair<std::string, std::string>>& in_filePaths) const;
+            bool CopyFiles(const std::unordered_map<std::string, Location>& in_filePaths) const;
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
