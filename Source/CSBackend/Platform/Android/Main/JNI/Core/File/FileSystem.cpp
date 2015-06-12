@@ -265,13 +265,13 @@ namespace CSBackend
 			bool GetPaths(std::vector<std::string>& out_directoryPaths, const std::string& in_directoryPath, bool in_searchForDirectories,
 			    bool in_recursive, const std::string& in_relativeParentDirectory = "")
 			{
-			    std::string directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_relativeParentDirectory);
+			    std::string directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
 			    std::string relativeParentDirectory = CSCore::StringUtils::StandardiseDirectoryPath(in_relativeParentDirectory);
 
                 DIR* directory = opendir(directoryPath.c_str());
                 if(directory == nullptr)
                 {
-                    CS_LOG_ERROR("File System: Error getting paths in directory '" + in_directoryPath + "': " + GetFileErrorString(errno));
+                    CS_LOG_ERROR("File System: Error getting paths in directory '" + directoryPath + "': " + GetFileErrorString(errno));
                     return false;
                 }
 
@@ -288,9 +288,9 @@ namespace CSBackend
                     }
 
                     struct stat dirStats;
-                    if (stat(itemPath.c_str(), &dirStats) != 0)
+                    if (stat(fullItemPath.c_str(), &dirStats) != 0)
                     {
-                        CS_LOG_ERROR("Error: Failed to stat path '" + itemPath + "'");
+                        CS_LOG_ERROR("Error: Failed to stat path '" + fullItemPath + "'");
                         success = false;
                         break;
                     }
@@ -306,7 +306,7 @@ namespace CSBackend
                         if (in_recursive == true)
                         {
                             fullItemPath = CSCore::StringUtils::StandardiseDirectoryPath(fullItemPath);
-                            if (GetDirectoryPaths(out_directoryPaths, fullItemPath, in_searchForDirectories, true, relativeItemPath) == false)
+                            if (GetPaths(out_directoryPaths, fullItemPath, in_searchForDirectories, true, relativeItemPath) == false)
                             {
                                 success = false;
                                 break;
@@ -485,14 +485,14 @@ namespace CSBackend
 
 			//create all of the required directories.
 			CreateDirectoryPath(in_destinationStorageLocation, destinationDirectoryPath);
-			std::vector<std::string> subDirectoryPaths = GetDirectoryPaths(in_sourceStorageLocation, in_sourceDirectoryPath);
+			std::vector<std::string> subDirectoryPaths = GetDirectoryPaths(in_sourceStorageLocation, in_sourceDirectoryPath, true);
 			for (const auto& subDirectoryPath : subDirectoryPaths)
 			{
-			    CreateDirectoryPath(in_destinationStorageLocation, destinationDirectoryPath + subDirectoryPaths);
+			    CreateDirectoryPath(in_destinationStorageLocation, destinationDirectoryPath + subDirectoryPath);
 			}
 
 			//Get all of the files that need to be copied.
-			std::vector<std::string> filePaths = GetFilePaths(in_sourceStorageLocation, in_sourceDirectoryPath);
+			std::vector<std::string> filePaths = GetFilePaths(in_sourceStorageLocation, in_sourceDirectoryPath, true);
 
 			//Copy each of the files to the destination.
 			switch (in_sourceStorageLocation)
@@ -503,18 +503,26 @@ namespace CSBackend
                     //This could be handled by simply calling CopyFile() for each of the required
                     //files, however this is pretty inefficient when reading from the zip as it's
                     //repeatedly opened and closed. For the sake of performance we use the batch
-                    //copy method when copying from the zip.
+                    //CreateFileStreams() method when copying from the zip.
 
-                    std::string absSourceDirectoryPath = GetAbsolutePathToStorageLocation(in_sourceStorageLocation) + sourceDirectoryPath + filePath;
-                    std::string absDestinationDirectoryPath = GetAbsolutePathToStorageLocation(in_destinationStorageLocation) + destinationDirectoryPath + filePath;
-
-                    std::unordered_map<std::string, std::string> filesToCopy;
+                    std::string absSourceDirectoryPath = GetAbsolutePathToStorageLocation(in_sourceStorageLocation) + sourceDirectoryPath;
+                    std::vector<std::string> sourceFiles;
+                    std::vector<std::string> destinationFiles;
                     for (const auto& filePath : filePaths)
                     {
-                        std::unordered_map.emplace(absSourceDirectoryPath + filePath, absDestinationDirectoryPath + filePath);
+                        sourceFiles.push_back(absSourceDirectoryPath + filePath);
+                        destinationFiles.push_back(destinationDirectoryPath + filePath);
                     }
 
-                    if (m_zippedFileSystem->CopyFiles(filesToCopy) == false)
+                    u32 index = 0;
+					bool success = m_zippedFileSystem->ExtractFiles(sourceFiles, [&](const std::string& in_filePath, std::unique_ptr<const u8[]> in_fileContents, u32 in_fileSize) -> bool
+					{
+                        const auto& destination = destinationFiles[index];
+                        index++;
+                        return WriteFile(in_destinationStorageLocation, destination, reinterpret_cast<const s8*>(in_fileContents.get()), in_fileSize);
+					});
+
+                    if (success == false)
                     {
                         return false;
                     }
@@ -552,12 +560,8 @@ namespace CSBackend
             s32 error = unlink(filePath.c_str());
             if (error != 0)
             {
-                s32 errorType = errno;
-                if (errorType != ENOENT)
-                {
-                    CS_LOG_ERROR("File System: Error deleting file '" + in_filePath + "': " + GetFileErrorString(errorType));
-                    return false;
-                }
+                CS_LOG_ERROR("File System: Error deleting file '" + in_filePath + "': " + GetFileErrorString(errno));
+                return false;
             }
 
             return true;
@@ -569,13 +573,7 @@ namespace CSBackend
 			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "Cannot delete directory from read-only storage location.");
 
             std::string directoryPath = GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath);
-            if (directoryPath != "")
-            {
-                CSBackend::Android::DeleteDirectory(directoryPath);
-                return true;
-            }
-
-            return false;
+            return CSBackend::Android::DeleteDirectory(directoryPath);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------

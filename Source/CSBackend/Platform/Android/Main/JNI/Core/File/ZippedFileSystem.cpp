@@ -30,8 +30,6 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/File/VirtualFileStream.h>
 
-#include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/File/FileSystem.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
@@ -99,6 +97,8 @@ namespace CSBackend
             //read the contents of the zip file.
             std::unique_lock<std::mutex> lock(m_mutex);
 
+            CSCore::FileStreamUPtr output;
+
             unzFile unzipper = unzOpen(m_filePath.c_str());
             if (unzipper == nullptr)
             {
@@ -133,7 +133,7 @@ namespace CSBackend
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        bool ZippedFileSystem::CopyFiles(const std::unordered_map<std::string, std::string>& in_filePaths) const
+        bool ZippedFileSystem::ExtractFiles(const std::vector<std::string>& in_filePaths, const FileReadDelegate& in_delegate) const
         {
             CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
 
@@ -145,16 +145,14 @@ namespace CSBackend
                 return false;
             }
 
-            auto fileSystem = CSCore::Application::Get()->GetFileSystem();
-
             bool success = true;
             char filePathBuffer[k_filePathLength];
             ManifestItem item;
             unz_file_info info;
-            for (const auto& filePathPair : in_filePaths)
+            for (const auto& unstandardisedFilePath : in_filePaths)
             {
-                auto sourceFilePath = CSCore::StandardiseFilePath(filePathPair.first);
-                if (TryGetManifestItem(sourceFilePath, item) == false)
+                auto filePath = CSCore::StringUtils::StandardiseFilePath(unstandardisedFilePath);
+                if (TryGetManifestItem(filePath, item) == false)
                 {
                     success = false;
                     break;
@@ -180,21 +178,18 @@ namespace CSBackend
                     break;
                 }
 
-                unzGetCurrentFileInfo(unzipper, &info, filePath, k_filePathLength, nullptr, 0, nullptr, 0);
+                unzGetCurrentFileInfo(unzipper, &info, filePathBuffer, k_filePathLength, nullptr, 0, nullptr, 0);
 
                 std::unique_ptr<u8[]> buffer(new u8[info.uncompressed_size]);
-
                 unzReadCurrentFile(unzipper, (voidp)buffer.get(), info.uncompressed_size);
                 unzCloseCurrentFile(unzipper);
 
-                //TODO: Continue here!
-//                if (fileSystem->WriteFile() == false)
-//                {
-//                    success = false;
-//                    break;
-//                }
+                if (in_delegate(unstandardisedFilePath, std::move(buffer), info.uncompressed_size) == false)
+                {
+                    success = false;
+                    break;
+                }
             }
-
 
             unzClose(unzipper);
 

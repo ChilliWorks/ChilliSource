@@ -62,6 +62,20 @@ namespace CSBackend
         public:
             CS_DECLARE_NOCOPY(ZippedFileSystem);
             //------------------------------------------------------------------------------
+            /// A delegate called by the ExtractFiles() method as each file is read from
+            /// the zip.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_fileName - The path to the file which this callback refers to.
+            /// @param in_fileContents - The entire contents of the file.
+            /// @param in_fileSize - The size of the file.
+            ///
+            /// @return False should be returned if an error has occurred and ExtractFiles()
+            /// should no longer continue.
+            //------------------------------------------------------------------------------
+            using FileReadDelegate = std::function<bool(const std::string& in_filePath, std::unique_ptr<const u8[]> in_fileContents, u32 in_fileSize)>;
+            //------------------------------------------------------------------------------
             /// Opens the zip file and builds a manifest of its contents. This is then used
             /// in all future operations for the sake of performance. This means that the
             /// zip file cannot change while this is in use.
@@ -110,10 +124,14 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             CSCore::FileStreamUPtr CreateFileStream(const std::string& in_filePath, CSCore::FileMode in_fileMode) const;
             //------------------------------------------------------------------------------
-            /// Copies multiple files inside the zip to real file paths on disk. This is
-            /// more efficient that multiple standard file copies (i.e creating a
-            /// FileStream for each) as it avoids repeated opening and closing of the zip
-            /// file.
+            /// Opens a series of files one by one without closing the zip. The contents of
+            /// each file are returned via the FileReadDelegate.
+            ///
+            /// While each file could be loaded individually using CreateFileStream(), it
+            /// would involve repeatedly opening and closing the zip file. For bulk
+            /// operations - i.e copying a directory - that approach would be fairly
+            /// inefficient. This method doesn't close the zip after each file stream is
+            /// created and acts as a more efficient alternate.
             ///
             /// This can only be called by one thread at a time meaning others will block
             /// until it is finished. This can be a slow operation if copying large files,
@@ -124,8 +142,12 @@ namespace CSBackend
             ///
             /// @param in_filePaths - Pairs of file paths, the first being the source path
             /// within the zip, the second being the destination path on disk.
+            /// @param in_delegate - The file read delegate. Called as each file is read.
+            ///
+            /// @return Whether or not this was successful. If any file fails to extract
+            /// this will return null.
             //------------------------------------------------------------------------------
-            bool CopyFiles(const std::unordered_map<std::string, Location>& in_filePaths) const;
+            bool ExtractFiles(const std::vector<std::string>& in_filePaths, const FileReadDelegate& in_delegate) const;
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///

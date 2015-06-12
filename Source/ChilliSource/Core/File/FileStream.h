@@ -78,6 +78,7 @@ namespace ChilliSource
 		class FileStream
 		{
 		public:
+			CS_DECLARE_NOCOPY(FileStream);
             //------------------------------------------------------------------------------
             /// Constructor. Creates and opens a new file stream to a file at the given
             /// path with the given file mode. Prior to using the file stream IsValid()
