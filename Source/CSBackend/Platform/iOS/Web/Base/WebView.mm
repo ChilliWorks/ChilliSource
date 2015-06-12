@@ -139,17 +139,20 @@ namespace CSBackend
                 CSCore::FileSystem* fileSystem = CSCore::Application::Get()->GetFileSystem();
 
                 std::string fullFilePath;
-                switch(in_storageLocation)
+                if (in_storageLocation == CSCore::StorageLocation::k_DLC)
                 {
-                    default:
-                        fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + filePath;
-                        break;
-                    case CSCore::StorageLocation::k_package:
-                        fullFilePath = fileSystem->GetAbsolutePathToFile(CSCore::StorageLocation::k_package, filePath);
-                        break;
-                    case CSCore::StorageLocation::k_DLC:
-                        fullFilePath = fileSystem->GetAbsolutePathToFile(CSCore::StorageLocation::k_DLC, filePath);
-                        break;
+                    if (fileSystem->DoesFileExistInCachedDLC(filePath) == true)
+                    {
+                        fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + filePath;
+                    }
+                    else
+                    {
+                        fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + filePath;
+                    }
+                }
+                else
+                {
+                    fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + filePath;
                 }
 
                 std::string strHTMLFileContents;

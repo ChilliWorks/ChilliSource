@@ -110,7 +110,7 @@ namespace CSBackend
                 m_completionDelegateConnection = std::move(in_delegateConnection);
                 m_backgroundColour = in_backgroundColour;
                 
-                std::string filePath = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(in_storageLocation, in_fileName);
+                std::string filePath = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_storageLocation) + in_fileName;
                 
                 NSString* urlString = [NSStringUtils newNSStringWithUTF8String:filePath];
                 NSURL* pMovieURL = [NSURL fileURLWithPath:urlString];

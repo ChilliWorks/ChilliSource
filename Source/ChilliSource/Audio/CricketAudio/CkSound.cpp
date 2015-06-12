@@ -84,19 +84,22 @@ namespace ChilliSource
         {
             auto fileSystem = Core::Application::Get()->GetFileSystem();
             auto taggedFilePath = Core::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_streamStorageLocation, in_streamFilePath);
-            auto absFilePath = fileSystem->GetAbsolutePathToFile(in_streamStorageLocation, taggedFilePath);
 
 #if CS_TARGETPLATFORM_ANDROID
             if (in_streamStorageLocation == Core::StorageLocation::k_package || in_streamStorageLocation == Core::StorageLocation::k_chilliSource ||
             (in_streamStorageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
             {
-                m_sound = ::CkSound::newStreamSound(absFilePath.c_str());
+                //TODO: !? OBB
+//                auto absFilePath = fileSystem->GetAbsolutePathToFile(in_streamStorageLocation, taggedFilePath);
+//                m_sound = ::CkSound::newStreamSound(absFilePath.c_str());
             }
             else
             {
+                auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_streamStorageLocation) + taggedFilePath;
                 m_sound = ::CkSound::newStreamSound(absFilePath.c_str(), kCkPathType_FileSystem);
             }
 #else
+            auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_streamStorageLocation) + taggedFilePath;
             m_sound = ::CkSound::newStreamSound(absFilePath.c_str(), kCkPathType_FileSystem);
 #endif
 

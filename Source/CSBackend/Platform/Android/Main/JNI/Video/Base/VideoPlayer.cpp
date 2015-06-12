@@ -72,14 +72,18 @@ namespace CSBackend
 
             auto fileSystem = CSCore::Application::Get()->GetFileSystem();
             auto taggedFilePath = CSCore::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, in_filePath);
-            std::string absFilePath = fileSystem->GetAbsolutePathToFile(in_storageLocation, taggedFilePath);
 
-            bool isPackage = false;
+            std::string absFilePath;
+			bool isPackage = false;
             if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_package ||
             	(in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
             {
                 //TODO: OBB?
-                isPackage = true;
+                //isPackage = true;
+            }
+            else
+            {
+            	absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
             }
 
         	//start the video

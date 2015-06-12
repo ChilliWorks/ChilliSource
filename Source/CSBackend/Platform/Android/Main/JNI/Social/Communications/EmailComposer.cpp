@@ -90,11 +90,11 @@ namespace CSBackend
 				{
 					fileSystem->CreateDirectoryPath(CSCore::StorageLocation::k_cache, k_tempAttachmentDirectory);
 					fileSystem->CopyFile(in_attachment.m_storageLocation, attachmentTaggedFilePath, CSCore::StorageLocation::k_cache, k_tempAttachmentDirectory + attachmentTaggedFilePath);
-					attachmentAbsFilePath = fileSystem->GetAbsolutePathToFile(CSCore::StorageLocation::k_cache, k_tempAttachmentDirectory + attachmentTaggedFilePath);
+					attachmentAbsFilePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_cache) + k_tempAttachmentDirectory + attachmentTaggedFilePath;
 				}
 				else
 				{
-					attachmentAbsFilePath = fileSystem->GetAbsolutePathToFile(in_attachment.m_storageLocation, attachmentTaggedFilePath);
+					attachmentAbsFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_attachment.m_storageLocation) + attachmentTaggedFilePath;
 				}
 			}
 

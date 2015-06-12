@@ -299,42 +299,6 @@ namespace ChilliSource
 			//------------------------------------------------------------------------------
 			virtual std::string GetAbsolutePathToStorageLocation(StorageLocation in_storageLocation) const = 0;
             //------------------------------------------------------------------------------
-			/// Calculates the full path to the file by appending the path to the storage
-			/// location path. If the path is in the DLC storage location the Cached DLC
-			/// will first be checked to see if the file exists. If it does this path is
-			/// returned, otherwise the Package DLC path is given. The file at the returned
-			/// path doesn't necessarily exist
-			///
-			/// The result of this is platform specific so care should be taken when using
-			/// it in cross platform projects.
-            ///
-            /// @author Ian Copland
-			///
-            /// @param in_storageLocation - The storage location for the file.
-            /// @param in_path - The file path relative to the storage location.
-            ///
-			/// @return The full path to the file.
-			//------------------------------------------------------------------------------
-			virtual std::string GetAbsolutePathToFile(StorageLocation in_storageLocation, const std::string& in_path) const = 0;
-            //------------------------------------------------------------------------------
-			/// Calculates the full path to the directory by appending the path to the
-			/// storage location path. If the path is in the DLC storage location the Cached
-			/// DLC will first be checked to see if the directory exists. If it does this
-			/// path is returned, otherwise the Package DLC path is given. The directory at
-			/// the returned path doesn't necessarily exist
-			///
-			/// The result of this is platform specific so care should be taken when using
-			/// it in cross platform projects.
-            ///
-            /// @author Ian Copland
-			///
-            /// @param in_storageLocation - The storage location for the directory.
-            /// @param in_path - The directory path relative to the storage location.
-            ///
-			/// @return The full path to the directory.
-			//------------------------------------------------------------------------------
-			virtual std::string GetAbsolutePathToDirectory(StorageLocation in_storageLocation, const std::string& in_path) const = 0;
-            //------------------------------------------------------------------------------
             /// Sets the directory used by the DLC system to fall back on if it is not in
             /// the DLC cache directory.
             ///

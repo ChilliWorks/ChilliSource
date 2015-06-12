@@ -81,24 +81,25 @@ namespace ChilliSource
 		//------------------------------------------------------------------------------
 		void CkBankProvider::CreateResourceFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource)
 		{
-            ::CkBank* bank = nullptr;
-
             auto fileSystem = Core::Application::Get()->GetFileSystem();
             auto taggedFilePath = Core::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, in_filePath);
-            auto absFilePath = fileSystem->GetAbsolutePathToFile(in_storageLocation, taggedFilePath);
+
+            ::CkBank* bank = nullptr;
 
 #if CS_TARGETPLATFORM_ANDROID
             if (in_storageLocation == Core::StorageLocation::k_package || in_storageLocation == Core::StorageLocation::k_chilliSource ||
                 (in_storageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
             {
-                //TODO: OBB?
-                bank = ::CkBank::newBank(absFilePath.c_str());
+                //TODO: !? OBB
+                //bank = ::CkBank::newBank(absFilePath.c_str());
             }
             else
             {
+                auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
                 bank = ::CkBank::newBank(absFilePath.c_str(), kCkPathType_FileSystem);
             }
 #else
+            auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
             bank = ::CkBank::newBank(absFilePath.c_str(), kCkPathType_FileSystem);
 #endif
 
@@ -115,24 +116,25 @@ namespace ChilliSource
 		//------------------------------------------------------------------------------
 		void CkBankProvider::CreateResourceFromFileAsync(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 		{
-            ::CkBank* bank = nullptr;
-
-            auto fileSystem = Core::Application::Get()->GetFileSystem();
+		    auto fileSystem = Core::Application::Get()->GetFileSystem();
             auto taggedFilePath = Core::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, in_filePath);
-            auto absFilePath = fileSystem->GetAbsolutePathToFile(in_storageLocation, taggedFilePath);
+
+            ::CkBank* bank = nullptr;
 
 #if CS_TARGETPLATFORM_ANDROID
             if (in_storageLocation == Core::StorageLocation::k_package || in_storageLocation == Core::StorageLocation::k_chilliSource ||
                 (in_storageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
             {
-                //TODO: OBB?
-                bank = ::CkBank::newBankAsync(absFilePath.c_str());
+                //TODO: !? OBB
+                //bank = ::CkBank::newBankAsync(absFilePath.c_str());
             }
             else
             {
+                auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
                 bank = ::CkBank::newBankAsync(absFilePath.c_str(), kCkPathType_FileSystem);
             }
 #else
+            auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
             bank = ::CkBank::newBankAsync(absFilePath.c_str(), kCkPathType_FileSystem);
 #endif
 

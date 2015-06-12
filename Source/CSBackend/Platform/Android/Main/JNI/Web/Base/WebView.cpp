@@ -35,6 +35,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/File/FileStream.h>
+#include <ChilliSource/Core/File/TaggedFilePathResolver.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 namespace CSBackend
@@ -119,23 +120,26 @@ namespace CSBackend
 
 			CSBackend::Android::FileSystem* fileSystem = static_cast<CSBackend::Android::FileSystem*>(CSCore::Application::Get()->GetFileSystem());
 
+			auto taggedFilePath = CSCore::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, filePath);
+
 			std::string htmlFileContents;
-			CSCore::FileStreamUPtr htmlFile = fileSystem->CreateFileStream(in_storageLocation, filePath, CSCore::FileMode::k_read);
+			CSCore::FileStreamUPtr htmlFile = fileSystem->CreateFileStream(in_storageLocation, taggedFilePath, CSCore::FileMode::k_read);
 			htmlFile->GetAll(htmlFileContents);
 			htmlFile.reset();
 
-			std::string fullFilePath = fileSystem->GetAbsolutePathToFile(in_storageLocation, filePath);
+			std::string fullFilePath;
 			if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_package ||
-            	(in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(fullFilePath) == false))
+            	(in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
 			{
 				//TODO: OBB
-				fullFilePath = "file:///android_asset/" + fullFilePath;
+				//fullFilePath = "file:///android_asset/" + fullFilePath;
 			}
 			else
 			{
-				fullFilePath = "file://" + fullFilePath;
+				fullFilePath = "file://" + fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
 			}
 
+			//Get the directory.
 			u32 offset = fullFilePath.find_last_of("/");
 			if(offset != std::string::npos)
 			{

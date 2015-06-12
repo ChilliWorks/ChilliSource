@@ -109,7 +109,7 @@ namespace CSBackend
                     std::string strFilename;
                     if (in_attachment.m_storageLocation == CSCore::StorageLocation::k_package)
                     {
-                        strFilename = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(CSCore::StorageLocation::k_package, in_attachment.m_filename);
+                        strFilename = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + in_attachment.m_filename;
                     }
                     else if (in_attachment.m_storageLocation == CSCore::StorageLocation::k_DLC && CSCore::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(in_attachment.m_filename) == false)
                     {

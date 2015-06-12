@@ -374,33 +374,45 @@ namespace CSBackend
 		//------------------------------------------------------------------------------
 		CSCore::FileStreamUPtr FileSystem::CreateFileStream(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, CSCore::FileMode in_fileMode) const
 		{
-			if (IsWriteMode(in_fileMode) == true)
+			switch (in_storageLocation)
 			{
-			    CS_ASSERT(IsStorageLocationWritable(in_storageLocation) == true, "Cannot open write mode file stream in read-only storage location.");
+				case CSCore::StorageLocation::k_package:
+				case CSCore::StorageLocation::k_chilliSource:
+				{
+					CS_ASSERT(IsStorageLocationWritable(in_storageLocation) == false, "Cannot open write mode file stream in read-only storage location.");
 
-		        CSCore::FileStreamUPtr output(new CSCore::FileStream(GetAbsolutePathToFile(in_storageLocation, in_filePath), in_fileMode));
-                if (output->IsValid() == true)
-                {
-                    return output;
-                }
-			}
-			else
-			{
-			    if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_chilliSource ||
-			        (in_storageLocation == CSCore::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == false))
-			    {
-			        //TODO: Cache DLC file existance race condition.
-			        return m_zippedFileSystem->CreateFileStream(GetAbsolutePathToFile(in_storageLocation, in_filePath), in_fileMode);
-			    }
-			    else
-			    {
-			        //TODO: Cache DLC file existance race condition.
-			        CSCore::FileStreamUPtr output(new CSCore::FileStream(GetAbsolutePathToFile(in_storageLocation, in_filePath), in_fileMode));
-                    if (output->IsValid() == true)
-                    {
-                        return output;
-                    }
-			    }
+					auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseFilePath(in_filePath);
+					return m_zippedFileSystem->CreateFileStream(absFilePath, in_fileMode);
+					break;
+				}
+				case CSCore::StorageLocation::k_DLC:
+				{
+					if (DoesFileExistInCachedDLC(in_filePath) == true || IsWriteMode(in_fileMode) == true)
+					{
+						auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseFilePath(in_filePath);
+						CSCore::FileStreamUPtr output(new CSCore::FileStream(absFilePath, in_fileMode));
+						if (output->IsValid() == true)
+						{
+							return output;
+						}
+					}
+					else
+					{
+						auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + GetPackageDLCPath() + CSCore::StringUtils::StandardiseFilePath(in_filePath);
+						return m_zippedFileSystem->CreateFileStream(absFilePath, in_fileMode);
+					}
+					break;
+				}
+				default:
+				{
+					auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseFilePath(in_filePath);
+					CSCore::FileStreamUPtr output(new CSCore::FileStream(absFilePath, in_fileMode));
+					if (output->IsValid() == true)
+					{
+						return output;
+					}
+					break;
+				}
 			}
 
 			return nullptr;
@@ -485,14 +497,14 @@ namespace CSBackend
 
 			//create all of the required directories.
 			CreateDirectoryPath(in_destinationStorageLocation, destinationDirectoryPath);
-			std::vector<std::string> subDirectoryPaths = GetDirectoryPaths(in_sourceStorageLocation, in_sourceDirectoryPath, true);
+			std::vector<std::string> subDirectoryPaths = GetDirectoryPaths(in_sourceStorageLocation, sourceDirectoryPath, true);
 			for (const auto& subDirectoryPath : subDirectoryPaths)
 			{
 			    CreateDirectoryPath(in_destinationStorageLocation, destinationDirectoryPath + subDirectoryPath);
 			}
 
 			//Get all of the files that need to be copied.
-			std::vector<std::string> filePaths = GetFilePaths(in_sourceStorageLocation, in_sourceDirectoryPath, true);
+			std::vector<std::string> filePaths = GetFilePaths(in_sourceStorageLocation, sourceDirectoryPath, true);
 
 			//Copy each of the files to the destination.
 			switch (in_sourceStorageLocation)
@@ -556,7 +568,7 @@ namespace CSBackend
 		{
 			CS_ASSERT(IsStorageLocationWritable(in_storageLocation) == true, "Cannot delete file from read-only storage location.");
 
-            std::string filePath = GetAbsolutePathToFile(in_storageLocation, in_filePath);
+            std::string filePath = GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseFilePath(in_filePath);
             s32 error = unlink(filePath.c_str());
             if (error != 0)
             {
@@ -572,7 +584,7 @@ namespace CSBackend
 		{
 			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "Cannot delete directory from read-only storage location.");
 
-            std::string directoryPath = GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath);
+            std::string directoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
             return CSBackend::Android::DeleteDirectory(directoryPath);
 		}
 		//------------------------------------------------------------------------------
@@ -583,14 +595,28 @@ namespace CSBackend
 			{
 			    case CSCore::StorageLocation::k_package:
 			    case CSCore::StorageLocation::k_chilliSource:
-			        return m_zippedFileSystem->GetFilePaths(GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath), in_recursive);
+			    {
+			        return m_zippedFileSystem->GetFilePaths(GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath), in_recursive);
+			    }
 			    case CSCore::StorageLocation::k_DLC:
-			        //TODO: !?
-			        return std::vector<std::string>();
-                default:
-                    std::vector<std::string> filePaths;
-                    GetPaths(filePaths, GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath), false, in_recursive);
+			    {
+                    auto absPackageDirectoryPath = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + GetPackageDLCPath() + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
+                    auto filePaths = m_zippedFileSystem->GetFilePaths(absPackageDirectoryPath, in_recursive);
+
+                    auto absCacheDirectoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
+                    GetPaths(filePaths, absCacheDirectoryPath, false, in_recursive);
+
+                    std::sort(filePaths.begin(), filePaths.end());
+                    auto it = std::unique(filePaths.begin(), filePaths.end());
+                    filePaths.resize(it - filePaths.begin());
                     return filePaths;
+			    }
+                default:
+                {
+                    std::vector<std::string> filePaths;
+                    GetPaths(filePaths, GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath), false, in_recursive);
+                    return filePaths;
+                }
 			}
 		}
 		//------------------------------------------------------------------------------
@@ -601,38 +627,56 @@ namespace CSBackend
             {
                 case CSCore::StorageLocation::k_package:
                 case CSCore::StorageLocation::k_chilliSource:
-                    return m_zippedFileSystem->GetDirectoryPaths(GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath), in_recursive);
+                {
+                    return m_zippedFileSystem->GetDirectoryPaths(GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath), in_recursive);
+                }
                 case CSCore::StorageLocation::k_DLC:
-                    //TODO: !?
-                    return std::vector<std::string>();
+                {
+                    auto absPackageDirectoryPath = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + GetPackageDLCPath() + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
+                    auto subDirectoryPaths = m_zippedFileSystem->GetDirectoryPaths(absPackageDirectoryPath, in_recursive);
+
+                    auto absCacheDirectoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
+                    GetPaths(subDirectoryPaths, absCacheDirectoryPath, true, in_recursive);
+
+                    std::sort(subDirectoryPaths.begin(), subDirectoryPaths.end());
+                    auto it = std::unique(subDirectoryPaths.begin(), subDirectoryPaths.end());
+                    subDirectoryPaths.resize(it - subDirectoryPaths.begin());
+                    return subDirectoryPaths;
+                }
                 default:
+                {
                     std::vector<std::string> directoryPaths;
-                    GetPaths(directoryPaths, GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath), true, in_recursive);
+                    GetPaths(directoryPaths, GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath), true, in_recursive);
                     return directoryPaths;
+                }
             }
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
 		bool FileSystem::DoesFileExist(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath) const
 		{
-		    if (in_storageLocation == CSCore::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == true)
-		    {
-		        return true;
-		    }
-
-		    if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_chilliSource || in_storageLocation == CSCore::StorageLocation::k_DLC)
-		    {
-		        //TODO: Cached DLC file existance race condition.
-		        return m_zippedFileSystem->DoesFileExist(GetAbsolutePathToFile(in_storageLocation, in_filePath));
-		    }
-
-		    return CSBackend::Android::DoesFileExist(GetAbsolutePathToFile(in_storageLocation, in_filePath));
+			switch (in_storageLocation)
+			{
+				case CSCore::StorageLocation::k_package:
+				case CSCore::StorageLocation::k_chilliSource:
+				{
+					return m_zippedFileSystem->DoesFileExist(GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseFilePath(in_filePath));
+				}
+				case CSCore::StorageLocation::k_DLC:
+				{
+					return (DoesFileExistInCachedDLC(in_filePath) || DoesFileExistInPackageDLC(in_filePath));
+				}
+				default:
+				{
+					return CSBackend::Android::DoesFileExist(GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseFilePath(in_filePath));
+				}
+			}
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
 		bool FileSystem::DoesFileExistInCachedDLC(const std::string& in_filePath) const
 		{
-			return CSBackend::Android::DoesFileExist(CSCore::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath));
+			return CSBackend::Android::DoesFileExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + CSCore::StringUtils::StandardiseFilePath(in_filePath));
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
@@ -644,24 +688,28 @@ namespace CSBackend
 		//------------------------------------------------------------------------------
 		bool FileSystem::DoesDirectoryExist(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
 		{
-            if (in_storageLocation == CSCore::StorageLocation::k_DLC && DoesDirectoryExistInCachedDLC(in_directoryPath) == true)
-            {
-                return true;
-            }
-
-            if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_chilliSource || in_storageLocation == CSCore::StorageLocation::k_DLC)
-            {
-                //TODO: Cached DLC directory existance race condition.
-                return m_zippedFileSystem->DoesDirectoryExist(GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath));
-            }
-
-            return CSBackend::Android::DoesDirectoryExist(GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath));
+			switch (in_storageLocation)
+			{
+				case CSCore::StorageLocation::k_package:
+                case CSCore::StorageLocation::k_chilliSource:
+                {
+                	return m_zippedFileSystem->DoesDirectoryExist(GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath));
+                }
+                case CSCore::StorageLocation::k_DLC:
+                {
+                	return (DoesDirectoryExistInCachedDLC(in_directoryPath) || DoesDirectoryExistInPackageDLC(in_directoryPath));
+                }
+                default:
+                {
+                	return CSBackend::Android::DoesDirectoryExist(GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath));
+                }
+			}
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
 		bool FileSystem::DoesDirectoryExistInCachedDLC(const std::string& in_directoryPath) const
 		{
-			return CSBackend::Android::DoesDirectoryExist(CSCore::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath));
+			return CSBackend::Android::DoesDirectoryExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + CSCore::StringUtils::StandardiseFilePath(in_directoryPath));
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
@@ -701,28 +749,6 @@ namespace CSBackend
 			}
 
 			return storageLocationPath;
-		}
-		//------------------------------------------------------------------------------
-		//------------------------------------------------------------------------------
-		std::string FileSystem::GetAbsolutePathToFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath) const
-		{
-            if (in_storageLocation == CSCore::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == false)
-            {
-                return GetAbsolutePathToFile(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
-            }
-
-            return GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
-		}
-		//------------------------------------------------------------------------------
-		//------------------------------------------------------------------------------
-		std::string FileSystem::GetAbsolutePathToDirectory(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
-		{
-            if (in_storageLocation == CSCore::StorageLocation::k_DLC && DoesDirectoryExistInCachedDLC(in_directoryPath) == false)
-            {
-                return GetAbsolutePathToDirectory(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
-            }
-
-            return GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
 		}
 	}
 }

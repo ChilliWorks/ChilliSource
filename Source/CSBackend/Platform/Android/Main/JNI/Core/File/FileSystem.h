@@ -235,42 +235,6 @@ namespace CSBackend
 			/// available.
 			//------------------------------------------------------------------------------
 			std::string GetAbsolutePathToStorageLocation(CSCore::StorageLocation in_storageLocation) const override;
-            //------------------------------------------------------------------------------
-			/// Calculates the full path to the file by appending the path to the storage
-			/// location path. If the path is in the DLC storage location the Cached DLC
-			/// will first be checked to see if the file exists. If it does this path is
-			/// returned, otherwise the Package DLC path is given. The file at the returned
-			/// path doesn't necessarily exist.
-			///
-			/// The result of this is platform specific so care should be taken when using
-			/// it in cross platform projects.
-            ///
-            /// @author Ian Copland
-			///
-            /// @param in_storageLocation - The storage location for the file.
-            /// @param in_path - The file path relative to the storage location.
-            ///
-			/// @return The full path to the file.
-			//------------------------------------------------------------------------------
-			std::string GetAbsolutePathToFile(CSCore::StorageLocation in_storageLocation, const std::string& in_path) const override;
-            //------------------------------------------------------------------------------
-			/// Calculates the full path to the directory by appending the path to the
-			/// storage location path. If the path is in the DLC storage location the Cached
-			/// DLC will first be checked to see if the directory exists. If it does this
-			/// path is returned, otherwise the Package DLC path is given. The directory at
-			/// the returned path doesn't necessarily exist.
-			///
-			/// The result of this is platform specific so care should be taken when using
-			/// it in cross platform projects.
-            ///
-            /// @author Ian Copland
-			///
-            /// @param in_storageLocation - The storage location for the directory.
-            /// @param in_path - The directory path relative to the storage location.
-            ///
-			/// @return The full path to the directory.
-			//------------------------------------------------------------------------------
-			std::string GetAbsolutePathToDirectory(CSCore::StorageLocation in_storageLocation, const std::string& in_path) const override;
 
 		private:
 			friend CSCore::FileSystemUPtr CSCore::FileSystem::Create();
