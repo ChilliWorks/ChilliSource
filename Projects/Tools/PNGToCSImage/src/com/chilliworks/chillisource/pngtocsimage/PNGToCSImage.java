@@ -37,6 +37,7 @@ import java.util.zip.Deflater;
 
 import javax.imageio.ImageIO;
 
+import com.chilliworks.chillisource.coreutils.CSException;
 import com.chilliworks.chillisource.coreutils.Logging;
 
 //============================================================================
@@ -103,7 +104,7 @@ public class PNGToCSImage
 	///
 	/// Converts a PNG to MoImage format based upon the given options.
 	//------------------------------------------------------------------------
-	public static void run(PNGToCSImageOptions inOptions) throws IOException
+	public static void run(PNGToCSImageOptions inOptions) throws IOException, CSException
 	{
 		long ddwCRC = 0;
 		int dwOriginalDataSize = 0;
@@ -120,9 +121,7 @@ public class PNGToCSImage
 		} 
 		catch (IOException e) 
 		{
-			Logging.logVerbose("Cannot load PNG file");
-			e.printStackTrace();
-			return;
+			throw new CSException("Cannot load PNG file: " + e.getMessage());
 		}
 		
 		//pre multiply data if required
@@ -141,8 +140,9 @@ public class PNGToCSImage
 		byte[] outImageData = ConvertImageToFormat(image, imageFormat, bDithering);
 		if(outImageData == null)
 		{
-			return;
+			throw new CSException("Cannot convert image to format: " + inOptions.strInputFilename + ", " + imageFormat);
 		}
+		
 		dwOriginalDataSize = outImageData.length;
 		Logging.logVerbose("Building Image Data Complete");
 
@@ -169,9 +169,7 @@ public class PNGToCSImage
 		} 
 		catch (IOException e) 
 		{
-			Logging.logVerbose("Cannot output csimage file");
-			e.printStackTrace();
-			return;
+			throw new CSException("Cannot output csimage file: " + e.getMessage());
 		}
 	}
 	//------------------------------------------------------------------------
