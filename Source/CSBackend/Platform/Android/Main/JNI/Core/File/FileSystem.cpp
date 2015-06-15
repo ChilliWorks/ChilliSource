@@ -83,35 +83,6 @@ namespace CSBackend
                 return nullptr;
 #endif
 			}
-            //------------------------------------------------------------------------------
-            /// Returns the error from errno() in string form.
-            ///
-			/// @author Ian Copland
-			///
-			/// @param The error number.
-			///
-			/// @return The error string.
-			//------------------------------------------------------------------------------
-            std::string GetFileErrorString(u32 in_errorNumber)
-            {
-            	switch (in_errorNumber)
-            	{
-            	case EACCES:
-            	  	return "EACCES - Access permission error.";
-            	case ELOOP:
-            		return "ELOOP - Symbolic link error.";
-            	case ENAMETOOLONG:
-            		return "ENAMETOOLONG - The path is too long.";
-            	case ENOENT:
-            		return "ENOENT - Path does not exist.";
-            	case ENOTDIR:
-            		return "ENOTDIR - Path is not a directory.";
-            	case EMFILE:
-            		return "EMFILE - To many files in Program Opened Error.";
-            	default:
-            		return "Unknown error.";
-            	}
-            }
 			//------------------------------------------------------------------------------
 			/// Creates a new directory at the given directory path.
             ///
@@ -129,7 +100,6 @@ namespace CSBackend
 					s32 errorType = errno;
 					if (errorType != EEXIST)
 					{
-						CS_LOG_ERROR("File System: Error creating directory '" + in_directoryPath + "': " + GetFileErrorString(errorType));
 						return false;
 					}
 				}
@@ -271,7 +241,6 @@ namespace CSBackend
                 DIR* directory = opendir(directoryPath.c_str());
                 if(directory == nullptr)
                 {
-                    CS_LOG_ERROR("File System: Error getting paths in directory '" + directoryPath + "': " + GetFileErrorString(errno));
                     return false;
                 }
 
@@ -290,7 +259,6 @@ namespace CSBackend
                     struct stat dirStats;
                     if (stat(fullItemPath.c_str(), &dirStats) != 0)
                     {
-                        CS_LOG_ERROR("Error: Failed to stat path '" + fullItemPath + "'");
                         success = false;
                         break;
                     }
@@ -398,7 +366,7 @@ namespace CSBackend
 					}
 					else
 					{
-						auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + GetPackageDLCPath() + CSCore::StringUtils::StandardiseFilePath(in_filePath);
+						auto absFilePath = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + GetPackageDLCPath() + CSCore::StringUtils::StandardiseFilePath(in_filePath);
 						return m_zippedFileSystem->CreateFileStream(absFilePath, in_fileMode);
 					}
 					break;
@@ -503,10 +471,8 @@ namespace CSBackend
 			    CreateDirectoryPath(in_destinationStorageLocation, destinationDirectoryPath + subDirectoryPath);
 			}
 
-			//Get all of the files that need to be copied.
+			//copy files
 			std::vector<std::string> filePaths = GetFilePaths(in_sourceStorageLocation, sourceDirectoryPath, true);
-
-			//Copy each of the files to the destination.
 			switch (in_sourceStorageLocation)
 			{
 			    case CSCore::StorageLocation::k_package:
@@ -515,11 +481,10 @@ namespace CSBackend
                     //This could be handled by simply calling CopyFile() for each of the required
                     //files, however this is pretty inefficient when reading from the zip as it's
                     //repeatedly opened and closed. For the sake of performance we use the batch
-                    //CreateFileStreams() method when copying from the zip.
+                    //ExtractFiles() method when copying from the zip.
 
                     std::string absSourceDirectoryPath = GetAbsolutePathToStorageLocation(in_sourceStorageLocation) + sourceDirectoryPath;
-                    std::vector<std::string> sourceFiles;
-                    std::vector<std::string> destinationFiles;
+                    std::vector<std::string> sourceFiles, destinationFiles;
                     for (const auto& filePath : filePaths)
                     {
                         sourceFiles.push_back(absSourceDirectoryPath + filePath);
@@ -527,24 +492,50 @@ namespace CSBackend
                     }
 
                     u32 index = 0;
-					bool success = m_zippedFileSystem->ExtractFiles(sourceFiles, [&](const std::string& in_filePath, std::unique_ptr<const u8[]> in_fileContents, u32 in_fileSize) -> bool
+					return m_zippedFileSystem->ExtractFiles(sourceFiles, [&](const std::string& in_filePath, std::unique_ptr<const u8[]> in_fileContents, u32 in_fileSize) -> bool
 					{
-                        const auto& destination = destinationFiles[index];
-                        index++;
+                        const auto& destination = destinationFiles[index++];
                         return WriteFile(in_destinationStorageLocation, destination, reinterpret_cast<const s8*>(in_fileContents.get()), in_fileSize);
 					});
-
-                    if (success == false)
-                    {
-                        return false;
-                    }
-
-                    break;
                 }
                 case CSCore::StorageLocation::k_DLC:
                 {
-                    //TODO: !?
-                    break;
+                	//As with the Package and ChilliSource storage locations this could be handled
+                	//by simply calling CopyFile() for each, however it would be inefficient for
+                	//files contained in the zip. Instead, the batch ExtractFiles() method is used.
+
+					std::string absPackageDLCPath = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + GetPackageDLCPath();
+                	std::vector<std::string> sourceFiles, destinationFiles;
+                    for (const auto& filePath : filePaths)
+                    {
+                        auto sourceFilePath = sourceDirectoryPath + filePath;
+                        auto destinationFilePath = destinationDirectoryPath + filePath;
+
+                    	if (DoesFileExistInCachedDLC(sourceFilePath) == true)
+                    	{
+                    		if (CopyFile(in_sourceStorageLocation, sourceFilePath, in_destinationStorageLocation, destinationFilePath) == false)
+							{
+								return false;
+							}
+                    	}
+                    	else
+                    	{
+							sourceFiles.push_back(absPackageDLCPath + sourceFilePath);
+							destinationFiles.push_back(destinationFilePath);
+                    	}
+                    }
+
+                    if (sourceFiles.empty() == false)
+                    {
+						u32 index = 0;
+						return m_zippedFileSystem->ExtractFiles(sourceFiles, [&](const std::string& in_filePath, std::unique_ptr<const u8[]> in_fileContents, u32 in_fileSize) -> bool
+						{
+							const auto& destination = destinationFiles[index++];
+							return WriteFile(in_destinationStorageLocation, destination, reinterpret_cast<const s8*>(in_fileContents.get()), in_fileSize);
+						});
+                    }
+
+                    return true;
                 }
                 default:
                 {
@@ -556,11 +547,9 @@ namespace CSBackend
                         }
                     }
 
-                    break;
+                    return true;
                 }
 			}
-
-			return true;
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
@@ -572,7 +561,6 @@ namespace CSBackend
             s32 error = unlink(filePath.c_str());
             if (error != 0)
             {
-                CS_LOG_ERROR("File System: Error deleting file '" + in_filePath + "': " + GetFileErrorString(errno));
                 return false;
             }
 
@@ -604,7 +592,10 @@ namespace CSBackend
                     auto filePaths = m_zippedFileSystem->GetFilePaths(absPackageDirectoryPath, in_recursive);
 
                     auto absCacheDirectoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
-                    GetPaths(filePaths, absCacheDirectoryPath, false, in_recursive);
+                    if (CSBackend::Android::DoesDirectoryExist(absCacheDirectoryPath) == true && GetPaths(filePaths, absCacheDirectoryPath, false, in_recursive) == false)
+                    {
+                        CS_LOG_ERROR("Failed to get file paths in directory '" + in_directoryPath + "' in storage location '" + CSCore::ToString(in_storageLocation) + "'");
+                    }
 
                     std::sort(filePaths.begin(), filePaths.end());
                     auto it = std::unique(filePaths.begin(), filePaths.end());
@@ -614,7 +605,11 @@ namespace CSBackend
                 default:
                 {
                     std::vector<std::string> filePaths;
-                    GetPaths(filePaths, GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath), false, in_recursive);
+                    if (GetPaths(filePaths, GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath), false, in_recursive) == false)
+                    {
+                        CS_LOG_ERROR("Failed to get file paths in directory '" + in_directoryPath + "' in storage location '" + CSCore::ToString(in_storageLocation) + "'");
+                    }
+
                     return filePaths;
                 }
 			}
@@ -636,7 +631,10 @@ namespace CSBackend
                     auto subDirectoryPaths = m_zippedFileSystem->GetDirectoryPaths(absPackageDirectoryPath, in_recursive);
 
                     auto absCacheDirectoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath);
-                    GetPaths(subDirectoryPaths, absCacheDirectoryPath, true, in_recursive);
+                    if (CSBackend::Android::DoesDirectoryExist(absCacheDirectoryPath) == true && GetPaths(subDirectoryPaths, absCacheDirectoryPath, true, in_recursive) == false)
+                    {
+                        CS_LOG_ERROR("Failed to get directory paths in directory '" + in_directoryPath + "' in storage location '" + CSCore::ToString(in_storageLocation) + "'");
+                    }
 
                     std::sort(subDirectoryPaths.begin(), subDirectoryPaths.end());
                     auto it = std::unique(subDirectoryPaths.begin(), subDirectoryPaths.end());
@@ -646,7 +644,11 @@ namespace CSBackend
                 default:
                 {
                     std::vector<std::string> directoryPaths;
-                    GetPaths(directoryPaths, GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath), true, in_recursive);
+                    if (GetPaths(directoryPaths, GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath), true, in_recursive) == false)
+                    {
+                        CS_LOG_ERROR("Failed to get directory paths in directory '" + in_directoryPath + "' in storage location '" + CSCore::ToString(in_storageLocation) + "'");
+                    }
+
                     return directoryPaths;
                 }
             }
