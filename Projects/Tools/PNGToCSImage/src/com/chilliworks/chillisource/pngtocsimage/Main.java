@@ -158,7 +158,7 @@ public class Main
 		}
 		catch (CSException e)
 		{
-			Logging.logFatal(e.toString());
+			Logging.logFatal(e.getMessage());
 		}
 		catch (Exception e)
 		{

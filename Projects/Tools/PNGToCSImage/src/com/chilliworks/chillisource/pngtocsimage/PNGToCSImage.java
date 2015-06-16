@@ -124,11 +124,11 @@ public class PNGToCSImage
 			String ioErrorMessage = e.getMessage();
 			if (ioErrorMessage != null)
 			{
-			    throw new CSException("Cannot load PNG file: " + ioErrorMessage);
+			    throw new CSException("Cannot load PNG file: " + ioErrorMessage, e);
 			}
 			else
 			{
-			    throw new CSException("Cannot load PNG file.");
+			    throw new CSException("Cannot load PNG file.", e);
 			}
 		}
 		
@@ -180,11 +180,11 @@ public class PNGToCSImage
 			String ioErrorMessage = e.getMessage();
 			if (ioErrorMessage != null)
 			{
-			    throw new CSException("Cannot output csimage file: " + ioErrorMessage);
+			    throw new CSException("Cannot output csimage file: " + ioErrorMessage, e);
 			}
 			else
 			{
-			    throw new CSException("Cannot output csimage file.");
+			    throw new CSException("Cannot output csimage file.", e);
 			}
 		}
 	}
