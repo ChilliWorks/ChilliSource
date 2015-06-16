@@ -88,6 +88,11 @@ def executeCommand(String[] in_commands) {
     errorThread.join();
     process.waitFor();
     process.destroy();
+
+    if (process.exitValue() != 0)
+    {
+        throw new GradleException("Native build failed. See errors above for more information.");
+    }
 }
 /**
  * @author Ian Copland

@@ -218,10 +218,12 @@ namespace ChilliSource
             CS_ASSERT(in_entity->GetScene() == this, "Cannot add an entity without a pre-exisitng scene");
             CS_ASSERT((in_entity->GetParent() == nullptr || in_entity->GetParent()->GetScene() == this), "Cannot remove an entity from a different scene than it's parent.");
             
-            SharedEntityList::iterator it = std::find_if(m_entities.begin(), m_entities.end(), [in_entity](const EntitySPtr& in_entityInList)
+            auto searchPredicate = [in_entity](const EntitySPtr& in_entityInList)
             {
                 return in_entityInList.get() == in_entity;
-            });
+            };
+            
+            auto it = std::find_if(m_entities.begin(), m_entities.end(), searchPredicate);
             
             if(it != m_entities.end())
             {
@@ -236,6 +238,9 @@ namespace ChilliSource
                 
                 in_entity->OnRemovedFromScene();
                 in_entity->SetScene(nullptr);
+                
+                //the iterator may have been invalidated during OnBackground, OnSuspend or OnRemovedFromScene, so re-calculate it
+                it = std::find_if(m_entities.begin(), m_entities.end(), searchPredicate);
                 
                 it->swap(m_entities.back());
                 m_entities.pop_back();

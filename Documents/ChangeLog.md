@@ -1,6 +1,12 @@
 Chilli Source Change Log
 ========================
 
+Version 1.4.4, 2015-06-05
+-------------------------
+* Fixed: A crash when removing Entities with children from the scene.
+* Fixed: Child widgets are now correctly removed from their parent when the parent is deleted.
+* Fixed: An issue that would result in auto-scaling text not rendering.
+
 Version 1.4.3, 2015-05-21
 -------------------------
 * Removed: The GUI model and animation converter it had a number of issues and was windows specific. It will be replaced with a cross platform equivalent at some point in the future, but for now the command line tools should be used.

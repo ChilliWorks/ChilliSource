@@ -345,12 +345,6 @@ namespace ChilliSource
 		//-------------------------------------------------------------
 		void Entity::SetName(const std::string& in_name)
 		{
-            if(in_name == "Comp 1")
-            {
-                int i = 9;
-                ++i;
-            }
-            
 			m_name = in_name;
 		}
 		//-------------------------------------------------------------
