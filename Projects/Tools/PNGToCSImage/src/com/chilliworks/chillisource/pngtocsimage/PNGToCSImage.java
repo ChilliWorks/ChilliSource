@@ -169,7 +169,7 @@ public class PNGToCSImage
 		} 
 		catch (IOException e) 
 		{
-			throw new CSException("Cannot output csimage file: " + e.getMessage());
+			throw new CSException("Cannot output csimage file: " + e.toString());
 		}
 	}
 	//------------------------------------------------------------------------

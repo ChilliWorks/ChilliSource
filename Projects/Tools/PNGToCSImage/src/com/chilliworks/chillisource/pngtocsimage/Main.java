@@ -28,6 +28,7 @@
 
 package com.chilliworks.chillisource.pngtocsimage;
 
+import com.chilliworks.chillisource.coreutils.CSException;
 import com.chilliworks.chillisource.coreutils.Logging;
 import com.chilliworks.chillisource.coreutils.Logging.LoggingLevel;
 import com.chilliworks.chillisource.coreutils.StringUtils;
@@ -154,12 +155,17 @@ public class Main
 		try
 		{
 			PNGToCSImage.run(options);
-			Logging.finish();
+		}
+		catch (CSException e)
+		{
+			Logging.logFatal(e.toString());
 		}
 		catch (Exception e)
 		{
 			Logging.logFatal(StringUtils.convertExceptionToString(e));
 		}
+
+		Logging.finish();
 	}
 	//------------------------------------------------------
 	/// Print Help Text
