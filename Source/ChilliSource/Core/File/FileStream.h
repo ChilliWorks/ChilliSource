@@ -71,9 +71,13 @@ namespace ChilliSource
             k_end
 		};
 		//------------------------------------------------------------------------------
-		/// A filestream is used for all reading and writing of files.
-		/// This will emulate the functionality of fstream and allows for
-		/// cross platform file reading.
+		/// A filestream is used for all reading and writing of files. This will emulate
+		/// the functionality of fstream and allows for cross platform file reading.
+		///
+		/// File streams are thread agnostic, but not thread-safe. A file stream should
+		/// be used and destroyed on the same thread that it was created.
+		///
+		/// @author Ian Copland
 		//------------------------------------------------------------------------------
 		class FileStream
 		{

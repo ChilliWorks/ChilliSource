@@ -71,11 +71,15 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			///
-			/// @param The cricket audio sound bank that this resource represents. Cannot
-			/// be null. This will take ownership of the bank and release it when it has
-			/// finished with it.
+			/// @param in_ckBank - The cricket audio sound bank that this resource
+			/// represents. Cannot be null. This will take ownership of the bank and release
+			/// it when it has finished with it.
+			/// @param in_bankBuffer - [Optional] The memory buffer associated with the bank.
+			/// This is only relevant if the bank is loaded from memory and should be null
+			/// otherwise. The buffer will be de-allocated along with the bank. Defaults to
+			/// null.
 			//------------------------------------------------------------------------------
-			void Build(::CkBank* in_ckBank);
+			void Build(::CkBank* in_ckBank, std::unique_ptr<u8[]> in_bankBuffer = nullptr);
 			//------------------------------------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -108,6 +112,7 @@ namespace ChilliSource
 			CkBank() = default;
 
 			::CkBank* m_bank = nullptr;
+			std::unique_ptr<u8[]> m_bankBuffer;
 		};
 	}
 }

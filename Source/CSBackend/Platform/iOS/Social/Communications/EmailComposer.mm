@@ -106,18 +106,16 @@ namespace CSBackend
                 //add the attachment if one is available.
                 if (in_attachment.m_filename.size() > 0)
                 {
+                    auto fileSystem = CSCore::Application::Get()->GetFileSystem();
+
                     std::string strFilename;
-                    if (in_attachment.m_storageLocation == CSCore::StorageLocation::k_package)
+                    if (in_attachment.m_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_attachment.m_filename) == false)
                     {
-                        strFilename = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + in_attachment.m_filename;
-                    }
-                    else if (in_attachment.m_storageLocation == CSCore::StorageLocation::k_DLC && CSCore::Application::Get()->GetFileSystem()->DoesFileExistInCachedDLC(in_attachment.m_filename) == false)
-                    {
-                        strFilename = CSCore::Application::Get()->GetFileSystem()->GetPackageDLCPath() + in_attachment.m_filename;
+                        strFilename = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + in_attachment.m_filename;
                     }
                     else
                     {
-                        strFilename = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToStorageLocation(in_attachment.m_storageLocation) + in_attachment.m_filename;
+                        strFilename = fileSystem->GetAbsolutePathToStorageLocation(in_attachment.m_storageLocation) + in_attachment.m_filename;
                     }
                     
                     std::string strPath, strBasename;

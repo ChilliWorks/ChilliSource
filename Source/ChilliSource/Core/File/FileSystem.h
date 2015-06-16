@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/File/StorageLocation.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-#include <string>
+#include <mutex>
 
 namespace ChilliSource
 {
@@ -45,6 +45,10 @@ namespace ChilliSource
 		/// provides sandboxed access to specific locations on disk, such as access to
 		/// application assets, or save data. It is safe to use the File System during
 		/// the OnInit and OnDestroy lifecycle events.
+		///
+        /// This is thread-safe though care still needs to be taken when dealing with
+        /// file streams as they are not. A file stream should be read and destroyed
+        /// on the same thread it was created.
         ///
         /// @author Ian Copland
 		//------------------------------------------------------------------------------
@@ -63,6 +67,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// Reads the contents of a file from disc if the file exists.
             ///
+            /// This is thread-safe.
+            ///
             /// @author Ian Copland
             ///
             /// @param in_storageLocation - The Storage Location.
@@ -75,6 +81,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// Write a file to disc with the given data.
             ///
+            /// This is thread-safe.
+            ///
             /// @author Ian Copland
             ///
             /// @param in_storageLocation - The Storage Location.
@@ -86,6 +94,8 @@ namespace ChilliSource
             bool WriteFile(StorageLocation in_storageLocation, const std::string& in_filePath, const std::string& in_contents) const;
             //------------------------------------------------------------------------------
             /// Write a file to disc with the given data.
+            ///
+            /// This is thread-safe.
             ///
             /// @author S Downie
             ///
@@ -100,6 +110,9 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// Creates a new file stream to the given file in the given storage location.
             ///
+            /// This is thread-safe, though the created file stream is not. Make sure it
+            /// is used and destroyed on the same thread it was created.
+            ///
             /// @author Ian Copland
             ///
             /// @param in_storageLocation - The storage location.
@@ -113,6 +126,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// Creates the given directory. The full directory hierarchy will be created.
             ///
+            /// This is thread-safe.
+            ///
             /// @author Ian Copland
             ///
             /// @param in_storageLocation - The Storage Location
@@ -124,6 +139,8 @@ namespace ChilliSource
             virtual bool CreateDirectoryPath(StorageLocation in_storageLocation, const std::string& in_directoryPath) const = 0;
             //------------------------------------------------------------------------------
             /// Copies a file from one location to another.
+            ///
+            /// This is thread-safe.
             ///
             /// @author Ian Copland
             ///
@@ -140,6 +157,8 @@ namespace ChilliSource
             /// Copies a directory from one location to another. If the destination
             /// directory does not exist, it will be created.
             ///
+            /// This is thread-safe.
+            ///
             /// @author Ian Copland
             ///
             /// @param in_sourceStorageLocation - The source storage location.
@@ -154,6 +173,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// Deletes the specified file.
             ///
+            /// This is thread-safe.
+            ///
             /// @author Ian Copland
             ///
             /// @param in_storageLocation - The storage location.
@@ -164,6 +185,8 @@ namespace ChilliSource
             virtual bool DeleteFile(StorageLocation in_storageLocation, const std::string& in_filePath) const = 0;
             //------------------------------------------------------------------------------
             /// Deletes a directory and all its contents.
+            ///
+            /// This is thread-safe.
             ///
             /// @author Ian Copland
             ///
@@ -176,6 +199,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// Creates a dynamic array containing the file names of each file in the given
             /// directory. File paths will be relative to the input directory.
+            ///
+            /// This is thread-safe.
             ///
             /// @author Ian Copland
             ///
@@ -191,6 +216,8 @@ namespace ChilliSource
             /// Creates a dynamic array containing the file names of each file that has the
             /// provided extension in the given directory. File paths will be returned
             /// relative to the input directory.
+            ///
+            /// This is thread-safe.
             ///
             /// @author S Downie
             ///
@@ -208,6 +235,8 @@ namespace ChilliSource
             /// the given name in the given directory. File paths will be relative to the
             /// input directory.
             ///
+            /// This is thread-safe.
+            ///
             /// @author S Downie
             ///
             /// @param in_storageLocation - The Storage Location.
@@ -223,6 +252,8 @@ namespace ChilliSource
             /// Creates a dynamic array containing the names of each directory in the given
             /// directory. Directory paths will be relative to the input directory.
             ///
+            /// This is thread-safe.
+            ///
             /// @author Ian Copland
             ///
             /// @param in_storageLocation - The Storage Location
@@ -236,6 +267,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// returns whether or not the given file exists.
             ///
+            /// This is thread-safe.
+            ///
             /// @author Ian Copland
             /// 
             /// @param in_storageLocation - The Storage Location
@@ -245,6 +278,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             virtual bool DoesFileExist(StorageLocation in_storageLocation, const std::string& in_filePath) const = 0;
             //------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
             /// @author Ian Copland
             ///
             /// @param in_filePath - The file path.
@@ -253,6 +288,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             virtual bool DoesFileExistInCachedDLC(const std::string& in_filePath) const = 0;
             //------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
             /// @author Ian Copland
             ///
             /// @param in_filePath - The file path.
@@ -261,6 +298,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             virtual bool DoesFileExistInPackageDLC(const std::string& in_filePath) const = 0;
             //------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
             /// @author Ian Copland
             /// 
             /// @param in_storageLocation - The Storage Location
@@ -270,6 +309,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             virtual bool DoesDirectoryExist(StorageLocation in_storageLocation, const std::string& in_directoryPath) const = 0;
             //------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
             /// @author Ian Copland
             ///
             /// @param in_directoryPath - The directory path.
@@ -278,6 +319,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             virtual bool DoesDirectoryExistInCachedDLC(const std::string& in_directoryPath) const = 0;
             //------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
             /// @author Ian Copland
             ///
             /// @param in_directoryPath - The directory path.
@@ -289,6 +332,8 @@ namespace ChilliSource
 			/// Returns the absolute path to the given storage location. The value this
 			/// returns is platform specific and use of this should be kept to a minimum in
 			/// cross platform projects.
+            ///
+            /// This is thread-safe.
             ///
             /// @author S Downie
             ///
@@ -302,12 +347,16 @@ namespace ChilliSource
             /// Sets the directory used by the DLC system to fall back on if it is not in
             /// the DLC cache directory.
             ///
+            /// This is thread safe.
+            ///
             /// @author S Downie
             ///
             /// @param in_directoryPath - The package DLC directory.
 			//------------------------------------------------------------------------------
 			void SetPackageDLCPath(const std::string& in_directoryPath);
             //------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
             /// @author S Downie
 			///
             /// @return The package DLC directory.
@@ -315,6 +364,8 @@ namespace ChilliSource
             const std::string& GetPackageDLCPath() const;
             //------------------------------------------------------------------------------
             /// Calculate the SHA1 checksum of the file at the given directory
+            ///
+            /// This is thread-safe.
             ///
             /// @author N Tanda
             ///
@@ -327,6 +378,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// Calculate the MD5 checksum of the file at the given directory
             ///
+            /// This is thread-safe.
+            ///
             /// @author S Downie
             ///
             /// @param in_storageLocation - Storage location
@@ -337,6 +390,8 @@ namespace ChilliSource
             std::string GetFileChecksumMD5(StorageLocation in_storageLocation, const std::string& in_filePath) const;
             //------------------------------------------------------------------------------
             /// Calculate the MD5 checksum of the given directory
+            ///
+            /// This is thread-safe.
             ///
             /// @author S Downie
             ///
@@ -349,6 +404,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// Gets the CRC32 Checksum for the given file.
             ///
+            /// This is thread-safe.
+            ///
             /// @author S Downie
             ///
             /// @param in_storageLocation - The storage location.
@@ -360,6 +417,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// Gets the CRC32 Checksum for the given directory.
             ///
+            /// This is thread-safe.
+            ///
             /// @param in_storageLocation - The storage location.
 			/// @param in_directoryPath - the filepath.
 			///
@@ -367,6 +426,8 @@ namespace ChilliSource
 			//------------------------------------------------------------------------------
 			u32 GetDirectoryChecksumCRC32(StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
 	        //------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
 			/// @author Ian Copland
             ///
             /// @param in_storageLocation - The storage location.
@@ -376,6 +437,8 @@ namespace ChilliSource
 			//------------------------------------------------------------------------------
 			u32 GetFileSize(StorageLocation in_storageLocation, const std::string& in_filePath) const;
 	        //------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
 			/// @author Ian Copland
             ///
             /// @param in_storageLocation - The storage location.
@@ -386,6 +449,8 @@ namespace ChilliSource
 			u32 GetDirectorySize(StorageLocation in_storageLocation, const std::string& in_directoryPath) const;
             //------------------------------------------------------------------------------
 			/// Returns whether or not the given storage location can be written to.
+            ///
+            /// This is thread-safe.
             ///
             /// @author Ian Copland
 			///
@@ -409,6 +474,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             FileSystem();
             //------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
             /// @author Ian Copland
             ///
             /// @param in_fileMode - The file mode.
@@ -419,6 +486,7 @@ namespace ChilliSource
 
         private:
             std::string m_packageDLCPath;
+            mutable std::mutex m_packageDLCPathMutex;
 		};
 	}
 		

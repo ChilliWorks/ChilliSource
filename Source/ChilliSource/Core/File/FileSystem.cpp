@@ -156,12 +156,14 @@ namespace ChilliSource
         //-------------------------------------------------------
         void FileSystem::SetPackageDLCPath(const std::string& in_directoryPath)
         {
+            std::unique_lock<std::mutex> lock(m_packageDLCPathMutex);
             m_packageDLCPath = StringUtils::StandardiseDirectoryPath(in_directoryPath);
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------
 		const std::string& FileSystem::GetPackageDLCPath() const
 		{
+		    std::unique_lock<std::mutex> lock(m_packageDLCPathMutex);
 			return m_packageDLCPath;
         }
         //--------------------------------------------------------------

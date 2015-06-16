@@ -42,6 +42,10 @@ namespace CSBackend
 		//------------------------------------------------------
 		/// Core
 		//------------------------------------------------------
+		CS_FORWARDDECLARE_CLASS(ZippedCkBankLoader);
+		//------------------------------------------------------
+		/// Core
+		//------------------------------------------------------
 		CS_FORWARDDECLARE_CLASS(JavaClass);
 		CS_FORWARDDECLARE_CLASS(JavaClassDef);
 		CS_FORWARDDECLARE_CLASS(JavaStaticClass);

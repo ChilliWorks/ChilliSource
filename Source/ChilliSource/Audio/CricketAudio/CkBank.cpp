@@ -50,12 +50,13 @@ namespace ChilliSource
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void CkBank::Build(::CkBank* in_CkAudioBank)
+		void CkBank::Build(::CkBank* in_CkAudioBank, std::unique_ptr<u8[]> in_bankBuffer)
 		{
 			CS_ASSERT(m_bank == nullptr, "Cannot call Build() on a CkBank more than once.");
 			CS_ASSERT(in_CkAudioBank != nullptr, "Cannot Build() a CkBank with a null bank pointer.");
 
 			m_bank = in_CkAudioBank;
+			m_bankBuffer = std::move(in_bankBuffer);
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
@@ -73,6 +74,8 @@ namespace ChilliSource
 			{
 				m_bank->destroy();
 				m_bank = nullptr;
+
+				m_bankBuffer.reset();
 			}
 		}
 	}

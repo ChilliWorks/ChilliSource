@@ -50,6 +50,10 @@ namespace CSBackend
 		/// zip files. Google Play builds use the main Apk Expansion file, and Amazon
 		/// builds use the Apk.
 		///
+		/// This is thread-safe though care still needs to be taken when dealing with
+		/// file streams as they are not. A file stream should be used and destroyed
+		/// on the same thread it was created.
+		///
 		/// @author Ian Copland
 		//------------------------------------------------------------------------------
 		class FileSystem final : public CSCore::FileSystem
