@@ -81,7 +81,12 @@ namespace CSBackend
             
             HttpRequestUPtr request(new HttpRequest(in_type, in_url, in_body, in_headers, in_timeoutSecs, GetMaxBufferSize(), [=](const CSNetworking::HttpRequest* in_request, const CSNetworking::HttpResponse& in_response)
             {
-                m_finishedRequests.push_back(in_request);
+                //If flushed, we are not finished with the request yet
+                if(in_response.GetResult() != CSNetworking::HttpResponse::Result::k_flushed)
+                {
+                    m_finishedRequests.push_back(in_request);
+                }
+                
                 in_delegate(in_request, in_response);
             }));
             

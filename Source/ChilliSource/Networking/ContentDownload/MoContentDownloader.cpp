@@ -163,13 +163,16 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void MoContentDownloader::OnContentDownloadComplete(const HttpRequest* in_request, const HttpResponse& in_response)
         {
-            if(mpCurrentRequest == in_request)
-                mpCurrentRequest = nullptr;
-            
-            if(m_downloadProgressUpdateTimer)
+            if(in_response.GetResult() != HttpResponse::Result::k_flushed)
             {
-                m_downloadProgressEventConnection->Close();
-                m_downloadProgressUpdateTimer->Stop();
+                if(mpCurrentRequest == in_request)
+                    mpCurrentRequest = nullptr;
+            
+                if(m_downloadProgressUpdateTimer)
+                {
+                    m_downloadProgressEventConnection->Close();
+                    m_downloadProgressUpdateTimer->Stop();
+                }
             }
             
             switch(in_response.GetResult())
@@ -212,6 +215,7 @@ namespace ChilliSource
                 {
                     // Calculate current scene download progress
                     progress = (f32)mpCurrentRequest->GetCurrentSize() / (f32)mpCurrentRequest->GetExpectedTotalSize();
+                    CS_LOG_VERBOSE("!!!Progress = " + CSCore::ToString(progress));
                 }
                 else
                 {

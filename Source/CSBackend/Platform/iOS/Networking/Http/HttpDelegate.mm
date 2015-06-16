@@ -46,6 +46,8 @@
         m_responseCode = 0;
         m_maxBufferSize = in_bufferSize;
         m_expectedSize = 0;
+        m_downloadedSize = 0;
+        
         CS_ASSERT(m_request != nullptr, "Request must be supplied to Http Delegate.");
         return self;
     }
@@ -99,6 +101,7 @@
         }
     }
     
+    m_downloadedSize += [in_data length];
     [m_data appendData:in_data];
 }
 //---------------------------------------------------------------------------
@@ -111,11 +114,7 @@
 //---------------------------------------------------------------------------
 - (u64) GetReceivedData
 {
-    if(m_data != nil)
-    {
-        return [m_data length];
-    }
-    return 0;
+    return m_downloadedSize;
 }
 //-----------------------------------------------------------------------------
 /// Called when the connection has finished sending data.

@@ -45,6 +45,8 @@
     u32 m_responseCode;
     u32 m_maxBufferSize;
     u64 m_expectedSize;
+    u64 m_downloadedSize;
+    
     NSMutableData* m_data;
 }
 //---------------------------------------------------------------------------

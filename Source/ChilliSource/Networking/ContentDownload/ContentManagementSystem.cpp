@@ -294,8 +294,11 @@ namespace ChilliSource
                     break;
             };
             
-            //Reset the listener
-            m_onUpdateCheckCompleteDelegate = nullptr;
+            if(in_result != IContentDownloader::Result::k_flushed)
+            {
+                //Reset the listener
+                m_onUpdateCheckCompleteDelegate = nullptr;
+            }
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
@@ -702,6 +705,7 @@ namespace ChilliSource
                 
                 f32 increment = 1.0f / m_packageDetails.size();
                 f32 totalProgress = m_currentPackageDownload * increment + (in_progress * increment);
+                CS_LOG_VERBOSE("OnContentDownloadProgress - " + CSCore::ToString(totalProgress));
                 m_onDownloadProgressDelegate(DownloadProgress(m_packageDetails[m_currentPackageDownload].m_id, totalProgress));
             }
         }
