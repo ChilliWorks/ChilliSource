@@ -215,11 +215,6 @@ namespace ChilliSource
                 {
                     // Calculate current scene download progress
                     progress = (f32)mpCurrentRequest->GetCurrentSize() / (f32)mpCurrentRequest->GetExpectedTotalSize();
-                    CS_LOG_VERBOSE("!!!Progress = " + CSCore::ToString(progress));
-                }
-                else
-                {
-                    progress = 0.0f;
                 }
             }
             

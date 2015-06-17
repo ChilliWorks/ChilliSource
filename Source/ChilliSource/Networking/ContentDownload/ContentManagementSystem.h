@@ -253,6 +253,26 @@ namespace ChilliSource
                 std::string m_id;
                 std::string m_checksum;
                 u32 m_size;
+                
+                //-----------------------------------------------------------
+                /// @author HMcLaughlin
+                ///
+                /// @param in_other - Package to compare to
+                ///
+                /// @return If equal
+                //-----------------------------------------------------------
+                bool operator==(const PackageDetails& in_other) const
+                {
+                    if(m_id == in_other.m_id &&
+                       m_checksum == in_other.m_checksum &&
+                       m_size == in_other.m_size &&
+                       m_url == in_other.m_url)
+                    {
+                        return true;
+                    }
+                    
+                    return false;
+                }
             };
             //------------------------------------------------------------
             /// Initialisation method called at a time when all App Systems
@@ -379,6 +399,15 @@ namespace ChilliSource
             //-----------------------------------------------------------
             void DownloadNextPackage();
             //-----------------------------------------------------------
+            /// Perform the HTTP request for a DLC package.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param Package Index
+            /// @param If we should check to see if it is cached
+            //-----------------------------------------------------------
+            void DownloadPackage(u32 in_packageIndex, bool in_checkCached = true);
+            //-----------------------------------------------------------
             /// Callback for package download progress
             ///
             /// @author HMcLaughlin
@@ -387,11 +416,52 @@ namespace ChilliSource
             /// @param in_progress - Progress through download (0.0f - 1.0f)
             //-----------------------------------------------------------
             void OnContentDownloadProgress(const std::string& in_url, f32 in_progress);
+            //-----------------------------------------------------------
+            /// Verifies all temperary downloads with the passed in manifest, returns a list of
+            /// PackageDetails for fully cached files. This will remove any packages that do
+            /// not pass checksum validation
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_manifestPath - Manifest path
+            ///
+            /// @return Vector of package details
+            //-----------------------------------------------------------
+            std::vector<PackageDetails> VerifyTemporaryDownloads(const std::string& in_manifestPath) const;
+            //-----------------------------------------------------------
+            /// Retrieves a list of package names in a folder
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_location - File location
+            /// @param in_filePath - File path
+            ///
+            /// @return Vector of package names
+            //-----------------------------------------------------------
+            std::vector<std::string> GetPackageNamesAtPath(Core::StorageLocation in_location, const std::string& in_filePath) const;
+            //-----------------------------------------------------------
+            /// Writes a checksum safe version of a manifest xml to path
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_manifestDoc - Original Manifest XML Document
+            /// @param in_filePath - File path to save to
+            ///
+            /// @return If the saving was successful
+            //-----------------------------------------------------------
+            bool SaveTempManifest(Core::XML::Document* in_manifestDoc, const std::string& in_filePath);
+            //-----------------------------------------------------------
+            /// Clears the temp download folder
+            ///
+            /// @author HMcLaughlin
+            //-----------------------------------------------------------
+            void ClearTempDownloadFolder();
             
         private:
             std::vector<std::string> m_removePackageIds;
             std::vector<PackageDetails> m_packageDetails;
-			
+			std::vector<PackageDetails> m_cachedPackageDetails;
+            
 			u32	m_runningToDownloadTotal = 0;
 			u32 m_runningDownloadedTotal = 0;
             

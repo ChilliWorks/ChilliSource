@@ -30,6 +30,7 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Container/VectorUtils.h>
 #include <ChilliSource/Core/Cryptographic/BaseEncoding.h>
 #include <ChilliSource/Core/Cryptographic/HashMD5.h>
 #include <ChilliSource/Core/File/FileSystem.h>
@@ -47,6 +48,12 @@ namespace ChilliSource
         namespace
         {
             const std::string k_adsKeyHasCached = "_CMSCachedDLC";
+            const std::string k_tempDirectory = "Temp";
+            const std::string k_manifestFile = "ContentManifest.moman";
+            const std::string k_tempManifestFile = "ContentManifestTemp.moman";
+            const std::string k_tempManifestFilePath = k_tempDirectory + "/" + k_tempManifestFile;
+            const std::string k_packageExtension = "packzip";
+            const std::string k_packageExtensionFull = "." + k_packageExtension;
             
             //--------------------------------------------------------
             /// @author S Downie
@@ -122,7 +129,7 @@ namespace ChilliSource
         Core::XMLUPtr ContentManagementSystem::LoadLocalManifest()
         {
             //The manifest lives in the documents directory
-            Core::XMLUPtr xml = Core::XMLUtils::ReadDocument(Core::StorageLocation::k_DLC, "ContentManifest.moman");
+            Core::XMLUPtr xml = Core::XMLUtils::ReadDocument(Core::StorageLocation::k_DLC, k_manifestFile);
             if (xml != nullptr && xml->GetDocument() != nullptr)
             {
                 Core::XML::Node* rootNode = Core::XMLUtils::GetFirstChildElement(xml->GetDocument());
@@ -207,9 +214,8 @@ namespace ChilliSource
             {
             	//Add a temp directory so that the packages are stored atomically and only overwrite
                 //the originals on full success
-                Core::Application::Get()->GetFileSystem()->CreateDirectoryPath(Core::StorageLocation::k_DLC, "Temp");
-                m_contentDownloader->DownloadPackage(m_packageDetails[m_currentPackageDownload].m_url, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete),
-                                                     Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadProgress));
+                Core::Application::Get()->GetFileSystem()->CreateDirectoryPath(Core::StorageLocation::k_DLC, k_tempDirectory);
+                DownloadPackage(m_currentPackageDownload);
             }
             else
             {
@@ -221,8 +227,40 @@ namespace ChilliSource
         void ContentManagementSystem::DownloadNextPackage()
         {
             m_currentPackageDownload++;
-            m_contentDownloader->DownloadPackage(m_packageDetails[m_currentPackageDownload].m_url, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete),
-                                                 Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadProgress));
+            DownloadPackage(m_currentPackageDownload);
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        void ContentManagementSystem::DownloadPackage(u32 in_packageIndex, bool in_checkCached)
+        {
+            CS_ASSERT(in_packageIndex < m_packageDetails.size(), "Package index out of range");
+            
+            auto package = m_packageDetails[in_packageIndex];
+            bool existsInCache = CSCore::VectorUtils::Contains<PackageDetails>(m_cachedPackageDetails, package);
+            
+            if(in_checkCached && existsInCache)
+            {
+                //We call the progress function for this index
+                OnContentDownloadProgress(package.m_url, 1.0f);
+                
+                m_runningDownloadedTotal += m_packageDetails[in_packageIndex].m_size;
+                
+                //Check if this is the last download
+                if(in_packageIndex >= (m_packageDetails.size() - 1))
+                {
+                    m_onDownloadCompleteDelegate(Result::k_succeeded);
+                }
+                else
+                {
+                    //Else move on to next package
+                    DownloadNextPackage();
+                }
+            }
+            else
+            {
+                m_contentDownloader->DownloadPackage(m_packageDetails[in_packageIndex].m_url, Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadComplete),
+                                                     Core::MakeDelegate(this, &ContentManagementSystem::OnContentDownloadProgress));
+            }
         }
         //-----------------------------------------------------------
         //-----------------------------------------------------------
@@ -240,7 +278,7 @@ namespace ChilliSource
 				}
                 
                 //Remove the temp zips
-                DeleteDirectory("Temp");
+                ClearTempDownloadFolder();
                 
                 m_packageDetails.clear();
 			
@@ -254,7 +292,7 @@ namespace ChilliSource
 				}
                 
                 //Save the new content manifest
-                CSCore::XMLUtils::WriteDocument(m_serverManifest->GetDocument(), Core::StorageLocation::k_DLC, "ContentManifest.moman");
+                CSCore::XMLUtils::WriteDocument(m_serverManifest->GetDocument(), Core::StorageLocation::k_DLC, k_manifestFile);
                 
                 m_dlcCachePurged = false;
                 
@@ -327,9 +365,6 @@ namespace ChilliSource
                 }
                 case IContentDownloader::Result::k_failed:
                 {
-                    //Delete all temp zip files and cancel the outstanding requests
-                    DeleteDirectory("Temp");
-                    
                     if(m_onDownloadCompleteDelegate)
                     {
                         m_onDownloadCompleteDelegate(Result::k_failed);
@@ -497,6 +532,40 @@ namespace ChilliSource
             //Notify the delegate of our completion and whether the need to update anything
             bool bRequiresUpdating = (!m_removePackageIds.empty() || !m_packageDetails.empty());
             
+            if(bRequiresUpdating)
+            {
+                //Check if the temp file exists before writing it, if it does then we are resuming
+                if(!Core::Application::Get()->GetFileSystem()->DoesFileExist(Core::StorageLocation::k_DLC, k_tempManifestFilePath))
+                {
+                    Core::Application::Get()->GetFileSystem()->CreateDirectoryPath(Core::StorageLocation::k_DLC, k_tempDirectory);
+                    
+                    //Save the temperary manifest for resuming later
+                    SaveTempManifest(m_serverManifest->GetDocument(), k_tempManifestFilePath);
+                }
+                else
+                {
+                    const std::string tempDownloadedContentPath =  k_tempDirectory + "/DownloadedContent.moman";
+                    
+                    //We need to compare checksums to see if the downloaded one is different from the cached one
+                    SaveTempManifest(m_serverManifest->GetDocument(), tempDownloadedContentPath);
+                    
+                    const std::string downloadedChecksum = CalculateChecksum(CSCore::StorageLocation::k_DLC, tempDownloadedContentPath);
+                    const std::string cachedChecksum = CalculateChecksum(CSCore::StorageLocation::k_DLC, k_tempManifestFilePath);
+                    
+                    //Manifests are different, clear the temperary folder
+                    if(downloadedChecksum != cachedChecksum)
+                    {
+                        //We should purge the cache
+                        ClearTempDownloadFolder();
+                    }
+                    else
+                    {
+                        //We retrieve a list of already downloaded packages
+                        m_cachedPackageDetails = VerifyTemporaryDownloads(k_tempManifestFilePath);
+                    }
+                }
+            }
+            
             if(bRequiresUpdating && m_dlcCachePurged)
             {
                 m_onUpdateCheckCompleteDelegate(CheckForUpdatesResult::k_availableBlocking);
@@ -557,7 +626,7 @@ namespace ChilliSource
         //-----------------------------------------------------------
         bool ContentManagementSystem::SavePackageToFile(const PackageDetails& in_packageDetails, const std::string& in_zippedPackage, bool in_fullyDownloaded)
         {
-            std::string strFile = "Temp/" + in_packageDetails.m_id + ".packzip";
+            std::string strFile = k_tempDirectory + "/" + in_packageDetails.m_id + k_packageExtensionFull;
 
             //Append to the file as it can take multiple writes
             Core::FileStreamSPtr pFileStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(Core::StorageLocation::k_DLC, strFile, Core::FileMode::k_writeBinaryAppend);
@@ -583,7 +652,7 @@ namespace ChilliSource
         void ContentManagementSystem::ExtractFilesFromPackage(const ContentManagementSystem::PackageDetails& in_packageDetails) const
         {
 			//Open zip
-			std::string strZipFilePath(m_contentDirectory + "/Temp/" + in_packageDetails.m_id + ".packzip");
+			std::string strZipFilePath(m_contentDirectory + "/Temp/" + in_packageDetails.m_id + k_packageExtensionFull);
 			
 			unzFile ZippedFile = unzOpen(strZipFilePath.c_str());
 			if(!ZippedFile)
@@ -705,9 +774,108 @@ namespace ChilliSource
                 
                 f32 increment = 1.0f / m_packageDetails.size();
                 f32 totalProgress = m_currentPackageDownload * increment + (in_progress * increment);
-                CS_LOG_VERBOSE("OnContentDownloadProgress - " + CSCore::ToString(totalProgress));
+                
                 m_onDownloadProgressDelegate(DownloadProgress(m_packageDetails[m_currentPackageDownload].m_id, totalProgress));
             }
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        std::vector<ContentManagementSystem::PackageDetails> ContentManagementSystem::VerifyTemporaryDownloads(const std::string& in_manifestPath) const
+        {
+            auto manifest = Core::XMLUtils::ReadDocument(Core::StorageLocation::k_DLC, in_manifestPath);
+            Core::XML::Node* manifestRootNode = CSCore::XMLUtils::GetFirstChildElement(m_serverManifest->GetDocument());
+            
+            auto tempPackageFiles = GetPackageNamesAtPath(CSCore::StorageLocation::k_DLC, k_tempDirectory);
+            
+            const Core::XML::Node* serverPackageEl = Core::XMLUtils::GetFirstChildElement(manifestRootNode, "Package");
+            
+            std::vector<ContentManagementSystem::PackageDetails> alreadyCachedPackages;
+            
+            while(serverPackageEl && (tempPackageFiles.size() != alreadyCachedPackages.size()))
+            {
+                //Check if this is the one were after
+                auto ID = Core::XMLUtils::GetAttributeValue<std::string>(serverPackageEl, "ID", "");
+                
+                //Go through all packages and verify
+                for(const auto& packageName : tempPackageFiles)
+                {
+                    std::string name;
+                    std::string extension;
+                    
+                    Core::StringUtils::SplitBaseFilename(packageName, name, extension);
+                    
+                    if(ID == name)
+                    {
+                        //Validate the file
+                        std::string cachedFilePath = k_tempDirectory + "/" + packageName;
+                        
+                        std::string cachedFileChecksum = CalculateChecksum(CSCore::StorageLocation::k_DLC, cachedFilePath);
+                        std::string expectedChecksum = Core::XMLUtils::GetAttributeValue<std::string>(serverPackageEl, "Checksum", "");
+                        
+                        if(cachedFileChecksum == expectedChecksum)
+                        {
+                            //Add a validated package
+                            std::string url = Core::XMLUtils::GetAttributeValue<std::string>(serverPackageEl, "URL", "");
+                            u32 packageSize = Core::XMLUtils::GetAttributeValue<u32>(serverPackageEl, "Size", 0);
+                            
+                            PackageDetails details;
+                            details.m_url = url;
+                            details.m_size = packageSize;
+                            details.m_checksum = expectedChecksum;
+                            details.m_id = ID;
+                            
+                            alreadyCachedPackages.push_back(details);
+                        }
+                        else
+                        {
+                            //Cached package is corrupt/incomplete, remove it
+                            CS_LOG_ERROR("Cached package corrupt removing - " + packageName);
+                            CSCore::Application::Get()->GetFileSystem()->DeleteFile(CSCore::StorageLocation::k_DLC, cachedFilePath);
+                        }
+                    }
+                }
+                
+                //On to the next package
+                serverPackageEl = Core::XMLUtils::GetNextSiblingElement(serverPackageEl, "Package");
+            }
+            
+            return alreadyCachedPackages;
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        std::vector<std::string> ContentManagementSystem::GetPackageNamesAtPath(Core::StorageLocation in_location, const std::string& in_filePath) const
+        {
+            return CSCore::Application::Get()->GetFileSystem()->GetFilePathsWithExtension(in_location, in_filePath, false, k_packageExtension);
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        bool ContentManagementSystem::SaveTempManifest(Core::XML::Document* in_manifestDoc, const std::string& in_filePath)
+        {
+            //Clone the manifest before we modify it
+            auto xmlString = Core::XMLUtils::ToString(in_manifestDoc);
+            auto doc = Core::XMLUtils::ParseDocument(xmlString);
+            
+            //Remove the TimeStamp attribute as it interferes with the checksum comparison
+            auto manifestNode = doc->GetDocument()->first_node();
+            if(manifestNode)
+            {
+                for(rapidxml::xml_attribute<>* attribute = manifestNode->first_attribute(); attribute != nullptr; attribute = attribute->next_attribute())
+                {
+                    if (Core::XMLUtils::GetName(attribute) == "Timestamp")
+                    {
+                        manifestNode->remove_attribute(attribute);
+                        break;
+                    }
+                }
+            }
+            
+            return Core::XMLUtils::WriteDocument(doc->GetDocument(), CSCore::StorageLocation::k_DLC, in_filePath);
+        }
+        //-----------------------------------------------------------
+        //-----------------------------------------------------------
+        void ContentManagementSystem::ClearTempDownloadFolder()
+        {
+            DeleteDirectory(k_tempDirectory);
         }
     }
 }
