@@ -58,29 +58,43 @@ namespace CSBackend
 			const char k_chilliSourcePath[] = "CSResources/";
 
             //------------------------------------------------------------------------------
-            /// Creates a new zipped file system instance. This is dependant on the current
-            /// Android flavour: Google Play builds will create a file system which points
-            /// to the main Apk Expansion file; Amazon builds will refer to the APK.
-            ///
 			/// @author Ian Copland
 			///
-			/// @return The zipped file system.
+			/// @return The file path to the zip. This is dependent on the current Android
+			/// Flavour: Google Play builds will refer to the OBB file, while Amazon builds
+			/// will refer to the the APK.
 			//------------------------------------------------------------------------------
-			ZippedFileSystemUPtr CreateZippedFileSystem()
+			std::string GetZipFilePath()
 			{
 #if defined(CS_ANDROIDFLAVOUR_GOOGLEPLAY)
                 JavaStaticClassDef apkExpansionInfoDef("com/chilliworks/chillisource/core/ApkExpansionInfo");
                 apkExpansionInfoDef.AddMethod("getFilePath", "()Ljava/lang/String;");
                 JavaStaticClass apkExpansionInfo(apkExpansionInfoDef);
-
-                return ZippedFileSystemUPtr(new ZippedFileSystem(apkExpansionInfo.CallStringMethod("getFilePath")));
+                return apkExpansionInfo.CallStringMethod("getFilePath");
 #elif defined(CS_ANDROIDFLAVOUR_AMAZON)
                 auto* coreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
-
-                return ZippedFileSystemUPtr(new ZippedFileSystem(coreJI->GetApkDirectory(), "assets/"));
+                return coreJI->GetApkDirectory();
 #else
                 CS_LOG_FATAL("File System does not support this Android Flavour.");
-                return nullptr;
+                return "";
+#endif
+			}
+			//------------------------------------------------------------------------------
+			/// @author Ian Copland
+			///
+			/// @return the directory within the zip file which will be used as the root.
+			/// This is dependent on the Android Flavour: Google Play builds will use the
+			/// root of the zip, while Amazon builds will use the assets/ directory.
+			//------------------------------------------------------------------------------
+			std::string GetZipRootDirectory()
+			{
+#if defined(CS_ANDROIDFLAVOUR_GOOGLEPLAY)
+				return "";
+#elif defined(CS_ANDROIDFLAVOUR_AMAZON)
+				return "assets/";
+#else
+				CS_LOG_FATAL("File System does not support this Android Flavour.");
+				return "";
 #endif
 			}
 			//------------------------------------------------------------------------------
@@ -326,7 +340,8 @@ namespace CSBackend
 			CSBackend::Android::CreateDirectory(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC));
 			CS_ASSERT(CSBackend::Android::DoesDirectoryExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC)) == true, "Could not create DLC storage location.");
 
-            m_zippedFileSystem = CreateZippedFileSystem();
+			m_zipFilePath = CSBackend::Android::GetZipFilePath();
+            m_zippedFileSystem = ZippedFileSystemUPtr(new ZippedFileSystem(m_zipFilePath, GetZipRootDirectory()));
             if (m_zippedFileSystem->IsValid() == false)
             {
             	CS_LOG_FATAL("File system cannot read Package.");
@@ -752,6 +767,42 @@ namespace CSBackend
 
 			return storageLocationPath;
 		}
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		const std::string& FileSystem::GetZipFilePath() const
+		{
+			return m_zipFilePath;
+		}
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		bool FileSystem::TryGetZippedFileInfo(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, ZippedFileInfo& out_zippedFileInfo) const
+		{
+			CS_ASSERT(in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_chilliSource
+				|| in_storageLocation == CSCore::StorageLocation::k_DLC, "Invalid storage location.");
+
+			std::string filePath;
+			if (in_storageLocation == CSCore::StorageLocation::k_DLC)
+			{
+				filePath == GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + GetPackageDLCPath() + CSCore::StringUtils::StandardiseFilePath(in_filePath);
+			}
+			else
+			{
+				filePath == GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseFilePath(in_filePath);
+			}
+
+			ZippedFileSystem::FileInfo info;
+			if (m_zippedFileSystem->TryGetFileInfo(filePath, info) == false)
+			{
+				return false;
+			}
+
+			out_zippedFileInfo.m_offset = info.m_offset;
+			out_zippedFileInfo.m_size = info.m_size;
+			out_zippedFileInfo.m_uncompressedSize = info.m_uncompressedSize;
+			out_zippedFileInfo.m_isCompressed = info.m_isCompressed;
+			return true;
+		}
+
 	}
 }
 

@@ -61,6 +61,19 @@ namespace CSBackend
 		public:
 			CS_DECLARE_NAMEDTYPE(FileSystem);
 			//------------------------------------------------------------------------------
+			/// A struct containing information about the location of a single file within
+			/// the zip. This can be used to manually access the zip data.
+			///
+			/// @author Ian Copland
+			//------------------------------------------------------------------------------
+			struct ZippedFileInfo final
+			{
+				u32 m_offset = 0;
+				u32 m_size = 0;
+				u32 m_uncompressedSize = 0;
+				bool m_isCompressed = false;
+			};
+			//------------------------------------------------------------------------------
 			/// Queries whether or not this system implements the interface with the given
 			/// Id.
 			///
@@ -239,7 +252,33 @@ namespace CSBackend
 			/// available.
 			//------------------------------------------------------------------------------
 			std::string GetAbsolutePathToStorageLocation(CSCore::StorageLocation in_storageLocation) const override;
-
+			//------------------------------------------------------------------------------
+			/// @author Ian Copland
+			///
+			/// @return The file path to the zip. The location of this is dependent on the
+			/// current Android Flavour: Google Play builds will return the OBB file, while
+			/// Amazon builds will simply return the APK. There aren't many cases where this
+			/// zip file should be accessed directly, instead the cross platform file system
+			/// methods should be used.
+			//------------------------------------------------------------------------------
+			const std::string& GetZipFilePath() const;
+			//------------------------------------------------------------------------------
+			/// Calculates information on a file within the zipped file system. This applies
+			/// to the Package, ChilliSource and DLC storage locations, passing other
+			/// storage locations will cause this to assert. If DLC is passed, only files
+			/// in the Package DLC directory will be checked.
+			///
+			/// @author Ian Copland
+			///
+			/// @param in_storageLocation - The storage location. Must be package,
+			/// ChilliSource or DLC.
+			/// @param in_filePath - The path to the file.
+			/// @param out_zippedFileInfo - [Out] Information on the zipped file. This is
+			/// only set if the method is successful.
+			///
+			/// @return Whether or not this was successful.
+			//------------------------------------------------------------------------------
+			bool TryGetZippedFileInfo(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, ZippedFileInfo& out_zippedFileInfo) const;
 		private:
 			friend CSCore::FileSystemUPtr CSCore::FileSystem::Create();
             //------------------------------------------------------------------------------
@@ -250,6 +289,7 @@ namespace CSBackend
             FileSystem();
 
 			std::string m_storagePath;
+			std::string m_zipFilePath;
 			ZippedFileSystemUPtr m_zippedFileSystem;
 		};
 	}

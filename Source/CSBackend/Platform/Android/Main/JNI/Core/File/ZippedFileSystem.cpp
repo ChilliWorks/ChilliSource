@@ -42,8 +42,6 @@ namespace CSBackend
     {
         namespace
         {
-            const u32 k_filePathLength = 32 * 1024;
-
             //------------------------------------------------------------------------------
             /// Returns whether or not the given unz_file_info represents a file or a
             /// directory. The struct doesn't directly contain this information (though it
@@ -106,25 +104,26 @@ namespace CSBackend
             }
 
             s32 result = unzGoToFilePos(unzipper, &item.m_zipPosition);
-            if (result == UNZ_OK)
+            if (result != UNZ_OK)
             {
-                result = unzOpenCurrentFile(unzipper);
-                if (result == UNZ_OK)
-                {
-                    //get file information
-                    unz_file_info info;
-                    char filePath[k_filePathLength];
-                    unzGetCurrentFileInfo(unzipper, &info, filePath, k_filePathLength, nullptr, 0, nullptr, 0);
+                return nullptr;
+            }
 
-                    //load the file into memory
-                    std::unique_ptr<u8[]> buffer(new u8[info.uncompressed_size]);
-                    unzReadCurrentFile(unzipper, (voidp)buffer.get(), info.uncompressed_size);
-                    output = CSCore::FileStreamUPtr(new VirtualFileStream(std::move(buffer), info.uncompressed_size, in_fileMode));
-                    if (output->IsValid() == false)
-                    {
-                        output = nullptr;
-                    }
-                }
+            unz_file_info info;
+            unzGetCurrentFileInfo(unzipper, &info, nullptr, 0, nullptr, 0, nullptr, 0);
+
+            result = unzOpenCurrentFile(unzipper);
+            if (result != UNZ_OK)
+            {
+                return nullptr;
+            }
+
+            std::unique_ptr<u8[]> buffer(new u8[info.uncompressed_size]);
+            unzReadCurrentFile(unzipper, (voidp)buffer.get(), info.uncompressed_size);
+            output = CSCore::FileStreamUPtr(new VirtualFileStream(std::move(buffer), info.uncompressed_size, in_fileMode));
+            if (output->IsValid() == false)
+            {
+                output = nullptr;
             }
 
             unzCloseCurrentFile(unzipper);
@@ -146,7 +145,6 @@ namespace CSBackend
             }
 
             bool success = true;
-            char filePathBuffer[k_filePathLength];
             ManifestItem item;
             unz_file_info info;
             for (const auto& unstandardisedFilePath : in_filePaths)
@@ -171,14 +169,14 @@ namespace CSBackend
                     break;
                 }
 
+                unzGetCurrentFileInfo(unzipper, &info, nullptr, 0, nullptr, 0, nullptr, 0);
+
                 result = unzOpenCurrentFile(unzipper);
                 if (result != UNZ_OK)
                 {
                     success = false;
                     break;
                 }
-
-                unzGetCurrentFileInfo(unzipper, &info, filePathBuffer, k_filePathLength, nullptr, 0, nullptr, 0);
 
                 std::unique_ptr<u8[]> buffer(new u8[info.uncompressed_size]);
                 unzReadCurrentFile(unzipper, (voidp)buffer.get(), info.uncompressed_size);
@@ -275,9 +273,65 @@ namespace CSBackend
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
+        bool ZippedFileSystem::TryGetFileInfo(const std::string& in_filePath, FileInfo& out_fileInfo) const
+        {
+            CS_ASSERT(IsValid() == true, "Calling into an invalid ZippedFileSystem.");
+
+            //Get the manifest item describing the location of the file within the zip.
+            ManifestItem item;
+            if (TryGetManifestItem(CSCore::StringUtils::StandardiseFilePath(in_filePath), item) == false)
+            {
+                return false;
+            }
+
+            //confirm the item is a file, and not a directory.
+            if (item.m_isFile == false)
+            {
+                return false;
+            }
+
+            //read the contents of the zip file.
+            std::unique_lock<std::mutex> lock(m_mutex);
+
+            CSCore::FileStreamUPtr output;
+
+            unzFile unzipper = unzOpen(m_filePath.c_str());
+            if (unzipper == nullptr)
+            {
+                return false;
+            }
+
+            s32 result = unzGoToFilePos(unzipper, &item.m_zipPosition);
+            if (result != UNZ_OK)
+            {
+                return false;
+            }
+
+            unz_file_info info;
+            unzGetCurrentFileInfo(unzipper, &info, nullptr, 0, nullptr, 0, nullptr, 0);
+
+            result = unzOpenCurrentFile(unzipper);
+            if (result != UNZ_OK)
+            {
+                return false;
+            }
+
+            out_fileInfo.m_offset = static_cast<u32>(unzGetCurrentFileZStreamPos64(unzipper));
+            out_fileInfo.m_size = static_cast<u32>(info.compressed_size);
+            out_fileInfo.m_uncompressedSize = static_cast<u32>(info.uncompressed_size);
+            out_fileInfo.m_isCompressed = (info.compression_method == 0);
+
+            unzCloseCurrentFile(unzipper);
+            unzClose(unzipper);
+            return true;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
         void ZippedFileSystem::BuildManifest(const std::string& in_rootDirectoryPath)
         {
             CS_ASSERT(m_isValid == false, "Cannot re-build manifest.");
+
+            static const u32 k_filePathLength = 32 * 1024;
 
             unzFile unzipper = unzOpen(m_filePath.c_str());
             if (unzipper == nullptr)

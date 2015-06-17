@@ -89,9 +89,17 @@ namespace ChilliSource
             if (in_streamStorageLocation == Core::StorageLocation::k_package || in_streamStorageLocation == Core::StorageLocation::k_chilliSource ||
             (in_streamStorageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
             {
-                //TODO: !? OBB
-//                auto absFilePath = fileSystem->GetAbsolutePathToFile(in_streamStorageLocation, taggedFilePath);
-//                m_sound = ::CkSound::newStreamSound(absFilePath.c_str());
+                auto androidFS = fileSystem->Cast<CSBackend::Android::FileSystem>();
+                CS_ASSERT(androidFS != nullptr, "Could not cast to Android file system.");
+
+                CSBackend::Android::FileSystem::ZippedFileInfo fileInfo;
+                if (androidFS->TryGetZippedFileInfo(in_streamStorageLocation, in_streamFilePath, fileInfo) == true)
+                {
+                    CS_ASSERT(fileInfo.m_isCompressed == false && fileInfo.m_size == fileInfo.m_uncompressedSize, "Cannot stream a file compressed inside Apk or Apk expansion file.");
+                    CS_ASSERT(fileInfo.m_size > 0, "Cannot stream a zero size file.");
+
+                    m_sound = ::CkSound::newStreamSound(androidFS->GetZipFilePath().c_str(), kCkPathType_FileSystem, fileInfo.m_offset, fileInfo.m_size, in_streamFilePath.c_str());
+                }
             }
             else
             {

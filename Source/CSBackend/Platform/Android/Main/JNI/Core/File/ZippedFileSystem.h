@@ -62,6 +62,19 @@ namespace CSBackend
         public:
             CS_DECLARE_NOCOPY(ZippedFileSystem);
             //------------------------------------------------------------------------------
+            /// A struct containing information about the location of a single file within
+            /// the zip. This can be used to manually access the zip data.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            struct FileInfo final
+            {
+                u32 m_offset = 0;
+                u32 m_size = 0;
+                u32 m_uncompressedSize = 0;
+                bool m_isCompressed = false;
+            };
+            //------------------------------------------------------------------------------
             /// A delegate called by the ExtractFiles() method as each file is read from
             /// the zip.
             ///
@@ -186,6 +199,20 @@ namespace CSBackend
             /// @return A list of all directories within the given directory path.
             //------------------------------------------------------------------------------
             std::vector<std::string> GetDirectoryPaths(const std::string& in_directoryPath, bool in_recursive) const;
+            //------------------------------------------------------------------------------
+            /// Gets information on a single file within the zip. This information requires
+            /// the zip file to be opened and therefore requires a lock to remain thread
+            /// safe.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_filePath - The path to the file within the zip.
+            /// @param out_fileInfo - [Out] The output file info. This will only be set if
+            /// the request was successful.
+            ///
+            /// @return Whether or not this was successful.
+            //------------------------------------------------------------------------------
+            bool TryGetFileInfo(const std::string& in_filePath, FileInfo& out_fileInfo) const;
 
         private:
             //------------------------------------------------------------------------------
