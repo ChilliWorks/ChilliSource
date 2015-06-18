@@ -44,18 +44,9 @@ import android.widget.RelativeLayout;
 //========================================================
 public class VideoPlayerActivity extends Activity
 {
-	//------------------------------------------------------------------------
-	/// Private Static Member data
-	//------------------------------------------------------------------------
-	private static VideoPlayerActivity mActivityInstance = null;
-	private static boolean mbInAPK = false;
-	private static String mstrFilename = "";
-	private static boolean mbCanDismissWithTap = false;
-	private static boolean mbHasSubtitles = false;
-	private static int mBackgroundColour = 0x00000000;
-	//------------------------------------------------------------------------
-	/// Private Member data
-	//------------------------------------------------------------------------
+	private static VideoPlayerActivity s_activityInstance = null;
+	private static VideoInfo s_videoInfo = null;
+
 	private RelativeLayout mViewContainer;
 	public RelativeLayout mAspectViewContainer; //View that contains the video sized based on its aspect ratio
 	private VideoPlayerView mVideoPlayerView;
@@ -63,34 +54,46 @@ public class VideoPlayerActivity extends Activity
 	private int mdwSeekPosition;
 	private boolean mbHasFocusChangedEventOccurred = false;
 	private boolean mbIsVideoResuming = false;
-	
-	//------------------------------------------------------------------------
-	/// Get Activity
-	///
-	/// @return return the static activity instance.
-	//------------------------------------------------------------------------
+
+	/**
+	 * This is thread safe.
+	 *
+	 * @author Ian Copland
+	 *
+	 * @return The active video player activity. Will be null if no activity is active.
+	 */
     public static synchronized VideoPlayerActivity GetActivity() 
     {
-    	return mActivityInstance;
+    	return s_activityInstance;
     }
-	//------------------------------------------------------------------------
-	/// Setup Video
-	///
-	/// @param whether or not the video is in the APK.
-    /// @param the filename of the video.
-    /// @param whether or not the video can be dismissed with a tap.
-    /// @param whether or not the video has subtitles.
-    /// @param Background colour RGBA
-	//------------------------------------------------------------------------
-    public static synchronized void SetupVideo(boolean inbInAPK, String instrFilename, boolean inbCanDimissWithTap, boolean inbHasSubtitles, 
-    										   float fR, float fG, float fB, float fA)
+
+	/**
+	 * Sets the info which will be used to play the video when this activty is started.
+	 *
+	 * This is thread safe.
+	 *
+	 * @author Ian Copland
+	 *
+	 * @param in_inApk - Whether or not the file is inside the Apk.
+	 * @param in_filePath - The path to the video file or file which contains the video data.
+	 * @param in_fileOffset - The offset into file where the video data starts. Should be -1 if the
+	 * file is a video file.
+	 * @param in_fileLength - The length of the video data. Should be -1 if the file is a video
+	 * file.
+	 * @param in_dismissedWithTap - Whether or not the video can be dismissed with a tap.
+	 * @param in_hasSubtitles - Whether or not the video has subtitles.
+	 * @param in_bgColourR - The red component of the background colour.
+	 * @param in_bgColourG - The green component of the background colour.
+	 * @param in_bgColourB - The blue component of the background colour.
+	 * @param in_bgColourA - The alpha component of the background colour.
+	 */
+    public static synchronized void setVideoInfo(boolean in_inApk, String in_filePath, int in_fileOffset, int in_fileLength, boolean in_dismissedWithTap, boolean in_hasSubtitles,
+    										   float in_bgColourR, float in_bgColourG, float in_bgColourB, float in_bgColourA)
     {
-    	mbInAPK = inbInAPK;
-    	mstrFilename = instrFilename;
-    	mbCanDismissWithTap = inbCanDimissWithTap;
-    	mbHasSubtitles = inbHasSubtitles;
-    	
-    	mBackgroundColour = Color.argb((int)(fA * 255), (int)(fR * 255), (int)(fG * 255), (int)(fB * 255));
+    	assert (s_videoInfo == null) : "Video info is already set!";
+
+		int backgroundColour = Color.argb((int)(in_bgColourR * 255), (int)(in_bgColourG * 255), (int)(in_bgColourB * 255), (int)(in_bgColourA * 255));
+		s_videoInfo = new VideoInfo(in_inApk, in_filePath, in_fileOffset, in_fileLength, in_dismissedWithTap, in_hasSubtitles, backgroundColour);
     }
 	//------------------------------------------------------------------------
 	/// On Create
@@ -104,7 +107,7 @@ public class VideoPlayerActivity extends Activity
     	super.onCreate(savedInstanceState);
     	synchronized(VideoPlayerActivity.class)
     	{
-    		mActivityInstance = this;
+    		s_activityInstance = this;
     	}
     	
     	//go full screen!
@@ -115,11 +118,11 @@ public class VideoPlayerActivity extends Activity
     	mViewContainer = new RelativeLayout(this);
     	setContentView(mViewContainer);
     	
-    	mViewContainer.setBackgroundColor(mBackgroundColour);
+    	mViewContainer.setBackgroundColor(s_videoInfo.m_backgroundColour);
     	mAspectViewContainer = new RelativeLayout(this);
     	mViewContainer.addView(mAspectViewContainer);
     	
-    	if (mbHasSubtitles == true)
+    	if (s_videoInfo.m_hasSubtitles == true)
     	{
     		mSubtitlesView = new SubtitlesView(this);
     		mAspectViewContainer.addView(mSubtitlesView);
@@ -191,15 +194,17 @@ public class VideoPlayerActivity extends Activity
   	//------------------------------------------------------------------------
     @Override protected synchronized void onDestroy()
     {
-		VideoPlayerNativeInterface mediaPlayerNI = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.INTERFACE_ID);
+		s_videoInfo = null;
+
+		VideoPlayer mediaPlayerNI = (VideoPlayer)CSApplication.get().getSystem(VideoPlayer.INTERFACE_ID);
 		if (mediaPlayerNI != null)
 		{
-			mediaPlayerNI.OnVideoComplete();
+			mediaPlayerNI.completeVideo();
 		}
 		
     	synchronized(VideoPlayerActivity.class)
     	{
-    		mActivityInstance = null;
+    		s_activityInstance = null;
     	}
 	    super.onDestroy();
     }
@@ -230,7 +235,7 @@ public class VideoPlayerActivity extends Activity
     	//create and add the media player view.
     	if (mVideoPlayerView == null)
     	{
-    		mVideoPlayerView = new VideoPlayerView(this, mbInAPK, mstrFilename, mbCanDismissWithTap, mdwSeekPosition);
+    		mVideoPlayerView = new VideoPlayerView(this, s_videoInfo.m_inApk, s_videoInfo.m_filePath, s_videoInfo.m_fileOffset, s_videoInfo.m_fileLength, s_videoInfo.m_dismissedWithTap, mdwSeekPosition);
     		mAspectViewContainer.addView(mVideoPlayerView);
     		if (mSubtitlesView != null)
     		{
@@ -265,5 +270,31 @@ public class VideoPlayerActivity extends Activity
 	@Override public void onBackPressed()
 	{
 		mVideoPlayerView.OnBackPressed();
+	}
+	/**
+	 * A container for information on the video which should be played by the activity.
+	 *
+	 * @author Ian Copland
+	 */
+	private static class VideoInfo
+	{
+		public final boolean m_inApk;
+		public final String m_filePath;
+		public final int m_fileOffset;
+		public final int m_fileLength;
+		public final boolean m_dismissedWithTap;
+		public final boolean m_hasSubtitles;
+		public final int m_backgroundColour;
+
+		public VideoInfo(boolean in_inApk, String in_filePath, int in_fileOffset, int in_fileLength, boolean in_dismissedWithTap, boolean in_hasSubtitles, int in_backgroundColour)
+		{
+			m_inApk = in_inApk;
+			m_filePath = in_filePath;
+			m_fileOffset = in_fileOffset;
+			m_fileLength = in_fileLength;
+			m_dismissedWithTap = in_dismissedWithTap;
+			m_hasSubtitles = in_hasSubtitles;
+			m_backgroundColour = in_backgroundColour;
+		}
 	}
 }

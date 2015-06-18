@@ -33,7 +33,6 @@ import java.util.Map;
 
 import com.chilliworks.chillisource.core.CSApplication;
 import com.chilliworks.chillisource.core.Logging;
-import com.chilliworks.chillisource.video.VideoPlayerNativeInterface;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -66,7 +65,7 @@ public class SubtitlesView extends ViewGroup
 	//----------------------------------------------------------
 	/// Member data
 	//----------------------------------------------------------
-	private VideoPlayerNativeInterface mVideoPlayerNativeInterface = null;
+	private VideoPlayer mVideoPlayer = null;
 	private HashMap<Long, TextView> mTextViewMap = new HashMap<Long, TextView>();
 	private HashMap<Long, SubtitleInfo> mSubtitleMap = new HashMap<Long, SubtitleInfo>();
 	private long mlwNextID = 0;
@@ -76,8 +75,8 @@ public class SubtitlesView extends ViewGroup
 	public SubtitlesView(Context context) 
 	{
 		super(context);
-		mVideoPlayerNativeInterface = (VideoPlayerNativeInterface)CSApplication.get().getSystem(VideoPlayerNativeInterface.INTERFACE_ID);
-		if (mVideoPlayerNativeInterface == null)
+		mVideoPlayer = (VideoPlayer)CSApplication.get().getSystem(VideoPlayer.INTERFACE_ID);
+		if (mVideoPlayer == null)
 		{
 			Logging.logError("Could not get the video player native interface!");
 		}
@@ -166,7 +165,7 @@ public class SubtitlesView extends ViewGroup
 	//--------------------------------------------------------------
 	@Override public void onDraw(Canvas inCanvas)
 	{
-		mVideoPlayerNativeInterface.OnUpdateSubtitles();
+		mVideoPlayer.updateSubtitles();
 		postInvalidate();
 	}
 	//--------------------------------------------------------------

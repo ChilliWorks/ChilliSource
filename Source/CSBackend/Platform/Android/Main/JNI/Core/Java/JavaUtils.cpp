@@ -114,6 +114,14 @@ namespace CSBackend
 					CS_LOG_FATAL(in_errorMessage);
 				}
 			}
+			//------------------------------------------------------------------------------
+			//------------------------------------------------------------------------------
+			void DeleteLocalRef(jobject in_localReference)
+			{
+				auto environment = JavaVirtualMachine::Get()->GetJNIEnvironment();
+
+				environment->DeleteLocalRef(in_localReference);
+			}
 		}
 	}
 }

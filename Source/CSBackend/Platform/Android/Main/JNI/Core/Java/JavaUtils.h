@@ -107,6 +107,16 @@ namespace CSBackend
 			/// @param in_errorMessage - The error message to print if an exception occurred.
 			//------------------------------------------------------------------------------
 			void CheckJavaExceptions(const std::string& in_errorMessage);
+			//------------------------------------------------------------------------------
+			/// Deletes a local reference. This is provided for convenience to save having
+			/// to get the java environment when a reference was created through the other
+			/// convenience methods provided here.
+			///
+			/// @author Ian Copland
+			///
+			/// @param in_localReference - The local java reference which should be deleted.
+			//------------------------------------------------------------------------------
+			void DeleteLocalRef(jobject in_localReference);
 		}
 	}
 }
