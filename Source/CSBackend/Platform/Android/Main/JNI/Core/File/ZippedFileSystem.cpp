@@ -319,10 +319,11 @@ namespace CSBackend
             out_fileInfo.m_offset = static_cast<u32>(unzGetCurrentFileZStreamPos64(unzipper));
             out_fileInfo.m_size = static_cast<u32>(info.compressed_size);
             out_fileInfo.m_uncompressedSize = static_cast<u32>(info.uncompressed_size);
-            out_fileInfo.m_isCompressed = (info.compression_method == 0);
+            out_fileInfo.m_isCompressed = (info.compression_method != 0);
 
             unzCloseCurrentFile(unzipper);
             unzClose(unzipper);
+
             return true;
         }
         //------------------------------------------------------------------------------

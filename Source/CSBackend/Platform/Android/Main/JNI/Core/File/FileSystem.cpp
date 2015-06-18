@@ -783,11 +783,11 @@ namespace CSBackend
 			std::string filePath;
 			if (in_storageLocation == CSCore::StorageLocation::k_DLC)
 			{
-				filePath == GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + GetPackageDLCPath() + CSCore::StringUtils::StandardiseFilePath(in_filePath);
+				filePath = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + GetPackageDLCPath() + CSCore::StringUtils::StandardiseFilePath(in_filePath);
 			}
 			else
 			{
-				filePath == GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseFilePath(in_filePath);
+				filePath = GetAbsolutePathToStorageLocation(in_storageLocation) + CSCore::StringUtils::StandardiseFilePath(in_filePath);
 			}
 
 			ZippedFileSystem::FileInfo info;
