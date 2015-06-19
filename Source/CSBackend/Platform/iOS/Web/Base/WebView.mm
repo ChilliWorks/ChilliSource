@@ -141,7 +141,7 @@ namespace CSBackend
                 std::string fullFilePath;
                 if (in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(filePath) == false)
                 {
-                    fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + filePath
+                    fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + filePath;
                 }
                 else
                 {
