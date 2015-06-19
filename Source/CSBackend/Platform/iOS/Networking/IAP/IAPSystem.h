@@ -55,6 +55,19 @@ namespace CSBackend
         public:
 
             CS_DECLARE_NAMEDTYPE(IAPSystem);
+            
+            //---------------------------------------------------------------
+            /// This defines platform-specific extra product information.
+            ///
+            /// @author T Kane
+            //---------------------------------------------------------------
+            struct ExtraProductInfo final
+            {
+                std::string m_productId;            // Platform-specific product ID
+                std::string m_unformattedPrice;     // Unformatted price e.g. 1.00
+                std::string m_currencyCode;         // ISO 4217 currency code, e.g. GBP, USD
+            };
+
             //---------------------------------------------------------------
             /// @author S Downie
             ///
@@ -154,19 +167,19 @@ namespace CSBackend
             ///
             /// @author S Downie
             //---------------------------------------------------------------
-            void RestoreManagedPurchases() override;
+            void RestoreManagedPurchases() override;            
             //---------------------------------------------------------------
-            /// @author N Tanda
+            /// @author T Kane
             ///
-            /// @return An array for products that have been retained
-            /// after being returned from the store. Products must be
-            /// requested from the store via RequestProductDescriptions or
-            /// RequestAllProductDescriptions before being available so there
-            /// is no guarantee that a particular product will be available.
-            /// It is the application's responsibility to ensure the correct
-            /// data has been requested up front
+            /// @return A vector of extra product information, particular to
+            /// this platform. Note that products must be requested from the
+            /// store via RequestProductDescriptions or
+            /// RequestProductDescriptions before being available so there is
+            /// no guarantee that a particular product will be available. It is
+            /// the application's responsibility to ensure the correct data
+            /// has been requested up-front.
             //---------------------------------------------------------------
-            NSArray* GetNativeStoreProductData();
+            std::vector<ExtraProductInfo> GetExtraProductInfo() const;
             
         private:
             
