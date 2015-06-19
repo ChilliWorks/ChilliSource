@@ -108,7 +108,7 @@ namespace ChilliSource
             ///
             /// @return If the saving was successful
             //-----------------------------------------------------------
-            bool SaveTempManifest(Core::XML::Document* in_manifestDoc, const std::string& in_filePath)
+            bool SaveTempManifest(const Core::XML::Document* in_manifestDoc, const std::string& in_filePath)
             {
                 //Clone the manifest before we modify it
                 auto xmlString = Core::XMLUtils::ToString(in_manifestDoc);
@@ -134,8 +134,6 @@ namespace ChilliSource
             /// Deletes a directory from the DLC Storage Location.
             ///
             /// @author S Downie
-            ///
-            /// @return The directory
             //-----------------------------------------------------------
             void DeleteDirectory(const std::string& in_directory)
             {
@@ -285,8 +283,8 @@ namespace ChilliSource
             }
             else
             {
-                m_onDownloadCompleteDelegate(Result::k_succeeded);
                 m_downloadInProgress = false;
+                m_onDownloadCompleteDelegate(Result::k_succeeded);
             }
         }
         //-----------------------------------------------------------
@@ -315,8 +313,8 @@ namespace ChilliSource
                 //Check if this is the last download
                 if(in_packageIndex >= (m_packageDetails.size() - 1))
                 {
-                    m_onDownloadCompleteDelegate(Result::k_succeeded);
                     m_downloadInProgress = false;
+                    m_onDownloadCompleteDelegate(Result::k_succeeded);
                 }
                 else
                 {
@@ -423,8 +421,8 @@ namespace ChilliSource
                         //Don't overwrite the old manifest until all the content has been downloaded 
                         if(m_currentPackageDownload >= (m_packageDetails.size() - 1))
                         {
-                            m_onDownloadCompleteDelegate(Result::k_succeeded);
                             m_downloadInProgress = false;
+                            m_onDownloadCompleteDelegate(Result::k_succeeded);
                         }
                         else
                         {
@@ -438,8 +436,8 @@ namespace ChilliSource
                 {
                     if(m_onDownloadCompleteDelegate)
                     {
-                        m_onDownloadCompleteDelegate(Result::k_failed);
                         m_downloadInProgress = false;
+                        m_onDownloadCompleteDelegate(Result::k_failed);
                     }
                     break;
                 }
@@ -857,7 +855,7 @@ namespace ChilliSource
             auto manifest = Core::XMLUtils::ReadDocument(Core::StorageLocation::k_DLC, in_manifestPath);
             Core::XML::Node* manifestRootNode = CSCore::XMLUtils::GetFirstChildElement(m_serverManifest->GetDocument());
             
-            auto tempPackageFiles =  CSCore::Application::Get()->GetFileSystem()->GetFilePathsWithExtension(CSCore::StorageLocation::k_DLC, k_tempDirectory, false, k_packageExtension);
+            auto tempPackageFiles = CSCore::Application::Get()->GetFileSystem()->GetFilePathsWithExtension(CSCore::StorageLocation::k_DLC, k_tempDirectory, false, k_packageExtension);
             
             const Core::XML::Node* serverPackageEl = Core::XMLUtils::GetFirstChildElement(manifestRootNode, "Package");
             

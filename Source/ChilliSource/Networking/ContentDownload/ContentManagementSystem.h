@@ -426,17 +426,6 @@ namespace ChilliSource
             /// @param in_manifestPath - Manifest path
             //-----------------------------------------------------------
             void VerifyTemporaryDownloads(const std::string& in_manifestPath);
-            //-----------------------------------------------------------
-            /// Retrieves a list of package names in a folder
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @param in_location - File location
-            /// @param in_filePath - File path
-            ///
-            /// @return Vector of package names
-            //-----------------------------------------------------------
-            std::vector<std::string> GetPackageNamesAtPath(Core::StorageLocation in_location, const std::string& in_filePath) const;
             
         private:
             std::vector<std::string> m_removePackageIds;
