@@ -166,11 +166,13 @@ namespace ChilliSource
             if(in_response.GetResult() != HttpResponse::Result::k_flushed)
             {
                 if(mpCurrentRequest == in_request)
+                {
                     mpCurrentRequest = nullptr;
+                }
             
                 if(m_downloadProgressUpdateTimer)
                 {
-                    m_downloadProgressEventConnection->Close();
+                    m_downloadProgressEventConnection.reset();
                     m_downloadProgressUpdateTimer->Stop();
                 }
             }

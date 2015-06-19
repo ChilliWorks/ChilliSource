@@ -359,14 +359,6 @@ namespace ChilliSource
             //-----------------------------------------------------------
             void ExtractFilesFromPackage(const PackageDetails& in_packageDetails) const;
             //-----------------------------------------------------------
-			/// Deletes a directory from the DLC Storage Location.
-            ///
-            /// @author S Downie
-			///
-			/// @return The directory
-			//-----------------------------------------------------------
-			void DeleteDirectory(const std::string& in_directory) const;
-            //-----------------------------------------------------------
             /// Checks whether the file is within the application and if the
             /// the checksums match
             ///
@@ -403,8 +395,8 @@ namespace ChilliSource
             ///
             /// @author HMcLaughlin
             ///
-            /// @param Package Index
-            /// @param If we should check to see if it is cached
+            /// @param in_packageIndex - Index in m_packageDetails
+            /// @param in_checkCached - Check if already cached
             //-----------------------------------------------------------
             void DownloadPackage(u32 in_packageIndex, bool in_checkCached = true);
             //-----------------------------------------------------------
@@ -417,17 +409,23 @@ namespace ChilliSource
             //-----------------------------------------------------------
             void OnContentDownloadProgress(const std::string& in_url, f32 in_progress);
             //-----------------------------------------------------------
-            /// Verifies all temperary downloads with the passed in manifest, returns a list of
-            /// PackageDetails for fully cached files. This will remove any packages that do
-            /// not pass checksum validation
+            /// Checks if there is any incomplete downloads and refresh
+            /// the temporary data
+            ///
+            /// @author HMcLaughlin
+            //-----------------------------------------------------------
+            void RefreshIncompleteDownloadInfo();
+            //-----------------------------------------------------------
+            /// Verifies all temporary downloads with the passed in
+            /// manifest, stores a list of packageDetails for fully
+            /// cached files. This will remove any packages that do not
+            /// pass checksum validation
             ///
             /// @author HMcLaughlin
             ///
             /// @param in_manifestPath - Manifest path
-            ///
-            /// @return Vector of package details
             //-----------------------------------------------------------
-            std::vector<PackageDetails> VerifyTemporaryDownloads(const std::string& in_manifestPath) const;
+            void VerifyTemporaryDownloads(const std::string& in_manifestPath);
             //-----------------------------------------------------------
             /// Retrieves a list of package names in a folder
             ///
@@ -439,23 +437,6 @@ namespace ChilliSource
             /// @return Vector of package names
             //-----------------------------------------------------------
             std::vector<std::string> GetPackageNamesAtPath(Core::StorageLocation in_location, const std::string& in_filePath) const;
-            //-----------------------------------------------------------
-            /// Writes a checksum safe version of a manifest xml to path
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @param in_manifestDoc - Original Manifest XML Document
-            /// @param in_filePath - File path to save to
-            ///
-            /// @return If the saving was successful
-            //-----------------------------------------------------------
-            bool SaveTempManifest(Core::XML::Document* in_manifestDoc, const std::string& in_filePath);
-            //-----------------------------------------------------------
-            /// Clears the temp download folder
-            ///
-            /// @author HMcLaughlin
-            //-----------------------------------------------------------
-            void ClearTempDownloadFolder();
             
         private:
             std::vector<std::string> m_removePackageIds;
@@ -480,6 +461,7 @@ namespace ChilliSource
             u32 m_currentPackageDownload = 0;
             
             bool m_dlcCachePurged = false;
+            bool m_downloadInProgress = false;
         };
     }
 }
