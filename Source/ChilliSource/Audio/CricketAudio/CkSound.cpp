@@ -95,8 +95,8 @@ namespace ChilliSource
                 CSBackend::Android::FileSystem::ZippedFileInfo fileInfo;
                 if (androidFS->TryGetZippedFileInfo(in_streamStorageLocation, in_streamFilePath, fileInfo) == true)
                 {
-                    CS_ASSERT(fileInfo.m_isCompressed == false && fileInfo.m_size == fileInfo.m_uncompressedSize, "Cannot stream file '" + in_streamFilePath + "' becuase it is compressed inside Apk or Apk expansion file.");
-                    CS_ASSERT(fileInfo.m_size > 0, "Cannot stream a zero size file.");
+                    CS_ASSERT(fileInfo.m_isCompressed == false && fileInfo.m_size == fileInfo.m_uncompressedSize, "Cannot stream audio file '" + in_streamFilePath + "' becuase it is compressed inside Apk or Apk expansion file.");
+                    CS_ASSERT(fileInfo.m_size > 0, "Cannot stream zero size audio file: " + in_streamFilePath);
 
                     m_sound = ::CkSound::newStreamSound(androidFS->GetZipFilePath().c_str(), kCkPathType_FileSystem, fileInfo.m_offset, fileInfo.m_size, in_streamFilePath.c_str());
                 }

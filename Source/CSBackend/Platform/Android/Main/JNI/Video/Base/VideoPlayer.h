@@ -32,9 +32,11 @@
 #define _CSBACKEND_PLATFORM_ANDROID_VIDEO_BASE_VIDEOPLAYER_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
 #include <ChilliSource/Video/Base/VideoPlayer.h>
+
+#include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaSystem.h>
 
 #include <unordered_map>
 #include <vector>

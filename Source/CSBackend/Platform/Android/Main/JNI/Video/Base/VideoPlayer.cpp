@@ -30,9 +30,7 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Video/Base/VideoPlayer.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClass.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/File/FileSystem.h>
-#include <CSBackend/Platform/Android/Main/JNI/Video/Base/VideoPlayerJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
@@ -89,6 +87,40 @@ namespace CSBackend
 {
     namespace Android
     {
+    	namespace
+    	{
+			//------------------------------------------------------------------------------
+			/// Calculate the offset and size of the given size within the zip.
+			///
+			/// @author Ian Copland
+			///
+			/// @param in_storageLocation - The storage location.
+			/// @param in_filePath - The path to the file in the zip.
+			/// @param out_filePath - [Out] The output file path.
+			/// @param out_fileOffset - [Out] The output file offset.
+			/// @param out_fileLength - [Out] The output file length.
+			//------------------------------------------------------------------------------
+    		void CalcZippedVideoInfo(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, std::string& out_filePath, s32& out_fileOffset, s32& out_fileLength)
+    		{
+    			auto fileSystem = CSCore::Application::Get()->GetFileSystem()->Cast<FileSystem>();
+    			CS_ASSERT(fileSystem != nullptr, "Could not cast to android file system.");
+
+    			FileSystem::ZippedFileInfo zippedFileInfo;
+				if (fileSystem->TryGetZippedFileInfo(in_storageLocation, in_filePath, zippedFileInfo) == false)
+				{
+					CS_LOG_FATAL("Couldn't get video file '" + in_filePath + "' from zip.");
+				}
+
+				CS_ASSERT(zippedFileInfo.m_size > 0, "Cannot stream a zero size video file: " + in_filePath);
+				CS_ASSERT(zippedFileInfo.m_isCompressed == false && zippedFileInfo.m_size == zippedFileInfo.m_uncompressedSize, "Cannot stream video file '" + in_filePath +
+					"' becuase it is compressed inside Apk or Apk expansion file.");
+
+				out_filePath = fileSystem->GetZipFilePath();
+				out_fileOffset = zippedFileInfo.m_offset;
+				out_fileLength = zippedFileInfo.m_size;
+    		}
+    	}
+
     	CS_DEFINE_NAMEDTYPE(VideoPlayer);
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
@@ -119,19 +151,17 @@ namespace CSBackend
             if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_package)
             {
 #if defined(CS_ANDROIDFLAVOUR_GOOGLEPLAY)
-
-				//TODO: Continue here.
+				CalcZippedVideoInfo(in_storageLocation, taggedFilePath, absFilePath, fileOffset, fileLength);
 #elif defined(CS_ANDROIDFLAVOUR_AMAZON)
 				inApk = true;
 #else
 				CS_LOG_FATAL("This Android Flavour cannot play videos from this storage location.");
 #endif
             }
-            else (in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false)
+            else if (in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false)
             {
 #if defined(CS_ANDROIDFLAVOUR_GOOGLEPLAY)
-
-				//TODO: Continue here.
+				CalcZippedVideoInfo(in_storageLocation, taggedFilePath, absFilePath, fileOffset, fileLength);
 #elif defined(CS_ANDROIDFLAVOUR_AMAZON)
 				inApk = true;
 #else
@@ -158,7 +188,7 @@ namespace CSBackend
 		//------------------------------------------------------------------------------
         void VideoPlayer::OnInit()
         {
-			JavaClassDef classDef("com/chilliworks/chillisource/video/VideoPlayerNativeInterface");
+			JavaClassDef classDef("com/chilliworks/chillisource/video/VideoPlayer");
 			classDef.AddMethod("present", "(ZLjava/lang/String;IIZZFFFF)V");
 			classDef.AddMethod("getPlaybackPosition", "()F");
 			classDef.AddMethod("createSubtitle", "(Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;FFFF)J");
@@ -207,12 +237,12 @@ namespace CSBackend
 						const CSVideo::Subtitles::Style* style = m_subtitles->GetStyleWithName((*it)->m_styleName);
 						auto alignment = CSRendering::StringFromAlignmentAnchor(style->m_alignment);
 
-						jstring jText = JavaUtils::CreateJStringFromSTDString(in_filePath);
+						jstring jText = JavaUtils::CreateJStringFromSTDString(text);
 						jstring jFontName = JavaUtils::CreateJStringFromSTDString(style->m_fontName);
 						jstring jAlignment = JavaUtils::CreateJStringFromSTDString(alignment);
 
 						s64 subtitleID = m_javaSystem->CallLongMethod("createSubtitle", jText, jFontName, style->m_fontSize, jAlignment, style->m_bounds.vOrigin.x, style->m_bounds.vOrigin.y, style->m_bounds.vSize.x, style->m_bounds.vSize.y);
-						m_javaInterface->SetSubtitleColour(subtitleID, 0.0f, 0.0f, 0.0f, 0.0f);
+						m_javaSystem->CallVoidMethod("setSubtitleColour", subtitleID, 0.0f, 0.0f, 0.0f, 0.0f);
 
 						JavaUtils::DeleteLocalRef(jAlignment);
 						JavaUtils::DeleteLocalRef(jFontName);

@@ -73,7 +73,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	/// Constructor
 	//------------------------------------------------------------------------
 	@SuppressWarnings("deprecation")
-	public VideoPlayerView(Context inContext, boolean inbInAPK, int in_fileOffset, int in_fileLength, String instrFilename, boolean inbCanDismissWithTap, int indwSeekPosition)
+	public VideoPlayerView(Context inContext, boolean inbInAPK, String instrFilename, int in_fileOffset, int in_fileLength, boolean inbCanDismissWithTap, int indwSeekPosition)
 	{
 		super(inContext);
 		mActivity = VideoPlayerActivity.GetActivity();
