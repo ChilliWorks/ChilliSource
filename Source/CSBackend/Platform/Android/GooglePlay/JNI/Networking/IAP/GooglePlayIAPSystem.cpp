@@ -185,6 +185,12 @@ namespace CSBackend
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
+        std::vector<GooglePlayIAPJavaInterface::ExtraProductInfo> GooglePlayIAPSystem::GetExtraProductInfo() const
+        {
+            return m_javaInterface->GetExtraProductInfo();
+        }
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
         void GooglePlayIAPSystem::OnDestroy()
         {
         	m_javaInterface = nullptr;

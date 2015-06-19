@@ -58,6 +58,7 @@ namespace CSBackend
 		public:
 
             CS_DECLARE_NAMEDTYPE(GooglePlayIAPSystem);
+
             //---------------------------------------------------------------
             /// @author S Downie
             ///
@@ -158,6 +159,18 @@ namespace CSBackend
             /// @author S Downie
             //---------------------------------------------------------------
             void RestoreManagedPurchases() override;
+            //---------------------------------------------------------------
+            /// @author T Kane
+            ///
+            /// @return A vector of extra product information, particular to
+            /// this platform. Note that products must be requested from the
+            /// store via RequestProductDescriptions or
+            /// RequestProductDescriptions before being available so there is
+            /// no guarantee that a particular product will be available. It is
+            /// the application's responsibility to ensure the correct data
+            /// has been requested up-front.
+            //---------------------------------------------------------------
+            std::vector<GooglePlayIAPJavaInterface::ExtraProductInfo> GetExtraProductInfo() const;
 
 		private:
             friend CSNetworking::IAPSystemUPtr CSNetworking::IAPSystem::Create(const CSCore::ParamDictionary&);

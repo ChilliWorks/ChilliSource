@@ -58,8 +58,10 @@ extern "C"
 	/// @param Array of product Names
 	/// @param Array of product Descriptions
 	/// @param Array of product Prices
+	/// @param Array of currency codes
+	/// @param Array of unformatted prices
 	//--------------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices);
+	void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices, jobjectArray in_currencyCodes, jobjectArray in_unformattedPrices);
 	//--------------------------------------------------------------------------------------
 	/// Called by Java when the transaction status updates
 	///
@@ -87,7 +89,7 @@ extern "C"
 
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices)
+void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices, jobjectArray in_currencyCodes, jobjectArray in_unformattedPrices)
 {
 	CSBackend::Android::GooglePlayIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::GooglePlayIAPJavaInterface>();
 	if (javaInterface != nullptr)
@@ -95,6 +97,9 @@ void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNative
 		u32 numProducts = in_env->GetArrayLength(in_productIds);
 		std::vector<CSNetworking::IAPSystem::ProductDesc> products;
 		products.reserve(numProducts);
+
+        std::vector<CSBackend::Android::GooglePlayIAPJavaInterface::ExtraProductInfo> extraProductsInfo;
+        extraProductsInfo.reserve(numProducts);
 
 		for(u32 i=0; i<numProducts; ++i)
 		{
@@ -112,9 +117,19 @@ void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNative
 			desc.m_formattedPrice = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(price);
 
 			products.push_back(desc);
+
+            CSBackend::Android::GooglePlayIAPJavaInterface::ExtraProductInfo extraProductInfo;
+
+			// Populate the extra information
+			extraProductInfo.m_productId = desc.m_id;
+			jstring currencyCode = (jstring)in_env->GetObjectArrayElement(in_currencyCodes, i);
+			extraProductInfo.m_currencyCode = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(currencyCode);
+			jstring unformattedPrice = (jstring)in_env->GetObjectArrayElement(in_unformattedPrices, i);
+			extraProductInfo.m_unformattedPrice = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(unformattedPrice);
+			extraProductsInfo.push_back(extraProductInfo);
 		}
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete, javaInterface.get(), products));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete, javaInterface.get(), products, extraProductsInfo));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -293,8 +308,10 @@ namespace CSBackend
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        void GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<CSNetworking::IAPSystem::ProductDesc>& in_products)
+        void GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<CSNetworking::IAPSystem::ProductDesc>& in_products, const std::vector<CSBackend::Android::GooglePlayIAPJavaInterface::ExtraProductInfo>& in_extraProductsInfo)
         {
+            m_extraProductsInfo = in_extraProductsInfo;
+
         	if(m_productsRequestDelegate == nullptr)
         		return;
 
@@ -412,6 +429,12 @@ namespace CSBackend
         {
         	JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
         	env->CallVoidMethod(GetJavaObject(), GetMethodID("RestoreManagedPurchases"));
+        }
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        const std::vector<GooglePlayIAPJavaInterface::ExtraProductInfo>& GooglePlayIAPJavaInterface::GetExtraProductInfo() const
+        {
+            return m_extraProductsInfo;
         }
 	}
 }

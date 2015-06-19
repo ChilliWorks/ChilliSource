@@ -52,6 +52,18 @@ namespace CSBackend
 		public:
 			CS_DECLARE_NAMEDTYPE(GooglePlayIAPJavaInterface);
 
+            //---------------------------------------------------------------
+            /// This defines platform-specific extra product information.
+            ///
+            /// @author T Kane
+            //---------------------------------------------------------------
+            struct ExtraProductInfo final
+            {
+                std::string m_productId;            // Platform-specific product ID
+                std::string m_unformattedPrice;     // Unformatted price e.g. 1.00
+                std::string m_currencyCode;         // ISO 4217 currency code, e.g. GBP, USD
+            };
+
 			//--------------------------------------------------------------
 			/// Constructor
 			///
@@ -146,8 +158,9 @@ namespace CSBackend
             /// @author S Downie
             ///
             /// @param List of product descriptions
+            /// @param List of extra product information
             //---------------------------------------------------------------
-            void OnProductDescriptionsRequestComplete(const std::vector<CSNetworking::IAPSystem::ProductDesc>& in_products);
+            void OnProductDescriptionsRequestComplete(const std::vector<CSNetworking::IAPSystem::ProductDesc>& in_products, const std::vector<CSBackend::Android::GooglePlayIAPJavaInterface::ExtraProductInfo>& in_extraProductsInfo);
             //---------------------------------------------------------------
     		/// Called when transaction status changes
             ///
@@ -168,8 +181,17 @@ namespace CSBackend
             /// @param Whether the closing of the transaction was successful
             //---------------------------------------------------------------
             void OnTransactionClosed(const std::string& in_productID, const std::string& in_transactionId, bool in_success);
+            //---------------------------------------------------------------
+    		/// Gets the extra products info for all registers product IDs.
+    		///
+    		/// @author T Kane
+    		///
+    		/// @return Vector of extra product info for each product ID registered
+            //---------------------------------------------------------------
+            const std::vector<GooglePlayIAPJavaInterface::ExtraProductInfo>& GetExtraProductInfo() const;
 
 		private:
+		    std::vector<GooglePlayIAPJavaInterface::ExtraProductInfo> m_extraProductsInfo;
 
             CSNetworking::IAPSystem::ProductDescDelegate m_productsRequestDelegate;
             CSNetworking::IAPSystem::TransactionStatusDelegate m_transactionStatusDelegate;

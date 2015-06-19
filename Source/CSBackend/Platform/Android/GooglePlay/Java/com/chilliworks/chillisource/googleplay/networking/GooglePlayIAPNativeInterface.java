@@ -63,7 +63,7 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 	//---------------------------------------------------------------------
 	/// Native Methods
 	//---------------------------------------------------------------------
-	public native void NativeOnProductsDescriptionsRequestComplete(String[] in_IDs, String[] in_names, String[] in_descriptions, String[] in_formattedPrices);
+	public native void NativeOnProductsDescriptionsRequestComplete(String[] in_IDs, String[] in_names, String[] in_descriptions, String[] in_formattedPrices, String[] in_currencyCodes, String[] in_unformattedPrices);
 	public native void NativeOnTransactionStatusUpdated(int in_result, String in_productID, String in_transactionID, String in_receipt);
 	public native void NativeOnTransactionClosed(String in_productID, String in_transactionID, boolean in_success);
 	
@@ -242,7 +242,12 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
     public void OnProductsRequestComplete(Inventory in_inventory, final String[] in_productIDs) 
     {
 		List<IAPProductDescription> results = new ArrayList<IAPProductDescription>();
-		
+
+        int numProducts = in_productIDs.length;
+
+		String[] currencyCodes = new String[numProducts];
+        String[] unformattedPrices = new String[numProducts];
+
 		if(m_inventory != null)
 		{
 			for(int i=0; i<in_productIDs.length; ++i)
@@ -256,25 +261,32 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 					desc.Description = details.getDescription();
 					desc.FormattedPrice = details.getPrice();
 
+                    String currencyCode = details.getPriceCurrencyCode();
+                    currencyCodes[i] = currencyCode;
+
+                    String unformattedPrice = Double.toString((double)details.getPriceAmountMicros() / 1000000.0);
+                    unformattedPrices[i] = unformattedPrice;
+
 					results.add(desc);
 				}
 			}
 		}
-		
-    	String[] ids = new String[results.size()];
-    	String[] names = new String[results.size()];
-    	String[] descriptions = new String[results.size()];
-    	String[] prices = new String[results.size()];
-    	
+
+        int resultsSize = results.size();
+    	String[] ids = new String[resultsSize];
+    	String[] names = new String[resultsSize];
+    	String[] descriptions = new String[resultsSize];
+    	String[] formattedPrices = new String[resultsSize];
+
     	for(int i=0; i<results.size(); ++i)
     	{
     		ids[i] = results.get(i).ID;
     		names[i] = results.get(i).Name;
     		descriptions[i] = results.get(i).Description;
-    		prices[i] = results.get(i).FormattedPrice;
+            formattedPrices[i] = results.get(i).FormattedPrice;
     	}
   
-    	NativeOnProductsDescriptionsRequestComplete(ids, names, descriptions, prices);
+    	NativeOnProductsDescriptionsRequestComplete(ids, names, descriptions, formattedPrices, currencyCodes, unformattedPrices);
     }
     /**
 	 * Cancel Product Descriptions Request
