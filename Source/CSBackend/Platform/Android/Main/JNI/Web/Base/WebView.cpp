@@ -131,8 +131,8 @@ namespace CSBackend
 			if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_package ||
             	(in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
 			{
-				//TODO: OBB
-				//fullFilePath = "file:///android_asset/" + fullFilePath;
+				//TODO: Implement
+				CS_LOG_FATAL("WebViews loaded from the OBB are currently not supported.");
 			}
 			else
 			{
