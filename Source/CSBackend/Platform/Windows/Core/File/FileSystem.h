@@ -248,40 +248,9 @@ namespace CSBackend
 			/// is not available.
 			//--------------------------------------------------------------
 			std::string GetAbsolutePathToStorageLocation(CSCore::StorageLocation in_storageLocation) const override;
-			//--------------------------------------------------------------
-			/// Returns the absolute path to the file in the given storage
-			/// location. The file must exist otherwise an empty string
-			/// will be returned. The result of this is platform specific
-			/// so care should be taken when using this in cross platform
-			/// projects.
-			///
-			/// @author S Downie
-			///
-			/// @param The storage location for the file.
-			/// @param The file path relative to the storage location.
-			///
-			/// @return The full path to the file.
-			//--------------------------------------------------------------
-			std::string GetAbsolutePathToFile(CSCore::StorageLocation in_storageLocation, const std::string& in_path) const override;
-			//--------------------------------------------------------------
-			/// Returns the absolute path to the directory in the given storage
-			/// location. The directory must exist otherwise an empty string
-			/// will be returned. The result of this is platform specific
-			/// so care should be taken when using this in cross platform
-			/// projects.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The storage location for the directory.
-			/// @param The directory path relative to the storage location.
-			///
-			/// @return The full path to the directory.
-			//--------------------------------------------------------------
-			std::string GetAbsolutePathToDirectory(CSCore::StorageLocation in_storageLocation, const std::string& in_path) const override;
             
 		private:
 			friend CSCore::FileSystemUPtr CSCore::FileSystem::Create();
-
 			//--------------------------------------------------------------
 			/// Private constructor to force use of the factory
 			/// method.
