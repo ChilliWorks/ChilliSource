@@ -28,8 +28,10 @@
 
 package com.chilliworks.chillisource.pngtocsimage;
 
+import com.chilliworks.chillisource.coreutils.CSException;
 import com.chilliworks.chillisource.coreutils.Logging;
 import com.chilliworks.chillisource.coreutils.Logging.LoggingLevel;
+import com.chilliworks.chillisource.coreutils.StringUtils;
 
 public class Main 
 {
@@ -150,7 +152,18 @@ public class Main
 		if (options.strOutputFilename.equals(""))
 			Logging.logFatal("No output file provided.");
 		
-		PNGToCSImage.run(options);
+		try
+		{
+			PNGToCSImage.run(options);
+		}
+		catch (CSException e)
+		{
+			Logging.logFatal(e.getMessage());
+		}
+		catch (Exception e)
+		{
+			Logging.logFatal(StringUtils.convertExceptionToString(e));
+		}
 
 		Logging.finish();
 	}
