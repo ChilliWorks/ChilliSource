@@ -366,7 +366,6 @@ namespace ChilliSource
                 }
             }
             
-            CS_LOG_WARNING("State cannot find implementing systems");
             return nullptr;
         }
         //----------------------------------------------------
@@ -381,7 +380,6 @@ namespace ChilliSource
                 }
             }
             
-            CS_LOG_WARNING("State cannot find implementing systems");
             return nullptr;
         }
         //----------------------------------------------------
