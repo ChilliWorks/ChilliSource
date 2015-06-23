@@ -52,42 +52,44 @@ extern "C"
 	///
 	/// @author S Downie
 	///
-	/// @param JNI environment
-	/// @param Pointer to the calling function
-	/// @param Array of product IDs
-	/// @param Array of product Names
-	/// @param Array of product Descriptions
-	/// @param Array of product Prices
+	/// @param in_env - JNI environment
+	/// @param in_this - Pointer to the calling function
+	/// @param in_productIds - Array of product IDs
+	/// @param in_names - Array of product Names
+	/// @param in_descs - Array of product Descriptions
+	/// @param in_prices - Array of product Prices
+	/// @param in_currencyCodes - Array of currency codes
+	/// @param in_unformattedPrices - Array of unformatted prices
 	//--------------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices);
+	void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices, jobjectArray in_currencyCodes, jobjectArray in_unformattedPrices);
 	//--------------------------------------------------------------------------------------
 	/// Called by Java when the transaction status updates
 	///
 	/// @author S Downie
 	///
-	/// @param JNI environment
-	/// @param Pointer to the calling function
-	/// @param Result (SUCCESS - 0, FAILED - 1)
-	/// @param Product ID
-	/// @param Transaction ID
-	/// @param Receipt
+	/// @param in_env - JNI environment
+	/// @param in_this - Pointer to the calling function
+	/// @param in_result - Result (SUCCESS - 0, FAILED - 1)
+	/// @param in_productId - Product ID
+	/// @param in_transactionId - Transaction ID
+	/// @param in_receipt - Receipt
 	//--------------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint in_result, jstring in_productId, jstring in_transactionId, jstring instrReceipt);
+	void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNativeInterface_NativeOnTransactionStatusUpdated(JNIEnv* in_env, jobject in_this, jint in_result, jstring in_productId, jstring in_transactionId, jstring in_receipt);
 	//--------------------------------------------------------------------------------------
 	/// Called by Java when the transaction close result returns
 	///
-	/// @param JNI environment
-	/// @param Pointer to the calling function
-	/// @param Product ID
-	/// @param Transaction ID
-	/// @param Success or failure
+	/// @param in_env - JNI environment
+	/// @param in_this - Pointer to the calling function
+	/// @param in_productId - Product ID
+	/// @param in_transactionId - Transaction ID
+	/// @param in_success - Success or failure
 	//--------------------------------------------------------------------------------------
 	void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNativeInterface_NativeOnTransactionClosed(JNIEnv* in_env, jobject in_this, jstring in_productId, jstring in_transactionId, jboolean in_success);
 }
 
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices)
+void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNativeInterface_NativeOnProductsDescriptionsRequestComplete(JNIEnv* in_env, jobject in_this, jobjectArray in_productIds, jobjectArray in_names, jobjectArray in_descs, jobjectArray in_prices, jobjectArray in_currencyCodes, jobjectArray in_unformattedPrices)
 {
 	CSBackend::Android::GooglePlayIAPJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::GooglePlayIAPJavaInterface>();
 	if (javaInterface != nullptr)
@@ -96,25 +98,37 @@ void Java_com_chilliworks_chillisource_googleplay_networking_GooglePlayIAPNative
 		std::vector<CSNetworking::IAPSystem::ProductDesc> products;
 		products.reserve(numProducts);
 
+        std::vector<std::string> currencyCodes;
+        currencyCodes.reserve(numProducts);
+
+        std::vector<std::string> unformattedPrices;
+        unformattedPrices.reserve(numProducts);
+
 		for(u32 i=0; i<numProducts; ++i)
 		{
 			CSNetworking::IAPSystem::ProductDesc desc;
-			jstring id = (jstring)in_env->GetObjectArrayElement(in_productIds, i);
+			jstring id = static_cast<jstring>(in_env->GetObjectArrayElement(in_productIds, i));
 			desc.m_id = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(id);
 
-			jstring name = (jstring)in_env->GetObjectArrayElement(in_names, i);
+			jstring name = static_cast<jstring>(in_env->GetObjectArrayElement(in_names, i));
 			desc.m_name = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(name);
 
-			jstring description = (jstring)in_env->GetObjectArrayElement(in_descs, i);
+			jstring description = static_cast<jstring>(in_env->GetObjectArrayElement(in_descs, i));
 			desc.m_description = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(description);
 
-			jstring price = (jstring)in_env->GetObjectArrayElement(in_prices, i);
+			jstring price = static_cast<jstring>(in_env->GetObjectArrayElement(in_prices, i));
 			desc.m_formattedPrice = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(price);
 
 			products.push_back(desc);
+
+			// Populate the extra product information
+			std::string currencyCode = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(static_cast<jstring>(in_env->GetObjectArrayElement(in_currencyCodes, i)));
+			currencyCodes.push_back(currencyCode);
+			std::string unformattedPrice = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(static_cast<jstring>(in_env->GetObjectArrayElement(in_unformattedPrices, i)));
+			unformattedPrices.push_back(unformattedPrice);
 		}
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete, javaInterface.get(), products));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete, javaInterface.get(), products, currencyCodes, unformattedPrices));
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -261,7 +275,7 @@ namespace CSBackend
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        void GooglePlayIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& in_productIds, const CSNetworking::IAPSystem::ProductDescDelegate& in_delegate)
+        void GooglePlayIAPJavaInterface::RequestProductDescriptions(const std::vector<std::string>& in_productIds, const OnProductDescriptionsRequestCompleteDelegate& in_delegate)
         {
             CS_ASSERT(in_productIds.empty() == false, "Cannot request no product descriptions");
             CS_ASSERT(in_delegate != nullptr, "Cannot have null product description delegate");
@@ -293,12 +307,14 @@ namespace CSBackend
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
-        void GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<CSNetworking::IAPSystem::ProductDesc>& in_products)
+        void GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete(const std::vector<CSNetworking::IAPSystem::ProductDesc>& in_products, const std::vector<std::string>& in_currencyCodes, const std::vector<std::string>& in_unformattedPrices)
         {
         	if(m_productsRequestDelegate == nullptr)
+        	{
         		return;
+        	}
 
-        	m_productsRequestDelegate(in_products);
+        	m_productsRequestDelegate(in_products, in_currencyCodes, in_unformattedPrices);
         	m_productsRequestDelegate = nullptr;
         }
         //---------------------------------------------------------------

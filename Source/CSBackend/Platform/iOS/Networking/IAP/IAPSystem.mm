@@ -32,9 +32,11 @@
 
 #import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 
-#import <ChilliSource/Core/Delegate/MakeDelegate.h>
+#import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Cryptographic/BaseEncoding.h>
+#import <ChilliSource/Core/Delegate/MakeDelegate.h>
 #import <ChilliSource/Core/String/StringUtils.h>
+#import <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace CSBackend
 {
@@ -268,6 +270,34 @@ namespace CSBackend
         void IAPSystem::RestoreManagedPurchases()
         {
             [m_storeKitSystem restoreNonConsumablePurchases];
+        }
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        std::vector<IAPSystem::ExtraProductInfo> IAPSystem::GetExtraProductInfo() const
+        {
+            CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
+            
+            ExtraProductInfo extraProductInfo;
+            std::vector<ExtraProductInfo> extraProductsInfo;
+
+            NSArray* products = [m_storeKitSystem getNativeStoreData];
+            if (products != nil)
+            {
+                for (SKProduct* product in products)
+                {
+                    extraProductInfo.m_productId = [NSStringUtils newUTF8StringWithNSString:product.productIdentifier];
+                    extraProductInfo.m_unformattedPrice = [NSStringUtils newUTF8StringWithNSString:[product.price stringValue]];
+
+                    NSNumberFormatter* Formatter = [[[NSNumberFormatter alloc] init] autorelease];
+                    [Formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+                    [Formatter setLocale:product.priceLocale];
+                    extraProductInfo.m_currencyCode = [NSStringUtils newUTF8StringWithNSString:[Formatter currencyCode]];
+                    
+                    extraProductsInfo.push_back(extraProductInfo);
+                }
+            }
+            
+            return extraProductsInfo;
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------
