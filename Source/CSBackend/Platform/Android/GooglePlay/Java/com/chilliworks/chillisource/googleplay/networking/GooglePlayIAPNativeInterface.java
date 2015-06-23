@@ -242,11 +242,8 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
     public void OnProductsRequestComplete(Inventory in_inventory, final String[] in_productIDs) 
     {
 		List<IAPProductDescription> results = new ArrayList<IAPProductDescription>();
-
-        int numProducts = in_productIDs.length;
-
-		String[] currencyCodes = new String[numProducts];
-        String[] unformattedPrices = new String[numProducts];
+        List<String> currencyCodesList = new ArrayList<String>();
+        List<String> unformattedPricesList = new ArrayList<String>();
 
 		if(m_inventory != null)
 		{
@@ -260,14 +257,13 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
 					desc.Name = details.getTitle();
 					desc.Description = details.getDescription();
 					desc.FormattedPrice = details.getPrice();
+                    results.add(desc);
 
                     String currencyCode = details.getPriceCurrencyCode();
-                    currencyCodes[i] = currencyCode;
+                    currencyCodesList.add(currencyCode);
 
                     String unformattedPrice = Double.toString((double)details.getPriceAmountMicros() / 1000000.0);
-                    unformattedPrices[i] = unformattedPrice;
-
-					results.add(desc);
+                    unformattedPricesList.add(unformattedPrice);
 				}
 			}
 		}
@@ -277,13 +273,17 @@ public class GooglePlayIAPNativeInterface  extends INativeInterface
     	String[] names = new String[resultsSize];
     	String[] descriptions = new String[resultsSize];
     	String[] formattedPrices = new String[resultsSize];
+        String[] currencyCodes = new String[resultsSize];
+        String[] unformattedPrices = new String[resultsSize];
 
-    	for(int i=0; i<results.size(); ++i)
+    	for (int i = 0; i < resultsSize; ++i)
     	{
     		ids[i] = results.get(i).ID;
     		names[i] = results.get(i).Name;
     		descriptions[i] = results.get(i).Description;
             formattedPrices[i] = results.get(i).FormattedPrice;
+            currencyCodes[i] = currencyCodesList.get(i);
+            unformattedPrices[i] = unformattedPricesList.get(i);
     	}
   
     	NativeOnProductsDescriptionsRequestComplete(ids, names, descriptions, formattedPrices, currencyCodes, unformattedPrices);

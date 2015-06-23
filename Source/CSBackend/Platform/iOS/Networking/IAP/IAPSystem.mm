@@ -32,9 +32,11 @@
 
 #import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 
-#import <ChilliSource/Core/Delegate/MakeDelegate.h>
+#import <ChilliSource/Core/Base/Application.h>
 #import <ChilliSource/Core/Cryptographic/BaseEncoding.h>
+#import <ChilliSource/Core/Delegate/MakeDelegate.h>
 #import <ChilliSource/Core/String/StringUtils.h>
+#import <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace CSBackend
 {
@@ -273,6 +275,8 @@ namespace CSBackend
         //---------------------------------------------------------------
         std::vector<IAPSystem::ExtraProductInfo> IAPSystem::GetExtraProductInfo() const
         {
+            CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
+            
             ExtraProductInfo extraProductInfo;
             std::vector<ExtraProductInfo> extraProductsInfo;
 

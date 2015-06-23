@@ -60,6 +60,18 @@ namespace CSBackend
             CS_DECLARE_NAMEDTYPE(GooglePlayIAPSystem);
 
             //---------------------------------------------------------------
+            /// This defines platform-specific extra product information.
+            ///
+            /// @author T Kane
+            //---------------------------------------------------------------
+            struct ExtraProductInfo final
+            {
+                std::string m_productId;            // Platform-specific product ID
+                std::string m_unformattedPrice;     // Unformatted price e.g. 1.00
+                std::string m_currencyCode;         // ISO 4217 currency code, e.g. GBP, USD
+            };
+
+            //---------------------------------------------------------------
             /// @author S Downie
             ///
             /// @param Interface ID to compare
@@ -170,7 +182,7 @@ namespace CSBackend
             /// the application's responsibility to ensure the correct data
             /// has been requested up-front.
             //---------------------------------------------------------------
-            std::vector<GooglePlayIAPJavaInterface::ExtraProductInfo> GetExtraProductInfo() const;
+            const std::vector<GooglePlayIAPSystem::ExtraProductInfo>& GetExtraProductInfo() const { return m_extraProductsInfo; }
 
 		private:
             friend CSNetworking::IAPSystemUPtr CSNetworking::IAPSystem::Create(const CSCore::ParamDictionary&);
@@ -206,6 +218,7 @@ namespace CSBackend
 
             GooglePlayIAPJavaInterfaceSPtr m_javaInterface;
             std::string m_publicKey;
+		    std::vector<ExtraProductInfo> m_extraProductsInfo;
 		};
 	}
 }
