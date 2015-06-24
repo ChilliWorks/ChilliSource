@@ -28,10 +28,19 @@
 
 package com.chilliworks.chillisource.csatlasbuilder;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.imageio.*;
+import javax.imageio.ImageIO;
 
+import com.chilliworks.chillisource.coreutils.CSException;
 import com.chilliworks.chillisource.coreutils.FileUtils;
 import com.chilliworks.chillisource.coreutils.LittleEndianWriterUtils;
 import com.chilliworks.chillisource.coreutils.Logging;
@@ -42,8 +51,6 @@ import com.chilliworks.chillisource.texturepackerutils.PackedTexture;
 import com.chilliworks.chillisource.texturepackerutils.PackerInfo;
 import com.chilliworks.chillisource.texturepackerutils.TexturePacker;
 
-import java.util.*;
-
 /**
  * Packs images into a single "texture atlas".
  * 
@@ -51,7 +58,7 @@ import java.util.*;
  */
 public class CSAtlasBuilder
 {
-	private static final String k_versionString = "2.13";
+	private static final String k_versionString = "2.14";
 	private static final short k_versionNum = 3;
 	private static final String k_atlasExtension = ".csatlas";
 	private static final String k_atlasIdExtension = ".csatlasid";
@@ -80,7 +87,7 @@ public class CSAtlasBuilder
 		//Check for a valid extension, i.e. either csatlas/csatlasid/csimage
 		if(!(extension.equals(k_atlasExtension.substring(1)) || extension.equals(k_atlasIdExtension.substring(1)) || extension.equals(k_csImageExtension.substring(1))))
 		{
-			Logging.logFatal("Output filepath (" + m_options.m_outputFilePath +  ") has wrong extension type, valid output extensions are " + k_atlasExtension + ", " + k_atlasIdExtension + " and " + k_csImageExtension);
+			throw new CSException("Output filepath (" + m_options.m_outputFilePath +  ") has wrong extension type, valid output extensions are " + k_atlasExtension + ", " + k_atlasIdExtension + " and " + k_csImageExtension);
 		}
 		
 		//Remove the extension from the outputpath
@@ -216,7 +223,7 @@ public class CSAtlasBuilder
 	 * @param Whether or not to recurse. Will only recurse one level deep.
 	 * @param [Out] The output list of files.
 	 */
-	private void addImageFilesInDirectory(File in_directory, boolean in_recursiveDirectorySearch, List<AtlasImage> out_atlasImages)
+	private void addImageFilesInDirectory(File in_directory, boolean in_recursiveDirectorySearch, List<AtlasImage> out_atlasImages) throws CSException
 	{
 		String[] dirContents = in_directory.list();
 
@@ -246,7 +253,7 @@ public class CSAtlasBuilder
 	 * 
 	 * @return The output sprite name.
 	 */
-	private String generateSpriteNameFromFile(File in_file)
+	private String generateSpriteNameFromFile(File in_file) throws CSException
 	{
 		//choose the output format for the filenames.
 		String srcFilePath = null;
@@ -258,7 +265,7 @@ public class CSAtlasBuilder
 		}
 		catch (Exception e)
 		{
-			Logging.logFatal(StringUtils.convertExceptionToString(e));
+			throw new CSException(StringUtils.convertExceptionToString(e));
 		}
 		
 		String srcFilePathWithoutExtension = srcFilePath.substring(0, srcFilePath.lastIndexOf("."));
@@ -310,7 +317,7 @@ public class CSAtlasBuilder
 	 * 
 	 * @author S Downie
 	 */
-	private void convertToCSImage()
+	private void convertToCSImage() throws CSException
 	{
 		Logging.logVerbose("Converting to CSImage");
 		
@@ -339,13 +346,17 @@ public class CSAtlasBuilder
 		}
 		
 		try
-		{
-			PNGToCSImage.run(options);
-		}
-		catch (Exception e)
-		{
-			Logging.logFatal("An exception occurred while converting to CSImage:\n" + StringUtils.convertExceptionToString(e));
-		}
+        {
+            PNGToCSImage.run(options);
+        }
+        catch(CSException cse)
+        {
+            throw new CSException("An exception occurred while converting to CSImage", cse);
+        }
+        catch(Exception e)
+        {
+            throw new CSException("An exception occurred while converting to CSImage", e);
+        }
 		
 		FileUtils.deleteFile(m_outputFilePathWithoutExtension + ".png");
 	}
@@ -401,7 +412,7 @@ public class CSAtlasBuilder
 	 * @param in_packedTexture - The packaged texture.
 	 * @param in_textureToSpriteNameMapper - Optional file to spriteId name map 
 	 */
-	private void writeStringIDs(PackedTexture in_packedTexture, List<AtlasImage> in_atlasImages) throws IOException 
+	private void writeStringIDs(PackedTexture in_packedTexture, List<AtlasImage> in_atlasImages) throws IOException, CSException
 	{
 		int numImages = in_packedTexture.getNumImages();
 		
@@ -423,7 +434,7 @@ public class CSAtlasBuilder
 			
 			if (atlasImageId.length() == 0)
 			{
-				Logging.logFatal("Couldn't file atlas image Id for image: " + in_packedTexture.getOriginalFile(i).getName());
+			    throw new CSException("Couldn't file atlas image Id for image: " + in_packedTexture.getOriginalFile(i).getName());
 			}
 			
 			dosC.writeBytes(atlasImageId);
