@@ -130,7 +130,26 @@ namespace CSBackend
             CS_ASSERT(in_productIds.empty() == false, "Cannot request no product descriptions");
             CS_ASSERT(in_delegate != nullptr, "Cannot have null product description delegate");
 
-        	m_javaInterface->RequestProductDescriptions(in_productIds, in_delegate);
+        	m_javaInterface->RequestProductDescriptions(in_productIds, [=](const std::vector<CSNetworking::IAPSystem::ProductDesc>& in_products, const std::vector<std::string>& in_currencyCodes, const std::vector<std::string>& in_unformattedPrices)
+        	{
+        	    CS_ASSERT(in_products.size() == in_currencyCodes.size() && in_products.size() == in_unformattedPrices.size(), "Disparity betewen list sizes.");
+
+                // Construct the extra products information from the supplied lists
+            	m_extraProductsInfo.clear();
+        	    for (u32 i = 0; i < (u32)in_products.size(); ++i)
+        	    {
+        	        ExtraProductInfo extraProductInfo;
+        	        extraProductInfo.m_productId = in_products[i].m_id;
+        	        extraProductInfo.m_currencyCode = in_currencyCodes[i];
+        	        extraProductInfo.m_unformattedPrice = in_unformattedPrices[i];
+        	        m_extraProductsInfo.push_back(extraProductInfo);
+        	    }
+
+        	    if (in_delegate)
+        	    {
+            	    in_delegate(in_products);
+        	    }
+        	});
         }
         //---------------------------------------------------------------
         //---------------------------------------------------------------

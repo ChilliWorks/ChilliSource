@@ -58,19 +58,19 @@ namespace StoreKitIAP
     SKProductsRequest* mProductsRequest;
     StoreKitIAP::TransactionUpdateDelegate mTransactionUpdateDelegate;
 }
-//-------------------------------------------------------
+//---------------------------------------------------------------
 /// Init
-//-------------------------------------------------------
+//---------------------------------------------------------------
 -(StoreKitIAPSystem*) init;
 
-//-------------------------------------------------------
+//---------------------------------------------------------------
 /// Is Purchasing Enabled
 ///
 /// @return Whether purchasing is enabled or not
-//-------------------------------------------------------
+//---------------------------------------------------------------
 -(BOOL) isPurchasingEnabled;
 
-//-------------------------------------------------------
+//---------------------------------------------------------------
 /// Request Products Fore Delegate
 ///
 /// Starts requesting the SKProducts from the store
@@ -79,47 +79,47 @@ namespace StoreKitIAP
 ///
 /// @param Set of product IDs
 /// @param Delegate to pass results to
-//-------------------------------------------------------
+//---------------------------------------------------------------
 -(void) requestProducts:(NSSet*)inProductIDs forDelegate:(const StoreKitIAP::ProductsDelegate&) inDelegate;
-//-------------------------------------------------------
+//---------------------------------------------------------------
 /// Cancel Products Request
 ///
 /// Cancels the request.
-//-------------------------------------------------------
+//---------------------------------------------------------------
 -(void) cancelProductsRequest;
 
-//-------------------------------------------------------
+//---------------------------------------------------------------
 /// Start Listening For Transactions
 ///
 /// Add the delegate as a listener to the payment
 /// queue
 ///
 /// @param Delegate to pass updates to
-//-------------------------------------------------------
+//---------------------------------------------------------------
 -(void) startListeningForTransactions:(const StoreKitIAP::TransactionUpdateDelegate&) inDelegate;
-//-------------------------------------------------------
+//---------------------------------------------------------------
 /// Stop Listening For Transactions
 ///
 /// Remove the delegate as a listener to the payment
 /// queue
-//-------------------------------------------------------
+//---------------------------------------------------------------
 -(void) stopListeningForTransactions;
 
-//-------------------------------------------------------
+//---------------------------------------------------------------
 /// Request Purchase With Product ID and Quantity
 ///
 /// @param Product ID
 /// @param Quantity
-//-------------------------------------------------------
+//---------------------------------------------------------------
 -(void) requestPurchaseWithProductID:(NSString*)inProductID andQuantity:(u32)inQuantity;
 
-//-------------------------------------------------------
+//---------------------------------------------------------------
 /// Close Transaction With ID
 ///
 /// Close the transaction with the given transaction ID
 ///
 /// @param Transaction ID
-//-------------------------------------------------------
+//---------------------------------------------------------------
 -(void) closeTransactionWithID:(NSString*)inTransactionID;
 
 //---------------------------------------------------------------
@@ -129,6 +129,15 @@ namespace StoreKitIAP
 /// owned non-consumable items
 //---------------------------------------------------------------
 -(void) restoreNonConsumablePurchases;
+
+//---------------------------------------------------------------
+/// Returns native store data as return from Apple
+///
+/// @author N Tanda
+///
+/// @return Array of native store product obejcts
+//---------------------------------------------------------------
+-(NSArray*) getNativeStoreData;
 
 @end
 
