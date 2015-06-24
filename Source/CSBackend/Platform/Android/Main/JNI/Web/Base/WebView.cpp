@@ -114,25 +114,26 @@ namespace CSBackend
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
 
+			auto fileSystem = static_cast<CSBackend::Android::FileSystem*>(CSCore::Application::Get()->GetFileSystem());
+
 			std::string anchor;
 			std::string filePath;
 			GetFilePathAndAnchor(in_filePath, filePath, anchor);
-
-			CSBackend::Android::FileSystem* fileSystem = static_cast<CSBackend::Android::FileSystem*>(CSCore::Application::Get()->GetFileSystem());
-
 			auto taggedFilePath = CSCore::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, filePath);
 
 			std::string htmlFileContents;
-			CSCore::FileStreamUPtr htmlFile = fileSystem->CreateFileStream(in_storageLocation, taggedFilePath, CSCore::FileMode::k_read);
-			htmlFile->GetAll(htmlFileContents);
-			htmlFile.reset();
+			if (fileSystem->ReadFile(in_storageLocation, taggedFilePath, htmlFileContents) == false)
+			{
+				CS_LOG_ERROR("Could not open WebView: " + taggedFilePath);
+				return;
+			}
 
 			std::string fullFilePath;
 			if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_package ||
             	(in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
 			{
-				//TODO: Implement
-				CS_LOG_FATAL("WebViews loaded from the OBB are currently not supported.");
+				//TODO: !?
+				fullFilePath = "content://com.taggames.cstest.apkexpansion/" + fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
 			}
 			else
 			{

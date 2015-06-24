@@ -79,22 +79,39 @@ public final class FileUtils
 		
 		return "";
 	}
-    /**
-     * This will return the path to the directory on external storage that important files should
-     * be stored in for the application with the given package name. This directory will be:
-     *
-     *  	Android/data/<PackageName>/files/
-     *
-     * @author Ian Copland
-     *
-     * @param in_packageName - The package name.
-     *
-     * @return The files directory.
-     */
-    public static String getExternalFilesDirectory(String in_packageName)
-    {
-        return "Android/data/" + in_packageName + "/files/";
-    }
+	/**
+	 * This will return the path to the directory on external storage that important files should
+	 * be stored in for the application with the given package name. This directory will be:
+	 *
+	 *  	Android/data/<PackageName>/files/
+	 *
+	 * @author Ian Copland
+	 *
+	 * @param in_packageName - The package name.
+	 *
+	 * @return The files directory.
+	 */
+	public static String getExternalFilesDirectory(String in_packageName)
+	{
+		return "Android/data/" + in_packageName + "/files/";
+	}
+	/**
+	 * This will return the path to the directory on external storage that unimportant files which
+	 * can be lost and later recreated should be stored in for the application with the given
+	 * package name. This directory will be:
+	 *
+	 *  	Android/data/<PackageName>/cache/
+	 *
+	 * @author Ian Copland
+	 *
+	 * @param in_packageName - The package name.
+	 *
+	 * @return The cache directory.
+	 */
+	public static String getExternalCacheDirectory(String in_packageName)
+	{
+		return "Android/data/" + in_packageName + "/cache/";
+	}
     /**
      * Returns the path to the directory used by the FileSystem which relates to the "Save Data"
      * Storage Location.
@@ -232,6 +249,36 @@ public final class FileUtils
                 return false;
         }
     }
+	/**
+	 * Creates a new directory at the given location. The path to the directory must already exist.
+	 * This will fail if the directory already exists.
+	 *
+	 * @author Ian Copland
+	 *
+	 * @param in_storageLocation - The storage location.
+	 * @param in_directoryPath - The path to the directory which should be created.
+	 *
+	 * @return Whether or not the directory was successfully created.
+	 */
+	public static boolean createDirectory(StorageLocation in_storageLocation, String in_directoryPath)
+	{
+		switch (in_storageLocation)
+		{
+			case k_root:
+				return createDirectory(in_directoryPath);
+			case k_externalStorage:
+				return createDirectory(StringUtils.standardiseDirectoryPath(getExternalStorageDirectory()) + in_directoryPath);
+			case k_internalStorage:
+				Logging.logFatal("FileUtils: Cannot create directory in internal storage.");
+				return false;
+			case k_apk:
+				Logging.logFatal("FileUtils: Cannot create directory in the APK.");
+				return false;
+			default:
+				Logging.logFatal("FileUtils: Invalid storage location.");
+				return false;
+		}
+	}
 	/**
 	 * Deletes the given file from the given storage location. If the file doesn't exist this will
 	 * still return success. it will only return an error if the file still exists after this has
@@ -559,6 +606,21 @@ public final class FileUtils
 			Logging.logError(ExceptionUtils.ConvertToString(e));
 		}
 		return bSuccess;
+	}
+	/**
+	 * Creates a new directory at the given path. The path to the directory must already exist.
+	 * This will fail if the directory already exists.
+	 *
+	 * @author Ian Copland
+	 *
+	 * @param in_directoryPath - The path to the directory which should be created.
+	 *
+	 * @return Whether or not this was successful.
+	 */
+	private static boolean createDirectory(String in_directoryPath)
+	{
+		File file = new File(in_directoryPath);
+		return file.mkdir();
 	}
 	/**
 	 * Deletes the given file on disk if it exists. If the file doesn't exist this will still
