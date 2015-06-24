@@ -73,7 +73,7 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------------------
 			/// End Of File
 			///
-			/// @return Checks whether the end of the file has been reached.
+			/// @return Whether the end of the file has been reached.
 			//--------------------------------------------------------------------------------------------------
 			bool EndOfFile() override;
 			//--------------------------------------------------------------------------------------------------
@@ -280,7 +280,7 @@ namespace CSBackend
 			//--------------------------------------------------------------------------------------------------
 			void Flush() override;
 			//------------------------------------------------------------------------------
-			/// Destructor. Closes the file stream if it was succesfully opened.
+			/// Destructor. Closes the file stream if it was successfully opened.
 			///
 			/// @author Ian Copland
 			//------------------------------------------------------------------------------

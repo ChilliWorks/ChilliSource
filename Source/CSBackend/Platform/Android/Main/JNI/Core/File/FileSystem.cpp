@@ -408,7 +408,7 @@ namespace CSBackend
 
             std::string path = GetAbsolutePathToStorageLocation(in_storageLocation);
 
-            //get each level of the new directory seperately
+            //get each level of the new directory saperately
             std::string relativePath = CSCore::StringUtils::StandardiseDirectoryPath(in_directory);
             std::vector<std::string> relativePathSections = CSCore::StringUtils::Split(relativePath, "/");
 

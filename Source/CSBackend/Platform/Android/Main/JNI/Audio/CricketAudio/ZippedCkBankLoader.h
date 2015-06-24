@@ -44,7 +44,7 @@ namespace CSBackend
 	{
 		//------------------------------------------------------------------------------
 		/// Cricket Audio doesn't provide any means to load from within the OBB, only
-		/// APK. To get arround this, this can be used. The methods provided will
+		/// APK. To get around that, this can be used. The methods provided will
 		/// load the entire file into memory and create a CkBank from memory.
 		///
 		/// @author Ian Copland
@@ -77,12 +77,12 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             void Load(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::ResourceSPtr& out_resource) const;
             //------------------------------------------------------------------------------
-            /// Asynchonously loads the entire file from the zip into memory then creates
+            /// Asynchronously loads the entire file from the zip into memory then creates
             /// the CkBank from this memory buffer. This can technically be used for any of
             /// the storage locations, but for the sake of performance should only be used
             /// for Package, ChilliSource and DLC if not in Cached DLC on Android.
             ///
-            /// This must be caleld from the main thread. The loaded delegate will be
+            /// This must be called from the main thread. The loaded delegate will be
             /// called on the main thread.
             ///
             /// @author Ian Copland

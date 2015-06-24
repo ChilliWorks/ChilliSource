@@ -62,7 +62,7 @@ public final class ApkExpansionInfo
      *
      * @param in_activity - Any of the applications activities.
      */
-    public static synchronized void calcInfo(Activity in_activity)
+    public static synchronized void init(Activity in_activity)
     {
         assert (m_calculated == false) : "Cannot re-calculate the expansion info.";
 
@@ -90,13 +90,13 @@ public final class ApkExpansionInfo
         m_apkExpansionDirectoryPath = StringUtils.standardiseDirectoryPath(expansionDirectory);
 
         String expansionFileName = Helpers.getExpansionAPKFileName(in_activity, true, m_versionCode);
-        m_apkExpansionFilePath =  m_apkExpansionDirectoryPath + expansionFileName;
+        m_apkExpansionFilePath = m_apkExpansionDirectoryPath + expansionFileName;
     }
     /**
      * Returns the path to the Apk Expansion directory. The Apk Expansion file doesn't necessarily
      * exist yet.
      *
-     * calcInfo() must have been called prior to this.
+     * init() must have been called prior to this.
      *
      * This is thread safe.
      *
@@ -106,7 +106,7 @@ public final class ApkExpansionInfo
      */
     public static synchronized String getDirectoryPath()
     {
-        assert (m_calculated == true) : "Must calculate Apk Expansion info before it can be retreived.";
+        assert (m_calculated == true) : "Must calculate Apk Expansion info before it can be retrieved.";
 
         return m_apkExpansionDirectoryPath;
     }
@@ -114,17 +114,17 @@ public final class ApkExpansionInfo
      * Returns the path to the main Apk Expansion file. The Apk Expansion file doesn't necessarily
      * exist yet.
      *
-     * calcInfo() must have been called prior to this.
+     * init() must have been called prior to this.
      *
      * This is thread safe.
      *
      * @author Ian Copland
      *
-     * @return The file path to the main apk expansion file. The expansion file doesn't nec
+     * @return The file path to the main apk expansion file.
      */
     public static synchronized String getFilePath()
     {
-        assert (m_calculated == true) : "Must calculate Apk Expansion info before it can be retreived.";
+        assert (m_calculated == true) : "Must calculate Apk Expansion info before it can be retrieved.";
 
         return m_apkExpansionFilePath;
     }
@@ -132,7 +132,7 @@ public final class ApkExpansionInfo
      * Returns the versionCode of the main Apk Expansion file. TThe Apk Expansion file doesn't
      * necessarily exist yet.
      *
-     * calcInfo() must have been called prior to this.
+     * init() must have been called prior to this.
      *
      * This is thread safe.
      *
@@ -142,7 +142,7 @@ public final class ApkExpansionInfo
      */
     public static synchronized int getVersionCode()
     {
-        assert (m_calculated == true) : "Must calculate Apk Expansion info before it can be retreived.";
+        assert (m_calculated == true) : "Must calculate Apk Expansion info before it can be retrieved.";
 
         return m_versionCode;
     }
@@ -150,7 +150,7 @@ public final class ApkExpansionInfo
      * Returns the file size of the main Apk Expansion file. TThe Apk Expansion file doesn't
      * necessarily exist yet.
      *
-     * calcInfo() must have been called prior to this.
+     * init() must have been called prior to this.
      *
      * This is thread safe.
      *
@@ -160,7 +160,7 @@ public final class ApkExpansionInfo
      */
     public static synchronized long getFileSize()
     {
-        assert (m_calculated == true) : "Must calculate Apk Expansion info before it can be retreived.";
+        assert (m_calculated == true) : "Must calculate Apk Expansion info before it can be retrieved.";
 
         return m_fileSize;
     }

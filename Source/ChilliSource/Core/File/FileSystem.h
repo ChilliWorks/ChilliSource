@@ -56,14 +56,6 @@ namespace ChilliSource
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(FileSystem);
-            ///------------------------------------------------------------------------------
-            /// Create the platform dependent backend
-            ///
-            /// @author S Downie
-            ///
-            /// @return New backend instance
-            //------------------------------------------------------------------------------
-            static FileSystemUPtr Create();
             //------------------------------------------------------------------------------
             /// Reads the contents of a file from disc if the file exists.
             ///
@@ -119,8 +111,8 @@ namespace ChilliSource
             /// @param in_filePath - The file path.
             /// @param in_fileMode - The file mode.
             ///
-            /// @return The new file stream. If the file stream couldn't be opened or was
-            /// invalid, null will be returned.
+			/// @return The new file stream. If the stream cannot be created or is invalid,
+			/// null be returned.
             //------------------------------------------------------------------------------
             virtual FileStreamUPtr CreateFileStream(StorageLocation in_storageLocation, const std::string& in_filePath, FileMode in_fileMode) const = 0;
             //------------------------------------------------------------------------------
@@ -133,8 +125,8 @@ namespace ChilliSource
             /// @param in_storageLocation - The Storage Location
             /// @param in_directoryPath - The directory path.
             ///
-            /// @return Returns whether or not this was successful. Failure to create the
-            /// directory because it already exists is considered a success.
+            /// @return Whether or not this was successful. Failure to create the directory
+            /// because it already exists is considered a success.
             //------------------------------------------------------------------------------
             virtual bool CreateDirectoryPath(StorageLocation in_storageLocation, const std::string& in_directoryPath) const = 0;
             //------------------------------------------------------------------------------
@@ -467,6 +459,15 @@ namespace ChilliSource
             virtual ~FileSystem() {}
 
         protected:
+            friend class Application;
+            //------------------------------------------------------------------------------
+            /// Create the platform dependent backend
+            ///
+            /// @author S Downie
+            ///
+            /// @return New backend instance
+            //------------------------------------------------------------------------------
+            static FileSystemUPtr Create();
             //------------------------------------------------------------------------------
             /// Private constructor to force use of factory method
             ///

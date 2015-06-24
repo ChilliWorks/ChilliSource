@@ -75,15 +75,15 @@ namespace CSBackend
             //--------------------------------------------------------------
             CSCore::FileStreamUPtr CreateFileStream(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, CSCore::FileMode in_fileMode) const override;
             //--------------------------------------------------------------
-            /// Creates the given directory. The full directory hierarchy will
-            /// be created.
+            /// Creates the given directory. The full directory hierarchy
+            /// will be created.
             ///
             /// @author Ian Copland
             ///
             /// @param The Storage Location
             /// @param The directory path.
             ///
-            /// @return Returns whether or not this was successful. Failure to
+            /// @return Whether or not this was successful. Failure to
             /// create the directory because it already exists is considered
             /// a success.
             //--------------------------------------------------------------

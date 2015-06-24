@@ -108,7 +108,7 @@ namespace ChilliSource
 			//--------------------------------------------------------------------------------------------------
             /// End Of File
             ///
-            /// @return Checks whether the end of the file has been reached.
+            /// @return Whether the end of the file has been reached.
             //--------------------------------------------------------------------------------------------------
             virtual bool EndOfFile();
 			//--------------------------------------------------------------------------------------------------
@@ -351,7 +351,7 @@ namespace ChilliSource
             //--------------------------------------------------------------
             std::string GetSHA1Checksum(CSHA1::REPORT_TYPE ineReportType);
             //------------------------------------------------------------------------------
-            /// Destructor. Closes the file stream if it was succesfully opened.
+            /// Destructor. Closes the file stream if it was successfully opened.
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------------------

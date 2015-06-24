@@ -53,6 +53,8 @@ namespace CSBackend
             /// problem.
             ///
             /// @author Ian Copland
+            ///
+            /// @param in_fileInfo - The file info.
             //------------------------------------------------------------------------------
             bool IsFile(const unz_file_info& in_fileInfo)
             {

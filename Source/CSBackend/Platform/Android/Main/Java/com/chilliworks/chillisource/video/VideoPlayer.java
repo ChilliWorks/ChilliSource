@@ -70,11 +70,11 @@ public class VideoPlayer extends System
 	 *
 	 * @param in_inApk - Whether or not the file is inside the APK.
 	 * @param in_filePath - The path to the video file or the file which contains the video file.
-	 * @param in_fileOffset - The offset into the file that the video file is located. This should
+	 * @param in_fileOffset - The offset into the file that the video file is located at. This should
 	 * be -1 if the file is a video file.
 	 * @param in_fileLength - The length of the video file. This should be -1 if the file is a video
 	 * file.
-	 * @param in_dismissWhenTapped - Whether or not the video activity will be dismissed by a tap.
+	 * @param in_dismissWhenTapped - Whether or not the video activity can be dismissed by a tap.
 	 * @param in_hasSubtitles - Whether or not the video has subtitles.
 	 * @param in_bgColourR - the red component of the background colour.
 	 * @param in_bgColourG - the green component of the background colour.

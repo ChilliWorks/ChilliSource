@@ -85,7 +85,10 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
 			//------------------------------------------------------------------------------
-			/// Creates a new file stream to the given file in the givenstorage location.
+			/// Creates a new file stream to the given file in the given storage location.
+			///
+			/// This is thread-safe, though the created file stream is not. Make sure it
+			/// is used and destroyed on the same thread it was created.
 			///
 			/// @author Ian Copland
 			///
@@ -94,11 +97,13 @@ namespace CSBackend
 			/// @param in_fileMode - The file mode.
 			///
 			/// @return The new file stream. If the stream cannot be created or is invalid,
-			/// null be be returned.
+			/// null be returned.
 			//------------------------------------------------------------------------------
 			CSCore::FileStreamUPtr CreateFileStream(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, CSCore::FileMode in_fileMode) const override;
 			//------------------------------------------------------------------------------
 			/// Creates the given directory. The full directory hierarchy will be created.
+            ///
+            /// This is thread-safe.
 			///
 			/// @author Ian Copland
 			///
@@ -111,6 +116,8 @@ namespace CSBackend
 			bool CreateDirectoryPath(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
 			//------------------------------------------------------------------------------
 			/// Copies a file from one location to another.
+            ///
+            /// This is thread-safe.
 			///
 			/// @author Ian Copland
 			///
@@ -126,6 +133,8 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			/// Copies a directory from one location to another. If the destination
 			/// directory does not exist, it will be created.
+            ///
+            /// This is thread-safe.
 			///
 			/// @author Ian Copland
 			///
@@ -140,6 +149,8 @@ namespace CSBackend
 							   CSCore::StorageLocation in_destinationStorageLocation, const std::string& in_destinationDirectoryPath) const override;
 			//------------------------------------------------------------------------------
 			/// Deletes the specified file.
+            ///
+            /// This is thread-safe.
 			///
 			/// @author Ian Copland
 			///
@@ -151,6 +162,8 @@ namespace CSBackend
 			bool DeleteFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
 			//------------------------------------------------------------------------------
 			/// Deletes a directory and all its contents.
+            ///
+            /// This is thread-safe.
 			///
 			/// @author Ian Copland
 			///
@@ -163,6 +176,8 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			/// Creates a dynamic array containing the filenames of each file in the given
 			/// directory. File paths will be relative to the input directory.
+            ///
+            /// This is thread-safe.
 			///
 			/// @author Ian Copland
 			///
@@ -177,6 +192,8 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			/// Creates a dynamic array containing the names of each directory in the given
 			/// directory. Directory paths will be relative to the input directory.
+            ///
+            /// This is thread-safe.
 			///
 			/// @author Ian Copland
 			///
@@ -189,6 +206,8 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			std::vector<std::string> GetDirectoryPaths(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath,  bool in_recursive) const override;
 			//------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
 			/// @author Ian Copland
 			///
 			/// @param in_storageLocation - The Storage Location
@@ -198,6 +217,8 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			bool DoesFileExist(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath) const override;
 			//------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
 			/// @author Ian Copland
 			///
 			/// @param in_filePath - The file path.
@@ -206,15 +227,19 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			bool DoesFileExistInCachedDLC(const std::string& in_filePath) const override;
 			//------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
 			/// @author Ian Copland
 			///
 			/// @param in_filePath - The file path.
 			///
-			/// @return Whether or not the given dile path exists in the Package DLC
+			/// @return Whether or not the given file path exists in the Package DLC
 			/// directory.
 			//------------------------------------------------------------------------------
 			bool DoesFileExistInPackageDLC(const std::string& in_filePath) const override;
 			//------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
 			/// @author Ian Copland
 			///
 			/// @param in_storageLocation - The Storage Location
@@ -224,6 +249,8 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			bool DoesDirectoryExist(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const override;
 			//------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
 			/// @author Ian Copland
 			///
 			/// @param in_directoryPath - The directory path.
@@ -232,6 +259,8 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			bool DoesDirectoryExistInCachedDLC(const std::string& in_directoryPath) const override;
 			//------------------------------------------------------------------------------
+            /// This is thread-safe.
+            ///
 			/// @author Ian Copland
 			///
 			/// @param in_directoryPath - The directory path.
@@ -244,6 +273,8 @@ namespace CSBackend
 			/// returns is platform specific and use of this should be kept to a minimum in
 			/// cross platform projects.
 			///
+			/// This is thread-safe.
+			///
 			/// @author Ian Copland
 			///
 			/// @param in_storageLocation - The source storage location.
@@ -253,6 +284,8 @@ namespace CSBackend
 			//------------------------------------------------------------------------------
 			std::string GetAbsolutePathToStorageLocation(CSCore::StorageLocation in_storageLocation) const override;
 			//------------------------------------------------------------------------------
+			/// This is thread-safe.
+			///
 			/// @author Ian Copland
 			///
 			/// @return The file path to the zip. The location of this is dependent on the
@@ -267,6 +300,8 @@ namespace CSBackend
 			/// to the Package, ChilliSource and DLC storage locations, passing other
 			/// storage locations will cause this to assert. If DLC is passed, only files
 			/// in the Package DLC directory will be checked.
+			///
+			/// This is thread-safe.
 			///
 			/// @author Ian Copland
 			///

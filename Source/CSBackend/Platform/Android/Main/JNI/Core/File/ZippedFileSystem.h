@@ -129,7 +129,7 @@ namespace CSBackend
             /// @author Ian Copland
             ///
             /// @param in_filePath - The file path inside the zip, relative to the "root
-            /// diectory path".
+            /// directory path".
             /// @param in_fileMode - The file mode. The file mode has to be a "read" file
             /// mode or this will assert.
             ///
@@ -165,7 +165,7 @@ namespace CSBackend
             /// @author Ian Copland
             ///
             /// @param in_filePath - The file path inside the zip, relative to the "root
-            /// diectory path".
+            /// directory path".
             ///
             /// @return Whether or not the file path exists.
             //------------------------------------------------------------------------------
@@ -174,7 +174,7 @@ namespace CSBackend
             /// @author Ian Copland
             ///
             /// @param in_directoryPath - The directory path inside the zip, relative to the
-            /// "root diectory path".
+            /// "root directory path".
             ///
             /// @return Whether or not the directory path exists.
             //------------------------------------------------------------------------------
@@ -183,7 +183,7 @@ namespace CSBackend
             /// @author Ian Copland
             ///
             /// @param in_directoryPath - The directory path inside the zip, relative to the
-            /// "root diectory path".
+            /// "root directory path".
             /// @param in_recursive - Whether or not to recurse into sub-directories.
             ///
             /// @return A list of all files within the given directory path.
@@ -193,7 +193,7 @@ namespace CSBackend
             /// @author Ian Copland
             ///
             /// @param in_directoryPath - The directory path inside the zip, relative to the
-            /// "root diectory path".
+            /// "root directory path".
             /// @param in_recursive - Whether or not to recurse into sub-directories.
             ///
             /// @return A list of all directories within the given directory path.
@@ -257,8 +257,8 @@ namespace CSBackend
             void AddItemToManifest(const std::string& in_filePath, unz_file_pos in_zipPosition, bool in_isFile);
             //------------------------------------------------------------------------------
             /// Searches the manifest item list for the manifest item with the given path.
-            /// if it is found true is returned and the output manifest item is set. If it
-            /// is not found false is returned and no value is set ofr the output manifest
+            /// If it is found true is returned and the output manifest item is set. If it
+            /// is not found false is returned and no value is set for the output manifest
             /// item.
             ///
             /// @author Ian Copland
