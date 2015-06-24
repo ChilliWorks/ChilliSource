@@ -28,9 +28,10 @@
 
 package com.chilliworks.chillisource.csatlasbuilder;
 
+import com.chilliworks.chillisource.coreutils.CSException;
 import com.chilliworks.chillisource.coreutils.Logging;
-import com.chilliworks.chillisource.coreutils.StringUtils;
 import com.chilliworks.chillisource.coreutils.Logging.LoggingLevel;
+import com.chilliworks.chillisource.coreutils.StringUtils;
 import com.chilliworks.chillisource.texturepackerutils.TexturePacker.PlacementHeuristic;
 
 /**
@@ -301,8 +302,19 @@ public final class Main
 			Logging.logFatal("Must provide input directory and output file paths.");
 		}
 		
-		CSAtlasBuilder tool = new CSAtlasBuilder();
-		tool.buildAtlas(options);
+		try
+        {
+            CSAtlasBuilder tool = new CSAtlasBuilder();
+            tool.buildAtlas(options);
+        }
+        catch(CSException cse)
+        {
+            Logging.logFatal(cse.getMessage());
+        }
+        catch(Exception e)
+        {
+            Logging.logFatal(StringUtils.convertExceptionToString(e));
+        }
 		
 		Logging.finish();
 	}
