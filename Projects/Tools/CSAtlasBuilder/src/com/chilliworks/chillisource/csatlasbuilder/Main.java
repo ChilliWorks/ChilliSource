@@ -92,7 +92,7 @@ public final class Main
 	 * 
 	 * @param The input arguments.
 	 */
-	public static void main(String[] in_arguments) throws Exception 
+	public static void main(String[] in_arguments)
 	{
 		String[] arguments = Logging.start(in_arguments);
 		

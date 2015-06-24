@@ -351,11 +351,11 @@ public class CSAtlasBuilder
         }
         catch(CSException cse)
         {
-            throw new CSException("An exception occurred while converting to CSImage:\n" + cse.getMessage());
+            throw new CSException("An exception occurred while converting to CSImage", cse);
         }
         catch(Exception e)
         {
-            throw new CSException("An exception occurred while converting to CSImage:\n" + StringUtils.convertExceptionToString(e));
+            throw new CSException("An exception occurred while converting to CSImage", e);
         }
 		
 		FileUtils.deleteFile(m_outputFilePathWithoutExtension + ".png");

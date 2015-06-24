@@ -54,12 +54,13 @@ import com.chilliworks.chillisource.coreutils.Logging;
 public class TexturePacker 
 {
 	/**
-	Predicates for choosing best placement point for a sprite out of two possibles
-	
-	@param The first placement point
-	@param The second placement point
-	
-	@returns True if first is better than second, false otherwise
+	 * Predicates for choosing best placement point for a sprite out of two possibles
+	 * 
+	 * @param The first placement point
+	 * @param The second placement point
+	 * 
+	 * @returns True if first is better than second, false otherwise
+	 *
 	 */
 	public enum PlacementHeuristic
 	{
@@ -208,7 +209,7 @@ public class TexturePacker
 	 * 
 	 * @author HMcLaughlin
 	 * 
-	 * @param in_ignore - Whether to ignore or not
+	 * @param in_ignore Whether to ignore or not
 	 * 
 	 * @return this instance
 	 */
@@ -224,7 +225,7 @@ public class TexturePacker
 	 * @author S Downie
 	 * 
 	 * @param List of files to pack
-	 * @param out_errorInfo - Info object to be populated if an error occurs, can be null
+	 * @param out_errorInfo Info object to be populated if an error occurs, can be null
 	 * 
 	 * @return Packed image data
 	 * 
@@ -328,8 +329,7 @@ public class TexturePacker
 
 		if (!layoutSpritesForSheet(sortedOrder, out_errorInfo))
 		{
-			logFatalError("Images will not fit in any of the allowed output sizes.");
-			return null;
+			throw new CSException("Images will not fit in any of the allowed output sizes.");
 		}
 
 		// Ok re-sort the output so that the files are processed in
@@ -365,9 +365,9 @@ public class TexturePacker
 	}
 
 	/**
-	 * @param outputOrder - Order to pack images
+	 * @param outputOrder Order to pack images
 	 * 
-	 * @return - BufferImage containing packed sprites
+	 * @return BufferImage containing packed sprites
 	 * 
 	 * @throws IOException
 	 * @throws CSException
@@ -410,7 +410,7 @@ public class TexturePacker
 					}
 					else
 					{
-						logFatalError("input out of range:" + (ix + x) + "," + (iy + y));
+					    throw new CSException("input out of range:" + (ix + x) + "," + (iy + y));
 					}
 
 					if ((ox + x) < combinedImageWidth && (oy + y) < combinedImageHeight)
@@ -419,7 +419,7 @@ public class TexturePacker
 					}
 					else
 					{
-						logFatalError("Pixel out of range:" + (ox + x) + "," + (oy + y));
+					    throw new CSException("Pixel out of range:" + (ox + x) + "," + (oy + y));
 					}
 				}
 			}
@@ -429,8 +429,8 @@ public class TexturePacker
 	}
 
 	/**
-	 * @param outputOrder - Order to pack images
-	 * @param combinedImage - Image to write extruded images into
+	 * @param outputOrder Order to pack images
+	 * @param combinedImage Image to write extruded images into
 	 * 
 	 * @throws IOException
 	 */
@@ -552,8 +552,8 @@ public class TexturePacker
 	}
 
 	/**
-	 * @param imageIndex2 - Index of image to test
-	 * @param imageIndex1 - Index of image to test
+	 * @param imageIndex2 Index of image to test
+	 * @param imageIndex1 Index of image to test
 	 * 
 	 * @return True if images are the same
 	 */
@@ -599,10 +599,10 @@ public class TexturePacker
 	}
 
 	/**
-	 * @param indwLeft - Index of image to test
-	 * @param indwRight - Index of image to test
+	 * @param indwLeft Index of image to test
+	 * @param indwRight Index of image to test
 	 * 
-	 * @return - True if the 'left' image is smaller than the 'right' image
+	 * @return True if the 'left' image is smaller than the 'right' image
 	 */
 	private boolean imagePriorityHeuristic(int indwLeft, int indwRight)
 	{
@@ -612,7 +612,7 @@ public class TexturePacker
 	}
 
 	/**
-	 * @return - Estimated height for final image
+	 * @return Estimated height for final image
 	 */
 	int guessOutputHeight()
 	{
@@ -633,7 +633,7 @@ public class TexturePacker
 	}
 
 	/**
-	 * @return - Estimated width for final image 
+	 * @return Estimated width for final image 
 	 */
 	int guessOutputWidth()
 	{
@@ -663,9 +663,9 @@ public class TexturePacker
 	}
 
 	/**
-	 * @param h - Height to get nearest allowed height for
+	 * @param h Height to get nearest allowed height for
 	 * 
-	 * @return - Nearest allowed height for give height
+	 * @return Nearest allowed height for give height
 	 */
 	int nextAllowedHeight(int h)
 	{
@@ -704,9 +704,9 @@ public class TexturePacker
 	}
 
 	/**
-     * @param w - Height to get nearest allowed width for
+     * @param w Height to get nearest allowed width for
      * 
-     * @return - Nearest allowed width for give width
+     * @return Nearest allowed width for give width
      */
 	int nextAllowedWidth(int w)
 	{
@@ -747,9 +747,9 @@ public class TexturePacker
 	/**
 	 * Checks for intersections with other placed sprites
 	 * 
-	 * @param inSprite - Sprite to check for intersections with
+	 * @param inSprite Sprite to check for intersections with
 	 * 
-	 * @return - The intersecting sprite or null if there was no intersection
+	 * @return The intersecting sprite or null if there was no intersection
 	 */
 	private Rectangle findIntersectingSprite(Rectangle inSprite)
 	{
@@ -779,11 +779,11 @@ public class TexturePacker
 	/**
 	 * Checks if a sprite fits within specified bounds
 	 * 
-	 * @param inSprite - Sprite to check against bounds
-	 * @param inWidth - Bounding width
-	 * @param inHeight - Bounding height
+	 * @param inSprite Sprite to check against bounds
+	 * @param inWidth Bounding width
+	 * @param inHeight Bounding height
 	 * 
-	 * @return - If sprite fits
+	 * @return If sprite fits
 	 */
 	private boolean spriteFitsArea(Rectangle inSprite, int inWidth, int inHeight)
 	{
@@ -793,9 +793,9 @@ public class TexturePacker
 	/**
 	 * Checks if a sprite will fit into our spritesheet if the spritesheet can be resized
 	 * 
-	 * @param inSprite - Sprite to check 
+	 * @param inSprite Sprite to check 
 	 * 
-	 * @return - If sprite fits (with resizing)
+	 * @return If sprite fits (with resizing)
 	 */
 	private boolean spriteFitsWithResize(Rectangle inSprite)
 	{
@@ -810,9 +810,9 @@ public class TexturePacker
 	/**
 	 * Resizes our sprite sheet to fit a passed in sprite
 	 * 
-	 * @param inSprite - The sprite to fit on to our sprite sheet
+	 * @param inSprite The sprite to fit on to our sprite sheet
 	 * 
-	 * @return - If it was possible to resize to fit the sprite
+	 * @return If it was possible to resize to fit the sprite
 	 */
 	private boolean resizeToFitSprite(Rectangle inSprite)
 	{
@@ -837,8 +837,8 @@ public class TexturePacker
 	/**
 	 * Attempts to place a sprite on our spritesheet, expanding when necessary
 	 * 
-	 * @param inSprite - The sprite to fit
-	 * @return - The position of the fitted sprite or null if it was not possible to fit
+	 * @param inSprite The sprite to fit
+	 * @return The position of the fitted sprite or null if it was not possible to fit
 	 */
 	private Rectangle findSpaceForSprite(Rectangle inSprite)
 	{
@@ -914,10 +914,10 @@ public class TexturePacker
 	/**
 	 * Places a sprite down on the spritesheet
 	 * 
-	 * @param sortedIndex - The index of the sprite to place
-	 * @param sortedOrder - The list of original sprite indices
+	 * @param sortedIndex The index of the sprite to place
+	 * @param sortedOrder The list of original sprite indices
 	 * 
-	 * @return - If it was possible to place the sprite on the sheet
+	 * @return If it was possible to place the sprite on the sheet
 	 */
 	private boolean placeSprite(int sortedIndex, int[] sortedOrder)
 	{
@@ -940,11 +940,11 @@ public class TexturePacker
 	}
 
 	/**
-	 * @param inSpriteNo - Index of sprite
+	 * @param inSpriteNo Index of sprite
 	 * 
-	 * @param inSprites - List of sprites
+	 * @param inSprites List of sprites
 	 * 
-	 * @return - True if the sprite can be placed in the final image
+	 * @return True if the sprite can be placed in the final image
 	 */
 	private boolean TryToLayoutSprite(int inSpriteNo, int[] inSprites)
 	{
@@ -969,8 +969,8 @@ public class TexturePacker
 	/**
 	* Layout all sprites
 	* 
-	* @param in_sortedOrder - List of sprite indices in best order to try placement
-	* @param out_errorInfo - error struct to store any error information, can be null
+	* @param in_sortedOrder List of sprite indices in best order to try placement
+	* @param out_errorInfo error struct to store any error information, can be null
 	* 
 	* @returns if it was possible to fit all sprites
 	* 
@@ -1002,8 +1002,7 @@ public class TexturePacker
 				}
 				else 
 				{
-					logFatalError("Could not fit sprite:" + sourceImageFiles[originalID].getAbsolutePath());
-					return false;
+				    throw new CSException("Could not fit sprite:" + sourceImageFiles[originalID].getAbsolutePath());
 				}
 			}
 			numPlacedImages++;
@@ -1016,8 +1015,8 @@ public class TexturePacker
 	/**
 	 * Generates an md5 hash for any given file
 	 * 
-	 * @param inFile - File to be hashed
-	 * @return - The md5 hash (as a hex string) of the file's contents
+	 * @param inFile File to be hashed
+	 * @return The md5 hash (as a hex string) of the file's contents
 	 */
 	private String GetFileHash(File inFile)
 	{
@@ -1192,24 +1191,4 @@ public class TexturePacker
 			}
 		}
 	}
-	/**
-	 * Raises a fatal error if enabled
-	 * 
-	 * @author HMcLaughlin
-	 * 
-	 * @param in_message - Message to show
-	 * 
-	 * @throws CSException
-	 */
-	private void logFatalError(String in_message) throws CSException
-    {
-        if(!m_ignoreFatalLogs)
-        {
-            Logging.logError(in_message);
-        }
-        else
-        {
-            throw new CSException(in_message);
-        }
-    }
 }
