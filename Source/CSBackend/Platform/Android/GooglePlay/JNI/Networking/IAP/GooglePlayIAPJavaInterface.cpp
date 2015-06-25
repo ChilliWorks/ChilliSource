@@ -123,9 +123,9 @@ void Java_com_chilliworks_chillisource_networking_GooglePlayIAPNativeInterface_N
 			products.push_back(desc);
 
 			// Populate the extra product information
-			std::string currencyCode = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(static_cast<jstring>(in_env->GetObjectArrayElement(in_currencyCodes, i)));
+			std::string currencyCode = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(static_cast<jstring>(in_env->GetObjectArrayElement(in_currencyCodes, i)));
 			currencyCodes.push_back(currencyCode);
-			std::string unformattedPrice = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(static_cast<jstring>(in_env->GetObjectArrayElement(in_unformattedPrices, i)));
+			std::string unformattedPrice = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(static_cast<jstring>(in_env->GetObjectArrayElement(in_unformattedPrices, i)));
 			unformattedPrices.push_back(unformattedPrice);
 		}
 
