@@ -30,9 +30,9 @@ package com.chilliworks.chillisource.core;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
-import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 
 import java.io.File;
@@ -40,7 +40,9 @@ import java.io.FileNotFoundException;
 import java.util.Random;
 
 /**
- * //TODO: !?
+ * A content provider for accessing assets within the main Apk Expansion OBB file. The file will
+ * first be extracted to a temporary location then deleted again when the relevant file descriptor
+ * is closed. This is pretty inefficient, so it should only be used where absolutely necessary.
  *
  * @author Ian Copland
  */
@@ -49,38 +51,44 @@ public final class ApkExpansionContentProvider extends ContentProvider
     private static final String k_tempDirectory = "_ApkExpansionContentProvider/";
 
     /**
-     * //TODO: !?
+     * Called when the provider is first created.
      *
-     * @return
+     * @author Ian Copland
+     *
+     * @return Whether the provider was successfully loaded. Always true in this case.
      */
     @Override public boolean onCreate()
     {
-        //TODO: !?
-
-        Logging.logError("[ApkExpansionContentProvider] onCreate()");
-
-        return false;
+        return true;
     }
     /**
-     * //TODO: !?
+     * Returns the MIME type for the given URL.
      *
-     * @param in_uri
-     * @return
+     * @author Ian Copland
+     *
+     * @param in_uri - The URI which should have its MIME type checked.
+     *
+     * @return The MIME Type. Currently this always returns null.
      */
     @Override public String getType(Uri in_uri)
     {
-        //TODO: !?
-
-        Logging.logError("[ApkExpansionContentProvider] getType('" + in_uri + "')");
-
         return null;
     }
     /**
-     * //TODO: !?
+     * Opens a descriptor for the file with the given URI. As this provides access to the contents
+     * of a zip file, the file is first extracted to a temporary location and it is this file that
+     * the descriptor describes. As the file is extracted, this is pretty inefficient and other
+     * methods should be preferred.
      *
-     * @param in_uri
-     * @param in_mode
-     * @return
+     * @author Ian Copland
+     *
+     * @param in_uri - The URI to the requested file.
+     * @param in_mode - The file mode. Must be 'r'.
+     *
+     * @return The file descriptor. Will never be null.
+     *
+     * @throws FileNotFoundException - If the file doesn't exist, the content prefix is incorrect
+     * or the read mode is anything other than 'r', this is thrown.
      */
     @Override public ParcelFileDescriptor openFile(Uri in_uri, String in_mode) throws FileNotFoundException
     {
@@ -106,79 +114,102 @@ public final class ApkExpansionContentProvider extends ContentProvider
 
         Random random = new Random();
         String tempFileName = StringUtils.removeExtension(fileName) + "-" + random.nextLong() + "." + StringUtils.getExtension(fileName);
-        String absTempFilePath = FileUtils.getExternalStorageDirectory() + tempDirectoryPath + tempFileName;
+        final String absTempFilePath = FileUtils.getExternalStorageDirectory() + tempDirectoryPath + tempFileName;
 
         if (extractApkExpansionFile(filePath, absTempFilePath) == false)
         {
             throw new FileNotFoundException("Failed to extract temp file '" + tempFileName + "'.");
         }
 
-        //TODO: Handle removal of files after descriptor is closed.
         try
         {
-            return ParcelFileDescriptor.open(new File(absTempFilePath), ParcelFileDescriptor.MODE_READ_ONLY);
+            Handler uiThreadHandler = new Handler(CSApplication.get().getActivity().getMainLooper());
+            return new ListenableParcelFileDescriptor(new File(absTempFilePath), ParcelFileDescriptor.MODE_READ_ONLY, new ListenableParcelFileDescriptor.OnClose()
+            {
+                @Override public void onClosed()
+                {
+                    FileUtils.removeFile(FileUtils.StorageLocation.k_root, absTempFilePath);
+                }
+            });
         }
-        catch (FileNotFoundException e)
+        catch (Exception e)
         {
+            FileUtils.removeFile(FileUtils.StorageLocation.k_root, absTempFilePath);
             throw new FileNotFoundException("Could not read the extracted temp file '" + tempFileName + "'.");
         }
     }
     /**
-     * //TODO: !?
+     * Unsupported by this provider. Will throw an UnsupportedOperationException if called.
      *
-     * @param in_uri
-     * @param in_projection
-     * @param in_selection
-     * @param in_selectionArgs
-     * @param in_sortOrder
-     * @return
+     * @author Ian Copland
+     *
+     * @param in_uri - The URI
+     * @param in_projection - The project
+     * @param in_selection - The selection
+     * @param in_selectionArgs - The selection arguments
+     * @param in_sortOrder - The sort order
+     *
+     * @return Nothing will be returned as this always throws
      */
     @Override public Cursor query(Uri in_uri, String[] in_projection, String in_selection, String[] in_selectionArgs, String in_sortOrder)
     {
         throw new UnsupportedOperationException("This content provider only supports reading files from the Apk Expansion.");
     }
     /**
-     * //TODO: !?
+     * Unsupported by this provider. Will throw an UnsupportedOperationException if called.
      *
-     * @param in_uri
-     * @param in_values
-     * @return
+     * @author Ian Copland
+     *
+     * @param in_uri - The URI
+     * @param in_values - The values
+     *
+     * @return Nothing will be returned as this always throws.
      */
     @Override public Uri insert(Uri in_uri, ContentValues in_values)
     {
         throw new UnsupportedOperationException("This content provider only supports reading files from the Apk Expansion.");
     }
     /**
-     * //TODO: !?
+     * Unsupported by this provider. Will throw an UnsupportedOperationException if called.
      *
-     * @param in_uri
-     * @param in_selection
-     * @param in_selectionArgs
-     * @return
+     * @author Ian Copland
+     *
+     * @param in_uri - The URI
+     * @param in_selection - The selection
+     * @param in_selectionArgs - The selection arguments
+     *
+     * @return Nothing will be returned as this always throws.
      */
     @Override public int delete(Uri in_uri, String in_selection, String[] in_selectionArgs)
     {
         throw new UnsupportedOperationException("This content provider only supports reading files from the Apk Expansion.");
     }
     /**
-     * //TODO: !?
+     * Unsupported by this provider. Will throw an UnsupportedOperationException if called.
      *
-     * @param in_uri
-     * @param in_values
-     * @param in_selection
-     * @param in_selectionArgs
-     * @return
+     * @author Ian Copland
+     *
+     * @param in_uri - The URI
+     * @param in_values - The values
+     * @param in_selection - The selection
+     * @param in_selectionArgs - The selection arguments
+     *
+     * @return Nothing will be returned as this always throws.
      */
     @Override public int update(Uri in_uri, ContentValues in_values, String in_selection, String[] in_selectionArgs)
     {
         throw new UnsupportedOperationException("This content provider only supports reading files from the Apk Expansion.");
     }
     /**
-     * //TODO: !?
+     * Extracts the file at the given source file path inside the Apk Expansion to the given
+     * literal destination file.
      *
-     * @param in_sourceFilePath
-     * @param in_destFilePath
-     * @return
+     * @author Ian Copland
+     *
+     * @param in_sourceFilePath - The source file path inside the Apk Expansion file.
+     * @param in_destFilePath - The literal destination file path on disk.
+     *
+     * @return Whether or not the extraction was successful.
      */
     private native boolean extractApkExpansionFile(String in_sourceFilePath, String in_destFilePath);
 }

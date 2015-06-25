@@ -42,7 +42,8 @@
 extern "C"
 {
     //------------------------------------------------------------------------------
-    ///TODO: !?
+    /// Extracts the file at the given source file path inside the Apk Expansion to
+    /// the given literal destination file. Called from Java.
     ///
     /// @author Ian Copland
     ///
