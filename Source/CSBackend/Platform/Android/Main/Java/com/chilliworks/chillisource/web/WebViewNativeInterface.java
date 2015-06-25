@@ -39,11 +39,7 @@ import android.widget.RelativeLayout;
 
 import com.chilliworks.chillisource.core.CSActivity;
 import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.Logging;
 import com.chilliworks.chillisource.core.ResourceHelper;
-import com.chilliworks.chillisource.web.CSWebView;
-import com.chilliworks.chillisource.web.CSWebViewClient;
-import com.chilliworks.chillisource.web.WebViewCloseButton;
 
 public class WebViewNativeInterface 
 {
@@ -93,8 +89,6 @@ public class WebViewNativeInterface
 		    {		
 		    	synchronized (msWebviewHolder) 
 		    	{
-					Logging.logError("[WebviewNI] Present -> " + instrURL);
-
 		    		CSWebView sWebView = CreateBlankWebView(inudwIndex, inudwXAbsolute, inudwYAbsolute, "");
 		    		sWebView.loadUrl(instrURL);
 		    		msWebviewHolder.addView(sWebView);
@@ -104,8 +98,6 @@ public class WebViewNativeInterface
 		    		s_dismissButtonSize = in_dismissButtonRelativeSize * inudwXAbsolute;
 		    		s_currentIndex = inudwIndex;
 		    		s_active = true;
-
-					Logging.logError("[WebviewNI] Present end ");
 		    	}
 		    }
 		});		
