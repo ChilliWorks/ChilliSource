@@ -30,7 +30,7 @@ THE SOFTWARE.
 
     <application>
 
-        <provider android:name="com.chilliworks.chillisource.core.ApkExpansionContentProvider" android:authorities="com.taggames.cstest.apkexpansion" android:enabled="true" android:exported="false" />
+        <provider android:name="com.chilliworks.chillisource.core.ApkExpansionContentProvider" android:authorities="com.chilliworks.chillisource.core.apkexpansioncontentprovider" android:enabled="true" android:exported="false" />
 
     </application>
 

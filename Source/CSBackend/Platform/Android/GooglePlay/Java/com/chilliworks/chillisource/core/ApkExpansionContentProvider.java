@@ -48,7 +48,8 @@ import java.util.Random;
  */
 public final class ApkExpansionContentProvider extends ContentProvider
 {
-    private static final String k_tempDirectory = "_ApkExpansionContentProvider/";
+    private static final String TEMP_DIRECTORY = "_ApkExpansionContentProvider/";
+    private static final String CONTENT_PATH_PREFIX = "content://com.chilliworks.chillisource.core.apkexpansioncontentprovider/";
 
     /**
      * Called when the provider is first created.
@@ -99,17 +100,16 @@ public final class ApkExpansionContentProvider extends ContentProvider
             throw new FileNotFoundException("This content provider only supports read operations.");
         }
 
-        final String contentPrefix = "content://" + CSApplication.get().getActivity().getPackageName() + ".apkexpansion/";
         final String uriString = in_uri.toString();
-        if (uriString.startsWith(contentPrefix) == false)
+        if (uriString.startsWith(CONTENT_PATH_PREFIX) == false)
         {
             throw new FileNotFoundException("The content prefix is incorrect for this content provider.");
         }
 
-        String filePath = uriString.substring(contentPrefix.length());
+        String filePath = uriString.substring(CONTENT_PATH_PREFIX.length());
         String fileName = StringUtils.getFileName(filePath);
 
-        String tempDirectoryPath = FileUtils.getExternalCacheDirectory(CSApplication.get().getActivity().getPackageName()) + k_tempDirectory;
+        String tempDirectoryPath = FileUtils.getExternalCacheDirectory(CSApplication.get().getActivity().getPackageName()) + TEMP_DIRECTORY;
         FileUtils.createDirectory(FileUtils.StorageLocation.k_externalStorage, tempDirectoryPath);
 
         Random random = new Random();

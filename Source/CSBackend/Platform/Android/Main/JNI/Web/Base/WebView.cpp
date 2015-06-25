@@ -132,8 +132,13 @@ namespace CSBackend
 			if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_package ||
             	(in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
 			{
-				//TODO: !?
-				fullFilePath = "content://com.taggames.cstest.apkexpansion/" + fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
+#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
+				fullFilePath = "content://com.chilliworks.chillisource.core.apkexpansioncontentprovider/" + fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
+#elif defined(CS_ANDROIDFLAVOUR_AMAZON)
+				fullFilePath = "file:///android_asset/" + fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
+#else
+				CS_LOG_FATAL("WebView doesn't support this Android flavour.");
+#endif
 			}
 			else
 			{
