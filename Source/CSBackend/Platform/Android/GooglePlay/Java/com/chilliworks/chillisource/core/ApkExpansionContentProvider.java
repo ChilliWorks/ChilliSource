@@ -88,19 +88,19 @@ public final class ApkExpansionContentProvider extends ContentProvider
      *
      * @return The file descriptor. Will never be null.
      *
-     * @throws FileNotFoundException - If the file doesn't exist, the content prefix is incorrect
-     * or the read mode is anything other than 'r', this is thrown.
+     * @throws FileNotFoundException - This is thrown if the file doesn't exist, the content prefix
+     * is incorrect or the read mode is anything other than 'r'.
      */
     @Override public ParcelFileDescriptor openFile(Uri in_uri, String in_mode) throws FileNotFoundException
     {
         assert (CSApplication.get() != null && CSApplication.get().getActivity() != null) : "Cannot open asset file before the application has been created.";
 
-        if (in_mode != "r")
+        if (in_mode.equals("r") == false)
         {
             throw new FileNotFoundException("This content provider only supports read operations.");
         }
 
-        final String uriString = in_uri.toString();
+        String uriString = in_uri.toString();
         if (uriString.startsWith(CONTENT_PATH_PREFIX) == false)
         {
             throw new FileNotFoundException("The content prefix is incorrect for this content provider.");
