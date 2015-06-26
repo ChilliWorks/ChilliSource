@@ -434,6 +434,7 @@ public class CSAtlasBuilder
 			
 			if (atlasImageId.length() == 0)
 			{
+				dosC.close();
 			    throw new CSException("Couldn't file atlas image Id for image: " + in_packedTexture.getOriginalFile(i).getName());
 			}
 			
