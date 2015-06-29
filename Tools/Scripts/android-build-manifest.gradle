@@ -34,9 +34,9 @@ ext {
      *
      * @author Ian Copland
      */
-    csGenerateAndroidManifest = { in_rootProjectDirectoryPath, in_androidProjectDirectoryPath ->
-        def absRootProjectDirectoryPath = file(in_rootProjectDirectoryPath).absolutePath
-        def absAndroidProjectDirectoryPath = file(in_androidProjectDirectoryPath).absolutePath
+    csGenerateAndroidManifest = { ->
+        def absRootProjectDirectoryPath = file("../../../..").absolutePath
+        def absAndroidProjectDirectoryPath = file("src/main").absolutePath
         def toolPath = absRootProjectDirectoryPath + "/ChilliSource/Tools/AndroidManifestBuilder.jar"
         def templateFilePath = absRootProjectDirectoryPath + "/ChilliSource/Tools/Scripts/AndroidManifestTemplate.xml"
         def manifestFilePath = absAndroidProjectDirectoryPath + "/AndroidManifest.xml"

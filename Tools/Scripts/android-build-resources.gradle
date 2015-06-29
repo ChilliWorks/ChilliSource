@@ -26,6 +26,130 @@
 //  THE SOFTWARE.
 //
 
+apply from: '../../../../ChilliSource/Tools/Scripts/android-build-execute-command.gradle'
+
+import java.nio.file.*
+import java.nio.file.attribute.*
+
+def g_assetsDirectory = "src/main/assets"
+def g_rng = new Random()
+
+/**
+ * //TODO: !?
+ *
+ * @author Ian Copland
+ */
+def canInclude(String in_fileName, String[] in_ignoreFilesWith, String[] in_forceIncludeFilesWith) {
+    for (String forceInclude : in_forceIncludeFilesWith) {
+        if (in_fileName.contains(forceInclude) == true) {
+            return true
+        }
+    }
+    for (String ignore : in_forceIncludeFilesWith) {
+        if (in_fileName.contains(ignore) == true) {
+            return false
+        }
+    }
+    return true
+}
+/**
+ * //TODO: !?
+ *
+ * @author Ian Copland
+ */
+def copyDirectory(String in_sourceDirectoryPath, String in_destDirectoryPath, String[] in_ignoreFilesWith, String[] in_forceIncludeFilesWith) {
+    File destinationDir = new File(in_destDirectoryPath)
+    destinationDir.mkdir()
+    
+    File sourceDir = new File(in_sourceDirectoryPath)
+
+    def directoryContents = sourceDir.list();
+    if (directoryContents != null) {
+        for (String directoryItem : directoryContents) {
+
+            File entry = new File(sourceDir, directoryItem);
+            if (entry.isDirectory() == true) {
+                def sourceSubDir = Paths.get(in_sourceDirectoryPath, directoryItem).toString()
+                def destSubDir = Paths.get(in_destDirectoryPath, directoryItem).toString()
+                copyDirectory(sourceSubDir, destSubDir, in_ignoreFilesWith, in_forceIncludeFilesWith)
+
+            } else if (canInclude(directoryItem, in_ignoreFilesWith, in_forceIncludeFilesWith) == true) {
+                def sourceFilePath = Paths.get(in_sourceDirectoryPath, directoryItem)
+                def destFilePath = Paths.get(in_destDirectoryPath, directoryItem)
+                Files.copy(sourceFilePath, destFilePath)
+            }
+        }
+    }
+}
+/**
+ * //TODO: !?
+ *
+ * @author Ian Copland
+ */
+def copyResourcesToDirectory(String in_directoryPath) {
+    def excludes = [ ".ios", ".windows", ".DS_Store" ] as String[]
+    def includes = [ ".android" ] as String[]
+
+    File directory = new File(in_directoryPath)
+    directory.mkdir()
+
+    String appSourceDirectory = file('../../../../Content/AppResources').absolutePath
+    String appDestDirectory = in_directoryPath + "/AppResources"
+    copyDirectory(appSourceDirectory, appDestDirectory, excludes, includes) 
+
+    String csSourceDirectory = file('../../../../ChilliSource/CSResources').absolutePath
+    String csDestDirectory = in_directoryPath + "/CSResources"
+    copyDirectory(csSourceDirectory, csDestDirectory, excludes, includes)
+}
+/**
+ * //TODO: !?
+ *
+ * @author Ian Copland
+ */
+def premultiplyPngsInDirectory(String in_directoryPath) {
+    def jarPath = file("../../../../ChilliSource/Tools/PNGAlphaPremultiplier.jar").absolutePath
+
+    for (String directoryItem : sourceDir.list()) {
+        if (directoryItem.isDirectory() == true) {
+            premultiplyPngsInDirectory(in_directoryPath + "/" + directoryItem)
+        }
+        else if (directoryItem.toLowerCase().endsWith(".png") == true) {
+            def fullPath = in_directoryPath + "/" + directoryItem
+            csExecuteCommand([ "java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarPath, "--input", fullPath, "--output", fullPath ] as String[]);
+        }
+    }
+}
+/**
+ * //TODO: !?
+ *
+ * @author Ian Copland
+ */
+def createApkExpansionFromDirectory(String in_directoryPath) {
+    //csExecuteCommand([ "zip", "-r", "-n", ".ogg:.mp4", "main.7.taggames.cstest.obb.zip", "CSResources/", "AppResources/" ] as String[])
+}
+/**
+ * //TODO: !?
+ *
+ * @author Ian Copland
+ */
+def deleteDirectory(String in_directoryPath) {
+    File directoryFile = new File(in_directoryPath);
+    if (directoryFile.exists() == true && directoryFile.isDirectory() == true)
+    {
+        Path directoryPath = Paths.get(in_directoryPath);
+        Files.walkFileTree(directoryPath, new SimpleFileVisitor<Path>() {
+           @Override public FileVisitResult visitFile(Path in_file, BasicFileAttributes in_attrubutes) throws IOException {
+               Files.delete(in_file);
+               return FileVisitResult.CONTINUE;
+           }
+           @Override public FileVisitResult postVisitDirectory(Path in_dir, IOException in_exception) throws IOException {
+               Files.delete(in_dir);
+               return FileVisitResult.CONTINUE;
+           }
+       });
+    }
+}
+
 ext {
     /**
      * //TODO: !?
@@ -33,7 +157,24 @@ ext {
      * @author Ian Copland
      */
     csGenerateApkExpansion = { ->
+        deleteDirectory(file(g_assetsDirectory).absolutePath)
 
+        def tempDirectory = file("_resources-" + g_rng.nextLong()).absolutePath
+        copyResourcesToDirectory(tempDirectory)
+
+        println "csGenerateApkExpansion -> 1"
+
+        premultiplyPngsInDirectory(tempDirectory)
+
+        println "csGenerateApkExpansion -> 2"
+
+        createApkExpansionFromDirectory(tempDirectory)
+
+        println "csGenerateApkExpansion -> 3"
+
+        deleteDirectory(tempDirectory)
+
+        println "csGenerateApkExpansion -> -"
     }
     /**
      * //TODO: !?
@@ -41,6 +182,9 @@ ext {
      * @author Ian Copland
      */
     csGenerateApkAssets = { ->
-
+        def assetsDirectory = file(g_assetsDirectory).absolutePath
+        deleteDirectory(assetsDirectory)
+        copyResourcesToDirectory(assetsDirectory)
+        premultiplyPngsInDirectory(assetsDirectory)
     }
 }

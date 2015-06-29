@@ -200,7 +200,7 @@ ext {
             //if it is a process manifest task, add the genate manifest task as a dependancy
             } else if (taskName.startsWith("check") == true && taskName.endsWith("manifest") == true) {
                 task "csGenerateAndroidManifest" (overwrite: true) << {
-                    csGenerateAndroidManifest("../../../..", "src/main")
+                    csGenerateAndroidManifest()
                 }
                 currentTask.dependsOn("csGenerateAndroidManifest")
 
