@@ -1,5 +1,5 @@
 //
-//  androidbuild.gradle
+//  android-build.gradle
 //  Chilli Source
 //  Created by Ian Copland on 13/03/2015.
 //
@@ -26,74 +26,12 @@
 //  THE SOFTWARE.
 //
 
+apply from: '../../../../ChilliSource/Tools/Scripts/android-build-manifest.gradle'
+apply from: '../../../../ChilliSource/Tools/Scripts/android-build-ndk.gradle'
+apply from: '../../../../ChilliSource/Tools/Scripts/android-build-resources.gradle'
+
 import com.sun.tools.classfile.Dependency
-import org.apache.tools.ant.taskdefs.condition.Os
-import java.lang.Runtime
-import java.lang.Process
-import java.util.zip.CRC32
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-/**
- * Prints anything in the given buffered stream.
- *
- * @author Ian Copland
- *
- * @param in_stream - The input stream.
- * @param in_printAsError - If true, any messages will be printed as an error message.
- */
-def printStream(InputStream in_stream, boolean in_printAsError) {
-    try {
-        def bufferedInputReader = new BufferedReader(new InputStreamReader(in_stream));
-        String line = null;
-        while ((line = bufferedInputReader.readLine()) != null) {
-            if (in_printAsError == true) {
-                System.err.println(line);
-            } else {
-                System.out.println(line);
-            }
-        }
-    }
-    catch (Exception e) {
-        System.err.println(e.toString());
-        e.printStackTrace();
-    }
-}
-/**
- * Executes the given command line parameters. Outputs the contents of both the input stream
- * and error stream to console.
- *
- * @author Ian Copland
- *
- * @param in_commands - The array of commands
- */
-def executeCommand(String[] in_commands) {
-    final def process = new ProcessBuilder(in_commands).start();
-    def inputRunnable = new Runnable() {
-        @Override public void run() {
-            printStream(process.getInputStream(), false);
-        }
-    };
-    def errorRunnable = new Runnable() {
-        @Override public void run() {
-            printStream(process.getErrorStream(), true);
-        }
-    };
-    def inputThread = new Thread(inputRunnable);
-    def errorThread = new Thread(errorRunnable);
-    inputThread.start();
-    errorThread.start();
-    inputThread.join();
-    errorThread.join();
-    process.waitFor();
-    process.destroy();
-
-    if (process.exitValue() != 0)
-    {
-        throw new GradleException("Native build failed. See errors above for more information.");
-    }
-}
 /**
  * @author Ian Copland
  *
@@ -155,7 +93,7 @@ def getAbiFromTaskName(String in_taskName) {
  */
 def getSkuFromTaskName(String in_taskName) {
     String lowerTaskName = in_taskName.toLowerCase()
-    if (lowerTaskName.toLowerCase().contains('googleplay') == true) {
+    if (lowerTaskName.contains('googleplay') == true) {
         return "googleplay"
     } else if (lowerTaskName.contains('amazon')){
         return "amazon"
@@ -165,157 +103,29 @@ def getSkuFromTaskName(String in_taskName) {
     }
 }
 /**
- * Reads the local.properties file to get the location of the ndk-build script. This also takes
- * into account the OS - returning ndk-build.cmd on windows and ndk-build on other platforms.
- *
  * @author Ian Copland
  *
- * @return The path to ndk-build.
+ * @param in_sku - The SKU name.
+ *
+ * @return Whether or not the given SKU is Google Play.
  */
-def getNDKBuildScriptPath() {
-    def rootDir = project.rootDir
-    def localProperties = new File(rootDir, "local.properties")
-    if (localProperties.exists()) {
-        def properties = new Properties()
-        localProperties.withInputStream {
-            stream -> properties.load(stream)
-        }
-        def ndkDir = properties.getProperty('ndk.dir')
-        if (ndkDir == null) {
-            throw new Exception("The ndk.dir property in local.propeties is not set")
-        }
-        def ndkBuild = Os.isFamily(Os.FAMILY_WINDOWS) ? "$ndkDir/ndk-build.cmd" : "$ndkDir/ndk-build"
-        return ndkBuild
-
-    } else {
-        throw new Exception("The local.properties file does not exist")
-    }
+def isGooglePlaySku(String in_sku) {
+    String lowerSku = in_sku.toLowerCase()
+    return (lowerSku.equals('googleplay') == true)
 }
 /**
  * @author Ian Copland
  *
- * @return The directory all object files will be built to. On windows this will be a directory
- * located at C:/.CSTemp/<project hash> to shorten the path to keep the build under the windows
- * path length limit.  On other platforms this will be the <Project>/src/main/obj directory.
+ * @param in_sku - The SKU name.
+ *
+ * @return Whether or not the given SKU is Amazon.
  */
-def getBuildDirectory() {
-    if (Os.isFamily(Os.FAMILY_WINDOWS) == true) {
-        def projPath = file('.').absolutePath
-        def crc = new CRC32();
-        crc.update(projPath.getBytes());
-        return System.getenv("SystemDrive") + "/.CSTemp/" + crc.getValue()
-    } else {
-        return file('src/main/obj').absolutePath
-    }
-}
-/**
- * Builds native source for the given SKU, ABI and debug mode.
- *
- * @author Ian Copland
- *
- * @param in_sku - The SKU which the source should be built for.
- * @param in_abi - The ABI thes source should be built for.
- * @param in_debug - Whether or not the build should have debug symbols.
- */
-def ndkBuild(String in_sku, String in_abi, boolean in_debug) {
-    def jniPath = file('src/main/jni').absolutePath
-    ArrayList<String> commands
-    if (in_debug == true) {
-        commands = [ getNDKBuildScriptPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi", "NDK_DEBUG=1" ] as ArrayList<String>
-    }
-    else {
-        commands = [ getNDKBuildScriptPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi" ] as ArrayList<String>
-    }
-
-    if (Os.isFamily(Os.FAMILY_WINDOWS) == true) {
-        def buildDir = getBuildDirectory()
-        commands.add("NDK_OUT=" + buildDir)
-        Files.createDirectories(Paths.get(buildDir))
-    }
-
-    executeCommand(commands as String[])
-}
-/**
- * Builds native source for the given sku, abi and debug mode and also copies the static library
- * to the output directory.
- *
- * @author Ian Copland
- *
- * @param in_sku - The SKU which the source should be built for.
- * @param in_abi - The ABI thes source should be built for.
- * @param in_debug - Whether or not the build should have debug symbols.
- * @param in_libName - The name of the static library that should be copied to the output
- * directory.
- */
-def ndkBuildStatic(String in_sku, String in_abi, boolean in_debug, String in_libName) {
-    ndkBuild(in_sku, in_abi, in_debug)
-
-    def inputDir = getBuildDirectory() + "/local/" + in_abi
-    def outputDir = file('src/main/libs/' + in_abi).absolutePath
-    def fileName = "lib" + in_libName + ".a"
-
-    Files.createDirectories(Paths.get(outputDir))
-
-    def outputFilePath = Paths.get(outputDir + "/" + fileName)
-    if (Files.exists(outputFilePath) == true) {
-        Files.delete(outputFilePath)
-    }
-
-    Files.copy(Paths.get(inputDir + "/" + fileName), outputFilePath)
-}
-/**
- * Cleans native source for all abis, skus and both debug and release.
- *
- * @author Ian Copland
- */
-def ndkBuildClean() {
-    def jniPath = file('src/main/jni').absolutePath
-
-    def commands = [ getNDKBuildScriptPath(), "-C", jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86", "CS_CLEAN=1" ]
-    if (Os.isFamily(Os.FAMILY_WINDOWS) == true) {
-        def buildDir = getBuildDirectory()
-        Files.createDirectories(Paths.get(buildDir))
-        commands.add("NDK_OUT=" + buildDir)
-    }
-    executeCommand(commands as String[])
-
-    commands.add("NDK_DEBUG=1")
-    executeCommand(commands as String[])
-}
-/**
- * Performs a clean build of all native source and removes the built static libraries from the libs
- * directory.
- *
- * @author Ian Copland
- */
-def ndkBuildCleanStatic(String in_libName) {
-    ndkBuildClean()
-
-    def abis = [ "armeabi", "armeabi-v7a", "x86" ]
-    for (def abi : abis)
-    {
-        def filePath = Paths.get(file('src/main/libs/' + abi).absolutePath + "/lib" + in_libName + ".a")
-        if (Files.exists(filePath) == true) {
-            Files.delete(filePath)
-        }
-    }
-}
-/**
- * Bundles the resources that should be copied to the APK.
- *
- * @author Ian Copland
- */
-def generateResources() {
-    def scriptPath = file("$csProjectRoot/ChilliSource/Tools/Scripts/copy_android_resources.py").absolutePath
-    def csProjectPath = file(csProjectRoot).absolutePath
-    def androidProjectPath = file("src/main/").absolutePath
-    String[] commands = [ "python", scriptPath, csProjectPath, androidProjectPath ]
-    executeCommand(commands);
+def isAmazonSku(String in_sku) {
+    String lowerSku = in_sku.toLowerCase()
+    return (lowerSku.equals('amazon') == true)
 }
 
 ext {
-    csProjectRoot = "../../../.."
-
     /**
      * Adds task dependencies as required for building a ChilliSource library.
      *
@@ -325,14 +135,13 @@ ext {
      * @param in_libName - The name of the library, without the lib prefix and .a suffix.
      */
     csInitLibrary = { in_tasks, in_libName ->
-
         in_tasks.all() { currentTask ->
             def taskName = currentTask.name.toLowerCase();
 
             //If it is the "clean" task also hook in the ChilliSource clean event.
             if (taskName == "clean") {
                 def cleanTask = task("csCleanNdkStatic") << {
-                    ndkBuildCleanStatic(in_libName)
+                    csNdkBuildCleanStatic(in_libName)
                 }
                 currentTask.dependsOn(cleanTask)
 
@@ -350,7 +159,7 @@ ext {
                     def debugText = (debug == true) ? "debug" : "release"
 
                     def csCompileTask = task("csCompileNdk_${sku}_${abi}_${debugText}") << {
-                        ndkBuildStatic(sku, abi, debug, in_libName)
+                        csNdkBuildStatic(sku, abi, debug, in_libName)
                     }
 
                     //This is a hack to ensure ChilliSource is only built for the ABI/SKU/config that the
@@ -378,16 +187,22 @@ ext {
      * @param in_tasks - The gradle tasks dependencies will be added to.
      */
     csInitApplication = { in_tasks ->
-
         in_tasks.all() { currentTask ->
             def taskName = currentTask.name.toLowerCase();
 
             //if it is the 'clean' task also hook in the ChilliSource clean event.
             if (taskName == "clean") {
                 def cleanTask = task("csCleanNdk") << {
-                    ndkBuildClean()
+                    csNdkBuildClean()
                 }
                 currentTask.dependsOn(cleanTask)
+
+            //if it is a process manifest task, add the genate manifest task as a dependancy
+            } else if (taskName.startsWith("check") == true && taskName.endsWith("manifest") == true) {
+                task "csGenerateAndroidManifest" (overwrite: true) << {
+                    csGenerateAndroidManifest("../../../..", "src/main")
+                }
+                currentTask.dependsOn("csGenerateAndroidManifest")
 
             //if it is a ndk compile task, replace it with the ChilliSource ndk compile task.
             } else if (taskName.startsWith("compile") == true && taskName.endsWith("ndk") == true) {
@@ -403,10 +218,17 @@ ext {
                     def debugText = (debug == true) ? "debug" : "release"
 
                     task "csCompileNdk_${sku}_${abi}_${debugText}" (dependsOn: ":chillisource:csCompileNdk_${sku}_${abi}_${debugText}", overwrite: true) << {
-                        ndkBuild(sku, abi, debug)
+                        csNdkBuild(sku, abi, debug)
                     }
+
                     task "csGenerateResources_${sku}_${abi}_${debugText}" (dependsOn: "csCompileNdk_${sku}_${abi}_${debugText}", overwrite: true) << {
-                        generateResources()
+                        if (isGooglePlaySku(sku) == true) {
+                            csGenerateApkExpansion();
+                        } else if (isAmazonSku(sku) == true) {
+                            csGenerateApkAssets();
+                        } else {
+                            throw new GradleException("Unsupported SKU.");
+                        }
                     }
                     currentTask.dependsOn("csGenerateResources_${sku}_${abi}_${debugText}")
                 }

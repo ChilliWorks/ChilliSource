@@ -1,0 +1,175 @@
+//
+//  android-build-ndk.gradle
+//  Chilli Source
+//  Created by Ian Copland on 26/06/2015.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2015 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+apply from: '../../../../ChilliSource/Tools/Scripts/android-build-execute-command.gradle'
+
+import org.apache.tools.ant.taskdefs.condition.Os
+import java.util.zip.CRC32
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
+
+/**
+ * Reads the local.properties file to get the location of the ndk-build script. This also takes
+ * into account the OS - returning ndk-build.cmd on windows and ndk-build on other platforms.
+ *
+ * @author Ian Copland
+ *
+ * @return The path to ndk-build.
+ */
+def getNDKBuildScriptPath() {
+    def rootDir = project.rootDir
+    def localProperties = new File(rootDir, "local.properties")
+    if (localProperties.exists()) {
+        def properties = new Properties()
+        localProperties.withInputStream {
+            stream -> properties.load(stream)
+        }
+        def ndkDir = properties.getProperty('ndk.dir')
+        if (ndkDir == null) {
+            throw new Exception("The ndk.dir property in local.propeties is not set")
+        }
+        def ndkBuild = Os.isFamily(Os.FAMILY_WINDOWS) ? "$ndkDir/ndk-build.cmd" : "$ndkDir/ndk-build"
+        return ndkBuild
+
+    } else {
+        throw new Exception("The local.properties file does not exist")
+    }
+}
+/**
+ * @author Ian Copland
+ *
+ * @return The directory all object files will be built to. On windows this will be a directory
+ * located at C:/.CSTemp/<project hash> to shorten the path to keep the build under the windows
+ * path length limit.  On other platforms this will be the <Project>/src/main/obj directory.
+ */
+def getBuildDirectory() {
+    if (Os.isFamily(Os.FAMILY_WINDOWS) == true) {
+        def projPath = file('.').absolutePath
+        def crc = new CRC32();
+        crc.update(projPath.getBytes());
+        return System.getenv("SystemDrive") + "/.CSTemp/" + crc.getValue()
+    } else {
+        return file('src/main/obj').absolutePath
+    }
+}
+
+ext {
+    /**
+     * Builds native source for the given SKU, ABI and debug mode.
+     *
+     * @author Ian Copland
+     *
+     * @param in_sku - The SKU which the source should be built for.
+     * @param in_abi - The ABI thes source should be built for.
+     * @param in_debug - Whether or not the build should have debug symbols.
+     */
+    csNdkBuild = { in_sku, in_abi, in_debug ->
+        def jniPath = file('src/main/jni').absolutePath
+        ArrayList<String> commands
+        if (in_debug == true) {
+            commands = [ getNDKBuildScriptPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi", "NDK_DEBUG=1" ] as ArrayList<String>
+        }
+        else {
+            commands = [ getNDKBuildScriptPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi" ] as ArrayList<String>
+        }
+
+        if (Os.isFamily(Os.FAMILY_WINDOWS) == true) {
+            def buildDir = getBuildDirectory()
+            commands.add("NDK_OUT=" + buildDir)
+            Files.createDirectories(Paths.get(buildDir))
+        }
+
+        csExecuteCommand(commands as String[])
+    }
+    /**
+     * Builds native source for the given sku, abi and debug mode and also copies the static library
+     * to the output directory.
+     *
+     * @author Ian Copland
+     *
+     * @param in_sku - The SKU which the source should be built for.
+     * @param in_abi - The ABI thes source should be built for.
+     * @param in_debug - Whether or not the build should have debug symbols.
+     * @param in_libName - The name of the static library that should be copied to the output
+     * directory.
+     */
+    csNdkBuildStatic = { in_sku, in_abi, in_debug, in_libName ->
+        csNdkBuild(in_sku, in_abi, in_debug)
+
+        def inputDir = getBuildDirectory() + "/local/" + in_abi
+        def outputDir = file('src/main/libs/' + in_abi).absolutePath
+        def fileName = "lib" + in_libName + ".a"
+
+        Files.createDirectories(Paths.get(outputDir))
+
+        def outputFilePath = Paths.get(outputDir + "/" + fileName)
+        if (Files.exists(outputFilePath) == true) {
+            Files.delete(outputFilePath)
+        }
+
+        Files.copy(Paths.get(inputDir + "/" + fileName), outputFilePath)
+    }
+    /**
+     * Cleans native source for all abis, skus and both debug and release.
+     *
+     * @author Ian Copland
+     */
+    csNdkBuildClean = { ->
+        def jniPath = file('src/main/jni').absolutePath
+
+        def commands = [ getNDKBuildScriptPath(), "-C", jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86", "CS_CLEAN=1" ]
+        if (Os.isFamily(Os.FAMILY_WINDOWS) == true) {
+            def buildDir = getBuildDirectory()
+            Files.createDirectories(Paths.get(buildDir))
+            commands.add("NDK_OUT=" + buildDir)
+        }
+        csExecuteCommand(commands as String[])
+
+        commands.add("NDK_DEBUG=1")
+        csExecuteCommand(commands as String[])
+    }
+    /**
+     * Performs a clean build of all native source and removes the built static libraries from the libs
+     * directory.
+     *
+     * @author Ian Copland
+     */
+    csNdkBuildCleanStatic = { in_libName ->
+        csNdkBuildClean()
+
+        def abis = [ "armeabi", "armeabi-v7a", "x86" ]
+        for (def abi : abis)
+        {
+            def filePath = Paths.get(file('src/main/libs/' + abi).absolutePath + "/lib" + in_libName + ".a")
+            if (Files.exists(filePath) == true) {
+                Files.delete(filePath)
+            }
+        }
+    }
+}

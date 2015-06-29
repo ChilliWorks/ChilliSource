@@ -27,7 +27,7 @@
 //
 
 apply plugin: 'com.android.library'
-apply from: '../../../Tools/Scripts/androidbuild.gradle'
+apply from: '../../../Tools/Scripts/android-build.gradle'
 
 android {
     publishNonDefault true

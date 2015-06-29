@@ -1,7 +1,7 @@
 //
-//  settingsbuild.gradle
+//  android-build-manifest.gradle
 //  Chilli Source
-//  Created by Ian Copland on 22/04/2015.
+//  Created by Ian Copland on 26/06/2015.
 //
 //  The MIT License (MIT)
 //
@@ -26,22 +26,22 @@
 //  THE SOFTWARE.
 //
 
-ext {
-    csProjectRoot = "../../.."
+apply from: '../../../../ChilliSource/Tools/Scripts/android-build-execute-command.gradle'
 
+ext {
     /**
-     * Adds the 3 android library project modules to the project.
+     * Generates a new android manifest from the CSAndroidManifest.xml.
      *
      * @author Ian Copland
      */
-    csApplyDefaultSettings = { ->
-        include ':chillisource'
-        project(':chillisource').projectDir = new File(settingsDir, "$csProjectRoot/ChilliSource/Projects/Android/chillisource")
+    csGenerateAndroidManifest = { in_rootProjectDirectoryPath, in_androidProjectDirectoryPath ->
+        def absRootProjectDirectoryPath = file(in_rootProjectDirectoryPath).absolutePath
+        def absAndroidProjectDirectoryPath = file(in_androidProjectDirectoryPath).absolutePath
+        def toolPath = absRootProjectDirectoryPath + "/ChilliSource/Tools/AndroidManifestBuilder.jar"
+        def templateFilePath = absRootProjectDirectoryPath + "/ChilliSource/Tools/Scripts/AndroidManifestTemplate.xml"
+        def manifestFilePath = absAndroidProjectDirectoryPath + "/AndroidManifest.xml"
+        def csManifestFilePath = absAndroidProjectDirectoryPath + "/CSAndroidManifest.xml"
 
-        include ':playapkexpansion'
-        project(':playapkexpansion').projectDir = new File(settingsDir, "$csProjectRoot/ChilliSource/Projects/Android/playapkexpansion")
-
-        include ':playlicensing'
-        project(':playlicensing').projectDir = new File(settingsDir, "$csProjectRoot/ChilliSource/Projects/Android/playlicensing")
+        csExecuteCommand([ "java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", toolPath, "--input", csManifestFilePath, "--template", templateFilePath, "--output", manifestFilePath ] as String[])
     }
 }
