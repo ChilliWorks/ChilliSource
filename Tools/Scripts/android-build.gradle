@@ -136,7 +136,7 @@ ext {
      */
     csInitLibrary = { in_tasks, in_libName ->
         in_tasks.all() { currentTask ->
-            def taskName = currentTask.name.toLowerCase();
+            def taskName = currentTask.name.toLowerCase()
 
             //If it is the "clean" task also hook in the ChilliSource clean event.
             if (taskName == "clean") {
@@ -148,8 +148,8 @@ ext {
             //if it is a ndk compile task, replace it with the ChilliSource ndk compile task.
             } else if (taskName.startsWith("compile") == true && taskName.endsWith("ndk") == true) {
 
-                currentTask.dependsOn.clear();
-                currentTask.deleteAllActions();
+                currentTask.dependsOn.clear()
+                currentTask.deleteAllActions()
 
                 //exclude test tasks to avoid duplicate version of the created task.
                 if (isTestFromTaskName(taskName) == false) {
@@ -188,7 +188,7 @@ ext {
      */
     csInitApplication = { in_tasks ->
         in_tasks.all() { currentTask ->
-            def taskName = currentTask.name.toLowerCase();
+            def taskName = currentTask.name.toLowerCase()
 
             //if it is the 'clean' task also hook in the ChilliSource clean event.
             if (taskName == "clean") {
@@ -207,8 +207,8 @@ ext {
             //if it is a ndk compile task, replace it with the ChilliSource ndk compile task.
             } else if (taskName.startsWith("compile") == true && taskName.endsWith("ndk") == true) {
 
-                currentTask.dependsOn.clear();
-                currentTask.deleteAllActions();
+                currentTask.dependsOn.clear()
+                currentTask.deleteAllActions()
 
                 //exclude test tasks to avoid duplicate version of the created task.
                 if (isTestFromTaskName(taskName) == false) {
@@ -223,11 +223,13 @@ ext {
 
                     task "csGenerateResources_${sku}_${abi}_${debugText}" (dependsOn: "csCompileNdk_${sku}_${abi}_${debugText}", overwrite: true) << {
                         if (isGooglePlaySku(sku) == true) {
-                            csGenerateApkExpansion();
+
+                            //TODO: !? Correctly evaluate package name and versionCode
+                            csGenerateApkExpansion("com.taggames.cstest", 10)
                         } else if (isAmazonSku(sku) == true) {
-                            csGenerateApkAssets();
+                            csGenerateApkAssets()
                         } else {
-                            throw new GradleException("Unsupported SKU.");
+                            throw new GradleException("Unsupported SKU.")
                         }
                     }
                     currentTask.dependsOn("csGenerateResources_${sku}_${abi}_${debugText}")

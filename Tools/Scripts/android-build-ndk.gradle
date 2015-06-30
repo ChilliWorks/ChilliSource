@@ -71,8 +71,8 @@ def getNDKBuildScriptPath() {
 def getBuildDirectory() {
     if (Os.isFamily(Os.FAMILY_WINDOWS) == true) {
         def projPath = file('.').absolutePath
-        def crc = new CRC32();
-        crc.update(projPath.getBytes());
+        def crc = new CRC32()
+        crc.update(projPath.getBytes())
         return System.getenv("SystemDrive") + "/.CSTemp/" + crc.getValue()
     } else {
         return file('src/main/obj').absolutePath

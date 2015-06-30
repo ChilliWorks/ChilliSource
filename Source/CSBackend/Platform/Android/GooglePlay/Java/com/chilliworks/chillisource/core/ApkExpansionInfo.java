@@ -66,7 +66,7 @@ public final class ApkExpansionInfo
     {
         assert (m_calculated == false) : "Cannot re-calculate the expansion info.";
 
-        String filePath = "AppResources/ApkExpansion.config";
+        String filePath = "ApkExpansion.config";
         if (FileUtils.doesFileExistAPK(in_activity, filePath) == false)
         {
             Logging.logFatal("Apk Expansion config file '" + filePath + "' does not exist.");

@@ -1,0 +1,197 @@
+//
+//  android-build-zip-directory.gradle
+//  ChilliSource
+//  Created by Ian Copland on 30/06/2015.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2015 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+import java.io.*
+import java.util.zip.*
+
+/**
+ * @author Ian Copland
+ *
+ * @param in_filePath - A file path.
+ * @param in_extensions - A list of extensions.
+ *
+ * @return Whether or not the given file path has one of the given extensions.
+ */
+def hasExtension(in_filePath, in_extensions) {
+    def lowerFilePath = in_filePath.toLowerCase()
+    for (def extension : in_extensions) {
+        if (lowerFilePath.endsWith(extension) == true) {
+            return true
+        }
+    }
+    return false
+}
+/**
+ * @author Ian Copland
+ *
+ * @param in_path - The absolute path
+ * @param in_basePath - The base path
+ *
+ * @return the given path relative to the base path.
+ */
+def getRelativePath(in_path, in_basePath) {
+    def output = new File(in_basePath).toURI().relativize(new File(in_path).toURI()).getPath()
+
+    if (output.endsWith("/") == true || output.endsWith("\\") == true) {
+        return output.substring(1)
+    }
+
+    return output;
+}
+/**
+ * Adds the given file to the zip.
+ *
+ * @author Ian Copland
+ *
+ * @param in_zipStream - The stream to add the file to.
+ * @param in_absFilePath - The full file path.
+ * @param in_relativeTo - The path the file is relative to.
+ * @param in_uncompressedExt - A list of file extentions which should not be compressed
+ * @param in_copyBuffer - a buffer used in copying the file contents. This is provided
+ * as an optimisation to avoid re-allocating the buffer for each file.
+ */
+def zipFile(in_zipStream, in_absFilePath, in_relativeTo, in_uncompressedExt, in_copyBuffer) {
+    BufferedInputStream bufferedInputStream = null;
+
+    try {        
+        def relativePath = getRelativePath(in_absFilePath, in_relativeTo)
+        def entry = new ZipEntry(relativePath)
+
+        in_zipStream.putNextEntry(entry)
+
+        if (hasExtension(relativePath, in_uncompressedExt) == true) {
+            println "Compression OFF for " + in_absFilePath
+            in_zipStream.setLevel(Deflater.NO_COMPRESSION);
+
+        } else {
+            println "Compression ON for " + in_absFilePath
+            in_zipStream.setLevel(Deflater.DEFAULT_COMPRESSION);
+        }
+
+        def fileInputStream = new FileInputStream(in_absFilePath)
+        bufferedInputStream = new BufferedInputStream(fileInputStream, in_copyBuffer.length)
+
+        int count = 0
+        while((count = bufferedInputStream.read(in_copyBuffer, 0, in_copyBuffer.length)) != -1) {
+            in_zipStream.write(in_copyBuffer, 0, count)
+        }
+    }
+    catch(Exception e) {
+        throw GradleException("Could zip file '" + in_absFilePath + "'", e)
+    }
+    finally {
+        if (bufferedInputStream != null) {
+            bufferedInputStream.close()
+        }
+    }
+}
+/**
+ * Recursively adds the directory to the given zip.
+ *
+ * @author Ian Copland
+ *
+ * @param in_zipStream - The stream to add the file to.
+ * @param in_absDirectoryPath - The full path to the directory.
+ * @param in_relativeTo - The directory the zip entries should be relative to
+ * @param in_uncompressedExt - A list of file extentions which should not be compressed
+ * @param in_copyBuffer - A buffer used by the zipFile method. This is provided
+ * as an optimisation to avoid re-allocating the buffer for each file.
+ */
+def zipDirectoryRecursive(in_zipStream, in_absDirectoryPath, in_relativeTo, in_uncompressedExt, in_copyBuffer) {
+    def directory = new File(in_absDirectoryPath)
+    def relativePath = getRelativePath(in_absDirectoryPath, in_relativeTo)
+
+    def directoryContents = directory.list()
+    for (def directoryItemName : directoryContents) {
+        def directoryItem = new File(directory, directoryItemName)
+        if (directoryItem.isDirectory() == true) {
+            zipDirectoryRecursive(in_zipStream, directoryItem.getAbsolutePath(), in_relativeTo, in_uncompressedExt, in_copyBuffer)
+        } else if (directoryItem.isFile() == true) {
+            zipFile(in_zipStream, directoryItem.getAbsolutePath(), in_relativeTo, in_uncompressedExt, in_copyBuffer)
+        }
+    }
+}
+
+ext {
+    /**
+     * Zips the contents of of the given directory. The directory itself will
+     * not be included in the zip. If the zip already exists, it will be deleted
+     *
+     * @author Ian Copland
+     *
+     * @param in_directoryPath - The path to the directory whose contents will
+     * be zipped.
+     * @param in_zipFilePath - The path to the output zip file.
+     * @param in_uncompressedExt - A list of file extentions which should not be 
+     * compressed
+     */
+    csZipDirectoryContents = { in_directoryPath, in_zipFilePath, in_uncompressedExt ->
+        def zipFile = new File(in_zipFilePath)
+        if (zipFile.exists() == true) {
+            zipFile.delete()
+        }
+
+        ZipOutputStream zipStream = null
+        try {
+            def outputStream = new  FileOutputStream(in_zipFilePath)
+            zipStream = new ZipOutputStream(new BufferedOutputStream(outputStream))
+
+            final int BUFFER_SIZE = 16 * 1024
+            def buffer = new byte[BUFFER_SIZE]
+
+            def directory = new File(in_directoryPath)
+            def directoryContents = directory.list()
+
+            for (def directoryItemName : directoryContents) {
+                def directoryItem = new File(directory, directoryItemName)
+                if (directoryItem.isDirectory() == true) {
+                    zipDirectoryRecursive(zipStream, directoryItem.getAbsolutePath(), in_directoryPath, in_uncompressedExt, buffer)
+                } else if (directoryItem.isFile() == true) {
+                    zipFile(zipStream, directoryItem.getAbsolutePath(), in_directoryPath, in_uncompressedExt, buffer)
+                }
+            }
+        }
+        catch(Exception e) {
+            throw GradleException("Could create zip file '" + in_zipFilePath + "'", e)
+        }
+        finally {
+            if (zipStream != null) {
+                zipStream.close()
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+

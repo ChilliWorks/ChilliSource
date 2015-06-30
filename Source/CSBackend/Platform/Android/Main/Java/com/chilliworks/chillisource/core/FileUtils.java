@@ -383,8 +383,14 @@ public final class FileUtils
 			File file = new File(in_filePath);
 			
 			AssetManager assets = in_activity.getAssets();
-			String[] filesArray = assets.list(file.getParent());
-			
+
+			String parentDirectoryPath = file.getParent();
+			if (parentDirectoryPath == null)
+			{
+				parentDirectoryPath = "";
+			}
+
+			String[] filesArray = assets.list(parentDirectoryPath);
 		    if (filesArray != null && filesArray.length > 0)
 		    {
 		    	List<String> filesList = Arrays.asList(filesArray);
