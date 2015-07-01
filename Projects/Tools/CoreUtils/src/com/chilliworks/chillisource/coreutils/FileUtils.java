@@ -28,10 +28,12 @@
 
 package com.chilliworks.chillisource.coreutils;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -42,9 +44,12 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.zip.CRC32;
 
 public class FileUtils 
 {
+	private static final int BUFFER_SIZE = 8 * 1024;
+	
 	/**
 	 * Reads the entire contents of a file into a string.
 	 * 
@@ -434,7 +439,7 @@ public class FileUtils
 	 * 
 	 * @return The MD5 Checksum.
 	 */
-	static public String calculateFileChecksumMD5(String in_filePath)
+	static public String calcFileMD5(String in_filePath)
 	{
 		String strChecksum = "";
 		
@@ -470,6 +475,33 @@ public class FileUtils
 		}
 		
 		return strChecksum;
+	}
+	/**
+	 * @param in_filePath - The file path.
+	 * 
+	 * @return The CRC32 hash of the file at the given file path.
+	 * 
+	 * @throws IOException - This will be thrown if there is an error reading the file.
+	 */
+	static public long calcFileCRC32(String in_filePath) throws IOException
+	{
+		try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(in_filePath), BUFFER_SIZE))
+		{
+			byte[] buffer = new byte[BUFFER_SIZE];
+			CRC32 crc32 = new CRC32();
+			
+			int count = 0;
+	        while((count = stream.read(buffer, 0, buffer.length)) != -1) 
+	        {
+	        	crc32.update(buffer, 0, count);
+	        }
+			
+	        return crc32.getValue();
+		}
+		catch (IOException e)
+		{
+			throw e;
+		}
 	}
 	/**
 	 * Returns all the filenames in the given directory. Files names include 

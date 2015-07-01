@@ -28,6 +28,7 @@
 
 package com.chilliworks.chillisource.coreutils;
 
+import java.io.File;
 import java.nio.charset.Charset;
 
 /**
@@ -100,6 +101,32 @@ public class StringUtils
 			standardisedPath += "/";
 		}
 		return standardisedPath;
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @param in_path - The absolute file path
+	 * @param in_basePath - The base directory path
+	 *
+	 * @return The given file path relative to the base path.
+	 */
+	public static String getRelativeFilePath(String in_filePath, String in_basePath) 
+	{
+	    String relativePath = new File(in_basePath).toURI().relativize(new File(in_filePath).toURI()).getPath();
+	    return standardiseFilePath(relativePath);
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @param in_path - The absolute directory path
+	 * @param in_basePath - The base directory path
+	 *
+	 * @return the given directory path relative to the base path.
+	 */
+	public static String getRelativeDirectoryPath(String in_filePath, String in_basePath) 
+	{
+	    String relativePath = new File(in_basePath).toURI().relativize(new File(in_filePath).toURI()).getPath();
+	    return standardiseDirectoryPath(relativePath);
 	}
 	/**
 	 * @author Ian Copland
@@ -189,6 +216,17 @@ public class StringUtils
 		strOutput = strOutput.replace("\r", "");
 		strOutput = strOutput.replace("\t", "");
 		return strOutput;
+	}
+	/**
+	 * @author Ian Copland
+	 * 
+	 * @param in_string - The string to check.
+	 * 
+	 * @return Whether or not the string contains any spaces, line returns and tabs.
+	 */
+	public static boolean containsWhitespace(String in_string)
+	{
+		return in_string.contains("_") == true || in_string.contains("\n") == true || in_string.contains("\r") == true || in_string.contains("\t") == true;
 	}
 	/**
 	 * @author Ian Copland

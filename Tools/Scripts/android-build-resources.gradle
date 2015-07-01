@@ -27,7 +27,6 @@
 //
 
 apply from: '../../../../ChilliSource/Tools/Scripts/android-build-execute-command.gradle'
-apply from: '../../../../ChilliSource/Tools/Scripts/android-build-zip-directory.gradle'
 
 import java.io.*
 import java.nio.file.*
@@ -154,8 +153,9 @@ def premultiplyPngsInDirectory(String in_directoryPath) {
  * @param in_versionCode - The version code that will be used in the OBB file name.
  */
 def createApkExpansionFromDirectory(String in_directoryPath, String in_packageName, int in_versionCode) {
-    def uncompressedExtensions = [ ".jpg", ".jpeg", ".png", ".gif", ".wav", ".mp2", ".mp3", ".ogg", ".aac", ".mpg", ".mpeg", ".mid", ".midi", ".smf", ".jet", 
-        ".rtttl", ".imy", ".xmf", ".mp4", ".m4a", ".m4v", ".3gp", ".3gpp", ".3g2", ".3gpp2", ".amr", ".awb", ".wma", ".wmv" ] 
+    def jarPath = file("../../../../ChilliSource/Tools/Zip.jar").absolutePath
+    def uncompressedExtensions = ".jpg, .jpeg, .png, .gif, .wav, .mp2, .mp3, .ogg, .aac, .mpg, .mpeg, .mid, .midi," +
+        " .smf, .jet, .rtttl, .imy, .xmf, .mp4, .m4a, .m4v, .3gp, .3gpp, .3g2, .3gpp2, .amr, .awb, .wma, .wmv"
     
     File directory = new File(file("build/outputs/obb").absolutePath)
     if (directory.exists() == false) {
@@ -164,7 +164,14 @@ def createApkExpansionFromDirectory(String in_directoryPath, String in_packageNa
 
     def fileName = "main." + in_versionCode + "." + in_packageName + ".obb"
     def filePath = directory.getAbsolutePath() + "/" + fileName
-    csZipDirectoryContents(in_directoryPath, filePath, uncompressedExtensions)
+
+    File zipFile = new File(filePath)
+    if (zipFile.exists() == true) {
+        zipFile.delete()
+    }
+
+    csExecuteCommand([ "java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarPath, "--input", in_directoryPath, "--output", filePath, 
+        "--uncompressedext", uncompressedExtensions ] as String[])
 
     def obbFile = new File(filePath)
     return obbFile.length()
