@@ -43,7 +43,7 @@ import java.nio.file.Paths
  * @return The path to ndk-build.
  */
 def getNDKBuildScriptPath() {
-    def rootDir = project.rootDir
+    String rootDir = project.rootDir
     def localProperties = new File(rootDir, "local.properties")
     if (localProperties.exists()) {
         def properties = new Properties()
@@ -54,7 +54,7 @@ def getNDKBuildScriptPath() {
         if (ndkDir == null) {
             throw new Exception("The ndk.dir property in local.propeties is not set")
         }
-        def ndkBuild = Os.isFamily(Os.FAMILY_WINDOWS) ? "$ndkDir/ndk-build.cmd" : "$ndkDir/ndk-build"
+        def ndkBuild = Os.isFamily(Os.FAMILY_WINDOWS) ? "$ndkDir/ndk-build.cmd" : "$ndkDir/ndk-build" as String
         return ndkBuild
 
     } else {
@@ -70,7 +70,7 @@ def getNDKBuildScriptPath() {
  */
 def getBuildDirectory() {
     if (Os.isFamily(Os.FAMILY_WINDOWS) == true) {
-        def projPath = file('.').absolutePath
+        String projPath = file('.').absolutePath
         def crc = new CRC32()
         crc.update(projPath.getBytes())
         return System.getenv("SystemDrive") + "/.CSTemp/" + crc.getValue()
@@ -129,7 +129,7 @@ ext {
         Files.createDirectories(Paths.get(outputDir))
 
         def outputFilePath = Paths.get(outputDir + "/" + fileName)
-        if (Files.exists(outputFilePath) == true) {
+        if (Files.exists(outputFilePath)) {
             Files.delete(outputFilePath)
         }
 
@@ -167,7 +167,7 @@ ext {
         for (def abi : abis)
         {
             def filePath = Paths.get(file('src/main/libs/' + abi).absolutePath + "/lib" + in_libName + ".a")
-            if (Files.exists(filePath) == true) {
+            if (Files.exists(filePath)) {
                 Files.delete(filePath)
             }
         }

@@ -36,12 +36,12 @@ ext {
      */
     csApplyDefaultSettings = { ->
         include ':chillisource'
-        project(':chillisource').projectDir = new File(settingsDir, "$csProjectRoot/ChilliSource/Projects/Android/chillisource")
+        project(':chillisource').projectDir = new File(settingsDir as String, "$csProjectRoot/ChilliSource/Projects/Android/chillisource")
 
         include ':playapkexpansion'
-        project(':playapkexpansion').projectDir = new File(settingsDir, "$csProjectRoot/ChilliSource/Projects/Android/playapkexpansion")
+        project(':playapkexpansion').projectDir = new File(settingsDir as String, "$csProjectRoot/ChilliSource/Projects/Android/playapkexpansion")
 
         include ':playlicensing'
-        project(':playlicensing').projectDir = new File(settingsDir, "$csProjectRoot/ChilliSource/Projects/Android/playlicensing")
+        project(':playlicensing').projectDir = new File(settingsDir as String, "$csProjectRoot/ChilliSource/Projects/Android/playlicensing")
     }
 }

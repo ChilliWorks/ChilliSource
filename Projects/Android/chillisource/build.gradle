@@ -31,12 +31,12 @@ apply from: '../../../Tools/Scripts/android-build.gradle'
 
 android {
     publishNonDefault true
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
         minSdkVersion 9
-        targetSdkVersion 21
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
     }
@@ -66,25 +66,25 @@ android {
     flavorDimensions "sku", "abi"
     productFlavors {
         googlePlay {
-            flavorDimension "sku"
+            dimension "sku"
         }
         amazon {
-            flavorDimension "sku"
+            dimension "sku"
         }
         arm {
-            flavorDimension "abi"
+            dimension "abi"
             ndk {
                 abiFilter "armeabi"
             }
         }
         armv7 {
-            flavorDimension "abi"
+            dimension "abi"
             ndk {
                 abiFilter "armeabi-v7a"
             }
         }
         x86 {
-            flavorDimension "abi"
+            dimension "abi"
             ndk {
                 abiFilter "x86"
             }

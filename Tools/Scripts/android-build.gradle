@@ -40,8 +40,8 @@ import com.sun.tools.classfile.Dependency
  * @return Whether or not the given task name follows the convention set for Task tasks.
  */
 def isTestFromTaskName(String in_taskName) {
-    String lowerTaskName = in_taskName.toLowerCase()
-    if (lowerTaskName.contains('unittest') == true || lowerTaskName.contains('androidtest') == true) {
+    def lowerTaskName = in_taskName.toLowerCase()
+    if (lowerTaskName.contains('unittest') || lowerTaskName.contains('androidtest')) {
         return true
     }
     return false
@@ -51,13 +51,13 @@ def isTestFromTaskName(String in_taskName) {
  *
  * @param in_taskName - The name of the task.
  *
- * @return Whether or not the given task name follows the convent set for debug tasks.
+ * @return Whether or not the given task name follows the convention set for debug tasks.
  */
 def isDebugFromTaskName(String in_taskName) {
-    String lowerTaskName = in_taskName.toLowerCase()
-    if (lowerTaskName.contains('debug') == true) {
+    def lowerTaskName = in_taskName.toLowerCase()
+    if (lowerTaskName.contains('debug')) {
         return true
-    } else if (lowerTaskName.contains('release') == true){
+    } else if (lowerTaskName.contains('release')){
         return false
     } else {
         System.err.println("Task '$taskName' does not specify release or debug.")
@@ -72,8 +72,8 @@ def isDebugFromTaskName(String in_taskName) {
  * @return The name of the ABI the task relates to, based on the naming convention.
  */
 def getAbiFromTaskName(String in_taskName) {
-    String lowerTaskName = in_taskName.toLowerCase()
-    if (lowerTaskName.contains('armv7') == true) {
+    def lowerTaskName = in_taskName.toLowerCase()
+    if (lowerTaskName.contains('armv7')) {
         return "armeabi-v7a"
     } else if (lowerTaskName.contains('arm')){
         return "armeabi"
@@ -92,8 +92,8 @@ def getAbiFromTaskName(String in_taskName) {
  * @return The name of the SKU the task relates to, based on the naming convention.
  */
 def getSkuFromTaskName(String in_taskName) {
-    String lowerTaskName = in_taskName.toLowerCase()
-    if (lowerTaskName.contains('googleplay') == true) {
+    def lowerTaskName = in_taskName.toLowerCase()
+    if (lowerTaskName.contains('googleplay')) {
         return "googleplay"
     } else if (lowerTaskName.contains('amazon')){
         return "amazon"
@@ -110,8 +110,8 @@ def getSkuFromTaskName(String in_taskName) {
  * @return Whether or not the given SKU is Google Play.
  */
 def isGooglePlaySku(String in_sku) {
-    String lowerSku = in_sku.toLowerCase()
-    return (lowerSku.equals('googleplay') == true)
+    def lowerSku = in_sku.toLowerCase()
+    return (lowerSku == 'googleplay')
 }
 /**
  * @author Ian Copland
@@ -121,9 +121,12 @@ def isGooglePlaySku(String in_sku) {
  * @return Whether or not the given SKU is Amazon.
  */
 def isAmazonSku(String in_sku) {
-    String lowerSku = in_sku.toLowerCase()
-    return (lowerSku.equals('amazon') == true)
+    def lowerSku = in_sku.toLowerCase()
+    return (lowerSku == 'amazon')
 }
+
+def g_applicationId = ""
+def g_versionCode = 0
 
 ext {
     /**
@@ -168,7 +171,7 @@ ext {
                     csCompileTask.onlyIf {
                         def taskGraph = gradle.taskGraph
                         for (def aTask : taskGraph.getAllTasks()) {
-                            if (aTask.project.name.equals("app") && aTask.name.equals(csCompileTask.name) == true) {
+                            if (aTask.project.name.equals("app") && aTask.name.equals(csCompileTask.name)) {
                                 return true
                             }
                         }
@@ -184,9 +187,38 @@ ext {
      *
      * @author Ian Copland
      *
-     * @param in_tasks - The gradle tasks dependencies will be added to.
+     * @param in_tasks - The applications gradle project
+     * @param in_defaultConfig - The default configuration
+     * @param in_applicationVariants - The list of application variants
      */
-    csInitApplication = { in_tasks ->
+    csInitApplication = { in_tasks, in_defaultConfig, in_applicationVariants ->
+
+        in_applicationVariants.all() { in_variant ->
+            in_variant.outputs.each { in_output ->
+                def getInfoTask = task "getInfo${in_output.name}"() << {
+                    g_applicationId = in_defaultConfig.applicationId
+
+                    def flavourApplicationId = in_variant.productFlavors.get(0).applicationId
+                    if (flavourApplicationId != null && flavourApplicationId.length() > 0) {
+                        g_applicationId = flavourApplicationId
+                    }
+
+                    def suffix = in_variant.buildType.applicationIdSuffix
+                    if (suffix != null && suffix.length() > 0) {
+                        g_applicationId += suffix
+                    }
+
+                    g_versionCode = in_defaultConfig.versionCode
+
+                    def flavourVersionCode = in_variant.productFlavors.get(0).versionCode
+                    if (flavourVersionCode != null && flavourVersionCode > 0) {
+                        g_versionCode = flavourVersionCode
+                    }
+                }
+                in_output.processManifest.dependsOn getInfoTask
+            }
+        }
+
         in_tasks.all() { currentTask ->
             def taskName = currentTask.name.toLowerCase()
 
@@ -223,13 +255,11 @@ ext {
 
                     task "csGenerateResources_${sku}_${abi}_${debugText}" (dependsOn: "csCompileNdk_${sku}_${abi}_${debugText}", overwrite: true) << {
                         if (isGooglePlaySku(sku) == true) {
-
-                            //TODO: !? Correctly evaluate package name and versionCode
-                            csGenerateApkExpansion("com.taggames.cstest", 10)
+                            csGenerateApkExpansion(g_applicationId, g_versionCode)
                         } else if (isAmazonSku(sku) == true) {
                             csGenerateApkAssets()
                         } else {
-                            throw new GradleException("Unsupported SKU.")
+                            throw new GradleException("Unsupported SKU.") as Throwable
                         }
                     }
                     currentTask.dependsOn("csGenerateResources_${sku}_${abi}_${debugText}")
@@ -245,8 +275,8 @@ ext {
      * @param in_dependencies - The dependencies.
      */
     csAddDefaultDependencies = { in_dependencies ->
-        in_dependencies.compile('com.android.support:appcompat-v7:21.0.3')
-        in_dependencies.compile('com.google.android.gms:play-services:6.5.87')
+        in_dependencies.compile('com.android.support:appcompat-v7:22.2.0')
+        in_dependencies.compile('com.google.android.gms:play-services:7.5.0')
         in_dependencies.compile('com.facebook.android:facebook-android-sdk:3.23.1')
         in_dependencies.googlePlayCompile(in_dependencies.project(path: ":playapkexpansion"))
         in_dependencies.googlePlayCompile(in_dependencies.project(path: ":playlicensing"))
@@ -265,12 +295,12 @@ ext {
     csAddCSDependencies = { in_dependencies, in_configurations, in_csDependencyMap ->
 
         def depsMap = new HashMap<String, Dependency>()
-        for (Map.Entry<String, String> entry : in_csDependencyMap) {
-            depsMap.put("${entry.getKey()}Compile", in_dependencies.project(path: ":chillisource", configuration: entry.getValue()))
+        for (def entry : in_csDependencyMap) {
+            depsMap.put("${entry.getKey()}Compile" as String, in_dependencies.project(path: ":chillisource", configuration: entry.getValue()))
         }
 
         in_configurations.all() { config ->
-            def dep = depsMap.get("${config.name}")
+            def dep = depsMap.get("${config.name}" as String)
             if(dep != null) {
                 config.dependencies.add(dep)
             }
@@ -289,14 +319,13 @@ ext {
 
         in_tasks.all() { task ->
 
-            def androidSupportLibV7TaskName = "prepareComAndroidSupportAppcompatV72103Library"
-            def androidSupportLibV4TaskName = "prepareComAndroidSupportSupportV42103Library"
-            def googlePlayServicesLibTaskName = "prepareComGoogleAndroidGmsPlayServices6587Library"
+            def androidSupportLibV7TaskName = "prepareComAndroidSupportAppcompatV72220Library"
+            def androidSupportLibV4TaskName = "prepareComAndroidSupportSupportV42220Library"
+            def googlePlayServicesLibTaskName = "prepareComGoogleAndroidGmsPlayServices750Library"
             def facebookLibTaskName = "prepareComFacebookAndroidFacebookAndroidSdk3231Library"
 
             def taskName = task.name.toLowerCase()
-            if (taskName.equals(androidSupportLibV7TaskName) == true || taskName.contains(androidSupportLibV4TaskName) == true ||
-                taskName.equals(googlePlayServicesLibTaskName) == true || taskName.equals(facebookLibTaskName) == true) {
+            if (taskName == androidSupportLibV7TaskName || taskName == androidSupportLibV4TaskName || taskName == googlePlayServicesLibTaskName || taskName == facebookLibTaskName) {
                 task.dependsOn.clear()
             }
         }

@@ -49,12 +49,12 @@ def g_rng = new Random()
  */
 def canInclude(String in_fileName, String[] in_ignoreFilesWith, String[] in_forceIncludeFilesWith) {
     for (String forceInclude : in_forceIncludeFilesWith) {
-        if (in_fileName.contains(forceInclude) == true) {
+        if (in_fileName.contains(forceInclude)) {
             return true
         }
     }
     for (String ignore : in_forceIncludeFilesWith) {
-        if (in_fileName.contains(ignore) == true) {
+        if (in_fileName.contains(ignore)) {
             return false
         }
     }
@@ -83,7 +83,7 @@ def copyDirectory(String in_sourceDirectoryPath, String in_destDirectoryPath, St
     for (String directoryItem : directoryContents) {
 
         File entry = new File(sourceDir, directoryItem)
-        if (entry.isDirectory() == true) {
+        if (entry.isDirectory()) {
             def sourceSubDir = Paths.get(in_sourceDirectoryPath, directoryItem).toString()
             def destSubDir = Paths.get(in_destDirectoryPath, directoryItem).toString()
             copyDirectory(sourceSubDir, destSubDir, in_ignoreFilesWith, in_forceIncludeFilesWith)
@@ -134,10 +134,10 @@ def premultiplyPngsInDirectory(String in_directoryPath) {
     for (def directoryItemName : directoryContents) {
         def directoryItem = new File(directory, directoryItemName)
 
-        if (directoryItem.isDirectory() == true) {
+        if (directoryItem.isDirectory()) {
             premultiplyPngsInDirectory(directoryItem.getAbsolutePath())
         }
-        else if (directoryItemName.toLowerCase().endsWith(".png") == true) {
+        else if (directoryItemName.toLowerCase().endsWith(".png")) {
             def fullPath = directoryItem.getAbsolutePath()
             csExecuteCommand([ "java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarPath, "--input", fullPath, "--output", fullPath ] as String[])
         }
@@ -149,24 +149,24 @@ def premultiplyPngsInDirectory(String in_directoryPath) {
  * @author Ian Copland
  *
  * @param in_directoryPath - The directory to create the OBB from.
- * @param in_packageName - The package name that will be used in the OBB file name.
+ * @param in_applicationId - The application Id that will be used in the OBB file name.
  * @param in_versionCode - The version code that will be used in the OBB file name.
  */
-def createApkExpansionFromDirectory(String in_directoryPath, String in_packageName, int in_versionCode) {
+def createApkExpansionFromDirectory(String in_directoryPath, String in_applicationId, int in_versionCode) {
     def jarPath = file("../../../../ChilliSource/Tools/Zip.jar").absolutePath
     def uncompressedExtensions = ".jpg, .jpeg, .png, .gif, .wav, .mp2, .mp3, .ogg, .aac, .mpg, .mpeg, .mid, .midi," +
         " .smf, .jet, .rtttl, .imy, .xmf, .mp4, .m4a, .m4v, .3gp, .3gpp, .3g2, .3gpp2, .amr, .awb, .wma, .wmv"
     
-    File directory = new File(file("build/outputs/obb").absolutePath)
-    if (directory.exists() == false) {
+    File directory = new File(file("build/outputs/obb").absolutePath as String)
+    if (!directory.exists()) {
         directory.mkdirs()
     }
 
-    def fileName = "main." + in_versionCode + "." + in_packageName + ".obb"
-    def filePath = directory.getAbsolutePath() + "/" + fileName
+    def fileName = "main." + in_versionCode + "." + in_applicationId + ".obb"
+    String filePath = directory.getAbsolutePath() + "/" + fileName
 
     File zipFile = new File(filePath)
-    if (zipFile.exists() == true) {
+    if (zipFile.exists()) {
         zipFile.delete()
     }
 
@@ -185,7 +185,7 @@ def createApkExpansionFromDirectory(String in_directoryPath, String in_packageNa
  */
 def deleteDirectory(String in_directoryPath) {
     File directoryFile = new File(in_directoryPath)
-    if (directoryFile.exists() == true && directoryFile.isDirectory() == true)
+    if (directoryFile.exists() && directoryFile.isDirectory())
     {
         Path directoryPath = Paths.get(in_directoryPath)
         Files.walkFileTree(directoryPath, new SimpleFileVisitor<Path>() {
@@ -210,7 +210,7 @@ def deleteDirectory(String in_directoryPath) {
  * @param in_versionCode - The version code used in the OBB file name.
  * @param in_obbSize - The file size of the OBB.
  */
-def writeApkExpansionConfig(in_assetsDirectoryPath, in_versionCode, in_obbSize) {
+def writeApkExpansionConfig(String in_assetsDirectoryPath, int in_versionCode, long in_obbSize) {
     deleteDirectory(in_assetsDirectoryPath)
     def directory = new File(in_assetsDirectoryPath)
     directory.mkdir();
@@ -218,7 +218,7 @@ def writeApkExpansionConfig(in_assetsDirectoryPath, in_versionCode, in_obbSize) 
     FileWriter fileWriter = null
     try {
         fileWriter = new FileWriter(new File(directory, "ApkExpansion.config"))
-        fileWriter.write("{ \"VersionCode\": " + in_versionCode + ", \"FileSize\": " + in_obbSize + " }")
+        fileWriter.write("{ \"VersionCode\": " + in_versionCode + ", \"FileSize\": " + in_obbSize + " }" as String)
     }
     catch(Exception e) {
         throw GradleException("Could create ApkExpansion.config.", e)
@@ -241,14 +241,14 @@ ext {
      *
      * @author Ian Copland
      *
-     * @param in_packageName - The package name that will be used in the OBB file name.
+     * @param in_applicationId - The application Id that will be used in the OBB file name.
      * @param in_versionCode - The version code that will be used in the OBB file name.
      */
-    csGenerateApkExpansion = { in_packageName, in_versionCode ->
-        def tempDirectoryPath = file("_resources-" + g_rng.nextLong()).absolutePath
+    csGenerateApkExpansion = { in_applicationId, in_versionCode ->
+        def tempDirectoryPath = file("build/_resources-" + g_rng.nextLong()).absolutePath
         copyResourcesToDirectory(tempDirectoryPath)
         premultiplyPngsInDirectory(tempDirectoryPath)
-        def obbSize = createApkExpansionFromDirectory(tempDirectoryPath, in_packageName, in_versionCode)
+        def obbSize = createApkExpansionFromDirectory(tempDirectoryPath, in_applicationId, in_versionCode)
         deleteDirectory(tempDirectoryPath)
 
         def assetsDirectoryPath = file(g_assetsDirectory).absolutePath

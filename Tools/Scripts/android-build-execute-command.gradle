@@ -27,6 +27,7 @@
 //
 
 import java.lang.Process
+import java.lang.reflect.Array
 
 /**
  * Prints anything in the given buffered stream.
@@ -38,19 +39,19 @@ import java.lang.Process
  */
 def printStream(InputStream in_stream, boolean in_printAsError) {
     try {
-        def bufferedInputReader = new BufferedReader(new InputStreamReader(in_stream));
-        String line = null;
+        def bufferedInputReader = new BufferedReader(new InputStreamReader(in_stream))
+        String line
         while ((line = bufferedInputReader.readLine()) != null) {
-            if (in_printAsError == true) {
-                System.err.println(line);
+            if (in_printAsError) {
+                System.err.println(line)
             } else {
-                System.out.println(line);
+                System.out.println(line)
             }
         }
     }
     catch (Exception e) {
-        System.err.println(e.toString());
-        e.printStackTrace();
+        System.err.println(e.toString())
+        e.printStackTrace()
     }
 }
 
@@ -64,30 +65,30 @@ ext {
      * @param in_commands - The array of commands
      */
     csExecuteCommand = { in_commands ->
-        final def process = new ProcessBuilder(in_commands).start();
+        final def process = new ProcessBuilder(in_commands as String[]).start()
 
         def inputRunnable = new Runnable() {
             @Override public void run() {
-                printStream(process.getInputStream(), false);
+                printStream(process.getInputStream(), false)
             }
-        };
+        }
         def errorRunnable = new Runnable() {
             @Override public void run() {
-                printStream(process.getErrorStream(), true);
+                printStream(process.getErrorStream(), true)
             }
-        };
+        }
 
-        def inputThread = new Thread(inputRunnable);
-        def errorThread = new Thread(errorRunnable);
-        inputThread.start();
-        errorThread.start();
-        inputThread.join();
-        errorThread.join();
-        process.waitFor();
-        process.destroy();
+        def inputThread = new Thread(inputRunnable)
+        def errorThread = new Thread(errorRunnable)
+        inputThread.start()
+        errorThread.start()
+        inputThread.join()
+        errorThread.join()
+        process.waitFor()
+        process.destroy()
 
         if (process.exitValue() != 0) {
-            throw new GradleException("Native build failed. See errors above for more information.");
+            throw new GradleException("Native build failed. See errors above for more information.") as Throwable
         }
     }
 }
