@@ -1,0 +1,81 @@
+//
+//  android-build-push-obb-to-device.gradle
+//  ChilliSource
+//  Created by Ian Copland on 02/07/2015.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2015 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+apply from: '../../../../ChilliSource/Tools/Scripts/android-build-execute-command.gradle'
+
+/**
+ * Reads the local.properties file to get the location of the ndk-build script. This also takes
+ * into account the OS - returning ndk-build.cmd on windows and ndk-build on other platforms.
+ *
+ * @author Ian Copland
+ *
+ * @return The path to ndk-build.
+ */
+def getAdbFilePath() {
+    String rootDir = project.rootDir
+    def localProperties = new File(rootDir, "local.properties")
+    if (localProperties.exists()) {
+        def properties = new Properties()
+        localProperties.withInputStream {
+            stream -> properties.load(stream)
+        }
+        def ndkDir = properties.getProperty('std.dir')
+        if (ndkDir == null) {
+            throw new GradleException("The sdk.dir property in local.propeties is not set")
+        }
+        def ndkBuild = Os.isFamily(Os.FAMILY_WINDOWS) ? "$ndkDir/platform-tools/adb.exe" : "$ndkDir/platform-tools/adb" as String
+        return ndkBuild
+
+    } else {
+        throw new GradleException("The local.properties file does not exist")
+    }
+}
+
+ext {
+    /**
+     * Pushes the generated Apk Expansion file to device.
+     *
+     * @author Ian Copland
+     *
+     * @param in_applicationId - The application Id
+     * @param in_versionCode - The version code
+     */
+    csPushObbToDevice = { ->
+        def fileName = "main." + in_versionCode + "." + in_applicationId + ".obb"
+        String filePath = file("build/outputs/obb").absolutePath + "/" + fileName
+
+        if (new File(filePath).exists() == false)
+        {
+            throw new GradleException("Cannot push Apk Expansion file to device becuase it doesn't exist!")
+        }
+
+        String destinationDirectory = "/sdcard/Android/obb/" + in_applicationId
+
+        csExecuteCommand([ getAdbFilePath(), "push", filePath, destinationDirectory ] as String[])
+    }
+}

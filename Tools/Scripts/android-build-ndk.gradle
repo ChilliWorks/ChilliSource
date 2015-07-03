@@ -52,13 +52,13 @@ def getNDKBuildScriptPath() {
         }
         def ndkDir = properties.getProperty('ndk.dir')
         if (ndkDir == null) {
-            throw new Exception("The ndk.dir property in local.propeties is not set")
+            throw new GradleException("The ndk.dir property in local.propeties is not set")
         }
         def ndkBuild = Os.isFamily(Os.FAMILY_WINDOWS) ? "$ndkDir/ndk-build.cmd" : "$ndkDir/ndk-build" as String
         return ndkBuild
 
     } else {
-        throw new Exception("The local.properties file does not exist")
+        throw new GradleException("The local.properties file does not exist")
     }
 }
 /**
@@ -119,7 +119,7 @@ ext {
      * @param in_libName - The name of the static library that should be copied to the output
      * directory.
      */
-    csNdkBuildStatic = { in_sku, in_abi, in_debug, in_libName ->
+    csNdkBuildStaticLib = { in_sku, in_abi, in_debug, in_libName ->
         csNdkBuild(in_sku, in_abi, in_debug)
 
         def inputDir = getBuildDirectory() + "/local/" + in_abi
@@ -160,7 +160,7 @@ ext {
      *
      * @author Ian Copland
      */
-    csNdkBuildCleanStatic = { in_libName ->
+    csNdkBuildCleanStaticLib = { in_libName ->
         csNdkBuildClean()
 
         def abis = [ "armeabi", "armeabi-v7a", "x86" ]

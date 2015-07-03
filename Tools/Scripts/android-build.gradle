@@ -1,6 +1,6 @@
 //
 //  android-build.gradle
-//  Chilli Source
+//  ChilliSource
 //  Created by Ian Copland on 13/03/2015.
 //
 //  The MIT License (MIT)
@@ -29,6 +29,7 @@
 apply from: '../../../../ChilliSource/Tools/Scripts/android-build-manifest.gradle'
 apply from: '../../../../ChilliSource/Tools/Scripts/android-build-ndk.gradle'
 apply from: '../../../../ChilliSource/Tools/Scripts/android-build-resources.gradle'
+apply from: '../../../../ChilliSource/Tools/Scripts/android-build-push-obb-to-device.gradle'
 
 import com.sun.tools.classfile.Dependency
 
@@ -60,8 +61,7 @@ def isDebugFromTaskName(String in_taskName) {
     } else if (lowerTaskName.contains('release')){
         return false
     } else {
-        System.err.println("Task '$taskName' does not specify release or debug.")
-        return false
+        throw GradleException("Task '$taskName' does not specify release or debug.")
     }
 }
 /**
@@ -80,8 +80,7 @@ def getAbiFromTaskName(String in_taskName) {
     } else if (lowerTaskName.contains('x86')){
         return "x86"
     } else {
-        System.err.println("Task '$taskName' does not specify an abi.")
-        return "armeabi"
+        throw GradleException("Task '$taskName' does not specify an abi.")
     }
 }
 /**
@@ -98,8 +97,7 @@ def getSkuFromTaskName(String in_taskName) {
     } else if (lowerTaskName.contains('amazon')){
         return "amazon"
     } else {
-        System.err.println("Task '$taskName' does not specify a sku.")
-        return "googleplay"
+        throw GradleException("Task '$taskName' does not specify a sku.")
     }
 }
 /**
@@ -124,11 +122,150 @@ def isAmazonSku(String in_sku) {
     def lowerSku = in_sku.toLowerCase()
     return (lowerSku == 'amazon')
 }
+/**
+ * Adds the static library clean ndk task to the given task as a dependency.
+ *
+ * @author Ian Copland
+ *
+ * @param in_task - The task to add the dependency to.
+ * @param in_libName - The name of the static library.
+ */
+def addCleanNdkStaticLibTask(def in_task, String in_libName) {
+    def cleanTask = task("csCleanNdk", overwrite: true) << {
+        csNdkBuildCleanStatic(in_libName)
+    }
+    in_task.dependsOn(cleanTask)
+}
+/**
+ * Adds the static library compile ndk task to the given task as a dependency.
+ *
+ * @author Ian Copland
+ *
+ * @param in_task - The task to add the dependency to.
+ * @param in_libName - The name of the static library.
+ */
+def addCompileNdkStaticLibTask(def in_task, String in_libName) {
+    def taskName = in_task.name.toLowerCase()
+    def sku = getSkuFromTaskName(taskName)
+    def abi = getAbiFromTaskName(taskName)
+    def debug = isDebugFromTaskName(taskName)
+    def debugText = (debug == true) ? "debug" : "release"
 
-def g_applicationId = ""
-def g_versionCode = 0
+    def csCompileTask = task("csCompileNdk_${sku}_${abi}_${debugText}", overwrite: true) << {
+        csNdkBuildStaticLib(sku, abi, debug, in_libName)
+    }
+
+    //This is a hack to ensure ChilliSource is only built for the ABI/SKU/config that the
+    //application is being built for. This has the draw-back that ChilliSource can no longer
+    //be built on its own, so hopefully a better solution presents itself in the future.
+    csCompileTask.onlyIf {
+        def taskGraph = gradle.taskGraph
+        for (def aTask : taskGraph.getAllTasks()) {
+            if (aTask.project.name.equals("app") && aTask.name.equals(csCompileTask.name)) {
+                return true
+            }
+        }
+        return false
+    }
+    in_task.dependsOn(csCompileTask)
+}
+/**
+ * Adds the application ndk clean task to the given task as a dependency.
+ *
+ * @author Ian Copland
+ *
+ * @param in_task - The task to add the dependency to.
+ */
+def addCleanNdkTask(def in_task) {
+    def cleanTask = task("csCleanNdk", overwrite: true) << {
+        csNdkBuildClean()
+    }
+    in_task.dependsOn(cleanTask)
+}
+/**
+ * Adds the application generate android manifest task to the given task as a dependency.
+ *
+ * @author Ian Copland
+ *
+ * @param in_task - The task to add the dependency to.
+ */
+def addGenerateAndroidManifestTask(def in_task) {
+    task "csGenerateAndroidManifest" (overwrite: true) << {
+        csGenerateAndroidManifest()
+    }
+    in_task.dependsOn("csGenerateAndroidManifest")
+}
+/**
+ * Adds the application ndk compile task to the given task as a dependency.
+ *
+ * @author Ian Copland
+ *
+ * @param in_task - The task to add the dependency to.
+ */
+def addCompileNdkTask(def in_task) {
+    def taskName = in_task.name.toLowerCase()
+    def sku = getSkuFromTaskName(taskName)
+    def abi = getAbiFromTaskName(taskName)
+    def debug = isDebugFromTaskName(taskName)
+    def debugText = (debug == true) ? "debug" : "release"
+
+    task "csCompileNdk_${sku}_${abi}_${debugText}" (dependsOn: ":chillisource:csCompileNdk_${sku}_${abi}_${debugText}", overwrite: true) << {
+        csNdkBuild(sku, abi, debug)
+    }
+
+    task "csGenerateResources_${sku}_${abi}_${debugText}" (dependsOn: "csCompileNdk_${sku}_${abi}_${debugText}", overwrite: true) << {
+        if (isGooglePlaySku(sku) == true) {
+            csGenerateApkExpansion(g_applicationId, g_versionCode)
+        } else if (isAmazonSku(sku) == true) {
+            csGenerateApkAssets()
+        } else {
+            throw new GradleException("Unsupported SKU.") as Throwable
+        }
+    }
+    in_task.dependsOn("csGenerateResources_${sku}_${abi}_${debugText}")
+}
+/**
+ * Adds the task for the getting the applicationId and versionCode to each of the check manifest
+ * tasks as a depedency.
+ *
+ * @author Ian Copland
+ *
+ * @param in_defaultConfig - The default configuration
+ * @param in_applicationVariants - The list of application variants
+ */
+def addGetInfoTasks(def in_defaultConfig, def in_applicationVariants) {
+    in_applicationVariants.all() { in_variant ->
+        in_variant.outputs.each { in_output ->
+            def getInfoTask = task "getInfo${in_output.name}"() << {
+                g_applicationId = in_defaultConfig.applicationId
+
+                def flavourApplicationId = in_variant.productFlavors.get(0).applicationId
+                if (flavourApplicationId != null && flavourApplicationId.length() > 0) {
+                    g_applicationId = flavourApplicationId
+                }
+
+                def suffix = in_variant.buildType.applicationIdSuffix
+                if (suffix != null && suffix.length() > 0) {
+                    g_applicationId += suffix
+                }
+
+                g_versionCode = in_defaultConfig.versionCode
+
+                def flavourVersionCode = in_variant.productFlavors.get(0).versionCode
+                if (flavourVersionCode != null && flavourVersionCode > 0) {
+                    g_versionCode = flavourVersionCode
+                }
+            }
+            in_output.processManifest.dependsOn getInfoTask
+        }
+    }
+}
 
 ext {
+
+    g_applicationId = ""
+    g_versionCode = 0
+
     /**
      * Adds task dependencies as required for building a ChilliSource library.
      *
@@ -143,41 +280,16 @@ ext {
 
             //If it is the "clean" task also hook in the ChilliSource clean event.
             if (taskName == "clean") {
-                def cleanTask = task("csCleanNdkStatic") << {
-                    csNdkBuildCleanStatic(in_libName)
-                }
-                currentTask.dependsOn(cleanTask)
+                addCleanNdkStaticLibTask(currentTask, in_libName)
 
             //if it is a ndk compile task, replace it with the ChilliSource ndk compile task.
             } else if (taskName.startsWith("compile") == true && taskName.endsWith("ndk") == true) {
-
                 currentTask.dependsOn.clear()
                 currentTask.deleteAllActions()
 
                 //exclude test tasks to avoid duplicate version of the created task.
                 if (isTestFromTaskName(taskName) == false) {
-                    def sku = getSkuFromTaskName(taskName)
-                    def abi = getAbiFromTaskName(taskName)
-                    def debug = isDebugFromTaskName(taskName)
-                    def debugText = (debug == true) ? "debug" : "release"
-
-                    def csCompileTask = task("csCompileNdk_${sku}_${abi}_${debugText}") << {
-                        csNdkBuildStatic(sku, abi, debug, in_libName)
-                    }
-
-                    //This is a hack to ensure ChilliSource is only built for the ABI/SKU/config that the
-                    //application is being built for. This has the draw-back that ChilliSource can no longer
-                    //be built on its own, so hopefully a better solution presents itself in the future.
-                    csCompileTask.onlyIf {
-                        def taskGraph = gradle.taskGraph
-                        for (def aTask : taskGraph.getAllTasks()) {
-                            if (aTask.project.name.equals("app") && aTask.name.equals(csCompileTask.name)) {
-                                return true
-                            }
-                        }
-                        return false
-                    }
-                    currentTask.dependsOn(csCompileTask)
+                    addCompileNdkStaticLibTask(currentTask, in_libName)
                 }
             }
         }
@@ -192,77 +304,27 @@ ext {
      * @param in_applicationVariants - The list of application variants
      */
     csInitApplication = { in_tasks, in_defaultConfig, in_applicationVariants ->
-
-        in_applicationVariants.all() { in_variant ->
-            in_variant.outputs.each { in_output ->
-                def getInfoTask = task "getInfo${in_output.name}"() << {
-                    g_applicationId = in_defaultConfig.applicationId
-
-                    def flavourApplicationId = in_variant.productFlavors.get(0).applicationId
-                    if (flavourApplicationId != null && flavourApplicationId.length() > 0) {
-                        g_applicationId = flavourApplicationId
-                    }
-
-                    def suffix = in_variant.buildType.applicationIdSuffix
-                    if (suffix != null && suffix.length() > 0) {
-                        g_applicationId += suffix
-                    }
-
-                    g_versionCode = in_defaultConfig.versionCode
-
-                    def flavourVersionCode = in_variant.productFlavors.get(0).versionCode
-                    if (flavourVersionCode != null && flavourVersionCode > 0) {
-                        g_versionCode = flavourVersionCode
-                    }
-                }
-                in_output.processManifest.dependsOn getInfoTask
-            }
-        }
+        addGetInfoTasks(in_defaultConfig, in_applicationVariants)
 
         in_tasks.all() { currentTask ->
             def taskName = currentTask.name.toLowerCase()
 
             //if it is the 'clean' task also hook in the ChilliSource clean event.
             if (taskName == "clean") {
-                def cleanTask = task("csCleanNdk") << {
-                    csNdkBuildClean()
-                }
-                currentTask.dependsOn(cleanTask)
+                addCleanNdkTask(currentTask)
 
             //if it is a process manifest task, add the genate manifest task as a dependancy
             } else if (taskName.startsWith("check") == true && taskName.endsWith("manifest") == true) {
-                task "csGenerateAndroidManifest" (overwrite: true) << {
-                    csGenerateAndroidManifest()
-                }
-                currentTask.dependsOn("csGenerateAndroidManifest")
+                addGenerateAndroidManifestTask(currentTask)
 
             //if it is a ndk compile task, replace it with the ChilliSource ndk compile task.
             } else if (taskName.startsWith("compile") == true && taskName.endsWith("ndk") == true) {
-
                 currentTask.dependsOn.clear()
                 currentTask.deleteAllActions()
 
                 //exclude test tasks to avoid duplicate version of the created task.
                 if (isTestFromTaskName(taskName) == false) {
-                    def sku = getSkuFromTaskName(taskName)
-                    def abi = getAbiFromTaskName(taskName)
-                    def debug = isDebugFromTaskName(taskName)
-                    def debugText = (debug == true) ? "debug" : "release"
-
-                    task "csCompileNdk_${sku}_${abi}_${debugText}" (dependsOn: ":chillisource:csCompileNdk_${sku}_${abi}_${debugText}", overwrite: true) << {
-                        csNdkBuild(sku, abi, debug)
-                    }
-
-                    task "csGenerateResources_${sku}_${abi}_${debugText}" (dependsOn: "csCompileNdk_${sku}_${abi}_${debugText}", overwrite: true) << {
-                        if (isGooglePlaySku(sku) == true) {
-                            csGenerateApkExpansion(g_applicationId, g_versionCode)
-                        } else if (isAmazonSku(sku) == true) {
-                            csGenerateApkAssets()
-                        } else {
-                            throw new GradleException("Unsupported SKU.") as Throwable
-                        }
-                    }
-                    currentTask.dependsOn("csGenerateResources_${sku}_${abi}_${debugText}")
+                    addCompileNdkTask(currentTask)
                 }
             }
         }
@@ -293,7 +355,6 @@ ext {
      * @param in_csDependencyMap - The map of application variants to ChilliSource variants.
      */
     csAddCSDependencies = { in_dependencies, in_configurations, in_csDependencyMap ->
-
         def depsMap = new HashMap<String, Dependency>()
         for (def entry : in_csDependencyMap) {
             depsMap.put("${entry.getKey()}Compile" as String, in_dependencies.project(path: ":chillisource", configuration: entry.getValue()))
@@ -316,9 +377,7 @@ ext {
      * @param in_tasks - All tasks in the android project.
      */
     csFixDefaultLibraryDependancies = { in_tasks ->
-
         in_tasks.all() { task ->
-
             def androidSupportLibV7TaskName = "prepareComAndroidSupportAppcompatV72220Library"
             def androidSupportLibV4TaskName = "prepareComAndroidSupportSupportV42220Library"
             def googlePlayServicesLibTaskName = "prepareComGoogleAndroidGmsPlayServices750Library"
