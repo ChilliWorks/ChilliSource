@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-apply from: '../../../../ChilliSource/Tools/Scripts/android-build-execute-command.gradle'
+apply from: '../../../../ChilliSource/Tools/Scripts/android-execute-command.gradle'
 
 import org.apache.tools.ant.taskdefs.condition.Os
 import java.util.zip.CRC32
@@ -90,13 +90,14 @@ ext {
      * @param in_debug - Whether or not the build should have debug symbols.
      */
     csNdkBuild = { in_sku, in_abi, in_debug ->
+        def lowerSKU = in_sku.toLowerCase()
         def jniPath = file('src/main/jni').absolutePath
         ArrayList<String> commands
         if (in_debug == true) {
-            commands = [ getNDKBuildScriptPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi", "NDK_DEBUG=1" ] as ArrayList<String>
+            commands = [ getNDKBuildScriptPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$lowerSKU", "APP_ABI=$in_abi", "NDK_DEBUG=1" ] as ArrayList<String>
         }
         else {
-            commands = [ getNDKBuildScriptPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$in_sku", "APP_ABI=$in_abi" ] as ArrayList<String>
+            commands = [ getNDKBuildScriptPath(), "-C", jniPath, "-j4", "CS_FLAVOUR_SKU=$lowerSKU", "APP_ABI=$in_abi" ] as ArrayList<String>
         }
 
         if (Os.isFamily(Os.FAMILY_WINDOWS) == true) {

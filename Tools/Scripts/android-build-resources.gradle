@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-apply from: '../../../../ChilliSource/Tools/Scripts/android-build-execute-command.gradle'
+apply from: '../../../../ChilliSource/Tools/Scripts/android-execute-command.gradle'
 
 import java.io.*
 import java.nio.file.*

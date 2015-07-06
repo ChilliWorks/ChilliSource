@@ -1,5 +1,5 @@
 //
-//  android-build-push-obb-to-device.gradle
+//  android-push-apk-expansion.gradle
 //  ChilliSource
 //  Created by Ian Copland on 02/07/2015.
 //
@@ -26,7 +26,9 @@
 //  THE SOFTWARE.
 //
 
-apply from: '../../../../ChilliSource/Tools/Scripts/android-build-execute-command.gradle'
+apply from: '../../../../ChilliSource/Tools/Scripts/android-execute-command.gradle'
+
+import org.apache.tools.ant.taskdefs.condition.Os
 
 /**
  * Reads the local.properties file to get the location of the ndk-build script. This also takes
@@ -44,7 +46,7 @@ def getAdbFilePath() {
         localProperties.withInputStream {
             stream -> properties.load(stream)
         }
-        def ndkDir = properties.getProperty('std.dir')
+        def ndkDir = properties.getProperty('sdk.dir')
         if (ndkDir == null) {
             throw new GradleException("The sdk.dir property in local.propeties is not set")
         }
@@ -65,17 +67,16 @@ ext {
      * @param in_applicationId - The application Id
      * @param in_versionCode - The version code
      */
-    csPushObbToDevice = { ->
+    csPushApkExpansionToDevice = { in_applicationId, in_versionCode ->
         def fileName = "main." + in_versionCode + "." + in_applicationId + ".obb"
         String filePath = file("build/outputs/obb").absolutePath + "/" + fileName
 
-        if (new File(filePath).exists() == false)
-        {
+        if (new File(filePath).exists() == false) {
             throw new GradleException("Cannot push Apk Expansion file to device becuase it doesn't exist!")
         }
 
-        String destinationDirectory = "/sdcard/Android/obb/" + in_applicationId
+        String destinationFilePath = "/sdcard/Android/obb/" + in_applicationId + "/" + fileName
 
-        csExecuteCommand([ getAdbFilePath(), "push", filePath, destinationDirectory ] as String[])
+        csExecuteCommand([ getAdbFilePath(), "push", filePath, destinationFilePath ] as String[])
     }
 }
