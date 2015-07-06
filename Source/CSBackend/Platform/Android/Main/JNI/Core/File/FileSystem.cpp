@@ -72,8 +72,8 @@ namespace CSBackend
                 JavaStaticClass apkExpansionInfo(apkExpansionInfoDef);
                 return apkExpansionInfo.CallStringMethod("getFilePath");
 #elif defined(CS_ANDROIDFLAVOUR_AMAZON)
-                auto* coreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
-                return coreJI->GetApkDirectory();
+                auto coreJI = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CoreJavaInterface>();
+                return coreJI->GetAPKDirectory();
 #else
                 CS_LOG_FATAL("File System does not support this Android Flavour.");
                 return "";

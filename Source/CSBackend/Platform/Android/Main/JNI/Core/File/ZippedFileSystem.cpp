@@ -343,7 +343,7 @@ namespace CSBackend
             }
 
             char filePathBytes[k_filePathLength];
-            auto rootDirectoryPath = CSCore::StringUtils::StandardiseFilePath(in_rootDirectoryPath);
+            auto rootDirectoryPath = CSCore::StringUtils::StandardiseDirectoryPath(in_rootDirectoryPath);
 
             s32 status = unzGoToFirstFile(unzipper);
             while (status == UNZ_OK)

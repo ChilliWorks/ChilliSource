@@ -257,13 +257,23 @@ def addCompileNdkTask(def in_task) {
         csNdkBuild(sku, abi, debug)
     }
 
+    in_task.dependsOn("csCompileNdk$variantName")
+}
+/**
+ * Adds the application generate resources task to the given task as a dependency. This only applies
+ * to Amazon builds.
+ *
+ * @author Ian Copland
+ *
+ * @param in_task - The task to add the dependency to.
+ */
+def addGenerateResourcesTask(def in_task) {
+    def sku = getSkuFromTaskName(in_task.name)
     if (isAmazonSku(sku)) {
-        task "csGenerateResources$variantName" (dependsOn: "csCompileNdk$variantName", overwrite: true) << {
+        task "csGenerateApkResources" (dependsOn: "csGenerateAndroidManifest", overwrite: true) << {
             csGenerateApkAssets()
         }
-        in_task.dependsOn("csGenerateResources$variantName")
-    } else {
-        in_task.dependsOn("csCompileNdk$variantName")
+        in_task.dependsOn("csGenerateApkResources")
     }
 }
 /**
@@ -278,7 +288,7 @@ def addCompileNdkTask(def in_task) {
 def addGetInfoTasks(def in_defaultConfig, def in_applicationVariants) {
     in_applicationVariants.all() { in_variant ->
         in_variant.outputs.each { in_output ->
-            def getInfoTask = task "getInfo${upperCaseFirstLetter(in_output.name)}"() << {
+            def getInfoTask = task "csGetVariantInfo${upperCaseFirstLetter(in_output.name)}"() << {
                 g_applicationId = in_defaultConfig.applicationId
 
                 def flavourApplicationId = in_variant.productFlavors.get(0).applicationId
@@ -382,6 +392,7 @@ ext {
             //if it is a process manifest task, add the genate manifest task as a dependancy
             } else if (taskName.startsWith("check") == true && taskName.endsWith("manifest") == true) {
                 addGenerateAndroidManifestTask(currentTask)
+                addGenerateResourcesTask(currentTask)
 
             //if it is a ndk compile task, replace it with the ChilliSource ndk compile task.
             } else if (taskName.startsWith("compile") == true && taskName.endsWith("ndk") == true) {

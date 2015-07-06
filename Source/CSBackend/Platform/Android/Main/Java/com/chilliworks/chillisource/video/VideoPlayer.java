@@ -84,7 +84,7 @@ public class VideoPlayer extends System
 	public void present(boolean in_inApk, String in_filePath, int in_fileOffset, int in_fileLength, boolean in_dismissWhenTapped, boolean in_hasSubtitles,
 						float in_bgColourR, float in_bgColourG, float in_bgColourB, float in_bgColourA)
 	{
-		VideoPlayerActivity.setVideoInfo(false, in_filePath, in_fileOffset, in_fileLength, in_dismissWhenTapped, in_hasSubtitles, in_bgColourR, in_bgColourG, in_bgColourB, in_bgColourA);
+		VideoPlayerActivity.setVideoInfo(in_inApk, in_filePath, in_fileOffset, in_fileLength, in_dismissWhenTapped, in_hasSubtitles, in_bgColourR, in_bgColourG, in_bgColourB, in_bgColourA);
 		Intent mediaPlayerIntent = new Intent(CSApplication.get().getActivityContext(), VideoPlayerActivity.class);
 		CSApplication.get().getActivityContext().startActivity(mediaPlayerIntent);
 	}
