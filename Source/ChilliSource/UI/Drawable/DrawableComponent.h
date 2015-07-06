@@ -97,6 +97,13 @@ namespace ChilliSource
             //-------------------------------------------------------------------
             const Drawable* GetDrawable() const;
             //-------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return The drawable definition that was used to create the
+            /// underlying drawable object.
+            //-------------------------------------------------------------------
+            const DrawableDefCSPtr& GetDrawableDef() const;
+            //-------------------------------------------------------------------
             /// Sets the drawable definition that is used to create the underlying
             /// drawable object.
             ///
@@ -119,13 +126,6 @@ namespace ChilliSource
             /// @param The property map.
             //-------------------------------------------------------------------
             DrawableComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties);
-            //-------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The drawable definition that was used to create the
-            /// underlying drawable object.
-            //-------------------------------------------------------------------
-            const DrawableDefCSPtr& GetDrawableDef() const;
             //----------------------------------------------------------------
             /// This is called during the draw event whenever the application
             /// is active and the owning widget in on the canvas. This will
