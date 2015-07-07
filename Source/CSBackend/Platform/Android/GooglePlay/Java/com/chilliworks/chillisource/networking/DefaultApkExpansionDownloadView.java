@@ -67,10 +67,12 @@ public final class DefaultApkExpansionDownloadView extends ApkExpansionDownloadV
      */
     @Override protected void onInit()
     {
-        //The following uses the deprecated method: getWidth(). This should be changed to getSize() when the minimum SDK target is changed to API Level 13 or higher.
-
         final float PROGRESS_BAR_MARGIN_PERCENTAGE = 0.25f;
-        int progressBarMargin = (int)Math.round(((float)getActivity().getWindowManager().getDefaultDisplay().getWidth()) * PROGRESS_BAR_MARGIN_PERCENTAGE);
+
+        //The following uses the deprecated method: getWidth(). This should be changed to getSize() when the minimum SDK target is changed to API Level 13 or higher.
+        @SuppressWarnings("deprecation") float displayWidth = (float)getActivity().getWindowManager().getDefaultDisplay().getWidth();
+
+        int progressBarMargin = (int)Math.round(displayWidth * PROGRESS_BAR_MARGIN_PERCENTAGE);
         RelativeLayout.LayoutParams progressBarLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         progressBarLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
         progressBarLayoutParams.setMargins(progressBarMargin, 0, progressBarMargin, 0);
@@ -79,7 +81,7 @@ public final class DefaultApkExpansionDownloadView extends ApkExpansionDownloadV
         m_progressBar.setLayoutParams(progressBarLayoutParams);
 
         final float TEXT_VIEW_MARGIN_PERCENTAGE = 0.1f;
-        int textViewMargin = (int)Math.round(((float)getActivity().getWindowManager().getDefaultDisplay().getWidth()) * TEXT_VIEW_MARGIN_PERCENTAGE);
+        int textViewMargin = (int)Math.round(displayWidth * TEXT_VIEW_MARGIN_PERCENTAGE);
         RelativeLayout.LayoutParams textViewLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         textViewLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
         textViewLayoutParams.setMargins(textViewMargin, 0, textViewMargin, 0);

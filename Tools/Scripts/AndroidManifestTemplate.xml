@@ -30,10 +30,10 @@ THE SOFTWARE.
 
 <!-- NOTE: This is auto generated, do not change! -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="[[PACKAGE]]" android:versionCode="[[VERSIONCODE]]" android:versionName="[[VERSIONNAME]]" android:installLocation="preferExternal" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="[[PACKAGE]]" android:installLocation="preferExternal" >
 
-    <uses-feature android:name="android.hardware.touchscreen.multitouch" android:required="true" android:glEsVersion="0x00020000" />
-    <uses-sdk android:minSdkVersion="[[MINSDKVERSION]]" android:targetSdkVersion="[[TARGETSDKVERSION]]"/>
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+    <uses-feature android:name="android.hardware.touchscreen.multitouch" android:required="true" />
 
     <!-- Chilli Source permissions -->
     <permission android:name="[[PACKAGE]].permission.C2D_MESSAGE" android:protectionLevel="signature" />
@@ -102,13 +102,6 @@ THE SOFTWARE.
                 <category android:name="[[PACKAGE]]" />
             </intent-filter>
         </receiver>
-
-        <!-- Amazon iap -->
-	    <receiver android:name= "com.amazon.inapp.purchasing.ResponseReceiver">
-			<intent-filter>
-				<action android:name= "com.amazon.inapp.purchasing.NOTIFY" android:permission= "com.amazon.inapp.purchasing.Permission.NOTIFY" />
-			</intent-filter>
-		</receiver>
 
         <!-- Application extra information -->
         [[APPLICATIONEXTRA]]
