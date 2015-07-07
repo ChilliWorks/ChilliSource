@@ -88,7 +88,7 @@ ext {
         process.destroy()
 
         if (process.exitValue() != 0) {
-            throw new GradleException("Native build failed. See errors above for more information.") as Throwable
+            throw new GradleException("Process exited with with error code " + process.exitValue() + ". See above for details if available.") as Throwable
         }
     }
 }
