@@ -139,23 +139,19 @@ namespace CSBackend
                 CSCore::FileSystem* fileSystem = CSCore::Application::Get()->GetFileSystem();
 
                 std::string fullFilePath;
-                switch(in_storageLocation)
+                if (in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(filePath) == false)
                 {
-                    default:
-                        fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + filePath;
-                        break;
-                    case CSCore::StorageLocation::k_package:
-                        fullFilePath = fileSystem->GetAbsolutePathToFile(CSCore::StorageLocation::k_package, filePath);
-                        break;
-                    case CSCore::StorageLocation::k_DLC:
-                        fullFilePath = fileSystem->GetAbsolutePathToFile(CSCore::StorageLocation::k_DLC, filePath);
-                        break;
+                    fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + filePath;
+                }
+                else
+                {
+                    fullFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + filePath;
                 }
 
                 std::string strHTMLFileContents;
-                CSCore::FileStreamSPtr pHTMLFile = fileSystem->CreateFileStream(in_storageLocation, in_filePath, CSCore::FileMode::k_read);
+                CSCore::FileStreamUPtr pHTMLFile = fileSystem->CreateFileStream(in_storageLocation, in_filePath, CSCore::FileMode::k_read);
                 pHTMLFile->GetAll(strHTMLFileContents);
-                pHTMLFile->Close();
+                pHTMLFile.reset();
                 
                 NSString* pstrHTML = [NSStringUtils newNSStringWithUTF8String:strHTMLFileContents];
                 NSString* urlString = [NSStringUtils newNSStringWithUTF8String:fullFilePath];

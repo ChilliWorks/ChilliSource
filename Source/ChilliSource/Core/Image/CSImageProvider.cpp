@@ -151,7 +151,6 @@ namespace ChilliSource
                     // Allocated memory needed for the compressed image data
                     u8* pubyCompressedData = (u8*)malloc(sHeader.m_compressedDataSize);
                     in_stream->Read((s8*)pubyCompressedData, sHeader.m_compressedDataSize);
-                    in_stream->Close();
                     
                     // Allocated memory need for for the bitmap context
                     pubyBitmapData = new u8[sHeader.m_originalDataSize];
@@ -184,7 +183,6 @@ namespace ChilliSource
                     // Allocated memory needed for the bitmap context
                     pubyBitmapData = new u8[sHeader.m_originalDataSize];;
                     in_stream->Read((s8*)pubyBitmapData, udwSize);
-                    in_stream->Close();
                 }
                 
                 Image::ImageDataUPtr imageData(pubyBitmapData);
@@ -213,7 +211,7 @@ namespace ChilliSource
             {
                 FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filepath, FileMode::k_readBinary);
                 
-                if(pImageFile == nullptr || pImageFile->IsBad() == true)
+                if(pImageFile == nullptr)
                 {
                     out_resource->SetLoadState(Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
@@ -234,6 +232,8 @@ namespace ChilliSource
                 CS_ASSERT(udwVersion >= 3, "Only version 3 and above supported");
    
                 ReadFileVersion3(pImageFile, out_resource);
+
+                pImageFile.reset();
                 
                 out_resource->SetLoadState(Resource::LoadState::k_loaded);
                 if(in_delegate != nullptr)

@@ -32,7 +32,7 @@
 #define _CSBACKEND_PLATFORM_ANDROID_CORE_BASE_COREJAVAINTERFACE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 #include <jni.h>

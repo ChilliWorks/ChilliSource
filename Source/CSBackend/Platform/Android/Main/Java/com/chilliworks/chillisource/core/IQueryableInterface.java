@@ -28,20 +28,24 @@
 
 package com.chilliworks.chillisource.core;
 
-//=============================================================
-/// Queryable Interface
-///
-/// Interface that allows type querying even on generics.
-///
-/// Any classes inheriting from this will have to provide
-/// the public member "InterfaceIDType InterfaceID".
-//=============================================================
-public abstract class IQueryableInterface
+/**
+ * An interface for types that can have their type queried at runtime. This is an alternate
+ * to using the instanceof keyword.
+ *
+ * Classes which implement this should provide a static, public instance of InterfaceID called
+ * INTERFACE_ID which can be used to query the type.
+ *
+ * @author Ian Copland
+ */
+interface IQueryableInterface
 {
-	//---------------------------------------------------------
-	/// IsA
-	///
-	/// @return whether or not it is off the given type.
-	//---------------------------------------------------------
-	public abstract boolean IsA(InterfaceIDType inInterfaceType);
+    /**
+     * Allows querying of whether the class implements the interface associated with the
+     * given interface Id.
+     *
+     * @param in_interfaceId - The interface Id
+     *
+     * @return Whether or not the interface is implemented.
+     */
+	boolean isA(InterfaceId in_interfaceId);
 }

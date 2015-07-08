@@ -33,8 +33,9 @@
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/Screen.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/DialogueBox/DialogueBoxSystem.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
 #include <CSBackend/Platform/Android/Main/JNI/Input/Pointer/TouchInputJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Networking/Http/HttpRequestJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Web/Base/WebViewJavaInterface.h>
@@ -62,7 +63,7 @@ extern "C"
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
 	//--------------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject in_this);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_initApplication(JNIEnv* in_env, jobject in_this);
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is resumed.
 	///
@@ -109,7 +110,7 @@ extern "C"
 	/// @param JNIEnv - The jni environment.
 	/// @param jobject - the java object calling the function
 	//--------------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroy(JNIEnv* in_env, jobject in_this);
+	void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroyApplication(JNIEnv* in_env, jobject in_this);
 	//--------------------------------------------------------------------------------------
 	/// Interface function called from java. This is called when the application is updated
 	///
@@ -157,9 +158,9 @@ extern "C"
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_create(JNIEnv* in_env, jobject in_this)
 {
 	//get the java VM and init the Java Interface Manager
-	JavaVM* javaVM;
+	JavaVM* javaVM = nullptr;
 	in_env->GetJavaVM(&javaVM);
-
+	CSBackend::Android::JavaVirtualMachine::Create(javaVM);
 	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->Initialise(javaVM);
 
 	//add the core native interface
@@ -167,7 +168,7 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_create(JNIEnv* i
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_core_CoreNativeInterface_init(JNIEnv* in_env, jobject in_this)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_initApplication(JNIEnv* in_env, jobject in_this)
 {
 	//get the java VM and init the Java Interface Manager
 	JavaVM* javaVM;
@@ -211,9 +212,11 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_suspend(JNIEnv* 
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroy(JNIEnv* in_env, jobject in_this)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroyApplication(JNIEnv* in_env, jobject in_this)
 {
 	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>()->DestroyApplication();
+
+	CSBackend::Android::JavaVirtualMachine::Destroy();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
@@ -310,7 +313,7 @@ namespace CSBackend
 			std::string sdCardRootPath = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring externalStorageDir = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getExternalStorageDirectory")));
-			sdCardRootPath = JavaInterfaceUtils::CreateSTDStringFromJString(externalStorageDir);
+			sdCardRootPath = JavaUtils::CreateSTDStringFromJString(externalStorageDir);
 			env->DeleteLocalRef(externalStorageDir);
 			return sdCardRootPath;
 		}
@@ -321,7 +324,7 @@ namespace CSBackend
 			std::string appName = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrName = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getApplicationName")));
-			appName = JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
+			appName = JavaUtils::CreateSTDStringFromJString(jstrName);
 			env->DeleteLocalRef(jstrName);
 			return appName;
 		}
@@ -339,7 +342,7 @@ namespace CSBackend
 			std::string appVersion = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrName = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getApplicationVersionName")));
-			appVersion = JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
+			appVersion = JavaUtils::CreateSTDStringFromJString(jstrName);
 			env->DeleteLocalRef(jstrName);
 			return appVersion;
 		}
@@ -350,7 +353,7 @@ namespace CSBackend
 			std::string packageName = "";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrName = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getPackageName")));
-			packageName = JavaInterfaceUtils::CreateSTDStringFromJString(jstrName);
+			packageName = JavaUtils::CreateSTDStringFromJString(jstrName);
 			env->DeleteLocalRef(jstrName);
 			return packageName;
 		}
@@ -361,7 +364,7 @@ namespace CSBackend
 			std::string apkRootPath = " ";
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrAkpPath = static_cast<jstring>(env->CallObjectMethod(GetJavaObject(), GetMethodID("getAPKDirectory")));
-			apkRootPath = JavaInterfaceUtils::CreateSTDStringFromJString(jstrAkpPath);
+			apkRootPath = JavaUtils::CreateSTDStringFromJString(jstrAkpPath);
 			env->DeleteLocalRef(jstrAkpPath);
 			return apkRootPath;
 		}

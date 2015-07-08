@@ -42,6 +42,10 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+
 //========================================================
 /// Media Player View
 ///
@@ -57,9 +61,11 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	/// Private Member Data
 	//------------------------------------------------------------------------
 	private boolean mbInAPK;
-	private String mstrFilename;
+	private String m_filePath;
+	private int m_fileOffset = -1;
+	private int m_fileLength = -1;
 	private boolean mbCanDismissWithTap;
-	private MediaPlayer mMediaPlayer;
+	private MediaPlayer m_mediaPlayer;
 	private int mdwSeekPosition;
 	private VideoPlayerActivity mActivity;
 	private long mqwTapTime;
@@ -67,13 +73,15 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	/// Constructor
 	//------------------------------------------------------------------------
 	@SuppressWarnings("deprecation")
-	public VideoPlayerView(Context inContext, boolean inbInAPK, String instrFilename, boolean inbCanDismissWithTap, int indwSeekPosition) 
+	public VideoPlayerView(Context inContext, boolean inbInAPK, String instrFilename, int in_fileOffset, int in_fileLength, boolean inbCanDismissWithTap, int indwSeekPosition)
 	{
 		super(inContext);
 		mActivity = VideoPlayerActivity.GetActivity();
 
 		mbInAPK = inbInAPK;
-		mstrFilename = instrFilename;
+		m_filePath = instrFilename;
+		m_fileOffset = in_fileOffset;
+		m_fileLength = in_fileLength;
 		mbCanDismissWithTap = inbCanDismissWithTap;
 		mdwSeekPosition = indwSeekPosition;
 		mqwTapTime = 0;
@@ -89,9 +97,9 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	//--------------------------------------------------------------
 	public synchronized int GetTime() 
 	{
-		if (mMediaPlayer != null)
+		if (m_mediaPlayer != null)
 		{
-			return mMediaPlayer.getCurrentPosition();
+			return m_mediaPlayer.getCurrentPosition();
 		}
 		return 0;
 	}
@@ -102,37 +110,57 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	//--------------------------------------------------------------
 	private synchronized void PrepareVideoPlayer() 
 	{
-		if (mMediaPlayer == null)
+		if (m_mediaPlayer == null)
 		{
 			try
 			{	
 				//setup the media player
-				mMediaPlayer = new MediaPlayer();
-				mMediaPlayer.setOnPreparedListener(this);
-				mMediaPlayer.setOnErrorListener(this);
-				mMediaPlayer.setOnCompletionListener(this);
-				mMediaPlayer.setDisplay(getHolder());
-				mMediaPlayer.setScreenOnWhilePlaying(true);
-				mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+				m_mediaPlayer = new MediaPlayer();
+				m_mediaPlayer.setOnPreparedListener(this);
+				m_mediaPlayer.setOnErrorListener(this);
+				m_mediaPlayer.setOnCompletionListener(this);
+				m_mediaPlayer.setDisplay(getHolder());
+				m_mediaPlayer.setScreenOnWhilePlaying(true);
+				m_mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 				
 				//set the data source
 				if (mbInAPK == true)
 				{
-					AssetFileDescriptor fileDesc = mActivity.getAssets().openFd(mstrFilename);
-					mMediaPlayer.setDataSource(fileDesc.getFileDescriptor(), fileDesc.getStartOffset(), fileDesc.getLength());
+					AssetFileDescriptor fileDesc = mActivity.getAssets().openFd(m_filePath);
+
+					if (m_fileOffset == -1 && m_fileLength == -1)
+					{
+						m_mediaPlayer.setDataSource(fileDesc.getFileDescriptor(), fileDesc.getStartOffset(), fileDesc.getLength());
+					}
+					else
+					{
+						assert (m_fileLength > 0) : "Cannot create 0 size stream";
+
+						m_mediaPlayer.setDataSource(fileDesc.getFileDescriptor(), fileDesc.getStartOffset() + m_fileOffset, m_fileLength);
+					}
 				}
 				else
 				{
-					mMediaPlayer.setDataSource(mstrFilename);
+					if (m_fileOffset == -1 && m_fileLength == -1)
+					{
+						m_mediaPlayer.setDataSource(m_filePath);
+					}
+					else
+					{
+						assert (m_fileLength > 0) : "Cannot create 0 size stream";
+
+						FileInputStream stream = new FileInputStream(m_filePath);
+						m_mediaPlayer.setDataSource(stream.getFD(), m_fileOffset, m_fileLength);
+					}
 				}
 				
 				//prepare the media player asynchronously
-				mMediaPlayer.prepareAsync();
+				m_mediaPlayer.prepareAsync();
 			}
 			catch (Exception e)
 			{
-				Logging.logError("Error trying to open video file: " + mstrFilename);
-				onError(mMediaPlayer, 0, 0);
+				Logging.logError("Error trying to open video file: " + m_filePath);
+				onError(m_mediaPlayer, 0, 0);
 			}
 		}
 	}	
@@ -145,14 +173,14 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	public synchronized void Cleanup() 
 	{
 		//clean up the video
-		if (mMediaPlayer != null)
+		if (m_mediaPlayer != null)
 		{
-			if (mMediaPlayer.isPlaying() == true)
+			if (m_mediaPlayer.isPlaying() == true)
 			{
-				mMediaPlayer.stop();
+				m_mediaPlayer.stop();
 			}
-			mMediaPlayer.release();
-			mMediaPlayer = null;
+			m_mediaPlayer.release();
+			m_mediaPlayer = null;
 		}
 	}
 	//--------------------------------------------------------------
@@ -203,12 +231,12 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	@SuppressWarnings("deprecation")
 	@Override public synchronized void onPrepared(MediaPlayer inMediaPlayer) 
 	{
-		if (mMediaPlayer == inMediaPlayer)
+		if (m_mediaPlayer == inMediaPlayer)
 		{	
 			//Since the view were placing the video onto is normally full screen, we need to fit the 
 			//video by width aspect, i.e video is full width of screen but maintains height aspect
-			int dwVideoHeight = mMediaPlayer.getVideoHeight();
-			int dwVideoWidth = mMediaPlayer.getVideoWidth();
+			int dwVideoHeight = m_mediaPlayer.getVideoHeight();
+			int dwVideoWidth = m_mediaPlayer.getVideoWidth();
 			
 			int dwScreenWidth = 0;
 			int dwScreenHeight = 0;
@@ -262,8 +290,8 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 			mActivity.mAspectViewContainer.setPadding(0, (int)(fYPadding * 0.5f), 0, (int)(fYPadding * 0.5f));
 			
 			//start the video
-			mMediaPlayer.seekTo(mdwSeekPosition);
-			mMediaPlayer.start();
+			m_mediaPlayer.seekTo(mdwSeekPosition);
+			m_mediaPlayer.start();
 		}
 	}
 	//--------------------------------------------------------------
@@ -274,7 +302,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	//--------------------------------------------------------------
 	@Override public synchronized boolean onError(MediaPlayer inMediaPlayer, int indwWhat, int indwExtra) 
 	{
-		if (mMediaPlayer == inMediaPlayer)
+		if (m_mediaPlayer == inMediaPlayer)
 		{
 			Logging.logError("Media player has encountered an error while preparing.");
 			onCompletion(inMediaPlayer);
@@ -290,7 +318,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	//--------------------------------------------------------------
 	@Override public synchronized void onCompletion(MediaPlayer inMediaPlayer) 
 	{
-		if (mMediaPlayer == inMediaPlayer)
+		if (m_mediaPlayer == inMediaPlayer)
 		{
 			Cleanup();
 			mActivity.finish();
@@ -319,7 +347,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 			{
 				if (System.currentTimeMillis() - mqwTapTime <= kqwTapLengthInMS)
 				{
-					onCompletion(mMediaPlayer);
+					onCompletion(m_mediaPlayer);
 				}
 			}
 		}
@@ -336,7 +364,7 @@ public class VideoPlayerView extends SurfaceView implements OnPreparedListener, 
 	{
 		if (mbCanDismissWithTap == true)
 		{
-			onCompletion(mMediaPlayer);
+			onCompletion(m_mediaPlayer);
 		}
 	}
 }

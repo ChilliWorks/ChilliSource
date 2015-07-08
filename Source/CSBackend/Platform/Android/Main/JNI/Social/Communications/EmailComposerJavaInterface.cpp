@@ -30,8 +30,8 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Social/Communications/EmailComposerJavaInterface.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 
 //function definitions
 extern "C"
@@ -121,14 +121,14 @@ namespace CSBackend
 			jobjectArray ajstrRecipients = pEnv->NewObjectArray(inastrRecipientAddresses.size(), pEnv->FindClass("java/lang/String"), pEnv->NewStringUTF(""));
 			for(auto it = inastrRecipientAddresses.begin(); it != inastrRecipientAddresses.end(); ++it)
 			{
-				jstring jstrRecipient = JavaInterfaceUtils::CreateJStringFromSTDString(*it);
+				jstring jstrRecipient = JavaUtils::CreateJStringFromSTDString(*it);
 				pEnv->SetObjectArrayElement(ajstrRecipients,udwCount++, jstrRecipient);
 				pEnv->DeleteLocalRef(jstrRecipient);
 			}
 
-			jstring jstrSubject = JavaInterfaceUtils::CreateJStringFromSTDString(instrSubject);
-			jstring jstrContents = JavaInterfaceUtils::CreateJStringFromSTDString(instrContents);
-			jstring jstrAttachmentFilename = JavaInterfaceUtils::CreateJStringFromSTDString(instrAttachmentFilename);
+			jstring jstrSubject = JavaUtils::CreateJStringFromSTDString(instrSubject);
+			jstring jstrContents = JavaUtils::CreateJStringFromSTDString(instrContents);
+			jstring jstrAttachmentFilename = JavaUtils::CreateJStringFromSTDString(instrAttachmentFilename);
 
 			//call method
 			pEnv->CallVoidMethod(GetJavaObject(), GetMethodID("Present"), ajstrRecipients, jstrSubject, jstrContents, inbFormatAsHtml, jstrAttachmentFilename);

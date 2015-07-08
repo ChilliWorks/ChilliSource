@@ -59,13 +59,6 @@ namespace CSBackend
 			}
 
 			CSCore::FileStream* pStream = (CSCore::FileStream*)png_get_io_ptr(inpPng);
-
-			if (pStream->IsBad() == true || pStream->IsOpen() == false)
-			{
-				CS_LOG_ERROR("ReadPngData() has failed due to a problem with the filestream.");
-				png_error(inpPng, "Read Error");
-			}
-
 			pStream->Read((s8*)inpData, indwLength);
 		}
 		//----------------------------------------------------------------------------------
@@ -111,9 +104,8 @@ namespace CSBackend
 			CSCore::FileStreamSPtr stream = CSCore::Application::Get()->GetFileSystem()->CreateFileStream(ineStorageLocation, instrFilename, CSCore::FileMode::k_readBinary);
 
 			//insure the stream is not broken
-			if (stream == CSCore::FileStreamSPtr() || stream->IsBad() == true || stream->IsOpen() == false)
+			if (stream == nullptr)
 			{
-				stream->Close();
 				return;
 			}
 
@@ -122,9 +114,6 @@ namespace CSBackend
 			{
 				mbIsLoaded = true;
 			}
-
-			//close the stream
-			stream->Close();
 		}
 		//----------------------------------------------------------------------------------
 		/// Release
@@ -319,8 +308,6 @@ namespace CSBackend
 
 			//deallocate everything
 			png_destroy_read_struct(&pPng, &pInfo, (png_infopp)nullptr);
-
-			inStream->Close();
 
 			return true;
 		}

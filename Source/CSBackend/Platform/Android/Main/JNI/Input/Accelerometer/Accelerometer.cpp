@@ -30,7 +30,7 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Input/Accelerometer/Accelerometer.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Input/Accelerometer/AccelerometerJavaInterface.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 

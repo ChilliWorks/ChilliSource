@@ -122,7 +122,7 @@ namespace ChilliSource
 			bool ReadHeader(const Core::FileStreamSPtr& in_stream, const std::string & in_filePath, const SkinnedAnimationSPtr& out_resource, u32& out_numFrames, s32& out_numSkeletonNodes)
             {
                 //Check file for corruption
-                if(in_stream == nullptr || in_stream->IsBad() == true)
+                if(in_stream == nullptr)
                 {
                     CS_LOG_ERROR("Cannot open CSAnim file: " + in_filePath);
                     return false;
@@ -207,7 +207,7 @@ namespace ChilliSource
 		void CSAnimProvider::ReadSkinnedAnimationFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const SkinnedAnimationSPtr& out_resource) const
 		{
 			Core::FileStreamSPtr stream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_readBinary);
-			
+
 			u32 numFrames = 0;
 			s32 numSkeletonNodes = 0;
 			if(ReadHeader(stream, in_filePath, out_resource, numFrames, numSkeletonNodes) == false)

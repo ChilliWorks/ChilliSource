@@ -32,7 +32,7 @@
 
 #include <CSBackend/Platform/Android/GooglePlay/JNI/Networking/IAP/GooglePlayIAPSystem.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 
 namespace CSBackend
 {
@@ -40,8 +40,6 @@ namespace CSBackend
 	{
 		namespace
 		{
-			const std::string k_playStorePublicKeyKey("GooglePlayPublicKey");
-
 			//---------------------------------------------------------------
 			/// Try and locate the product in the list and return its
 			/// type - managed or unmanaged
@@ -75,8 +73,6 @@ namespace CSBackend
         //---------------------------------------------------------------
 		GooglePlayIAPSystem::GooglePlayIAPSystem(const CSCore::ParamDictionary& in_params)
 		{
-			CS_ASSERT(in_params.HasKey(k_playStorePublicKeyKey) == true, "Cannot create GooglePlay IAP system without Play store public key - GooglePlayPublicKey");
-			m_publicKey = in_params.GetValue(k_playStorePublicKeyKey);
 		}
         //---------------------------------------------------------------
         //---------------------------------------------------------------
@@ -91,7 +87,7 @@ namespace CSBackend
 			m_javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<GooglePlayIAPJavaInterface>();
 			if(m_javaInterface == nullptr)
 			{
-				m_javaInterface = GooglePlayIAPJavaInterfaceSPtr(new GooglePlayIAPJavaInterface(m_publicKey));
+				m_javaInterface = GooglePlayIAPJavaInterfaceSPtr(new GooglePlayIAPJavaInterface());
 				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_javaInterface);
 			}
 		}

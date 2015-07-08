@@ -70,45 +70,47 @@ namespace ChilliSource
             k_current,
             k_end
 		};
-		//=================================================================
-		/// FileStream
+		//------------------------------------------------------------------------------
+		/// A filestream is used for all reading and writing of files. This will emulate
+		/// the functionality of fstream and allows for cross platform file reading.
 		///
-		/// A filestream is used for all reading and writing of files.
-		/// This will emulate the functionality of fstream and allows for
-		/// cross platform file reading.
-		//=================================================================
+		/// File streams are thread agnostic, but not thread-safe. A file stream should
+		/// be used and destroyed on the same thread that it was created.
+		///
+		/// @author Ian Copland
+		//------------------------------------------------------------------------------
 		class FileStream
 		{
 		public:
-			//--------------------------------------------------------------------------------------------------
-			/// Destructor
-			//--------------------------------------------------------------------------------------------------
-            virtual ~FileStream(){}
-			//--------------------------------------------------------------------------------------------------
-			/// Is Open
+			CS_DECLARE_NOCOPY(FileStream);
+            //------------------------------------------------------------------------------
+            /// Constructor. Creates and opens a new file stream to a file at the given
+            /// path with the given file mode. Prior to using the file stream IsValid()
+            /// should be checked to confirm it was successfully opened.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_filePath - The path to the file to be opened.
+            /// @param in_fileMode - The file mode with which the file should be opened.
+            //------------------------------------------------------------------------------
+            FileStream(const std::string& in_filePath, FileMode in_fileMode);
+			//------------------------------------------------------------------------------
+			/// This should be called immediately after construction, before calling any
+			/// other file stream methods. If this returns false the FileStream should be
+			/// discarded, no other methods should be called.
 			///
-			/// @return whether or not the stream is open
-			//--------------------------------------------------------------------------------------------------
-			virtual bool IsOpen();
-			//--------------------------------------------------------------------------------------------------
-			/// Is Bad
+			/// @author Ian Copland
 			///
-			/// @return Checks that the file stream is not corrupt. this calls both fstream::fail() and
-			///			fstream::bad()
+			/// @return Whether or not the file was successfully opened on construction and
+			/// is now ready to be read from.
+			//------------------------------------------------------------------------------
+			virtual bool IsValid() const;
 			//--------------------------------------------------------------------------------------------------
-			virtual bool IsBad();
-			//--------------------------------------------------------------------------------------------------
-			/// End Of File
-			///
-			/// @return Checks whether the end of the file has been reached.
-			//--------------------------------------------------------------------------------------------------
-			virtual bool EndOfFile();
-			//--------------------------------------------------------------------------------------------------
-			/// Close
-			///
-			/// Closes the filestream.
-			//--------------------------------------------------------------------------------------------------
-			virtual void Close();
+            /// End Of File
+            ///
+            /// @return Whether the end of the file has been reached.
+            //--------------------------------------------------------------------------------------------------
+            virtual bool EndOfFile();
 			//--------------------------------------------------------------------------------------------------
 			/// Get
 			///
@@ -348,43 +350,28 @@ namespace ChilliSource
             /// @return SHA1 checksum
             //--------------------------------------------------------------
             std::string GetSHA1Checksum(CSHA1::REPORT_TYPE ineReportType);
-            //--------------------------------------------------------------------------------------------------
-			/// Open
-			///
-			/// Opens the filestream with the specified file mode.
-			///
-			/// @param The path to the file to be opened.
-			/// @param The file mode with which the file should be opened.
-			//--------------------------------------------------------------------------------------------------
-			virtual void Open(const std::string& instrFilename, FileMode ineMode);
-            //--------------------------------------------------------------------------------------------------
-			/// Open Encrypted
-			///
-			/// Opens the filestream to the encrypted file with the specified file mode. The file is then
-            /// decrypted using the private key into memory. Subsequent actions are performed on the memory
-            /// copy
-			///
-			/// @param The path to the file to be opened.
-            /// @param Private AES key
-			/// @param The file mode with which the file should be opened.
-			//--------------------------------------------------------------------------------------------------
-            void OpenEncrypted(const std::string& instrFilename, const std::string& instrPrivateKey, FileMode ineMode);
-            //--------------------------------------------------------------------------------------------------
-			/// Constructor
-			///
-			/// This is defined protected so that only the FileSystem can create it.
-			//--------------------------------------------------------------------------------------------------
-			FileStream(){};
+            //------------------------------------------------------------------------------
+            /// Destructor. Closes the file stream if it was successfully opened.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            virtual ~FileStream();
 
 		protected:
-
+			//------------------------------------------------------------------------------
+			/// Constructor. Declared protected so child classes can implement their own
+			/// constructors.
+			///
+			/// @author Ian Copland
+			//------------------------------------------------------------------------------
+			FileStream() {}
             //--------------------------------------------------------------------------------------------------
             /// Get File Mode
             //--------------------------------------------------------------------------------------------------
             std::ios_base::openmode GetFileMode() const;
-            
+
+            bool m_isValid = false;
             Core::FileMode meFileMode;
-        
 			std::string mstrFilename;
 			std::fstream mFileStream;
 		};

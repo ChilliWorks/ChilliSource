@@ -30,8 +30,8 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Input/TextEntry/TextEntryJavaInterface.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -69,7 +69,7 @@ void Java_com_chilliworks_chillisource_input_TextEntryNativeInterface_nativeOnTe
 	CSBackend::Android::TextEntryJavaInterfaceSPtr textEntryJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::TextEntryJavaInterface>();
 	if (textEntryJI != nullptr)
 	{
-		std::string text = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(in_text);
+		std::string text = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_text);
 		auto task = std::bind(&CSBackend::Android::TextEntryJavaInterface::OnTextChanged, textEntryJI.get(), text);
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
 	}
@@ -195,7 +195,7 @@ namespace CSBackend
 		void TextEntryJavaInterface::SetTextBuffer(const std::string& in_text)
 		{
         	JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-        	jstring text = JavaInterfaceUtils::CreateJStringFromSTDString(in_text);
+        	jstring text = JavaUtils::CreateJStringFromSTDString(in_text);
         	env->CallVoidMethod(GetJavaObject(), GetMethodID("setTextBuffer"), text);
         	env->DeleteLocalRef(text);
 		}

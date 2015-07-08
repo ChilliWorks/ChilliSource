@@ -353,7 +353,7 @@ namespace ChilliSource
             
             if(pathsContaining.empty() == true)
             {
-                return "";
+                return in_basePath;
             }
 
             //Filter the paths based on the priority tag - if it doesn't contain the tag check to make sure it doesn't have an excluding tag in this group
@@ -384,7 +384,7 @@ namespace ChilliSource
                 }
             }
 
-            return finalPaths.empty() == false ? filePath + finalPaths[0] : "";
+            return finalPaths.empty() == false ? filePath + finalPaths[0] : in_basePath;
         }
         //--------------------------------------------------------------
         //--------------------------------------------------------------

@@ -31,8 +31,8 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/DialogueBox/DialogueBoxJavaInterface.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/DialogueBox/DialogueBoxSystem.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <ChilliSource/Core/Base/Application.h>
 
 #include <jni.h>
@@ -111,7 +111,7 @@ namespace CSBackend
         void DialogueBoxJavaInterface::MakeToast(const std::string& in_text)
         {
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring message = JavaInterfaceUtils::CreateJStringFromSTDString(in_text);
+			jstring message = JavaUtils::CreateJStringFromSTDString(in_text);
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("makeToast"), message);
 			env->DeleteLocalRef(message);
         }
@@ -120,10 +120,10 @@ namespace CSBackend
         void DialogueBoxJavaInterface::ShowSystemConfirmDialogue(s32 in_dialogID, const std::string& in_title, const std::string& in_message, const std::string& in_confirm, const std::string& in_cancel)
         {
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring title = JavaInterfaceUtils::CreateJStringFromSTDString(in_title);
-			jstring message = JavaInterfaceUtils::CreateJStringFromSTDString(in_message);
-			jstring confirm = JavaInterfaceUtils::CreateJStringFromSTDString(in_confirm);
-			jstring cancel = JavaInterfaceUtils::CreateJStringFromSTDString(in_cancel);
+			jstring title = JavaUtils::CreateJStringFromSTDString(in_title);
+			jstring message = JavaUtils::CreateJStringFromSTDString(in_message);
+			jstring confirm = JavaUtils::CreateJStringFromSTDString(in_confirm);
+			jstring cancel = JavaUtils::CreateJStringFromSTDString(in_cancel);
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("showSystemConfirmDialogue"), in_dialogID, title, message, confirm, cancel);
 			env->DeleteLocalRef(title);
 			env->DeleteLocalRef(message);
@@ -135,9 +135,9 @@ namespace CSBackend
         void DialogueBoxJavaInterface::ShowSystemDialogue(s32 in_dialogID, const std::string& in_title, const std::string& in_message, const std::string& in_confirm)
         {
 			JNIEnv* env = JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring title = JavaInterfaceUtils::CreateJStringFromSTDString(in_title);
-			jstring message = JavaInterfaceUtils::CreateJStringFromSTDString(in_message);
-			jstring confirm = JavaInterfaceUtils::CreateJStringFromSTDString(in_confirm);
+			jstring title = JavaUtils::CreateJStringFromSTDString(in_title);
+			jstring message = JavaUtils::CreateJStringFromSTDString(in_message);
+			jstring confirm = JavaUtils::CreateJStringFromSTDString(in_confirm);
 			env->CallVoidMethod(GetJavaObject(), GetMethodID("showSystemDialogue"), in_dialogID, title, message, confirm);
 			env->DeleteLocalRef(title);
 			env->DeleteLocalRef(message);

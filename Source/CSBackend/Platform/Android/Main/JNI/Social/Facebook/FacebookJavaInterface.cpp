@@ -30,8 +30,8 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookJavaInterface.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookAuthenticationSystem.h>
 #include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookPostSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
@@ -213,7 +213,7 @@ namespace CSBackend
 	    	u32 udwPermissionCount = 0;
 	    	for(std::vector<std::string>::const_iterator it = inaReadPerms.begin(); it != inaReadPerms.end(); ++it)
 	    	{
-	    		jstring jstrPermission = JavaInterfaceUtils::CreateJStringFromSTDString((*it));
+	    		jstring jstrPermission = JavaUtils::CreateJStringFromSTDString((*it));
 	    		pEnv->SetObjectArrayElement(jaPermissions, udwPermissionCount, jstrPermission);
 	    		pEnv->DeleteLocalRef(jstrPermission);
 	    		++udwPermissionCount;
@@ -237,7 +237,7 @@ namespace CSBackend
 		{
 			JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
 			jstring jstrToken = (jstring)pEnv->CallObjectMethod(GetJavaObject(), GetMethodID("GetActiveToken"));
-			std::string strToken = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(jstrToken);
+			std::string strToken = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(jstrToken);
 			pEnv->DeleteLocalRef(jstrToken);
 			return strToken;
 		}
@@ -246,7 +246,7 @@ namespace CSBackend
 	    bool FacebookJavaInterface::HasPermission(const std::string& instrPermission)
 	    {
 			JNIEnv* pEnv = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJNIEnvironmentPtr();
-			jstring jstrPermission = CSBackend::Android::JavaInterfaceUtils::CreateJStringFromSTDString(instrPermission);
+			jstring jstrPermission = CSBackend::Android::JavaUtils::CreateJStringFromSTDString(instrPermission);
 			bool bHasPermission = pEnv->CallBooleanMethod(GetJavaObject(), GetMethodID("HasPermission"), jstrPermission);
 			pEnv->DeleteLocalRef(jstrPermission);
 			return bHasPermission;
@@ -262,7 +262,7 @@ namespace CSBackend
 	    	u32 udwPermissionCount = 0;
 	    	for(std::vector<std::string>::const_iterator it = inaReadPerms.begin(); it != inaReadPerms.end(); ++it)
 	    	{
-	    		jstring jstrPermission = JavaInterfaceUtils::CreateJStringFromSTDString((*it));
+	    		jstring jstrPermission = JavaUtils::CreateJStringFromSTDString((*it));
 	    		pEnv->SetObjectArrayElement(jaPermissions, udwPermissionCount, jstrPermission);
 	    		pEnv->DeleteLocalRef(jstrPermission);
 	    		++udwPermissionCount;
@@ -284,7 +284,7 @@ namespace CSBackend
 	    	u32 udwPermissionCount = 0;
 	    	for(std::vector<std::string>::const_iterator it = inaWritePerms.begin(); it != inaWritePerms.end(); ++it)
 	    	{
-	    		jstring jstrPermission = JavaInterfaceUtils::CreateJStringFromSTDString((*it));
+	    		jstring jstrPermission = JavaUtils::CreateJStringFromSTDString((*it));
 	    		pEnv->SetObjectArrayElement(jaPermissions, udwPermissionCount, jstrPermission);
 	    		pEnv->DeleteLocalRef(jstrPermission);
 	    		++udwPermissionCount;
@@ -313,13 +313,13 @@ namespace CSBackend
 	    	u32 i = 0;
 	    	for (const auto& postParam : in_postParams)
 	    	{
-	    		jstring element = JavaInterfaceUtils::CreateJStringFromSTDString(postParam);
+	    		jstring element = JavaUtils::CreateJStringFromSTDString(postParam);
 	    		env->SetObjectArrayElement(keyValues, i, element);
 	    		env->DeleteLocalRef(element);
 	    		++i;
 	    	}
 
-    		jstring graphPath = JavaInterfaceUtils::CreateJStringFromSTDString(in_graphPath);
+    		jstring graphPath = JavaUtils::CreateJStringFromSTDString(in_graphPath);
     		env->CallVoidMethod(GetJavaObject(), GetMethodID("Post"), graphPath, keyValues);
 
 	    	env->DeleteLocalRef(keyValues);
@@ -338,7 +338,7 @@ namespace CSBackend
 	    	u32 i = 0;
 	    	for(std::vector<std::string>::const_iterator it = inaKeyValues.begin(); it != inaKeyValues.end(); ++it, ++i)
 	    	{
-	    		jstring jstrElement = JavaInterfaceUtils::CreateJStringFromSTDString((*it));
+	    		jstring jstrElement = JavaUtils::CreateJStringFromSTDString((*it));
 	    		pEnv->SetObjectArrayElement(jaKeyValues, i, jstrElement);
 	    		pEnv->DeleteLocalRef(jstrElement);
 	    	}

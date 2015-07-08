@@ -12,8 +12,9 @@
         <option name="SELECTED_TEST_ARTIFACT" value="_android_test_" />
         <option name="ASSEMBLE_TASK_NAME" value="assembleGooglePlayArmv7Debug" />
         <option name="COMPILE_JAVA_TASK_NAME" value="compileGooglePlayArmv7DebugSources" />
-        <option name="ASSEMBLE_TEST_TASK_NAME" value="assembleGooglePlayArmv7DebugAndroidTest" />
         <option name="SOURCE_GEN_TASK_NAME" value="generateGooglePlayArmv7DebugSources" />
+        <option name="ASSEMBLE_TEST_TASK_NAME" value="assembleGooglePlayArmv7DebugAndroidTest" />
+        <option name="COMPILE_JAVA_TEST_TASK_NAME" value="compileGooglePlayArmv7DebugAndroidTestSources" />
         <option name="TEST_SOURCE_GEN_TASK_NAME" value="generateGooglePlayArmv7DebugAndroidTestSources" />
         <option name="ALLOW_USER_CONFIGURATION" value="false" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/src/main/AndroidManifest.xml" />
@@ -135,17 +136,36 @@
     <content url="file://$MODULE_DIR$/../../../Source/CSBackend/Platform/Android/Main/Java">
       <sourceFolder url="file://$MODULE_DIR$/../../../Source/CSBackend/Platform/Android/Main/Java" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
+    <orderEntry type="jdk" jdkName="Android API 22 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="googleplayexpansiondownloader" level="project" />
+    <orderEntry type="library" exported="" name="play-services-base-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-appinvite-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-panorama-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-drive-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-gcm-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-appindexing-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-wearable-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-safetynet-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-games-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-maps-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-plus-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-fitness-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="mediarouter-v7-22.0.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-analytics-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-wallet-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-identity-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-appstate-7.5.0" level="project" />
     <orderEntry type="library" exported="" name="facebook-android-sdk-3.23.1" level="project" />
-    <orderEntry type="library" exported="" name="appcompat-v7-21.0.3" level="project" />
-    <orderEntry type="library" exported="" name="play-services-6.5.87" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-21.0.3" level="project" />
-    <orderEntry type="library" exported="" name="support-v4-21.0.3" level="project" />
-    <orderEntry type="library" exported="" name="googleplayexpansionunzipper" level="project" />
-    <orderEntry type="library" exported="" name="googleplaylicensing" level="project" />
+    <orderEntry type="library" exported="" name="play-services-nearby-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="support-v4-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-cast-7.5.0" level="project" />
     <orderEntry type="library" exported="" name="bolts-android-1.1.4" level="project" />
+    <orderEntry type="library" exported="" name="appcompat-v7-22.2.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-ads-7.5.0" level="project" />
+    <orderEntry type="library" exported="" name="play-services-location-7.5.0" level="project" />
+    <orderEntry type="module" module-name="playapkexpansion" exported="" />
+    <orderEntry type="module" module-name="playlicensing" exported="" />
   </component>
 </module>
-

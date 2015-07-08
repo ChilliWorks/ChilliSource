@@ -35,6 +35,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/File/FileStream.h>
+#include <ChilliSource/Core/File/TaggedFilePathResolver.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 
 namespace CSBackend
@@ -113,51 +114,38 @@ namespace CSBackend
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
 
+			auto fileSystem = static_cast<CSBackend::Android::FileSystem*>(CSCore::Application::Get()->GetFileSystem());
+
 			std::string anchor;
 			std::string filePath;
 			GetFilePathAndAnchor(in_filePath, filePath, anchor);
-
-			CSBackend::Android::FileSystem* fileSystem = static_cast<CSBackend::Android::FileSystem*>(CSCore::Application::Get()->GetFileSystem());
+			auto taggedFilePath = CSCore::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, filePath);
 
 			std::string htmlFileContents;
-			CSCore::FileStreamUPtr htmlFile = fileSystem->CreateFileStream(in_storageLocation, filePath, CSCore::FileMode::k_read);
-			htmlFile->GetAll(htmlFileContents);
-			htmlFile->Close();
-			htmlFile.reset();
+			if (fileSystem->ReadFile(in_storageLocation, taggedFilePath, htmlFileContents) == false)
+			{
+				CS_LOG_ERROR("Could not open WebView: " + taggedFilePath);
+				return;
+			}
 
-			std::string fullFilePath = fileSystem->GetAbsolutePathToFile(in_storageLocation, filePath);
+			std::string fullFilePath;
+			if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_package ||
+            	(in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
+			{
+#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
+				fullFilePath = "content://com.chilliworks.chillisource.core.apkexpansioncontentprovider/" + fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
+#elif defined(CS_ANDROIDFLAVOUR_AMAZON)
+				fullFilePath = "file:///android_asset/" + fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
+#else
+				CS_LOG_FATAL("WebView doesn't support this Android flavour.");
+#endif
+			}
+			else
+			{
+				fullFilePath = "file://" + fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
+			}
 
-            switch(in_storageLocation)
-            {
-                case CSCore::StorageLocation::k_package:
-                {
-                	fullFilePath = "file:///android_asset/" + FileSystem::k_packageAPKDir + fullFilePath;
-                    break;
-                }
-                case CSCore::StorageLocation::k_chilliSource:
-                {
-                    fullFilePath = "file:///android_asset/" + FileSystem::k_csAPKDir + fullFilePath;
-                    break;
-                }
-                case CSCore::StorageLocation::k_DLC:
-                {
-                	if(fileSystem->DoesFileExistInCachedDLC(filePath) == true)
-                	{
-                		fullFilePath = "file://" + fullFilePath;
-                	}
-                	else
-                	{
-                		fullFilePath = "file:///android_asset/" + FileSystem::k_packageAPKDir + fullFilePath;
-                	}
-                    break;
-                }
-                default:
-                {
-                	fullFilePath = "file://" + fullFilePath;
-            		break;
-                }
-            }
-
+			//Get the directory.
 			u32 offset = fullFilePath.find_last_of("/");
 			if(offset != std::string::npos)
 			{

@@ -31,7 +31,7 @@
 #ifndef _CHILLISOURCE_PLATFORM_ANDROID_CORE_WEBVIEW_INTERFACE_
 #define _CHILLISOURCE_PLATFORM_ANDROID_CORE_WEBVIEW_INTERFACE_
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/_JavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/_JavaInterface.h>
 
 namespace CSBackend
 {

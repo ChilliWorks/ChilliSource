@@ -42,14 +42,14 @@
 -keep public class **.R { public *; }
 -keep public class **.R$* { public *; }
 
-#Keep all classes with public methods
+#Keep all classes with native methods
 -keepclasseswithmembers class * {
     native <methods>;
 }
 
 #Keep all Native Interfaces
--keep public class com.chilliworks.chillisource.core.INativeInterface { public *; }
--keep public class * extends com.chilliworks.chillisource.core.INativeInterface { public *; }
+-keep public class com.chilliworks.chillisource.core.System { public *; }
+-keep public class * extends com.chilliworks.chillisource.core.System { public *; }
 
 #also keep old-style Native Interfaces. This will be removed in the future
 -keep public class **NativeInterface { *; }
@@ -60,6 +60,9 @@
 #keep facebook
 -keep class com.facebook.** { *; }
 -keepattributes Signature
+
+#keep google play classes
+-keep class com.google.android.vending.expansion.downloader.impl.DownloadsDB
 
 #keep amazon classes
 -dontwarn com.amazon.**

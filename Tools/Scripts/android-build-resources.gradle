@@ -1,0 +1,270 @@
+//
+//  android-build-resources.gradle
+//  Chilli Source
+//  Created by Ian Copland on 26/06/2015.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2015 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+apply from: '../../../../ChilliSource/Tools/Scripts/android-execute-command.gradle'
+
+import java.io.*
+import java.nio.file.*
+import java.nio.file.attribute.*
+
+def g_assetsDirectory = "src/main/assets"
+def g_rng = new Random()
+
+/**
+ * @author Ian Copland
+ * 
+ * @param in_fileName - The file name that should be checked.
+ * @param in_ignoreFilesWith - Any files that contain any of the values in this
+ * list should be ignored
+ * @param in_forceIncludeFilesWith - Any files that contain any of the values in
+ * this this should be included, regardless of whether or not they contain values
+ * from the ignore list.
+ * 
+ * @return Whether or not the file should be included, based of the file name
+ */
+def canInclude(String in_fileName, String[] in_ignoreFilesWith, String[] in_forceIncludeFilesWith) {
+    for (String forceInclude : in_forceIncludeFilesWith) {
+        if (in_fileName.contains(forceInclude)) {
+            return true
+        }
+    }
+    for (String ignore : in_forceIncludeFilesWith) {
+        if (in_fileName.contains(ignore)) {
+            return false
+        }
+    }
+    return true
+}
+/**
+ * copies the source directory to the destination directory. File names which contain
+ * entries in the ignore list will not be copied. File names which contain entries in
+ * the force include list will be copied, regardless of whether or not they contained
+ * entries in the ignore list.
+ * 
+ * @author Ian Copland
+ *
+ * @param in_sourceDirectoryPath - The source directory path.
+ * @param in_destDirectoryPath - The destination directory path.
+ * @param in_ignoreFilesWith - The ignore list.
+ * @param in_forceIncludeFilesWith - The force include list.
+ */
+def copyDirectory(String in_sourceDirectoryPath, String in_destDirectoryPath, String[] in_ignoreFilesWith, String[] in_forceIncludeFilesWith) {
+    File destinationDir = new File(in_destDirectoryPath)
+    destinationDir.mkdir()
+    
+    File sourceDir = new File(in_sourceDirectoryPath)
+
+    def directoryContents = sourceDir.list()
+    for (String directoryItem : directoryContents) {
+
+        File entry = new File(sourceDir, directoryItem)
+        if (entry.isDirectory()) {
+            def sourceSubDir = Paths.get(in_sourceDirectoryPath, directoryItem).toString()
+            def destSubDir = Paths.get(in_destDirectoryPath, directoryItem).toString()
+            copyDirectory(sourceSubDir, destSubDir, in_ignoreFilesWith, in_forceIncludeFilesWith)
+
+        } else if (canInclude(directoryItem, in_ignoreFilesWith, in_forceIncludeFilesWith) == true) {
+            def sourceFilePath = Paths.get(in_sourceDirectoryPath, directoryItem)
+            def destFilePath = Paths.get(in_destDirectoryPath, directoryItem)
+            Files.copy(sourceFilePath, destFilePath)
+        }
+    }
+}
+/**
+ * Copy the resource directories (AppResources/ and CSResources) to the given directory. 
+ * Files which contain other platform tags (i.e '.ios' or '.windows') will be not be copied
+ * unless the android tag is also declared.
+ *
+ * @author Ian Copland
+ *
+ * @param in_directoryPath - The directory to copy the resource directories to.
+ */
+def copyResourcesToDirectory(String in_directoryPath) {
+    def excludes = [ ".ios", ".windows", ".DS_Store" ] as String[]
+    def includes = [ ".android" ] as String[]
+
+    File directory = new File(in_directoryPath)
+    directory.mkdir()
+
+    String appSourceDirectory = file('../../../../Content/AppResources').absolutePath
+    String appDestDirectory = in_directoryPath + "/AppResources"
+    copyDirectory(appSourceDirectory, appDestDirectory, excludes, includes) 
+
+    String csSourceDirectory = file('../../../../ChilliSource/CSResources').absolutePath
+    String csDestDirectory = in_directoryPath + "/CSResources"
+    copyDirectory(csSourceDirectory, csDestDirectory, excludes, includes)
+}
+/**
+ * Premultiples the Alpha for all PNGs in the given directory, recursively.
+ *
+ * @author Ian Copland
+ *
+ * @param in_directoryPath - The directory to operate on.
+ */
+def premultiplyPngsInDirectory(String in_directoryPath) {
+    def jarPath = file("../../../../ChilliSource/Tools/PNGAlphaPremultiplier.jar").absolutePath
+
+    def directory = new File(in_directoryPath)
+    def directoryContents = directory.list()
+    for (def directoryItemName : directoryContents) {
+        def directoryItem = new File(directory, directoryItemName)
+
+        if (directoryItem.isDirectory()) {
+            premultiplyPngsInDirectory(directoryItem.getAbsolutePath())
+        }
+        else if (directoryItemName.toLowerCase().endsWith(".png")) {
+            def fullPath = directoryItem.getAbsolutePath()
+            csExecuteCommand([ "java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarPath, "--input", fullPath, "--output", fullPath ] as String[])
+        }
+    }
+}
+/**
+ * Creates the Apk Expansion OBB zip file from the given directory.
+ *
+ * @author Ian Copland
+ *
+ * @param in_directoryPath - The directory to create the OBB from.
+ * @param in_applicationId - The application Id that will be used in the OBB file name.
+ * @param in_versionCode - The version code that will be used in the OBB file name.
+ */
+def createApkExpansionFromDirectory(String in_directoryPath, String in_applicationId, int in_versionCode) {
+    def jarPath = file("../../../../ChilliSource/Tools/Zip.jar").absolutePath
+    def uncompressedExtensions = ".jpg, .jpeg, .png, .gif, .wav, .mp2, .mp3, .ogg, .aac, .mpg, .mpeg, .mid, .midi," +
+        " .smf, .jet, .rtttl, .imy, .xmf, .mp4, .m4a, .m4v, .3gp, .3gpp, .3g2, .3gpp2, .amr, .awb, .wma, .wmv"
+    
+    File directory = new File(file("build/outputs/obb").absolutePath as String)
+    if (!directory.exists()) {
+        directory.mkdirs()
+    }
+
+    def fileName = "main." + in_versionCode + "." + in_applicationId + ".obb"
+    String filePath = directory.getAbsolutePath() + "/" + fileName
+
+    File zipFile = new File(filePath)
+    if (zipFile.exists()) {
+        zipFile.delete()
+    }
+
+    csExecuteCommand([ "java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", jarPath, "--input", in_directoryPath, "--output", filePath, 
+        "--uncompressedext", uncompressedExtensions ] as String[])
+
+    def obbFile = new File(filePath)
+    return obbFile.length()
+}
+/**
+ * Deletes the given directory. This does nothing if the directory doesn't exist.
+ *
+ * @author Ian Copland
+ *
+ * @param in_directoryPath - The directory to delete.
+ */
+def deleteDirectory(String in_directoryPath) {
+    File directoryFile = new File(in_directoryPath)
+    if (directoryFile.exists() && directoryFile.isDirectory())
+    {
+        Path directoryPath = Paths.get(in_directoryPath)
+        Files.walkFileTree(directoryPath, new SimpleFileVisitor<Path>() {
+           @Override public FileVisitResult visitFile(Path in_file, BasicFileAttributes in_attrubutes) throws IOException {
+               Files.delete(in_file)
+               return FileVisitResult.CONTINUE
+           }
+           @Override public FileVisitResult postVisitDirectory(Path in_dir, IOException in_exception) throws IOException {
+               Files.delete(in_dir)
+               return FileVisitResult.CONTINUE
+           }
+       })
+    }
+}
+/**
+ * Writes the ApkExpansion.config to the assets/ directory. Also removed other
+ * resources from the directory to remove residual assets from previous builds.
+ *
+ * @author Ian Copland
+ *
+ * @param in_assetsDirectoryPath - The assets directory
+ * @param in_versionCode - The version code used in the OBB file name.
+ * @param in_obbSize - The file size of the OBB.
+ */
+def writeApkExpansionConfig(String in_assetsDirectoryPath, int in_versionCode, long in_obbSize) {
+    deleteDirectory(in_assetsDirectoryPath)
+    def directory = new File(in_assetsDirectoryPath)
+    directory.mkdir();
+
+    FileWriter fileWriter = null
+    try {
+        fileWriter = new FileWriter(new File(directory, "ApkExpansion.config"))
+        fileWriter.write("{ \"VersionCode\": " + in_versionCode + ", \"FileSize\": " + in_obbSize + " }" as String)
+    }
+    catch(Exception e) {
+        throw GradleException("Could create ApkExpansion.config.", e)
+    }
+    finally {
+        if (fileWriter != null){
+            fileWriter.close()
+        }
+    }
+}
+
+ext {
+    /**
+     * Generates the APK Expansion zip file from the resource directories (AppResources and
+     * and CSResources). Files which contain other platform tags (i.e '.ios' or '.windows') 
+     * will be not be included unless the android tag is also declared.
+     *
+     * The 'assets/' directory will also be deleted to ensure resources aren't included in
+     * both the Apk and Expansion file.
+     *
+     * @author Ian Copland
+     *
+     * @param in_applicationId - The application Id that will be used in the OBB file name.
+     * @param in_versionCode - The version code that will be used in the OBB file name.
+     */
+    csGenerateApkExpansion = { in_applicationId, in_versionCode ->
+        def tempDirectoryPath = file("build/_resources-" + g_rng.nextLong()).absolutePath
+        copyResourcesToDirectory(tempDirectoryPath)
+        premultiplyPngsInDirectory(tempDirectoryPath)
+        def obbSize = createApkExpansionFromDirectory(tempDirectoryPath, in_applicationId, in_versionCode)
+        deleteDirectory(tempDirectoryPath)
+
+        def assetsDirectoryPath = file(g_assetsDirectory).absolutePath
+        writeApkExpansionConfig(assetsDirectoryPath, in_versionCode, obbSize)
+    }
+    /**
+     * Generates the APK assets directory from the resource directories (AppResources and
+     * and CSResources). Files which contain other platform tags (i.e '.ios' or '.windows') 
+     * will be not be included unless the android tag is also declared.
+     *
+     * @author Ian Copland
+     */
+    csGenerateApkAssets = { ->
+        def assetsDirectoryPath = file(g_assetsDirectory).absolutePath
+        deleteDirectory(assetsDirectoryPath)
+        copyResourcesToDirectory(assetsDirectoryPath)
+        premultiplyPngsInDirectory(assetsDirectoryPath)
+    }
+}

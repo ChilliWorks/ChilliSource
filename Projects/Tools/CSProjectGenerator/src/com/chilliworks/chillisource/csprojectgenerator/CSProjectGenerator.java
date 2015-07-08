@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.chilliworks.chillisource.coreutils.CSException;
 import com.chilliworks.chillisource.coreutils.FileUtils;
 import com.chilliworks.chillisource.coreutils.Logging;
 import com.chilliworks.chillisource.coreutils.StringUtils;
@@ -65,7 +66,7 @@ public final class CSProjectGenerator
 	 *
 	 * @param in_options - The options with which to create the new project.
 	 */
-	public static void generate(Options in_options)
+	public static void generate(Options in_options) throws CSException
 	{
 		validateOptions(in_options);
 		unzipProject(in_options);
@@ -81,18 +82,18 @@ public final class CSProjectGenerator
 	 * 
 	 * @param in_options - The options.
 	 */
-	private static void validateOptions(Options in_options)
+	private static void validateOptions(Options in_options) throws CSException
 	{
 		//check that the project name is valid.
 		if (in_options.m_projectName.matches("[a-zA-Z0-9]+") == false)
 		{
-			Logging.logFatal("Project name can only contain: a-z, A-Z or 0-9.");
+			throw new CSException("Project name can only contain: a-z, A-Z or 0-9.");
 		}
 		
 		//check that that package name is valid
 		if (in_options.m_packageName.matches("[a-z.]+") == false)
 		{
-			Logging.logFatal("Package name can only contain: a-z and '.'");
+			throw new CSException("Package name can only contain: a-z and '.'");
 		}
 		
 		//confirm that the project path doesn't already exist.
@@ -100,7 +101,7 @@ public final class CSProjectGenerator
 		File outputProjectDirectory = new File(outputProjectDirectoryPathName);
 		if (outputProjectDirectory.exists() == true)
 		{
-			Logging.logFatal("Output project directory '" + outputProjectDirectoryPathName + "' already exists!");
+			throw new CSException("Output project directory '" + outputProjectDirectoryPathName + "' already exists!");
 		}
 		
 		//ensure the output path is not inside Chilli Source as this will break copying of files.
@@ -115,13 +116,13 @@ public final class CSProjectGenerator
 
 			if (outputProjectDirectoryPath.startsWith(csDirectoryPath) == true)
 			{
-				Logging.logFatal("Output project directory '" + outputProjectDirectoryPathName + "' cannot be located inside Chilli Source.");
+				throw new CSException("Output project directory '" + outputProjectDirectoryPathName + "' cannot be located inside Chilli Source.");
 			}
 		}
 		catch (Exception e)
 		{
 			Logging.logVerbose(StringUtils.convertExceptionToString(e));
-			Logging.logFatal("Failed to validate output directory path.");
+			throw new CSException("Failed to validate output directory path.", e);
 		}
 	}
 	/**
@@ -131,7 +132,7 @@ public final class CSProjectGenerator
 	 *
 	 * @param in_options - The options with which to create the new project.
 	 */
-	private static void unzipProject(Options in_options)
+	private static void unzipProject(Options in_options) throws CSException
 	{
 		try 
 		{
@@ -140,7 +141,7 @@ public final class CSProjectGenerator
 			String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
 			if (new File(tempDirectoryPath).exists() == true)
 			{
-				Logging.logFatal("Temp directory already exists.");
+				throw new CSException("Temp directory already exists.");
 			}
 			
 			String pathToZip = getJarDirectoryPath(in_options) + k_projectZipFilePath;
@@ -151,7 +152,7 @@ public final class CSProjectGenerator
 			Logging.logVerbose(StringUtils.convertExceptionToString(e));
 			
 			cleanupTemp(in_options);
-	        Logging.logFatal("Could not open project zip file: " + k_projectZipFilePath);
+	        throw new CSException("Could not open project zip file: " + k_projectZipFilePath, e);
 	    }
 	}
 	/**
@@ -163,7 +164,7 @@ public final class CSProjectGenerator
 	 * 
 	 * @return Directory path to jar folder
 	 */
-	private static String getJarDirectoryPath(Options in_options)
+	private static String getJarDirectoryPath(Options in_options) throws CSException
 	{
 		String jarDir = "";
 		
@@ -179,7 +180,7 @@ public final class CSProjectGenerator
 			Logging.logVerbose(StringUtils.convertExceptionToString(e));
 			
 			cleanupTemp(in_options);
-			Logging.logFatal("Could not get jar directory path.");
+			throw new CSException("Could not get jar directory path.", e);
 		}
 		 
 		return StringUtils.standardiseDirectoryPath(jarDir);
@@ -191,10 +192,11 @@ public final class CSProjectGenerator
 	 *
 	 * @param in_options - The options with which to create the new project.
 	 */
-	private static void updateProjectFiles(Options in_options)
+	private static void updateProjectFiles(Options in_options) throws CSException
 	{
 		String[] filesToUpdateContents = new String[]
 		{
+			".gitignore",
 			"AppSource/App.cpp",
 			"AppSource/App.h",
 			"AppSource/State.cpp",
@@ -203,10 +205,6 @@ public final class CSProjectGenerator
 			"Content/BuildAll.command",
 			"Content/BuildAll.sh",
 			"Content/AppResources/App.config",
-			"Projects/iOS/" + k_templateProjectName + ".xcodeproj/project.pbxproj",
-			"Projects/iOS/ProjectResources/" + k_templateProjectName + "-Info.plist",
-			"Projects/Windows/" + k_templateProjectName + ".sln",
-			"Projects/Windows/" + k_templateProjectName + ".vcxproj",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/build.gradle",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/settings.gradle",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/.idea/.name",
@@ -219,6 +217,10 @@ public final class CSProjectGenerator
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/jni/Android.mk",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/jni/Application.mk",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/res/values/strings.xml",
+			"Projects/iOS/" + k_templateProjectName + ".xcodeproj/project.pbxproj",
+			"Projects/iOS/ProjectResources/" + k_templateProjectName + "-Info.plist",
+			"Projects/Windows/" + k_templateProjectName + ".sln",
+			"Projects/Windows/" + k_templateProjectName + ".vcxproj",
 			"Tools/Scripts/content_builder.py",
 			"Tools/Scripts/file_system_utils.py",
 			"Tools/Scripts/model_builder.py",
@@ -231,18 +233,19 @@ public final class CSProjectGenerator
 		
 		String[] filesToUpdateFileName = new String[]
 		{
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/" + k_templateProjectName.toLowerCase() + ".iml",
 			"Projects/iOS/ProjectResources/" + k_templateProjectName + "-Info.plist",
 			"Projects/Windows/" + k_templateProjectName + ".sln",
-			"Projects/Windows/" + k_templateProjectName + ".vcxproj",
-			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/" + k_templateProjectName.toLowerCase() + ".iml"
+			"Projects/Windows/" + k_templateProjectName + ".vcxproj"
+
 		};
 		
 		updateFileNames(in_options, filesToUpdateFileName);
 		
 		String[] directoriesToUpdateDirectoryName = new String[]
 		{
-			"Projects/iOS/" + k_templateProjectName + ".xcodeproj",
-			"Projects/Android/" + k_templateProjectName.toLowerCase()
+			"Projects/Android/" + k_templateProjectName.toLowerCase(),
+			"Projects/iOS/" + k_templateProjectName + ".xcodeproj"
 		};
 		
 		updateDirectoryNames(in_options, directoriesToUpdateDirectoryName);
@@ -257,7 +260,7 @@ public final class CSProjectGenerator
 	 * @param in_filePaths - The array of file paths that should have their
 	 * contents updated.
 	 */
-	private static void updateFileContents(Options in_options, String[] in_filePaths)
+	private static void updateFileContents(Options in_options, String[] in_filePaths) throws CSException
 	{
 		String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
 		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(tempDirectoryPath + k_templateProjectName);
@@ -271,7 +274,7 @@ public final class CSProjectGenerator
 			if (fileContents == null || fileContents.length() == 0)
 			{
 				cleanupTemp(in_options);
-				Logging.logFatal("Could not read file: " + filePath);
+				throw new CSException("Could not read file: " + filePath);
 			}
 
 			fileContents = fileContents.replace(k_templatePackageName, in_options.m_packageName);
@@ -281,7 +284,7 @@ public final class CSProjectGenerator
 			if (FileUtils.writeFile(fullFilePath, fileContents) == false)
 			{
 				cleanupTemp(in_options);
-				Logging.logFatal("Could not write file: " + filePath);
+				throw new CSException("Could not write file: " + filePath);
 			}
 		}
 	}
@@ -295,7 +298,7 @@ public final class CSProjectGenerator
 	 * @param in_filePaths - The array of file paths that should have their
 	 * file names updated.
 	 */
-	private static void updateFileNames(Options in_options, String[] in_filePaths)
+	private static void updateFileNames(Options in_options, String[] in_filePaths) throws CSException
 	{
 		String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
 		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(tempDirectoryPath + k_templateProjectName);
@@ -317,7 +320,7 @@ public final class CSProjectGenerator
 			if (FileUtils.renameFile(currentFullFilePath, newFullFilePath) == false)
 			{
 				cleanupTemp(in_options);
-				Logging.logFatal("Failed to rename file: " + currentFilePath);
+				throw new CSException("Failed to rename file: " + currentFilePath);
 			}
 		}
 	}
@@ -331,7 +334,7 @@ public final class CSProjectGenerator
 	 * @param in_filePaths - The array of directory paths that should have their
 	 * directory names updated.
 	 */
-	private static void updateDirectoryNames(Options in_options, String[] in_directoryPaths)
+	private static void updateDirectoryNames(Options in_options, String[] in_directoryPaths) throws CSException
 	{
 		String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
 		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(tempDirectoryPath + k_templateProjectName);
@@ -350,7 +353,7 @@ public final class CSProjectGenerator
 			if (FileUtils.renameDirectory(currentFullDirectoryPath, newFullDirectoryPath) == false)
 			{
 				cleanupTemp(in_options);
-				Logging.logFatal("Failed to rename directory: " + newFullDirectoryPath);
+				throw new CSException("Failed to rename directory: " + newFullDirectoryPath);
 			}
 		}
 	}
@@ -361,7 +364,7 @@ public final class CSProjectGenerator
 	 * 
 	 * @param in_options - The options with which to create the new project.
 	 */
-	private static void copyChilliSource(Options in_options)
+	private static void copyChilliSource(Options in_options) throws CSException
 	{
 		String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
 		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(tempDirectoryPath + k_templateProjectName);
@@ -370,13 +373,12 @@ public final class CSProjectGenerator
 		
 		Logging.logVerbose("Copying Chilli Source into the project.");
 		
-		
 		List<String> ignore = new ArrayList<>();
 		Collections.addAll(ignore, "bin", "obj");
 		if (FileUtils.copyDirectory(csSourcePath, csDestinationPath, ignore) == false)
 		{
 			cleanupTemp(in_options);
-			Logging.logFatal("Could not copy Chilli Source into project.");
+			throw new CSException("Could not copy Chilli Source into project.");
 		}
 		
 		//remove any remnants of the git project.
@@ -396,7 +398,7 @@ public final class CSProjectGenerator
 		catch (Exception e)
 		{
 			cleanupTemp(in_options);
-			Logging.logFatal("Could not delete git remnants.");
+			throw new CSException("Could not delete git remnants.", e);
 		}
 	}
 	/**
@@ -406,7 +408,7 @@ public final class CSProjectGenerator
 	 * 
 	 * @param in_options - The options with which to create the new project.
 	 */
-	private static void copyToOutput(Options in_options)
+	private static void copyToOutput(Options in_options) throws CSException
 	{
 		String tempDirectoryPath = StringUtils.standardiseDirectoryPath(in_options.m_outputDirectory + k_tempDirectory);
 		String tempProjectDirectory = StringUtils.standardiseDirectoryPath(tempDirectoryPath + k_templateProjectName);
@@ -419,7 +421,7 @@ public final class CSProjectGenerator
 		if (FileUtils.copyDirectory(tempProjectDirectory, outputProjectDirectory, ignore) == false)
 		{
 			cleanupTemp(in_options);
-			Logging.logFatal("Could not copy to output directory: " + outputProjectDirectory);
+			throw new CSException("Could not copy to output directory: " + outputProjectDirectory);
 		}
 	}
 	/**

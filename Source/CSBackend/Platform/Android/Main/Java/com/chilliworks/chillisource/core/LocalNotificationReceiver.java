@@ -99,7 +99,7 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 	        	intent.putExtra(strKey, mapParams.get(strKey).toString());
 	        }
 	       
-	        LocalNotificationNativeInterface localNotificationNI = (LocalNotificationNativeInterface)CSApplication.get().getSystem(LocalNotificationNativeInterface.InterfaceID);
+	        LocalNotificationNativeInterface localNotificationNI = (LocalNotificationNativeInterface)CSApplication.get().getSystem(LocalNotificationNativeInterface.INTERFACE_ID);
 	        if (localNotificationNI != null)
 	        {
 	        	localNotificationNI.onNotificationReceived(intent);

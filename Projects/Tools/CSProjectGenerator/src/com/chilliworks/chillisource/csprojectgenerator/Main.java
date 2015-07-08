@@ -28,6 +28,7 @@
 
 package com.chilliworks.chillisource.csprojectgenerator;
 
+import com.chilliworks.chillisource.coreutils.CSException;
 import com.chilliworks.chillisource.coreutils.Logging;
 import com.chilliworks.chillisource.coreutils.StringUtils;
 import com.chilliworks.chillisource.coreutils.Logging.LoggingLevel;
@@ -119,7 +120,14 @@ public final class Main
 			Logging.logFatal("Must provide project name, package name.");
 		}
 		
-		CSProjectGenerator.generate(options);
+		try
+		{
+			CSProjectGenerator.generate(options);
+		}
+		catch (CSException e)
+		{
+			Logging.logFatal(e.getMessage());
+		}
 		
 		Logging.finish();
 	}

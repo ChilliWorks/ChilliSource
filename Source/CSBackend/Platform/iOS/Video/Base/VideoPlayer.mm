@@ -109,9 +109,18 @@ namespace CSBackend
                 
                 m_completionDelegateConnection = std::move(in_delegateConnection);
                 m_backgroundColour = in_backgroundColour;
-                
-                std::string filePath = CSCore::Application::Get()->GetFileSystem()->GetAbsolutePathToFile(in_storageLocation, in_fileName);
-                
+
+                auto fileSystem = CSCore::Application::Get()->GetFileSystem();
+                std::string filePath;
+                if (in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_fileName) == false)
+                {
+                    filePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + in_fileName;
+                }
+                else
+                {
+                    filePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + in_fileName;
+                }
+
                 NSString* urlString = [NSStringUtils newNSStringWithUTF8String:filePath];
                 NSURL* pMovieURL = [NSURL fileURLWithPath:urlString];
                 [urlString release];

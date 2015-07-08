@@ -187,7 +187,6 @@ namespace ChilliSource
         {
             FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, Core::FileMode::k_write);
             stream->Write("Chilli Source Log");
-            stream->Close();
         }
         //-----------------------------------------------
         //-----------------------------------------------
@@ -204,7 +203,6 @@ namespace ChilliSource
                     FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, Core::FileMode::k_write);
                     stream->Write("Chilli Source Log");
                     stream->Write(m_logBuffer);
-                    stream->Close();
                     m_logBuffer.clear();
                     m_isFirstLog = false;
                 }
@@ -212,7 +210,6 @@ namespace ChilliSource
                 {
                     FileStreamUPtr stream = Application::Get()->GetFileSystem()->CreateFileStream(StorageLocation::k_cache, k_logFileName, Core::FileMode::k_writeAppend);
                     stream->Write(m_logBuffer);
-                    stream->Close();
                     m_logBuffer.clear();
                 }
             }

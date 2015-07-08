@@ -1,0 +1,469 @@
+//
+//  android-build.gradle
+//  ChilliSource
+//  Created by Ian Copland on 13/03/2015.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2015 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+apply from: '../../../../ChilliSource/Tools/Scripts/android-build-manifest.gradle'
+apply from: '../../../../ChilliSource/Tools/Scripts/android-build-ndk.gradle'
+apply from: '../../../../ChilliSource/Tools/Scripts/android-build-resources.gradle'
+apply from: '../../../../ChilliSource/Tools/Scripts/android-push-apk-expansion.gradle'
+
+import com.sun.tools.classfile.Dependency
+
+/**
+ * @author Ian Copland
+ *
+ * @param in_abi - The abi
+ *
+ * @return The shorter form of the abi name.
+ */
+def getAbiShortForm(String in_abi) {
+    if (in_abi == 'armeabi-v7a') {
+        return 'armv7'
+    } else if (in_abi == 'armeabi') {
+        return "arm"
+    } else if (in_abi == 'x86') {
+        return "x86"
+    } else {
+        throw GradleException("ABI '$in_abi' does not exist.")
+    }
+}
+/**
+ * @author Ian Copland
+ *
+ * @param in_string - The string
+ *
+ * @return The given string with the first letter in the string converted to upper case.
+ */
+def upperCaseFirstLetter(String in_string) {
+    if (in_string.length() > 0) {
+        String start = in_string.substring(0, 1)
+        start = start.toUpperCase();
+        return start + in_string.substring(1)
+    }
+    return in_string
+}
+/**
+ * @author Ian Copland
+ *
+ * @param in_sku - The name of the SKU.
+ * @param in_abi - The name of the ABI.
+ * @param in_debug - Whether or not it's a debug build.
+ *
+ * @return Each of the params combined into a single variant name. The first letter of each will be
+ * made upper case
+ */
+def generateVariantName(String in_sku, String in_abi, boolean in_debug) {
+    def shortAbiName = getAbiShortForm(in_abi)
+    def buildType = (in_debug == true) ? "debug" : "release"
+    return upperCaseFirstLetter(in_sku) + upperCaseFirstLetter(shortAbiName) + upperCaseFirstLetter(buildType)
+}
+/**
+ * @author Ian Copland
+ *
+ * @param in_taskName - The name of the task.
+ *
+ * @return Whether or not the given task name follows the convention set for Task tasks.
+ */
+def isTestFromTaskName(String in_taskName) {
+    def lowerTaskName = in_taskName.toLowerCase()
+    if (lowerTaskName.contains('unittest') || lowerTaskName.contains('androidtest')) {
+        return true
+    }
+    return false
+}
+/**
+ * @author Ian Copland
+ *
+ * @param in_taskName - The name of the task.
+ *
+ * @return Whether or not the given task name follows the convention set for debug tasks.
+ */
+def isDebugFromTaskName(String in_taskName) {
+    def lowerTaskName = in_taskName.toLowerCase()
+    if (lowerTaskName.contains('debug')) {
+        return true
+    } else if (lowerTaskName.contains('release')){
+        return false
+    } else {
+        throw GradleException("Task '$taskName' does not specify release or debug.")
+    }
+}
+/**
+ * @author Ian Copland
+ *
+ * @param in_taskName - The name of the task.
+ *
+ * @return The name of the ABI the task relates to, based on the naming convention.
+ */
+def getAbiFromTaskName(String in_taskName) {
+    def lowerTaskName = in_taskName.toLowerCase()
+    if (lowerTaskName.contains('armv7')) {
+        return "armeabi-v7a"
+    } else if (lowerTaskName.contains('arm')){
+        return "armeabi"
+    } else if (lowerTaskName.contains('x86')){
+        return "x86"
+    } else {
+        throw GradleException("Task '$taskName' does not specify an abi.")
+    }
+}
+/**
+ * @author Ian Copland
+ *
+ * @param in_taskName - The name of the task.
+ *
+ * @return The name of the SKU the task relates to, based on the naming convention.
+ */
+def getSkuFromTaskName(String in_taskName) {
+    def lowerTaskName = in_taskName.toLowerCase()
+    if (lowerTaskName.contains('googleplay')) {
+        return "googlePlay"
+    } else if (lowerTaskName.contains('amazon')){
+        return "amazon"
+    } else {
+        throw GradleException("Task '$taskName' does not specify a sku.")
+    }
+}
+/**
+ * @author Ian Copland
+ *
+ * @param in_sku - The SKU name.
+ *
+ * @return Whether or not the given SKU is Google Play.
+ */
+def isGooglePlaySku(String in_sku) {
+    return (in_sku == 'googlePlay')
+}
+/**
+ * @author Ian Copland
+ *
+ * @param in_sku - The SKU name.
+ *
+ * @return Whether or not the given SKU is Amazon.
+ */
+def isAmazonSku(String in_sku) {
+    return (in_sku == 'amazon')
+}
+/**
+ * Adds the static library clean ndk task to the given task as a dependency.
+ *
+ * @author Ian Copland
+ *
+ * @param in_task - The task to add the dependency to.
+ * @param in_libName - The name of the static library.
+ */
+def addCleanNdkStaticLibTask(def in_task, String in_libName) {
+    def cleanTask = task("csCleanNdk", overwrite: true) << {
+        csNdkBuildCleanStaticLib(in_libName)
+    }
+    in_task.dependsOn(cleanTask)
+}
+/**
+ * Adds the static library compile ndk task to the given task as a dependency.
+ *
+ * @author Ian Copland
+ *
+ * @param in_task - The task to add the dependency to.
+ * @param in_libName - The name of the static library.
+ */
+def addCompileNdkStaticLibTask(def in_task, String in_libName) {
+    def sku = getSkuFromTaskName(in_task.name)
+    def abi = getAbiFromTaskName(in_task.name)
+    def debug = isDebugFromTaskName(in_task.name)
+    def variantName = generateVariantName(sku, abi, debug)
+
+    def csCompileTask = task("csCompileNdk$variantName", overwrite: true) << {
+        csNdkBuildStaticLib(sku, abi, debug, in_libName)
+    }
+
+    //This is a hack to ensure ChilliSource is only built for the ABI/SKU/config that the
+    //application is being built for. This has the draw-back that ChilliSource can no longer
+    //be built on its own, so hopefully a better solution presents itself in the future.
+    csCompileTask.onlyIf {
+        def taskGraph = gradle.taskGraph
+        for (def aTask : taskGraph.getAllTasks()) {
+            if (aTask.project.name.equals("app") && aTask.name.equals(csCompileTask.name)) {
+                return true
+            }
+        }
+        return false
+    }
+    in_task.dependsOn(csCompileTask)
+}
+/**
+ * Adds the application ndk clean task to the given task as a dependency.
+ *
+ * @author Ian Copland
+ *
+ * @param in_task - The task to add the dependency to.
+ */
+def addCleanNdkTask(def in_task) {
+    def cleanTask = task("csCleanNdk", overwrite: true) << {
+        csNdkBuildClean()
+    }
+    in_task.dependsOn(cleanTask)
+}
+/**
+ * Adds the application generate android manifest task to the given task as a dependency.
+ *
+ * @author Ian Copland
+ *
+ * @param in_task - The task to add the dependency to.
+ */
+def addGenerateAndroidManifestTask(def in_task) {
+    task "csGenerateAndroidManifest" (overwrite: true) << {
+        csGenerateAndroidManifest()
+    }
+    in_task.dependsOn("csGenerateAndroidManifest")
+}
+/**
+ * Adds the application ndk compile task to the given task as a dependency.
+ *
+ * @author Ian Copland
+ *
+ * @param in_task - The task to add the dependency to.
+ */
+def addCompileNdkTask(def in_task) {
+    def sku = getSkuFromTaskName(in_task.name)
+    def abi = getAbiFromTaskName(in_task.name)
+    def debug = isDebugFromTaskName(in_task.name)
+    def variantName = generateVariantName(sku, abi, debug)
+
+    task "csCompileNdk$variantName" (dependsOn: ":chillisource:csCompileNdk$variantName", overwrite: true) << {
+        csNdkBuild(sku, abi, debug)
+    }
+
+    in_task.dependsOn("csCompileNdk$variantName")
+}
+/**
+ * Adds the application generate resources task to the given task as a dependency. This only applies
+ * to Amazon builds.
+ *
+ * @author Ian Copland
+ *
+ * @param in_task - The task to add the dependency to.
+ */
+def addGenerateResourcesTask(def in_task) {
+    def sku = getSkuFromTaskName(in_task.name)
+    if (isAmazonSku(sku)) {
+        task "csGenerateApkResources" (dependsOn: "csGenerateAndroidManifest", overwrite: true) << {
+            csGenerateApkAssets()
+        }
+        in_task.dependsOn("csGenerateApkResources")
+    }
+}
+/**
+ * Adds the task for the getting the applicationId and versionCode to each of the check manifest
+ * tasks as a depedency.
+ *
+ * @author Ian Copland
+ *
+ * @param in_defaultConfig - The default configuration
+ * @param in_applicationVariants - The list of application variants
+ */
+def addGetInfoTasks(def in_defaultConfig, def in_applicationVariants) {
+    in_applicationVariants.all() { in_variant ->
+        in_variant.outputs.each { in_output ->
+            def getInfoTask = task "csGetVariantInfo${upperCaseFirstLetter(in_output.name)}"() << {
+                g_applicationId = in_defaultConfig.applicationId
+
+                def flavourApplicationId = in_variant.productFlavors.get(0).applicationId
+                if (flavourApplicationId != null && flavourApplicationId.length() > 0) {
+                    g_applicationId = flavourApplicationId
+                }
+
+                def suffix = in_variant.buildType.applicationIdSuffix
+                if (suffix != null && suffix.length() > 0) {
+                    g_applicationId += suffix
+                }
+
+                g_versionCode = in_defaultConfig.versionCode
+
+                def flavourVersionCode = in_variant.productFlavors.get(0).versionCode
+                if (flavourVersionCode != null && flavourVersionCode > 0) {
+                    g_versionCode = flavourVersionCode
+                }
+            }
+            in_output.processManifest.dependsOn getInfoTask
+        }
+    }
+}
+/**
+ * Adds the push Apk Expansion task.
+ *
+ * @author Ian Copland
+ *
+ * @param in_applicationVariants - The list of application variants
+ */
+def addApkExpansionTasks(def in_applicationVariants) {
+    in_applicationVariants.all() { in_variant ->
+        in_variant.outputs.each { in_output ->
+            def sku = getSkuFromTaskName(in_output.name)
+            if (isGooglePlaySku(sku)) {
+                task "csAssembleApkExpansion${upperCaseFirstLetter(in_output.name)}"(group: 'buildApkExpansion', dependsOn: in_output.processManifest) << {
+                    csGenerateApkExpansion(g_applicationId, g_versionCode)
+                }
+
+                task "csInstallApkExpansion${upperCaseFirstLetter(in_output.name)}"(group: 'installApkExpansion', dependsOn: "csAssembleApkExpansion${upperCaseFirstLetter(in_output.name)}") << {
+                    csPushApkExpansionToDevice(g_applicationId, g_versionCode)
+                }
+            }
+        }
+    }
+}
+
+ext {
+    g_applicationId = ""
+    g_versionCode = 0
+
+    /**
+     * Adds task dependencies as required for building a ChilliSource library.
+     *
+     * @author Ian Copland
+     *
+     * @param in_tasks - The gradle tasks dependencies will be added to.
+     * @param in_libName - The name of the library, without the lib prefix and .a suffix.
+     */
+    csInitLibrary = { in_tasks, in_libName ->
+        in_tasks.all() { currentTask ->
+            def taskName = currentTask.name.toLowerCase()
+
+            //If it is the "clean" task also hook in the ChilliSource clean event.
+            if (taskName == "clean") {
+                addCleanNdkStaticLibTask(currentTask, in_libName)
+
+            //if it is a ndk compile task, replace it with the ChilliSource ndk compile task.
+            } else if (taskName.startsWith("compile") == true && taskName.endsWith("ndk") == true) {
+                currentTask.dependsOn.clear()
+                currentTask.deleteAllActions()
+
+                //exclude test tasks to avoid duplicate version of the created task.
+                if (isTestFromTaskName(taskName) == false) {
+                    addCompileNdkStaticLibTask(currentTask, in_libName)
+                }
+            }
+        }
+    }
+    /**
+     * Adds task dependencies as requires for building a ChilliSource application.
+     *
+     * @author Ian Copland
+     *
+     * @param in_tasks - The applications gradle project
+     * @param in_defaultConfig - The default configuration
+     * @param in_applicationVariants - The list of application variants
+     */
+    csInitApplication = { in_tasks, in_defaultConfig, in_applicationVariants ->
+        addGetInfoTasks(in_defaultConfig, in_applicationVariants)
+
+        addApkExpansionTasks(in_applicationVariants)
+
+        in_tasks.all() { currentTask ->
+            def taskName = currentTask.name.toLowerCase()
+
+            //if it is the 'clean' task also hook in the ChilliSource clean event.
+            if (taskName == "clean") {
+                addCleanNdkTask(currentTask)
+
+            //if it is a process manifest task, add the genate manifest task as a dependancy
+            } else if (taskName.startsWith("check") == true && taskName.endsWith("manifest") == true) {
+                addGenerateAndroidManifestTask(currentTask)
+                addGenerateResourcesTask(currentTask)
+
+            //if it is a ndk compile task, replace it with the ChilliSource ndk compile task.
+            } else if (taskName.startsWith("compile") == true && taskName.endsWith("ndk") == true) {
+                currentTask.dependsOn.clear()
+                currentTask.deleteAllActions()
+
+                //exclude test tasks to avoid duplicate version of the created task.
+                if (isTestFromTaskName(taskName) == false) {
+                    addCompileNdkTask(currentTask)
+                }
+            }
+        }
+    }
+    /**
+     * Adds the default library dependencies required by ChilliSource.
+     *
+     * @author Ian Copland
+     *
+     * @param in_dependencies - The dependencies.
+     */
+    csAddDefaultDependencies = { in_dependencies ->
+        in_dependencies.compile('com.android.support:appcompat-v7:22.2.0')
+        in_dependencies.compile('com.google.android.gms:play-services:7.5.0')
+        in_dependencies.compile('com.facebook.android:facebook-android-sdk:3.23.1')
+        in_dependencies.googlePlayCompile(in_dependencies.project(path: ":playapkexpansion"))
+        in_dependencies.googlePlayCompile(in_dependencies.project(path: ":playlicensing"))
+    }
+    /**
+     * Android Gradle currently does not support dependencies for specific combinations of build
+     * type and product flavour. This provides a means to handle it, by mapping application
+     * build variant to a ChilliSource build variant.
+     *
+     * @author Ian Copland
+     *
+     * @param in_dependencies - The dependencies.
+     * @param in_configurations - The configurations.
+     * @param in_csDependencyMap - The map of application variants to ChilliSource variants.
+     */
+    csAddCSDependencies = { in_dependencies, in_configurations, in_csDependencyMap ->
+        def depsMap = new HashMap<String, Dependency>()
+        for (def entry : in_csDependencyMap) {
+            depsMap.put("${entry.getKey()}Compile" as String, in_dependencies.project(path: ":chillisource", configuration: entry.getValue()))
+        }
+
+        in_configurations.all() { config ->
+            def dep = depsMap.get("${config.name}" as String)
+            if(dep != null) {
+                config.dependencies.add(dep)
+            }
+        }
+    }
+    /**
+     * External library projects are currently bugged such that they depend on all build variants
+     * in a project. This causes a number of issues (and long build times!) for native projects,
+     * so this can be used to solve the issue for the default dependencies.
+     *
+     * @author Ian Copland
+     *
+     * @param in_tasks - All tasks in the android project.
+     */
+    csFixDefaultLibraryDependancies = { in_tasks ->
+        in_tasks.all() { task ->
+            def androidSupportLibV7TaskName = "prepareComAndroidSupportAppcompatV72220Library"
+            def androidSupportLibV4TaskName = "prepareComAndroidSupportSupportV42220Library"
+            def googlePlayServicesLibTaskName = "prepareComGoogleAndroidGmsPlayServices750Library"
+            def facebookLibTaskName = "prepareComFacebookAndroidFacebookAndroidSdk3231Library"
+
+            def taskName = task.name.toLowerCase()
+            if (taskName == androidSupportLibV7TaskName || taskName == androidSupportLibV4TaskName || taskName == googlePlayServicesLibTaskName || taskName == facebookLibTaskName) {
+                task.dependsOn.clear()
+            }
+        }
+    }
+}

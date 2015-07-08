@@ -32,7 +32,7 @@
 #define _CHILLISOURCE_PLATFORM_ANDROID_JAVAINTERFACE_ACCELEROMETERJAVAINTERFACE_H
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterface.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterface.h>
 
 namespace CSBackend
 {

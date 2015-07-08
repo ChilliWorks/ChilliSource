@@ -90,6 +90,7 @@ namespace CSBackend
 			{
 				std::wstring filePath = WindowsStringUtils::ConvertStandardPathToWindows(in_filePath);
 				DWORD attributes = GetFileAttributes(filePath.c_str());
+
 				return (attributes != INVALID_FILE_ATTRIBUTES && !(attributes & FILE_ATTRIBUTE_DIRECTORY));
 			}
 			//--------------------------------------------------------------
@@ -103,6 +104,7 @@ namespace CSBackend
 			{
 				std::wstring directoryPath = WindowsStringUtils::ConvertStandardPathToWindows(in_directoryPath);
 				DWORD attributes = GetFileAttributes(directoryPath.c_str());
+
 				return (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY));
 			}
 			//--------------------------------------------------------------
@@ -118,7 +120,7 @@ namespace CSBackend
 
 				WIN32_FIND_DATA fileData;
 				HANDLE fileHandle = WindowsFileUtils::WindowsFindFirstFile(directoryQuery.c_str(), &fileData);
-				if (fileHandle == INVALID_HANDLE_VALUE || GetLastError() == ERROR_FILE_NOT_FOUND)
+				if (fileHandle == INVALID_HANDLE_VALUE)
 				{
 					return false;
 				}
@@ -184,7 +186,7 @@ namespace CSBackend
 
 				WIN32_FIND_DATA fileData;
 				HANDLE fileHandle = WindowsFileUtils::WindowsFindFirstFile(directoryQuery.c_str(), &fileData);
-				if (fileHandle == INVALID_HANDLE_VALUE || GetLastError() == ERROR_FILE_NOT_FOUND)
+				if (fileHandle == INVALID_HANDLE_VALUE)
 				{
 					return false;
 				}
@@ -252,22 +254,31 @@ namespace CSBackend
 		//--------------------------------------------------------------
 		CSCore::FileStreamUPtr FileSystem::CreateFileStream(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, CSCore::FileMode in_fileMode) const
 		{
-			CSCore::FileStreamUPtr fileStream = CSCore::FileStreamUPtr(new CSCore::FileStream());
-
 			if (IsWriteMode(in_fileMode) == true)
 			{
 				CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
+			}
 
-				std::string filePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
-				fileStream->Open(filePath, in_fileMode);
+			if (in_storageLocation == CSCore::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_filePath) == false && IsWriteMode(in_fileMode) == false)
+			{
+				auto absFilePath = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + GetPackageDLCPath() + in_filePath;
+				CSCore::FileStreamUPtr output(new CSCore::FileStream(absFilePath, in_fileMode));
+				if (output->IsValid() == true)
+				{
+					return output;
+				}
 			}
 			else
 			{
-				std::string filePath = GetAbsolutePathToFile(in_storageLocation, in_filePath);
-				fileStream->Open(filePath, in_fileMode);
+				auto absFilePath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+				CSCore::FileStreamUPtr output(new CSCore::FileStream(absFilePath, in_fileMode));
+				if (output->IsValid() == true)
+				{
+					return output;
+				}
 			}
 
-			return fileStream;
+			return nullptr;
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
@@ -294,12 +305,21 @@ namespace CSBackend
 		{
 			CS_ASSERT(IsStorageLocationWritable(in_destinationStorageLocation), "File System: Trying to write to read only storage location.");
             
-			std::string sourceFilePath = GetAbsolutePathToFile(in_sourceStorageLocation, in_sourceFilePath);
-			if (sourceFilePath.empty() == true)
-            {
+			std::string sourceFilePath;
+			if (in_sourceStorageLocation == CSCore::StorageLocation::k_DLC && DoesFileExistInCachedDLC(in_sourceFilePath) == false)
+			{
+				sourceFilePath = GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + GetPackageDLCPath() + CSCore::StringUtils::StandardiseFilePath(in_sourceFilePath);
+			}
+			else
+			{
+				sourceFilePath = GetAbsolutePathToStorageLocation(in_sourceStorageLocation) + CSCore::StringUtils::StandardiseFilePath(in_sourceFilePath);
+			}
+
+			if (CSBackend::Windows::DoesFileExist(sourceFilePath) == false)
+			{
 				CS_LOG_ERROR("File System: Trying to copy file '" + in_sourceFilePath + "' but it does not exist.");
-                return false;
-            }
+				return false;
+			}
 
             //get the path to the file
 			std::string destinationFileName, destinationDirectoryPath;
@@ -376,18 +396,14 @@ namespace CSBackend
 		{
 			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to delete from a read only storage location.");
 
-			std::string directoryPath = GetAbsolutePathToDirectory(in_storageLocation, in_directoryPath);
-			if (directoryPath != "")
+			std::string directoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
+			if (CSBackend::Windows::DeleteDirectory(directoryPath) == false)
 			{
-				if (CSBackend::Windows::DeleteDirectory(directoryPath) == false)
-				{
-					CS_LOG_ERROR("File System: Failed to delete directory '" + in_directoryPath + "'");
-					return false;
-				}
-				return true;
+				CS_LOG_ERROR("File System: Failed to delete directory '" + in_directoryPath + "'");
+				return false;
 			}
 
-			return false;
+			return true;
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
@@ -459,6 +475,18 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
+		bool FileSystem::DoesFileExistInCachedDLC(const std::string& in_filePath) const
+		{
+			return DoesItemExistInDLCCache(in_filePath, false);
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
+		bool FileSystem::DoesFileExistInPackageDLC(const std::string& in_filePath) const
+		{
+			return DoesFileExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+		}
+		//--------------------------------------------------------------
+		//--------------------------------------------------------------
 		bool FileSystem::DoesDirectoryExist(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
 		{
 			switch (in_storageLocation)
@@ -481,15 +509,15 @@ namespace CSBackend
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExistInCachedDLC(const std::string& in_filePath) const
+		bool FileSystem::DoesDirectoryExistInCachedDLC(const std::string& in_directoryPath) const
 		{
-			return DoesItemExistInDLCCache(in_filePath, false);
+			return DoesItemExistInDLCCache(in_directoryPath, true);
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
-		bool FileSystem::DoesFileExistInPackageDLC(const std::string& in_filePath) const
+		bool FileSystem::DoesDirectoryExistInPackageDLC(const std::string& in_directoryPath) const
 		{
-			return DoesFileExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
+			return DoesDirectoryExist(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------
@@ -514,60 +542,6 @@ namespace CSBackend
 				CS_LOG_ERROR("Storage Location not available on this platform!");
 				return "";
 			}
-		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		std::string FileSystem::GetAbsolutePathToFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath) const
-		{
-			if (DoesFileExist(in_storageLocation, in_filePath) == true)
-			{
-				switch (in_storageLocation)
-				{
-					case CSCore::StorageLocation::k_DLC:
-					{
-						std::string filePath = CSCore::StringUtils::StandardiseFilePath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_filePath);
-						if (CSBackend::Windows::DoesFileExist(filePath) == true)
-						{
-							return filePath;
-						}
-
-						return GetAbsolutePathToFile(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_filePath);
-					}
-					default:
-					{
-						return GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
-					}
-				}
-			}
-
-			return "";
-		}
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
-		std::string FileSystem::GetAbsolutePathToDirectory(CSCore::StorageLocation in_storageLocation, const std::string& in_directoryPath) const
-		{
-			if (DoesDirectoryExist(in_storageLocation, in_directoryPath) == true)
-			{
-				switch (in_storageLocation)
-				{
-					case CSCore::StorageLocation::k_DLC:
-					{
-						std::string filePath = CSCore::StringUtils::StandardiseDirectoryPath(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC) + in_directoryPath);
-						if (CSBackend::Windows::DoesDirectoryExist(filePath) == true)
-						{
-							return filePath;
-						}
-
-						return GetAbsolutePathToDirectory(CSCore::StorageLocation::k_package, GetPackageDLCPath() + in_directoryPath);
-					}
-					default:
-					{
-						return GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
-					}
-				}
-			}
-
-			return "";
 		}
 		//--------------------------------------------------------------
 		//--------------------------------------------------------------

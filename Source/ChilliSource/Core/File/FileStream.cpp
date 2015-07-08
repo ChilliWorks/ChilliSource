@@ -41,6 +41,23 @@ namespace ChilliSource
 {
     namespace Core
     {
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		FileStream::FileStream(const std::string& in_filePath, FileMode in_fileMode)
+		{
+			mstrFilename = in_filePath;
+			meFileMode = in_fileMode;
+
+			mFileStream.open(mstrFilename.c_str(), GetFileMode());
+
+			m_isValid = mFileStream.is_open() == true && mFileStream.bad() == false && mFileStream.fail() == false;
+		}
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		bool FileStream::IsValid() const
+		{
+			return m_isValid;
+		}
         //--------------------------------------------------------------
         /// Get MD5 Checksum 
         ///
@@ -50,6 +67,8 @@ namespace ChilliSource
         //--------------------------------------------------------------
         std::string FileStream::GetMD5Checksum()
         {
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
             s32 dwCurrentPos = TellG();
             
             // Get file size
@@ -87,6 +106,8 @@ namespace ChilliSource
         //--------------------------------------------------------------
         std::string FileStream::GetSHA1Checksum(CSHA1::REPORT_TYPE ineReportType)
         {
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
             s32 dwCurrentPos = TellG();
             
             // Get file size
@@ -134,51 +155,22 @@ namespace ChilliSource
 			return std::string(cHash);
 #endif
         }
-        //--------------------------------------------------------------------------------------------------
-		/// Open
-		//--------------------------------------------------------------------------------------------------			
-		void FileStream::Open(const std::string& instrFilename, Core::FileMode ineMode)
-		{
-			mstrFilename = instrFilename;
-			meFileMode = ineMode;
-			
-			std::ios_base::openmode mode = GetFileMode();
-			
-			mFileStream.open(instrFilename.c_str(), mode);
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Is Open
-		//--------------------------------------------------------------------------------------------------
-		bool FileStream::IsOpen()
-		{
-			return mFileStream.is_open();
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Is Bad
-		//--------------------------------------------------------------------------------------------------
-		bool FileStream::IsBad()
-		{
-			return (mFileStream.bad() || mFileStream.fail());
-		}
 		//--------------------------------------------------------------------------------------------------
 		/// End Of File
 		//--------------------------------------------------------------------------------------------------
 		bool FileStream::EndOfFile()
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			return mFileStream.eof();
-		}
-		//--------------------------------------------------------------------------------------------------
-		/// Close
-		//--------------------------------------------------------------------------------------------------
-		void FileStream::Close()
-		{
-			mFileStream.close();
 		}
 		//--------------------------------------------------------------------------------------------------
 		/// Get
 		//--------------------------------------------------------------------------------------------------
 		s32 FileStream::Get()
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			return mFileStream.get();
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -186,6 +178,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::Get(s8 & outbyChar)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.get(outbyChar);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -193,6 +187,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::Get(s8 * outpbyString, s32 indwStreamSize)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.get(outpbyString, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -200,6 +196,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::Get(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.get(outpbyString, indwStreamSize, inbyDelim);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -207,6 +205,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::GetLine(std::string &outstrString)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream >> outstrString;
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -214,6 +214,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::GetAll(std::string &outstrString)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			std::stringstream cStream;
 			cStream << mFileStream.rdbuf();
 			
@@ -224,6 +226,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::Get(std::stringstream &outstrStringStream)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			outstrStringStream << mFileStream.rdbuf();
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -231,6 +235,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::GetLine(s8 * outpbyString, s32 indwStreamSize)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.getline(outpbyString, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -238,6 +244,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::GetLine(s8 * outpbyString, s32 indwStreamSize, s8 inbyDelim)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.getline(outpbyString, indwStreamSize, inbyDelim);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -245,6 +253,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::Ignore(s32 indwStreamSize, s8 inbyDelim)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.ignore(indwStreamSize, inbyDelim);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -252,6 +262,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		s32 FileStream::Peek()
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			return mFileStream.peek();
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -259,6 +271,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::Read(s8* inpbyBuffer, s32 indwStreamSize)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.read(inpbyBuffer, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -266,6 +280,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::PutBack(s8 inbyChar)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.putback(inbyChar);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -273,6 +289,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::Unget()
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.unget();
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -280,6 +298,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		s32 FileStream::TellG()
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			return (s32)mFileStream.tellg();
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -287,6 +307,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::SeekG(s32 indwPosition)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.seekg(indwPosition);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -294,6 +316,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::SeekG(s32 indwPosition, Core::SeekDir ineDir)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			std::ios_base::seekdir dir;
 			switch (ineDir)
 			{
@@ -315,6 +339,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		s32 FileStream::Sync()
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			return mFileStream.sync();
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -322,6 +348,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::Put(s8 inbyChar)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.put(inbyChar);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -329,6 +357,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::Write(const s8* inpbyChar, s32 indwStreamSize)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.write(inpbyChar, indwStreamSize);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -336,6 +366,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::Write(const std::string& _instrString)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.write(_instrString.c_str(), _instrString.length());
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -343,6 +375,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		s32 FileStream::TellP()
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			return (s32)mFileStream.tellp();
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -350,6 +384,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::SeekP(s32 indwPosition)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.seekp(indwPosition);
 		}
 		//--------------------------------------------------------------------------------------------------
@@ -357,6 +393,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::SeekP(s32 indwPosition, Core::SeekDir ineDir)
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			std::ios_base::seekdir dir;
 			switch (ineDir)
 			{
@@ -378,6 +416,8 @@ namespace ChilliSource
 		//--------------------------------------------------------------------------------------------------
 		void FileStream::Flush()
 		{
+        	CS_ASSERT(IsValid() == true, "Trying to use an invalid FileStream.");
+
 			mFileStream.flush();
 		}
         //--------------------------------------------------------------------------------------------------
@@ -411,5 +451,14 @@ namespace ChilliSource
 					return (std::ios_base::in);
 			}
 		}
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        FileStream::~FileStream()
+        {
+            if (IsValid() == true)
+            {
+                mFileStream.close();
+            }
+        }
 	}
 }

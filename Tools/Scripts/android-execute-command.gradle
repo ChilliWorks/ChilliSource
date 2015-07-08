@@ -1,0 +1,152 @@
+//
+//  android-execute-command.gradle
+//  ChilliSource
+//  Created by Ian Copland on 26/06/2015.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2015 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+import java.lang.Process
+import java.lang.reflect.Array
+
+/**
+ * Prints anything in the given buffered stream.
+ *
+ * @author Ian Copland
+ *
+ * @param in_stream - The input stream.
+ * @param in_printAsError - If true, any messages will be printed as an error message.
+ */
+def printStream(InputStream in_stream, boolean in_printAsError) {
+    try {
+        def bufferedInputReader = new BufferedReader(new InputStreamReader(in_stream))
+        String line
+        while ((line = bufferedInputReader.readLine()) != null) {
+            if (in_printAsError) {
+                System.err.println(line)
+            } else {
+                System.out.println(line)
+            }
+        }
+    }
+    catch (Exception e) {
+        throw new GradleException("Failed to print stream.", e) as Throwable
+    }
+}
+/**
+ * adds the given stream to the given string builder.
+ *
+ * @author Ian Copland
+ *
+ * @param in_stream - The input stream.
+ * @param in_stringBuilder - The string builder
+ */
+def addStreamToString(InputStream in_stream, StringBuilder in_stringBuilder) {
+    try {
+        def bufferedInputReader = new BufferedReader(new InputStreamReader(in_stream))
+        String line
+        while ((line = bufferedInputReader.readLine()) != null) {
+            in_stringBuilder.append(line)
+        }
+    }
+    catch (Exception e) {
+        throw new GradleException("Failed to add stream to string.", e) as Throwable
+    }
+}
+
+ext {
+    /**
+     * Executes the given command line parameters. Outputs the contents of both the input stream
+     * and error stream to console.
+     *
+     * @author Ian Copland
+     *
+     * @param in_commands - The array of commands
+     */
+    csExecuteCommand = { in_commands ->
+        final def process = new ProcessBuilder(in_commands as String[]).start()
+
+        def inputRunnable = new Runnable() {
+            @Override public void run() {
+                printStream(process.getInputStream(), false)
+            }
+        }
+        def errorRunnable = new Runnable() {
+            @Override public void run() {
+                printStream(process.getErrorStream(), true)
+            }
+        }
+
+        def inputThread = new Thread(inputRunnable)
+        def errorThread = new Thread(errorRunnable)
+        inputThread.start()
+        errorThread.start()
+        inputThread.join()
+        errorThread.join()
+        process.waitFor()
+        process.destroy()
+
+        if (process.exitValue() != 0) {
+            throw new GradleException("Process exited with the error code " + process.exitValue() + ". See above for details if available.") as Throwable
+        }
+    }
+    /**
+     * Executes the given command line parameters and returns the contents of the input stream.
+     *
+     * @author Ian Copland
+     *
+     * @param in_commands - The array of commands
+     *
+     * @return The contents of the input stream.
+     */
+    csExecuteCommandAndGetOutput = { in_commands ->
+        final def process = new ProcessBuilder(in_commands as String[]).start()
+
+        final def stringBuilder = new StringBuilder()
+        def inputRunnable = new Runnable() {
+            @Override public void run() {
+                addStreamToString(process.getInputStream(), stringBuilder)
+            }
+        }
+        def errorRunnable = new Runnable() {
+            @Override public void run() {
+                printStream(process.getErrorStream(), true)
+            }
+        }
+
+        def inputThread = new Thread(inputRunnable)
+        def errorThread = new Thread(errorRunnable)
+        inputThread.start()
+        errorThread.start()
+        inputThread.join()
+        errorThread.join()
+        process.waitFor()
+        process.destroy()
+
+        if (process.exitValue() != 0) {
+            throw new GradleException("Process exited the error code " + process.exitValue() + ". See above for more information, if available.") as Throwable
+        }
+
+        return stringBuilder.toString()
+    }
+}

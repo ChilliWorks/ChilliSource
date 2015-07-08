@@ -33,7 +33,7 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/CoreJavaInterface.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #endif
 
 #include <ck/ck.h>

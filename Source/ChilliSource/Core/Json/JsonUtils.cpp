@@ -65,7 +65,7 @@ namespace ChilliSource
             {
                 Core::FileStreamSPtr fileStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_read);
                 
-                if (fileStream == nullptr || fileStream->IsOpen() == false || fileStream->IsBad() == true)
+                if (fileStream == nullptr)
                 {
                     CS_LOG_ERROR("Could not open json file: " + in_filePath);
                     return false;
@@ -73,7 +73,7 @@ namespace ChilliSource
                 
                 std::string fileContents;
                 fileStream->GetAll(fileContents);
-                fileStream->Close();
+                fileStream.reset();
                 
                 Json::Reader jsonReader;
                 if (jsonReader.parse(fileContents, out_jsonValue) == false)

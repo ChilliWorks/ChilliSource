@@ -113,9 +113,9 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         void TextureAtlasProvider::LoadFrames(Core::StorageLocation in_location, const std::string& in_filePath, TextureAtlas::Descriptor& out_desc)
         {
-            CSCore::FileStreamSPtr frameFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, CSCore::FileMode::k_readBinary);
+            CSCore::FileStreamUPtr frameFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, CSCore::FileMode::k_readBinary);
 			
-			if(frameFile->IsOpen() == false)
+			if(frameFile == nullptr)
 			{
 				return;
 			}
@@ -140,7 +140,7 @@ namespace ChilliSource
             
 			//Fetch the binary data in one read.
 			frameFile->Read(reinterpret_cast<s8*>(buffer), numElements * sizeof(s16));
-			frameFile->Close();
+			frameFile.reset();
 			
 			//Now copy the data into our sprite data buffer as it is now in the correct format
             out_desc.m_textureAtlasWidth = (u32)textureAtlasWidth;
@@ -176,9 +176,9 @@ namespace ChilliSource
             std::string fileExtension;
             
             Core::StringUtils::SplitBaseFilename(in_filePath, fileName, fileExtension);
-            Core::FileStreamSPtr mapFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, fileName + ".csatlasid", Core::FileMode::k_read);
+            Core::FileStreamUPtr mapFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, fileName + ".csatlasid", Core::FileMode::k_read);
             
-			if(mapFile->IsOpen())
+			if(mapFile != nullptr)
 			{
                 std::vector<u32> IDHashedLookup;
                 

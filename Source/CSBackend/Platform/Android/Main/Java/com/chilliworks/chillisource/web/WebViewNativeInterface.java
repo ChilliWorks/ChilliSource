@@ -40,9 +40,6 @@ import android.widget.RelativeLayout;
 import com.chilliworks.chillisource.core.CSActivity;
 import com.chilliworks.chillisource.core.CSApplication;
 import com.chilliworks.chillisource.core.ResourceHelper;
-import com.chilliworks.chillisource.web.CSWebView;
-import com.chilliworks.chillisource.web.CSWebViewClient;
-import com.chilliworks.chillisource.web.WebViewCloseButton;
 
 public class WebViewNativeInterface 
 {

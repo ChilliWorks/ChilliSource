@@ -39,6 +39,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.chilliworks.chillisource.core.InterfaceId;
 import com.facebook.FacebookOperationCanceledException;
 import com.facebook.Session;
 import com.facebook.Session.NewPermissionsRequest;
@@ -55,13 +56,12 @@ import com.facebook.FacebookException;
 import com.facebook.UiLifecycleHelper;
 import com.chilliworks.chillisource.core.CSApplication;
 import com.chilliworks.chillisource.core.ExceptionUtils;
-import com.chilliworks.chillisource.core.INativeInterface;
-import com.chilliworks.chillisource.core.InterfaceIDType;
+import com.chilliworks.chillisource.core.System;
 import com.chilliworks.chillisource.core.Logging;
 
-public class FacebookNativeInterface extends INativeInterface
+public class FacebookNativeInterface extends System
 {
-	private static final InterfaceIDType InterfaceID = new InterfaceIDType("FacebookNativeInterface");
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
 	
 	private static final int RESULT_SUCCESS = 0;
 	private static final int RESULT_CANCEL = 1;
@@ -100,19 +100,20 @@ public class FacebookNativeInterface extends INativeInterface
 		
 		CSApplication.get().scheduleUIThreadTask(task);						
 	}
-	/**
-	 * Is A
-	 *
-	 * @author T Kane 
-	 * 
-	 * @param inInterfaceType - Interface type to check against
-	 *
-	 * @return Whether or not this implements the given interface
-	 */
-	@Override public boolean IsA(InterfaceIDType inInterfaceType) 
-	{
-		return inInterfaceType == FacebookNativeInterface.InterfaceID;
-	}
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean isA(InterfaceId in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
     /**
      * Post to Facebook
      *
@@ -382,7 +383,7 @@ public class FacebookNativeInterface extends INativeInterface
 		return session.getAccessToken();
 	}
     /**
-     * If a session exists, log the user out and destroy any cached tokens.
+     * If a session exists, log the user out and destroyApplication any cached tokens.
      *
      * @author T Kane 
      */
@@ -399,9 +400,9 @@ public class FacebookNativeInterface extends INativeInterface
 	 * @author T Kane
 	 * 
 	 */
-	@Override public void onActivitySuspend()
+	@Override public void onSuspend()
 	{
-		super.onActivitySuspend();
+		super.onSuspend();
 
 		m_uiHelper.onPause();
 	}
@@ -410,9 +411,9 @@ public class FacebookNativeInterface extends INativeInterface
 	 *
 	 * @author T Kane
 	 */
-	@Override public void onActivityResume()
+	@Override public void onResume()
 	{
-		super.onActivityResume();
+		super.onResume();
 
 		m_uiHelper.onResume();
 	}
@@ -421,9 +422,9 @@ public class FacebookNativeInterface extends INativeInterface
 	 *
 	 * @author T Kane
 	 */
-	@Override public void onActivityDestroy()
+	@Override public void onDestroy()
 	{
-		super.onActivityDestroy();
+        super.onDestroy();
 
 		m_uiHelper.onDestroy();
 	}

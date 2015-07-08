@@ -95,7 +95,7 @@ public class Renderer implements GLSurfaceView.Renderer
 	 */
     @Override public void onSurfaceChanged(GL10 in_GlContext, int in_width, int in_height) 
     {
-    	CoreNativeInterface coreNI = (CoreNativeInterface)CSApplication.get().getSystem(CoreNativeInterface.InterfaceID);
+    	CoreNativeInterface coreNI = (CoreNativeInterface)CSApplication.get().getSystem(CoreNativeInterface.INTERFACE_ID);
     	if (coreNI != null)
     	{
     		coreNI.onResolutionChanged(in_width, in_height);
