@@ -48,7 +48,7 @@ import java.util.zip.CRC32;
 
 public class FileUtils 
 {
-	private static final int BUFFER_SIZE = 8 * 1024;
+	private static final int INPUT_STREAM_BUFFER_SIZE = 8 * 1024;
 	
 	/**
 	 * Reads the entire contents of a file into a string.
@@ -485,9 +485,9 @@ public class FileUtils
 	 */
 	static public long calcFileCRC32(String in_filePath) throws IOException
 	{
-		try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(in_filePath), BUFFER_SIZE))
+		try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(in_filePath), INPUT_STREAM_BUFFER_SIZE))
 		{
-			byte[] buffer = new byte[BUFFER_SIZE];
+			byte[] buffer = new byte[INPUT_STREAM_BUFFER_SIZE];
 			CRC32 crc32 = new CRC32();
 			
 			int count = 0;

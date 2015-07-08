@@ -50,8 +50,27 @@ def printStream(InputStream in_stream, boolean in_printAsError) {
         }
     }
     catch (Exception e) {
-        System.err.println(e.toString())
-        e.printStackTrace()
+        throw new GradleException("Failed to print stream.", e) as Throwable
+    }
+}
+/**
+ * adds the given stream to the given string builder.
+ *
+ * @author Ian Copland
+ *
+ * @param in_stream - The input stream.
+ * @param in_stringBuilder - The string builder
+ */
+def addStreamToString(InputStream in_stream, StringBuilder in_stringBuilder) {
+    try {
+        def bufferedInputReader = new BufferedReader(new InputStreamReader(in_stream))
+        String line
+        while ((line = bufferedInputReader.readLine()) != null) {
+            in_stringBuilder.append(line)
+        }
+    }
+    catch (Exception e) {
+        throw new GradleException("Failed to add stream to string.", e) as Throwable
     }
 }
 
@@ -88,7 +107,46 @@ ext {
         process.destroy()
 
         if (process.exitValue() != 0) {
-            throw new GradleException("Process exited with with error code " + process.exitValue() + ". See above for details if available.") as Throwable
+            throw new GradleException("Process exited with the error code " + process.exitValue() + ". See above for details if available.") as Throwable
         }
+    }
+    /**
+     * Executes the given command line parameters and returns the contents of the input stream.
+     *
+     * @author Ian Copland
+     *
+     * @param in_commands - The array of commands
+     *
+     * @return The contents of the input stream.
+     */
+    csExecuteCommandAndGetOutput = { in_commands ->
+        final def process = new ProcessBuilder(in_commands as String[]).start()
+
+        final def stringBuilder = new StringBuilder()
+        def inputRunnable = new Runnable() {
+            @Override public void run() {
+                addStreamToString(process.getInputStream(), stringBuilder)
+            }
+        }
+        def errorRunnable = new Runnable() {
+            @Override public void run() {
+                printStream(process.getErrorStream(), true)
+            }
+        }
+
+        def inputThread = new Thread(inputRunnable)
+        def errorThread = new Thread(errorRunnable)
+        inputThread.start()
+        errorThread.start()
+        inputThread.join()
+        errorThread.join()
+        process.waitFor()
+        process.destroy()
+
+        if (process.exitValue() != 0) {
+            throw new GradleException("Process exited the error code " + process.exitValue() + ". See above for more information, if available.") as Throwable
+        }
+
+        return stringBuilder.toString()
     }
 }

@@ -48,7 +48,7 @@ def getAdbFilePath() {
         }
         def ndkDir = properties.getProperty('sdk.dir')
         if (ndkDir == null) {
-            throw new GradleException("The sdk.dir property in local.propeties is not set")
+            throw new GradleException("The sdk.dir property in local.propeties is not set") as Throwable
         }
         def ndkBuild = Os.isFamily(Os.FAMILY_WINDOWS) ? "$ndkDir/platform-tools/adb.exe" : "$ndkDir/platform-tools/adb" as String
         return ndkBuild
@@ -71,12 +71,14 @@ ext {
         def fileName = "main." + in_versionCode + "." + in_applicationId + ".obb"
         String filePath = file("build/outputs/obb").absolutePath + "/" + fileName
 
-        if (new File(filePath).exists() == false) {
-            throw new GradleException("Cannot push Apk Expansion file to device becuase it doesn't exist!")
+        if (!new File(filePath).exists()) {
+            throw new GradleException("Cannot push Apk Expansion file to device becuase it doesn't exist!") as Throwable
         }
 
-        String destinationFilePath = "/sdcard/Android/obb/" + in_applicationId + "/" + fileName
+        String adb = getAdbFilePath()
+        String storagePath = csExecuteCommandAndGetOutput([adb, 'shell', 'echo', '$EXTERNAL_STORAGE'])
 
-        csExecuteCommand([ getAdbFilePath(), "push", filePath, destinationFilePath ] as String[])
+        String destinationFilePath = storagePath + '/Android/obb/' + in_applicationId + '/' + fileName
+        csExecuteCommand([ adb, "push", filePath, destinationFilePath ] as String[])
     }
 }

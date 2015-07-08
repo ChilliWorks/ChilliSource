@@ -226,7 +226,7 @@ public class StringUtils
 	 */
 	public static boolean containsWhitespace(String in_string)
 	{
-		return in_string.contains("_") == true || in_string.contains("\n") == true || in_string.contains("\r") == true || in_string.contains("\t") == true;
+		return in_string.contains(" ") == true || in_string.contains("\n") == true || in_string.contains("\r") == true || in_string.contains("\t") == true;
 	}
 	/**
 	 * @author Ian Copland
