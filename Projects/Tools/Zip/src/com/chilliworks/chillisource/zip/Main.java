@@ -96,7 +96,7 @@ public final class Main
 				i++;
 			}
 			
-			//swap handedness
+			//uncompressed extensions
 			else if (arguments[i].equalsIgnoreCase(PARAM_NAME_UNCOMPRESSED_EXTENSIONS) == true || arguments[i].equalsIgnoreCase(SHORT_PARAM_NAME_UNCOMPRESSED_EXTENSIONS) == true)
 			{
 				if (i+1 < arguments.length)
