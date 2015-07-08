@@ -1,6 +1,13 @@
 Chilli Source Change Log
 ========================
 
+Version 1.4.5, 2015-06-26
+-------------------------
+* Added: Additional data on IAPs can now be retreived through the Android and iOS backends for IAPSystem.
+* Fixed: Application and State no longer log a warning if a system couldn't be found using GetSystem<>()
+* Fixed: Fixed a number of fatal errors which were incorrectly reported in the PNG To CSImage tool.
+* Fixed: The Android build process will now correctly halt if there are compiler errors during the native build.
+
 Version 1.4.4, 2015-06-05
 -------------------------
 * Fixed: A crash when removing Entities with children from the scene.
