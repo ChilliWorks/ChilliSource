@@ -205,12 +205,11 @@ public final class CSProjectGenerator
 			"Content/BuildAll.command",
 			"Content/BuildAll.sh",
 			"Content/AppResources/App.config",
-			"Projects/iOS/" + k_templateProjectName + ".xcodeproj/project.pbxproj",
-			"Projects/iOS/ProjectResources/" + k_templateProjectName + "-Info.plist",
-			"Projects/Windows/" + k_templateProjectName + ".sln",
-			"Projects/Windows/" + k_templateProjectName + ".vcxproj",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/build.gradle",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/settings.gradle",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/.idea/.name",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/.idea/modules.xml",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/app.iml",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/build.gradle",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/proguard-rules.pro",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/AndroidManifest.xml",
@@ -218,6 +217,10 @@ public final class CSProjectGenerator
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/jni/Android.mk",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/jni/Application.mk",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/res/values/strings.xml",
+			"Projects/iOS/" + k_templateProjectName + ".xcodeproj/project.pbxproj",
+			"Projects/iOS/ProjectResources/" + k_templateProjectName + "-Info.plist",
+			"Projects/Windows/" + k_templateProjectName + ".sln",
+			"Projects/Windows/" + k_templateProjectName + ".vcxproj",
 			"Tools/Scripts/content_builder.py",
 			"Tools/Scripts/file_system_utils.py",
 			"Tools/Scripts/model_builder.py",
@@ -230,17 +233,19 @@ public final class CSProjectGenerator
 		
 		String[] filesToUpdateFileName = new String[]
 		{
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/" + k_templateProjectName.toLowerCase() + ".iml",
 			"Projects/iOS/ProjectResources/" + k_templateProjectName + "-Info.plist",
 			"Projects/Windows/" + k_templateProjectName + ".sln",
 			"Projects/Windows/" + k_templateProjectName + ".vcxproj"
+
 		};
 		
 		updateFileNames(in_options, filesToUpdateFileName);
 		
 		String[] directoriesToUpdateDirectoryName = new String[]
 		{
-			"Projects/iOS/" + k_templateProjectName + ".xcodeproj",
-			"Projects/Android/" + k_templateProjectName.toLowerCase()
+			"Projects/Android/" + k_templateProjectName.toLowerCase(),
+			"Projects/iOS/" + k_templateProjectName + ".xcodeproj"
 		};
 		
 		updateDirectoryNames(in_options, directoriesToUpdateDirectoryName);
