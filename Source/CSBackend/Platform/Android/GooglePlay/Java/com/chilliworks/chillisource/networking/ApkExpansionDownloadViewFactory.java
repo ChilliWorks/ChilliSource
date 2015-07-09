@@ -1,7 +1,7 @@
 /**
- * ApkExpansionDownloadView.java
+ * ApkExpansionDownloadViewFactory.java
  * ChilliSource
- * Created by Ian Copland on 28/05/2015.
+ * Created by Ian Copland on 09/07/2015.
  *
  * The MIT License (MIT)
  *
@@ -28,7 +28,6 @@
 
 package com.chilliworks.chillisource.networking;
 
-import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
@@ -92,7 +91,6 @@ final class ApkExpansionDownloadViewFactory
         //failing that, simply return the default view.
         return new DefaultApkExpansionDownloadView(in_activity);
     }
-
     /**
      * Creates an instance of the ApkExpansionDownloadView with the given name using reflection.
      * The created class must have a constructor which takes the ApkExpansionDownloadActivity as
@@ -105,7 +103,11 @@ final class ApkExpansionDownloadViewFactory
      *
      * @return The new download view.
      *
-     * @throws ClassNotFoundException - Will be thrown if the class doesn't exist
+     * @throws ClassNotFoundException - Will be thrown if the class doesn't exist.
+     * @throws IllegalAccessException - Thrown if the constructor cannot be accessed.
+     * @throws InvocationTargetException - Thrown if the constructor throws and exception.
+     * @throws InstantiationException - If the class cannot be instantiated because it's abstract
+     * or there is no suitable constructor.
      */
     private static ApkExpansionDownloadView createView(String in_customViewName, ApkExpansionDownloadActivity in_activity) throws ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException
     {
