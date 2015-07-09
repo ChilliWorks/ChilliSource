@@ -42,7 +42,7 @@ import android.widget.TextView;
  *
  * @author Ian Copland
  */
-public final class DefaultApkExpansionDownloadView extends ApkExpansionDownloadView
+final class DefaultApkExpansionDownloadView extends ApkExpansionDownloadView
 {
     private RelativeLayout m_layout = null;
     private ProgressBar m_progressBar = null;

@@ -31,6 +31,7 @@ package com.chilliworks.chillisource.networking;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -299,7 +300,7 @@ public final class ApkExpansionDownloadActivity extends Activity implements IDow
     {
         assert (m_view == null) : "View already exists!";
 
-        m_view = new DefaultApkExpansionDownloadView(this);
+        m_view = ApkExpansionDownloadViewFactory.createView(this);
         m_view.onInit();
     }
     /**
