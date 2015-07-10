@@ -1,6 +1,40 @@
 Chilli Source Change Log
 ========================
 
+Version 1.5.0, 2015-07-10
+-------------------------
+* Added: The android build pipeline now includes gradle tasks for packaging resources in the Apk Expansion file and pushing it to device.
+* Added: The APK expansion downloader screen can now be overridden by the user.
+* Added: Implemented a new, much easier to use system for handling JNI calls on Android. Native to Java calls are now all handled through JavaClass or JavaStaticClass. These include a number of sanity checks and provide more intuitive error messages. Java to Native still works as before.
+* Added: Implemented JavaSystem, similar to JavaClass, but specifically for andriod java classes which extend System.
+* Added: The android java class FileUtils now includes separate methods for reading and writing binary and text files.
+* Added: FileSystem now includes methods for checking if a directory exists in the cached or package DLC locations.
+* Added: The java tools ZipUtils now includes the ability to zip the contents of a directory.
+* Added: A new java tool for cross-platform zipping of directories.
+* Removed: The previous android expansion system has been removed.
+* Removed: The android Power Manager is now redundant and has been removed.
+* Removed: The GetAbsolutePathToFile() and GetAbsolutePathToDirectory() methods in FileSystem are no longer relevant with changes made to the system a while ago, and therefore have been removed.
+* Improved: Updated the android projects to Android Studio 1.2. This included updating to gradle 1.2.3, build tools version 22.0.1 and sdk version 22.
+* Improved: Support for Android Expansion files has been greatly improved. Google Play builds will now be automatically downloaded on startup if not already present. This occurs prior to any game code being executed so the user no longer need to handle the case where game assets do not yet exist. The downloaded expansion file is no longer unpacked meaning the app will be much smaller on disc, and a number of possible complications are avoided. A default downloader screen is provided by the engine.
+* Improved: The android file system implementation has been significantly overhauled. Google Play flavoured builds now refer to the main APK expansion file rather than the APK when the Package, ChilliSource or DLC storage locations are requested. Amazon builds still use the APK.
+* Improved: Significantly tidied up and improved the android gradle build scripts. 
+* Improved: Restructured the Android backend.
+* Improved: Renamed the android java class NativeInterface and changed it so that it follows the same lifecycle rules as systems in the native side of the engine.
+* Improved: Renamexd JavaInterfaceUtils to JavaUtils.
+* Improved: Simplified the creation and destruction of file streams. Calls to FileSystem::CreateFileStream() will now either return a valid ready to use stream, or null if it failed. A stream is no longer manually closed, instead it will be automatically cleaned up when it goes out of scope.
+* Improved: The LVL key for Android Google Play builds should now be provided once in App.cpp, rather than being provided to each system that needs it in different ways.
+* Improved: It is now possible to get access to the DrawableDef in a UI::DrawableComponent.
+* Improved: Refactored and improved the android java StringUtils class.
+* Improved: Refactored the android java class IQueryableInterface.
+* Improved: The TaggedPathResolver now returns the input path if the path doesn't exist. This means requests to ResourcePool will print more helpful error messages.
+* Improved: Refactored the android VideoPlayer backend so that it uses JavaSystem instead of JavaInterface. 
+* Improved: The android manifest builder has been updated to reflect the changes to the Android project structure. Added new option for specifying a custom APK expansion downloader view.
+* Improved: The project generator has been updated to include the new Android project structure changes.
+* Fixed: A number of inconsistencies and bugs in the Android and Windows FileSystem have been fixed.
+* Fixed: A FileStream referring to the Package, ChilliSource or packaged DLC storage locations on Android no longer allows write operations.
+* Fixed: A bug where tagged asset paths were incorrectly handled for CkBank resources has been resolved.
+* Deprecated: JavaInterface and _JavaInteface are both now deprecated and will be removed in the near future.
+
 Version 1.4.5, 2015-06-26
 -------------------------
 * Added: Additional data on IAPs can now be retreived through the Android and iOS backends for IAPSystem.
