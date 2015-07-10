@@ -32,6 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
+#include <ChilliSource/Core/ForwardDeclarations.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
@@ -425,58 +426,13 @@ namespace ChilliSource
             ///
             /// @author Nicolas Tanda
             ///
-            /// @param in_font - The font which will be used to render the text.
             /// @param in_text - The text containing mark-ups
             /// @param in_params - The param dictionary which contains the values which
             /// should be used for each variable in the string.
             /// @param in_imageData - The image data dictionary which contains the values
             /// which should be used for each image in the string.
-            /// @param out_text - [Out] The output text string with the markup resolved.
-            /// The string will be initially cleared.
-            /// @param out_iconIndices - [Out] The output icons described in markup.
             //------------------------------------------------------------------------------
-            static void ReplaceVariables(const Rendering::FontCSPtr& in_font, const std::string& in_text, const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData,
-                                         std::string& out_text, std::vector<TextIconIndex>& out_iconIndices);
-            //------------------------------------------------------------------------------
-            /// Find any variable or nested variable mark-up and insert the value of the
-            /// variables.
-            ///
-            /// For instance: My string contains [var =a] variable and [var= b] variable
-            /// called a and b
-            ///
-            /// Furthermore, [var= Var_[var= a]_b] has variables called a, and e.g.
-            /// Var_12_b (if a == "12")
-            ///
-            /// This will also replace any [img= variable] flags with actual icons,
-            /// using the cached images data map.
-            ///
-            /// @author Nicolas Tanda
-            ///
-            /// @param in_font - The font which will be used to render the text.
-            /// @param in_params - The param dictionary which contains the values which
-            /// should be used for each variable in the string.
-            /// @param in_iconDictionary - The image data dictionary which contains the
-            /// values which should be used for each image in the string.
-            /// @param out_iterator - [OUT] The iterator going through the text
-            /// @param out_index - [OUT] The current index of the text
-            /// @param out_text - [OUT] The text output
-            /// @param out_iconIndices - [Out] The output icons described in markup.
-            //------------------------------------------------------------------------------
-            static void ReplaceVariablesRecursive(const Rendering::FontCSPtr& in_font, const Core::ParamDictionary& in_params, const TextIconDictionary& in_iconDictionary,
-                                                  std::string::const_iterator& out_iterator, u32& out_index, std::string& out_text, std::vector<TextIconIndex>& out_iconIndices);
-            //------------------------------------------------------------------------------
-            /// Adds the value of the variable with the given name to the output string.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_params - The param dictionary which contains all of the different
-            /// variables.
-            /// @param in_variable - The name of the variable.
-            /// @param out_text - [Out] The string to append the variable to.
-            ///
-            /// @return Whether or not the variable was successfully replaced.
-            //------------------------------------------------------------------------------
-            static bool AddVariable(const Core::ParamDictionary& in_params, const std::string& in_variableName, std::string& out_text);
+            void ReplaceVariables(const std::string& in_text, const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData);
             //------------------------------------------------------------------------------
             /// Adds the icon described by the [img] tag to the Text Icon Indices list. Also
             /// makes space in the rendered text string for the icon.
@@ -489,13 +445,12 @@ namespace ChilliSource
             /// @param in_spaceInfo - Character info on a single space.
             /// @param in_markerInfo - Character info on the marker character.
             /// @param out_index - [Out] The current index of the text
-            /// @param out_text - [Out] The string to append space for the icon to.
             /// @param out_iconIndices - [Out] The output list of icons.
             ///
-            /// @return Whether or not the icon was successfully added to the label.
+            /// @return The text replacement for the icon.
             //------------------------------------------------------------------------------
-            static bool AddIcon(const Rendering::FontCSPtr& in_font, const TextIconDictionary& in_iconDictionary, const std::string& in_iconName, const Rendering::Font::CharacterInfo& in_spaceInfo,
-                                const Rendering::Font::CharacterInfo& in_markerInfo, u32& out_index, std::string& out_text, std::vector<TextIconIndex>& out_iconIndices);
+            static std::string AddIcon(const Rendering::FontCSPtr& in_font, const TextIconDictionary& in_iconDictionary, const std::string& in_iconName, const Rendering::Font::CharacterInfo& in_spaceInfo,
+                                       const Rendering::Font::CharacterInfo& in_markerInfo, u32& out_index, std::vector<TextIconIndex>& out_iconIndices);
             //------------------------------------------------------------------------------
             /// Builds the cachable Icon data from the list of icon indicies.
             ///
@@ -544,6 +499,8 @@ namespace ChilliSource
             Core::Vector2 m_cachedSize;
             Rendering::CanvasRenderer::BuiltText m_cachedText;
             std::vector<TextIconCachedData> m_cachedIcons;
+            
+            CSCore::StringMarkupParserSPtr m_markupParser;
         };
     }
 }

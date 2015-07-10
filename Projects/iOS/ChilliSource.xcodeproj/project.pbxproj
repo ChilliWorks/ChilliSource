@@ -17,6 +17,8 @@
 		8138A8FA1A5804AA00C81462 /* CricketAudioSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8F11A5804AA00C81462 /* CricketAudioSystem.cpp */; };
 		8138A90F1A5806A300C81462 /* libck.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8138A90E1A5806A300C81462 /* libck.a */; };
 		814F240B1A9B96560053ADC5 /* TextIcon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814F24091A9B96560053ADC5 /* TextIcon.cpp */; };
+		817C8C7A1B4D7D3E00ADDE52 /* MarkupDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817C8C781B4D7D3E00ADDE52 /* MarkupDef.cpp */; };
+		817C8C7D1B4D7D5000ADDE52 /* StringMarkupParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817C8C7B1B4D7D5000ADDE52 /* StringMarkupParser.cpp */; };
 		819630B21A3A0D5400475D76 /* HttpDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 819630B11A3A0D5400475D76 /* HttpDelegate.mm */; };
 		81AAFBBB19C9C18100CD4A14 /* Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB419C9C18100CD4A14 /* Gesture.cpp */; };
 		81AAFBBC19C9C18100CD4A14 /* GestureSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB619C9C18100CD4A14 /* GestureSystem.cpp */; };
@@ -448,6 +450,10 @@
 		816B0C1719CC2E7000520B50 /* concurrent_vector.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = concurrent_vector.h; sourceTree = "<group>"; };
 		816B0C1819CC48D300520B50 /* concurrent_vector_forward_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_forward_iterator.h; sourceTree = "<group>"; };
 		816B0C1919CC66E300520B50 /* concurrent_vector_reverse_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_reverse_iterator.h; sourceTree = "<group>"; };
+		817C8C781B4D7D3E00ADDE52 /* MarkupDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MarkupDef.cpp; sourceTree = "<group>"; };
+		817C8C791B4D7D3E00ADDE52 /* MarkupDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupDef.h; sourceTree = "<group>"; };
+		817C8C7B1B4D7D5000ADDE52 /* StringMarkupParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringMarkupParser.cpp; sourceTree = "<group>"; };
+		817C8C7C1B4D7D5000ADDE52 /* StringMarkupParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringMarkupParser.h; sourceTree = "<group>"; };
 		819630B11A3A0D5400475D76 /* HttpDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HttpDelegate.mm; sourceTree = "<group>"; };
 		819630B31A3A0D6400475D76 /* HttpDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HttpDelegate.h; sourceTree = "<group>"; };
 		81AAFBB419C9C18100CD4A14 /* Gesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gesture.cpp; sourceTree = "<group>"; };
@@ -1593,8 +1599,6 @@
 		81D8B22C1962E0EB0010DA84 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				81E258CC1A5D39880020264E /* Json */,
-				81E258CF1A5D39880020264E /* Json.h */,
 				81D8B22D1962E0EB0010DA84 /* Base */,
 				8158E483196ACB25005FF0A8 /* Base.h */,
 				81D8B2461962E0EB0010DA84 /* Container */,
@@ -1614,6 +1618,8 @@
 				81D8B2791962E0EB0010DA84 /* ForwardDeclarations.h */,
 				81D8B27A1962E0EB0010DA84 /* Image */,
 				8158E48B196ACB84005FF0A8 /* Image.h */,
+				81E258CC1A5D39880020264E /* Json */,
+				81E258CF1A5D39880020264E /* Json.h */,
 				81D8B2891962E0EB0010DA84 /* Localisation */,
 				8158E48C196ACB91005FF0A8 /* Localisation.h */,
 				81D8B28E1962E0EB0010DA84 /* Math */,
@@ -1901,6 +1907,10 @@
 		81D8B2C61962E0EB0010DA84 /* String */ = {
 			isa = PBXGroup;
 			children = (
+				817C8C781B4D7D3E00ADDE52 /* MarkupDef.cpp */,
+				817C8C791B4D7D3E00ADDE52 /* MarkupDef.h */,
+				817C8C7B1B4D7D5000ADDE52 /* StringMarkupParser.cpp */,
+				817C8C7C1B4D7D5000ADDE52 /* StringMarkupParser.h */,
 				81D8B2C71962E0EB0010DA84 /* StringParser.cpp */,
 				81D8B2C81962E0EB0010DA84 /* StringParser.h */,
 				81D8B2C91962E0EB0010DA84 /* StringUtils.cpp */,
@@ -2290,10 +2300,10 @@
 			isa = PBXGroup;
 			children = (
 				81D8B3E51962E0EC0010DA84 /* Communications */,
-				81D8B3E81962E0EC0010DA84 /* Facebook */,
-				81D8B3ED1962E0EC0010DA84 /* ForwardDeclarations.h */,
 				8158E4AB196ADE19005FF0A8 /* Communications.h */,
+				81D8B3E81962E0EC0010DA84 /* Facebook */,
 				8158E4AC196ADE49005FF0A8 /* Facebook.h */,
+				81D8B3ED1962E0EC0010DA84 /* ForwardDeclarations.h */,
 			);
 			path = Social;
 			sourceTree = "<group>";
@@ -2322,8 +2332,8 @@
 			isa = PBXGroup;
 			children = (
 				81D8B3EF1962E0EC0010DA84 /* Base */,
-				81D8B3F61962E0EC0010DA84 /* ForwardDeclarations.h */,
 				8158E4AD196ADE95005FF0A8 /* Base.h */,
+				81D8B3F61962E0EC0010DA84 /* ForwardDeclarations.h */,
 			);
 			path = Video;
 			sourceTree = "<group>";
@@ -2345,8 +2355,8 @@
 			isa = PBXGroup;
 			children = (
 				81D8B3F81962E0EC0010DA84 /* Base */,
-				81D8B3FB1962E0EC0010DA84 /* ForwardDeclarations.h */,
 				8158E4AE196ADEE4005FF0A8 /* Base.h */,
+				81D8B3FB1962E0EC0010DA84 /* ForwardDeclarations.h */,
 			);
 			path = Web;
 			sourceTree = "<group>";
@@ -3038,6 +3048,7 @@
 				81D8B4161962E0EC0010DA84 /* TaggedFilePathResolver.cpp in Sources */,
 				81D8B6CE1962E0F70010DA84 /* ContextRestorer.cpp in Sources */,
 				81D8B4721962E0EC0010DA84 /* CameraComponent.cpp in Sources */,
+				817C8C7D1B4D7D5000ADDE52 /* StringMarkupParser.cpp in Sources */,
 				81D8B4A11962E0EC0010DA84 /* TextureResourceOptions.cpp in Sources */,
 				81D8B6BC1962E0F70010DA84 /* VideoPlayerTapListener.mm in Sources */,
 				81D8B4001962E0EC0010DA84 /* ColourUtils.cpp in Sources */,
@@ -3152,6 +3163,7 @@
 				81D8B4101962E0EC0010DA84 /* Entity.cpp in Sources */,
 				81E258B91A5D38EF0020264E /* ProgressBarComponent.cpp in Sources */,
 				81C925301A5C3ADB00B3AE11 /* ParticleEmitterDefFactory.cpp in Sources */,
+				817C8C7A1B4D7D3E00ADDE52 /* MarkupDef.cpp in Sources */,
 				81C9252E1A5C3ADB00B3AE11 /* ParticleEmitter.cpp in Sources */,
 				81D8B4661962E0EC0010DA84 /* AspectRatioUtils.cpp in Sources */,
 				81D8B4821962E0EC0010DA84 /* MeshDescriptor.cpp in Sources */,
