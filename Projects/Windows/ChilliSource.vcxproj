@@ -79,6 +79,8 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Scene\Scene.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\State\State.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\State\StateManager.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\String\MarkupDef.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\String\StringMarkupParser.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\String\StringParser.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\String\StringUtils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\String\ToString.cpp" />
@@ -399,6 +401,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\State\State.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\State\StateManager.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\String.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\String\MarkupDef.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\String\StringMarkupParser.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\String\StringParser.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\String\StringUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\String\ToString.h" />

@@ -32,6 +32,8 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/String/MarkupDef.h>
 
+#include <functional>
+
 namespace ChilliSource
 {
     namespace Core

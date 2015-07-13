@@ -963,6 +963,12 @@
     <ClCompile Include="..\..\Source\ChilliSource\UI\Text\TextIcon.cpp">
       <Filter>ChilliSource\UI\Text</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\String\MarkupDef.cpp">
+      <Filter>ChilliSource\Core\String</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\String\StringMarkupParser.cpp">
+      <Filter>ChilliSource\Core\String</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
@@ -2092,6 +2098,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\NumericLimits.h">
       <Filter>ChilliSource\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\String\MarkupDef.h">
+      <Filter>ChilliSource\Core\String</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\String\StringMarkupParser.h">
+      <Filter>ChilliSource\Core\String</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
