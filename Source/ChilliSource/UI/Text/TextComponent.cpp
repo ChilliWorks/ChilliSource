@@ -63,6 +63,9 @@ namespace ChilliSource
             const char k_minTextScaleKey[] = "MinTextAutoScale";
             const char k_enableAutoScaledTextKey[] = "EnableAutoTextScale";
             
+            const char k_keywordImage[] = "img";
+            const char k_keywordVariable[] = "var";
+            
             
             const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
             {
@@ -114,6 +117,12 @@ namespace ChilliSource
             RegisterProperty<bool>(Core::PropertyTypes::Bool(), k_enableAutoScaledTextKey, CSCore::MakeDelegate(this, &TextComponent::IsTextAutoScaleEnabled), CSCore::MakeDelegate(this, &TextComponent::SetTextAutoScaleEnabled));
             
             ApplyRegisteredProperties(in_properties);
+            
+            // Register a new parser
+            CSCore::MarkupDef markupDef;
+            markupDef.AddKeyword(k_keywordImage, false);
+            markupDef.AddKeyword(k_keywordVariable, true);
+            m_markupParser = CSCore::StringMarkupParser(markupDef);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -265,7 +274,7 @@ namespace ChilliSource
         {
             CS_ASSERT(m_localisedText != nullptr, "Cannot set text using a null localised text.");
             
-            ReplaceVariables(m_font, m_localisedText->GetText(in_localisedTextId), in_params, in_imageData, m_text, m_iconIndices);
+            ReplaceVariables(m_localisedText->GetText(in_localisedTextId), in_params, in_imageData);
             
             m_invalidateCache = true;
         }
@@ -282,7 +291,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void TextComponent::SetText(const std::string& in_text, const TextIconDictionary& in_imageData)
         {
-            ReplaceVariables(m_font, in_text, {}, in_imageData, m_text, m_iconIndices);
+            ReplaceVariables(in_text, {}, in_imageData);
             
             m_invalidateCache = true;
         }
@@ -368,168 +377,78 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TextComponent::ReplaceVariables(const Rendering::FontCSPtr& in_font, const std::string& in_text, const Core::ParamDictionary& in_params, const TextIconDictionary& in_iconDictionary,
-                                             std::string& out_text, std::vector<TextIconIndex>& out_iconIndices)
+        void TextComponent::ReplaceVariables(const std::string& in_text, const Core::ParamDictionary& in_params, const TextIconDictionary& in_iconDictionary)
         {
-            out_text.clear();
-            out_text.shrink_to_fit();
+            m_text.clear();
+            m_text.shrink_to_fit();
             
-            out_iconIndices.clear();
-            out_iconIndices.shrink_to_fit();
-            
-            u32 index = 0;
-            
-            auto it = in_text.begin();
-            while(it < in_text.end())
-            {
-                auto character = Core::UTF8StringUtils::Next(it);
-                
-                if(character != '[')
-                {
-                    Core::UTF8StringUtils::Append(character, out_text);
-                    if(character != ' ' && character != '\t' && character != '\n')
-                    {
-                        ++index;
-                    }
-                }
-                else
-                {
-                    // Found a mark up, check it
-                    ReplaceVariablesRecursive(in_font, in_params, in_iconDictionary, it, index, out_text, out_iconIndices);
-                }
-            }
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::ReplaceVariablesRecursive(const Rendering::FontCSPtr& in_font, const Core::ParamDictionary& in_params, const TextIconDictionary& in_iconDictionary,
-                                                      std::string::const_iterator& out_iterator, u32& out_index, std::string& out_text, std::vector<TextIconIndex>& out_iconIndices)
-        {
-            // Found some mark-up. What type is it?
-            std::string type;
-            Core::UTF8Char nextChar = '\0';
+            m_iconIndices.clear();
+            m_iconIndices.shrink_to_fit();
             
             // Marker for images
             Rendering::Font::CharacterInfo markerInfo;
-            in_font->TryGetCharacterInfo(k_imageReplacementKey, markerInfo);
+            m_font->TryGetCharacterInfo(k_imageReplacementKey, markerInfo);
             
             // Spacing info
             Rendering::Font::CharacterInfo spaceInfo;
-            in_font->TryGetCharacterInfo(' ', spaceInfo);
+            m_font->TryGetCharacterInfo(' ', spaceInfo);
             
-            while (nextChar != '=')
+            // Parses the text to replace variables
+            m_text = m_markupParser.Parse(in_text, [=](const std::string& in_name, const std::string& in_keywordValue, u32 in_indexInString) -> std::string
             {
-                nextChar = Core::UTF8StringUtils::Next(out_iterator);
-                
-                if(nextChar != '=' && nextChar != ' ')
+                std::string value;
+                if (in_name == k_keywordVariable)
                 {
-                    type += nextChar;
+                    in_params.TryGetValue(in_keywordValue, value);
                 }
-            }
-            
-            // Variable type has been located
-            std::string varName;
-            
-            // There may be some whitespace that we need to ignore
-            nextChar = Core::UTF8StringUtils::Next(out_iterator);
-            if(nextChar != ' ')
-            {
-                varName += nextChar;
-            }
-            
-            // Find the closing bracket
-            while (nextChar != ']')
-            {
-                nextChar = Core::UTF8StringUtils::Next(out_iterator);
-                
-                if(nextChar != ']' && nextChar != '[' && nextChar != ' ')
+                else if (in_name == k_keywordImage)
                 {
-                    varName += nextChar;
+                    value = AddIcon(m_font, in_iconDictionary, in_keywordValue, spaceInfo, markerInfo, in_indexInString, m_iconIndices);
                 }
                 
-                // Nested variable
-                if(nextChar == '[')
-                {
-                    std::vector<TextIconIndex> icons;
-                    std::string variableName;
-                    
-                    ReplaceVariablesRecursive(in_font, in_params, in_iconDictionary, out_iterator, out_index, variableName, icons);
-                    CS_ASSERT(icons.size() == 0, "Found text icons in a variable name in a TextComponent.");
-                    
-                    varName += variableName;
-                }
-            }
-            
-            bool variableReplaced = false;
-            
-            if (type == "var")
-            {
-                variableReplaced = AddVariable(in_params, varName, out_text);
-            }
-            else if (type == "img")
-            {
-                variableReplaced = AddIcon(in_font, in_iconDictionary, varName, spaceInfo, markerInfo, out_index, out_text, out_iconIndices);
-            }
-            
-            // If not, readd the [xxx= ]
-            if (variableReplaced == false)
-            {
-                out_text.append("[" + type + "= " + varName + "]");
-            }
+                return value;
+            });
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        bool TextComponent::AddVariable(const Core::ParamDictionary& in_params, const std::string& in_variableName, std::string& out_text)
+        std::string TextComponent::AddIcon(const Rendering::FontCSPtr& in_font, const TextIconDictionary& in_iconDictionary, const std::string& in_iconName, const Rendering::Font::CharacterInfo& in_spaceInfo,
+                                           const Rendering::Font::CharacterInfo& in_markerInfo, u32& out_index, std::vector<TextIconIndex>& out_iconIndices)
         {
-            std::string value;
+            std::string iconText;
             
-            if (in_params.TryGetValue(in_variableName, value))
-            {
-                out_text.append(value);
-                return true;
-            }
-            
-            return false;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        bool TextComponent::AddIcon(const Rendering::FontCSPtr& in_font, const TextIconDictionary& in_iconDictionary, const std::string& in_iconName, const Rendering::Font::CharacterInfo& in_spaceInfo,
-                                    const Rendering::Font::CharacterInfo& in_markerInfo, u32& out_index, std::string& out_text, std::vector<TextIconIndex>& out_iconIndices)
-        {
             auto iconIt = in_iconDictionary.find(in_iconName);
-            if (iconIt != in_iconDictionary.end())
+            
+            CS_ASSERT(iconIt != in_iconDictionary.end(), "Unknown icon name in TextComponent: " + in_iconName);
+            
+            //Create the Text Icon Index entry.
+            TextIconIndex iconIndex;
+            iconIndex.m_icon = iconIt->second;
+            iconIndex.m_indexInText = out_index;
+            out_iconIndices.push_back(iconIndex);
+            
+            //Make space for the Icon in the string. This doesn't include the text scale since that will be accounted for later.
+            f32 aspectRatio = iconIndex.m_icon.GetOriginalSize().x / iconIndex.m_icon.GetOriginalSize().y;
+            f32 width = aspectRatio * in_font->GetLineHeight() * iconIndex.m_icon.GetScale();
+            
+            u32 spacesNeeded = 0;
+            if(in_spaceInfo.m_advance > 0.0f)
             {
-                //Create the Text Icon Index entry.
-                TextIconIndex iconIndex;
-                iconIndex.m_icon = iconIt->second;
-                iconIndex.m_indexInText = out_index;
-                out_iconIndices.push_back(iconIndex);
-                
-                //Make space for the Icon in the string. This doesn't include the text scale since that will be accounted for later.
-                f32 aspectRatio = iconIndex.m_icon.GetOriginalSize().x / iconIndex.m_icon.GetOriginalSize().y;
-                f32 width = aspectRatio * in_font->GetLineHeight() * iconIndex.m_icon.GetScale();
-                
-                u32 spacesNeeded = 0;
-                if(in_spaceInfo.m_advance > 0.0f)
+                spacesNeeded = std::ceil((width - in_spaceInfo.m_size.x) / in_spaceInfo.m_advance);
+                if(spacesNeeded % 2 == 1)
                 {
-                    spacesNeeded = std::ceil((width - in_spaceInfo.m_size.x) / in_spaceInfo.m_advance);
-                    if(spacesNeeded % 2 == 1)
-                    {
-                        ++spacesNeeded;
-                    }
+                    ++spacesNeeded;
                 }
-                std::string padding;
-                padding.append(&k_imageReplacementKey, 1);
-                for(u32 i = 0; i < spacesNeeded / 2; ++i)
-                {
-                    padding = " " + padding + " ";
-                }
-                out_text.append(padding);
-                ++out_index;
-                
-                return true;
             }
             
-            return false;
+            iconText.append(&k_imageReplacementKey, 1);
+            for(u32 i = 0; i < spacesNeeded / 2; ++i)
+            {
+                iconText = " " + iconText + " ";
+            }
+            
+            ++out_index;
+            
+            return iconText;
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------

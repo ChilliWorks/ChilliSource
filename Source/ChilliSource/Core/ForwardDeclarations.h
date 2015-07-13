@@ -189,6 +189,10 @@ namespace ChilliSource
         CS_FORWARDDECLARE_CLASS(State);
         CS_FORWARDDECLARE_CLASS(StateManager);
         //---------------------------------------------------------
+        /// String
+        //---------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(StringMarkupParser);
+        //---------------------------------------------------------
         /// System
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(AppSystem);
