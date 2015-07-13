@@ -74,12 +74,6 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             StringMarkupParser(const MarkupDef& in_markupDef);
             //------------------------------------------------------------------------------
-            /// @author N Tanda
-            ///
-            /// @param in_markupDef - The markup definition
-            //------------------------------------------------------------------------------
-            void SetMarkupDef(const MarkupDef& in_markupDef) { m_markupDef = in_markupDef; }
-            //------------------------------------------------------------------------------
             /// Parses the given string using the callback function passed to decide what to
             /// do with the markups found.
             ///
