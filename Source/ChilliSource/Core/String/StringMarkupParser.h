@@ -51,12 +51,20 @@ namespace ChilliSource
             /// @author N Tanda
             ///
             /// @param in_keywordName - The keyword name found in the string
-            /// @param in_value - The value of the markup
-            /// @param out_index - [Out] The current index of the text
+            /// @param in_keywordValue - The value of the keyword
+            /// @param in_indexInString - The index of the string within which the output will
+            ///        be placed at
+            ///
             /// @return The value replacing the markup in the string
             //------------------------------------------------------------------------------
-            using MarkupFoundDelegate = std::function<std::string(const std::string& in_keywordName, const std::string& in_keywordValue, u32& out_index)>;
+            using MarkupFoundDelegate = std::function<std::string(const std::string& in_keywordName, const std::string& in_keywordValue, u32 in_indexInString)>;
             
+            //------------------------------------------------------------------------------
+            /// Constructor
+            ///
+            /// @author N Tanda
+            //------------------------------------------------------------------------------
+            StringMarkupParser() = default;
             //------------------------------------------------------------------------------
             /// Constructor
             ///
@@ -66,6 +74,12 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             StringMarkupParser(const MarkupDef& in_markupDef);
             //------------------------------------------------------------------------------
+            /// @author N Tanda
+            ///
+            /// @param in_markupDef - The markup definition
+            //------------------------------------------------------------------------------
+            void SetMarkupDef(const MarkupDef& in_markupDef) { m_markupDef = in_markupDef; }
+            //------------------------------------------------------------------------------
             /// Parses the given string using the callback function passed to decide what to
             /// do with the markups found.
             ///
@@ -73,6 +87,7 @@ namespace ChilliSource
             ///
             /// @param in_string - The string to parse
             /// @param in_callback - The delegate to callback when a markup has been found
+            ///
             /// @return The parsed string
             //------------------------------------------------------------------------------
             std::string Parse(const std::string& in_string, const MarkupFoundDelegate& in_callback);
@@ -84,13 +99,15 @@ namespace ChilliSource
             ///
             /// @author N Tanda
             ///
+            /// @param in_indexInString - The index of the string within which the output
+            ///        will be placed at
             /// @param out_iterator - [OUT] The iterator going through the text
-            /// @param out_index - [OUT] The current index of the text
             /// @param out_string - [OUT] The text output
             /// @param in_callback - The delegate to callback when a markup has been found
+            ///
             /// @return The keyword name found in the string
             //------------------------------------------------------------------------------
-            std::string ParseRecursive(std::string::const_iterator& out_iterator, u32& out_index, std::string& out_string, const MarkupFoundDelegate& in_callback);
+            std::string ParseRecursive(u32 in_indexInString, std::string::const_iterator& out_iterator, std::string& out_string, const MarkupFoundDelegate& in_callback);
             
         private:
             MarkupDef m_markupDef;

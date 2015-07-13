@@ -1,9 +1,29 @@
 //
 //  StringMarkupParser.cpp
-//  ChilliSource
-//
+//  Chilli Source
 //  Created by Nicolas Tanda on 08/07/2015.
-//  Copyright (c) 2015 Chilli Source. All rights reserved.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2015 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
 //
 
 #include <ChilliSource/Core/String/StringMarkupParser.h>
@@ -14,6 +34,13 @@ namespace ChilliSource
 {
     namespace Core
     {
+        namespace
+        {
+            const char k_markupStart = '[';
+            const char k_markupSeparator = '=';
+            const char k_markupEnd = ']';
+        }
+        
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         StringMarkupParser::StringMarkupParser(const MarkupDef& in_markupDef)
@@ -32,7 +59,7 @@ namespace ChilliSource
             {
                 auto character = UTF8StringUtils::Next(it);
                 
-                if(character != '[')
+                if(character != k_markupStart)
                 {
                     UTF8StringUtils::Append(character, out_string);
                     if(character != ' ' && character != '\t' && character != '\n')
@@ -43,7 +70,7 @@ namespace ChilliSource
                 else
                 {
                     // Found a mark up, check it
-                    ParseRecursive(it, index, out_string, in_callback);
+                    ParseRecursive(index, it, out_string, in_callback);
                 }
             }
             
@@ -51,17 +78,17 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        std::string StringMarkupParser::ParseRecursive(std::string::const_iterator& out_iterator, u32& out_index, std::string& out_string, const MarkupFoundDelegate& in_callback)
+        std::string StringMarkupParser::ParseRecursive(u32 in_indexInString, std::string::const_iterator& out_iterator, std::string& out_string, const MarkupFoundDelegate& in_callback)
         {
             // Found some mark-up. What type is it?
             std::string type;
             UTF8Char nextChar = '\0';
             
-            while (nextChar != '=')
+            while (nextChar != k_markupSeparator)
             {
                 nextChar = UTF8StringUtils::Next(out_iterator);
                 
-                if(nextChar != '=' && nextChar != ' ')
+                if(nextChar != k_markupSeparator && nextChar != ' ')
                 {
                     type += nextChar;
                 }
@@ -78,21 +105,21 @@ namespace ChilliSource
             }
             
             // Find the closing bracket
-            while (nextChar != ']')
+            while (nextChar != k_markupEnd)
             {
                 nextChar = UTF8StringUtils::Next(out_iterator);
                 
-                if(nextChar != ']' && nextChar != '[' && nextChar != ' ')
+                if(nextChar != k_markupEnd && nextChar != k_markupStart && nextChar != ' ')
                 {
                     varName += nextChar;
                 }
                 
                 // Nested variable
-                if(nextChar == '[')
+                if(nextChar == k_markupStart)
                 {
                     std::string variableName;
                     
-                    const auto& subType = ParseRecursive(out_iterator, out_index, variableName, in_callback);
+                    const auto& subType = ParseRecursive(in_indexInString, out_iterator, variableName, in_callback);
                     
                     // Check if the keyword is nestable
                     if(m_markupDef.HasKeyword(subType))
@@ -106,12 +133,12 @@ namespace ChilliSource
             
             if(m_markupDef.HasKeyword(type))
             {
-                const auto& variable = in_callback(type, varName, out_index);
+                const auto& variable = in_callback(type, varName, in_indexInString);
                 out_string.append(variable);
             }
             else
             {
-                out_string.append("[" + type + "= " + varName + "]");
+                out_string.append(k_markupStart + type + k_markupSeparator + varName + k_markupEnd);
             }
             
             return type;

@@ -45,17 +45,6 @@ namespace ChilliSource
         class MarkupDef final
         {
         public:
-            
-            //------------------------------------------------------------------------------
-            /// Container for markup keywords
-            ///
-            /// @author N Tanda
-            //------------------------------------------------------------------------------
-            struct Keyword final
-            {
-                bool m_nestable = false;
-            };
-            
             //------------------------------------------------------------------------------
             /// Adds a keyword to the markup
             ///
@@ -69,6 +58,7 @@ namespace ChilliSource
             /// @author N Tanda
             ///
             /// @param in_name - The unique name of the keyword.
+            ///
             /// @return Whether the keyword is known
             //------------------------------------------------------------------------------
             bool HasKeyword(const std::string& in_name) const;
@@ -76,12 +66,13 @@ namespace ChilliSource
             /// @author N Tanda
             ///
             /// @param in_name - The unique name of the keyword.
+            ///
             /// @return Whether the keyword can include other markups
             //------------------------------------------------------------------------------
             bool IsKeywordNestable(const std::string& in_name) const;
             
         private:
-            std::unordered_map<std::string, Keyword> m_keywords;
+            std::unordered_map<std::string, bool> m_keywords;
         };
     }
 }

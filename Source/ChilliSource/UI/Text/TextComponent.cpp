@@ -33,7 +33,6 @@
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Localisation/LocalisedText.h>
 #include <ChilliSource/Core/Resource/ResourcePool.h>
-#include <ChilliSource/Core/String/StringMarkupParser.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Rendering/Font/Font.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
@@ -123,7 +122,7 @@ namespace ChilliSource
             CSCore::MarkupDef markupDef;
             markupDef.AddKeyword(k_keywordImage, false);
             markupDef.AddKeyword(k_keywordVariable, true);
-            m_markupParser = CSCore::StringMarkupParserSPtr(new CSCore::StringMarkupParser(markupDef));
+            m_markupParser = CSCore::StringMarkupParser(markupDef);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -380,8 +379,6 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void TextComponent::ReplaceVariables(const std::string& in_text, const Core::ParamDictionary& in_params, const TextIconDictionary& in_iconDictionary)
         {
-            CS_ASSERT(m_markupParser, "The string markup parser shouldn't be null");
-            
             m_text.clear();
             m_text.shrink_to_fit();
             
@@ -397,7 +394,7 @@ namespace ChilliSource
             m_font->TryGetCharacterInfo(' ', spaceInfo);
             
             // Parses the text to replace variables
-            m_text = m_markupParser->Parse(in_text, [=](const std::string& in_name, const std::string& in_keywordValue, u32& out_index) -> std::string
+            m_text = m_markupParser.Parse(in_text, [=](const std::string& in_name, const std::string& in_keywordValue, u32 in_indexInString) -> std::string
             {
                 std::string value;
                 if (in_name == k_keywordVariable)
@@ -406,7 +403,7 @@ namespace ChilliSource
                 }
                 else if (in_name == k_keywordImage)
                 {
-                    value = AddIcon(m_font, in_iconDictionary, in_keywordValue, spaceInfo, markerInfo, out_index, m_iconIndices);
+                    value = AddIcon(m_font, in_iconDictionary, in_keywordValue, spaceInfo, markerInfo, in_indexInString, m_iconIndices);
                 }
                 
                 return value;
@@ -420,40 +417,36 @@ namespace ChilliSource
             std::string iconText;
             
             auto iconIt = in_iconDictionary.find(in_iconName);
-            if (iconIt != in_iconDictionary.end())
+            
+            CS_ASSERT(iconIt != in_iconDictionary.end(), "Unknown icon name in TextComponent: " + in_iconName);
+            
+            //Create the Text Icon Index entry.
+            TextIconIndex iconIndex;
+            iconIndex.m_icon = iconIt->second;
+            iconIndex.m_indexInText = out_index;
+            out_iconIndices.push_back(iconIndex);
+            
+            //Make space for the Icon in the string. This doesn't include the text scale since that will be accounted for later.
+            f32 aspectRatio = iconIndex.m_icon.GetOriginalSize().x / iconIndex.m_icon.GetOriginalSize().y;
+            f32 width = aspectRatio * in_font->GetLineHeight() * iconIndex.m_icon.GetScale();
+            
+            u32 spacesNeeded = 0;
+            if(in_spaceInfo.m_advance > 0.0f)
             {
-                //Create the Text Icon Index entry.
-                TextIconIndex iconIndex;
-                iconIndex.m_icon = iconIt->second;
-                iconIndex.m_indexInText = out_index;
-                out_iconIndices.push_back(iconIndex);
-                
-                //Make space for the Icon in the string. This doesn't include the text scale since that will be accounted for later.
-                f32 aspectRatio = iconIndex.m_icon.GetOriginalSize().x / iconIndex.m_icon.GetOriginalSize().y;
-                f32 width = aspectRatio * in_font->GetLineHeight() * iconIndex.m_icon.GetScale();
-                
-                u32 spacesNeeded = 0;
-                if(in_spaceInfo.m_advance > 0.0f)
+                spacesNeeded = std::ceil((width - in_spaceInfo.m_size.x) / in_spaceInfo.m_advance);
+                if(spacesNeeded % 2 == 1)
                 {
-                    spacesNeeded = std::ceil((width - in_spaceInfo.m_size.x) / in_spaceInfo.m_advance);
-                    if(spacesNeeded % 2 == 1)
-                    {
-                        ++spacesNeeded;
-                    }
+                    ++spacesNeeded;
                 }
-                
-                iconText.append(&k_imageReplacementKey, 1);
-                for(u32 i = 0; i < spacesNeeded / 2; ++i)
-                {
-                    iconText = " " + iconText + " ";
-                }
-                
-                ++out_index;
             }
-            else
+            
+            iconText.append(&k_imageReplacementKey, 1);
+            for(u32 i = 0; i < spacesNeeded / 2; ++i)
             {
-                CS_LOG_VERBOSE("Unknown icon name in TextComponent: " + in_iconName);
+                iconText = " " + iconText + " ";
             }
+            
+            ++out_index;
             
             return iconText;
         }

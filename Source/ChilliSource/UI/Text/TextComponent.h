@@ -32,7 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
-#include <ChilliSource/Core/ForwardDeclarations.h>
+#include <ChilliSource/Core/String/StringMarkupParser.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
@@ -500,7 +500,7 @@ namespace ChilliSource
             Rendering::CanvasRenderer::BuiltText m_cachedText;
             std::vector<TextIconCachedData> m_cachedIcons;
             
-            CSCore::StringMarkupParserSPtr m_markupParser;
+            CSCore::StringMarkupParser m_markupParser;
         };
     }
 }
