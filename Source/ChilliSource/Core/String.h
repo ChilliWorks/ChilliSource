@@ -30,6 +30,8 @@
 #define _CHILLISOURCE_CORE_STRING_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/String/MarkupDef.h>
+#include <ChilliSource/Core/String/StringMarkupParser.h>
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Core/String/ToString.h>
