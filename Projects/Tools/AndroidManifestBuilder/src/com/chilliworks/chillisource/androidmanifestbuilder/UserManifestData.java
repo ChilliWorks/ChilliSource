@@ -36,13 +36,9 @@ package com.chilliworks.chillisource.androidmanifestbuilder;
 public final class UserManifestData
 {
 	public String m_package = "";
-	public String m_versionCode = "1";
-	public String m_versionName = "1.0";
-	public String m_minSdkVersion = "9";
-	public String m_targetSdkVersion = "19";
 	public String m_orientation = "sensor";
 	public String m_facebookAppId = "";
-	public String m_googlePlayProjectId = "";
+	public String m_apkExpansionDownloadView = "";
 	public String m_manifestExtra = "";
 	public String m_applicationExtra = "";
 	public String m_permissions = "";

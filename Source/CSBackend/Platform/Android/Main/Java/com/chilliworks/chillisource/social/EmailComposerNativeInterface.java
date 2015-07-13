@@ -31,8 +31,8 @@ package com.chilliworks.chillisource.social;
 import java.io.File;
 
 import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.INativeInterface;
-import com.chilliworks.chillisource.core.InterfaceIDType;
+import com.chilliworks.chillisource.core.InterfaceId;
+import com.chilliworks.chillisource.core.System;
 import com.chilliworks.chillisource.core.Logging;
 
 import android.app.Activity;
@@ -47,12 +47,13 @@ import android.text.Html;
 /// of sending emails to multiple recipients and sending 
 /// multiple attachments.
 //=============================================================
-public class EmailComposerNativeInterface extends INativeInterface
+public class EmailComposerNativeInterface extends System
 {
 	//--------------------------------------------------------------
 	/// Member Data
 	//--------------------------------------------------------------
-	public static InterfaceIDType InterfaceID = new InterfaceIDType("CEmailCompositionNativeInterface");
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
+
 	private static final int EMAIL_RETURN_REQUEST = 0;
 	private boolean mbActive = false;
 	//--------------------------------------------------------------
@@ -60,16 +61,22 @@ public class EmailComposerNativeInterface extends INativeInterface
 	//--------------------------------------------------------------
 	public EmailComposerNativeInterface()
 	{
+        init();
 	}
-	//--------------------------------------------------------------
-	/// Is A
-	///
-	/// @return whether or not this implements the given interface.
-	//--------------------------------------------------------------
-	@Override public boolean IsA(InterfaceIDType inInterfaceType) 
-	{
-		return (inInterfaceType.Equals(InterfaceID));
-	}
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean isA(InterfaceId in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
 	//-----------------------------------------------
 	/// Present
 	///

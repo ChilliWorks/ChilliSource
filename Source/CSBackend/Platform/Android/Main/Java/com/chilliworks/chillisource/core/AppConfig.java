@@ -85,7 +85,7 @@ public final class AppConfig
 		if (FileUtils.doesFileExistAPK(in_activity, k_configFilePath))
 		{
 			byte[] byteContents = FileUtils.readFileAPK(in_activity, k_configFilePath);
-			String stringContents = StringUtils.UTF8ByteArrayToString(byteContents);
+			String stringContents = StringUtils.utf8BytesToString(byteContents);
 			
 			try
 			{

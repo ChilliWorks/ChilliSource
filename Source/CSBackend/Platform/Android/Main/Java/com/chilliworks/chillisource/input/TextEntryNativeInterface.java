@@ -42,8 +42,8 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.INativeInterface;
-import com.chilliworks.chillisource.core.InterfaceIDType;
+import com.chilliworks.chillisource.core.InterfaceId;
+import com.chilliworks.chillisource.core.System;
 import com.chilliworks.chillisource.core.Logging;
 
 /**
@@ -54,9 +54,10 @@ import com.chilliworks.chillisource.core.Logging;
  * @author S Downie
  *
  */
-public final class TextEntryNativeInterface extends INativeInterface implements TextWatcher, OnEditorActionListener
+public final class TextEntryNativeInterface extends System implements TextWatcher, OnEditorActionListener
 {
-	public static final InterfaceIDType InterfaceID = new InterfaceIDType("CKeyboardNativeInterface");
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
+
 	private int m_keyboardTypeFlags = 0;
 	private int m_keyboardCapitalisationFlags = 0;
 	private EditTextBackEvent m_textEntryView;
@@ -68,6 +69,8 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 	 */
 	TextEntryNativeInterface()
 	{
+        init();
+
 		final TextEntryNativeInterface finalThis = this;
 		
 		Runnable task = new Runnable() 
@@ -97,17 +100,20 @@ public final class TextEntryNativeInterface extends INativeInterface implements 
 		};
 		CSApplication.get().scheduleUIThreadTask(task);
 	}
-	/**
-	 * @author Ian Copland
-	 * 
-	 * @param Interface type
-	 * 
-	 * @return Whether this objects interface is of the given type
-	 */
-	@Override public boolean IsA(InterfaceIDType in_interfaceType) 
-	{
-		return (in_interfaceType == InterfaceID);
-	}
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean isA(InterfaceId in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
 	/**
 	 * Activate text entry. This will display the soft keyboard if required
 	 * 

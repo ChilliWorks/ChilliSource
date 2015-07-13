@@ -134,8 +134,8 @@ namespace CSBackend
             //----------------------------------------------
 			void LoadShader(CSCore::StorageLocation in_location, const std::string& in_filePath, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate, const ShaderSPtr& out_shader)
             {
-                CSCore::FileStreamSPtr shaderStream = CSCore::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, CSCore::FileMode::k_read);
-                if(shaderStream == nullptr || shaderStream->IsBad())
+                CSCore::FileStreamUPtr shaderStream = CSCore::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, CSCore::FileMode::k_read);
+                if(shaderStream == nullptr)
                 {
                     CS_LOG_ERROR("Failed to open shader file: " + in_filePath);
                     out_shader->SetLoadState(CSCore::Resource::LoadState::k_failed);
@@ -148,7 +148,7 @@ namespace CSBackend
                 
                 std::string fileContents;
                 shaderStream->GetAll(fileContents);
-                shaderStream->Close();
+                shaderStream.reset();
                 
                 std::string languageChunk = GetChunk(k_languageTag, fileContents);
                 if(languageChunk.empty() == true)

@@ -670,9 +670,15 @@ namespace ChilliSource
             std::string strFile = k_tempDirectory + in_packageDetails.m_id + k_packageExtensionFull;
 
             //Append to the file as it can take multiple writes
-            Core::FileStreamSPtr pFileStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(Core::StorageLocation::k_DLC, strFile, Core::FileMode::k_writeBinaryAppend);
+            Core::FileStreamUPtr pFileStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(Core::StorageLocation::k_DLC, strFile, Core::FileMode::k_writeBinaryAppend);
+            if (pFileStream == nullptr)
+            {
+                CS_LOG_ERROR("CMS: " + in_packageDetails.m_id + " Couldn't write package.");
+                return false;
+            }
+
 			pFileStream->Write((s8*)in_zippedPackage.data(), (s32)in_zippedPackage.size());
-            pFileStream->Close();
+            pFileStream.reset();
             
             //Check if the full file has been written and perform a checksum validation 
             if(in_fullyDownloaded)

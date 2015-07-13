@@ -404,7 +404,7 @@ namespace ChilliSource
                 Core::FileStreamSPtr meshStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_location, in_filePath, Core::FileMode::k_readBinary);
                 
                 //Check file for corruption
-                if(nullptr == meshStream || true == meshStream->IsBad())
+                if(nullptr == meshStream)
                 {
                     CS_LOG_ERROR("Cannot open csmodel file: " + in_filePath);
                     return false;
@@ -430,9 +430,7 @@ namespace ChilliSource
                     
                     out_meshDesc.mMeshes.push_back(subMeshDesc);
                 }
-                
-                meshStream->Close();
-                
+
                 return true;
             }
         }

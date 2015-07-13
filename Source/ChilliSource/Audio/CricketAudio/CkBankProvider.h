@@ -34,6 +34,10 @@
 #include <ChilliSource/Core/Container/concurrent_vector.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+#include <CSBackend/Platform/Android/Main/JNI/Audio/CricketAudio/ZippedCkBankLoader.h>
+#endif
+
 namespace ChilliSource
 {
 	namespace Audio
@@ -161,6 +165,10 @@ namespace ChilliSource
             void OnUpdate(f32 in_deltaTime) override;
             
             Core::concurrent_vector<AsyncRequest> m_asyncRequests;
+
+#ifdef CS_TARGETPLATFORM_ANDROID
+			CSBackend::Android::ZippedCkBankLoader m_zippedCkBankLoader;
+#endif
 		};
 	}
 }

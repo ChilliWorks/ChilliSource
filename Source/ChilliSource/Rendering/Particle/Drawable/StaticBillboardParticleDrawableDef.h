@@ -64,7 +64,7 @@ namespace ChilliSource
 		/// "AtlasPath": The file path of the texture atlas that will be 
 		/// used to render the particles.
 		///
-		/// "AtlasIds": A comma separated list of texture atlas Ids that 
+		/// "AtlasIds": A space separated list of texture atlas Ids that 
 		/// will be used to render the particles.
 		///
 		/// "ImageSelectionType": A string describing the method used to 
@@ -74,7 +74,10 @@ namespace ChilliSource
 		///
 		/// "SizePolicy": The size policy describing how the particle is 
 		/// rendered when the rendered image has a different aspect ratio
-		/// to the given size.
+		/// to the given size. Possible values are: “None”,
+        /// “FillMaintainingAspect”, “FitMaintainingAspect”,
+        /// “UseHeightMaintainingAspect”, “UsePreferredSize”,
+        /// “UseWidthMaintainingAspect”
 		///
 		/// @author Ian Copland
 		//-----------------------------------------------------------------------

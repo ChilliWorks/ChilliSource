@@ -106,30 +106,6 @@ public final class AndroidManifestBuilder
 				output.m_package = packageName.getNodeValue();
 			}
 			
-			Node versionCodeNode = root.getAttributes().getNamedItem("versionCode");
-			if (versionCodeNode != null)
-			{
-				output.m_versionCode = versionCodeNode.getNodeValue();
-			}
-			
-			Node versionNameNode = root.getAttributes().getNamedItem("versionName");
-			if (versionNameNode != null)
-			{
-				output.m_versionName = versionNameNode.getNodeValue();
-			}
-			
-			Node minSdkVersionNode = root.getAttributes().getNamedItem("minSdkVersion");
-			if (minSdkVersionNode != null)
-			{
-				output.m_minSdkVersion = minSdkVersionNode.getNodeValue();
-			}
-			
-			Node targetSdkVersionNode = root.getAttributes().getNamedItem("targetSdkVersion");
-			if (targetSdkVersionNode != null)
-			{
-				output.m_targetSdkVersion = targetSdkVersionNode.getNodeValue();
-			}
-			
 			Node orientationNode = root.getAttributes().getNamedItem("screenOrientation");
 			if (orientationNode != null)
 			{
@@ -142,10 +118,10 @@ public final class AndroidManifestBuilder
 				output.m_facebookAppId = facebookAppIdNode.getNodeValue();
 			}
 			
-			Node googlePlayProjectIdNode = root.getAttributes().getNamedItem("googlePlayProjectId");
-			if (googlePlayProjectIdNode != null)
+			Node apkExpansionDownloadViewNode = root.getAttributes().getNamedItem("apkExpansionDownloadView");
+			if (apkExpansionDownloadViewNode != null)
 			{
-				output.m_googlePlayProjectId = googlePlayProjectIdNode.getNodeValue();
+				output.m_apkExpansionDownloadView = apkExpansionDownloadViewNode.getNodeValue();
 			}
 			
 			output.m_manifestExtra = getElementContentAsString(xmlString, "manifest-extra");
@@ -194,13 +170,9 @@ public final class AndroidManifestBuilder
 		String output = in_template;
 		
 		output = output.replace("[[PACKAGE]]", in_userData.m_package);
-		output = output.replace("[[VERSIONCODE]]", in_userData.m_versionCode);
-		output = output.replace("[[VERSIONNAME]]", in_userData.m_versionName);
-		output = output.replace("[[MINSDKVERSION]]", in_userData.m_minSdkVersion);
-		output = output.replace("[[TARGETSDKVERSION]]", in_userData.m_targetSdkVersion);
 		output = output.replace("[[ORIENTATION]]", in_userData.m_orientation);
-		output = output.replace("[[GOOGLEPLAYPROJECTID]]", in_userData.m_googlePlayProjectId);
 		output = output.replace("[[FACEBOOKAPPID]]", in_userData.m_facebookAppId);
+		output = output.replace("[[APKEXPANSIONDOWNLOADVIEW]]", in_userData.m_apkExpansionDownloadView);
 		output = output.replace("[[MANIFESTEXTRA]]", in_userData.m_manifestExtra);
 		output = output.replace("[[APPLICATIONEXTRA]]", in_userData.m_applicationExtra);
 		output = output.replace("[[PERMISSIONS]]", in_userData.m_permissions);

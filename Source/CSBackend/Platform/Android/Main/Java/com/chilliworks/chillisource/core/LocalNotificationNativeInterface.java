@@ -39,20 +39,16 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import com.chilliworks.chillisource.core.InterfaceIDType;
-
 /**
  * A native interface for passing local notifications down
  * to the engine.
  * 
  * @author Steven Hendrie
  */
-public class LocalNotificationNativeInterface extends INativeInterface
+public class LocalNotificationNativeInterface extends System
 {
-	/**
-	 * Constants
-	 */
-	public final static InterfaceIDType InterfaceID = new InterfaceIDType("LocalNotificationNativeInterface");
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
+
 	private final static String k_sharedPrefsName = "LocalNotifications";
 	private final static long k_notificationTimeLimitMs = 500 * 1000; 
 	
@@ -69,23 +65,26 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 */
 	public LocalNotificationNativeInterface()
 	{
-		super();
-		
+        init();
+
 		m_alarmManager = (AlarmManager)CSApplication.get().getActivityContext().getSystemService(Context.ALARM_SERVICE);
 		freeOutOfDateIntentIDs();
 	}
-	
-	/**
-	 * @author Steven Hendrie
-	 * 
-	 * @param The interface Id.
-	 * 
-	 * @return whether or not this implements the given interface.
-	 */
-	@Override public boolean IsA(InterfaceIDType in_interfaceId) 
-	{
-		return (in_interfaceId.Equals(InterfaceID));
-	}
+
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean isA(InterfaceId in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
 	
 	/**
 	 * method accessible from native for allowing System notifications to 
@@ -252,7 +251,7 @@ public class LocalNotificationNativeInterface extends INativeInterface
 	 */
 	private void freeOutOfDateIntentIDs()
 	{
-		long currentTime = System.currentTimeMillis();
+		long currentTime = java.lang.System.currentTimeMillis();
 		List<LocalNotification> notifications = m_notificationStore.getNotifications();
 		List<LocalNotification> removeList = new ArrayList<LocalNotification>();
 		for (LocalNotification notification : notifications)

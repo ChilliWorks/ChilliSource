@@ -28,8 +28,8 @@
 
 package com.chilliworks.chillisource.input;
 
-import com.chilliworks.chillisource.core.INativeInterface;
-import com.chilliworks.chillisource.core.InterfaceIDType;
+import com.chilliworks.chillisource.core.InterfaceId;
+import com.chilliworks.chillisource.core.System;
 
 /**
  * A native interface for passing information on physical device buttons
@@ -38,9 +38,9 @@ import com.chilliworks.chillisource.core.InterfaceIDType;
  * 
  * @author Ian Copland
  */
-public final class DeviceButtonNativeInterface extends INativeInterface
+public final class DeviceButtonNativeInterface extends System
 {
-	public static InterfaceIDType InterfaceID = new InterfaceIDType("DeviceButtonNativeInterface");
+    public static InterfaceId INTERFACE_ID = new InterfaceId();
 	
 	/**
 	 * An enum describing the different possible device buttons. This
@@ -53,20 +53,29 @@ public final class DeviceButtonNativeInterface extends INativeInterface
 	{
 		k_backButton
 	}
-	/**
-	 * Allows querying of whether or not this implements the interface
-	 * with the given Id.
-	 * 
-	 * @author Ian Copland
-	 * 
-	 * @param The interface Id.
-	 * 
-	 * @return Whether or not the interface is implemented.
-	 */
-	@Override public boolean IsA(InterfaceIDType in_interfaceId) 
-	{
-		return in_interfaceId.Equals(InterfaceID);
-	}
+    /**
+     * Constructor
+     *
+     * @author Ian Copland
+     */
+    public DeviceButtonNativeInterface()
+    {
+        init();
+    }
+    /**
+     * Allows querying of whether or not the system implements the interface described by the
+     * given interface id.
+     *
+     * @author Ian Copland
+     *
+     * @param in_interfaceId - The interface id to check
+     *
+     * @return Whether the system implements the given interface
+     */
+    @Override public boolean isA(InterfaceId in_interfaceId)
+    {
+        return (in_interfaceId == INTERFACE_ID);
+    }
 	/**
 	 * Called when a device button triggered event is received.
 	 * 

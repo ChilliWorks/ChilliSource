@@ -32,8 +32,8 @@
 
 #include <CSBackend/Platform/Android/GooglePlay/JNI/Core/Notification/GooglePlayRemoteNotificationJavaInterface.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceUtils.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <CSBackend/Platform/Android/GooglePlay/JNI/Core/Notification/GooglePlayRemoteNotificationSystem.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
@@ -43,21 +43,21 @@
 
 extern "C"
 {
-	void Java_com_chilliworks_chillisource_googleplay_core_GooglePlayRemoteNotificationNativeInterface_NativeOnRemoteTokenReceived(JNIEnv* inpEnv, jobject inThis, jstring instrToken);
-	void Java_com_chilliworks_chillisource_googleplay_core_GooglePlayRemoteNotificationNativeInterface_NativeOnRemoteNotificationReceived(JNIEnv* inpEnv, jobject inThis, jobjectArray inaKeys, jobjectArray inaValues);
+	void Java_com_chilliworks_chillisource_core_GooglePlayRemoteNotificationNativeInterface_NativeOnRemoteTokenReceived(JNIEnv* inpEnv, jobject inThis, jstring instrToken);
+	void Java_com_chilliworks_chillisource_core_GooglePlayRemoteNotificationNativeInterface_NativeOnRemoteNotificationReceived(JNIEnv* inpEnv, jobject inThis, jobjectArray inaKeys, jobjectArray inaValues);
 }
 
-void Java_com_chilliworks_chillisource_googleplay_core_GooglePlayRemoteNotificationNativeInterface_NativeOnRemoteTokenReceived(JNIEnv* inpEnv, jobject inThis, jstring instrToken)
+void Java_com_chilliworks_chillisource_core_GooglePlayRemoteNotificationNativeInterface_NativeOnRemoteTokenReceived(JNIEnv* inpEnv, jobject inThis, jstring instrToken)
 {
 	CSBackend::Android::GooglePlayRemoteNotificationJavaInterfaceSPtr pInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::GooglePlayRemoteNotificationJavaInterface>();
 	if(pInterface != nullptr)
 	{
-		const std::string strToken = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(instrToken);
+		const std::string strToken = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(instrToken);
 		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::GooglePlayRemoteNotificationJavaInterface::OnRemoteTokenReceived, pInterface.get(), strToken));
 	}
 }
 
-void Java_com_chilliworks_chillisource_googleplay_core_GooglePlayRemoteNotificationNativeInterface_NativeOnRemoteNotificationReceived(JNIEnv* inpEnv, jobject inThis, jobjectArray inaKeys, jobjectArray inaValues)
+void Java_com_chilliworks_chillisource_core_GooglePlayRemoteNotificationNativeInterface_NativeOnRemoteNotificationReceived(JNIEnv* inpEnv, jobject inThis, jobjectArray inaKeys, jobjectArray inaValues)
 {
 	CSBackend::Android::GooglePlayRemoteNotificationJavaInterfaceSPtr pInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::GooglePlayRemoteNotificationJavaInterface>();
 	if(pInterface != nullptr)
@@ -70,8 +70,8 @@ void Java_com_chilliworks_chillisource_googleplay_core_GooglePlayRemoteNotificat
 
 		for(u32 i = 0; i < dwNumEntries; ++i)
 		{
-			std::string strKey = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(static_cast<jstring>(inpEnv->GetObjectArrayElement(inaKeys, i)));
-			std::string strValue = CSBackend::Android::JavaInterfaceUtils::CreateSTDStringFromJString(static_cast<jstring>(inpEnv->GetObjectArrayElement(inaValues, i)));
+			std::string strKey = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(static_cast<jstring>(inpEnv->GetObjectArrayElement(inaKeys, i)));
+			std::string strValue = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(static_cast<jstring>(inpEnv->GetObjectArrayElement(inaValues, i)));
 
 			// Bail out on any keys we do not want to end up in the final params.
 			if(strKey == "collapse_key" || strKey == "from")
@@ -97,7 +97,7 @@ namespace CSBackend
 		//--------------------------------------------------------------
     	GooglePlayRemoteNotificationJavaInterface::GooglePlayRemoteNotificationJavaInterface()
     	{
-    		CreateNativeInterface("com/chilliworks/chillisource/googleplay/core/GooglePlayRemoteNotificationNativeInterface");
+    		CreateNativeInterface("com/chilliworks/chillisource/core/GooglePlayRemoteNotificationNativeInterface");
     		CreateMethodReference("RequestRemoteToken", "()V");
     	}
     	//--------------------------------------------------------------

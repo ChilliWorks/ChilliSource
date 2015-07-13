@@ -51,9 +51,6 @@ void ReadPngData(png_structp png_ptr, png_bytep data, png_size_t length)
 
 	CSCore::FileStream* pStream = (CSCore::FileStream*)png_get_io_ptr(png_ptr);
 	pStream->Read((s8*)data, length);
-
-	if (pStream->IsBad() == true)
-		png_error(png_ptr, "Read Error");
 }
 
 namespace CSBackend
@@ -106,9 +103,8 @@ namespace CSBackend
 			CSCore::FileStreamSPtr stream = CSCore::Application::Get()->GetFileSystem()->CreateFileStream(ineLocation, instrFilename, CSCore::FileMode::k_readBinary);
 
 			//insure the stream is not broken
-			if (stream == CSCore::FileStreamSPtr() || stream->IsBad() == true || stream->IsOpen() == false)
+			if (stream == nullptr)
 			{
-				stream->Close();
 				return;
 			}
 
@@ -117,9 +113,6 @@ namespace CSBackend
 			{
 				mbIsLoaded = true;
 			}
-
-			//close the stream
-			stream->Close();
 		}
 		//----------------------------------------------------------------------------------
 		/// Release

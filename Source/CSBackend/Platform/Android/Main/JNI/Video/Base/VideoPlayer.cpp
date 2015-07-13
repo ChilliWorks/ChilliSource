@@ -30,9 +30,7 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Video/Base/VideoPlayer.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/File/FileSystem.h>
-#include <CSBackend/Platform/Android/Main/JNI/Video/Base/VideoPlayerJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
@@ -43,80 +41,169 @@
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Video/Base/Subtitles.h>
 
+extern "C"
+{
+	//------------------------------------------------------------------------------
+	/// Called from java whenever subtitles are to be updated. This will occur every
+	/// frame a video containing subtitles is running.
+	///
+	/// @author Ian Copland
+	///
+	/// @param in_env - The jni environment.
+	/// @param in_this - The java object calling the function.
+	//------------------------------------------------------------------------------
+	void Java_com_chilliworks_chillisource_video_VideoPlayer_onUpdateSubtitles(JNIEnv* in_env, jobject in_this);
+	//------------------------------------------------------------------------------
+    /// Called from java when the video has stopped.
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param in_env - The jni environment.
+    /// @param in_this - The java object calling the function.
+    //------------------------------------------------------------------------------
+	void Java_com_chilliworks_chillisource_video_VideoPlayer_onVideoComplete(JNIEnv* in_env, jobject in_this);
+}
+
+CSBackend::Android::VideoPlayer* g_activeVideoPlayer = nullptr;
+
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void Java_com_chilliworks_chillisource_video_VideoPlayer_onUpdateSubtitles(JNIEnv* in_env, jobject in_this)
+{
+	CS_ASSERT(g_activeVideoPlayer != nullptr, "No video player active!");
+
+	CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(CSCore::MakeDelegate(g_activeVideoPlayer, &CSBackend::Android::VideoPlayer::OnUpdateSubtitles));
+}
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void Java_com_chilliworks_chillisource_video_VideoPlayer_onVideoComplete(JNIEnv* in_env, jobject in_this)
+{
+	CS_ASSERT(g_activeVideoPlayer != nullptr, "No video player active!");
+
+    CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(CSCore::MakeDelegate(g_activeVideoPlayer, &CSBackend::Android::VideoPlayer::OnVideoComplete));
+}
+
 namespace CSBackend
 {
     namespace Android
     {
+    	namespace
+    	{
+			//------------------------------------------------------------------------------
+			/// Calculate the offset and size of the given size within the zip.
+			///
+			/// @author Ian Copland
+			///
+			/// @param in_storageLocation - The storage location.
+			/// @param in_filePath - The path to the file in the zip.
+			/// @param out_filePath - [Out] The output file path.
+			/// @param out_fileOffset - [Out] The output file offset.
+			/// @param out_fileLength - [Out] The output file length.
+			//------------------------------------------------------------------------------
+    		void CalcZippedVideoInfo(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, std::string& out_filePath, s32& out_fileOffset, s32& out_fileLength)
+    		{
+    			auto fileSystem = CSCore::Application::Get()->GetFileSystem()->Cast<FileSystem>();
+    			CS_ASSERT(fileSystem != nullptr, "Could not cast to android file system.");
+
+    			FileSystem::ZippedFileInfo zippedFileInfo;
+				if (fileSystem->TryGetZippedFileInfo(in_storageLocation, in_filePath, zippedFileInfo) == false)
+				{
+					CS_LOG_FATAL("Couldn't get video file '" + in_filePath + "' from zip.");
+				}
+
+				CS_ASSERT(zippedFileInfo.m_size > 0, "Cannot stream a zero size video file: " + in_filePath);
+				CS_ASSERT(zippedFileInfo.m_isCompressed == false && zippedFileInfo.m_size == zippedFileInfo.m_uncompressedSize, "Cannot stream video file '" + in_filePath +
+					"' becuase it is compressed inside Apk or Apk expansion file.");
+
+				out_filePath = fileSystem->GetZipFilePath();
+				out_fileOffset = zippedFileInfo.m_offset;
+				out_fileLength = zippedFileInfo.m_size;
+    		}
+    	}
+
     	CS_DEFINE_NAMEDTYPE(VideoPlayer);
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        VideoPlayer::VideoPlayer()
-        	: m_currentSubtitleTimeMS(0), m_isPlaying(false)
-        {
-        }
-		//--------------------------------------------------------------
-		//--------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		bool VideoPlayer::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
 			return (in_interfaceId == CSVideo::VideoPlayer::InterfaceID || in_interfaceId == VideoPlayer::InterfaceID);
 		}
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
         void VideoPlayer::Present(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, VideoCompleteDelegate::Connection&& in_delegateConnection, bool in_dismissWithTap,
         		const CSCore::Colour& in_backgroundColour)
         {
+        	CS_ASSERT(g_activeVideoPlayer == nullptr, "A video player is already active!");
         	CS_ASSERT(m_isPlaying == false, "Cannot present a video while one is already playing.");
+
         	m_isPlaying = true;
+			g_activeVideoPlayer = this;
 
             m_completionDelegateConnection = std::move(in_delegateConnection);
 
             auto fileSystem = CSCore::Application::Get()->GetFileSystem();
             auto taggedFilePath = CSCore::Application::Get()->GetTaggedFilePathResolver()->ResolveFilePath(in_storageLocation, in_filePath);
-            std::string absFilePath = fileSystem->GetAbsolutePathToFile(in_storageLocation, taggedFilePath);
 
-            bool isPackage = false;
-            if (in_storageLocation == CSCore::StorageLocation::k_package || (in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
+			bool inApk = false;
+			std::string absFilePath = absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
+			s32 fileOffset = -1;
+			s32 fileLength = -1;
+            if (in_storageLocation == CSCore::StorageLocation::k_package || in_storageLocation == CSCore::StorageLocation::k_package)
             {
-                isPackage = true;
-                absFilePath = FileSystem::k_packageAPKDir + absFilePath;
+#if defined(CS_ANDROIDFLAVOUR_GOOGLEPLAY)
+				CalcZippedVideoInfo(in_storageLocation, taggedFilePath, absFilePath, fileOffset, fileLength);
+#elif defined(CS_ANDROIDFLAVOUR_AMAZON)
+				inApk = true;
+#else
+				CS_LOG_FATAL("This Android Flavour cannot play videos from this storage location.");
+#endif
             }
-            else if (in_storageLocation == CSCore::StorageLocation::k_chilliSource)
+            else if (in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false)
             {
-                isPackage = true;
-                absFilePath = FileSystem::k_csAPKDir + absFilePath;
+#if defined(CS_ANDROIDFLAVOUR_GOOGLEPLAY)
+				CalcZippedVideoInfo(in_storageLocation, taggedFilePath, absFilePath, fileOffset, fileLength);
+#elif defined(CS_ANDROIDFLAVOUR_AMAZON)
+				inApk = true;
+#else
+				CS_LOG_FATAL("This Android Flavour cannot play videos from this storage location.");
+#endif
             }
 
-        	//start the video
-        	m_javaInterface->Present(isPackage, absFilePath, in_dismissWithTap, in_backgroundColour, CSCore::MakeDelegate(this, &VideoPlayer::OnVideoComplete));
+			jstring jAbsFilePath = JavaUtils::CreateJStringFromSTDString(absFilePath);
+
+			m_javaSystem->CallVoidMethod("present", inApk, jAbsFilePath, fileOffset, fileLength, in_dismissWithTap, (m_subtitles != nullptr), in_backgroundColour.r, in_backgroundColour.g,
+			in_backgroundColour.b, in_backgroundColour.a);
+
+			JavaUtils::DeleteLocalRef(jAbsFilePath);
         }
-        //--------------------------------------------------------------
-		//--------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		void VideoPlayer::PresentWithSubtitles(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSVideo::SubtitlesCSPtr& in_subtitles, VideoCompleteDelegate::Connection&& in_delegateConnection,
                 bool in_dismissWithTap, const CSCore::Colour& in_backgroundColour)
 		{
 			m_subtitles = in_subtitles;
-			m_javaInterface->SetUpdateSubtitlesDelegate(CSCore::MakeDelegate(this, &VideoPlayer::OnUpdateSubtitles));
 			Present(in_storageLocation, in_filePath, std::move(in_delegateConnection), in_dismissWithTap, in_backgroundColour);
 		}
-        //-------------------------------------------------------
-        //-------------------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
         void VideoPlayer::OnInit()
         {
-        	//get the media player java interface or create it if it doesn't yet exist.
-			m_javaInterface = JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<VideoPlayerJavaInterface>();
-			if (m_javaInterface == nullptr)
-			{
-				m_javaInterface = VideoPlayerJavaInterfaceSPtr(new VideoPlayerJavaInterface());
-				JavaInterfaceManager::GetSingletonPtr()->AddJavaInterface(m_javaInterface);
-			}
+			JavaClassDef classDef("com/chilliworks/chillisource/video/VideoPlayer");
+			classDef.AddMethod("present", "(ZLjava/lang/String;IIZZFFFF)V");
+			classDef.AddMethod("getPlaybackPosition", "()F");
+			classDef.AddMethod("createSubtitle", "(Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;FFFF)J");
+			classDef.AddMethod("setSubtitleColour", "(JFFFF)V");
+			classDef.AddMethod("removeSubtitle", "(J)V");
+
+        	m_javaSystem = JavaSystemUPtr(new JavaSystem(classDef));
         }
-        //---------------------------------------------------------------
-        //---------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
         void VideoPlayer::OnVideoComplete()
         {
-        	m_javaInterface->SetUpdateSubtitlesDelegate(nullptr);
         	m_subtitles.reset();
         	m_isPlaying = false;
+			g_activeVideoPlayer = nullptr;
 
             if (m_completionDelegateConnection != nullptr)
             {
@@ -125,12 +212,12 @@ namespace CSBackend
                 delegateConnection->Call();
             }
         }
-		//---------------------------------------------------------------
-		//---------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		void VideoPlayer::OnUpdateSubtitles()
 		{
 			//only update if the position in the video has changed.
-			f32 position = m_javaInterface->GetTime();
+			f32 position = m_javaSystem->CallFloatMethod("getPlaybackPosition");
 			TimeIntervalMs currentTimeMS = (TimeIntervalMs)(position * 1000.0f);
 			if (m_currentSubtitleTimeMS != currentTimeMS)
 			{
@@ -148,8 +235,19 @@ namespace CSBackend
 					{
 						const std::string& text = localisedText->GetText((*it)->m_localisedTextId);
 						const CSVideo::Subtitles::Style* style = m_subtitles->GetStyleWithName((*it)->m_styleName);
-						s64 subtitleID = m_javaInterface->CreateSubtitle(text, style->m_fontName, style->m_fontSize, CSRendering::StringFromAlignmentAnchor(style->m_alignment), style->m_bounds.vOrigin.x, style->m_bounds.vOrigin.y, style->m_bounds.vSize.x, style->m_bounds.vSize.y);
-						m_javaInterface->SetSubtitleColour(subtitleID, 0.0f, 0.0f, 0.0f, 0.0f);
+						auto alignment = CSRendering::StringFromAlignmentAnchor(style->m_alignment);
+
+						jstring jText = JavaUtils::CreateJStringFromSTDString(text);
+						jstring jFontName = JavaUtils::CreateJStringFromSTDString(style->m_fontName);
+						jstring jAlignment = JavaUtils::CreateJStringFromSTDString(alignment);
+
+						s64 subtitleID = m_javaSystem->CallLongMethod("createSubtitle", jText, jFontName, style->m_fontSize, jAlignment, style->m_bounds.vOrigin.x, style->m_bounds.vOrigin.y, style->m_bounds.vSize.x, style->m_bounds.vSize.y);
+						m_javaSystem->CallVoidMethod("setSubtitleColour", subtitleID, 0.0f, 0.0f, 0.0f, 0.0f);
+
+						JavaUtils::DeleteLocalRef(jAlignment);
+						JavaUtils::DeleteLocalRef(jFontName);
+						JavaUtils::DeleteLocalRef(jText);
+
 						m_subtitleMap.insert(std::make_pair(*it, subtitleID));
 					}
 				}
@@ -166,15 +264,15 @@ namespace CSBackend
 					auto mapEntry = m_subtitleMap.find(*it);
 					if (mapEntry != m_subtitleMap.end())
 					{
-						m_javaInterface->RemoveSubtitle(mapEntry->second);
+						m_javaSystem->CallVoidMethod("removeSubtitle", mapEntry->second);
 						m_subtitleMap.erase(mapEntry);
 					}
 				}
 				m_subtitlesToRemove.clear();
 			}
 		}
-		//---------------------------------------------------------------
-		//---------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		void VideoPlayer::UpdateSubtitle(const CSVideo::Subtitles::Subtitle* in_subtitle, s64 in_subtitleID, TimeIntervalMs in_timeMS)
 		{
 			const CSVideo::Subtitles::Style* style = m_subtitles->GetStyleWithName(in_subtitle->m_styleName);
@@ -213,13 +311,13 @@ namespace CSBackend
 				m_subtitlesToRemove.push_back(in_subtitle);
 			}
 
-			m_javaInterface->SetSubtitleColour(in_subtitleID, style->m_colour.r, style->m_colour.g, style->m_colour.b, fade * style->m_colour.a);
+			m_javaSystem->CallVoidMethod("setSubtitleColour", in_subtitleID, style->m_colour.r, style->m_colour.g, style->m_colour.b, fade * style->m_colour.a);
 		}
-        //-------------------------------------------------------
-        //-------------------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
         void VideoPlayer::OnDestroy()
         {
-        	m_javaInterface.reset();
+        	m_javaSystem.reset();
         }
     }
 }

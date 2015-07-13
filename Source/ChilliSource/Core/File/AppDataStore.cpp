@@ -300,10 +300,10 @@ namespace ChilliSource
                 // Write to disk
                 FileSystem* pFileSystem = Application::Get()->GetFileSystem();
                 FileStreamSPtr pFileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_writeBinary);
-                if(pFileStream->IsOpen() && !pFileStream->IsBad())
+                if(pFileStream != nullptr)
                 {
                     pFileStream->Write(reinterpret_cast<const s8*>(encryptedData.m_data.get()), encryptedData.m_size);
-                    pFileStream->Close();
+                    pFileStream.reset();
                 }
                 
                 m_needsSynchonised = false;
@@ -317,7 +317,7 @@ namespace ChilliSource
             if(pFileSystem->DoesFileExist(StorageLocation::k_saveData, k_filename) == true)
             {
 				FileStreamSPtr fileStream = pFileSystem->CreateFileStream(StorageLocation::k_saveData, k_filename, FileMode::k_readBinary);
-				if (fileStream->IsOpen() == true && fileStream->IsBad() == false)
+				if (fileStream != nullptr)
                 {
 					fileStream->SeekG(0, SeekDir::k_end);
 					u32 encryptedDataSize = fileStream->TellG();
@@ -325,7 +325,7 @@ namespace ChilliSource
                     
                     std::unique_ptr<s8[]> encryptedData(new s8[encryptedDataSize]);
 					fileStream->Read(encryptedData.get(), encryptedDataSize);
-					fileStream->Close();
+					fileStream.reset();
                     
                     std::string decrypted = AESEncrypt::DecryptString(reinterpret_cast<const u8*>(encryptedData.get()), encryptedDataSize, k_privateKey);
 

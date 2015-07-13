@@ -31,7 +31,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/Screen.h>
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/Base/CoreJavaInterface.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/JNI/JavaInterfaceManager.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 
 namespace CSBackend
 {

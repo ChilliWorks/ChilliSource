@@ -34,8 +34,6 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.chilliworks.chillisource.core.CSPowerManager;
-import com.chilliworks.chillisource.core.SharedPreferencesNativeInterface;
 import com.chilliworks.chillisource.input.DeviceButtonNativeInterface;
 import com.chilliworks.chillisource.input.DeviceButtonNativeInterface.DeviceButton;
 import com.chilliworks.chillisource.networking.HttpRequestNativeInterface;
@@ -54,42 +52,39 @@ public class CSActivity extends Activity
 	private static final int k_googlePlayServicesErrorDialogRequestCode = 7564568;
 	private Surface m_surface;
 	private AppConfig m_appConfig;
-	
+	private boolean m_initialised = false;
+
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return Activity surface
+	 */
+	public Surface getSurface()
+	{
+		return m_surface;
+	}
 	/**
 	 * Triggered when the activity is first created (i.e. on app launch).
 	 * 
 	 * @author Ian Copland
 	 * 
-	 * @param Saved instance state (Not used)
+	 * @param in_savedInstanceState - Saved instance state (Not used)
 	 */
-    @Override public void onCreate(Bundle savedInstanceState) 
+    @Override public void onCreate(Bundle in_savedInstanceState)
     {	
-        super.onCreate(savedInstanceState);
-        try
-        {
-        	//go full screen!
-        	requestWindowFeature(Window.FEATURE_NO_TITLE);
-        	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        
-        	m_appConfig = new AppConfig(this);
-      
-        	m_surface = new Surface(m_appConfig, this);
-        	
-        	CSApplication.create(this);
-      
-        	CSApplication.get().activityIntent(getIntent());
-    		
-          	//initialise the old style native interfaces (These should be removed over time as each of these is changed over to the new system!)
-        	HttpRequestNativeInterface.Setup(this);
-        	SharedPreferencesNativeInterface.Setup(this);
-            WebViewNativeInterface.Setup(this);
-            CSPowerManager.Setup(this);
-        }
-        catch (Exception e)
-        {
-        	Logging.logError("Activity.onCreate has thrown an exception: " + e.toString());
-        	e.printStackTrace();
-        }
+        super.onCreate(in_savedInstanceState);
+
+		//go full screen!
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+		//load the native libraries.
+		NativeLibraryLoader.load(this);
+
+		if (StartupActivityFactory.tryStartActivity(this) == false)
+		{
+			init();
+		}
     }
 	/**
 	 * Triggered when the activity becomes visible
@@ -99,31 +94,40 @@ public class CSActivity extends Activity
     @Override protected void onResume() 
     {
     	super.onResume();
-    	
-        m_surface.onResume();
 
-        CSPowerManager.RequestWakeLock(CSPowerManager.LOCK_TYPE.SCREEN_DIM_LOCK);
-        
-        CSApplication.get().resume();
-        
-        if(m_appConfig.isGooglePlayServicesRequired() == true)
+        if (m_initialised == false)
         {
-    		//We require Google Play Services so we need to check if they require installing
-    		int gpsAvailableResult = GooglePlayServicesUtil.isGooglePlayServicesAvailable(CSApplication.get().getAppContext());
-    		
-    		switch(gpsAvailableResult)
-    		{
-    		case ConnectionResult.SUCCESS:
-    			break;
-    		case ConnectionResult.SERVICE_MISSING:
-    			//Kindle or unsupported device
-    			break;
-    		case ConnectionResult.SERVICE_DISABLED:
-    		case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
-    			//Requires update
-    			GooglePlayServicesUtil.getErrorDialog(gpsAvailableResult, this, k_googlePlayServicesErrorDialogRequestCode).show();
-    			break;
-    		}
+            if (StartupActivityFactory.tryStartActivity(this) == false)
+            {
+                init();
+            }
+        }
+
+        if (m_initialised == true)
+        {
+            m_surface.onResume();
+
+            CSApplication.get().resume();
+
+            if (m_appConfig.isGooglePlayServicesRequired() == true)
+            {
+                //We require Google Play Services so we need to check if they require installing
+                int gpsAvailableResult = GooglePlayServicesUtil.isGooglePlayServicesAvailable(CSApplication.get().getAppContext());
+
+                switch (gpsAvailableResult)
+                {
+                    case ConnectionResult.SUCCESS:
+                        break;
+                    case ConnectionResult.SERVICE_MISSING:
+                        //Kindle or unsupported device
+                        break;
+                    case ConnectionResult.SERVICE_DISABLED:
+                    case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
+                        //Requires update
+                        GooglePlayServicesUtil.getErrorDialog(gpsAvailableResult, this, k_googlePlayServicesErrorDialogRequestCode).show();
+                        break;
+                }
+            }
         }
     }
 	/**
@@ -133,20 +137,23 @@ public class CSActivity extends Activity
 	 * 
 	 * @author Ian Copland
 	 * 
-	 * @param Whether the window has focus or not
+	 * @param in_hasFocus - Whether the window has focus or not
 	 */
     @Override public void onWindowFocusChanged(boolean in_hasFocus)
     {
-    	if(in_hasFocus == true)
-    	{
-    		super.onWindowFocusChanged(in_hasFocus);
-    		CSApplication.get().foreground();
-    	}
-    	else
-    	{
-    		CSApplication.get().background();
-    		super.onWindowFocusChanged(in_hasFocus);
-    	}
+        if (m_initialised == true)
+        {
+            if (in_hasFocus == true)
+            {
+                super.onWindowFocusChanged(in_hasFocus);
+                CSApplication.get().foreground();
+            }
+            else
+            {
+                CSApplication.get().background();
+                super.onWindowFocusChanged(in_hasFocus);
+            }
+        }
     }
 	/**
 	 * Triggered when the activity is no longer wholly visible.
@@ -155,10 +162,12 @@ public class CSActivity extends Activity
 	 */
     @Override public void onPause() 
     {
-    	CSApplication.get().suspend();
-    	
-    	m_surface.onPause();
-        CSPowerManager.ReleaseLock(CSPowerManager.LOCK_TYPE.SCREEN_DIM_LOCK);
+        if (m_initialised == true)
+        {
+            CSApplication.get().suspend();
+
+            m_surface.onPause();
+        }
        
         super.onPause();
     }
@@ -178,7 +187,11 @@ public class CSActivity extends Activity
 	 */
     @Override public void onDestroy()
     {
-    	CSApplication.get().destroy();
+        if (m_initialised == true)
+        {
+            CSApplication.get().destroy();
+        }
+
 	    super.onDestroy();
     }
 	/**
@@ -187,12 +200,17 @@ public class CSActivity extends Activity
 	 * 
 	 * @author Ian Copland
 	 * 
-	 * @param Intent
+	 * @param in_intent - Intent
 	 */
     @Override public void onNewIntent(Intent in_intent)
     {
     	setIntent(in_intent);
-    	CSApplication.get().activityIntent(in_intent);
+
+        if (m_initialised == true)
+        {
+            CSApplication.get().activityIntent(in_intent);
+        }
+
     	super.onNewIntent(in_intent);
     }
 	/**
@@ -200,21 +218,24 @@ public class CSActivity extends Activity
 	 * 
 	 * @author Ian Copland
 	 * 
-	 * @param Request code that it started with
-	 * @param Result code it returned
-	 * @param Any additional data returned
+	 * @param in_requestCode - Request code that it started with
+	 * @param in_resultCode - Result code it returned
+	 * @param in_data - Any additional data returned
 	 */
     @Override protected void onActivityResult(int in_requestCode, int in_resultCode, Intent in_data) 
     {
-    	if(in_requestCode != k_googlePlayServicesErrorDialogRequestCode)
-    	{
-    		CSApplication.get().activityResult(in_requestCode, in_resultCode, in_data);
-    	}
-    	else if(in_resultCode == RESULT_CANCELED)
-    	{
-    		//Terminate until downloaded
-    		CSApplication.get().quit();
-    	}
+        if (m_initialised == true)
+        {
+            if (in_requestCode != k_googlePlayServicesErrorDialogRequestCode)
+            {
+                CSApplication.get().activityResult(in_requestCode, in_resultCode, in_data);
+            }
+            else if (in_resultCode == RESULT_CANCELED)
+            {
+                //Terminate until downloaded
+                CSApplication.get().quit();
+            }
+        }
     	super.onActivityResult(in_requestCode, in_resultCode, in_data);
 	}
 	/**
@@ -223,11 +244,15 @@ public class CSActivity extends Activity
 	 * 
 	 * @author Ian Copland
 	 * 
-	 * @param New config
+	 * @param in_config - The new config
 	 */
     @Override public void onConfigurationChanged(Configuration in_config) 
-    {    
-    	CSApplication.get().activityConfigurationChanged(in_config);
+    {
+        if (m_initialised == true)
+        {
+            CSApplication.get().activityConfigurationChanged(in_config);
+        }
+
     	super.onConfigurationChanged(in_config);
     }
 	/**
@@ -236,18 +261,44 @@ public class CSActivity extends Activity
 	 * 
 	 * @author Ian Copland
 	 */
-    @Override public void onBackPressed() 
+    @Override public void onBackPressed()
     {
-    	DeviceButtonNativeInterface nativeInterface = (DeviceButtonNativeInterface)CSApplication.get().getSystem(DeviceButtonNativeInterface.InterfaceID);
-    	nativeInterface.onTriggered(DeviceButton.k_backButton);
+        if (m_initialised == true)
+        {
+            DeviceButtonNativeInterface nativeInterface = (DeviceButtonNativeInterface) CSApplication.get().getSystem(DeviceButtonNativeInterface.INTERFACE_ID);
+            nativeInterface.onTriggered(DeviceButton.k_backButton);
+        }
     }
 	/**
+	 * Initialises the Chilli Source application and creates the OpenGL surface.
+	 *
 	 * @author Ian Copland
-	 * 
-	 * @return Activity surface
 	 */
-    public Surface getSurface()
-    {
-    	return m_surface;
-    }
+	private void init()
+	{
+        assert (m_initialised == false) : "Cannot re-initialise CSActivity.";
+
+		try
+		{
+			m_appConfig = new AppConfig(this);
+
+			m_surface = new Surface(m_appConfig, this);
+
+			CSApplication.create(this);
+
+			CSApplication.get().activityIntent(getIntent());
+
+			//initialise the old style native interfaces (These should be removed over time as each of these is changed over to the new system!)
+			HttpRequestNativeInterface.Setup(this);
+			SharedPreferencesNativeInterface.Setup(this);
+			WebViewNativeInterface.Setup(this);
+		}
+		catch (Exception e)
+		{
+            Logging.logError("Activity.init() has thrown an exception: " + ExceptionUtils.ConvertToString(e));
+            Logging.logFatal("Could not initialise CSActivity.");
+		}
+
+        m_initialised = true;
+	}
 }

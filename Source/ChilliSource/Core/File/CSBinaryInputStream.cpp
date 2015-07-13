@@ -99,7 +99,7 @@ namespace ChilliSource
             CS_ASSERT(fileSystem != nullptr, "CSBinaryInputStream missing required system: FileSystem.");
             
             m_fileStream = fileSystem->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_readBinary);
-            if (m_fileStream != nullptr && m_fileStream->IsBad() == false && m_fileStream->IsOpen() == true)
+            if (m_fileStream != nullptr)
             {
                 u32 numChunkTableEntries;
                 if (ReadHeader(m_fileStream.get(), in_filePath, m_fileFormatId, m_fileFormatVersion, numChunkTableEntries) == false)
