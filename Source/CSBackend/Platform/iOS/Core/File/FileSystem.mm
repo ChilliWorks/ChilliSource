@@ -456,7 +456,6 @@ namespace CSBackend
                 
                 if (error != nil)
                 {
-                    CS_LOG_ERROR("File System: Error deleting file '" + in_filePath + "' - " + GetErrorString(error));
                     return false;
                 }
             }
@@ -482,7 +481,6 @@ namespace CSBackend
                 
                 if (error != nil)
                 {
-                    CS_LOG_ERROR("File System: Error deleting file '" + in_directoryPath + "' - " + GetErrorString(error));
                     return false;
                 }
             }
