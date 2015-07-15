@@ -74,6 +74,18 @@ namespace CSBackend
             //----------------------------------------------------------------------------------------
             const CSCore::ParamDictionary& GetHeaders() const override;
             //----------------------------------------------------------------------------------------
+            /// @author HMcLaughlin
+            ///
+            /// @return The expected total size of the request
+            //----------------------------------------------------------------------------------------
+            u64 GetExpectedTotalSize() const;
+            //----------------------------------------------------------------------------------------
+            /// @author HMcLaughlin
+            ///
+            /// @return The current transferred size of the request
+            //----------------------------------------------------------------------------------------
+            u64 GetCurrentSize() const;
+            //----------------------------------------------------------------------------------------
             /// Close the request. Note: The completion delegate is not invoked
             ///
             /// @author Ian Copland
