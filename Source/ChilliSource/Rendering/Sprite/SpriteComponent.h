@@ -349,7 +349,7 @@ namespace ChilliSource
             //-----------------------------------------------------------
             void SetTextureSizeCacheValid();
             //------------------------------------------------------------------------------
-            /// Calculates the frame centre and size for the current texture altas. Vertical
+            /// Calculates the frame centre and size for the current texture atlas. Vertical
             /// and horizontal flipping are taken into account when calculating the centre.
             /// This should only be called when there is a texture atlas, otherwise the
             /// app is considered to be in an irrecoverable state and will exit.
