@@ -52,6 +52,7 @@ namespace CSBackend
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(WebView);
+            
             //-------------------------------------------------------
 			/// Queries whether or not this system implements the
             /// interface with the given Id.
@@ -73,7 +74,7 @@ namespace CSBackend
             /// @param The relative size of the dismiss button.
             /// @param The dismissed delegate.
             //---------------------------------------------------------
-            void Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate) override;
+            void Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler = nullptr) override;
             //---------------------------------------------------------
             /// Displays the website at the given location on disk in
             /// an in-app web view.
@@ -86,7 +87,7 @@ namespace CSBackend
             /// @param The relative size of the dismiss button.
             /// @param The dismissed delegate.
             //---------------------------------------------------------
-            void PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate) override;
+            void PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler = nullptr) override;
             //---------------------------------------------------------
             /// Displays the website at the given Url in an external
             /// browser.
@@ -117,6 +118,21 @@ namespace CSBackend
             /// @author Ian Copland
             //---------------------------------------------------------
             void OnViewDidFinishLoad();
+            //---------------------------------------------------------
+            /// Called from the webview delegate to inform the system
+            /// that a link on the webview has been clicked. This will
+            /// pass the link to any external handlers (if any) and
+            /// return based on whether it will be handled elsewhere
+            ///
+            /// This should not be called manually by the user.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_url - URL Clicked
+            ///
+            /// @return If this link will be handled elsewhere
+            //---------------------------------------------------------
+            bool OnLinkClicked(const std::string& in_url);
             
         private:
             friend CSWeb::WebViewUPtr CSWeb::WebView::Create();
@@ -175,20 +191,24 @@ namespace CSBackend
             void OnDestroy() override;
 		private:
 			
-            CSCore::Screen* m_screen;
-            
-            bool m_isPresented;
             DismissedDelegate m_dismissedDelegate;
+            CustomLinkHandlerDelegate m_linkHandlerDelegate;
+            
+            CSCore::Screen* m_screen;
 			UIWebView* m_webView;
 			UIButton * m_dismissButton;
             UIActivityIndicatorView* m_activityIndicator;
 			WebViewDelegate* m_webViewDelegate;
-			
+            
+            std::string m_anchor;
+            
 			CSCore::Vector2 m_absoluteSize;
 			CSCore::Vector2 m_absolutePosition;
+            
             f32 m_dismissButtonRelativeSize;
 			
-            std::string m_anchor;
+            bool m_isPresented;
+            
 		};
 	}
 }

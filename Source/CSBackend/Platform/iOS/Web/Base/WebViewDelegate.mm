@@ -30,6 +30,9 @@
 
 #import <CSBackend/Platform/iOS/Web/Base/WebViewDelegate.h>
 
+#import <ChilliSource/Core/Base.h>
+#import <ChilliSource/Core/DialogueBox/DialogueBoxSystem.h>
+
 #import <CSBackend/Platform/iOS/Core/String/NSStringUtils.h>
 
 @implementation WebViewDelegate
@@ -48,39 +51,73 @@
 //----------------------------------------------------
 -(void) onDismissButtonPressed:(id)object
 {
-	webViewSystem->Dismiss();
+    webViewSystem->Dismiss();
 }
 //----------------------------------------------------
 //----------------------------------------------------
--(BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)request navigationType:(UIWebViewNavigationType)navigationType
+-(BOOL)webView:(UIWebView*)webView shouldStartLoadWithRequest:(NSURLRequest*)in_request navigationType:(UIWebViewNavigationType)in_navigationType
 {
-	if(navigationType == UIWebViewNavigationTypeLinkClicked)
-	{
-        if([[[request URL] scheme] isEqualToString:@"file"] == TRUE)
+    if(in_navigationType == UIWebViewNavigationTypeLinkClicked)
+    {
+        if(webViewSystem)
+        {
+            std::string url = [NSStringUtils newUTF8StringWithNSString:[in_request.URL absoluteString]];
+            bool linkHandledExternally = webViewSystem->OnLinkClicked(url);
+            
+            if(linkHandledExternally)
+            {
+                return NO;
+            }
+        }
+        
+        if([[[in_request URL] scheme] isEqualToString:@"file"] == TRUE)
         {
             //Load all other links externally
-            [[UIApplication sharedApplication] openURL:request.URL];
+            [[UIApplication sharedApplication] openURL:in_request.URL];
             return NO;
         }
-	}
+    }
     
     return YES;
 }
 //----------------------------------------------------
 //----------------------------------------------------
--(void) webViewDidFinishLoad:(UIWebView*)webView
+-(void) webViewDidFinishLoad:(UIWebView*)in_webView
 {
     webViewSystem->OnViewDidFinishLoad();
 }
 //----------------------------------------------------
 //----------------------------------------------------
--(void)webView:(UIWebView*)webView didFailLoadWithError:(NSError*)error
+-(void)webView:(UIWebView*)webView didFailLoadWithError:(NSError*)in_error
 {
-    CS_LOG_ERROR([NSStringUtils newUTF8StringWithNSString:[error localizedDescription]]);
+    CS_LOG_ERROR([NSStringUtils newUTF8StringWithNSString:[in_error localizedDescription]]);
     
-    if(webViewSystem)
+    if (in_error.code == NSURLErrorNotConnectedToInternet)
+    {
+        auto dialogSystem = CSCore::Application::Get()->GetSystem<CSCore::DialogueBoxSystem>();
+        dialogSystem->ShowSystemDialogue(0, [=](u32 in_id, CSCore::DialogueBoxSystem::DialogueResult in_result)
+        {
+            if(webViewSystem)
+            {
+                webViewSystem->Dismiss();
+            }
+        }, "Error", [NSStringUtils newUTF8StringWithNSString:[in_error localizedDescription]], "OK");
+    }
+    else if(webViewSystem)
     {
         webViewSystem->Dismiss();
+    }
+}
+//----------------------------------------------------
+//----------------------------------------------------
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)in_buttonIndex
+{
+    if (in_buttonIndex == 0)
+    {
+        if(webViewSystem)
+        {
+            webViewSystem->Dismiss();
+        }
     }
 }
 @end

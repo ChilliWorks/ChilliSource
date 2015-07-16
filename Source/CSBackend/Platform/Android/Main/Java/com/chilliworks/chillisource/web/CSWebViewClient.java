@@ -28,13 +28,14 @@
 
 package com.chilliworks.chillisource.web;
 
-import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.web.WebViewNativeInterface;
-
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.webkit.WebView;
+
+import com.chilliworks.chillisource.core.CSApplication;
 
 public class CSWebViewClient extends android.webkit.WebViewClient
 {
@@ -69,29 +70,45 @@ public class CSWebViewClient extends android.webkit.WebViewClient
 	///
 	/// @author S Hendrie
 	///
-	/// @param The URL string.
+	/// @param in_view - WebView
+	/// @param in_url - The URL string.
 	///
 	/// @return Whether or not it is a store deep link.
 	//--------------------------------------------------------
-	@Override public boolean shouldOverrideUrlLoading(WebView inView, String instrUrl)
+	@Override public boolean shouldOverrideUrlLoading(WebView in_view, String in_url)
 	{
 		Activity activity = CSApplication.get().getActivity();
-		if (activity != null && IsStoreDeepLink(instrUrl) == true)
+		if (activity != null && IsStoreDeepLink(in_url) == true)
 		{
 			Intent intent = new Intent(Intent.ACTION_VIEW);
-			intent.setData(Uri.parse(instrUrl));
+			intent.setData(Uri.parse(in_url));
 			activity.startActivity(intent);
 		}
 		else
 		{
-			inView.loadUrl(instrUrl); 
+			CSWebView webView = (CSWebView) in_view;
+			if(webView != null)
+			{
+				boolean handledExternally = WebViewNativeInterface.OnLinkClicked(webView.GetIndexID(), in_url);
+				if(handledExternally == false)
+				{
+					in_view.loadUrl(in_url);
+				}
+			}
 		}
 		
 	    return true;
-	}	
-	
+	}
+	//--------------------------------------------------------
+	/// Called when a web page is finished loading
+	///
+	/// @author S Hendrie
+	///
+	/// @param in_view - WebView
+	/// @param in_url - The URL that finished loading.
+	//--------------------------------------------------------
 	@Override
-	public void onPageFinished(WebView inView, String inURL)
+	public void onPageFinished(WebView in_view, String in_url)
 	{
 		WebViewNativeInterface.RemoveActivityIndicator();
 		WebViewNativeInterface.AddDismissButton();
@@ -102,12 +119,38 @@ public class CSWebViewClient extends android.webkit.WebViewClient
 			mAnchor = "";
 		}
 	}
-	
+	//--------------------------------------------------------
+	/// Called when a web page is finished loading
+	///
+	/// @author S Hendrie
+	///
+	/// @param in_view - WebView
+	/// @param in_errorCode - Error code reported
+	/// @param in_description - String description of the error
+	/// @param in_failingUrl - The URL that failed to load.
+	//--------------------------------------------------------
 	@Override
-	public void onReceivedError(WebView view, int errorCode, String description, String failingUrl)
+	public void onReceivedError(WebView in_view, int in_errorCode, String in_description, String in_failingUrl)
 	{
 		WebViewNativeInterface.RemoveActivityIndicator();
-		WebViewNativeInterface.OnWebviewDismissed(0);
+
+		final CSWebView webView = (CSWebView) in_view;
+		if(webView != null)
+		{
+			AlertDialog.Builder builder = new AlertDialog.Builder(webView.getContext());
+			builder.setMessage(in_description)
+					.setCancelable(false)
+					.setPositiveButton("OK", new DialogInterface.OnClickListener()
+					{
+						public void onClick(DialogInterface dialog, int id)
+						{
+							WebViewNativeInterface.OnWebviewDismissed(webView.GetIndexID());
+						}
+					});
+
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
 	}
 	
 	public void SetAnchor(String inAnchor)

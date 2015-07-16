@@ -44,15 +44,15 @@ namespace CSBackend
 	{
 		namespace
 		{
-			//---------------------------------------------------------
+			//--------------------------------------------------------------------------------------
 			/// Breaks the given url path into the file path and anchor.
 			///
 			/// @author Ian Copland
 			///
-			/// @param The URL.
-			/// @param [Out] The file path.
-			/// @param [Out] The anchor.
-			//---------------------------------------------------------
+			/// @param in_combined - The URL.
+			/// @param out_filePath - [Out] The file path.
+			/// @param out_anchor - [Out] The anchor.
+			//--------------------------------------------------------------------------------------
 			void GetFilePathAndAnchor(const std::string& in_combined, std::string& out_filePath, std::string& out_anchor)
 			{
 				size_t anchorStart = in_combined.find_last_of('#');
@@ -74,8 +74,9 @@ namespace CSBackend
 		std::unordered_map<s32, WebView*> WebView::s_indexToWebViewMap;
 
 		CS_DEFINE_NAMEDTYPE(WebView);
-		//-----------------------------------------------
-		//-----------------------------------------------
+
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		void WebView::OnWebViewDismissed(s32 in_index)
 		{
 			auto webViewIt = s_indexToWebViewMap.find(in_index);
@@ -84,33 +85,47 @@ namespace CSBackend
 				webViewIt->second->OnWebViewDismissed();
 			}
 		}
-        //---------------------------------------------------------
-        //---------------------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+        bool WebView::OnLinkClicked(s32 in_index, const std::string& in_url)
+        {
+			auto webViewIt = s_indexToWebViewMap.find(in_index);
+            if (webViewIt != s_indexToWebViewMap.end())
+            {
+            	return webViewIt->second->OnLinkClicked(in_url);
+            }
+
+            return false;
+        }
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		WebView::WebView()
 			: m_index(s_nextIndex++), m_isPresented(false)
 		{
 		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		bool WebView::IsA(CSCore::InterfaceIDType in_interfaceId) const
 		{
 			return (CSWeb::WebView::InterfaceID == in_interfaceId || WebView::InterfaceID == in_interfaceId);
 		}
-		//-----------------------------------------------
-		//-----------------------------------------------
-		void WebView::Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		void WebView::Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
 
 			m_isPresented = true;
 			m_delegate = in_delegate;
+			m_linkHandlerDelegate = in_customURLClickHandler;
+
 			CSCore::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
 
 			WebViewJavaInterface::Present(m_index, in_url, absoluteSize, in_dismissButtonRelativeSize);
 		}
-		//-----------------------------------------------
-		//-----------------------------------------------
-		void WebView::PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate)
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		void WebView::PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
 
@@ -154,36 +169,38 @@ namespace CSBackend
 
 			m_isPresented = true;
 			m_delegate = in_delegate;
+			m_linkHandlerDelegate = in_customURLClickHandler;
+
 			CSCore::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
 			WebViewJavaInterface::PresentFromFile(m_index, htmlFileContents, absoluteSize, fullFilePath, anchor, in_dismissButtonRelativeSize);
 		}
-		//-----------------------------------------------
-		//-----------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		void WebView::PresentInExternalBrowser(const std::string& in_url)
 		{
 			WebViewJavaInterface::PresentInExternalBrowser(in_url);
 		}
-		//-----------------------------------------------
-		//-----------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		void WebView::Dismiss()
 		{
 			WebViewJavaInterface::Dismiss(m_index);
 		}
-        //---------------------------------------------------------
-        //---------------------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
         bool WebView::IsPresented() const
         {
         	return m_isPresented;
         }
-        //-----------------------------------------------
-        //-----------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		void WebView::OnInit()
 		{
 			m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
 			s_indexToWebViewMap.emplace(m_index, this);
 		}
-		//---------------------------------------------------------
-        //---------------------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
         void WebView::OnWebViewDismissed()
         {
         	m_isPresented = false;
@@ -195,8 +212,19 @@ namespace CSBackend
         		delegate();
         	}
         }
-        //-----------------------------------------------
-        //-----------------------------------------------
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+        bool WebView::OnLinkClicked(const std::string& in_url)
+        {
+			if(m_linkHandlerDelegate)
+			{
+				return m_linkHandlerDelegate(in_url);
+			}
+
+			return false;
+        }
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
 		void WebView::OnDestroy()
 		{
 			if (IsPresented() == true)

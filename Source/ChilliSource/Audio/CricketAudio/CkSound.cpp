@@ -107,8 +107,16 @@ namespace ChilliSource
                 m_sound = ::CkSound::newStreamSound(absFilePath.c_str(), kCkPathType_FileSystem);
             }
 #else
-            auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_streamStorageLocation) + taggedFilePath;
-            m_sound = ::CkSound::newStreamSound(absFilePath.c_str(), kCkPathType_FileSystem);
+            if (in_streamStorageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false)
+            {
+                auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + taggedFilePath;
+                m_sound = ::CkSound::newStreamSound(absFilePath.c_str(), kCkPathType_FileSystem);
+            }
+            else
+            {
+                auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_streamStorageLocation) + taggedFilePath;
+                m_sound = ::CkSound::newStreamSound(absFilePath.c_str(), kCkPathType_FileSystem);
+            }
 #endif
 
             CS_ASSERT(m_sound != nullptr, "Could not create " + std::string(k_className) + " because audio stream '" + in_streamFilePath + "' doesn't exist.");

@@ -44,6 +44,7 @@ import com.chilliworks.chillisource.core.ResourceHelper;
 public class WebViewNativeInterface 
 {
 	native public static void OnWebviewDismissed(int inudwIndex);
+	native public static boolean OnLinkClicked(int in_index, String in_linkURL);
 	
 	private static CSActivity msActivity;
 	private static RelativeLayout msWebviewHolder;

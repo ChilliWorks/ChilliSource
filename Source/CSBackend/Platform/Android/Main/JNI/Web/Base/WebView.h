@@ -61,6 +61,22 @@ namespace CSBackend
 			/// @param index of webview
 			//---------------------------------------------------------
 			static void OnWebViewDismissed(s32 in_index);
+            //---------------------------------------------------------
+            /// Called from the Java webview to inform the system
+            /// that a link on the webview has been clicked. This will
+            /// pass the link to any external handlers (if any) and
+            /// return based on whether it will be handled elsewhere
+            ///
+            /// This should not be called manually by the user.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_url - Index of webview
+            /// @param in_url - URL Clicked
+            ///
+            /// @return If this link will be handled elsewhere
+            //---------------------------------------------------------
+            static bool OnLinkClicked(s32 in_index, const std::string& in_url);
             //-------------------------------------------------------
 			/// Queries whether or not this system implements the
             /// interface with the given Id.
@@ -81,8 +97,10 @@ namespace CSBackend
             /// @param The size of the webview in GUI coordinates.
             /// @param The relative size of the dismiss button.
             /// @param The dismissed delegate.
+            /// @param The delegate to call when a link is clicked on
+            /// the displayed page
             //---------------------------------------------------------
-            void Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate) override;
+            void Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler = nullptr) override;
             //---------------------------------------------------------
             /// Displays the website at the given location on disk in
             /// an in-app web view.
@@ -94,8 +112,10 @@ namespace CSBackend
             /// @param The size of the webview in GUI coordinates.
             /// @param The relative size of the dismiss button.
             /// @param The dismissed delegate.
+            /// @param The delegate to call when a link is clicked on
+            /// the displayed page
             //---------------------------------------------------------
-            void PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate) override;
+            void PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler = nullptr) override;
             //---------------------------------------------------------
             /// Displays the website at the given Url in an external
             /// browser.
@@ -139,6 +159,19 @@ namespace CSBackend
             //---------------------------------------------------------
             void OnWebViewDismissed();
             //---------------------------------------------------------
+            /// Called from the Java webview to inform the system
+            /// that a link on the webview has been clicked. This will
+            /// pass the link to any external handlers (if any) and
+            /// return based on whether it will be handled elsewhere
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_url - URL Clicked
+            ///
+            /// @return If this link will be handled elsewhere
+            //---------------------------------------------------------
+            bool OnLinkClicked(const std::string& in_url);
+            //---------------------------------------------------------
             /// Called when the the owning state is destroyed.
             ///
             /// @author Ian Copland
@@ -147,9 +180,12 @@ namespace CSBackend
 		private:
 
 			CSCore::Screen* m_screen;
+
 			bool m_isPresented;
 			const s32 m_index;
+
 			DismissedDelegate m_delegate;
+            CustomLinkHandlerDelegate m_linkHandlerDelegate;
 
 			static s32 s_nextIndex;
 			static std::unordered_map<s32, WebView*> s_indexToWebViewMap;
