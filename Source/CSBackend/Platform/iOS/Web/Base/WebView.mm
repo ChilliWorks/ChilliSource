@@ -131,7 +131,7 @@ namespace CSBackend
                 m_isPresented = true;
                 m_dismissedDelegate = in_delegate;
                 m_dismissButtonRelativeSize = in_dismissButtonRelativeSize;
-                m_linkHandlerDelegate = in_customURLClickHandler;
+                m_linkHandlerDelegate = in_customLinkHandler;
                 
                 CreateWebview(in_size);
                 
