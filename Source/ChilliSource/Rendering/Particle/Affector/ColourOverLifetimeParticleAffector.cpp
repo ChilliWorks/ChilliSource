@@ -28,6 +28,7 @@
 
 #include <ChilliSource/Rendering/Particle/Affector/ColourOverLifetimeParticleAffector.h>
 
+#include <ChilliSource/Core/Math/CurveFunctions.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Rendering/Particle/Particle.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
@@ -37,6 +38,24 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
+        namespace
+        {
+            // TODO: somewhere else?
+            const u32 k_maxIntermediateColours = 2;
+            
+            //----------------------------------------------------------------
+            /// @author Nicolas Tanda
+            ///
+            /// @param Value to clamp
+            ///
+            /// @return The value clamped between 0.0f and 1.0f
+            //----------------------------------------------------------------
+            f32 Clamp(f32 in_value)
+            {
+                return CSCore::MathUtils::Clamp(in_value, 0.0f, 1.0f);
+            }
+        }
+        
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
 		ColourOverLifetimeParticleAffector::ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray)
@@ -51,25 +70,54 @@ namespace ChilliSource
 		{
 			CS_ASSERT(in_index >= 0 && in_index < m_particleColourData.size(), "Index out of bounds!");
 
-			ColourData& colourData = m_particleColourData[in_index];
+			ColourData* colourData = m_particleColourData[in_index];
 			const Particle& particle = GetParticleArray()->at(in_index);
-			
-			colourData.m_initialColour = particle.m_colour;
-
-			colourData.m_targetColour = m_colourOverLifetimeAffectorDef->GetTargetColourProperty()->GenerateValue(in_effectProgress);
+            
+            colourData[0].m_time = 0.0f;
+            colourData[0].m_colour = particle.m_colour;
+            
+            for(u32 index = 1; index < k_maxIntermediateColours + 1; ++index)
+            {
+                colourData[index].m_colour = m_colourOverLifetimeAffectorDef->GetIntermediateColours()[index - 1].m_colourProperty->GenerateValue(in_effectProgress);
+                colourData[index].m_time = m_colourOverLifetimeAffectorDef->GetIntermediateColours()[index - 1].m_timeProperty->GenerateValue(in_effectProgress);
+                
+                // No data for intermediate colour - take previous data
+                if(colourData[index].m_time == 0.0f)
+                {
+                    colourData[index].m_time = colourData[index - 1].m_time;
+                    colourData[index].m_colour = colourData[index - 1].m_colour;
+                }
+            }
+            
+            colourData[3].m_time = 1.0f;
+            colourData[3].m_colour = m_colourOverLifetimeAffectorDef->GetTargetColourProperty()->GenerateValue(in_effectProgress);
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
 		void ColourOverLifetimeParticleAffector::AffectParticles(f32 in_deltaTime, f32 in_effectProgress)
-		{
+        {
+            const auto& curveFunction = CSCore::CurveFunctions::GetCurveFunction(m_colourOverLifetimeAffectorDef->GetCurveName());
+            
 			Core::dynamic_array<Particle>* particleArray = GetParticleArray();
 			for (u32 i = 0; i < particleArray->size(); ++i)
 			{
 				Particle& particle = particleArray->at(i);
-				ColourData& colourData = m_particleColourData[i];
+				ColourData* colourData = m_particleColourData[i];
+                
+                if(particle.m_lifetime <= 0.0f)
+                {
+                    continue;
+                }
 
-				f32 normalisedLifeProgress = 1.0f - (particle.m_energy / particle.m_lifetime);
-				particle.m_colour = colourData.m_initialColour + (colourData.m_targetColour - colourData.m_initialColour) * normalisedLifeProgress;
+                f32 normalisedLifeProgress = 1.0f - (particle.m_energy / particle.m_lifetime);
+                f32 progress = curveFunction(normalisedLifeProgress);
+                
+                particle.m_colour = colourData[0].m_colour;
+                for(u32 index = 0; index < 3; ++index)
+                {
+                    f32 timeProgress = Clamp(Clamp(progress - colourData[index].m_time) / (colourData[index + 1].m_time - colourData[index].m_time));
+                    particle.m_colour += (colourData[index + 1].m_colour - colourData[index].m_colour) * timeProgress;
+                }
 			}
 		}
 	}

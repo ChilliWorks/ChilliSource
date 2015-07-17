@@ -1,5 +1,5 @@
 //
-//  ParticlePropertyCurveFunctions.h
+//  CurveFunctions.h
 //  Chilli Source
 //  Created by Ian Copland on 29/12/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_PARTICLEPROPERTYCURVEFUNCTIONS_H_
-#define _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_PARTICLEPROPERTYCURVEFUNCTIONS_H_
+#ifndef _CHILLISOURCE_CORE_MATH_CURVEFUNCTIONS_H_
+#define _CHILLISOURCE_CORE_MATH_CURVEFUNCTIONS_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/String/StringUtils.h>
@@ -36,16 +36,23 @@
 
 namespace ChilliSource
 {
-    namespace Rendering
+    namespace Core
     {
         //------------------------------------------------------------------------------
-        /// A collection of curve functions for use by the various curve type Particle
-        /// Properties.
+        /// A collection of curve functions.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------------
-        namespace ParticlePropertyCurveFunctions
+        namespace CurveFunctions
         {
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @param The string name of the curve.
+            ///
+            /// @return The associated curve function.
+            //------------------------------------------------------------------------------
+            std::function<f32(f32)> GetCurveFunction(const std::string& in_curveName);
             //------------------------------------------------------------------------------
             /// The linear curve function.
             ///

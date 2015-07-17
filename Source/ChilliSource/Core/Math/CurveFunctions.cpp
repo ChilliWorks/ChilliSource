@@ -1,5 +1,5 @@
 //
-//  ParticlePropertyCurveFunctions.cpp
+//  CurveFunctions.cpp
 //  Chilli Source
 //  Created by Ian Copland on 29/12/2014.
 //
@@ -26,16 +26,73 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/Rendering/Particle/Property/ParticlePropertyCurveFunctions.h>
+#include <ChilliSource/Core/Math/CurveFunctions.h>
+
+#include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
 #include <json/json.h>
 
 namespace ChilliSource
 {
-    namespace Rendering
+    namespace Core
     {
-        namespace ParticlePropertyCurveFunctions
+        namespace CurveFunctions
         {
+            namespace
+            {
+                const char k_linearCurveName[] = "linear";
+                const char k_easeInQuadCurveName[] = "easeinquad";
+                const char k_easeOutQuadCurveName[] = "easeoutquad";
+                const char k_smoothStepCurveName[] = "smoothstep";
+                const char k_linearPingPongCurveName[] = "linearpingpong";
+                const char k_easeInQuadPingPongCurveName[] = "easeinquadpingpong";
+                const char k_easeOutQuadPingPongCurveName[] = "easeoutquadpingpong";
+                const char k_smoothStepPingPongCurveName[] = "smoothsteppingpong";
+            }
+            
+            //------------------------------------------------------------------------------
+            //------------------------------------------------------------------------------
+            std::function<f32(f32)> GetCurveFunction(const std::string& in_curveName)
+            {
+                std::string nameLower = in_curveName;
+                StringUtils::ToLowerCase(nameLower);
+                
+                if (nameLower == k_linearCurveName)
+                {
+                    return MakeDelegate(&CurveFunctions::Linear);
+                }
+                else if (nameLower == k_easeInQuadCurveName)
+                {
+                    return MakeDelegate(&CurveFunctions::EaseInQuad);
+                }
+                else if (nameLower == k_easeOutQuadCurveName)
+                {
+                    return MakeDelegate(&CurveFunctions::EaseOutQuad);
+                }
+                else if (nameLower == k_smoothStepCurveName)
+                {
+                    return MakeDelegate(&CurveFunctions::SmoothStep);
+                }
+                else if (nameLower == k_linearPingPongCurveName)
+                {
+                    return MakeDelegate(&CurveFunctions::LinearPingPong);
+                }
+                else if (nameLower == k_easeInQuadPingPongCurveName)
+                {
+                    return MakeDelegate(&CurveFunctions::EaseInQuadPingPong);
+                }
+                else if (nameLower == k_easeOutQuadPingPongCurveName)
+                {
+                    return MakeDelegate(&CurveFunctions::EaseOutQuadPingPong);
+                }
+                else if (nameLower == k_smoothStepPingPongCurveName)
+                {
+                    return MakeDelegate(&CurveFunctions::SmoothStepPingPong);
+                }
+                
+                CS_LOG_FATAL("Invalid curve function: " + in_curveName);
+                return nullptr;
+            }
             //------------------------------------------------------------------------------
             //------------------------------------------------------------------------------
             f32 Linear(f32 in_x)

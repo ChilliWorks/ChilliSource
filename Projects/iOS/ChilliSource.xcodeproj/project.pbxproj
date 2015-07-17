@@ -16,6 +16,7 @@
 		8138A8F71A5804AA00C81462 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8EA1A5804AA00C81462 /* CkAudioPlayer.cpp */; };
 		8138A8FA1A5804AA00C81462 /* CricketAudioSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8F11A5804AA00C81462 /* CricketAudioSystem.cpp */; };
 		8138A90F1A5806A300C81462 /* libck.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8138A90E1A5806A300C81462 /* libck.a */; };
+		8141E52D1B56788900259FAD /* CurveFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8141E52B1B56788900259FAD /* CurveFunctions.cpp */; };
 		814F240B1A9B96560053ADC5 /* TextIcon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814F24091A9B96560053ADC5 /* TextIcon.cpp */; };
 		817C8C7A1B4D7D3E00ADDE52 /* MarkupDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817C8C781B4D7D3E00ADDE52 /* MarkupDef.cpp */; };
 		817C8C7D1B4D7D5000ADDE52 /* StringMarkupParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817C8C7B1B4D7D5000ADDE52 /* StringMarkupParser.cpp */; };
@@ -62,7 +63,6 @@
 		81C925341A5C3ADB00B3AE11 /* SphereParticleEmitterDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C925011A5C3ADB00B3AE11 /* SphereParticleEmitterDef.cpp */; };
 		81C925351A5C3ADB00B3AE11 /* ParticleEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C925041A5C3ADB00B3AE11 /* ParticleEffect.cpp */; };
 		81C925361A5C3ADB00B3AE11 /* ParticleEffectComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C925061A5C3ADB00B3AE11 /* ParticleEffectComponent.cpp */; };
-		81C925371A5C3ADB00B3AE11 /* ParticlePropertyCurveFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C9250E1A5C3ADB00B3AE11 /* ParticlePropertyCurveFunctions.cpp */; };
 		81C925381A5C3ADB00B3AE11 /* ParticlePropertyFactoryImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C925111A5C3ADB00B3AE11 /* ParticlePropertyFactoryImpl.cpp */; };
 		81C9253E1A5C3B1800B3AE11 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C9253C1A5C3B1800B3AE11 /* Random.cpp */; };
 		81C925421A5C3C3500B3AE11 /* RNGContainer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 81C925411A5C3C3500B3AE11 /* RNGContainer.mm */; };
@@ -401,6 +401,8 @@
 		8138A93F1A5806C100C81462 /* SHA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHA1.h; sourceTree = "<group>"; };
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
 		8141DFF21A02439100F3D9DF /* concurrent_blocking_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_blocking_queue.h; sourceTree = "<group>"; };
+		8141E52B1B56788900259FAD /* CurveFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CurveFunctions.cpp; sourceTree = "<group>"; };
+		8141E52C1B56788900259FAD /* CurveFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurveFunctions.h; sourceTree = "<group>"; };
 		814F24091A9B96560053ADC5 /* TextIcon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextIcon.cpp; sourceTree = "<group>"; };
 		814F240A1A9B96560053ADC5 /* TextIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextIcon.h; sourceTree = "<group>"; };
 		8154B74619D0274100F9F5B9 /* concurrent_vector_const_forward_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_const_forward_iterator.h; sourceTree = "<group>"; };
@@ -550,8 +552,6 @@
 		81C9250B1A5C3ADB00B3AE11 /* ConstantParticleProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstantParticleProperty.h; sourceTree = "<group>"; };
 		81C9250C1A5C3ADB00B3AE11 /* CurveParticleProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurveParticleProperty.h; sourceTree = "<group>"; };
 		81C9250D1A5C3ADB00B3AE11 /* ParticleProperty.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleProperty.h; sourceTree = "<group>"; };
-		81C9250E1A5C3ADB00B3AE11 /* ParticlePropertyCurveFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticlePropertyCurveFunctions.cpp; sourceTree = "<group>"; };
-		81C9250F1A5C3ADB00B3AE11 /* ParticlePropertyCurveFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticlePropertyCurveFunctions.h; sourceTree = "<group>"; };
 		81C925101A5C3ADB00B3AE11 /* ParticlePropertyFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticlePropertyFactory.h; sourceTree = "<group>"; };
 		81C925111A5C3ADB00B3AE11 /* ParticlePropertyFactoryImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticlePropertyFactoryImpl.cpp; sourceTree = "<group>"; };
 		81C925121A5C3ADB00B3AE11 /* ParticlePropertyFactoryImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticlePropertyFactoryImpl.h; sourceTree = "<group>"; };
@@ -1480,8 +1480,6 @@
 				81C9250B1A5C3ADB00B3AE11 /* ConstantParticleProperty.h */,
 				81C9250C1A5C3ADB00B3AE11 /* CurveParticleProperty.h */,
 				81C9250D1A5C3ADB00B3AE11 /* ParticleProperty.h */,
-				81C9250E1A5C3ADB00B3AE11 /* ParticlePropertyCurveFunctions.cpp */,
-				81C9250F1A5C3ADB00B3AE11 /* ParticlePropertyCurveFunctions.h */,
 				81C925101A5C3ADB00B3AE11 /* ParticlePropertyFactory.h */,
 				81C925111A5C3ADB00B3AE11 /* ParticlePropertyFactoryImpl.cpp */,
 				81C925121A5C3ADB00B3AE11 /* ParticlePropertyFactoryImpl.h */,
@@ -1823,6 +1821,8 @@
 		81D8B28E1962E0EB0010DA84 /* Math */ = {
 			isa = PBXGroup;
 			children = (
+				8141E52B1B56788900259FAD /* CurveFunctions.cpp */,
+				8141E52C1B56788900259FAD /* CurveFunctions.h */,
 				81D8B28F1962E0EB0010DA84 /* Geometry */,
 				81D8B2961962E0EB0010DA84 /* MathUtils.cpp */,
 				81D8B2971962E0EB0010DA84 /* MathUtils.h */,
@@ -2986,6 +2986,7 @@
 				81C925421A5C3C3500B3AE11 /* RNGContainer.mm in Sources */,
 				81D8B46E1962E0EC0010DA84 /* Renderer.cpp in Sources */,
 				814F240B1A9B96560053ADC5 /* TextIcon.cpp in Sources */,
+				8141E52D1B56788900259FAD /* CurveFunctions.cpp in Sources */,
 				81D8B6D81962E0F70010DA84 /* TextureUnitSystem.cpp in Sources */,
 				81D8B49C1962E0EC0010DA84 /* CubemapResourceOptions.cpp in Sources */,
 				81E258991A5D38EF0020264E /* Component.cpp in Sources */,
@@ -3100,7 +3101,6 @@
 				81E258F61A5D43C20020264E /* LayoutDef.cpp in Sources */,
 				81C925231A5C3ADB00B3AE11 /* ParticleDrawable.cpp in Sources */,
 				819630B21A3A0D5400475D76 /* HttpDelegate.mm in Sources */,
-				81C925371A5C3ADB00B3AE11 /* ParticlePropertyCurveFunctions.cpp in Sources */,
 				81D8B4261962E0EC0010DA84 /* NotificationManager.cpp in Sources */,
 				81D8B4801962E0EC0010DA84 /* CSModelProvider.cpp in Sources */,
 				8138A8F41A5804AA00C81462 /* CkSound.cpp in Sources */,

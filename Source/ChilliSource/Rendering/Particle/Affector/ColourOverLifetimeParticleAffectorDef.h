@@ -55,7 +55,17 @@ namespace ChilliSource
 		class ColourOverLifetimeParticleAffectorDef final : public ParticleAffectorDef
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(ColourOverLifetimeParticleAffectorDef);
+            CS_DECLARE_NAMEDTYPE(ColourOverLifetimeParticleAffectorDef);
+            //----------------------------------------------------------------
+            /// Definition of an intermediate colour of a single particle.
+            ///
+            /// @author Nicolas Tanda
+            //----------------------------------------------------------------
+            struct IntermediateColour final
+            {
+                ParticlePropertyUPtr<Core::Colour> m_colourProperty;
+                ParticlePropertyUPtr<f32> m_timeProperty;
+            };
 			//----------------------------------------------------------------
 			/// Constructor.
 			///
@@ -100,22 +110,37 @@ namespace ChilliSource
 			///
 			/// @return the instance.
 			//----------------------------------------------------------------
-			ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const override;
-			//----------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return A property describing the target colour.
-			//----------------------------------------------------------------
-			const ParticleProperty<Core::Colour>* GetTargetColourProperty() const;
+            ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const override;
+            //----------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A property describing the target colour.
+            //----------------------------------------------------------------
+            const ParticleProperty<Core::Colour>* GetTargetColourProperty() const;
+            //----------------------------------------------------------------
+            /// @author Nicolas Tanda
+            ///
+            /// @return The name of the curve used
+            //----------------------------------------------------------------
+            const std::string& GetCurveName() const;
+            //----------------------------------------------------------------
+            /// @author Nicolas Tanda
+            ///
+            /// @return An array of intermediate colours
+            //----------------------------------------------------------------
+            const IntermediateColour* GetIntermediateColours() const;
 			//----------------------------------------------------------------
 			/// Destructor
 			///
 			/// @author Ian Copland.
 			//----------------------------------------------------------------
 			virtual ~ColourOverLifetimeParticleAffectorDef() {}
-		private:
-
+        private:
+            
+            std::string m_curveName;
 			ParticlePropertyUPtr<Core::Colour> m_targetColourProperty;
+            
+            IntermediateColour m_intermediateColours[2];
 		};
 	}
 }
