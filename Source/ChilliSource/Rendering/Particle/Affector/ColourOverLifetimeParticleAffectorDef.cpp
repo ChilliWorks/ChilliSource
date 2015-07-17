@@ -41,6 +41,9 @@ namespace ChilliSource
             const char k_targetColourProperty[] = "TargetColourProperty";
             const char k_colourProperty[] = "ColourProperty";
             const char k_timeProperty[] = "TimeProperty";
+            
+            const char k_curveKey[] = "Curve";
+            const char k_defaultCurve[] = "Linear";
         }
         
 		CS_DEFINE_NAMEDTYPE(ColourOverLifetimeParticleAffectorDef);
@@ -60,34 +63,23 @@ namespace ChilliSource
 			m_targetColourProperty = ParticlePropertyFactory::CreateProperty<Core::Colour>(jsonValue);
             
             // Intermediate Colours
-            u32 index = 0;
             const auto& jsonArray = in_paramsJson.get(k_intermediateColours, Json::nullValue);
+            m_intermediateColours.reserve(jsonArray.size());
             for(const auto& jsonIntermediateColour : jsonArray)
             {
-                CS_ASSERT(index < 2, "Can't handle more than 2 intermediate colours");
+                m_intermediateColours.push_back(IntermediateColour());
                 
                 const auto& jsonColour = jsonIntermediateColour.get(k_colourProperty, Json::nullValue);
-                m_intermediateColours[index].m_colourProperty = ParticlePropertyFactory::CreateProperty<Core::Colour>(jsonColour);
+                m_intermediateColours.back().m_colourProperty = ParticlePropertyFactory::CreateProperty<Core::Colour>(jsonColour);
                 
                 const auto& jsonTime = jsonIntermediateColour.get(k_timeProperty, Json::nullValue);
-                m_intermediateColours[index].m_timeProperty = ParticlePropertyFactory::CreateProperty<f32>(jsonTime);
-                
-                ++index;
-            }
-            
-            // TODO: ask Ian
-            // Complete unfilled colours
-            while(index < 2)
-            {
-                m_intermediateColours[index].m_colourProperty = ParticlePropertyFactory::CreateProperty<Core::Colour>("0.0 0.0 0.0 0.0");
-                m_intermediateColours[index].m_timeProperty = ParticlePropertyFactory::CreateProperty<f32>("0.0");
-                ++index;
+                m_intermediateColours.back().m_timeProperty = ParticlePropertyFactory::CreateProperty<f32>(jsonTime);
             }
             
             // Curve
-            m_curveName = in_paramsJson.get("Curve", "Linear").asString();
+            m_curveName = in_paramsJson.get(k_curveKey, k_defaultCurve).asString();
 
-			//call the loaded delegate if required.
+			// Call the loaded delegate if required.
 			if (in_asyncDelegate != nullptr)
 			{
 				in_asyncDelegate(this);
@@ -119,7 +111,7 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
-        const ColourOverLifetimeParticleAffectorDef::IntermediateColour* ColourOverLifetimeParticleAffectorDef::GetIntermediateColours() const
+        const std::vector<ColourOverLifetimeParticleAffectorDef::IntermediateColour>& ColourOverLifetimeParticleAffectorDef::GetIntermediateColours() const
         {
             return m_intermediateColours;
         }

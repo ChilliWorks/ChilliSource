@@ -40,9 +40,6 @@ namespace ChilliSource
 	{
         namespace
         {
-            // TODO: somewhere else?
-            const u32 k_maxIntermediateColours = 2;
-            
             //----------------------------------------------------------------
             /// @author Nicolas Tanda
             ///
@@ -59,38 +56,51 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
 		ColourOverLifetimeParticleAffector::ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray)
-			: ParticleAffector(in_affectorDef, in_particleArray), m_particleColourData(in_particleArray->size())
-		{
-			//This can only be created by the ColourOverLifetimeParticleAffectorDef so this is safe.
-			m_colourOverLifetimeAffectorDef = static_cast<const ColourOverLifetimeParticleAffectorDef*>(in_affectorDef);
+		:ParticleAffector(in_affectorDef, in_particleArray)
+        ,m_particleColourData(0)
+        {
+            m_colourOverLifetimeAffectorDef = static_cast<const ColourOverLifetimeParticleAffectorDef*>(in_affectorDef);
+            m_intermediateParticles = m_colourOverLifetimeAffectorDef->GetIntermediateColours().size();
+            m_particleColourData = std::move(Core::dynamic_array<ColourData>(in_particleArray->size() * (2 + m_intermediateParticles)));
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
 		void ColourOverLifetimeParticleAffector::ActivateParticle(u32 in_index, f32 in_effectProgress)
-		{
-			CS_ASSERT(in_index >= 0 && in_index < m_particleColourData.size(), "Index out of bounds!");
-
-			ColourData* colourData = m_particleColourData[in_index];
+        {
+            u32 index = in_index * (2 + m_intermediateParticles);
+			CS_ASSERT(index >= 0 && index < m_particleColourData.size(), "Index out of bounds!");
+            
+			ColourData& colourDataInitial = m_particleColourData[index];
 			const Particle& particle = GetParticleArray()->at(in_index);
             
-            colourData[0].m_time = 0.0f;
-            colourData[0].m_colour = particle.m_colour;
+            colourDataInitial.m_time = 0.0f;
+            colourDataInitial.m_colour = particle.m_colour;
+            ++index;
             
-            for(u32 index = 1; index < k_maxIntermediateColours + 1; ++index)
+            // Get the intermediate colours
+            std::vector<ColourData> intermediateColours;
+            intermediateColours.reserve(m_intermediateParticles);
+            for(const auto& intermediateColour : m_colourOverLifetimeAffectorDef->GetIntermediateColours())
             {
-                colourData[index].m_colour = m_colourOverLifetimeAffectorDef->GetIntermediateColours()[index - 1].m_colourProperty->GenerateValue(in_effectProgress);
-                colourData[index].m_time = m_colourOverLifetimeAffectorDef->GetIntermediateColours()[index - 1].m_timeProperty->GenerateValue(in_effectProgress);
-                
-                // No data for intermediate colour - take previous data
-                if(colourData[index].m_time == 0.0f)
-                {
-                    colourData[index].m_time = colourData[index - 1].m_time;
-                    colourData[index].m_colour = colourData[index - 1].m_colour;
-                }
+                intermediateColours.push_back(ColourData());
+                intermediateColours.back().m_colour = intermediateColour.m_colourProperty->GenerateValue(in_effectProgress);
+                intermediateColours.back().m_time = intermediateColour.m_timeProperty->GenerateValue(in_effectProgress);
             }
             
-            colourData[3].m_time = 1.0f;
-            colourData[3].m_colour = m_colourOverLifetimeAffectorDef->GetTargetColourProperty()->GenerateValue(in_effectProgress);
+            // Sort by time
+            std::sort(intermediateColours.begin(), intermediateColours.end(), ColourOverLifetimeParticleAffector::SortIntermediateColours);
+            
+            // Add to the particles colour data
+            for(const auto& intermediateColour : intermediateColours)
+            {
+                ColourData& colourDataIntermediate = m_particleColourData[index];
+                colourDataIntermediate = intermediateColour;
+                ++index;
+            }
+            
+            ColourData& colourDataTarget = m_particleColourData[index];
+            colourDataTarget.m_time = 1.0f;
+            colourDataTarget.m_colour = m_colourOverLifetimeAffectorDef->GetTargetColourProperty()->GenerateValue(in_effectProgress);
 		}
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
@@ -102,23 +112,33 @@ namespace ChilliSource
 			for (u32 i = 0; i < particleArray->size(); ++i)
 			{
 				Particle& particle = particleArray->at(i);
-				ColourData* colourData = m_particleColourData[i];
                 
                 if(particle.m_lifetime <= 0.0f)
                 {
                     continue;
                 }
+                
+                u32 colourIndex = i * (2 + m_intermediateParticles);
+                ColourData& colourDataInitial = m_particleColourData[colourIndex];
 
                 f32 normalisedLifeProgress = 1.0f - (particle.m_energy / particle.m_lifetime);
                 f32 progress = curveFunction(normalisedLifeProgress);
                 
-                particle.m_colour = colourData[0].m_colour;
-                for(u32 index = 0; index < 3; ++index)
+                particle.m_colour = colourDataInitial.m_colour;
+                for(u32 offset = 0; offset < m_intermediateParticles + 1; ++offset)
                 {
-                    f32 timeProgress = Clamp(Clamp(progress - colourData[index].m_time) / (colourData[index + 1].m_time - colourData[index].m_time));
-                    particle.m_colour += (colourData[index + 1].m_colour - colourData[index].m_colour) * timeProgress;
+                    ColourData& colourData = m_particleColourData[colourIndex + offset];
+                    ColourData& colourDataNext = m_particleColourData[colourIndex + offset + 1];
+                    f32 timeProgress = Clamp(Clamp(progress - colourData.m_time) / (colourDataNext.m_time - colourData.m_time));
+                    particle.m_colour += (colourDataNext.m_colour - colourData.m_colour) * timeProgress;
                 }
 			}
-		}
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        bool ColourOverLifetimeParticleAffector::SortIntermediateColours(const ColourData& in_r, const ColourData& in_l)
+        {
+            return in_r.m_time < in_l.m_time;
+        }
 	}
 }

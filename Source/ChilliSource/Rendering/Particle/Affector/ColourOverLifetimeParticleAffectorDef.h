@@ -58,7 +58,7 @@ namespace ChilliSource
             CS_DECLARE_NAMEDTYPE(ColourOverLifetimeParticleAffectorDef);
             //----------------------------------------------------------------
             /// Definition of an intermediate colour of a single particle.
-            ///
+            ///ß
             /// @author Nicolas Tanda
             //----------------------------------------------------------------
             struct IntermediateColour final
@@ -128,19 +128,19 @@ namespace ChilliSource
             ///
             /// @return An array of intermediate colours
             //----------------------------------------------------------------
-            const IntermediateColour* GetIntermediateColours() const;
+            const std::vector<IntermediateColour>& GetIntermediateColours() const;
 			//----------------------------------------------------------------
 			/// Destructor
 			///
 			/// @author Ian Copland.
 			//----------------------------------------------------------------
 			virtual ~ColourOverLifetimeParticleAffectorDef() {}
-        private:
             
+        private:
             std::string m_curveName;
 			ParticlePropertyUPtr<Core::Colour> m_targetColourProperty;
             
-            IntermediateColour m_intermediateColours[2];
+            std::vector<IntermediateColour> m_intermediateColours;
 		};
 	}
 }

@@ -1,5 +1,5 @@
 //
-//  CurveFunctions.h
+//  Curves.h
 //  Chilli Source
 //  Created by Ian Copland on 29/12/2014.
 //
