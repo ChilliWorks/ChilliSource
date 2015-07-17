@@ -94,8 +94,16 @@ namespace ChilliSource
                 bank = ::CkBank::newBank(absFilePath.c_str(), kCkPathType_FileSystem);
             }
 #else
-            auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
-            bank = ::CkBank::newBank(absFilePath.c_str(), kCkPathType_FileSystem);
+            if (in_storageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_filePath) == false)
+            {
+                auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + in_filePath;
+                bank = ::CkBank::newBank(absFilePath.c_str(), kCkPathType_FileSystem);
+            }
+            else
+            {
+                auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+                bank = ::CkBank::newBank(absFilePath.c_str(), kCkPathType_FileSystem);
+            }
 #endif
 
             if (bank == nullptr)
@@ -128,8 +136,16 @@ namespace ChilliSource
                 bank = ::CkBank::newBankAsync(absFilePath.c_str(), kCkPathType_FileSystem);
             }
 #else
-            auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
-            bank = ::CkBank::newBankAsync(absFilePath.c_str(), kCkPathType_FileSystem);
+            if (in_storageLocation == Core::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(in_filePath) == false)
+            {
+                auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_package) + fileSystem->GetPackageDLCPath() + in_filePath;
+                bank = ::CkBank::newBankAsync(absFilePath.c_str(), kCkPathType_FileSystem);
+            }
+            else
+            {
+                auto absFilePath = fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath;
+                bank = ::CkBank::newBankAsync(absFilePath.c_str(), kCkPathType_FileSystem);
+            }
 #endif
 
             if (bank != nullptr)
