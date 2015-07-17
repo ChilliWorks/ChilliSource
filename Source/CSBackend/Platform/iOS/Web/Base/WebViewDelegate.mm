@@ -94,14 +94,16 @@
     
     if (in_error.code == NSURLErrorNotConnectedToInternet)
     {
-        auto dialogSystem = CSCore::Application::Get()->GetSystem<CSCore::DialogueBoxSystem>();
-        dialogSystem->ShowSystemDialogue(0, [=](u32 in_id, CSCore::DialogueBoxSystem::DialogueResult in_result)
+        auto dialogResultLambda = [=](u32 in_id, CSCore::DialogueBoxSystem::DialogueResult in_result)
         {
             if(webViewSystem)
             {
                 webViewSystem->Dismiss();
             }
-        }, "Error", [NSStringUtils newUTF8StringWithNSString:[in_error localizedDescription]], "OK");
+        };
+        
+        auto dialogSystem = CSCore::Application::Get()->GetSystem<CSCore::DialogueBoxSystem>();
+        dialogSystem->ShowSystemDialogue(0, dialogResultLambda, "Error", [NSStringUtils newUTF8StringWithNSString:[in_error localizedDescription]], "OK");
     }
     else if(webViewSystem)
     {

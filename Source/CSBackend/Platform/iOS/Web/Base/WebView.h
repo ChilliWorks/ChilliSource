@@ -73,8 +73,10 @@ namespace CSBackend
             /// @param The size of the webview in GUI coordinates.
             /// @param The relative size of the dismiss button.
             /// @param The dismissed delegate.
+            /// @param in_customURLClickHandler - The delegate to call when a link is
+            /// clicked on the displayed page
             //---------------------------------------------------------
-            void Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler = nullptr) override;
+            void Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) override;
             //---------------------------------------------------------
             /// Displays the website at the given location on disk in
             /// an in-app web view.
@@ -86,8 +88,10 @@ namespace CSBackend
             /// @param The size of the webview in GUI coordinates.
             /// @param The relative size of the dismiss button.
             /// @param The dismissed delegate.
+            /// @param in_customURLClickHandler - The delegate to call when a link is
+            /// clicked on the displayed page
             //---------------------------------------------------------
-            void PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler = nullptr) override;
+            void PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) override;
             //---------------------------------------------------------
             /// Displays the website at the given Url in an external
             /// browser.

@@ -111,13 +111,13 @@ namespace CSBackend
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void WebView::Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler)
+		void WebView::Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
 
 			m_isPresented = true;
 			m_delegate = in_delegate;
-			m_linkHandlerDelegate = in_customURLClickHandler;
+			m_customLinkHandlerDelegate = in_customLinkHandler;
 
 			CSCore::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
 
@@ -125,7 +125,7 @@ namespace CSBackend
 		}
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
-		void WebView::PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler)
+		void WebView::PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler)
 		{
 			CS_ASSERT(m_isPresented == false, "Cannot present a web view while one is already displayed.");
 
@@ -169,7 +169,7 @@ namespace CSBackend
 
 			m_isPresented = true;
 			m_delegate = in_delegate;
-			m_linkHandlerDelegate = in_customURLClickHandler;
+			m_customLinkHandlerDelegate = in_customLinkHandler;
 
 			CSCore::Vector2 absoluteSize = (m_screen->GetResolution() * in_size.GetRelative()) + in_size.GetAbsolute();
 			WebViewJavaInterface::PresentFromFile(m_index, htmlFileContents, absoluteSize, fullFilePath, anchor, in_dismissButtonRelativeSize);
@@ -216,9 +216,9 @@ namespace CSBackend
 		//------------------------------------------------------------------------------
         bool WebView::OnLinkClicked(const std::string& in_url)
         {
-			if(m_linkHandlerDelegate)
+			if(m_customLinkHandlerDelegate)
 			{
-				return m_linkHandlerDelegate(in_url);
+				return m_customLinkHandlerDelegate(in_url);
 			}
 
 			return false;

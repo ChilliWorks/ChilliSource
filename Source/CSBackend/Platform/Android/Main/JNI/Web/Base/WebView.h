@@ -42,16 +42,16 @@ namespace CSBackend
 {
 	namespace Android
 	{
-		//-------------------------------------------------------
+		//--------------------------------------------------------------------------------------
 		/// The Android backend for the web view.
 		///
 		/// @author S Hendrie
-		//-------------------------------------------------------
+		//--------------------------------------------------------------------------------------
 		class WebView final : public CSWeb::WebView
 		{
 		public:
             CS_DECLARE_NAMEDTYPE(WebView);
-			//---------------------------------------------------------
+			//--------------------------------------------------------------------------------------
 			/// Called when webview has been dismissed. This is for
             /// internal use and should not be called manually by the
             /// user.
@@ -59,9 +59,9 @@ namespace CSBackend
             /// @author S Hendrie
 			///
 			/// @param index of webview
-			//---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
 			static void OnWebViewDismissed(s32 in_index);
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             /// Called from the Java webview to inform the system
             /// that a link on the webview has been clicked. This will
             /// pass the link to any external handlers (if any) and
@@ -75,7 +75,7 @@ namespace CSBackend
             /// @param in_url - URL Clicked
             ///
             /// @return If this link will be handled elsewhere
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             static bool OnLinkClicked(s32 in_index, const std::string& in_url);
             //-------------------------------------------------------
 			/// Queries whether or not this system implements the
@@ -85,80 +85,80 @@ namespace CSBackend
             ///
 			/// @param The interface Id.
 			/// @param Whether system is of given type.
-			//-------------------------------------------------------
+			//--------------------------------------------------------------------------------------
 			bool IsA(CSCore::InterfaceIDType in_interfaceId) const override;
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             /// Displays the website at the given URL in an in-app
             /// web view.
             ///
             /// @author S Hendrie
             ///
-            /// @param The Url.
-            /// @param The size of the webview in GUI coordinates.
-            /// @param The relative size of the dismiss button.
-            /// @param The dismissed delegate.
-            /// @param The delegate to call when a link is clicked on
+            /// @param in_url - The Url.
+            /// @param in_size - The size of the webview in GUI coordinates.
+            /// @param in_dismissButtonRelativeSize - The relative size of the dismiss button.
+            /// @param in_delegate - The dismissed delegate.
+            /// @param in_customLinkHandler - The delegate to call when a link is clicked on
             /// the displayed page
-            //---------------------------------------------------------
-            void Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler = nullptr) override;
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
+            void Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) override;
+            //--------------------------------------------------------------------------------------
             /// Displays the website at the given location on disk in
             /// an in-app web view.
             ///
             /// @author S Hendrie
             ///
-            /// @param The storage location.
-            /// @param The file path.
-            /// @param The size of the webview in GUI coordinates.
-            /// @param The relative size of the dismiss button.
-            /// @param The dismissed delegate.
-            /// @param The delegate to call when a link is clicked on
+            /// @param in_storageLocation - The storage location.
+            /// @param in_filePath - The file path.
+            /// @param in_size - The size of the webview in GUI coordinates.
+            /// @param in_dismissButtonRelativeSize - The relative size of the dismiss button.
+            /// @param in_delegate - The dismissed delegate.
+            /// @param in_customLinkHandler - The delegate to call when a link is clicked on
             /// the displayed page
-            //---------------------------------------------------------
-            void PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler = nullptr) override;
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
+            void PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) override;
+            //--------------------------------------------------------------------------------------
             /// Displays the website at the given Url in an external
             /// browser.
             ///
             /// @author S Hendrie
             ///
             /// @param The Url.
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             void PresentInExternalBrowser(const std::string& in_url) override;
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             /// Dismiss the web view if it is currently presented.
             ///
             /// @author S Hendrie
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             void Dismiss() override;
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             /// @author S Hendrie
             ///
             /// @return Whether or not the web view is currently
             /// presented.
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             bool IsPresented() const override;
 		private:
             friend CSWeb::WebViewUPtr CSWeb::WebView::Create();
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             /// Private constructor to force use of factory method
             ///
             /// @author S Downie
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             WebView();
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             /// Called when the the owning state is initialised.
             ///
             /// @author Ian Copland
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
 			void OnInit() override;
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             /// Called when the webview is dismissed.
             ///
             /// @author Ian Copland
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             void OnWebViewDismissed();
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             /// Called from the Java webview to inform the system
             /// that a link on the webview has been clicked. This will
             /// pass the link to any external handlers (if any) and
@@ -169,13 +169,13 @@ namespace CSBackend
             /// @param in_url - URL Clicked
             ///
             /// @return If this link will be handled elsewhere
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             bool OnLinkClicked(const std::string& in_url);
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
             /// Called when the the owning state is destroyed.
             ///
             /// @author Ian Copland
-            //---------------------------------------------------------
+            //--------------------------------------------------------------------------------------
 			void OnDestroy() override;
 		private:
 
@@ -185,7 +185,7 @@ namespace CSBackend
 			const s32 m_index;
 
 			DismissedDelegate m_delegate;
-            CustomLinkHandlerDelegate m_linkHandlerDelegate;
+            CustomLinkHandlerDelegate m_customLinkHandlerDelegate;
 
 			static s32 s_nextIndex;
 			static std::unordered_map<s32, WebView*> s_indexToWebViewMap;

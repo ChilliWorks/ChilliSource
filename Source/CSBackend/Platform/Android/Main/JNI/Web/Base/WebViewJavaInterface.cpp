@@ -41,36 +41,36 @@ extern "C"
 	///
 	/// @author HMcLaughlin
 	///
-	/// @param The jni environment.
-	/// @param The java object calling the function
-	/// @param The request index
+	/// @param in_env - The jni environment.
+	/// @param in_object - The java object calling the function
+	/// @param in_index - The request index
 	///
 	/// @return whether or not the text was accepted.
 	//--------------------------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_web_WebViewNativeInterface_OnWebviewDismissed(JNIEnv* in_env, jobject in_object, u32 in_index);
+	void Java_com_chilliworks_chillisource_web_WebViewNativeInterface_onWebviewDismissed(JNIEnv* in_env, jobject in_object, u32 in_index);
 	//--------------------------------------------------------------------------------------
 	/// Called when a link is clicked from an internal webview
 	///
 	/// @author HMcLaughlin
 	///
-	/// @param The jni environment.
-	/// @param The java object calling the function
-	/// @param The request index
-	/// @param The request URL
+	/// @param in_env - The jni environment.
+	/// @param in_object - The java object calling the function
+	/// @param in_index - The request index
+	/// @param in_url - The request URL
 	///
 	/// @return whether or not the link was handled externally.
 	//--------------------------------------------------------------------------------------
-	bool Java_com_chilliworks_chillisource_web_WebViewNativeInterface_OnLinkClicked(JNIEnv* in_env, jobject in_object, u32 in_index, jstring in_url);
+	bool Java_com_chilliworks_chillisource_web_WebViewNativeInterface_onLinkClicked(JNIEnv* in_env, jobject in_object, u32 in_index, jstring in_url);
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_web_WebViewNativeInterface_OnWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex)
+void Java_com_chilliworks_chillisource_web_WebViewNativeInterface_onWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex)
 {
 	CSBackend::Android::WebView::OnWebViewDismissed(inudwIndex);
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-bool Java_com_chilliworks_chillisource_web_WebViewNativeInterface_OnLinkClicked(JNIEnv* in_env, jobject in_object, u32 in_index, jstring in_url)
+bool Java_com_chilliworks_chillisource_web_WebViewNativeInterface_onLinkClicked(JNIEnv* in_env, jobject in_object, u32 in_index, jstring in_url)
 {
 	return CSBackend::Android::WebView::OnLinkClicked(in_index, CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_url));
 }

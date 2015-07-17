@@ -43,15 +43,19 @@ public class CSWebViewClient extends android.webkit.WebViewClient
 	final String kstrAmazonUrlScheme = "amzn";
 	private String mAnchor;
 	private CSWebView mWebView;
-	//--------------------------------------------------------
-	/// Is Store Deep Link
-	///
-	/// @param The URL string.
-	/// @return Whether or not it is a store deep link.
-	//--------------------------------------------------------
-	public boolean IsStoreDeepLink(final String instrUrl)
+
+	/**
+	 * Is Store Deep Link
+	 *
+	 * @author Steven Hendrie
+	 *
+	 * @param in_url -The URL string.
+	 *
+	 * @return Whether or not it is a store deep link.
+	 */
+	public boolean IsStoreDeepLink(final String in_url)
 	{
-		Uri uri = Uri.parse(instrUrl);
+		Uri uri = Uri.parse(in_url);
 		if (uri != null)
 		{
 			String strScheme = uri.getScheme();
@@ -62,19 +66,19 @@ public class CSWebViewClient extends android.webkit.WebViewClient
 		}
 		return false;
 	}
-	//--------------------------------------------------------
-	/// This intercepts url clicks within the webview and
-	/// ensures they are not opened in an external browser. 
-	/// It will also check if the link was a store deep link 
-	/// and instead  open the store.
-	///
-	/// @author S Hendrie
-	///
-	/// @param in_view - WebView
-	/// @param in_url - The URL string.
-	///
-	/// @return Whether or not it is a store deep link.
-	//--------------------------------------------------------
+	/**
+	 * This intercepts url clicks within the webview and
+	 * ensures they are not opened in an external browser.
+	 * It will also check if the link was a store deep link
+	 * and instead  open the store.
+	 *
+	 * @author Steven Hendrie
+	 *
+	 * @param in_view - WebView
+	 * @param in_url - The URL string.
+	 *
+	 * @return Whether or not we are handling the URL loading
+	 */
 	@Override public boolean shouldOverrideUrlLoading(WebView in_view, String in_url)
 	{
 		Activity activity = CSApplication.get().getActivity();
@@ -89,7 +93,7 @@ public class CSWebViewClient extends android.webkit.WebViewClient
 			CSWebView webView = (CSWebView) in_view;
 			if(webView != null)
 			{
-				boolean handledExternally = WebViewNativeInterface.OnLinkClicked(webView.GetIndexID(), in_url);
+				boolean handledExternally = WebViewNativeInterface.onLinkClicked(webView.getIndexID(), in_url);
 				if(handledExternally == false)
 				{
 					in_view.loadUrl(in_url);
@@ -99,14 +103,14 @@ public class CSWebViewClient extends android.webkit.WebViewClient
 		
 	    return true;
 	}
-	//--------------------------------------------------------
-	/// Called when a web page is finished loading
-	///
-	/// @author S Hendrie
-	///
-	/// @param in_view - WebView
-	/// @param in_url - The URL that finished loading.
-	//--------------------------------------------------------
+	/**
+	 * Called when a web page is finished loading
+	 *
+	 * @author Steven Hendrie
+	 *
+	 * @param in_view - WebView
+	 * @param in_url - The URL that finished loading.
+	 */
 	@Override
 	public void onPageFinished(WebView in_view, String in_url)
 	{
@@ -119,22 +123,24 @@ public class CSWebViewClient extends android.webkit.WebViewClient
 			mAnchor = "";
 		}
 	}
-	//--------------------------------------------------------
-	/// Called when a web page is finished loading
-	///
-	/// @author S Hendrie
-	///
-	/// @param in_view - WebView
-	/// @param in_errorCode - Error code reported
-	/// @param in_description - String description of the error
-	/// @param in_failingUrl - The URL that failed to load.
-	//--------------------------------------------------------
+	/**
+	 * Called when a web page is finished loading
+	 *
+	 * @author Steven Hendrie
+	 *
+	 * @param in_view - WebView
+	 * @param in_errorCode - Error code reported
+	 * @param in_description - String description of the error
+	 * @param in_failingUrl - The URL that failed to load.
+	 */
 	@Override
 	public void onReceivedError(WebView in_view, int in_errorCode, String in_description, String in_failingUrl)
 	{
 		WebViewNativeInterface.RemoveActivityIndicator();
 
 		final CSWebView webView = (CSWebView) in_view;
+		assert (webView != null) : "Should always be castable to CSWebView!";
+
 		if(webView != null)
 		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(webView.getContext());
@@ -144,7 +150,7 @@ public class CSWebViewClient extends android.webkit.WebViewClient
 					{
 						public void onClick(DialogInterface dialog, int id)
 						{
-							WebViewNativeInterface.OnWebviewDismissed(webView.GetIndexID());
+							WebViewNativeInterface.onWebviewDismissed(webView.getIndexID());
 						}
 					});
 

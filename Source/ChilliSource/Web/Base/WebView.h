@@ -51,13 +51,13 @@ namespace ChilliSource
         {
         public:
             CS_DECLARE_NAMEDTYPE(WebViewActivity);
-            //-------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// A delegate called when the webview is dismissed.
             ///
             /// @author S Downie
-            //-------------------------------------------------------
+            //------------------------------------------------------------------------------
             using DismissedDelegate = std::function<void()>;
-            //-------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// A delegate called when a link is clicked on an
             /// internal webview.
             ///
@@ -68,9 +68,9 @@ namespace ChilliSource
             /// @return True if the URL will be handled by the
             /// delegate owner, False will allow the webview to
             /// display as normal
-            //-------------------------------------------------------
+            //------------------------------------------------------------------------------
             using CustomLinkHandlerDelegate = std::function<bool(const std::string& in_url)>;
-            //---------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// Displays the website at the given URL in an in-app
             /// web view.
             ///
@@ -78,13 +78,14 @@ namespace ChilliSource
             ///
             /// @param in_url - The Url.
             /// @param in_size - The size of the webview in GUI coordinates.
-            /// @param in_dismissButtonRelativeSize - The relative size of the dismiss button.
+            /// @param in_dismissButtonRelativeSize - The relative size of the dismiss
+            /// button.
             /// @param in_delegate - The dismissed delegate.
-            /// @param in_customURLClickHandler - The delegate to call when a link is clicked on
-            /// the displayed page
-            //---------------------------------------------------------
-            virtual void Present(const std::string& in_url, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler = nullptr) = 0;
-            //---------------------------------------------------------
+            /// @param in_customURLClickHandler - The delegate to call when a link is
+            /// clicked on the displayed page
+            //------------------------------------------------------------------------------
+            virtual void Present(const std::string& in_url, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) = 0;
+            //------------------------------------------------------------------------------
             /// Displays the website at the given location on disk in
             /// an in-app web view.
             ///
@@ -93,50 +94,51 @@ namespace ChilliSource
             /// @param in_storageLocation - The storage location.
             /// @param in_filePath - The file path.
             /// @param in_size - The size of the webview in GUI coordinates.
-            /// @param in_dismissButtonRelativeSize - The relative size of the dismiss button.
+            /// @param in_dismissButtonRelativeSize - The relative size of the dismiss
+            /// button.
             /// @param in_delegate - The dismissed delegate.
-            /// @param in_customURLClickHandler - The delegate to call when a link is clicked on
-            /// the displayed page
-            //---------------------------------------------------------
-            virtual void PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler = nullptr) = 0;
-            //---------------------------------------------------------
+            /// @param in_customURLClickHandler - The delegate to call when a link is
+            /// clicked on the displayed page
+            //------------------------------------------------------------------------------
+            virtual void PresentFromFile(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler = nullptr) = 0;
+            //------------------------------------------------------------------------------
             /// Displays the website at the given Url in an external
             /// browser.
             ///
             /// @author S Downie
             ///
             /// @param The Url.
-            //---------------------------------------------------------
+            //------------------------------------------------------------------------------
             virtual void PresentInExternalBrowser(const std::string& in_url) = 0;
-            //---------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// Dismiss the web view if it is currently presented.
             ///
             /// @author S Downie
-            //---------------------------------------------------------
+            //------------------------------------------------------------------------------
             virtual void Dismiss() = 0;
-            //---------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return Whether or not the web view is currently
             /// presented.
-            //---------------------------------------------------------
+            //------------------------------------------------------------------------------
             virtual bool IsPresented() const = 0;
             
         protected:
             friend class Core::State;
-            //-------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// Create the platform dependent backend.
             ///
             /// @author S Downie
             ///
             /// @return New backend instance
-            //-------------------------------------------------------
+            //------------------------------------------------------------------------------
             static WebViewUPtr Create();
-            //-------------------------------------------------------
+            //------------------------------------------------------------------------------
             /// protected constructor to force use of factory method
             ///
             /// @author S Downie
-            //-------------------------------------------------------
+            //------------------------------------------------------------------------------
             WebView() = default;
         };
     }

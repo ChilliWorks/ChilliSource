@@ -32,56 +32,52 @@ import android.content.Context;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 
-//------------------------------------------------------
-/// Web View
-///
-/// @author Ian Copland
-///
-/// The Chilli Source implementation of a Web View. This differs 
-/// from a standard webview by allowing the back button to close 
-/// ∂the webview.
-//------------------------------------------------------
+/**
+ * The Chilli Source implementation of a Web View. This differs
+ * from a standard webview by allowing the back button to close
+ * the webview.
+ *
+ * @author Steven Hendrie
+ */
 public class CSWebView extends android.webkit.WebView
 {
 	private int m_indexID;
 
-	//------------------------------------------------------
-	/// Constructor
-	///
-	/// @author Ian Copland
-	///
-	/// @param in_context - The context used to create the Web View.
-	/// @param in_index - The index of this webview.
-	//------------------------------------------------------
+	/**
+	 * Constructor.
+	 *
+	 * @author Steven Hendrie
+	 *
+	 * @param in_context - The URI which should have its MIME type checked.
+	 * @param in_index - The MIME Type. Currently this always returns null.
+	 */
 	public CSWebView(Context in_context, int in_index)
 	{
 		super(in_context);
 
 		m_indexID = in_index;
 	}
-	//------------------------------------------------------
-	/// Gets the index of this WebView
-	///
-	/// @author HMcLaughlin
-	///
-	/// @return The index id given to this instance
-	//------------------------------------------------------
-	public int GetIndexID()
+	/**
+	 * Gets the index of this WebView.
+	 *
+	 * @author HMcLaughlin
+	 *
+	 * @return The index id given to this instance.
+	 */
+	public int getIndexID()
 	{
 		return m_indexID;
 	}
-	//------------------------------------------------------
-	/// On Key Down
-	///
-	/// @author Ian Copland
-	///
-	/// This is called whenever a key is pressed when this
-	/// is the top view.
-	///
-	/// @param in_keyCode - The code for the given key.
-	/// @param in_keyEvent - The key event.
-	/// @param Whether or not the key event should be consumed.
-	//------------------------------------------------------
+	/**
+	 * On Key Down.
+	 *
+	 * @author Steven Hendrie
+	 *
+	 * @param in_keyCode - The code for the given key.
+	 * @param in_keyEvent - The key event.
+	 *
+	 * @return Whether or not the key event should be consumed.
+	 */
 	@Override public boolean onKeyDown(int in_keyCode, KeyEvent in_keyEvent)
 	{
 		if (in_keyCode == KeyEvent.KEYCODE_BACK)

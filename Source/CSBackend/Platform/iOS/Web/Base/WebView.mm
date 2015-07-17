@@ -88,7 +88,7 @@ namespace CSBackend
         }
 		//-----------------------------------------------
 		//-----------------------------------------------
-		void WebView::Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler)
+		void WebView::Present(const std::string& in_url, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler)
 		{
             @autoreleasepool
             {
@@ -96,7 +96,7 @@ namespace CSBackend
                 
                 m_isPresented = true;
                 m_dismissedDelegate = in_delegate;
-                m_linkHandlerDelegate = in_customURLClickHandler;
+                m_linkHandlerDelegate = in_customLinkHandler;
                 m_dismissButtonRelativeSize = in_dismissButtonRelativeSize;
                 
                 if(!m_webView)
@@ -122,7 +122,7 @@ namespace CSBackend
 		}
 		//-----------------------------------------------
 		//-----------------------------------------------
-		void WebView::PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customURLClickHandler)
+		void WebView::PresentFromFile(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::UnifiedVector2& in_size, f32 in_dismissButtonRelativeSize, const DismissedDelegate& in_delegate, const CustomLinkHandlerDelegate& in_customLinkHandler)
 		{
             @autoreleasepool
             {
