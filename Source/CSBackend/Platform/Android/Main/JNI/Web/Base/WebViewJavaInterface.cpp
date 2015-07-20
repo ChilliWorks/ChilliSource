@@ -30,27 +30,49 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Web/Base/WebViewJavaInterface.h>
 
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <CSBackend/Platform/Android/Main/JNI/Web/Base/WebView.h>
 
 //function definitions
 extern "C"
 {
-	void Java_com_chilliworks_chillisource_web_WebViewNativeInterface_OnWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex);
+	//--------------------------------------------------------------------------------------
+	/// Called when the webview is dismissed
+	///
+	/// @author HMcLaughlin
+	///
+	/// @param in_env - The jni environment.
+	/// @param in_object - The java object calling the function
+	/// @param in_index - The request index
+	///
+	/// @return whether or not the text was accepted.
+	//--------------------------------------------------------------------------------------
+	void Java_com_chilliworks_chillisource_web_WebViewNativeInterface_onWebviewDismissed(JNIEnv* in_env, jobject in_object, u32 in_index);
+	//--------------------------------------------------------------------------------------
+	/// Called when a link is clicked from an internal webview
+	///
+	/// @author HMcLaughlin
+	///
+	/// @param in_env - The jni environment.
+	/// @param in_object - The java object calling the function
+	/// @param in_index - The request index
+	/// @param in_url - The request URL
+	///
+	/// @return whether or not the link was handled externally.
+	//--------------------------------------------------------------------------------------
+	bool Java_com_chilliworks_chillisource_web_WebViewNativeInterface_onLinkClicked(JNIEnv* in_env, jobject in_object, u32 in_index, jstring in_url);
 }
 //--------------------------------------------------------------------------------------
-/// On Update Text
-///
-/// Interface function called from java. This is called when the keyboard text has been
-/// updated.
-///
-/// @param The jni environment.
-/// @param the java object calling the function
-/// @param the updated keyboard text
-/// @return whether or not the text was accepted.
 //--------------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_web_WebViewNativeInterface_OnWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex)
+void Java_com_chilliworks_chillisource_web_WebViewNativeInterface_onWebviewDismissed(JNIEnv* inpEnv, jobject thiz, u32 inudwIndex)
 {
 	CSBackend::Android::WebView::OnWebViewDismissed(inudwIndex);
+}
+//--------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------
+bool Java_com_chilliworks_chillisource_web_WebViewNativeInterface_onLinkClicked(JNIEnv* in_env, jobject in_object, u32 in_index, jstring in_url)
+{
+	return CSBackend::Android::WebView::OnLinkClicked(in_index, CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_url));
 }
 
 namespace CSBackend

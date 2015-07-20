@@ -384,7 +384,6 @@ namespace CSBackend
 			std::wstring filePath = WindowsStringUtils::ConvertStandardPathToWindows(GetAbsolutePathToStorageLocation(in_storageLocation) + in_filePath);
 			if (WindowsFileUtils::WindowsDeleteFile(filePath.c_str()) == FALSE)
 			{
-				CS_LOG_ERROR("File System: Failed to delete file '" + in_filePath + "'");
 				return false;
 			}
 
@@ -399,7 +398,6 @@ namespace CSBackend
 			std::string directoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
 			if (CSBackend::Windows::DeleteDirectory(directoryPath) == false)
 			{
-				CS_LOG_ERROR("File System: Failed to delete directory '" + in_directoryPath + "'");
 				return false;
 			}
 

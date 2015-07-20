@@ -28,56 +28,68 @@
 
 package com.chilliworks.chillisource.web;
 
-import com.chilliworks.chillisource.web.WebViewNativeInterface;
-
 import android.content.Context;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 
-//============================================================
-/// Web View
-///
-/// The Chilli Source implementation of a Web View. This differs 
-/// from a standard webview by allowing the back button to close 
-/// ∂the webview.
-//============================================================
+/**
+ * The Chilli Source implementation of a Web View. This differs
+ * from a standard webview by allowing the back button to close
+ * the webview.
+ *
+ * @author Steven Hendrie
+ */
 public class CSWebView extends android.webkit.WebView
 {
-	private int mdwIndex;
+	private int m_indexID;
 
-	//------------------------------------------------------
-	/// Constructor
-	///
-	/// @param The context used to create the Web View.
-	/// @param The index of this webview.
-	//------------------------------------------------------
-	public CSWebView(Context inContext, int indwIndex) 
+	/**
+	 * Constructor.
+	 *
+	 * @author Steven Hendrie
+	 *
+	 * @param in_context - The URI which should have its MIME type checked.
+	 * @param in_index - The MIME Type. Currently this always returns null.
+	 */
+	public CSWebView(Context in_context, int in_index)
 	{
-		super(inContext);
-		mdwIndex = indwIndex;
+		super(in_context);
+
+		m_indexID = in_index;
 	}
-	//------------------------------------------------------
-	/// On Key Down
-	///
-	/// This is called whenever a key is pressed when this
-	/// is the top view.
-	///
-	/// @param The code for the given key.
-	/// @param The key event.
-	/// @param Whether or not the key event should be consumed.
-	//------------------------------------------------------
-	@Override public boolean onKeyDown(int indwKeyCode, KeyEvent inKeyEvent) 
+	/**
+	 * Gets the index of this WebView.
+	 *
+	 * @author HMcLaughlin
+	 *
+	 * @return The index id given to this instance.
+	 */
+	public int getIndexID()
 	{
-		if (indwKeyCode == KeyEvent.KEYCODE_BACK)
+		return m_indexID;
+	}
+	/**
+	 * On Key Down.
+	 *
+	 * @author Steven Hendrie
+	 *
+	 * @param in_keyCode - The code for the given key.
+	 * @param in_keyEvent - The key event.
+	 *
+	 * @return Whether or not the key event should be consumed.
+	 */
+	@Override public boolean onKeyDown(int in_keyCode, KeyEvent in_keyEvent)
+	{
+		if (in_keyCode == KeyEvent.KEYCODE_BACK)
 		{
 			ViewGroup viewGroup = (ViewGroup)(getParent());
 			if (viewGroup != null)
 			{
 				viewGroup.removeView(this);
-				WebViewNativeInterface.Dismiss(mdwIndex);
+				WebViewNativeInterface.Dismiss(m_indexID);
 			}
 			return true;
 		}
-		return super.onKeyDown(indwKeyCode, inKeyEvent);
+		return super.onKeyDown(in_keyCode, in_keyEvent);
 	}
 }

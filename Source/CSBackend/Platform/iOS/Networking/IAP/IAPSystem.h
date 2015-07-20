@@ -167,7 +167,7 @@ namespace CSBackend
             ///
             /// @author S Downie
             //---------------------------------------------------------------
-            void RestoreManagedPurchases() override;            
+            void RestoreManagedPurchases() override;
             //---------------------------------------------------------------
             /// @author T Kane
             ///

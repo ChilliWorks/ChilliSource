@@ -43,7 +43,25 @@ import com.chilliworks.chillisource.core.ResourceHelper;
 
 public class WebViewNativeInterface 
 {
-	native public static void OnWebviewDismissed(int inudwIndex);
+	/**
+	 * Called when a webview is dimissed
+	 *
+	 * @author Steven Hendrie
+	 *
+	 * @param in_index - WebView index.
+	 */
+	native public static void onWebviewDismissed(int in_index);
+	/**
+	 * Called when a link is clicked on a webview
+	 *
+	 * @author Steven Hendrie
+	 *
+	 * @param in_index - WebView index.
+	 * @param in_linkURL - URL of the link to be handled.
+	 *
+	 * @return Whether the URL is handled externally.
+	 */
+	native public static boolean onLinkClicked(int in_index, String in_linkURL);
 	
 	private static CSActivity msActivity;
 	private static RelativeLayout msWebviewHolder;
@@ -176,7 +194,7 @@ public class WebViewNativeInterface
 		    }
 		});	
 		
-		WebViewNativeInterface.OnWebviewDismissed(inudwIndex);
+		WebViewNativeInterface.onWebviewDismissed(inudwIndex);
 	}
 	//---------------------------------------------------------------------
 	/// Add Activity Indicator

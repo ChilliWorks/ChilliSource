@@ -348,9 +348,20 @@ namespace ChilliSource
             /// @author S Downie
             //-----------------------------------------------------------
             void SetTextureSizeCacheValid();
+            //------------------------------------------------------------------------------
+            /// Calculates the frame centre and size for the current texture atlas. Vertical
+            /// and horizontal flipping are taken into account when calculating the centre.
+            /// This should only be called when there is a texture atlas, otherwise the
+            /// app is considered to be in an irrecoverable state and will exit.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param out_centre - [Output] The frame centre from the centre of the sprite.
+            /// @param out_size - [Output] The sprite frame size.
+            //------------------------------------------------------------------------------
+            void CalcFrameCentreAndSize(Core::Vector2& out_centre, Core::Vector2& out_size) const;
 
 		private:
-        
             Core::EventConnectionUPtr m_transformChangedConnection;
         
             TextureAtlasCSPtr m_textureAtlas;

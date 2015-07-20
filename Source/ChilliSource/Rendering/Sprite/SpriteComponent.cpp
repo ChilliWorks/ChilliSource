@@ -353,6 +353,7 @@ namespace ChilliSource
 		void SpriteComponent::SetFlippedHorizontally(bool in_flip)
 		{
             m_flippedHorizontally = in_flip;
+            m_vertexPositionsValid = false;
             
             UpdateVertexUVs(m_uvs);
 		}
@@ -367,6 +368,7 @@ namespace ChilliSource
 		void SpriteComponent::SetFlippedVertically(bool in_flip)
 		{
             m_flippedVertically = in_flip;
+            m_vertexPositionsValid = false;
             
             UpdateVertexUVs(m_uvs);
 		}
@@ -475,56 +477,41 @@ namespace ChilliSource
         //-----------------------------------------------------------
 		void SpriteComponent::UpdateVertexPositions()
         {
-            Core::Vector4 offsetTL;
-            Core::Vector2 transformedSize;
+            Core::Vector2 frameCenter;
+            Core::Vector2 frameSize;
             if(m_textureAtlas != nullptr && m_hashedTextureAtlasId > 0)
             {
-                const auto& frame = m_textureAtlas->GetFrame(m_hashedTextureAtlasId);
-                transformedSize = m_sizePolicyDelegate(m_originalSize, frame.m_originalSize);
-                
-                Core::Vector2 offsetTL2;
-                offsetTL2.x = (-frame.m_originalSize.x * 0.5f) + (frame.m_croppedSize.x * 0.5f) + frame.m_offset.x;
-                offsetTL2.y = (frame.m_originalSize.y * 0.5f) - (frame.m_croppedSize.y * 0.5f) - frame.m_offset.y;
-                
-                //Convert offset from texel space to local sprite space
-                offsetTL2 = transformedSize/frame.m_originalSize * offsetTL2;
-                transformedSize = transformedSize/frame.m_originalSize * frame.m_croppedSize;
-                
-                offsetTL = Core::Vector4(offsetTL2.x, offsetTL2.y, 0.0f, 0.0f);
+                CalcFrameCentreAndSize(frameCenter, frameSize);
             }
             else if(mpMaterial != nullptr && mpMaterial->GetTexture() != nullptr)
             {
                 auto texture = mpMaterial->GetTexture().get();
-                transformedSize = m_sizePolicyDelegate(m_originalSize, Core::Vector2((f32)texture->GetWidth(), (f32)texture->GetHeight()));
+                frameSize = m_sizePolicyDelegate(m_originalSize, Core::Vector2((f32)texture->GetWidth(), (f32)texture->GetHeight()));
             }
             
             const Core::Matrix4& worldTransform = GetEntity()->GetTransform().GetWorldTransform();
+			Core::Vector2 halfFrameSize(frameSize.x * 0.5f, frameSize.y * 0.5f);
+			Core::Vector2 alignedPosition = -GetAnchorPoint(m_originAlignment, halfFrameSize);
+            Core::Vector4 vertexCentre(alignedPosition.x + frameCenter.x, alignedPosition.y + frameCenter.y, 0.0f, 1.0f);
             
-			Core::Vector2 vHalfSize(transformedSize.x * 0.5f, transformedSize.y * 0.5f);
-			Core::Vector2 vAlignedPos = -GetAnchorPoint(m_originAlignment, vHalfSize);
+            //TL
+            Core::Vector4 vertexOffset(-halfFrameSize.x, halfFrameSize.y, 0.0f, 0.0f);
+			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos = (vertexCentre + vertexOffset) * worldTransform;
             
-            Core::Vector4 vCentrePos(vAlignedPos.x, vAlignedPos.y, 0, 0);
-            Core::Vector4 vTemp(-vHalfSize.x, vHalfSize.y, 0, 1.0f);
-			vTemp += (vCentrePos + offsetTL);
-			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topLeft].vPos = vTemp * worldTransform;
+            //TR
+            vertexOffset.x = halfFrameSize.x;
+            vertexOffset.y = halfFrameSize.y;
+			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos = (vertexCentre + vertexOffset) * worldTransform;
             
-            vTemp.x = vHalfSize.x;
-            vTemp.y = vHalfSize.y;
-
-			vTemp += (vCentrePos + offsetTL);
-			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vPos = vTemp * worldTransform;
+            //BL
+            vertexOffset.x = -halfFrameSize.x;
+            vertexOffset.y = -halfFrameSize.y;
+			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos = (vertexCentre + vertexOffset) * worldTransform;
             
-            vTemp.x = -vHalfSize.x;
-            vTemp.y = -vHalfSize.y;
-
-            vTemp += (vCentrePos + offsetTL);
-			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomLeft].vPos = vTemp * worldTransform;
-            
-            vTemp.x = vHalfSize.x;
-            vTemp.y = -vHalfSize.y;
-
-			vTemp += (vCentrePos + offsetTL);
-			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos = vTemp * worldTransform;
+            //BR
+            vertexOffset.x = halfFrameSize.x;
+            vertexOffset.y = -halfFrameSize.y;
+			m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vPos = (vertexCentre + vertexOffset) * worldTransform;
 		}
         //-----------------------------------------------------------
         //-----------------------------------------------------------
@@ -553,6 +540,37 @@ namespace ChilliSource
             m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_topRight].vTex.y = transformedUVs.m_v;
             m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.x = transformedUVs.m_u + transformedUVs.m_s;
             m_spriteData.sVerts[(u32)SpriteBatch::Verts::k_bottomRight].vTex.y = transformedUVs.m_v + transformedUVs.m_t;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void SpriteComponent::CalcFrameCentreAndSize(Core::Vector2& out_centre, Core::Vector2& out_size) const
+        {
+            CS_ASSERT((m_textureAtlas != nullptr && m_hashedTextureAtlasId > 0), "Texture atlas and atlas Id must be valid.");
+            
+            const auto& frame = m_textureAtlas->GetFrame(m_hashedTextureAtlasId);
+            Core::Vector2 spriteSize = m_sizePolicyDelegate(m_originalSize, frame.m_originalSize);
+            
+            if (m_flippedHorizontally == true)
+            {
+                out_centre.x = (frame.m_originalSize.x * 0.5f) - frame.m_offset.x - (frame.m_croppedSize.x * 0.5f);
+            }
+            else
+            {
+                out_centre.x = (-frame.m_originalSize.x * 0.5f) +  frame.m_offset.x + (frame.m_croppedSize.x * 0.5f);
+            }
+            
+            if (m_flippedVertically == true)
+            {
+                out_centre.y = (-frame.m_originalSize.y * 0.5f) + frame.m_offset.y + (frame.m_croppedSize.y * 0.5f);
+            }
+            else
+            {
+                out_centre.y = (frame.m_originalSize.y * 0.5f) - frame.m_offset.y - (frame.m_croppedSize.y * 0.5f);
+            }
+            
+            Core::Vector2 frameScale = spriteSize / frame.m_originalSize;
+            out_centre = out_centre * frameScale;
+            out_size = frame.m_croppedSize * frameScale;
         }
 	}
 }
