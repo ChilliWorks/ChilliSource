@@ -69,6 +69,19 @@ namespace ChilliSource
 			/// @param The value to check.
 			//------------------------------------------------------------------------------
 			template <typename TValueType> void Remove(std::vector<TValueType>& in_vector, TValueType in_value);
+            //------------------------------------------------------------------------------
+            /// Tests that two vectors have the same contents. Both must have identical
+            /// contents and be the same size, but the elements do not need to be in the
+            /// same order.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_a - The first vector
+            /// @param in_b - The second vector
+            ///
+            /// @return Whether or not they have the same contents.
+            //------------------------------------------------------------------------------
+            template <typename TValueType> bool EqualContents(const std::vector<TValueType>& in_a, const std::vector<TValueType>& in_b);
 
 			//------------------------------------------------------------------------------
 			//------------------------------------------------------------------------------
@@ -84,7 +97,26 @@ namespace ChilliSource
 				CS_ASSERT(it != in_vector.end(), "Cannot remove the given value from the vector becuase it doesn't exist.");
 
 				in_vector.erase(it);
-			}
+            }
+            //------------------------------------------------------------------------------
+            //------------------------------------------------------------------------------
+            template <typename TValueType> bool EqualContents(const std::vector<TValueType>& in_a, const std::vector<TValueType>& in_b)
+            {
+                if (in_a.size() != in_b.size())
+                {
+                    return false;
+                }
+                
+                for (const auto& itemA : in_a)
+                {
+                    if (CSCore::VectorUtils::Contains(in_b, itemA) == false)
+                    {
+                        return false;
+                    }
+                }
+                
+                return true;
+            }
 		}
 	}
 }
