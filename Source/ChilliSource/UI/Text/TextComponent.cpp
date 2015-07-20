@@ -423,7 +423,7 @@ namespace ChilliSource
             //Create the Text Icon Index entry.
             TextIconIndex iconIndex;
             iconIndex.m_icon = iconIt->second;
-            iconIndex.m_indexInText = out_index;
+            iconIndex.m_indexInText = out_index + out_iconIndices.size();
             out_iconIndices.push_back(iconIndex);
             
             //Make space for the Icon in the string. This doesn't include the text scale since that will be accounted for later.
