@@ -456,7 +456,6 @@ namespace CSBackend
                 
                 if (error != nil)
                 {
-                    CS_LOG_ERROR("File System: Error deleting file '" + in_filePath + "' - " + GetErrorString(error));
                     return false;
                 }
             }
@@ -482,7 +481,6 @@ namespace CSBackend
                 
                 if (error != nil)
                 {
-                    CS_LOG_ERROR("File System: Error deleting file '" + in_directoryPath + "' - " + GetErrorString(error));
                     return false;
                 }
             }
@@ -512,6 +510,11 @@ namespace CSBackend
                 std::sort(output.begin(), output.end());
                 std::vector<std::string>::iterator it = std::unique(output.begin(), output.end());
                 output.resize(it - output.begin());
+                
+                for (auto& filePath : output)
+                {
+                    filePath = CSCore::StringUtils::StandardiseFilePath(filePath);
+                }
             }
             
             return output;
@@ -539,6 +542,11 @@ namespace CSBackend
                 std::sort(output.begin(), output.end());
                 std::vector<std::string>::iterator it = std::unique(output.begin(), output.end());
                 output.resize(it - output.begin());
+                
+                for (auto& directoryPath : output)
+                {
+                    directoryPath = CSCore::StringUtils::StandardiseDirectoryPath(directoryPath);
+                }
             }
             
             return output;
