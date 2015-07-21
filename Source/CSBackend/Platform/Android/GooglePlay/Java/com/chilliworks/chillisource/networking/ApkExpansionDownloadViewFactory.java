@@ -79,12 +79,12 @@ final class ApkExpansionDownloadViewFactory
         }
         catch (ClassNotFoundException e)
         {
-            Logging.logVerbose(ExceptionUtils.ConvertToString(e));
+            Logging.logVerbose(ExceptionUtils.convertToString(e));
             Logging.logFatal("Could not create custom Apk Expansion Download View '" + customViewName + "' because the class doesn't exist.");
         }
         catch (Exception e)
         {
-            Logging.logVerbose(ExceptionUtils.ConvertToString(e));
+            Logging.logVerbose(ExceptionUtils.convertToString(e));
             Logging.logFatal("Could not create custom Apk Expansion Download View '" + customViewName + "' becuase an exception occured during instantiation.");
         }
 

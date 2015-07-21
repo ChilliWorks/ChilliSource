@@ -576,7 +576,7 @@ public class AmazonIAPNativeInterface extends com.chilliworks.chillisource.core.
 		}
 		catch (Exception e)
 		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
+			Logging.logError(ExceptionUtils.convertToString(e));
 		}
 		return strReceipt;
 	}

@@ -150,7 +150,7 @@ public final class LocalNotificationStore
 		}
 		catch (JSONException e)
 		{
-			Logging.logFatal("An exception occurred while reading the local notification json: \n" + ExceptionUtils.ConvertToString(e));
+			Logging.logFatal("An exception occurred while reading the local notification json: \n" + ExceptionUtils.convertToString(e));
 		}
 		
 		return output;
@@ -182,7 +182,7 @@ public final class LocalNotificationStore
 		}
 		catch (JSONException e)
 		{
-			Logging.logFatal("An exception occurred while writing the local notification Json: \n" + ExceptionUtils.ConvertToString(e));
+			Logging.logFatal("An exception occurred while writing the local notification Json: \n" + ExceptionUtils.convertToString(e));
 		}
 	}
 }

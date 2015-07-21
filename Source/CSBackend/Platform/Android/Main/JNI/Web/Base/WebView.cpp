@@ -32,6 +32,7 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Core/File/FileSystem.h>
 #include <CSBackend/Platform/Android/Main/JNI/Web/Base/WebViewJavaInterface.h>
+
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Screen.h>
 #include <ChilliSource/Core/File/FileStream.h>
@@ -133,7 +134,7 @@ namespace CSBackend
             	(in_storageLocation == CSCore::StorageLocation::k_DLC && fileSystem->DoesFileExistInCachedDLC(taggedFilePath) == false))
 			{
 #ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
-				fullFilePath = "content://com.chilliworks.chillisource.core.apkexpansioncontentprovider/" + fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
+				fullFilePath = m_contentProvider->CallStringMethod("getContentPathPrefix") + fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
 #elif defined(CS_ANDROIDFLAVOUR_AMAZON)
 				fullFilePath = "file:///android_asset/" + fileSystem->GetAbsolutePathToStorageLocation(in_storageLocation) + taggedFilePath;
 #else
@@ -181,6 +182,12 @@ namespace CSBackend
 		{
 			m_screen = CSCore::Application::Get()->GetSystem<CSCore::Screen>();
 			s_indexToWebViewMap.emplace(m_index, this);
+
+#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
+			JavaStaticClassDef classDef("com/chilliworks/chillisource/core/ApkExpansionContentProvider");
+			classDef.AddMethod("getContentPathPrefix", "()Ljava/lang/String;");
+			m_contentProvider = JavaStaticClassUPtr(new JavaStaticClass(classDef));
+#endif
 		}
 		//---------------------------------------------------------
         //---------------------------------------------------------

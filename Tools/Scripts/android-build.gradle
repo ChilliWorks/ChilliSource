@@ -28,146 +28,12 @@
 
 apply from: '../../../../ChilliSource/Tools/Scripts/android-build-manifest.gradle'
 apply from: '../../../../ChilliSource/Tools/Scripts/android-build-ndk.gradle'
+apply from: '../../../../ChilliSource/Tools/Scripts/android-build-variant-utils.gradle'
 apply from: '../../../../ChilliSource/Tools/Scripts/android-build-resources.gradle'
 apply from: '../../../../ChilliSource/Tools/Scripts/android-push-apk-expansion.gradle'
 
 import com.sun.tools.classfile.Dependency
 
-/**
- * @author Ian Copland
- *
- * @param in_abi - The abi
- *
- * @return The shorter form of the abi name.
- */
-def getAbiShortForm(String in_abi) {
-    if (in_abi == 'armeabi-v7a') {
-        return 'armv7'
-    } else if (in_abi == 'armeabi') {
-        return "arm"
-    } else if (in_abi == 'x86') {
-        return "x86"
-    } else {
-        throw GradleException("ABI '$in_abi' does not exist.")
-    }
-}
-/**
- * @author Ian Copland
- *
- * @param in_string - The string
- *
- * @return The given string with the first letter in the string converted to upper case.
- */
-def upperCaseFirstLetter(String in_string) {
-    if (in_string.length() > 0) {
-        String start = in_string.substring(0, 1)
-        start = start.toUpperCase();
-        return start + in_string.substring(1)
-    }
-    return in_string
-}
-/**
- * @author Ian Copland
- *
- * @param in_sku - The name of the SKU.
- * @param in_abi - The name of the ABI.
- * @param in_debug - Whether or not it's a debug build.
- *
- * @return Each of the params combined into a single variant name. The first letter of each will be
- * made upper case
- */
-def generateVariantName(String in_sku, String in_abi, boolean in_debug) {
-    def shortAbiName = getAbiShortForm(in_abi)
-    def buildType = (in_debug == true) ? "debug" : "release"
-    return upperCaseFirstLetter(in_sku) + upperCaseFirstLetter(shortAbiName) + upperCaseFirstLetter(buildType)
-}
-/**
- * @author Ian Copland
- *
- * @param in_taskName - The name of the task.
- *
- * @return Whether or not the given task name follows the convention set for Task tasks.
- */
-def isTestFromTaskName(String in_taskName) {
-    def lowerTaskName = in_taskName.toLowerCase()
-    if (lowerTaskName.contains('unittest') || lowerTaskName.contains('androidtest')) {
-        return true
-    }
-    return false
-}
-/**
- * @author Ian Copland
- *
- * @param in_taskName - The name of the task.
- *
- * @return Whether or not the given task name follows the convention set for debug tasks.
- */
-def isDebugFromTaskName(String in_taskName) {
-    def lowerTaskName = in_taskName.toLowerCase()
-    if (lowerTaskName.contains('debug')) {
-        return true
-    } else if (lowerTaskName.contains('release')){
-        return false
-    } else {
-        throw GradleException("Task '$taskName' does not specify release or debug.")
-    }
-}
-/**
- * @author Ian Copland
- *
- * @param in_taskName - The name of the task.
- *
- * @return The name of the ABI the task relates to, based on the naming convention.
- */
-def getAbiFromTaskName(String in_taskName) {
-    def lowerTaskName = in_taskName.toLowerCase()
-    if (lowerTaskName.contains('armv7')) {
-        return "armeabi-v7a"
-    } else if (lowerTaskName.contains('arm')){
-        return "armeabi"
-    } else if (lowerTaskName.contains('x86')){
-        return "x86"
-    } else {
-        throw GradleException("Task '$taskName' does not specify an abi.")
-    }
-}
-/**
- * @author Ian Copland
- *
- * @param in_taskName - The name of the task.
- *
- * @return The name of the SKU the task relates to, based on the naming convention.
- */
-def getSkuFromTaskName(String in_taskName) {
-    def lowerTaskName = in_taskName.toLowerCase()
-    if (lowerTaskName.contains('googleplay')) {
-        return "googlePlay"
-    } else if (lowerTaskName.contains('amazon')){
-        return "amazon"
-    } else {
-        throw GradleException("Task '$taskName' does not specify a sku.")
-    }
-}
-/**
- * @author Ian Copland
- *
- * @param in_sku - The SKU name.
- *
- * @return Whether or not the given SKU is Google Play.
- */
-def isGooglePlaySku(String in_sku) {
-    return (in_sku == 'googlePlay')
-}
-/**
- * @author Ian Copland
- *
- * @param in_sku - The SKU name.
- *
- * @return Whether or not the given SKU is Amazon.
- */
-def isAmazonSku(String in_sku) {
-    return (in_sku == 'amazon')
-}
 /**
  * Adds the static library clean ndk task to the given task as a dependency.
  *
@@ -191,10 +57,10 @@ def addCleanNdkStaticLibTask(def in_task, String in_libName) {
  * @param in_libName - The name of the static library.
  */
 def addCompileNdkStaticLibTask(def in_task, String in_libName) {
-    def sku = getSkuFromTaskName(in_task.name)
-    def abi = getAbiFromTaskName(in_task.name)
-    def debug = isDebugFromTaskName(in_task.name)
-    def variantName = generateVariantName(sku, abi, debug)
+    def sku = csGetSkuFromTaskName(in_task.name)
+    def abi = csGetAbiFromTaskName(in_task.name)
+    def debug = csIsDebugFromTaskName(in_task.name)
+    def variantName = csGenerateVariantName(sku, abi, debug)
 
     def csCompileTask = task("csCompileNdk$variantName", overwrite: true) << {
         csNdkBuildStaticLib(sku, abi, debug, in_libName)
@@ -235,10 +101,23 @@ def addCleanNdkTask(def in_task) {
  * @param in_task - The task to add the dependency to.
  */
 def addGenerateAndroidManifestTask(def in_task) {
-    task "csGenerateAndroidManifest" (overwrite: true) << {
-        csGenerateAndroidManifest()
+    def sku = csGetSkuFromTaskName(in_task.name);
+    if (csIsGooglePlaySku(sku)) {
+        task "csGenerateGooglePlayAndroidManifest" (overwrite: true) << {
+            csGenerateGooglePlayAndroidManifest()
+        }
+        in_task.dependsOn("csGenerateGooglePlayAndroidManifest")
+        
+    } else if (csIsAmazonSku(sku)) {
+        task "csGenerateAmazonAndroidManifest" (overwrite: true) << {
+            csGenerateAmazonAndroidManifest()
+        }
+        in_task.dependsOn("csGenerateAmazonAndroidManifest")
+        
+    } else { 
+        throw new GradleException("Invalid sku for task '${in_task.name}'") as Throwable
     }
-    in_task.dependsOn("csGenerateAndroidManifest")
+    
 }
 /**
  * Adds the application ndk compile task to the given task as a dependency.
@@ -248,10 +127,10 @@ def addGenerateAndroidManifestTask(def in_task) {
  * @param in_task - The task to add the dependency to.
  */
 def addCompileNdkTask(def in_task) {
-    def sku = getSkuFromTaskName(in_task.name)
-    def abi = getAbiFromTaskName(in_task.name)
-    def debug = isDebugFromTaskName(in_task.name)
-    def variantName = generateVariantName(sku, abi, debug)
+    def sku = csGetSkuFromTaskName(in_task.name)
+    def abi = csGetAbiFromTaskName(in_task.name)
+    def debug = csIsDebugFromTaskName(in_task.name)
+    def variantName = csGenerateVariantName(sku, abi, debug)
 
     task "csCompileNdk$variantName" (dependsOn: ":chillisource:csCompileNdk$variantName", overwrite: true) << {
         csNdkBuild(sku, abi, debug)
@@ -268,9 +147,9 @@ def addCompileNdkTask(def in_task) {
  * @param in_task - The task to add the dependency to.
  */
 def addGenerateResourcesTask(def in_task) {
-    def sku = getSkuFromTaskName(in_task.name)
-    if (isAmazonSku(sku)) {
-        task "csGenerateApkResources" (dependsOn: "csGenerateAndroidManifest", overwrite: true) << {
+    def sku = csGetSkuFromTaskName(in_task.name)
+    if (csIsAmazonSku(sku)) {
+        task "csGenerateApkResources" (dependsOn: "csGenerateAmazonAndroidManifest", overwrite: true) << {
             csGenerateApkAssets()
         }
         in_task.dependsOn("csGenerateApkResources")
@@ -288,12 +167,15 @@ def addGenerateResourcesTask(def in_task) {
 def addGetInfoTasks(def in_defaultConfig, def in_applicationVariants) {
     in_applicationVariants.all() { in_variant ->
         in_variant.outputs.each { in_output ->
-            def getInfoTask = task "csGetVariantInfo${upperCaseFirstLetter(in_output.name)}"() << {
+            def getInfoTask = task "csGetVariantInfo${csUpperCaseFirstLetter(in_output.name)}"() << {
                 g_applicationId = in_defaultConfig.applicationId
 
-                def flavourApplicationId = in_variant.productFlavors.get(0).applicationId
-                if (flavourApplicationId != null && flavourApplicationId.length() > 0) {
-                    g_applicationId = flavourApplicationId
+                for (def i = 0; i < in_variant.productFlavors.size(); ++i)
+                {
+                    def flavourApplicationId = in_variant.productFlavors.get(i).applicationId
+                    if (flavourApplicationId != null && flavourApplicationId.length() > 0) {
+                        g_applicationId = flavourApplicationId
+                    }
                 }
 
                 def suffix = in_variant.buildType.applicationIdSuffix
@@ -303,9 +185,12 @@ def addGetInfoTasks(def in_defaultConfig, def in_applicationVariants) {
 
                 g_versionCode = in_defaultConfig.versionCode
 
-                def flavourVersionCode = in_variant.productFlavors.get(0).versionCode
-                if (flavourVersionCode != null && flavourVersionCode > 0) {
-                    g_versionCode = flavourVersionCode
+                for (def i = 0; i < in_variant.productFlavors.size(); ++i)
+                {
+                    def flavourVersionCode = in_variant.productFlavors.get(i).versionCode
+                    if (flavourVersionCode != null && flavourVersionCode > 0) {
+                        g_versionCode = flavourVersionCode
+                    }
                 }
             }
             in_output.processManifest.dependsOn getInfoTask
@@ -322,13 +207,13 @@ def addGetInfoTasks(def in_defaultConfig, def in_applicationVariants) {
 def addApkExpansionTasks(def in_applicationVariants) {
     in_applicationVariants.all() { in_variant ->
         in_variant.outputs.each { in_output ->
-            def sku = getSkuFromTaskName(in_output.name)
-            if (isGooglePlaySku(sku)) {
-                task "csAssembleApkExpansion${upperCaseFirstLetter(in_output.name)}"(group: 'buildApkExpansion', dependsOn: in_output.processManifest) << {
+            def sku = csGetSkuFromTaskName(in_output.name)
+            if (csIsGooglePlaySku(sku)) {
+                task "csAssembleApkExpansion${csUpperCaseFirstLetter(in_output.name)}"(group: 'buildApkExpansion', dependsOn: in_output.processManifest) << {
                     csGenerateApkExpansion(g_applicationId, g_versionCode)
                 }
 
-                task "csInstallApkExpansion${upperCaseFirstLetter(in_output.name)}"(group: 'installApkExpansion', dependsOn: "csAssembleApkExpansion${upperCaseFirstLetter(in_output.name)}") << {
+                task "csInstallApkExpansion${csUpperCaseFirstLetter(in_output.name)}"(group: 'installApkExpansion', dependsOn: "csAssembleApkExpansion${csUpperCaseFirstLetter(in_output.name)}") << {
                     csPushApkExpansionToDevice(g_applicationId, g_versionCode)
                 }
             }
@@ -362,7 +247,7 @@ ext {
                 currentTask.deleteAllActions()
 
                 //exclude test tasks to avoid duplicate version of the created task.
-                if (isTestFromTaskName(taskName) == false) {
+                if (csIsTestFromTaskName(taskName) == false) {
                     addCompileNdkStaticLibTask(currentTask, in_libName)
                 }
             }
@@ -400,7 +285,7 @@ ext {
                 currentTask.deleteAllActions()
 
                 //exclude test tasks to avoid duplicate version of the created task.
-                if (isTestFromTaskName(taskName) == false) {
+                if (csIsTestFromTaskName(taskName) == false) {
                     addCompileNdkTask(currentTask)
                 }
             }

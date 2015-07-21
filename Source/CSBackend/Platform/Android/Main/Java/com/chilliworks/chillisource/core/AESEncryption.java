@@ -59,7 +59,7 @@ public class AESEncryption
 		}
 		catch (Exception e)
 		{
-			ExceptionUtils.ConvertToString(e);
+			ExceptionUtils.convertToString(e);
 		}
         return abyOutput;
 	}
@@ -84,7 +84,7 @@ public class AESEncryption
 		}
 		catch (Exception e)
 		{
-			ExceptionUtils.ConvertToString(e);
+			ExceptionUtils.convertToString(e);
 		}
         return abyOutput;
 	}

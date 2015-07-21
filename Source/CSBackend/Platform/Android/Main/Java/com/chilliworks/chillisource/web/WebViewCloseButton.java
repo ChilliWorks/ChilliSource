@@ -28,8 +28,7 @@
 
 package com.chilliworks.chillisource.web;
 
-import com.chilliworks.chillisource.core.ResourceHelper;
-import com.chilliworks.chillisource.web.WebViewNativeInterface;
+import com.chilliworks.chillisource.core.R;
 
 import android.content.Context;
 import android.view.View;
@@ -57,9 +56,9 @@ public class WebViewCloseButton extends Button
 		
 		mudwIndex = inudwIndex;
 		
-		if (ResourceHelper.DoesResourceExist(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "com_chillisource_close_button") == true)
+		if (R.doesExist(R.Type.DRAWABLE, "com_chillisource_close_button") == true)
 		{
-			setBackgroundResource(ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "com_chillisource_close_button"));
+			setBackgroundResource(R.getId(R.Type.DRAWABLE, "com_chillisource_close_button"));
 		}
 		else
 		{

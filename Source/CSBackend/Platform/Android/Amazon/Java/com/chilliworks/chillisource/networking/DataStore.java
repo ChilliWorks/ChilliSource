@@ -280,7 +280,7 @@ public class DataStore
 		}
 		catch (Exception e)
 		{
-			ExceptionUtils.ConvertToString(e);
+			ExceptionUtils.convertToString(e);
 		}
 	}
 	//---------------------------------------------
@@ -335,7 +335,7 @@ public class DataStore
 		}
 		catch (Exception e)
 		{
-			ExceptionUtils.ConvertToString(e);
+			ExceptionUtils.convertToString(e);
 		}
 	}
 	//---------------------------------------------

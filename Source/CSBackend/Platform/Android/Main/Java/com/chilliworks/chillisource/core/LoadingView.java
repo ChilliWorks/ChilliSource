@@ -28,8 +28,6 @@
 
 package com.chilliworks.chillisource.core;
 
-import com.chilliworks.chillisource.core.ResourceHelper;
-
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -63,13 +61,13 @@ public class LoadingView
 			{
 				mLoadingView = new ImageView(CSApplication.get().getActivityContext());
 				mLoadingView.setLayoutParams(new ViewGroup.LayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT));
-				if (ResourceHelper.DoesResourceExist(CSApplication.get().getActivityContext(), ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, instrResource) == true)
+				if (R.doesExist(R.Type.DRAWABLE, instrResource) == true)
 				{
-					mLoadingView.setImageResource(ResourceHelper.GetDynamicResourceIDForField(CSApplication.get().getActivityContext(), ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, instrResource));
+					mLoadingView.setImageResource(R.getId(R.Type.DRAWABLE, instrResource));
 				}
 				else
 				{
-					mLoadingView.setImageResource(ResourceHelper.GetDynamicResourceIDForField(CSApplication.get().getActivityContext(), ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, kstrDefaultImage));
+					mLoadingView.setImageResource(R.getId(R.Type.DRAWABLE, kstrDefaultImage));
 				}
 				mLoadingView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 				CSApplication.get().addView(mLoadingView);

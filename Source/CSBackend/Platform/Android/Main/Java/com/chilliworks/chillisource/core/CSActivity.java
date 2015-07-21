@@ -295,7 +295,7 @@ public class CSActivity extends Activity
 		}
 		catch (Exception e)
 		{
-            Logging.logError("Activity.init() has thrown an exception: " + ExceptionUtils.ConvertToString(e));
+            Logging.logError("Activity.init() has thrown an exception: " + ExceptionUtils.convertToString(e));
             Logging.logFatal("Could not initialise CSActivity.");
 		}
 

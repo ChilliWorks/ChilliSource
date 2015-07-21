@@ -399,7 +399,7 @@ public final class FileUtils
 		}
 		catch (Exception e)
 		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
+			Logging.logError(ExceptionUtils.convertToString(e));
 		}
 		
 	    return false;
@@ -455,7 +455,7 @@ public final class FileUtils
         }
         catch (Exception e)
         {
-            Logging.logError(ExceptionUtils.ConvertToString(e));
+            Logging.logError(ExceptionUtils.convertToString(e));
         }
 
         return dynamicByteBuffer.toByteArray();
@@ -482,7 +482,7 @@ public final class FileUtils
         }
         catch (IOException e)
         {
-            Logging.logError(ExceptionUtils.ConvertToString(e));
+            Logging.logError(ExceptionUtils.convertToString(e));
         }
 
         return 0;
@@ -567,7 +567,7 @@ public final class FileUtils
 		}
 		catch (Exception e)
 		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
+			Logging.logError(ExceptionUtils.convertToString(e));
 		}
 		
 		return abyOutput;
@@ -609,7 +609,7 @@ public final class FileUtils
 		}
 		catch (Exception e)
 		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
+			Logging.logError(ExceptionUtils.convertToString(e));
 		}
 		return bSuccess;
 	}
@@ -782,7 +782,7 @@ public final class FileUtils
 		}
 		catch (Exception e)
 		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
+			Logging.logError(ExceptionUtils.convertToString(e));
 		}
 		
 		return abyOutput;
@@ -825,7 +825,7 @@ public final class FileUtils
 		}
 		catch (Exception e)
 		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
+			Logging.logError(ExceptionUtils.convertToString(e));
 		}
 		return bSuccess;
 	}

@@ -49,8 +49,18 @@ import java.util.Random;
 public final class ApkExpansionContentProvider extends ContentProvider
 {
     private static final String TEMP_DIRECTORY = "_ApkExpansionContentProvider/";
-    private static final String CONTENT_PATH_PREFIX = "content://com.chilliworks.chillisource.core.apkexpansioncontentprovider/";
 
+    /**
+     * @author Ian Copland
+     *
+     * @return The prefix which all paths that this content provider relates to should have.
+     */
+    public static String getContentPathPrefix()
+    {
+        assert (CSApplication.get() != null && CSApplication.get().getActivity() != null) : "Cannot get content path prefix before the application has been created.";
+
+        return "content://" + CSApplication.get().getApplicationId() + ".apkexpansioncontentprovider/";
+    }
     /**
      * Called when the provider is first created.
      *
@@ -100,13 +110,15 @@ public final class ApkExpansionContentProvider extends ContentProvider
             throw new FileNotFoundException("This content provider only supports read operations.");
         }
 
+        String contentPathPrefix = getContentPathPrefix();
+
         String uriString = in_uri.toString();
-        if (uriString.startsWith(CONTENT_PATH_PREFIX) == false)
+        if (uriString.startsWith(contentPathPrefix) == false)
         {
             throw new FileNotFoundException("The content prefix is incorrect for this content provider.");
         }
 
-        String filePath = uriString.substring(CONTENT_PATH_PREFIX.length());
+        String filePath = uriString.substring(contentPathPrefix.length());
         String fileName = StringUtils.getFileName(filePath);
 
         String tempDirectoryPath = FileUtils.getExternalCacheDirectory(CSApplication.get().getActivity().getPackageName()) + TEMP_DIRECTORY;

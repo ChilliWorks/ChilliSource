@@ -83,7 +83,7 @@ public final class ApkExpansionInfo
         }
         catch (JSONException e)
         {
-            Logging.logFatal(ExceptionUtils.ConvertToString(e));
+            Logging.logFatal(ExceptionUtils.convertToString(e));
         }
 
         String expansionDirectory = Helpers.getSaveFilePath(in_activity);
