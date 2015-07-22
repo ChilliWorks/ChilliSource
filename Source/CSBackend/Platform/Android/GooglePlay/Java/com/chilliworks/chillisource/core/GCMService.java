@@ -184,7 +184,6 @@ public class GCMService extends GCMBaseIntentService
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
-            //TODO: This doesn't handle the case where applicationId and packageName are not the same.
             int smallIconId = 0;
             if (R.doesExist(context, R.Type.DRAWABLE, "ic_stat_notify") == true)
             {

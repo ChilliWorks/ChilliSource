@@ -1,5 +1,5 @@
 /**
- * ResourceHelper.java
+ * R.java
  * Chilli Source
  * Created by Hugh McLaughlin on 04/07/2012.
  * 
