@@ -147,7 +147,7 @@ public class CSApplication
 		catch (Exception e)
 		{
 			Logging.logVerbose(ExceptionUtils.convertToString(e));
-			Logging.logFatal("Could not read packageName from AndroidManifest.xml as an exception was thrown: " + e.getMessage());
+			Logging.logFatal("An exception was thrown while trying to read 'packageName' from AndroidManifest.xml: " + e.getMessage());
 		}
 	}
 	/**

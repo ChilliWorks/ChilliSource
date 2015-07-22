@@ -31,6 +31,9 @@ package com.chilliworks.chillisource.core;
 import java.lang.reflect.Field;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 
 /**
  * A series of convenience methods for accessing resources in res. This is useful in cases where
@@ -113,8 +116,11 @@ public final class R
 	 * Returns whether or not the resource with the given type and name exists in res for the
 	 * given context.
 	 *
-	 * The applicationId - as returned by Application.getPackageName() - is used as the package
-	 * name.
+	 * If the manifest for the given context contains an "packageName" entry, this will be used,
+	 * otherwise, the applicationId - as returned by Application.getPackageName() - is used as the
+	 * package name.
+	 *
+	 * @author Hugh McLaughlin
 	 *
 	 * @param in_context - The context form which to get the applicationId.
 	 * @param in_type - The type of the resource.
@@ -124,13 +130,16 @@ public final class R
 	 */
     static public boolean doesExist(Context in_context, Type in_type, String in_name)
     {
-    	return doesExist(in_context.getPackageName(), in_type, in_name);
+    	return doesExist(getPackageName(in_context), in_type, in_name);
     }
 	/**
 	 * Returns the id of the resource with the given type and name from res for the given context.
 	 *
-	 * The applicationId - as returned by Application.getPackageName() - is used as the package
-	 * name.
+	 * If the manifest for the given context contains an "packageName" entry, this will be used,
+	 * otherwise, the applicationId - as returned by Application.getPackageName() - is used as the
+	 * package name.
+	 *
+	 * @author Hugh McLaughlin
 	 *
 	 * @param in_context - The context form which to get the applicationId.
 	 * @param in_type - The type of the resource.
@@ -140,11 +149,13 @@ public final class R
 	 */
     static public int getId(Context in_context, Type in_type, String in_name)
     {
-    	return getId(in_context.getPackageName(), in_type, in_name);
+    	return getId(getPackageName(in_context), in_type, in_name);
     }
 	/**
 	 * Returns whether or not the resource with the given type and name exists in res for the
 	 * given packageName.
+	 *
+	 * @author Hugh McLaughlin
 	 *
 	 * @param in_packageName - The packageName which should be used.
 	 * @param in_type - The type of the resource.
@@ -182,6 +193,8 @@ public final class R
 	 * Returns the id of the resource with the given type and name from res for the given
 	 * packageName.
 	 *
+	 * @author Hugh McLaughlin
+	 *
 	 * @param in_packageName - The packageName which should be used.
 	 * @param in_type - The type of the resource.
 	 * @param in_name - The name of the resource.
@@ -215,4 +228,33 @@ public final class R
     	
     	return 0;
     }
+	/**
+	 * @author Ian Copland
+	 *
+	 * @param in_context - The context to generate a package name for.
+	 *
+	 * @return The package name which should be used by this context. If the manifest for the given
+	 * context contains an "packageName" entry, this will be used, otherwise, the applicationId -
+	 * as returned by Application.getPackageName() - is used as the package name.
+	 */
+	private static String getPackageName(Context in_context)
+	{
+		String packageName = in_context.getPackageName();
+		try
+		{
+			ApplicationInfo ai = in_context.getPackageManager().getApplicationInfo(in_context.getPackageName(), PackageManager.GET_META_DATA);
+			Bundle bundle = ai.metaData;
+			if (bundle.containsKey("packageName") == true)
+			{
+				packageName = bundle.getString("packageName");
+			}
+
+		}
+		catch (Exception e)
+		{
+			Logging.logVerbose(ExceptionUtils.convertToString(e));
+			Logging.logFatal("An exception was thrown while trying to read 'packageName' from AndroidManifest.xml: " + e.getMessage());
+		}
+		return packageName;
+	}
 }
