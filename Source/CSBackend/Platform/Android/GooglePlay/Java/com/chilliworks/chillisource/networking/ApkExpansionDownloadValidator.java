@@ -188,6 +188,6 @@ public final class ApkExpansionDownloadValidator
     private static long calcExpansionFileSize(Activity in_activity, int in_versionCode)
     {
         String filePath = ApkExpansionInfo.getFilePath();
-        return FileUtils.getFileSize(FileUtils.StorageLocation.k_root, filePath);
+        return FileUtils.getFileSize(filePath);
     }
 }

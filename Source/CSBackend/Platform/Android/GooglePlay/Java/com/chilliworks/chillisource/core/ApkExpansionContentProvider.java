@@ -121,14 +121,13 @@ public final class ApkExpansionContentProvider extends ContentProvider
         String filePath = uriString.substring(contentPathPrefix.length());
         String fileName = StringUtils.getFileName(filePath);
 
-        String tempDirectoryPath = FileUtils.getExternalCacheDirectory(CSApplication.get().getActivity().getPackageName()) + TEMP_DIRECTORY;
-        FileUtils.createDirectory(FileUtils.StorageLocation.k_externalStorage, tempDirectoryPath);
+        final String tempDirectoryPath = FileUtils.getExternalCacheDirectory(CSApplication.get().getActivity().getPackageName()) + TEMP_DIRECTORY;
+        FileUtils.createDirectory(tempDirectoryPath);
 
         Random random = new Random();
         String tempFileName = StringUtils.removeExtension(fileName) + "-" + random.nextLong() + "." + StringUtils.getExtension(fileName);
-        final String absTempFilePath = FileUtils.getExternalStorageDirectory() + tempDirectoryPath + tempFileName;
 
-        if (extractApkExpansionFile(filePath, absTempFilePath) == false)
+        if (extractApkExpansionFile(filePath, tempDirectoryPath) == false)
         {
             throw new FileNotFoundException("Failed to extract temp file '" + tempFileName + "'.");
         }
@@ -136,17 +135,17 @@ public final class ApkExpansionContentProvider extends ContentProvider
         try
         {
             Handler uiThreadHandler = new Handler(CSApplication.get().getActivity().getMainLooper());
-            return new ListenableParcelFileDescriptor(new File(absTempFilePath), ParcelFileDescriptor.MODE_READ_ONLY, new ListenableParcelFileDescriptor.OnClose()
+            return new ListenableParcelFileDescriptor(new File(tempDirectoryPath), ParcelFileDescriptor.MODE_READ_ONLY, new ListenableParcelFileDescriptor.OnClose()
             {
                 @Override public void onClosed()
                 {
-                    FileUtils.removeFile(FileUtils.StorageLocation.k_root, absTempFilePath);
+                    FileUtils.removeFile(tempDirectoryPath);
                 }
             });
         }
         catch (Exception e)
         {
-            FileUtils.removeFile(FileUtils.StorageLocation.k_root, absTempFilePath);
+            FileUtils.removeFile(tempDirectoryPath);
             throw new FileNotFoundException("Could not read the extracted temp file '" + tempFileName + "'.");
         }
     }

@@ -285,7 +285,11 @@ public final class ApkExpansionDownloadActivity extends Activity implements IDow
     private void deleteExpansionDirectory()
     {
         String expansionDirectory = StringUtils.standardiseDirectoryPath(Helpers.getSaveFilePath(this));
-        FileUtils.removeDirectory(FileUtils.StorageLocation.k_root, expansionDirectory);
+        if (FileUtils.doesDirectoryExist(expansionDirectory) == true)
+        {
+            boolean success = FileUtils.removeDirectory(expansionDirectory);
+            assert (success == true) : "Failed to delete expansion directory.";
+        }
     }
     /**
      * Creates the view which will render download progress, and send it the onInit() event.

@@ -82,10 +82,9 @@ public final class AppConfig
 	 */
 	private void parse(Activity in_activity)
 	{
-		if (FileUtils.doesFileExistAPK(in_activity, k_configFilePath))
+		if (ApkFileUtils.doesFileExist(in_activity, k_configFilePath))
 		{
-			byte[] byteContents = FileUtils.readFileAPK(in_activity, k_configFilePath);
-			String stringContents = StringUtils.utf8BytesToString(byteContents);
+			String stringContents = ApkFileUtils.readTextFile(in_activity, k_configFilePath);
 			
 			try
 			{
