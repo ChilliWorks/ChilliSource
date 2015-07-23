@@ -207,6 +207,7 @@ public final class CSProjectGenerator
 			"Content/AppResources/App.config",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/build.gradle",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/settings.gradle",
+			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/" + k_templateProjectName.toLowerCase() + ".iml",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/.idea/.name",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/.idea/modules.xml",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/app.iml",
@@ -279,6 +280,7 @@ public final class CSProjectGenerator
 
 			fileContents = fileContents.replace(k_templatePackageName, in_options.m_packageName);
 			fileContents = fileContents.replace(k_templateProjectName.toLowerCase(), in_options.m_projectName.toLowerCase());
+			fileContents = fileContents.replace(k_templateProjectName.toUpperCase(), in_options.m_projectName.toUpperCase());
 			fileContents = fileContents.replace(k_templateProjectName, in_options.m_projectName);
 			
 			if (FileUtils.writeFile(fullFilePath, fileContents) == false)
