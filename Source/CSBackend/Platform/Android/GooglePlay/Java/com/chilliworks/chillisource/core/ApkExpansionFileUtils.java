@@ -63,7 +63,7 @@ public final class ApkExpansionFileUtils
             ZipFile zipFile = new ZipFile(ApkExpansionInfo.getFilePath());
             try
             {
-                final Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                Enumeration<? extends ZipEntry> entries = zipFile.entries();
                 while (entries.hasMoreElements())
                 {
                     ZipEntry zipEntry = entries.nextElement();
@@ -107,7 +107,7 @@ public final class ApkExpansionFileUtils
             ZipFile zipFile = new ZipFile(ApkExpansionInfo.getFilePath());
             try
             {
-                final Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                Enumeration<? extends ZipEntry> entries = zipFile.entries();
                 while (entries.hasMoreElements())
                 {
                     ZipEntry zipEntry = entries.nextElement();
@@ -168,7 +168,7 @@ public final class ApkExpansionFileUtils
             ZipFile zipFile = new ZipFile(ApkExpansionInfo.getFilePath());
             try
             {
-                final Enumeration<? extends ZipEntry> entries = zipFile.entries();
+                Enumeration<? extends ZipEntry> entries = zipFile.entries();
                 while (entries.hasMoreElements())
                 {
                     ZipEntry zipEntry = entries.nextElement();

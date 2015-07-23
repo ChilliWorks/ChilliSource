@@ -96,7 +96,6 @@ public final class ApkFileUtils
      */
     public static byte[] readBinaryFile(Activity in_activity, String in_filePath)
     {
-
         try
         {
             if (doesFileExist(in_activity, in_filePath) == true)

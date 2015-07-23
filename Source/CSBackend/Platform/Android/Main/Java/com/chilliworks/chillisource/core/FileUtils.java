@@ -152,7 +152,6 @@ public final class FileUtils
 	 */
 	public static byte[] readBinaryFile(String in_filePath)
 	{
-
 		try
 		{
 			if (doesFileExist(in_filePath) == true)
@@ -244,7 +243,7 @@ public final class FileUtils
 		return success;
 	}
 	/**
-	 * Writes text to file on internal storage.
+	 * Writes text to file.
 	 *
 	 * @author Ian Copland
 	 *

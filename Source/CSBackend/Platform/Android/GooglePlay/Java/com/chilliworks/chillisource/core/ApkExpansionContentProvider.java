@@ -121,12 +121,12 @@ public final class ApkExpansionContentProvider extends ContentProvider
         String filePath = uriString.substring(contentPathPrefix.length());
         String fileName = StringUtils.getFileName(filePath);
 
-        final String tempDirectoryPath = FileUtils.getExternalCacheDirectory(CSApplication.get().getActivity().getPackageName()) + TEMP_DIRECTORY;
+        String tempDirectoryPath = FileUtils.getExternalCacheDirectory(CSApplication.get().getActivity().getPackageName()) + TEMP_DIRECTORY;
         FileUtils.createDirectory(tempDirectoryPath);
 
         Random random = new Random();
         String tempFileName = StringUtils.removeExtension(fileName) + "-" + random.nextLong() + "." + StringUtils.getExtension(fileName);
-        String tempFilePath = tempDirectoryPath + tempFileName;
+        final String tempFilePath = tempDirectoryPath + tempFileName;
 
         if (ApkExpansionFileUtils.copyFile(filePath, tempFilePath) == false)
         {
@@ -140,7 +140,7 @@ public final class ApkExpansionContentProvider extends ContentProvider
             {
                 @Override public void onClosed()
                 {
-                    FileUtils.removeFile(tempDirectoryPath);
+                    FileUtils.removeFile(tempFilePath);
                 }
             });
         }
