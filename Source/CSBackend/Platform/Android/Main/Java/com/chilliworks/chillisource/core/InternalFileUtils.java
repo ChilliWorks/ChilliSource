@@ -73,19 +73,17 @@ public class InternalFileUtils
      */
     public static byte[] readBinaryFile(Context in_context, String in_filePath)
     {
-        final int k_bufferSize = 16 * 1024;
-
-        DynamicByteBuffer dynamicByteBuffer = new DynamicByteBuffer(k_bufferSize);
         try
         {
             if (doesFileExist(in_context, in_filePath) == true)
             {
-                InputStream stream = null;
+                final int k_bufferSize = 16 * 1024;
+                DynamicByteBuffer dynamicByteBuffer = new DynamicByteBuffer(k_bufferSize);
+
+                File file = in_context.getFileStreamPath(in_filePath);
+                InputStream stream = new BufferedInputStream(in_context.openFileInput(in_filePath));
                 try
                 {
-                    File file = in_context.getFileStreamPath(in_filePath);
-                    stream = new BufferedInputStream(in_context.openFileInput(in_filePath));
-
                     byte[] buffer = new byte[k_bufferSize];
                     int numRead = 0;
                     while(numRead != -1)
@@ -97,27 +95,21 @@ public class InternalFileUtils
                         }
                     }
                 }
-                catch (Exception e)
-                {
-                    throw e;
-                }
                 finally
                 {
-                    if (stream != null)
-                    {
-                        stream.close();
-                    }
+                    stream.close();
                 }
+
+                return dynamicByteBuffer.toByteArray();
             }
         }
         catch (Exception e)
         {
             Logging.logVerbose(ExceptionUtils.convertToString(e));
             Logging.logError("An error occurred while reading file '" + in_filePath + "': " + e.getMessage());
-            return null;
         }
 
-        return dynamicByteBuffer.toByteArray();
+        return null;
     }
     /**
      * Reads the entire contents of a text file from internal storage.
@@ -154,23 +146,15 @@ public class InternalFileUtils
         boolean success = false;
         try
         {
-            OutputStream stream = null;
+            OutputStream stream = new BufferedOutputStream(in_context.openFileOutput(in_filePath, CSActivity.MODE_PRIVATE));
             try
             {
-                stream = new BufferedOutputStream(in_context.openFileOutput(in_filePath, CSActivity.MODE_PRIVATE));
                 stream.write(in_fileContents);
                 success = true;
             }
-            catch (IOException e)
-            {
-                throw e;
-            }
             finally
             {
-                if (stream != null)
-                {
-                    stream.close();
-                }
+                stream.close();
             }
         }
         catch (IOException e)

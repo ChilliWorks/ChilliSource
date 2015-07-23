@@ -96,18 +96,17 @@ public final class ApkFileUtils
      */
     public static byte[] readBinaryFile(Activity in_activity, String in_filePath)
     {
-        final int k_bufferSize = 16 * 1024;
 
-        DynamicByteBuffer dynamicByteBuffer = new DynamicByteBuffer(k_bufferSize);
         try
         {
             if (doesFileExist(in_activity, in_filePath) == true)
             {
-                InputStream stream = null;
+                final int k_bufferSize = 16 * 1024;
+                DynamicByteBuffer dynamicByteBuffer = new DynamicByteBuffer(k_bufferSize);
+
+                InputStream stream = new BufferedInputStream(in_activity.getAssets().open(in_filePath));
                 try
                 {
-                    stream = new BufferedInputStream(in_activity.getAssets().open(in_filePath));
-
                     byte[] buffer = new byte[k_bufferSize];
                     int numRead = 0;
                     while(numRead != -1)
@@ -119,27 +118,21 @@ public final class ApkFileUtils
                         }
                     }
                 }
-                catch (IOException e)
-                {
-                    throw e;
-                }
                 finally
                 {
-                    if (stream != null)
-                    {
-                        stream.close();
-                    }
+                    stream.close();
                 }
+
+                return dynamicByteBuffer.toByteArray();
             }
         }
         catch (IOException e)
         {
             Logging.logVerbose(ExceptionUtils.convertToString(e));
             Logging.logError("An error occurred while reading file '" + in_filePath + "': " + e.getMessage());
-            return null;
         }
 
-        return dynamicByteBuffer.toByteArray();
+        return null;
     }
     /**
      * Reads the entire contents of a text file from the APK.
@@ -186,5 +179,31 @@ public final class ApkFileUtils
         }
 
         return 0;
+    }
+    /**
+     * Copies the requested file from the Apk to external storage.
+     *
+     * @author Ian Copland
+     *
+     * @param in_activity - The activity which is currently active.
+     * @param in_sourceFilePath - The source file path inside the Apk.
+     * @param in_destFilePath - The destination file path in external storage.
+     *
+     * @return Whether or not the copy was successful.
+     */
+    public static boolean copyFile(Activity in_activity, String in_sourceFilePath, String in_destFilePath)
+    {
+        if (doesFileExist(in_activity, in_sourceFilePath) == false)
+        {
+            return false;
+        }
+
+        byte[] fileContents = readBinaryFile(in_activity, in_sourceFilePath);
+        if (fileContents == null)
+        {
+            return false;
+        }
+
+        return FileUtils.writeBinaryFile(in_destFilePath, fileContents);
     }
 }

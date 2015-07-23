@@ -152,19 +152,18 @@ public final class FileUtils
 	 */
 	public static byte[] readBinaryFile(String in_filePath)
 	{
-		final int k_bufferSize = 16 * 1024;
 
-		DynamicByteBuffer dynamicByteBuffer = new DynamicByteBuffer(k_bufferSize);
 		try
 		{
 			if (doesFileExist(in_filePath) == true)
 			{
-				InputStream stream = null;
+				final int k_bufferSize = 16 * 1024;
+				DynamicByteBuffer dynamicByteBuffer = new DynamicByteBuffer(k_bufferSize);
+
+				File file = new File(in_filePath);
+				InputStream stream = new BufferedInputStream(new FileInputStream(file));
 				try
 				{
-					File file = new File(in_filePath);
-					stream = new BufferedInputStream(new FileInputStream(file));
-
 					byte[] buffer = new byte[k_bufferSize];
 					int numRead = 0;
 					while(numRead != -1)
@@ -176,27 +175,21 @@ public final class FileUtils
 						}
 					}
 				}
-		        catch (Exception e)
-		        {
-		        	throw e;
-		        }
 				finally
 				{
-					if (stream != null)
-					{
-						stream.close();
-					}
+					stream.close();
 				}
+
+				return dynamicByteBuffer.toByteArray();
 			}
 		}
 		catch (Exception e)
 		{
 			Logging.logVerbose(ExceptionUtils.convertToString(e));
 			Logging.logError("An error occurred while reading file '" + in_filePath + "': " + e.getMessage());
-			return null;
 		}
 		
-		return dynamicByteBuffer.toByteArray();
+		return null;
 	}
 	/**
 	 * Reads the entire contents of a text file.
@@ -231,24 +224,16 @@ public final class FileUtils
 		boolean success = false;
 		try
 		{
-			OutputStream stream = null;
+			File file = new File(in_filePath);
+			OutputStream stream = new BufferedOutputStream(new FileOutputStream(file));
 			try
 			{
-				File file = new File(in_filePath);
-				stream = new BufferedOutputStream(new FileOutputStream(file));
 				stream.write(in_fileContents);
 				success = true;
 			}
-	        catch (Exception e)
-	        {
-	        	throw e;
-	        }
 			finally
 			{
-				if (stream != null)
-				{
-					stream.close();
-				}
+				stream.close();
 			}
 		}
 		catch (Exception e)
