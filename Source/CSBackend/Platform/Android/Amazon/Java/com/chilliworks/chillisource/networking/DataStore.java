@@ -37,6 +37,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.amazon.inapp.purchasing.Offset;
+import com.chilliworks.chillisource.core.CSApplication;
+import com.chilliworks.chillisource.core.InternalFileUtils;
 import com.chilliworks.chillisource.networking.PurchaseTransaction.ProductType;
 import com.chilliworks.chillisource.core.AESEncryption;
 import com.chilliworks.chillisource.core.ExceptionUtils;
@@ -240,7 +242,7 @@ public class DataStore
 		
 		try
 		{
-			byte[] abyEncryptedJson = FileUtils.readBinaryFile(FileUtils.StorageLocation.k_internalStorage, mstrCacheFilename);
+			byte[] abyEncryptedJson = InternalFileUtils.readBinaryFile(CSApplication.get().getAppContext(), mstrCacheFilename);
 			if (abyEncryptedJson != null && abyEncryptedJson.length > 0)
 			{
 				byte[] abyJson = AESEncryption.Decrypt(abyEncryptedJson, CalculateSaltedPrivateKey());
@@ -280,7 +282,7 @@ public class DataStore
 		}
 		catch (Exception e)
 		{
-			ExceptionUtils.ConvertToString(e);
+			ExceptionUtils.convertToString(e);
 		}
 	}
 	//---------------------------------------------
@@ -326,7 +328,8 @@ public class DataStore
 			byte[] abyEncryptedJson = AESEncryption.Encrypt(StringUtils.stringToUTF8Bytes(strJson), CalculateSaltedPrivateKey());
 			if (abyEncryptedJson != null)
 			{
-				FileUtils.writeBinaryFile(FileUtils.StorageLocation.k_internalStorage, mstrCacheFilename, abyEncryptedJson);
+
+				InternalFileUtils.writeBinaryFile(CSApplication.get().getAppContext(), mstrCacheFilename, abyEncryptedJson);
 			}
 			else
 			{
@@ -335,7 +338,7 @@ public class DataStore
 		}
 		catch (Exception e)
 		{
-			ExceptionUtils.ConvertToString(e);
+			ExceptionUtils.convertToString(e);
 		}
 	}
 	//---------------------------------------------

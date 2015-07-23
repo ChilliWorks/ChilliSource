@@ -57,7 +57,7 @@ public class HashSHA256
 	    }
 	    catch (Exception e)
 	    {
-	    	Logging.logError(ExceptionUtils.ConvertToString(e));
+	    	Logging.logError(ExceptionUtils.convertToString(e));
 	    }
 	    
 	    return abyOutput;

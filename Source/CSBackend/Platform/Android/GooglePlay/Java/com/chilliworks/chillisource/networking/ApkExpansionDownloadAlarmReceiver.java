@@ -58,7 +58,7 @@ public final class ApkExpansionDownloadAlarmReceiver extends BroadcastReceiver
         }
         catch (PackageManager.NameNotFoundException e)
         {
-            Logging.logFatal(ExceptionUtils.ConvertToString(e));
+            Logging.logFatal(ExceptionUtils.convertToString(e));
         }
     }
 }

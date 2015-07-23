@@ -31,6 +31,8 @@
 #ifndef _CSBACKEND_PLATFORM_ANDROID_WEB_BASE_WEBVIEW_H_
 #define _CSBACKEND_PLATFORM_ANDROID_WEB_BASE_WEBVIEW_H_
 
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaStaticClass.h>
+
 #include <ChilliSource/ChilliSource.h>
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <ChilliSource/Core/Math/UnifiedCoordinates.h>
@@ -189,6 +191,10 @@ namespace CSBackend
 
 			static s32 s_nextIndex;
 			static std::unordered_map<s32, WebView*> s_indexToWebViewMap;
+
+#ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
+            JavaStaticClassUPtr m_contentProvider;
+#endif
 		};
 
 	}

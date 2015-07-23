@@ -1,0 +1,165 @@
+//
+//  android-build-variant-utils.gradle
+//  ChilliSource
+//  Created by Ian Copland on 21/07/2015.
+//
+//  The MIT License (MIT)
+//
+//  Copyright (c) 2015 Tag Games Limited
+//
+//  Permission is hereby granted, free of charge, to any person obtaining a copy
+//  of this software and associated documentation files (the "Software"), to deal
+//  in the Software without restriction, including without limitation the rights
+//  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+//  copies of the Software, and to permit persons to whom the Software is
+//  furnished to do so, subject to the following conditions:
+//
+//  The above copyright notice and this permission notice shall be included in
+//  all copies or substantial portions of the Software.
+//
+//  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+//  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+//  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+//  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+//  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+//  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+//  THE SOFTWARE.
+//
+
+ext {
+    /**
+     * @author Ian Copland
+     *
+     * @param in_abi - The abi
+     *
+     * @return The shorter form of the abi name.
+     */
+    csGetAbiShortForm = { String in_abi ->
+        if (in_abi == 'armeabi-v7a') {
+            return 'armv7'
+        } else if (in_abi == 'armeabi') {
+            return "arm"
+        } else if (in_abi == 'x86') {
+            return "x86"
+        } else {
+            throw GradleException("ABI '$in_abi' does not exist.")
+        }
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @param in_string - The string
+     *
+     * @return The given string with the first letter in the string converted to upper case.
+     */
+    csUpperCaseFirstLetter = { String in_string ->
+        if (in_string.length() > 0) {
+            String start = in_string.substring(0, 1)
+            start = start.toUpperCase();
+            return start + in_string.substring(1)
+        }
+        return in_string
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @param in_sku - The name of the SKU.
+     * @param in_abi - The name of the ABI.
+     * @param in_debug - Whether or not it's a debug build.
+     *
+     * @return Each of the params combined into a single variant name. The first letter of each will be
+     * made upper case
+     */
+   csGenerateVariantName = { String in_sku, String in_abi, boolean in_debug ->
+        def shortAbiName = csGetAbiShortForm(in_abi)
+        def buildType = (in_debug == true) ? "debug" : "release"
+        return csUpperCaseFirstLetter(in_sku) + csUpperCaseFirstLetter(shortAbiName) + csUpperCaseFirstLetter(buildType)
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @param in_taskName - The name of the task.
+     *
+     * @return Whether or not the given task name follows the convention set for Task tasks.
+     */
+    csIsTestFromTaskName = { String in_taskName ->
+        def lowerTaskName = in_taskName.toLowerCase()
+        if (lowerTaskName.contains('unittest') || lowerTaskName.contains('androidtest')) {
+            return true
+        }
+        return false
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @param in_taskName - The name of the task.
+     *
+     * @return Whether or not the given task name follows the convention set for debug tasks.
+     */
+    csIsDebugFromTaskName = { String in_taskName ->
+        def lowerTaskName = in_taskName.toLowerCase()
+        if (lowerTaskName.contains('debug')) {
+            return true
+        } else if (lowerTaskName.contains('release')){
+            return false
+        } else {
+            throw GradleException("Task '$taskName' does not specify release or debug.")
+        }
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @param in_taskName - The name of the task.
+     *
+     * @return The name of the ABI the task relates to, based on the naming convention.
+     */
+    csGetAbiFromTaskName = { String in_taskName ->
+        def lowerTaskName = in_taskName.toLowerCase()
+        if (lowerTaskName.contains('armv7')) {
+            return "armeabi-v7a"
+        } else if (lowerTaskName.contains('arm')){
+            return "armeabi"
+        } else if (lowerTaskName.contains('x86')){
+            return "x86"
+        } else {
+            throw GradleException("Task '$taskName' does not specify an abi.")
+        }
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @param in_taskName - The name of the task.
+     *
+     * @return The name of the SKU the task relates to, based on the naming convention.
+     */
+    csGetSkuFromTaskName = { String in_taskName ->
+        def lowerTaskName = in_taskName.toLowerCase()
+        if (lowerTaskName.contains('googleplay')) {
+            return "googlePlay"
+        } else if (lowerTaskName.contains('amazon')){
+            return "amazon"
+        } else {
+            throw GradleException("Task '$taskName' does not specify a sku.")
+        }
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @param in_sku - The SKU name.
+     *
+     * @return Whether or not the given SKU is Google Play.
+     */
+    csIsGooglePlaySku = { String in_sku ->
+        return (in_sku == 'googlePlay')
+    }
+    /**
+     * @author Ian Copland
+     *
+     * @param in_sku - The SKU name.
+     *
+     * @return Whether or not the given SKU is Amazon.
+     */
+    csIsAmazonSku = { String in_sku ->
+        return (in_sku == 'amazon')
+    }
+}

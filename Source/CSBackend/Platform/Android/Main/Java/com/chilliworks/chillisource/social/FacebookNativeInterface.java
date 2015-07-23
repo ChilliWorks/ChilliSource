@@ -182,7 +182,7 @@ public class FacebookNativeInterface extends System
 		}
 		catch(Exception e)
 		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
+			Logging.logError(ExceptionUtils.convertToString(e));
 		}
 	}
     /**
@@ -235,7 +235,7 @@ public class FacebookNativeInterface extends System
 		}
 		catch(Exception e)
 		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
+			Logging.logError(ExceptionUtils.convertToString(e));
 		}
     }
     /**
@@ -289,7 +289,7 @@ public class FacebookNativeInterface extends System
 		}
 		catch(Exception e)
 		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
+			Logging.logError(ExceptionUtils.convertToString(e));
 		}
     }
     /**
