@@ -177,31 +177,35 @@ public class GCMService extends GCMBaseIntentService
         // Otherwise display a notification.
         else
         {
-        	String strTitle = context.getString(ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "app_name"));
+        	String strTitle = context.getString(R.getId(context, R.Type.STRING, "app_name"));
         	String strMessage = inParams.get("message");
         	
             Intent notificationIntent = new Intent(context, CSActivity.class);
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-            
-			Bitmap largeIconBitmap = null;
-			int largeIconID = ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "ic_stat_notify_large");
-			
-			//If no large icon then use the small icon
-        	if(largeIconID == 0)
-        	{
-        		largeIconID = ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "ic_stat_notify");
-        	}
-			
-			if(largeIconID > 0)
-			{
-				largeIconBitmap = BitmapFactory.decodeResource(context.getResources(), largeIconID);
-			}
+
+            int smallIconId = 0;
+            if (R.doesExist(context, R.Type.DRAWABLE, "ic_stat_notify") == true)
+            {
+                smallIconId = R.getId(context, R.Type.DRAWABLE, "ic_stat_notify");
+            }
+
+            int largeIconId = smallIconId;
+            if (R.doesExist(context, R.Type.DRAWABLE, "ic_stat_notify_large") == true)
+            {
+                largeIconId = R.getId(context, R.Type.DRAWABLE, "ic_stat_notify_large");
+            }
+
+            Bitmap largeIconBitmap = null;
+            if(largeIconId > 0)
+            {
+                largeIconBitmap = BitmapFactory.decodeResource(context.getResources(), largeIconId);
+            }
 			
 			Notification notification = new NotificationCompat.Builder(context)
 			.setContentTitle(strTitle)
 			.setContentText(strMessage)
-			.setSmallIcon(ResourceHelper.GetDynamicResourceIDForField(context, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_DRAWABLE, "ic_stat_notify"))
+			.setSmallIcon(smallIconId)
 			.setLargeIcon(largeIconBitmap)
 			.setContentIntent(intent)
 			.build();

@@ -49,8 +49,18 @@ import java.util.Random;
 public final class ApkExpansionContentProvider extends ContentProvider
 {
     private static final String TEMP_DIRECTORY = "_ApkExpansionContentProvider/";
-    private static final String CONTENT_PATH_PREFIX = "content://com.chilliworks.chillisource.core.apkexpansioncontentprovider/";
 
+    /**
+     * @author Ian Copland
+     *
+     * @return The prefix which all paths that this content provider relates to should have.
+     */
+    public static String getContentPathPrefix()
+    {
+        assert (CSApplication.get() != null && CSApplication.get().getActivity() != null) : "Cannot get content path prefix before the application has been created.";
+
+        return "content://" + CSApplication.get().getApplicationId() + ".apkexpansioncontentprovider/";
+    }
     /**
      * Called when the provider is first created.
      *
@@ -100,23 +110,25 @@ public final class ApkExpansionContentProvider extends ContentProvider
             throw new FileNotFoundException("This content provider only supports read operations.");
         }
 
+        String contentPathPrefix = getContentPathPrefix();
+
         String uriString = in_uri.toString();
-        if (uriString.startsWith(CONTENT_PATH_PREFIX) == false)
+        if (uriString.startsWith(contentPathPrefix) == false)
         {
             throw new FileNotFoundException("The content prefix is incorrect for this content provider.");
         }
 
-        String filePath = uriString.substring(CONTENT_PATH_PREFIX.length());
+        String filePath = uriString.substring(contentPathPrefix.length());
         String fileName = StringUtils.getFileName(filePath);
 
         String tempDirectoryPath = FileUtils.getExternalCacheDirectory(CSApplication.get().getActivity().getPackageName()) + TEMP_DIRECTORY;
-        FileUtils.createDirectory(FileUtils.StorageLocation.k_externalStorage, tempDirectoryPath);
+        FileUtils.createDirectory(tempDirectoryPath);
 
         Random random = new Random();
         String tempFileName = StringUtils.removeExtension(fileName) + "-" + random.nextLong() + "." + StringUtils.getExtension(fileName);
-        final String absTempFilePath = FileUtils.getExternalStorageDirectory() + tempDirectoryPath + tempFileName;
+        final String tempFilePath = tempDirectoryPath + tempFileName;
 
-        if (extractApkExpansionFile(filePath, absTempFilePath) == false)
+        if (ApkExpansionFileUtils.copyFile(filePath, tempFilePath) == false)
         {
             throw new FileNotFoundException("Failed to extract temp file '" + tempFileName + "'.");
         }
@@ -124,17 +136,17 @@ public final class ApkExpansionContentProvider extends ContentProvider
         try
         {
             Handler uiThreadHandler = new Handler(CSApplication.get().getActivity().getMainLooper());
-            return new ListenableParcelFileDescriptor(new File(absTempFilePath), ParcelFileDescriptor.MODE_READ_ONLY, new ListenableParcelFileDescriptor.OnClose()
+            return new ListenableParcelFileDescriptor(new File(tempFilePath), ParcelFileDescriptor.MODE_READ_ONLY, new ListenableParcelFileDescriptor.OnClose()
             {
                 @Override public void onClosed()
                 {
-                    FileUtils.removeFile(FileUtils.StorageLocation.k_root, absTempFilePath);
+                    FileUtils.removeFile(tempFilePath);
                 }
             });
         }
         catch (Exception e)
         {
-            FileUtils.removeFile(FileUtils.StorageLocation.k_root, absTempFilePath);
+            FileUtils.removeFile(tempDirectoryPath);
             throw new FileNotFoundException("Could not read the extracted temp file '" + tempFileName + "'.");
         }
     }
@@ -200,16 +212,4 @@ public final class ApkExpansionContentProvider extends ContentProvider
     {
         throw new UnsupportedOperationException("This content provider only supports reading files from the Apk Expansion.");
     }
-    /**
-     * Extracts the file at the given source file path inside the Apk Expansion to the given
-     * literal destination file.
-     *
-     * @author Ian Copland
-     *
-     * @param in_sourceFilePath - The source file path inside the Apk Expansion file.
-     * @param in_destFilePath - The literal destination file path on disk.
-     *
-     * @return Whether or not the extraction was successful.
-     */
-    private native boolean extractApkExpansionFile(String in_sourceFilePath, String in_destFilePath);
 }

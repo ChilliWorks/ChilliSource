@@ -108,7 +108,7 @@ public final class LocalNotification
 		}
 		catch (Exception e)
 		{
-			Logging.logFatal("An exception occurred while building a Local Notification from JSON: \n" + ExceptionUtils.ConvertToString(e));
+			Logging.logFatal("An exception occurred while building a Local Notification from JSON: \n" + ExceptionUtils.convertToString(e));
 		}
 	}
 	/**
@@ -243,7 +243,7 @@ public final class LocalNotification
 		}
 		catch (JSONException e)
 		{
-			Logging.logFatal("An exception occurred while converting a local notification to JSON: \n" + ExceptionUtils.ConvertToString(e));
+			Logging.logFatal("An exception occurred while converting a local notification to JSON: \n" + ExceptionUtils.convertToString(e));
 		}
 		
 		return jsonRoot;

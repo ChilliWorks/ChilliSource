@@ -31,7 +31,6 @@ package com.chilliworks.chillisource.networking;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -43,7 +42,6 @@ import com.chilliworks.chillisource.core.CSActivity;
 import com.chilliworks.chillisource.core.ExceptionUtils;
 import com.chilliworks.chillisource.core.FileUtils;
 import com.chilliworks.chillisource.core.Logging;
-import com.chilliworks.chillisource.core.NativeLibraryLoader;
 import com.chilliworks.chillisource.core.StringUtils;
 import com.google.android.vending.expansion.downloader.DownloadProgressInfo;
 import com.google.android.vending.expansion.downloader.DownloaderClientMarshaller;
@@ -52,8 +50,6 @@ import com.google.android.vending.expansion.downloader.Helpers;
 import com.google.android.vending.expansion.downloader.IDownloaderClient;
 import com.google.android.vending.expansion.downloader.IDownloaderService;
 import com.google.android.vending.expansion.downloader.IStub;
-
-import java.io.File;
 
 /**
  * An activity which is presented prior to the CSActivity in Google Play builds which checks
@@ -249,7 +245,7 @@ public final class ApkExpansionDownloadActivity extends Activity implements IDow
         }
         catch (PackageManager.NameNotFoundException e)
         {
-            Logging.logFatal(ExceptionUtils.ConvertToString(e));
+            Logging.logFatal(ExceptionUtils.convertToString(e));
         }
 
         if (startResult != DownloaderClientMarshaller.NO_DOWNLOAD_REQUIRED)
@@ -289,7 +285,11 @@ public final class ApkExpansionDownloadActivity extends Activity implements IDow
     private void deleteExpansionDirectory()
     {
         String expansionDirectory = StringUtils.standardiseDirectoryPath(Helpers.getSaveFilePath(this));
-        FileUtils.removeDirectory(FileUtils.StorageLocation.k_root, expansionDirectory);
+        if (FileUtils.doesDirectoryExist(expansionDirectory) == true)
+        {
+            boolean success = FileUtils.removeDirectory(expansionDirectory);
+            assert (success == true) : "Failed to delete expansion directory.";
+        }
     }
     /**
      * Creates the view which will render download progress, and send it the onInit() event.

@@ -67,13 +67,12 @@ public final class ApkExpansionInfo
         assert (m_calculated == false) : "Cannot re-calculate the expansion info.";
 
         String filePath = "ApkExpansion.config";
-        if (FileUtils.doesFileExistAPK(in_activity, filePath) == false)
+        if (ApkFileUtils.doesFileExist(in_activity, filePath) == false)
         {
             Logging.logFatal("Apk Expansion config file '" + filePath + "' does not exist.");
         }
 
-        byte[] fileContentsBytes = FileUtils.readFileAPK(in_activity, filePath);
-        String fileContents = StringUtils.utf8BytesToString(fileContentsBytes);
+        String fileContents = ApkFileUtils.readTextFile(in_activity, filePath);
 
         try
         {
@@ -83,7 +82,7 @@ public final class ApkExpansionInfo
         }
         catch (JSONException e)
         {
-            Logging.logFatal(ExceptionUtils.ConvertToString(e));
+            Logging.logFatal(ExceptionUtils.convertToString(e));
         }
 
         String expansionDirectory = Helpers.getSaveFilePath(in_activity);

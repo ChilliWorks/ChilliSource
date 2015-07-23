@@ -1,6 +1,6 @@
 /**
  * FileUtils.java
- * Chilli Source
+ * ChilliSource
  * Created by Ian Copland on 16/12/2013
  * 
  * The MIT License (MIT)
@@ -33,15 +33,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.List;
 
-import android.app.Activity;
-import android.content.res.AssetFileDescriptor;
-import android.content.res.AssetManager;
 import android.os.Environment;
 
 /**
@@ -52,20 +46,6 @@ import android.os.Environment;
 public final class FileUtils
 {
 	/**
-	 * An enum describing the different storage locations available on Android. Note that this 
-	 * is not the same as Storage Location in the native side of the engine. This refers to 
-	 * specific storage media such as internal or external storage.
-	 * 
-	 * @author Ian Copland
-	 */
-	public enum StorageLocation
-	{
-		k_root,
-		k_externalStorage,
-		k_internalStorage,
-		k_apk
-	}
-	/**
 	 * @author Ian Copland
 	 * 
 	 * @return the "external storage" directory.
@@ -75,8 +55,11 @@ public final class FileUtils
 		String state = Environment.getExternalStorageState();
 
 		if (Environment.MEDIA_MOUNTED.equals(state))
+		{
 			return StringUtils.standardiseDirectoryPath(Environment.getExternalStorageDirectory().toString());
-		
+		}
+
+		Logging.logFatal("No external storage mounted.");
 		return "";
 	}
 	/**
@@ -93,7 +76,7 @@ public final class FileUtils
 	 */
 	public static String getExternalFilesDirectory(String in_packageName)
 	{
-		return "Android/data/" + in_packageName + "/files/";
+		return getExternalStorageDirectory() + "Android/data/" + in_packageName + "/files/";
 	}
 	/**
 	 * This will return the path to the directory on external storage that unimportant files which
@@ -110,7 +93,7 @@ public final class FileUtils
 	 */
 	public static String getExternalCacheDirectory(String in_packageName)
 	{
-		return "Android/data/" + in_packageName + "/cache/";
+		return getExternalStorageDirectory() + "Android/data/" + in_packageName + "/cache/";
 	}
     /**
      * Returns the path to the directory used by the FileSystem which relates to the "Save Data"
@@ -123,370 +106,9 @@ public final class FileUtils
      * @return The save data directory.
      */
     public static String getSaveDataDirectory(String in_packageName)
-    {
-        return getExternalFilesDirectory(in_packageName) + "SaveData/";
-    }
-	/**
-	 * Returns whether or not the given file exists in the given storage location.
-	 * 
-	 * @author Ian Copland
-	 * 
-	 * @param in_storageLocation - The storage location. If APK, the CSApplication and CSActivity
-	 * must exist.
-	 * @param in_filePath - The file path.
-	 * 
-	 * @return Whether or not the path exists.
-	 */
-	public static boolean doesFileExist(StorageLocation in_storageLocation, String in_filePath)
 	{
-		switch (in_storageLocation)
-		{
-			case k_root:
-				return doesFileExist(in_filePath);
-			case k_externalStorage:
-				return doesFileExist(StringUtils.standardiseDirectoryPath(getExternalStorageDirectory()) + in_filePath);
-			case k_internalStorage:
-				return doesFileExistInternal(in_filePath);
-			case k_apk:
-				return doesFileExistAPK(CSApplication.get().getActivity(), in_filePath);
-			default:
-				Logging.logFatal("FileUtils: Invalid storage location.");
-				return false;
-		}
+		return getExternalFilesDirectory(in_packageName) + "SaveData/";
 	}
-    /**
-     * Reads the entire contents of a text file in the given storage location. The contents are
-     * read as a string. The text file should be in UTF-8 format.
-     *
-     * @param in_storageLocation - The storage location. If APK, the CSApplication and CSActivity
-     * must exist.
-     * @param in_filePath - The filename.
-     *
-     * @return The contents of the text file as a string.
-     */
-    public static String readTextFile(StorageLocation in_storageLocation, String in_filePath)
-    {
-        byte[] fileContents = readBinaryFile(in_storageLocation, in_filePath);
-
-        if (fileContents != null)
-        {
-            return StringUtils.utf8BytesToString(fileContents);
-        }
-
-        return "";
-    }
-	/**
-	 * Reads the entire contents of a binary file in the given storage location. The contents are
-     * read as a byte array.
-	 * 
-	 * @author Ian Copland
-	 * 
-	 * @param in_storageLocation - The storage location. If APK, the CSApplication and CSActivity
-	 * must exist.
-	 * @param in_filePath - The filename.
-	 * 
-	 * @return The byte array.
-	 */
-	public static byte[] readBinaryFile(StorageLocation in_storageLocation, String in_filePath)
-	{
-		switch (in_storageLocation)
-		{
-			case k_root:
-				return readBinaryFile(in_filePath);
-			case k_externalStorage:
-				return readBinaryFile(StringUtils.standardiseDirectoryPath(getExternalStorageDirectory()) + in_filePath);
-			case k_internalStorage:
-				return readBinaryFileInternal(in_filePath);
-			case k_apk:
-				return readFileAPK(CSApplication.get().getActivity(), in_filePath);
-			default:
-				Logging.logFatal("FileUtils: Invalid storage location.");
-				return null;
-		}
-	}
-    /**
-     * Writes a String to file in the given storage location, in UTF-8 format.
-     *
-     * @author Ian Copland
-     *
-     * @param in_storageLocation - The storage location.
-     * @param in_filePath - The filename.
-     * @param in_fileContents - The string to be written to file.
-     *
-     * @return Whether or not the file was successfully written.
-     */
-    public static boolean writeTextFile(StorageLocation in_storageLocation, String in_filePath, String in_fileContents)
-    {
-        byte[] data = StringUtils.stringToUTF8Bytes(in_fileContents);
-        return writeBinaryFile(in_storageLocation, in_filePath, data);
-    }
-    /**
-     * Writes a byte array to file in the given storage location.
-     *
-     * @author Ian Copland
-     *
-     * @param in_storageLocation - The storage location.
-     * @param in_filePath - The filename.
-     * @param in_fileContents - The data to be written to file.
-     *
-     * @return Whether or not the file was successfully written.
-     */
-    public static boolean writeBinaryFile(StorageLocation in_storageLocation, String in_filePath, byte[] in_fileContents)
-    {
-        switch (in_storageLocation)
-        {
-            case k_root:
-                return writeBinaryFile(in_filePath, in_fileContents);
-            case k_externalStorage:
-                return writeBinaryFile(StringUtils.standardiseDirectoryPath(getExternalStorageDirectory()) + in_filePath, in_fileContents);
-            case k_internalStorage:
-                return writeBinaryFileInternal(in_filePath, in_fileContents);
-            case k_apk:
-                Logging.logFatal("FileUtils: Cannot write to the APK.");
-                return false;
-            default:
-                Logging.logFatal("FileUtils: Invalid storage location.");
-                return false;
-        }
-    }
-	/**
-	 * Creates a new directory at the given location. The path to the directory must already exist.
-	 * This will fail if the directory already exists.
-	 *
-	 * @author Ian Copland
-	 *
-	 * @param in_storageLocation - The storage location.
-	 * @param in_directoryPath - The path to the directory which should be created.
-	 *
-	 * @return Whether or not the directory was successfully created.
-	 */
-	public static boolean createDirectory(StorageLocation in_storageLocation, String in_directoryPath)
-	{
-		switch (in_storageLocation)
-		{
-			case k_root:
-				return createDirectory(in_directoryPath);
-			case k_externalStorage:
-				return createDirectory(StringUtils.standardiseDirectoryPath(getExternalStorageDirectory()) + in_directoryPath);
-			case k_internalStorage:
-				Logging.logFatal("FileUtils: Cannot create directory in internal storage.");
-				return false;
-			case k_apk:
-				Logging.logFatal("FileUtils: Cannot create directory in the APK.");
-				return false;
-			default:
-				Logging.logFatal("FileUtils: Invalid storage location.");
-				return false;
-		}
-	}
-	/**
-	 * Deletes the given file from the given storage location. If the file doesn't exist this will
-	 * still return success. it will only return an error if the file still exists after this has
-	 * been called.
-	 *
-	 * @author Ian Copland
-	 *
-	 * @param in_storageLocation - The storage location.
-	 * @param in_filePath - The filename.
-	 *
-	 * @return Whether or not the file removal was successful.
-	 */
-	public static boolean removeFile(StorageLocation in_storageLocation, String in_filePath)
-	{
-		switch (in_storageLocation)
-		{
-			case k_root:
-				return removeFile(in_filePath);
-			case k_externalStorage:
-				return removeFile(StringUtils.standardiseDirectoryPath(getExternalStorageDirectory()) + in_filePath);
-			case k_internalStorage:
-				return removeFileInternal(in_filePath);
-			case k_apk:
-				Logging.logFatal("FileUtils: Cannot remove file from APK.");
-				return false;
-			default:
-				Logging.logFatal("FileUtils: Invalid storage location.");
-				return false;
-		}
-	}
-	/**
-	 * Removes the given directory and all of it's contents. If the directory doesn't exist this
-	 * will still return success - an error will only be returned if the directory still exists
-	 * after this is called.
-	 *
-	 * @author Ian Copland
-	 *
-	 * @param in_storageLocation - The storage location.
-	 * @param in_directoryPath - The directory path to remove.
-	 *
-	 * @return Whether or not the file removal was successful.
-	 */
-	public static boolean removeDirectory(StorageLocation in_storageLocation, String in_directoryPath)
-	{
-		switch (in_storageLocation)
-		{
-			case k_root:
-				return removeDirectory(in_directoryPath);
-			case k_externalStorage:
-				return removeDirectory(StringUtils.standardiseDirectoryPath(getExternalStorageDirectory()) + in_directoryPath);
-			case k_internalStorage:
-				Logging.logFatal("FileUtils: Cannot remove directory from internal storage.");
-				return false;
-			case k_apk:
-				Logging.logFatal("FileUtils: Cannot remove file from APK.");
-				return false;
-			default:
-				Logging.logFatal("FileUtils: Invalid storage location.");
-				return false;
-		}
-	}
-    /**
-     * Returns the size of the given file.
-     *
-     * @author Ian Copland
-     *
-     * @param in_storageLocation - The storage location of the file which will have its size
-     * calculated.
-     * @param in_filePath - The  path to the file which will have its size calculated.
-     *
-     * @return The size of the file in bytes.
-     */
-    public static long getFileSize(StorageLocation in_storageLocation, String in_filePath)
-    {
-        switch (in_storageLocation)
-        {
-            case k_root:
-                return getFileSize(in_filePath);
-            case k_externalStorage:
-                return getFileSize(StringUtils.standardiseDirectoryPath(getExternalStorageDirectory()) + in_filePath);
-            case k_internalStorage:
-                return getFileSizeInternal(in_filePath);
-            case k_apk:
-                return getFileSizeAPK(CSApplication.get().getActivity(), in_filePath);
-            default:
-                Logging.logFatal("FileUtils: Invalid storage location.");
-                return 0;
-        }
-    }
-	/**
-	 * @author Ian Copland
-	 * 
-	 * @param in_activity - The activiy.
-	 * @param in_filePath - The file path inside the APK.
-	 * 
-	 * @return Whether or not the given file exists in the APK.
-	 */
-	public static boolean doesFileExistAPK(Activity in_activity, String in_filePath)
-	{
-		try
-		{
-			File file = new File(in_filePath);
-			
-			AssetManager assets = in_activity.getAssets();
-
-			String parentDirectoryPath = file.getParent();
-			if (parentDirectoryPath == null)
-			{
-				parentDirectoryPath = "";
-			}
-
-			String[] filesArray = assets.list(parentDirectoryPath);
-		    if (filesArray != null && filesArray.length > 0)
-		    {
-		    	List<String> filesList = Arrays.asList(filesArray);
-		    	return filesList.contains(file.getName());
-		    }
-		}
-		catch (Exception e)
-		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
-		}
-		
-	    return false;
-	}
-    /**
-     * Reads the entire contents of a binary file from the APK. The contents are returned as a
-     * byte array.
-     *
-     * @author Ian Copland
-     *
-     * @param in_activity - The activity
-     * @param in_filePath - The filename.
-     *
-     * @return The file contents.
-     */
-    public static byte[] readFileAPK(Activity in_activity, String in_filePath)
-    {
-        final int k_bufferSize = 16 * 1024;
-
-        DynamicByteBuffer dynamicByteBuffer = new DynamicByteBuffer(k_bufferSize);
-        try
-        {
-            if (doesFileExistAPK(in_activity, in_filePath) == true)
-            {
-                InputStream stream = null;
-                try
-                {
-                    stream = new BufferedInputStream(in_activity.getAssets().open(in_filePath));
-
-                    byte[] buffer = new byte[k_bufferSize];
-                    int numRead = 0;
-                    while(numRead != -1)
-                    {
-                        numRead = stream.read(buffer, 0, k_bufferSize);
-                        if (numRead > 0)
-                        {
-                            dynamicByteBuffer.appendBytes(buffer, numRead);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    throw e;
-                }
-                finally
-                {
-                    if (stream != null)
-                    {
-                        stream.close();
-                    }
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            Logging.logError(ExceptionUtils.ConvertToString(e));
-        }
-
-        return dynamicByteBuffer.toByteArray();
-    }
-    /**
-     * Calculates the size of the given file located in the APK.
-     *
-     * @author Ian Copland
-     *
-     * @param in_activity - The activity which is currently active.
-     * @param in_filePath - The path to the file which is to have its size calculated.
-     *
-     * @return The size of the file in bytes.
-     */
-    public static long getFileSizeAPK(Activity in_activity, String in_filePath)
-    {
-        try
-        {
-            AssetFileDescriptor fileDesc = in_activity.getAssets().openFd(in_filePath);
-            if (fileDesc != null)
-            {
-                return fileDesc.getLength();
-            }
-        }
-        catch (IOException e)
-        {
-            Logging.logError(ExceptionUtils.ConvertToString(e));
-        }
-
-        return 0;
-    }
 	/**
 	 * @author Ian Copland
 	 *
@@ -494,7 +116,7 @@ public final class FileUtils
 	 *
 	 * @return whether or not the given path exists.
 	 */
-	private static boolean doesFileExist(String in_filePath)
+	public static boolean doesFileExist(String in_filePath)
 	{
 		File file = new File(in_filePath);
 		if (file.exists() == true && file.isFile() == true)
@@ -510,7 +132,7 @@ public final class FileUtils
 	 *
 	 * @return whether or not the given path exists.
 	 */
-	private static boolean doesDirectoryExist(String in_directoryPath)
+	public static boolean doesDirectoryExist(String in_directoryPath)
 	{
 		File directory = new File(in_directoryPath);
 		if (directory.exists() == true && directory.isDirectory() == true)
@@ -523,54 +145,68 @@ public final class FileUtils
 	 * Reads the entire contents of a binary file to a byte array.
 	 * 
 	 * @author Ian Copland
-	 * 
-	 * @param in_filePath - The filename.
-	 * 
-	 * @return The byte array.
+	 *
+	 * @param in_filePath - The path to the file.
+	 *
+	 * @return The file contents.
 	 */
-	private static byte[] readBinaryFile(String in_filePath)
+	public static byte[] readBinaryFile(String in_filePath)
 	{
-		byte[] abyOutput = null;
 		try
 		{
 			if (doesFileExist(in_filePath) == true)
 			{
-				InputStream stream = null;
+				final int k_bufferSize = 16 * 1024;
+				DynamicByteBuffer dynamicByteBuffer = new DynamicByteBuffer(k_bufferSize);
+
+				File file = new File(in_filePath);
+				InputStream stream = new BufferedInputStream(new FileInputStream(file));
 				try
 				{
-					File file = new File(in_filePath);
-					abyOutput = new byte[(int)file.length()];
-					stream = new BufferedInputStream(new FileInputStream(file));
-					int dwTotalRead = 0;
-					while(dwTotalRead < abyOutput.length)
+					byte[] buffer = new byte[k_bufferSize];
+					int numRead = 0;
+					while(numRead != -1)
 					{
-						int dwRemaining = abyOutput.length - dwTotalRead;
-						int dwRead = stream.read(abyOutput, dwTotalRead, dwRemaining); 
-						if (dwRead > 0)
+						numRead = stream.read(buffer, 0, k_bufferSize);
+						if (numRead > 0)
 						{
-							dwTotalRead += dwRead;
+							dynamicByteBuffer.appendBytes(buffer, numRead);
 						}
 					}
 				}
-		        catch (Exception e)
-		        {
-		        	throw e;
-		        }
 				finally
 				{
-					if (stream != null)
-					{
-						stream.close();
-					}
+					stream.close();
 				}
+
+				return dynamicByteBuffer.toByteArray();
 			}
 		}
 		catch (Exception e)
 		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
+			Logging.logVerbose(ExceptionUtils.convertToString(e));
+			Logging.logError("An error occurred while reading file '" + in_filePath + "': " + e.getMessage());
 		}
 		
-		return abyOutput;
+		return null;
+	}
+	/**
+	 * Reads the entire contents of a text file.
+	 *
+	 * @author Ian Copland
+	 *
+	 * @param in_filePath - The path to the file.
+	 *
+	 * @return The file contents.
+	 */
+	public static String readTextFile(String in_filePath)
+	{
+		byte[] contents = readBinaryFile(in_filePath);
+		if (contents == null)
+		{
+			return "";
+		}
+		return StringUtils.utf8BytesToString(contents);
 	}
 	/**
 	 * Writes a byte array to file.
@@ -582,36 +218,44 @@ public final class FileUtils
 	 * 
 	 * @return Whether or not the file was successfully written.
 	 */
-	private static boolean writeBinaryFile(String in_filePath, byte[] in_fileContents)
+	public static boolean writeBinaryFile(String in_filePath, byte[] in_fileContents)
 	{
-		boolean bSuccess = false;
+		boolean success = false;
 		try
 		{
-			OutputStream stream = null;
+			File file = new File(in_filePath);
+			OutputStream stream = new BufferedOutputStream(new FileOutputStream(file));
 			try
 			{
-				File file = new File(in_filePath);
-				stream = new BufferedOutputStream(new FileOutputStream(file));
 				stream.write(in_fileContents);
-				bSuccess = true;
+				success = true;
 			}
-	        catch (Exception e)
-	        {
-	        	throw e;
-	        }
 			finally
 			{
-				if (stream != null)
-				{
-					stream.close();
-				}
+				stream.close();
 			}
 		}
 		catch (Exception e)
 		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
+			Logging.logVerbose(ExceptionUtils.convertToString(e));
+			Logging.logError("An error occurred while writing file '" + in_filePath + "': " + e.getMessage());
 		}
-		return bSuccess;
+		return success;
+	}
+	/**
+	 * Writes text to file.
+	 *
+	 * @author Ian Copland
+	 *
+	 * @param in_filePath - The filename.
+	 * @param in_fileContents - The text to be written to file.
+	 *
+	 * @return Whether or not the file was successfully written.
+	 */
+	public static boolean writeBinaryFile(String in_filePath, String in_fileContents)
+	{
+		byte[] bytes = StringUtils.stringToUTF8Bytes(in_fileContents);
+		return writeBinaryFile(in_filePath, bytes);
 	}
 	/**
 	 * Creates a new directory at the given path. The path to the directory must already exist.
@@ -623,15 +267,14 @@ public final class FileUtils
 	 *
 	 * @return Whether or not this was successful.
 	 */
-	private static boolean createDirectory(String in_directoryPath)
+	public static boolean createDirectory(String in_directoryPath)
 	{
 		File file = new File(in_directoryPath);
 		return file.mkdir();
 	}
 	/**
-	 * Deletes the given file on disk if it exists. If the file doesn't exist this will still
-	 * return successful, it will only return an error if the file still exists after this
-	 * has been called.
+	 * Deletes the given file on disk if it exists. If the file doesn't exist this will return
+	 * an error.
 	 *
 	 * @author Ian Copland
 	 *
@@ -639,19 +282,19 @@ public final class FileUtils
 	 *
 	 * @return Whether or not this was successful.
 	 */
-	private static boolean removeFile(String in_filePath)
+	public static boolean removeFile(String in_filePath)
 	{
-		if (doesFileExist(in_filePath) == true)
+		if (doesFileExist(in_filePath) == false)
 		{
-			File file = new File(in_filePath);
-			return file.delete();
+			return false;
 		}
-		return true;
+
+		File file = new File(in_filePath);
+		return file.delete();
 	}
 	/**
 	 * Deletes the given directory and all of its contents on disk if it exists. If the directory
-	 * doesn't exist this will still return successful, it will only return an error if the
-	 * directory still exists after this has been called.
+	 * doesn't exist this will return an error.
 	 *
 	 * @author Ian Copland
 	 *
@@ -659,44 +302,44 @@ public final class FileUtils
 	 *
 	 * @return Whether or not this was successful.
 	 */
-	private static boolean removeDirectory(String in_directoryPath)
+	public static boolean removeDirectory(String in_directoryPath)
 	{
 		String directoryPath = StringUtils.standardiseDirectoryPath(in_directoryPath);
 
-		if (doesDirectoryExist(directoryPath) == true)
+		if (doesDirectoryExist(directoryPath) == false)
 		{
-			File directory = new File(directoryPath);
+			return false;
+		}
 
-			String[] directoryContents = directory.list();
-			for (String directoryItemString : directoryContents)
+		File directory = new File(directoryPath);
+
+		String[] directoryContents = directory.list();
+		for (String directoryItemString : directoryContents)
+		{
+			File directoryItem = new File(directoryPath + directoryItemString);
+
+			if (directoryItem.isDirectory() == true)
 			{
-				File directoryItem = new File(directoryPath + directoryItemString);
-
-				if (directoryItem.isDirectory() == true)
+				if (removeDirectory(directoryItem.getPath()) == false)
 				{
-					if (removeDirectory(directoryItem.getPath()) == false)
-					{
-						return false;
-					}
-				}
-				else if (directoryItem.isFile() == true)
-				{
-					if (directoryItem.delete() == false)
-					{
-						return false;
-					}
-				}
-				else
-				{
-					//Unknown item in directory, return false.
 					return false;
 				}
 			}
-
-			return directory.delete();
+			else if (directoryItem.isFile() == true)
+			{
+				if (directoryItem.delete() == false)
+				{
+					return false;
+				}
+			}
+			else
+			{
+				//Unknown item in directory, return false.
+				return false;
+			}
 		}
 
-		return true;
+		return directory.delete();
 	}
     /**
      * Returns the size of the given file in bytes.
@@ -707,162 +350,9 @@ public final class FileUtils
      *
      * @return The size of the file in bytes.
      */
-    private static long getFileSize(String in_filePath)
+	public static long getFileSize(String in_filePath)
     {
         File file = new File(in_filePath);
-        return file.length();
-    }
-	/**
-	 * Note: This method requires the Chilli Source activity to have been created to work.
-	 * 
-	 * @author Ian Copland
-	 * 
-	 * @param in_filePath - The file path.
-	 * 
-	 * @return Whether or not the given file exists on internal 
-	 * storage.
-	 */
-	private static boolean doesFileExistInternal(String in_filePath)
-	{
-		File file = CSApplication.get().getAppContext().getFileStreamPath(in_filePath);
-	    if (file.exists() == true && file.isFile() == true)
-	    {
-	    	return true;
-	    }
-	    return false;
-	}
-	/**
-	 * Reads the entire contents of a binary file from internal storage. The contents are
-     * returned as a byte array.
-     *
-     * Note: This method requires the ChilliSource activity to have been created to work.
-	 * 
-	 * @author Ian Copland
-	 * 
-	 * @param in_filePath - The filename.
-     *
-	 * @return The file contents.
-	 */
-	private static byte[] readBinaryFileInternal(String in_filePath)
-	{
-		byte[] abyOutput = null;
-		try
-		{
-			if (doesFileExistInternal(in_filePath) == true)
-			{
-				InputStream stream = null;
-				try
-				{
-					File file = CSApplication.get().getAppContext().getFileStreamPath(in_filePath);
-					abyOutput = new byte[(int)file.length()];
-					stream = new BufferedInputStream(CSApplication.get().getAppContext().openFileInput(in_filePath));
-					int dwTotalRead = 0;
-					while(dwTotalRead < abyOutput.length)
-					{
-						int dwRemaining = abyOutput.length - dwTotalRead;
-						int dwRead = stream.read(abyOutput, dwTotalRead, dwRemaining); 
-						if (dwRead > 0)
-						{
-							dwTotalRead += dwRead;
-						}
-					}
-				}
-		        catch (Exception e)
-		        {
-		        	throw e;
-		        }
-				finally
-				{
-					if (stream != null)
-					{
-						stream.close();
-					}
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
-		}
-		
-		return abyOutput;
-	}
-	/**
-	 * Writes a byte array to a file on internal storage. 
-	 *
-     * Note: This method requires the ChilliSource activity to have been created to work.
-	 * 
-	 * @author Ian Copland
-	 * 
-	 * @param in_filePath - The filename.
-	 * @param in_fileContents - The data to be written to file.
-     *
-	 * @return Whether or not the file was successfully written.
-	 */
-	private static boolean writeBinaryFileInternal(String in_filePath, byte[] in_fileContents)
-	{
-		boolean bSuccess = false;
-		try
-		{
-			OutputStream stream = null;
-			try
-			{
-				stream = new BufferedOutputStream(CSApplication.get().getAppContext().openFileOutput(in_filePath, CSActivity.MODE_PRIVATE));
-				stream.write(in_fileContents);
-				bSuccess = true;
-			}
-	        catch (Exception e)
-	        {
-	        	throw e;
-	        }
-			finally
-			{
-				if (stream != null)
-				{
-					stream.close();
-				}
-			}
-		}
-		catch (Exception e)
-		{
-			Logging.logError(ExceptionUtils.ConvertToString(e));
-		}
-		return bSuccess;
-	}
-	/**
-	 * Deletes the given file from internal storage. If the file doesn't exist this will still
-     * return successful, it will only return an error if the file still exists after this has
-     * been called.
-	 *
-     * Note: This method requires the ChilliSource activity to have been created to work.
-	 * 
-	 * @author Ian Copland
-	 * 
-	 * @param in_filePath - The file path
-     *
-	 * @return Whether or not this was successful
-	 */
-	private static boolean removeFileInternal(String in_filePath)
-	{
-		if (doesFileExistInternal(in_filePath) == true)
-		{
-			return CSApplication.get().getAppContext().deleteFile(in_filePath);
-		}
-		
-		return true;
-	}
-    /**
-     * Calculates the size of the given file located in internal storage.
-     *
-     * @author Ian Copland
-     *
-     * @param in_filePath - The path to the file which is to have its size calculated.
-     *
-     * @return The size of the file in bytes.
-     */
-    private static long getFileSizeInternal(String in_filePath)
-    {
-        File file = CSApplication.get().getAppContext().getFileStreamPath(in_filePath);
         return file.length();
     }
 }

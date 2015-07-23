@@ -57,7 +57,7 @@ public class HashMD5
 	    }
 	    catch (Exception e)
 	    {
-	    	Logging.logError(ExceptionUtils.ConvertToString(e));
+	    	Logging.logError(ExceptionUtils.convertToString(e));
 	    }
 	    
 	    return output;

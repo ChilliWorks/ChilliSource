@@ -28,20 +28,42 @@
 
 apply from: '../../../../ChilliSource/Tools/Scripts/android-execute-command.gradle'
 
+/**
+ * Generates a new android manifest from the CSAndroidManifest.xml using the specified
+ * android manifest template.
+ *
+ * @author Ian Copland
+ * 
+ * @param in_templateFilePath - The path to the template relative to the root of the
+ * project.
+ */
+def generateAndroidManifest(String in_templateFilePath)
+{
+    def absRootProjectDirectoryPath = file("../../../..").absolutePath
+    def absAndroidProjectDirectoryPath = file("src/main").absolutePath
+    def toolPath = absRootProjectDirectoryPath + "/ChilliSource/Tools/AndroidManifestBuilder.jar"
+    def templateFilePath = absRootProjectDirectoryPath + in_templateFilePath
+    def manifestFilePath = absAndroidProjectDirectoryPath + "/AndroidManifest.xml"
+    def csManifestFilePath = absAndroidProjectDirectoryPath + "/CSAndroidManifest.xml"
+
+    csExecuteCommand([ "java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", toolPath, "--input", csManifestFilePath, "--template", templateFilePath, "--output", manifestFilePath ] as String[])
+}
+
 ext {
     /**
-     * Generates a new android manifest from the CSAndroidManifest.xml.
+     * Generates the google play android manifest from the CSAndroidManifest.xml.
      *
      * @author Ian Copland
      */
-    csGenerateAndroidManifest = { ->
-        def absRootProjectDirectoryPath = file("../../../..").absolutePath
-        def absAndroidProjectDirectoryPath = file("src/main").absolutePath
-        def toolPath = absRootProjectDirectoryPath + "/ChilliSource/Tools/AndroidManifestBuilder.jar"
-        def templateFilePath = absRootProjectDirectoryPath + "/ChilliSource/Tools/Scripts/AndroidManifestTemplate.xml"
-        def manifestFilePath = absAndroidProjectDirectoryPath + "/AndroidManifest.xml"
-        def csManifestFilePath = absAndroidProjectDirectoryPath + "/CSAndroidManifest.xml"
-
-        csExecuteCommand([ "java", "-Djava.awt.headless=true", "-Xmx512m", "-jar", toolPath, "--input", csManifestFilePath, "--template", templateFilePath, "--output", manifestFilePath ] as String[])
+    csGenerateGooglePlayAndroidManifest = { in_sky ->
+        generateAndroidManifest("/ChilliSource/Tools/Scripts/AndroidManifestTemplateGooglePlay.xml");
+    }
+    /**
+     * Generates the amazon android manifest from the CSAndroidManifest.xml.
+     *
+     * @author Ian Copland
+     */
+    csGenerateAmazonAndroidManifest = { in_sky ->
+        generateAndroidManifest("/ChilliSource/Tools/Scripts/AndroidManifestTemplateAmazon.xml");
     }
 }

@@ -39,7 +39,7 @@ import android.widget.RelativeLayout;
 
 import com.chilliworks.chillisource.core.CSActivity;
 import com.chilliworks.chillisource.core.CSApplication;
-import com.chilliworks.chillisource.core.ResourceHelper;
+import com.chilliworks.chillisource.core.R;
 
 public class WebViewNativeInterface 
 {
@@ -206,9 +206,9 @@ public class WebViewNativeInterface
 			return;
 		
 		mActivityIndicator = new ProgressDialog(msActivity);
-		int LoadingTextID = ResourceHelper.GetDynamicResourceIDForField(msActivity, ResourceHelper.RESOURCE_SUBCLASS.RESOURCE_STRING, "com_chillisource_webview_loading");
-		if(LoadingTextID > 0)
+		if (R.doesExist(R.Type.STRING, "com_chillisource_webview_loading") == true)
 		{
+			int LoadingTextID = R.getId(R.Type.STRING, "com_chillisource_webview_loading");
 			String strMessage = msActivity.getString(LoadingTextID);
 			mActivityIndicator.setMessage(strMessage);
 		}

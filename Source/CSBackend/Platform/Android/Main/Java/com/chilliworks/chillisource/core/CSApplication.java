@@ -34,7 +34,10 @@ import java.util.ListIterator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 
@@ -67,6 +70,7 @@ public class CSApplication
 	private boolean m_resetTimeSinceLastUpdate = false;
 	private boolean m_isActive = false;
     private boolean m_isForegrounded = false;
+	private String m_packageName = "";
 	
 	private boolean m_initLifecycleEventOccurred = false;
 	private boolean m_resumeLifecycleEventOccurred = false;
@@ -133,6 +137,18 @@ public class CSApplication
 		m_rootViewContainer.addView(m_activeActivity.getSurface());
 		
 		m_currentAppLifecycleState = LifecycleState.k_notInitialised;
+
+		try
+		{
+			ApplicationInfo ai = m_activeActivity.getPackageManager().getApplicationInfo(m_activeActivity.getPackageName(), PackageManager.GET_META_DATA);
+			Bundle bundle = ai.metaData;
+			m_packageName = bundle.getString("packageName");
+		}
+		catch (Exception e)
+		{
+			Logging.logVerbose(ExceptionUtils.convertToString(e));
+			Logging.logFatal("An exception was thrown while trying to read 'packageName' from AndroidManifest.xml: " + e.getMessage());
+		}
 	}
 	/**
 	 * Triggered when the app is launched
@@ -564,12 +580,33 @@ public class CSApplication
 	}
 	/**
 	 * @author S Downie
-	 * 
+	 *
 	 * @return Chilli source activity
 	 */
 	public Activity getActivity()
 	{
 		return m_activeActivity;
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return The applicationId for the ChilliSource app. This will return the same value as
+	 * Activity.getPackageName().
+	 */
+	public String getApplicationId()
+	{
+		return m_activeActivity.getPackageName();
+	}
+	/**
+	 * @author Ian Copland
+	 *
+	 * @return The "original" packageName for the ChilliSource app, as specified in the
+	 * CSAndroidManifest.xml. This will potentiall differ from value that will be returned from
+	 * Activity.getPackageName().
+	 */
+	public String getPackageName()
+	{
+		return m_packageName;
 	}
 	/**
 	 * @author S Downie
