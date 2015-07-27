@@ -30,10 +30,7 @@
 #define _CHILLISOURCE_CORE_MATH_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Math/CurveFunctions.h>
-#include <ChilliSource/Core/Math/Geometry/Curves.h>
-#include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
-#include <ChilliSource/Core/Math/Geometry/Shapes.h>
+#include <ChilliSource/Core/Math/Interpolate.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
@@ -43,5 +40,8 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Core/Math/Vector3.h>
 #include <ChilliSource/Core/Math/Vector4.h>
+#include <ChilliSource/Core/Math/Geometry/Curves.h>
+#include <ChilliSource/Core/Math/Geometry/ShapeIntersection.h>
+#include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
 #endif

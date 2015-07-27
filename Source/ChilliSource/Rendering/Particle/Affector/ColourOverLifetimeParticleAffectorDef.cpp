@@ -42,8 +42,8 @@ namespace ChilliSource
             const char k_colourProperty[] = "ColourProperty";
             const char k_timeProperty[] = "TimeProperty";
             
-            const char k_curveKey[] = "Curve";
-            const char k_defaultCurve[] = "Linear";
+            const char k_interpolationKey[] = "Interpolation";
+            const char k_defaultInterpolation[] = "Linear";
         }
         
 		CS_DEFINE_NAMEDTYPE(ColourOverLifetimeParticleAffectorDef);
@@ -77,7 +77,7 @@ namespace ChilliSource
             }
             
             // Curve
-            m_curveName = in_paramsJson.get(k_curveKey, k_defaultCurve).asString();
+            m_interpolationName = in_paramsJson.get(k_interpolationKey, k_defaultInterpolation).asString();
 
 			// Call the loaded delegate if required.
 			if (in_asyncDelegate != nullptr)
@@ -105,9 +105,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
-        const std::string& ColourOverLifetimeParticleAffectorDef::GetCurveName() const
+        const std::string& ColourOverLifetimeParticleAffectorDef::GetInterpolationName() const
         {
-            return m_curveName;
+            return m_interpolationName;
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------

@@ -16,7 +16,7 @@
 		8138A8F71A5804AA00C81462 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8EA1A5804AA00C81462 /* CkAudioPlayer.cpp */; };
 		8138A8FA1A5804AA00C81462 /* CricketAudioSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8138A8F11A5804AA00C81462 /* CricketAudioSystem.cpp */; };
 		8138A90F1A5806A300C81462 /* libck.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8138A90E1A5806A300C81462 /* libck.a */; };
-		8141E52D1B56788900259FAD /* CurveFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8141E52B1B56788900259FAD /* CurveFunctions.cpp */; };
+		8141E52D1B56788900259FAD /* Interpolate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8141E52B1B56788900259FAD /* Interpolate.cpp */; };
 		814F240B1A9B96560053ADC5 /* TextIcon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814F24091A9B96560053ADC5 /* TextIcon.cpp */; };
 		817C8C7A1B4D7D3E00ADDE52 /* MarkupDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817C8C781B4D7D3E00ADDE52 /* MarkupDef.cpp */; };
 		817C8C7D1B4D7D5000ADDE52 /* StringMarkupParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817C8C7B1B4D7D5000ADDE52 /* StringMarkupParser.cpp */; };
@@ -401,8 +401,8 @@
 		8138A93F1A5806C100C81462 /* SHA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SHA1.h; sourceTree = "<group>"; };
 		813F09431966A572005E0EC7 /* SmoothStep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmoothStep.h; sourceTree = "<group>"; };
 		8141DFF21A02439100F3D9DF /* concurrent_blocking_queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_blocking_queue.h; sourceTree = "<group>"; };
-		8141E52B1B56788900259FAD /* CurveFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CurveFunctions.cpp; sourceTree = "<group>"; };
-		8141E52C1B56788900259FAD /* CurveFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CurveFunctions.h; sourceTree = "<group>"; };
+		8141E52B1B56788900259FAD /* Interpolate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Interpolate.cpp; sourceTree = "<group>"; };
+		8141E52C1B56788900259FAD /* Interpolate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Interpolate.h; sourceTree = "<group>"; };
 		814F24091A9B96560053ADC5 /* TextIcon.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextIcon.cpp; sourceTree = "<group>"; };
 		814F240A1A9B96560053ADC5 /* TextIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextIcon.h; sourceTree = "<group>"; };
 		8154B74619D0274100F9F5B9 /* concurrent_vector_const_forward_iterator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = concurrent_vector_const_forward_iterator.h; sourceTree = "<group>"; };
@@ -1821,9 +1821,9 @@
 		81D8B28E1962E0EB0010DA84 /* Math */ = {
 			isa = PBXGroup;
 			children = (
-				8141E52B1B56788900259FAD /* CurveFunctions.cpp */,
-				8141E52C1B56788900259FAD /* CurveFunctions.h */,
 				81D8B28F1962E0EB0010DA84 /* Geometry */,
+				8141E52B1B56788900259FAD /* Interpolate.cpp */,
+				8141E52C1B56788900259FAD /* Interpolate.h */,
 				81D8B2961962E0EB0010DA84 /* MathUtils.cpp */,
 				81D8B2971962E0EB0010DA84 /* MathUtils.h */,
 				81D8B2981962E0EB0010DA84 /* Matrix3.h */,
@@ -2986,7 +2986,7 @@
 				81C925421A5C3C3500B3AE11 /* RNGContainer.mm in Sources */,
 				81D8B46E1962E0EC0010DA84 /* Renderer.cpp in Sources */,
 				814F240B1A9B96560053ADC5 /* TextIcon.cpp in Sources */,
-				8141E52D1B56788900259FAD /* CurveFunctions.cpp in Sources */,
+				8141E52D1B56788900259FAD /* Interpolate.cpp in Sources */,
 				81D8B6D81962E0F70010DA84 /* TextureUnitSystem.cpp in Sources */,
 				81D8B49C1962E0EC0010DA84 /* CubemapResourceOptions.cpp in Sources */,
 				81E258991A5D38EF0020264E /* Component.cpp in Sources */,

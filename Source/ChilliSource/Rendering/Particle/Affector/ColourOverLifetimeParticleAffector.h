@@ -97,16 +97,6 @@ namespace ChilliSource
 			/// @param The particle array.
 			//----------------------------------------------------------------
             ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
-            //----------------------------------------------------------------
-            /// Sort ColourData by increasing time
-            ///
-            /// @author Nicolas Tanda
-            ///
-            /// @param Right colour data
-            /// @param Left colour data
-            /// @return Whether colour data should swap
-            //----------------------------------------------------------------
-            static bool SortIntermediateColours(const ColourData& in_r, const ColourData& in_l);
             
         private:
 			const ColourOverLifetimeParticleAffectorDef* m_colourOverLifetimeAffectorDef = nullptr;
