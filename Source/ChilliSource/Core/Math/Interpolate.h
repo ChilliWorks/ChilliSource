@@ -34,6 +34,8 @@
 
 #include <json/json.h>
 
+#include <functional>
+
 namespace ChilliSource
 {
     namespace Core

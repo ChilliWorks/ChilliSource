@@ -49,8 +49,25 @@ namespace ChilliSource
 		CS_DEFINE_NAMEDTYPE(ColourOverLifetimeParticleAffectorDef);
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		ColourOverLifetimeParticleAffectorDef::ColourOverLifetimeParticleAffectorDef(ParticlePropertyUPtr<Core::Colour> in_targetColour)
-			: m_targetColourProperty(std::move(in_targetColour))
+		ColourOverLifetimeParticleAffectorDef::IntermediateColour::IntermediateColour(IntermediateColour&& in_toMove)
+		{
+			m_colourProperty = std::move(in_toMove.m_colourProperty);
+			m_timeProperty = std::move(in_toMove.m_timeProperty);
+		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		ColourOverLifetimeParticleAffectorDef::IntermediateColour& ColourOverLifetimeParticleAffectorDef::IntermediateColour::operator=(IntermediateColour&& in_toMove)
+		{
+			m_colourProperty = std::move(in_toMove.m_colourProperty);
+			m_timeProperty = std::move(in_toMove.m_timeProperty);
+
+			return *this;
+		}
+		//----------------------------------------------------------------
+		//----------------------------------------------------------------
+		ColourOverLifetimeParticleAffectorDef::ColourOverLifetimeParticleAffectorDef(ParticlePropertyUPtr<Core::Colour> in_targetColour, std::vector<IntermediateColour> in_intermediateColours,
+			const std::function<f32(f32)>& in_interpolation)
+			: m_targetColourProperty(std::move(in_targetColour)), m_intermediateColours(std::move(in_intermediateColours)), m_interpolation(in_interpolation)
 		{
 		}
 		//----------------------------------------------------------------
@@ -77,7 +94,8 @@ namespace ChilliSource
             }
             
             // Curve
-            m_interpolationName = in_paramsJson.get(k_interpolationKey, k_defaultInterpolation).asString();
+            auto interpolationName = in_paramsJson.get(k_interpolationKey, k_defaultInterpolation).asString();
+			m_interpolation = Core::Interpolate::GetInterpolateFunction(interpolationName);
 
 			// Call the loaded delegate if required.
 			if (in_asyncDelegate != nullptr)
@@ -105,9 +123,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
-        const std::string& ColourOverLifetimeParticleAffectorDef::GetInterpolationName() const
+        const std::function<f32(f32)>& ColourOverLifetimeParticleAffectorDef::GetInterpolation() const
         {
-            return m_interpolationName;
+            return m_interpolation;
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------

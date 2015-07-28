@@ -28,7 +28,6 @@
 
 #include <ChilliSource/Rendering/Particle/Affector/ColourOverLifetimeParticleAffector.h>
 
-#include <ChilliSource/Core/Math/Interpolate.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Rendering/Particle/Particle.h>
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
@@ -109,7 +108,7 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		void ColourOverLifetimeParticleAffector::AffectParticles(f32 in_deltaTime, f32 in_effectProgress)
         {
-            const auto interpolation = CSCore::Interpolate::GetInterpolateFunction(m_colourOverLifetimeAffectorDef->GetInterpolationName());
+            const auto& interpolation = m_colourOverLifetimeAffectorDef->GetInterpolation();
             
 			Core::dynamic_array<Particle>* particleArray = GetParticleArray();
 			for (u32 i = 0; i < particleArray->size(); ++i)
