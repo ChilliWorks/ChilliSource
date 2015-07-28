@@ -60,14 +60,30 @@ namespace ChilliSource
             using reverse_iterator = std::reverse_iterator<iterator>;
             using const_reverse_iterator = std::reverse_iterator<const_iterator>;
             
-			//------------------------------------------------------------------------------
-			/// Constructor. Initialises the array with the given number of elements.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The size of the array.
-			//------------------------------------------------------------------------------
-			dynamic_array(size_type in_size);
+            //------------------------------------------------------------------------------
+            /// Constructor. Initialises the array with the given number of elements.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param The size of the array.
+            //------------------------------------------------------------------------------
+            dynamic_array(size_type in_size);
+            //------------------------------------------------------------------------------
+            /// Move constructor.
+            ///
+            /// @author Nicolas Tanda
+            ///
+            /// @param in_dynamicArray - The dynamic array to move
+            //------------------------------------------------------------------------------
+            dynamic_array(dynamic_array<TType>&& in_dynamicArray);
+            //------------------------------------------------------------------------------
+            /// Move assignment.
+            ///
+            /// @author Nicolas Tanda
+            ///
+            /// @param in_dynamicArray - The dynamic array to move
+            //------------------------------------------------------------------------------
+            dynamic_array<TType>& operator=(dynamic_array<TType>&& in_dynamicArray);
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -233,7 +249,7 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             const_reverse_iterator crend() const;
 		private:
-			const size_type m_size;
+			size_type m_size;
 			std::unique_ptr<value_type[]> m_array;
 		};
 		//------------------------------------------------------------------------------
@@ -241,10 +257,31 @@ namespace ChilliSource
 		template <typename TType> dynamic_array<TType>::dynamic_array(size_type in_size)
 			: m_size(in_size)
 		{
-			CS_ASSERT(m_size > 0, "Cannot create dynamic_array with size of 0 or below.");
-
-			m_array = std::unique_ptr<TType[]>(new TType[in_size]);
-		}
+            if(in_size > 0)
+            {
+                m_array = std::unique_ptr<TType[]>(new TType[in_size]);
+            }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename TType> dynamic_array<TType>::dynamic_array(dynamic_array<TType>&& in_dynamicArray)
+        {
+            m_array = std::move(in_dynamicArray.m_array);
+            
+            m_size = in_dynamicArray.m_size;
+            in_dynamicArray.m_size = 0;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename TType> dynamic_array<TType>& dynamic_array<TType>::operator=(dynamic_array<TType>&& in_dynamicArray)
+        {
+            m_array = std::move(in_dynamicArray.m_array);
+            
+            m_size = in_dynamicArray.m_size;
+            in_dynamicArray.m_size = 0;
+            
+            return *this;
+        }
 		//------------------------------------------------------------------------------
 		//------------------------------------------------------------------------------
 		template <typename TType> typename dynamic_array<TType>::size_type dynamic_array<TType>::size() const

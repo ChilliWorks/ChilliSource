@@ -810,9 +810,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\SphereParticleEmitterDef.cpp">
       <Filter>ChilliSource\Rendering\Particle\Emitter</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyCurveFunctions.cpp">
-      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactoryImpl.cpp">
       <Filter>ChilliSource\Rendering\Particle\Property</Filter>
     </ClCompile>
@@ -968,6 +965,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\String\StringMarkupParser.cpp">
       <Filter>ChilliSource\Core\String</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Interpolate.cpp">
+      <Filter>ChilliSource\Core\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1880,9 +1880,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticleProperty.h">
       <Filter>ChilliSource\Rendering\Particle\Property</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyCurveFunctions.h">
-      <Filter>ChilliSource\Rendering\Particle\Property</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactory.h">
       <Filter>ChilliSource\Rendering\Particle\Property</Filter>
     </ClInclude>
@@ -2104,6 +2101,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\String\StringMarkupParser.h">
       <Filter>ChilliSource\Core\String</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Interpolate.h">
+      <Filter>ChilliSource\Core\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

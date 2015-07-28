@@ -66,6 +66,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Localisation\LocalisedTextProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Geometry\ShapeIntersection.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Geometry\Shapes.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Interpolate.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\MathUtils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Random.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\UnifiedCoordinates.cpp" />
@@ -183,7 +184,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Emitter\SphereParticleEmitterDef.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffect.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\ParticleEffectComponent.cpp" />
-    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyCurveFunctions.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactoryImpl.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Shader\Shader.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Sprite\DynamicSpriteBatcher.cpp" />
@@ -373,6 +373,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Geometry\Curves.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Geometry\ShapeIntersection.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Geometry\Shapes.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Interpolate.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\MathUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Matrix3.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Matrix4.h" />
@@ -544,7 +545,6 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ConstantParticleProperty.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\CurveParticleProperty.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticleProperty.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyCurveFunctions.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\ParticlePropertyFactoryImpl.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Particle\Property\RandomConstantParticleProperty.h" />

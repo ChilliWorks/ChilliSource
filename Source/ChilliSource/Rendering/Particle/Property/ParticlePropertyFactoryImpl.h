@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_PARTICLEPROPERTYFACTORYIMPL_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Interpolate.h>
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/Rendering/Particle/Property/ComponentwiseRandomConstantParticleProperty.h>
 #include <ChilliSource/Rendering/Particle/Property/ComponentwiseRandomCurveParticleProperty.h>
@@ -74,16 +75,6 @@ namespace ChilliSource
                 static const char k_endUpperValueKey[] = "EndUpperValue";
                 static const char k_curveKey[] = "Curve";
                 
-                //------------------------------------------------------------------------------
-                /// Parse the curve function.
-                ///
-                /// @author Ian Copland
-                ///
-                /// @param The string name of the curve.
-                ///
-                /// @return The
-                //------------------------------------------------------------------------------
-                std::function<f32(f32)> ParseCurveFunction(const std::string& in_curveName);
                 //------------------------------------------------------------------------------
                 /// A templated method for parsing values from a string.
                 ///
@@ -197,7 +188,7 @@ namespace ChilliSource
                     CS_ASSERT(endValue != Json::nullValue, "Must supply '" + std::string(k_endValueKey) + "' in '" + std::string(k_curveType) + "' property.");
                     CS_ASSERT(endValue.isString(), "'" + std::string(k_endValueKey) + "' in '" + std::string(k_curveType) + "' property must be a string.");
                     
-                    return ParticlePropertyUPtr<TType>(new CurveParticleProperty<TType>(ParseValue<TType>(startValue.asString()), ParseValue<TType>(endValue.asString()), ParseCurveFunction(curve.asString())));
+                    return ParticlePropertyUPtr<TType>(new CurveParticleProperty<TType>(ParseValue<TType>(startValue.asString()), ParseValue<TType>(endValue.asString()), Core::Interpolate::GetInterpolateFunction(curve.asString())));
                 }
                 //------------------------------------------------------------------------------
                 /// Creates a new random curve particle property with the value described in the
@@ -232,7 +223,7 @@ namespace ChilliSource
                     CS_ASSERT(endUpperValue.isString(), "'" + std::string(k_endUpperValueKey) + "' in '" + std::string(k_randomCurveType) + "' property must be a string.");
                     
                     return ParticlePropertyUPtr<TType>(new RandomCurveParticleProperty<TType>(ParseValue<TType>(startLowerValue.asString()), ParseValue<TType>(startUpperValue.asString()),
-                        ParseValue<TType>(endLowerValue.asString()), ParseValue<TType>(endUpperValue.asString()), ParseCurveFunction(curve.asString())));
+                        ParseValue<TType>(endLowerValue.asString()), ParseValue<TType>(endUpperValue.asString()), Core::Interpolate::GetInterpolateFunction(curve.asString())));
                 }
                 //------------------------------------------------------------------------------
                 /// Creates a new componentwise random curve particle property with the value
@@ -267,7 +258,7 @@ namespace ChilliSource
                     CS_ASSERT(endUpperValue.isString(), "'" + std::string(k_endUpperValueKey) + "' in '" + std::string(k_componentwiseRandomCurveType) + "' property must be a string.");
                     
                     return ParticlePropertyUPtr<TType>(new ComponentwiseRandomCurveParticleProperty<TType>(ParseValue<TType>(startLowerValue.asString()), ParseValue<TType>(startUpperValue.asString()),
-                        ParseValue<TType>(endLowerValue.asString()), ParseValue<TType>(endUpperValue.asString()), ParseCurveFunction(curve.asString())));
+                        ParseValue<TType>(endLowerValue.asString()), ParseValue<TType>(endUpperValue.asString()), Core::Interpolate::GetInterpolateFunction(curve.asString())));
                 }
                 //------------------------------------------------------------------------------
                 /// Specialisation for parsing u32 values.
