@@ -1,5 +1,5 @@
 //
-//  ParticlePropertyCurveFunctions.h
+//  Interpolate.h
 //  Chilli Source
 //  Created by Ian Copland on 29/12/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_PARTICLEPROPERTYCURVEFUNCTIONS_H_
-#define _CHILLISOURCE_RENDERING_PARTICLE_PROPERTY_PARTICLEPROPERTYCURVEFUNCTIONS_H_
+#ifndef _CHILLISOURCE_CORE_MATH_INTERPOLATE_H_
+#define _CHILLISOURCE_CORE_MATH_INTERPOLATE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/String/StringUtils.h>
@@ -36,18 +36,25 @@
 
 namespace ChilliSource
 {
-    namespace Rendering
+    namespace Core
     {
         //------------------------------------------------------------------------------
-        /// A collection of curve functions for use by the various curve type Particle
-        /// Properties.
+        /// A collection of Interpolate functions.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------------
-        namespace ParticlePropertyCurveFunctions
+        namespace Interpolate
         {
             //------------------------------------------------------------------------------
-            /// The linear curve function.
+            /// @author Ian Copland
+            ///
+            /// @param The string name of the curve.
+            ///
+            /// @return The associated Interpolate function.
+            //------------------------------------------------------------------------------
+            std::function<f32(f32)> GetInterpolateFunction(const std::string& in_name);
+            //------------------------------------------------------------------------------
+            /// The linear Interpolate function.
             ///
             /// @author Ian Copland
             ///
@@ -57,7 +64,7 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             f32 Linear(f32 in_x);
             //------------------------------------------------------------------------------
-            /// The ease in quad curve function.
+            /// The ease in quad Interpolate function.
             ///
             /// @author Ian Copland
             ///
@@ -67,7 +74,7 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             f32 EaseInQuad(f32 in_x);
             //------------------------------------------------------------------------------
-            /// The ease out quad curve function.
+            /// The ease out quad Interpolate function.
             ///
             /// @author Ian Copland
             ///
@@ -77,7 +84,7 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             f32 EaseOutQuad(f32 in_x);
             //------------------------------------------------------------------------------
-            /// The smooth step curve function.
+            /// The smooth step Interpolate function.
             ///
             /// @author Ian Copland
             ///
@@ -87,7 +94,7 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             f32 SmoothStep(f32 in_x);
             //------------------------------------------------------------------------------
-            /// The linear ping pong curve function.
+            /// The linear ping pong Interpolate function.
             ///
             /// @author Ian Copland
             ///
@@ -97,7 +104,7 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             f32 LinearPingPong(f32 in_x);
             //------------------------------------------------------------------------------
-            /// The ease in quad ping pong curve function.
+            /// The ease in quad ping pong Interpolate function.
             ///
             /// @author Ian Copland
             ///
@@ -107,7 +114,7 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             f32 EaseInQuadPingPong(f32 in_x);
             //------------------------------------------------------------------------------
-            /// The ease out quad ping pong curve function.
+            /// The ease out quad ping pong Interpolate function.
             ///
             /// @author Ian Copland
             ///
@@ -117,7 +124,7 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             f32 EaseOutQuadPingPong(f32 in_x);
             //------------------------------------------------------------------------------
-            /// The smooth step ping pong curve function.
+            /// The smooth step ping pong Interpolate function.
             ///
             /// @author Ian Copland
             ///

@@ -75,8 +75,19 @@ namespace ChilliSource
 			/// @author Ian Copland
 			//----------------------------------------------------------------
 			virtual ~ColourOverLifetimeParticleAffector() {};
+            
 		private:
 			friend class ColourOverLifetimeParticleAffectorDef;
+            //----------------------------------------------------------------
+            /// A container for the colours of a single particle.
+            ///
+            /// @author Nicolas Tanda
+            //----------------------------------------------------------------
+            struct ColourData final
+            {
+                Core::Colour m_colour;
+                f32 m_time;
+            };
 			//----------------------------------------------------------------
 			/// Constructor.
 			///
@@ -85,21 +96,13 @@ namespace ChilliSource
 			/// @param The particle affector definition.
 			/// @param The particle array.
 			//----------------------------------------------------------------
-			ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
-			//----------------------------------------------------------------
-			/// A container for the initial and target colour of a single 
-			/// particle.
-			///
-			/// @author Ian Copland.
-			//----------------------------------------------------------------
-			struct ColourData
-			{
-				Core::Colour m_initialColour;
-				Core::Colour m_targetColour;
-			};
-
+            ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
+            
+        private:
 			const ColourOverLifetimeParticleAffectorDef* m_colourOverLifetimeAffectorDef = nullptr;
 			Core::dynamic_array<ColourData> m_particleColourData;
+            
+            u32 m_intermediateParticles = 0;
 		};
 	}
 }

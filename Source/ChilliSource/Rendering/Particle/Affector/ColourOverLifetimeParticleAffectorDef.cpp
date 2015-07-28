@@ -35,6 +35,17 @@ namespace ChilliSource
 {
 	namespace Rendering
 	{
+        namespace
+        {
+            const char k_intermediateColours[] = "IntermediateColours";
+            const char k_targetColourProperty[] = "TargetColourProperty";
+            const char k_colourProperty[] = "ColourProperty";
+            const char k_timeProperty[] = "TimeProperty";
+            
+            const char k_interpolationKey[] = "Interpolation";
+            const char k_defaultInterpolation[] = "Linear";
+        }
+        
 		CS_DEFINE_NAMEDTYPE(ColourOverLifetimeParticleAffectorDef);
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
@@ -46,12 +57,29 @@ namespace ChilliSource
 		//----------------------------------------------------------------
 		ColourOverLifetimeParticleAffectorDef::ColourOverLifetimeParticleAffectorDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate)
 		{
-			//Colour
-			Json::Value jsonValue = in_paramsJson.get("TargetColourProperty", Json::nullValue);
+			// Target Colour
+			const auto& jsonValue = in_paramsJson.get(k_targetColourProperty, Json::nullValue);
 			CS_ASSERT(jsonValue.isNull() == false, "No target colour property provided.");
 			m_targetColourProperty = ParticlePropertyFactory::CreateProperty<Core::Colour>(jsonValue);
+            
+            // Intermediate Colours
+            const auto& jsonArray = in_paramsJson.get(k_intermediateColours, Json::nullValue);
+            m_intermediateColours.reserve(jsonArray.size());
+            for(const auto& jsonIntermediateColour : jsonArray)
+            {
+                m_intermediateColours.push_back(IntermediateColour());
+                
+                const auto& jsonColour = jsonIntermediateColour.get(k_colourProperty, Json::nullValue);
+                m_intermediateColours.back().m_colourProperty = ParticlePropertyFactory::CreateProperty<Core::Colour>(jsonColour);
+                
+                const auto& jsonTime = jsonIntermediateColour.get(k_timeProperty, Json::nullValue);
+                m_intermediateColours.back().m_timeProperty = ParticlePropertyFactory::CreateProperty<f32>(jsonTime);
+            }
+            
+            // Curve
+            m_interpolationName = in_paramsJson.get(k_interpolationKey, k_defaultInterpolation).asString();
 
-			//call the loaded delegate if required.
+			// Call the loaded delegate if required.
 			if (in_asyncDelegate != nullptr)
 			{
 				in_asyncDelegate(this);
@@ -74,6 +102,18 @@ namespace ChilliSource
 		const ParticleProperty<Core::Colour>* ColourOverLifetimeParticleAffectorDef::GetTargetColourProperty() const
 		{
 			return m_targetColourProperty.get();
-		}
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        const std::string& ColourOverLifetimeParticleAffectorDef::GetInterpolationName() const
+        {
+            return m_interpolationName;
+        }
+        //----------------------------------------------------------------
+        //----------------------------------------------------------------
+        const std::vector<ColourOverLifetimeParticleAffectorDef::IntermediateColour>& ColourOverLifetimeParticleAffectorDef::GetIntermediateColours() const
+        {
+            return m_intermediateColours;
+        }
 	}
 }

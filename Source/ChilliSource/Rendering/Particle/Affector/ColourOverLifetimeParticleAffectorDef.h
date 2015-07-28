@@ -48,14 +48,36 @@ namespace ChilliSource
 		///
 		/// A colour over lifetime particle affector contains the following params:
 		///
-		/// "TargetColourProperty": The property describing the target colour. 
+		/// "TargetColourProperty": The property describing the target colour.
+        ///
+        /// "IntermediateColours": The list of intermediate colours to go through
+        /// before interpolating to the target colour. Each intermediate colour
+        /// has the following properties:
+        ///
+        ///     "ColourProperty": The property describing the intermediate colour.
+        ///
+        ///     "TimeProperty": The property defining the target time for that
+        ///     colour.
+        ///
+        /// "Interpolation": The interpolation curve used to transition from one
+        /// colour to another.
 		///
-		/// @author Ian Copland
+		/// @author Nicolas Tanda
 		//-----------------------------------------------------------------------
 		class ColourOverLifetimeParticleAffectorDef final : public ParticleAffectorDef
 		{
 		public:
-			CS_DECLARE_NAMEDTYPE(ColourOverLifetimeParticleAffectorDef);
+            CS_DECLARE_NAMEDTYPE(ColourOverLifetimeParticleAffectorDef);
+            //----------------------------------------------------------------
+            /// Definition of an intermediate colour of a single particle.
+            ///ß
+            /// @author Nicolas Tanda
+            //----------------------------------------------------------------
+            struct IntermediateColour final
+            {
+                ParticlePropertyUPtr<Core::Colour> m_colourProperty;
+                ParticlePropertyUPtr<f32> m_timeProperty;
+            };
 			//----------------------------------------------------------------
 			/// Constructor.
 			///
@@ -100,22 +122,38 @@ namespace ChilliSource
 			///
 			/// @return the instance.
 			//----------------------------------------------------------------
-			ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const override;
-			//----------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return A property describing the target colour.
-			//----------------------------------------------------------------
-			const ParticleProperty<Core::Colour>* GetTargetColourProperty() const;
+            ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const override;
+            //----------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return A property describing the target colour.
+            //----------------------------------------------------------------
+            const ParticleProperty<Core::Colour>* GetTargetColourProperty() const;
+            //----------------------------------------------------------------
+            /// @author Nicolas Tanda
+            ///
+            /// @return The name of the Interpolation used to transition from
+            /// colour to colour.
+            //----------------------------------------------------------------
+            const std::string& GetInterpolationName() const;
+            //----------------------------------------------------------------
+            /// @author Nicolas Tanda
+            ///
+            /// @return An array of intermediate colours
+            //----------------------------------------------------------------
+            const std::vector<IntermediateColour>& GetIntermediateColours() const;
 			//----------------------------------------------------------------
 			/// Destructor
 			///
 			/// @author Ian Copland.
 			//----------------------------------------------------------------
 			virtual ~ColourOverLifetimeParticleAffectorDef() {}
-		private:
-
+            
+        private:
+            std::string m_interpolationName;
 			ParticlePropertyUPtr<Core::Colour> m_targetColourProperty;
+            
+            std::vector<IntermediateColour> m_intermediateColours;
 		};
 	}
 }

@@ -30,6 +30,7 @@
 #define _CHILLISOURCE_CORE_MATH_H_
 
 #include <ChilliSource/ChilliSource.h>
+#include <ChilliSource/Core/Math/Interpolate.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Math/Matrix3.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
