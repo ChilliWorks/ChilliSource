@@ -39,7 +39,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         HListLayout::HListLayout(LayoutComponent* in_layoutComponent, u32 in_numCells, const Core::Vector4& in_relMargins, const Core::Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing)
-            : Layout(in_layoutComponent), m_gridLayout(in_layoutComponent, GridLayout::CellOrder::k_colMajor, 1, in_numCells, in_relMargins, in_absMargins, in_relSpacing, in_absSpacing, 0.0f, 0.0f)
+            : Layout(in_layoutComponent), m_gridLayout(in_layoutComponent, GridLayout::CellOrder::k_rowMajor, 1, in_numCells, in_relMargins, in_absMargins, in_relSpacing, in_absSpacing, 0.0f, 0.0f)
         {
         }
         //------------------------------------------------------------------------------

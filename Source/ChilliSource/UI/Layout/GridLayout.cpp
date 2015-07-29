@@ -230,12 +230,12 @@ namespace ChilliSource
             switch(m_cellOrder)
             {
                 case CellOrder::k_colMajor:
-                    indexCol = in_index % m_numCols;
-                    indexRow = in_index / m_numCols;
-                    break;
-                case CellOrder::k_rowMajor:
                     indexCol = in_index / m_numRows;
                     indexRow = in_index % m_numRows;
+                    break;
+                case CellOrder::k_rowMajor:
+                    indexCol = in_index % m_numCols;
+                    indexRow = in_index / m_numCols;
                     break;
             }
         
