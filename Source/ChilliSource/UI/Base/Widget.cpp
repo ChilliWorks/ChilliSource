@@ -1073,7 +1073,7 @@ namespace ChilliSource
             
             Core::Matrix3 pivot(Core::Matrix3::CreateTransform(-anchorPoint, Core::Vector2::k_one, 0.0f));
             Core::Matrix3 rotate(Core::Matrix3::CreateTransform(Core::Vector2::k_zero, Core::Vector2::k_one, -m_localRotation));
-            Core::Matrix3 translate(Core::Matrix3::CreateTransform(renderSpacePositionCentred - anchorPoint, Core::Vector2::k_one, 0.0f));
+            Core::Matrix3 translate(Core::Matrix3::CreateTransform(renderSpacePositionCentred + anchorPoint, Core::Vector2::k_one, 0.0f));
             
             m_cachedLocalTransform = pivot * rotate * translate;
             

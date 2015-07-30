@@ -315,12 +315,6 @@ namespace ChilliSource
 			/// subtracted from it.
 			//-----------------------------------------------------
 			GenericVector2<TType>& operator-=(const GenericVector2<TType>& in_b);
-            //-----------------------------------------------------
-            /// @author S Downie
-			///
-			/// @return This vector after it has been negated
-            //-----------------------------------------------------
-            GenericVector2<TType>& operator-();
 			//-----------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -370,18 +364,6 @@ namespace ChilliSource
 			TType x;
 			TType y;
 		};
-        //-----------------------------------------------------
-		/// @author I Copland
-		///
-		/// @param The vector A.
-		/// @param The vector B.
-		///
-		/// @return The result of A + B.
-		//-----------------------------------------------------
-		template <typename TType> GenericVector2<TType> operator-(TType in_a, GenericVector2<TType> in_b)
-        {
-            return GenericVector2<TType>(0.0f, 0.0f);
-        }
 		//-----------------------------------------------------
 		/// @author Ian Copland
 		///
@@ -472,6 +454,14 @@ namespace ChilliSource
 		/// @return Whether or not the two vectors are in-equal
 		//-----------------------------------------------------
 		template <typename TType> bool operator!=(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b);
+        //-----------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @param in_a - A vector.
+        ///
+        /// @return A negated copy of the given vector.
+        //-----------------------------------------------------
+        template <typename TType> GenericVector2<TType> operator-(GenericVector2<TType> in_a);
 	}
 }
 
@@ -483,6 +473,7 @@ namespace ChilliSource
 #include <ChilliSource/Core/Math/Matrix3.h>
 
 #include <algorithm>
+#include <assert.h>
 #include <cmath>
 
 namespace ChilliSource
@@ -653,6 +644,8 @@ namespace ChilliSource
         //-----------------------------------------------------
         template <typename TType> void GenericVector2<TType>::Clamp(const GenericVector2<TType>& in_min, const GenericVector2<TType>& in_max)
         {
+            assert(in_min.x <= in_max.x && in_min.y <= in_max.y);
+            
             x = std::min(std::max(x, in_min.x), in_max.x);
 			y = std::min(std::max(y, in_min.y), in_max.y);
         }
@@ -697,14 +690,6 @@ namespace ChilliSource
 			y -= in_b.y;
 			return *this;
 		}
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        template <typename TType> GenericVector2<TType>& GenericVector2<TType>::operator-()
-        {
-            x = -x;
-			y = -y;
-			return *this;
-        }
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector2<TType>& GenericVector2<TType>::operator*=(const GenericVector2<TType>& in_b)
@@ -813,6 +798,14 @@ namespace ChilliSource
 		{
 			return !(in_a == in_b);
 		}
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> GenericVector2<TType> operator-(GenericVector2<TType> in_a)
+        {
+            in_a.x = -in_a.x;
+            in_a.y = -in_a.y;
+            return in_a;
+        }
 	}
 }
 
