@@ -85,6 +85,18 @@ namespace CSBackend
 			/// @author S Downie
 			//----------------------------------------------------------------------------------------
 			void Cancel() override;
+			//----------------------------------------------------------------------------------------
+			/// @author HMcLaughlin
+			///
+			/// @return The expected total size of the request
+			//----------------------------------------------------------------------------------------
+			u64 GetExpectedTotalSize() const;
+			//----------------------------------------------------------------------------------------
+			/// @author HMcLaughlin
+			///
+			/// @return The current transferred size of the request
+			//----------------------------------------------------------------------------------------
+			u64 GetCurrentSize() const;
 
 		private:
 			friend class HttpRequestSystem;
