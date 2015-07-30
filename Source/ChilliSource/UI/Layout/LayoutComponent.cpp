@@ -89,6 +89,8 @@ namespace ChilliSource
             
             m_layoutDef = in_layoutDef;
             m_layout = m_layoutDef->CreateLayout(this);
+            
+            OnLayoutChanged();
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -118,7 +120,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void LayoutComponent::OnLayoutChanged()
         {
-            GetWidget()->ForceLayoutChildren();
+            GetWidget()->ForceLayout();
         }
     }
 }
