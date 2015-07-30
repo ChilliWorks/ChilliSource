@@ -168,7 +168,8 @@ namespace CSBackend
 			u32 m_responseCode = 0;
 			CSNetworking::HttpResponse::Result m_requestResult = CSNetworking::HttpResponse::Result::k_failed;
 
-			u32 m_totalBytesRead = 0;
+			u64 m_totalBytesRead = 0;
+			u64 m_expectedSize = 0;
 			
 			bool m_shouldKillThread = false;
 			bool m_isPollingComplete = false;

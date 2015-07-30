@@ -34,6 +34,7 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
+#include <ChilliSource/Core/String.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <Windows.h>
@@ -134,7 +135,7 @@ namespace CSBackend
 			///
 			/// @return Key value dictionary
 			//-------------------------------------------------------------------
-			CSCore::ParamDictionary GetHeaders(HINTERNET in_requestHandle)
+			CSCore::ParamDictionary GetRequestHandleHeaders(HINTERNET in_requestHandle)
 			{
 				CSCore::ParamDictionary headers;
 
@@ -264,20 +265,24 @@ namespace CSBackend
 			DWORD headerSize = sizeof(DWORD);
 			u32 responseCode = 0;
 			WinHttpQueryHeaders(in_requestHandle, WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER, nullptr, &responseCode, &headerSize, nullptr);
+			
+			CSCore::ParamDictionary headers = GetRequestHandleHeaders(in_requestHandle);
+			std::string expectedSize;
+			headers.TryGetValue("Content-Length", expectedSize);
+			m_expectedSize = CSCore::ParseU32(expectedSize);
 
 			// Keep reading from the remote server until there's
 			// nothing left to read
 			DWORD bytesToBeRead = 0;
 			DWORD bytesRead = 0;
 			CSNetworking::HttpResponse::Result result = CSNetworking::HttpResponse::Result::k_failed;
-			u32 totalBytesRead = 0;
 			u32 totalBytesReadThisBlock = 0;
 			s8 readBuffer[k_readBufferSize];
 			std::stringstream streamBuffer;
 
 			do
 			{
-				lock.unlock();
+				lock.unlock(); 
 				BOOL queryAvailableResult = WinHttpQueryDataAvailable(in_requestHandle, &bytesToBeRead);
 				lock.lock();
 
@@ -313,12 +318,13 @@ namespace CSBackend
 				if (bytesRead > 0)
 				{
 					streamBuffer.write(readBuffer, bytesRead);
-					totalBytesRead += bytesRead;
+					m_totalBytesRead += bytesRead;
 					totalBytesReadThisBlock += bytesRead;
 
 					if (bufferFlushSize != 0 && totalBytesReadThisBlock >= bufferFlushSize)
 					{
 						m_responseData = streamBuffer.str();
+						m_requestResult = CSNetworking::HttpResponse::Result::k_flushed;
 						m_taskScheduler->ScheduleMainThreadTask(std::bind(m_completionDelegate, this, CSNetworking::HttpResponse(m_requestResult, m_responseCode, m_responseData)));
 						streamBuffer.clear();
 						streamBuffer.str("");
@@ -338,7 +344,6 @@ namespace CSBackend
 			m_isPollingComplete = true;
 			m_requestResult = result;
 			m_responseCode = responseCode;
-			m_totalBytesRead = totalBytesRead;
 			m_responseData = streamBuffer.str();
 		}
 		//----------------------------------------------------------------------------------------
@@ -398,13 +403,13 @@ namespace CSBackend
 		//----------------------------------------------------------------------------------------
 		u64 HttpRequest::GetExpectedTotalSize() const
 		{
-			return 0;
+			return m_expectedSize;
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
 		u64 HttpRequest::GetCurrentSize() const
 		{
-			return 0;
+			return m_totalBytesRead;
 		}
 	}
 }
