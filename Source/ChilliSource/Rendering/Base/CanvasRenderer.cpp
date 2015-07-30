@@ -706,9 +706,6 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
         void CanvasRenderer::OnInit()
         {
-            m_materialFactory = Core::Application::Get()->GetSystem<MaterialFactory>();
-            CS_ASSERT(m_materialFactory != nullptr, "Must have a material factory");
-
             m_resourcePool = Core::Application::Get()->GetResourcePool();
             CS_ASSERT(m_resourcePool != nullptr, "Must have a resource pool");
 
@@ -718,37 +715,11 @@ namespace ChilliSource
             m_screen = Core::Application::Get()->GetSystem<Core::Screen>();
             CS_ASSERT(m_screen != nullptr, "Canvas renderer cannot find screen system");
 
+            auto materialFactory = Core::Application::Get()->GetSystem<MaterialFactory>();
+            CS_ASSERT(materialFactory != nullptr, "Must have a material factory");
+            
+            m_materialPool = CanvasMaterialPoolUPtr(new CanvasMaterialPool(materialFactory));
             m_overlayBatcher = DynamicSpriteBatchUPtr(new DynamicSpriteBatch(renderSystem));
-        }
-        //----------------------------------------------------------------------------
-        //----------------------------------------------------------------------------
-        MaterialCSPtr CanvasRenderer::GetGUIMaterialForTexture(const TextureCSPtr& in_texture)
-        {
-            auto itExistingEntry = m_materialGUICache.find(in_texture);
-            if(itExistingEntry != m_materialGUICache.end())
-            {
-                return itExistingEntry->second;
-            }
-            else
-            {
-                std::string materialId("_GUI:" + Core::ToString(in_texture->GetId()));
-                MaterialCSPtr materialExisting = m_resourcePool->GetResource<Material>(materialId);
-
-                if(materialExisting != nullptr)
-                {
-                    m_materialGUICache.insert(std::make_pair(in_texture, materialExisting));
-                    return materialExisting;
-                }
-
-                MaterialSPtr materialNew = m_materialFactory->CreateGUI(materialId);
-                materialNew->AddTexture(in_texture);
-                m_materialGUICache.insert(std::make_pair(in_texture, materialNew));
-
-                return materialNew;
-            }
-
-            CS_LOG_FATAL("CanvasRenderer: No GUI material created. Some logic has gone wrong");
-            return nullptr;
         }
         //----------------------------------------------------------
 		//----------------------------------------------------------
@@ -761,7 +732,7 @@ namespace ChilliSource
 			m_overlayBatcher->DisableScissoring();
 			m_overlayBatcher->ForceRender();
 
-            m_materialGUICache.clear();
+            m_materialPool->Clear();
 			m_canvasSprite.pMaterial = nullptr;
 		}
         //----------------------------------------------------------------------------
@@ -822,7 +793,7 @@ namespace ChilliSource
         void CanvasRenderer::DrawBox(const Core::Matrix3& in_transform, const Core::Vector2& in_size, const Core::Vector2& in_offset, const TextureCSPtr& in_texture, const Rendering::UVs& in_UVs,
                                      const Core::Colour& in_colour, AlignmentAnchor in_anchor)
         {
-            m_canvasSprite.pMaterial = GetGUIMaterialForTexture(in_texture);
+            m_canvasSprite.pMaterial = m_materialPool->GetMaterial(in_texture);
 
 			UpdateSpriteData(Convert2DTransformTo3D(in_transform), in_size, in_offset, in_UVs, in_colour, in_anchor, m_canvasSprite);
 
@@ -897,7 +868,7 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
 		void CanvasRenderer::DrawText(const std::vector<DisplayCharacterInfo>& in_characters, const Core::Matrix3& in_transform, const Core::Colour& in_colour, const TextureCSPtr& in_texture)
 		{
-            m_canvasSprite.pMaterial = GetGUIMaterialForTexture(in_texture);
+            m_canvasSprite.pMaterial = m_materialPool->GetMaterial(in_texture);
 
             Core::Matrix4 matTransform = Convert2DTransformTo3D(in_transform);
             Core::Matrix4 matTransformedLocal;
@@ -914,7 +885,7 @@ namespace ChilliSource
         void CanvasRenderer::OnDestroy()
         {
             m_overlayBatcher = nullptr;
-            m_materialGUICache.clear();
+            m_materialPool->Clear();
             m_canvasSprite.pMaterial = nullptr;
         }
 	}
