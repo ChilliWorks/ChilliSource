@@ -551,7 +551,7 @@ namespace ChilliSource
 		//-----------------------------------------------------
 		template <typename TType> TType GenericVector2<TType>::Angle(const GenericVector2<TType>& in_a, const GenericVector2<TType>& in_b)
 		{
-			return std::atan2(in_b.y, in_b.x) - std::atan2(in_a.y, in_a.x);
+            return std::abs(std::atan2(in_b.y, in_b.x) - std::atan2(in_a.y, in_a.x));
 		}
         //-----------------------------------------------------
         //-----------------------------------------------------
