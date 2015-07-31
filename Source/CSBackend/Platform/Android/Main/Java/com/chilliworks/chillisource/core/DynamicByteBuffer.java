@@ -139,11 +139,13 @@ public class DynamicByteBuffer
 	 */
 	private void checkCapacity(int in_additionalCount)
 	{
+		int requiredCapacity = m_size + in_additionalCount;
+
 		//if its not big enough, then make sure it is.
-		if (m_size + in_additionalCount > m_capacity)
+		if (requiredCapacity > m_capacity)
 		{
 			//create the new buffer
-			int dwNewCapacity = m_capacity * 2;
+			int dwNewCapacity = requiredCapacity;
 			byte[] abyNewData = new byte[dwNewCapacity];
 			
 			//put the old data in the new buffer
