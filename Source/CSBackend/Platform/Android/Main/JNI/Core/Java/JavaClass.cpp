@@ -61,6 +61,18 @@ namespace CSBackend
             environment->DeleteGlobalRef(m_javaObject);
             m_javaObject = nullptr;
         }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        jobject JavaClass::GetJavaObject() const
+        {
+            return m_javaObject;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        const std::string& JavaClass::GetClassName() const
+        {
+            return m_className;
+        }
     }
 }
 

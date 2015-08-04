@@ -37,7 +37,6 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
 #include <CSBackend/Platform/Android/Main/JNI/Input/Pointer/TouchInputJavaInterface.h>
-#include <CSBackend/Platform/Android/Main/JNI/Networking/Http/HttpRequestJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Web/Base/WebViewJavaInterface.h>
 #include <ChilliSource/Core/Base/PlatformSystem.h>
 
@@ -180,7 +179,6 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_initApplication(
 
 	//setup other interfaces
 	CSBackend::Android::TouchInputJavaInterface::SetupJavaInterface(javaVM);
-	CSBackend::Android::HttpRequestJavaInterface::SetupJavaInterface(javaVM);
 	CSBackend::Android::WebViewJavaInterface::SetupJavaInterface(javaVM);
     
 	//run the application

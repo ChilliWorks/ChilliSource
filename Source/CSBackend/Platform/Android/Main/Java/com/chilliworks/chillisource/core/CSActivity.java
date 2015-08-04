@@ -36,7 +36,6 @@ import android.view.WindowManager;
 
 import com.chilliworks.chillisource.input.DeviceButtonNativeInterface;
 import com.chilliworks.chillisource.input.DeviceButtonNativeInterface.DeviceButton;
-import com.chilliworks.chillisource.networking.HttpRequestNativeInterface;
 import com.chilliworks.chillisource.web.WebViewNativeInterface;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -289,7 +288,6 @@ public class CSActivity extends Activity
 			CSApplication.get().activityIntent(getIntent());
 
 			//initialise the old style native interfaces (These should be removed over time as each of these is changed over to the new system!)
-			HttpRequestNativeInterface.Setup(this);
 			SharedPreferencesNativeInterface.Setup(this);
 			WebViewNativeInterface.Setup(this);
 		}
