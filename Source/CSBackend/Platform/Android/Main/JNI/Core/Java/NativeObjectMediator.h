@@ -73,10 +73,10 @@ namespace CSBackend
             ///
             /// @return Unique ID
             //------------------------------------------------------------------------------
-            template <typename TType> u64 GenerateId()
+            template <typename TType> s64 GenerateId()
             {
                 auto typeIndex = std::type_index(typeid(TType));
-                return static_cast<u64>(typeIndex.hash_code());
+                return static_cast<s64>(typeIndex.hash_code());
             }
             //------------------------------------------------------------------------------
             /// Casts a native pointer to a Java Native Pointer container
@@ -111,8 +111,8 @@ namespace CSBackend
             {
                 CS_ASSERT(in_javaContainer->GetClassName() == GetNativePointerClassDef().GetClassName(), "Java object is not of type NativePointer! " + in_javaContainer->GetClassName());
 
-                u64 pointerAddress = in_javaContainer->CallLongMethod("getPointerAddress");
-                u64 pointerTypeHash = in_javaContainer->CallLongMethod("getTypeHash");
+                s64 pointerAddress = in_javaContainer->CallLongMethod("getPointerAddress");
+                s64 pointerTypeHash = in_javaContainer->CallLongMethod("getTypeHash");
                 
                 CS_ASSERT(pointerTypeHash == GenerateId<TType>(), "Failed to cast Java pointer back to c pointer, type mismatch!");
                 
