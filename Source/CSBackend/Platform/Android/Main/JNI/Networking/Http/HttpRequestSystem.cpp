@@ -30,6 +30,8 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Networking/Http/HttpRequestSystem.h>
 
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaSystem.h>
+
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -39,6 +41,15 @@ namespace CSBackend
 	{
 		CS_DEFINE_NAMEDTYPE(HttpRequestSystem);
 
+		//--------------------------------------------------------------------------------------------------
+		//--------------------------------------------------------------------------------------------------
+        HttpRequestSystem::HttpRequestSystem()
+        {
+            JavaClassDef classDef("com/chilliworks/chillisource/networking/HttpRequestSystem");
+            classDef.AddMethod("isConnected", "()Z");
+
+            m_javaSystem = JavaSystemUPtr(new JavaSystem(classDef));
+        }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
 		bool HttpRequestSystem::IsA(CSCore::InterfaceIDType in_interfaceId) const
@@ -97,7 +108,7 @@ namespace CSBackend
         //--------------------------------------------------------------------------------------------------
         bool HttpRequestSystem::CheckReachability() const
         {
-            return false;//HttpRequestJavaInterface::IsConnected();
+            return m_javaSystem->CallBoolMethod("isConnected");
         }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------

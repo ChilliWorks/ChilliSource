@@ -28,13 +28,8 @@
 
 package com.chilliworks.chillisource.networking;
 
-import android.app.Activity;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 
-import com.chilliworks.chillisource.core.CSApplication;
 import com.chilliworks.chillisource.core.DynamicByteBuffer;
 import com.chilliworks.chillisource.core.Logging;
 import com.chilliworks.chillisource.core.NativePointer;
@@ -365,24 +360,5 @@ public final class HttpRequest
     synchronized private void addDownloadProgress(int in_downloadProgressBytes)
     {
         m_downloadedDataSize += in_downloadProgressBytes;
-    }
-    //-------------------------------------------------------------------
-    /// Is Connected
-    ///
-    /// method accessible from native to test whether or not the device is
-    /// connected to the Internet.
-    ///
-    /// @return whether or not the device is connected.
-    //-------------------------------------------------------------------
-    public boolean IsConnected()
-    {
-        Activity activity = CSApplication.get().getActivity();
-        ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnected())
-        {
-            return true;
-        }
-        return false;
     }
 }

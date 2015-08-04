@@ -136,7 +136,7 @@ namespace CSBackend
             ///
             /// @author Ian Copland
             //--------------------------------------------------------------------------------------------------
-            HttpRequestSystem() = default;
+            HttpRequestSystem();
             //------------------------------------------------------------------
             /// Concrete method to which all MakeRequest overloads feed.
             ///
@@ -170,6 +170,8 @@ namespace CSBackend
 		private:
 
 			std::vector<HttpRequest*> m_requests;
+
+            JavaSystemUPtr m_javaSystem;
 		};
 	}
 
