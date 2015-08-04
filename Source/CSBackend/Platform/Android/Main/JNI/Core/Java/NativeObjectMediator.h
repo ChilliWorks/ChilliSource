@@ -52,6 +52,11 @@ namespace CSBackend
         namespace NativeObjectMediator
         {
             //------------------------------------------------------------------------------
+            /// Gets the definition for a native pointer java class
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @return Native pointer def
             //------------------------------------------------------------------------------
             JavaClassDef GetNativePointerClassDef()
             {
@@ -62,6 +67,11 @@ namespace CSBackend
                 return javaNativePointerClassDef;
             }
             //------------------------------------------------------------------------------
+            /// Generates a unique number for a templated type
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @return Unique ID
             //------------------------------------------------------------------------------
             template <typename TType> u64 GenerateId()
             {
@@ -69,6 +79,13 @@ namespace CSBackend
                 return static_cast<u64>(typeIndex.hash_code());
             }
             //------------------------------------------------------------------------------
+            /// Casts a native pointer to a Java Native Pointer container
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param Object pointer
+            ///
+            /// @return Java Object containing pointer info
             //------------------------------------------------------------------------------
             template <typename TType> JavaClassSPtr NativeToJavaPointer(TType* in_type)
             {
@@ -82,6 +99,13 @@ namespace CSBackend
                 return javaNativePointerClass;
             }
             //------------------------------------------------------------------------------
+            /// Casts a java pointer container back to a c++ pointer of the original type
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param Java Object containing pointer info
+            ///
+            /// @return Native pointer
             //------------------------------------------------------------------------------
             template <typename TType> TType* JavaToNativePointer(const JavaClassSPtr& in_javaContainer)
             {
