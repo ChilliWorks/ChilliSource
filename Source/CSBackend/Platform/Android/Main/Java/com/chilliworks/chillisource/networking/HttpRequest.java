@@ -332,7 +332,7 @@ public final class HttpRequest
     /**
      * @author HMcLaughlin
      *
-     * @return Total size of the download, can be 0
+     * @return Total current downloaded size
      */
     public long getCurrentSize()
     {

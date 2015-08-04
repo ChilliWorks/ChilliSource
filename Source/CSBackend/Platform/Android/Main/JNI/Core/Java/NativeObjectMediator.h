@@ -51,44 +51,6 @@ namespace CSBackend
 	{
         namespace NativeObjectMediator
         {
-//            //------------------------------------------------------------------------------
-//            /// Provides functions to convert a c++ pointer to java object container and 
-//            /// back
-//            ///
-//            /// @author HMcLaughlin
-//            //------------------------------------------------------------------------------
-//            class NativeObjectMediator final
-//            {
-//            public:
-//                //------------------------------------------------------------------------------
-//                /// Generates a unique number for a templated type
-//                ///
-//                /// @author HMcLaughlin
-//                ///
-//                /// @return Unique ID
-//                //------------------------------------------------------------------------------
-//                template <typename TType> static u64 GenerateId();
-//                //------------------------------------------------------------------------------
-//                /// Casts a native pointer to a Java Native Pointer container
-//                ///
-//                /// @author HMcLaughlin
-//                ///
-//                /// @param Object pointer
-//                ///
-//                /// @return Java Object containing pointer info
-//                //------------------------------------------------------------------------------
-//                template <typename TType> static JavaClassSPtr NativeToJavaPointer(TType* in_type);
-//                //------------------------------------------------------------------------------
-//                /// Casts a java pointer container back to a c++ pointer of the original type
-//                ///
-//                /// @author HMcLaughlin
-//                ///
-//                /// @param Java Object containing pointer info
-//                ///
-//                /// @return Native pointer
-//                //------------------------------------------------------------------------------
-//                template <typename TType> static TType* JavaToNativePointer(const JavaClassSPtr& in_javaContainer);
-//            };
             //------------------------------------------------------------------------------
             //------------------------------------------------------------------------------
             JavaClassDef GetNativePointerClassDef()
@@ -115,10 +77,8 @@ namespace CSBackend
                 
                 s64 pointerAddress = (s64)in_type;
                 s64 pointerTypeHash = GenerateId<TType>();
-                
-                CS_LOG_ERROR("$$$$$$$ PAddress - " + CSCore::ToString(pointerAddress) + ", PHash - " + CSCore::ToString(pointerTypeHash));
+
                 JavaClassSPtr javaNativePointerClass = JavaClassSPtr(new JavaClass(javaNativePointerClassDef, pointerAddress, pointerTypeHash));
-    //            a.m_pointer = reinterpret_cast<void*>(in_type);
                 return javaNativePointerClass;
             }
             //------------------------------------------------------------------------------
@@ -126,6 +86,7 @@ namespace CSBackend
             template <typename TType> TType* JavaToNativePointer(const JavaClassSPtr& in_javaContainer)
             {
                 CS_ASSERT(in_javaContainer->GetClassName() == GetNativePointerClassDef().GetClassName(), "Java object is not of type NativePointer! " + in_javaContainer->GetClassName());
+
                 u64 pointerAddress = in_javaContainer->CallLongMethod("getPointerAddress");
                 u64 pointerTypeHash = in_javaContainer->CallLongMethod("getTypeHash");
                 
