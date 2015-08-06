@@ -1,7 +1,7 @@
 //
 //  PrimitiveEntityFactory.h
-//  CSTest
-//  Created by Ian Copland on 28/07/2015.
+//  ChilliSource
+//  Created by Ian Copland on 04/08/2015.
 //
 //  The MIT License (MIT)
 //

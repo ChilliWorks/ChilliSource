@@ -1,6 +1,6 @@
 //
 //  PrimitiveModelFactory.cpp
-//  CSTest
+//  ChilliSource
 //  Created by Ian Copland on 03/08/2015.
 //
 //  The MIT License (MIT)
