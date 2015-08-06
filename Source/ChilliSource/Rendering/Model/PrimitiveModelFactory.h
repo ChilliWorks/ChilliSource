@@ -76,10 +76,12 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @param in_size - The size of the plane.
+            /// @param in_textureRepeat - [Optional] The number of times a texture is
+            /// repeated on the plane in each axis. Defaults to [1, 1]
             ///
             /// @return The plane model.
             //------------------------------------------------------------------------------
-            MeshCSPtr CreatePlane(const Core::Vector2& in_size) const;
+            MeshCSPtr CreatePlane(const Core::Vector2& in_size, const Core::Vector2& in_textureRepeat = Core::Vector2::k_one) const;
             //------------------------------------------------------------------------------
             /// Creates a box model of the given size. If an identical box already exists
             /// it will be returned instead of creating a new instance.

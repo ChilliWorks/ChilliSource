@@ -58,10 +58,11 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @param in_size - The size of the model.
+            /// @param in_textureRepeat - The number of times the texture is repeated.
             ///
             /// @return The new mesh descriptor.
             //------------------------------------------------------------------------------
-            MeshDescriptor CreatePlaneDesc(const Core::Vector2& in_size)
+            MeshDescriptor CreatePlaneDesc(const Core::Vector2& in_size, const Core::Vector2& in_textureRepeat)
             {
                 Core::Vector2 halfSize = in_size * 0.5f;
                 
@@ -94,11 +95,10 @@ namespace ChilliSource
                 Vertex* vertices = new Vertex[subMesh.mudwNumVertices];
                 subMesh.mpVertexData = reinterpret_cast<u8*>(vertices);
                 
-                //front
                 vertices[0] = { Core::Vector4(-halfSize.x, 0.0f, -halfSize.y, 1.0f), Core::Vector2(0.0f, 0.0f), Core::Vector3(0.0f, 1.0f, 0.0f) };
-                vertices[1] = { Core::Vector4(-halfSize.x, 0.0f, halfSize.y, 1.0f), Core::Vector2(0.0f, 1.0f), Core::Vector3(0.0f, 1.0f, 0.0f) };
-                vertices[2] = { Core::Vector4(halfSize.x, 0.0f, -halfSize.y, 1.0f), Core::Vector2(1.0f, 0.0f), Core::Vector3(0.0f, 1.0f, 0.0f) };
-                vertices[3] = { Core::Vector4(halfSize.x, 0.0f, halfSize.y, 1.0f), Core::Vector2(1.0f, 1.0f), Core::Vector3(0.0f, 1.0f, 0.0f) };
+                vertices[1] = { Core::Vector4(-halfSize.x, 0.0f, halfSize.y, 1.0f), Core::Vector2(0.0f, in_textureRepeat.y), Core::Vector3(0.0f, 1.0f, 0.0f) };
+                vertices[2] = { Core::Vector4(halfSize.x, 0.0f, -halfSize.y, 1.0f), Core::Vector2(in_textureRepeat.x, 0.0f), Core::Vector3(0.0f, 1.0f, 0.0f) };
+                vertices[3] = { Core::Vector4(halfSize.x, 0.0f, halfSize.y, 1.0f), Core::Vector2(in_textureRepeat.x, in_textureRepeat.y), Core::Vector3(0.0f, 1.0f, 0.0f) };
                 
                 //Indices
                 u16 *indices(new u16[subMesh.mudwNumIndices]);
@@ -306,7 +306,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        MeshCSPtr PrimitiveModelFactory::CreatePlane(const Core::Vector2& in_size) const
+        MeshCSPtr PrimitiveModelFactory::CreatePlane(const Core::Vector2& in_size, const Core::Vector2& in_textureRepeat) const
         {
             CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread(), "Cannot create models on a background thread.");
             
@@ -318,7 +318,7 @@ namespace ChilliSource
             {
                 auto mutableMesh = resourcePool->CreateResource<Mesh>(meshName);
                 
-                auto desc = CreatePlaneDesc(in_size);
+                auto desc = CreatePlaneDesc(in_size, in_textureRepeat);
                 mutableMesh->Build(desc);
                 CleanupDesc(desc);
                 mutableMesh->SetLoadState(Core::Resource::LoadState::k_loaded);
