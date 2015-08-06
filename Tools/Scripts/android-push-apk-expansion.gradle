@@ -76,6 +76,8 @@ ext {
         }
 
         String adb = getAdbFilePath()
+        csExecuteCommand([ adb, "start-server" ] as String[])
+        
         String storagePath = csExecuteCommandAndGetOutput([adb, 'shell', 'echo', '$EXTERNAL_STORAGE'])
 
         String destinationFilePath = storagePath + '/Android/obb/' + in_applicationId + '/' + fileName
