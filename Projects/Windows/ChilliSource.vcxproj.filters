@@ -969,6 +969,9 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Math\Interpolate.cpp">
       <Filter>ChilliSource\Core\Math</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.cpp">
+      <Filter>ChilliSource\Rendering\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Base\ContextRestorer.h">
@@ -2104,6 +2107,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Interpolate.h">
       <Filter>ChilliSource\Core\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.h">
+      <Filter>ChilliSource\Rendering\Base</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

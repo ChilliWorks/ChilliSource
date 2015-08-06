@@ -40,6 +40,7 @@ namespace ChilliSource
         //------------------------------------------------------------
         /// Base
         //------------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(CanvasMaterialPool);
         CS_FORWARDDECLARE_CLASS(CanvasRenderer);
         CS_FORWARDDECLARE_CLASS(ICullingPredicate);
         CS_FORWARDDECLARE_CLASS(ViewportCullPredicate);

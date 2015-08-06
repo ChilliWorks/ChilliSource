@@ -59,7 +59,7 @@ namespace ChilliSource
         ,m_particleColourData(0)
         {
             m_colourOverLifetimeAffectorDef = static_cast<const ColourOverLifetimeParticleAffectorDef*>(in_affectorDef);
-            m_intermediateParticles = m_colourOverLifetimeAffectorDef->GetIntermediateColours().size();
+            m_intermediateParticles = static_cast<u32>(m_colourOverLifetimeAffectorDef->GetIntermediateColours().size());
             m_particleColourData = std::move(Core::dynamic_array<ColourData>(in_particleArray->size() * (2 + m_intermediateParticles)));
 		}
 		//----------------------------------------------------------------

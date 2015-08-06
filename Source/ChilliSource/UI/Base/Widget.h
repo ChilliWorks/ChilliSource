@@ -860,12 +860,13 @@ namespace ChilliSource
             /// @return The local space position relative to the given anchor.
             //----------------------------------------------------------------------------------------
             Core::Vector2 ToLocalSpace(const Core::Vector2& in_point, Rendering::AlignmentAnchor in_alignmentAnchor) const;
-            //----------------------------------------------------------------------------------------
-            /// Forces the widget to update its children.
+            //------------------------------------------------------------------------------
+            /// Invalidates all caches, ensuring the transform for the widget and its
+            /// children are re-calculated the next time it is rendered.
             ///
             /// @author Ian Copland
-            //----------------------------------------------------------------------------------------
-            void ForceLayoutChildren();
+            //------------------------------------------------------------------------------
+            void ForceLayout();
             //----------------------------------------------------------------------------------------
             /// Destructor. Sends the OnDestroy event to all components.
             ///
@@ -1113,12 +1114,6 @@ namespace ChilliSource
             /// @return Whether or not the pointer is within the bounds.
             //------------------------------------------------------------------------------
             bool IsContainedPointer(const Input::Pointer& in_pointer);
-            //----------------------------------------------------------------------------------------
-            /// Called when the out transform changes forcing this to update its caches
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            void InvalidateTransformCache();
             //----------------------------------------------------------------------------------------
             /// Called when the parent transform changes forcing this to update its caches
             ///

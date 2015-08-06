@@ -340,12 +340,6 @@ namespace ChilliSource
 			/// subtracted from it.
 			//-----------------------------------------------------
 			GenericVector3<TType>& operator-=(const GenericVector3<TType>& in_b);
-            //-----------------------------------------------------
-            /// @author S Downie
-			///
-			/// @return This vector after it has been negated
-            //-----------------------------------------------------
-            GenericVector3<TType>& operator-();
 			//-----------------------------------------------------
 			/// @author Ian Copland
 			///
@@ -496,15 +490,23 @@ namespace ChilliSource
 		/// @return Whether or not the two vectors are equal.
 		//-----------------------------------------------------
 		template <typename TType> bool operator==(const GenericVector3<TType>& in_a, const GenericVector3<TType>& in_b);
-		//-----------------------------------------------------
-		/// @author Ian Copland
-		///
-		/// @param The vector A.
-		/// @param The vector B.
-		///
-		/// @return Whether or not the two vectors are in-equal.
-		//-----------------------------------------------------
-		template <typename TType> bool operator!=(const GenericVector3<TType>& in_a, const GenericVector3<TType>& in_b);
+        //-----------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @param The vector A.
+        /// @param The vector B.
+        ///
+        /// @return Whether or not the two vectors are in-equal.
+        //-----------------------------------------------------
+        template <typename TType> bool operator!=(const GenericVector3<TType>& in_a, const GenericVector3<TType>& in_b);
+        //-----------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @param in_a - A vector.
+        ///
+        /// @return A negated copy of the given vector.
+        //-----------------------------------------------------
+        template <typename TType> GenericVector3<TType> operator-(GenericVector3<TType> in_a);
 	}
 }
 
@@ -519,6 +521,7 @@ namespace ChilliSource
 #include <ChilliSource/Core/Math/Vector2.h>
 
 #include <algorithm>
+#include <assert.h>
 #include <cmath>
 
 namespace ChilliSource
@@ -739,6 +742,8 @@ namespace ChilliSource
         //-----------------------------------------------------
         template <typename TType> void GenericVector3<TType>::Clamp(const GenericVector3<TType>& in_min, const GenericVector3<TType>& in_max)
         {
+            assert(in_min.x <= in_max.x && in_min.y <= in_max.y && in_min.z <= in_max.z);
+            
             x = std::min(std::max(x, in_min.x), in_max.x);
 			y = std::min(std::max(y, in_min.y), in_max.y);
 			z = std::min(std::max(z, in_min.z), in_max.z);
@@ -794,15 +799,6 @@ namespace ChilliSource
 			z -= in_b.z;
 			return *this;
 		}
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        template <typename TType> GenericVector3<TType>& GenericVector3<TType>::operator-()
-        {
-            x = -x;
-			y = -y;
-			z = -z;
-			return *this;
-        }
 		//-----------------------------------------------------
 		//-----------------------------------------------------
 		template <typename TType> GenericVector3<TType>& GenericVector3<TType>::operator*=(const GenericVector3<TType>& in_b)
@@ -937,6 +933,15 @@ namespace ChilliSource
 		{
 			return !(in_a == in_b);
 		}
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        template <typename TType> GenericVector3<TType> operator-(GenericVector3<TType> in_a)
+        {
+            in_a.x = -in_a.x;
+            in_a.y = -in_a.y;
+            in_a.z = -in_a.z;
+            return in_a;
+        }
 	}
 }
 

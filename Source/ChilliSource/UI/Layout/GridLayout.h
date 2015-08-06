@@ -54,10 +54,10 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             /// Describes the increment order of the cells.
             ///
-            /// Col. Major: 0123
+            /// Row. Major: 0123
             ///             4567
             ///
-            /// Row. Major: 0246
+            /// Col. Major: 0246
             ///             1357
             ///
             /// @author S Downie

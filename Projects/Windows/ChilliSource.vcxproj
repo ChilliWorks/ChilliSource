@@ -116,6 +116,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Networking\IAP\IAPSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CullingPredicates.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp" />
@@ -458,6 +459,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\BlendMode.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullFace.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullingPredicates.h" />

@@ -442,7 +442,7 @@ namespace ChilliSource
         {
             m_localSize.vRelative = in_size;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -456,7 +456,7 @@ namespace ChilliSource
         {
             m_localSize.vAbsolute = in_size;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -470,7 +470,7 @@ namespace ChilliSource
         {
             m_preferredSize = in_size;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -481,7 +481,7 @@ namespace ChilliSource
             m_sizePolicy = in_policy;
             m_sizePolicyDelegate = SizePolicyFuncs::k_sizePolicyFuncs[(u32)m_sizePolicy];
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -495,7 +495,7 @@ namespace ChilliSource
         {
             m_localPosition.vRelative = in_pos;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -509,7 +509,7 @@ namespace ChilliSource
         {
             m_localPosition.vAbsolute = in_pos;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -523,7 +523,7 @@ namespace ChilliSource
         {
             m_localPosition.vRelative += in_translate;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -531,7 +531,7 @@ namespace ChilliSource
         {
             m_localPosition.vAbsolute += in_translate;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -539,7 +539,7 @@ namespace ChilliSource
         {
             m_localRotation += in_angleRads;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -547,7 +547,7 @@ namespace ChilliSource
         {
             m_localRotation = in_angleRads;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -561,7 +561,7 @@ namespace ChilliSource
         {
             m_localScale *= in_scale;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -569,7 +569,7 @@ namespace ChilliSource
         {
             m_localScale = in_scale;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -583,7 +583,7 @@ namespace ChilliSource
         {
             m_parentalAnchor = in_anchor;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -597,7 +597,7 @@ namespace ChilliSource
         {
             m_originAnchor = in_anchor;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -611,7 +611,7 @@ namespace ChilliSource
         {
             m_originPosition.vAbsolute = in_position;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -625,7 +625,7 @@ namespace ChilliSource
         {
             m_originPosition.vRelative = in_position;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1022,7 +1022,7 @@ namespace ChilliSource
                 }
             }
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1030,7 +1030,7 @@ namespace ChilliSource
         {
             m_parent = in_parent;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1073,7 +1073,7 @@ namespace ChilliSource
             
             Core::Matrix3 pivot(Core::Matrix3::CreateTransform(-anchorPoint, Core::Vector2::k_one, 0.0f));
             Core::Matrix3 rotate(Core::Matrix3::CreateTransform(Core::Vector2::k_zero, Core::Vector2::k_one, -m_localRotation));
-            Core::Matrix3 translate(Core::Matrix3::CreateTransform(renderSpacePositionCentred - anchorPoint, Core::Vector2::k_one, 0.0f));
+            Core::Matrix3 translate(Core::Matrix3::CreateTransform(renderSpacePositionCentred + anchorPoint, Core::Vector2::k_one, 0.0f));
             
             m_cachedLocalTransform = pivot * rotate * translate;
             
@@ -1397,42 +1397,12 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::InvalidateTransformCache()
-        {
-            m_isLocalTransformCacheValid = false;
-            m_isLocalSizeCacheValid = false;
-            
-            if(m_canvas != nullptr)
-            {
-                if(m_layoutComponent != nullptr)
-                {
-                    m_layoutComponent->BuildLayout();
-                }
-            }
-            
-            for(auto& child : m_internalChildren)
-            {
-                child->OnParentTransformChanged();
-            }
-            
-            for(auto& child : m_children)
-            {
-                child->OnParentTransformChanged();
-            }
-            
-			if (m_canvas != nullptr && m_isInputEnabled == true)
-			{
-				UpdateAllContainedPointers();
-			}
-        }
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
         void Widget::OnParentTransformChanged()
         {
             m_isParentTransformCacheValid = false;
             m_isParentSizeCacheValid = false;
             
-            InvalidateTransformCache();
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1597,11 +1567,32 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        void Widget::ForceLayoutChildren()
+        void Widget::ForceLayout()
         {
+            m_isLocalTransformCacheValid = false;
+            m_isLocalSizeCacheValid = false;
+            
+            if(m_canvas != nullptr)
+            {
+                if(m_layoutComponent != nullptr)
+                {
+                    m_layoutComponent->BuildLayout();
+                }
+            }
+            
+            for(auto& child : m_internalChildren)
+            {
+                child->OnParentTransformChanged();
+            }
+            
             for(auto& child : m_children)
             {
                 child->OnParentTransformChanged();
+            }
+            
+            if (m_canvas != nullptr && m_isInputEnabled == true)
+            {
+                UpdateAllContainedPointers();
             }
         }
         //------------------------------------------------------------------------------
