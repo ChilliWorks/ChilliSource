@@ -1,7 +1,7 @@
 //
-//  NativeObjectMediator
+//  BoxedPointer
 //  ChilliSource
-//  Created by HMcLaughlin on 31/08/2015.
+//  Created by HMcLaughlin on 31/07/2015.
 //
 //  The MIT License (MIT)
 //
@@ -28,8 +28,8 @@
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifndef _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_NATIVEOBJECTMEDIATOR_H_
-#define _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_NATIVEOBJECTMEDIATOR_H_
+#ifndef _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_BOXEDPOINTER_H_
+#define _CSBACKEND_PLATFORM_ANDROID_MAIN_JNI_CORE_JAVA_BOXEDPOINTER_H_
 
 #include <ChilliSource/ChilliSource.h>
 
@@ -49,23 +49,14 @@ namespace CSBackend
 {
 	namespace Android
 	{
-        namespace NativeObjectMediator
+        namespace BoxedPointer
         {
             //------------------------------------------------------------------------------
-            /// Gets the definition for a native pointer java class
-            ///
             /// @author HMcLaughlin
             ///
-            /// @return Native pointer def
+            /// @return Definition for a java BoxedPointer class
             //------------------------------------------------------------------------------
-            JavaClassDef GetNativePointerClassDef()
-            {
-                JavaClassDef javaNativePointerClassDef("com/chilliworks/chillisource/core/NativePointer", "(JJ)V");
-                javaNativePointerClassDef.AddMethod("getPointerAddress", "()J");
-                javaNativePointerClassDef.AddMethod("getTypeHash", "()J");
-                
-                return javaNativePointerClassDef;
-            }
+            JavaClassDef GetBoxedPointerClassDef();
             //------------------------------------------------------------------------------
             /// Generates a unique number for a templated type
             ///
@@ -73,49 +64,60 @@ namespace CSBackend
             ///
             /// @return Unique ID
             //------------------------------------------------------------------------------
-            template <typename TType> s64 GenerateId()
+            template <typename TType> s64 GenerateTypeHash();
+            //------------------------------------------------------------------------------
+            /// Wraps a native pointer in a java BoxedPointer container
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_type - Object pointer
+            ///
+            /// @return Java Boxed Pointer containing pointer info
+            //------------------------------------------------------------------------------
+            template <typename TType> JavaClassUPtr Box(TType* in_type);
+            //------------------------------------------------------------------------------
+            /// Casts a java BoxedPointer back to a c++ pointer of the original type
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param in_javaContainer - Java Object containing pointer info
+            ///
+            /// @return Native pointer
+            //------------------------------------------------------------------------------
+            template <typename TType> TType* Unbox(JavaClass* in_javaBoxedPointer);
+        }
+        namespace BoxedPointer
+        {
+            //------------------------------------------------------------------------------
+            //------------------------------------------------------------------------------
+            template <typename TType> s64 GenerateTypeHash()
             {
                 auto typeIndex = std::type_index(typeid(TType));
                 return static_cast<s64>(typeIndex.hash_code());
             }
             //------------------------------------------------------------------------------
-            /// Casts a native pointer to a Java Native Pointer container
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @param Object pointer
-            ///
-            /// @return Java Object containing pointer info
             //------------------------------------------------------------------------------
-            template <typename TType> JavaClassSPtr NativeToJavaPointer(TType* in_type)
+            template <typename TType> JavaClassUPtr Box(TType* in_type)
             {
                 //Create a java NativePointer for this instance
-                JavaClassDef javaNativePointerClassDef = GetNativePointerClassDef();
-                
-                s64 pointerAddress = (s64)in_type;
-                s64 pointerTypeHash = GenerateId<TType>();
+                JavaClassDef javaBoxedPointerClassDef = BoxedPointer::GetBoxedPointerClassDef();
 
-                JavaClassSPtr javaNativePointerClass = JavaClassSPtr(new JavaClass(javaNativePointerClassDef, pointerAddress, pointerTypeHash));
-                return javaNativePointerClass;
+                s64 pointerAddress = (s64)in_type;
+                s64 pointerTypeHash = GenerateTypeHash<TType>();
+
+                JavaClassUPtr javaBoxedPointerClass = JavaClassUPtr(new JavaClass(javaBoxedPointerClassDef, pointerAddress, pointerTypeHash));
+                return javaBoxedPointerClass;
             }
             //------------------------------------------------------------------------------
-            /// Casts a java pointer container back to a c++ pointer of the original type
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @param Java Object containing pointer info
-            ///
-            /// @return Native pointer
             //------------------------------------------------------------------------------
-            template <typename TType> TType* JavaToNativePointer(const JavaClassSPtr& in_javaContainer)
+            template <typename TType> TType* Unbox(JavaClass* in_javaBoxedPointer)
             {
-                CS_ASSERT(in_javaContainer->GetClassName() == GetNativePointerClassDef().GetClassName(), "Java object is not of type NativePointer! " + in_javaContainer->GetClassName());
+                CS_ASSERT(in_javaBoxedPointer->GetClassName() == BoxedPointer::GetBoxedPointerClassDef().GetClassName(), "Cannot convert '" + in_javaBoxedPointer->GetClassName() + "', only BoxedPointer");
 
-                s64 pointerAddress = in_javaContainer->CallLongMethod("getPointerAddress");
-                s64 pointerTypeHash = in_javaContainer->CallLongMethod("getTypeHash");
-                
-                CS_ASSERT(pointerTypeHash == GenerateId<TType>(), "Failed to cast Java pointer back to c pointer, type mismatch!");
-                
+                s64 pointerAddress = in_javaBoxedPointer->CallLongMethod("getPointerAddress");
+
+                CS_ASSERT(in_javaBoxedPointer->CallLongMethod("getTypeHash") == GenerateTypeHash<TType>(), "Failed to cast Java pointer back to c pointer, type mismatch!");
+
                 return reinterpret_cast<TType*>(pointerAddress);
             }
         }

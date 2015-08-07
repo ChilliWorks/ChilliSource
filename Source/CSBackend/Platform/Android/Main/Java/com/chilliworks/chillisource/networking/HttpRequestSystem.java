@@ -42,7 +42,7 @@ import com.chilliworks.chillisource.core.System;
  *
  * @author HMcLaughlin
  */
-public class HttpRequestSystem extends System
+public final class HttpRequestSystem extends System
 {
     public static InterfaceId INTERFACE_ID = new InterfaceId();
 
@@ -53,7 +53,6 @@ public class HttpRequestSystem extends System
      */
     public HttpRequestSystem()
     {
-        init();
     }
     /**
      * Allows querying of whether or not the system implements the interface described by the

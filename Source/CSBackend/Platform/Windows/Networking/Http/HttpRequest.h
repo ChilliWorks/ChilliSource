@@ -90,13 +90,13 @@ namespace CSBackend
 			///
 			/// @return The expected total size of the request
 			//----------------------------------------------------------------------------------------
-			u64 GetExpectedTotalSize() const;
+			u64 GetExpectedSize() const override;
 			//----------------------------------------------------------------------------------------
 			/// @author HMcLaughlin
 			///
 			/// @return The current transferred size of the request
 			//----------------------------------------------------------------------------------------
-			u64 GetCurrentSize() const;
+			u64 GetDownloadedBytes() const override;
 
 		private:
 			friend class HttpRequestSystem;

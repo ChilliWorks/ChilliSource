@@ -135,7 +135,7 @@ namespace CSBackend
 			///
 			/// @return Key value dictionary
 			//-------------------------------------------------------------------
-			CSCore::ParamDictionary GetRequestHandleHeaders(HINTERNET in_requestHandle)
+			CSCore::ParamDictionary GetRequestHeaders(HINTERNET in_requestHandle)
 			{
 				CSCore::ParamDictionary headers;
 
@@ -266,7 +266,7 @@ namespace CSBackend
 			u32 responseCode = 0;
 			WinHttpQueryHeaders(in_requestHandle, WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER, nullptr, &responseCode, &headerSize, nullptr);
 			
-			CSCore::ParamDictionary headers = GetRequestHandleHeaders(in_requestHandle);
+			CSCore::ParamDictionary headers = GetRequestHeaders(in_requestHandle);
 			std::string expectedSize;
 			headers.TryGetValue("Content-Length", expectedSize);
 			m_expectedSize = CSCore::ParseU32(expectedSize);
@@ -401,13 +401,13 @@ namespace CSBackend
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
-		u64 HttpRequest::GetExpectedTotalSize() const
+		u64 HttpRequest::GetExpectedSize() const
 		{
 			return m_expectedSize;
 		}
 		//----------------------------------------------------------------------------------------
 		//----------------------------------------------------------------------------------------
-		u64 HttpRequest::GetCurrentSize() const
+		u64 HttpRequest::GetDownloadedBytes() const
 		{
 			return m_totalBytesRead;
 		}

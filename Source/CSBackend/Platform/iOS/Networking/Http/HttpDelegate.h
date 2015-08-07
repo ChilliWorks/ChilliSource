@@ -59,12 +59,6 @@
 /// request must be flushed (0 == no limit)
 //---------------------------------------------------------------------------
 - (id) initWithRequest:(CSBackend::iOS::HttpRequest*)in_request andMaxBufferSize:(u32) in_bufferSize;
-//---------------------------------------------------------------------------
-/// Cleans up the delegate.
-///
-/// @author Ian Copland
-//---------------------------------------------------------------------------
--(void) dealloc;
 //-----------------------------------------------
 /// @author N Tanda
 ///
@@ -76,7 +70,13 @@
 ///
 /// @return The current length of the received data
 //-----------------------------------------------
-- (u64) GetReceivedData;
+- (u64) GetDownloadedBytes;
+//---------------------------------------------------------------------------
+/// Cleans up the delegate.
+///
+/// @author Ian Copland
+//---------------------------------------------------------------------------
+-(void) dealloc;
 
 @end
 

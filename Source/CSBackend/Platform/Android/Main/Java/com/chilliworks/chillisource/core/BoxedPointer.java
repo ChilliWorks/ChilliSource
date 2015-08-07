@@ -1,5 +1,5 @@
 /**
- * NativePointer.java
+ * BoxedPointer.java
  * Chilli Source
  * Created by HMcLaughlin on 31/07/2015.
  *
@@ -29,14 +29,17 @@
 package com.chilliworks.chillisource.core;
 
 /**
- * Structure to hold data to recreate a native pointer
+ * This can be used to wrap a c-pointer and type up in a java object.
+ *
+ * The BoxedPointer, native side, can be used to box (Wrap a c-pointer and type to java) and
+ * Unbox (Unwrap the java object back to a c-pointer)
  *
  * @author HMcLaughlin
  */
-public final class NativePointer
+public final class BoxedPointer
 {
-    private long m_pointerAddress;
-    private long m_typeHash;
+    final private long m_pointerAddress;
+    final private long m_typeHash;
 
     /**
      * Constructor
@@ -46,7 +49,7 @@ public final class NativePointer
      * @param in_pointerAddress
      * @param in_typeHash
      */
-    public NativePointer(long in_pointerAddress, long in_typeHash)
+    public BoxedPointer(long in_pointerAddress, long in_typeHash)
     {
         m_pointerAddress = in_pointerAddress;
         m_typeHash = in_typeHash;

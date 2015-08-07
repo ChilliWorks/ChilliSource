@@ -34,7 +34,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaClassDef.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
-#include <CSBackend/Platform/Android/Main/JNI/Core/Java/NativeObjectMediator.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/BoxedPointer.h>
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
@@ -52,12 +52,12 @@ extern "C"
 	///
     /// @param in_env - The jni environment.
     /// @param in_this - The java object calling the function.
+    /// @param in_objectPointer - BoxedPointer Java object
     /// @param in_data - Partial Data
     /// @param in_dataLength - Length of partial data
     /// @param in_responseCode - Response code
-    /// @param in_objectPointer - NativePointer Java object
 	//-----------------------------------------------------------------------
-	void Java_com_chilliworks_chillisource_networking_HttpRequest_OnBufferFlushed(JNIEnv* in_env, jobject in_this, jbyteArray in_data, jint in_dataLength, jint in_responseCode, jobject in_objectPointer);
+	void Java_com_chilliworks_chillisource_networking_HttpRequest_onBufferFlushed(JNIEnv* in_env, jobject in_this, jobject in_objectPointer, jbyteArray in_data, jint in_dataLength, jint in_responseCode);
 	//-----------------------------------------------------------------------
     /// Called when the connection has finished
     ///
@@ -65,44 +65,33 @@ extern "C"
     ///
     /// @param in_env - The jni environment.
     /// @param in_this - The java object calling the function.
+    /// @param in_objectPointer - BoxedPointer Java object
     /// @param in_resultCode - Result code
     /// @param in_data - Data
     /// @param in_dataLength - Length of partial data
     /// @param in_responseCode - Response code
-    /// @param in_objectPointer - NativePointer Java object
     //-----------------------------------------------------------------------
-    void Java_com_chilliworks_chillisource_networking_HttpRequest_OnComplete(JNIEnv* in_env, jobject in_this, jint in_resultCode, jbyteArray in_data, jint in_dataLength, jint in_responseCode, jobject in_objectPointer);
+    void Java_com_chilliworks_chillisource_networking_HttpRequest_onComplete(JNIEnv* in_env, jobject in_this, jobject in_objectPointer, jint in_resultCode, jbyteArray in_data, jint in_dataLength, jint in_responseCode);
 }
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_networking_HttpRequest_OnBufferFlushed(JNIEnv* in_env, jobject in_this, jbyteArray in_data, jint in_dataLength, jint in_responseCode, jobject in_objectPointer)
+void Java_com_chilliworks_chillisource_networking_HttpRequest_onBufferFlushed(JNIEnv* in_env, jobject in_this, jobject in_objectPointer, jbyteArray in_data, jint in_dataLength, jint in_responseCode)
 {
-	std::string data = CSBackend::Android::JavaUtils::CreateSTDStringFromJByteArray(in_data, in_dataLength);
-	CSBackend::Android::JavaClassSPtr javaNativePointer = CSBackend::Android::JavaClassSPtr(new CSBackend::Android::JavaClass(in_objectPointer, CSBackend::Android::NativeObjectMediator::GetNativePointerClassDef()));
+	CSBackend::Android::JavaClassSPtr javaBoxedPointer = CSBackend::Android::JavaClassSPtr(new CSBackend::Android::JavaClass(in_objectPointer, CSBackend::Android::BoxedPointer::GetBoxedPointerClassDef()));
 
-	CSBackend::Android::HttpRequest* httpRequest = CSBackend::Android::NativeObjectMediator::JavaToNativePointer<CSBackend::Android::HttpRequest>(javaNativePointer);
-	CS_ASSERT(httpRequest, "Java pointer conversion Error!");
-	if(httpRequest)
-	{
-		std::string data = CSBackend::Android::JavaUtils::CreateSTDStringFromJByteArray(in_data, in_dataLength);
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::HttpRequest::OnFlushed, httpRequest, data, (u32)in_responseCode));
-	}
+	CSBackend::Android::HttpRequest* httpRequest = CSBackend::Android::BoxedPointer::Unbox<CSBackend::Android::HttpRequest>(javaBoxedPointer.get());
+	std::string data = CSBackend::Android::JavaUtils::CreateSTDStringFromJByteArray(in_data, in_dataLength);
+	CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::HttpRequest::OnFlushed, httpRequest, data, (u32)in_responseCode));
 }
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_networking_HttpRequest_OnComplete(JNIEnv* in_env, jobject in_this, jint in_resultCode, jbyteArray in_data, jint in_dataLength, jint in_responseCode, jobject in_objectPointer)
+void Java_com_chilliworks_chillisource_networking_HttpRequest_onComplete(JNIEnv* in_env, jobject in_this, jobject in_objectPointer, jint in_resultCode, jbyteArray in_data, jint in_dataLength, jint in_responseCode)
 {
+	CSBackend::Android::JavaClassSPtr javaBoxedPointer = CSBackend::Android::JavaClassSPtr(new CSBackend::Android::JavaClass(in_objectPointer, CSBackend::Android::BoxedPointer::GetBoxedPointerClassDef()));
+
+	CSBackend::Android::HttpRequest* httpRequest = CSBackend::Android::BoxedPointer::Unbox<CSBackend::Android::HttpRequest>(javaBoxedPointer.get());
 	std::string data = CSBackend::Android::JavaUtils::CreateSTDStringFromJByteArray(in_data, in_dataLength);
-
-	CSBackend::Android::JavaClassSPtr javaNativePointer = CSBackend::Android::JavaClassSPtr(new CSBackend::Android::JavaClass(in_objectPointer, CSBackend::Android::NativeObjectMediator::GetNativePointerClassDef()));
-
-	CSBackend::Android::HttpRequest* httpRequest = CSBackend::Android::NativeObjectMediator::JavaToNativePointer<CSBackend::Android::HttpRequest>(javaNativePointer);
-	CS_ASSERT(httpRequest, "Java pointer conversion Error!");
-	if(httpRequest)
-	{
-		std::string data = CSBackend::Android::JavaUtils::CreateSTDStringFromJByteArray(in_data, in_dataLength);
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::HttpRequest::OnComplete, httpRequest, (u32)in_resultCode, data, (u32)in_responseCode));
-	}
+	CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::HttpRequest::OnComplete, httpRequest, (u32)in_resultCode, data, (u32)in_responseCode));
 }
 
 namespace CSBackend
@@ -116,17 +105,17 @@ namespace CSBackend
 		{
 			CS_ASSERT(m_completionDelegate, "Http request cannot have null delegate");
 
-			//Create a java NativePointer for this instance
-			JavaClassSPtr nativePointerClass = NativeObjectMediator::NativeToJavaPointer(this);
+			//Create a java BoxdPointer for this instance
+			JavaClassUPtr boxedPointerClass = BoxedPointer::Box(this);
 
 			//Create a java HttpRequest class definition
-			JavaClassDef javaRequestClassDef("com/chilliworks/chillisource/networking/HttpRequest", "(Lcom/chilliworks/chillisource/core/NativePointer;)V");
-			javaRequestClassDef.AddMethod("makeHttpRequestWithHeaders", "(Ljava/lang/String;Z[Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;II)V");
-			javaRequestClassDef.AddMethod("getCurrentSize", "()J");
-			javaRequestClassDef.AddMethod("getExpectedTotalSize", "()J");
+			JavaClassDef javaRequestClassDef("com/chilliworks/chillisource/networking/HttpRequest", "(Lcom/chilliworks/chillisource/core/BoxedPointer;)V");
+			javaRequestClassDef.AddMethod("performHttpRequest", "(Ljava/lang/String;Z[Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;II)V");
+			javaRequestClassDef.AddMethod("getDownloadedBytes", "()J");
+			javaRequestClassDef.AddMethod("getExpectedSize", "()J");
 
 			//Create a java HttpRequest instance
-			m_javaHttpRequest = JavaClassSPtr(new JavaClass(javaRequestClassDef, nativePointerClass->GetJavaObject()));
+			m_javaHttpRequest = JavaClassSPtr(new JavaClass(javaRequestClassDef, boxedPointerClass->GetJavaObject()));
 
 			//Immediately make the request
 			PerformRequest();
@@ -144,14 +133,14 @@ namespace CSBackend
             jobjectArray values = env->NewObjectArray(m_headers.size(), stringClass, emptyString);
 
             u32 paramCount = 0;
-            for(auto it = m_headers.begin(); it != m_headers.end(); ++it)
+            for(const auto& it : m_headers)
             {
-            	jstring jstrFirst = JavaUtils::CreateJStringFromSTDString(it->first);
-            	jstring jstrSecond = JavaUtils::CreateJStringFromSTDString(it->second);
-            	env->SetObjectArrayElement(keys, paramCount, jstrFirst);
-            	env->SetObjectArrayElement(values, paramCount, jstrSecond);
-            	env->DeleteLocalRef(jstrFirst);
-            	env->DeleteLocalRef(jstrSecond);
+            	jstring first = JavaUtils::CreateJStringFromSTDString(it.first);
+            	jstring second = JavaUtils::CreateJStringFromSTDString(it.second);
+            	env->SetObjectArrayElement(keys, paramCount, first);
+            	env->SetObjectArrayElement(values, paramCount, second);
+            	env->DeleteLocalRef(first);
+            	env->DeleteLocalRef(second);
             	paramCount++;
             }
 
@@ -162,7 +151,7 @@ namespace CSBackend
             bool isPost = m_type == CSNetworking::HttpRequest::Type::k_post;
 
 			//Finally call the java function
-			m_javaHttpRequest->CallVoidMethod("makeHttpRequestWithHeaders", url, isPost, keys, values, body, m_timeoutSecs, m_maxBufferSize);
+			m_javaHttpRequest->CallVoidMethod("performHttpRequest", url, isPost, keys, values, body, m_timeoutSecs, m_maxBufferSize);
 
             //delete all local references
             env->DeleteLocalRef(url);
@@ -226,15 +215,15 @@ namespace CSBackend
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        u64 HttpRequest::GetExpectedTotalSize() const
+        u64 HttpRequest::GetExpectedSize() const
         {
-			return m_javaHttpRequest->CallLongMethod("getExpectedTotalSize");
+			return m_javaHttpRequest->CallLongMethod("getExpectedSize");
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        u64 HttpRequest::GetCurrentSize() const
+        u64 HttpRequest::GetDownloadedBytes() const
         {
-			return m_javaHttpRequest->CallLongMethod("getCurrentSize");
+			return m_javaHttpRequest->CallLongMethod("getDownloadedBytes");
         }
 	}
 }

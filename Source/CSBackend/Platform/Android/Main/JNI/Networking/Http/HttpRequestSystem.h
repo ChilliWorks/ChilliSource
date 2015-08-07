@@ -153,6 +153,10 @@ namespace CSBackend
             //------------------------------------------------------------------
             HttpRequest* MakeRequest(HttpRequest::Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs);
 			//--------------------------------------------------------------------------------------------------
+            /// @author HMcLaughlin
+            //--------------------------------------------------------------------------------------------------
+            void OnInit() override;
+			//--------------------------------------------------------------------------------------------------
             /// Poll the connection on active requests
             ///
             /// @author Ian Copland

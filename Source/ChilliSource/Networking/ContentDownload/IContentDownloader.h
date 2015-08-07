@@ -68,7 +68,7 @@ namespace ChilliSource
             ///
             /// @author S Downie
             //----------------------------------------------------------
-            typedef std::function<void(Result, const std::string&)> Delegate;
+            using Delegate = std::function<void(Result, const std::string&)>;
             //----------------------------------------------------------
             /// A delegate that can be used to report the progress of a
             /// download
@@ -78,7 +78,7 @@ namespace ChilliSource
             ///
             /// @author HMcLaughlin
             //----------------------------------------------------------
-            typedef std::function<void(const std::string&, f32)> DownloadProgressDelegate;
+            using DownloadProgressDelegate = std::function<void(const std::string&, f32)>;
             //----------------------------------------------------------
             /// Pull the .csman file from the server and callback when
             /// the download is complete

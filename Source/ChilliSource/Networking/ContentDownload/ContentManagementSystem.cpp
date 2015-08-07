@@ -100,6 +100,9 @@ namespace ChilliSource
             }
             //-----------------------------------------------------------
             /// Writes a checksum safe version of a manifest xml to path
+            /// i.e. Will remove the Timestamp key from the manifest
+            /// before saving, to ensure checksum correctness with any
+            /// new manifests downloaded later
             ///
             /// @author HMcLaughlin
             ///
@@ -262,12 +265,8 @@ namespace ChilliSource
         {
             CS_ASSERT(Core::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "This can only be called on the main thread.");
             
-            if(m_downloadInProgress)
-            {
-                CS_LOG_FATAL("Download is already in progress!");
-                return;
-            }
-            
+            CS_ASSERT(!m_downloadInProgress, "Cannot call DownloadUpdates while updates are being downloaded!");
+
         	m_onDownloadCompleteDelegate = in_delegate;
             m_onDownloadProgressDelegate = in_progressDelegate;
             
@@ -816,7 +815,7 @@ namespace ChilliSource
                 f32 increment = 1.0f / m_packageDetails.size();
                 f32 totalProgress = m_currentPackageDownload * increment + (in_progress * increment);
                 
-                m_onDownloadProgressDelegate(DownloadProgress(m_packageDetails[m_currentPackageDownload].m_id, totalProgress));
+                m_onDownloadProgressDelegate(m_packageDetails[m_currentPackageDownload].m_id, totalProgress);
             }
         }
         //-----------------------------------------------------------

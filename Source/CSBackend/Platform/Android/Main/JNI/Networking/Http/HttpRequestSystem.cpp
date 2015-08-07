@@ -45,10 +45,6 @@ namespace CSBackend
 		//--------------------------------------------------------------------------------------------------
         HttpRequestSystem::HttpRequestSystem()
         {
-            JavaClassDef classDef("com/chilliworks/chillisource/networking/HttpRequestSystem");
-            classDef.AddMethod("isConnected", "()Z");
-
-            m_javaSystem = JavaSystemUPtr(new JavaSystem(classDef));
         }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
@@ -112,6 +108,15 @@ namespace CSBackend
         }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
+        void HttpRequestSystem::OnInit()
+        {
+            JavaClassDef classDef("com/chilliworks/chillisource/networking/HttpRequestSystem");
+            classDef.AddMethod("isConnected", "()Z");
+
+            m_javaSystem = JavaSystemUPtr(new JavaSystem(classDef));
+        }
+		//--------------------------------------------------------------------------------------------------
+		//--------------------------------------------------------------------------------------------------
 		void HttpRequestSystem::OnUpdate(f32 in_timeSinceLastUpdate)
 		{
             for(auto it = m_requests.begin(); it != m_requests.end(); /*No increment*/)
@@ -140,6 +145,8 @@ namespace CSBackend
 
             m_requests.clear();
             m_requests.shrink_to_fit();
+
+            m_javaSystem.reset();
         }
 	}
 }

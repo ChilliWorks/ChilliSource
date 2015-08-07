@@ -90,7 +90,7 @@ namespace CSBackend
             ///
             /// @author HMcLaughlin
             ///
-            /// @param in_object - Object instance who's type is defined by in_javaClassDef
+            /// @param in_object - Object instance whose type is defined by in_javaClassDef
             /// @param in_javaClassDef - The definition for this java class.
             //------------------------------------------------------------------------------
             template <typename... TArgs> JavaClass(jobject in_object, const JavaClassDef& in_javaClassDef);

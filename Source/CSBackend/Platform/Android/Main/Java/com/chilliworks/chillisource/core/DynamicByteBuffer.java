@@ -128,7 +128,9 @@ public class DynamicByteBuffer
 	public void clear()
 	{
 		m_size = 0;
-		m_capacity = 0;
+		m_capacity = 1;
+
+		m_data = new byte[m_capacity];
 	}
 	/**
 	 * This makes sure the capacity is always big enough to fit any new data 
@@ -145,7 +147,7 @@ public class DynamicByteBuffer
 		if (requiredCapacity > m_capacity)
 		{
 			//create the new buffer
-			int dwNewCapacity = requiredCapacity;
+			int dwNewCapacity = requiredCapacity * 2;
 			byte[] abyNewData = new byte[dwNewCapacity];
 			
 			//put the old data in the new buffer
