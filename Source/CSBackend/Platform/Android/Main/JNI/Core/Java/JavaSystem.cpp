@@ -43,6 +43,18 @@ namespace CSBackend
             m_javaClass->CallVoidMethod("destroy");
             m_javaClass.reset();
         }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        jobject JavaSystem::GetJavaObject() const
+        {
+            return m_javaClass->GetJavaObject();
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        const std::string& JavaSystem::GetClassName() const
+        {
+            return m_javaClass->GetClassName();
+        }
     }
 }
 
