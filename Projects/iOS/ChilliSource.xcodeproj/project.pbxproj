@@ -20,6 +20,7 @@
 		814F240B1A9B96560053ADC5 /* TextIcon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814F24091A9B96560053ADC5 /* TextIcon.cpp */; };
 		817C8C7A1B4D7D3E00ADDE52 /* MarkupDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817C8C781B4D7D3E00ADDE52 /* MarkupDef.cpp */; };
 		817C8C7D1B4D7D5000ADDE52 /* StringMarkupParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 817C8C7B1B4D7D5000ADDE52 /* StringMarkupParser.cpp */; };
+		819303211B6A50E90036740E /* CanvasMaterialPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8193031F1B6A50E90036740E /* CanvasMaterialPool.cpp */; };
 		819630B21A3A0D5400475D76 /* HttpDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 819630B11A3A0D5400475D76 /* HttpDelegate.mm */; };
 		81AAFBBB19C9C18100CD4A14 /* Gesture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB419C9C18100CD4A14 /* Gesture.cpp */; };
 		81AAFBBC19C9C18100CD4A14 /* GestureSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81AAFBB619C9C18100CD4A14 /* GestureSystem.cpp */; };
@@ -309,6 +310,8 @@
 		81E258F61A5D43C20020264E /* LayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258E51A5D43C20020264E /* LayoutDef.cpp */; };
 		81E258F91A5D43C20020264E /* VListLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258EC1A5D43C20020264E /* VListLayout.cpp */; };
 		81E258FA1A5D43C20020264E /* VListLayoutDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E258EE1A5D43C20020264E /* VListLayoutDef.cpp */; };
+		81E4BF2F1B735A3C00DCF465 /* PrimitiveModelFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E4BF2D1B735A3C00DCF465 /* PrimitiveModelFactory.cpp */; };
+		81E4BF321B735E9F00DCF465 /* PrimitiveEntityFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81E4BF301B735E9F00DCF465 /* PrimitiveEntityFactory.cpp */; };
 		81FB634419FFA86C009D6894 /* CSBinaryInputStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81FB634219FFA86C009D6894 /* CSBinaryInputStream.cpp */; };
 		81FB634719FFB723009D6894 /* CSBinaryChunk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81FB634519FFB723009D6894 /* CSBinaryChunk.cpp */; };
 /* End PBXBuildFile section */
@@ -456,6 +459,8 @@
 		817C8C791B4D7D3E00ADDE52 /* MarkupDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkupDef.h; sourceTree = "<group>"; };
 		817C8C7B1B4D7D5000ADDE52 /* StringMarkupParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringMarkupParser.cpp; sourceTree = "<group>"; };
 		817C8C7C1B4D7D5000ADDE52 /* StringMarkupParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringMarkupParser.h; sourceTree = "<group>"; };
+		8193031F1B6A50E90036740E /* CanvasMaterialPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CanvasMaterialPool.cpp; sourceTree = "<group>"; };
+		819303201B6A50E90036740E /* CanvasMaterialPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CanvasMaterialPool.h; sourceTree = "<group>"; };
 		819630B11A3A0D5400475D76 /* HttpDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HttpDelegate.mm; sourceTree = "<group>"; };
 		819630B31A3A0D6400475D76 /* HttpDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HttpDelegate.h; sourceTree = "<group>"; };
 		81AAFBB419C9C18100CD4A14 /* Gesture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Gesture.cpp; sourceTree = "<group>"; };
@@ -1094,6 +1099,10 @@
 		81E258ED1A5D43C20020264E /* VListLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VListLayout.h; sourceTree = "<group>"; };
 		81E258EE1A5D43C20020264E /* VListLayoutDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VListLayoutDef.cpp; sourceTree = "<group>"; };
 		81E258EF1A5D43C20020264E /* VListLayoutDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VListLayoutDef.h; sourceTree = "<group>"; };
+		81E4BF2D1B735A3C00DCF465 /* PrimitiveModelFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PrimitiveModelFactory.cpp; sourceTree = "<group>"; };
+		81E4BF2E1B735A3C00DCF465 /* PrimitiveModelFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrimitiveModelFactory.h; sourceTree = "<group>"; };
+		81E4BF301B735E9F00DCF465 /* PrimitiveEntityFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PrimitiveEntityFactory.cpp; sourceTree = "<group>"; };
+		81E4BF311B735E9F00DCF465 /* PrimitiveEntityFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrimitiveEntityFactory.h; sourceTree = "<group>"; };
 		81FB634219FFA86C009D6894 /* CSBinaryInputStream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSBinaryInputStream.cpp; sourceTree = "<group>"; };
 		81FB634319FFA86C009D6894 /* CSBinaryInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSBinaryInputStream.h; sourceTree = "<group>"; };
 		81FB634519FFB723009D6894 /* CSBinaryChunk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CSBinaryChunk.cpp; sourceTree = "<group>"; };
@@ -1744,6 +1753,8 @@
 		81D8B2621962E0EB0010DA84 /* Entity */ = {
 			isa = PBXGroup;
 			children = (
+				81E4BF301B735E9F00DCF465 /* PrimitiveEntityFactory.cpp */,
+				81E4BF311B735E9F00DCF465 /* PrimitiveEntityFactory.h */,
 				81D8B2631962E0EB0010DA84 /* Component.cpp */,
 				81D8B2641962E0EB0010DA84 /* Component.h */,
 				81D8B2651962E0EB0010DA84 /* Entity.cpp */,
@@ -2129,21 +2140,21 @@
 		81D8B3531962E0EC0010DA84 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				81E258D11A5D39A00020264E /* HorizontalTextJustification.cpp */,
-				81E258D21A5D39A00020264E /* HorizontalTextJustification.h */,
-				81E258D31A5D39A00020264E /* VerticalTextJustification.cpp */,
-				81E258D41A5D39A00020264E /* VerticalTextJustification.h */,
 				81D8B3541962E0EC0010DA84 /* AlignmentAnchors.cpp */,
 				81D8B3551962E0EC0010DA84 /* AlignmentAnchors.h */,
 				81D8B3561962E0EC0010DA84 /* AspectRatioUtils.cpp */,
 				81D8B3571962E0EC0010DA84 /* AspectRatioUtils.h */,
 				81D8B3581962E0EC0010DA84 /* BlendMode.h */,
+				8193031F1B6A50E90036740E /* CanvasMaterialPool.cpp */,
+				819303201B6A50E90036740E /* CanvasMaterialPool.h */,
 				81D8B3591962E0EC0010DA84 /* CanvasRenderer.cpp */,
 				81D8B35A1962E0EC0010DA84 /* CanvasRenderer.h */,
 				81D8B35B1962E0EC0010DA84 /* CullFace.h */,
 				81D8B35C1962E0EC0010DA84 /* CullingPredicates.cpp */,
 				81D8B35D1962E0EC0010DA84 /* CullingPredicates.h */,
 				81D8B35E1962E0EC0010DA84 /* DepthTestComparison.h */,
+				81E258D11A5D39A00020264E /* HorizontalTextJustification.cpp */,
+				81E258D21A5D39A00020264E /* HorizontalTextJustification.h */,
 				81D8B35F1962E0EC0010DA84 /* MeshBatch.cpp */,
 				81D8B3601962E0EC0010DA84 /* MeshBatch.h */,
 				81D8B3611962E0EC0010DA84 /* MeshBuffer.cpp */,
@@ -2166,6 +2177,8 @@
 				81D8B3721962E0EC0010DA84 /* VertexDeclaration.cpp */,
 				81D8B3731962E0EC0010DA84 /* VertexDeclaration.h */,
 				81D8B3741962E0EC0010DA84 /* VertexLayouts.h */,
+				81E258D31A5D39A00020264E /* VerticalTextJustification.cpp */,
+				81E258D41A5D39A00020264E /* VerticalTextJustification.h */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -2225,6 +2238,8 @@
 		81D8B3921962E0EC0010DA84 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				81E4BF2D1B735A3C00DCF465 /* PrimitiveModelFactory.cpp */,
+				81E4BF2E1B735A3C00DCF465 /* PrimitiveModelFactory.h */,
 				81D8B3931962E0EC0010DA84 /* AnimatedMeshComponent.cpp */,
 				81D8B3941962E0EC0010DA84 /* AnimatedMeshComponent.h */,
 				81D8B3951962E0EC0010DA84 /* CSAnimProvider.cpp */,
@@ -3057,6 +3072,7 @@
 				81D8B6B81962E0F70010DA84 /* FacebookUtils.mm in Sources */,
 				81C9251E1A5C3ADB00B3AE11 /* ParticleAffectorDefFactory.cpp in Sources */,
 				81D8B6BE1962E0F70010DA84 /* WebViewDelegate.mm in Sources */,
+				81E4BF2F1B735A3C00DCF465 /* PrimitiveModelFactory.cpp in Sources */,
 				81D8B4A01962E0EC0010DA84 /* TextureProvider.cpp in Sources */,
 				81E2589A1A5D38EF0020264E /* ComponentDesc.cpp in Sources */,
 				81D8B4A21962E0EC0010DA84 /* UVs.cpp in Sources */,
@@ -3155,6 +3171,7 @@
 				81D8B6A81962E0F70010DA84 /* NSStringUtils.mm in Sources */,
 				81D8B42F1962E0EC0010DA84 /* Scene.cpp in Sources */,
 				81D8B42E1962E0EC0010DA84 /* ResourceProvider.cpp in Sources */,
+				819303211B6A50E90036740E /* CanvasMaterialPool.cpp in Sources */,
 				811B181819D19AF400B06B5D /* RotationGesture.cpp in Sources */,
 				81D8B46A1962E0EC0010DA84 /* MeshBuffer.cpp in Sources */,
 				81E258F21A5D43C20020264E /* HListLayout.cpp in Sources */,
@@ -3180,6 +3197,7 @@
 				81E258F51A5D43C20020264E /* LayoutComponent.cpp in Sources */,
 				81E258A71A5D38EF0020264E /* HighlightComponent.cpp in Sources */,
 				81D8B46B1962E0EC0010DA84 /* RenderCapabilities.cpp in Sources */,
+				81E4BF321B735E9F00DCF465 /* PrimitiveEntityFactory.cpp in Sources */,
 				81D8B4061962E0EC0010DA84 /* ParamDictionary.cpp in Sources */,
 				81E258BB1A5D38EF0020264E /* ProgressBarType.cpp in Sources */,
 				81D8B4171962E0EC0010DA84 /* CSImageProvider.cpp in Sources */,

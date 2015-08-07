@@ -40,6 +40,7 @@ namespace ChilliSource
         //------------------------------------------------------------
         /// Base
         //------------------------------------------------------------
+        CS_FORWARDDECLARE_CLASS(CanvasMaterialPool);
         CS_FORWARDDECLARE_CLASS(CanvasRenderer);
         CS_FORWARDDECLARE_CLASS(ICullingPredicate);
         CS_FORWARDDECLARE_CLASS(ViewportCullPredicate);
@@ -100,6 +101,7 @@ namespace ChilliSource
         CS_FORWARDDECLARE_STRUCT(SkeletonDescriptor);
         CS_FORWARDDECLARE_CLASS(CSAnimProvider);
         CS_FORWARDDECLARE_CLASS(CSModelProvider);
+        CS_FORWARDDECLARE_CLASS(PrimitiveModelFactory);
         CS_FORWARDDECLARE_CLASS(Skeleton);
         CS_FORWARDDECLARE_CLASS(SkinnedAnimation);
         CS_FORWARDDECLARE_STRUCT(SkeletonNode);

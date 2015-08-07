@@ -47,6 +47,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\DialogueBox\DialogueBoxSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Entity\Component.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Entity\Entity.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Entity\PrimitiveEntityFactory.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Entity\Transform.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Event\EventConnection.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\File\AppDataStore.cpp" />
@@ -116,6 +117,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Networking\IAP\IAPSystem.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\CullingPredicates.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Base\HorizontalTextJustification.cpp" />
@@ -146,6 +148,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Mesh.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\MeshDescriptor.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\PrimitiveModelFactory.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.cpp" />
@@ -340,6 +343,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Entity.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Entity\Component.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Entity\Entity.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Entity\PrimitiveEntityFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Entity\Transform.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Event.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Event\Event.h" />
@@ -458,6 +462,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AspectRatioUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\BlendMode.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasMaterialPool.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CanvasRenderer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullFace.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\CullingPredicates.h" />
@@ -500,6 +505,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\CSModelProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\Mesh.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\MeshDescriptor.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\PrimitiveModelFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\Skeleton.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimation.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Model\SkinnedAnimationGroup.h" />

@@ -32,6 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Rendering/Base/CanvasMaterialPool.h>
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 #include <ChilliSource/Rendering/Sprite/DynamicSpriteBatcher.h>
@@ -204,15 +205,6 @@ namespace ChilliSource
             /// @author S Downie
             //----------------------------------------------------------------------------
             void OnDestroy() override;
-            //----------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Texture
-            ///
-            /// @return Cached or new GUI material that has the given
-            /// texture
-            //----------------------------------------------------------------------------
-            MaterialCSPtr GetGUIMaterialForTexture(const TextureCSPtr& in_texture);
 
 		private:
             
@@ -223,11 +215,10 @@ namespace ChilliSource
 			std::vector<Core::Vector2> m_scissorPositions;
             std::vector<Core::Vector2> m_scissorSizes;
 
-            std::unordered_map<TextureCSPtr, MaterialCSPtr> m_materialGUICache;
+            CanvasMaterialPoolUPtr m_materialPool;
 
             Core::ResourcePool* m_resourcePool;
             Core::Screen* m_screen;
-            MaterialFactory* m_materialFactory;
 		};
 	}
 }
