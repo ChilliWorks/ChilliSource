@@ -106,13 +106,13 @@ namespace CSBackend
         //----------------------------------------------------------------------------------------
         u64 HttpRequest::GetExpectedSize() const
         {
-            return [m_httpDelegate GetExpectedSize];
+            return [m_httpDelegate expectedSize];
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         u64 HttpRequest::GetDownloadedBytes() const
         {
-            return [m_httpDelegate GetDownloadedBytes];
+            return [m_httpDelegate downloadedBytes];
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------

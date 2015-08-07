@@ -64,13 +64,13 @@
 ///
 /// @return Expected size of the request
 //-----------------------------------------------
-- (u64) GetExpectedSize;
+- (u64) expectedSize;
 //-----------------------------------------------
 /// @author N Tanda
 ///
 /// @return The current length of the received data
 //-----------------------------------------------
-- (u64) GetDownloadedBytes;
+- (u64) downloadedBytes;
 //---------------------------------------------------------------------------
 /// Cleans up the delegate.
 ///
