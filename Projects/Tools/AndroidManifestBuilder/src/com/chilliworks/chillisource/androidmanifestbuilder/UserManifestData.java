@@ -42,4 +42,5 @@ public final class UserManifestData
 	public String m_manifestExtra = "";
 	public String m_applicationExtra = "";
 	public String m_permissions = "";
+	public String m_multidex = "";
 }
