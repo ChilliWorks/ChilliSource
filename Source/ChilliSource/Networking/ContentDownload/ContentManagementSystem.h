@@ -98,7 +98,8 @@ namespace ChilliSource
             ///
             /// @author HMcLaughlin
             ///
-            /// @param The Download Progress.
+            /// @param in_packageName - Package name that progressed.
+            /// @param in_progress - Total Progress through downloads
             //--------------------------------------------------------
             using DownloadProgressDelegate = std::function<void(const std::string& in_packageName, f32 in_progress)>;
             //-----------------------------------------------------------
