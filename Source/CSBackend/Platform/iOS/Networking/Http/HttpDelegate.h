@@ -88,9 +88,10 @@ typedef std::function<void(CSNetworking::HttpResponse::Result in_result, u32 in_
 ///
 /// @author HMcLaughlin
 ///
-/// @param in_connectionEstablishedDelegate - Connection Established Delegate
-/// @param in_flushedDelegate - Flushed delegate
-/// @param in_completeDelegate - Complete Delegate
+/// @param in_connectionEstablishedDelegate - Delegate to call when connection is established.
+/// @param in_flushedDelegate - Delegate to call when connection is flushed.
+/// @param in_completeDelegate - Delegate to call when connection is completed.
+/// @param in_bufferSize - The buffer size of the request in bytes after which we flush
 //--------------------------------------------------------------------------------------------------
 - (id) initWithConnectionDelegate:(const ConnectionEstablishedDelegate&)in_connectionEstablishedDelegate andFlushedDelegate:(const FlushedDelegate&)in_flushedDelegate andCompleteDelegate:(const FlushedDelegate&)in_completeDelegate andMaxBufferSize:(u32) in_bufferSize;
 //--------------------------------------------------------------------------------------------------

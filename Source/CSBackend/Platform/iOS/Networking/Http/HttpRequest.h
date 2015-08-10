@@ -92,30 +92,6 @@ namespace CSBackend
             //------------------------------------------------------------------
             void Cancel() override;
             //------------------------------------------------------------------
-            /// Called by the Http Delegate once the request has complete. This
-            /// is for internal use only and should not be called by the user.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The result.
-            /// @param The response code.
-            /// @param The data in string form.
-            //------------------------------------------------------------------
-            void OnComplete(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data);
-            //------------------------------------------------------------------
-            /// Called by the Http Delegate when the max buffer size is exceeded
-            /// and it flushes the current data.
-            ///
-            /// This is for internal use only and should not be called by the user.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The result.
-            /// @param The response code.
-            /// @param The partial data in string form.
-            //------------------------------------------------------------------
-            void OnFlushed(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data);
-            //------------------------------------------------------------------
             /// Destructor.
             ///
             /// @author Ian Copland
