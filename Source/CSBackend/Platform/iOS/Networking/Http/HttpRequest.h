@@ -152,6 +152,9 @@ namespace CSBackend
             
             NSURLConnection* m_connection = nil;
             HttpDelegate* m_httpDelegate = nil;
+            
+            u64 m_downloadedBytes = 0;
+            u64 m_expectedSize = 0;
         };
 	}
 }

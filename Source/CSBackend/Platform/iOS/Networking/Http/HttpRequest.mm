@@ -75,7 +75,29 @@ namespace CSBackend
                     request.HTTPBody = [NSData dataWithBytes:m_body.c_str() length:m_body.length()];
                 }
                 
-                m_httpDelegate = [[HttpDelegate alloc] initWithRequest:this andMaxBufferSize:in_maxBufferSize];
+                auto connectionEstablishedDelegate = [this](u64 in_expectedSize)
+                {
+                    m_expectedSize = in_expectedSize;
+                };
+                
+                auto connectionFlushedDelegate = [this](CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
+                {
+                    CS_ASSERT(m_complete == false, "Cannot flush an already completed request.");
+                    m_downloadedBytes += in_data.length();
+                    m_completionDelegate(this, CSNetworking::HttpResponse(in_result, in_responseCode, in_data));
+                };
+                
+                auto connectionCompleteDelegate = [this](CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
+                {
+                    CS_ASSERT(m_complete == false, "Cannot complete an already completed request.");
+                    
+                    m_downloadedBytes += in_data.length();
+                    
+                    m_complete = true;
+                    m_completionDelegate(this, CSNetworking::HttpResponse(in_result, in_responseCode, in_data));
+                };
+                
+                m_httpDelegate = [[HttpDelegate alloc] initWithConnectionDelegate:connectionEstablishedDelegate andFlushedDelegate:connectionFlushedDelegate andCompleteDelegate:connectionCompleteDelegate andMaxBufferSize:in_maxBufferSize];
                 m_connection = [[NSURLConnection connectionWithRequest:[request copy] delegate: m_httpDelegate] retain];
             }
         }
@@ -106,13 +128,13 @@ namespace CSBackend
         //----------------------------------------------------------------------------------------
         u64 HttpRequest::GetExpectedSize() const
         {
-            return [m_httpDelegate expectedSize];
+            return m_expectedSize;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
         u64 HttpRequest::GetDownloadedBytes() const
         {
-            return [m_httpDelegate downloadedBytes];
+            return m_downloadedBytes;
         }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
@@ -124,22 +146,6 @@ namespace CSBackend
             
             [m_connection cancel];
 		}
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        void HttpRequest::OnComplete(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
-        {
-            CS_ASSERT(m_complete == false, "Cannot complete an already completed request.");
-            
-            m_complete = true;
-            m_completionDelegate(this, CSNetworking::HttpResponse(in_result, in_responseCode, in_data));
-        }
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        void HttpRequest::OnFlushed(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)
-        {
-            CS_ASSERT(m_complete == false, "Cannot flush an already completed request.");
-            m_completionDelegate(this, CSNetworking::HttpResponse(in_result, in_responseCode, in_data));
-        }
         //------------------------------------------------------------------
         //------------------------------------------------------------------
         HttpRequest::~HttpRequest()
