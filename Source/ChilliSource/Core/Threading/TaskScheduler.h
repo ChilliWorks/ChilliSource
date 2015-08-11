@@ -133,8 +133,10 @@ namespace ChilliSource
             
             std::recursive_mutex m_mainThreadQueueMutex;
             std::vector<GenericTaskType> m_mainThreadTasks;
-            
+
+#ifndef CS_TARGETPLATFORM_ANDROID
             std::thread::id m_mainThreadId;
+#endif
         };
     }
 }

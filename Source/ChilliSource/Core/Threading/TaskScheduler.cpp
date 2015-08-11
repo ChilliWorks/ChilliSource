@@ -31,6 +31,12 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+
+#include <CSBackend/Platform/Android/Main/JNI/Core/Threading/MainThreadId.h>
+
+#endif
+
 namespace ChilliSource
 {
     namespace Core
@@ -61,14 +67,20 @@ namespace ChilliSource
 		{
             Device* device = Core::Application::Get()->GetSystem<Device>();
 			m_threadPool = ThreadPoolUPtr(new Core::ThreadPool(device->GetNumberOfCPUCores() * 2));
-            
+
+#ifndef CS_TARGETPLATFORM_ANDROID
             m_mainThreadId = std::this_thread::get_id();
+#endif
 		}
         //------------------------------------------------
         //------------------------------------------------
         bool TaskScheduler::IsMainThread() const
         {
+#ifdef CS_TARGETPLATFORM_ANDROID
+			return CSBackend::Android::MainThreadId::Get()->GetId() == std::this_thread::get_id();
+#else
             return m_mainThreadId == std::this_thread::get_id();
+#endif
         }
 		//------------------------------------------------
 		//------------------------------------------------

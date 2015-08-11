@@ -36,6 +36,7 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaInterfaceManager.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaUtils.h>
 #include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
+#include <CSBackend/Platform/Android/Main/JNI/Core/Threading/MainThreadId.h>
 #include <CSBackend/Platform/Android/Main/JNI/Input/Pointer/TouchInputJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Networking/Http/HttpRequestJavaInterface.h>
 #include <CSBackend/Platform/Android/Main/JNI/Web/Base/WebViewJavaInterface.h>
@@ -174,6 +175,9 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_initApplication(
 	JavaVM* javaVM;
 	in_env->GetJavaVM(&javaVM);
 
+	//create the MainThread
+	CSBackend::Android::MainThreadId::Create();
+
 	//create the application
 	CSCore::Application* pApplication = CreateApplication();
 	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>()->SetApplication(pApplication);
@@ -214,16 +218,20 @@ void Java_com_chilliworks_chillisource_core_CoreNativeInterface_suspend(JNIEnv* 
 //--------------------------------------------------------------------------------------
 void Java_com_chilliworks_chillisource_core_CoreNativeInterface_destroyApplication(JNIEnv* in_env, jobject in_this)
 {
+	CSBackend::Android::MainThreadId::Get()->SetCurrentThread();
+
 	CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::CoreJavaInterface>()->DestroyApplication();
+
+	CSBackend::Android::MainThreadId::Destroy();
 
 	CSBackend::Android::JavaVirtualMachine::Destroy();
 }
 //--------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------
-void Java_com_chilliworks_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobject in_this, f32 in_deltaTime, s64 in_elaspedTime)
+void Java_com_chilliworks_chillisource_core_CoreNativeInterface_update(JNIEnv* in_env, jobject in_this, f32 in_deltaTime, s64 in_elapsedTime)
 {
 	//Create the message with the time between frames
-	CSCore::Application::Get()->Update(in_deltaTime, (u64)in_elaspedTime);
+	CSCore::Application::Get()->Update(in_deltaTime, (u64)in_elapsedTime);
 	CSCore::Application::Get()->Render();
 }
 //--------------------------------------------------------------------------------------
