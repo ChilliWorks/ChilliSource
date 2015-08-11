@@ -42,5 +42,5 @@ public final class UserManifestData
 	public String m_manifestExtra = "";
 	public String m_applicationExtra = "";
 	public String m_permissions = "";
-	public boolean m_multidex = false;
+	public boolean m_multiDexEnabled = false;
 }

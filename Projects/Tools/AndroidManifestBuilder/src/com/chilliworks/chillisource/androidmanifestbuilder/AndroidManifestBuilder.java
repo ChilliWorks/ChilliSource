@@ -124,10 +124,10 @@ public final class AndroidManifestBuilder
 				output.m_apkExpansionDownloadView = apkExpansionDownloadViewNode.getNodeValue();
 			}
 			
-			Node multiDexNode = root.getAttributes().getNamedItem("multi-dex");
+			Node multiDexNode = root.getAttributes().getNamedItem("multi-dex-enabled");
 			if(multiDexNode != null)
 			{
-				output.m_multidex = multiDexNode.getNodeValue().equalsIgnoreCase("true");
+				output.m_multiDexEnabled = multiDexNode.getNodeValue().equalsIgnoreCase("true");
 			}
 			
 			output.m_manifestExtra = getElementContentAsString(xmlString, "manifest-extra");
@@ -183,8 +183,8 @@ public final class AndroidManifestBuilder
 		output = output.replace("[[APPLICATIONEXTRA]]", in_userData.m_applicationExtra);
 		output = output.replace("[[PERMISSIONS]]", in_userData.m_permissions);
 		
-		String multiDex = in_userData.m_multidex ? "android:name=\"android.support.multidex.MultiDexApplication\"" : "";
-		output = output.replace("[[MULTIDEX]]", multiDex);
+		String multiDex = in_userData.m_multiDexEnabled ? "android:name=\"android.support.multidex.MultiDexApplication\"" : "";
+		output = output.replace("[[MULTIDEXENABLED]]", multiDex);
 		
 		return output;
 	}
