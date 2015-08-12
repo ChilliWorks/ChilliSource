@@ -85,6 +85,18 @@ namespace CSBackend
 			/// @author S Downie
 			//----------------------------------------------------------------------------------------
 			void Cancel() override;
+			//----------------------------------------------------------------------------------------
+			/// @author HMcLaughlin
+			///
+			/// @return The expected total size of the request
+			//----------------------------------------------------------------------------------------
+			u64 GetExpectedSize() const override;
+			//----------------------------------------------------------------------------------------
+			/// @author HMcLaughlin
+			///
+			/// @return The current transferred size of the request
+			//----------------------------------------------------------------------------------------
+			u64 GetDownloadedBytes() const override;
 
 		private:
 			friend class HttpRequestSystem;
@@ -156,7 +168,8 @@ namespace CSBackend
 			u32 m_responseCode = 0;
 			CSNetworking::HttpResponse::Result m_requestResult = CSNetworking::HttpResponse::Result::k_failed;
 
-			u32 m_totalBytesRead = 0;
+			u64 m_totalBytesRead = 0;
+			u64 m_expectedSize = 0;
 			
 			bool m_shouldKillThread = false;
 			bool m_isPollingComplete = false;

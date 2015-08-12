@@ -103,15 +103,16 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             /// @author N Tanda
             ///
-            /// @return The expected total size of the request
+            /// @return The expected total size of the request. This will be 0 until the first
+            ///         response arrives
             //----------------------------------------------------------------------------------------
-            virtual u64 GetExpectedTotalSize() const = 0;
+            virtual u64 GetExpectedSize() const = 0;
             //----------------------------------------------------------------------------------------
             /// @author N Tanda
             ///
             /// @return The current transferred size of the request
             //----------------------------------------------------------------------------------------
-            virtual u64 GetCurrentSize() const = 0;
+            virtual u64 GetDownloadedBytes() const = 0;
             //----------------------------------------------------------------------------------------
             /// Cancel the request. Does not invoke the completion delegate
             ///

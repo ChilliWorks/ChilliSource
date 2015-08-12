@@ -1,11 +1,11 @@
 //
-//  Model.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
+//  BoxedPointer
+//  ChilliSource
+//  Created by HMcLaughlin on 31/07/2015.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2015 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,21 +26,28 @@
 //  THE SOFTWARE.
 //
 
+#ifdef CS_TARGETPLATFORM_ANDROID
 
-#ifndef _CHILLISOURCE_RENDERING_MODEL_H_
-#define _CHILLISOURCE_RENDERING_MODEL_H_
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/BoxedPointer.h>
 
-#include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Rendering/Model/AnimatedMeshComponent.h>
-#include <ChilliSource/Rendering/Model/CSAnimProvider.h>
-#include <ChilliSource/Rendering/Model/CSModelProvider.h>
-#include <ChilliSource/Rendering/Model/Mesh.h>
-#include <ChilliSource/Rendering/Model/MeshDescriptor.h>
-#include <ChilliSource/Rendering/Model/PrimitiveModelFactory.h>
-#include <ChilliSource/Rendering/Model/Skeleton.h>
-#include <ChilliSource/Rendering/Model/SkinnedAnimation.h>
-#include <ChilliSource/Rendering/Model/SkinnedAnimationGroup.h>
-#include <ChilliSource/Rendering/Model/StaticMeshComponent.h>
-#include <ChilliSource/Rendering/Model/SubMesh.h>
+namespace CSBackend
+{
+	namespace Android
+	{
+        namespace BoxedPointer
+        {
+            //------------------------------------------------------------------------------
+            //------------------------------------------------------------------------------
+            JavaClassDef GetBoxedPointerClassDef()
+            {
+                JavaClassDef javaBoxedPointerClassDef("com/chilliworks/chillisource/core/BoxedPointer", "(JJ)V");
+                javaBoxedPointerClassDef.AddMethod("getPointerAddress", "()J");
+                javaBoxedPointerClassDef.AddMethod("getTypeHash", "()J");
+                
+                return javaBoxedPointerClassDef;
+            }
+        }
+    }
+}
 
 #endif

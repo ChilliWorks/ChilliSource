@@ -31,6 +31,7 @@
 #ifndef _CSBACKEND_PLATFORM_ANDROID_HTTP_HTTPREQUESTSYSTEM_H_
 #define _CSBACKEND_PLATFORM_ANDROID_HTTP_HTTPREQUESTSYSTEM_H_
 
+#include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaSystem.h>
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 #include <CSBackend/Platform/Android/Main/JNI/Networking/Http/HttpRequest.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
@@ -153,6 +154,12 @@ namespace CSBackend
             //------------------------------------------------------------------
             HttpRequest* MakeRequest(HttpRequest::Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs);
 			//--------------------------------------------------------------------------------------------------
+            /// Sets up the java HttpRequestSystem
+            ///
+            /// @author HMcLaughlin
+            //--------------------------------------------------------------------------------------------------
+            void OnInit() override;
+			//--------------------------------------------------------------------------------------------------
             /// Poll the connection on active requests
             ///
             /// @author Ian Copland
@@ -170,6 +177,8 @@ namespace CSBackend
 		private:
 
 			std::vector<HttpRequest*> m_requests;
+
+            JavaSystemUPtr m_javaSystem;
 		};
 	}
 

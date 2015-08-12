@@ -33,50 +33,73 @@
 
 #import <Foundation/Foundation.h>
 
-//--------------------------------------------------------------------------------
+#include <functional>
+
+//--------------------------------------------------------------------------------------------------
+/// Called when the connection is established.
+///
+/// @author HMcLaughlin
+///
+/// @param Expected size of the request
+//--------------------------------------------------------------------------------------------------
+typedef std::function<void(u64 in_expectedSize)> ConnectionEstablishedDelegate;
+//--------------------------------------------------------------------------------------------------
+/// Called when the max buffer size is exceeded
+///
+/// @author HMcLaughlin
+///
+/// @param in_result - The result.
+/// @param in_responseCode - The response code.
+/// @param in_data - The data in string form.
+//--------------------------------------------------------------------------------------------------
+typedef std::function<void(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)> FlushedDelegate;
+//--------------------------------------------------------------------------------------------------
+/// Called once the request has complete
+///
+/// @author HMcLaughlin
+///
+/// @param in_result - The result.
+/// @param in_responseCode - The response code.
+/// @param in_data - The data in string form.
+//--------------------------------------------------------------------------------------------------
+typedef std::function<void(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data)> CompleteDelegate;
+
+
+//--------------------------------------------------------------------------------------------------
 /// A delegate for callbacks from a NSURLConnection. This passes any events on to
 /// the Http Request System.
 ///
 /// @author Ian Copland
-//--------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 @interface HttpDelegate : NSObject <NSURLConnectionDataDelegate>
 {
-    CSBackend::iOS::HttpRequest* m_request;
     u32 m_responseCode;
     u32 m_maxBufferSize;
-    u64 m_expectedSize;
-    u64 m_downloadedSize;
+    
+    ConnectionEstablishedDelegate m_connectionEstablishedDelegate;
+    FlushedDelegate m_flushedDelegate;
+    CompleteDelegate m_completeDelegate;
     
     NSMutableData* m_data;
 }
-//---------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------
 /// Constructor.
 ///
-/// @author Ian Copland
+/// @author HMcLaughlin
 ///
-/// @param The owning request.
-/// @param The max buffer size of the request in bytes after which the
-/// request must be flushed (0 == no limit)
-//---------------------------------------------------------------------------
-- (id) initWithRequest:(CSBackend::iOS::HttpRequest*)in_request andMaxBufferSize:(u32) in_bufferSize;
-//---------------------------------------------------------------------------
+/// @param in_connectionEstablishedDelegate - Delegate to call when connection is established.
+/// @param in_flushedDelegate - Delegate to call when connection is flushed.
+/// @param in_completeDelegate - Delegate to call when connection is completed.
+/// @param in_bufferSize - The buffer size of the request in bytes after which we flush
+//--------------------------------------------------------------------------------------------------
+- (id) initWithConnectionDelegate:(const ConnectionEstablishedDelegate&)in_connectionEstablishedDelegate andFlushedDelegate:(const FlushedDelegate&)in_flushedDelegate andCompleteDelegate:(const FlushedDelegate&)in_completeDelegate andMaxBufferSize:(u32) in_bufferSize;
+//--------------------------------------------------------------------------------------------------
 /// Cleans up the delegate.
 ///
 /// @author Ian Copland
-//---------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 -(void) dealloc;
-//-----------------------------------------------
-/// @author N Tanda
-///
-/// @return Expected size of the request
-//-----------------------------------------------
-- (u64) GetExpectedSize;
-//-----------------------------------------------
-/// @author N Tanda
-///
-/// @return The current length of the received data
-//-----------------------------------------------
-- (u64) GetReceivedData;
 
 @end
 

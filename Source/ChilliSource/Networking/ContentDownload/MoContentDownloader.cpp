@@ -86,9 +86,9 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
-        void MoContentDownloader::DownloadPackage(const std::string& in_url, const Delegate& in_delegate, const DownloadProgressDelegate& in_progressDelegate)
+        void MoContentDownloader::DownloadPackage(const std::string& in_url, const Delegate& in_completiondelegate, const DownloadProgressDelegate& in_progressDelegate)
         {
-            mOnContentDownloadCompleteDelegate = in_delegate;
+            mOnContentDownloadCompleteDelegate = in_completiondelegate;
             mpCurrentRequest = mpHttpRequestSystem->MakeGetRequest(in_url, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
             
             //Reset the timer
@@ -206,17 +206,17 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------
         //----------------------------------------------------------------
-        f32 MoContentDownloader::GetDownloadProgress()
+        f32 MoContentDownloader::GetDownloadProgress() const
         {
             f32 progress = 0.0f;
             
             // Check if there is an active request
             if(mpCurrentRequest)
             {
-                if(mpCurrentRequest->GetExpectedTotalSize() > 0)
+                if(mpCurrentRequest->GetExpectedSize() > 0)
                 {
                     // Calculate current scene download progress
-                    progress = (f32)mpCurrentRequest->GetCurrentSize() / (f32)mpCurrentRequest->GetExpectedTotalSize();
+                    progress = (f32)mpCurrentRequest->GetDownloadedBytes() / (f32)mpCurrentRequest->GetExpectedSize();
                 }
             }
             

@@ -128,7 +128,9 @@ public class DynamicByteBuffer
 	public void clear()
 	{
 		m_size = 0;
-		m_capacity = 0;
+		m_capacity = 1;
+
+		m_data = new byte[m_capacity];
 	}
 	/**
 	 * This makes sure the capacity is always big enough to fit any new data 
@@ -139,11 +141,13 @@ public class DynamicByteBuffer
 	 */
 	private void checkCapacity(int in_additionalCount)
 	{
+		int requiredCapacity = m_size + in_additionalCount;
+
 		//if its not big enough, then make sure it is.
-		if (m_size + in_additionalCount > m_capacity)
+		if (requiredCapacity > m_capacity)
 		{
 			//create the new buffer
-			int dwNewCapacity = m_capacity * 2;
+			int dwNewCapacity = nextPowerOf2(requiredCapacity);
 			byte[] abyNewData = new byte[dwNewCapacity];
 			
 			//put the old data in the new buffer
@@ -161,5 +165,23 @@ public class DynamicByteBuffer
 			checkCapacity(in_additionalCount - dwAmountIncreased);
 		}
 	}
-	
+	/**
+	 * Returns the next power of two value after the input
+	 *
+	 * @author Ian Copland
+	 *
+	 * @param in_value - The value from which to find the next PO2
+	 */
+	private static int nextPowerOf2(int in_value)
+	{
+		assert (in_value >= 0) : "Value must be positive!";
+
+		int output = 1;
+		while (output < in_value)
+		{
+			output <<= 1;
+		}
+
+		return output;
+	}
 }

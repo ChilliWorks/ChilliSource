@@ -80,6 +80,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(Component);
         CS_FORWARDDECLARE_CLASS(Entity);
+        CS_FORWARDDECLARE_CLASS(PrimitiveEntityFactory);
         CS_FORWARDDECLARE_CLASS(Transform);
         //---------------------------------------------------------
         /// Event

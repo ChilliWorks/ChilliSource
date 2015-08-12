@@ -82,7 +82,6 @@ namespace CSBackend
 		//------------------------------------------------------
 		/// Networking
 		//------------------------------------------------------
-		CS_FORWARDDECLARE_CLASS(HttpRequestJavaInterface);
 		CS_FORWARDDECLARE_CLASS(HttpRequest);
 		CS_FORWARDDECLARE_CLASS(HttpRequestSystem);
 		//------------------------------------------------------

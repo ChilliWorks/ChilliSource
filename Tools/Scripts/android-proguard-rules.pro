@@ -54,14 +54,13 @@
 #also keep old-style Native Interfaces. This will be removed in the future
 -keep public class **NativeInterface { *; }
 
-#keep Local Notification, as it is accessed from native
--keep public class com.chilliworks.chillisource.core.LocalNotification { public *; }
-
 #keep anything which extends ApkExpansionDownloader, since reflection is used create them
 -keep public class * extends com.chilliworks.chillisource.networking.ApkExpansionDownloadView { public *; }
 
-#keep the ApkExpansionInfo class as it is accessed from native
+#keep the following classes are they are accessed from native
+-keep public class com.chilliworks.chillisource.core.LocalNotification { public *; }
 -keep public class com.chilliworks.chillisource.core.ApkExpansionInfo { public *; }
+-keep public class com.chilliworks.chillisource.core.ApkExpansionContentProvider { public *; }
 
 #keep facebook
 -keep class com.facebook.** { *; }

@@ -65,10 +65,10 @@ namespace ChilliSource
             /// @author HMcLaughlin
             ///
             /// @param in_url - Url to download
-            /// @param in_delegate - Delegate to call on completion
+            /// @param in_completiondelegate - Delegate to call on completion
             /// @param in_progressDelegate - Download Progress Delegate
             //----------------------------------------------------------------
-            void DownloadPackage(const std::string& in_url, const Delegate& in_delegate, const DownloadProgressDelegate& in_progressDelegate);
+            void DownloadPackage(const std::string& in_url, const Delegate& in_completiondelegate, const DownloadProgressDelegate& in_progressDelegate);
             //----------------------------------------------------------------
             /// Get Tags
             ///
@@ -86,7 +86,7 @@ namespace ChilliSource
             ///
             /// @return The progress of the current package
             //------------------------------------------------------------
-            f32 GetDownloadProgress();
+            f32 GetDownloadProgress() const;
             
         private:
             //----------------------------------------------------------------

@@ -75,30 +75,6 @@ namespace ChilliSource
                 k_failed
             };
             //--------------------------------------------------------
-            /// A struct containing information on download progress
-            ///
-            /// @author HMcLaughlin
-            //--------------------------------------------------------
-            struct DownloadProgress
-            {
-                std::string m_packageName;
-                f32 m_downloadProgress = 0.0f;
-                
-                //--------------------------------------------------------
-                /// Constructor
-                ///
-                /// @author HMcLaughlin
-                ///
-                /// @param in_packageName - Package name being downloaded
-                /// @param in_progress - Current progress
-                //--------------------------------------------------------
-                DownloadProgress(const std::string& in_packageName, f32 in_progress)
-                :m_packageName(in_packageName)
-                ,m_downloadProgress(in_progress)
-                {
-                }
-            };
-            //--------------------------------------------------------
             /// A delegate used for receiving the result of a Check
             /// For Updates request.
             ///
@@ -117,13 +93,15 @@ namespace ChilliSource
             //--------------------------------------------------------
             using CompleteDelegate = std::function<void(Result)>;
             //--------------------------------------------------------
-            /// A delegate used for receiving updates on the progress of a download
+            /// A delegate used for receiving updates on the progress
+            /// of a download
             ///
             /// @author HMcLaughlin
             ///
-            /// @param The Download Progress.
+            /// @param in_packageName - Package name that progressed.
+            /// @param in_progress - Total Progress through downloads
             //--------------------------------------------------------
-            using DownloadProgressDelegate = std::function<void(DownloadProgress)>;
+            using DownloadProgressDelegate = std::function<void(const std::string& in_packageName, f32 in_progress)>;
             //-----------------------------------------------------------
             /// Called when a checksum needs to be calculated.
             ///
@@ -396,7 +374,7 @@ namespace ChilliSource
             /// @author HMcLaughlin
             ///
             /// @param in_packageIndex - Index in m_packageDetails
-            /// @param in_checkCached - Check if already cached
+            /// @param in_checkCached - [Optional] Check if already cached
             //-----------------------------------------------------------
             void DownloadPackage(u32 in_packageIndex, bool in_checkCached = true);
             //-----------------------------------------------------------

@@ -30,7 +30,6 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/Networking/Http/HttpRequestSystem.h>
 
-#include <CSBackend/Platform/Android/Main/JNI/Networking/Http/HttpRequestJavaInterface.h>
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
@@ -98,18 +97,21 @@ namespace CSBackend
         //--------------------------------------------------------------------------------------------------
         bool HttpRequestSystem::CheckReachability() const
         {
-            return HttpRequestJavaInterface::IsConnected();
+            return m_javaSystem->CallBoolMethod("isConnected");
+        }
+		//--------------------------------------------------------------------------------------------------
+		//--------------------------------------------------------------------------------------------------
+        void HttpRequestSystem::OnInit()
+        {
+            JavaClassDef classDef("com/chilliworks/chillisource/networking/HttpRequestSystem");
+            classDef.AddMethod("isConnected", "()Z");
+
+            m_javaSystem = JavaSystemUPtr(new JavaSystem(classDef));
         }
 		//--------------------------------------------------------------------------------------------------
 		//--------------------------------------------------------------------------------------------------
 		void HttpRequestSystem::OnUpdate(f32 in_timeSinceLastUpdate)
 		{
-            //We should do this in two loops incase anyone tries to insert into the requests from the completion callback
-			for(u32 i=0; i<m_requests.size(); ++i)
-            {
-                m_requests[i]->Update();
-            }
-
             for(auto it = m_requests.begin(); it != m_requests.end(); /*No increment*/)
             {
                 if((*it)->HasCompleted())
@@ -136,6 +138,8 @@ namespace CSBackend
 
             m_requests.clear();
             m_requests.shrink_to_fit();
+
+            m_javaSystem.reset();
         }
 	}
 }

@@ -204,6 +204,22 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             template <typename... TArgs> std::string CallStringMethod(const std::string& in_methodName, TArgs&&... in_args) const;
             //------------------------------------------------------------------------------
+            /// Returns the java object for this
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @return Java object
+            //------------------------------------------------------------------------------
+            jobject GetJavaObject() const;
+            //------------------------------------------------------------------------------
+            /// Gets the class name
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @return Class Name of the java def
+            //------------------------------------------------------------------------------
+            const std::string& GetClassName() const;
+            //------------------------------------------------------------------------------
             /// Destructor.
             ///
             /// @author Ian Copland

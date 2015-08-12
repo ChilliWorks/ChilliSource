@@ -78,24 +78,45 @@ namespace CSBackend
             ///
             /// @return The expected total size of the request
             //----------------------------------------------------------------------------------------
-            u64 GetExpectedTotalSize() const;
+            u64 GetExpectedSize() const override;
             //----------------------------------------------------------------------------------------
             /// @author HMcLaughlin
             ///
             /// @return The current transferred size of the request
             //----------------------------------------------------------------------------------------
-            u64 GetCurrentSize() const;
+            u64 GetDownloadedBytes() const override;
             //----------------------------------------------------------------------------------------
             /// Close the request. Note: The completion delegate is not invoked
             ///
             /// @author Ian Copland
             //----------------------------------------------------------------------------------------
             void Cancel() override;
+			//--------------------------------------------------------------------------------------
+			/// Called by Java when the request contents exceed the max buffer size and are flushed.
+			/// This is called on the main thread.
+			///
+			/// @author S Downie
+			///
+			/// @param in_data - Partial data
+			/// @param in_responseCode - Response code
+			//--------------------------------------------------------------------------------------
+			void OnFlushed(const std::string& in_data, u32 in_responseCode);
+			//--------------------------------------------------------------------------------------
+			/// Called by Java when the request completes.
+			/// This is called on the main thread.
+			///
+			/// @author HMcLaughlin
+			///
+			/// @param in_resultCode - Result code
+			/// @param in_data - Data
+			/// @param in_responseCode - Response code for request
+			//--------------------------------------------------------------------------------------
+		    void OnComplete(u32 in_resultCode, const std::string& in_data, u32 in_responseCode);
 
 		private:
 
             friend class HttpRequestSystem;
-            friend class HttpRequestJavaInterface;
+
             //------------------------------------------------------------------
             /// Constructor. Can only be created via HttpRequestSystem
             ///
@@ -111,14 +132,6 @@ namespace CSBackend
             //------------------------------------------------------------------
             HttpRequest(Type in_type, const std::string& in_url, const std::string& in_body, const CSCore::ParamDictionary& in_headers, u32 in_timeoutSecs, u32 in_maxBufferSize, const Delegate& in_delegate);
             //----------------------------------------------------------------------------------------
-            /// Checks the stream to see if any data is available for reading
-            /// and reads this into a buffer. Once all the data is read
-            /// the request will call the complete delegate
-            ///
-            /// @author Ian Copland
-            //----------------------------------------------------------------------------------------
-            void Update();
-            //----------------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
             /// @return Whether the request has completed - regardless of success or failure
@@ -130,16 +143,6 @@ namespace CSBackend
 			/// Sends the request
 			//------------------------------------------------------------------
 			void PerformRequest();
-			//--------------------------------------------------------------------------------------
-			/// Called by Java when the request contents exceed the max buffer size and are flushed.
-			/// This is called on the main thread.
-			///
-			/// @author S Downie
-			///
-			/// @param Partial data
-			/// @param Response code
-			//--------------------------------------------------------------------------------------
-			void OnFlushed(const std::string& in_data, u32 in_responseCode);
 
 		private:
 			
@@ -155,6 +158,8 @@ namespace CSBackend
 			bool m_isPollingComplete = false;
 			bool m_isRequestComplete = false;
 			bool m_isRequestCancelled = false;
+
+            JavaClassSPtr m_javaHttpRequest;
 
 			std::string m_responseData;
 			CSNetworking::HttpResponse::Result m_requestResult = CSNetworking::HttpResponse::Result::k_failed;

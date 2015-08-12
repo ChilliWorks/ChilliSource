@@ -78,43 +78,19 @@ namespace CSBackend
             ///
             /// @return The expected total size of the request
             //----------------------------------------------------------------------------------------
-            u64 GetExpectedTotalSize() const override;
+            u64 GetExpectedSize() const override;
             //----------------------------------------------------------------------------------------
             /// @author N Tanda
             ///
             /// @return The current transferred size of the request
             //----------------------------------------------------------------------------------------
-            u64 GetCurrentSize() const override;
+            u64 GetDownloadedBytes() const override;
             //------------------------------------------------------------------
             /// Close the request. Note: The completion delegate is not invoked
             ///
             /// @author S Downie
             //------------------------------------------------------------------
             void Cancel() override;
-            //------------------------------------------------------------------
-            /// Called by the Http Delegate once the request has complete. This
-            /// is for internal use only and should not be called by the user.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The result.
-            /// @param The response code.
-            /// @param The data in string form.
-            //------------------------------------------------------------------
-            void OnComplete(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data);
-            //------------------------------------------------------------------
-            /// Called by the Http Delegate when the max buffer size is exceeded
-            /// and it flushes the current data.
-            ///
-            /// This is for internal use only and should not be called by the user.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The result.
-            /// @param The response code.
-            /// @param The partial data in string form.
-            //------------------------------------------------------------------
-            void OnFlushed(CSNetworking::HttpResponse::Result in_result, u32 in_responseCode, const std::string& in_data);
             //------------------------------------------------------------------
             /// Destructor.
             ///
@@ -152,6 +128,9 @@ namespace CSBackend
             
             NSURLConnection* m_connection = nil;
             HttpDelegate* m_httpDelegate = nil;
+            
+            u64 m_downloadedBytes = 0;
+            u64 m_expectedSize = 0;
         };
 	}
 }
