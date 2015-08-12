@@ -885,8 +885,10 @@ namespace ChilliSource
         void CanvasRenderer::OnDestroy()
         {
             m_overlayBatcher = nullptr;
-            m_materialPool->Clear();
             m_canvasSprite.pMaterial = nullptr;
+            
+            m_materialPool->Clear();
+            m_materialPool.reset();
         }
 	}
 }

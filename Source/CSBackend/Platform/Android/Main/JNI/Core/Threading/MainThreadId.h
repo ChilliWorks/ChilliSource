@@ -36,6 +36,7 @@
 
 #include <CSBackend/Platform/Android/Main/JNI/ForwardDeclarations.h>
 
+#include <atomic>
 #include <thread>
 
 namespace CSBackend
@@ -73,7 +74,7 @@ namespace CSBackend
 			MainThreadId();
 
         private:
-			std::thread::id m_mainThreadId;
+			std::atomic<std::thread::id> m_mainThreadId;
 		};
 	}
 }

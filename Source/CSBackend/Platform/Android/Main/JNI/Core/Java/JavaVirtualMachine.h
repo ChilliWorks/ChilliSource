@@ -52,12 +52,31 @@ namespace CSBackend
 		{
 		public:
 			//------------------------------------------------------------------------------
+			/// Attached the current thread to the JVM. If a background thread created in
+			/// native might be calling up to Java this should be the first thing it calls.
+			/// If this is called, DetachCurrentThread() must be called before the thread
+			/// finishes or the JVM will crash.
+			///
+			/// @author Ian Copland
+			//------------------------------------------------------------------------------
+			void AttachCurrentThread();
+			//------------------------------------------------------------------------------
 			/// @author Ian Copland
 			///
-			/// @return The pointer to the JNI Environment for the current thread.
+			/// @return The pointer to the JNI Environment for the current thread. The
+			/// thread will be attached to the JVM if it isn't already. This means that
+			/// DetachCurrentThread will need to be called prior to the thread exiting if
+			/// the thread was created in native.
 			//------------------------------------------------------------------------------
-			JNIEnv* GetJNIEnvironment() const;
-
+			JNIEnv* GetJNIEnvironment();
+			//------------------------------------------------------------------------------
+			/// Detaches the current thread from the JVM. This must be called for all
+			/// natively created threads that have been attached to the JVM. This must not
+			/// be called for threads which were created in Java.
+			///
+			/// @author Ian Copland
+			//------------------------------------------------------------------------------
+			void DetachCurrentThread();
 		private:
 		    friend class CSCore::Singleton<JavaVirtualMachine>;
 			//------------------------------------------------------------------------------

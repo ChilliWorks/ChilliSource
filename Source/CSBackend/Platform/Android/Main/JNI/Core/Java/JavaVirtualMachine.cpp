@@ -43,7 +43,14 @@ namespace CSBackend
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        JNIEnv* JavaVirtualMachine::GetJNIEnvironment() const
+        void JavaVirtualMachine::AttachCurrentThread()
+        {
+            JNIEnv* environment = nullptr;
+            m_javaVirtualMachine->AttachCurrentThread(&environment, nullptr);
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        JNIEnv* JavaVirtualMachine::GetJNIEnvironment()
         {
             CS_ASSERT(m_javaVirtualMachine != nullptr, "The java virtual machine cannot be null.");
 
@@ -52,6 +59,12 @@ namespace CSBackend
         	CS_ASSERT(environment != nullptr, "The jni environment cannot be null.");
 
         	return environment;
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void JavaVirtualMachine::DetachCurrentThread()
+        {
+            m_javaVirtualMachine->DetachCurrentThread();
         }
 	}
 }
