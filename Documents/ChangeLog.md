@@ -1,5 +1,26 @@
-Chilli Source Change Log
+ChilliSource Change Log
 ========================
+
+Version 1.5.1, 2015-08-14
+-------------------------
+* Added: A new primitive shape model factory. This can be used to create boxes and planes in code.
+* Added: A new primitive shape entity factory. This creates new entities using shapes generated through the primitive shape model factory.
+* Added: Support for "multi-dex" applications on Android. This is needed if your application exceeds to 65k method limit.
+* Added: A new way of handling JNI callbacks from Java to Native on Android. The method should now provide a BoxedPointer, which can be used to retreive a pointer to the target native object
+* Improved: The Change Over Lifetime particle affector now supports 'intermediate colours', meaning it can fade through a series of different colours over the lifetime
+* Improved: It is now possible to get the expected size and current progress of a download using the Http Request System
+* Improved: Reimplemented Http Request on Android. It will no longer block the background task queue if several requests are made at the same time.
+* Improved: It is now possible to get the jobject from a JavaClass.
+* Fixed: Row and column major ordering is now the correct way round in a Grid Layout
+* Fixed: Materials used by the Canvas Renderer and now correctly relinquished at the end of each frame, fixing the issue where the textures could not be manually released
+* Fixed: An issue with the minus operator in all math vectors where the vector itself was modified rather than a copy, leading the following returning true: b = -a; return (a == b);
+* Fixed: Vector2::Angle now returns an absolute angle to be consistent with how Vector3::Angle() works
+* Fixed: A crash bug that would occur under certain conditions when using Application::Quit() on Android
+* Fixed: System dialogue boxes now correctly display on Windows
+* Fixed: The main thead id is now correctly updated during the OnDestroy() life cycle event on Android
+* Fixed: An issue where pushing an Apk Expansion file to device would fail becuase a directory doesn't exist.
+* Fixed: A crash related to WebView in Android release builds.
+* Fixed: An issue with clear() in the Java class DynamicByteBuffer
 
 Version 1.5.0, 2015-07-10
 -------------------------
@@ -167,11 +188,11 @@ Version 1.1.4, 2014-10-24
 
 Version 1.1.3, 2014-10-20
 -------------------------
-* Project generator will now error if the output directory is inside Chilli Source. This was causing recursive file copy issues when copying Chilli Source to the project directory.
+* Project generator will now error if the output directory is inside ChilliSource. This was causing recursive file copy issues when copying ChilliSource to the project directory.
 
 Version 1.1.2, 2014-10-16
 -------------------------
-* Added CSProjectGenerator, a tool for generating new Chilli Source project.
+* Added CSProjectGenerator, a tool for generating new ChilliSource project.
 
 Version 1.1.1, 2014-10-10
 -------------------------

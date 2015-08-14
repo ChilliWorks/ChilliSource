@@ -1,22 +1,23 @@
 ![alt link](Documents/Images/ChilliSourceLogo.png)
 
-Chilli Source v1.5.0
+ChilliSource v1.5.1
 ====================
 
-Chilli Source is an open source, cross-platform game engine designed by game developers for game developers. It is completely free to use, released under the MIT License.
+ChilliSource is an open source, cross-platform game engine designed by game developers for game developers. It is completely free to use, released under the MIT License.
 
 Links
 -----
 * [Chilli Works Website](http://chilli-works.com/)
-* [Chilli Source Documentation](http://www.chilli-works.com/learn/)
-* [Chilli Source Samples Repository](https://github.com/ChilliWorks/CSSamples)
-* [Chilli Source Forum](http://forums.chilli-works.com/)
+* [ChilliSource Documentation](http://www.chilli-works.com/learn/)
+* [ChilliSource Samples Repository](https://github.com/ChilliWorks/CSSamples)
+* [ChilliSource Testing Repository](https://github.com/ChilliWorks/CSTest)
+* [ChilliSource Forum](http://forums.chilli-works.com/)
 
 Getting Started
 ---------------
 The [Getting Started: What You'll Need](http://www.chilli-works.com/learn/tutorials-2/getting-started-what-youll-need/) tutorial provides a good starting point for working with ChilliSource. It demonstrates how to create and build a new project. Also check out the other tutorials for more information.
 
-If you have any development questions or suggestions for the engine please post them on the [Chilli Source Forum](http://forums.chilli-works.com/). Any bugs encountered should be reported using [Github Issues](https://github.com/chilliworks/chillisource/issues).
+If you have any development questions or suggestions for the engine please post them on the [ChilliSource Forum](http://forums.chilli-works.com/). Any bugs encountered should be reported using [Github Issues](https://github.com/chilliworks/chillisource/issues).
 
 Contribution
 ------------
