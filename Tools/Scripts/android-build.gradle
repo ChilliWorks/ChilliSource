@@ -340,13 +340,35 @@ ext {
      */
     csFixDefaultLibraryDependancies = { in_tasks ->
         in_tasks.all() { task ->
-            def androidSupportLibV7TaskName = "prepareComAndroidSupportAppcompatV72220Library"
-            def androidSupportLibV4TaskName = "prepareComAndroidSupportSupportV42220Library"
-            def googlePlayServicesLibTaskName = "prepareComGoogleAndroidGmsPlayServices750Library"
-            def facebookLibTaskName = "prepareComFacebookAndroidFacebookAndroidSdk3231Library"
+            tasksToClear = [
+                "prepareComAndroidSupportAppcompatV72220Library",
+                "prepareComAndroidSupportMediarouterV72200Library",
+                "prepareComAndroidSupportSupportV42220Library",
+                "prepareComFacebookAndroidFacebookAndroidSdk3231Library",
+                "prepareComGoogleAndroidGmsPlayServices750Library",
+                "prepareComGoogleAndroidGmsPlayServicesAds750Library",
+                "prepareComGoogleAndroidGmsPlayServicesAnalytics750Library",
+                "prepareComGoogleAndroidGmsPlayServicesAppindexing750Library",
+                "prepareComGoogleAndroidGmsPlayServicesAppinvite750Library",
+                "prepareComGoogleAndroidGmsPlayServicesAppstate750Library",
+                "prepareComGoogleAndroidGmsPlayServicesBase750Library",
+                "prepareComGoogleAndroidGmsPlayServicesCast750Library",
+                "prepareComGoogleAndroidGmsPlayServicesDrive750Library",
+                "prepareComGoogleAndroidGmsPlayServicesFitness750Library",
+                "prepareComGoogleAndroidGmsPlayServicesGames750Library",
+                "prepareComGoogleAndroidGmsPlayServicesGcm750Library",
+                "prepareComGoogleAndroidGmsPlayServicesIdentity750Library",
+                "prepareComGoogleAndroidGmsPlayServicesLocation750Library",
+                "prepareComGoogleAndroidGmsPlayServicesMaps750Library",
+                "prepareComGoogleAndroidGmsPlayServicesNearby750Library",
+                "prepareComGoogleAndroidGmsPlayServicesPanorama750Library",
+                "prepareComGoogleAndroidGmsPlayServicesPlus750Library",
+                "prepareComGoogleAndroidGmsPlayServicesSafetynet750Library",
+                "prepareComGoogleAndroidGmsPlayServicesWallet750Library",
+                "prepareComGoogleAndroidGmsPlayServicesWearable750Library",
+            ]
 
-            def taskName = task.name.toLowerCase()
-            if (taskName == androidSupportLibV7TaskName || taskName == androidSupportLibV4TaskName || taskName == googlePlayServicesLibTaskName || taskName == facebookLibTaskName) {
+            if (tasksToClear.contains(task.name)) {
                 task.dependsOn.clear()
             }
         }
