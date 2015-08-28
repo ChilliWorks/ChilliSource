@@ -72,6 +72,47 @@ namespace ChilliSource
             //----------------------------------------------------------------------------------------
             bool IsA(Core::InterfaceIDType in_interfaceId) const override;
             //----------------------------------------------------------------------------------------
+            /// Get the texture that is currently used.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @return Texture
+            //----------------------------------------------------------------------------------------
+            const Rendering::TextureCSPtr& GetTexture();
+            //----------------------------------------------------------------------------------------
+            /// Get the texture atlas that is currently used.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @return Texture atlas
+            //----------------------------------------------------------------------------------------
+            const Rendering::TextureAtlasCSPtr& GetTextureAtlas();
+            //----------------------------------------------------------------------------------------
+            /// Get the texture atlas frame Id that is currently used.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @return Frame Id
+            //----------------------------------------------------------------------------------------
+            const std::string& GetTextureAtlasId();
+            //----------------------------------------------------------------------------------------
+            /// Get the UVs that are currently used. UVs are relative to the
+            /// frame and not the overall atlas
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @return Rectangle containing U, V, S, T
+            //----------------------------------------------------------------------------------------
+            const Rendering::UVs& GetUVs();
+            //----------------------------------------------------------------------------------------
+            /// Gets the colour of the drawable.
+            ///
+            /// @author HMcLaughlin
+            ///
+            /// @param The colour.
+            //----------------------------------------------------------------------------------------
+            const Core::Colour& GetColour();
+            //----------------------------------------------------------------------------------------
             /// Set the texture that should be used in subsequent draws
             ///
             /// @author S Downie
