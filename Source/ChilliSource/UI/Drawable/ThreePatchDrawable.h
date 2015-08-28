@@ -88,7 +88,7 @@ namespace ChilliSource
             ///
             /// @return Texture
             //----------------------------------------------------------------------------------------
-            const Rendering::TextureCSPtr& GetTexture();
+            const Rendering::TextureCSPtr& GetTexture() const override;
             //----------------------------------------------------------------------------------------
             /// Get the texture atlas that is currently used.
             ///
@@ -96,7 +96,7 @@ namespace ChilliSource
             ///
             /// @return Texture atlas
             //----------------------------------------------------------------------------------------
-            const Rendering::TextureAtlasCSPtr& GetTextureAtlas();
+            const Rendering::TextureAtlasCSPtr& GetTextureAtlas() const override;
             //----------------------------------------------------------------------------------------
             /// Get the texture atlas frame Id that is currently used.
             ///
@@ -104,7 +104,7 @@ namespace ChilliSource
             ///
             /// @return Frame Id
             //----------------------------------------------------------------------------------------
-            const std::string& GetTextureAtlasId();
+            const std::string& GetTextureAtlasId() const override;
             //----------------------------------------------------------------------------------------
             /// Get the UVs that are currently used. UVs are relative to the
             /// frame and not the overall atlas
@@ -113,7 +113,7 @@ namespace ChilliSource
             ///
             /// @return Rectangle containing U, V, S, T
             //----------------------------------------------------------------------------------------
-            const Rendering::UVs& GetUVs();
+            const Rendering::UVs& GetUVs() const override;
             //----------------------------------------------------------------------------------------
             /// Gets the colour of the drawable.
             ///
@@ -121,7 +121,7 @@ namespace ChilliSource
             ///
             /// @param The colour.
             //----------------------------------------------------------------------------------------
-            const Core::Colour& GetColour();
+            const Core::Colour& GetColour() const override;
             //----------------------------------------------------------------------------------------
             /// Set the texture that should be used in subsequent draws
             ///

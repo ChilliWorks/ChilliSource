@@ -405,31 +405,31 @@ namespace ChilliSource
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        const Rendering::TextureCSPtr& NinePatchDrawable::GetTexture()
+        const Rendering::TextureCSPtr& NinePatchDrawable::GetTexture() const
         {
             return m_texture;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        const Rendering::TextureAtlasCSPtr& NinePatchDrawable::GetTextureAtlas()
+        const Rendering::TextureAtlasCSPtr& NinePatchDrawable::GetTextureAtlas() const
         {
             return m_atlas;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        const std::string& NinePatchDrawable::GetTextureAtlasId()
+        const std::string& NinePatchDrawable::GetTextureAtlasId() const
         {
             return m_atlasId;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        const Rendering::UVs& NinePatchDrawable::GetUVs()
+        const Rendering::UVs& NinePatchDrawable::GetUVs() const
         {
             return m_uvs;
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
-        const Core::Colour& NinePatchDrawable::GetColour()
+        const Core::Colour& NinePatchDrawable::GetColour() const
         {
             return m_colour;
         }
