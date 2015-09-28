@@ -78,7 +78,7 @@ namespace CSBackend
             m_model = javaInterface->GetDeviceModel();
             m_modelType = javaInterface->GetDeviceModelType();
             m_manufacturer = javaInterface->GetDeviceManufacturer();
-            m_osVersion = javaInterface->GetOSVersionCode();
+            m_osVersion = CSCore::ToString(javaInterface->GetOSVersionCode());
             m_locale = javaInterface->GetDefaultLocaleCode();
             m_language = ParseLanguageFromLocale(m_locale);
             m_udid = javaInterface->GetUniqueId();
