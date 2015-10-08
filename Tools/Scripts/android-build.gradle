@@ -184,12 +184,14 @@ def addGetInfoTasks(def in_defaultConfig, def in_applicationVariants) {
                 }
 
                 g_versionCode = in_defaultConfig.versionCode
+                g_versionName = in_defaultConfig.versionName
 
                 for (def i = 0; i < in_variant.productFlavors.size(); ++i)
                 {
-                    def flavourVersionCode = in_variant.productFlavors.get(i).versionCode
-                    if (flavourVersionCode != null && flavourVersionCode > 0) {
-                        g_versionCode = flavourVersionCode
+                    def productFlavour = in_variant.productFlavors.get(i)
+                    if (productFlavour.versionCode != null && productFlavour.versionCode > 0) {
+                        g_versionCode = productFlavour.versionCode
+                        g_versionName = productFlavour.versionName
                     }
                 }
             }
@@ -224,6 +226,7 @@ def addApkExpansionTasks(def in_applicationVariants) {
 ext {
     g_applicationId = ""
     g_versionCode = 0
+    g_versionName = ""
 
     /**
      * Adds task dependencies as required for building a ChilliSource library.
