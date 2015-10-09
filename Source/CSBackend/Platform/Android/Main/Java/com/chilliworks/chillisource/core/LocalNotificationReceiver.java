@@ -170,6 +170,7 @@ public class LocalNotificationReceiver extends BroadcastReceiver
 				.setContentIntent(sContentIntent)
 				.build();
 
+			notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 			NotificationManager notificationManager = (NotificationManager) in_context.getSystemService(Context.NOTIFICATION_SERVICE);
 			notificationManager.notify(intentId, notification);
 			Toast.makeText(in_context, text, Toast.LENGTH_LONG).show();
