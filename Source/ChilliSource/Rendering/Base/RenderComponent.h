@@ -58,7 +58,7 @@ namespace ChilliSource
 			/// recomputed when required.
 			/// @return Axis aligned bounding box
 			//----------------------------------------------------
-			virtual const Core::AABB& GetAABB(){return mBoundingBox;}
+			virtual const Core::AABB& GetAABB() override { return mBoundingBox; }
 			//----------------------------------------------------
 			/// Get Object Oriented Bounding Box
 			///
@@ -67,7 +67,7 @@ namespace ChilliSource
 			/// recomputed when required.
 			/// @return OOBB
 			//----------------------------------------------------
-			virtual const Core::OOBB& GetOOBB(){return mOBBoundingBox;}
+			virtual const Core::OOBB& GetOOBB() override { return mOBBoundingBox; }
 			//----------------------------------------------------
 			/// Get Bounding Sphere
 			///
@@ -76,13 +76,13 @@ namespace ChilliSource
 			/// recomputed when required.
 			/// @return bounding sphere
 			//----------------------------------------------------
-			virtual const Core::Sphere& GetBoundingSphere(){return mBoundingSphere;}
+			virtual const Core::Sphere& GetBoundingSphere() override { return mBoundingSphere; }
 			//----------------------------------------------------
 			/// Is Visible
 			///
 			/// @return Whether or not to render
 			//----------------------------------------------------
-			bool IsVisible() const;
+			bool IsVisible() const override;
 			//----------------------------------------------------
 			/// Set Visible
 			///

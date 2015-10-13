@@ -37,8 +37,8 @@
 #define CS_DECLARE_NAMEDTYPE(x) \
     static const ::CSCore::InterfaceIDType InterfaceID; \
     static const ::std::string TypeName; \
-    virtual ::CSCore::InterfaceIDType GetInterfaceID() const; \
-    virtual const ::std::string& GetInterfaceTypeName() const;
+    virtual ::CSCore::InterfaceIDType GetInterfaceID() const override; \
+    virtual const ::std::string& GetInterfaceTypeName() const override;
 
 #define CS_DEFINE_NAMEDTYPE(x) \
     const ::CSCore::InterfaceIDType x::InterfaceID = ::CSCore::QueryableInterface::InterfaceIDHash(#x); \

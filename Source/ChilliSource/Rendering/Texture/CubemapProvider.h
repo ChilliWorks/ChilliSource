@@ -116,7 +116,7 @@ namespace ChilliSource
             ///
             /// @retrun Default options for cubemap loading
             //----------------------------------------------------
-            Core::IResourceOptionsBaseCSPtr GetDefaultOptions() const;
+            Core::IResourceOptionsBaseCSPtr GetDefaultOptions() const override;
             
 		private:
             friend class Core::Application;

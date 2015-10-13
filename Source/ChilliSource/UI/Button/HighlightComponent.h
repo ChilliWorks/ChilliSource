@@ -157,7 +157,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             //-------------------------------------------------------------------
-            void OnInit();
+            void OnInit() override;
             //-------------------------------------------------------------------
             /// Called when a pointer is pressed inside the bounds of the owning
             /// widget. This will enable the highlight.
@@ -220,7 +220,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             //-------------------------------------------------------------------
-            void OnDestroy();
+            void OnDestroy() override;
             
             DrawableDefCSPtr m_normalDrawableDef;
             DrawableDefCSPtr m_highlightDrawableDef;

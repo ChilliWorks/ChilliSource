@@ -211,13 +211,13 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             //-------------------------------------------------------------------
-            void OnInit();
+            void OnInit() override;
             //-------------------------------------------------------------------
             /// Called when the owning widget is being destructed.
             ///
             /// @author Ian Copland
             //-------------------------------------------------------------------
-            void OnDestroy();
+            void OnDestroy() override;
             
             Core::Vector2 m_relBarSize;
             f32 m_progress = 0.0f;
