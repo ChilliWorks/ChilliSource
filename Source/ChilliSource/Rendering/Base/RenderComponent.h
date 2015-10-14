@@ -82,7 +82,7 @@ namespace ChilliSource
 			///
 			/// @return Whether or not to render
 			//----------------------------------------------------
-			bool IsVisible() const override;
+			bool IsVisible() const final override;
 			//----------------------------------------------------
 			/// Set Visible
 			///
