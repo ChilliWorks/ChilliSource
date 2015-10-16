@@ -1015,11 +1015,6 @@ namespace ChilliSource
                 {
                     component->OnAddedToCanvas();
                 }
-                
-                if (m_isInputEnabled == true)
-                {
-                    UpdateAllContainedPointers();
-                }
             }
             
             ForceLayout();
@@ -1408,6 +1403,8 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::OnResume()
         {
+            CS_ASSERT(m_canvas != nullptr, "Cannot resume without a canvas.");
+            
             for (const auto& component : m_components)
             {
                 component->OnResume();
@@ -1426,6 +1423,8 @@ namespace ChilliSource
                 child->OnResume();
             }
             m_children.unlock();
+            
+            ForceLayout();
         }
         //----------------------------------------------------------------------------------------
         //----------------------------------------------------------------------------------------
@@ -1546,6 +1545,13 @@ namespace ChilliSource
         //----------------------------------------------------------------------------------------
         void Widget::OnSuspend()
         {
+            CS_ASSERT(m_canvas != nullptr, "Cannot suspend without a canvas.");
+            
+            if (m_isInputEnabled == true)
+            {
+                RemoveAllContainedPointers();
+            }
+            
             m_children.lock();
             for(auto& child : m_children)
             {

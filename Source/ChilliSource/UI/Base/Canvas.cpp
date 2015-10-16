@@ -68,15 +68,6 @@ namespace ChilliSource
             m_canvas->SetAbsolutePosition(GetSize() * 0.5f);
             m_canvas->SetInputEnabled(true);
             m_canvas->SetInputConsumeEnabled(false);
-            
-            m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnScreenResolutionChanged));
-            
-            auto pointerSystem = Core::Application::Get()->GetSystem<Input::PointerSystem>();
-            m_pointerAddedConnection = pointerSystem->GetPointerAddedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerAdded));
-            m_pointerDownConnection = pointerSystem->GetPointerDownEventInternal().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerDown));
-            m_pointerMovedConnection = pointerSystem->GetPointerMovedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerMoved));
-            m_pointerUpConnection = pointerSystem->GetPointerUpEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerUp));
-            m_pointerRemovedConnection = pointerSystem->GetPointerRemovedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerRemoved));
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -127,6 +118,15 @@ namespace ChilliSource
         //-------------------------------------------------------
         void Canvas::OnResume()
         {
+            m_screenResizedConnection = m_screen->GetResolutionChangedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnScreenResolutionChanged));
+            
+            auto pointerSystem = Core::Application::Get()->GetSystem<Input::PointerSystem>();
+            m_pointerAddedConnection = pointerSystem->GetPointerAddedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerAdded));
+            m_pointerDownConnection = pointerSystem->GetPointerDownEventInternal().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerDown));
+            m_pointerMovedConnection = pointerSystem->GetPointerMovedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerMoved));
+            m_pointerUpConnection = pointerSystem->GetPointerUpEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerUp));
+            m_pointerRemovedConnection = pointerSystem->GetPointerRemovedEvent().OpenConnection(Core::MakeDelegate(this, &Canvas::OnPointerRemoved));
+            
             m_canvas->OnResume();
         }
         //-------------------------------------------------------
@@ -158,6 +158,14 @@ namespace ChilliSource
         void Canvas::OnSuspend()
         {
             m_canvas->OnSuspend();
+            
+            m_screenResizedConnection.reset();
+            
+            m_pointerAddedConnection.reset();
+            m_pointerDownConnection.reset();
+            m_pointerMovedConnection.reset();
+            m_pointerUpConnection.reset();
+            m_pointerRemovedConnection.reset();
         }
         //-------------------------------------------------------
         //-------------------------------------------------------
