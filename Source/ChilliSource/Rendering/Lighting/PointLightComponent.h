@@ -161,7 +161,7 @@ namespace ChilliSource
             /// of influence based on the light radius and the
             /// minimum light influence value.
             //----------------------------------------------------------
-            void CalculateLightingValues();
+            void CalculateLightingValues() override;
         private:
             
             Core::EventConnectionUPtr m_transformChangedConnection;
