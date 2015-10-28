@@ -67,7 +67,7 @@ namespace ChilliSource
             ///
             /// @return Whether the system implements the given interface
             //---------------------------------------------------------
-            bool IsA(InterfaceIDType in_interfaceId) const;
+            bool IsA(InterfaceIDType in_interfaceId) const override;
 			//---------------------------------------------------------
             /// @author T Kane
             ///

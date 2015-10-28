@@ -136,13 +136,13 @@ namespace CSBackend
             ///
             /// @return The width of the texture in texels
             //--------------------------------------------------
-            u32 GetWidth() const;
+            u32 GetWidth() const override;
             //--------------------------------------------------
             /// @author S Downie
             ///
             /// @return The height of the texture in texels
             //--------------------------------------------------
-            u32 GetHeight() const;
+            u32 GetHeight() const override;
             
 #ifdef CS_TARGETPLATFORM_ANDROID
             //--------------------------------------------------

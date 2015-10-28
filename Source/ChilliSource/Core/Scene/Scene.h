@@ -76,7 +76,7 @@ namespace ChilliSource
             ///
             /// @return Whether the system has the given interface
             //-------------------------------------------------------
-            bool IsA(InterfaceIDType in_interfaceId) const;
+            bool IsA(InterfaceIDType in_interfaceId) const override;
 			//-------------------------------------------------------
 			/// Add an entity to the scene. This entity cannot
             /// exist on another scene prior to adding. The entity

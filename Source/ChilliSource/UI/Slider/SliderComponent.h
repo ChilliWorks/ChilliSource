@@ -188,7 +188,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------------------
-            void OnInit();
+            void OnInit() override;
             //------------------------------------------------------------------------------
             /// This is called when the owning widget is added to the canvas.
             ///
@@ -252,7 +252,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------------------
-            void OnDestroy();
+            void OnDestroy() override;
             
             f32 m_sliderSize = 1.0f;
             f32 m_sliderPos = 0.5f;

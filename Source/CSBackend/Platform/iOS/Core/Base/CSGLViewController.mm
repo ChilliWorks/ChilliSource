@@ -335,7 +335,6 @@
 {
     GLKView* view = (GLKView*)self.view;
     [view.context release];
-    view.context = nil;
     [EAGLContext setCurrentContext:nil];
     [view release];
     
