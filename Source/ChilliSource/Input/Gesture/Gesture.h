@@ -96,13 +96,23 @@ namespace ChilliSource
             //--------------------------------------------------------
             /// This will be called if the gesture is currently active
             /// and conflict resolution deduces that it should end.
-            /// The gesture should reset itself and fire any "ended"
-            /// events where relevant. Instantious gestures such as
-            /// a tap do not need to implement this.
+            /// This will de-activate the current gesture and set all
+            /// pointers back to inactive.
             ///
             /// @author Ian Copland
             //--------------------------------------------------------
-            virtual void Cancel() {};
+            virtual void Cancel() {}
+            //--------------------------------------------------------
+            /// This is called to reset the gesture back to its
+            /// intials state. If the gesture was active, it will be
+            /// reset. Any data keeping track of the current state of
+            /// the gesture should be reset. This is typically called
+            /// when transitioning scenes, to ensure the gesture is
+            /// not in an invalid state when transitioning back.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------
+            virtual void Reset() {}
             //--------------------------------------------------------
             /// A method that can optionally be implemented by the
             /// implementing class to receive update events.

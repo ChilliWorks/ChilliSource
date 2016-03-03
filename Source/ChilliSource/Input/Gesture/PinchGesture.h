@@ -187,6 +187,17 @@ namespace ChilliSource
             //--------------------------------------------------------
             void Cancel() override;
             //--------------------------------------------------------
+            /// This is called to reset the gesture back to its
+            /// intials state. If the gesture was active, it will be
+            /// reset. Any data keeping track of the current state of
+            /// the gesture should be reset. This is typically called
+            /// when transitioning scenes, to ensure the gesture is
+            /// not in an invalid state when transitioning back.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------
+            void Reset() override;
+            //--------------------------------------------------------
             /// Called when a pointer down event occurs.
             ///
             /// @author Ian Copland

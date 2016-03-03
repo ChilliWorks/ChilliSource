@@ -171,12 +171,18 @@ namespace ChilliSource
             //--------------------------------------------------------
             bool ResolveConflicts(Gesture* in_gesture);
             //--------------------------------------------------------
-            /// Called when the owning state is initialised. This
+            /// Resets all gestures.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------
+            void ResetAll();
+            //--------------------------------------------------------
+            /// Called when the owning state is resumed. This
             /// registers for the input events.
             ///
             /// @author Ian Copland
             //--------------------------------------------------------
-            void OnInit() override;
+            void OnResume() override;
             //--------------------------------------------------------
             /// Called when the owning state is updated. This passes
             /// the event onto all registered gestures.
@@ -251,8 +257,14 @@ namespace ChilliSource
             //--------------------------------------------------------
             void OnPointerDownLegacy(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType);
             //--------------------------------------------------------
-            /// Called when the owning state is destroyed. This
-            /// -de-registers all of the input events.
+            /// Called when the owning state is suspeneded. This
+            /// de-registers all of the input events.
+            ///
+            /// @author Ian Copland
+            //--------------------------------------------------------
+            void OnSuspend() override;
+            //--------------------------------------------------------
+            /// Called when the owning state is destroyed. 
             ///
             /// @author Ian Copland
             //--------------------------------------------------------

@@ -101,7 +101,7 @@ namespace ChilliSource
             
             if (m_tapPending == false && m_requiredTapCount > 0 && in_timestamp - m_lastTapEndTimestamp > k_maxTimeBetweenTaps)
             {
-                ResetGesture();
+                Reset();
             }
         }
         //--------------------------------------------------------
@@ -114,7 +114,7 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void TapGesture::ResetGesture()
+        void TapGesture::Reset()
         {
             ResetTap();
             m_tapCount = 0;
@@ -254,7 +254,7 @@ namespace ChilliSource
                             }
                             gesturePosition /= m_firstTapPendingPointers.size();
                             
-                            ResetGesture();
+                            Reset();
                             
                             if (ResolveConflicts() == true)
                             {

@@ -161,7 +161,21 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
-        void GestureSystem::OnInit()
+        void GestureSystem::ResetAll()
+        {
+            std::unique_lock<std::recursive_mutex> lock(m_mutex);
+            m_gestures.lock();
+            
+            for (const auto& gesture : m_gestures)
+            {
+                gesture->Reset();
+            }
+            
+            m_gestures.unlock();
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
+        void GestureSystem::OnResume()
         {
             Input::PointerSystem* pointerSystem = Core::Application::Get()->GetSystem<Input::PointerSystem>();
             CS_ASSERT(pointerSystem != nullptr, "Gesture system missing required system: Pointer System");
@@ -256,18 +270,23 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
+        void GestureSystem::OnSuspend()
+        {
+            ResetAll();
+            
+            m_pointerScrolledConnection.reset();
+            m_pointerUpConnection.reset();
+            m_pointerMovedConnection.reset();
+            m_pointerDownConnection.reset();
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
         void GestureSystem::OnDestroy()
         {
             std::unique_lock<std::recursive_mutex> lock(m_mutex);
             m_gestures.lock();
             
             m_conflictResolutionDelegate = nullptr;
-            
-            m_pointerScrolledConnection.reset();
-            m_pointerUpConnection.reset();
-            m_pointerMovedConnection.reset();
-            m_pointerDownConnection.reset();
-            
             
             for (const auto& gesture : m_gestures)
             {

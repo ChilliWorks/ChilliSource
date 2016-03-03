@@ -151,7 +151,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             //--------------------------------------------------------
-            void ResetGesture();
+            void Reset() override;
             //--------------------------------------------------------
             /// Called when a pointer down event occurs.
             ///

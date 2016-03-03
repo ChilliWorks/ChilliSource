@@ -186,6 +186,17 @@ namespace ChilliSource
         }
         //--------------------------------------------------------
         //--------------------------------------------------------
+        void DragGesture::Reset()
+        {
+            if (IsActive())
+            {
+                Cancel();
+            }
+            
+            m_pendingPointers.clear();
+        }
+        //--------------------------------------------------------
+        //--------------------------------------------------------
         void DragGesture::OnPointerDown(const Pointer& in_pointer, f64 in_timestamp, Pointer::InputType in_inputType)
         {
             if (in_inputType == m_requiredInputType)
