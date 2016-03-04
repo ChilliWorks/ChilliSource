@@ -70,8 +70,8 @@ namespace ChilliSource
                 if ((*it)->pSkinnedAnimation.get() == inpAnimation.get())
                 {
                     mAnimations.erase(it);
+                    break;
                 }
-                break;
             }
         }
         //----------------------------------------------------------
