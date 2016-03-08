@@ -254,6 +254,18 @@
     }
 }
 //-------------------------------------------------------------
+/// Ensures that the status bar is hidden while the GL View is
+/// active.
+///
+/// @author Ian Copland
+///
+/// @param Whether or not the status bar should be hidden.
+//-------------------------------------------------------------
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+//-------------------------------------------------------------
 /// Called by the OS when one or more touches start on the view
 ///
 /// @author S Downie

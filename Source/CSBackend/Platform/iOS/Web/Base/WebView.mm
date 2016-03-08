@@ -291,7 +291,7 @@ namespace CSBackend
 		{
             CS_ASSERT(m_dismissButton == nil, "Cannot add dismiss button as one already exists.");
             
-            UIImage* btnImage = [UIImage imageNamed:@"com_taggames_close_button.png"];
+            UIImage* btnImage = [UIImage imageNamed:@"WebViewCloseButton.png"];
             if(btnImage)
             {
                 m_dismissButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
