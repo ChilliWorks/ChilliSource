@@ -125,7 +125,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             //--------------------------------------------------------
-            void Reset();
+            void Reset() override;
             //--------------------------------------------------------
             /// Updates the hold gesture. Tests to see if the hold
             /// time has exceeded.
