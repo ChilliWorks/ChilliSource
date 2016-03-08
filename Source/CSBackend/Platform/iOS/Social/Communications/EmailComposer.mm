@@ -125,7 +125,7 @@ namespace CSBackend
                 }
                 
                 m_rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
-                [m_rootViewController presentModalViewController:m_viewController animated:YES];
+                [m_rootViewController presentViewController:m_viewController animated:YES completion:nil];
                 
                 [pNamesArray release];
             }
@@ -138,7 +138,7 @@ namespace CSBackend
             {
                 m_viewController.mailComposeDelegate = nil;
                 
-                [m_rootViewController dismissModalViewControllerAnimated:YES];
+                [m_rootViewController dismissViewControllerAnimated:YES completion:nil];
                 m_rootViewController = nil;
                 
                 [m_viewController release];
