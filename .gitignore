@@ -43,3 +43,4 @@ Projects/Android/chillisource/src/main/libs/armeabi
 Projects/Android/chillisource/src/main/libs/x86
 Projects/Android/playapkexpansion/build
 Projects/Android/playlicensing/build
+*.opendb

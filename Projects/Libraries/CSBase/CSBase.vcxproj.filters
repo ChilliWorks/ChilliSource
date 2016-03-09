@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{ac1d99d0-3d76-49ea-85c8-a15c3843528b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlatformSource">
+      <UniqueIdentifier>{40da9152-5ecc-4e4b-b64b-3edc1f17bfca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlatformSource\Windows">
+      <UniqueIdentifier>{d2fa60bc-3054-4d32-b437-c26c1ab89da3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\aes">
+      <UniqueIdentifier>{9b0c143b-fdbf-4321-86ca-aacaedb9d22c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\base64">
+      <UniqueIdentifier>{380b3210-80ea-47fa-bc55-ab3188a878af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\json">
+      <UniqueIdentifier>{02467a67-6788-4bc6-8c7a-c1f0a10899a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\md5">
+      <UniqueIdentifier>{f20002fd-d60c-4dcb-a19c-d54d3167287e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\minizip">
+      <UniqueIdentifier>{9389dca9-e5fc-4d6d-84b8-313072e3b62c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\png">
+      <UniqueIdentifier>{7c802d6c-a0bb-4c71-b791-eba69af27e2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\rapidxml">
+      <UniqueIdentifier>{6cd42858-2c1f-4966-957d-87828dde6e0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\SHA1">
+      <UniqueIdentifier>{3cca65dd-355a-41a8-be6a-65324630b025}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PlatformSource\Windows\zconf.h">
+      <Filter>PlatformSource\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformSource\Windows\zlib.h">
+      <Filter>PlatformSource\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\aes\aes.h">
+      <Filter>Source\aes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\base64\base64.h">
+      <Filter>Source\base64</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\json\assertions.h">
+      <Filter>Source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\json\autolink.h">
+      <Filter>Source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\json\config.h">
+      <Filter>Source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\json\features.h">
+      <Filter>Source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\json\forwards.h">
+      <Filter>Source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\json\json.h">
+      <Filter>Source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\json\json_batchallocator.h">
+      <Filter>Source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\json\json_tool.h">
+      <Filter>Source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\json\reader.h">
+      <Filter>Source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\json\value.h">
+      <Filter>Source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\json\writer.h">
+      <Filter>Source\json</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\md5\md5.h">
+      <Filter>Source\md5</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\minizip\additional.h">
+      <Filter>Source\minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\minizip\crypt.h">
+      <Filter>Source\minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\minizip\ioapi.h">
+      <Filter>Source\minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\minizip\mztools.h">
+      <Filter>Source\minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\minizip\unzip.h">
+      <Filter>Source\minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\minizip\zconf.h">
+      <Filter>Source\minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\minizip\zip.h">
+      <Filter>Source\minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SHA1\HMAC_SHA1.h">
+      <Filter>Source\SHA1</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SHA1\SHA1.h">
+      <Filter>Source\SHA1</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\rapidxml\rapidxml.hpp">
+      <Filter>Source\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\rapidxml\rapidxml_iterators.hpp">
+      <Filter>Source\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\rapidxml\rapidxml_print.hpp">
+      <Filter>Source\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\rapidxml\rapidxml_utils.hpp">
+      <Filter>Source\rapidxml</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\png\png.h">
+      <Filter>Source\png</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\png\pngconf.h">
+      <Filter>Source\png</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\png\pngdebug.h">
+      <Filter>Source\png</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\png\pnginfo.h">
+      <Filter>Source\png</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\png\pnglibconf.h">
+      <Filter>Source\png</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\png\pngpriv.h">
+      <Filter>Source\png</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\png\pngstruct.h">
+      <Filter>Source\png</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\aes\aes.c">
+      <Filter>Source\aes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\base64\base64.cpp">
+      <Filter>Source\base64</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\json\json_reader.cpp">
+      <Filter>Source\json</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\json\json_value.cpp">
+      <Filter>Source\json</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\json\json_writer.cpp">
+      <Filter>Source\json</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\md5\md5.cpp">
+      <Filter>Source\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\minizip\ioapi.cpp">
+      <Filter>Source\minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\minizip\mztools.cpp">
+      <Filter>Source\minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\minizip\unzip.cpp">
+      <Filter>Source\minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\minizip\zip.cpp">
+      <Filter>Source\minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SHA1\HMAC_SHA1.cpp">
+      <Filter>Source\SHA1</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SHA1\SHA1.cpp">
+      <Filter>Source\SHA1</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\png.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngerror.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngget.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngmem.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngpread.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngread.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngrio.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngrtran.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngrutil.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngset.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngtest.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngtrans.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngwio.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngwrite.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngwtran.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\png\pngwutil.c">
+      <Filter>Source\png</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source\json\json_internalarray.inl">
+      <Filter>Source\json</Filter>
+    </None>
+    <None Include="Source\json\json_internalmap.inl">
+      <Filter>Source\json</Filter>
+    </None>
+    <None Include="Source\json\json_valueiterator.inl">
+      <Filter>Source\json</Filter>
+    </None>
+    <None Include="Source\json\version.h.in">
+      <Filter>Source\json</Filter>
+    </None>
+  </ItemGroup>
+</Project>
