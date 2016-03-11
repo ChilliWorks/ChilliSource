@@ -312,7 +312,7 @@ namespace ChilliSource
                 std::unique_lock<std::recursive_mutex> scopedLock(*m_iterableMutex);
                 auto size = m_iterable->size();
                 
-                for(auto i = in_beginIndex; i < size; ++i)
+                for(std::size_t i = in_beginIndex; i < size; ++i)
                 {
                     if((*m_iterable)[i].second == false)
                     {

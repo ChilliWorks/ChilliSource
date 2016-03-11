@@ -103,8 +103,8 @@ namespace ChilliSource
             
             f32 interpolationFactor = m_curveFunction(in_playbackProgress);
             
-            TPropertyType lowerBound = m_startLowerValue + (m_endLowerValue - m_startLowerValue) * interpolationFactor;
-            TPropertyType upperBound = m_startUpperValue + (m_endUpperValue - m_startUpperValue) * interpolationFactor;
+            TPropertyType lowerBound = TPropertyType(m_startLowerValue + (m_endLowerValue - m_startLowerValue) * interpolationFactor);
+            TPropertyType upperBound = TPropertyType(m_startUpperValue + (m_endUpperValue - m_startUpperValue) * interpolationFactor);
             
             return Core::Random::Generate(lowerBound, upperBound);
         }

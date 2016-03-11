@@ -42,6 +42,7 @@
 #include <SFML/OpenGL.hpp>
 
 #include <fstream>
+#include <array>
 
 #include <windows.h>
 
@@ -81,7 +82,7 @@ namespace CSBackend
 					Json::Reader jReader;
 					if (!jReader.parse(contents, root))
 					{
-						OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[Chilli Source] Could not parse App.config: " + jReader.getFormatedErrorMessages() + "\n").c_str());
+						OutputDebugString(CSBackend::Windows::WindowsStringUtils::UTF8ToUTF16("[Chilli Source] Could not parse App.config: " + jReader.getFormattedErrorMessages() + "\n").c_str());
 					}
 				}
 
@@ -283,7 +284,7 @@ namespace CSBackend
 			//Pick the best fit RGBA depth based on the supported depths
 			for (auto it = sf::VideoMode::getFullscreenModes().rbegin(); it != sf::VideoMode::getFullscreenModes().rend(); ++it)
 			{
-				s32 bpp = it->bitsPerPixel;
+				u32 bpp = it->bitsPerPixel;
 				if (bpp >= m_preferredRGBADepth)
 				{
 					auto windowSize = GetWindowSize();
@@ -495,8 +496,7 @@ namespace CSBackend
 							break;
 						case sf::Event::TextEntered:
 						{
-							CSCore::UTF8Char utf8Char = 0;
-							sf::Utf32::toUtf8(&event.text.unicode, (&event.text.unicode) + 1, &utf8Char);
+							CSCore::UTF8Char utf8Char = event.text.unicode;
 							m_textEnteredEvent.NotifyConnections(utf8Char);
 							break;
 						}
@@ -509,7 +509,7 @@ namespace CSBackend
 				auto runningTime = (appPreviousTime - appStartTime);
 				appPreviousTime = appCurrentTime;
 
-				app->Update(deltaTime, runningTime);
+				app->Update(deltaTime, TimeIntervalSecs(runningTime));
 				app->Render();
 			}
 

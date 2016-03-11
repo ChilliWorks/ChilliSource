@@ -252,7 +252,7 @@ namespace ChilliSource
                             {
                                 gesturePosition += pointerInfo.m_initialPosition;
                             }
-                            gesturePosition /= m_firstTapPendingPointers.size();
+                            gesturePosition /= f32(m_firstTapPendingPointers.size());
                             
                             Reset();
                             

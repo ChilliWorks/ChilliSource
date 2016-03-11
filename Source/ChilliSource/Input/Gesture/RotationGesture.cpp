@@ -159,7 +159,7 @@ namespace ChilliSource
                     }
                 }
                 
-                gesturePos /= k_requiredPointerCount;
+                gesturePos /= f32(k_requiredPointerCount);
             }
             
             return gesturePos;

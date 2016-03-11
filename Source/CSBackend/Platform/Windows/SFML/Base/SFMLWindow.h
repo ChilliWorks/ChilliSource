@@ -333,7 +333,7 @@ namespace CSBackend
 			sf::ContextSettings m_contextSettings;
 
 			u32 m_preferredRGBADepth = 32;
-			f32 m_preferredFPS = 0.0f;
+			u32 m_preferredFPS = 0;
 
 			bool m_isRunning = true;
 			bool m_isFocused = true;

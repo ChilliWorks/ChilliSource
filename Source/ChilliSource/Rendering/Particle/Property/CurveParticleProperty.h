@@ -97,7 +97,7 @@ namespace ChilliSource
             
             f32 interpolationFactor = m_curveFunction(in_playbackProgress);
             
-            return m_startValue + (m_endValue - m_startValue) * interpolationFactor;
+            return TPropertyType(m_startValue + (m_endValue - m_startValue) * interpolationFactor);
         }
     }
 }

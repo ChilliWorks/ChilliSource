@@ -187,7 +187,7 @@ namespace ChilliSource
 			//----------------------------------------------------------
 			template <typename TRealType> TRealType Round(TRealType in_value)
             {
-                return ((in_value > 0.0) ? std::floor(in_value + 0.5) : std::ceil(in_value - 0.5));
+                return TRealType((in_value > 0.0) ? std::floor(in_value + 0.5) : std::ceil(in_value - 0.5));
             }
             //----------------------------------------------------
             /// Calculate the most common value from the given

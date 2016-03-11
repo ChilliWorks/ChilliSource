@@ -433,7 +433,7 @@ namespace ChilliSource
             u32 spacesNeeded = 0;
             if(in_spaceInfo.m_advance > 0.0f)
             {
-                spacesNeeded = std::ceil((width - in_spaceInfo.m_size.x) / in_spaceInfo.m_advance);
+                spacesNeeded = u32(std::ceil((width - in_spaceInfo.m_size.x) / in_spaceInfo.m_advance));
                 if(spacesNeeded % 2 == 1)
                 {
                     ++spacesNeeded;

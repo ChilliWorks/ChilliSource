@@ -113,7 +113,7 @@ namespace ChilliSource
 			//Just assign the width of a whitespaces based on the similar space character in the
 			//font. This means it will scale relative to the font
             CharacterInfo spaceCharacter;
-            spaceCharacter.m_advance = in_desc.m_spaceAdvance;
+            spaceCharacter.m_advance = f32(in_desc.m_spaceAdvance);
             
             //Space
             m_characterInfos.insert(std::make_pair(k_spaceCharacter, spaceCharacter));

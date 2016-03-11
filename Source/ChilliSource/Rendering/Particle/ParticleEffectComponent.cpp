@@ -55,6 +55,26 @@ namespace ChilliSource
 		namespace
 		{
 			//----------------------------------------------------------------
+			/// A container for all information required by the background
+			/// particle update.
+			///
+			/// @author Ian Copland
+			//----------------------------------------------------------------
+			struct ParticleUpdateDesc final
+			{
+				ParticleEffectCSPtr m_particleEffect;
+				ParticleEmitterSPtr m_particleEmitter;
+				std::vector<ParticleAffectorSPtr> m_particleAffectors;
+				std::shared_ptr<Core::dynamic_array<Particle>> m_particleArray;
+				ConcurrentParticleDataSPtr m_concurrentParticleData;
+				f32 m_playbackTime = 0.0f;
+				f32 m_deltaTime = 0.0f; 
+				Core::Vector3 m_entityPosition;
+				Core::Vector3 m_entityScale;
+				Core::Quaternion m_entityOrientation;
+				bool m_interpolateEmission = false;
+			};
+			//----------------------------------------------------------------
 			/// Performs a series of assertions to ensure the given particle 
 			/// effect is ready for use.
 			///
@@ -130,39 +150,25 @@ namespace ChilliSource
 			///
 			/// @author Ian Copland
 			///
-			/// @param Whether or not this needs to initialise the particles.
-			/// @param The particle effect.
-			/// @param The particle emitter. If null, the effect is no longer
-			/// emitting.
-			/// @param The list of particle affectors.
-			/// @param The array of particles.
-			/// @param The particle draw data array.
-			/// @param The playback time.
-			/// @param The delta time.
-			/// @param The entity's world position.
-			/// @param The entity's world scale.
-			/// @param The entity's world orientation.
-			/// @param Whether or not to interpolate the particles point
-			/// of emission since the last frame.
+			/// @param in_desc - The particle update description. This contains
+			/// a snapshot of all data required to update the particle effect.
 			//----------------------------------------------------------------
-			void ParticleUpdateTask(ParticleEffectCSPtr in_particleEffect, ParticleEmitterSPtr in_particleEmitter, std::vector<ParticleAffectorSPtr> in_particleAffectors, 
-				std::shared_ptr<Core::dynamic_array<Particle>> in_particleArray, ConcurrentParticleDataSPtr in_concurrentParticleData, f32 in_playbackTime, 
-				f32 in_deltaTime, Core::Vector3 in_entityPosition, Core::Vector3 in_entityScale, Core::Quaternion in_entityOrientation, bool in_interpolateEmission)
+			void ParticleUpdateTask(const ParticleUpdateDesc& in_desc)
 			{
-				CS_ASSERT(in_particleEffect != nullptr, "Cannot update particles with null particle effect.");
-				CS_ASSERT(in_particleArray != nullptr, "Cannot update particles with null particle array.");
-				CS_ASSERT(in_concurrentParticleData != nullptr, "Cannot update particles with null concurrent particle data.");
+				CS_ASSERT(in_desc.m_particleEffect != nullptr, "Cannot update particles with null particle effect.");
+				CS_ASSERT(in_desc.m_particleArray != nullptr, "Cannot update particles with null particle array.");
+				CS_ASSERT(in_desc.m_concurrentParticleData != nullptr, "Cannot update particles with null concurrent particle data.");
 
 				//update the particles
-				for (auto& particle : *in_particleArray)
+				for (auto& particle : *in_desc.m_particleArray)
 				{
 					if (particle.m_isActive == true)
 					{
-						particle.m_energy -= in_deltaTime;
+						particle.m_energy -= in_desc.m_deltaTime;
 						if (particle.m_energy > 0.0f)
 						{
-							particle.m_position += particle.m_velocity * in_deltaTime;
-							particle.m_rotation += particle.m_angularVelocity * in_deltaTime;
+							particle.m_position += particle.m_velocity * in_desc.m_deltaTime;
+							particle.m_rotation += particle.m_angularVelocity * in_desc.m_deltaTime;
 						}
 						else
 						{
@@ -173,32 +179,32 @@ namespace ChilliSource
 				}
 
                 //calculate the normalised playback progress.
-                const f32 effectProgress = in_playbackTime / in_particleEffect->GetDuration();
+                const f32 effectProgress = in_desc.m_playbackTime / in_desc.m_particleEffect->GetDuration();
                 
 				//apply affectors
-				for (auto& affector : in_particleAffectors)
+				for (auto& affector : in_desc.m_particleAffectors)
 				{
-					affector->AffectParticles(in_deltaTime, effectProgress);
+					affector->AffectParticles(in_desc.m_deltaTime, effectProgress);
 				}
 
 				//try to emit
 				std::vector<u32> newIndices;
-				if (in_particleEmitter != nullptr)
+				if (in_desc.m_particleEmitter != nullptr)
 				{
-					newIndices = in_particleEmitter->TryEmit(in_playbackTime, in_entityPosition, in_entityScale, in_entityOrientation, in_interpolateEmission);
+					newIndices = in_desc.m_particleEmitter->TryEmit(in_desc.m_playbackTime, in_desc.m_entityPosition, in_desc.m_entityScale, in_desc.m_entityOrientation, in_desc.m_interpolateEmission);
 				}
 
 				//Initialise any new particles in each affector.
 				for (u32 newIndex : newIndices)
 				{
-					for (auto& affector : in_particleAffectors)
+					for (auto& affector : in_desc.m_particleAffectors)
 					{
 						affector->ActivateParticle(newIndex, effectProgress);
 					}
 				}
 
-				auto boundingShapes = CalculateBoundingShapes(in_particleEffect.get(), in_particleArray.get());
-				in_concurrentParticleData->CommitParticleData(in_particleArray.get(), newIndices, boundingShapes.first, boundingShapes.second);
+				auto boundingShapes = CalculateBoundingShapes(in_desc.m_particleEffect.get(), in_desc.m_particleArray.get());
+				in_desc.m_concurrentParticleData->CommitParticleData(in_desc.m_particleArray.get(), newIndices, boundingShapes.first, boundingShapes.second);
 			}
 		}
 		CS_DEFINE_NAMEDTYPE(ParticleEffectComponent);
@@ -572,9 +578,19 @@ namespace ChilliSource
 			{
 				StoreLocalBoundingShapes();
 
-				bool shouldInterpolateEmission = (m_firstFrame == false);
-				Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, m_emitter, m_affectors, m_particleArray, m_concurrentParticleData,
-					m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation(), shouldInterpolateEmission));
+				ParticleUpdateDesc desc;
+				desc.m_particleEffect = m_particleEffect;
+				desc.m_particleEmitter = m_emitter;
+				desc.m_particleAffectors = m_affectors;
+				desc.m_particleArray = m_particleArray;
+				desc.m_concurrentParticleData = m_concurrentParticleData;
+				desc.m_playbackTime = m_playbackTimer;
+				desc.m_deltaTime = m_accumulatedDeltaTime;
+				desc.m_entityPosition = GetEntity()->GetTransform().GetWorldPosition();
+				desc.m_entityScale = GetEntity()->GetTransform().GetWorldScale();
+				desc.m_entityOrientation = GetEntity()->GetTransform().GetWorldOrientation();
+				desc.m_interpolateEmission = (m_firstFrame == false);
+				Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, desc));
 
 				m_firstFrame = false;
 				m_accumulatedDeltaTime = 0.0f;
@@ -595,9 +611,19 @@ namespace ChilliSource
 				{
 					StoreLocalBoundingShapes();
 
-					bool shouldInterpolateEmission = (m_firstFrame == false);
-					Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, m_particleEffect, nullptr, m_affectors, m_particleArray, m_concurrentParticleData,
-						m_playbackTimer, m_accumulatedDeltaTime, GetEntity()->GetTransform().GetWorldPosition(), GetEntity()->GetTransform().GetWorldScale(), GetEntity()->GetTransform().GetWorldOrientation(), shouldInterpolateEmission));
+					ParticleUpdateDesc desc;
+					desc.m_particleEffect = m_particleEffect;
+					desc.m_particleEmitter = nullptr;
+					desc.m_particleAffectors = m_affectors;
+					desc.m_particleArray = m_particleArray;
+					desc.m_concurrentParticleData = m_concurrentParticleData;
+					desc.m_playbackTime = m_playbackTimer;
+					desc.m_deltaTime = m_accumulatedDeltaTime;
+					desc.m_entityPosition = GetEntity()->GetTransform().GetWorldPosition();
+					desc.m_entityScale = GetEntity()->GetTransform().GetWorldScale();
+					desc.m_entityOrientation = GetEntity()->GetTransform().GetWorldOrientation();
+					desc.m_interpolateEmission = (m_firstFrame == false);
+					Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, desc));
 
 					m_firstFrame = false;
 					m_accumulatedDeltaTime = 0.0f;

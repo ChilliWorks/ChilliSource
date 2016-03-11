@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
       <Configuration>Release</Configuration>
@@ -296,7 +296,9 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ByteColour.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Colour.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ColourUtils.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\ConstMethodCast.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Device.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Base\GenericFactory.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\Logging.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\MakeSharedArray.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Base\PlatformSystem.h" />
@@ -381,10 +383,10 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\MathUtils.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Matrix3.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Matrix4.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\NumericLimits.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Quaternion.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Random.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\RandomImpl.h" />
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Math\NumericLimits.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\UnifiedCoordinates.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector2.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Math\Vector3.h" />
@@ -433,11 +435,14 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\XML.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\XML\XML.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\XML\XMLUtils.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Accelerometer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Accelerometer\Accelerometer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Base.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Base\Filter.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\DeviceButtons.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\DeviceButtons\DeviceButtonSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\ForwardDeclarations.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\DragGesture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\Gesture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\GestureSystem.h" />
@@ -445,18 +450,25 @@
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\PinchGesture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\RotationGesture.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Gesture\TapGesture.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Keyboard.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Keyboard\Keyboard.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Keyboard\KeyCode.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Keyboard\ModifierKeyCode.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\Pointer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Pointer\Pointer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\Pointer\PointerSystem.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Input\TextEntry\TextEntry.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Networking\ContentDownload.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ContentDownload\ContentManagementSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ContentDownload\IContentDownloader.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ContentDownload\MoContentDownloader.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\ForwardDeclarations.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Networking\Http.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\Http\HttpRequest.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\Http\HttpRequestSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\Http\HttpResponse.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Networking\IAP.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Networking\IAP\IAPSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Base\AlignmentAnchors.h" />
@@ -571,7 +583,9 @@
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\TextureResourceOptions.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Rendering\Texture\UVs.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Social\Communications.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Social\Communications\EmailComposer.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Social\Facebook.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Social\Facebook\FacebookAuthenticationSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Social\Facebook\FacebookPostSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Social\ForwardDeclarations.h" />
@@ -626,10 +640,12 @@
     <ClInclude Include="..\..\Source\ChilliSource\UI\Text.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextComponent.h" />
     <ClInclude Include="..\..\Source\ChilliSource\UI\Text\TextIcon.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Video\Base.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Video\Base\CSSubtitlesProvider.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Video\Base\Subtitles.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Video\Base\VideoPlayer.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Video\ForwardDeclarations.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Web\Base.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Web\Base\WebView.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Web\ForwardDeclarations.h" />
     <ClInclude Include="..\..\Source\CSBackend\Platform\Windows\Core\Base\Device.h" />
@@ -664,100 +680,139 @@
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Texture\TextureUnitSystem.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{A9B516D3-71D5-4661-8EEE-DA55F3EADC9A}</ProjectGuid>
+    <ProjectGuid>{09108227-056C-4A6F-9A74-1C3ECA245C3F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ChilliSource</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  <ImportGroup Label="Shared">
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\;$(ProjectDir)..\..\Libraries\CricketAudio\Windows\Headers\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)\csbin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\csobj\$(Platform)\$(Configuration)\a\b\</IntDir>
+    <OutDir>$(SolutionDir)Build\$(ProjectName)\Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build\$(ProjectName)\Intermediate\$(Platform)\$(Configuration)\a\b\</IntDir>
+    <IncludePath>$(ProjectDir)..\..\Source;$(ProjectDir)..\..\Libraries\Core\Windows\Headers;$(ProjectDir)..\..\Libraries\CricketAudio\Windows\Headers;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\;$(ProjectDir)..\..\Libraries\CricketAudio\Windows\Headers\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)\csbin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\csobj\$(Platform)\$(Configuration)\a\b\</IntDir>
+    <OutDir>$(SolutionDir)Build\$(ProjectName)\Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build\$(ProjectName)\Intermediate\$(Platform)\$(Configuration)\a\b\</IntDir>
+    <IncludePath>$(ProjectDir)..\..\Source;$(ProjectDir)..\..\Libraries\Core\Windows\Headers;$(ProjectDir)..\..\Libraries\CricketAudio\Windows\Headers;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\;$(ProjectDir)..\..\Libraries\CricketAudio\Windows\Headers\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)\csbin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\csobj\$(Platform)\$(Configuration)\a\b\</IntDir>
+    <OutDir>$(SolutionDir)Build\$(ProjectName)\Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build\$(ProjectName)\Intermediate\$(Platform)\$(Configuration)\a\b\</IntDir>
+    <IncludePath>$(ProjectDir)..\..\Source;$(ProjectDir)..\..\Libraries\Core\Windows\Headers;$(ProjectDir)..\..\Libraries\CricketAudio\Windows\Headers;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)..\..\Source\;$(ProjectDir)..\..\Libraries\Core\Windows\Headers\;$(ProjectDir)..\..\Libraries\CricketAudio\Windows\Headers\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)\csbin\$(Platform)\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\csobj\$(Platform)\$(Configuration)\a\b\</IntDir>
+    <OutDir>$(SolutionDir)Build\$(ProjectName)\Output\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Build\$(ProjectName)\Intermediate\$(Platform)\$(Configuration)\a\b\</IntDir>
+    <IncludePath>$(ProjectDir)..\..\Source;$(ProjectDir)..\..\Libraries\Core\Windows\Headers;$(ProjectDir)..\..\Libraries\CricketAudio\Windows\Headers;$(IncludePath)</IncludePath>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDEBUG;GLEW_STATIC;SFML_STATIC;CS_TARGETPLATFORM_WINDOWS;CS_LOGLEVEL_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
-    </ClCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDEBUG;GLEW_STATIC;SFML_STATIC;CS_TARGETPLATFORM_WINDOWS;CS_LOGLEVEL_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
-    </ClCompile>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;_DEBUG;DEBUG;GLEW_STATIC;SFML_STATIC;CS_TARGETPLATFORM_WINDOWS;CS_ENABLE_DEBUG;CS_LOGLEVEL_VERBOSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <MinimalRebuild>false</MinimalRebuild>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;GLEW_STATIC;SFML_STATIC;CS_TARGETPLATFORM_WINDOWS;CS_ENABLE_DEBUG;CS_LOGLEVEL_VERBOSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;_DEBUG;DEBUG;GLEW_STATIC;SFML_STATIC;CS_TARGETPLATFORM_WINDOWS;CS_ENABLE_DEBUG;CS_LOGLEVEL_VERBOSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <MinimalRebuild>false</MinimalRebuild>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_LIB;GLEW_STATIC;SFML_STATIC;CS_TARGETPLATFORM_WINDOWS;CS_ENABLE_DEBUG;CS_LOGLEVEL_VERBOSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;GLEW_STATIC;SFML_STATIC;CS_TARGETPLATFORM_WINDOWS;CS_LOGLEVEL_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;GLEW_STATIC;SFML_STATIC;CS_TARGETPLATFORM_WINDOWS;CS_LOGLEVEL_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

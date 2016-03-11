@@ -450,12 +450,17 @@ namespace ChilliSource
             std::string StandardiseFilePath(const std::string& init)
             {
                 std::string path = init;
-                
                 std::replace( path.begin(), path.end(), '\\', '/' );
-                path = ReplaceAll(path, "//", "/");
+
+				bool startsWithDoubleSlash = StartsWith(path, "//");
+				path = ReplaceAll(path, "//", "/");
+				ChopTrailingChars(path, '/');
                 
-                ChopTrailingChars(path, '/');
-                
+				if (startsWithDoubleSlash)
+				{
+					path = "/" + path;
+				}
+
                 return path;
             }
             
@@ -463,14 +468,20 @@ namespace ChilliSource
             std::string StandardiseDirectoryPath(const std::string& init)
             {
                 std::string path = init;
-                
                 std::replace( path.begin(), path.end(), '\\', '/' );
+
+				bool startsWithDoubleSlash = StartsWith(path, "//");
                 path = ReplaceAll(path, "//", "/");
                 
-                if(path.empty() == false && path.back() != '/')
+                if(!path.empty() && path.back() != '/')
                 {
                     TerminateStringWith(path, "/");
                 }
+
+				if (startsWithDoubleSlash)
+				{
+					path = "/" + path;
+				}
                 
                 return path;
             }

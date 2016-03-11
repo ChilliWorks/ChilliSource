@@ -49,7 +49,7 @@ namespace ChilliSource
                 Json::Reader jsonReader;
                 if (jsonReader.parse(in_jsonString, output) == false)
                 {
-                    CS_LOG_FATAL("Could not parse json from string due to errors: \n" + jsonReader.getFormatedErrorMessages());
+                    CS_LOG_FATAL("Could not parse json from string due to errors: \n" + jsonReader.getFormattedErrorMessages());
                 }
                 
                 if (output.isNull())
@@ -78,7 +78,7 @@ namespace ChilliSource
                 Json::Reader jsonReader;
                 if (jsonReader.parse(fileContents, out_jsonValue) == false)
                 {
-                    CS_LOG_FATAL("Could not parse json file '" + in_filePath + "' due to errors: \n" + jsonReader.getFormatedErrorMessages());
+                    CS_LOG_FATAL("Could not parse json file '" + in_filePath + "' due to errors: \n" + jsonReader.getFormattedErrorMessages());
                 }
                 
                 if (out_jsonValue.isNull())

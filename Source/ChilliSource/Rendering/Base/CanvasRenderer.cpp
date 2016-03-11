@@ -186,7 +186,7 @@ namespace ChilliSource
                 while(it < in_text.end())
                 {
                     auto character = Core::UTF8StringUtils::Next(it);
-                    u32 characterWidth = GetCharacterWidth(character, in_font, in_absCharSpacingOffset, in_textScale);
+                    f32 characterWidth = GetCharacterWidth(character, in_font, in_absCharSpacingOffset, in_textScale);
                     
                     //If we come across a character on which we can wrap we need
                     //to check ahead to see if the next space is within the bounds or
