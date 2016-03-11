@@ -222,6 +222,7 @@ public final class CSProjectGenerator
 			"Projects/iOS/ProjectResources/Info.plist",
 			"Projects/Windows/" + k_templateProjectName + ".sln",
 			"Projects/Windows/" + k_templateProjectName + ".vcxproj",
+			"Projects/Windows/" + k_templateProjectName + ".vcxproj.filters",
 			"Tools/Scripts/content_builder.py",
 			"Tools/Scripts/file_system_utils.py",
 			"Tools/Scripts/model_builder.py",
@@ -236,7 +237,8 @@ public final class CSProjectGenerator
 		{
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/" + k_templateProjectName.toLowerCase() + ".iml",
 			"Projects/Windows/" + k_templateProjectName + ".sln",
-			"Projects/Windows/" + k_templateProjectName + ".vcxproj"
+			"Projects/Windows/" + k_templateProjectName + ".vcxproj",
+			"Projects/Windows/" + k_templateProjectName + ".vcxproj.filters"
 
 		};
 		

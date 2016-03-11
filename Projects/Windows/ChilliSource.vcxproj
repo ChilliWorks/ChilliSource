@@ -775,6 +775,8 @@
       <PreprocessorDefinitions>_DEBUG;_LIB;GLEW_STATIC;SFML_STATIC;CS_TARGETPLATFORM_WINDOWS;CS_ENABLE_DEBUG;CS_LOGLEVEL_VERBOSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -791,6 +793,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;GLEW_STATIC;SFML_STATIC;CS_TARGETPLATFORM_WINDOWS;CS_LOGLEVEL_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -809,6 +812,7 @@
       <PreprocessorDefinitions>NDEBUG;_LIB;GLEW_STATIC;SFML_STATIC;CS_TARGETPLATFORM_WINDOWS;CS_LOGLEVEL_WARNING;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
