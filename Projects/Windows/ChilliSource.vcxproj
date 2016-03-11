@@ -759,6 +759,8 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;GLEW_STATIC;SFML_STATIC;CS_TARGETPLATFORM_WINDOWS;CS_ENABLE_DEBUG;CS_LOGLEVEL_VERBOSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
