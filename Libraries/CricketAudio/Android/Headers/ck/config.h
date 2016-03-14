@@ -22,16 +22,41 @@ typedef void (*CkFreeFunc)(void*);
 /** Log message types */
 typedef enum 
 {
+    /** Flag to enable INFO log messages */
     kCkLog_Info =  (1 << 0),
+
+    /** Flag to enable WARNING log messages */
     kCkLog_Warning = (1 << 1),
+
+    /** Flag to enable ERROR log messages */
     kCkLog_Error = (1 << 2),
 
+    /** Flag to disable all log messages */
     kCkLog_None = 0,
+
+    /** Flag to enable all log messages */
     kCkLog_All = (kCkLog_Info | kCkLog_Warning | kCkLog_Error)
+
 } CkLogType;
+
 
 /** Log message function */
 typedef void (*CkLogFunc)(CkLogType, const char* msg);
+
+
+/** Sample types used for internal DSP pipeline */
+typedef enum
+{
+    /** Force floating-point samples */
+    kCkSampleType_Float,
+
+    /** Force fixed-point samples */
+    kCkSampleType_Fixed,
+    
+    /** Use the default, based on the processor type */
+    kCkSampleType_Default
+
+} CkSampleType;
 
 
 ////////////////////////////////////////
@@ -41,7 +66,7 @@ struct _CkConfig
 {
 #ifdef __cplusplus
 #  if CK_PLATFORM_ANDROID
-    /** Constructor to be used from JNI functions. 
+    /** Constructor to be used from JNI functions.
       @param env      A JNI environment pointer
       @param context  An android.content.Context object from Java (typically an
                        android.app.Activity or android.app.Service)
@@ -50,7 +75,7 @@ struct _CkConfig
 
     /** This constructor should be used when there is no valid JNIEnv* pointer; for
       example, from android_main() in a native activity using the android_native_app_glue
-      library.  See the code in src/samples/hellocricket/android-ndk-native for an example. 
+      library.  See the code in src/samples/hellocricket/android-ndk-native for an example.
       @param vm       A Java VM pointer
       @param context  An android.content.Context object from Java (typically an
                        android.app.Activity or android.app.Service)
@@ -86,7 +111,7 @@ struct _CkConfig
       support all of the features available to sounds decoded in software.
       Default is true (Ogg Vorbis streams are decoded in software).
       @par Only available on Android. */
-    int enableOggVorbis;
+    bool enableOggVorbis;
 #endif
 
 #if CK_PLATFORM_IOS
@@ -145,6 +170,12 @@ struct _CkConfig
       some sounds will not be rendered, to keep the CPU usage down.
       Default is 0.8. */
     float maxRenderLoad;
+
+    /** Sample type to be used internally for processing.  The default is 
+      kCkSampleType_Default, which means that fixed-point samples are used on Android 
+      armv5 and armv6 devices, which may lack hardware support for floating-point 
+      operations, and that floating-point samples are used on all other devices. */
+    CkSampleType sampleType;
 };
 
 typedef struct _CkConfig CkConfig;

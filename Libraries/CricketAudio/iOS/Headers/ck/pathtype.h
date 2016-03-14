@@ -30,15 +30,11 @@ typedef enum
 #endif
 
 #if CK_PLATFORM_IOS || CK_PLATFORM_OSX
-    /** A path relative to the application's resource directory. 
+    /** A path relative to the application's resource directory.
+      On iOS, the resource directory is the application bundle, and is read-only.
+      On OS X, the resource directory is the directory containing the executable.
      @par Only available on iOS and OS X. */
     kCkPathType_Resource,
-#endif
-
-#if CK_PLATFORM_WIN || CK_PLATFORM_LINUX
-    /** A path relative to the executable's directory. 
-     @par Only available on Windows and Linux. */
-    kCkPathType_ExeDir,
 #endif
 
 #if CK_PLATFORM_WP8
@@ -53,16 +49,53 @@ typedef enum
     kCkPathType_InstallationDir,
 #endif
 
-    /** The default path type. */
-#if CK_PLATFORM_ANDROID
-    kCkPathType_Default = kCkPathType_Asset,
-#elif CK_PLATFORM_IOS || CK_PLATFORM_OSX
-    kCkPathType_Default = kCkPathType_Resource,
-#elif CK_PLATFORM_WIN || CK_PLATFORM_LINUX
-    kCkPathType_Default = kCkPathType_ExeDir,
-#elif CK_PLATFORM_WP8
-    kCkPathType_Default = kCkPathType_InstallationDir
+#if CK_PLATFORM_IOS || CK_PLATFORM_OSX || CK_PLATFORM_WIN || CK_PLATFORM_LINUX 
+    /** A path relative to the directory used for temporary files.
+     @par Only available on iOS, OS X, Windows, and Linux. */
+    kCkPathType_Temp,
 #endif
+
+#if CK_PLATFORM_IOS || CK_PLATFORM_OSX || CK_PLATFORM_WIN || CK_PLATFORM_LINUX 
+    /** A path relative to the application's documents directory.
+      On iOS, this is the app's Documents directory.
+      On OS X and Windows, this is the user's Documents directory.
+      On Linux, this is the user's home directory.
+     @par Only available on iOS, OS X, Windows, and Linux. */
+    kCkPathType_Documents,
+#endif
+
+#if CK_PLATFORM_WIN || CK_PLATFORM_LINUX || CK_PLATFORM_OSX
+    /** A path relative to the executable's directory. 
+     (On OS X, this is the same as kCkPathType_Resource.) 
+     @par Only available on Windows, Linux, and OS X.  */
+    kCkPathType_ExeDir,
+#endif
+
+    /** The default path type for reading files. */
+#if CK_PLATFORM_ANDROID
+    kCkPathType_ReadDefault = kCkPathType_Asset,
+#elif CK_PLATFORM_IOS || CK_PLATFORM_OSX
+    kCkPathType_ReadDefault = kCkPathType_Resource,
+#elif CK_PLATFORM_WIN || CK_PLATFORM_LINUX
+    kCkPathType_ReadDefault = kCkPathType_ExeDir,
+#elif CK_PLATFORM_WP8
+    kCkPathType_ReadDefault = kCkPathType_InstallationDir,
+#endif
+
+    /** The default path type for writing files. */
+#if CK_PLATFORM_ANDROID
+    kCkPathType_WriteDefault = kCkPathType_PrivateFiles,
+#elif CK_PLATFORM_IOS || CK_PLATFORM_OSX
+    kCkPathType_WriteDefault = kCkPathType_Documents,
+#elif CK_PLATFORM_WIN || CK_PLATFORM_LINUX
+    kCkPathType_WriteDefault = kCkPathType_ExeDir,
+#elif CK_PLATFORM_WP8
+    kCkPathType_WriteDefault = kCkPathType_LocalDir,
+#endif
+
+    /** The default path type. */
+    kCkPathType_Default = kCkPathType_ReadDefault
+
 } CkPathType;
 
 /** @} */

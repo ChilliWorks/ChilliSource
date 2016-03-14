@@ -155,7 +155,7 @@ def premultiplyPngsInDirectory(String in_directoryPath) {
 def createApkExpansionFromDirectory(String in_directoryPath, String in_applicationId, int in_versionCode) {
     def jarPath = file("../../../../ChilliSource/Tools/Zip.jar").absolutePath
     def uncompressedExtensions = ".jpg, .jpeg, .png, .gif, .wav, .mp2, .mp3, .ogg, .aac, .mpg, .mpeg, .mid, .midi," +
-        " .smf, .jet, .rtttl, .imy, .xmf, .mp4, .m4a, .m4v, .3gp, .3gpp, .3g2, .3gpp2, .amr, .awb, .wma, .wmv"
+        " .smf, .jet, .rtttl, .imy, .xmf, .mp4, .m4a, .m4v, .3gp, .3gpp, .3g2, .3gpp2, .amr, .awb, .wma, .wmv, .cks"
     
     File directory = new File(file("build/outputs/obb").absolutePath as String)
     if (!directory.exists()) {

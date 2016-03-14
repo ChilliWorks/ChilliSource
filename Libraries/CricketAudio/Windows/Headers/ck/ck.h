@@ -6,6 +6,7 @@
 
 #pragma once
 #include "ck/config.h"
+#include "ck/pathtype.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -55,6 +56,27 @@ float CkGetVolumeRampTime();
 
 /** Default value of volume ramp time. */
 extern const float Ck_volumeRampTimeMsDefault;
+
+
+/** Lock the audio processing thread to prevent it from processing any API calls.
+  The lock should be held only for a short time.  This is useful to ensure that
+  certain calls are processed together.  For example, if you want to play multiple
+  sounds together exactly in sync, call CkLockAudio(), call play() on each sound,
+  then call CkUnlockAudio(). */
+void CkLockAudio();
+
+/** Unlock the audio processing thread after a call to CkLockAudio(). */
+void CkUnlockAudio();
+
+
+/** Start capturing the final audio output to a file.  The filename must end with ".wav" 
+  (for a Microsoft WAVE file) or ".raw" (for a headerless file containing 32-bit floating-point 
+  interleaved stereo samples). */
+void CkStartCapture(const char* path, CkPathType pathType);
+
+/** Stop capturing audio output. */
+void CkStopCapture();
+
 
 #ifdef __cplusplus
 } // extern "C"
