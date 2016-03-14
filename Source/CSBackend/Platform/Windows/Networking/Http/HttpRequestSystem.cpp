@@ -208,7 +208,7 @@ namespace CSBackend
 			{
 				std::wstring headerBlob = ConvertHeaders(in_headers);
 
-				if (WinHttpAddRequestHeaders(requestHandle, headerBlob.c_str(), headerBlob.length(), WINHTTP_ADDREQ_FLAG_ADD) == false)
+				if (WinHttpAddRequestHeaders(requestHandle, headerBlob.c_str(), DWORD(headerBlob.length()), WINHTTP_ADDREQ_FLAG_ADD) == false)
 				{
 					CS_LOG_ERROR("Failed to add http headers: " + in_url);
 					WinHttpCloseHandle(requestHandle);

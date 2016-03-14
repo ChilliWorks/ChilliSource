@@ -571,7 +571,8 @@ namespace CSBackend
             
 			//Render the buffer contents
 			EnableVertexAttributeForSemantic(inpBuffer);
-			glDrawElements(GetPrimitiveType(inpBuffer->GetPrimitiveType()), inudwNumIndices, GL_UNSIGNED_SHORT, reinterpret_cast<const GLvoid*>(inudwOffset));
+			auto indicesOffset = reinterpret_cast<const GLvoid*>(std::uintptr_t(inudwOffset));
+			glDrawElements(GetPrimitiveType(inpBuffer->GetPrimitiveType()), inudwNumIndices, GL_UNSIGNED_SHORT, indicesOffset);
             
             mbInvalidateAllCaches = false;
             

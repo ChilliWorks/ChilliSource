@@ -79,7 +79,7 @@ namespace ChilliSource
                                           (Bytef*)(outstrCompressed.data()),
                                           &maxCompSize,
                                           (Bytef*)instrUncompressed.data(),
-                                          instrUncompressed.size(),
+                                          uLong(instrUncompressed.size()),
                                            Z_BEST_COMPRESSION);
                 
                 
@@ -103,7 +103,7 @@ namespace ChilliSource
                                             (Bytef*)(outstrUncompress.data()) ,
                                             &outBufferSize,
                                             (const Bytef*)instrCompressed.data(),
-                                            instrCompressed.size());
+                                            uLong(instrCompressed.size()));
                 
                 if(zlibResult == Z_OK)
                 {

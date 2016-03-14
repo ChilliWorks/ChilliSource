@@ -206,7 +206,7 @@ namespace CSBackend
 			std::string body = m_body;
 
 			lock.unlock();
-			BOOL sendRequestResult = WinHttpSendRequest(in_requestHandle, 0, WINHTTP_NO_REQUEST_DATA, (LPVOID)body.data(), body.length(), body.length(), NULL);
+			BOOL sendRequestResult = WinHttpSendRequest(in_requestHandle, 0, WINHTTP_NO_REQUEST_DATA, (LPVOID)body.data(), DWORD(body.length()), DWORD(body.length()), NULL);
 			lock.lock();
 
 			if (s_isDestroying == true)

@@ -50,7 +50,7 @@ void ReadPngData(png_structp png_ptr, png_bytep data, png_size_t length)
 		return;
 
 	CSCore::FileStream* pStream = (CSCore::FileStream*)png_get_io_ptr(png_ptr);
-	pStream->Read((s8*)data, length);
+	pStream->Read(reinterpret_cast<s8*>(data), s32(length));
 }
 
 namespace CSBackend
@@ -274,7 +274,7 @@ namespace CSBackend
 			png_read_update_info(pPng, pInfo);
 
 			//read the image into the data buffer
-			s32 dwRowBytes = png_get_rowbytes(pPng, pInfo);
+			s32 dwRowBytes = s32(png_get_rowbytes(pPng, pInfo));
 			m_dataSize = dwRowBytes * udwHeight;
 			mpData = new u8[m_dataSize];
 
