@@ -45,6 +45,7 @@
 //Undefine the windows file system functions that share names with ours.
 #undef CopyFile
 #undef DeleteFile
+#undef CreateDirectory
 
 namespace CSBackend
 {
@@ -106,6 +107,22 @@ namespace CSBackend
 				DWORD attributes = GetFileAttributes(directoryPath.c_str());
 
 				return (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY));
+			}
+			//--------------------------------------------------------------
+			/// Creates a new directory at the given path. This will not
+			/// create intermediate directories.
+			///
+			/// @author Ian Copland
+			///
+			/// @param The directory path.
+			///
+			/// @return Whether or not the directory was created. Returns
+			/// false if the directory already existed.
+			//--------------------------------------------------------------
+			bool CreateDirectory(const std::string& in_directoryPath)
+			{
+				auto windowsDirectoryPath = WindowsStringUtils::ConvertStandardPathToWindows(in_directoryPath);
+				return (WindowsFileUtils::WindowsCreateDirectory(windowsDirectoryPath.c_str(), NULL) == TRUE);
 			}
 			//--------------------------------------------------------------
 			/// @author Ian Copland
@@ -240,9 +257,17 @@ namespace CSBackend
 			m_packagePath = strWorkingDir + "assets/";
 			m_documentsPath = strWorkingDir + "Documents/";
 
-			CreateDirectoryPath(CSCore::StorageLocation::k_saveData, "");
-			CreateDirectoryPath(CSCore::StorageLocation::k_cache, "");
-			CreateDirectoryPath(CSCore::StorageLocation::k_DLC, "");
+			CSBackend::Windows::CreateDirectory(m_documentsPath);
+			CS_ASSERT(CSBackend::Windows::DoesDirectoryExist(m_documentsPath), "Could not create Documents directory.");
+
+			CSBackend::Windows::CreateDirectory(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_saveData));
+			CS_ASSERT(CSBackend::Windows::DoesDirectoryExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_saveData)), "Could not create SaveData storage location.");
+
+			CSBackend::Windows::CreateDirectory(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_cache));
+			CS_ASSERT(CSBackend::Windows::DoesDirectoryExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_cache)), "Could not create Cache storage location.");
+
+			CSBackend::Windows::CreateDirectory(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC));
+			CS_ASSERT(CSBackend::Windows::DoesDirectoryExist(GetAbsolutePathToStorageLocation(CSCore::StorageLocation::k_DLC)), "Could not create DLC storage location.");
 		}
 		//----------------------------------------------------------
 		//----------------------------------------------------------
@@ -286,13 +311,20 @@ namespace CSBackend
 		{
 			CS_ASSERT(IsStorageLocationWritable(in_storageLocation), "File System: Trying to write to read only storage location.");
 
-			std::string directoryPath = GetAbsolutePathToStorageLocation(in_storageLocation) + in_directoryPath;
-			if (CSBackend::Windows::DoesDirectoryExist(directoryPath) == false)
+			//get each level of the new directory separately and then iterate though each creating it if it does not already exist.
+			auto currentDirectoryPath = GetAbsolutePathToStorageLocation(in_storageLocation);
+			auto relativePathSections = CSCore::StringUtils::Split(CSCore::StringUtils::StandardiseDirectoryPath(in_directoryPath), "/");
+
+			for (const auto& relativePathSection : relativePathSections)
 			{
-				if (WindowsFileUtils::WindowsCreateDirectory(WindowsStringUtils::ConvertStandardPathToWindows(directoryPath).c_str(), NULL) == FALSE)
+				currentDirectoryPath += CSCore::StringUtils::StandardiseDirectoryPath(relativePathSection);
+				if (!CSBackend::Windows::DoesDirectoryExist(currentDirectoryPath))
 				{
-					CS_LOG_ERROR("File System: Failed to create directory '" + in_directoryPath + "'");
-					return false;
+					if (!CSBackend::Windows::CreateDirectory(currentDirectoryPath))
+					{
+						CS_LOG_ERROR("File System: Failed to create directory '" + in_directoryPath + "'");
+						return false;
+					}
 				}
 			}
 
