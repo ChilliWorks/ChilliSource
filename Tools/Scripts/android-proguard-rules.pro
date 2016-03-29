@@ -47,9 +47,12 @@
     native <methods>;
 }
 
-#Keep all Native Interfaces
+#Keep all java systems as these are typically accessed from native
 -keep public class com.chilliworks.chillisource.core.System { public *; }
 -keep public class * extends com.chilliworks.chillisource.core.System { public *; }
+
+#Keep boxed pointers
+-keep public class com.chilliworks.chillisource.core.BoxedPointer { public *; }
 
 #also keep old-style Native Interfaces. This will be removed in the future
 -keep public class **NativeInterface { *; }
@@ -61,6 +64,7 @@
 -keep public class com.chilliworks.chillisource.core.LocalNotification { public *; }
 -keep public class com.chilliworks.chillisource.core.ApkExpansionInfo { public *; }
 -keep public class com.chilliworks.chillisource.core.ApkExpansionContentProvider { public *; }
+-keep public class com.chilliworks.chillisource.networking.HttpRequest { public *; }
 
 #keep facebook
 -keep class com.facebook.** { *; }

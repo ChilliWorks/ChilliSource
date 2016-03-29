@@ -86,6 +86,7 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             template <typename TType> TType* Unbox(JavaClass* in_javaBoxedPointer);
         }
+
         namespace BoxedPointer
         {
             //------------------------------------------------------------------------------
@@ -100,7 +101,7 @@ namespace CSBackend
             template <typename TType> JavaClassUPtr Box(TType* in_type)
             {
                 //Create a java NativePointer for this instance
-                JavaClassDef javaBoxedPointerClassDef = BoxedPointer::GetBoxedPointerClassDef();
+                JavaClassDef javaBoxedPointerClassDef = GetBoxedPointerClassDef();
 
                 s64 pointerAddress = (s64)in_type;
                 s64 pointerTypeHash = GenerateTypeHash<TType>();
@@ -112,7 +113,7 @@ namespace CSBackend
             //------------------------------------------------------------------------------
             template <typename TType> TType* Unbox(JavaClass* in_javaBoxedPointer)
             {
-                CS_ASSERT(in_javaBoxedPointer->GetClassName() == BoxedPointer::GetBoxedPointerClassDef().GetClassName(), "Cannot convert '" + in_javaBoxedPointer->GetClassName() + "', only BoxedPointer");
+                CS_ASSERT(in_javaBoxedPointer->GetClassName() == GetBoxedPointerClassDef().GetClassName(), "Cannot convert '" + in_javaBoxedPointer->GetClassName() + "', only BoxedPointer");
 
                 s64 pointerAddress = in_javaBoxedPointer->CallLongMethod("getPointerAddress");
 
