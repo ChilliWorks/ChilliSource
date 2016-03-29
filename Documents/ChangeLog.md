@@ -1,6 +1,10 @@
 ChilliSource Change Log
 ========================
 
+Version 1.5.2, 2016-03-18
+-------------------------
+* Fixed: FileSystem::GetDirectoryPath() now correctly creates parent paths recursively on Windows. This fixes the issue where the Documents/ directory would not be created on start up in certain circumstances.
+
 Version 1.5.1, 2015-08-14
 -------------------------
 * Added: A new primitive shape model factory. This can be used to create boxes and planes in code.
