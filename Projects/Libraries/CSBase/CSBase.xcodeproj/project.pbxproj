@@ -21,6 +21,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		814B94B01CAD7425002831E4 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 814B94A61CAD7425002831E4 /* ioapi.c */; };
+		814B94B21CAD7425002831E4 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 814B94AA1CAD7425002831E4 /* mztools.c */; };
+		814B94B31CAD7425002831E4 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 814B94AC1CAD7425002831E4 /* unzip.c */; };
+		814B94B41CAD7425002831E4 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 814B94AE1CAD7425002831E4 /* zip.c */; };
 		81C7FDED1C89D79B00D306F9 /* CSReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 81C7FD9E1C89D79B00D306F9 /* CSReachability.m */; };
 		81C7FDEE1C89D79B00D306F9 /* aes.c in Sources */ = {isa = PBXBuildFile; fileRef = 81C7FDA41C89D79B00D306F9 /* aes.c */; };
 		81C7FDEF1C89D79B00D306F9 /* base64.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C7FDA71C89D79B00D306F9 /* base64.cpp */; };
@@ -28,10 +32,6 @@
 		81C7FDF11C89D79B00D306F9 /* json_value.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C7FDB51C89D79B00D306F9 /* json_value.cpp */; };
 		81C7FDF21C89D79B00D306F9 /* json_writer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C7FDB71C89D79B00D306F9 /* json_writer.cpp */; };
 		81C7FDF31C89D79B00D306F9 /* md5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C7FDBD1C89D79B00D306F9 /* md5.cpp */; };
-		81C7FDF41C89D79B00D306F9 /* ioapi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C7FDC21C89D79B00D306F9 /* ioapi.cpp */; };
-		81C7FDF51C89D79B00D306F9 /* mztools.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C7FDC41C89D79B00D306F9 /* mztools.cpp */; };
-		81C7FDF61C89D79B00D306F9 /* unzip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C7FDC61C89D79B00D306F9 /* unzip.cpp */; };
-		81C7FDF71C89D79B00D306F9 /* zip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C7FDC91C89D79B00D306F9 /* zip.cpp */; };
 		81C7FDF81C89D79B00D306F9 /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = 81C7FDCC1C89D79B00D306F9 /* png.c */; };
 		81C7FDF91C89D79B00D306F9 /* pngerror.c in Sources */ = {isa = PBXBuildFile; fileRef = 81C7FDD01C89D79B00D306F9 /* pngerror.c */; };
 		81C7FDFA1C89D79B00D306F9 /* pngget.c in Sources */ = {isa = PBXBuildFile; fileRef = 81C7FDD11C89D79B00D306F9 /* pngget.c */; };
@@ -66,6 +66,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		814B94A51CAD7425002831E4 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		814B94A61CAD7425002831E4 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		814B94A71CAD7425002831E4 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		814B94AA1CAD7425002831E4 /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		814B94AB1CAD7425002831E4 /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		814B94AC1CAD7425002831E4 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		814B94AD1CAD7425002831E4 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		814B94AE1CAD7425002831E4 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		814B94AF1CAD7425002831E4 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		81C7FD8E1C89D73E00D306F9 /* libCSBase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCSBase.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		81C7FD9D1C89D79B00D306F9 /* CSReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSReachability.h; sourceTree = "<group>"; };
 		81C7FD9E1C89D79B00D306F9 /* CSReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSReachability.m; sourceTree = "<group>"; };
@@ -93,17 +102,6 @@
 		81C7FDBB1C89D79B00D306F9 /* writer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = writer.h; sourceTree = "<group>"; };
 		81C7FDBD1C89D79B00D306F9 /* md5.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = md5.cpp; sourceTree = "<group>"; };
 		81C7FDBE1C89D79B00D306F9 /* md5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
-		81C7FDC01C89D79B00D306F9 /* additional.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = additional.h; sourceTree = "<group>"; };
-		81C7FDC11C89D79B00D306F9 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
-		81C7FDC21C89D79B00D306F9 /* ioapi.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ioapi.cpp; sourceTree = "<group>"; };
-		81C7FDC31C89D79B00D306F9 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
-		81C7FDC41C89D79B00D306F9 /* mztools.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mztools.cpp; sourceTree = "<group>"; };
-		81C7FDC51C89D79B00D306F9 /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
-		81C7FDC61C89D79B00D306F9 /* unzip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = unzip.cpp; sourceTree = "<group>"; };
-		81C7FDC71C89D79B00D306F9 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
-		81C7FDC81C89D79B00D306F9 /* zconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zconf.h; sourceTree = "<group>"; };
-		81C7FDC91C89D79B00D306F9 /* zip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zip.cpp; sourceTree = "<group>"; };
-		81C7FDCA1C89D79B00D306F9 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
 		81C7FDCC1C89D79B00D306F9 /* png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = png.c; sourceTree = "<group>"; };
 		81C7FDCD1C89D79B00D306F9 /* png.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = png.h; sourceTree = "<group>"; };
 		81C7FDCE1C89D79B00D306F9 /* pngconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pngconf.h; sourceTree = "<group>"; };
@@ -150,6 +148,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		814B94A41CAD7425002831E4 /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				814B94A51CAD7425002831E4 /* crypt.h */,
+				814B94A61CAD7425002831E4 /* ioapi.c */,
+				814B94A71CAD7425002831E4 /* ioapi.h */,
+				814B94AA1CAD7425002831E4 /* mztools.c */,
+				814B94AB1CAD7425002831E4 /* mztools.h */,
+				814B94AC1CAD7425002831E4 /* unzip.c */,
+				814B94AD1CAD7425002831E4 /* unzip.h */,
+				814B94AE1CAD7425002831E4 /* zip.c */,
+				814B94AF1CAD7425002831E4 /* zip.h */,
+			);
+			path = minizip;
+			sourceTree = "<group>";
+		};
 		81C7FD851C89D73E00D306F9 = {
 			isa = PBXGroup;
 			children = (
@@ -200,7 +214,7 @@
 				81C7FDA61C89D79B00D306F9 /* base64 */,
 				81C7FDA91C89D79B00D306F9 /* json */,
 				81C7FDBC1C89D79B00D306F9 /* md5 */,
-				81C7FDBF1C89D79B00D306F9 /* minizip */,
+				814B94A41CAD7425002831E4 /* minizip */,
 				81C7FDCB1C89D79B00D306F9 /* png */,
 				81C7FDE31C89D79B00D306F9 /* rapidxml */,
 				81C7FDE81C89D79B00D306F9 /* SHA1 */,
@@ -258,24 +272,6 @@
 				81C7FDBE1C89D79B00D306F9 /* md5.h */,
 			);
 			path = md5;
-			sourceTree = "<group>";
-		};
-		81C7FDBF1C89D79B00D306F9 /* minizip */ = {
-			isa = PBXGroup;
-			children = (
-				81C7FDC01C89D79B00D306F9 /* additional.h */,
-				81C7FDC11C89D79B00D306F9 /* crypt.h */,
-				81C7FDC21C89D79B00D306F9 /* ioapi.cpp */,
-				81C7FDC31C89D79B00D306F9 /* ioapi.h */,
-				81C7FDC41C89D79B00D306F9 /* mztools.cpp */,
-				81C7FDC51C89D79B00D306F9 /* mztools.h */,
-				81C7FDC61C89D79B00D306F9 /* unzip.cpp */,
-				81C7FDC71C89D79B00D306F9 /* unzip.h */,
-				81C7FDC81C89D79B00D306F9 /* zconf.h */,
-				81C7FDC91C89D79B00D306F9 /* zip.cpp */,
-				81C7FDCA1C89D79B00D306F9 /* zip.h */,
-			);
-			path = minizip;
 			sourceTree = "<group>";
 		};
 		81C7FDCB1C89D79B00D306F9 /* png */ = {
@@ -416,24 +412,24 @@
 			files = (
 				81C7FDF01C89D79B00D306F9 /* json_reader.cpp in Sources */,
 				81C7FDED1C89D79B00D306F9 /* CSReachability.m in Sources */,
-				81C7FDF71C89D79B00D306F9 /* zip.cpp in Sources */,
+				814B94B31CAD7425002831E4 /* unzip.c in Sources */,
+				814B94B41CAD7425002831E4 /* zip.c in Sources */,
 				81C7FDFB1C89D79B00D306F9 /* pngmem.c in Sources */,
 				81C7FE061C89D79B00D306F9 /* pngwtran.c in Sources */,
 				81C7FDF81C89D79B00D306F9 /* png.c in Sources */,
 				81C7FE041C89D79B00D306F9 /* pngwio.c in Sources */,
-				81C7FDF61C89D79B00D306F9 /* unzip.cpp in Sources */,
 				81C7FE031C89D79B00D306F9 /* pngtrans.c in Sources */,
 				81C7FDFF1C89D79B00D306F9 /* pngrtran.c in Sources */,
 				81C7FDF11C89D79B00D306F9 /* json_value.cpp in Sources */,
 				81C7FE001C89D79B00D306F9 /* pngrutil.c in Sources */,
 				81C7FDEE1C89D79B00D306F9 /* aes.c in Sources */,
-				81C7FDF41C89D79B00D306F9 /* ioapi.cpp in Sources */,
 				81C7FDFA1C89D79B00D306F9 /* pngget.c in Sources */,
 				81C7FDF91C89D79B00D306F9 /* pngerror.c in Sources */,
 				81C7FE071C89D79B00D306F9 /* pngwutil.c in Sources */,
-				81C7FDF51C89D79B00D306F9 /* mztools.cpp in Sources */,
+				814B94B01CAD7425002831E4 /* ioapi.c in Sources */,
 				81C7FE011C89D79B00D306F9 /* pngset.c in Sources */,
 				81C7FE091C89D79B00D306F9 /* SHA1.cpp in Sources */,
+				814B94B21CAD7425002831E4 /* mztools.c in Sources */,
 				81C7FE021C89D79B00D306F9 /* pngtest.c in Sources */,
 				81C7FE051C89D79B00D306F9 /* pngwrite.c in Sources */,
 				81C7FDFC1C89D79B00D306F9 /* pngpread.c in Sources */,
@@ -473,11 +469,11 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
+					USE_FILE32API,
 					"$(inherited)",
 				);
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -520,8 +516,8 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_INPUT_FILETYPE = sourcecode.cpp.objcpp;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = USE_FILE32API;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;

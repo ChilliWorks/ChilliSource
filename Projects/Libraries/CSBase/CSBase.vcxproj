@@ -35,12 +35,10 @@
     <ClInclude Include="Source\json\value.h" />
     <ClInclude Include="Source\json\writer.h" />
     <ClInclude Include="Source\md5\md5.h" />
-    <ClInclude Include="Source\minizip\additional.h" />
     <ClInclude Include="Source\minizip\crypt.h" />
     <ClInclude Include="Source\minizip\ioapi.h" />
     <ClInclude Include="Source\minizip\mztools.h" />
     <ClInclude Include="Source\minizip\unzip.h" />
-    <ClInclude Include="Source\minizip\zconf.h" />
     <ClInclude Include="Source\minizip\zip.h" />
     <ClInclude Include="Source\png\png.h" />
     <ClInclude Include="Source\png\pngconf.h" />
@@ -63,10 +61,10 @@
     <ClCompile Include="Source\json\json_value.cpp" />
     <ClCompile Include="Source\json\json_writer.cpp" />
     <ClCompile Include="Source\md5\md5.cpp" />
-    <ClCompile Include="Source\minizip\ioapi.cpp" />
-    <ClCompile Include="Source\minizip\mztools.cpp" />
-    <ClCompile Include="Source\minizip\unzip.cpp" />
-    <ClCompile Include="Source\minizip\zip.cpp" />
+    <ClCompile Include="Source\minizip\ioapi.c" />
+    <ClCompile Include="Source\minizip\mztools.c" />
+    <ClCompile Include="Source\minizip\unzip.c" />
+    <ClCompile Include="Source\minizip\zip.c" />
     <ClCompile Include="Source\png\png.c" />
     <ClCompile Include="Source\png\pngerror.c" />
     <ClCompile Include="Source\png\pngget.c" />

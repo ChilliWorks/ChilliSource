@@ -84,27 +84,6 @@
     <ClInclude Include="Source\md5\md5.h">
       <Filter>Source\md5</Filter>
     </ClInclude>
-    <ClInclude Include="Source\minizip\additional.h">
-      <Filter>Source\minizip</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\minizip\crypt.h">
-      <Filter>Source\minizip</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\minizip\ioapi.h">
-      <Filter>Source\minizip</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\minizip\mztools.h">
-      <Filter>Source\minizip</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\minizip\unzip.h">
-      <Filter>Source\minizip</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\minizip\zconf.h">
-      <Filter>Source\minizip</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\minizip\zip.h">
-      <Filter>Source\minizip</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SHA1\HMAC_SHA1.h">
       <Filter>Source\SHA1</Filter>
     </ClInclude>
@@ -144,6 +123,21 @@
     <ClInclude Include="Source\png\pngstruct.h">
       <Filter>Source\png</Filter>
     </ClInclude>
+    <ClInclude Include="Source\minizip\crypt.h">
+      <Filter>Source\minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\minizip\ioapi.h">
+      <Filter>Source\minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\minizip\mztools.h">
+      <Filter>Source\minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\minizip\unzip.h">
+      <Filter>Source\minizip</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\minizip\zip.h">
+      <Filter>Source\minizip</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\aes\aes.c">
@@ -163,18 +157,6 @@
     </ClCompile>
     <ClCompile Include="Source\md5\md5.cpp">
       <Filter>Source\md5</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\minizip\ioapi.cpp">
-      <Filter>Source\minizip</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\minizip\mztools.cpp">
-      <Filter>Source\minizip</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\minizip\unzip.cpp">
-      <Filter>Source\minizip</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\minizip\zip.cpp">
-      <Filter>Source\minizip</Filter>
     </ClCompile>
     <ClCompile Include="Source\SHA1\HMAC_SHA1.cpp">
       <Filter>Source\SHA1</Filter>
@@ -229,6 +211,18 @@
     </ClCompile>
     <ClCompile Include="Source\png\pngwutil.c">
       <Filter>Source\png</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\minizip\ioapi.c">
+      <Filter>Source\minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\minizip\mztools.c">
+      <Filter>Source\minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\minizip\unzip.c">
+      <Filter>Source\minizip</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\minizip\zip.c">
+      <Filter>Source\minizip</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
