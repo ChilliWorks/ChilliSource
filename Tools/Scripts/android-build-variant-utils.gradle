@@ -35,10 +35,14 @@ ext {
      * @return The shorter form of the abi name.
      */
     csGetAbiShortForm = { String in_abi ->
-        if (in_abi == 'armeabi-v7a') {
+        if (in_abi == 'arm64-v8a') {
+            return "arm64"
+        } else if (in_abi == 'armeabi-v7a') {
             return 'armv7'
         } else if (in_abi == 'armeabi') {
             return "arm"
+        } else if (in_abi == 'x86_64') {
+            return "x64"
         } else if (in_abi == 'x86') {
             return "x86"
         } else {
@@ -115,10 +119,14 @@ ext {
      */
     csGetAbiFromTaskName = { String in_taskName ->
         def lowerTaskName = in_taskName.toLowerCase()
-        if (lowerTaskName.contains('armv7')) {
+        if (lowerTaskName.contains('arm64')) {
+            return "arm64-v8a"
+        } else if (lowerTaskName.contains('armv7')) {
             return "armeabi-v7a"
         } else if (lowerTaskName.contains('arm')){
             return "armeabi"
+        } else if (lowerTaskName.contains('x64')){
+            return "x86_64"
         } else if (lowerTaskName.contains('x86')){
             return "x86"
         } else {

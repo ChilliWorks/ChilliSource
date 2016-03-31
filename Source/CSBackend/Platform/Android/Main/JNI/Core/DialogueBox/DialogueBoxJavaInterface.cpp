@@ -81,7 +81,7 @@ void Java_com_chilliworks_chillisource_core_DialogueBoxNativeInterface_onDialogu
 	CSBackend::Android::DialogueBoxSystem* dialogueBoxSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::DialogueBoxSystem>();
 	if (dialogueBoxSystem != nullptr)
 	{
-		dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_env, CSCore::DialogueBoxSystem::DialogueResult::k_cancel);
+		dialogueBoxSystem->OnSystemConfirmDialogueResult((u32)in_id, CSCore::DialogueBoxSystem::DialogueResult::k_cancel);
 	}
 }
 

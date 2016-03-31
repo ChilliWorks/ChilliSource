@@ -83,10 +83,22 @@ android {
                 abiFilter "armeabi-v7a"
             }
         }
+        arm64 {
+            dimension "abi"
+            ndk {
+                abiFilter "arm64-v8a"
+            }
+        }
         x86 {
             dimension "abi"
             ndk {
                 abiFilter "x86"
+            }
+        }
+        x64 {
+            dimension "abi"
+            ndk {
+                abiFilter "x86_64"
             }
         }
     }

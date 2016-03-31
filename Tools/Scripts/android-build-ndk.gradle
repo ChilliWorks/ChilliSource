@@ -144,14 +144,17 @@ ext {
     csNdkBuildClean = { ->
         def jniPath = file('src/main/jni').absolutePath
 
-        def commands = [ getNDKBuildScriptPath(), "-C", jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,x86", "CS_CLEAN=1" ]
+        def commands = [ getNDKBuildScriptPath(), "-C", jniPath, "clean", "APP_ABI=armeabi,armeabi-v7a,arm64-v8a,x86,x86_64", "CS_CLEAN=1" ]
         if (Os.isFamily(Os.FAMILY_WINDOWS) == true) {
             def buildDir = getBuildDirectory()
             Files.createDirectories(Paths.get(buildDir))
             commands.add("NDK_OUT=" + buildDir)
         }
+        
+        println "Clean release:"
         csExecuteCommand(commands as String[])
 
+        println "Clean debug:"
         commands.add("NDK_DEBUG=1")
         csExecuteCommand(commands as String[])
     }
@@ -163,8 +166,8 @@ ext {
      */
     csNdkBuildCleanStaticLib = { in_libName ->
         csNdkBuildClean()
-
-        def abis = [ "armeabi", "armeabi-v7a", "x86" ]
+        
+        def abis = [ "armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64" ]
         for (def abi : abis)
         {
             def filePath = Paths.get(file('src/main/libs/' + abi).absolutePath + "/lib" + in_libName + ".a")
