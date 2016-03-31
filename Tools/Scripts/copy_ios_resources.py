@@ -41,7 +41,7 @@ import shutil
 
 #----------------------------------------------------------------------
 # Copies the files from src directory to dst directory but excludes
-# those that are tagged ".ios" or ".windows"
+# those that are tagged ".android" or ".windows"
 #
 # @author S Downie
 #
@@ -49,7 +49,7 @@ import shutil
 # @param Destination path
 #----------------------------------------------------------------------
 def copy_file_tree(src_path, dst_path):
-    excludes = [".android", ".windows", ".DS_Store"]
+    excludes = [".android", ".windows", ".DS_Store", "Thumbs.db"]
     includes = [".ios"]
 
     filter_func = lambda name: any(include in name for include in includes) or not any(exclude in name for exclude in excludes)

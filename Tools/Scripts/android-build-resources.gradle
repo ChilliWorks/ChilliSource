@@ -53,7 +53,7 @@ def canInclude(String in_fileName, String[] in_ignoreFilesWith, String[] in_forc
             return true
         }
     }
-    for (String ignore : in_forceIncludeFilesWith) {
+    for (String ignore : in_ignoreFilesWith) {
         if (in_fileName.contains(ignore)) {
             return false
         }
@@ -105,7 +105,7 @@ def copyDirectory(String in_sourceDirectoryPath, String in_destDirectoryPath, St
  * @param in_directoryPath - The directory to copy the resource directories to.
  */
 def copyResourcesToDirectory(String in_directoryPath) {
-    def excludes = [ ".ios", ".windows", ".DS_Store" ] as String[]
+    def excludes = [ ".ios", ".windows", ".DS_Store", "Thumbs.db" ] as String[]
     def includes = [ ".android" ] as String[]
 
     File directory = new File(in_directoryPath)
