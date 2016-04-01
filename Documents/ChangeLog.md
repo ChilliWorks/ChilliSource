@@ -1,5 +1,30 @@
 ChilliSource Change Log
-========================
+=======================
+
+Version 1.6.0, 2016-01-01
+-------------------------
+
+* Added: 64-bit Android support. Both arm64-v8a and x86_64 can now be targetted.
+* Added: Support for building music and sound effect files to the default asset pipeline provided in generated projects.
+* Improved: Updated to Visual Studio 2015. Support for Visual Studio 2013 has been dropped, meaning we can now use additional C++11 features such as 'noexcept' and 'constexpr'.
+* Improved: Re-created the windows project with modern settings and improved the output build format.
+* Improved: Re-created the iOS projects with modern settings and fixed all warnings and errors in XCode 7.
+* Improved: Improved the python asset pipeline scripts provided in generated projects.
+* Improved: UI::Drawable properties are now accessbile.
+* Improved: Updated to the latest version of Cricket Audio.
+* Improved: Updated to a more up to date, and unmodified version of Minizip.
+* Improved: Updated to the latest version of SFML on windows.
+* Improved: Updated to the latest version of Glew on windows.
+* Improved: Minor updates to the Android project format.
+* Fixed: An issue where .DS_Store files were not being correctly omitted from the Android APK expansion file. Also added Thumbs.db ignore.
+* Fixed: A crash in the HTTP request system on Android.
+* Fixed: UI input events are no longer received for inactive states.
+* Fixed: Gesture input events are no longer received for inactive states.
+* Fixed: Android notifications are now cleared after they have been selected.
+* Fixed: The standardise path methods no longer break UNC paths.
+* Fixed: OS version is now correctly reported on Android.
+* Fixed: .pyc files are now correctly ignored in generated projects.
+* Fixed: An issue on Android where some libraries still depended on all build variants, resulting in long build times.
 
 Version 1.5.2, 2016-03-18
 -------------------------
