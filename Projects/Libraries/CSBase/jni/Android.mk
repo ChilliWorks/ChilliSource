@@ -35,7 +35,8 @@ SOURCE_FILES := $(shell 'python' '$(GET_FILES_SCRIPT)' '-d' 'Source/' '-p' '../'
 #build the ChilliSource library
 include $(CLEAR_VARS)
 LOCAL_MODULE := CSBase
-LOCAL_CXXFLAGS := -O3 -DNDEBUG -fsigned-char -std=c++11 -pthread -fexceptions -frtti
+LOCAL_CFLAGS := -O3 -DNDEBUG -DUSE_FILE32API -fsigned-char
+LOCAL_CXXFLAGS := -std=c++11 -pthread -fexceptions -frtti
 LOCAL_SRC_FILES := $(SOURCE_FILES)
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../Source/
 include $(BUILD_STATIC_LIBRARY)
