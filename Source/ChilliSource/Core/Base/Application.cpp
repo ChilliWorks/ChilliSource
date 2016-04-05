@@ -46,6 +46,7 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Time/CoreTimer.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
+#include <ChilliSource/Core/Threading/TaskSchedulerNew.h>
 
 #include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
@@ -115,6 +116,8 @@ namespace ChilliSource
         //----------------------------------------------------
 		TimeIntervalSecs Application::GetAppElapsedTime() const
 		{
+            CS_ASSERT(m_taskScheduler->IsMainThread(), "Can only be called from the main thread.");
+            
 			return m_currentAppTime;
 		}
         //----------------------------------------------------
@@ -258,6 +261,9 @@ namespace ChilliSource
             
             //Tell the state manager to update the active state
             OnUpdate(in_deltaTime);
+            
+            m_taskSchedulerNew->WaitOnGameLogicTasks();
+            m_taskSchedulerNew->ExecuteMainThreadTasks();
 		}
         //----------------------------------------------------
         //----------------------------------------------------
@@ -364,7 +370,8 @@ namespace ChilliSource
             CreateSystem<Device>();
             m_screen = CreateSystem<Screen>();
             
-			m_taskScheduler = CreateSystem<TaskScheduler>();
+            m_taskScheduler = CreateSystem<TaskScheduler>();
+            m_taskSchedulerNew = CreateSystem<TaskSchedulerNew>();
             m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();
             m_resourcePool = CreateSystem<ResourcePool>();

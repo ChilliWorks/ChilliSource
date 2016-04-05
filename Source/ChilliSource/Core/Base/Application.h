@@ -93,6 +93,10 @@ namespace ChilliSource
             /// Looks for a system that implements the queryable
             /// interface provided as a template parameter.
             ///
+            /// This is thread-safe as long as it is called between
+            /// the OnInit() and OnDestroy() applicationlifecycle
+            /// events, inclusive.
+            ///
             /// @author I Copland
             ///
             /// @return A pointer to the first system found that
@@ -102,6 +106,10 @@ namespace ChilliSource
             //----------------------------------------------------
 			/// Looks for a system that implements the queryable
             /// interface provided as a template parameter.
+            ///
+            /// This is thread-safe as long as it is called between
+            /// the OnInit() and OnDestroy() applicationlifecycle
+            /// events, inclusive.
             ///
             /// @author I Copland
             ///
@@ -113,6 +121,10 @@ namespace ChilliSource
             /// Looks for all systems that implement the given
             /// queryable interface provided as a template parameter.
             ///
+            /// This is thread-safe as long as it is called between
+            /// the OnInit() and OnDestroy() applicationlifecycle
+            /// events, inclusive.
+            ///
             /// @author I Copland
             ///
             /// @return A list of pointers to the systems that
@@ -122,6 +134,10 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Looks for all systems that implement the given
             /// queryable interface provided as a template parameter.
+            ///
+            /// This is thread-safe as long as it is called between
+            /// the OnInit() and OnDestroy() applicationlifecycle
+            /// events, inclusive.
 			///
             /// @author I Copland
             ///
@@ -141,6 +157,9 @@ namespace ChilliSource
 			//-----------------------------------------------------
 			/// Returns the elapsed time since the application
             /// started running in seconds.
+            ///
+            /// This is not thread-safe and should only be called
+            /// from the main thread.
 			///
             /// @author S Downie.
             ///
@@ -281,6 +300,26 @@ namespace ChilliSource
             /// @return A const pointer to the task scheduler.
             //-----------------------------------------------------
             const TaskScheduler* GetTaskScheduler() const;
+            //-----------------------------------------------------
+            /// This is thread-safe as long as it is called between
+            /// the OnInit() and OnDestroy() applicationlifecycle
+            /// events, inclusive.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return A pointer to the task scheduler.
+            //-----------------------------------------------------
+            TaskSchedulerNew* GetTaskSchedulerNew();
+            //-----------------------------------------------------
+            /// This is thread-safe as long as it is called between
+            /// the OnInit() and OnDestroy() applicationlifecycle
+            /// events, inclusive.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return A const pointer to the task scheduler.
+            //-----------------------------------------------------
+            const TaskSchedulerNew* GetTaskSchedulerNew() const;
             //-----------------------------------------------------
             /// @author S Downie
             ///
@@ -485,8 +524,9 @@ namespace ChilliSource
             std::vector<AppSystemUPtr> m_systems;
             
             ResourcePool* m_resourcePool = nullptr;
-			StateManager* m_stateManager = nullptr;
-			TaskScheduler* m_taskScheduler = nullptr;
+            StateManager* m_stateManager = nullptr;
+            TaskScheduler* m_taskScheduler = nullptr;
+            TaskSchedulerNew* m_taskSchedulerNew = nullptr;
             Screen* m_screen = nullptr;
 			Rendering::Renderer* m_renderer = nullptr;
             Rendering::RenderSystem* m_renderSystem = nullptr;

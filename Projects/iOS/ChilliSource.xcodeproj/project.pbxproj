@@ -287,6 +287,8 @@
 		8158F7FF1C89D2AD00B13109 /* Cubemap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6441C89D2AD00B13109 /* Cubemap.cpp */; };
 		8158F8001C89D2AD00B13109 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6461C89D2AD00B13109 /* Texture.cpp */; };
 		8158F8011C89D2AD00B13109 /* TextureUnitSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6481C89D2AD00B13109 /* TextureUnitSystem.cpp */; };
+		81C58C221CB3C57000EA58A0 /* TaskSchedulerNew.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C201CB3C57000EA58A0 /* TaskSchedulerNew.cpp */; };
+		81C58C251CB3D1FB00EA58A0 /* TaskContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C231CB3D1FB00EA58A0 /* TaskContext.cpp */; };
 		81C7FF8B1C89DD0600D306F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE811C89DD0500D306F9 /* FacebookSDK.framework */; };
 		81C7FF8C1C89DD0600D306F9 /* libCSBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE821C89DD0500D306F9 /* libCSBase.a */; };
 		81C7FFA41C89DD0600D306F9 /* libck.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FF621C89DD0600D306F9 /* libck.a */; };
@@ -1028,6 +1030,11 @@
 		8158F6471C89D2AD00B13109 /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		8158F6481C89D2AD00B13109 /* TextureUnitSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureUnitSystem.cpp; sourceTree = "<group>"; };
 		8158F6491C89D2AD00B13109 /* TextureUnitSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureUnitSystem.h; sourceTree = "<group>"; };
+		81C58C201CB3C57000EA58A0 /* TaskSchedulerNew.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskSchedulerNew.cpp; sourceTree = "<group>"; };
+		81C58C211CB3C57000EA58A0 /* TaskSchedulerNew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskSchedulerNew.h; sourceTree = "<group>"; };
+		81C58C231CB3D1FB00EA58A0 /* TaskContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskContext.cpp; sourceTree = "<group>"; };
+		81C58C241CB3D1FB00EA58A0 /* TaskContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskContext.h; sourceTree = "<group>"; };
+		81C58C261CB3D37900EA58A0 /* TaskType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TaskType.h; sourceTree = "<group>"; };
 		81C7FE521C89DD0500D306F9 /* aes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aes.h; sourceTree = "<group>"; };
 		81C7FE541C89DD0500D306F9 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
 		81C7FE561C89DD0500D306F9 /* assertions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = assertions.h; sourceTree = "<group>"; };
@@ -1588,6 +1595,11 @@
 				8158F2DD1C89D2AD00B13109 /* TaskScheduler.h */,
 				8158F2DE1C89D2AD00B13109 /* ThreadPool.cpp */,
 				8158F2DF1C89D2AD00B13109 /* ThreadPool.h */,
+				81C58C201CB3C57000EA58A0 /* TaskSchedulerNew.cpp */,
+				81C58C211CB3C57000EA58A0 /* TaskSchedulerNew.h */,
+				81C58C231CB3D1FB00EA58A0 /* TaskContext.cpp */,
+				81C58C241CB3D1FB00EA58A0 /* TaskContext.h */,
+				81C58C261CB3D37900EA58A0 /* TaskType.h */,
 			);
 			path = Threading;
 			sourceTree = "<group>";
@@ -3118,6 +3130,7 @@
 				8158F6571C89D2AD00B13109 /* Screen.cpp in Sources */,
 				8158F70A1C89D2AD00B13109 /* Widget.cpp in Sources */,
 				8158F6761C89D2AD00B13109 /* LocalisedText.cpp in Sources */,
+				81C58C221CB3C57000EA58A0 /* TaskSchedulerNew.cpp in Sources */,
 				8158F6D31C89D2AD00B13109 /* AngularAccelerationParticleAffector.cpp in Sources */,
 				8158F7DA1C89D2AD00B13109 /* EmailComposer.mm in Sources */,
 				8158F7FC1C89D2AD00B13109 /* RenderTarget.cpp in Sources */,
@@ -3170,6 +3183,7 @@
 				8158F71C1C89D2AD00B13109 /* ThreePatchDrawable.cpp in Sources */,
 				8158F8011C89D2AD00B13109 /* TextureUnitSystem.cpp in Sources */,
 				8158F70E1C89D2AD00B13109 /* WidgetFactory.cpp in Sources */,
+				81C58C251CB3D1FB00EA58A0 /* TaskContext.cpp in Sources */,
 				8158F7071C89D2AD00B13109 /* PropertyLink.cpp in Sources */,
 				8158F6F71C89D2AD00B13109 /* Cubemap.cpp in Sources */,
 				8158F7E31C89D2AD00B13109 /* VideoPlayerTapListener.mm in Sources */,
