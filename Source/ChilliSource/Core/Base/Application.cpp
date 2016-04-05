@@ -562,6 +562,18 @@ namespace ChilliSource
         }
         //-----------------------------------------------------
         //-----------------------------------------------------
+        TaskSchedulerNew* Application::GetTaskSchedulerNew()
+        {
+            return m_taskSchedulerNew;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        const TaskSchedulerNew* Application::GetTaskSchedulerNew() const
+        {
+            return m_taskSchedulerNew;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
         ResourcePool* Application::GetResourcePool()
         {
             return m_resourcePool;

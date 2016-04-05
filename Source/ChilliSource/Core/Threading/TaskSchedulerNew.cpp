@@ -74,13 +74,13 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskSchedulerNew::ScheduleTasks(TaskType in_taskType, const Task& in_task) noexcept
+        void TaskSchedulerNew::ScheduleTasks(TaskType in_taskType, const std::vector<Task>& in_tasks, const Task& in_completionTask) noexcept
         {
             //TODO: !? Implement
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskSchedulerNew::ScheduleTasks(TaskType in_taskType, const SimpleTask& in_task) noexcept
+        void TaskSchedulerNew::ScheduleTasks(TaskType in_taskType, const std::vector<SimpleTask>& in_tasks, const SimpleTask& in_completionTask) noexcept
         {
             //TODO: !? Implement
         }
