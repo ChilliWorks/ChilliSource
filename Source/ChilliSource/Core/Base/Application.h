@@ -154,6 +154,14 @@ namespace ChilliSource
 			/// @return The version string.
 			//-----------------------------------------------------
 			std::string GetAppVersion() const;
+            //-----------------------------------------------------
+            /// This is thread-safe.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return The unique index of the current frame.
+            //-----------------------------------------------------
+            u32 GetFrameIndex() const;
 			//-----------------------------------------------------
 			/// Returns the elapsed time since the application
             /// started running in seconds.
@@ -537,6 +545,7 @@ namespace ChilliSource
             AppConfig* m_appConfig = nullptr;
             UI::WidgetFactory* m_widgetFactory = nullptr;
             
+            std::atomic<u32> m_frameIndex;
 			TimeIntervalSecs m_currentAppTime = 0;
 			f32 m_updateInterval;
             f32 m_updateSpeed = 1.0f;
@@ -544,7 +553,6 @@ namespace ChilliSource
             
             bool m_shouldNotifyConnectionsResumeEvent = false;
             bool m_shouldNotifyConnectionsForegroundEvent = false;
-            bool m_isFirstFrame = true;
             bool m_isSuspending = false;
             bool m_isSystemCreationAllowed = false;
             

@@ -47,7 +47,6 @@ namespace ChilliSource
         class TaskContext final
         {
         public:
-            CS_DECLARE_NOCOPY(TaskContext);
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -113,6 +112,9 @@ namespace ChilliSource
             /// @param in_yieldTimeMs
             //------------------------------------------------------------------------------
             void Yield(TimeIntervalMs in_yieldTimeMs) const noexcept;
+            
+        private:
+            TaskType m_taskType;
         };
     }
 }

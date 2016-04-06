@@ -31,6 +31,9 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Core/Threading/ThreadPool.h>
+
+#include <atomic>
 
 namespace ChilliSource
 {
@@ -127,7 +130,7 @@ namespace ChilliSource
             /// @param in_completionTask - [Optional] A task which is scheduled when the
             /// other tasks have all completed.
             //------------------------------------------------------------------------------
-            void ScheduleTasks(TaskType in_taskType, const std::vector<Task>& in_tasks, const Task& in_completionTask) noexcept;
+            void ScheduleTasks(TaskType in_taskType, const std::vector<Task>& in_tasks, const Task& in_completionTask = nullptr) noexcept;
             //------------------------------------------------------------------------------
             /// A convience method for scheduling a batch of simple tasks which will be
             /// executed in a manner dependant on the task type. Once all tasks have
@@ -145,7 +148,7 @@ namespace ChilliSource
             /// @param in_completionTask - [Optional] A task which is scheduled when the
             /// other tasks have all completed.
             //------------------------------------------------------------------------------
-            void ScheduleTasks(TaskType in_taskType, const std::vector<SimpleTask>& in_tasks, const SimpleTask& in_completionTask) noexcept;
+            void ScheduleTasks(TaskType in_taskType, const std::vector<SimpleTask>& in_tasks, const SimpleTask& in_completionTask = nullptr) noexcept;
             
         private:
             friend class Application;
@@ -162,24 +165,53 @@ namespace ChilliSource
             /// Application::CreateSystem<TaskScheduler>().
             ///
             /// @author Ian Copland
-            ///
-            /// @param in_title - The title.
             //------------------------------------------------------------------------------
             TaskSchedulerNew() noexcept;
             //------------------------------------------------------------------------------
-            /// Waits on all game logic tasks finishing.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------------------
-            void WaitOnGameLogicTasks() noexcept;
-            //------------------------------------------------------------------------------
-            /// Executes all main thread tasks. 
+            /// Executes all main thread tasks. Prior to running them, this will wait on all
+            /// game logic tasks completing.
             ///
             /// This must be called from the main thread.
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------------------
             void ExecuteMainThreadTasks() noexcept;
+            //------------------------------------------------------------------------------
+            /// TODO: !?
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void StartNextFileTask(const Task& in_task) noexcept;
+            //------------------------------------------------------------------------------
+            /// Initialises the Task Scheduler, creating all threads.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void OnInit() noexcept override;
+            //------------------------------------------------------------------------------
+            /// Cleans up the Task Scheduler, joining on all existing threads and then
+            /// destroying them.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void OnDestroy() noexcept override;
+            
+            ThreadPoolUPtr m_smallTaskThreadPool;
+            ThreadPoolUPtr m_largeTaskThreadPool;
+        
+            std::recursive_mutex m_mainThreadTaskMutex;
+            std::vector<Task> m_mainThreadTasks;
+            
+            std::atomic<u32> m_gameLogicTaskCount;
+            std::condition_variable_any m_gameLogicTaskCondition;
+            
+            std::mutex m_fileTaskMutex;
+            bool m_isFileTaskRunning = false;
+            std::queue<Task> m_fileTaskQueue;
+            
+#ifndef CS_TARGETPLATFORM_ANDROID
+            std::thread::id m_mainThreadId;
+#endif
         };
     }
 }

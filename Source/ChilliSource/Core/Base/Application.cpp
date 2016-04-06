@@ -103,7 +103,7 @@ namespace ChilliSource
         //----------------------------------------------------
         //----------------------------------------------------
 		Application::Application()
-            : m_updateInterval(k_defaultUpdateInterval)
+            : m_updateInterval(k_defaultUpdateInterval), m_frameIndex(0)
 		{
 		}
         //----------------------------------------------------
@@ -112,6 +112,12 @@ namespace ChilliSource
 		{
 			return m_platformSystem->GetAppVersion();
 		}
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        u32 Application::GetFrameIndex() const
+        {
+            return m_frameIndex;
+        }
         //----------------------------------------------------
         //----------------------------------------------------
 		TimeIntervalSecs Application::GetAppElapsedTime() const
@@ -244,7 +250,8 @@ namespace ChilliSource
 				m_pointerSystem->ProcessQueuedInput();
 			}
             
-            while((m_updateIntervalRemainder >= GetUpdateInterval()) || m_isFirstFrame)
+            bool isFirstFrame = (m_frameIndex == 0);
+            while((m_updateIntervalRemainder >= GetUpdateInterval()) || isFirstFrame)
             {
                 m_updateIntervalRemainder -=  GetUpdateInterval();
                 
@@ -256,14 +263,15 @@ namespace ChilliSource
                 
                 m_stateManager->FixedUpdateStates(GetUpdateInterval());
                 
-                m_isFirstFrame = false;
+                isFirstFrame = false;
             }
             
             //Tell the state manager to update the active state
             OnUpdate(in_deltaTime);
             
-            m_taskSchedulerNew->WaitOnGameLogicTasks();
             m_taskSchedulerNew->ExecuteMainThreadTasks();
+            
+            ++m_frameIndex;
 		}
         //----------------------------------------------------
         //----------------------------------------------------
