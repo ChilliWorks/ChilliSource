@@ -80,12 +80,12 @@ namespace ChilliSource
             {
                 case TaskType::k_small:
                 {
-                    m_smallTaskThreadPool->Schedule(std::bind(in_task, TaskContext(in_taskType)));
+                    m_smallTaskPool->Add(std::bind(in_task, TaskContext(in_taskType)));
                     break;
                 }
                 case TaskType::k_large:
                 {
-                    m_largeTaskThreadPool->Schedule(std::bind(in_task, TaskContext(in_taskType)));
+                    m_largeTaskPool->Add(std::bind(in_task, TaskContext(in_taskType)));
                     break;
                 }
                 case TaskType::k_mainThread:
@@ -97,7 +97,7 @@ namespace ChilliSource
                 case TaskType::k_gameLogic:
                 {
                     ++m_gameLogicTaskCount;
-                    m_smallTaskThreadPool->Schedule([=]()
+                    m_smallTaskPool->Add([=]()
                     {
                         in_task(TaskContext(in_taskType));
                         
@@ -203,7 +203,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void TaskSchedulerNew::StartNextFileTask(const Task& in_task) noexcept
         {
-            ScheduleTask(TaskType::k_large, [=](const TaskContext&)
+            m_largeTaskPool->Add([=]()
             {
                 in_task(TaskContext(TaskType::k_file));
                 
@@ -235,8 +235,8 @@ namespace ChilliSource
             s32 numFreeCores = s32(device->GetNumberOfCPUCores()) - k_namedThreads;
             s32 threadsPerPool = std::max(k_minThreadsPerPool, numFreeCores);
             
-            m_smallTaskThreadPool = ThreadPoolUPtr(new Core::ThreadPool(threadsPerPool));
-            m_largeTaskThreadPool = ThreadPoolUPtr(new Core::ThreadPool(threadsPerPool));
+            m_smallTaskPool = TaskPoolUPtr(new Core::TaskPool(threadsPerPool));
+            m_largeTaskPool = TaskPoolUPtr(new Core::TaskPool(threadsPerPool));
             
 #ifndef CS_TARGETPLATFORM_ANDROID
             m_mainThreadId = std::this_thread::get_id();
@@ -246,8 +246,8 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void TaskSchedulerNew::OnDestroy() noexcept
         {
-            m_smallTaskThreadPool.reset();
-            m_largeTaskThreadPool.reset();
+            m_smallTaskPool.reset();
+            m_largeTaskPool.reset();
             m_mainThreadTasks.clear();
         }
     }

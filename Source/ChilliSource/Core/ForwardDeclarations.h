@@ -204,6 +204,7 @@ namespace ChilliSource
         //---------------------------------------------------------
         CS_FORWARDDECLARE_CLASS(WaitCondition);
         CS_FORWARDDECLARE_CLASS(TaskContext);
+        CS_FORWARDDECLARE_CLASS(TaskPool);
         CS_FORWARDDECLARE_CLASS(TaskScheduler);
         CS_FORWARDDECLARE_CLASS(TaskSchedulerNew);
         CS_FORWARDDECLARE_CLASS(ThreadPool);

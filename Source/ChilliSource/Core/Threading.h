@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Threading/TaskContext.h>
+#include <ChilliSource/Core/Threading/TaskPool.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 #include <ChilliSource/Core/Threading/TaskSchedulerNew.h>
 #include <ChilliSource/Core/Threading/TaskType.h>

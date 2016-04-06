@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		814E92B51CB54F76004D6ADE /* TaskPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 814E92B31CB54F76004D6ADE /* TaskPool.cpp */; };
 		8158F64A1C89D2AD00B13109 /* CkAudioPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1F91C89D2AC00B13109 /* CkAudioPlayer.cpp */; };
 		8158F64B1C89D2AD00B13109 /* CkBank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1FB1C89D2AC00B13109 /* CkBank.cpp */; };
 		8158F64C1C89D2AD00B13109 /* CkBankProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F1FD1C89D2AC00B13109 /* CkBankProvider.cpp */; };
@@ -331,6 +332,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		814E92B31CB54F76004D6ADE /* TaskPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskPool.cpp; sourceTree = "<group>"; };
+		814E92B41CB54F76004D6ADE /* TaskPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskPool.h; sourceTree = "<group>"; };
 		8158F1EA1C89D27300B13109 /* libChilliSource.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libChilliSource.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8158F1F91C89D2AC00B13109 /* CkAudioPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CkAudioPlayer.cpp; sourceTree = "<group>"; };
 		8158F1FA1C89D2AC00B13109 /* CkAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CkAudioPlayer.h; sourceTree = "<group>"; };
@@ -1591,15 +1594,17 @@
 		8158F2DB1C89D2AD00B13109 /* Threading */ = {
 			isa = PBXGroup;
 			children = (
-				8158F2DC1C89D2AD00B13109 /* TaskScheduler.cpp */,
-				8158F2DD1C89D2AD00B13109 /* TaskScheduler.h */,
-				8158F2DE1C89D2AD00B13109 /* ThreadPool.cpp */,
-				8158F2DF1C89D2AD00B13109 /* ThreadPool.h */,
-				81C58C201CB3C57000EA58A0 /* TaskSchedulerNew.cpp */,
-				81C58C211CB3C57000EA58A0 /* TaskSchedulerNew.h */,
 				81C58C231CB3D1FB00EA58A0 /* TaskContext.cpp */,
 				81C58C241CB3D1FB00EA58A0 /* TaskContext.h */,
+				814E92B31CB54F76004D6ADE /* TaskPool.cpp */,
+				814E92B41CB54F76004D6ADE /* TaskPool.h */,
+				8158F2DC1C89D2AD00B13109 /* TaskScheduler.cpp */,
+				8158F2DD1C89D2AD00B13109 /* TaskScheduler.h */,
+				81C58C201CB3C57000EA58A0 /* TaskSchedulerNew.cpp */,
+				81C58C211CB3C57000EA58A0 /* TaskSchedulerNew.h */,
 				81C58C261CB3D37900EA58A0 /* TaskType.h */,
+				8158F2DE1C89D2AD00B13109 /* ThreadPool.cpp */,
+				8158F2DF1C89D2AD00B13109 /* ThreadPool.h */,
 			);
 			path = Threading;
 			sourceTree = "<group>";
@@ -3086,6 +3091,7 @@
 				8158F64C1C89D2AD00B13109 /* CkBankProvider.cpp in Sources */,
 				8158F7FE1C89D2AD00B13109 /* Shader.cpp in Sources */,
 				8158F65D1C89D2AD00B13109 /* AESEncrypt.cpp in Sources */,
+				814E92B51CB54F76004D6ADE /* TaskPool.cpp in Sources */,
 				8158F6A91C89D2AD00B13109 /* IAPSystem.cpp in Sources */,
 				8158F7C61C89D2AD00B13109 /* DialogueBoxListener.mm in Sources */,
 				8158F66C1C89D2AD00B13109 /* FileStream.cpp in Sources */,

@@ -31,7 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/Core/Threading/ThreadPool.h>
+#include <ChilliSource/Core/Threading/TaskPool.h>
 
 #include <atomic>
 
@@ -196,8 +196,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             void OnDestroy() noexcept override;
             
-            ThreadPoolUPtr m_smallTaskThreadPool;
-            ThreadPoolUPtr m_largeTaskThreadPool;
+            TaskPoolUPtr m_smallTaskPool;
+            TaskPoolUPtr m_largeTaskPool;
         
             std::recursive_mutex m_mainThreadTaskMutex;
             std::vector<Task> m_mainThreadTasks;
