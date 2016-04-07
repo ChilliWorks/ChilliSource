@@ -27,7 +27,10 @@
 //
 
 #include <ChilliSource/Core/Threading/TaskContext.h>
+
+#include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Threading/TaskType.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace ChilliSource
 {
@@ -35,9 +38,17 @@ namespace ChilliSource
     {
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        TaskContext::TaskContext(TaskType in_taskType) noexcept
-            : m_taskType(in_taskType)
+        TaskContext::TaskContext(TaskType in_backgroundTaskType, TaskPool* in_taskPool) noexcept
+            : m_taskType(in_backgroundTaskType), m_taskPool(in_taskPool)
         {
+            if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)
+            {
+                CS_ASSERT(!m_taskPool, "Main thread and file task contexts should not have a task pool.");
+            }
+            else
+            {
+                CS_ASSERT(m_taskPool, " task contexts should not have a task pool.");
+            }
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -49,31 +60,93 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void TaskContext::ProcessChildTask(const TaskSchedulerNew::Task& in_task) const noexcept
         {
-            //TODO: !? Implement
+            std::vector<TaskSchedulerNew::Task> tasks;
+            tasks.push_back(in_task);
+            
+            ProcessChildTasks(tasks);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         void TaskContext::ProcessChildTask(const TaskSchedulerNew::SimpleTask& in_task) const noexcept
         {
-            //TODO: !? Implement
+            ProcessChildTask([=](const TaskContext&)
+            {
+                in_task();
+            });
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTasks(const std::vector<TaskSchedulerNew::Task>& in_task) const noexcept
+        void TaskContext::ProcessChildTasks(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept
         {
-            //TODO: !? Implement
+            if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)
+            {
+                ProcessChildTasksInSeries(in_tasks);
+            }
+            else
+            {
+                ProcessChildTasksInParallel(in_tasks);
+            }
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTasks(const std::vector<TaskSchedulerNew::SimpleTask>& in_task) const noexcept
+        void TaskContext::ProcessChildTasks(const std::vector<TaskSchedulerNew::SimpleTask>& in_tasks) const noexcept
         {
-            //TODO: !? Implement
+            std::vector<TaskSchedulerNew::Task> nonSimpleTasks;
+            
+            for (const auto& simpleTask : in_tasks)
+            {
+                nonSimpleTasks.push_back([=](const TaskContext&)
+                {
+                    simpleTask();
+                });
+            }
+
+            ProcessChildTasks(nonSimpleTasks);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskContext::Yield(TimeIntervalMs in_yieldTimeMs) const noexcept
+        void TaskContext::ProcessChildTasksInParallel(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept
         {
-            //TODO: !? Implement
+            CS_ASSERT(m_taskType == TaskType::k_small || m_taskType == TaskType::k_large || m_taskType == TaskType::k_gameLogic, "Invalid task type.");
+            
+            auto taskScheduler = Application::Get()->GetTaskSchedulerNew();
+            
+            //TODO: These should be allocated from a pool to reduce fragmentation.
+            std::atomic<int> taskCount(in_tasks.size());
+            std::atomic<bool> finished(false);
+            
+            for (const auto& task : in_tasks)
+            {
+                taskScheduler->ScheduleTask(m_taskType, [=, &taskCount, &finished](const TaskContext&)
+                {
+                    task(*this);
+
+                    if (--taskCount == 0)
+                    {
+                        finished = true;
+                        if (m_taskPool)
+                        {
+                            m_taskPool->AwakenAllThreads();
+                        }
+                    }
+                });
+            }
+            
+            while (!finished)
+            {
+                m_taskPool->PerformTask(finished);
+            }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void TaskContext::ProcessChildTasksInSeries(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept
+        {
+            CS_ASSERT(m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file, "Invalid task type.");
+            
+            for (const auto& task : in_tasks)
+            {
+                task(*this);
+            }
         }
     }
 }

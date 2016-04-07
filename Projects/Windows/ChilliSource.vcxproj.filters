@@ -1065,6 +1065,18 @@
     <ClCompile Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\Shader.cpp">
       <Filter>CSBackend\Rendering\OpenGL\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.cpp">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.cpp">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskPool.cpp">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskSchedulerNew.cpp">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Source\ChilliSource\Audio\CricketAudio\CkAudioPlayer.h">
@@ -2257,6 +2269,21 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\CSBackend\Rendering\OpenGL\Shader\Shader.h">
       <Filter>CSBackend\Rendering\OpenGL\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.h">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.h">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskPool.h">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskSchedulerNew.h">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskType.h">
+      <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -80,18 +80,17 @@ namespace ChilliSource
             {
                 case TaskType::k_small:
                 {
-                    m_smallTaskPool->Add(std::bind(in_task, TaskContext(in_taskType)));
+                    m_smallTaskPool->Add(std::bind(in_task, TaskContext(in_taskType, m_smallTaskPool.get())));
                     break;
                 }
                 case TaskType::k_large:
                 {
-                    m_largeTaskPool->Add(std::bind(in_task, TaskContext(in_taskType)));
+                    m_largeTaskPool->Add(std::bind(in_task, TaskContext(in_taskType, m_largeTaskPool.get())));
                     break;
                 }
                 case TaskType::k_mainThread:
                 {
-                    std::unique_lock<std::recursive_mutex> lock(m_mainThreadTaskMutex);
-                    m_mainThreadTasks.push_back(in_task);
+                    m_mainThreadTaskPool->Add(std::bind(in_task, TaskContext(in_taskType)));
                     break;
                 }
                 case TaskType::k_gameLogic:
@@ -99,7 +98,7 @@ namespace ChilliSource
                     ++m_gameLogicTaskCount;
                     m_smallTaskPool->Add([=]()
                     {
-                        in_task(TaskContext(in_taskType));
+                        in_task(TaskContext(in_taskType, m_smallTaskPool.get()));
                         
                         if (--m_gameLogicTaskCount == 0)
                         {
@@ -184,20 +183,17 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void TaskSchedulerNew::ExecuteMainThreadTasks() noexcept
         {
-            std::unique_lock<std::recursive_mutex> lock(m_mainThreadTaskMutex);
-            
             //wait on all game logic tasks completing.
+            std::unique_lock<std::mutex> lock(m_gameLogicTaskMutex);
+            
             while (m_gameLogicTaskCount != 0)
             {
                 m_gameLogicTaskCondition.wait(lock);
             }
             
-            for (u32 i = 0; i < m_mainThreadTasks.size(); ++i)
-            {
-                m_mainThreadTasks[i](TaskContext(TaskType::k_mainThread));
-            }
+            lock.unlock();
             
-            m_mainThreadTasks.clear();
+            m_mainThreadTaskPool->PerformTasks();
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -235,8 +231,9 @@ namespace ChilliSource
             s32 numFreeCores = s32(device->GetNumberOfCPUCores()) - k_namedThreads;
             s32 threadsPerPool = std::max(k_minThreadsPerPool, numFreeCores);
             
-            m_smallTaskPool = TaskPoolUPtr(new Core::TaskPool(threadsPerPool));
-            m_largeTaskPool = TaskPoolUPtr(new Core::TaskPool(threadsPerPool));
+            m_smallTaskPool = TaskPoolUPtr(new TaskPool(threadsPerPool));
+            m_largeTaskPool = TaskPoolUPtr(new TaskPool(threadsPerPool));
+            m_mainThreadTaskPool = MainThreadTaskPoolUPtr(new MainThreadTaskPool());
             
 #ifndef CS_TARGETPLATFORM_ANDROID
             m_mainThreadId = std::this_thread::get_id();
@@ -248,7 +245,7 @@ namespace ChilliSource
         {
             m_smallTaskPool.reset();
             m_largeTaskPool.reset();
-            m_mainThreadTasks.clear();
+            m_mainThreadTaskPool.reset();
         }
     }
 }

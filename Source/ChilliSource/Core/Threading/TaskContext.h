@@ -37,8 +37,7 @@ namespace ChilliSource
     namespace Core
     {
         //------------------------------------------------------------------------------
-        /// Provides information on a task and the means for it to execute child tasks
-        /// and yeild.
+        /// Provides information on a task and the means for it to execute child tasks.
         ///
         /// This is immutable and thread-safe.
         ///
@@ -48,11 +47,15 @@ namespace ChilliSource
         {
         public:
             //------------------------------------------------------------------------------
+            /// Constructs a task context of the given type.
+            ///
             /// @author Ian Copland
             ///
             /// @param in_taskType - The type of task this context represents.
+            /// @param in_taskPool - The task pool that this task and its children should be
+            /// run within. This should not be provided for main thread and file task types.
             //------------------------------------------------------------------------------
-            TaskContext(TaskType in_taskType) noexcept;
+            TaskContext(TaskType in_taskType, TaskPool* in_taskPool = nullptr) noexcept;
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -91,7 +94,7 @@ namespace ChilliSource
             ///
             /// @param in_tasks - The tasks which should be processed.
             //------------------------------------------------------------------------------
-            void ProcessChildTasks(const std::vector<TaskSchedulerNew::Task>& in_task) const noexcept;
+            void ProcessChildTasks(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept;
             //------------------------------------------------------------------------------
             /// Schedules the given child simple tasks and yields until they have completed.
             /// Child tasks must be of the same type as the parent.
@@ -102,19 +105,32 @@ namespace ChilliSource
             ///
             /// @param in_tasks - The tasks which should be processed.
             //------------------------------------------------------------------------------
-            void ProcessChildTasks(const std::vector<TaskSchedulerNew::SimpleTask>& in_task) const noexcept;
+            void ProcessChildTasks(const std::vector<TaskSchedulerNew::SimpleTask>& in_tasks) const noexcept;
+            
+        private:
             //------------------------------------------------------------------------------
-            /// Yeilds for the given time, allowing other tasks to be processed. The given
-            /// yield time is minimum; the actual time yeilded may be greater.
+            /// Processes child tasks in parallel, requiring this to yeild and process other
+            /// tasks in the meantime.
+            ///
+            /// This should be used for small, large and game logic task types.
             ///
             /// @author Ian Copland
             ///
-            /// @param in_yieldTimeMs
+            /// @param in_tasks - The tasks which should be processed.
             //------------------------------------------------------------------------------
-            void Yield(TimeIntervalMs in_yieldTimeMs) const noexcept;
+            void ProcessChildTasksInParallel(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept;
+            //------------------------------------------------------------------------------
+            /// Processes child tasks in series, meaning they can be processed locally
+            /// without needing to add the tasks to a pool.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_tasks - The tasks which should be processed.
+            //------------------------------------------------------------------------------
+            void ProcessChildTasksInSeries(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept;
             
-        private:
             TaskType m_taskType;
+            TaskPool* m_taskPool = nullptr;
         };
     }
 }

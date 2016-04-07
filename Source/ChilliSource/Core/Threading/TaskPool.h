@@ -92,19 +92,30 @@ namespace ChilliSource
             /// Performs a task from the task pool. This must be called from one of the
             /// threads owned by the task pool.
             ///
-            /// This is primarily used to let other tasks temporary yield and perform other
-            /// tasks in the meantime.
+            /// A flag is provided which can be changed by other threads to notify that
+            /// the current thread should continue regardless of whether there are any tasks
+            /// available. AwakenAllThreads() can be used in conjunction with this flag.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_forceContinue - The force continue flag.
+            //------------------------------------------------------------------------------
+            void PerformTask(const std::atomic<bool>& in_forceContinue) noexcept;
+            //------------------------------------------------------------------------------
+            /// Awakens all threads which are currently waiting on a task. This is used in
+            /// conjunction with the PerformTask() force continue flag when performing tasks
+            /// to wake up a thread and continue even if no tasks as available.
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------------------
-            void PerformTaskOrWait() noexcept;
+            void AwakenAllThreads() noexcept;
             //------------------------------------------------------------------------------
-            /// Clears the task list, waits for any currently running tasks to finish then
-            /// joins all owned threads.
+            /// Waits for any currently running tasks to finish then joins all owned threads.
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------------------
             ~TaskPool() noexcept;
+            
         private:
             //------------------------------------------------------------------------------
             /// Continues to perform tasks until the task pool is deallocated. If there are
@@ -118,6 +129,7 @@ namespace ChilliSource
 
             std::vector<std::thread> m_threads;
             
+            std::atomic<u32> m_taskCountHeuristic;
             std::queue<Task> m_taskQueue;
             std::mutex m_taskQueueMutex;
             std::condition_variable m_emptyWaitCondition;

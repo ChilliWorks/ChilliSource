@@ -88,7 +88,11 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\String\ToString.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\String\UTF8StringUtils.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\System\StateSystem.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskPool.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.cpp" />
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskSchedulerNew.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\ThreadPool.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Time\CoreTimer.cpp" />
     <ClCompile Include="..\..\Source\ChilliSource\Core\Time\PerformanceTimer.cpp" />
@@ -418,7 +422,12 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\System\AppSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\System\StateSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskPool.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskSchedulerNew.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskType.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\ThreadPool.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Time.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Time\CoreTimer.h" />

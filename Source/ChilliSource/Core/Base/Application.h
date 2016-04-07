@@ -36,6 +36,7 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 
 #include <limits>
+#include <atomic>
 
 namespace ChilliSource
 {

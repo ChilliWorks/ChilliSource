@@ -31,6 +31,7 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Core/Threading/MainThreadTaskPool.h>
 #include <ChilliSource/Core/Threading/TaskPool.h>
 
 namespace ChilliSource
@@ -150,6 +151,7 @@ namespace ChilliSource
             
         private:
             friend class Application;
+            friend class TaskContext;
             //------------------------------------------------------------------------------
             /// A factory method for creating new instances of the task scheduler.
             ///
@@ -175,7 +177,10 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             void ExecuteMainThreadTasks() noexcept;
             //------------------------------------------------------------------------------
-            /// TODO: !?
+            /// Adds the given task to the large task pool. Once the task is complete then
+            /// this is called again for the next task in the file queue. If the file queue
+            /// is empty then flag indication whether or not file tasks are running is set
+            /// to false.
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------------------
@@ -196,12 +201,11 @@ namespace ChilliSource
             
             TaskPoolUPtr m_smallTaskPool;
             TaskPoolUPtr m_largeTaskPool;
-        
-            std::recursive_mutex m_mainThreadTaskMutex;
-            std::vector<Task> m_mainThreadTasks;
+            MainThreadTaskPoolUPtr m_mainThreadTaskPool;
             
             std::atomic<u32> m_gameLogicTaskCount;
-            std::condition_variable_any m_gameLogicTaskCondition;
+            std::condition_variable m_gameLogicTaskCondition;
+            std::mutex m_gameLogicTaskMutex;
             
             std::mutex m_fileTaskMutex;
             bool m_isFileTaskRunning = false;

@@ -36,37 +36,12 @@ namespace ChilliSource
 {
     namespace Core
     {
-        namespace
-        {
-            //------------------------------------------------------------------------------
-            /// Navigates the list of threads to query if one of the threads has the given
-            /// thread id.
-            ///
-            /// @param in_threadList - The list of threads.
-            /// @param in_id - The thread id to look for.
-            ///
-            /// @return Whether or not one of the given threads has the given id.
-            //------------------------------------------------------------------------------
-            bool ThreadListHasId(const std::vector<std::thread>& in_threadList, std::thread::id in_id)
-            {
-                for (const auto& thread : in_threadList)
-                {
-                    if (thread.get_id() == in_id)
-                    {
-                        return true;
-                    }
-                }
-                
-                return false;
-            }
-        }
-        
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         TaskPool::TaskPool(u32 in_numThreads) noexcept
-            : m_numThreads(in_numThreads), m_isFinished(false)
+            : m_numThreads(in_numThreads), m_isFinished(false), m_taskCountHeuristic(0)
         {
-            for (u32 i=0; i < m_numThreads; ++i)
+            for (u32 i = 0; i < m_numThreads; ++i)
             {
                 m_threads.push_back(std::thread(MakeDelegate(this, &TaskPool::ProcessTasks)));
             }
@@ -85,35 +60,42 @@ namespace ChilliSource
             CS_ASSERT(m_isFinished == false, "Task is being pushed after finishing.");
             
             m_taskQueue.push(in_task);
+            ++m_taskCountHeuristic;
+            
             queueLock.unlock();
             
             m_emptyWaitCondition.notify_one();
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskPool::PerformTaskOrWait() noexcept
+        void TaskPool::PerformTask(const std::atomic<bool>& in_forceContinue) noexcept
         {
-            CS_ASSERT(ThreadListHasId(m_threads, std::this_thread::get_id()), "Tasks can only be performed on a thread owned by the task pool.");
-            
             std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
             CS_ASSERT(m_isFinished == false, "Task is being pushed after finishing.");
             
-            while (m_taskQueue.empty() && !m_isFinished)
+            if (m_taskQueue.empty() && !in_forceContinue)
             {
                 m_emptyWaitCondition.wait(queueLock);
             }
             
-            if (m_isFinished)
+            if (m_taskQueue.empty())
             {
                 return;
             }
             
             Task task = m_taskQueue.front();
             m_taskQueue.pop();
+            --m_taskCountHeuristic;
                 
             queueLock.unlock();
             
             task();
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void TaskPool::AwakenAllThreads() noexcept
+        {
+            m_emptyWaitCondition.notify_all();
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -123,9 +105,9 @@ namespace ChilliSource
             CSBackend::Android::JavaVirtualMachine::Get()->AttachCurrentThread();
 #endif
 
-            while (!m_isFinished)
+            while (!m_isFinished || m_taskCountHeuristic > 0)
             {
-                PerformTaskOrWait();
+                PerformTask(m_isFinished);
             }
             
 #ifdef CS_TARGETPLATFORM_ANDROID
@@ -138,12 +120,6 @@ namespace ChilliSource
         {
             std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
             m_isFinished = true;
-            
-            while (!m_taskQueue.empty())
-            {
-                m_taskQueue.pop();
-            }
-            
             queueLock.unlock();
             
             m_emptyWaitCondition.notify_all();
