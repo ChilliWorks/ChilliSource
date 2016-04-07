@@ -33,8 +33,6 @@
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/Threading/TaskPool.h>
 
-#include <atomic>
-
 namespace ChilliSource
 {
     namespace Core

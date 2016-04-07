@@ -31,9 +31,12 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/Core/Threading/ThreadPool.h>
 
 #include <atomic>
+#include <condition_variable>
+#include <mutex>
+#include <queue>
+#include <thread>
 
 namespace ChilliSource
 {
@@ -114,7 +117,11 @@ namespace ChilliSource
             const u32 m_numThreads;
 
             std::vector<std::thread> m_threads;
-            concurrent_blocking_queue<Task> m_tasks;
+            
+            std::queue<Task> m_taskQueue;
+            std::mutex m_taskQueueMutex;
+            std::condition_variable m_emptyWaitCondition;
+            
             std::atomic<bool> m_isFinished;
         };
     }

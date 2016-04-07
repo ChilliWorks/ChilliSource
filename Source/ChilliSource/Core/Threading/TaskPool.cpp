@@ -45,7 +45,6 @@ namespace ChilliSource
             /// @param in_threadList - The list of threads.
             /// @param in_id - The thread id to look for.
             ///
-            ///
             /// @return Whether or not one of the given threads has the given id.
             //------------------------------------------------------------------------------
             bool ThreadListHasId(const std::vector<std::thread>& in_threadList, std::thread::id in_id)
@@ -82,19 +81,39 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void TaskPool::Add(const Task& in_task) noexcept
         {
-            m_tasks.push(in_task);
+            std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
+            CS_ASSERT(m_isFinished == false, "Task is being pushed after finishing.");
+            
+            m_taskQueue.push(in_task);
+            queueLock.unlock();
+            
+            m_emptyWaitCondition.notify_one();
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         void TaskPool::PerformTaskOrWait() noexcept
         {
             CS_ASSERT(ThreadListHasId(m_threads, std::this_thread::get_id()), "Tasks can only be performed on a thread owned by the task pool.");
-
-            Task task;
-            if (m_tasks.pop_or_wait(task))
+            
+            std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
+            CS_ASSERT(m_isFinished == false, "Task is being pushed after finishing.");
+            
+            while (m_taskQueue.empty() && !m_isFinished)
             {
-                task();
+                m_emptyWaitCondition.wait(queueLock);
             }
+            
+            if (m_isFinished)
+            {
+                return;
+            }
+            
+            Task task = m_taskQueue.front();
+            m_taskQueue.pop();
+                
+            queueLock.unlock();
+            
+            task();
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -117,9 +136,17 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         TaskPool::~TaskPool() noexcept
         {
+            std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
             m_isFinished = true;
-            m_tasks.abort();
             
+            while (!m_taskQueue.empty())
+            {
+                m_taskQueue.pop();
+            }
+            
+            queueLock.unlock();
+            
+            m_emptyWaitCondition.notify_all();
             for (auto& thread : m_threads)
             {
                 thread.join();
