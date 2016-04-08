@@ -2273,5 +2273,8 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.h">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\Task.h">
+      <Filter>ChilliSource\Core\Threading</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

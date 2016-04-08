@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_CORE_THREADING_MAINTHREADTASKPOOL_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Core/Threading/TaskContext.h>
 
 #include <atomic>
 #include <condition_variable>
@@ -55,17 +55,11 @@ namespace ChilliSource
         public:
             CS_DECLARE_NOCOPY(MainThreadTaskPool);
             //------------------------------------------------------------------------------
-            /// A delegate describing a single task which can be added to the task pool.
+            /// Constructs a new main thread task pool.
             ///
             /// @author Ian Copland
             //------------------------------------------------------------------------------
-            using Task = std::function<void() noexcept>;
-            //------------------------------------------------------------------------------
-            /// The default constructor.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------------------
-            MainThreadTaskPool() = default;
+            MainThreadTaskPool();
             //------------------------------------------------------------------------------
             /// Adds a task to the pool. The task will be executed when PerformTasks() is
             /// called.
@@ -86,6 +80,8 @@ namespace ChilliSource
             /// @author Ian Copland
             //------------------------------------------------------------------------------
             void PerformTasks() noexcept;
+            
+            const TaskContext m_taskContext;
             
             std::deque<Task> m_taskQueue;
             std::mutex m_taskQueueMutex;

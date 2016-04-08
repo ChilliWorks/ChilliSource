@@ -29,6 +29,7 @@
 #include <ChilliSource/Core/Threading/TaskPool.h>
 
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
+#include <ChilliSource/Core/Threading/TaskType.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
 #   include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
@@ -42,9 +43,11 @@ namespace ChilliSource
     {
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        TaskPool::TaskPool(u32 in_numThreads) noexcept
-            : m_numThreads(in_numThreads), m_isFinished(false), m_taskCountHeuristic(0)
+        TaskPool::TaskPool(TaskType in_taskType, u32 in_numThreads) noexcept
+            : m_numThreads(in_numThreads), m_taskContext(in_taskType, this), m_isFinished(false), m_taskCountHeuristic(0)
         {
+            CS_ASSERT(in_taskType == TaskType::k_small || in_taskType == TaskType::k_large, "Task type must be small or large");
+            
             for (u32 i = 0; i < m_numThreads; ++i)
             {
                 m_threads.push_back(std::thread(MakeDelegate(this, &TaskPool::ProcessTasks)));
@@ -93,7 +96,7 @@ namespace ChilliSource
                 
             queueLock.unlock();
             
-            task();
+            task(m_taskContext);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------

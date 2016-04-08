@@ -32,6 +32,7 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 #include <ChilliSource/Core/Threading/MainThreadTaskPool.h>
+#include <ChilliSource/Core/Threading/Task.h>
 #include <ChilliSource/Core/Threading/TaskPool.h>
 #include <ChilliSource/Core/Threading/TaskType.h>
 
@@ -55,16 +56,6 @@ namespace ChilliSource
         {
         public:
             CS_DECLARE_NAMEDTYPE(TaskScheduler);
-            //------------------------------------------------------------------------------
-            /// A delegate describing a single task. A context is provided which provides
-            /// information on the task and provides the ability to launch child tasks or
-            /// yeild.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_taskContext - The task context.
-            //------------------------------------------------------------------------------
-            using Task = std::function<void(const TaskContext& in_taskContext) noexcept>;
             //------------------------------------------------------------------------------
             /// Allows querying of whether or not this system implements the interface
             /// described by the given interface Id. Typically this is not called directly

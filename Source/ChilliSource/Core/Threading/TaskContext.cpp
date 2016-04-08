@@ -58,16 +58,16 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTask(const TaskScheduler::Task& in_task) const noexcept
+        void TaskContext::ProcessChildTask(const Task& in_task) const noexcept
         {
-            std::vector<TaskScheduler::Task> tasks;
+            std::vector<Task> tasks;
             tasks.push_back(in_task);
             
             ProcessChildTasks(tasks);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTasks(const std::vector<TaskScheduler::Task>& in_tasks) const noexcept
+        void TaskContext::ProcessChildTasks(const std::vector<Task>& in_tasks) const noexcept
         {
             if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)
             {
@@ -80,7 +80,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTasksInParallel(const std::vector<TaskScheduler::Task>& in_tasks) const noexcept
+        void TaskContext::ProcessChildTasksInParallel(const std::vector<Task>& in_tasks) const noexcept
         {
             CS_ASSERT(m_taskType == TaskType::k_small || m_taskType == TaskType::k_large || m_taskType == TaskType::k_gameLogic, "Invalid task type.");
             
@@ -114,7 +114,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTasksInSeries(const std::vector<TaskScheduler::Task>& in_tasks) const noexcept
+        void TaskContext::ProcessChildTasksInSeries(const std::vector<Task>& in_tasks) const noexcept
         {
             CS_ASSERT(m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file, "Invalid task type.");
             

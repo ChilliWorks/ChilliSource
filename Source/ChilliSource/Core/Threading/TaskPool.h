@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_CORE_THREADING_TASKPOOL_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/System/AppSystem.h>
+#include <ChilliSource/Core/Threading/TaskContext.h>
 
 #include <atomic>
 #include <condition_variable>
@@ -59,20 +59,16 @@ namespace ChilliSource
         public:
             CS_DECLARE_NOCOPY(TaskPool);
             //------------------------------------------------------------------------------
-            /// A delegate describing a single task which can be added to the task pool.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------------------
-            using Task = std::function<void() noexcept>;
-            //------------------------------------------------------------------------------
             /// Constructs a new task pool with the given number of threads.
             ///
             /// @author Ian Copland
             ///
+            /// @param in_taskType - The type of task this task pool is for. Only small and
+            /// large can be specified here.
             /// @param in_numThreads - The number of threads that this task pool should
             /// create to run tasks on.
             //------------------------------------------------------------------------------
-            TaskPool(u32 in_numThreads) noexcept;
+            TaskPool(TaskType in_taskType, u32 in_numThreads) noexcept;
             //------------------------------------------------------------------------------
             /// @author Ian Copland
             ///
@@ -126,6 +122,7 @@ namespace ChilliSource
             void ProcessTasks() noexcept;
             
             const u32 m_numThreads;
+            const TaskContext m_taskContext;
 
             std::vector<std::thread> m_threads;
             

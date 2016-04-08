@@ -421,6 +421,7 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\System\StateSystem.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\MainThreadTaskPool.h" />
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\Task.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskContext.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskPool.h" />
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.h" />

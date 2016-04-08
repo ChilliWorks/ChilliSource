@@ -1,11 +1,11 @@
 //
-//  Threading.h
-//  Chilli Source
-//  Created by Ian Copland on 07/07/2014.
+//  TaskScheduler.h
+//  ChilliSource
+//  Created by Ian Copland on 05/04/2016.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2014 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,15 +26,27 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_CORE_THREADING_H_
-#define _CHILLISOURCE_CORE_THREADING_H_
+#ifndef _CHILLISOURCE_CORE_THREADING_TASK_H_
+#define _CHILLISOURCE_CORE_THREADING_TASK_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Threading/MainThreadTaskPool.h>
-#include <ChilliSource/Core/Threading/Task.h>
-#include <ChilliSource/Core/Threading/TaskContext.h>
-#include <ChilliSource/Core/Threading/TaskPool.h>
-#include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/Threading/TaskType.h>
+
+#include <functional>
+
+namespace ChilliSource
+{
+    namespace Core
+    {
+        //------------------------------------------------------------------------------
+        /// A delegate describing a single task. A context is provided which provides
+        /// information on the task and provides the ability to launch child tasks.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_taskContext - The task context.
+        //------------------------------------------------------------------------------
+        using Task = std::function<void(const TaskContext& in_taskContext) noexcept>;
+    }
+}
 
 #endif

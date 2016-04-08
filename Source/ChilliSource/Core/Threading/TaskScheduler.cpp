@@ -80,25 +80,25 @@ namespace ChilliSource
             {
                 case TaskType::k_small:
                 {
-                    m_smallTaskPool->Add(std::bind(in_task, TaskContext(in_taskType, m_smallTaskPool.get())));
+                    m_smallTaskPool->Add(in_task);
                     break;
                 }
                 case TaskType::k_large:
                 {
-                    m_largeTaskPool->Add(std::bind(in_task, TaskContext(in_taskType, m_largeTaskPool.get())));
+                    m_largeTaskPool->Add(in_task);
                     break;
                 }
                 case TaskType::k_mainThread:
                 {
-                    m_mainThreadTaskPool->Add(std::bind(in_task, TaskContext(in_taskType)));
+                    m_mainThreadTaskPool->Add(in_task);
                     break;
                 }
                 case TaskType::k_gameLogic:
                 {
                     ++m_gameLogicTaskCount;
-                    m_smallTaskPool->Add([=]()
+                    m_smallTaskPool->Add([=](const TaskContext&)
                     {
-                        in_task(TaskContext(in_taskType, m_smallTaskPool.get()));
+                        in_task(TaskContext(TaskType::k_gameLogic, m_smallTaskPool.get()));
                         
                         if (--m_gameLogicTaskCount == 0)
                         {
@@ -165,7 +165,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void TaskScheduler::StartNextFileTask(const Task& in_task) noexcept
         {
-            m_largeTaskPool->Add([=]()
+            m_largeTaskPool->Add([=](const TaskContext& in_taskContext)
             {
                 in_task(TaskContext(TaskType::k_file));
                 
@@ -197,8 +197,8 @@ namespace ChilliSource
             s32 numFreeCores = s32(device->GetNumberOfCPUCores()) - k_namedThreads;
             s32 threadsPerPool = std::max(k_minThreadsPerPool, numFreeCores);
             
-            m_smallTaskPool = TaskPoolUPtr(new TaskPool(threadsPerPool));
-            m_largeTaskPool = TaskPoolUPtr(new TaskPool(threadsPerPool));
+            m_smallTaskPool = TaskPoolUPtr(new TaskPool(TaskType::k_small, threadsPerPool));
+            m_largeTaskPool = TaskPoolUPtr(new TaskPool(TaskType::k_large, threadsPerPool));
             m_mainThreadTaskPool = MainThreadTaskPoolUPtr(new MainThreadTaskPool());
             
 #ifndef CS_TARGETPLATFORM_ANDROID
