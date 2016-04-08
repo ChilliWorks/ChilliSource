@@ -459,12 +459,6 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Time\Timer.cpp">
       <Filter>ChilliSource\Core\Time</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.cpp">
-      <Filter>ChilliSource\Core\Threading</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\ThreadPool.cpp">
-      <Filter>ChilliSource\Core\Threading</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\ChilliSource\Core\System\StateSystem.cpp">
       <Filter>ChilliSource\Core\System</Filter>
     </ClCompile>
@@ -1074,7 +1068,7 @@
     <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskPool.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskSchedulerNew.cpp">
+    <ClCompile Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.cpp">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1471,12 +1465,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\Time\Timer.h">
       <Filter>ChilliSource\Core\Time</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.h">
-      <Filter>ChilliSource\Core\Threading</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\ThreadPool.h">
-      <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ChilliSource\Core\System\AppSystem.h">
       <Filter>ChilliSource\Core\System</Filter>
@@ -2279,10 +2267,10 @@
     <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskPool.h">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskSchedulerNew.h">
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskType.h">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskType.h">
+    <ClInclude Include="..\..\Source\ChilliSource\Core\Threading\TaskScheduler.h">
       <Filter>ChilliSource\Core\Threading</Filter>
     </ClInclude>
   </ItemGroup>

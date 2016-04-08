@@ -81,8 +81,10 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
 		void TextureAtlasProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
-			auto task = std::bind(&TextureAtlasProvider::LoadResource, this, in_location, in_filePath, in_delegate, out_resource);
-            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
+            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+            {
+                LoadResource(in_location, in_filePath, in_delegate, out_resource);
+            });
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
@@ -106,7 +108,10 @@ namespace ChilliSource
             
             if(in_delegate != nullptr)
             {
-				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                {
+                    in_delegate(out_resource);
+                });
             }
         }
         //----------------------------------------------------------------------------

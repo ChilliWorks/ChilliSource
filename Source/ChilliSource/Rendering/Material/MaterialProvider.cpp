@@ -596,14 +596,20 @@ namespace ChilliSource
                                 else
                                 {
                                     out_material->SetLoadState(Core::Resource::LoadState::k_loaded);
-									Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_material));
+                                    Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                                    {
+                                        in_delegate(out_material);
+                                    });
                                     return;
                                 }
                             }
                             else
                             {
                                 out_material->SetLoadState(Core::Resource::LoadState::k_failed);
-								Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_material));
+                                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                                {
+                                    in_delegate(out_material);
+                                });
                                 return;
                             }
                         });
@@ -612,7 +618,7 @@ namespace ChilliSource
                     case ResourceType::k_texture:
                     {
                         auto options(std::make_shared<TextureResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV, true));
-                        resourcePool->LoadResourceAsync<Texture>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [in_loadIndex, in_descs, in_delegate, out_material](const TextureCSPtr& in_texture)
+                        resourcePool->LoadResourceAsync<Texture>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [=](const TextureCSPtr& in_texture)
                         {
                             if(in_texture->GetLoadState() == Core::Resource::LoadState::k_loaded)
                             {
@@ -627,14 +633,20 @@ namespace ChilliSource
                                 else
                                 {
                                     out_material->SetLoadState(Core::Resource::LoadState::k_loaded);
-									Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_material));
+                                    Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                                    {
+                                        in_delegate(out_material);
+                                    });
                                     return;
                                 }
                             }
                             else
                             {
                                 out_material->SetLoadState(Core::Resource::LoadState::k_failed);
-								Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_material));
+                                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                                {
+                                    in_delegate(out_material);
+                                });
                                 return;
                             }
                         });
@@ -643,7 +655,7 @@ namespace ChilliSource
                     case ResourceType::k_cubemap:
                     {
                         auto options(std::make_shared<CubemapResourceOptions>(in_descs[in_loadIndex].m_shouldMipMap, in_descs[in_loadIndex].m_filterMode, in_descs[in_loadIndex].m_wrapModeU, in_descs[in_loadIndex].m_wrapModeV, true));
-                        resourcePool->LoadResourceAsync<Cubemap>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [in_loadIndex, in_descs, in_delegate, out_material](const CubemapCSPtr& in_cubemap)
+                        resourcePool->LoadResourceAsync<Cubemap>(in_descs[in_loadIndex].m_location, in_descs[in_loadIndex].m_filePath, options, [=](const CubemapCSPtr& in_cubemap)
                         {
                             if(in_cubemap->GetLoadState() == Core::Resource::LoadState::k_loaded)
                             {
@@ -658,14 +670,20 @@ namespace ChilliSource
                                 else
                                 {
                                     out_material->SetLoadState(Core::Resource::LoadState::k_loaded);
-									Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_material));
+                                    Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                                    {
+                                        in_delegate(out_material);
+                                    });
                                     return;
                                 }
                             }
                             else
                             {
                                 out_material->SetLoadState(Core::Resource::LoadState::k_failed);
-								Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_material));
+                                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                                {
+                                    in_delegate(out_material);
+                                });
                                 return;
                             }
                         });
@@ -777,8 +795,10 @@ namespace ChilliSource
 		//----------------------------------------------------------------------------
 		void MaterialProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
 		{
-			auto task = std::bind(&MaterialProvider::BuildMaterialTask, this, in_location, in_filePath, in_delegate, out_resource);
-			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
+            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+            {
+                BuildMaterialTask(in_location, in_filePath, in_delegate, out_resource);
+            });
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -790,7 +810,10 @@ namespace ChilliSource
 			if(BuildMaterialFromFile(in_location, in_filePath, shaderFiles, textureFiles, cubemapFiles, (Material*)out_resource.get()) == false)
             {
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                {
+                    in_delegate(out_resource);
+                });
                 return;
             }
             

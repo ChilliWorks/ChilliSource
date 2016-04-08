@@ -104,8 +104,10 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
 		void TextureProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
-			auto task = std::bind(&TextureProvider::LoadTexture, this, in_location, in_filePath, in_options, in_delegate, out_resource);
-            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
+            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+            {
+                LoadTexture(in_location, in_filePath, in_options, in_delegate, out_resource);
+            });
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
@@ -133,7 +135,10 @@ namespace ChilliSource
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
-					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                    {
+                        in_delegate(out_resource);
+                    });
                 }
                 return;
             }
@@ -148,7 +153,10 @@ namespace ChilliSource
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
-					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                    {
+                        in_delegate(out_resource);
+                    });
                 }
                 return;
             }
@@ -172,25 +180,24 @@ namespace ChilliSource
             }
             else
             {
-                auto task([image, in_options, in_delegate, out_resource]()
+                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
                 {
                     Texture* texture = (Texture*)out_resource.get();
                     const TextureResourceOptions* options = (const TextureResourceOptions*)in_options.get();
-                    
+
                     Texture::Descriptor desc;
                     desc.m_width = image->GetWidth();
                     desc.m_height = image->GetHeight();
                     desc.m_format = image->GetFormat();
                     desc.m_compression = image->GetCompression();
                     desc.m_dataSize = image->GetDataSize();
-                    
+
                     texture->Build(desc, Texture::TextureDataUPtr(image->MoveData()), options->IsMipMapsEnabled(), options->IsRestoreTextureDataEnabled());
                     texture->SetWrapMode(options->GetWrapModeS(), options->GetWrapModeT());
                     texture->SetFilterMode(options->GetFilterMode());
                     out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
                     in_delegate(out_resource);
                 });
-                Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
             }
         }
 	}

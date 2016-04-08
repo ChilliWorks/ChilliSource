@@ -1,11 +1,11 @@
 //
 //  TaskScheduler.cpp
-//  Chilli Source
-//  Created by Scott Downie on 09/08/2011.
+//  ChilliSource
+//  Created by Ian Copland on 05/04/2016.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -30,91 +30,188 @@
 
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Base/Device.h>
+#include <ChilliSource/Core/Threading/TaskContext.h>
+#include <ChilliSource/Core/Threading/TaskType.h>
 
 #ifdef CS_TARGETPLATFORM_ANDROID
-
-#include <CSBackend/Platform/Android/Main/JNI/Core/Threading/MainThreadId.h>
-
+#   include <CSBackend/Platform/Android/Main/JNI/Core/Threading/MainThreadId.h>
 #endif
+
+#include <algorithm>
 
 namespace ChilliSource
 {
     namespace Core
     {
-		CS_DEFINE_NAMEDTYPE(TaskScheduler);
-
-		//-------------------------------------------------
-		//-------------------------------------------------
-		TaskSchedulerUPtr TaskScheduler::Create()
-		{
-			return TaskSchedulerUPtr(new TaskScheduler());
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		TaskScheduler::TaskScheduler()
-		{
-        
-		}
-		//------------------------------------------------
-		//------------------------------------------------
-		bool TaskScheduler::IsA(InterfaceIDType in_interfaceId) const
-		{
-			return in_interfaceId == TaskScheduler::InterfaceID;
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		void TaskScheduler::OnInit()
-		{
-            Device* device = Core::Application::Get()->GetSystem<Device>();
-			m_threadPool = ThreadPoolUPtr(new Core::ThreadPool(device->GetNumberOfCPUCores() * 2));
-
-#ifndef CS_TARGETPLATFORM_ANDROID
-            m_mainThreadId = std::this_thread::get_id();
-#endif
-		}
-        //------------------------------------------------
-        //------------------------------------------------
-        bool TaskScheduler::IsMainThread() const
+        CS_DEFINE_NAMEDTYPE(TaskScheduler);
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        TaskSchedulerUPtr TaskScheduler::Create() noexcept
+        {
+            return TaskSchedulerUPtr(new TaskScheduler());
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        TaskScheduler::TaskScheduler() noexcept
+            : m_gameLogicTaskCount(0)
+        {
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        bool TaskScheduler::IsA(CSCore::InterfaceIDType in_interfaceId) const noexcept
+        {
+            return (TaskScheduler::InterfaceID == in_interfaceId);
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        bool TaskScheduler::IsMainThread() const noexcept
         {
 #ifdef CS_TARGETPLATFORM_ANDROID
-			return CSBackend::Android::MainThreadId::Get()->GetId() == std::this_thread::get_id();
+            return CSBackend::Android::MainThreadId::Get()->GetId() == std::this_thread::get_id();
 #else
             return m_mainThreadId == std::this_thread::get_id();
 #endif
         }
-		//------------------------------------------------
-		//------------------------------------------------
-		void TaskScheduler::ScheduleTask(const GenericTaskType& in_task)
-		{
-			m_threadPool->Schedule(in_task);
-		}
-		//----------------------------------------------------
-		//----------------------------------------------------
-		void TaskScheduler::ScheduleMainThreadTask(const GenericTaskType& in_task)
-		{
-			std::unique_lock<std::recursive_mutex> lock(m_mainThreadQueueMutex);
-			m_mainThreadTasks.push_back(in_task);
-		}
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void TaskScheduler::ExecuteMainThreadTasks()
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void TaskScheduler::ScheduleTask(TaskType in_taskType, const Task& in_task) noexcept
         {
-            std::unique_lock<std::recursive_mutex> lock(m_mainThreadQueueMutex);
-            
-            for (u32 i = 0; i < m_mainThreadTasks.size(); ++i)
+            switch (in_taskType)
             {
-				m_mainThreadTasks[i]();
+                case TaskType::k_small:
+                {
+                    m_smallTaskPool->Add(std::bind(in_task, TaskContext(in_taskType, m_smallTaskPool.get())));
+                    break;
+                }
+                case TaskType::k_large:
+                {
+                    m_largeTaskPool->Add(std::bind(in_task, TaskContext(in_taskType, m_largeTaskPool.get())));
+                    break;
+                }
+                case TaskType::k_mainThread:
+                {
+                    m_mainThreadTaskPool->Add(std::bind(in_task, TaskContext(in_taskType)));
+                    break;
+                }
+                case TaskType::k_gameLogic:
+                {
+                    ++m_gameLogicTaskCount;
+                    m_smallTaskPool->Add([=]()
+                    {
+                        in_task(TaskContext(in_taskType, m_smallTaskPool.get()));
+                        
+                        if (--m_gameLogicTaskCount == 0)
+                        {
+                            m_gameLogicTaskCondition.notify_all();
+                        }
+                    });
+                    break;
+                }
+                case TaskType::k_file:
+                {
+                    std::unique_lock<std::mutex> lock(m_fileTaskMutex);
+                    
+                    if (m_isFileTaskRunning)
+                    {
+                        m_fileTaskQueue.push(in_task);
+                        break;
+                    }
+                    
+                    m_isFileTaskRunning = true;
+                    lock.unlock();
+                    
+                    StartNextFileTask(in_task);
+                    break;
+                }
+            }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void TaskScheduler::ScheduleTasks(TaskType in_taskType, const std::vector<Task>& in_tasks, const Task& in_completionTask) noexcept
+        {
+            //TODO: Ideally this should be allocated from a pool.
+            auto taskCount = std::make_shared<std::atomic<u32>>(u32(in_tasks.size()));
+            
+            for (const auto& task : in_tasks)
+            {
+                ScheduleTask(in_taskType, [=](const TaskContext& in_taskContext)
+                {
+                    task(in_taskContext);
+                    
+                    if (--(*taskCount) == 0)
+                    {
+                        ScheduleTask(in_taskType, in_completionTask);
+                    }
+                });
+            }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void TaskScheduler::ExecuteMainThreadTasks() noexcept
+        {
+            //wait on all game logic tasks completing.
+            std::unique_lock<std::mutex> lock(m_gameLogicTaskMutex);
+            
+            while (m_gameLogicTaskCount != 0)
+            {
+                m_gameLogicTaskCondition.wait(lock);
             }
             
-			m_mainThreadTasks.clear();
-		}
-		//-------------------------------------------------
-		//-------------------------------------------------
-		void TaskScheduler::Destroy()
-		{
-			m_threadPool.reset();
-			m_mainThreadTasks.clear();
-		}
+            lock.unlock();
+            
+            m_mainThreadTaskPool->PerformTasks();
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void TaskScheduler::StartNextFileTask(const Task& in_task) noexcept
+        {
+            m_largeTaskPool->Add([=]()
+            {
+                in_task(TaskContext(TaskType::k_file));
+                
+                std::unique_lock<std::mutex> lock(m_fileTaskMutex);
+                
+                if (m_fileTaskQueue.empty())
+                {
+                    m_isFileTaskRunning = false;
+                    return;
+                }
+                
+                auto task = m_fileTaskQueue.front();
+                m_fileTaskQueue.pop();
+                
+                lock.unlock();
+                
+                StartNextFileTask(task);
+            });
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void TaskScheduler::OnInit() noexcept
+        {
+            Device* device = Core::Application::Get()->GetSystem<Device>();
+            
+            constexpr s32 k_minThreadsPerPool = 2;
+            constexpr s32 k_namedThreads = 2; //The main thread and the render thread.
+            
+            s32 numFreeCores = s32(device->GetNumberOfCPUCores()) - k_namedThreads;
+            s32 threadsPerPool = std::max(k_minThreadsPerPool, numFreeCores);
+            
+            m_smallTaskPool = TaskPoolUPtr(new TaskPool(threadsPerPool));
+            m_largeTaskPool = TaskPoolUPtr(new TaskPool(threadsPerPool));
+            m_mainThreadTaskPool = MainThreadTaskPoolUPtr(new MainThreadTaskPool());
+            
+#ifndef CS_TARGETPLATFORM_ANDROID
+            m_mainThreadId = std::this_thread::get_id();
+#endif
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void TaskScheduler::Destroy() noexcept
+        {
+            m_smallTaskPool.reset();
+            m_largeTaskPool.reset();
+            m_mainThreadTaskPool.reset();
+        }
     }
 }
-

@@ -67,7 +67,10 @@ namespace ChilliSource
                     textResource->SetLoadState(Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                        {
+                            in_delegate(out_resource);
+                        });
                     }
                     return;
                 }
@@ -82,7 +85,10 @@ namespace ChilliSource
                     textResource->SetLoadState(Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                        {
+                            in_delegate(out_resource);
+                        });
                     }
                     return;
                 }
@@ -93,7 +99,10 @@ namespace ChilliSource
                     textResource->SetLoadState(Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                        {
+                            in_delegate(out_resource);
+                        });
                     }
                     return;
                 }
@@ -109,7 +118,10 @@ namespace ChilliSource
                 
                 if(in_delegate != nullptr)
                 {
-                    Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                    {
+                        in_delegate(out_resource);
+                    });
                 }
 			}
 		}
@@ -150,7 +162,10 @@ namespace ChilliSource
 		//----------------------------------------------------
 		void LocalisedTextProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
 		{
-            Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(LoadResource, in_storageLocation, in_filePath, in_delegate, out_resource));
+            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
+            {
+                LoadResource(in_storageLocation, in_filePath, in_delegate, out_resource);
+            });
 		}
 	}
 }

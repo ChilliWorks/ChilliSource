@@ -81,13 +81,13 @@ namespace CSBackend
 			CS_ASSERT(CSCore::Application::Get()->GetTaskScheduler()->IsMainThread() == true, "Must be called from the main thread.");
 
 			auto taskScheduler = CSCore::Application::Get()->GetTaskScheduler();
-			taskScheduler->ScheduleTask([=]()
+			taskScheduler->ScheduleTask(CSCore::TaskType::k_file, [=](const CSCore::TaskContext&)
 			{
 				auto fileSystem = CSCore::Application::Get()->GetFileSystem();
 				auto stream = fileSystem->CreateFileStream(in_storageLocation, in_filePath, CSCore::FileMode::k_readBinary);
 				if (stream == nullptr)
 				{
-					taskScheduler->ScheduleMainThreadTask([=]()
+					taskScheduler->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
 					{
 						out_resource->SetLoadState(CSCore::Resource::LoadState::k_failed);
 						in_delegate(out_resource);
@@ -107,7 +107,7 @@ namespace CSBackend
 				u8* bufferHandle = bankBuffer.get();
 				StoreBuffer(std::move(bankBuffer));
 
-				taskScheduler->ScheduleMainThreadTask([=]()
+				taskScheduler->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
                 {
 					std::unique_ptr<u8[]> retrievedBuffer = RetrieveBuffer(bufferHandle);
 

@@ -102,7 +102,7 @@ namespace ChilliSource
 			/// @param Size of data in bytes
 			/// @param [Out] Image resource
 			//------------------------------------------------------------
-			void CreatePVRImageFromFile(const s8* in_data, u32 in_dataSize, Core::Image* out_image)
+			void CreatePVRImageFromFile(const s8* in_data, u32 in_dataSize, Image* out_image)
             {
                 //Get the header data from the image file
                 const PVRTCTexHeader* header = reinterpret_cast<const PVRTCTexHeader*>(in_data);
@@ -118,8 +118,8 @@ namespace ChilliSource
                 
                 u32 udwLow32Bits  = udwPFormat & 0x00000000ffffffff;
                 u32 udwHigh32Bits = udwPFormat >> 32; //Shift to right 32bits
-                Core::ImageCompression compression = Core::ImageCompression::k_none;
-                Core::ImageFormat format = Core::ImageFormat::k_RGB888;
+                ImageCompression compression = ImageCompression::k_none;
+                ImageFormat format = ImageFormat::k_RGB888;
                 
                 //Calculate the data size for each texture level and respect the minimum number of blocks
                 u32 udwBpp = 4;
@@ -129,7 +129,7 @@ namespace ChilliSource
                 {
                     if(udwLow32Bits == (u32)PixelFormat::k_2BppRGB || udwLow32Bits == (u32)PixelFormat::k_2BppRGBA)
                     {
-                        compression = Core::ImageCompression::k_PVR2Bpp;
+                        compression = ImageCompression::k_PVR2Bpp;
                         
                         //Pixel by pixel block size for 2bpp
                         udwBpp = 2;
@@ -137,12 +137,12 @@ namespace ChilliSource
                         //Set if Alpha in image
                         if(udwLow32Bits == (u32)PixelFormat::k_2BppRGBA)
                         {
-                            format = Core::ImageFormat::k_RGBA8888;
+                            format = ImageFormat::k_RGBA8888;
                         }
                     }
                     else if(udwLow32Bits == (u32)PixelFormat::k_4BppRGB || udwLow32Bits == (u32)PixelFormat::k_4BppRGBA)
                     {
-                        compression = Core::ImageCompression::k_PVR4Bpp;
+                        compression = ImageCompression::k_PVR4Bpp;
                         
                         //Pixel by pixel block size for 4bpp
                         udwBpp = 4;
@@ -150,7 +150,7 @@ namespace ChilliSource
                         //Set if Alpha in image
                         if(udwLow32Bits == (u32)PixelFormat::k_4BppRGBA)
                         {
-                            format = Core::ImageFormat::k_RGBA8888;
+                            format = ImageFormat::k_RGBA8888;
                         }
                     }
                     else
@@ -167,7 +167,7 @@ namespace ChilliSource
                     CS_LOG_FATAL("Unimplemented PixelFormat for image");
                 }
                 
-                Core::Image::Descriptor desc;
+                Image::Descriptor desc;
                 desc.m_width = header->udwWidth;
                 desc.m_height = header->udwHeight;
                 desc.m_compression = compression;
@@ -176,7 +176,7 @@ namespace ChilliSource
                 
                 u8* pData = new u8[desc.m_dataSize];
                 memcpy(pData, in_data + sizeof(PVRTCTexHeader), sizeof(u8) * desc.m_dataSize);
-                out_image->Build(desc, Core::Image::ImageDataUPtr(pData));
+                out_image->Build(desc, Image::ImageDataUPtr(pData));
             }
             //-----------------------------------------------------------
             /// Performs the heavy lifting for the 2 create methods
@@ -188,30 +188,36 @@ namespace ChilliSource
             /// @param Completion delegate
             /// @param [Out] The output resource
             //-----------------------------------------------------------
-            void LoadImage(Core::StorageLocation in_storageLocation, const std::string& in_filePath, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
+            void LoadImage(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
             {
-                Core::FileStreamSPtr pImageFile = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_readBinary);
+                FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_readBinary);
                 
                 if(pImageFile == nullptr)
                 {
-                    out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
+                    out_resource->SetLoadState(Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                        {
+                            in_delegate(out_resource);
+                        });
                     }
                     return;
                 }
                 
                 std::string abyData;
                 pImageFile->GetAll(abyData);
-                CS_ASSERT(abyData.size() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "File is too large. It cannot exceed " + CSCore::ToString(std::numeric_limits<u32>::max()) + " bytes.");
+                CS_ASSERT(abyData.size() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "File is too large. It cannot exceed " + ToString(std::numeric_limits<u32>::max()) + " bytes.");
                 
-                CreatePVRImageFromFile(abyData.data(), static_cast<u32>(abyData.size()), (Core::Image*)out_resource.get());
+                CreatePVRImageFromFile(abyData.data(), static_cast<u32>(abyData.size()), (Image*)out_resource.get());
                 
-                out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
+                out_resource->SetLoadState(Resource::LoadState::k_loaded);
                 if(in_delegate != nullptr)
                 {
-                    Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                    {
+                        in_delegate(out_resource);
+                    });
                 }
             }
         }
@@ -224,15 +230,15 @@ namespace ChilliSource
         }
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
-		bool PVRImageProvider::IsA(Core::InterfaceIDType in_interaceId) const
+		bool PVRImageProvider::IsA(InterfaceIDType in_interaceId) const
 		{
 			return (in_interaceId == ResourceProvider::InterfaceID || in_interaceId == PVRImageProvider::InterfaceID);
 		}
         //-------------------------------------------------------
         //-------------------------------------------------------
-        Core::InterfaceIDType PVRImageProvider::GetResourceType() const
+        InterfaceIDType PVRImageProvider::GetResourceType() const
         {
-            return Core::Image::InterfaceID;
+            return Image::InterfaceID;
         }
 		//----------------------------------------------------------------
 		//----------------------------------------------------------------
@@ -250,9 +256,10 @@ namespace ChilliSource
         //----------------------------------------------------
         void PVRImageProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
         {
-            auto task = std::bind(LoadImage, in_storageLocation, in_filePath, in_delegate, out_resource);
-            
-            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
+            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
+            {
+                LoadImage(in_storageLocation, in_filePath, in_delegate, out_resource);
+            });
         }
 	}
 }

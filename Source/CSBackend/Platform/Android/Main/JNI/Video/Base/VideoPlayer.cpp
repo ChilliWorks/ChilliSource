@@ -72,7 +72,10 @@ void Java_com_chilliworks_chillisource_video_VideoPlayer_onUpdateSubtitles(JNIEn
 {
 	CS_ASSERT(g_activeVideoPlayer != nullptr, "No video player active!");
 
-	CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(CSCore::MakeDelegate(g_activeVideoPlayer, &CSBackend::Android::VideoPlayer::OnUpdateSubtitles));
+	CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+	{
+		g_activeVideoPlayer->OnUpdateSubtitles();
+	});
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -80,7 +83,10 @@ void Java_com_chilliworks_chillisource_video_VideoPlayer_onVideoComplete(JNIEnv*
 {
 	CS_ASSERT(g_activeVideoPlayer != nullptr, "No video player active!");
 
-    CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(CSCore::MakeDelegate(g_activeVideoPlayer, &CSBackend::Android::VideoPlayer::OnVideoComplete));
+	CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+	{
+		g_activeVideoPlayer->OnVideoComplete();
+	});
 }
 
 namespace CSBackend

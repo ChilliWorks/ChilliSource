@@ -243,8 +243,10 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
 		void FontProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
-			auto task = std::bind(&FontProvider::LoadFont, this, in_location, in_filePath, in_delegate, out_resource);
-            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
+            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+            {
+                LoadFont(in_location, in_filePath, in_delegate, out_resource);
+            });
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
@@ -277,11 +279,11 @@ namespace ChilliSource
             }
             else
             {
-                Core::Application::Get()->GetResourcePool()->LoadResourceAsync<Texture>(in_location, textureFilePath, [out_resource, in_delegate, in_location, in_filePath](const TextureCSPtr& in_texture)
+                Core::Application::Get()->GetResourcePool()->LoadResourceAsync<Texture>(in_location, textureFilePath, [=](const TextureCSPtr& in_texture)
                 {
                     if(in_texture != nullptr)
                     {
-                        Core::Application::Get()->GetTaskScheduler()->ScheduleTask([out_resource, in_delegate, in_location, in_filePath, in_texture]()
+                        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
                         {
                             Font::Descriptor desc;
                             desc.m_texture = in_texture;
@@ -297,7 +299,10 @@ namespace ChilliSource
                                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                             }
 
-                            Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                            {
+                                in_delegate(out_resource);
+                            });
                         });
                     }
                     else

@@ -65,7 +65,10 @@ void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnAuthenti
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::FacebookAuthenticationSystem::OnAuthenticationComplete, gpAndroidAuthSystem, inbSuccess));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		{
+			gpAndroidAuthSystem->OnAuthenticationComplete(inbSuccess);
+		});
 	}
 }
 //------------------------------------------------------------
@@ -81,7 +84,10 @@ void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnReadAuth
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::FacebookAuthenticationSystem::OnAuthoriseReadPermissionsComplete, gpAndroidAuthSystem, inbSuccess));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		{
+			gpAndroidAuthSystem->OnAuthoriseReadPermissionsComplete(inbSuccess);
+		});
 	}
 }
 //------------------------------------------------------------
@@ -97,7 +103,10 @@ void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnWriteAut
 {
 	if(gpAndroidAuthSystem)
 	{
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::FacebookAuthenticationSystem::OnAuthoriseWritePermissionsComplete, gpAndroidAuthSystem, inbSuccess));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		{
+			gpAndroidAuthSystem->OnAuthoriseWritePermissionsComplete(inbSuccess);
+		});
 	}
 }
 //------------------------------------------------------------
@@ -127,7 +136,10 @@ void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnPostToFe
 			break;
 		}
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::FacebookPostSystem::OnPostToFeedComplete, gpAndroidPostSystem, result));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		{
+			gpAndroidPostSystem->OnPostToFeedComplete(result);
+		});
 	}
 }
 //------------------------------------------------------------
@@ -157,7 +169,10 @@ void Java_com_chilliworks_chillisource_social_FacebookNativeInterface_OnPostRequ
 			break;
 		}
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::FacebookPostSystem::OnPostRequestComplete, gpAndroidPostSystem, result));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		{
+			gpAndroidPostSystem->OnPostRequestComplete(result);
+		});
 	}
 }
 

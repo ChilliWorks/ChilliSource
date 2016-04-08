@@ -430,7 +430,10 @@ namespace ChilliSource
                     out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                        {
+                           in_delegate(out_resource);
+                        });
                     }
                     return;
                 }
@@ -492,7 +495,10 @@ namespace ChilliSource
                 
                 if(in_delegate != nullptr)
                 {
-                    CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                    {
+                        in_delegate(out_resource);
+                    });
                 }
             }
         }

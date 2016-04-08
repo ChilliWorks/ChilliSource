@@ -30,7 +30,7 @@
 #define _CHILLISOURCE_CORE_THREADING_TASKCONTEXT_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/Core/Threading/TaskSchedulerNew.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace ChilliSource
 {
@@ -72,7 +72,7 @@ namespace ChilliSource
             ///
             /// @param in_task - The task which should be processed.
             //------------------------------------------------------------------------------
-            void ProcessChildTask(const TaskSchedulerNew::Task& in_task) const noexcept;
+            void ProcessChildTask(const TaskScheduler::Task& in_task) const noexcept;
             //------------------------------------------------------------------------------
             /// Schedules the given child tasks and yields until they have completed. Child
             /// tasks must be of the same type as the parent.
@@ -83,7 +83,7 @@ namespace ChilliSource
             ///
             /// @param in_tasks - The tasks which should be processed.
             //------------------------------------------------------------------------------
-            void ProcessChildTasks(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept;
+            void ProcessChildTasks(const std::vector<TaskScheduler::Task>& in_tasks) const noexcept;
             
         private:
             //------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ namespace ChilliSource
             ///
             /// @param in_tasks - The tasks which should be processed.
             //------------------------------------------------------------------------------
-            void ProcessChildTasksInParallel(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept;
+            void ProcessChildTasksInParallel(const std::vector<TaskScheduler::Task>& in_tasks) const noexcept;
             //------------------------------------------------------------------------------
             /// Processes child tasks in series, meaning they can be processed locally
             /// without needing to add the tasks to a pool.
@@ -105,7 +105,7 @@ namespace ChilliSource
             ///
             /// @param in_tasks - The tasks which should be processed.
             //------------------------------------------------------------------------------
-            void ProcessChildTasksInSeries(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept;
+            void ProcessChildTasksInSeries(const std::vector<TaskScheduler::Task>& in_tasks) const noexcept;
             
             TaskType m_taskType;
             TaskPool* m_taskPool = nullptr;

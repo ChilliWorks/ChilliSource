@@ -46,7 +46,6 @@
 #include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Time/CoreTimer.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
-#include <ChilliSource/Core/Threading/TaskSchedulerNew.h>
 
 #include <ChilliSource/Input/DeviceButtons/DeviceButtonSystem.h>
 #include <ChilliSource/Input/Keyboard/Keyboard.h>
@@ -237,8 +236,6 @@ namespace ChilliSource
 			//Update the app time since start
 			m_currentAppTime = in_timestamp;
             
-			m_taskScheduler->ExecuteMainThreadTasks();
-            
             //We do not need to render as often as we update so this callback will be triggered
             //less freqenctly than the update frequency suggests. We must work out how many times to update based on the time since last frame
             //and our actual update frequency. We carry the remainder to the next frame until we have a full update cycle
@@ -269,7 +266,7 @@ namespace ChilliSource
             //Tell the state manager to update the active state
             OnUpdate(in_deltaTime);
             
-            m_taskSchedulerNew->ExecuteMainThreadTasks();
+            m_taskScheduler->ExecuteMainThreadTasks();
             
             ++m_frameIndex;
 		}
@@ -379,7 +376,6 @@ namespace ChilliSource
             m_screen = CreateSystem<Screen>();
             
             m_taskScheduler = CreateSystem<TaskScheduler>();
-            m_taskSchedulerNew = CreateSystem<TaskSchedulerNew>();
             m_fileSystem = CreateSystem<FileSystem>();
             m_stateManager = CreateSystem<StateManager>();
             m_resourcePool = CreateSystem<ResourcePool>();
@@ -567,18 +563,6 @@ namespace ChilliSource
         const TaskScheduler* Application::GetTaskScheduler() const
         {
             return m_taskScheduler;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        TaskSchedulerNew* Application::GetTaskSchedulerNew()
-        {
-            return m_taskSchedulerNew;
-        }
-        //-----------------------------------------------------
-        //-----------------------------------------------------
-        const TaskSchedulerNew* Application::GetTaskSchedulerNew() const
-        {
-            return m_taskSchedulerNew;
         }
         //-----------------------------------------------------
         //-----------------------------------------------------

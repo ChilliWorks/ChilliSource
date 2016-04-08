@@ -77,7 +77,10 @@ namespace ChilliSource
                     out_resource->SetLoadState(Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+						Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                        {
+                            in_delegate(out_resource);
+                        });
                     }
                     return;
                 }
@@ -129,7 +132,10 @@ namespace ChilliSource
                 
                 if(in_delegate != nullptr)
                 {
-					Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                    {
+                        in_delegate(out_resource);
+                    });
                 }
             }
         }
@@ -169,8 +175,10 @@ namespace ChilliSource
         //----------------------------------------------------
 		void ETC1ImageProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
         {
-			auto task = std::bind(LoadImage, in_storageLocation, in_filepath, in_delegate, out_resource);
-			Application::Get()->GetTaskScheduler()->ScheduleTask(task);
+            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
+            {
+                LoadImage(in_storageLocation, in_filepath, in_delegate, out_resource);
+            });
         }
     }
 }

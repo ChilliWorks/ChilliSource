@@ -70,8 +70,11 @@ void Java_com_chilliworks_chillisource_input_TextEntryNativeInterface_nativeOnTe
 	if (textEntryJI != nullptr)
 	{
 		std::string text = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_text);
-		auto task = std::bind(&CSBackend::Android::TextEntryJavaInterface::OnTextChanged, textEntryJI.get(), text);
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
+
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		{
+			textEntryJI->OnTextChanged(text);
+		});
 	}
 	in_env->DeleteLocalRef(in_text);
 }
@@ -82,8 +85,10 @@ void Java_com_chilliworks_chillisource_input_TextEntryNativeInterface_nativeOnKe
 	CSBackend::Android::TextEntryJavaInterfaceSPtr textEntryJI = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::TextEntryJavaInterface>();
 	if (textEntryJI != nullptr)
 	{
-		auto task = std::bind(&CSBackend::Android::TextEntryJavaInterface::OnKeyboardDismissed, textEntryJI.get());
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		{
+			textEntryJI->OnKeyboardDismissed();
+		});
 	}
 }
 

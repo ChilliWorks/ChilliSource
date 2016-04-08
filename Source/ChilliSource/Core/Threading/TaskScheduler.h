@@ -1,11 +1,11 @@
 //
 //  TaskScheduler.h
-//  Chilli Source
-//  Created by Scott Downie on 09/08/2011.
+//  ChilliSource
+//  Created by Ian Copland on 05/04/2016.
 //
 //  The MIT License (MIT)
 //
-//  Copyright (c) 2011 Tag Games Limited
+//  Copyright (c) 2016 Tag Games Limited
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -31,109 +31,152 @@
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
-#include <ChilliSource/Core/Threading/ThreadPool.h>
+#include <ChilliSource/Core/Threading/MainThreadTaskPool.h>
+#include <ChilliSource/Core/Threading/TaskPool.h>
+#include <ChilliSource/Core/Threading/TaskType.h>
 
 namespace ChilliSource
 {
     namespace Core
     {
-		//-------------------------------------------------
-		/// System for scheduling tasks to be executed
-		/// asynchronously by the thread pool or on
-		/// the main thread.
-		///
-		/// @author S Downie
-		//-------------------------------------------------
+        //------------------------------------------------------------------------------
+        /// A system for executing task on the main thread or background threads.
+        /// Several types of task are provided, each of which are processed in different
+        /// ways. See TaskType.h for more information on these types.
+        ///
+        /// The task scheduler can be used during the OnInit and OnDestroy application
+        /// lifecycle events.
+        ///
+        /// This is thread-safe.
+        ///
+        /// @author Ian Copland
+        //------------------------------------------------------------------------------
         class TaskScheduler final : public AppSystem
         {
         public:
-        
-			CS_DECLARE_NAMEDTYPE(TaskScheduler);
-
-            typedef std::function<void()> GenericTaskType;
-
-			//------------------------------------------------
-			/// @author S Downie
-			///
-			/// @param Interface Id
-			///
-			/// @return Whether this object is of the given type
-			//------------------------------------------------
-			bool IsA(InterfaceIDType in_interfaceId) const override;
-            //------------------------------------------------
-            /// The task will be placed into the
-            /// task queue and be performed when a thread
-            /// becomes available.
-			///
-			/// @author S Downie
+            CS_DECLARE_NAMEDTYPE(TaskScheduler);
+            //------------------------------------------------------------------------------
+            /// A delegate describing a single task. A context is provided which provides
+            /// information on the task and provides the ability to launch child tasks or
+            /// yeild.
             ///
-            /// @param Task
-            //------------------------------------------------
-			void ScheduleTask(const GenericTaskType& in_task);
-            //----------------------------------------------------
-            /// Schedule a task to be executed by the main
-            /// thread
-			///
-			/// @author S Downie
-			///
-			/// @param Task
-            //----------------------------------------------------
-			void ScheduleMainThreadTask(const GenericTaskType& insTask);
-            //----------------------------------------------------
-            /// Execute any tasks that have been scehduled
-            /// for the main thread
-			///
-			/// @author S Downie
-            //----------------------------------------------------
-            void ExecuteMainThreadTasks();
-            //----------------------------------------------------
-            /// @author S Downie
+            /// @author Ian Copland
             ///
-            /// @return Whether the calling thread is the main
-            /// thread
-            //----------------------------------------------------
-            bool IsMainThread() const;
-
-		private:
-			friend class Application;
-			//-------------------------------------------------
-			/// Factory create method called by application
+            /// @param in_taskContext - The task context.
+            //------------------------------------------------------------------------------
+            using Task = std::function<void(const TaskContext& in_taskContext) noexcept>;
+            //------------------------------------------------------------------------------
+            /// Allows querying of whether or not this system implements the interface
+            /// described by the given interface Id. Typically this is not called directly
+            /// as the templated equivalent IsA<Interface>() is preferred.
             ///
-            /// @author S Downie
-			///
-			/// @return Ownership of new instance
-			//-------------------------------------------------
-			static TaskSchedulerUPtr Create();
-			//-------------------------------------------------
-			/// Private constructor to enforce use of create
-			/// method
-			///
-			/// @author S Downie
-			//-------------------------------------------------
-			TaskScheduler();
-			//-------------------------------------------------
-			/// Called when the system is created. Creates
-			/// the thread pool based on the set number of
-			/// threads.
-			///
-			/// @author S Downie
-			//-------------------------------------------------
-			void OnInit() override;
-			//-------------------------------------------------
-			/// Cleans up the task scheduler, joining all threads
-			/// and clearing all remaining tasks.
-			///
-			/// @author S Downie
-			//-------------------------------------------------
-			void Destroy();
+            /// @author Ian Copland
+            ///
+            /// @param in_interfaceId - The interface Id.
+            ///
+            /// @return Whether or not the interface is implemented.
+            //------------------------------------------------------------------------------
+            bool IsA(CSCore::InterfaceIDType in_interfaceId) const noexcept override;
+            //------------------------------------------------------------------------------
+            /// @author Ian Copland
+            ///
+            /// @return Whether or not the current thread is the main thread.
+            //------------------------------------------------------------------------------
+            bool IsMainThread() const noexcept;
+            //------------------------------------------------------------------------------
+            /// Schedules a single task which will be executed in a manner dependant on the
+            /// task type.
+            ///
+            /// A task context is provided for launching child tasks or yeilding.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_taskType - The type of task.
+            /// @param in_task - The task which should be scheduled.
+            //------------------------------------------------------------------------------
+            void ScheduleTask(TaskType in_taskType, const Task& in_task) noexcept;
+            //------------------------------------------------------------------------------
+            /// Schedules a batch of tasks which will be executed in a manner dependant on
+            /// the task type. Once all tasks have finished executing a completion task will
+            /// be scheduled.
+            ///
+            /// All tasks, including the completion task, will be of the same type.
+            ///
+            /// Task contexts are provided for launching child tasks or yeilding.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_taskType - The type of task.
+            /// @param in_tasks - The tasks which should be scheduled.
+            /// @param in_completionTask - [Optional] A task which is scheduled when the
+            /// other tasks have all completed.
+            //------------------------------------------------------------------------------
+            void ScheduleTasks(TaskType in_taskType, const std::vector<Task>& in_tasks, const Task& in_completionTask = nullptr) noexcept;
             
         private:
-        
-            ThreadPoolUPtr m_threadPool;
+            friend class Application;
+            //------------------------------------------------------------------------------
+            /// A factory method for creating new instances of the task scheduler.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @return The new instance of the system.
+            //------------------------------------------------------------------------------
+            static TaskSchedulerUPtr Create() noexcept;
+            //------------------------------------------------------------------------------
+            /// Constructor. Declared private to ensure the system is created through
+            /// Application::CreateSystem<TaskScheduler>().
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            TaskScheduler() noexcept;
+            //------------------------------------------------------------------------------
+            /// Executes all main thread tasks. Prior to running them, this will wait on all
+            /// game logic tasks completing.
+            ///
+            /// This must be called from the main thread.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void ExecuteMainThreadTasks() noexcept;
+            //------------------------------------------------------------------------------
+            /// Adds the given task to the large task pool. Once the task is complete then
+            /// this is called again for the next task in the file queue. If the file queue
+            /// is empty then flag indication whether or not file tasks are running is set
+            /// to false.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void StartNextFileTask(const Task& in_task) noexcept;
+            //------------------------------------------------------------------------------
+            /// Cleans up the Task Scheduler, joining on all existing threads and then
+            /// destroying them.
+            ///
+            /// This should be called prior to the Application OnDestroy lifecycle event is
+            /// sent to each system.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void Destroy() noexcept;
+            //------------------------------------------------------------------------------
+            /// Initialises the Task Scheduler, creating all threads.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            void OnInit() noexcept override;
             
-            std::recursive_mutex m_mainThreadQueueMutex;
-            std::vector<GenericTaskType> m_mainThreadTasks;
-
+            TaskPoolUPtr m_smallTaskPool;
+            TaskPoolUPtr m_largeTaskPool;
+            MainThreadTaskPoolUPtr m_mainThreadTaskPool;
+            
+            std::atomic<u32> m_gameLogicTaskCount;
+            std::condition_variable m_gameLogicTaskCondition;
+            std::mutex m_gameLogicTaskMutex;
+            
+            std::mutex m_fileTaskMutex;
+            bool m_isFileTaskRunning = false;
+            std::queue<Task> m_fileTaskQueue;
+            
 #ifndef CS_TARGETPLATFORM_ANDROID
             std::thread::id m_mainThreadId;
 #endif

@@ -64,16 +64,14 @@ void Java_com_chilliworks_chillisource_core_LocalNotificationNativeInterface_nat
 		in_environment->DeleteLocalRef(valueJava);
 	}
 
-	auto delegate = [=]()
+	CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
 	{
 		CSBackend::Android::LocalNotificationSystem* localNotificationSystem = CSCore::Application::Get()->GetSystem<CSBackend::Android::LocalNotificationSystem>();
 		if (localNotificationSystem != nullptr)
 		{
 			localNotificationSystem->OnNotificationReceived(static_cast<CSCore::Notification::ID>(in_id), params, static_cast<CSCore::Notification::Priority>(in_priority));
 		}
-	};
-
-	CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(delegate);
+	});
 }
 
 namespace CSBackend

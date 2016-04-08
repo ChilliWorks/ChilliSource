@@ -486,8 +486,10 @@ namespace ChilliSource
 			MeshSPtr meshResource = std::static_pointer_cast<Mesh>(out_resource);
 			
             //Load model as task
-			auto task = std::bind(&CSModelProvider::LoadMeshDataTask, this, in_location, in_filePath, in_delegate, meshResource);
-			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
+            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+            {
+                LoadMeshDataTask(in_location, in_filePath, in_delegate, meshResource);
+            });
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
@@ -498,16 +500,21 @@ namespace ChilliSource
 			if (false == ReadFile(in_location, in_filePath, descriptor))
 			{
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
-				Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
-				return;
+				Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                {
+                    in_delegate(out_resource);
+                });
 			}
 			
 			//start a main thread task for loading the data into a mesh
-			Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSModelProvider::BuildMesh, this, in_delegate, descriptor, out_resource));
+			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_large, [=](const Core::TaskContext&) noexcept
+            {
+                BuildMesh(in_delegate, descriptor, out_resource);
+            });
 		}
 		//----------------------------------------------------------------------------
 		//----------------------------------------------------------------------------
-		void CSModelProvider::BuildMesh(const AsyncLoadDelegate& in_delegate, MeshDescriptor& out_meshDesc, const MeshSPtr& out_resource)
+		void CSModelProvider::BuildMesh(const AsyncLoadDelegate& in_delegate, const MeshDescriptor& out_meshDesc, const MeshSPtr& out_resource)
 		{
 			bool success = out_resource->Build(out_meshDesc);
 

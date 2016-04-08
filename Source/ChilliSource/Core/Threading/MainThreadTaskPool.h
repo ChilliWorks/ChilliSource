@@ -76,7 +76,10 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             void Add(const Task& in_task) noexcept;
             //------------------------------------------------------------------------------
-            /// Performs all tasks in the task pool.
+            /// Performs all tasks in the task pool. The task queue is copied locally and
+			/// cleared before processing all tasks. This means that any tasks queued while
+			/// performing main thread tasks will be perfomed during the next call to
+			/// PerformTasks() rather than the current one.
             ///
             /// This must be called from the main thread.
             ///
@@ -84,26 +87,8 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             void PerformTasks() noexcept;
             
-        private:
-            //------------------------------------------------------------------------------
-            /// Tries to get the next task from the local task queue. If the queue is empty
-            /// it will take all tasks from the global queue. If the queue is still empty it
-            /// will return a failure.
-            ///
-            /// This must be called on the main thread.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param out_task - [Out] The output task.
-            ///
-            /// @return Whether or not a task was successfully retreived.
-            //------------------------------------------------------------------------------
-            bool TryGetNextTask(Task& out_task);
-            
-            std::deque<Task> m_globalTaskQueue;
-            std::mutex m_globalTaskQueueMutex;
-            
-            std::deque<Task> m_localTaskQueue;
+            std::deque<Task> m_taskQueue;
+            std::mutex m_taskQueueMutex;
         };
     }
 }

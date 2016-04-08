@@ -34,7 +34,8 @@
 #include <ChilliSource/Core/Base/Application.h>
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/Core/Math/MathUtils.h>
-#include <ChilliSource/Core/String.h>
+#include <ChilliSource/Core/String/StringUtils.h>
+#include <ChilliSource/Core/String/StringParser.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 #include <Windows.h>
@@ -175,8 +176,12 @@ namespace CSBackend
 			u32 readTimeoutMilliSecs = 60000;
 			::WinHttpSetTimeouts(in_requestHandle, connectTimeoutMilliSecs, connectTimeoutMilliSecs, readTimeoutMilliSecs, readTimeoutMilliSecs);
 
+			//TODO: This should probably be handled by a HTTP system specific thread, like the other platforms.
 			m_taskScheduler = CSCore::Application::Get()->GetTaskScheduler();
-			m_taskScheduler->ScheduleTask(std::bind(&HttpRequest::PollReadStream, this, in_requestHandle, in_connectionHandle, destroyingMutex));
+			m_taskScheduler->ScheduleTask(CSCore::TaskType::k_large, [=](const CSCore::TaskContext&)
+			{
+				PollReadStream(in_requestHandle, in_connectionHandle, destroyingMutex);
+			});
 		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------
@@ -325,7 +330,12 @@ namespace CSBackend
 					{
 						m_responseData = streamBuffer.str();
 						m_requestResult = CSNetworking::HttpResponse::Result::k_flushed;
-						m_taskScheduler->ScheduleMainThreadTask(std::bind(m_completionDelegate, this, CSNetworking::HttpResponse(m_requestResult, m_responseCode, m_responseData)));
+
+						m_taskScheduler->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+						{
+							m_completionDelegate(this, CSNetworking::HttpResponse(m_requestResult, m_responseCode, m_responseData));
+						});
+
 						streamBuffer.clear();
 						streamBuffer.str("");
 						totalBytesReadThisBlock = 0;

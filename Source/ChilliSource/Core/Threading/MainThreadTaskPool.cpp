@@ -29,7 +29,7 @@
 #include <ChilliSource/Core/Threading/MainThreadTaskPool.h>
 
 #include <ChilliSource/Core/Base/Application.h>
-#include <ChilliSource/Core/Threading/TaskSchedulerNew.h>
+#include <ChilliSource/Core/Threading/TaskScheduler.h>
 
 namespace ChilliSource
 {
@@ -39,44 +39,27 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void MainThreadTaskPool::Add(const Task& in_task) noexcept
         {
-            std::unique_lock<std::mutex> lock(m_globalTaskQueueMutex);
-            m_globalTaskQueue.push_back(in_task);
+            std::unique_lock<std::mutex> lock(m_taskQueueMutex);
+            m_taskQueue.push_back(in_task);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         void MainThreadTaskPool::PerformTasks() noexcept
         {
-            CS_ASSERT(Application::Get()->GetTaskSchedulerNew()->IsMainThread(), "Main thread tasks cannot be performed on a background thread.");
+            CS_ASSERT(Application::Get()->GetTaskScheduler()->IsMainThread(), "Main thread tasks cannot be performed on a background thread.");
             
-            Task task;
-            while (TryGetNextTask(task))
-            {
-                task();
-            }
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        bool MainThreadTaskPool::TryGetNextTask(Task& out_task)
-        {
-            CS_ASSERT(Application::Get()->GetTaskSchedulerNew()->IsMainThread(), "Main thread tasks cannot be performed on a background thread.");
-            
-            if (m_localTaskQueue.empty())
-            {
-                std::unique_lock<std::mutex> lock(m_globalTaskQueueMutex);
-                
-                m_localTaskQueue = m_globalTaskQueue;
-                m_globalTaskQueue.clear();
-            }
-            
-            if (m_localTaskQueue.empty())
-            {
-                return false;
-            }
-            
-            out_task = m_localTaskQueue.front();
-            m_localTaskQueue.pop_front();
-            
-            return true;
+			std::unique_lock<std::mutex> lock(m_taskQueueMutex);
+			auto localTaskQueue = m_taskQueue;
+			m_taskQueue.clear();
+			lock.unlock();
+
+			while (!localTaskQueue.empty())
+			{
+				auto task = std::move(localTaskQueue.front());
+				localTaskQueue.pop_front();
+
+				task();
+			}
         }
     }
 }

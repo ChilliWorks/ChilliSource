@@ -30,6 +30,10 @@
 
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 
+#ifdef CS_TARGETPLATFORM_ANDROID
+#   include <CSBackend/Platform/Android/Main/JNI/Core/Java/JavaVirtualMachine.h>
+#endif
+
 #include <sstream>
 
 namespace ChilliSource

@@ -81,7 +81,11 @@ void Java_com_chilliworks_chillisource_networking_HttpRequest_onBufferFlushed(JN
 
 	CSBackend::Android::HttpRequest* httpRequest = CSBackend::Android::BoxedPointer::Unbox<CSBackend::Android::HttpRequest>(javaBoxedPointer.get());
 	std::string data = CSBackend::Android::JavaUtils::CreateSTDStringFromJByteArray(in_data, in_dataLength);
-	CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::HttpRequest::OnFlushed, httpRequest, data, (u32)in_responseCode));
+
+	CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+	{
+		httpRequest->OnFlushed(data, (u32)in_responseCode);
+	});
 }
 //-----------------------------------------------------------------------
 //-----------------------------------------------------------------------
@@ -91,7 +95,11 @@ void Java_com_chilliworks_chillisource_networking_HttpRequest_onComplete(JNIEnv*
 
 	CSBackend::Android::HttpRequest* httpRequest = CSBackend::Android::BoxedPointer::Unbox<CSBackend::Android::HttpRequest>(javaBoxedPointer.get());
 	std::string data = CSBackend::Android::JavaUtils::CreateSTDStringFromJByteArray(in_data, in_dataLength);
-	CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::HttpRequest::OnComplete, httpRequest, (u32)in_resultCode, data, (u32)in_responseCode));
+
+	CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+	{
+		httpRequest->OnComplete((u32)in_resultCode, data, (u32)in_responseCode);
+	});
 }
 
 namespace CSBackend

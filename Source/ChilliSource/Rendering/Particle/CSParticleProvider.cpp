@@ -418,7 +418,10 @@ namespace ChilliSource
 				if (Core::JsonUtils::ReadJson(in_storageLocation, in_filePath, jsonRoot) == false)
 				{
 					out_particleEffect->SetLoadState(Core::Resource::LoadState::k_failed);
-					Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_particleEffect));
+                    Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                    {
+                        in_delegate(out_particleEffect);
+                    });
 					return;
 				}
 
@@ -431,7 +434,10 @@ namespace ChilliSource
 						ReadAffectorDefsAsync(jsonRoot, in_affectorDefFactory, out_particleEffect, [=]()
 						{
 							out_particleEffect->SetLoadState(Core::Resource::LoadState::k_loaded);
-							Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_particleEffect));
+                            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                            {
+                                in_delegate(out_particleEffect);
+                            });
 						});
 					});
 				});
@@ -486,7 +492,10 @@ namespace ChilliSource
 			CS_ASSERT(in_delegate != nullptr, "Async load delegate cannot be null.");
 
 			ParticleEffectSPtr particleEffect = std::static_pointer_cast<ParticleEffect>(out_resource);
-			Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(&LoadCSParticleAsync, in_location, in_filePath, m_drawableDefFactory, m_emitterDefFactory, m_affectorDefFactory, in_delegate, particleEffect));
+            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+            {
+                LoadCSParticleAsync(in_location, in_filePath, m_drawableDefFactory, m_emitterDefFactory, m_affectorDefFactory, in_delegate, particleEffect);
+            });
 		}
 		//------------------------------------------------------------------
 		//------------------------------------------------------------------

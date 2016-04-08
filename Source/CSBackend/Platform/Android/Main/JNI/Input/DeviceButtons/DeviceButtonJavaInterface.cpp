@@ -59,8 +59,10 @@ void Java_com_chilliworks_chillisource_input_DeviceButtonNativeInterface_onTrigg
 	CSBackend::Android::DeviceButtonJavaInterfaceSPtr javaInterface = CSBackend::Android::JavaInterfaceManager::GetSingletonPtr()->GetJavaInterface<CSBackend::Android::DeviceButtonJavaInterface>();
 	if (javaInterface != nullptr)
 	{
-		auto task = std::bind(&CSBackend::Android::DeviceButtonJavaInterface::OnTriggered, javaInterface.get(), in_buttonPressed);
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		{
+			javaInterface->OnTriggered(in_buttonPressed);
+		});
 	}
 }
 

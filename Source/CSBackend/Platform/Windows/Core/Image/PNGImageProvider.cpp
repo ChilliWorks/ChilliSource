@@ -72,7 +72,10 @@ namespace CSBackend
 					imageResource->SetLoadState(CSCore::Resource::LoadState::k_failed);
 					if (in_delegate != nullptr)
 					{
-						CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+						CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+						{
+							in_delegate(out_resource);
+						});
 					}
 					return;
 				}
@@ -91,7 +94,10 @@ namespace CSBackend
 				imageResource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
 				if (in_delegate != nullptr)
 				{
-					CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+					CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+					{
+						in_delegate(out_resource);
+					});
 				}
 			}
 		}
@@ -125,8 +131,10 @@ namespace CSBackend
 		//----------------------------------------------------
 		void PNGImageProvider::CreateResourceFromFileAsync(CSCore::StorageLocation in_storageLocation, const std::string& in_filePath, const CSCore::IResourceOptionsBaseCSPtr& in_options, const CSCore::ResourceProvider::AsyncLoadDelegate& in_delegate, const CSCore::ResourceSPtr& out_resource)
 		{
-			auto task = std::bind(CreatePNGImageFromFile, in_storageLocation, in_filePath, in_delegate, out_resource);
-			CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
+			CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_file, [=](const CSCore::TaskContext&)
+			{
+				CreatePNGImageFromFile(in_storageLocation, in_filePath, in_delegate, out_resource);
+			});
 		}
 	}
 }

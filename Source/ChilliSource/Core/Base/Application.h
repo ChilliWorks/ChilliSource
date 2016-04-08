@@ -298,37 +298,25 @@ namespace ChilliSource
             //-----------------------------------------------------
             const TaggedFilePathResolver* GetTaggedFilePathResolver() const;
             //-----------------------------------------------------
-            /// @author S Downie
+            /// This is thread-safe as long as it is called between
+            /// the OnInit() and OnDestroy() applicationlifecycle
+            /// events, inclusive.
+            ///
+            /// @author Ian Copland
             ///
             /// @return A pointer to the task scheduler.
             //-----------------------------------------------------
             TaskScheduler* GetTaskScheduler();
             //-----------------------------------------------------
+            /// This is thread-safe as long as it is called between
+            /// the OnInit() and OnDestroy() applicationlifecycle
+            /// events, inclusive.
+            ///
             /// @author Ian Copland
             ///
             /// @return A const pointer to the task scheduler.
             //-----------------------------------------------------
             const TaskScheduler* GetTaskScheduler() const;
-            //-----------------------------------------------------
-            /// This is thread-safe as long as it is called between
-            /// the OnInit() and OnDestroy() applicationlifecycle
-            /// events, inclusive.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @return A pointer to the task scheduler.
-            //-----------------------------------------------------
-            TaskSchedulerNew* GetTaskSchedulerNew();
-            //-----------------------------------------------------
-            /// This is thread-safe as long as it is called between
-            /// the OnInit() and OnDestroy() applicationlifecycle
-            /// events, inclusive.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @return A const pointer to the task scheduler.
-            //-----------------------------------------------------
-            const TaskSchedulerNew* GetTaskSchedulerNew() const;
             //-----------------------------------------------------
             /// @author S Downie
             ///
@@ -535,7 +523,6 @@ namespace ChilliSource
             ResourcePool* m_resourcePool = nullptr;
             StateManager* m_stateManager = nullptr;
             TaskScheduler* m_taskScheduler = nullptr;
-            TaskSchedulerNew* m_taskSchedulerNew = nullptr;
             Screen* m_screen = nullptr;
 			Rendering::Renderer* m_renderer = nullptr;
             Rendering::RenderSystem* m_renderSystem = nullptr;

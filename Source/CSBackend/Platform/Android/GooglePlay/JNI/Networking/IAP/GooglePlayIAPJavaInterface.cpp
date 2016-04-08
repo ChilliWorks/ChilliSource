@@ -129,7 +129,10 @@ void Java_com_chilliworks_chillisource_networking_GooglePlayIAPNativeInterface_N
 			unformattedPrices.push_back(unformattedPrice);
 		}
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::GooglePlayIAPJavaInterface::OnProductDescriptionsRequestComplete, javaInterface.get(), products, currencyCodes, unformattedPrices));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		{
+			javaInterface->OnProductDescriptionsRequestComplete(products, currencyCodes, unformattedPrices);
+		});
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -144,7 +147,10 @@ void Java_com_chilliworks_chillisource_networking_GooglePlayIAPNativeInterface_N
 		transaction.m_transactionId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_transactionId);
 		transaction.m_receipt = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_receipt);
 
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::GooglePlayIAPJavaInterface::OnTransactionStatusUpdated, javaInterface.get(), in_result, transaction));
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		{
+			javaInterface->OnTransactionStatusUpdated(in_result, transaction);
+		});
 	}
 }
 //--------------------------------------------------------------------------------------
@@ -156,7 +162,11 @@ void Java_com_chilliworks_chillisource_networking_GooglePlayIAPNativeInterface_N
 	{
 		std::string productId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_productId);
 		std::string transactionId = CSBackend::Android::JavaUtils::CreateSTDStringFromJString(in_transactionId);
-		CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(&CSBackend::Android::GooglePlayIAPJavaInterface::OnTransactionClosed, javaInterface.get(), productId, transactionId, in_success));
+
+		CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&)
+		{
+			javaInterface->OnTransactionClosed(productId, transactionId, in_success);
+		});
 	}
 }
 

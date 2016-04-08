@@ -120,10 +120,10 @@ namespace ChilliSource
 			/// @author Ian Copland
 			///
             /// @param Delegate to callback on completion either success or failure
-			/// @param [Out] The MeshDescriptor used to build the mesh
+			/// @param The MeshDescriptor used to build the mesh
 			/// @param [Out] The mesh resource
 			//----------------------------------------------------------------------------
-			void BuildMesh(const AsyncLoadDelegate& in_delegate, MeshDescriptor& out_meshDesc, const MeshSPtr& out_resource);
+			void BuildMesh(const AsyncLoadDelegate& in_delegate, const MeshDescriptor& in_meshDesc, const MeshSPtr& out_resource);
 		};
 	}
 }

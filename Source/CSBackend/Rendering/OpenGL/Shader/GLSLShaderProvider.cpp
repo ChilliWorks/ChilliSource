@@ -141,7 +141,10 @@ namespace CSBackend
                     out_shader->SetLoadState(CSCore::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
+                        CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&) noexcept
+                        {
+                            in_delegate(out_shader);
+                        });
                     }
                     return;
                 }
@@ -157,7 +160,10 @@ namespace CSBackend
                     out_shader->SetLoadState(CSCore::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
+                        CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&) noexcept
+                        {
+                            in_delegate(out_shader);
+                        });
                     }
                     return;
                 }
@@ -169,7 +175,10 @@ namespace CSBackend
                     out_shader->SetLoadState(CSCore::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
+                        CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&) noexcept
+                        {
+                            in_delegate(out_shader);
+                        });
                     }
                     return;
                 }
@@ -181,7 +190,10 @@ namespace CSBackend
                     out_shader->SetLoadState(CSCore::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-						CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_shader));
+                        CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&) noexcept
+                        {
+                            in_delegate(out_shader);
+                        });
                     }
                     return;
                 }
@@ -194,14 +206,12 @@ namespace CSBackend
                 else
                 {
                     //All GL related tasks must be performed on the main thread.
-					auto buildTask = [](const std::string& in_vs, const std::string& in_ps, const CSCore::ResourceProvider::AsyncLoadDelegate& in_completionDelegate, const ShaderSPtr& out_shaderResource)
+                    CSCore::Application::Get()->GetTaskScheduler()->ScheduleTask(CSCore::TaskType::k_mainThread, [=](const CSCore::TaskContext&) noexcept
                     {
-                        out_shaderResource->Build(in_vs, in_ps);
-                        out_shaderResource->SetLoadState(CSCore::Resource::LoadState::k_loaded);
-                        in_completionDelegate(out_shaderResource);
-                    };
-					auto task = std::bind(buildTask, vsChunk, fsChunk, in_delegate, out_shader);
-					CSCore::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
+                        out_shader->Build(vsChunk, fsChunk);
+                        out_shader->SetLoadState(CSCore::Resource::LoadState::k_loaded);
+                        in_delegate(out_shader);
+                    });
                 }
             }
         }

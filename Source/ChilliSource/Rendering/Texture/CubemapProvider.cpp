@@ -178,8 +178,10 @@ namespace ChilliSource
         //----------------------------------------------------------------------------
 		void CubemapProvider::CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource)
         {
-            auto task = std::bind(&CubemapProvider::LoadCubemap, this, in_location, in_filePath, in_options, in_delegate, out_resource);
-            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(task);
+            Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_file, [=](const Core::TaskContext&) noexcept
+            {
+                LoadCubemap(in_location, in_filePath, in_options, in_delegate, out_resource);
+            });
         }
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------
@@ -193,7 +195,10 @@ namespace ChilliSource
                 out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
-                    Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                    Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                    {
+                        in_delegate(out_resource);
+                    });
                 }
                 return;
             }
@@ -215,7 +220,10 @@ namespace ChilliSource
                     out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                        {
+                            in_delegate(out_resource);
+                        });
                     }
                     return;
                 }
@@ -227,7 +235,10 @@ namespace ChilliSource
                     out_resource->SetLoadState(Core::Resource::LoadState::k_failed);
                     if(in_delegate != nullptr)
                     {
-                        Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(std::bind(in_delegate, out_resource));
+                        Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
+                        {
+                            in_delegate(out_resource);
+                        });
                     }
                     return;
                 }
@@ -255,7 +266,7 @@ namespace ChilliSource
             }
             else
             {
-				auto task([descs, imageDataContainer, in_options, in_delegate, out_resource]()
+                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_mainThread, [=](const Core::TaskContext&) noexcept
                 {
                     Cubemap* cubemap = (Cubemap*)out_resource.get();
                     const CubemapResourceOptions* options = (const CubemapResourceOptions*)in_options.get();
@@ -265,7 +276,6 @@ namespace ChilliSource
                     out_resource->SetLoadState(Core::Resource::LoadState::k_loaded);
                     in_delegate(out_resource);
                 });
-                Core::Application::Get()->GetTaskScheduler()->ScheduleMainThreadTask(task);
             }
         }
 	}

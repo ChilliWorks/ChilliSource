@@ -590,7 +590,10 @@ namespace ChilliSource
 				desc.m_entityScale = GetEntity()->GetTransform().GetWorldScale();
 				desc.m_entityOrientation = GetEntity()->GetTransform().GetWorldOrientation();
 				desc.m_interpolateEmission = (m_firstFrame == false);
-				Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, desc));
+                Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_small, [=](const Core::TaskContext&) noexcept
+                {
+                    ParticleUpdateTask(desc);
+                });
 
 				m_firstFrame = false;
 				m_accumulatedDeltaTime = 0.0f;
@@ -623,7 +626,10 @@ namespace ChilliSource
 					desc.m_entityScale = GetEntity()->GetTransform().GetWorldScale();
 					desc.m_entityOrientation = GetEntity()->GetTransform().GetWorldOrientation();
 					desc.m_interpolateEmission = (m_firstFrame == false);
-					Core::Application::Get()->GetTaskScheduler()->ScheduleTask(std::bind(ParticleUpdateTask, desc));
+                    Core::Application::Get()->GetTaskScheduler()->ScheduleTask(Core::TaskType::k_small, [=](const Core::TaskContext&) noexcept
+                    {
+                        ParticleUpdateTask(desc);
+                    });
 
 					m_firstFrame = false;
 					m_accumulatedDeltaTime = 0.0f;

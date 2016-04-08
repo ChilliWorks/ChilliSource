@@ -58,16 +58,16 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTask(const TaskSchedulerNew::Task& in_task) const noexcept
+        void TaskContext::ProcessChildTask(const TaskScheduler::Task& in_task) const noexcept
         {
-            std::vector<TaskSchedulerNew::Task> tasks;
+            std::vector<TaskScheduler::Task> tasks;
             tasks.push_back(in_task);
             
             ProcessChildTasks(tasks);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTasks(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept
+        void TaskContext::ProcessChildTasks(const std::vector<TaskScheduler::Task>& in_tasks) const noexcept
         {
             if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)
             {
@@ -80,19 +80,19 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTasksInParallel(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept
+        void TaskContext::ProcessChildTasksInParallel(const std::vector<TaskScheduler::Task>& in_tasks) const noexcept
         {
             CS_ASSERT(m_taskType == TaskType::k_small || m_taskType == TaskType::k_large || m_taskType == TaskType::k_gameLogic, "Invalid task type.");
             
-            auto taskScheduler = Application::Get()->GetTaskSchedulerNew();
+            auto taskScheduler = Application::Get()->GetTaskScheduler();
             
             //TODO: These should be allocated from a pool to reduce fragmentation.
-            std::atomic<int> taskCount(in_tasks.size());
+            std::atomic<u32> taskCount(u32(in_tasks.size()));
             std::atomic<bool> finished(false);
             
             for (const auto& task : in_tasks)
             {
-                taskScheduler->ScheduleTask(m_taskType, [=, &taskCount, &finished](const TaskContext&)
+                taskScheduler->ScheduleTask(m_taskType, [=, &taskCount, &finished](const TaskContext&) noexcept
                 {
                     task(*this);
 
@@ -114,7 +114,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTasksInSeries(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept
+        void TaskContext::ProcessChildTasksInSeries(const std::vector<TaskScheduler::Task>& in_tasks) const noexcept
         {
             CS_ASSERT(m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file, "Invalid task type.");
             

@@ -77,8 +77,6 @@
 		8158F68C1C89D2AD00B13109 /* ToString.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2D11C89D2AD00B13109 /* ToString.cpp */; };
 		8158F68D1C89D2AD00B13109 /* UTF8StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2D31C89D2AD00B13109 /* UTF8StringUtils.cpp */; };
 		8158F68E1C89D2AD00B13109 /* StateSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2D81C89D2AD00B13109 /* StateSystem.cpp */; };
-		8158F68F1C89D2AD00B13109 /* TaskScheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2DC1C89D2AD00B13109 /* TaskScheduler.cpp */; };
-		8158F6901C89D2AD00B13109 /* ThreadPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2DE1C89D2AD00B13109 /* ThreadPool.cpp */; };
 		8158F6911C89D2AD00B13109 /* CoreTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2E21C89D2AD00B13109 /* CoreTimer.cpp */; };
 		8158F6921C89D2AD00B13109 /* PerformanceTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2E41C89D2AD00B13109 /* PerformanceTimer.cpp */; };
 		8158F6931C89D2AD00B13109 /* Timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F2E61C89D2AD00B13109 /* Timer.cpp */; };
@@ -289,7 +287,7 @@
 		8158F8001C89D2AD00B13109 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6461C89D2AD00B13109 /* Texture.cpp */; };
 		8158F8011C89D2AD00B13109 /* TextureUnitSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F6481C89D2AD00B13109 /* TextureUnitSystem.cpp */; };
 		8164A4691CB69C86002A95B0 /* MainThreadTaskPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8164A4671CB69C86002A95B0 /* MainThreadTaskPool.cpp */; };
-		81C58C221CB3C57000EA58A0 /* TaskSchedulerNew.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C201CB3C57000EA58A0 /* TaskSchedulerNew.cpp */; };
+		81C58C221CB3C57000EA58A0 /* TaskScheduler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */; };
 		81C58C251CB3D1FB00EA58A0 /* TaskContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 81C58C231CB3D1FB00EA58A0 /* TaskContext.cpp */; };
 		81C7FF8B1C89DD0600D306F9 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE811C89DD0500D306F9 /* FacebookSDK.framework */; };
 		81C7FF8C1C89DD0600D306F9 /* libCSBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C7FE821C89DD0500D306F9 /* libCSBase.a */; };
@@ -541,10 +539,6 @@
 		8158F2D81C89D2AD00B13109 /* StateSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StateSystem.cpp; sourceTree = "<group>"; };
 		8158F2D91C89D2AD00B13109 /* StateSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StateSystem.h; sourceTree = "<group>"; };
 		8158F2DA1C89D2AD00B13109 /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
-		8158F2DC1C89D2AD00B13109 /* TaskScheduler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskScheduler.cpp; sourceTree = "<group>"; };
-		8158F2DD1C89D2AD00B13109 /* TaskScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskScheduler.h; sourceTree = "<group>"; };
-		8158F2DE1C89D2AD00B13109 /* ThreadPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadPool.cpp; sourceTree = "<group>"; };
-		8158F2DF1C89D2AD00B13109 /* ThreadPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ThreadPool.h; sourceTree = "<group>"; };
 		8158F2E01C89D2AD00B13109 /* Threading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Threading.h; sourceTree = "<group>"; };
 		8158F2E21C89D2AD00B13109 /* CoreTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CoreTimer.cpp; sourceTree = "<group>"; };
 		8158F2E31C89D2AD00B13109 /* CoreTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreTimer.h; sourceTree = "<group>"; };
@@ -1036,8 +1030,8 @@
 		8158F6491C89D2AD00B13109 /* TextureUnitSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureUnitSystem.h; sourceTree = "<group>"; };
 		8164A4671CB69C86002A95B0 /* MainThreadTaskPool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainThreadTaskPool.cpp; sourceTree = "<group>"; };
 		8164A4681CB69C86002A95B0 /* MainThreadTaskPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainThreadTaskPool.h; sourceTree = "<group>"; };
-		81C58C201CB3C57000EA58A0 /* TaskSchedulerNew.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskSchedulerNew.cpp; sourceTree = "<group>"; };
-		81C58C211CB3C57000EA58A0 /* TaskSchedulerNew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskSchedulerNew.h; sourceTree = "<group>"; };
+		81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskScheduler.cpp; sourceTree = "<group>"; };
+		81C58C211CB3C57000EA58A0 /* TaskScheduler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskScheduler.h; sourceTree = "<group>"; };
 		81C58C231CB3D1FB00EA58A0 /* TaskContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskContext.cpp; sourceTree = "<group>"; };
 		81C58C241CB3D1FB00EA58A0 /* TaskContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskContext.h; sourceTree = "<group>"; };
 		81C58C261CB3D37900EA58A0 /* TaskType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TaskType.h; sourceTree = "<group>"; };
@@ -1603,13 +1597,9 @@
 				81C58C241CB3D1FB00EA58A0 /* TaskContext.h */,
 				814E92B31CB54F76004D6ADE /* TaskPool.cpp */,
 				814E92B41CB54F76004D6ADE /* TaskPool.h */,
-				8158F2DC1C89D2AD00B13109 /* TaskScheduler.cpp */,
-				8158F2DD1C89D2AD00B13109 /* TaskScheduler.h */,
-				81C58C201CB3C57000EA58A0 /* TaskSchedulerNew.cpp */,
-				81C58C211CB3C57000EA58A0 /* TaskSchedulerNew.h */,
+				81C58C201CB3C57000EA58A0 /* TaskScheduler.cpp */,
+				81C58C211CB3C57000EA58A0 /* TaskScheduler.h */,
 				81C58C261CB3D37900EA58A0 /* TaskType.h */,
-				8158F2DE1C89D2AD00B13109 /* ThreadPool.cpp */,
-				8158F2DF1C89D2AD00B13109 /* ThreadPool.h */,
 			);
 			path = Threading;
 			sourceTree = "<group>";
@@ -3064,7 +3054,6 @@
 				8158F7D11C89D2AD00B13109 /* PointerSystem.mm in Sources */,
 				8158F6921C89D2AD00B13109 /* PerformanceTimer.cpp in Sources */,
 				8158F6C81C89D2AD00B13109 /* CSModelProvider.cpp in Sources */,
-				8158F68F1C89D2AD00B13109 /* TaskScheduler.cpp in Sources */,
 				8158F64B1C89D2AD00B13109 /* CkBank.cpp in Sources */,
 				8158F6831C89D2AD00B13109 /* ResourcePool.cpp in Sources */,
 				8158F7E51C89D2AD00B13109 /* WebViewDelegate.mm in Sources */,
@@ -3129,7 +3118,6 @@
 				8158F6EB1C89D2AD00B13109 /* ParticleEmitterDefFactory.cpp in Sources */,
 				8158F6781C89D2AD00B13109 /* ShapeIntersection.cpp in Sources */,
 				8158F65A1C89D2AD00B13109 /* ParamDictionarySerialiser.cpp in Sources */,
-				8158F6901C89D2AD00B13109 /* ThreadPool.cpp in Sources */,
 				8158F7FD1C89D2AD00B13109 /* GLSLShaderProvider.cpp in Sources */,
 				8158F6E71C89D2AD00B13109 /* ConeParticleEmitter.cpp in Sources */,
 				8158F6CE1C89D2AD00B13109 /* SkinnedAnimationGroup.cpp in Sources */,
@@ -3141,7 +3129,7 @@
 				8158F6571C89D2AD00B13109 /* Screen.cpp in Sources */,
 				8158F70A1C89D2AD00B13109 /* Widget.cpp in Sources */,
 				8158F6761C89D2AD00B13109 /* LocalisedText.cpp in Sources */,
-				81C58C221CB3C57000EA58A0 /* TaskSchedulerNew.cpp in Sources */,
+				81C58C221CB3C57000EA58A0 /* TaskScheduler.cpp in Sources */,
 				8158F6D31C89D2AD00B13109 /* AngularAccelerationParticleAffector.cpp in Sources */,
 				8158F7DA1C89D2AD00B13109 /* EmailComposer.mm in Sources */,
 				8158F7FC1C89D2AD00B13109 /* RenderTarget.cpp in Sources */,
