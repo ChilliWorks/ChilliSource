@@ -74,17 +74,6 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             void ProcessChildTask(const TaskSchedulerNew::Task& in_task) const noexcept;
             //------------------------------------------------------------------------------
-            /// Schedules the given child simple task and yields until it has completed.
-            /// Child tasks must be of the same type as the parent.
-            ///
-            /// Child simple tasks are not provided with a task context.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_task - The task which should be processed.
-            //------------------------------------------------------------------------------
-            void ProcessChildTask(const TaskSchedulerNew::SimpleTask& in_task) const noexcept;
-            //------------------------------------------------------------------------------
             /// Schedules the given child tasks and yields until they have completed. Child
             /// tasks must be of the same type as the parent.
             ///
@@ -95,17 +84,6 @@ namespace ChilliSource
             /// @param in_tasks - The tasks which should be processed.
             //------------------------------------------------------------------------------
             void ProcessChildTasks(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept;
-            //------------------------------------------------------------------------------
-            /// Schedules the given child simple tasks and yields until they have completed.
-            /// Child tasks must be of the same type as the parent.
-            ///
-            /// Child simple tasks are not provided with a task context.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_tasks - The tasks which should be processed.
-            //------------------------------------------------------------------------------
-            void ProcessChildTasks(const std::vector<TaskSchedulerNew::SimpleTask>& in_tasks) const noexcept;
             
         private:
             //------------------------------------------------------------------------------

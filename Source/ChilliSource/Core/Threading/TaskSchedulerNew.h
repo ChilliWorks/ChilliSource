@@ -65,12 +65,6 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             using Task = std::function<void(const TaskContext& in_taskContext) noexcept>;
             //------------------------------------------------------------------------------
-            /// A delegate describing a single task with no context.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------------------
-            using SimpleTask = std::function<void() noexcept>;
-            //------------------------------------------------------------------------------
             /// Allows querying of whether or not this system implements the interface
             /// described by the given interface Id. Typically this is not called directly
             /// as the templated equivalent IsA<Interface>() is preferred.
@@ -101,19 +95,6 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             void ScheduleTask(TaskType in_taskType, const Task& in_task) noexcept;
             //------------------------------------------------------------------------------
-            /// A convenience method for scheduling a single simple task which will be
-            /// executed in a manner dependant on the task type.
-            ///
-            /// A simple task doesn't provide a task context for scheduling children or
-            /// yeilding.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_taskType - The type of task.
-            /// @param in_task - The simple task which should be scheduled.
-            //------------------------------------------------------------------------------
-            void ScheduleTask(TaskType in_taskType, const SimpleTask& in_task) noexcept;
-            //------------------------------------------------------------------------------
             /// Schedules a batch of tasks which will be executed in a manner dependant on
             /// the task type. Once all tasks have finished executing a completion task will
             /// be scheduled.
@@ -130,28 +111,9 @@ namespace ChilliSource
             /// other tasks have all completed.
             //------------------------------------------------------------------------------
             void ScheduleTasks(TaskType in_taskType, const std::vector<Task>& in_tasks, const Task& in_completionTask = nullptr) noexcept;
-            //------------------------------------------------------------------------------
-            /// A convience method for scheduling a batch of simple tasks which will be
-            /// executed in a manner dependant on the task type. Once all tasks have
-            /// finished executing a completion task will be scheduled.
-            ///
-            /// All tasks, including the completion task, will be of the same type.
-            ///
-            /// A simple task doesn't provide a task context for scheduling children or
-            /// yeilding.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_taskType - The type of task.
-            /// @param in_tasks - The tasks which should be scheduled.
-            /// @param in_completionTask - [Optional] A task which is scheduled when the
-            /// other tasks have all completed.
-            //------------------------------------------------------------------------------
-            void ScheduleTasks(TaskType in_taskType, const std::vector<SimpleTask>& in_tasks, const SimpleTask& in_completionTask = nullptr) noexcept;
             
         private:
             friend class Application;
-            friend class TaskContext;
             //------------------------------------------------------------------------------
             /// A factory method for creating new instances of the task scheduler.
             ///

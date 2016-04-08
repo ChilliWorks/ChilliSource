@@ -67,15 +67,6 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTask(const TaskSchedulerNew::SimpleTask& in_task) const noexcept
-        {
-            ProcessChildTask([=](const TaskContext&)
-            {
-                in_task();
-            });
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
         void TaskContext::ProcessChildTasks(const std::vector<TaskSchedulerNew::Task>& in_tasks) const noexcept
         {
             if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)
@@ -86,22 +77,6 @@ namespace ChilliSource
             {
                 ProcessChildTasksInParallel(in_tasks);
             }
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTasks(const std::vector<TaskSchedulerNew::SimpleTask>& in_tasks) const noexcept
-        {
-            std::vector<TaskSchedulerNew::Task> nonSimpleTasks;
-            
-            for (const auto& simpleTask : in_tasks)
-            {
-                nonSimpleTasks.push_back([=](const TaskContext&)
-                {
-                    simpleTask();
-                });
-            }
-
-            ProcessChildTasks(nonSimpleTasks);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------

@@ -127,15 +127,6 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskSchedulerNew::ScheduleTask(TaskType in_taskType, const SimpleTask& in_task) noexcept
-        {
-            ScheduleTask(in_taskType, [=](const TaskContext&)
-            {
-                in_task();
-            });
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
         void TaskSchedulerNew::ScheduleTasks(TaskType in_taskType, const std::vector<Task>& in_tasks, const Task& in_completionTask) noexcept
         {
             //TODO: Ideally this should be allocated from a pool.
@@ -153,31 +144,6 @@ namespace ChilliSource
                     }
                 });
             }
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TaskSchedulerNew::ScheduleTasks(TaskType in_taskType, const std::vector<SimpleTask>& in_tasks, const SimpleTask& in_completionTask) noexcept
-        {
-            std::vector<Task> nonSimpleTasks;
-            
-            for (const auto& simpleTask : in_tasks)
-            {
-                nonSimpleTasks.push_back([=](const TaskContext&)
-                {
-                    simpleTask();
-                });
-            }
-            
-            Task nonSimpleCompletionTask = nullptr;
-            if (in_completionTask)
-            {
-                nonSimpleCompletionTask = [=](const TaskContext&)
-                {
-                    in_completionTask();
-                };
-            }
-            
-            ScheduleTasks(in_taskType, nonSimpleTasks, nonSimpleCompletionTask);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
