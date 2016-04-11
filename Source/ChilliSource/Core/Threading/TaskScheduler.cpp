@@ -189,10 +189,10 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void TaskScheduler::OnInit() noexcept
         {
-            Device* device = Core::Application::Get()->GetSystem<Device>();
-            
             constexpr s32 k_minThreadsPerPool = 2;
             constexpr s32 k_namedThreads = 1; //The main thread.
+            
+            Device* device = Core::Application::Get()->GetSystem<Device>();
             
             s32 numFreeCores = s32(device->GetNumberOfCPUCores()) - k_namedThreads;
             s32 threadsPerPool = std::max(k_minThreadsPerPool, numFreeCores);

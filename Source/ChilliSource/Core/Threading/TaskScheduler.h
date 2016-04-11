@@ -83,7 +83,7 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @param in_taskType - The type of task.
-            /// @param in_task - The task which should be scheduled.
+            /// @param in_task - The task to be scheduled.
             //------------------------------------------------------------------------------
             void ScheduleTask(TaskType in_taskType, const Task& in_task) noexcept;
             //------------------------------------------------------------------------------
@@ -98,7 +98,7 @@ namespace ChilliSource
             /// @author Ian Copland
             ///
             /// @param in_taskType - The type of task.
-            /// @param in_tasks - The tasks which should be scheduled.
+            /// @param in_tasks - The tasks to be scheduled.
             /// @param in_completionTask - [Optional] A task which is scheduled when the
             /// other tasks have all completed.
             //------------------------------------------------------------------------------
