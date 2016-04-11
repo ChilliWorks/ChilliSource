@@ -72,7 +72,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
-            /// @param in_task - The task which should be processed.
+            /// @param in_task - The task to be processed.
             //------------------------------------------------------------------------------
             void ProcessChildTask(const Task& in_task) const noexcept;
             //------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
-            /// @param in_tasks - The tasks which should be processed.
+            /// @param in_tasks - The tasks to be processed.
             //------------------------------------------------------------------------------
             void ProcessChildTasks(const std::vector<Task>& in_tasks) const noexcept;
             
@@ -96,7 +96,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
-            /// @param in_tasks - The tasks which should be processed.
+            /// @param in_tasks - The tasks to be processed.
             //------------------------------------------------------------------------------
             void ProcessChildTasksInParallel(const std::vector<Task>& in_tasks) const noexcept;
             //------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
-            /// @param in_tasks - The tasks which should be processed.
+            /// @param in_tasks - The tasks to be processed.
             //------------------------------------------------------------------------------
             void ProcessChildTasksInSeries(const std::vector<Task>& in_tasks) const noexcept;
             

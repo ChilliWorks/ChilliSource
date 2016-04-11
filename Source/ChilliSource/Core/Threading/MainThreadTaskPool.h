@@ -66,7 +66,7 @@ namespace ChilliSource
             ///
             /// @author Ian Copland
             ///
-            /// @param in_task - The task which should be added to the pool.
+            /// @param in_task - The task to be added to the pool.
             //------------------------------------------------------------------------------
             void Add(const Task& in_task) noexcept;
             //------------------------------------------------------------------------------
