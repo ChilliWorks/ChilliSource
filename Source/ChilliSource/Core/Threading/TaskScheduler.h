@@ -45,8 +45,8 @@ namespace ChilliSource
         /// Several types of task are provided, each of which are processed in different
         /// ways. See TaskType.h for more information on these types.
         ///
-        /// The task scheduler can be used during the OnInit and OnDestroy application
-        /// lifecycle events.
+        /// The task scheduler can be used during the application OnInit lifecycle event,
+		/// but it should not be used during the OnDestroy event.
         ///
         /// This is thread-safe.
         ///

@@ -129,7 +129,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void TaskScheduler::ScheduleTasks(TaskType in_taskType, const std::vector<Task>& in_tasks, const Task& in_completionTask) noexcept
         {
-            //TODO: Ideally this should be allocated from a pool.
+            //TODO: This should be allocated from a pool to reduce memory fragmentation.
             auto taskCount = std::make_shared<std::atomic<u32>>(u32(in_tasks.size()));
             
             for (const auto& task : in_tasks)
@@ -192,7 +192,7 @@ namespace ChilliSource
             Device* device = Core::Application::Get()->GetSystem<Device>();
             
             constexpr s32 k_minThreadsPerPool = 2;
-            constexpr s32 k_namedThreads = 2; //The main thread and the render thread.
+            constexpr s32 k_namedThreads = 1; //The main thread.
             
             s32 numFreeCores = s32(device->GetNumberOfCPUCores()) - k_namedThreads;
             s32 threadsPerPool = std::max(k_minThreadsPerPool, numFreeCores);

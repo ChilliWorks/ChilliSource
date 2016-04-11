@@ -38,8 +38,8 @@ namespace ChilliSource
     {
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        TaskContext::TaskContext(TaskType in_backgroundTaskType, TaskPool* in_taskPool) noexcept
-            : m_taskType(in_backgroundTaskType), m_taskPool(in_taskPool)
+        TaskContext::TaskContext(TaskType in_taskType, TaskPool* in_taskPool) noexcept
+            : m_taskType(in_taskType), m_taskPool(in_taskPool)
         {
             if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)
             {
@@ -47,7 +47,7 @@ namespace ChilliSource
             }
             else
             {
-                CS_ASSERT(m_taskPool, " task contexts should not have a task pool.");
+                CS_ASSERT(m_taskPool, "Small, large and game logic task contexts must have a task pool.");
             }
         }
         //------------------------------------------------------------------------------
@@ -86,7 +86,6 @@ namespace ChilliSource
             
             auto taskScheduler = Application::Get()->GetTaskScheduler();
             
-            //TODO: These should be allocated from a pool to reduce fragmentation.
             std::atomic<u32> taskCount(u32(in_tasks.size()));
             std::atomic<bool> finished(false);
             
