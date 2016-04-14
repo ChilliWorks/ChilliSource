@@ -219,6 +219,7 @@ public final class CSProjectGenerator
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/jni/Application.mk",
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/app/src/main/res/values/strings.xml",
 			"Projects/iOS/" + k_templateProjectName + ".xcodeproj/project.pbxproj",
+			"Projects/iOS/" + k_templateProjectName + ".xcodeproj/xcshareddata/xcschemes/" + k_templateProjectName + ".xcscheme",
 			"Projects/iOS/ProjectResources/Info.plist",
 			"Projects/Windows/" + k_templateProjectName + ".sln",
 			"Projects/Windows/" + k_templateProjectName + ".vcxproj",
@@ -236,6 +237,7 @@ public final class CSProjectGenerator
 		String[] filesToUpdateFileName = new String[]
 		{
 			"Projects/Android/" + k_templateProjectName.toLowerCase() + "/" + k_templateProjectName.toLowerCase() + ".iml",
+			"Projects/iOS/" + k_templateProjectName + ".xcodeproj/xcshareddata/xcschemes/" + k_templateProjectName + ".xcscheme",
 			"Projects/Windows/" + k_templateProjectName + ".sln",
 			"Projects/Windows/" + k_templateProjectName + ".vcxproj",
 			"Projects/Windows/" + k_templateProjectName + ".vcxproj.filters"
