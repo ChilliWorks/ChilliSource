@@ -1,5 +1,5 @@
 ################################
-# Windows Ignore Files
+# Visual Studio Ignore Files
 ################################
 *.user
 *.sdf
@@ -7,14 +7,14 @@
 *.opendb
 
 ################################
-# iOS Ignore Files
+# XCode Ignore Files
 ################################
 xcuserdata/
 Projects/Libraries/CSBase/build
 *.xcscmblueprint
 
 ################################
-# Android Ignore Files
+# Android Studio Ignore Files
 ################################
 Projects/Android/chillisource/build
 Projects/Android/chillisource/src/main/libs/armeabi-v7a
