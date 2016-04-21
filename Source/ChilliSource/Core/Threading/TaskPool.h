@@ -35,7 +35,7 @@
 #include <atomic>
 #include <condition_variable>
 #include <mutex>
-#include <queue>
+#include <deque>
 #include <thread>
 
 namespace ChilliSource
@@ -75,15 +75,6 @@ namespace ChilliSource
             /// @return The number of threads that this task pool has to run tasks on.
             //------------------------------------------------------------------------------
             u32 GetNumThreads() const noexcept;
-            //------------------------------------------------------------------------------
-            /// Adds a task to the pool. The task will be executed as soon as a thread
-            /// becomes free.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_task - The task to be added to the pool.
-            //------------------------------------------------------------------------------
-            void AddTask(const Task& in_task) noexcept;
             //------------------------------------------------------------------------------
             /// Adds a series of tasks to the pool. These task will be executed as soon as a
             /// thread becomes free.
@@ -137,7 +128,7 @@ namespace ChilliSource
             std::vector<std::thread> m_threads;
             
             std::atomic<u32> m_taskCountHeuristic;
-            std::queue<Task> m_taskQueue;
+            std::deque<Task> m_taskQueue;
             std::mutex m_taskQueueMutex;
             std::condition_variable m_emptyWaitCondition;
             

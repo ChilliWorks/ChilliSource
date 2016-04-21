@@ -40,14 +40,13 @@ namespace ChilliSource
         MainThreadTaskPool::MainThreadTaskPool()
             : m_taskContext(CSCore::TaskType::k_mainThread)
         {
-            
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void MainThreadTaskPool::AddTask(const Task& in_task) noexcept
+        void MainThreadTaskPool::AddTasks(const std::vector<Task>& in_tasks) noexcept
         {
             std::unique_lock<std::mutex> lock(m_taskQueueMutex);
-            m_taskQueue.push_back(in_task);
+			m_taskQueue.insert(m_taskQueue.begin(), in_tasks.begin(), in_tasks.end());
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------

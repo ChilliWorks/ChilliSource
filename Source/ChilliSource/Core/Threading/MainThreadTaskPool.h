@@ -61,14 +61,14 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             MainThreadTaskPool();
             //------------------------------------------------------------------------------
-            /// Adds a task to the pool. The task will be executed when PerformTasks() is
-            /// called.
+            /// Adds a series of tasks to the pool. The tasks will be executed when 
+			/// PerformTasks() is called.
             ///
             /// @author Ian Copland
             ///
-            /// @param in_task - The task to be added to the pool.
+            /// @param in_tasks - The tasks to be added to the pool.
             //------------------------------------------------------------------------------
-            void AddTask(const Task& in_task) noexcept;
+            void AddTasks(const std::vector<Task>& in_tasks) noexcept;
             //------------------------------------------------------------------------------
             /// Performs all tasks in the task pool. The task queue is copied locally and
 			/// cleared before processing all tasks. This means that any tasks queued while

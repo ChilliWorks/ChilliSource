@@ -61,27 +61,10 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskPool::AddTask(const Task& in_task) noexcept
-        {
-            std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
-            
-            m_taskQueue.push(in_task);
-            ++m_taskCountHeuristic;
-            
-            queueLock.unlock();
-            
-            m_emptyWaitCondition.notify_one();
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
         void TaskPool::AddTasks(const std::vector<Task>& in_tasks) noexcept
         {
             std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
-            
-            for (const auto& task : in_tasks)
-            {
-                m_taskQueue.push(task);
-            }
+			m_taskQueue.insert(m_taskQueue.begin(), in_tasks.begin(), in_tasks.end());
             m_taskCountHeuristic += in_tasks.size();
             
             if (in_tasks.size() > 1)
@@ -141,7 +124,7 @@ namespace ChilliSource
             }
             
             Task task = m_taskQueue.front();
-            m_taskQueue.pop();
+            m_taskQueue.pop_front();
             --m_taskCountHeuristic;
                 
             queueLock.unlock();

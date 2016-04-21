@@ -78,7 +78,7 @@ namespace ChilliSource
             /// Schedules a single task which will be executed in a manner dependant on the
             /// task type.
             ///
-            /// A task context is provided for launching child tasks or yeilding.
+            /// A task context is provided for launching child tasks.
             ///
             /// @author Ian Copland
             ///
@@ -86,6 +86,18 @@ namespace ChilliSource
             /// @param in_task - The task to be scheduled.
             //------------------------------------------------------------------------------
             void ScheduleTask(TaskType in_taskType, const Task& in_task) noexcept;
+			//------------------------------------------------------------------------------
+			/// Schedules a batch of tasks which will be executed in a manner dependant on
+			/// the task type.
+			///
+			/// Task contexts are provided for launching child tasks.
+			///
+			/// @author Ian Copland
+			///
+			/// @param in_taskType - The type of task.
+			/// @param in_tasks - The tasks to be scheduled.
+			//------------------------------------------------------------------------------
+			void ScheduleTasks(TaskType in_taskType, const std::vector<Task>& in_tasks) noexcept;
             //------------------------------------------------------------------------------
             /// Schedules a batch of tasks which will be executed in a manner dependant on
             /// the task type. Once all tasks have finished executing a completion task will
@@ -99,10 +111,10 @@ namespace ChilliSource
             ///
             /// @param in_taskType - The type of task.
             /// @param in_tasks - The tasks to be scheduled.
-            /// @param in_completionTask - [Optional] A task which is scheduled when the
-            /// other tasks have all completed.
+            /// @param in_completionTask - A task which is scheduled when the other tasks 
+			/// have all completed.
             //------------------------------------------------------------------------------
-            void ScheduleTasks(TaskType in_taskType, const std::vector<Task>& in_tasks, const Task& in_completionTask = nullptr) noexcept;
+            void ScheduleTasks(TaskType in_taskType, const std::vector<Task>& in_tasks, const Task& in_completionTask) noexcept;
             
         private:
             friend class Application;
@@ -121,7 +133,7 @@ namespace ChilliSource
             /// @author Ian Copland
             //------------------------------------------------------------------------------
             TaskScheduler() noexcept;
-            //------------------------------------------------------------------------------
+			//------------------------------------------------------------------------------
             /// Executes all main thread tasks. Prior to running them, this will wait on all
             /// game logic tasks completing.
             ///
@@ -166,7 +178,7 @@ namespace ChilliSource
             
             std::mutex m_fileTaskMutex;
             bool m_isFileTaskRunning = false;
-            std::queue<Task> m_fileTaskQueue;
+            std::deque<Task> m_fileTaskQueue;
             
 #ifndef CS_TARGETPLATFORM_ANDROID
             std::thread::id m_mainThreadId;

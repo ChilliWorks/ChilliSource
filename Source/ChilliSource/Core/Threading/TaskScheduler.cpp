@@ -76,55 +76,70 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void TaskScheduler::ScheduleTask(TaskType in_taskType, const Task& in_task) noexcept
         {
-            switch (in_taskType)
-            {
-                case TaskType::k_small:
-                {
-                    m_smallTaskPool->AddTask(in_task);
-                    break;
-                }
-                case TaskType::k_large:
-                {
-                    m_largeTaskPool->AddTask(in_task);
-                    break;
-                }
-                case TaskType::k_mainThread:
-                {
-                    m_mainThreadTaskPool->AddTask(in_task);
-                    break;
-                }
-                case TaskType::k_gameLogic:
-                {
-                    ++m_gameLogicTaskCount;
-                    m_smallTaskPool->AddTask([=](const TaskContext&)
-                    {
-                        in_task(TaskContext(TaskType::k_gameLogic, m_smallTaskPool.get()));
-                        
-                        if (--m_gameLogicTaskCount == 0)
-                        {
-                            m_gameLogicTaskCondition.notify_all();
-                        }
-                    });
-                    break;
-                }
-                case TaskType::k_file:
-                {
-                    std::unique_lock<std::mutex> lock(m_fileTaskMutex);
-                    
-                    if (m_isFileTaskRunning)
-                    {
-                        m_fileTaskQueue.push(in_task);
-                        break;
-                    }
-                    
-                    m_isFileTaskRunning = true;
-                    lock.unlock();
-                    
-                    StartNextFileTask(in_task);
-                    break;
-                }
-            }
+			std::vector<Task> tasks = { in_task };
+			ScheduleTasks(in_taskType, tasks);
         }
+		//------------------------------------------------------------------------------
+		//------------------------------------------------------------------------------
+		void TaskScheduler::ScheduleTasks(TaskType in_taskType, const std::vector<Task>& in_tasks) noexcept
+		{
+			switch (in_taskType)
+			{
+				case TaskType::k_small:
+				{
+					m_smallTaskPool->AddTasks(in_tasks);
+					break;
+				}
+				case TaskType::k_large:
+				{
+					m_largeTaskPool->AddTasks(in_tasks);
+					break;
+				}
+				case TaskType::k_mainThread:
+				{
+					m_mainThreadTaskPool->AddTasks(in_tasks);
+					break;
+				}
+				case TaskType::k_gameLogic:
+				{
+					std::vector<Task> gameLogicTasks;
+					gameLogicTasks.reserve(in_tasks.size());
+					for (const auto& task : in_tasks)
+					{
+						gameLogicTasks.push_back([=](const TaskContext&)
+						{
+							task(TaskContext(TaskType::k_gameLogic, m_smallTaskPool.get()));
+
+							if (--m_gameLogicTaskCount == 0)
+							{
+								m_gameLogicTaskCondition.notify_all();
+							}
+						});
+					}
+
+					m_gameLogicTaskCount += u32(gameLogicTasks.size());
+					m_smallTaskPool->AddTasks(gameLogicTasks);
+					break;
+				}
+				case TaskType::k_file:
+				{
+					std::unique_lock<std::mutex> lock(m_fileTaskMutex);
+
+					m_fileTaskQueue.insert(m_fileTaskQueue.begin(), in_tasks.begin(), in_tasks.end());
+
+					if (!m_isFileTaskRunning)
+					{
+						m_isFileTaskRunning = true;
+						auto task = m_fileTaskQueue.front();
+						m_fileTaskQueue.pop_front();
+						lock.unlock();
+
+						StartNextFileTask(task);
+					}
+					break;
+				}
+			}
+		}
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
         void TaskScheduler::ScheduleTasks(TaskType in_taskType, const std::vector<Task>& in_tasks, const Task& in_completionTask) noexcept
@@ -132,9 +147,12 @@ namespace ChilliSource
             //TODO: This should be allocated from a pool to reduce memory fragmentation.
             auto taskCount = std::make_shared<std::atomic<u32>>(u32(in_tasks.size()));
             
+			std::vector<Task> tasksWithCounter;
+			tasksWithCounter.reserve(in_tasks.size());
+
             for (const auto& task : in_tasks)
             {
-                ScheduleTask(in_taskType, [=](const TaskContext& in_taskContext)
+				tasksWithCounter.push_back([=](const TaskContext& in_taskContext)
                 {
                     task(in_taskContext);
                     
@@ -144,6 +162,8 @@ namespace ChilliSource
                     }
                 });
             }
+
+			ScheduleTasks(in_taskType, tasksWithCounter);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -165,7 +185,10 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void TaskScheduler::StartNextFileTask(const Task& in_task) noexcept
         {
-            m_largeTaskPool->AddTask([=](const TaskContext& in_taskContext)
+			std::vector<Task> tasks;
+			tasks.reserve(1);
+
+			tasks.push_back([=](const TaskContext& in_taskContext)
             {
                 in_task(TaskContext(TaskType::k_file));
                 
@@ -178,12 +201,14 @@ namespace ChilliSource
                 }
                 
                 auto task = m_fileTaskQueue.front();
-                m_fileTaskQueue.pop();
+                m_fileTaskQueue.pop_front();
                 
                 lock.unlock();
                 
                 StartNextFileTask(task);
             });
+
+			m_largeTaskPool->AddTasks(tasks);
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
