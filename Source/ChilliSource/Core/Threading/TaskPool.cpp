@@ -61,10 +61,9 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskPool::Add(const Task& in_task) noexcept
+        void TaskPool::AddTask(const Task& in_task) noexcept
         {
             std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
-            CS_ASSERT(m_isFinished == false, "Task is being pushed after finishing.");
             
             m_taskQueue.push(in_task);
             ++m_taskCountHeuristic;
@@ -72,6 +71,57 @@ namespace ChilliSource
             queueLock.unlock();
             
             m_emptyWaitCondition.notify_one();
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void TaskPool::AddTasks(const std::vector<Task>& in_tasks) noexcept
+        {
+            std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
+            
+            for (const auto& task : in_tasks)
+            {
+                m_taskQueue.push(task);
+            }
+            m_taskCountHeuristic += in_tasks.size();
+            
+            if (in_tasks.size() > 1)
+            {
+                m_emptyWaitCondition.notify_all();
+            }
+            else
+            {
+                m_emptyWaitCondition.notify_one();
+            }
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        void TaskPool::AddTasksAndYield(const std::vector<Task>& in_tasks) noexcept
+        {
+            std::atomic<u32> taskCount(u32(in_tasks.size()));
+            std::atomic<bool> finished(false);
+            
+            std::vector<Task> tasksWithCounter;
+            for (const auto& task : in_tasks)
+            {
+                tasksWithCounter.push_back([=, &task, &taskCount, &finished](const TaskContext& in_taskContext) noexcept
+                {
+                    task(in_taskContext);
+
+                    if (--taskCount == 0)
+                    {
+                        std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
+                        finished = true;
+                        m_emptyWaitCondition.notify_all();
+                    }
+                });
+            }
+            
+            AddTasks(tasksWithCounter);
+            
+            while (!finished)
+            {
+                PerformTask(finished);
+            }
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -97,12 +147,6 @@ namespace ChilliSource
             queueLock.unlock();
             
             task(m_taskContext);
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TaskPool::AwakenAllThreads() noexcept
-        {
-            m_emptyWaitCondition.notify_all();
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------

@@ -68,7 +68,7 @@ namespace ChilliSource
             ///
             /// @param in_task - The task to be added to the pool.
             //------------------------------------------------------------------------------
-            void Add(const Task& in_task) noexcept;
+            void AddTask(const Task& in_task) noexcept;
             //------------------------------------------------------------------------------
             /// Performs all tasks in the task pool. The task queue is copied locally and
 			/// cleared before processing all tasks. This means that any tasks queued while

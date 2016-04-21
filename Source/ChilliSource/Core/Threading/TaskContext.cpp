@@ -71,55 +71,27 @@ namespace ChilliSource
         {
             if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)
             {
-                ProcessChildTasksInSeries(in_tasks);
+                for (const auto& task : in_tasks)
+                {
+                    task(*this);
+                }
+            }
+            else if (m_taskType == TaskType::k_gameLogic)
+            {
+                std::vector<Task> gameLogicTasks;
+                for (const auto& task : in_tasks)
+                {
+                    gameLogicTasks.push_back([=](const TaskContext&)
+                    {
+                        task(*this);
+                    });
+                }
+                
+                m_taskPool->AddTasksAndYield(gameLogicTasks);
             }
             else
             {
-                ProcessChildTasksInParallel(in_tasks);
-            }
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTasksInParallel(const std::vector<Task>& in_tasks) const noexcept
-        {
-            CS_ASSERT(m_taskType == TaskType::k_small || m_taskType == TaskType::k_large || m_taskType == TaskType::k_gameLogic, "Invalid task type.");
-            
-            auto taskScheduler = Application::Get()->GetTaskScheduler();
-            
-            std::atomic<u32> taskCount(u32(in_tasks.size()));
-            std::atomic<bool> finished(false);
-            
-            for (const auto& task : in_tasks)
-            {
-                taskScheduler->ScheduleTask(m_taskType, [=, &taskCount, &finished](const TaskContext&) noexcept
-                {
-                    task(*this);
-
-                    if (--taskCount == 0)
-                    {
-                        finished = true;
-                        if (m_taskPool)
-                        {
-                            m_taskPool->AwakenAllThreads();
-                        }
-                    }
-                });
-            }
-            
-            while (!finished)
-            {
-                m_taskPool->PerformTask(finished);
-            }
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTasksInSeries(const std::vector<Task>& in_tasks) const noexcept
-        {
-            CS_ASSERT(m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file, "Invalid task type.");
-            
-            for (const auto& task : in_tasks)
-            {
-                task(*this);
+                m_taskPool->AddTasksAndYield(in_tasks);
             }
         }
     }

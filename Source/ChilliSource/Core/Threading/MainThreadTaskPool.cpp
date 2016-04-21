@@ -44,7 +44,7 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void MainThreadTaskPool::Add(const Task& in_task) noexcept
+        void MainThreadTaskPool::AddTask(const Task& in_task) noexcept
         {
             std::unique_lock<std::mutex> lock(m_taskQueueMutex);
             m_taskQueue.push_back(in_task);

@@ -80,23 +80,23 @@ namespace ChilliSource
             {
                 case TaskType::k_small:
                 {
-                    m_smallTaskPool->Add(in_task);
+                    m_smallTaskPool->AddTask(in_task);
                     break;
                 }
                 case TaskType::k_large:
                 {
-                    m_largeTaskPool->Add(in_task);
+                    m_largeTaskPool->AddTask(in_task);
                     break;
                 }
                 case TaskType::k_mainThread:
                 {
-                    m_mainThreadTaskPool->Add(in_task);
+                    m_mainThreadTaskPool->AddTask(in_task);
                     break;
                 }
                 case TaskType::k_gameLogic:
                 {
                     ++m_gameLogicTaskCount;
-                    m_smallTaskPool->Add([=](const TaskContext&)
+                    m_smallTaskPool->AddTask([=](const TaskContext&)
                     {
                         in_task(TaskContext(TaskType::k_gameLogic, m_smallTaskPool.get()));
                         
@@ -165,7 +165,7 @@ namespace ChilliSource
         //------------------------------------------------------------------------------
         void TaskScheduler::StartNextFileTask(const Task& in_task) noexcept
         {
-            m_largeTaskPool->Add([=](const TaskContext& in_taskContext)
+            m_largeTaskPool->AddTask([=](const TaskContext& in_taskContext)
             {
                 in_task(TaskContext(TaskType::k_file));
                 

@@ -83,7 +83,33 @@ namespace ChilliSource
             ///
             /// @param in_task - The task to be added to the pool.
             //------------------------------------------------------------------------------
-            void Add(const Task& in_task) noexcept;
+            void AddTask(const Task& in_task) noexcept;
+            //------------------------------------------------------------------------------
+            /// Adds a series of tasks to the pool. These task will be executed as soon as a
+            /// thread becomes free.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_tasks - The tasks to be added to the pool.
+            //------------------------------------------------------------------------------
+            void AddTasks(const std::vector<Task>& in_tasks) noexcept;
+            //------------------------------------------------------------------------------
+            /// Performs the given series of tasks and yields until they are finished. While
+            /// yielding, other tasks will be processed.
+            ///
+            /// @author Ian Copland
+            ///
+            /// @param in_tasks - The tasks to be added to the pool.
+            //------------------------------------------------------------------------------
+            void AddTasksAndYield(const std::vector<Task>& in_tasks) noexcept;
+            //------------------------------------------------------------------------------
+            /// Waits for any currently running tasks to finish then joins all owned threads.
+            ///
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            ~TaskPool() noexcept;
+            
+        private:
             //------------------------------------------------------------------------------
             /// Performs a task from the task pool. This must be called from one of the
             /// threads owned by the task pool.
@@ -97,22 +123,6 @@ namespace ChilliSource
             /// @param in_forceContinue - The force continue flag.
             //------------------------------------------------------------------------------
             void PerformTask(const std::atomic<bool>& in_forceContinue) noexcept;
-            //------------------------------------------------------------------------------
-            /// Awakens all threads which are currently waiting on a task. This is used in
-            /// conjunction with the PerformTask() force continue flag when performing tasks
-            /// to wake up a thread and continue even if no tasks as available.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------------------
-            void AwakenAllThreads() noexcept;
-            //------------------------------------------------------------------------------
-            /// Waits for any currently running tasks to finish then joins all owned threads.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------------------
-            ~TaskPool() noexcept;
-            
-        private:
             //------------------------------------------------------------------------------
             /// Continues to perform tasks until the task pool is deallocated. If there are
             /// no tasks currently available this will sleep until a task is added.

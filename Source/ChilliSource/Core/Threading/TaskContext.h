@@ -87,28 +87,6 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             void ProcessChildTasks(const std::vector<Task>& in_tasks) const noexcept;
             
-        private:
-            //------------------------------------------------------------------------------
-            /// Processes child tasks in parallel, requiring this to yeild and process other
-            /// tasks in the meantime.
-            ///
-            /// This should be used for small, large and game logic task types.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_tasks - The tasks to be processed.
-            //------------------------------------------------------------------------------
-            void ProcessChildTasksInParallel(const std::vector<Task>& in_tasks) const noexcept;
-            //------------------------------------------------------------------------------
-            /// Processes child tasks in series, meaning they can be processed locally
-            /// without needing to add the tasks to a pool.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_tasks - The tasks to be processed.
-            //------------------------------------------------------------------------------
-            void ProcessChildTasksInSeries(const std::vector<Task>& in_tasks) const noexcept;
-            
             TaskType m_taskType;
             TaskPool* m_taskPool = nullptr;
         };
