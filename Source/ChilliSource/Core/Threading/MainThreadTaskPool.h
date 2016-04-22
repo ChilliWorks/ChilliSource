@@ -34,7 +34,6 @@
 
 #include <atomic>
 #include <condition_variable>
-#include <deque>
 #include <mutex>
 #include <thread>
 
@@ -83,7 +82,7 @@ namespace ChilliSource
             
             const TaskContext m_taskContext;
             
-            std::deque<Task> m_taskQueue;
+            std::vector<Task> m_taskQueue;
             std::mutex m_taskQueueMutex;
         };
     }

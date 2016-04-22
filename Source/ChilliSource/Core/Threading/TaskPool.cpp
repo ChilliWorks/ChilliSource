@@ -65,7 +65,7 @@ namespace ChilliSource
         {
             std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
 			m_taskQueue.insert(m_taskQueue.begin(), in_tasks.begin(), in_tasks.end());
-            m_taskCountHeuristic += in_tasks.size();
+            m_taskCountHeuristic += u32(in_tasks.size());
             
             if (in_tasks.size() > 1)
             {
@@ -124,7 +124,7 @@ namespace ChilliSource
             }
             
             Task task = m_taskQueue.front();
-            m_taskQueue.pop_front();
+			m_taskQueue.pop_front();
             --m_taskCountHeuristic;
                 
             queueLock.unlock();

@@ -46,7 +46,7 @@ namespace ChilliSource
         void MainThreadTaskPool::AddTasks(const std::vector<Task>& in_tasks) noexcept
         {
             std::unique_lock<std::mutex> lock(m_taskQueueMutex);
-			m_taskQueue.insert(m_taskQueue.begin(), in_tasks.begin(), in_tasks.end());
+			m_taskQueue.insert(m_taskQueue.end(), in_tasks.begin(), in_tasks.end());
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
@@ -59,11 +59,8 @@ namespace ChilliSource
 			m_taskQueue.clear();
 			lock.unlock();
 
-			while (!localTaskQueue.empty())
+			for (const auto& task : localTaskQueue)
 			{
-				auto task = std::move(localTaskQueue.front());
-				localTaskQueue.pop_front();
-
 				task(m_taskContext);
 			}
         }

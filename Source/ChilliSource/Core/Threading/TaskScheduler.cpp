@@ -201,7 +201,7 @@ namespace ChilliSource
                 }
                 
                 auto task = m_fileTaskQueue.front();
-                m_fileTaskQueue.pop_front();
+				m_fileTaskQueue.pop_front();
                 
                 lock.unlock();
                 
