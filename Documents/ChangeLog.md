@@ -1,7 +1,7 @@
 ChilliSource Change Log
 =======================
 
-Version 1.6.0, 2016-01-01
+Version 1.6.0, 2016-04-01
 -------------------------
 
 * Added: 64-bit Android support. Both arm64-v8a and x86_64 can now be targetted.
