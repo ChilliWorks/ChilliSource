@@ -58,15 +58,6 @@ namespace ChilliSource
         }
         //------------------------------------------------------------------------------
         //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTask(const Task& in_task) const noexcept
-        {
-            std::vector<Task> tasks;
-            tasks.push_back(in_task);
-            
-            ProcessChildTasks(tasks);
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
         void TaskContext::ProcessChildTasks(const std::vector<Task>& in_tasks) const noexcept
         {
             if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)

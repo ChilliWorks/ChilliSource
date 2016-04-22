@@ -65,17 +65,6 @@ namespace ChilliSource
             //------------------------------------------------------------------------------
             TaskType GetType() const noexcept;
             //------------------------------------------------------------------------------
-            /// Schedules the given child task and yields until it has completed. Child
-            /// tasks must be of the same type as the parent.
-            ///
-            /// Child tasks are provided with a task context.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_task - The task to be processed.
-            //------------------------------------------------------------------------------
-            void ProcessChildTask(const Task& in_task) const noexcept;
-            //------------------------------------------------------------------------------
             /// Schedules the given child tasks and yields until they have completed. Child
             /// tasks must be of the same type as the parent.
             ///
