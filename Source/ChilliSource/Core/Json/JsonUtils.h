@@ -33,47 +33,44 @@
 
 #include <json/forwards.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //----------------------------------------------------------------------
+    /// A collection of convenience methods for working with json. This
+    /// includes a method for creating a new Json object from a string
+    /// and for creating a new Json object from a file.
+    ///
+    /// @author Ian Copland
+    //----------------------------------------------------------------------
+    namespace JsonUtils
     {
-        //----------------------------------------------------------------------
-        /// A collection of convenience methods for working with json. This
-        /// includes a method for creating a new Json object from a string
-        /// and for creating a new Json object from a file.
+        //---------------------------------------------------------------
+        /// Creates a new Json object from the given string. If there
+        /// are any errors in the given Json the app is considered to be
+        /// in an irrecoverable state and will terminate.
         ///
         /// @author Ian Copland
-        //----------------------------------------------------------------------
-        namespace JsonUtils
-        {
-            //---------------------------------------------------------------
-            /// Creates a new Json object from the given string. If there
-            /// are any errors in the given Json the app is considered to be
-            /// in an irrecoverable state and will terminate.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The input json string.
-            ///
-            /// @return The new json object.
-            //---------------------------------------------------------------
-            Json::Value ParseJson(const std::string& in_jsonString);
-            //---------------------------------------------------------------
-            /// Creates a new Json object from the contents of the file
-            /// at the given path. If the file cannot be read this will return
-            /// false, but if the file can be read but it is not valid json
-            /// the app is considered to be in an irrecoverable state and
-            /// will terminate.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The storage location of the file.
-            /// @param The file path.
-            ///
-            /// @return The new json object.
-            //---------------------------------------------------------------
-            bool ReadJson(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Json::Value& out_jsonValue);
-        }
+        ///
+        /// @param The input json string.
+        ///
+        /// @return The new json object.
+        //---------------------------------------------------------------
+        Json::Value ParseJson(const std::string& in_jsonString);
+        //---------------------------------------------------------------
+        /// Creates a new Json object from the contents of the file
+        /// at the given path. If the file cannot be read this will return
+        /// false, but if the file can be read but it is not valid json
+        /// the app is considered to be in an irrecoverable state and
+        /// will terminate.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The storage location of the file.
+        /// @param The file path.
+        ///
+        /// @return The new json object.
+        //---------------------------------------------------------------
+        bool ReadJson(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Json::Value& out_jsonValue);
     }
 }
 

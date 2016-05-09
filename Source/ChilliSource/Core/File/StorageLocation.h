@@ -29,27 +29,24 @@
 #ifndef _CHILLISOURCE_CORE_FILE_STORAGELOCATION_H_
 #define _CHILLISOURCE_CORE_FILE_STORAGELOCATION_H_
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //-----------------------------------------------------------------
+    /// An enum describing the different possible locations for
+    /// files to be located.
+    ///
+    /// @author Ian Copland
+    //-----------------------------------------------------------------
+    enum class StorageLocation
     {
-        //-----------------------------------------------------------------
-        /// An enum describing the different possible locations for
-        /// files to be located.
-        ///
-        /// @author Ian Copland
-        //-----------------------------------------------------------------
-        enum class StorageLocation
-        {
-            k_none,
-            k_root,
-            k_package,
-            k_saveData,
-            k_cache,
-            k_DLC,
-            k_chilliSource
-        };
-    }
+        k_none,
+        k_root,
+        k_package,
+        k_saveData,
+        k_cache,
+        k_DLC,
+        k_chilliSource
+    };
 }
 
 #endif

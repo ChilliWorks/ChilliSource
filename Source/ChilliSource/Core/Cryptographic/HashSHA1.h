@@ -31,31 +31,28 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------------
+    /// A collection of methods for working with the SHA1
+    /// hashing algorithm.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------
+    namespace HashSHA1
     {
-        //------------------------------------------------------
-        /// A collection of methods for working with the SHA1
-        /// hashing algorithm.
+        //------------------------------------------------
+        /// Hashes the given data using SHA1. The output is
+        /// returned as a hex string.
         ///
         /// @author Ian Copland
-        //------------------------------------------------------
-        namespace HashSHA1
-        {
-            //------------------------------------------------
-            /// Hashes the given data using SHA1. The output is
-            /// returned as a hex string.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The input data.
-            /// @param The input data size.
-            ///
-            /// @return The output hex string.
-            //------------------------------------------------
-            std::string GenerateHexHashCode(const s8* in_data, u32 in_size);
-        }
+        ///
+        /// @param The input data.
+        /// @param The input data size.
+        ///
+        /// @return The output hex string.
+        //------------------------------------------------
+        std::string GenerateHexHashCode(const s8* in_data, u32 in_size);
     }
 }
 

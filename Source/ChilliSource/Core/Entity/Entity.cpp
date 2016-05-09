@@ -32,458 +32,455 @@
 
 #include <algorithm>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-        namespace
+    namespace
+    {
+        const EntitySPtr EntityNullPtr;
+        const ComponentSPtr ComponentNullPtr;
+    }
+    
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    EntityUPtr Entity::Create()
+    {
+        return EntityUPtr(new Entity());
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::AddEntity(const EntitySPtr& in_child)
+    {
+        CS_ASSERT(in_child != nullptr, "Cannot add null child");
+        CS_ASSERT(in_child->GetParent() == nullptr, "Cannot add child with existing parent");
+        CS_ASSERT(in_child->GetScene() == nullptr, "Cannot add child with existing scene");
+        CS_ASSERT(m_children.size() < static_cast<std::vector<EntitySPtr>::size_type>(std::numeric_limits<u32>::max()), "There are too many child entities. It cannot exceed "
+                  + CSCore::ToString(std::numeric_limits<u32>::max()) + ".");
+        
+        m_children.push_back(in_child);
+        m_transform.AddChildTransform(&in_child->GetTransform());
+        in_child->m_parent = this;
+        
+        if(m_scene != nullptr)
         {
-            const EntitySPtr EntityNullPtr;
-            const ComponentSPtr ComponentNullPtr;
+            //This will add the entity and any children it may have
+            m_scene->Add(in_child);
+        }
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::RemoveEntity(Entity* in_child)
+    {
+        CS_ASSERT(in_child != nullptr, "Cannot remove null child");
+        CS_ASSERT(in_child->GetParent() == this, "Cannot remove entity that is not a child of this");
+        
+        SharedEntityList::iterator it = std::find_if(m_children.begin(), m_children.end(), [in_child](const EntitySPtr& in_entity)
+        {
+            return in_entity.get() == in_child;
+        });
+        
+        if(it != m_children.end())
+        {
+            m_transform.RemoveChildTransform(&in_child->GetTransform());
+            
+            if(m_scene != nullptr)
+            {
+                m_scene->Remove(in_child);
+            }
+            
+            in_child->m_parent = nullptr;
+            std::swap(m_children.back(), *it);
+            m_children.pop_back();
+        }
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::RemoveAllChildren()
+    {
+        m_transform.RemoveAllChildTransforms();
+        
+        for(SharedEntityList::iterator it = m_children.begin(); it != m_children.end(); ++it)
+        {
+            if(m_scene != nullptr)
+            {
+                m_scene->Remove(it->get());
+            }
+            
+            (*it)->m_parent = nullptr;
         }
         
-        //------------------------------------------------------------------
-		//------------------------------------------------------------------
-		EntityUPtr Entity::Create()
-		{
-			return EntityUPtr(new Entity());
-		}
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::AddEntity(const EntitySPtr& in_child)
-		{
-            CS_ASSERT(in_child != nullptr, "Cannot add null child");
-            CS_ASSERT(in_child->GetParent() == nullptr, "Cannot add child with existing parent");
-            CS_ASSERT(in_child->GetScene() == nullptr, "Cannot add child with existing scene");
-            CS_ASSERT(m_children.size() < static_cast<std::vector<EntitySPtr>::size_type>(std::numeric_limits<u32>::max()), "There are too many child entities. It cannot exceed "
-                      + CSCore::ToString(std::numeric_limits<u32>::max()) + ".");
-            
-            m_children.push_back(in_child);
-            m_transform.AddChildTransform(&in_child->GetTransform());
-            in_child->m_parent = this;
-			
-			if(m_scene != nullptr)
-			{
-				//This will add the entity and any children it may have
-				m_scene->Add(in_child);
-			}
-		}
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::RemoveEntity(Entity* in_child)
-		{
-            CS_ASSERT(in_child != nullptr, "Cannot remove null child");
-            CS_ASSERT(in_child->GetParent() == this, "Cannot remove entity that is not a child of this");
-            
-			SharedEntityList::iterator it = std::find_if(m_children.begin(), m_children.end(), [in_child](const EntitySPtr& in_entity)
-            {
-                return in_entity.get() == in_child;
-            });
-			
-			if(it != m_children.end())
-			{
-				m_transform.RemoveChildTransform(&in_child->GetTransform());
-				
-				if(m_scene != nullptr)
-				{
-					m_scene->Remove(in_child);
-				}
-                
-                in_child->m_parent = nullptr;
-                std::swap(m_children.back(), *it);
-				m_children.pop_back();
-			}
-		}
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::RemoveAllChildren()
-		{
-			m_transform.RemoveAllChildTransforms();
-			
-			for(SharedEntityList::iterator it = m_children.begin(); it != m_children.end(); ++it)
-			{
-                if(m_scene != nullptr)
-				{
-					m_scene->Remove(it->get());
-				}
-                
-                (*it)->m_parent = nullptr;
-			}
-			
-			m_children.clear();
-		}
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::RemoveFromParent()
-		{
-            CS_ASSERT(m_parent != nullptr || m_scene != nullptr, "Must have a parent to remove from");
-            
-            if(m_parent != nullptr)
-            {
-                m_parent->RemoveEntity(this);
-            }
-            else if(m_scene != nullptr)
-            {
-                m_scene->Remove(this);
-            }
-		}
-		//------------------------------------------------------------------
-		//------------------------------------------------------------------
-		Entity* Entity::GetParent() 
-		{ 
-			return m_parent;
-        }
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        const Entity* Entity::GetParent() const
+        m_children.clear();
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::RemoveFromParent()
+    {
+        CS_ASSERT(m_parent != nullptr || m_scene != nullptr, "Must have a parent to remove from");
+        
+        if(m_parent != nullptr)
         {
-            return m_parent;
+            m_parent->RemoveEntity(this);
         }
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        const EntitySPtr& Entity::GetEntityWithName(const std::string& in_name) const
+        else if(m_scene != nullptr)
         {
-            for(SharedEntityList::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
+            m_scene->Remove(this);
+        }
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    Entity* Entity::GetParent() 
+    { 
+        return m_parent;
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    const Entity* Entity::GetParent() const
+    {
+        return m_parent;
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    const EntitySPtr& Entity::GetEntityWithName(const std::string& in_name) const
+    {
+        for(SharedEntityList::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
+        {
+            if((*it)->GetName() == in_name)
             {
-                if((*it)->GetName() == in_name)
+                return (*it);
+            }
+        }
+        
+        return EntityNullPtr;
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    const EntitySPtr& Entity::GetEntityWithNameRecursive(const std::string& in_name) const
+    {
+        for (SharedEntityList::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
+        {
+            if((*it)->GetName() == in_name)
+            {
+                return (*it);
+            }
+            
+            const EntitySPtr& entity = (*it)->GetEntityWithNameRecursive(in_name);
+            if (entity != nullptr)
+            {
+                return entity;
+            }
+        }
+        
+        return EntityNullPtr;
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    u32 Entity::GetNumEntities() const
+    {
+        return static_cast<u32>(m_children.size());
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    u32 Entity::GetNumComponents() const
+    {
+        return static_cast<u32>(m_components.size());
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    const SharedEntityList& Entity::GetEntities() const
+    {
+        return m_children;
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::SetScene(Scene* in_scene)
+    {
+        m_scene = in_scene;
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::AddComponent(const ComponentSPtr& in_component)
+    {
+        CS_ASSERT(in_component != nullptr, "Cannot add null component");
+        CS_ASSERT(in_component->GetEntity() == nullptr, "Component cannot be attached to more than 1 entity at a time.");
+        CS_ASSERT(m_components.size() < static_cast<std::vector<ComponentSPtr>::size_type>(std::numeric_limits<u32>::max()), "There are too many components. It cannot exceed "
+                  + CSCore::ToString(std::numeric_limits<u32>::max()) + ".");
+        
+        m_components.push_back(in_component);
+        
+        in_component->SetEntity(this);
+        
+        in_component->OnAddedToEntity();
+        
+        if(GetScene() != nullptr)
+        {
+            in_component->OnAddedToScene();
+            if (m_appActive == true)
+            {
+                in_component->OnResume();
+                if (m_appForegrounded == true)
                 {
-                    return (*it);
+                    in_component->OnForeground();
                 }
             }
-            
-            return EntityNullPtr;
         }
-		//------------------------------------------------------------------
-		//------------------------------------------------------------------
-		const EntitySPtr& Entity::GetEntityWithNameRecursive(const std::string& in_name) const
-		{
-            for (SharedEntityList::const_iterator it = m_children.begin(); it != m_children.end(); ++it)
-            {
-                if((*it)->GetName() == in_name)
-                {
-                    return (*it);
-                }
-                
-                const EntitySPtr& entity = (*it)->GetEntityWithNameRecursive(in_name);
-                if (entity != nullptr)
-                {
-                    return entity;
-                }
-            }
-			
-			return EntityNullPtr;
-		}
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        u32 Entity::GetNumEntities() const
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::RemoveComponent(Component* in_component)
+    {
+        CS_ASSERT(in_component != nullptr, "Cannot remove a null component");
+        CS_ASSERT(in_component->GetEntity() == this, "Cannot remove component that is not attached to this.");
+        
+        for(ComponentList::iterator it = m_components.begin(); it != m_components.end(); ++it)
         {
-            return static_cast<u32>(m_children.size());
-        }
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        u32 Entity::GetNumComponents() const
-        {
-            return static_cast<u32>(m_components.size());
-        }
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        const SharedEntityList& Entity::GetEntities() const
-        {
-            return m_children;
-        }
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::SetScene(Scene* in_scene)
-		{
-			m_scene = in_scene;
-		}
-        //-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::AddComponent(const ComponentSPtr& in_component)
-		{
-            CS_ASSERT(in_component != nullptr, "Cannot add null component");
-            CS_ASSERT(in_component->GetEntity() == nullptr, "Component cannot be attached to more than 1 entity at a time.");
-            CS_ASSERT(m_components.size() < static_cast<std::vector<ComponentSPtr>::size_type>(std::numeric_limits<u32>::max()), "There are too many components. It cannot exceed "
-                      + CSCore::ToString(std::numeric_limits<u32>::max()) + ".");
-            
-            m_components.push_back(in_component);
-            
-            in_component->SetEntity(this);
-            
-            in_component->OnAddedToEntity();
-            
-            if(GetScene() != nullptr)
+            if(in_component == it->get())
             {
-                in_component->OnAddedToScene();
-                if (m_appActive == true)
-                {
-                    in_component->OnResume();
-                    if (m_appForegrounded == true)
-                    {
-                        in_component->OnForeground();
-                    }
-                }
-            }
-		}
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::RemoveComponent(Component* in_component)
-		{
-            CS_ASSERT(in_component != nullptr, "Cannot remove a null component");
-            CS_ASSERT(in_component->GetEntity() == this, "Cannot remove component that is not attached to this.");
-            
-            for(ComponentList::iterator it = m_components.begin(); it != m_components.end(); ++it)
-            {
-                if(in_component == it->get())
-                {
-                    if(GetScene() != nullptr)
-                    {
-                        if (m_appActive == true)
-                        {
-                            if (m_appForegrounded == true)
-                            {
-                                in_component->OnBackground();
-                            }
-                            in_component->OnSuspend();
-                        }
-                        in_component->OnRemovedFromScene();
-                    }
-                    
-                    in_component->OnRemovedFromEntity();
-                    in_component->SetEntity(nullptr);
-                    
-                    std::swap(m_components.back(), *it);
-                    m_components.pop_back();
-                    return;
-                }
-            }
-		}
-        //-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::RemoveAllComponents()
-		{
-            for(ComponentList::iterator it = m_components.begin(); it != m_components.end(); ++it)
-            {
-                Component* component = it->get();
-                
                 if(GetScene() != nullptr)
                 {
                     if (m_appActive == true)
                     {
                         if (m_appForegrounded == true)
                         {
-                            component->OnBackground();
+                            in_component->OnBackground();
                         }
-                        component->OnSuspend();
+                        in_component->OnSuspend();
                     }
-                    component->OnRemovedFromScene();
+                    in_component->OnRemovedFromScene();
                 }
                 
-                component->OnRemovedFromEntity();
-                component->SetEntity(nullptr);
-            }
-            
-            m_components.clear();
-		}
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		const ComponentSPtr& Entity::GetComponent(InterfaceIDType in_interfaceId) const
-		{
-			for(ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
-			{
-                if((*itr)->IsA(in_interfaceId))
-                {
-                    return *itr;
-                }
-			}
-			
-			return ComponentNullPtr;
-		}
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::GetComponents(InterfaceIDType in_interfaceId, std::vector<ComponentSPtr>& out_components) const
-		{
-			for (ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
-			{
-                if ((*itr)->IsA(in_interfaceId))
-                {
-                    out_components.push_back(*itr);
-                }
-			}
-		}
-        //-------------------------------------------------------------
-		//-------------------------------------------------------------
-		const ComponentSPtr& Entity::GetComponentRecursive(InterfaceIDType in_interfaceId) const
-		{
-			for(ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
-			{
-                if((*itr)->IsA(in_interfaceId))
-                {
-                    return *itr;
-                }
-			}
-            
-            for(SharedEntityList::const_iterator itr = m_children.begin(); itr != m_children.end(); ++itr)
-            {
-                const ComponentSPtr& component = (*itr)->GetComponentRecursive(in_interfaceId);
+                in_component->OnRemovedFromEntity();
+                in_component->SetEntity(nullptr);
                 
-                if(component != nullptr)
+                std::swap(m_components.back(), *it);
+                m_components.pop_back();
+                return;
+            }
+        }
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::RemoveAllComponents()
+    {
+        for(ComponentList::iterator it = m_components.begin(); it != m_components.end(); ++it)
+        {
+            Component* component = it->get();
+            
+            if(GetScene() != nullptr)
+            {
+                if (m_appActive == true)
                 {
-                    return component;
+                    if (m_appForegrounded == true)
+                    {
+                        component->OnBackground();
+                    }
+                    component->OnSuspend();
                 }
+                component->OnRemovedFromScene();
             }
-			
-			return ComponentNullPtr;
-		}
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        const ComponentList& Entity::GetComponents() const
-        {
-            return m_components;
+            
+            component->OnRemovedFromEntity();
+            component->SetEntity(nullptr);
         }
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::SetName(const std::string& in_name)
-		{
-			m_name = in_name;
-		}
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		const std::string & Entity::GetName() const
-		{
-			return m_name;
-		}
-        //-------------------------------------------------------------
-		//-------------------------------------------------------------
-		Scene* Entity::GetScene()
-		{
-			return m_scene;
-		}
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        Transform& Entity::GetTransform()
+        
+        m_components.clear();
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    const ComponentSPtr& Entity::GetComponent(InterfaceIDType in_interfaceId) const
+    {
+        for(ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
         {
-            return m_transform;
-        }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        const Transform& Entity::GetTransform() const
-        {
-            return m_transform;
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void Entity::OnUpdate(f32 in_timeSinceLastUpdate)
-        {
-            for(u32 i=0; i<m_components.size(); ++i)
-			{
-                m_components[i]->OnUpdate(in_timeSinceLastUpdate);
-			}
-        }
-        //-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::OnAddedToScene()
-		{
-            for (u32 i = 0; i < m_components.size(); ++i)
+            if((*itr)->IsA(in_interfaceId))
             {
-                m_components[i]->OnAddedToScene();
-            }
-            
-            for (u32 i = 0; i < m_children.size(); ++i)
-            {
-                m_scene->Add(m_children[i]);
-            }
-		}
-        //-------------------------------------------------------------
-        //-------------------------------------------------------------
-        void Entity::OnResume()
-        {
-            CS_ASSERT(m_appActive == false, "Entity: Received resume while already active.");
-            
-            m_appActive = true;
-            for (u32 i = 0; i < m_components.size(); ++i)
-            {
-                m_components[i]->OnResume();
+                return *itr;
             }
         }
-        //-------------------------------------------------------------
-        //-------------------------------------------------------------
-        void Entity::OnForeground()
+        
+        return ComponentNullPtr;
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::GetComponents(InterfaceIDType in_interfaceId, std::vector<ComponentSPtr>& out_components) const
+    {
+        for (ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
         {
-            CS_ASSERT(m_appForegrounded == false, "Entity: Received foreground while already foregrounded.");
-            
-            m_appForegrounded = true;
-            for (u32 i = 0; i < m_components.size(); ++i)
+            if ((*itr)->IsA(in_interfaceId))
             {
-                m_components[i]->OnForeground();
+                out_components.push_back(*itr);
             }
         }
-        //-------------------------------------------------------------
-		//-------------------------------------------------------------
-		void Entity::OnRemovedFromScene()
-		{
-            for (auto it = m_children.rbegin(); it != m_children.rend(); ++it)
-            {
-                m_scene->Remove((*it).get());
-            }
-            
-            for (auto it = m_components.rbegin(); it != m_components.rend(); ++it)
-            {
-                (*it)->OnRemovedFromScene();
-            }
-		}
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void Entity::OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate)
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    const ComponentSPtr& Entity::GetComponentRecursive(InterfaceIDType in_interfaceId) const
+    {
+        for(ComponentList::const_iterator itr = m_components.begin(); itr != m_components.end(); ++itr)
         {
-            for(u32 i=0; i<m_components.size(); ++i)
-			{
-                m_components[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
-			}
-        }
-        //-------------------------------------------------------------
-        //-------------------------------------------------------------
-        void Entity::OnBackground()
-        {
-            CS_ASSERT(m_appForegrounded == true, "Entity: Received background while already backgrounded.");
-            
-            m_appForegrounded = false;
-            
-            for (auto it = m_components.rbegin(); it != m_components.rend(); ++it)
+            if((*itr)->IsA(in_interfaceId))
             {
-                (*it)->OnBackground();
+                return *itr;
             }
         }
-        //-------------------------------------------------------------
-        //-------------------------------------------------------------
-        void Entity::OnSuspend()
+        
+        for(SharedEntityList::const_iterator itr = m_children.begin(); itr != m_children.end(); ++itr)
         {
-            CS_ASSERT(m_appActive == true, "Entity: Received suspend while already suspended.");
+            const ComponentSPtr& component = (*itr)->GetComponentRecursive(in_interfaceId);
             
-            m_appActive = false;
-            
-            for (auto it = m_components.rbegin(); it != m_components.rend(); ++it)
+            if(component != nullptr)
             {
-                (*it)->OnSuspend();
+                return component;
             }
         }
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        void Entity::Reset()
+        
+        return ComponentNullPtr;
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    const ComponentList& Entity::GetComponents() const
+    {
+        return m_components;
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::SetName(const std::string& in_name)
+    {
+        m_name = in_name;
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    const std::string & Entity::GetName() const
+    {
+        return m_name;
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    Scene* Entity::GetScene()
+    {
+        return m_scene;
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    Transform& Entity::GetTransform()
+    {
+        return m_transform;
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    const Transform& Entity::GetTransform() const
+    {
+        return m_transform;
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    void Entity::OnUpdate(f32 in_timeSinceLastUpdate)
+    {
+        for(u32 i=0; i<m_components.size(); ++i)
         {
-            RemoveAllComponents();
-            RemoveAllChildren();
-            RemoveFromParent();
-            
-            m_name = std::string();
-            m_transform.Reset();
+            m_components[i]->OnUpdate(in_timeSinceLastUpdate);
         }
-		//-------------------------------------------------------------
-		//-------------------------------------------------------------
-		Entity::~Entity()
-		{
-            RemoveAllComponents();
-			RemoveAllChildren();
-		}
-	}
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::OnAddedToScene()
+    {
+        for (u32 i = 0; i < m_components.size(); ++i)
+        {
+            m_components[i]->OnAddedToScene();
+        }
+        
+        for (u32 i = 0; i < m_children.size(); ++i)
+        {
+            m_scene->Add(m_children[i]);
+        }
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::OnResume()
+    {
+        CS_ASSERT(m_appActive == false, "Entity: Received resume while already active.");
+        
+        m_appActive = true;
+        for (u32 i = 0; i < m_components.size(); ++i)
+        {
+            m_components[i]->OnResume();
+        }
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::OnForeground()
+    {
+        CS_ASSERT(m_appForegrounded == false, "Entity: Received foreground while already foregrounded.");
+        
+        m_appForegrounded = true;
+        for (u32 i = 0; i < m_components.size(); ++i)
+        {
+            m_components[i]->OnForeground();
+        }
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::OnRemovedFromScene()
+    {
+        for (auto it = m_children.rbegin(); it != m_children.rend(); ++it)
+        {
+            m_scene->Remove((*it).get());
+        }
+        
+        for (auto it = m_components.rbegin(); it != m_components.rend(); ++it)
+        {
+            (*it)->OnRemovedFromScene();
+        }
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    void Entity::OnFixedUpdate(f32 in_fixedTimeSinceLastUpdate)
+    {
+        for(u32 i=0; i<m_components.size(); ++i)
+        {
+            m_components[i]->OnFixedUpdate(in_fixedTimeSinceLastUpdate);
+        }
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::OnBackground()
+    {
+        CS_ASSERT(m_appForegrounded == true, "Entity: Received background while already backgrounded.");
+        
+        m_appForegrounded = false;
+        
+        for (auto it = m_components.rbegin(); it != m_components.rend(); ++it)
+        {
+            (*it)->OnBackground();
+        }
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    void Entity::OnSuspend()
+    {
+        CS_ASSERT(m_appActive == true, "Entity: Received suspend while already suspended.");
+        
+        m_appActive = false;
+        
+        for (auto it = m_components.rbegin(); it != m_components.rend(); ++it)
+        {
+            (*it)->OnSuspend();
+        }
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    void Entity::Reset()
+    {
+        RemoveAllComponents();
+        RemoveAllChildren();
+        RemoveFromParent();
+        
+        m_name = std::string();
+        m_transform.Reset();
+    }
+    //-------------------------------------------------------------
+    //-------------------------------------------------------------
+    Entity::~Entity()
+    {
+        RemoveAllComponents();
+        RemoveAllChildren();
+    }
 }

@@ -34,74 +34,71 @@
 
 #include <functional>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
+    //---------------------------------------------------
+    /// A system for listening for remote/push notifications.
+    ///
+    /// @author Robert Henning
+    //---------------------------------------------------
+    class RemoteNotificationSystem : public Core::AppSystem
     {
+    public:
+        CS_DECLARE_NAMEDTYPE(RemoteNotificationSystem);
         //---------------------------------------------------
-        /// A system for listening for remote/push notifications.
+        /// Typedefs
+        //---------------------------------------------------
+        using TokenReceivedDelegate = std::function<void(const std::string&)>;
+        using NotificationReceivedDelegate = std::function<void(const NotificationCSPtr&)>;
+        //---------------------------------------------------
+        /// Creates a new platform specfic instance of the remote
+        /// notification system.
         ///
         /// @author Robert Henning
         //---------------------------------------------------
-        class RemoteNotificationSystem : public Core::AppSystem
-        {
-        public:
-            CS_DECLARE_NAMEDTYPE(RemoteNotificationSystem);
-            //---------------------------------------------------
-            /// Typedefs
-            //---------------------------------------------------
-            using TokenReceivedDelegate = std::function<void(const std::string&)>;
-            using NotificationReceivedDelegate = std::function<void(const NotificationCSPtr&)>;
-            //---------------------------------------------------
-            /// Creates a new platform specfic instance of the remote
-            /// notification system.
-            ///
-            /// @author Robert Henning
-            //---------------------------------------------------
-            static RemoteNotificationSystemUPtr Create();
-            //--------------------------------------------------
-            /// Enables and disables addition of remote notifications.
-            /// All existing notifications will be cancelled
-            /// when this is disabled. This is enabled by default.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param Whether or not to enable the scheduling
-            /// of app notifications.
-            //---------------------------------------------------
-            virtual void SetEnabled(bool in_enabled) = 0;
-            //--------------------------------------------------
-            /// Request the remote token for this device for use
-            /// with Push Notifications.
-            ///
-            /// @author Robert Henning
-            ///
-            /// @param The return delegate.
-            //--------------------------------------------------
-            virtual void RequestRemoteToken(const TokenReceivedDelegate& in_delegate) = 0;
-            //--------------------------------------------------
-            /// @author Robert Hennin
-            ///
-            /// @return The unique token that the push notification
-            /// provider uses to identify the device
-            //--------------------------------------------------
-            virtual const std::string& GetRemoteToken() const = 0;
-            //--------------------------------------------------
-            /// @author Robert Hennin
-            ///
-            /// @return The ID for the Apple remote notification
-            /// service
-            //--------------------------------------------------
-            virtual const std::string& GetProviderID() const = 0;
-            //--------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return An event that can be used to listen for
-            /// new notifications being received.
-            //---------------------------------------------------
-            virtual IConnectableEvent<NotificationReceivedDelegate>& GetReceivedEvent() = 0;
-        };
-    }
+        static RemoteNotificationSystemUPtr Create();
+        //--------------------------------------------------
+        /// Enables and disables addition of remote notifications.
+        /// All existing notifications will be cancelled
+        /// when this is disabled. This is enabled by default.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param Whether or not to enable the scheduling
+        /// of app notifications.
+        //---------------------------------------------------
+        virtual void SetEnabled(bool in_enabled) = 0;
+        //--------------------------------------------------
+        /// Request the remote token for this device for use
+        /// with Push Notifications.
+        ///
+        /// @author Robert Henning
+        ///
+        /// @param The return delegate.
+        //--------------------------------------------------
+        virtual void RequestRemoteToken(const TokenReceivedDelegate& in_delegate) = 0;
+        //--------------------------------------------------
+        /// @author Robert Hennin
+        ///
+        /// @return The unique token that the push notification
+        /// provider uses to identify the device
+        //--------------------------------------------------
+        virtual const std::string& GetRemoteToken() const = 0;
+        //--------------------------------------------------
+        /// @author Robert Hennin
+        ///
+        /// @return The ID for the Apple remote notification
+        /// service
+        //--------------------------------------------------
+        virtual const std::string& GetProviderID() const = 0;
+        //--------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return An event that can be used to listen for
+        /// new notifications being received.
+        //---------------------------------------------------
+        virtual IConnectableEvent<NotificationReceivedDelegate>& GetReceivedEvent() = 0;
+    };
 }
 
 #endif

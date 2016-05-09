@@ -36,86 +36,33 @@
 
 #include <json/json.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-		namespace
-		{
-            const u32 k_version = 1;
-			const std::string k_fileExtension("cstext");
+    namespace
+    {
+        const u32 k_version = 1;
+        const std::string k_fileExtension("cstext");
+        
+        //----------------------------------------------------
+        /// Performs the heavy lifting for the 2 create methods
+        /// by loading the keys and text files into a single resource
+        ///
+        /// @author S Downie
+        ///
+        /// @param The storage location.
+        /// @param The filepath.
+        /// @param Completion delegate
+        /// @param [Out] The output resource.
+        //----------------------------------------------------
+        void LoadResource(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
+        {
+            LocalisedText* textResource((LocalisedText*)out_resource.get());
             
-			//----------------------------------------------------
-			/// Performs the heavy lifting for the 2 create methods
-			/// by loading the keys and text files into a single resource
-			///
-			/// @author S Downie
-			///
-			/// @param The storage location.
-			/// @param The filepath.
-			/// @param Completion delegate
-			/// @param [Out] The output resource.
-			//----------------------------------------------------
-			void LoadResource(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
-			{
-                LocalisedText* textResource((LocalisedText*)out_resource.get());
-                
-                Json::Value jsonRoot;
-                if (Core::JsonUtils::ReadJson(in_storageLocation, in_filePath, jsonRoot) == false)
-                {
-                    CS_LOG_ERROR("Cannot read cstext file: " + in_filePath);
-                    textResource->SetLoadState(Resource::LoadState::k_failed);
-                    if(in_delegate != nullptr)
-                    {
-                        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-                        {
-                            in_delegate(out_resource);
-                        });
-                    }
-                    return;
-                }
-                
-                
-                auto jsonVersion = jsonRoot.get("Version", Json::nullValue);
-                auto jsonText = jsonRoot.get("Text", Json::nullValue);
-                
-                if (jsonVersion.isNull() || jsonText.isNull())
-                {
-                    CS_LOG_ERROR("Cannot read cstext file: " + in_filePath);
-                    textResource->SetLoadState(Resource::LoadState::k_failed);
-                    if(in_delegate != nullptr)
-                    {
-                        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-                        {
-                            in_delegate(out_resource);
-                        });
-                    }
-                    return;
-                }
-                
-                if (jsonVersion.asInt() != k_version)
-                {
-                    CS_LOG_ERROR("Invalid cstext file version: " + in_filePath);
-                    textResource->SetLoadState(Resource::LoadState::k_failed);
-                    if(in_delegate != nullptr)
-                    {
-                        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-                        {
-                            in_delegate(out_resource);
-                        });
-                    }
-                    return;
-                }
-                
-                std::unordered_map<std::string, std::string> map;
-                for (const auto& member : jsonText.getMemberNames())
-                {
-                    map.emplace(member, jsonText[member].asString());
-                }
-                
-                textResource->Build(map);
-                textResource->SetLoadState(Resource::LoadState::k_loaded);
-                
+            Json::Value jsonRoot;
+            if (Core::JsonUtils::ReadJson(in_storageLocation, in_filePath, jsonRoot) == false)
+            {
+                CS_LOG_ERROR("Cannot read cstext file: " + in_filePath);
+                textResource->SetLoadState(Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
                     Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
@@ -123,49 +70,99 @@ namespace ChilliSource
                         in_delegate(out_resource);
                     });
                 }
-			}
-		}
-
-		CS_DEFINE_NAMEDTYPE(LocalisedTextProvider);
-
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		LocalisedTextProviderUPtr LocalisedTextProvider::Create()
-		{
-			return LocalisedTextProviderUPtr(new LocalisedTextProvider());
-		}
-        //----------------------------------------------------
-        //----------------------------------------------------
-        bool LocalisedTextProvider::IsA(InterfaceIDType in_interfaceId) const
-        {
-            return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == LocalisedTextProvider::InterfaceID;
-        }
-		//----------------------------------------------------
-		//----------------------------------------------------
-		InterfaceIDType LocalisedTextProvider::GetResourceType() const
-		{
-			return LocalisedText::InterfaceID;
-		}
-		//----------------------------------------------------
-		//----------------------------------------------------
-		bool LocalisedTextProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
-		{
-			return in_extension == k_fileExtension;
-		}
-		//----------------------------------------------------
-		//----------------------------------------------------
-		void LocalisedTextProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
-		{
-            LoadResource(in_storageLocation, in_filePath, nullptr, out_resource);
-		}
-		//----------------------------------------------------
-		//----------------------------------------------------
-		void LocalisedTextProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
-		{
-            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
+                return;
+            }
+            
+            
+            auto jsonVersion = jsonRoot.get("Version", Json::nullValue);
+            auto jsonText = jsonRoot.get("Text", Json::nullValue);
+            
+            if (jsonVersion.isNull() || jsonText.isNull())
             {
-                LoadResource(in_storageLocation, in_filePath, in_delegate, out_resource);
-            });
-		}
-	}
+                CS_LOG_ERROR("Cannot read cstext file: " + in_filePath);
+                textResource->SetLoadState(Resource::LoadState::k_failed);
+                if(in_delegate != nullptr)
+                {
+                    Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                    {
+                        in_delegate(out_resource);
+                    });
+                }
+                return;
+            }
+            
+            if (jsonVersion.asInt() != k_version)
+            {
+                CS_LOG_ERROR("Invalid cstext file version: " + in_filePath);
+                textResource->SetLoadState(Resource::LoadState::k_failed);
+                if(in_delegate != nullptr)
+                {
+                    Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                    {
+                        in_delegate(out_resource);
+                    });
+                }
+                return;
+            }
+            
+            std::unordered_map<std::string, std::string> map;
+            for (const auto& member : jsonText.getMemberNames())
+            {
+                map.emplace(member, jsonText[member].asString());
+            }
+            
+            textResource->Build(map);
+            textResource->SetLoadState(Resource::LoadState::k_loaded);
+            
+            if(in_delegate != nullptr)
+            {
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                {
+                    in_delegate(out_resource);
+                });
+            }
+        }
+    }
+
+    CS_DEFINE_NAMEDTYPE(LocalisedTextProvider);
+
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    LocalisedTextProviderUPtr LocalisedTextProvider::Create()
+    {
+        return LocalisedTextProviderUPtr(new LocalisedTextProvider());
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    bool LocalisedTextProvider::IsA(InterfaceIDType in_interfaceId) const
+    {
+        return in_interfaceId == ResourceProvider::InterfaceID || in_interfaceId == LocalisedTextProvider::InterfaceID;
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    InterfaceIDType LocalisedTextProvider::GetResourceType() const
+    {
+        return LocalisedText::InterfaceID;
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    bool LocalisedTextProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
+    {
+        return in_extension == k_fileExtension;
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    void LocalisedTextProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
+    {
+        LoadResource(in_storageLocation, in_filePath, nullptr, out_resource);
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    void LocalisedTextProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
+    {
+        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
+        {
+            LoadResource(in_storageLocation, in_filePath, in_delegate, out_resource);
+        });
+    }
 }

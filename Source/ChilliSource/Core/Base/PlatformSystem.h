@@ -32,88 +32,85 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //-----------------------------------------------------------
+    /// Provides an interface for initialising the platform
+    /// specific application backend, creating platform specific
+    /// default systems and managing the platform specific
+    /// updater.
+    ///
+    /// @author S Downie
+    //-----------------------------------------------------------
+    class PlatformSystem : public AppSystem
     {
-        //-----------------------------------------------------------
-        /// Provides an interface for initialising the platform
-        /// specific application backend, creating platform specific
-        /// default systems and managing the platform specific
-        /// updater.
+    public:
+        CS_DECLARE_NAMEDTYPE(PlatformSystem);
+        //---------------------------------------------------
+        /// NOTE: Setting this will disable VSync
         ///
         /// @author S Downie
-        //-----------------------------------------------------------
-        class PlatformSystem : public AppSystem
-        {
-        public:
-            CS_DECLARE_NAMEDTYPE(PlatformSystem);
-            //---------------------------------------------------
-            /// NOTE: Setting this will disable VSync
-            ///
-            /// @author S Downie
-            ///
-            /// @param The maximum frames per second
-            /// to clamp to. This should be in multiples
-            /// of 15 (15, 30, 60)
-            //---------------------------------------------------
-            virtual void SetPreferredFPS(u32 in_fps) = 0;
-            //---------------------------------------------------
-            /// This will turn VSync on or off on platforms that
-            /// support it. NOTE: This will override the preferred FPS
-            ///
-            /// @author S Downie
-            ///
-            /// @param Enable/Disable
-            //---------------------------------------------------
-            virtual void SetVSyncEnabled(bool in_enabled) = 0;
-            //---------------------------------------------------
-            /// Terminate the app
-            ///
-            /// @author S Downie
-            //---------------------------------------------------
-            virtual void Quit() = 0;
-            //---------------------------------------------------
-            /// Adds default systems to the applications system
-			/// list.
-            ///
-            /// @author S Downie
-			///
-			/// @param Application instance to add the default
-            /// platform systems to.
-            //---------------------------------------------------
-            virtual void CreateDefaultSystems(Application* in_application) = 0;
-            //---------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return the current time in milliseconds
-            //---------------------------------------------------
-            virtual TimeIntervalMs GetSystemTimeMS() const = 0;
-            //---------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The version of the application
-            //---------------------------------------------------
-            virtual std::string GetAppVersion() const = 0;
-            //---------------------------------------------------
-            /// Destructor
-            ///
-            /// @author S Downie
-            //---------------------------------------------------
-            virtual ~PlatformSystem(){}
-        protected:
-            friend class Application;
-            //---------------------------------------------------
-            /// Creates a new platform specfic instance of the
-            /// platform system.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @return The new instance.
-            //---------------------------------------------------
-            static PlatformSystemUPtr Create();
-        };
-    }
+        ///
+        /// @param The maximum frames per second
+        /// to clamp to. This should be in multiples
+        /// of 15 (15, 30, 60)
+        //---------------------------------------------------
+        virtual void SetPreferredFPS(u32 in_fps) = 0;
+        //---------------------------------------------------
+        /// This will turn VSync on or off on platforms that
+        /// support it. NOTE: This will override the preferred FPS
+        ///
+        /// @author S Downie
+        ///
+        /// @param Enable/Disable
+        //---------------------------------------------------
+        virtual void SetVSyncEnabled(bool in_enabled) = 0;
+        //---------------------------------------------------
+        /// Terminate the app
+        ///
+        /// @author S Downie
+        //---------------------------------------------------
+        virtual void Quit() = 0;
+        //---------------------------------------------------
+        /// Adds default systems to the applications system
+        /// list.
+        ///
+        /// @author S Downie
+        ///
+        /// @param Application instance to add the default
+        /// platform systems to.
+        //---------------------------------------------------
+        virtual void CreateDefaultSystems(Application* in_application) = 0;
+        //---------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return the current time in milliseconds
+        //---------------------------------------------------
+        virtual TimeIntervalMs GetSystemTimeMS() const = 0;
+        //---------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The version of the application
+        //---------------------------------------------------
+        virtual std::string GetAppVersion() const = 0;
+        //---------------------------------------------------
+        /// Destructor
+        ///
+        /// @author S Downie
+        //---------------------------------------------------
+        virtual ~PlatformSystem(){}
+    protected:
+        friend class Application;
+        //---------------------------------------------------
+        /// Creates a new platform specfic instance of the
+        /// platform system.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return The new instance.
+        //---------------------------------------------------
+        static PlatformSystemUPtr Create();
+    };
 }
 
 #endif

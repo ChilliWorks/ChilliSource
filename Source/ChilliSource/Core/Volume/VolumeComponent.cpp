@@ -28,10 +28,7 @@
 
 #include <ChilliSource/Core/Volume/VolumeComponent.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
-    {
-        CS_DEFINE_NAMEDTYPE(VolumeComponent);
-    }
+    CS_DEFINE_NAMEDTYPE(VolumeComponent);
 }

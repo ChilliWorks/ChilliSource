@@ -28,21 +28,18 @@
 
 #include <ChilliSource/Core/System/StateSystem.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------
+    //------------------------------------------------
+    State* StateSystem::GetState() const
     {
-        //------------------------------------------------
-        //------------------------------------------------
-        State* StateSystem::GetState() const
-        {
-            return m_state;
-        }
-        //------------------------------------------------
-        //------------------------------------------------
-        void StateSystem::SetState(State* in_state)
-        {
-            m_state = in_state;
-        }
+        return m_state;
+    }
+    //------------------------------------------------
+    //------------------------------------------------
+    void StateSystem::SetState(State* in_state)
+    {
+        m_state = in_state;
     }
 }

@@ -31,65 +31,62 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/Property.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------------------------------
+    /// A reference property. This does not contain a specific value for the
+    /// instead referencing another value accessible though the provided
+    /// getter and setter delegates.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------
+    template <typename TType> class ReferenceProperty final : public Property<TType>
     {
-        //------------------------------------------------------------------------
-        /// A reference property. This does not contain a specific value for the
-        /// instead referencing another value accessible though the provided
-        /// getter and setter delegates.
+    public:
+        //-----------------------------------------------------------------
+        /// The getter delegate used when calling Get() on the property.
         ///
         /// @author Ian Copland
-        //------------------------------------------------------------------------
-        template <typename TType> class ReferenceProperty final : public Property<TType>
-        {
-        public:
-            //-----------------------------------------------------------------
-            /// The getter delegate used when calling Get() on the property.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @return The current value of the property.
-            //-----------------------------------------------------------------
-            using GetterDelegate = std::function<TType()>;
-            //-----------------------------------------------------------------
-            /// The setter delegate used when calling Set() on the property.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The new value for the property.
-            //-----------------------------------------------------------------
-            using SetterDelegate = std::function<void(TType)>;
-            //-----------------------------------------------------------------
-            /// Constructor.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The type of property.
-            /// @param The getter delegate.
-            /// @param The setter delegate.
-            //-----------------------------------------------------------------
-            ReferenceProperty(const PropertyType<TType>* in_type, const GetterDelegate& in_getter, const SetterDelegate& in_setter);
-            //-----------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The value provided by calling the getter delegate.
-            //-----------------------------------------------------------------
-            TType Get() const override;
-            //-----------------------------------------------------------------
-            /// Sets the property value of the property by calling the setter
-            /// delegate.
-            ///
-            /// @author Ian Copland
-            //-----------------------------------------------------------------
-            void Set(const TType& in_value) override;
-            
-        private:
-            GetterDelegate m_getter;
-            SetterDelegate m_setter;
-        };
-    }
+        ///
+        /// @return The current value of the property.
+        //-----------------------------------------------------------------
+        using GetterDelegate = std::function<TType()>;
+        //-----------------------------------------------------------------
+        /// The setter delegate used when calling Set() on the property.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The new value for the property.
+        //-----------------------------------------------------------------
+        using SetterDelegate = std::function<void(TType)>;
+        //-----------------------------------------------------------------
+        /// Constructor.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The type of property.
+        /// @param The getter delegate.
+        /// @param The setter delegate.
+        //-----------------------------------------------------------------
+        ReferenceProperty(const PropertyType<TType>* in_type, const GetterDelegate& in_getter, const SetterDelegate& in_setter);
+        //-----------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The value provided by calling the getter delegate.
+        //-----------------------------------------------------------------
+        TType Get() const override;
+        //-----------------------------------------------------------------
+        /// Sets the property value of the property by calling the setter
+        /// delegate.
+        ///
+        /// @author Ian Copland
+        //-----------------------------------------------------------------
+        void Set(const TType& in_value) override;
+        
+    private:
+        GetterDelegate m_getter;
+        SetterDelegate m_setter;
+    };
 }
 
 //------------------------------------------------------------------------
@@ -99,30 +96,27 @@ namespace ChilliSource
 //------------------------------------------------------------------------
 #include <ChilliSource/Core/Container/Property/PropertyType.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    template <typename TType> ReferenceProperty<TType>::ReferenceProperty(const PropertyType<TType>* in_type, const GetterDelegate& in_getter, const SetterDelegate& in_setter)
+    : Property<TType>(in_type), m_getter(in_getter), m_setter(in_setter)
     {
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        template <typename TType> ReferenceProperty<TType>::ReferenceProperty(const PropertyType<TType>* in_type, const GetterDelegate& in_getter, const SetterDelegate& in_setter)
-        : Property<TType>(in_type), m_getter(in_getter), m_setter(in_setter)
-        {
-            CS_ASSERT(m_getter != nullptr, "Property getter delegate cannot be null.");
-            CS_ASSERT(m_setter != nullptr, "Property setter delegate cannot be null.");
-        }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        template <typename TType> void ReferenceProperty<TType>::Set(const TType& in_value)
-        {
-            m_setter(in_value);
-        }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        template <typename TType> TType ReferenceProperty<TType>::Get() const
-        {
-            return m_getter();
-        }
+        CS_ASSERT(m_getter != nullptr, "Property getter delegate cannot be null.");
+        CS_ASSERT(m_setter != nullptr, "Property setter delegate cannot be null.");
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    template <typename TType> void ReferenceProperty<TType>::Set(const TType& in_value)
+    {
+        m_setter(in_value);
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    template <typename TType> TType ReferenceProperty<TType>::Get() const
+    {
+        return m_getter();
     }
 }
 

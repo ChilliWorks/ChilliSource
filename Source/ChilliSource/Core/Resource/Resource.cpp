@@ -30,90 +30,87 @@
 
 #include <ChilliSource/Core/File/StorageLocation.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		Resource::Resource()
-        : m_location(StorageLocation::k_none), m_loadState(LoadState::k_loading)
-		{
-		}
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        Resource::LoadState Resource::GetLoadState() const
-        {
-            return m_loadState;
-        }
-        //-------------------------------------------------------
-        /// If we set the load state to loaded or failed
-        /// we need to notify any waiting parties that the resource
-        /// is now ready
-        //-------------------------------------------------------
-        void Resource::SetLoadState(LoadState in_loadState)
-        {
-            m_loadState = in_loadState;
-        }
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		void Resource::SetFilePath(const std::string& in_filePath)
-		{
-			m_filePath = in_filePath;
-		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		const std::string& Resource::GetFilePath() const
-		{
-			return m_filePath;
-		}
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void Resource::SetName(const std::string& in_name)
-        {
-            m_name = in_name;
-        }
-        //-------------------------------------------------------
-		//-------------------------------------------------------
-		const std::string& Resource::GetName() const
-		{
-			return m_name;
-		}
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void Resource::SetId(ResourceId in_id)
-        {
-            m_id = in_id;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        Resource::ResourceId Resource::GetId() const
-        {
-            return m_id;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void Resource::SetOptions(const IResourceOptionsBaseCSPtr& in_options)
-        {
-            m_options = in_options;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        const IResourceOptionsBaseCSPtr& Resource::GetOptions() const
-        {
-            return m_options;
-        }
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-		void Resource::SetStorageLocation(StorageLocation in_location)
-		{
-			m_location = in_location;
-		}
-		//-------------------------------------------------------
-		//-------------------------------------------------------
-        StorageLocation Resource::GetStorageLocation() const
-		{
-			return m_location;
-		}
-	}
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    Resource::Resource()
+    : m_location(StorageLocation::k_none), m_loadState(LoadState::k_loading)
+    {
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    Resource::LoadState Resource::GetLoadState() const
+    {
+        return m_loadState;
+    }
+    //-------------------------------------------------------
+    /// If we set the load state to loaded or failed
+    /// we need to notify any waiting parties that the resource
+    /// is now ready
+    //-------------------------------------------------------
+    void Resource::SetLoadState(LoadState in_loadState)
+    {
+        m_loadState = in_loadState;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    void Resource::SetFilePath(const std::string& in_filePath)
+    {
+        m_filePath = in_filePath;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    const std::string& Resource::GetFilePath() const
+    {
+        return m_filePath;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    void Resource::SetName(const std::string& in_name)
+    {
+        m_name = in_name;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    const std::string& Resource::GetName() const
+    {
+        return m_name;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    void Resource::SetId(ResourceId in_id)
+    {
+        m_id = in_id;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    Resource::ResourceId Resource::GetId() const
+    {
+        return m_id;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    void Resource::SetOptions(const IResourceOptionsBaseCSPtr& in_options)
+    {
+        m_options = in_options;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    const IResourceOptionsBaseCSPtr& Resource::GetOptions() const
+    {
+        return m_options;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    void Resource::SetStorageLocation(StorageLocation in_location)
+    {
+        m_location = in_location;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    StorageLocation Resource::GetStorageLocation() const
+    {
+        return m_location;
+    }
 }

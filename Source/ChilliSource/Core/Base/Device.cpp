@@ -40,24 +40,21 @@
 #include <CSBackend/Platform/Windows/Core/Base/Device.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    CS_DEFINE_NAMEDTYPE(Device);
+    //--------------------------------------------------
+    //--------------------------------------------------
+    DeviceUPtr Device::Create()
     {
-        CS_DEFINE_NAMEDTYPE(Device);
-        //--------------------------------------------------
-        //--------------------------------------------------
-        DeviceUPtr Device::Create()
-        {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return DeviceUPtr(new CSBackend::Android::Device());
+        return DeviceUPtr(new CSBackend::Android::Device());
 #elif defined CS_TARGETPLATFORM_IOS
-            return DeviceUPtr(new CSBackend::iOS::Device());
+        return DeviceUPtr(new CSBackend::iOS::Device());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return DeviceUPtr(new CSBackend::Windows::Device());
+        return DeviceUPtr(new CSBackend::Windows::Device());
 #else
-            return nullptr;
+        return nullptr;
 #endif
-        }
     }
 }

@@ -31,45 +31,42 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------------------------------------
+    /// An enum describing the various types of tasks which are available to be
+    /// scheduled.
+    ///
+    /// Small task: A task with a small execution time which should be processed
+    /// within a single frame. These have a high priority. Note that small tasks
+    /// which take a long time to execute will have a significant negative impact
+    /// on performance. Use large tasks where a longer execution time is required.
+    ///
+    /// Large task: A task with a large execution time which can be processed over
+    /// a number of frames and can take several seconds to process. These have a
+    /// low priority.
+    ///
+    /// Main thread task: A small task which is executed on the main thread. This
+    /// occurs after the game logic for each frame is executed.
+    ///
+    /// Game logic task: A small task which is executed on a background thread and
+    /// is guaranteed to be processed within the game logic stage, prior to
+    /// executing the main thread tasks.
+    ///
+    /// File Task: A large task specifically for processing file input or output.
+    /// All background processing of files should use this rather than standard
+    /// large tasks.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------------
+    enum class TaskType
     {
-        //------------------------------------------------------------------------------
-        /// An enum describing the various types of tasks which are available to be
-        /// scheduled.
-        ///
-        /// Small task: A task with a small execution time which should be processed
-        /// within a single frame. These have a high priority. Note that small tasks
-        /// which take a long time to execute will have a significant negative impact
-        /// on performance. Use large tasks where a longer execution time is required.
-        ///
-        /// Large task: A task with a large execution time which can be processed over
-        /// a number of frames and can take several seconds to process. These have a
-        /// low priority.
-        ///
-        /// Main thread task: A small task which is executed on the main thread. This
-        /// occurs after the game logic for each frame is executed.
-        ///
-        /// Game logic task: A small task which is executed on a background thread and
-        /// is guaranteed to be processed within the game logic stage, prior to
-        /// executing the main thread tasks.
-        ///
-        /// File Task: A large task specifically for processing file input or output.
-        /// All background processing of files should use this rather than standard
-        /// large tasks.
-        ///
-        /// @author Ian Copland
-        //------------------------------------------------------------------------------
-        enum class TaskType
-        {
-            k_small,
-            k_large,
-            k_mainThread,
-            k_gameLogic,
-            k_file
-        };
-    }
+        k_small,
+        k_large,
+        k_mainThread,
+        k_gameLogic,
+        k_file
+    };
 }
 
 #endif

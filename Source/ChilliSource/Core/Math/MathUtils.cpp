@@ -31,43 +31,40 @@
 #include <ctime>
 #include <random>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core 
-	{
-        namespace MathUtils
+    namespace MathUtils
+    {
+        namespace
         {
-            namespace
-            {
-                const f32 k_degreesToRadians = 0.0174532925f;
-                const f32 k_radiansToDegrees = 57.2957795f;
-            }
-            //---------------------------------------------------------
-            //---------------------------------------------------------
-            u32 NextPowerOfTwo(u32 in_value)
-            {
-                in_value--;
-                in_value |= in_value >> 1;  // handle  2 bit numbers
-                in_value |= in_value >> 2;  // handle  4 bit numbers
-                in_value |= in_value >> 4;  // handle  8 bit numbers
-                in_value |= in_value >> 8;  // handle 16 bit numbers
-                in_value |= in_value >> 16; // handle 32 bit numbers
-                in_value++;
-                
-                return in_value;	
-            }
-            //---------------------------------------------------------
-            //---------------------------------------------------------
-            f32 DegToRad(f32 in_angle)
-            {
-                return in_angle * k_degreesToRadians;
-            }
-            //---------------------------------------------------------
-            //---------------------------------------------------------
-            f32 RadToDeg(f32 infAngle)
-            {
-                return infAngle * k_radiansToDegrees;
-            }
+            const f32 k_degreesToRadians = 0.0174532925f;
+            const f32 k_radiansToDegrees = 57.2957795f;
         }
-	}
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        u32 NextPowerOfTwo(u32 in_value)
+        {
+            in_value--;
+            in_value |= in_value >> 1;  // handle  2 bit numbers
+            in_value |= in_value >> 2;  // handle  4 bit numbers
+            in_value |= in_value >> 4;  // handle  8 bit numbers
+            in_value |= in_value >> 8;  // handle 16 bit numbers
+            in_value |= in_value >> 16; // handle 32 bit numbers
+            in_value++;
+            
+            return in_value;	
+        }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        f32 DegToRad(f32 in_angle)
+        {
+            return in_angle * k_degreesToRadians;
+        }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        f32 RadToDeg(f32 infAngle)
+        {
+            return infAngle * k_radiansToDegrees;
+        }
+    }
 }

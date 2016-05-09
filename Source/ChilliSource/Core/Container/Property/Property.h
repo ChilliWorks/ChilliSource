@@ -31,78 +31,75 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/IProperty.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------------------------------
+    /// A specific type of property. This implements the IProperty interface
+    /// and exposes the specific type of the underlying value. Methods for
+    /// setting and getting the value are provided while abtracting the
+    /// literal storage of the value.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------
+    template <typename TType> class Property : public IProperty
     {
-        //------------------------------------------------------------------------
-        /// A specific type of property. This implements the IProperty interface
-        /// and exposes the specific type of the underlying value. Methods for
-        /// setting and getting the value are provided while abtracting the
-        /// literal storage of the value.
+    public:
+        //-----------------------------------------------------------------
+        /// Constructor. Constructs the property with the given type
+        /// description.
         ///
         /// @author Ian Copland
-        //------------------------------------------------------------------------
-        template <typename TType> class Property : public IProperty
-        {
-        public:
-            //-----------------------------------------------------------------
-            /// Constructor. Constructs the property with the given type
-            /// description.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The type description.
-            //-----------------------------------------------------------------
-            Property(const PropertyType<TType>* in_type);
-            //-----------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The property type description.
-            //-----------------------------------------------------------------
-            const IPropertyType* GetType() const override;
-            //-----------------------------------------------------------------
-            /// A basic getter for the value of the property. The literal storage
-            /// of the value is determined by the implementing type.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The value to set the property to.
-            //-----------------------------------------------------------------
-            virtual TType Get() const = 0;
-            //-----------------------------------------------------------------
-            /// Parses the given string and sets the property to the parsed
-            /// value.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The string to parse.
-            //-----------------------------------------------------------------
-            void Parse(const std::string& in_stringValue) override;
-            //-----------------------------------------------------------------
-            /// Sets the value of the property to that of the given property.
-            /// The given property must be of the same type, otherwise the app
-            /// is considered to be in an irrecoverable state and will terminate.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The property whose value this will be set to.
-            //-----------------------------------------------------------------
-            void Set(const IProperty* in_property) override;
-            //-----------------------------------------------------------------
-            /// A basic setter for the value of the property. The literal storage
-            /// of the value is determined by the implementing type.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The value to set the property to.
-            //-----------------------------------------------------------------
-            virtual void Set(const TType& in_value) = 0;
-            
-        private:
-            const PropertyType<TType>* m_type;
-        };
-    }
+        ///
+        /// @param The type description.
+        //-----------------------------------------------------------------
+        Property(const PropertyType<TType>* in_type);
+        //-----------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The property type description.
+        //-----------------------------------------------------------------
+        const IPropertyType* GetType() const override;
+        //-----------------------------------------------------------------
+        /// A basic getter for the value of the property. The literal storage
+        /// of the value is determined by the implementing type.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The value to set the property to.
+        //-----------------------------------------------------------------
+        virtual TType Get() const = 0;
+        //-----------------------------------------------------------------
+        /// Parses the given string and sets the property to the parsed
+        /// value.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The string to parse.
+        //-----------------------------------------------------------------
+        void Parse(const std::string& in_stringValue) override;
+        //-----------------------------------------------------------------
+        /// Sets the value of the property to that of the given property.
+        /// The given property must be of the same type, otherwise the app
+        /// is considered to be in an irrecoverable state and will terminate.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The property whose value this will be set to.
+        //-----------------------------------------------------------------
+        void Set(const IProperty* in_property) override;
+        //-----------------------------------------------------------------
+        /// A basic setter for the value of the property. The literal storage
+        /// of the value is determined by the implementing type.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The value to set the property to.
+        //-----------------------------------------------------------------
+        virtual void Set(const TType& in_value) = 0;
+        
+    private:
+        const PropertyType<TType>* m_type;
+    };
 }
 
 //------------------------------------------------------------------------
@@ -112,41 +109,38 @@ namespace ChilliSource
 //------------------------------------------------------------------------
 #include <ChilliSource/Core/Container/Property/PropertyType.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    template <typename TType> Property<TType>::Property(const PropertyType<TType>* in_type)
+        : m_type(in_type)
     {
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        template <typename TType> Property<TType>::Property(const PropertyType<TType>* in_type)
-            : m_type(in_type)
-        {
-        }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        template <typename TType> const IPropertyType* Property<TType>::GetType() const
-        {
-            return m_type;
-        }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        template <typename TType> void Property<TType>::Parse(const std::string& in_string)
-        {
-            auto parser = m_type->GetParseDelegate();
-            CS_ASSERT(parser != nullptr, "Cannot parse this property type from string.");
-            
-            TType value = parser(in_string);
-            Set(value);
-        }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        template <typename TType> void Property<TType>::Set(const IProperty* in_property)
-        {
-            CS_ASSERT(in_property->GetType() == GetType(), "Cannot set using the contents of another property created from a different Property Type.");
-            
-            const Property<TType>* castProperty = CS_SMARTCAST(const Property<TType>*, in_property, "Cannot set a property of a different property type.");
-            Set(castProperty->Get());
-        }
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    template <typename TType> const IPropertyType* Property<TType>::GetType() const
+    {
+        return m_type;
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    template <typename TType> void Property<TType>::Parse(const std::string& in_string)
+    {
+        auto parser = m_type->GetParseDelegate();
+        CS_ASSERT(parser != nullptr, "Cannot parse this property type from string.");
+        
+        TType value = parser(in_string);
+        Set(value);
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    template <typename TType> void Property<TType>::Set(const IProperty* in_property)
+    {
+        CS_ASSERT(in_property->GetType() == GetType(), "Cannot set using the contents of another property created from a different Property Type.");
+        
+        const Property<TType>* castProperty = CS_SMARTCAST(const Property<TType>*, in_property, "Cannot set a property of a different property type.");
+        Set(castProperty->Get());
     }
 }
 

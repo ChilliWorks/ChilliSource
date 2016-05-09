@@ -32,85 +32,82 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //---------------------------------------------------------------
+    /// A system for managing application configuration settings. The
+    /// settings are read from an App.config file in the assets
+    /// directory. Settings include things like the displayable name
+    /// of the project and the preferred FPS.
+    ///
+    /// @author Ian Copland
+    //---------------------------------------------------------------
+    class AppConfig final : public AppSystem
     {
-        //---------------------------------------------------------------
-        /// A system for managing application configuration settings. The
-        /// settings are read from an App.config file in the assets
-        /// directory. Settings include things like the displayable name
-        /// of the project and the preferred FPS.
+    public:
+        CS_DECLARE_NAMEDTYPE(AppConfig);
+        //---------------------------------------------------------
+        /// Allows querying of whether or not the system implements
+        /// the interface with the associated interface Id.
         ///
         /// @author Ian Copland
-        //---------------------------------------------------------------
-        class AppConfig final : public AppSystem
-        {
-        public:
-            CS_DECLARE_NAMEDTYPE(AppConfig);
-			//---------------------------------------------------------
-            /// Allows querying of whether or not the system implements
-            /// the interface with the associated interface Id.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The interface Id.
-            ///
-            /// @return Whether or not the interface is implemented.
-            //--------------------------------------------------------
-            bool IsA(InterfaceIDType in_interfaceId) const override;
-            //---------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The displayable name of the application. This
-            /// is not necessarily the name of the app displayed when
-            /// launching the App.
-            //--------------------------------------------------------
-            const std::string& GetDisplayableName() const;
-            //---------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @param The preferred FPS.
-            //--------------------------------------------------------
-            u32 GetPreferredFPS() const;
-			//---------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return Whether VSync is enabled or not
-			//---------------------------------------------------------
-			bool IsVSyncEnabled() const;
-            
-        private:
-            friend class Application;
-            //---------------------------------------------------------
-            /// Factory method for creating a new instance of the class.
-            /// This will be called by CreateSystem() in Application.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @return New instance of the system.
-            //---------------------------------------------------------
-            static AppConfigUPtr Create();
-            //---------------------------------------------------------
-            /// Constructor. Declared private to force the use of the
-            /// factory method.
-            ///
-            /// @author Ian Copland
-            //---------------------------------------------------------
-            AppConfig();
-            //---------------------------------------------------------
-            /// Reads the contents of the app config from file.
-            ///
-            /// @author Ian Copland
-            //---------------------------------------------------------
-            void Load();
-            
-            std::string m_displayableName;
-            u32 m_preferredFPS;
+        ///
+        /// @param The interface Id.
+        ///
+        /// @return Whether or not the interface is implemented.
+        //--------------------------------------------------------
+        bool IsA(InterfaceIDType in_interfaceId) const override;
+        //---------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The displayable name of the application. This
+        /// is not necessarily the name of the app displayed when
+        /// launching the App.
+        //--------------------------------------------------------
+        const std::string& GetDisplayableName() const;
+        //---------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @param The preferred FPS.
+        //--------------------------------------------------------
+        u32 GetPreferredFPS() const;
+        //---------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Whether VSync is enabled or not
+        //---------------------------------------------------------
+        bool IsVSyncEnabled() const;
+        
+    private:
+        friend class Application;
+        //---------------------------------------------------------
+        /// Factory method for creating a new instance of the class.
+        /// This will be called by CreateSystem() in Application.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return New instance of the system.
+        //---------------------------------------------------------
+        static AppConfigUPtr Create();
+        //---------------------------------------------------------
+        /// Constructor. Declared private to force the use of the
+        /// factory method.
+        ///
+        /// @author Ian Copland
+        //---------------------------------------------------------
+        AppConfig();
+        //---------------------------------------------------------
+        /// Reads the contents of the app config from file.
+        ///
+        /// @author Ian Copland
+        //---------------------------------------------------------
+        void Load();
+        
+        std::string m_displayableName;
+        u32 m_preferredFPS;
 
-			bool m_isVSyncEnabled = false;
-        };
-    }
+        bool m_isVSyncEnabled = false;
+    };
 }
 
 #endif

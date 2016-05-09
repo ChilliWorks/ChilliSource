@@ -28,124 +28,121 @@
 
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    namespace UTF8StringUtils
     {
-        namespace UTF8StringUtils
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        std::string AppendCopy(UTF8Char in_char, const std::string& in_string)
         {
-            //-----------------------------------------------------
-            //-----------------------------------------------------
-			std::string AppendCopy(UTF8Char in_char, const std::string& in_string)
+            std::string result(in_string);
+            Append(in_char, result);
+            return result;
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        void Append(UTF8Char in_char, std::string& out_appendedResult)
+        {
+            //Single byte code (ASCII)
+            if(in_char <= 0x7F)
             {
-                std::string result(in_string);
-                Append(in_char, result);
-                return result;
+                out_appendedResult.reserve(1);
+                out_appendedResult +=((in_char>>0) & 0x7F);
             }
-            //-----------------------------------------------------
-            //-----------------------------------------------------
-            void Append(UTF8Char in_char, std::string& out_appendedResult)
+            //Two byte code
+            else if(in_char <= 0x7FF)
             {
-                //Single byte code (ASCII)
-                if(in_char <= 0x7F)
-                {
-                    out_appendedResult.reserve(1);
-                    out_appendedResult +=((in_char>>0) & 0x7F);
-                }
-                //Two byte code
-                else if(in_char <= 0x7FF)
-                {
-                    out_appendedResult.reserve(2);
-                    out_appendedResult += 0xC0 | ((in_char>>6) & 0x1F);
-                    out_appendedResult += 0x80 | ((in_char) & 0x3F);
+                out_appendedResult.reserve(2);
+                out_appendedResult += 0xC0 | ((in_char>>6) & 0x1F);
+                out_appendedResult += 0x80 | ((in_char) & 0x3F);
 
-                }
-                //Three byte code
-                else if(in_char <= 0xFFFF)
-                {
-                    out_appendedResult.reserve(3);
-                    out_appendedResult += 0xE0 | ((in_char>>12) & 0x0F);
-                    out_appendedResult += 0x80 | ((in_char>>6) & 0x3F);
-                    out_appendedResult += 0x80 | ((in_char) & 0x3F);
+            }
+            //Three byte code
+            else if(in_char <= 0xFFFF)
+            {
+                out_appendedResult.reserve(3);
+                out_appendedResult += 0xE0 | ((in_char>>12) & 0x0F);
+                out_appendedResult += 0x80 | ((in_char>>6) & 0x3F);
+                out_appendedResult += 0x80 | ((in_char) & 0x3F);
 
-                }
-                //Four byte code
-                else if(in_char <= 0x1FFFFF)
+            }
+            //Four byte code
+            else if(in_char <= 0x1FFFFF)
+            {
+                out_appendedResult.reserve(4);
+                out_appendedResult += 0xF0 | ((in_char>>18) & 0x07);
+                out_appendedResult += 0x80 | ((in_char>>12) & 0x3F);
+                out_appendedResult += 0x80 | ((in_char>>6) & 0x3F);
+                out_appendedResult += 0x80 | ((in_char) & 0x3F);
+            }
+            //Invalid format
+            else
+            {
+                CS_LOG_FATAL("Invalid UTF8 format");
+            }
+        }
+        //-----------------------------------------------------
+        //-----------------------------------------------------
+        std::string SubString(const std::string& in_string, u32 in_start, u32 in_length)
+        {
+            if (in_length == 0)
+            {
+                return "";
+            }
+            
+            std::size_t start = in_start;
+            std::size_t length = in_length;
+            std::size_t codePointStart = std::string::npos;
+            std::size_t codePointLength = std::string::npos;
+            std::size_t numCodePoints = in_string.length();
+            
+            u32 codePointIdx = 0;
+            for (u32 charIdx=0; charIdx<numCodePoints; ++charIdx, ++codePointIdx)
+            {
+                if (codePointIdx == in_start)
                 {
-                    out_appendedResult.reserve(4);
-                    out_appendedResult += 0xF0 | ((in_char>>18) & 0x07);
-                    out_appendedResult += 0x80 | ((in_char>>12) & 0x3F);
-                    out_appendedResult += 0x80 | ((in_char>>6) & 0x3F);
-                    out_appendedResult += 0x80 | ((in_char) & 0x3F);
+                    codePointStart = charIdx;
                 }
-                //Invalid format
+                
+                if (codePointIdx <= start + length || length == std::string::npos)
+                {
+                    codePointLength = charIdx;
+                }
+                
+                UTF8Char character = (UTF8Char)in_string[charIdx];
+                if (character <= 127)
+                {
+                    charIdx += 0;
+                }
+                else if ((character & 0xE0) == 0xC0)
+                {
+                    charIdx += 1;
+                }
+                else if ((character & 0xF0) == 0xE0)
+                {
+                    charIdx += 2;
+                }
+                else if ((character & 0xF8) == 0xF0)
+                {
+                    charIdx += 3;
+                }
                 else
                 {
                     CS_LOG_FATAL("Invalid UTF8 format");
                 }
             }
-            //-----------------------------------------------------
-            //-----------------------------------------------------
-            std::string SubString(const std::string& in_string, u32 in_start, u32 in_length)
-            {
-                if (in_length == 0)
-                {
-                    return "";
-                }
-                
-                std::size_t start = in_start;
-                std::size_t length = in_length;
-                std::size_t codePointStart = std::string::npos;
-                std::size_t codePointLength = std::string::npos;
-                std::size_t numCodePoints = in_string.length();
-                
-                u32 codePointIdx = 0;
-                for (u32 charIdx=0; charIdx<numCodePoints; ++charIdx, ++codePointIdx)
-                {
-                    if (codePointIdx == in_start)
-                    {
-                        codePointStart = charIdx;
-                    }
-                    
-                    if (codePointIdx <= start + length || length == std::string::npos)
-                    {
-                        codePointLength = charIdx;
-                    }
-                    
-                    UTF8Char character = (UTF8Char)in_string[charIdx];
-                    if (character <= 127)
-                    {
-                        charIdx += 0;
-                    }
-                    else if ((character & 0xE0) == 0xC0)
-                    {
-                        charIdx += 1;
-                    }
-                    else if ((character & 0xF0) == 0xE0)
-                    {
-                        charIdx += 2;
-                    }
-                    else if ((character & 0xF8) == 0xF0)
-                    {
-                        charIdx += 3;
-                    }
-                    else
-                    {
-                        CS_LOG_FATAL("Invalid UTF8 format");
-                    }
-                }
-                
-                if (codePointIdx <= start + length || length == std::string::npos)
-                {
-                    codePointLength = numCodePoints;
-                }
-                if (codePointStart == std::string::npos || codePointLength == std::string::npos)
-                {
-                    return "";
-                }
             
-                return in_string.substr(codePointStart, codePointLength);
+            if (codePointIdx <= start + length || length == std::string::npos)
+            {
+                codePointLength = numCodePoints;
             }
+            if (codePointStart == std::string::npos || codePointLength == std::string::npos)
+            {
+                return "";
+            }
+        
+            return in_string.substr(codePointStart, codePointLength);
         }
     }
 }

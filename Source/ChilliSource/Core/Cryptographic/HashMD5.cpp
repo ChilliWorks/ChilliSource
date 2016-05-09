@@ -30,56 +30,53 @@
 
 #include <md5/md5.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    namespace HashMD5
     {
-        namespace HashMD5
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        std::string GenerateHexHashCode(const std::string &in_value)
         {
-            //-------------------------------------------------------------
-            //-------------------------------------------------------------
-            std::string GenerateHexHashCode(const std::string &in_value)
-            {
-                MD5 Hash(in_value);
-                return Hash.hexdigest();
-            }
-            //-------------------------------------------------------------
-            //-------------------------------------------------------------
-            std::string GenerateHexHashCode(const s8* in_value)
-            {
-                return GenerateHexHashCode(std::string(in_value));
-            }
-            //-------------------------------------------------------------
-            //-------------------------------------------------------------
-            std::string GenerateHexHashCode(const s8* in_value, u32 in_size)
-            {
-                MD5 Hash;
-                Hash.update(in_value, in_size);
-                Hash.finalize();
-                return Hash.hexdigest();
-            }
-            //-------------------------------------------------------------
-            //-------------------------------------------------------------
-            std::string GenerateBinaryHashCode(const std::string &in_value)
-            {
-                MD5 Hash(in_value);
-                return Hash.binarydigest();
-            }
-            //-------------------------------------------------------------
-            //-------------------------------------------------------------
-            std::string GenerateBinaryHashCode(const s8* in_value)
-            {
-                return GenerateBinaryHashCode(std::string(in_value));
-            }
-            //-------------------------------------------------------------
-            //-------------------------------------------------------------
-            std::string GenerateBinaryHashCode(const s8* in_value, u32 in_size)
-            {
-                MD5 Hash;
-                Hash.update(in_value, in_size);
-                Hash.finalize();
-                return Hash.binarydigest();
-            }
+            MD5 Hash(in_value);
+            return Hash.hexdigest();
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        std::string GenerateHexHashCode(const s8* in_value)
+        {
+            return GenerateHexHashCode(std::string(in_value));
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        std::string GenerateHexHashCode(const s8* in_value, u32 in_size)
+        {
+            MD5 Hash;
+            Hash.update(in_value, in_size);
+            Hash.finalize();
+            return Hash.hexdigest();
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        std::string GenerateBinaryHashCode(const std::string &in_value)
+        {
+            MD5 Hash(in_value);
+            return Hash.binarydigest();
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        std::string GenerateBinaryHashCode(const s8* in_value)
+        {
+            return GenerateBinaryHashCode(std::string(in_value));
+        }
+        //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        std::string GenerateBinaryHashCode(const s8* in_value, u32 in_size)
+        {
+            MD5 Hash;
+            Hash.update(in_value, in_size);
+            Hash.finalize();
+            return Hash.binarydigest();
         }
     }
 }

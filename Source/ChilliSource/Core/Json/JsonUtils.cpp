@@ -34,60 +34,57 @@
 
 #include <json/json.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    namespace JsonUtils
     {
-        namespace JsonUtils
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        Json::Value ParseJson(const std::string& in_jsonString)
         {
-            //---------------------------------------------------------------
-            //---------------------------------------------------------------
-            Json::Value ParseJson(const std::string& in_jsonString)
+            Json::Value output;
+            
+            Json::Reader jsonReader;
+            if (jsonReader.parse(in_jsonString, output) == false)
             {
-                Json::Value output;
-                
-                Json::Reader jsonReader;
-                if (jsonReader.parse(in_jsonString, output) == false)
-                {
-                    CS_LOG_FATAL("Could not parse json from string due to errors: \n" + jsonReader.getFormattedErrorMessages());
-                }
-                
-                if (output.isNull())
-                {
-                    CS_LOG_FATAL("Could not parse json from string.");
-                }
-                
-                return output;
+                CS_LOG_FATAL("Could not parse json from string due to errors: \n" + jsonReader.getFormattedErrorMessages());
             }
-            //---------------------------------------------------------------
-            //---------------------------------------------------------------
-            bool ReadJson(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Json::Value& out_jsonValue)
+            
+            if (output.isNull())
             {
-                Core::FileStreamSPtr fileStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_read);
-                
-                if (fileStream == nullptr)
-                {
-                    CS_LOG_ERROR("Could not open json file: " + in_filePath);
-                    return false;
-                }
-                
-                std::string fileContents;
-                fileStream->GetAll(fileContents);
-                fileStream.reset();
-                
-                Json::Reader jsonReader;
-                if (jsonReader.parse(fileContents, out_jsonValue) == false)
-                {
-                    CS_LOG_FATAL("Could not parse json file '" + in_filePath + "' due to errors: \n" + jsonReader.getFormattedErrorMessages());
-                }
-                
-                if (out_jsonValue.isNull())
-                {
-                    CS_LOG_FATAL("Could not parse json file: " + in_filePath);
-                }
-                
-                return true;
+                CS_LOG_FATAL("Could not parse json from string.");
             }
+            
+            return output;
+        }
+        //---------------------------------------------------------------
+        //---------------------------------------------------------------
+        bool ReadJson(Core::StorageLocation in_storageLocation, const std::string& in_filePath, Json::Value& out_jsonValue)
+        {
+            Core::FileStreamSPtr fileStream = Core::Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, Core::FileMode::k_read);
+            
+            if (fileStream == nullptr)
+            {
+                CS_LOG_ERROR("Could not open json file: " + in_filePath);
+                return false;
+            }
+            
+            std::string fileContents;
+            fileStream->GetAll(fileContents);
+            fileStream.reset();
+            
+            Json::Reader jsonReader;
+            if (jsonReader.parse(fileContents, out_jsonValue) == false)
+            {
+                CS_LOG_FATAL("Could not parse json file '" + in_filePath + "' due to errors: \n" + jsonReader.getFormattedErrorMessages());
+            }
+            
+            if (out_jsonValue.isNull())
+            {
+                CS_LOG_FATAL("Could not parse json file: " + in_filePath);
+            }
+            
+            return true;
         }
     }
 }

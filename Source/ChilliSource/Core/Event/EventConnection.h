@@ -31,50 +31,47 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //----------------------------------------------------------------
+    /// A connection is a channel to an event. When a listener
+    /// is registered with an event a scoped connection is created
+    /// when this connection object is destroyed then the connection
+    /// is automatically closed. (See Event.h)
+    ///
+    /// @author S Downie
+    //----------------------------------------------------------------
+    class EventConnection
     {
+    public:
+        
         //----------------------------------------------------------------
-        /// A connection is a channel to an event. When a listener
-        /// is registered with an event a scoped connection is created
-        /// when this connection object is destroyed then the connection
-        /// is automatically closed. (See Event.h)
+        /// Destructor
         ///
         /// @author S Downie
         //----------------------------------------------------------------
-        class EventConnection
-        {
-        public:
-            
-            //----------------------------------------------------------------
-            /// Destructor
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------
-            ~EventConnection();
-            //----------------------------------------------------------------
-			/// Sets the event this is connected to. This should only be called
-			/// by Event itself, don't call manually.
-			///
-            /// @author S Downie
-            ///
-            /// @param Event that owns the connection
-            //----------------------------------------------------------------
-            void SetOwningEvent(IDisconnectableEvent* in_owningEvent);
-            //----------------------------------------------------------------
-            /// Manually close the connection so that it no longer receieves
-            /// any events
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------
-            void Close();
+        ~EventConnection();
+        //----------------------------------------------------------------
+        /// Sets the event this is connected to. This should only be called
+        /// by Event itself, don't call manually.
+        ///
+        /// @author S Downie
+        ///
+        /// @param Event that owns the connection
+        //----------------------------------------------------------------
+        void SetOwningEvent(IDisconnectableEvent* in_owningEvent);
+        //----------------------------------------------------------------
+        /// Manually close the connection so that it no longer receieves
+        /// any events
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------
+        void Close();
 
-        private:
-            
-            IDisconnectableEvent* m_owningEvent = nullptr;
-        };
-    }
+    private:
+        
+        IDisconnectableEvent* m_owningEvent = nullptr;
+    };
 }
 
 #endif

@@ -31,56 +31,53 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-        //------------------------------------------------------------------------
-        /// A container for a value of a type determined by the implementing class.
-        /// This is mostly used for type erasuring to store heterogeneous types in
-        /// the same container. It also provides indirect method of setting the
-        /// value without knowing the erased type, both through string parsing and
-        /// using another type erased property.
+    //------------------------------------------------------------------------
+    /// A container for a value of a type determined by the implementing class.
+    /// This is mostly used for type erasuring to store heterogeneous types in
+    /// the same container. It also provides indirect method of setting the
+    /// value without knowing the erased type, both through string parsing and
+    /// using another type erased property.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------
+    class IProperty
+    {
+    public:
+        //-----------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The underlying property type description. This can be
+        /// used to re-establish the underlying type.
+        //-----------------------------------------------------------------
+        virtual const IPropertyType* GetType() const = 0;
+        //-----------------------------------------------------------------
+        /// Parses the given string and sets the property to the parsed
+        /// value.
         ///
         /// @author Ian Copland
-        //------------------------------------------------------------------------
-        class IProperty
-        {
-        public:
-            //-----------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The underlying property type description. This can be
-            /// used to re-establish the underlying type.
-            //-----------------------------------------------------------------
-            virtual const IPropertyType* GetType() const = 0;
-            //-----------------------------------------------------------------
-            /// Parses the given string and sets the property to the parsed
-            /// value.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The string to parse.
-            //-----------------------------------------------------------------
-            virtual void Parse(const std::string& in_stringValue) = 0;
-            //-----------------------------------------------------------------
-            /// Sets the value of the property to that of the given property.
-            /// The two properties must be of the same type, otherwise the app
-            /// is considered to be in an irrecoverable state and will terminate.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The property whose value this will be set to.
-            //-----------------------------------------------------------------
-            virtual void Set(const IProperty* in_property) = 0;
-            //-----------------------------------------------------------------
-            /// Virtual destructor.
-            ///
-            /// @author Ian Copland
-            //-----------------------------------------------------------------
-            virtual ~IProperty() {}
-        };
-    }
+        ///
+        /// @param The string to parse.
+        //-----------------------------------------------------------------
+        virtual void Parse(const std::string& in_stringValue) = 0;
+        //-----------------------------------------------------------------
+        /// Sets the value of the property to that of the given property.
+        /// The two properties must be of the same type, otherwise the app
+        /// is considered to be in an irrecoverable state and will terminate.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The property whose value this will be set to.
+        //-----------------------------------------------------------------
+        virtual void Set(const IProperty* in_property) = 0;
+        //-----------------------------------------------------------------
+        /// Virtual destructor.
+        ///
+        /// @author Ian Copland
+        //-----------------------------------------------------------------
+        virtual ~IProperty() {}
+    };
 }
 
 #endif

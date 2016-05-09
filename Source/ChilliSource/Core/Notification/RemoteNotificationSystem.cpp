@@ -38,23 +38,20 @@
 #endif
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
+    CS_DEFINE_NAMEDTYPE(RemoteNotificationSystem);
+    //----------------------------------------------------
+    //----------------------------------------------------
+    RemoteNotificationSystemUPtr RemoteNotificationSystem::Create()
     {
-        CS_DEFINE_NAMEDTYPE(RemoteNotificationSystem);
-        //----------------------------------------------------
-        //----------------------------------------------------
-        RemoteNotificationSystemUPtr RemoteNotificationSystem::Create()
-        {
 #ifdef CS_TARGETPLATFORM_IOS
-        	return RemoteNotificationSystemUPtr(new CSBackend::iOS::RemoteNotificationSystem());
+        return RemoteNotificationSystemUPtr(new CSBackend::iOS::RemoteNotificationSystem());
 #elif defined(CS_TARGETPLATFORM_ANDROID)
 #ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
-        	return RemoteNotificationSystemUPtr(new CSBackend::Android::GooglePlayRemoteNotificationSystem());
+        return RemoteNotificationSystemUPtr(new CSBackend::Android::GooglePlayRemoteNotificationSystem());
 #endif
 #endif
-        	return nullptr;
-        }
+        return nullptr;
     }
 }

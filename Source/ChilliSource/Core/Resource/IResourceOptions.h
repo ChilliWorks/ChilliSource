@@ -32,54 +32,51 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
+    //-------------------------------------------------------
+    /// Interface class for custom loading options for
+    /// resources. This allows custom loading to take place
+    /// via the generic resource pool loaders.
+    ///
+    /// @author S Downie
+    //-------------------------------------------------------
+    class IResourceOptionsBase
+    {
+    public:
         //-------------------------------------------------------
-        /// Interface class for custom loading options for
-        /// resources. This allows custom loading to take place
-        /// via the generic resource pool loaders.
+        /// Overriden to generate a unique hash based on the
+        /// currently set options
+        ///
+        /// @author S Downie
+        ///
+        /// @return Hash of the options contents
+        //-------------------------------------------------------
+        virtual u32 GenerateHash() const = 0;
+        //-------------------------------------------------------
+        /// Virual destructor
         ///
         /// @author S Downie
         //-------------------------------------------------------
-        class IResourceOptionsBase
-        {
-        public:
-            //-------------------------------------------------------
-            /// Overriden to generate a unique hash based on the
-            /// currently set options
-            ///
-            /// @author S Downie
-            ///
-            /// @return Hash of the options contents
-            //-------------------------------------------------------
-            virtual u32 GenerateHash() const = 0;
-            //-------------------------------------------------------
-            /// Virual destructor
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------
-            virtual ~IResourceOptionsBase(){}
-        };
+        virtual ~IResourceOptionsBase(){}
+    };
+    //-------------------------------------------------------
+    /// Interface class that provides type protection when
+    /// passing into resource pool.
+    ///
+    /// @author S Downie
+    //-------------------------------------------------------
+    template <typename TResourceType> class IResourceOptions : public IResourceOptionsBase
+    {
+    public:
+        
         //-------------------------------------------------------
-        /// Interface class that provides type protection when
-        /// passing into resource pool.
+        /// Virual destructor
         ///
         /// @author S Downie
         //-------------------------------------------------------
-		template <typename TResourceType> class IResourceOptions : public IResourceOptionsBase
-		{
-		public:
-            
-            //-------------------------------------------------------
-            /// Virual destructor
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------
-            virtual ~IResourceOptions(){}
-		};
-	}
+        virtual ~IResourceOptions(){}
+    };
 }
 
 #endif

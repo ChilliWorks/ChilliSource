@@ -37,55 +37,52 @@
 #include <mutex>
 #include <thread>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------------------------------------
+    /// A collection of tasks which will be performed on the main thread.
+    ///
+    /// Adding tasks is thread safe, but the perform task methods must be called on
+    /// the main thread.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------------
+    class MainThreadTaskPool final
     {
+    public:
+        CS_DECLARE_NOCOPY(MainThreadTaskPool);
         //------------------------------------------------------------------------------
-        /// A collection of tasks which will be performed on the main thread.
-        ///
-        /// Adding tasks is thread safe, but the perform task methods must be called on
-        /// the main thread.
+        /// Constructs a new main thread task pool.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------------
-        class MainThreadTaskPool final
-        {
-        public:
-            CS_DECLARE_NOCOPY(MainThreadTaskPool);
-            //------------------------------------------------------------------------------
-            /// Constructs a new main thread task pool.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------------------
-            MainThreadTaskPool();
-            //------------------------------------------------------------------------------
-            /// Adds a series of tasks to the pool. The tasks will be executed when 
-			/// PerformTasks() is called.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_tasks - The tasks to be added to the pool.
-            //------------------------------------------------------------------------------
-            void AddTasks(const std::vector<Task>& in_tasks) noexcept;
-            //------------------------------------------------------------------------------
-            /// Performs all tasks in the task pool. The task queue is copied locally and
-			/// cleared before processing all tasks. This means that any tasks queued while
-			/// performing main thread tasks will be perfomed during the next call to
-			/// PerformTasks() rather than the current one.
-            ///
-            /// This must be called from the main thread.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------------------
-            void PerformTasks() noexcept;
-            
-            const TaskContext m_taskContext;
-            
-            std::vector<Task> m_taskQueue;
-            std::mutex m_taskQueueMutex;
-        };
-    }
+        MainThreadTaskPool();
+        //------------------------------------------------------------------------------
+        /// Adds a series of tasks to the pool. The tasks will be executed when 
+        /// PerformTasks() is called.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_tasks - The tasks to be added to the pool.
+        //------------------------------------------------------------------------------
+        void AddTasks(const std::vector<Task>& in_tasks) noexcept;
+        //------------------------------------------------------------------------------
+        /// Performs all tasks in the task pool. The task queue is copied locally and
+        /// cleared before processing all tasks. This means that any tasks queued while
+        /// performing main thread tasks will be perfomed during the next call to
+        /// PerformTasks() rather than the current one.
+        ///
+        /// This must be called from the main thread.
+        ///
+        /// @author Ian Copland
+        //------------------------------------------------------------------------------
+        void PerformTasks() noexcept;
+        
+        const TaskContext m_taskContext;
+        
+        std::vector<Task> m_taskQueue;
+        std::mutex m_taskQueueMutex;
+    };
 }
 
 #endif

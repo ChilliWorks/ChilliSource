@@ -30,33 +30,30 @@
 
 #include <ChilliSource/Core/Event/IDisconnectableEvent.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void EventConnection::SetOwningEvent(IDisconnectableEvent* in_owningEvent)
     {
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        void EventConnection::SetOwningEvent(IDisconnectableEvent* in_owningEvent)
+        m_owningEvent = in_owningEvent;
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void EventConnection::Close()
+    {
+        if(m_owningEvent != nullptr)
         {
-            m_owningEvent = in_owningEvent;
+            m_owningEvent->CloseConnection(this);
+            m_owningEvent = nullptr;
         }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        void EventConnection::Close()
-        {
-            if(m_owningEvent != nullptr)
-            {
-                m_owningEvent->CloseConnection(this);
-				m_owningEvent = nullptr;
-            }
-        }
-        //----------------------------------------------------------------
-        // Destructor closes the connection automatically when the
-        // connection object is destroyed
-        //----------------------------------------------------------------
-        EventConnection::~EventConnection()
-        {
-            Close();
-        }
+    }
+    //----------------------------------------------------------------
+    // Destructor closes the connection automatically when the
+    // connection object is destroyed
+    //----------------------------------------------------------------
+    EventConnection::~EventConnection()
+    {
+        Close();
     }
 }

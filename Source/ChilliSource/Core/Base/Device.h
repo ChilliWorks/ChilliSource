@@ -32,93 +32,90 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //---------------------------------------------------------
+    /// An application system for providing cross platform
+    /// access to information about the current device. This
+    /// includes information like the current model name and
+    /// the number of CPU cores. It is safe to use this during
+    /// the OnInit() and OnDestroy() lifecycle events.
+    ///
+    /// @author S Downie
+    //---------------------------------------------------------
+    class Device : public AppSystem
     {
-        //---------------------------------------------------------
-        /// An application system for providing cross platform
-        /// access to information about the current device. This
-        /// includes information like the current model name and
-        /// the number of CPU cores. It is safe to use this during
-        /// the OnInit() and OnDestroy() lifecycle events.
+    public:
+        CS_DECLARE_NAMEDTYPE(Device);
+        //---------------------------------------------------
+        /// @author Ian Copland
         ///
+        /// @return The device model name.
+        //---------------------------------------------------
+        virtual const std::string& GetModel() const = 0;
+        //---------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The name of the device model type.
+        //---------------------------------------------------
+        virtual const std::string& GetModelType() const = 0;
+        //---------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The name of the device manufacturer.
+        //---------------------------------------------------
+        virtual const std::string& GetManufacturer() const = 0;
+        //---------------------------------------------------
         /// @author S Downie
-        //---------------------------------------------------------
-        class Device : public AppSystem
-        {
-        public:
-            CS_DECLARE_NAMEDTYPE(Device);
-            //---------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The device model name.
-            //---------------------------------------------------
-            virtual const std::string& GetModel() const = 0;
-            //---------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The name of the device model type.
-            //---------------------------------------------------
-            virtual const std::string& GetModelType() const = 0;
-            //---------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The name of the device manufacturer.
-            //---------------------------------------------------
-            virtual const std::string& GetManufacturer() const = 0;
-            //---------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The locale code registered with the
-            /// device.
-            //---------------------------------------------------
-            virtual const std::string& GetLocale() const = 0;
-            //---------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The language the device is set to.
-            //---------------------------------------------------
-            virtual const std::string& GetLanguage() const = 0;
-            //---------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The version of the operating system.
-            //---------------------------------------------------
-            virtual const std::string& GetOSVersion() const = 0;
-            //---------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return An identifier that can be used to uniquely
-            /// identify the device.
-            //---------------------------------------------------
-            virtual const std::string& GetUDID() const = 0;
-			//---------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The number of CPU cores available on the
-            /// device.
-			//---------------------------------------------------
-			virtual u32 GetNumberOfCPUCores() const = 0;
-            //---------------------------------------------------
-            /// Destructor
-            ///
-			/// @author Ian Copland
-			//---------------------------------------------------
-			virtual ~Device() {};
-        protected:
-            friend class Core::Application;
-            //---------------------------------------------------
-            /// Creates a new platform specific backend for the
-            /// system.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @return The new instance.
-            //---------------------------------------------------
-            static DeviceUPtr Create();
-        };
-    }
+        ///
+        /// @return The locale code registered with the
+        /// device.
+        //---------------------------------------------------
+        virtual const std::string& GetLocale() const = 0;
+        //---------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The language the device is set to.
+        //---------------------------------------------------
+        virtual const std::string& GetLanguage() const = 0;
+        //---------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The version of the operating system.
+        //---------------------------------------------------
+        virtual const std::string& GetOSVersion() const = 0;
+        //---------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return An identifier that can be used to uniquely
+        /// identify the device.
+        //---------------------------------------------------
+        virtual const std::string& GetUDID() const = 0;
+        //---------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The number of CPU cores available on the
+        /// device.
+        //---------------------------------------------------
+        virtual u32 GetNumberOfCPUCores() const = 0;
+        //---------------------------------------------------
+        /// Destructor
+        ///
+        /// @author Ian Copland
+        //---------------------------------------------------
+        virtual ~Device() {};
+    protected:
+        friend class Core::Application;
+        //---------------------------------------------------
+        /// Creates a new platform specific backend for the
+        /// system.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return The new instance.
+        //---------------------------------------------------
+        static DeviceUPtr Create();
+    };
 }
 
 #endif

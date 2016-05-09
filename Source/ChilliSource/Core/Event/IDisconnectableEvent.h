@@ -32,50 +32,47 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/ForwardDeclarations.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //-----------------------------------------------------------------
+    /// An interface that allows connections to be closed on an event
+    ///
+    /// @author S Downie
+    //-----------------------------------------------------------------
+    class IDisconnectableEvent
     {
-        //-----------------------------------------------------------------
-        /// An interface that allows connections to be closed on an event
+    public:
+        //-------------------------------------------------------------
+        /// Constructor
         ///
         /// @author S Downie
-        //-----------------------------------------------------------------
-        class IDisconnectableEvent
-        {
-        public:
-            //-------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------------
-            IDisconnectableEvent(){}
-            //-------------------------------------------------------------
-            /// No copying of events is allowed. If you wish to make a
-            /// shallow copy of an event then hold a pointer to it.
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------------
-            IDisconnectableEvent(const IDisconnectableEvent&) = delete;
-            IDisconnectableEvent& operator= (const IDisconnectableEvent&) = delete;
-            
-            //-------------------------------------------------------------
-            /// Close connection to the event. The connection will
-            /// no longer be notified of the event
-            ///
-            /// @author S Downie
-            ///
-            /// @param Connection to close
-            //-------------------------------------------------------------
-            virtual void CloseConnection(EventConnection* in_connection) = 0;
-			//-------------------------------------------------------------
-			/// Virtual destructor
-			///
-			/// @author Ian Copland
-			//-------------------------------------------------------------
-			virtual ~IDisconnectableEvent() {};
-        };
-    }
+        //-------------------------------------------------------------
+        IDisconnectableEvent(){}
+        //-------------------------------------------------------------
+        /// No copying of events is allowed. If you wish to make a
+        /// shallow copy of an event then hold a pointer to it.
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------------
+        IDisconnectableEvent(const IDisconnectableEvent&) = delete;
+        IDisconnectableEvent& operator= (const IDisconnectableEvent&) = delete;
+        
+        //-------------------------------------------------------------
+        /// Close connection to the event. The connection will
+        /// no longer be notified of the event
+        ///
+        /// @author S Downie
+        ///
+        /// @param Connection to close
+        //-------------------------------------------------------------
+        virtual void CloseConnection(EventConnection* in_connection) = 0;
+        //-------------------------------------------------------------
+        /// Virtual destructor
+        ///
+        /// @author Ian Copland
+        //-------------------------------------------------------------
+        virtual ~IDisconnectableEvent() {};
+    };
 }
 
 #endif

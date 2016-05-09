@@ -33,60 +33,57 @@
 #include <ChilliSource/Core/Math/MathUtils.h>
 #include <ChilliSource/Core/Tween/Tween.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-		//-----------------------------------------------------------------------
-		/// Functor that performs smoothstep interpolation on the start and end
-		/// values based on the given normalised T (0 - 1)
-		///
-		/// @author S Downie
-		//-----------------------------------------------------------------------
-		template <typename TValueType> struct SmoothStepInterpolate
-		{
-			TValueType m_startValue;
-			TValueType m_endValue;
-            
-			//-----------------------------------------------------------------------
-			/// Smoothly interpolate between the start and end
-			/// values based on the given normalised T (0 - 1)
-			///
-			/// @author S Downie
-			///
-			/// @param Normalised T (0 - 1)
-			///
-			/// @return SmoothStep interpolated type
-			//-----------------------------------------------------------------------
-			TValueType operator()(f32 in_t) const
-			{
-				return MathUtils::SmoothStep(in_t, m_startValue, m_endValue);
-			}
-		};
-		template <typename TValueType> using SmoothStepTween = Tween<SmoothStepInterpolate<TValueType>>;
-		//-----------------------------------------------------------------------
-		/// Convenience method to create an tween that performs a smoothstep
-		/// interpolation
+    //-----------------------------------------------------------------------
+    /// Functor that performs smoothstep interpolation on the start and end
+    /// values based on the given normalised T (0 - 1)
+    ///
+    /// @author S Downie
+    //-----------------------------------------------------------------------
+    template <typename TValueType> struct SmoothStepInterpolate
+    {
+        TValueType m_startValue;
+        TValueType m_endValue;
+        
+        //-----------------------------------------------------------------------
+        /// Smoothly interpolate between the start and end
+        /// values based on the given normalised T (0 - 1)
         ///
         /// @author S Downie
-		///
-		/// @param Start value
-		/// @param End value
-		/// @param Duration in seconds
-		/// @param Start delay in seconds
-        /// @param End delay in seconds
-		///
-		/// @return Tween with smoothstep interp function
-		//-----------------------------------------------------------------------
-		template <typename TValueType>
-		SmoothStepTween<TValueType> MakeSmoothStepTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_startDelay = 0.0f, f32 in_endDelay = 0.0f)
-		{
-			SmoothStepInterpolate<TValueType> func;
-			func.m_startValue = in_start;
-			func.m_endValue = in_end;
-			return SmoothStepTween<TValueType>(func, in_duration, in_startDelay, in_endDelay);
-		}
-	}
+        ///
+        /// @param Normalised T (0 - 1)
+        ///
+        /// @return SmoothStep interpolated type
+        //-----------------------------------------------------------------------
+        TValueType operator()(f32 in_t) const
+        {
+            return MathUtils::SmoothStep(in_t, m_startValue, m_endValue);
+        }
+    };
+    template <typename TValueType> using SmoothStepTween = Tween<SmoothStepInterpolate<TValueType>>;
+    //-----------------------------------------------------------------------
+    /// Convenience method to create an tween that performs a smoothstep
+    /// interpolation
+    ///
+    /// @author S Downie
+    ///
+    /// @param Start value
+    /// @param End value
+    /// @param Duration in seconds
+    /// @param Start delay in seconds
+    /// @param End delay in seconds
+    ///
+    /// @return Tween with smoothstep interp function
+    //-----------------------------------------------------------------------
+    template <typename TValueType>
+    SmoothStepTween<TValueType> MakeSmoothStepTween(TValueType in_start, TValueType in_end, f32 in_duration, f32 in_startDelay = 0.0f, f32 in_endDelay = 0.0f)
+    {
+        SmoothStepInterpolate<TValueType> func;
+        func.m_startValue = in_start;
+        func.m_endValue = in_end;
+        return SmoothStepTween<TValueType>(func, in_duration, in_startDelay, in_endDelay);
+    }
 }
 
 #endif

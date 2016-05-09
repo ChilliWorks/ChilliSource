@@ -31,63 +31,60 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    namespace HashMD5
     {
-        namespace HashMD5
-        {
-            //-------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param String to hash
-            ///
-            /// @return MD5 hex hash code
-            //-------------------------------------------------------------
-            std::string GenerateHexHashCode(const std::string &in_value);
-            //-------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Null terminated string to hash
-            ///
-            /// @return MD5 hex hash code
-            //-------------------------------------------------------------
-            std::string GenerateHexHashCode(const s8* in_value);
-            //-------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Block of binary data
-            /// @param Size of data
-            ///
-            /// @return MD5 hex hash code
-            //-------------------------------------------------------------
-            std::string GenerateHexHashCode(const s8* in_value, u32 in_size);
-            //-------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param String to hash
-            ///
-            /// @return MD5 binary hash code
-            //-------------------------------------------------------------
-            std::string GenerateBinaryHashCode(const std::string &in_value);
-            //-------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Null terminated string to hash
-            ///
-            /// @return MD5 binary hash code
-            //-------------------------------------------------------------
-            std::string GenerateBinaryHashCode(const s8* in_value);
-            //-------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Block of binary data
-            /// @param Size of data
-            ///
-            /// @return MD5 binary hash code
-            //-------------------------------------------------------------
-            std::string GenerateBinaryHashCode(const s8* in_value, u32 in_size);
-        }
+        //-------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param String to hash
+        ///
+        /// @return MD5 hex hash code
+        //-------------------------------------------------------------
+        std::string GenerateHexHashCode(const std::string &in_value);
+        //-------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Null terminated string to hash
+        ///
+        /// @return MD5 hex hash code
+        //-------------------------------------------------------------
+        std::string GenerateHexHashCode(const s8* in_value);
+        //-------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Block of binary data
+        /// @param Size of data
+        ///
+        /// @return MD5 hex hash code
+        //-------------------------------------------------------------
+        std::string GenerateHexHashCode(const s8* in_value, u32 in_size);
+        //-------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param String to hash
+        ///
+        /// @return MD5 binary hash code
+        //-------------------------------------------------------------
+        std::string GenerateBinaryHashCode(const std::string &in_value);
+        //-------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Null terminated string to hash
+        ///
+        /// @return MD5 binary hash code
+        //-------------------------------------------------------------
+        std::string GenerateBinaryHashCode(const s8* in_value);
+        //-------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Block of binary data
+        /// @param Size of data
+        ///
+        /// @return MD5 binary hash code
+        //-------------------------------------------------------------
+        std::string GenerateBinaryHashCode(const s8* in_value, u32 in_size);
     }
 }
 

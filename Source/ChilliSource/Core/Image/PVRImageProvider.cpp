@@ -35,183 +35,164 @@
 #include <ChilliSource/Core/Image/ImageFormat.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-        namespace
+    namespace
+    {
+        const u32 k_pvrVersionMismatch = 0x50565203;
+        
+        struct PVRTCTexHeader
         {
-            const u32 k_pvrVersionMismatch = 0x50565203;
+            u32 udwVersion;
+            u32 udwFlags;
+            u64 udwPixelFormat;
+            u32 udwColourSpace;
+            u32 udwChannelType;
+            u32 udwHeight;
+            u32 udwWidth;
+            u32 udwDepth;
+            u32 udwNumSurfaces;
+            u32 udwNumFaces;
+            u32 udwMipMapCount;
+            u32 udwMetaDataSize;
+        };
+        
+        //Anything outside these is not supported on iDevices
+        enum class PixelFormat
+        {
+            k_2BppRGB,
+            k_2BppRGBA,
+            k_4BppRGB,
+            k_4BppRGBA
+        };
+        
+        enum class ColourSpace
+        {
+            k_linearRGB,
+            k_SRGB
+        };
+        
+        enum class ChannelType
+        {
+            k_unsignedByteNormalised,
+            k_signedByteNormalised,
+            k_unsignedByte,
+            k_signedByte,
+            k_unsignedShortNormalised,
+            k_signedShortNormalised,
+            k_unsignedShort,
+            k_signedShort,
+            k_unsignedIntNormalised,
+            k_signedIntNormalised,
+            k_unsignedInt,
+            k_signedInt,
+            k_float
+        };
+        
+        const std::string k_pvrExtension("pvr");
+        
+        //-----------------------------------------------------------
+        /// Create an image in raw byte format
+        ///
+        /// @author S McGaw
+        ///
+        /// @param Image data in bytes
+        /// @param Size of data in bytes
+        /// @param [Out] Image resource
+        //------------------------------------------------------------
+        void CreatePVRImageFromFile(const s8* in_data, u32 in_dataSize, Image* out_image)
+        {
+            //Get the header data from the image file
+            const PVRTCTexHeader* header = reinterpret_cast<const PVRTCTexHeader*>(in_data);
             
-            struct PVRTCTexHeader
+            //Check the version so determine endianess correctness
+            if(header->udwVersion == k_pvrVersionMismatch)
             {
-                u32 udwVersion;
-                u32 udwFlags;
-                u64 udwPixelFormat;
-                u32 udwColourSpace;
-                u32 udwChannelType;
-                u32 udwHeight;
-                u32 udwWidth;
-                u32 udwDepth;
-                u32 udwNumSurfaces;
-                u32 udwNumFaces;
-                u32 udwMipMapCount;
-                u32 udwMetaDataSize;
-            };
+                //TODO:: Endianess is not correct, need to flip bits in the header data, possibly image data?
+                CS_LOG_FATAL("Image::UnpackPVRTCData >> Endianess Check failed for creating PVR");
+            }
             
-            //Anything outside these is not supported on iDevices
-            enum class PixelFormat
+            u64 udwPFormat = header->udwPixelFormat;
+            
+            u32 udwLow32Bits  = udwPFormat & 0x00000000ffffffff;
+            u32 udwHigh32Bits = udwPFormat >> 32; //Shift to right 32bits
+            ImageCompression compression = ImageCompression::k_none;
+            ImageFormat format = ImageFormat::k_RGB888;
+            
+            //Calculate the data size for each texture level and respect the minimum number of blocks
+            u32 udwBpp = 4;
+            
+            //Where the most significant 4 bytes have been set to ‘0’ the least significant 4 bytes will contain a 32bit unsigned integer value identifying the pixel format.
+            if(udwHigh32Bits == 0)
             {
-                k_2BppRGB,
-                k_2BppRGBA,
-                k_4BppRGB,
-                k_4BppRGBA
-            };
-            
-            enum class ColourSpace
-            {
-                k_linearRGB,
-                k_SRGB
-            };
-            
-            enum class ChannelType
-            {
-                k_unsignedByteNormalised,
-                k_signedByteNormalised,
-                k_unsignedByte,
-                k_signedByte,
-                k_unsignedShortNormalised,
-                k_signedShortNormalised,
-                k_unsignedShort,
-                k_signedShort,
-                k_unsignedIntNormalised,
-                k_signedIntNormalised,
-                k_unsignedInt,
-                k_signedInt,
-                k_float
-            };
-            
-            const std::string k_pvrExtension("pvr");
-            
-			//-----------------------------------------------------------
-			/// Create an image in raw byte format
-            ///
-            /// @author S McGaw
-			///
-            /// @param Image data in bytes
-			/// @param Size of data in bytes
-			/// @param [Out] Image resource
-			//------------------------------------------------------------
-			void CreatePVRImageFromFile(const s8* in_data, u32 in_dataSize, Image* out_image)
-            {
-                //Get the header data from the image file
-                const PVRTCTexHeader* header = reinterpret_cast<const PVRTCTexHeader*>(in_data);
-                
-                //Check the version so determine endianess correctness
-                if(header->udwVersion == k_pvrVersionMismatch)
+                if(udwLow32Bits == (u32)PixelFormat::k_2BppRGB || udwLow32Bits == (u32)PixelFormat::k_2BppRGBA)
                 {
-                    //TODO:: Endianess is not correct, need to flip bits in the header data, possibly image data?
-                    CS_LOG_FATAL("Image::UnpackPVRTCData >> Endianess Check failed for creating PVR");
+                    compression = ImageCompression::k_PVR2Bpp;
+                    
+                    //Pixel by pixel block size for 2bpp
+                    udwBpp = 2;
+                    
+                    //Set if Alpha in image
+                    if(udwLow32Bits == (u32)PixelFormat::k_2BppRGBA)
+                    {
+                        format = ImageFormat::k_RGBA8888;
+                    }
                 }
-                
-                u64 udwPFormat = header->udwPixelFormat;
-                
-                u32 udwLow32Bits  = udwPFormat & 0x00000000ffffffff;
-                u32 udwHigh32Bits = udwPFormat >> 32; //Shift to right 32bits
-                ImageCompression compression = ImageCompression::k_none;
-                ImageFormat format = ImageFormat::k_RGB888;
-                
-                //Calculate the data size for each texture level and respect the minimum number of blocks
-                u32 udwBpp = 4;
-                
-                //Where the most significant 4 bytes have been set to ‘0’ the least significant 4 bytes will contain a 32bit unsigned integer value identifying the pixel format.
-                if(udwHigh32Bits == 0)
+                else if(udwLow32Bits == (u32)PixelFormat::k_4BppRGB || udwLow32Bits == (u32)PixelFormat::k_4BppRGBA)
                 {
-                    if(udwLow32Bits == (u32)PixelFormat::k_2BppRGB || udwLow32Bits == (u32)PixelFormat::k_2BppRGBA)
+                    compression = ImageCompression::k_PVR4Bpp;
+                    
+                    //Pixel by pixel block size for 4bpp
+                    udwBpp = 4;
+                    
+                    //Set if Alpha in image
+                    if(udwLow32Bits == (u32)PixelFormat::k_4BppRGBA)
                     {
-                        compression = ImageCompression::k_PVR2Bpp;
-                        
-                        //Pixel by pixel block size for 2bpp
-                        udwBpp = 2;
-                        
-                        //Set if Alpha in image
-                        if(udwLow32Bits == (u32)PixelFormat::k_2BppRGBA)
-                        {
-                            format = ImageFormat::k_RGBA8888;
-                        }
-                    }
-                    else if(udwLow32Bits == (u32)PixelFormat::k_4BppRGB || udwLow32Bits == (u32)PixelFormat::k_4BppRGBA)
-                    {
-                        compression = ImageCompression::k_PVR4Bpp;
-                        
-                        //Pixel by pixel block size for 4bpp
-                        udwBpp = 4;
-                        
-                        //Set if Alpha in image
-                        if(udwLow32Bits == (u32)PixelFormat::k_4BppRGBA)
-                        {
-                            format = ImageFormat::k_RGBA8888;
-                        }
-                    }
-                    else
-                    {
-                        CS_LOG_FATAL("Unrecognised PixelFormat for image");
+                        format = ImageFormat::k_RGBA8888;
                     }
                 }
                 else
                 {
-                    //If the most significant 4 bytes contain a value, the full 8 bytes are used to determine the pixel format. The least significant 4 bytes contain the channel order,
-                    //each byte containing a single character, or a null character if there are fewer than four channels; for example, {‘r’,‘g’,‘b’,‘a’} or {‘r’,‘g’,‘b’,‘\0’}.
-                    //The most significant 4 bytes state the bit rate for each channel in the same order, each byte containing a single 8bit unsigned integer value,
-                    //or zero if there are fewer than four channels; for example, {8,8,8,8} or {5,6,5,0}.
-                    CS_LOG_FATAL("Unimplemented PixelFormat for image");
+                    CS_LOG_FATAL("Unrecognised PixelFormat for image");
                 }
-                
-                Image::Descriptor desc;
-                desc.m_width = header->udwWidth;
-                desc.m_height = header->udwHeight;
-                desc.m_compression = compression;
-                desc.m_format = format;
-                desc.m_dataSize = (header->udwWidth * header->udwHeight * udwBpp) >> 3;
-                
-                u8* pData = new u8[desc.m_dataSize];
-                memcpy(pData, in_data + sizeof(PVRTCTexHeader), sizeof(u8) * desc.m_dataSize);
-                out_image->Build(desc, Image::ImageDataUPtr(pData));
             }
-            //-----------------------------------------------------------
-            /// Performs the heavy lifting for the 2 create methods
-            ///
-            /// @author S Downie
-            ///
-            /// @param The storage location.
-            /// @param The filepath.
-            /// @param Completion delegate
-            /// @param [Out] The output resource
-            //-----------------------------------------------------------
-            void LoadImage(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
+            else
             {
-                FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_readBinary);
-                
-                if(pImageFile == nullptr)
-                {
-                    out_resource->SetLoadState(Resource::LoadState::k_failed);
-                    if(in_delegate != nullptr)
-                    {
-                        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
-                        {
-                            in_delegate(out_resource);
-                        });
-                    }
-                    return;
-                }
-                
-                std::string abyData;
-                pImageFile->GetAll(abyData);
-                CS_ASSERT(abyData.size() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "File is too large. It cannot exceed " + ToString(std::numeric_limits<u32>::max()) + " bytes.");
-                
-                CreatePVRImageFromFile(abyData.data(), static_cast<u32>(abyData.size()), (Image*)out_resource.get());
-                
-                out_resource->SetLoadState(Resource::LoadState::k_loaded);
+                //If the most significant 4 bytes contain a value, the full 8 bytes are used to determine the pixel format. The least significant 4 bytes contain the channel order,
+                //each byte containing a single character, or a null character if there are fewer than four channels; for example, {‘r’,‘g’,‘b’,‘a’} or {‘r’,‘g’,‘b’,‘\0’}.
+                //The most significant 4 bytes state the bit rate for each channel in the same order, each byte containing a single 8bit unsigned integer value,
+                //or zero if there are fewer than four channels; for example, {8,8,8,8} or {5,6,5,0}.
+                CS_LOG_FATAL("Unimplemented PixelFormat for image");
+            }
+            
+            Image::Descriptor desc;
+            desc.m_width = header->udwWidth;
+            desc.m_height = header->udwHeight;
+            desc.m_compression = compression;
+            desc.m_format = format;
+            desc.m_dataSize = (header->udwWidth * header->udwHeight * udwBpp) >> 3;
+            
+            u8* pData = new u8[desc.m_dataSize];
+            memcpy(pData, in_data + sizeof(PVRTCTexHeader), sizeof(u8) * desc.m_dataSize);
+            out_image->Build(desc, Image::ImageDataUPtr(pData));
+        }
+        //-----------------------------------------------------------
+        /// Performs the heavy lifting for the 2 create methods
+        ///
+        /// @author S Downie
+        ///
+        /// @param The storage location.
+        /// @param The filepath.
+        /// @param Completion delegate
+        /// @param [Out] The output resource
+        //-----------------------------------------------------------
+        void LoadImage(StorageLocation in_storageLocation, const std::string& in_filePath, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
+        {
+            FileStreamSPtr pImageFile = Application::Get()->GetFileSystem()->CreateFileStream(in_storageLocation, in_filePath, FileMode::k_readBinary);
+            
+            if(pImageFile == nullptr)
+            {
+                out_resource->SetLoadState(Resource::LoadState::k_failed);
                 if(in_delegate != nullptr)
                 {
                     Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
@@ -219,47 +200,63 @@ namespace ChilliSource
                         in_delegate(out_resource);
                     });
                 }
+                return;
+            }
+            
+            std::string abyData;
+            pImageFile->GetAll(abyData);
+            CS_ASSERT(abyData.size() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "File is too large. It cannot exceed " + ToString(std::numeric_limits<u32>::max()) + " bytes.");
+            
+            CreatePVRImageFromFile(abyData.data(), static_cast<u32>(abyData.size()), (Image*)out_resource.get());
+            
+            out_resource->SetLoadState(Resource::LoadState::k_loaded);
+            if(in_delegate != nullptr)
+            {
+                Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_mainThread, [=](const TaskContext&) noexcept
+                {
+                    in_delegate(out_resource);
+                });
             }
         }
-        CS_DEFINE_NAMEDTYPE(PVRImageProvider);
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        PVRImageProviderUPtr PVRImageProvider::Create()
+    }
+    CS_DEFINE_NAMEDTYPE(PVRImageProvider);
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    PVRImageProviderUPtr PVRImageProvider::Create()
+    {
+        return PVRImageProviderUPtr(new PVRImageProvider());
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    bool PVRImageProvider::IsA(InterfaceIDType in_interaceId) const
+    {
+        return (in_interaceId == ResourceProvider::InterfaceID || in_interaceId == PVRImageProvider::InterfaceID);
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    InterfaceIDType PVRImageProvider::GetResourceType() const
+    {
+        return Image::InterfaceID;
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    bool PVRImageProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
+    {
+        return in_extension == k_pvrExtension;
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void PVRImageProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
+    {
+        LoadImage(in_storageLocation, in_filePath, nullptr, out_resource);
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    void PVRImageProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
+    {
+        Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
         {
-            return PVRImageProviderUPtr(new PVRImageProvider());
-        }
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		bool PVRImageProvider::IsA(InterfaceIDType in_interaceId) const
-		{
-			return (in_interaceId == ResourceProvider::InterfaceID || in_interaceId == PVRImageProvider::InterfaceID);
-		}
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        InterfaceIDType PVRImageProvider::GetResourceType() const
-        {
-            return Image::InterfaceID;
-        }
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		bool PVRImageProvider::CanCreateResourceWithFileExtension(const std::string& in_extension) const
-		{
-			return in_extension == k_pvrExtension;
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		void PVRImageProvider::CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource)
-		{
-            LoadImage(in_storageLocation, in_filePath, nullptr, out_resource);
-		}
-        //----------------------------------------------------
-        //----------------------------------------------------
-        void PVRImageProvider::CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource)
-        {
-            Application::Get()->GetTaskScheduler()->ScheduleTask(TaskType::k_file, [=](const TaskContext&) noexcept
-            {
-                LoadImage(in_storageLocation, in_filePath, in_delegate, out_resource);
-            });
-        }
-	}
+            LoadImage(in_storageLocation, in_filePath, in_delegate, out_resource);
+        });
+    }
 }

@@ -33,77 +33,74 @@
 
 #include <unordered_map>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core 
+    //-----------------------------------------------------------------
+    /// Dictionary wrapper that maps string keys to string values
+    /// and provides convenience setters and accessors
+    ///
+    /// @author S McGaw
+    //-----------------------------------------------------------------
+    class ParamDictionary final : public std::unordered_map<std::string, std::string>
     {
+    public:
+        
         //-----------------------------------------------------------------
-        /// Dictionary wrapper that maps string keys to string values
-        /// and provides convenience setters and accessors
+        /// Constructor default
         ///
-        /// @author S McGaw
+        /// @author S Downie
         //-----------------------------------------------------------------
-		class ParamDictionary final : public std::unordered_map<std::string, std::string>
-        {
-		public:
-            
-            //-----------------------------------------------------------------
-            /// Constructor default
-            ///
-            /// @author S Downie
-            //-----------------------------------------------------------------
-            ParamDictionary() = default;
-            //-----------------------------------------------------------------
-            /// Constructor from initialiser list of key/value pairs
-            ///
-            /// @author S Downie
-            ///
-            /// @param Initialiser list of key/value pairs
-            //-----------------------------------------------------------------
-            ParamDictionary(const std::initializer_list<std::pair<std::string, std::string>>& in_initList);
-            //-----------------------------------------------------------------
-            /// @author S McGaw
-            ///
-            /// @param Key
-            /// @param Value
-            //-----------------------------------------------------------------
-            void SetValue(const std::string& in_key, const std::string& in_value);
-            //-----------------------------------------------------------------
-            /// @author S McGaw
-            ///
-            /// @param Key
-            ///
-            /// @return Whether key exists in dictionary
-            //-----------------------------------------------------------------
-            bool HasKey(const std::string& in_key) const;
-            //-----------------------------------------------------------------
-            /// @author S McGaw
-            ///
-            /// @param Key
-            /// @param [Out] Storage for value if the key exists
-            ///
-            /// @return Whether key exists and value has been set
-            //-----------------------------------------------------------------
-            bool TryGetValue(const std::string& in_key, std::string& out_value) const;
-            //-----------------------------------------------------------------
-            /// @author S McGaw
-            ///
-            /// @param Key
-            ///
-            /// @return Value at key or empty
-            //-----------------------------------------------------------------
-            const std::string& GetValue(const std::string& in_key) const;
-            //-----------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Key
-            /// @param Default value to return if key does not exist
-            ///
-            /// @return Value at key or default
-            //-----------------------------------------------------------------
-            const std::string& GetValueOrDefault(const std::string& in_key, const std::string& in_default) const;
-		};
-	}
+        ParamDictionary() = default;
+        //-----------------------------------------------------------------
+        /// Constructor from initialiser list of key/value pairs
+        ///
+        /// @author S Downie
+        ///
+        /// @param Initialiser list of key/value pairs
+        //-----------------------------------------------------------------
+        ParamDictionary(const std::initializer_list<std::pair<std::string, std::string>>& in_initList);
+        //-----------------------------------------------------------------
+        /// @author S McGaw
+        ///
+        /// @param Key
+        /// @param Value
+        //-----------------------------------------------------------------
+        void SetValue(const std::string& in_key, const std::string& in_value);
+        //-----------------------------------------------------------------
+        /// @author S McGaw
+        ///
+        /// @param Key
+        ///
+        /// @return Whether key exists in dictionary
+        //-----------------------------------------------------------------
+        bool HasKey(const std::string& in_key) const;
+        //-----------------------------------------------------------------
+        /// @author S McGaw
+        ///
+        /// @param Key
+        /// @param [Out] Storage for value if the key exists
+        ///
+        /// @return Whether key exists and value has been set
+        //-----------------------------------------------------------------
+        bool TryGetValue(const std::string& in_key, std::string& out_value) const;
+        //-----------------------------------------------------------------
+        /// @author S McGaw
+        ///
+        /// @param Key
+        ///
+        /// @return Value at key or empty
+        //-----------------------------------------------------------------
+        const std::string& GetValue(const std::string& in_key) const;
+        //-----------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Key
+        /// @param Default value to return if key does not exist
+        ///
+        /// @return Value at key or default
+        //-----------------------------------------------------------------
+        const std::string& GetValueOrDefault(const std::string& in_key, const std::string& in_default) const;
+    };
 }
 
 #endif

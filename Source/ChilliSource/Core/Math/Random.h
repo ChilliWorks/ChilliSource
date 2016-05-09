@@ -34,104 +34,101 @@
 
 #include <random>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-		//------------------------------------------------------------------------------
-		/// A collection of thread-safe methods which can be used to generate pseudo
-        /// random numbers.
-		///
-		/// @author Ian Copland
-		//------------------------------------------------------------------------------
-		namespace Random
-        {
-            //------------------------------------------------------------------------------
-            /// Generates a pseudo-random value of the requested type within the given range.
-            /// Defaults to the maximum possible range for the given type.
-            ///
-            /// This is thread-safe.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param [Optional] The lower value, inclusive.
-            /// @param [Optional] The upper value, inclusive.
-            ///
-            /// @return A value within the range.
-            //------------------------------------------------------------------------------
-			template <typename TType> TType Generate(TType in_lower = NumericLimits::Lowest<TType>(), TType in_upper = NumericLimits::Highest<TType>());
-			//------------------------------------------------------------------------------
-			/// Generates a pseudo-random number in the range between 0.0 and 1.0 for the
-            /// given type.
-			///
-			/// This is thread safe.
-			///
-			/// @author Ian Copland
-			///
-			/// @return A value within the range.
-			//------------------------------------------------------------------------------
-			template <typename TType> TType GenerateNormalised();
-			//------------------------------------------------------------------------------
-			/// Generates a pseudo-random direction vector in 2 dimensions with uniform
-            /// distribution.
-			///
-			/// This is thread-safe.
-			///
-			/// @author Ian Copland
-			///
-			/// @return A direction vector.
-			//------------------------------------------------------------------------------
-			template <typename TType> GenericVector2<TType> GenerateDirection2D();
-			//------------------------------------------------------------------------------
-			/// Generates a pseudo-random direction vector in 3 dimensions with uniform
-            /// distribution.
-			///
-			/// This is thread-safe.
-			///
-			/// @author Ian Copland
-			///
-			/// @return A direction vector.
-			//------------------------------------------------------------------------------
-			template <typename TType> GenericVector3<TType> GenerateDirection3D();
-			//------------------------------------------------------------------------------
-			/// Generates a pseudo-random direction vector in 4 dimensions with uniform
-            /// distribution.
-			///
-			/// This is thread-safe.
-			///
-			/// @author Ian Copland
-			///
-			/// @return A direction vector.
-			//------------------------------------------------------------------------------
-			template <typename TType> GenericVector4<TType> GenerateDirection4D();
-			//------------------------------------------------------------------------------
-			/// Generates a pseudo-random direction vector in 4 dimensions with uniform
-            /// distribution.
-			///
-			/// This is thread-safe.
-			///
-			/// @author Ian Copland
-			///
-			/// @return A direction vector.
-			//------------------------------------------------------------------------------
-			template <typename TType> GenericVector4<TType> GenerateDirection4D();
-            //------------------------------------------------------------------------------
-            /// Generates a pseudo-random value between the two given values. If the value
-            /// has multiple components, each will be randomised individually, otherwise
-            /// this is identical to Generate().
-            ///
-            /// This is thread-safe.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The lower value, inclusive.
-            /// @param The upper value, inclusive.
-            ///
-            /// @return The value in the given range.
-            //------------------------------------------------------------------------------
-			template <typename TType> TType GenerateComponentwise(TType in_lower = NumericLimits::Lowest<TType>(), TType in_upper = NumericLimits::Highest<TType>());
-		}
-	}
+    //------------------------------------------------------------------------------
+    /// A collection of thread-safe methods which can be used to generate pseudo
+    /// random numbers.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------------
+    namespace Random
+    {
+        //------------------------------------------------------------------------------
+        /// Generates a pseudo-random value of the requested type within the given range.
+        /// Defaults to the maximum possible range for the given type.
+        ///
+        /// This is thread-safe.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param [Optional] The lower value, inclusive.
+        /// @param [Optional] The upper value, inclusive.
+        ///
+        /// @return A value within the range.
+        //------------------------------------------------------------------------------
+        template <typename TType> TType Generate(TType in_lower = NumericLimits::Lowest<TType>(), TType in_upper = NumericLimits::Highest<TType>());
+        //------------------------------------------------------------------------------
+        /// Generates a pseudo-random number in the range between 0.0 and 1.0 for the
+        /// given type.
+        ///
+        /// This is thread safe.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return A value within the range.
+        //------------------------------------------------------------------------------
+        template <typename TType> TType GenerateNormalised();
+        //------------------------------------------------------------------------------
+        /// Generates a pseudo-random direction vector in 2 dimensions with uniform
+        /// distribution.
+        ///
+        /// This is thread-safe.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return A direction vector.
+        //------------------------------------------------------------------------------
+        template <typename TType> GenericVector2<TType> GenerateDirection2D();
+        //------------------------------------------------------------------------------
+        /// Generates a pseudo-random direction vector in 3 dimensions with uniform
+        /// distribution.
+        ///
+        /// This is thread-safe.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return A direction vector.
+        //------------------------------------------------------------------------------
+        template <typename TType> GenericVector3<TType> GenerateDirection3D();
+        //------------------------------------------------------------------------------
+        /// Generates a pseudo-random direction vector in 4 dimensions with uniform
+        /// distribution.
+        ///
+        /// This is thread-safe.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return A direction vector.
+        //------------------------------------------------------------------------------
+        template <typename TType> GenericVector4<TType> GenerateDirection4D();
+        //------------------------------------------------------------------------------
+        /// Generates a pseudo-random direction vector in 4 dimensions with uniform
+        /// distribution.
+        ///
+        /// This is thread-safe.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return A direction vector.
+        //------------------------------------------------------------------------------
+        template <typename TType> GenericVector4<TType> GenerateDirection4D();
+        //------------------------------------------------------------------------------
+        /// Generates a pseudo-random value between the two given values. If the value
+        /// has multiple components, each will be randomised individually, otherwise
+        /// this is identical to Generate().
+        ///
+        /// This is thread-safe.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The lower value, inclusive.
+        /// @param The upper value, inclusive.
+        ///
+        /// @return The value in the given range.
+        //------------------------------------------------------------------------------
+        template <typename TType> TType GenerateComponentwise(TType in_lower = NumericLimits::Lowest<TType>(), TType in_upper = NumericLimits::Highest<TType>());
+    }
 }
 
 #include <ChilliSource/Core/Math/RandomImpl.h>

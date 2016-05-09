@@ -32,35 +32,32 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //---------------------------------------------------------------
+    /// An image loader interface that providers PNG resources
+    ///
+    /// @author S Downie
+    //---------------------------------------------------------------
+    class PNGImageProvider : public Core::ResourceProvider
     {
-        //---------------------------------------------------------------
-        /// An image loader interface that providers PNG resources
+    protected:
+        friend class Application;
+        //-------------------------------------------------------
+        /// Create the platform dependent backend
         ///
         /// @author S Downie
-        //---------------------------------------------------------------
-        class PNGImageProvider : public Core::ResourceProvider
-        {
-        protected:
-            friend class Application;
-            //-------------------------------------------------------
-            /// Create the platform dependent backend
-            ///
-            /// @author S Downie
-            ///
-            /// @return New backend instance
-            //-------------------------------------------------------
-            static PNGImageProviderUPtr Create();
-            //-------------------------------------------------------
-            /// Private constructor to force use of factory method
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------
-            PNGImageProvider() = default;
-        };
-    }
+        ///
+        /// @return New backend instance
+        //-------------------------------------------------------
+        static PNGImageProviderUPtr Create();
+        //-------------------------------------------------------
+        /// Private constructor to force use of factory method
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------
+        PNGImageProvider() = default;
+    };
 }
 
 #endif

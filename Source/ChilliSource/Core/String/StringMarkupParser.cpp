@@ -30,118 +30,115 @@
 
 #include <ChilliSource/Core/String/UTF8StringUtils.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    namespace
     {
-        namespace
+        const char k_markupStart = '[';
+        const char k_markupSeparator = '=';
+        const char k_markupEnd = ']';
+    }
+    
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    StringMarkupParser::StringMarkupParser(const MarkupDef& in_markupDef)
+    :m_markupDef(in_markupDef)
+    {
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    std::string StringMarkupParser::Parse(const std::string& in_string, const MarkupFoundDelegate& in_callback)
+    {
+        std::string out_string;
+        u32 index = 0;
+        
+        auto it = in_string.begin();
+        while(it < in_string.end())
         {
-            const char k_markupStart = '[';
-            const char k_markupSeparator = '=';
-            const char k_markupEnd = ']';
+            auto character = UTF8StringUtils::Next(it);
+            
+            if(character != k_markupStart)
+            {
+                UTF8StringUtils::Append(character, out_string);
+                if(character != ' ' && character != '\t' && character != '\n')
+                {
+                    ++index;
+                }
+            }
+            else
+            {
+                // Found a mark up, check it
+                ParseRecursive(index, it, out_string, in_callback);
+            }
         }
         
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        StringMarkupParser::StringMarkupParser(const MarkupDef& in_markupDef)
-        :m_markupDef(in_markupDef)
+        return out_string;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    std::string StringMarkupParser::ParseRecursive(u32 in_indexInString, std::string::const_iterator& out_iterator, std::string& out_string, const MarkupFoundDelegate& in_callback)
+    {
+        // Found some mark-up. What type is it?
+        std::string type;
+        UTF8Char nextChar = '\0';
+        
+        while (nextChar != k_markupSeparator)
         {
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        std::string StringMarkupParser::Parse(const std::string& in_string, const MarkupFoundDelegate& in_callback)
-        {
-            std::string out_string;
-            u32 index = 0;
-            
-            auto it = in_string.begin();
-            while(it < in_string.end())
-            {
-                auto character = UTF8StringUtils::Next(it);
-                
-                if(character != k_markupStart)
-                {
-                    UTF8StringUtils::Append(character, out_string);
-                    if(character != ' ' && character != '\t' && character != '\n')
-                    {
-                        ++index;
-                    }
-                }
-                else
-                {
-                    // Found a mark up, check it
-                    ParseRecursive(index, it, out_string, in_callback);
-                }
-            }
-            
-            return out_string;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        std::string StringMarkupParser::ParseRecursive(u32 in_indexInString, std::string::const_iterator& out_iterator, std::string& out_string, const MarkupFoundDelegate& in_callback)
-        {
-            // Found some mark-up. What type is it?
-            std::string type;
-            UTF8Char nextChar = '\0';
-            
-            while (nextChar != k_markupSeparator)
-            {
-                nextChar = UTF8StringUtils::Next(out_iterator);
-                
-                if(nextChar != k_markupSeparator && nextChar != ' ')
-                {
-                    type += nextChar;
-                }
-            }
-            
-            // Variable type has been located
-            std::string varName;
-            
-            // There may be some whitespace that we need to ignore
             nextChar = UTF8StringUtils::Next(out_iterator);
-            if(nextChar != ' ')
+            
+            if(nextChar != k_markupSeparator && nextChar != ' ')
+            {
+                type += nextChar;
+            }
+        }
+        
+        // Variable type has been located
+        std::string varName;
+        
+        // There may be some whitespace that we need to ignore
+        nextChar = UTF8StringUtils::Next(out_iterator);
+        if(nextChar != ' ')
+        {
+            varName += nextChar;
+        }
+        
+        // Find the closing bracket
+        while (nextChar != k_markupEnd)
+        {
+            nextChar = UTF8StringUtils::Next(out_iterator);
+            
+            if(nextChar != k_markupEnd && nextChar != k_markupStart && nextChar != ' ')
             {
                 varName += nextChar;
             }
             
-            // Find the closing bracket
-            while (nextChar != k_markupEnd)
+            // Nested variable
+            if(nextChar == k_markupStart)
             {
-                nextChar = UTF8StringUtils::Next(out_iterator);
+                std::string variableName;
                 
-                if(nextChar != k_markupEnd && nextChar != k_markupStart && nextChar != ' ')
+                const auto& subType = ParseRecursive(in_indexInString, out_iterator, variableName, in_callback);
+                
+                // Check if the keyword is nestable
+                if(m_markupDef.HasKeyword(subType))
                 {
-                    varName += nextChar;
+                    CS_ASSERT(m_markupDef.IsKeywordNestable(subType) == true, "Keyword \"" + subType + "\" isn't a nestable type");
                 }
                 
-                // Nested variable
-                if(nextChar == k_markupStart)
-                {
-                    std::string variableName;
-                    
-                    const auto& subType = ParseRecursive(in_indexInString, out_iterator, variableName, in_callback);
-                    
-                    // Check if the keyword is nestable
-                    if(m_markupDef.HasKeyword(subType))
-                    {
-                        CS_ASSERT(m_markupDef.IsKeywordNestable(subType) == true, "Keyword \"" + subType + "\" isn't a nestable type");
-                    }
-                    
-                    varName += variableName;
-                }
+                varName += variableName;
             }
-            
-            if(m_markupDef.HasKeyword(type))
-            {
-                const auto& variable = in_callback(type, varName, in_indexInString);
-                out_string.append(variable);
-            }
-            else
-            {
-                out_string.append(k_markupStart + type + k_markupSeparator + varName + k_markupEnd);
-            }
-            
-            return type;
         }
+        
+        if(m_markupDef.HasKeyword(type))
+        {
+            const auto& variable = in_callback(type, varName, in_indexInString);
+            out_string.append(variable);
+        }
+        else
+        {
+            out_string.append(k_markupStart + type + k_markupSeparator + varName + k_markupEnd);
+        }
+        
+        return type;
     }
 }

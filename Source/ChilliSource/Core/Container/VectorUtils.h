@@ -34,91 +34,88 @@
 #include <algorithm>
 #include <vector>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-		//------------------------------------------------------------------------------
-		/// A collection of convenience methods for working with vector from the
-		/// standard library.
-		///
-		/// @author Ian Copland
-		//------------------------------------------------------------------------------
-		namespace VectorUtils
-		{
-			//------------------------------------------------------------------------------
-			/// Returns whether or not the given vector contains the given value.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The vector.
-			/// @param The value to check.
-			///
-			/// @return Whether or not the given value is contained in the given vector.
-			//------------------------------------------------------------------------------
-			template <typename TValueType> bool Contains(const std::vector<TValueType>& in_vector, TValueType in_value);
-			//------------------------------------------------------------------------------
-			/// Removes the first instance of the given value from the vector. If the value 
-			/// doesn't exist in the vector the app is considered to be in an irrecovereable 
-			/// state and will terminate. This should not be called while iterating over a 
-			/// vector as it will invalidate any iterators.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The vector.
-			/// @param The value to check.
-			//------------------------------------------------------------------------------
-			template <typename TValueType> void Remove(std::vector<TValueType>& in_vector, TValueType in_value);
-            //------------------------------------------------------------------------------
-            /// Tests that two vectors have the same contents. Both must have identical
-            /// contents and be the same size, but the elements do not need to be in the
-            /// same order.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_a - The first vector
-            /// @param in_b - The second vector
-            ///
-            /// @return Whether or not they have the same contents.
-            //------------------------------------------------------------------------------
-            template <typename TValueType> bool EqualContents(const std::vector<TValueType>& in_a, const std::vector<TValueType>& in_b);
+    //------------------------------------------------------------------------------
+    /// A collection of convenience methods for working with vector from the
+    /// standard library.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------------
+    namespace VectorUtils
+    {
+        //------------------------------------------------------------------------------
+        /// Returns whether or not the given vector contains the given value.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The vector.
+        /// @param The value to check.
+        ///
+        /// @return Whether or not the given value is contained in the given vector.
+        //------------------------------------------------------------------------------
+        template <typename TValueType> bool Contains(const std::vector<TValueType>& in_vector, TValueType in_value);
+        //------------------------------------------------------------------------------
+        /// Removes the first instance of the given value from the vector. If the value 
+        /// doesn't exist in the vector the app is considered to be in an irrecovereable 
+        /// state and will terminate. This should not be called while iterating over a 
+        /// vector as it will invalidate any iterators.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The vector.
+        /// @param The value to check.
+        //------------------------------------------------------------------------------
+        template <typename TValueType> void Remove(std::vector<TValueType>& in_vector, TValueType in_value);
+        //------------------------------------------------------------------------------
+        /// Tests that two vectors have the same contents. Both must have identical
+        /// contents and be the same size, but the elements do not need to be in the
+        /// same order.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_a - The first vector
+        /// @param in_b - The second vector
+        ///
+        /// @return Whether or not they have the same contents.
+        //------------------------------------------------------------------------------
+        template <typename TValueType> bool EqualContents(const std::vector<TValueType>& in_a, const std::vector<TValueType>& in_b);
 
-			//------------------------------------------------------------------------------
-			//------------------------------------------------------------------------------
-			template <typename TValueType> bool Contains(const std::vector<TValueType>& in_vector, TValueType in_value)
-			{
-				return (std::find(in_vector.begin(), in_vector.end(), in_value) != in_vector.end());
-			}
-			//------------------------------------------------------------------------------
-			//------------------------------------------------------------------------------
-			template <typename TValueType> void Remove(std::vector<TValueType>& in_vector, TValueType in_value)
-			{
-				auto it = std::find(in_vector.begin(), in_vector.end(), in_value);
-				CS_ASSERT(it != in_vector.end(), "Cannot remove the given value from the vector becuase it doesn't exist.");
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename TValueType> bool Contains(const std::vector<TValueType>& in_vector, TValueType in_value)
+        {
+            return (std::find(in_vector.begin(), in_vector.end(), in_value) != in_vector.end());
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename TValueType> void Remove(std::vector<TValueType>& in_vector, TValueType in_value)
+        {
+            auto it = std::find(in_vector.begin(), in_vector.end(), in_value);
+            CS_ASSERT(it != in_vector.end(), "Cannot remove the given value from the vector becuase it doesn't exist.");
 
-				in_vector.erase(it);
-            }
-            //------------------------------------------------------------------------------
-            //------------------------------------------------------------------------------
-            template <typename TValueType> bool EqualContents(const std::vector<TValueType>& in_a, const std::vector<TValueType>& in_b)
+            in_vector.erase(it);
+        }
+        //------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------
+        template <typename TValueType> bool EqualContents(const std::vector<TValueType>& in_a, const std::vector<TValueType>& in_b)
+        {
+            if (in_a.size() != in_b.size())
             {
-                if (in_a.size() != in_b.size())
+                return false;
+            }
+            
+            for (const auto& itemA : in_a)
+            {
+                if (CSCore::VectorUtils::Contains(in_b, itemA) == false)
                 {
                     return false;
                 }
-                
-                for (const auto& itemA : in_a)
-                {
-                    if (CSCore::VectorUtils::Contains(in_b, itemA) == false)
-                    {
-                        return false;
-                    }
-                }
-                
-                return true;
             }
-		}
-	}
+            
+            return true;
+        }
+    }
 }
 
 #endif

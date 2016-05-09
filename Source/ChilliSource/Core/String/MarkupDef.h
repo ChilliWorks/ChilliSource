@@ -33,48 +33,45 @@
 
 #include <unordered_map>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------------------------------------
+    /// Defines the markups
+    ///
+    /// @author N Tanda
+    //------------------------------------------------------------------------------
+    class MarkupDef final
     {
+    public:
         //------------------------------------------------------------------------------
-        /// Defines the markups
+        /// Adds a keyword to the markup
         ///
         /// @author N Tanda
+        ///
+        /// @param in_name - The unique name of the keyword.
+        /// @param in_nestable - Whether the keyword can include other markups
         //------------------------------------------------------------------------------
-        class MarkupDef final
-        {
-        public:
-            //------------------------------------------------------------------------------
-            /// Adds a keyword to the markup
-            ///
-            /// @author N Tanda
-            ///
-            /// @param in_name - The unique name of the keyword.
-            /// @param in_nestable - Whether the keyword can include other markups
-            //------------------------------------------------------------------------------
-            void AddKeyword(const std::string& in_name, bool in_nestable);
-            //------------------------------------------------------------------------------
-            /// @author N Tanda
-            ///
-            /// @param in_name - The unique name of the keyword.
-            ///
-            /// @return Whether the keyword is known
-            //------------------------------------------------------------------------------
-            bool HasKeyword(const std::string& in_name) const;
-            //------------------------------------------------------------------------------
-            /// @author N Tanda
-            ///
-            /// @param in_name - The unique name of the keyword.
-            ///
-            /// @return Whether the keyword can include other markups
-            //------------------------------------------------------------------------------
-            bool IsKeywordNestable(const std::string& in_name) const;
-            
-        private:
-            std::unordered_map<std::string, bool> m_keywords;
-        };
-    }
+        void AddKeyword(const std::string& in_name, bool in_nestable);
+        //------------------------------------------------------------------------------
+        /// @author N Tanda
+        ///
+        /// @param in_name - The unique name of the keyword.
+        ///
+        /// @return Whether the keyword is known
+        //------------------------------------------------------------------------------
+        bool HasKeyword(const std::string& in_name) const;
+        //------------------------------------------------------------------------------
+        /// @author N Tanda
+        ///
+        /// @param in_name - The unique name of the keyword.
+        ///
+        /// @return Whether the keyword can include other markups
+        //------------------------------------------------------------------------------
+        bool IsKeywordNestable(const std::string& in_name) const;
+        
+    private:
+        std::unordered_map<std::string, bool> m_keywords;
+    };
 }
 
 #endif

@@ -33,20 +33,18 @@
 
 #include <functional>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
-    {
-        //------------------------------------------------------------------------------
-        /// A delegate describing a single task. A context is provided which provides
-        /// information on the task and provides the ability to launch child tasks.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param in_taskContext - The task context.
-        //------------------------------------------------------------------------------
-        using Task = std::function<void(const TaskContext& in_taskContext) noexcept>;
-    }
+    //------------------------------------------------------------------------------
+    /// A delegate describing a single task. A context is provided which provides
+    /// information on the task and provides the ability to launch child tasks.
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param in_taskContext - The task context.
+    //------------------------------------------------------------------------------
+    using Task = std::function<void(const TaskContext& in_taskContext) noexcept>;
 }
+
 
 #endif

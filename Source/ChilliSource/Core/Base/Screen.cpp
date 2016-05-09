@@ -40,25 +40,22 @@
 #include <CSBackend/Platform/Windows/Core/Base/Screen.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-        CS_DEFINE_NAMEDTYPE(Screen);
-        //-----------------------------------------------------------
-        //-----------------------------------------------------------
-        ScreenUPtr Screen::Create()
-        {
+    CS_DEFINE_NAMEDTYPE(Screen);
+    //-----------------------------------------------------------
+    //-----------------------------------------------------------
+    ScreenUPtr Screen::Create()
+    {
 #if defined CS_TARGETPLATFORM_ANDROID
-            return ScreenUPtr(new CSBackend::Android::Screen());
+        return ScreenUPtr(new CSBackend::Android::Screen());
 #elif defined CS_TARGETPLATFORM_IOS
-            return ScreenUPtr(new CSBackend::iOS::Screen());
+        return ScreenUPtr(new CSBackend::iOS::Screen());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return ScreenUPtr(new CSBackend::Windows::Screen());
+        return ScreenUPtr(new CSBackend::Windows::Screen());
 #else
-            return nullptr;
+        return nullptr;
 #endif
-        }
-	}
+    }
 }
 

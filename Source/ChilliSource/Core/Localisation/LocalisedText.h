@@ -34,82 +34,79 @@
 
 #include <unordered_map>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-		//----------------------------------------------------------------------
-		/// Holds a resource loaded from the master text for a particular language.
-		/// The text comprises of Ids which act as the key and the text value.
+    //----------------------------------------------------------------------
+    /// Holds a resource loaded from the master text for a particular language.
+    /// The text comprises of Ids which act as the key and the text value.
+    ///
+    /// All localised text is in UTF-8 encoding format
+    ///
+    /// @author S Downie
+    //----------------------------------------------------------------------
+    class LocalisedText final : public Resource
+    {
+    public:
+        
+        CS_DECLARE_NAMEDTYPE(LocalisedText);
+
+        //---------------------------------------------------------------------
+        /// @author S Downie
         ///
-        /// All localised text is in UTF-8 encoding format
-		///
-		/// @author S Downie
-		//----------------------------------------------------------------------
-		class LocalisedText final : public Resource
-		{
-		public:
-            
-			CS_DECLARE_NAMEDTYPE(LocalisedText);
+        /// @param Interface Id
+        ///
+        /// @return Whether object is of given type
+        //---------------------------------------------------------------------
+        bool IsA(InterfaceIDType in_interfaceId) const override;
+        //---------------------------------------------------------------------
+        /// Populate the resource with the given keys and values
+        ///
+        /// @author S Downie
+        ///
+        /// @param A map containing the localised text. The text is in UTF-8
+        /// format.
+        //---------------------------------------------------------------------
+        void Build(const std::unordered_map<std::string, std::string>& in_textMap);
+        //---------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @param The string key.
+        ///
+        /// @return Whether or not this has the given key.
+        //---------------------------------------------------------------------
+        bool Contains(const std::string& in_key) const;
+        //---------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param String key
+        ///
+        /// @return String containing UTF8 codepoints that maps to this key
+        //---------------------------------------------------------------------
+        const std::string& GetText(const std::string& in_key) const;
 
-			//---------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @param Interface Id
-			///
-			/// @return Whether object is of given type
-			//---------------------------------------------------------------------
-			bool IsA(InterfaceIDType in_interfaceId) const override;
-			//---------------------------------------------------------------------
-			/// Populate the resource with the given keys and values
-			///
-			/// @author S Downie
-			///
-			/// @param A map containing the localised text. The text is in UTF-8
-            /// format.
-			//---------------------------------------------------------------------
-			void Build(const std::unordered_map<std::string, std::string>& in_textMap);
-            //---------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @param The string key.
-            ///
-            /// @return Whether or not this has the given key.
-            //---------------------------------------------------------------------
-            bool Contains(const std::string& in_key) const;
-            //---------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param String key
-            ///
-            /// @return String containing UTF8 codepoints that maps to this key
-            //---------------------------------------------------------------------
-            const std::string& GetText(const std::string& in_key) const;
+    private:
 
-		private:
-
-			friend class ResourcePool;
-			//---------------------------------------------------------------------
-			/// Factory method to create empty text resource. Only called
-			/// by the resource pool
-			///
-			/// @author S Downie
-			///
-			/// @return Ownership of resource
-			//---------------------------------------------------------------------
-			static LocalisedTextUPtr Create();
-			//---------------------------------------------------------------------
-			/// Private constructor to enforce use of factory create method
-			///
-			/// @author S Downie
-			//---------------------------------------------------------------------
-			LocalisedText() = default;
-            
-        private:
-            
-			std::unordered_map<std::string, std::string> m_text;
-		};
-	}
+        friend class ResourcePool;
+        //---------------------------------------------------------------------
+        /// Factory method to create empty text resource. Only called
+        /// by the resource pool
+        ///
+        /// @author S Downie
+        ///
+        /// @return Ownership of resource
+        //---------------------------------------------------------------------
+        static LocalisedTextUPtr Create();
+        //---------------------------------------------------------------------
+        /// Private constructor to enforce use of factory create method
+        ///
+        /// @author S Downie
+        //---------------------------------------------------------------------
+        LocalisedText() = default;
+        
+    private:
+        
+        std::unordered_map<std::string, std::string> m_text;
+    };
 }
 
 #endif

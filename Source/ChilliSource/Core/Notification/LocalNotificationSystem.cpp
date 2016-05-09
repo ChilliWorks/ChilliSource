@@ -38,23 +38,21 @@
 #include <CSBackend/Platform/Android/Main/JNI/Core/Notification/LocalNotificationSystem.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    CS_DEFINE_NAMEDTYPE(LocalNotificationSystem);
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    LocalNotificationSystemUPtr LocalNotificationSystem::Create()
     {
-        CS_DEFINE_NAMEDTYPE(LocalNotificationSystem);
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        LocalNotificationSystemUPtr LocalNotificationSystem::Create()
-        {
 #ifdef CS_TARGETPLATFORM_IOS
-            return LocalNotificationSystemUPtr(new CSBackend::iOS::LocalNotificationSystem());
+        return LocalNotificationSystemUPtr(new CSBackend::iOS::LocalNotificationSystem());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
-            return LocalNotificationSystemUPtr(new CSBackend::Android::LocalNotificationSystem());
+        return LocalNotificationSystemUPtr(new CSBackend::Android::LocalNotificationSystem());
 #endif
-            return nullptr;
-        }
+        return nullptr;
     }
 }
+
 

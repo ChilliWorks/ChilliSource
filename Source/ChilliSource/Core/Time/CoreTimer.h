@@ -34,39 +34,36 @@
 
 #include <functional>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-		typedef std::function<void(const f32)> TimeEventDelegate;
-		
-		class CoreTimer
-		{
-		public:
-			
-			//----------------------------------------------------
-			/// Get Timer Update Event
-			///
-			/// @return The event
-			//----------------------------------------------------
-			static IConnectableEvent<TimeEventDelegate>& GetTimerUpdateEvent();
+    typedef std::function<void(const f32)> TimeEventDelegate;
+    
+    class CoreTimer
+    {
+    public:
+        
+        //----------------------------------------------------
+        /// Get Timer Update Event
+        ///
+        /// @return The event
+        //----------------------------------------------------
+        static IConnectableEvent<TimeEventDelegate>& GetTimerUpdateEvent();
 
-		private:
-            
-            //----------------------------------------------------
-            /// Update
-            ///
-            /// @param Time since last frame
-            //----------------------------------------------------
-			static void Update(f32 infDT);
-			
-		private:
-			
-			static Event<TimeEventDelegate> mOnTimerUpdateEvent;
-            
-			friend class Application; //Only application can invoke the update
-		};
-	}
+    private:
+        
+        //----------------------------------------------------
+        /// Update
+        ///
+        /// @param Time since last frame
+        //----------------------------------------------------
+        static void Update(f32 infDT);
+        
+    private:
+        
+        static Event<TimeEventDelegate> mOnTimerUpdateEvent;
+        
+        friend class Application; //Only application can invoke the update
+    };
 }
 
 #endif

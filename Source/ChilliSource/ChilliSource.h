@@ -75,26 +75,29 @@ typedef u64                 TimeIntervalMs;
 /// Alternative, shorter namespace aliases for each of the
 /// Chilli Source libraries.
 //------------------------------------------------------------
-namespace ChilliSource
-{
-    namespace Audio{}
-    namespace Core{}
-    namespace Input{}
-    namespace Networking{}
-    namespace Rendering{}
-    namespace Social{}
-    namespace UI{}
-    namespace Video{}
-    namespace Web{}
-}
-namespace CSAudio = ChilliSource::Audio;
-namespace CSCore = ChilliSource::Core;
-namespace CSInput = ChilliSource::Input;
-namespace CSNetworking = ChilliSource::Networking;
-namespace CSRendering = ChilliSource::Rendering;
-namespace CSSocial = ChilliSource::Social;
-namespace CSUI = ChilliSource::UI;
-namespace CSVideo = ChilliSource::Video;
-namespace CSWeb = ChilliSource::Web;
+
+//TODO: Remove all of these.
+
+namespace CS {}
+
+namespace Audio = CS;
+namespace Core = CS;
+namespace Input = CS;
+namespace Networking = CS;
+namespace Rendering = CS;
+namespace Social = CS;
+namespace UI = CS;
+namespace Video = CS;
+namespace Web = CS;
+
+namespace CSAudio = CS;
+namespace CSCore = CS;
+namespace CSInput = CS;
+namespace CSNetworking = CS;
+namespace CSRendering = CS;
+namespace CSSocial = CS;
+namespace CSUI = CS;
+namespace CSVideo = CS;
+namespace CSWeb = CS;
 
 #endif

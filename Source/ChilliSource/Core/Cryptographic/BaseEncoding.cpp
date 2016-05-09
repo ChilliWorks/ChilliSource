@@ -32,33 +32,30 @@
 
 #include <algorithm>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    namespace BaseEncoding
     {
-        namespace BaseEncoding
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        std::string Base64Encode(const std::string& in_value)
         {
-            //---------------------------------------------------------
-            //---------------------------------------------------------
-            std::string Base64Encode(const std::string& in_value)
-            {
-                CS_ASSERT(in_value.length() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "String is too long. It cannot exceed "
-                          + CSCore::ToString(std::numeric_limits<u32>::max()) + " characters.");
-                
-                return Base64Encode(in_value.c_str(), static_cast<u32>(in_value.length()));
-            }
-            //---------------------------------------------------------
-            //---------------------------------------------------------
-            std::string Base64Encode(const s8* in_data, u32 in_size)
-            {
-                return base64_encode(reinterpret_cast<const u8*>(in_data), in_size);
-            }
-            //---------------------------------------------------------
-            //---------------------------------------------------------
-            std::string Base64Decode(const std::string& in_value)
-            {
-                return base64_decode(in_value);
-            }
+            CS_ASSERT(in_value.length() < static_cast<std::string::size_type>(std::numeric_limits<u32>::max()), "String is too long. It cannot exceed "
+                      + CSCore::ToString(std::numeric_limits<u32>::max()) + " characters.");
+            
+            return Base64Encode(in_value.c_str(), static_cast<u32>(in_value.length()));
+        }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        std::string Base64Encode(const s8* in_data, u32 in_size)
+        {
+            return base64_encode(reinterpret_cast<const u8*>(in_data), in_size);
+        }
+        //---------------------------------------------------------
+        //---------------------------------------------------------
+        std::string Base64Decode(const std::string& in_value)
+        {
+            return base64_decode(in_value);
         }
     }
 }

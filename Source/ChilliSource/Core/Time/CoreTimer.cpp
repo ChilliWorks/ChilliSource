@@ -28,30 +28,27 @@
 
 #include <ChilliSource/Core/Time/CoreTimer.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-        Event<TimeEventDelegate> CoreTimer::mOnTimerUpdateEvent;
-        
-		//----------------------------------------------------
-		/// Get Timer Update Event
-		///
-		/// @return The event
-		//----------------------------------------------------
-		IConnectableEvent<TimeEventDelegate>& CoreTimer::GetTimerUpdateEvent()
-		{
-			return mOnTimerUpdateEvent;
-		}
-        //----------------------------------------------------
-        /// Update
-        ///
-        /// @param Time since last frame
-        //----------------------------------------------------
-		void CoreTimer::Update(f32 infDT)
-		{
-			mOnTimerUpdateEvent.NotifyConnections(infDT);
-		}
-	}
+    Event<TimeEventDelegate> CoreTimer::mOnTimerUpdateEvent;
+    
+    //----------------------------------------------------
+    /// Get Timer Update Event
+    ///
+    /// @return The event
+    //----------------------------------------------------
+    IConnectableEvent<TimeEventDelegate>& CoreTimer::GetTimerUpdateEvent()
+    {
+        return mOnTimerUpdateEvent;
+    }
+    //----------------------------------------------------
+    /// Update
+    ///
+    /// @param Time since last frame
+    //----------------------------------------------------
+    void CoreTimer::Update(f32 infDT)
+    {
+        mOnTimerUpdateEvent.NotifyConnections(infDT);
+    }
 }
 

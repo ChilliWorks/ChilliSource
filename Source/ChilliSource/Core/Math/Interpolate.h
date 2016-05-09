@@ -36,106 +36,103 @@
 
 #include <functional>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------------------------------------
+    /// A collection of Interpolate functions.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------------
+    namespace Interpolate
     {
         //------------------------------------------------------------------------------
-        /// A collection of Interpolate functions.
+        /// @author Ian Copland
+        ///
+        /// @param The string name of the curve.
+        ///
+        /// @return The associated Interpolate function.
+        //------------------------------------------------------------------------------
+        std::function<f32(f32)> GetInterpolateFunction(const std::string& in_name);
+        //------------------------------------------------------------------------------
+        /// The linear Interpolate function.
         ///
         /// @author Ian Copland
+        ///
+        /// @param The input x. This must be in the range 0.0 to 1.0.
+        ///
+        /// @return The output y. This will be in the range 0.0 to 1.0.
         //------------------------------------------------------------------------------
-        namespace Interpolate
-        {
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @param The string name of the curve.
-            ///
-            /// @return The associated Interpolate function.
-            //------------------------------------------------------------------------------
-            std::function<f32(f32)> GetInterpolateFunction(const std::string& in_name);
-            //------------------------------------------------------------------------------
-            /// The linear Interpolate function.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The input x. This must be in the range 0.0 to 1.0.
-            ///
-            /// @return The output y. This will be in the range 0.0 to 1.0.
-            //------------------------------------------------------------------------------
-            f32 Linear(f32 in_x);
-            //------------------------------------------------------------------------------
-            /// The ease in quad Interpolate function.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The input x. This must be in the range 0.0 to 1.0.
-            ///
-            /// @return The output y. This will be in the range 0.0 to 1.0.
-            //------------------------------------------------------------------------------
-            f32 EaseInQuad(f32 in_x);
-            //------------------------------------------------------------------------------
-            /// The ease out quad Interpolate function.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The input x. This must be in the range 0.0 to 1.0.
-            ///
-            /// @return The output y. This will be in the range 0.0 to 1.0.
-            //------------------------------------------------------------------------------
-            f32 EaseOutQuad(f32 in_x);
-            //------------------------------------------------------------------------------
-            /// The smooth step Interpolate function.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The input x. This must be in the range 0.0 to 1.0.
-            ///
-            /// @return The output y. This will be in the range 0.0 to 1.0.
-            //------------------------------------------------------------------------------
-            f32 SmoothStep(f32 in_x);
-            //------------------------------------------------------------------------------
-            /// The linear ping pong Interpolate function.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The input x. This must be in the range 0.0 to 1.0.
-            ///
-            /// @return The output y. This will be in the range 0.0 to 1.0.
-            //------------------------------------------------------------------------------
-            f32 LinearPingPong(f32 in_x);
-            //------------------------------------------------------------------------------
-            /// The ease in quad ping pong Interpolate function.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The input x. This must be in the range 0.0 to 1.0.
-            ///
-            /// @return The output y. This will be in the range 0.0 to 1.0.
-            //------------------------------------------------------------------------------
-            f32 EaseInQuadPingPong(f32 in_x);
-            //------------------------------------------------------------------------------
-            /// The ease out quad ping pong Interpolate function.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The input x. This must be in the range 0.0 to 1.0.
-            ///
-            /// @return The output y. This will be in the range 0.0 to 1.0.
-            //------------------------------------------------------------------------------
-            f32 EaseOutQuadPingPong(f32 in_x);
-            //------------------------------------------------------------------------------
-            /// The smooth step ping pong Interpolate function.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The input x. This must be in the range 0.0 to 1.0.
-            ///
-            /// @return The output y. This will be in the range 0.0 to 1.0.
-            //------------------------------------------------------------------------------
-            f32 SmoothStepPingPong(f32 in_x);
-        }
+        f32 Linear(f32 in_x);
+        //------------------------------------------------------------------------------
+        /// The ease in quad Interpolate function.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The input x. This must be in the range 0.0 to 1.0.
+        ///
+        /// @return The output y. This will be in the range 0.0 to 1.0.
+        //------------------------------------------------------------------------------
+        f32 EaseInQuad(f32 in_x);
+        //------------------------------------------------------------------------------
+        /// The ease out quad Interpolate function.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The input x. This must be in the range 0.0 to 1.0.
+        ///
+        /// @return The output y. This will be in the range 0.0 to 1.0.
+        //------------------------------------------------------------------------------
+        f32 EaseOutQuad(f32 in_x);
+        //------------------------------------------------------------------------------
+        /// The smooth step Interpolate function.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The input x. This must be in the range 0.0 to 1.0.
+        ///
+        /// @return The output y. This will be in the range 0.0 to 1.0.
+        //------------------------------------------------------------------------------
+        f32 SmoothStep(f32 in_x);
+        //------------------------------------------------------------------------------
+        /// The linear ping pong Interpolate function.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The input x. This must be in the range 0.0 to 1.0.
+        ///
+        /// @return The output y. This will be in the range 0.0 to 1.0.
+        //------------------------------------------------------------------------------
+        f32 LinearPingPong(f32 in_x);
+        //------------------------------------------------------------------------------
+        /// The ease in quad ping pong Interpolate function.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The input x. This must be in the range 0.0 to 1.0.
+        ///
+        /// @return The output y. This will be in the range 0.0 to 1.0.
+        //------------------------------------------------------------------------------
+        f32 EaseInQuadPingPong(f32 in_x);
+        //------------------------------------------------------------------------------
+        /// The ease out quad ping pong Interpolate function.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The input x. This must be in the range 0.0 to 1.0.
+        ///
+        /// @return The output y. This will be in the range 0.0 to 1.0.
+        //------------------------------------------------------------------------------
+        f32 EaseOutQuadPingPong(f32 in_x);
+        //------------------------------------------------------------------------------
+        /// The smooth step ping pong Interpolate function.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The input x. This must be in the range 0.0 to 1.0.
+        ///
+        /// @return The output y. This will be in the range 0.0 to 1.0.
+        //------------------------------------------------------------------------------
+        f32 SmoothStepPingPong(f32 in_x);
     }
 }
 

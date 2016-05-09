@@ -38,72 +38,69 @@
 
 #include <json/json.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    namespace
     {
-        namespace
-        {
-            const std::string k_configFilePath = "App.config";
-            const std::string k_defaultDisplayableName = "Chilli Source App";
-            const u32 k_defaultPreferredFPS = 30;
-        }
-        
-        CS_DEFINE_NAMEDTYPE(AppConfig);
+        const std::string k_configFilePath = "App.config";
+        const std::string k_defaultDisplayableName = "Chilli Source App";
+        const u32 k_defaultPreferredFPS = 30;
+    }
+    
+    CS_DEFINE_NAMEDTYPE(AppConfig);
 
-        //---------------------------------------------------------
-        //---------------------------------------------------------
-        AppConfigUPtr AppConfig::Create()
+    //---------------------------------------------------------
+    //---------------------------------------------------------
+    AppConfigUPtr AppConfig::Create()
+    {
+        return AppConfigUPtr(new AppConfig());
+    }
+    //---------------------------------------------------------
+    //---------------------------------------------------------
+    AppConfig::AppConfig()
+    : m_preferredFPS(k_defaultPreferredFPS), m_displayableName(k_defaultDisplayableName)
+    {
+    }
+    //---------------------------------------------------------
+    //---------------------------------------------------------
+    bool AppConfig::IsA(InterfaceIDType in_interfaceId) const
+    {
+        return (AppConfig::InterfaceID == in_interfaceId);
+    }
+    //---------------------------------------------------------
+    //---------------------------------------------------------
+    const std::string& AppConfig::GetDisplayableName() const
+    {
+        return m_displayableName;
+    }
+    //---------------------------------------------------------
+    //---------------------------------------------------------
+    u32 AppConfig::GetPreferredFPS() const
+    {
+        return m_preferredFPS;
+    }
+    //---------------------------------------------------------
+    //---------------------------------------------------------
+    bool AppConfig::IsVSyncEnabled() const
+    {
+        return m_isVSyncEnabled;
+    }
+    //---------------------------------------------------------
+    //---------------------------------------------------------
+    void AppConfig::Load()
+    {
+        Json::Value root;
+        if(JsonUtils::ReadJson(StorageLocation::k_package, k_configFilePath, root) == true)
         {
-            return AppConfigUPtr(new AppConfig());
-        }
-        //---------------------------------------------------------
-        //---------------------------------------------------------
-        AppConfig::AppConfig()
-        : m_preferredFPS(k_defaultPreferredFPS), m_displayableName(k_defaultDisplayableName)
-        {
-        }
-        //---------------------------------------------------------
-        //---------------------------------------------------------
-        bool AppConfig::IsA(InterfaceIDType in_interfaceId) const
-        {
-            return (AppConfig::InterfaceID == in_interfaceId);
-        }
-        //---------------------------------------------------------
-        //---------------------------------------------------------
-        const std::string& AppConfig::GetDisplayableName() const
-        {
-            return m_displayableName;
-        }
-        //---------------------------------------------------------
-        //---------------------------------------------------------
-        u32 AppConfig::GetPreferredFPS() const
-        {
-            return m_preferredFPS;
-        }
-		//---------------------------------------------------------
-		//---------------------------------------------------------
-		bool AppConfig::IsVSyncEnabled() const
-		{
-			return m_isVSyncEnabled;
-		}
-        //---------------------------------------------------------
-        //---------------------------------------------------------
-        void AppConfig::Load()
-        {
-            Json::Value root;
-            if(JsonUtils::ReadJson(StorageLocation::k_package, k_configFilePath, root) == true)
+            m_displayableName = root.get("DisplayableName", k_defaultDisplayableName).asString();
+            m_preferredFPS = root.get("PreferredFPS", k_defaultPreferredFPS).asUInt();
+            m_isVSyncEnabled = root.get("VSync", false).asBool();
+            
+            const Json::Value& fileTags = root["FileTags"];
+            
+            if(fileTags.isNull() == false)
             {
-                m_displayableName = root.get("DisplayableName", k_defaultDisplayableName).asString();
-                m_preferredFPS = root.get("PreferredFPS", k_defaultPreferredFPS).asUInt();
-				m_isVSyncEnabled = root.get("VSync", false).asBool();
-                
-                const Json::Value& fileTags = root["FileTags"];
-                
-                if(fileTags.isNull() == false)
-                {
-                    Application::Get()->GetTaggedFilePathResolver()->SetFromJson(fileTags);
-                }
+                Application::Get()->GetTaggedFilePathResolver()->SetFromJson(fileTags);
             }
         }
     }

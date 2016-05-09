@@ -37,130 +37,127 @@
 
 #include <sstream>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    TaskPool::TaskPool(TaskType in_taskType, u32 in_numThreads) noexcept
+        : m_numThreads(in_numThreads), m_taskContext(in_taskType, this), m_isFinished(false), m_taskCountHeuristic(0)
     {
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        TaskPool::TaskPool(TaskType in_taskType, u32 in_numThreads) noexcept
-            : m_numThreads(in_numThreads), m_taskContext(in_taskType, this), m_isFinished(false), m_taskCountHeuristic(0)
+        CS_ASSERT(in_taskType == TaskType::k_small || in_taskType == TaskType::k_large, "Task type must be small or large");
+        
+        for (u32 i = 0; i < m_numThreads; ++i)
         {
-            CS_ASSERT(in_taskType == TaskType::k_small || in_taskType == TaskType::k_large, "Task type must be small or large");
-            
-            for (u32 i = 0; i < m_numThreads; ++i)
-            {
-                m_threads.push_back(std::thread(MakeDelegate(this, &TaskPool::ProcessTasks)));
-            }
+            m_threads.push_back(std::thread(MakeDelegate(this, &TaskPool::ProcessTasks)));
         }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        u32 TaskPool::GetNumThreads() const noexcept
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    u32 TaskPool::GetNumThreads() const noexcept
+    {
+        return m_numThreads;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TaskPool::AddTasks(const std::vector<Task>& in_tasks) noexcept
+    {
+        std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
+        m_taskQueue.insert(m_taskQueue.begin(), in_tasks.begin(), in_tasks.end());
+        m_taskCountHeuristic += u32(in_tasks.size());
+        
+        if (in_tasks.size() > 1)
         {
-            return m_numThreads;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TaskPool::AddTasks(const std::vector<Task>& in_tasks) noexcept
-        {
-            std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
-			m_taskQueue.insert(m_taskQueue.begin(), in_tasks.begin(), in_tasks.end());
-            m_taskCountHeuristic += u32(in_tasks.size());
-            
-            if (in_tasks.size() > 1)
-            {
-                m_emptyWaitCondition.notify_all();
-            }
-            else
-            {
-                m_emptyWaitCondition.notify_one();
-            }
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TaskPool::AddTasksAndYield(const std::vector<Task>& in_tasks) noexcept
-        {
-            std::atomic<u32> taskCount(u32(in_tasks.size()));
-            std::atomic<bool> finished(false);
-            
-            std::vector<Task> tasksWithCounter;
-            for (const auto& task : in_tasks)
-            {
-                tasksWithCounter.push_back([=, &task, &taskCount, &finished](const TaskContext& in_taskContext) noexcept
-                {
-                    task(in_taskContext);
-
-                    if (--taskCount == 0)
-                    {
-                        std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
-                        finished = true;
-                        m_emptyWaitCondition.notify_all();
-                    }
-                });
-            }
-            
-            AddTasks(tasksWithCounter);
-            
-            while (!finished)
-            {
-                PerformTask(finished);
-            }
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TaskPool::PerformTask(const std::atomic<bool>& in_forceContinue) noexcept
-        {
-            std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
-            CS_ASSERT(m_isFinished == false, "Task is being pushed after finishing.");
-            
-            if (m_taskQueue.empty() && !in_forceContinue)
-            {
-                m_emptyWaitCondition.wait(queueLock);
-            }
-            
-            if (m_taskQueue.empty())
-            {
-                return;
-            }
-            
-            Task task = m_taskQueue.front();
-			m_taskQueue.pop_front();
-            --m_taskCountHeuristic;
-                
-            queueLock.unlock();
-            
-            task(m_taskContext);
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TaskPool::ProcessTasks() noexcept
-        {
-#ifdef CS_TARGETPLATFORM_ANDROID
-            CSBackend::Android::JavaVirtualMachine::Get()->AttachCurrentThread();
-#endif
-
-            while (!m_isFinished || m_taskCountHeuristic > 0)
-            {
-                PerformTask(m_isFinished);
-            }
-            
-#ifdef CS_TARGETPLATFORM_ANDROID
-            CSBackend::Android::JavaVirtualMachine::Get()->DetachCurrentThread();
-#endif
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        TaskPool::~TaskPool() noexcept
-        {
-            std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
-            m_isFinished = true;
-            queueLock.unlock();
-            
             m_emptyWaitCondition.notify_all();
-            for (auto& thread : m_threads)
+        }
+        else
+        {
+            m_emptyWaitCondition.notify_one();
+        }
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TaskPool::AddTasksAndYield(const std::vector<Task>& in_tasks) noexcept
+    {
+        std::atomic<u32> taskCount(u32(in_tasks.size()));
+        std::atomic<bool> finished(false);
+        
+        std::vector<Task> tasksWithCounter;
+        for (const auto& task : in_tasks)
+        {
+            tasksWithCounter.push_back([=, &task, &taskCount, &finished](const TaskContext& in_taskContext) noexcept
             {
-                thread.join();
-            }
+                task(in_taskContext);
+
+                if (--taskCount == 0)
+                {
+                    std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
+                    finished = true;
+                    m_emptyWaitCondition.notify_all();
+                }
+            });
+        }
+        
+        AddTasks(tasksWithCounter);
+        
+        while (!finished)
+        {
+            PerformTask(finished);
+        }
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TaskPool::PerformTask(const std::atomic<bool>& in_forceContinue) noexcept
+    {
+        std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
+        CS_ASSERT(m_isFinished == false, "Task is being pushed after finishing.");
+        
+        if (m_taskQueue.empty() && !in_forceContinue)
+        {
+            m_emptyWaitCondition.wait(queueLock);
+        }
+        
+        if (m_taskQueue.empty())
+        {
+            return;
+        }
+        
+        Task task = m_taskQueue.front();
+        m_taskQueue.pop_front();
+        --m_taskCountHeuristic;
+            
+        queueLock.unlock();
+        
+        task(m_taskContext);
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TaskPool::ProcessTasks() noexcept
+    {
+#ifdef CS_TARGETPLATFORM_ANDROID
+        CSBackend::Android::JavaVirtualMachine::Get()->AttachCurrentThread();
+#endif
+
+        while (!m_isFinished || m_taskCountHeuristic > 0)
+        {
+            PerformTask(m_isFinished);
+        }
+        
+#ifdef CS_TARGETPLATFORM_ANDROID
+        CSBackend::Android::JavaVirtualMachine::Get()->DetachCurrentThread();
+#endif
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    TaskPool::~TaskPool() noexcept
+    {
+        std::unique_lock<std::mutex> queueLock(m_taskQueueMutex);
+        m_isFinished = true;
+        queueLock.unlock();
+        
+        m_emptyWaitCondition.notify_all();
+        for (auto& thread : m_threads)
+        {
+            thread.join();
         }
     }
 }

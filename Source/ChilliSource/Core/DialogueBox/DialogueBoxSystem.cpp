@@ -40,29 +40,26 @@
 #include <CSBackend/Platform/Windows/Core/DialogueBox/DialogueBoxSystem.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-        CS_DEFINE_NAMEDTYPE(DialogueBoxSystem);
-        //----------------------------------------------------
-        //----------------------------------------------------
-        DialogueBoxSystemUPtr DialogueBoxSystem::Create()
-        {
+    CS_DEFINE_NAMEDTYPE(DialogueBoxSystem);
+    //----------------------------------------------------
+    //----------------------------------------------------
+    DialogueBoxSystemUPtr DialogueBoxSystem::Create()
+    {
 #ifdef CS_TARGETPLATFORM_IOS
-            return DialogueBoxSystemUPtr(new CSBackend::iOS::DialogueBoxSystem());
+        return DialogueBoxSystemUPtr(new CSBackend::iOS::DialogueBoxSystem());
 #elif defined CS_TARGETPLATFORM_ANDROID
-            return DialogueBoxSystemUPtr(new CSBackend::Android::DialogueBoxSystem());
+        return DialogueBoxSystemUPtr(new CSBackend::Android::DialogueBoxSystem());
 #elif defined CS_TARGETPLATFORM_WINDOWS
-            return DialogueBoxSystemUPtr(new CSBackend::Windows::DialogueBoxSystem());
+        return DialogueBoxSystemUPtr(new CSBackend::Windows::DialogueBoxSystem());
 #else
-            return nullptr;
+        return nullptr;
 #endif
-        }
-        //----------------------------------------------------
-        //----------------------------------------------------
-        DialogueBoxSystem::~DialogueBoxSystem()
-        {
-        }
-	}
+    }
+    //----------------------------------------------------
+    //----------------------------------------------------
+    DialogueBoxSystem::~DialogueBoxSystem()
+    {
+    }
 }

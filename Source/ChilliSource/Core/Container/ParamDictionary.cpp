@@ -28,63 +28,60 @@
 
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    ParamDictionary::ParamDictionary(const std::initializer_list<std::pair<std::string, std::string>>& in_initList)
     {
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        ParamDictionary::ParamDictionary(const std::initializer_list<std::pair<std::string, std::string>>& in_initList)
+        for(const auto& pair : in_initList)
         {
-            for(const auto& pair : in_initList)
-            {
-                insert(pair);
-            }
+            insert(pair);
         }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        void ParamDictionary::SetValue(const std::string& in_key, const std::string& in_value)
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    void ParamDictionary::SetValue(const std::string& in_key, const std::string& in_value)
+    {
+        insert(std::make_pair(in_key, in_value));
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    bool ParamDictionary::HasKey(const std::string& in_key) const
+    {
+        return find(in_key) != end();
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    bool ParamDictionary::TryGetValue(const std::string& in_key, std::string& out_value) const
+    {
+        auto it = find(in_key);
+        
+        if(it != end())
         {
-            insert(std::make_pair(in_key, in_value));
+            out_value = it->second;
+            return true;
         }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        bool ParamDictionary::HasKey(const std::string& in_key) const
+        
+        return false;
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    const std::string& ParamDictionary::GetValue(const std::string& in_key) const
+    {
+        return GetValueOrDefault(in_key, "");
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    const std::string& ParamDictionary::GetValueOrDefault(const std::string& in_key, const std::string& in_default) const
+    {
+        auto it = find(in_key);
+        
+        if(it != end())
         {
-            return find(in_key) != end();
+            return it->second;
         }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        bool ParamDictionary::TryGetValue(const std::string& in_key, std::string& out_value) const
-        {
-            auto it = find(in_key);
-            
-            if(it != end())
-            {
-                out_value = it->second;
-                return true;
-            }
-            
-            return false;
-        }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        const std::string& ParamDictionary::GetValue(const std::string& in_key) const
-        {
-            return GetValueOrDefault(in_key, "");
-        }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        const std::string& ParamDictionary::GetValueOrDefault(const std::string& in_key, const std::string& in_default) const
-        {
-            auto it = find(in_key);
-            
-            if(it != end())
-            {
-                return it->second;
-            }
-            
-            return in_default;
-        }
-	}
+        
+        return in_default;
+    }
 }

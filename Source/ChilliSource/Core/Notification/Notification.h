@@ -33,34 +33,31 @@
 #include <ChilliSource/Core/Event/Event.h>
 #include <ChilliSource/Core/Container/ParamDictionary.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------------------
+    /// A notification that can be used by any of the notification
+    /// systems.
+    //------------------------------------------------------------
+    struct Notification
     {
-        //------------------------------------------------------------
-        /// A notification that can be used by any of the notification
-        /// systems.
-        //------------------------------------------------------------
-        struct Notification
+        //----------------------------------------------------
+        /// An enum describing the priority of a notification.
+        //----------------------------------------------------
+        enum class Priority
         {
-            //----------------------------------------------------
-            /// An enum describing the priority of a notification.
-            //----------------------------------------------------
-            enum class Priority
-            {
-                k_standard,
-                k_high
-            };
-            //----------------------------------------------------
-            /// Typedefs
-            //----------------------------------------------------
-            typedef u32 ID;
-
-            ID m_id;
-            ParamDictionary m_params;
-            Priority m_priority;
+            k_standard,
+            k_high
         };
-    }
+        //----------------------------------------------------
+        /// Typedefs
+        //----------------------------------------------------
+        typedef u32 ID;
+
+        ID m_id;
+        ParamDictionary m_params;
+        Priority m_priority;
+    };
 }
 
 #endif

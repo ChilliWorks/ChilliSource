@@ -31,52 +31,49 @@
 #include <ck/ck.h>
 #include <ck/bank.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Audio
-	{
-		CS_DEFINE_NAMEDTYPE(CkBank);
-		//------------------------------------------------------------------------------
-		//------------------------------------------------------------------------------
-		CkBankUPtr CkBank::Create()
-		{
-			return CkBankUPtr(new CkBank());
-		}
-		//------------------------------------------------------------------------------
-		//------------------------------------------------------------------------------
-		bool CkBank::IsA(Core::InterfaceIDType in_interfaceId) const
-		{
-			return (CkBank::InterfaceID == in_interfaceId);
-		}
-		//------------------------------------------------------------------------------
-		//------------------------------------------------------------------------------
-		void CkBank::Build(::CkBank* in_CkAudioBank, std::unique_ptr<u8[]> in_bankBuffer)
-		{
-			CS_ASSERT(m_bank == nullptr, "Cannot call Build() on a CkBank more than once.");
-			CS_ASSERT(in_CkAudioBank != nullptr, "Cannot Build() a CkBank with a null bank pointer.");
+    CS_DEFINE_NAMEDTYPE(CkBank);
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    CkBankUPtr CkBank::Create()
+    {
+        return CkBankUPtr(new CkBank());
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    bool CkBank::IsA(Core::InterfaceIDType in_interfaceId) const
+    {
+        return (CkBank::InterfaceID == in_interfaceId);
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void CkBank::Build(::CkBank* in_CkAudioBank, std::unique_ptr<u8[]> in_bankBuffer)
+    {
+        CS_ASSERT(m_bank == nullptr, "Cannot call Build() on a CkBank more than once.");
+        CS_ASSERT(in_CkAudioBank != nullptr, "Cannot Build() a CkBank with a null bank pointer.");
 
-			m_bank = in_CkAudioBank;
-			m_bankBuffer = std::move(in_bankBuffer);
-		}
-		//------------------------------------------------------------------------------
-		//------------------------------------------------------------------------------
-		::CkBank* CkBank::GetBank() const
-		{
-			CS_ASSERT(m_bank != nullptr, "Bank has not yet been built!");
+        m_bank = in_CkAudioBank;
+        m_bankBuffer = std::move(in_bankBuffer);
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    ::CkBank* CkBank::GetBank() const
+    {
+        CS_ASSERT(m_bank != nullptr, "Bank has not yet been built!");
 
-			return m_bank;
-		}
-		//------------------------------------------------------------------------------
-		//------------------------------------------------------------------------------
-		CkBank::~CkBank()
-		{
-			if (m_bank != nullptr)
-			{
-				m_bank->destroy();
-				m_bank = nullptr;
+        return m_bank;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    CkBank::~CkBank()
+    {
+        if (m_bank != nullptr)
+        {
+            m_bank->destroy();
+            m_bank = nullptr;
 
-				m_bankBuffer.reset();
-			}
-		}
-	}
+            m_bankBuffer.reset();
+        }
+    }
 }

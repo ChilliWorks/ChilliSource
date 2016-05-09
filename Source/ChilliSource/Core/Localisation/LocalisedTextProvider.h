@@ -32,96 +32,93 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-		//---------------------------------------------------------------
-		/// Provider that loads localised text files and corresponding
-		/// keys based on the current device language. All text is
-        /// UTF8 encoded
-		///
-		/// @author S Downie
-		//---------------------------------------------------------------
-		class LocalisedTextProvider final : public ResourceProvider 
-		{
-		public:
-			
-			CS_DECLARE_NAMEDTYPE(LocalisedTextProvider);
-            
-            //----------------------------------------------------
-			/// @author S Downie
-			///
-			/// @param Interface Id
-			///
-			/// @return Whether object is of given type
-			//----------------------------------------------------
-			bool IsA(InterfaceIDType in_interfaceId) const override;
-			//----------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The resource type this provider can create
-			//----------------------------------------------------
-			InterfaceIDType GetResourceType() const override;
-			//----------------------------------------------------
-			/// Allows querying of the resource type this provider
-			/// can create.
-			///
-			/// @author S Downie
-			///
-			/// @param The extension of the resource file.
-			///
-			/// @return Whether or not the resource can be created.
-			//----------------------------------------------------
-			bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
-			//----------------------------------------------------
-			/// Creates a localised text resource from the given file.
-			/// Check the load state of the resource for
-			/// success or failure
-			///
-			/// @author S Downie
-			///
-			/// @param The storage location.
-			/// @param The filepath.
-            /// @param Options to customise the creation
-			/// @param Delegate to callback on completion either success or failure
-			/// @param [Out] The output resource.
-			//----------------------------------------------------
-			void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
-			//----------------------------------------------------
-			/// Creates a localised text resource asynchronously.
-			/// The delegate will be called on completion. Check
-			/// the load state for success or failure.
-			///
-			/// @author S Downie
-			///
-			/// @param The storage location.
-			/// @param The filepath.
-            /// @param Options to customise the creation
-			/// @param Completion delegate
-			/// @param [Out] The output resource.
-			//----------------------------------------------------
-			void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
+    //---------------------------------------------------------------
+    /// Provider that loads localised text files and corresponding
+    /// keys based on the current device language. All text is
+    /// UTF8 encoded
+    ///
+    /// @author S Downie
+    //---------------------------------------------------------------
+    class LocalisedTextProvider final : public ResourceProvider 
+    {
+    public:
+        
+        CS_DECLARE_NAMEDTYPE(LocalisedTextProvider);
+        
+        //----------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Interface Id
+        ///
+        /// @return Whether object is of given type
+        //----------------------------------------------------
+        bool IsA(InterfaceIDType in_interfaceId) const override;
+        //----------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The resource type this provider can create
+        //----------------------------------------------------
+        InterfaceIDType GetResourceType() const override;
+        //----------------------------------------------------
+        /// Allows querying of the resource type this provider
+        /// can create.
+        ///
+        /// @author S Downie
+        ///
+        /// @param The extension of the resource file.
+        ///
+        /// @return Whether or not the resource can be created.
+        //----------------------------------------------------
+        bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
+        //----------------------------------------------------
+        /// Creates a localised text resource from the given file.
+        /// Check the load state of the resource for
+        /// success or failure
+        ///
+        /// @author S Downie
+        ///
+        /// @param The storage location.
+        /// @param The filepath.
+        /// @param Options to customise the creation
+        /// @param Delegate to callback on completion either success or failure
+        /// @param [Out] The output resource.
+        //----------------------------------------------------
+        void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
+        //----------------------------------------------------
+        /// Creates a localised text resource asynchronously.
+        /// The delegate will be called on completion. Check
+        /// the load state for success or failure.
+        ///
+        /// @author S Downie
+        ///
+        /// @param The storage location.
+        /// @param The filepath.
+        /// @param Options to customise the creation
+        /// @param Completion delegate
+        /// @param [Out] The output resource.
+        //----------------------------------------------------
+        void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
 
-		private:
+    private:
 
-			friend class Application;
-			//-------------------------------------------------------
-			/// Factory method
-			///
-			/// @author S Downie
-			///
-			/// @return New backend with ownership transferred
-			//-------------------------------------------------------
-			static LocalisedTextProviderUPtr Create();
-			//-------------------------------------------------------
-			/// Private constructor to force use of factory method
-			///
-			/// @author S Downie
-			//-------------------------------------------------------
-			LocalisedTextProvider() = default;
-		};
-	}
+        friend class Application;
+        //-------------------------------------------------------
+        /// Factory method
+        ///
+        /// @author S Downie
+        ///
+        /// @return New backend with ownership transferred
+        //-------------------------------------------------------
+        static LocalisedTextProviderUPtr Create();
+        //-------------------------------------------------------
+        /// Private constructor to force use of factory method
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------
+        LocalisedTextProvider() = default;
+    };
 }
 
 #endif

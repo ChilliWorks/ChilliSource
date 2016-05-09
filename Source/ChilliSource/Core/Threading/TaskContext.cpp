@@ -32,58 +32,55 @@
 #include <ChilliSource/Core/Threading/TaskType.h>
 #include <ChilliSource/Core/Threading/TaskScheduler.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    TaskContext::TaskContext(TaskType in_taskType, TaskPool* in_taskPool) noexcept
+        : m_taskType(in_taskType), m_taskPool(in_taskPool)
     {
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        TaskContext::TaskContext(TaskType in_taskType, TaskPool* in_taskPool) noexcept
-            : m_taskType(in_taskType), m_taskPool(in_taskPool)
+        if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)
         {
-            if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)
+            CS_ASSERT(!m_taskPool, "Main thread and file task contexts should not have a task pool.");
+        }
+        else
+        {
+            CS_ASSERT(m_taskPool, "Small, large and game logic task contexts must have a task pool.");
+        }
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    TaskType TaskContext::GetType() const noexcept
+    {
+        return m_taskType;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TaskContext::ProcessChildTasks(const std::vector<Task>& in_tasks) const noexcept
+    {
+        if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)
+        {
+            for (const auto& task : in_tasks)
             {
-                CS_ASSERT(!m_taskPool, "Main thread and file task contexts should not have a task pool.");
-            }
-            else
-            {
-                CS_ASSERT(m_taskPool, "Small, large and game logic task contexts must have a task pool.");
+                task(*this);
             }
         }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        TaskType TaskContext::GetType() const noexcept
+        else if (m_taskType == TaskType::k_gameLogic)
         {
-            return m_taskType;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TaskContext::ProcessChildTasks(const std::vector<Task>& in_tasks) const noexcept
-        {
-            if (m_taskType == TaskType::k_mainThread || m_taskType == TaskType::k_file)
+            std::vector<Task> gameLogicTasks;
+            for (const auto& task : in_tasks)
             {
-                for (const auto& task : in_tasks)
+                gameLogicTasks.push_back([=](const TaskContext&)
                 {
                     task(*this);
-                }
+                });
             }
-            else if (m_taskType == TaskType::k_gameLogic)
-            {
-                std::vector<Task> gameLogicTasks;
-                for (const auto& task : in_tasks)
-                {
-                    gameLogicTasks.push_back([=](const TaskContext&)
-                    {
-                        task(*this);
-                    });
-                }
-                
-                m_taskPool->AddTasksAndYield(gameLogicTasks);
-            }
-            else
-            {
-                m_taskPool->AddTasksAndYield(in_tasks);
-            }
+            
+            m_taskPool->AddTasksAndYield(gameLogicTasks);
+        }
+        else
+        {
+            m_taskPool->AddTasksAndYield(in_tasks);
         }
     }
 }

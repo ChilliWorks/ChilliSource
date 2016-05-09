@@ -33,107 +33,104 @@
 
 #include <mutex>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
+    //------------------------------------------------------------------
+    /// Connection wrapper around a delegate to allow safe callbacks
+    /// to member functions. The connection is closed when the connection
+    /// or the delegate goes out of scope
+    ///
+    /// @author S Downie
+    //------------------------------------------------------------------
+    template <typename TReturnType, typename... TArgTypes> class DelegateConnection<TReturnType(TArgTypes...)> final
+    {
+    public:
+        
+        CS_DECLARE_NOCOPY(DelegateConnection);
+        
         //------------------------------------------------------------------
-        /// Connection wrapper around a delegate to allow safe callbacks
-        /// to member functions. The connection is closed when the connection
-        /// or the delegate goes out of scope
+        /// Constructor
+        ///
+        /// @author S Downie
+        ///
+        /// @param Owning delegate
+        //------------------------------------------------------------------
+        DelegateConnection(ConnectableDelegate<TReturnType(TArgTypes...)>* in_owner)
+        : m_owningDelegate(in_owner)
+        {
+            
+        }
+        //------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Whether the connection is open and delegate can be executed
+        //------------------------------------------------------------------
+        bool IsOpen() const
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            return m_owningDelegate != nullptr;
+        }
+        //------------------------------------------------------------------
+        /// Close the connection and prevent the delegate from being executed
         ///
         /// @author S Downie
         //------------------------------------------------------------------
-        template <typename TReturnType, typename... TArgTypes> class DelegateConnection<TReturnType(TArgTypes...)> final
+        void Close()
         {
-        public:
-            
-            CS_DECLARE_NOCOPY(DelegateConnection);
-            
-            //------------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
-            ///
-            /// @param Owning delegate
-            //------------------------------------------------------------------
-            DelegateConnection(ConnectableDelegate<TReturnType(TArgTypes...)>* in_owner)
-            : m_owningDelegate(in_owner)
+            std::unique_lock<std::mutex> lock(m_mutex);
+            if(m_owningDelegate != nullptr)
             {
-                
-            }
-            //------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Whether the connection is open and delegate can be executed
-            //------------------------------------------------------------------
-            bool IsOpen() const
-            {
-                std::unique_lock<std::mutex> lock(m_mutex);
-                return m_owningDelegate != nullptr;
-            }
-            //------------------------------------------------------------------
-            /// Close the connection and prevent the delegate from being executed
-            ///
-            /// @author S Downie
-            //------------------------------------------------------------------
-            void Close()
-            {
-                std::unique_lock<std::mutex> lock(m_mutex);
-                if(m_owningDelegate != nullptr)
-                {
-                    m_owningDelegate->Close(this);
-                    m_owningDelegate = nullptr;
-                }
-            }
-            //------------------------------------------------------------------
-            /// Executes the delegate if the connection is open
-            ///
-            /// @author S Downie
-            ///
-            /// @param Variadic - matches the delegate signature
-            ///
-            /// @return TReturnType - matches the delegate signature
-            //------------------------------------------------------------------
-            TReturnType Call(TArgTypes... in_args)
-            {
-                std::unique_lock<std::mutex> lock(m_mutex);
-                if(m_owningDelegate != nullptr)
-                {
-                    return m_owningDelegate->Execute(in_args...);
-                }
-            }
-            //------------------------------------------------------------------
-            /// Destructor closes the connection when the owner goes out of scope
-            ///
-            /// @author S Downie
-            //------------------------------------------------------------------
-            ~DelegateConnection()
-            {
-                Close();
-            }
-            
-        private:
-            
-            friend class ConnectableDelegate<TReturnType(TArgTypes...)>;
-            //------------------------------------------------------------------
-            /// Called by the delegate when it wishes to close the connection
-            /// without being told by the connection itself
-            ///
-            /// @author S Downie
-            //------------------------------------------------------------------
-            void CloseNoNotify()
-            {
-                std::unique_lock<std::mutex> lock(m_mutex);
+                m_owningDelegate->Close(this);
                 m_owningDelegate = nullptr;
             }
-            
-        private:
+        }
+        //------------------------------------------------------------------
+        /// Executes the delegate if the connection is open
+        ///
+        /// @author S Downie
+        ///
+        /// @param Variadic - matches the delegate signature
+        ///
+        /// @return TReturnType - matches the delegate signature
+        //------------------------------------------------------------------
+        TReturnType Call(TArgTypes... in_args)
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            if(m_owningDelegate != nullptr)
+            {
+                return m_owningDelegate->Execute(in_args...);
+            }
+        }
+        //------------------------------------------------------------------
+        /// Destructor closes the connection when the owner goes out of scope
+        ///
+        /// @author S Downie
+        //------------------------------------------------------------------
+        ~DelegateConnection()
+        {
+            Close();
+        }
+        
+    private:
+        
+        friend class ConnectableDelegate<TReturnType(TArgTypes...)>;
+        //------------------------------------------------------------------
+        /// Called by the delegate when it wishes to close the connection
+        /// without being told by the connection itself
+        ///
+        /// @author S Downie
+        //------------------------------------------------------------------
+        void CloseNoNotify()
+        {
+            std::unique_lock<std::mutex> lock(m_mutex);
+            m_owningDelegate = nullptr;
+        }
+        
+    private:
 
-            mutable std::mutex m_mutex;
-            ConnectableDelegate<TReturnType(TArgTypes...)>* m_owningDelegate;
-        };
-	}
+        mutable std::mutex m_mutex;
+        ConnectableDelegate<TReturnType(TArgTypes...)>* m_owningDelegate;
+    };
 }
 
 #endif

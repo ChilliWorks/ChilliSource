@@ -33,50 +33,48 @@
 
 #include <rapidxml/rapidxml.hpp>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //----------------------------------------------------------------
+    /// A container class for an xml document. Rapid XML requires that
+    /// parsed data have a greater lifetime than the document, so this
+    /// holds on to and cleans up both.
+    ///
+    /// @author Ian Copland
+    //----------------------------------------------------------------
+    class XML final
     {
-        //----------------------------------------------------------------
-        /// A container class for an xml document. Rapid XML requires that
-        /// parsed data have a greater lifetime than the document, so this
-        /// holds on to and cleans up both.
+    public:
+        CS_DECLARE_NOCOPY(XML);
+        //---------------------------------------------------------
+        /// Convenience typedefs for all of the main rapid xml
+        /// types.
         ///
         /// @author Ian Copland
-        //----------------------------------------------------------------
-        class XML final
-        {
-        public:
-            CS_DECLARE_NOCOPY(XML);
-            //---------------------------------------------------------
-            /// Convenience typedefs for all of the main rapid xml
-            /// types.
-            ///
-            /// @author Ian Copland
-            //---------------------------------------------------------
-            using Base = rapidxml::xml_base<>;
-            using Node = rapidxml::xml_node<>;
-            using Attribute = rapidxml::xml_attribute<>;
-            using Document = rapidxml::xml_document<>;
-			//---------------------------------------------------------
-			/// Constructor.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The rapid xml document.
-			/// @param The parsed xml data.
-			//---------------------------------------------------------
-			XML(std::unique_ptr<Document> in_document, std::unique_ptr<s8[]> in_data);
-            //---------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The xml document pointer.
-            //---------------------------------------------------------
-            Document* GetDocument() const;
-        private:
-            std::unique_ptr<Document> m_document;
-            std::unique_ptr<s8[]> m_data;
-        };
-    }
+        //---------------------------------------------------------
+        using Base = rapidxml::xml_base<>;
+        using Node = rapidxml::xml_node<>;
+        using Attribute = rapidxml::xml_attribute<>;
+        using Document = rapidxml::xml_document<>;
+        //---------------------------------------------------------
+        /// Constructor.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The rapid xml document.
+        /// @param The parsed xml data.
+        //---------------------------------------------------------
+        XML(std::unique_ptr<Document> in_document, std::unique_ptr<s8[]> in_data);
+        //---------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The xml document pointer.
+        //---------------------------------------------------------
+        Document* GetDocument() const;
+    private:
+        std::unique_ptr<Document> m_document;
+        std::unique_ptr<s8[]> m_data;
+    };
 }
+
 #endif

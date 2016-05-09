@@ -32,92 +32,89 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //---------------------------------------------------------------
+    /// An image loader that provides PVR images
+    ///
+    /// @author S Downie
+    //---------------------------------------------------------------
+    class PVRImageProvider final : public Core::ResourceProvider
     {
-        //---------------------------------------------------------------
-        /// An image loader that provides PVR images
+    public:
+        CS_DECLARE_NAMEDTYPE(PVRImageProvider);
+        //----------------------------------------------------------
+        /// Is the object of the given interface type
         ///
         /// @author S Downie
-        //---------------------------------------------------------------
-        class PVRImageProvider final : public Core::ResourceProvider
-        {
-        public:
-            CS_DECLARE_NAMEDTYPE(PVRImageProvider);
-			//----------------------------------------------------------
-			/// Is the object of the given interface type
-            ///
-            /// @author S Downie
-            ///
-			/// @param Interface type to query
-            ///
-			/// @return Whether the object is of given type
-			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The resource type this provider can load
-            //-------------------------------------------------------
-            Core::InterfaceIDType GetResourceType() const override;
-			//----------------------------------------------------------
-			/// Whether or not the provider can create resources from
-            /// files with the given extension.
-            ///
-			/// @author S Downie
-            ///
-			/// @param Extension to compare against
-            ///
-			/// @return Whether the object can load a resource with that
-            /// extension
-			//----------------------------------------------------------
-			bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
-			//----------------------------------------------------------
-			/// Creates a new image resource from file. Check the
-            /// resource load state for success or failure
-			///
-            /// @author S Downie
-            ///
-            /// @param The storage location to load from
-			/// @param File path to resource
-            /// @param Options to customise the creation
-			/// @param [Out] Resource
-			//-----------------------------------------------------------
-			void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
-            //----------------------------------------------------
-            /// Creates a new resource from file asynchronously.
-            /// Completion delegate is called when load is finished.
-            /// Check the resource load state for success or failure
-            ///
-            /// @author S Downie
-            ///
-            /// @param The storage location.
-            /// @param The filepath.
-            /// @param Options to customise the creation
-            /// @param Completion delegate
-            /// @param [Out] The output resource.
-            //----------------------------------------------------
-			void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
-        
-        private:
-            friend class Application;
-            //-------------------------------------------------------
-            /// Create the platform dependent backend
-            ///
-            /// @author S Downie
-            ///
-            /// @return New backend instance
-            //-------------------------------------------------------
-            static PVRImageProviderUPtr Create();
-            //-------------------------------------------------------
-            /// Private constructor to force use of factory method
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------
-            PVRImageProvider() = default;
-        };
-    }
+        ///
+        /// @param Interface type to query
+        ///
+        /// @return Whether the object is of given type
+        //----------------------------------------------------------
+        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        //-------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The resource type this provider can load
+        //-------------------------------------------------------
+        Core::InterfaceIDType GetResourceType() const override;
+        //----------------------------------------------------------
+        /// Whether or not the provider can create resources from
+        /// files with the given extension.
+        ///
+        /// @author S Downie
+        ///
+        /// @param Extension to compare against
+        ///
+        /// @return Whether the object can load a resource with that
+        /// extension
+        //----------------------------------------------------------
+        bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
+        //----------------------------------------------------------
+        /// Creates a new image resource from file. Check the
+        /// resource load state for success or failure
+        ///
+        /// @author S Downie
+        ///
+        /// @param The storage location to load from
+        /// @param File path to resource
+        /// @param Options to customise the creation
+        /// @param [Out] Resource
+        //-----------------------------------------------------------
+        void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
+        //----------------------------------------------------
+        /// Creates a new resource from file asynchronously.
+        /// Completion delegate is called when load is finished.
+        /// Check the resource load state for success or failure
+        ///
+        /// @author S Downie
+        ///
+        /// @param The storage location.
+        /// @param The filepath.
+        /// @param Options to customise the creation
+        /// @param Completion delegate
+        /// @param [Out] The output resource.
+        //----------------------------------------------------
+        void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filePath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
+    
+    private:
+        friend class Application;
+        //-------------------------------------------------------
+        /// Create the platform dependent backend
+        ///
+        /// @author S Downie
+        ///
+        /// @return New backend instance
+        //-------------------------------------------------------
+        static PVRImageProviderUPtr Create();
+        //-------------------------------------------------------
+        /// Private constructor to force use of factory method
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------
+        PVRImageProvider() = default;
+    };
 }
 
 #endif

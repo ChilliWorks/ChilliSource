@@ -32,32 +32,29 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Container/Property/PropertyType.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------------------------------
+    /// The list of default property types. Other property types can be added
+    /// in addition to these.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------
+    namespace PropertyTypes
     {
-        //------------------------------------------------------------------------
-        /// The list of default property types. Other property types can be added
-        /// in addition to these.
-        ///
-        /// @author Ian Copland
-        //------------------------------------------------------------------------
-        namespace PropertyTypes
-        {
-            CS_DECLARE_PROPERTYTYPE(bool, Bool);
-            CS_DECLARE_PROPERTYTYPE(s32, Int);
-            CS_DECLARE_PROPERTYTYPE(u32, UInt);
-            CS_DECLARE_PROPERTYTYPE(f32, Float);
-            CS_DECLARE_PROPERTYTYPE(Vector2, Vector2);
-            CS_DECLARE_PROPERTYTYPE(Vector3, Vector3);
-            CS_DECLARE_PROPERTYTYPE(Vector4, Vector4);
-            CS_DECLARE_PROPERTYTYPE(Matrix3, Matrix3);
-            CS_DECLARE_PROPERTYTYPE(Matrix4, Matrix4);
-            CS_DECLARE_PROPERTYTYPE(Quaternion, Quaternion);
-            CS_DECLARE_PROPERTYTYPE(Colour, Colour);
-            CS_DECLARE_PROPERTYTYPE(StorageLocation, StorageLocation);
-            CS_DECLARE_PROPERTYTYPE(std::string, String);
-        }
+        CS_DECLARE_PROPERTYTYPE(bool, Bool);
+        CS_DECLARE_PROPERTYTYPE(s32, Int);
+        CS_DECLARE_PROPERTYTYPE(u32, UInt);
+        CS_DECLARE_PROPERTYTYPE(f32, Float);
+        CS_DECLARE_PROPERTYTYPE(Vector2, Vector2);
+        CS_DECLARE_PROPERTYTYPE(Vector3, Vector3);
+        CS_DECLARE_PROPERTYTYPE(Vector4, Vector4);
+        CS_DECLARE_PROPERTYTYPE(Matrix3, Matrix3);
+        CS_DECLARE_PROPERTYTYPE(Matrix4, Matrix4);
+        CS_DECLARE_PROPERTYTYPE(Quaternion, Quaternion);
+        CS_DECLARE_PROPERTYTYPE(Colour, Colour);
+        CS_DECLARE_PROPERTYTYPE(StorageLocation, StorageLocation);
+        CS_DECLARE_PROPERTYTYPE(std::string, String);
     }
 }
 

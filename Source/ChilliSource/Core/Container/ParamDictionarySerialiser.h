@@ -32,68 +32,65 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/XML/XMLUtils.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core 
+    //-----------------------------------------------------------------
+    /// Methods for serialising param dictionaries to and from a
+    /// variety of formats
+    ///
+    /// @author S Downie
+    //-----------------------------------------------------------------
+    namespace ParamDictionarySerialiser
     {
         //-----------------------------------------------------------------
-        /// Methods for serialising param dictionaries to and from a
-        /// variety of formats
+        /// Convert the param dictionary to XML and store it in the given
+        /// XML element.
         ///
-        /// @author S Downie
+        /// Format: <Params><String key = "key" value = "value"/></Params>
+        ///
+        /// @author A Glass
+        ///
+        /// @param Param dictionary to serialise
+        /// @param [Out] XML element
         //-----------------------------------------------------------------
-		namespace ParamDictionarySerialiser
-        {
-            //-----------------------------------------------------------------
-            /// Convert the param dictionary to XML and store it in the given
-            /// XML element.
-            ///
-            /// Format: <Params><String key = "key" value = "value"/></Params>
-            ///
-            /// @author A Glass
-            ///
-            /// @param Param dictionary to serialise
-            /// @param [Out] XML element
-            //-----------------------------------------------------------------
-            void ToXml(const ParamDictionary& in_dict, XML::Node* out_element);
-            //-----------------------------------------------------------------
-            /// Convert the XML to a param dictionary of key/values
-            ///
-            /// Format: <Params><String key = "key" value = "value"/></Params>
-            ///
-            /// @author A Glass
-            ///
-            /// @param XML element
-            ///
-            /// @return Param dictionary
-            //-----------------------------------------------------------------
-            ParamDictionary FromXml(const XML::Node* in_element);
-            //-----------------------------------------------------------------
-            /// Convert the param dictionary to a string config representation
-            ///
-            /// Format: "key1 = value1; key2 = value2;"
-            ///
-            /// @author S McGaw
-            ///
-            /// @param Param dictionary
-            ///
-            /// @return String
-            //-----------------------------------------------------------------
-            std::string ToString(const ParamDictionary& in_dict);
-            //-----------------------------------------------------------------
-            /// Convert the given string to a param dictionary of key/values
-            ///
-            /// Format: "key1 = value1; key2 = value2;"
-            ///
-            /// @author S McGaw
-            ///
-            /// @param String
-            ///
-            /// @return Param dictionary
-            //-----------------------------------------------------------------
-            ParamDictionary FromString(const std::string& in_string);
-		};
-	}
+        void ToXml(const ParamDictionary& in_dict, XML::Node* out_element);
+        //-----------------------------------------------------------------
+        /// Convert the XML to a param dictionary of key/values
+        ///
+        /// Format: <Params><String key = "key" value = "value"/></Params>
+        ///
+        /// @author A Glass
+        ///
+        /// @param XML element
+        ///
+        /// @return Param dictionary
+        //-----------------------------------------------------------------
+        ParamDictionary FromXml(const XML::Node* in_element);
+        //-----------------------------------------------------------------
+        /// Convert the param dictionary to a string config representation
+        ///
+        /// Format: "key1 = value1; key2 = value2;"
+        ///
+        /// @author S McGaw
+        ///
+        /// @param Param dictionary
+        ///
+        /// @return String
+        //-----------------------------------------------------------------
+        std::string ToString(const ParamDictionary& in_dict);
+        //-----------------------------------------------------------------
+        /// Convert the given string to a param dictionary of key/values
+        ///
+        /// Format: "key1 = value1; key2 = value2;"
+        ///
+        /// @author S McGaw
+        ///
+        /// @param String
+        ///
+        /// @return Param dictionary
+        //-----------------------------------------------------------------
+        ParamDictionary FromString(const std::string& in_string);
+    };
 }
 
 #endif

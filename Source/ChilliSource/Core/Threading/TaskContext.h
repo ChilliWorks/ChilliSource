@@ -34,52 +34,49 @@
 
 #include <vector>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------------------------------------
+    /// Provides information on a task and the means for it to execute child tasks.
+    ///
+    /// This is immutable and thread-safe.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------------
+    class TaskContext final
     {
+    public:
         //------------------------------------------------------------------------------
-        /// Provides information on a task and the means for it to execute child tasks.
-        ///
-        /// This is immutable and thread-safe.
+        /// Constructs a task context of the given type.
         ///
         /// @author Ian Copland
+        ///
+        /// @param in_taskType - The type of task this context represents.
+        /// @param in_taskPool - The task pool that this task and its children should be
+        /// run within. This should not be provided for main thread and file task types.
         //------------------------------------------------------------------------------
-        class TaskContext final
-        {
-        public:
-            //------------------------------------------------------------------------------
-            /// Constructs a task context of the given type.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_taskType - The type of task this context represents.
-            /// @param in_taskPool - The task pool that this task and its children should be
-            /// run within. This should not be provided for main thread and file task types.
-            //------------------------------------------------------------------------------
-            TaskContext(TaskType in_taskType, TaskPool* in_taskPool = nullptr) noexcept;
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The type of task this context represents.
-            //------------------------------------------------------------------------------
-            TaskType GetType() const noexcept;
-            //------------------------------------------------------------------------------
-            /// Schedules the given child tasks and yields until they have completed. Child
-            /// tasks must be of the same type as the parent.
-            ///
-            /// Child tasks are provided with a task context.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param in_tasks - The tasks to be processed.
-            //------------------------------------------------------------------------------
-            void ProcessChildTasks(const std::vector<Task>& in_tasks) const noexcept;
-            
-            TaskType m_taskType;
-            TaskPool* m_taskPool = nullptr;
-        };
-    }
+        TaskContext(TaskType in_taskType, TaskPool* in_taskPool = nullptr) noexcept;
+        //------------------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The type of task this context represents.
+        //------------------------------------------------------------------------------
+        TaskType GetType() const noexcept;
+        //------------------------------------------------------------------------------
+        /// Schedules the given child tasks and yields until they have completed. Child
+        /// tasks must be of the same type as the parent.
+        ///
+        /// Child tasks are provided with a task context.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_tasks - The tasks to be processed.
+        //------------------------------------------------------------------------------
+        void ProcessChildTasks(const std::vector<Task>& in_tasks) const noexcept;
+        
+        TaskType m_taskType;
+        TaskPool* m_taskPool = nullptr;
+    };
 }
 
 #endif

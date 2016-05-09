@@ -30,49 +30,46 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{	
-		CS_DEFINE_NAMEDTYPE(LocalisedText);
+    CS_DEFINE_NAMEDTYPE(LocalisedText);
 
-		//---------------------------------------------------------------------
-		//---------------------------------------------------------------------
-		LocalisedTextUPtr LocalisedText::Create()
-		{
-			return LocalisedTextUPtr(new LocalisedText());
-		}
-		//---------------------------------------------------------------------
-		//---------------------------------------------------------------------
-		bool LocalisedText::IsA(InterfaceIDType in_interfaceId) const
-		{
-			return in_interfaceId == LocalisedText::InterfaceID;
-		}
-		//---------------------------------------------------------------------
-		//---------------------------------------------------------------------
-		void LocalisedText::Build(const std::unordered_map<std::string, std::string>& in_textMap)
-		{
-			m_text = in_textMap;
-		}
-        //---------------------------------------------------------------------
-        //---------------------------------------------------------------------
-        bool LocalisedText::Contains(const std::string& in_key) const
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    LocalisedTextUPtr LocalisedText::Create()
+    {
+        return LocalisedTextUPtr(new LocalisedText());
+    }
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    bool LocalisedText::IsA(InterfaceIDType in_interfaceId) const
+    {
+        return in_interfaceId == LocalisedText::InterfaceID;
+    }
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    void LocalisedText::Build(const std::unordered_map<std::string, std::string>& in_textMap)
+    {
+        m_text = in_textMap;
+    }
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    bool LocalisedText::Contains(const std::string& in_key) const
+    {
+        return (m_text.find(in_key) != m_text.end());
+    }
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    const std::string& LocalisedText::GetText(const std::string& in_key) const
+    {
+        auto it = m_text.find(in_key);
+
+        if (it != m_text.end())
         {
-            return (m_text.find(in_key) != m_text.end());
+            return it->second;
         }
-        //---------------------------------------------------------------------
-        //---------------------------------------------------------------------
-        const std::string& LocalisedText::GetText(const std::string& in_key) const
-        {
-			auto it = m_text.find(in_key);
 
-			if (it != m_text.end())
-			{
-				return it->second;
-			}
-
-			CS_LOG_ERROR("No localised text for key: " + in_key);
-			return StringUtils::BLANK;
-        }
-	}
+        CS_LOG_ERROR("No localised text for key: " + in_key);
+        return StringUtils::BLANK;
+    }
 }

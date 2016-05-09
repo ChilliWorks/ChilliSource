@@ -38,25 +38,22 @@
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Core/String/StringParser.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    namespace PropertyTypes
     {
-        namespace PropertyTypes
-        {
-            CS_DEFINE_PROPERTYTYPE(bool, Bool, false, &ParseBool);
-            CS_DEFINE_PROPERTYTYPE(s32, Int, 0, &ParseS32);
-            CS_DEFINE_PROPERTYTYPE(u32, UInt, 0, &ParseU32);
-            CS_DEFINE_PROPERTYTYPE(f32, Float, 0.0f, &ParseF32);
-            CS_DEFINE_PROPERTYTYPE(Core::Vector2, Vector2, Core::Vector2(), &ParseVector2);
-            CS_DEFINE_PROPERTYTYPE(Core::Vector3, Vector3, Core::Vector3(), &ParseVector3);
-            CS_DEFINE_PROPERTYTYPE(Core::Vector4, Vector4, Core::Vector4(), &ParseVector4);
-            CS_DEFINE_PROPERTYTYPE(Core::Matrix3, Matrix3, Core::Matrix3(), &ParseMatrix3);
-            CS_DEFINE_PROPERTYTYPE(Core::Matrix4, Matrix4, Core::Matrix4(), &ParseMatrix4);
-            CS_DEFINE_PROPERTYTYPE(Core::Quaternion, Quaternion, Core::Quaternion(), &ParseQuaternion);
-            CS_DEFINE_PROPERTYTYPE(Core::Colour, Colour, Core::Colour(), &ParseColour);
-            CS_DEFINE_PROPERTYTYPE(Core::StorageLocation, StorageLocation, Core::StorageLocation::k_package, &ParseStorageLocation);
-            CS_DEFINE_PROPERTYTYPE(std::string, String, "", [](const std::string& in_string){return in_string;});
-        }
+        CS_DEFINE_PROPERTYTYPE(bool, Bool, false, &ParseBool);
+        CS_DEFINE_PROPERTYTYPE(s32, Int, 0, &ParseS32);
+        CS_DEFINE_PROPERTYTYPE(u32, UInt, 0, &ParseU32);
+        CS_DEFINE_PROPERTYTYPE(f32, Float, 0.0f, &ParseF32);
+        CS_DEFINE_PROPERTYTYPE(Core::Vector2, Vector2, Core::Vector2(), &ParseVector2);
+        CS_DEFINE_PROPERTYTYPE(Core::Vector3, Vector3, Core::Vector3(), &ParseVector3);
+        CS_DEFINE_PROPERTYTYPE(Core::Vector4, Vector4, Core::Vector4(), &ParseVector4);
+        CS_DEFINE_PROPERTYTYPE(Core::Matrix3, Matrix3, Core::Matrix3(), &ParseMatrix3);
+        CS_DEFINE_PROPERTYTYPE(Core::Matrix4, Matrix4, Core::Matrix4(), &ParseMatrix4);
+        CS_DEFINE_PROPERTYTYPE(Core::Quaternion, Quaternion, Core::Quaternion(), &ParseQuaternion);
+        CS_DEFINE_PROPERTYTYPE(Core::Colour, Colour, Core::Colour(), &ParseColour);
+        CS_DEFINE_PROPERTYTYPE(Core::StorageLocation, StorageLocation, Core::StorageLocation::k_package, &ParseStorageLocation);
+        CS_DEFINE_PROPERTYTYPE(std::string, String, "", [](const std::string& in_string){return in_string;});
     }
 }

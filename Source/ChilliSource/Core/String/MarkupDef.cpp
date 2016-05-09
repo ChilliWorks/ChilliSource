@@ -28,35 +28,32 @@
 
 #include <ChilliSource/Core/String/MarkupDef.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void MarkupDef::AddKeyword(const std::string& in_name, bool in_nestable)
     {
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void MarkupDef::AddKeyword(const std::string& in_name, bool in_nestable)
+        bool hasKeyword = HasKeyword(in_name);
+        CS_ASSERT(hasKeyword == false, "The markup definition already has \"" + in_name + "\" as a keyword");
+        
+        m_keywords[in_name] = in_nestable;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    bool MarkupDef::HasKeyword(const std::string& in_name) const
+    {
+        return m_keywords.find(in_name) != m_keywords.end();
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    bool MarkupDef::IsKeywordNestable(const std::string& in_name) const
+    {
+        std::unordered_map<std::string, bool>::const_iterator itKeyword = m_keywords.find(in_name);
+        if(itKeyword != m_keywords.end())
         {
-            bool hasKeyword = HasKeyword(in_name);
-            CS_ASSERT(hasKeyword == false, "The markup definition already has \"" + in_name + "\" as a keyword");
-            
-            m_keywords[in_name] = in_nestable;
+            return itKeyword->second;
         }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        bool MarkupDef::HasKeyword(const std::string& in_name) const
-        {
-            return m_keywords.find(in_name) != m_keywords.end();
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        bool MarkupDef::IsKeywordNestable(const std::string& in_name) const
-        {
-            std::unordered_map<std::string, bool>::const_iterator itKeyword = m_keywords.find(in_name);
-            if(itKeyword != m_keywords.end())
-            {
-                return itKeyword->second;
-            }
-            return false;
-        }
+        return false;
     }
 }

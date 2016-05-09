@@ -29,28 +29,25 @@
 #ifndef _CHILLISOURCE_CORE_IMAGE_IMAGEFORMAT_H_
 #define _CHILLISOURCE_CORE_IMAGE_IMAGEFORMAT_H_
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-        //-----------------------------------------------------
-        /// Holds the supported image formats that can be
-        /// converted to texture.
-        ///
-        /// @author S Downie
-        //-----------------------------------------------------
-        enum class ImageFormat
-        {
-            k_RGBA4444,
-            k_RGBA8888,
-            k_RGB888,
-            k_RGB565,
-            k_LumA88,
-            k_Lum8,
-            k_Depth16,
-            k_Depth32
-        };
-	}
+    //-----------------------------------------------------
+    /// Holds the supported image formats that can be
+    /// converted to texture.
+    ///
+    /// @author S Downie
+    //-----------------------------------------------------
+    enum class ImageFormat
+    {
+        k_RGBA4444,
+        k_RGBA8888,
+        k_RGB888,
+        k_RGB565,
+        k_LumA88,
+        k_Lum8,
+        k_Depth16,
+        k_Depth32
+    };
 }
 
 #endif

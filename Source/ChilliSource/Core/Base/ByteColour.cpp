@@ -28,15 +28,12 @@
 
 #include <ChilliSource/Core/Base/ByteColour.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Core
-	{
-        //-----------------------------------------------------------
-		//-----------------------------------------------------------
-		ByteColour::ByteColour(u8 in_red, u8 in_green, u8 in_blue, u8 in_alpha)
-        : r(in_red), g(in_green), b(in_blue), a(in_alpha)
-		{
-		}
-	}
+    //-----------------------------------------------------------
+    //-----------------------------------------------------------
+    ByteColour::ByteColour(u8 in_red, u8 in_green, u8 in_blue, u8 in_alpha)
+    : r(in_red), g(in_green), b(in_blue), a(in_alpha)
+    {
+    }
 }

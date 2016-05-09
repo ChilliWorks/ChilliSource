@@ -49,98 +49,95 @@
 /// width and height of the view once the relative term has 
 /// been applied.
 //--------------------------------------------------------------
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    struct UnifiedScalar
     {
-        struct UnifiedScalar
-        {
-            UnifiedScalar() : fRelative(0.0f), fAbsolute(0.0f){}
-            UnifiedScalar(f32 infRel, f32 infAbs) : fRelative(infRel), fAbsolute(infAbs){}
+        UnifiedScalar() : fRelative(0.0f), fAbsolute(0.0f){}
+        UnifiedScalar(f32 infRel, f32 infAbs) : fRelative(infRel), fAbsolute(infAbs){}
 
-            f32 fRelative;
-            f32 fAbsolute;
-        };
+        f32 fRelative;
+        f32 fAbsolute;
+    };
 
-        struct UnifiedVector2
-        {
-            UnifiedVector2(){}
-            UnifiedVector2(const Core::Vector2& invRelative, const Core::Vector2& invAbsolute) : vRelative(invRelative), vAbsolute(invAbsolute){}
-            UnifiedVector2(f32 infRelX, f32 infRelY, f32 infAbsX, f32 infAbsY) : vRelative(infRelX, infRelY), vAbsolute(infAbsX, infAbsY){}
+    struct UnifiedVector2
+    {
+        UnifiedVector2(){}
+        UnifiedVector2(const Core::Vector2& invRelative, const Core::Vector2& invAbsolute) : vRelative(invRelative), vAbsolute(invAbsolute){}
+        UnifiedVector2(f32 infRelX, f32 infRelY, f32 infAbsX, f32 infAbsY) : vRelative(infRelX, infRelY), vAbsolute(infAbsX, infAbsY){}
 
-            //------------------------------------------------------
-            /// Get Absolute
-            ///
-            /// @return Absolute vector
-            //------------------------------------------------------
-            const Core::Vector2& GetAbsolute() const;
-            //------------------------------------------------------
-            /// Get Relative
-            ///
-            /// @return Relative vector
-            //------------------------------------------------------
-            const Core::Vector2& GetRelative() const;
+        //------------------------------------------------------
+        /// Get Absolute
+        ///
+        /// @return Absolute vector
+        //------------------------------------------------------
+        const Core::Vector2& GetAbsolute() const;
+        //------------------------------------------------------
+        /// Get Relative
+        ///
+        /// @return Relative vector
+        //------------------------------------------------------
+        const Core::Vector2& GetRelative() const;
 
-            Core::Vector2 vRelative;
-            Core::Vector2 vAbsolute;
+        Core::Vector2 vRelative;
+        Core::Vector2 vAbsolute;
 
-            //---------------------------------
-            // Operators
-            //---------------------------------
-            UnifiedVector2& operator=(const UnifiedVector2 &Vec)
-            {this->vRelative = Vec.vRelative; this->vAbsolute = Vec.vAbsolute; return *this;}
+        //---------------------------------
+        // Operators
+        //---------------------------------
+        UnifiedVector2& operator=(const UnifiedVector2 &Vec)
+        {this->vRelative = Vec.vRelative; this->vAbsolute = Vec.vAbsolute; return *this;}
 
-            UnifiedVector2 operator+(const UnifiedVector2 &Vec) const
-            {UnifiedVector2 Result; Result.vRelative = this->vRelative + Vec.vRelative; Result.vAbsolute = this->vAbsolute + Vec.vAbsolute; return Result;}
-            
-            UnifiedVector2 operator-(const UnifiedVector2 &Vec) const
-            {UnifiedVector2 Result; Result.vRelative = this->vRelative - Vec.vRelative; Result.vAbsolute = this->vAbsolute - Vec.vAbsolute; return Result;}
+        UnifiedVector2 operator+(const UnifiedVector2 &Vec) const
+        {UnifiedVector2 Result; Result.vRelative = this->vRelative + Vec.vRelative; Result.vAbsolute = this->vAbsolute + Vec.vAbsolute; return Result;}
+        
+        UnifiedVector2 operator-(const UnifiedVector2 &Vec) const
+        {UnifiedVector2 Result; Result.vRelative = this->vRelative - Vec.vRelative; Result.vAbsolute = this->vAbsolute - Vec.vAbsolute; return Result;}
 
-            UnifiedVector2 operator*(const UnifiedVector2 &Vec) const
-            {UnifiedVector2 Result; Result.vRelative = this->vRelative * Vec.vRelative; Result.vAbsolute = this->vAbsolute * Vec.vAbsolute; return Result;}
-            
-            UnifiedVector2 operator*(f32 infValue) const
-            {UnifiedVector2 Result; Result.vRelative = this->vRelative * infValue; Result.vAbsolute = this->vAbsolute * infValue; return Result;}
+        UnifiedVector2 operator*(const UnifiedVector2 &Vec) const
+        {UnifiedVector2 Result; Result.vRelative = this->vRelative * Vec.vRelative; Result.vAbsolute = this->vAbsolute * Vec.vAbsolute; return Result;}
+        
+        UnifiedVector2 operator*(f32 infValue) const
+        {UnifiedVector2 Result; Result.vRelative = this->vRelative * infValue; Result.vAbsolute = this->vAbsolute * infValue; return Result;}
 
-            UnifiedVector2 operator/(const UnifiedVector2 &Vec) const
-            {UnifiedVector2 Result; Result.vRelative = this->vRelative / Vec.vRelative; Result.vAbsolute = this->vAbsolute / Vec.vAbsolute; return Result;}
-            
-            UnifiedVector2 operator/(f32 infValue) const
-            {UnifiedVector2 Result; Result.vRelative = this->vRelative / infValue; Result.vAbsolute = this->vAbsolute / infValue; return Result;}
+        UnifiedVector2 operator/(const UnifiedVector2 &Vec) const
+        {UnifiedVector2 Result; Result.vRelative = this->vRelative / Vec.vRelative; Result.vAbsolute = this->vAbsolute / Vec.vAbsolute; return Result;}
+        
+        UnifiedVector2 operator/(f32 infValue) const
+        {UnifiedVector2 Result; Result.vRelative = this->vRelative / infValue; Result.vAbsolute = this->vAbsolute / infValue; return Result;}
 
-            const UnifiedVector2& operator+=(const UnifiedVector2 &Vec)
-            {this->vRelative += Vec.vRelative; this->vAbsolute += Vec.vAbsolute; return *this;}
+        const UnifiedVector2& operator+=(const UnifiedVector2 &Vec)
+        {this->vRelative += Vec.vRelative; this->vAbsolute += Vec.vAbsolute; return *this;}
 
-            const UnifiedVector2& operator-=(const UnifiedVector2 &Vec)
-            {this->vRelative -= Vec.vRelative; this->vAbsolute -= Vec.vAbsolute; return *this;}
+        const UnifiedVector2& operator-=(const UnifiedVector2 &Vec)
+        {this->vRelative -= Vec.vRelative; this->vAbsolute -= Vec.vAbsolute; return *this;}
 
-            const UnifiedVector2& operator*=(const UnifiedVector2 &Vec)
-            {this->vRelative *= Vec.vRelative; this->vAbsolute *= Vec.vAbsolute; return *this;}
+        const UnifiedVector2& operator*=(const UnifiedVector2 &Vec)
+        {this->vRelative *= Vec.vRelative; this->vAbsolute *= Vec.vAbsolute; return *this;}
 
-            const UnifiedVector2& operator/=(const UnifiedVector2 &Vec)
-            {this->vRelative /= Vec.vRelative; this->vAbsolute /= Vec.vAbsolute; return *this;}
+        const UnifiedVector2& operator/=(const UnifiedVector2 &Vec)
+        {this->vRelative /= Vec.vRelative; this->vAbsolute /= Vec.vAbsolute; return *this;}
 
-            bool operator==(const UnifiedVector2 &Vec) const
-            {return (Vec.vRelative == vRelative && Vec.vAbsolute == vAbsolute);}
+        bool operator==(const UnifiedVector2 &Vec) const
+        {return (Vec.vRelative == vRelative && Vec.vAbsolute == vAbsolute);}
 
-            bool operator!=(const UnifiedVector2 &Vec) const
-            {return (Vec.vRelative != vRelative || Vec.vAbsolute != vAbsolute);}
-            
-            static const UnifiedVector2 ZERO;
-        };
+        bool operator!=(const UnifiedVector2 &Vec) const
+        {return (Vec.vRelative != vRelative || Vec.vAbsolute != vAbsolute);}
+        
+        static const UnifiedVector2 ZERO;
+    };
 
-        struct UnifiedRectangle
-        {
-            UnifiedRectangle(){}
-            UnifiedRectangle(const UnifiedVector2& invTL, const UnifiedVector2& invTR, const UnifiedVector2& invBL, const UnifiedVector2& invBR)
-            : vTopLeft(invTL), vTopRight(invTR), vBottomLeft(invBL), vBottomRight(invBR){}
+    struct UnifiedRectangle
+    {
+        UnifiedRectangle(){}
+        UnifiedRectangle(const UnifiedVector2& invTL, const UnifiedVector2& invTR, const UnifiedVector2& invBL, const UnifiedVector2& invBR)
+        : vTopLeft(invTL), vTopRight(invTR), vBottomLeft(invBL), vBottomRight(invBR){}
 
-            UnifiedVector2 vTopLeft;
-            UnifiedVector2 vTopRight;
-            UnifiedVector2 vBottomLeft;
-            UnifiedVector2 vBottomRight;
-        };
-    }
+        UnifiedVector2 vTopLeft;
+        UnifiedVector2 vTopRight;
+        UnifiedVector2 vBottomLeft;
+        UnifiedVector2 vBottomRight;
+    };
 }
 
 #endif

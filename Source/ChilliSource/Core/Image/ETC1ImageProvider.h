@@ -32,94 +32,91 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Core
+    //--------------------------------------------------------------------
+    /// An image provider for the ETC1 format. The ETC1 format is not
+    /// available on all platforms and you should be sure it is supported
+    /// if using it.
+    ///
+    /// @author Ian Copland
+    //--------------------------------------------------------------------
+    class ETC1ImageProvider final : public Core::ResourceProvider
     {
-        //--------------------------------------------------------------------
-        /// An image provider for the ETC1 format. The ETC1 format is not
-        /// available on all platforms and you should be sure it is supported
-        /// if using it.
+    public:
+        CS_DECLARE_NAMEDTYPE(ETC1ImageProvider);
+        //-------------------------------------------------------
+        /// Is the object of the given interface type.
         ///
-        /// @author Ian Copland
-        //--------------------------------------------------------------------
-        class ETC1ImageProvider final : public Core::ResourceProvider
-        {
-        public:
-            CS_DECLARE_NAMEDTYPE(ETC1ImageProvider);
-            //-------------------------------------------------------
-            /// Is the object of the given interface type.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Interface type to query
-            ///
-            /// @return Whether the object is of given type
-            //-------------------------------------------------------
-            bool IsA(InterfaceIDType in_interfaceId) const override;
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The resource type this provider can load
-            //-------------------------------------------------------
-            InterfaceIDType GetResourceType() const override;
-            //-------------------------------------------------------
-            /// Queries whether or not this provider can create
-            /// resources from files with the given extension.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Extension to compare against
-            ///
-            /// @return Whether the object can load a resource with
-            /// that extension
-            //-------------------------------------------------------
-            bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
-            //-------------------------------------------------------
-            /// Creates a new image from file. Check the resource
-            /// load state for success or failure
-            ///
-            /// @author S Downie
-            ///
-            /// @param The storage location to load from
-            /// @param File path to resource
-            /// @param Options to customise the creation
-            /// @param [Out] Resource
-            //-------------------------------------------------------
-			void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
-            //----------------------------------------------------
-            /// Creates a new resource from file asynchronously.
-            /// Completion delegate is called on finish. Check
-            /// the resource load state for success or failure
-            ///
-            /// @author S Downie
-            ///
-            /// @param The storage location.
-            /// @param The filepath.
-            /// @param Options to customise the creation
-            /// @param Completion delegate
-            /// @param [Out] The output resource.
-            //----------------------------------------------------
-			void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
-            
-        private:
-            friend class Application;
-            //-------------------------------------------------------------
-            /// Factory method
-            ///
-            /// @author S Downie
-            ///
-            /// @return New backend with ownership transferred
-            //-------------------------------------------------------------
-            static ETC1ImageProviderUPtr Create();
-            //-------------------------------------------------------
-            /// Private constructor to force use of factory method
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------
-            ETC1ImageProvider() = default;
-        };
-    }
+        /// @author S Downie
+        ///
+        /// @param Interface type to query
+        ///
+        /// @return Whether the object is of given type
+        //-------------------------------------------------------
+        bool IsA(InterfaceIDType in_interfaceId) const override;
+        //-------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The resource type this provider can load
+        //-------------------------------------------------------
+        InterfaceIDType GetResourceType() const override;
+        //-------------------------------------------------------
+        /// Queries whether or not this provider can create
+        /// resources from files with the given extension.
+        ///
+        /// @author S Downie
+        ///
+        /// @param Extension to compare against
+        ///
+        /// @return Whether the object can load a resource with
+        /// that extension
+        //-------------------------------------------------------
+        bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
+        //-------------------------------------------------------
+        /// Creates a new image from file. Check the resource
+        /// load state for success or failure
+        ///
+        /// @author S Downie
+        ///
+        /// @param The storage location to load from
+        /// @param File path to resource
+        /// @param Options to customise the creation
+        /// @param [Out] Resource
+        //-------------------------------------------------------
+        void CreateResourceFromFile(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const ResourceSPtr& out_resource) override;
+        //----------------------------------------------------
+        /// Creates a new resource from file asynchronously.
+        /// Completion delegate is called on finish. Check
+        /// the resource load state for success or failure
+        ///
+        /// @author S Downie
+        ///
+        /// @param The storage location.
+        /// @param The filepath.
+        /// @param Options to customise the creation
+        /// @param Completion delegate
+        /// @param [Out] The output resource.
+        //----------------------------------------------------
+        void CreateResourceFromFileAsync(StorageLocation in_storageLocation, const std::string& in_filepath, const IResourceOptionsBaseCSPtr& in_options, const ResourceProvider::AsyncLoadDelegate& in_delegate, const ResourceSPtr& out_resource) override;
+        
+    private:
+        friend class Application;
+        //-------------------------------------------------------------
+        /// Factory method
+        ///
+        /// @author S Downie
+        ///
+        /// @return New backend with ownership transferred
+        //-------------------------------------------------------------
+        static ETC1ImageProviderUPtr Create();
+        //-------------------------------------------------------
+        /// Private constructor to force use of factory method
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------
+        ETC1ImageProvider() = default;
+    };
 }
 
 #endif
