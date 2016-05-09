@@ -34,22 +34,19 @@
 #include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookPostSystem.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Social
-	{
-		CS_DEFINE_NAMEDTYPE(FacebookPostSystem);
-        //---------------------------------------------------
-        //---------------------------------------------------
-        FacebookPostSystemUPtr FacebookPostSystem::Create()
-        {
+    CS_DEFINE_NAMEDTYPE(FacebookPostSystem);
+    //---------------------------------------------------
+    //---------------------------------------------------
+    FacebookPostSystemUPtr FacebookPostSystem::Create()
+    {
 #ifdef CS_TARGETPLATFORM_IOS
-            return FacebookPostSystemUPtr(new CSBackend::iOS::FacebookPostSystem());
+        return FacebookPostSystemUPtr(new CSBackend::iOS::FacebookPostSystem());
 #elif CS_TARGETPLATFORM_ANDROID
-            return FacebookPostSystemUPtr(new CSBackend::Android::FacebookPostSystem());
+        return FacebookPostSystemUPtr(new CSBackend::Android::FacebookPostSystem());
 #else
-			return nullptr;
+        return nullptr;
 #endif
-        }
-	};
-};
+    }
+}

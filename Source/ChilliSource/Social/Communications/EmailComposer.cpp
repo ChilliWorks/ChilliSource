@@ -36,29 +36,26 @@
 #include <CSBackend/Platform/Android/Main/JNI/Social/Communications/EmailComposer.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Social
+    CS_DEFINE_NAMEDTYPE(EmailComposer);
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    EmailComposerUPtr EmailComposer::Create()
     {
-        CS_DEFINE_NAMEDTYPE(EmailComposer);
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        EmailComposerUPtr EmailComposer::Create()
-        {
 #ifdef CS_TARGETPLATFORM_IOS
-            if (CSBackend::iOS::EmailComposer::IsSupportedByDevice() == true)
-            {
-                return EmailComposerUPtr(new CSBackend::iOS::EmailComposer());
-            }
-            else
-            {
-                return nullptr;
-            }
-#elif defined CS_TARGETPLATFORM_ANDROID
-            return EmailComposerUPtr(new CSBackend::Android::EmailComposer());
-#else
-            return nullptr;
-#endif
+        if (CSBackend::iOS::EmailComposer::IsSupportedByDevice() == true)
+        {
+            return EmailComposerUPtr(new CSBackend::iOS::EmailComposer());
         }
+        else
+        {
+            return nullptr;
+        }
+#elif defined CS_TARGETPLATFORM_ANDROID
+        return EmailComposerUPtr(new CSBackend::Android::EmailComposer());
+#else
+        return nullptr;
+#endif
     }
 }

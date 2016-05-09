@@ -34,24 +34,21 @@
 #include <CSBackend/Platform/Android/Main/JNI/Social/Facebook/FacebookAuthenticationSystem.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Social
+    CS_DEFINE_NAMEDTYPE(FacebookAuthenticationSystem);
+    
+    //------------------------------------------------
+    //------------------------------------------------
+    FacebookAuthenticationSystemUPtr FacebookAuthenticationSystem::Create()
     {
-        CS_DEFINE_NAMEDTYPE(FacebookAuthenticationSystem);
-        
-        //------------------------------------------------
-        //------------------------------------------------
-        FacebookAuthenticationSystemUPtr FacebookAuthenticationSystem::Create()
-        {
 #ifdef CS_TARGETPLATFORM_IOS
-            return FacebookAuthenticationSystemUPtr(new CSBackend::iOS::FacebookAuthenticationSystem());
+        return FacebookAuthenticationSystemUPtr(new CSBackend::iOS::FacebookAuthenticationSystem());
 #elif defined(CS_TARGETPLATFORM_ANDROID)
-            return FacebookAuthenticationSystemUPtr(new CSBackend::Android::FacebookAuthenticationSystem());
+        return FacebookAuthenticationSystemUPtr(new CSBackend::Android::FacebookAuthenticationSystem());
 #else
-            return nullptr;
+        return nullptr;
 #endif
-        }
     }
 }
 

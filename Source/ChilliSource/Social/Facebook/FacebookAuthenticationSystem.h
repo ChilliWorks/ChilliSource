@@ -35,123 +35,120 @@
 
 #include <functional>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Social
-	{
+    //------------------------------------------------
+    /// Base class for logging in to Facebook using
+    /// the back end Facebook SDK. Also handles
+    /// the granting of read and write permissions
+    ///
+    /// @author S Downie
+    //------------------------------------------------
+    class FacebookAuthenticationSystem : public Core::AppSystem
+    {
+    public:
+        
+        enum class AuthenticateResult
+        {
+            k_success,
+            k_failed,
+            k_permissionMismatch
+        };
+        
+        //-------------------------------------------------
+        /// @author S McGaw
+        ///
+        /// Hold the response from any authentication
+        /// request
+        //-------------------------------------------------
+        struct AuthenticateResponse
+        {
+            AuthenticateResult m_result;
+            std::string m_token;
+        };
+        
         //------------------------------------------------
-        /// Base class for logging in to Facebook using
-        /// the back end Facebook SDK. Also handles
-        /// the granting of read and write permissions
+        /// Delegate call when authentication completes
+        /// either successfully or not.
+        ///
+        /// @author S Downie
+        ///
+        /// @param Response containing result and token
+        /// if successful
+        //------------------------------------------------
+        using AuthenticationCompleteDelegate = Core::ConnectableDelegate<void(const AuthenticateResponse&)>;
+        
+        CS_DECLARE_NAMEDTYPE(FacebookAuthenticationSystem);
+        
+        //------------------------------------------------
+        /// Creates a new instance of the facebook
+        /// authentication system.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return The new instance of the system.
+        //------------------------------------------------
+        static FacebookAuthenticationSystemUPtr Create();
+        //------------------------------------------------
+        /// Log the user into Facebook with the given
+        /// read permissions. If no permissions are specified
+        /// then only basic read permissions will be granted
+        /// on authentication success
+        ///
+        /// @author S Downie
+        ///
+        /// @param Read permissions (http://developers.facebook.com/docs/authentication/permissions/)
+        /// @param Connection to result delegate
+        //------------------------------------------------
+        virtual void Authenticate(const std::vector<std::string>& in_readPermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) = 0;
+        //------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Whether the user has authenticated with FB
+        //------------------------------------------------
+        virtual bool IsSignedIn() const = 0;
+        //------------------------------------------------
+        /// Request that the user grant additional read
+        /// permissions (http://developers.facebook.com/docs/authentication/permissions/)
+        ///
+        /// @author S Downie
+        ///
+        /// @param Read permissions
+        /// @param Connection to result delegate
+        //------------------------------------------------
+        virtual void AuthoriseReadPermissions(const std::vector<std::string>& in_readPermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) = 0;
+        //------------------------------------------------
+        /// Request that the user grant write
+        /// permissions (http://developers.facebook.com/docs/authentication/permissions/)
+        ///
+        /// @author S Downie
+        ///
+        /// @param Write permissions
+        /// @param Connection to result delegate
+        //------------------------------------------------
+        virtual void AuthoriseWritePermissions(const std::vector<std::string>& in_writePermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) = 0;
+        //------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Permission to check
+        ///
+        /// @return Whether the given permission has been
+        /// granted by the user
+        //------------------------------------------------
+        virtual bool HasPermission(const std::string& in_permission) const = 0;
+        //------------------------------------------------
+        /// Log the current user out of Facebook
         ///
         /// @author S Downie
         //------------------------------------------------
-		class FacebookAuthenticationSystem : public Core::AppSystem
-		{
-		public:
-            
-            enum class AuthenticateResult
-            {
-                k_success,
-                k_failed,
-                k_permissionMismatch
-            };
-            
-            //-------------------------------------------------
-            /// @author S McGaw
-            ///
-            /// Hold the response from any authentication
-            /// request
-            //-------------------------------------------------
-            struct AuthenticateResponse
-            {
-                AuthenticateResult m_result;
-                std::string m_token;
-            };
-            
-            //------------------------------------------------
-            /// Delegate call when authentication completes
-            /// either successfully or not.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Response containing result and token
-            /// if successful
-            //------------------------------------------------
-            using AuthenticationCompleteDelegate = Core::ConnectableDelegate<void(const AuthenticateResponse&)>;
-            
-			CS_DECLARE_NAMEDTYPE(FacebookAuthenticationSystem);
-			
-            //------------------------------------------------
-            /// Creates a new instance of the facebook
-            /// authentication system.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @return The new instance of the system.
-            //------------------------------------------------
-            static FacebookAuthenticationSystemUPtr Create();
-            //------------------------------------------------
-            /// Log the user into Facebook with the given
-            /// read permissions. If no permissions are specified
-            /// then only basic read permissions will be granted
-            /// on authentication success
-            ///
-            /// @author S Downie
-            ///
-            /// @param Read permissions (http://developers.facebook.com/docs/authentication/permissions/)
-            /// @param Connection to result delegate
-            //------------------------------------------------
-			virtual void Authenticate(const std::vector<std::string>& in_readPermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) = 0;
-			//------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Whether the user has authenticated with FB
-            //------------------------------------------------
-			virtual bool IsSignedIn() const = 0;
-            //------------------------------------------------
-            /// Request that the user grant additional read
-            /// permissions (http://developers.facebook.com/docs/authentication/permissions/)
-            ///
-            /// @author S Downie
-            ///
-            /// @param Read permissions
-            /// @param Connection to result delegate
-            //------------------------------------------------
-            virtual void AuthoriseReadPermissions(const std::vector<std::string>& in_readPermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) = 0;
-            //------------------------------------------------
-            /// Request that the user grant write
-            /// permissions (http://developers.facebook.com/docs/authentication/permissions/)
-            ///
-            /// @author S Downie
-            ///
-            /// @param Write permissions
-            /// @param Connection to result delegate
-            //------------------------------------------------
-            virtual void AuthoriseWritePermissions(const std::vector<std::string>& in_writePermissions, AuthenticationCompleteDelegate::Connection&& in_delegateConnection) = 0;
-            //------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Permission to check
-            ///
-            /// @return Whether the given permission has been
-            /// granted by the user
-            //------------------------------------------------
-            virtual bool HasPermission(const std::string& in_permission) const = 0;
-			//------------------------------------------------
-            /// Log the current user out of Facebook
-            ///
-            /// @author S Downie
-            //------------------------------------------------
-			virtual void SignOut() = 0;
-            //------------------------------------------------
-            /// Virtual destructor
-            ///
-            /// @author S McGaw
-            //------------------------------------------------
-            virtual ~FacebookAuthenticationSystem(){}
-		};
-	}
+        virtual void SignOut() = 0;
+        //------------------------------------------------
+        /// Virtual destructor
+        ///
+        /// @author S McGaw
+        //------------------------------------------------
+        virtual ~FacebookAuthenticationSystem(){}
+    };
 }
 
 #endif
