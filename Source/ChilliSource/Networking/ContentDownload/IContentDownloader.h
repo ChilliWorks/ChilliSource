@@ -33,80 +33,77 @@
 
 #include <functional>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Networking
+    //----------------------------------------------------------------
+    /// An interface for content downloaders. A downloader implementing
+    /// this interface should be used in conjunction with the Content
+    /// Management System.
+    ///
+    /// @author S Downie
+    //----------------------------------------------------------------
+    class IContentDownloader
     {
-        //----------------------------------------------------------------
-        /// An interface for content downloaders. A downloader implementing
-        /// this interface should be used in conjunction with the Content
-        /// Management System.
+    public:
+        //----------------------------------------------------------
+        /// An enum describing the possible results from a download
+        /// request.
         ///
         /// @author S Downie
-        //----------------------------------------------------------------
-        class IContentDownloader
+        //----------------------------------------------------------
+        enum class Result
         {
-        public:
-            //----------------------------------------------------------
-            /// An enum describing the possible results from a download
-            /// request.
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------
-            enum class Result
-            {
-                k_succeeded,
-                k_failed,
-                k_flushed
-            };
-            //----------------------------------------------------------
-            /// A delegate that can be used to get the response from a
-            /// download request.
-            ///
-            /// @param The result of the request
-            /// @param The response string.
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------
-            using Delegate = std::function<void(Result, const std::string&)>;
-            //----------------------------------------------------------
-            /// A delegate that can be used to report the progress of a
-            /// download
-            ///
-            /// @param The url of the request
-            /// @param Progress.
-            ///
-            /// @author HMcLaughlin
-            //----------------------------------------------------------
-            using DownloadProgressDelegate = std::function<void(const std::string&, f32)>;
-            //----------------------------------------------------------
-            /// Pull the .csman file from the server and callback when
-            /// the download is complete
-            ///
-            /// @author S Downie
-            ///
-            /// @param The delegate.
-            /// @return Whether the manifest download has begun.
-            //----------------------------------------------------------
-            virtual bool DownloadContentManifest(const Delegate& in_delegate) = 0;
-            //----------------------------------------------------------
-            /// Download the package file from the given URL
-            ///
-            /// @author S Downie
-            ///
-            /// @param URL string
-            /// @param Delegate
-            /// @param Download Progress Delegate
-            //---------------------------------------------------------
-            virtual void DownloadPackage(const std::string& in_url, const Delegate& in_delegate, const DownloadProgressDelegate& in_progressDelegate) = 0;
-            //---------------------------------------------------------
-            /// The destructor.
-            ///
-            /// @author S Downie
-            //---------------------------------------------------------
-            virtual ~IContentDownloader() {}
+            k_succeeded,
+            k_failed,
+            k_flushed
         };
-    }
+        //----------------------------------------------------------
+        /// A delegate that can be used to get the response from a
+        /// download request.
+        ///
+        /// @param The result of the request
+        /// @param The response string.
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------
+        using Delegate = std::function<void(Result, const std::string&)>;
+        //----------------------------------------------------------
+        /// A delegate that can be used to report the progress of a
+        /// download
+        ///
+        /// @param The url of the request
+        /// @param Progress.
+        ///
+        /// @author HMcLaughlin
+        //----------------------------------------------------------
+        using DownloadProgressDelegate = std::function<void(const std::string&, f32)>;
+        //----------------------------------------------------------
+        /// Pull the .csman file from the server and callback when
+        /// the download is complete
+        ///
+        /// @author S Downie
+        ///
+        /// @param The delegate.
+        /// @return Whether the manifest download has begun.
+        //----------------------------------------------------------
+        virtual bool DownloadContentManifest(const Delegate& in_delegate) = 0;
+        //----------------------------------------------------------
+        /// Download the package file from the given URL
+        ///
+        /// @author S Downie
+        ///
+        /// @param URL string
+        /// @param Delegate
+        /// @param Download Progress Delegate
+        //---------------------------------------------------------
+        virtual void DownloadPackage(const std::string& in_url, const Delegate& in_delegate, const DownloadProgressDelegate& in_progressDelegate) = 0;
+        //---------------------------------------------------------
+        /// The destructor.
+        ///
+        /// @author S Downie
+        //---------------------------------------------------------
+        virtual ~IContentDownloader() {}
+    };
 }
 
 #endif

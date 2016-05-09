@@ -36,138 +36,133 @@
 
 #include <functional>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Networking
+    //--------------------------------------------------------------------------------------------------
+    /// Common response codes
+    //--------------------------------------------------------------------------------------------------
+    namespace HttpResponseCode
     {
-        //--------------------------------------------------------------------------------------------------
-        /// Common response codes
-        //--------------------------------------------------------------------------------------------------
-        namespace HttpResponseCode
-        {
-            const u32 k_ok = 200;
-            const u32 k_redirect = 301;
-            const u32 k_movedTemporarily = 302;
-            const u32 k_redirectTemporarily = 307;
-            const u32 k_notFound = 404;
-            const u32 k_conflict = 409;
-            const u32 k_error = 500;
-            const u32 k_unavailable = 503;
-        }
+        const u32 k_ok = 200;
+        const u32 k_redirect = 301;
+        const u32 k_movedTemporarily = 302;
+        const u32 k_redirectTemporarily = 307;
+        const u32 k_notFound = 404;
+        const u32 k_conflict = 409;
+        const u32 k_error = 500;
+        const u32 k_unavailable = 503;
+    }
+    
+    //--------------------------------------------------------------------------------------------------
+    /// Base class for platform depended http request system. This system is responsible for making
+    /// http requests to a url and managing the lifetime of the requests and the connections.
+    ///
+    /// NOTE: On certain platforms you cannot redirect from https to http. You have been warned!
+    ///
+    /// @author S Downie
+    //--------------------------------------------------------------------------------------------------
+    class HttpRequestSystem : public Core::AppSystem
+    {
+    public:
+        
+        CS_DECLARE_NAMEDTYPE(HttpRequestSystem);
+        
+        static const u32 k_defaultTimeoutSecs = 15;
         
         //--------------------------------------------------------------------------------------------------
-        /// Base class for platform depended http request system. This system is responsible for making
-        /// http requests to a url and managing the lifetime of the requests and the connections.
+        /// Factory method
         ///
-        /// NOTE: On certain platforms you cannot redirect from https to http. You have been warned!
+        /// @author S Downie
+        ///
+        /// @return New backend with ownership transferred
+        //--------------------------------------------------------------------------------------------------
+        static HttpRequestSystemUPtr Create();
+        //--------------------------------------------------------------------------------------------------
+        /// Causes the system to issue an Http GET request.
+        ///
+        /// @author S Downie
+        ///
+        /// @param URL
+        /// @param Delegate that is called on request completed. Completion can be failure as well as success
+        /// @param Request timeout in seconds
+        ///
+        /// @return A pointer to the request. The system owns this pointer.
+        //--------------------------------------------------------------------------------------------------
+        virtual HttpRequest* MakeGetRequest(const std::string& in_url, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
+        //--------------------------------------------------------------------------------------------------
+        /// Causes the system to issue an Http GET request.
+        ///
+        /// @author S Downie
+        ///
+        /// @param URL
+        /// @param Key value headers to attach to the request
+        /// @param Delegate that is called on request completed. Completion can be failure as well as success
+        /// @param Request timeout in seconds
+        ///
+        /// @return A pointer to the request. The system owns this pointer.
+        //--------------------------------------------------------------------------------------------------
+        virtual HttpRequest* MakeGetRequest(const std::string& in_url, const Core::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
+        //--------------------------------------------------------------------------------------------------
+        /// Causes the system to issue an Http POST request with the given body.
+        ///
+        /// @author S Downie
+        ///
+        /// @param URL
+        /// @param POST body
+        /// @param Delegate that is called on request completed. Completion can be failure as well as success
+        /// @param Request timeout in seconds
+        ///
+        /// @return A pointer to the request. The system owns this pointer.
+        //--------------------------------------------------------------------------------------------------
+        virtual HttpRequest* MakePostRequest(const std::string& in_url, const std::string& in_body, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
+        //--------------------------------------------------------------------------------------------------
+        /// Causes the system to issue an Http POST request with the given body.
+        ///
+        /// @author S Downie
+        ///
+        /// @param URL
+        /// @param POST body
+        /// @param Key value headers to attach to the request
+        /// @param Delegate that is called on request completed. Completion can be failure as well as success
+        /// @param Request timeout in seconds
+        ///
+        /// @return A pointer to the request. The system owns this pointer.
+        //--------------------------------------------------------------------------------------------------
+        virtual HttpRequest* MakePostRequest(const std::string& in_url, const std::string& in_body, const Core::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
+        //--------------------------------------------------------------------------------------------------
+        /// Equivalent to calling cancel on every incomplete request in progress.
         ///
         /// @author S Downie
         //--------------------------------------------------------------------------------------------------
-		class HttpRequestSystem : public Core::AppSystem
-        {
-		public:
-            
-			CS_DECLARE_NAMEDTYPE(HttpRequestSystem);
-            
-            static const u32 k_defaultTimeoutSecs = 15;
-            
-            //--------------------------------------------------------------------------------------------------
-            /// Factory method
-            ///
-            /// @author S Downie
-            ///
-            /// @return New backend with ownership transferred
-            //--------------------------------------------------------------------------------------------------
-            static HttpRequestSystemUPtr Create();
-            //--------------------------------------------------------------------------------------------------
-            /// Causes the system to issue an Http GET request.
-            ///
-            /// @author S Downie
-            ///
-            /// @param URL
-            /// @param Delegate that is called on request completed. Completion can be failure as well as success
-            /// @param Request timeout in seconds
-            ///
-            /// @return A pointer to the request. The system owns this pointer.
-            //--------------------------------------------------------------------------------------------------
-            virtual HttpRequest* MakeGetRequest(const std::string& in_url, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
-            //--------------------------------------------------------------------------------------------------
-            /// Causes the system to issue an Http GET request.
-            ///
-            /// @author S Downie
-            ///
-            /// @param URL
-            /// @param Key value headers to attach to the request
-            /// @param Delegate that is called on request completed. Completion can be failure as well as success
-            /// @param Request timeout in seconds
-            ///
-            /// @return A pointer to the request. The system owns this pointer.
-            //--------------------------------------------------------------------------------------------------
-            virtual HttpRequest* MakeGetRequest(const std::string& in_url, const Core::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
-            //--------------------------------------------------------------------------------------------------
-            /// Causes the system to issue an Http POST request with the given body.
-            ///
-            /// @author S Downie
-            ///
-            /// @param URL
-            /// @param POST body
-            /// @param Delegate that is called on request completed. Completion can be failure as well as success
-            /// @param Request timeout in seconds
-            ///
-            /// @return A pointer to the request. The system owns this pointer.
-            //--------------------------------------------------------------------------------------------------
-            virtual HttpRequest* MakePostRequest(const std::string& in_url, const std::string& in_body, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
-            //--------------------------------------------------------------------------------------------------
-            /// Causes the system to issue an Http POST request with the given body.
-            ///
-            /// @author S Downie
-            ///
-            /// @param URL
-            /// @param POST body
-            /// @param Key value headers to attach to the request
-            /// @param Delegate that is called on request completed. Completion can be failure as well as success
-            /// @param Request timeout in seconds
-            ///
-            /// @return A pointer to the request. The system owns this pointer.
-            //--------------------------------------------------------------------------------------------------
-            virtual HttpRequest* MakePostRequest(const std::string& in_url, const std::string& in_body, const Core::ParamDictionary& in_headers, const HttpRequest::Delegate& in_delegate, u32 in_timeoutSecs = k_defaultTimeoutSecs) = 0;
-			//--------------------------------------------------------------------------------------------------
-            /// Equivalent to calling cancel on every incomplete request in progress.
-            ///
-            /// @author S Downie
-            //--------------------------------------------------------------------------------------------------
-			virtual void CancelAllRequests() = 0;
-            //--------------------------------------------------------------------------------------------------
-            /// Checks if the device is internet ready
-            ///
-            /// @author S Downie
-            ///
-            /// @return Success if net available
-            //--------------------------------------------------------------------------------------------------
-            virtual bool CheckReachability() const = 0;
-            //--------------------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param The number of bytes read before the buffer is flushed (0 is unlimited)
-            //--------------------------------------------------------------------------------------------------
-            void SetMaxBufferSize(u32 in_sizeInBytes);
-            
-        protected:
-            
-            //--------------------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The number of bytes read before the buffer is flushed
-            //--------------------------------------------------------------------------------------------------
-            u32 GetMaxBufferSize() const;
-            
-        private:
-            
-            u32 m_maxBufferSize = 0;
-		};
-	}
+        virtual void CancelAllRequests() = 0;
+        //--------------------------------------------------------------------------------------------------
+        /// Checks if the device is internet ready
+        ///
+        /// @author S Downie
+        ///
+        /// @return Success if net available
+        //--------------------------------------------------------------------------------------------------
+        virtual bool CheckReachability() const = 0;
+        //--------------------------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param The number of bytes read before the buffer is flushed (0 is unlimited)
+        //--------------------------------------------------------------------------------------------------
+        void SetMaxBufferSize(u32 in_sizeInBytes);
+        
+    protected:
+        
+        //--------------------------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The number of bytes read before the buffer is flushed
+        //--------------------------------------------------------------------------------------------------
+        u32 GetMaxBufferSize() const;
+        
+    private:
+        
+        u32 m_maxBufferSize = 0;
+    };
 }
-
-
 
 #endif

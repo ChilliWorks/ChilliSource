@@ -34,96 +34,93 @@
 #include <ChilliSource/Networking/ContentDownload/IContentDownloader.h>
 #include <ChilliSource/Networking/Http/HttpRequestSystem.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Networking
+    class MoContentDownloader final : public IContentDownloader
     {
-        class MoContentDownloader final : public IContentDownloader
-        {
-        public:
-            //----------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @param HTTP request system
-            /// @param Asset server URL
-            /// @param Dynamic array of tags that determine content
-            //----------------------------------------------------------------
-            MoContentDownloader(HttpRequestSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags);
-            //----------------------------------------------------------------
-            /// Download Content Manifest
-            ///
-            /// Pull the .moman file from the server and callback when
-            /// the download is complete
-            ///
-            /// @param Delegate
-            /// @return Whether the manifest download has begun
-            //----------------------------------------------------------------
-            bool DownloadContentManifest(const Delegate& inDelegate);
-            //----------------------------------------------------------------
-            /// Download the package file from the given URL
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @param in_url - Url to download
-            /// @param in_completiondelegate - Delegate to call on completion
-            /// @param in_progressDelegate - Download Progress Delegate
-            //----------------------------------------------------------------
-            void DownloadPackage(const std::string& in_url, const Delegate& in_completiondelegate, const DownloadProgressDelegate& in_progressDelegate);
-            //----------------------------------------------------------------
-            /// Get Tags
-            ///
-            /// @return The current tags of this downloader
-            //----------------------------------------------------------------
-            inline const std::vector<std::string>& GetTags() const { return mastrTags; }
-            //----------------------------------------------------------------
-            /// Set Tags
-            ///
-            /// Set the tags for this downloader
-            //----------------------------------------------------------------
-            inline void SetTags(const std::vector<std::string>& inastrTags) { mastrTags = inastrTags; }
-            //------------------------------------------------------------
-            /// @author HMcLaughlin
-            ///
-            /// @return The progress of the current package
-            //------------------------------------------------------------
-            f32 GetDownloadProgress() const;
-            
-        private:
-            //----------------------------------------------------------------
-            /// Triggered when the manifest download has completed
-            ///
-            /// @author S Downie
-            ///
-            /// @param Original request
-            /// @param Request response
-            //----------------------------------------------------------------
-            void OnContentManifestDownloadComplete(const HttpRequest* in_request, const HttpResponse& in_response);
-            //----------------------------------------------------------------
-            /// Triggered when a package download has completed
-            ///
-            /// @author S Downie
-            ///
-            /// @param Original request
-            /// @param Request response
-            //----------------------------------------------------------------
-            void OnContentDownloadComplete(const HttpRequest* in_request, const HttpResponse& in_response);
-            
-        private:
-            
-            std::vector<std::string> mastrTags;
-            
-            std::string mstrAssetServerURL;
-            Delegate mOnContentManifestDownloadCompleteDelegate;
-            Delegate mOnContentDownloadCompleteDelegate;
-            
-            HttpRequestSystem* mpHttpRequestSystem;
-            
-            HttpRequest* mpCurrentRequest;
-            
-            CSCore::TimerSPtr m_downloadProgressUpdateTimer;
-            CSCore::EventConnectionUPtr m_downloadProgressEventConnection;
-        };
-    }
+    public:
+        //----------------------------------------------------------------
+        /// Constructor
+        ///
+        /// @param HTTP request system
+        /// @param Asset server URL
+        /// @param Dynamic array of tags that determine content
+        //----------------------------------------------------------------
+        MoContentDownloader(HttpRequestSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags);
+        //----------------------------------------------------------------
+        /// Download Content Manifest
+        ///
+        /// Pull the .moman file from the server and callback when
+        /// the download is complete
+        ///
+        /// @param Delegate
+        /// @return Whether the manifest download has begun
+        //----------------------------------------------------------------
+        bool DownloadContentManifest(const Delegate& inDelegate);
+        //----------------------------------------------------------------
+        /// Download the package file from the given URL
+        ///
+        /// @author HMcLaughlin
+        ///
+        /// @param in_url - Url to download
+        /// @param in_completiondelegate - Delegate to call on completion
+        /// @param in_progressDelegate - Download Progress Delegate
+        //----------------------------------------------------------------
+        void DownloadPackage(const std::string& in_url, const Delegate& in_completiondelegate, const DownloadProgressDelegate& in_progressDelegate);
+        //----------------------------------------------------------------
+        /// Get Tags
+        ///
+        /// @return The current tags of this downloader
+        //----------------------------------------------------------------
+        inline const std::vector<std::string>& GetTags() const { return mastrTags; }
+        //----------------------------------------------------------------
+        /// Set Tags
+        ///
+        /// Set the tags for this downloader
+        //----------------------------------------------------------------
+        inline void SetTags(const std::vector<std::string>& inastrTags) { mastrTags = inastrTags; }
+        //------------------------------------------------------------
+        /// @author HMcLaughlin
+        ///
+        /// @return The progress of the current package
+        //------------------------------------------------------------
+        f32 GetDownloadProgress() const;
+        
+    private:
+        //----------------------------------------------------------------
+        /// Triggered when the manifest download has completed
+        ///
+        /// @author S Downie
+        ///
+        /// @param Original request
+        /// @param Request response
+        //----------------------------------------------------------------
+        void OnContentManifestDownloadComplete(const HttpRequest* in_request, const HttpResponse& in_response);
+        //----------------------------------------------------------------
+        /// Triggered when a package download has completed
+        ///
+        /// @author S Downie
+        ///
+        /// @param Original request
+        /// @param Request response
+        //----------------------------------------------------------------
+        void OnContentDownloadComplete(const HttpRequest* in_request, const HttpResponse& in_response);
+        
+    private:
+        
+        std::vector<std::string> mastrTags;
+        
+        std::string mstrAssetServerURL;
+        Delegate mOnContentManifestDownloadCompleteDelegate;
+        Delegate mOnContentDownloadCompleteDelegate;
+        
+        HttpRequestSystem* mpHttpRequestSystem;
+        
+        HttpRequest* mpCurrentRequest;
+        
+        CSCore::TimerSPtr m_downloadProgressUpdateTimer;
+        CSCore::EventConnectionUPtr m_downloadProgressEventConnection;
+    };
 }
 
 #endif

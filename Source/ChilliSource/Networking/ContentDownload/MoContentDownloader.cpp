@@ -35,192 +35,189 @@
 
 #include <json/json.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Networking
+    const f32 k_downloadProgressUpdateIntervalDefault = 1.0f / 30.0f;
+    
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    MoContentDownloader::MoContentDownloader(HttpRequestSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags)
+    : mpHttpRequestSystem(inpRequestSystem), mstrAssetServerURL(instrAssetServerURL), mastrTags(inastrTags)
     {
-        const f32 k_downloadProgressUpdateIntervalDefault = 1.0f / 30.0f;
+        m_downloadProgressUpdateTimer = CSCore::TimerSPtr(new CSCore::Timer());
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    bool MoContentDownloader::DownloadContentManifest(const Delegate& inDelegate)
+    {
+        mOnContentManifestDownloadCompleteDelegate = inDelegate;
         
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        MoContentDownloader::MoContentDownloader(HttpRequestSystem* inpRequestSystem, const std::string& instrAssetServerURL, const std::vector<std::string>& inastrTags)
-        : mpHttpRequestSystem(inpRequestSystem), mstrAssetServerURL(instrAssetServerURL), mastrTags(inastrTags)
+        //Request the content manifest
+        if(mpHttpRequestSystem->CheckReachability())
         {
-            m_downloadProgressUpdateTimer = CSCore::TimerSPtr(new CSCore::Timer());
-        }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        bool MoContentDownloader::DownloadContentManifest(const Delegate& inDelegate)
-        {
-            mOnContentManifestDownloadCompleteDelegate = inDelegate;
+            Core::Device* device = Core::Application::Get()->GetSystem<Core::Device>();
             
-            //Request the content manifest
-            if(mpHttpRequestSystem->CheckReachability())
+            //Build the JSON request with the device info so the server can decide what
+            //assets are suitable for us
+            Json::Value JDeviceData(Json::objectValue);
+            JDeviceData["Type"] = device->GetManufacturer() + device->GetModel() + device->GetModelType();
+            JDeviceData["OS"] = device->GetOSVersion();
+            JDeviceData["Locale"] = device->GetLocale();
+            JDeviceData["Language"] = device->GetLanguage();
+            
+            //The server uses the tags to determine which content to serve
+            Json::Value JTags(Json::arrayValue);
+            for(std::vector<std::string>::const_iterator it = mastrTags.begin(); it != mastrTags.end(); ++it)
             {
-                Core::Device* device = Core::Application::Get()->GetSystem<Core::Device>();
-                
-                //Build the JSON request with the device info so the server can decide what
-                //assets are suitable for us
-                Json::Value JDeviceData(Json::objectValue);
-                JDeviceData["Type"] = device->GetManufacturer() + device->GetModel() + device->GetModelType();
-                JDeviceData["OS"] = device->GetOSVersion();
-                JDeviceData["Locale"] = device->GetLocale();
-                JDeviceData["Language"] = device->GetLanguage();
-                
-                //The server uses the tags to determine which content to serve
-                Json::Value JTags(Json::arrayValue);
-                for(std::vector<std::string>::const_iterator it = mastrTags.begin(); it != mastrTags.end(); ++it)
-                {
-                    JTags.append(*it);
-                }
-                JDeviceData["Tags"] = JTags;
-                
-                Json::FastWriter JWriter;
-                mpHttpRequestSystem->MakePostRequest(mstrAssetServerURL, JWriter.write(JDeviceData), Core::MakeDelegate(this, &MoContentDownloader::OnContentManifestDownloadComplete));
-                return true;
+                JTags.append(*it);
             }
-            else
+            JDeviceData["Tags"] = JTags;
+            
+            Json::FastWriter JWriter;
+            mpHttpRequestSystem->MakePostRequest(mstrAssetServerURL, JWriter.write(JDeviceData), Core::MakeDelegate(this, &MoContentDownloader::OnContentManifestDownloadComplete));
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void MoContentDownloader::DownloadPackage(const std::string& in_url, const Delegate& in_completiondelegate, const DownloadProgressDelegate& in_progressDelegate)
+    {
+        mOnContentDownloadCompleteDelegate = in_completiondelegate;
+        mpCurrentRequest = mpHttpRequestSystem->MakeGetRequest(in_url, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
+        
+        //Reset the timer
+        m_downloadProgressUpdateTimer->Reset();
+        m_downloadProgressEventConnection = m_downloadProgressUpdateTimer->OpenConnection(k_downloadProgressUpdateIntervalDefault, [=]()
+        {
+            if(in_progressDelegate)
             {
-                return false;
+                in_progressDelegate(in_url, GetDownloadProgress());
             }
-        }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        void MoContentDownloader::DownloadPackage(const std::string& in_url, const Delegate& in_completiondelegate, const DownloadProgressDelegate& in_progressDelegate)
+        });
+        
+        m_downloadProgressUpdateTimer->Start();
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void MoContentDownloader::OnContentManifestDownloadComplete(const HttpRequest* in_request, const HttpResponse& in_response)
+    {
+        switch(in_response.GetResult())
         {
-            mOnContentDownloadCompleteDelegate = in_completiondelegate;
-            mpCurrentRequest = mpHttpRequestSystem->MakeGetRequest(in_url, Core::MakeDelegate(this, &MoContentDownloader::OnContentDownloadComplete));
-            
-            //Reset the timer
-            m_downloadProgressUpdateTimer->Reset();
-            m_downloadProgressEventConnection = m_downloadProgressUpdateTimer->OpenConnection(k_downloadProgressUpdateIntervalDefault, [=]()
+            case HttpResponse::Result::k_completed:
             {
-                if(in_progressDelegate)
+                //Check the response code for errors
+                switch(in_response.GetCode())
                 {
-                    in_progressDelegate(in_url, GetDownloadProgress());
-                }
-            });
-            
-            m_downloadProgressUpdateTimer->Start();
-        }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        void MoContentDownloader::OnContentManifestDownloadComplete(const HttpRequest* in_request, const HttpResponse& in_response)
-        {
-            switch(in_response.GetResult())
-            {
-                case HttpResponse::Result::k_completed:
-                {
-                    //Check the response code for errors
-                    switch(in_response.GetCode())
+                    default:   //OK 
+                    case HttpResponseCode::k_ok:
                     {
-                        default:   //OK 
-                        case HttpResponseCode::k_ok:
-                        {
-                            mOnContentManifestDownloadCompleteDelegate(Result::k_succeeded, in_response.GetDataAsString());
-                            break;
-                        }
-                        case HttpResponseCode::k_error:      //Error
-                        case HttpResponseCode::k_unavailable://Temporary error try again later
-                        case HttpResponseCode::k_notFound:   //End point doesn't exist
-                        {
-                            mOnContentManifestDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
-                            break;
-                        }
+                        mOnContentManifestDownloadCompleteDelegate(Result::k_succeeded, in_response.GetDataAsString());
+                        break;
                     }
-                    break;
-                }
-                case HttpResponse::Result::k_timeout:
-                case HttpResponse::Result::k_failed:
-                {
-                    mOnContentManifestDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
-                    break;
-                }
-                case HttpResponse::Result::k_flushed:
-                {
-                    //Check the response code for errors
-                    switch(in_response.GetCode())
+                    case HttpResponseCode::k_error:      //Error
+                    case HttpResponseCode::k_unavailable://Temporary error try again later
+                    case HttpResponseCode::k_notFound:   //End point doesn't exist
                     {
-                        default:   //OK 
-                        case HttpResponseCode::k_ok:
-                        {
-                            mOnContentManifestDownloadCompleteDelegate(Result::k_flushed, in_response.GetDataAsString());
-                            break;
-                        }
-                        case HttpResponseCode::k_error:      //Error
-                        case HttpResponseCode::k_unavailable://Temporary error try again later
-                        case HttpResponseCode::k_notFound:   //End point doesn't exist
-                        {
-                            mOnContentManifestDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
-                            break;
-                        }
+                        mOnContentManifestDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
+                        break;
                     }
-                    break;
                 }
+                break;
             }
-        }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        void MoContentDownloader::OnContentDownloadComplete(const HttpRequest* in_request, const HttpResponse& in_response)
-        {
-            if(in_response.GetResult() != HttpResponse::Result::k_flushed)
+            case HttpResponse::Result::k_timeout:
+            case HttpResponse::Result::k_failed:
             {
-                if(mpCurrentRequest == in_request)
-                {
-                    mpCurrentRequest = nullptr;
-                }
-            
-                if(m_downloadProgressUpdateTimer)
-                {
-                    m_downloadProgressEventConnection.reset();
-                    m_downloadProgressUpdateTimer->Stop();
-                }
+                mOnContentManifestDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
+                break;
             }
-            
-            switch(in_response.GetResult())
+            case HttpResponse::Result::k_flushed:
             {
-                case HttpResponse::Result::k_completed:
+                //Check the response code for errors
+                switch(in_response.GetCode())
                 {
-                    // Check the response code for errors
-                    switch(in_response.GetCode())
+                    default:   //OK 
+                    case HttpResponseCode::k_ok:
                     {
-                        default:   //OK
-                        case HttpResponseCode::k_ok:
-                            mOnContentDownloadCompleteDelegate(Result::k_succeeded, in_response.GetDataAsString());
-                            break;
+                        mOnContentManifestDownloadCompleteDelegate(Result::k_flushed, in_response.GetDataAsString());
+                        break;
                     }
-                    break;
+                    case HttpResponseCode::k_error:      //Error
+                    case HttpResponseCode::k_unavailable://Temporary error try again later
+                    case HttpResponseCode::k_notFound:   //End point doesn't exist
+                    {
+                        mOnContentManifestDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
+                        break;
+                    }
                 }
-                case HttpResponse::Result::k_timeout:
-                case HttpResponse::Result::k_failed:
-                {
-                    mOnContentDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
-                    break;
-                }
-                case HttpResponse::Result::k_flushed:
-                {
-                    mOnContentDownloadCompleteDelegate(Result::k_flushed, in_response.GetDataAsString());
-                    break;
-                }
+                break;
             }
         }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        f32 MoContentDownloader::GetDownloadProgress() const
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void MoContentDownloader::OnContentDownloadComplete(const HttpRequest* in_request, const HttpResponse& in_response)
+    {
+        if(in_response.GetResult() != HttpResponse::Result::k_flushed)
         {
-            f32 progress = 0.0f;
-            
-            // Check if there is an active request
-            if(mpCurrentRequest)
+            if(mpCurrentRequest == in_request)
             {
-                if(mpCurrentRequest->GetExpectedSize() > 0)
-                {
-                    // Calculate current scene download progress
-                    progress = (f32)mpCurrentRequest->GetDownloadedBytes() / (f32)mpCurrentRequest->GetExpectedSize();
-                }
+                mpCurrentRequest = nullptr;
             }
-            
-            return progress;
+        
+            if(m_downloadProgressUpdateTimer)
+            {
+                m_downloadProgressEventConnection.reset();
+                m_downloadProgressUpdateTimer->Stop();
+            }
         }
+        
+        switch(in_response.GetResult())
+        {
+            case HttpResponse::Result::k_completed:
+            {
+                // Check the response code for errors
+                switch(in_response.GetCode())
+                {
+                    default:   //OK
+                    case HttpResponseCode::k_ok:
+                        mOnContentDownloadCompleteDelegate(Result::k_succeeded, in_response.GetDataAsString());
+                        break;
+                }
+                break;
+            }
+            case HttpResponse::Result::k_timeout:
+            case HttpResponse::Result::k_failed:
+            {
+                mOnContentDownloadCompleteDelegate(Result::k_failed, in_response.GetDataAsString());
+                break;
+            }
+            case HttpResponse::Result::k_flushed:
+            {
+                mOnContentDownloadCompleteDelegate(Result::k_flushed, in_response.GetDataAsString());
+                break;
+            }
+        }
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    f32 MoContentDownloader::GetDownloadProgress() const
+    {
+        f32 progress = 0.0f;
+        
+        // Check if there is an active request
+        if(mpCurrentRequest)
+        {
+            if(mpCurrentRequest->GetExpectedSize() > 0)
+            {
+                // Calculate current scene download progress
+                progress = (f32)mpCurrentRequest->GetDownloadedBytes() / (f32)mpCurrentRequest->GetExpectedSize();
+            }
+        }
+        
+        return progress;
     }
 }

@@ -34,99 +34,96 @@
 
 #include <functional>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Networking
+    //----------------------------------------------------------------------------------------
+    /// Interface class to a platform dependent http request. A request can be issued
+    /// via the HttpRequestSystem to a given URL. Requests can be of type POST or GET. The
+    /// request object can be used to cancel the request
+    ///
+    /// @author S Downie
+    //----------------------------------------------------------------------------------------
+    class HttpRequest
     {
+    public:
+        
+        CS_DECLARE_NOCOPY(HttpRequest);
+        
         //----------------------------------------------------------------------------------------
-        /// Interface class to a platform dependent http request. A request can be issued
-        /// via the HttpRequestSystem to a given URL. Requests can be of type POST or GET. The
-        /// request object can be used to cancel the request
+        /// Type of the Http request (Post or Get)
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-		class HttpRequest
+        enum class Type
         {
-		public:
-            
-            CS_DECLARE_NOCOPY(HttpRequest);
-            
-            //----------------------------------------------------------------------------------------
-            /// Type of the Http request (Post or Get)
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            enum class Type
-            {
-                k_get,
-                k_post
-            };
-            //----------------------------------------------------------------------------------------
-            /// Delegate called when the request completes (either with success of failure)
-            ///
-            /// @param Original request
-            /// @param Request response
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-			typedef std::function<void(const HttpRequest*, const HttpResponse&)> Delegate;
-			//----------------------------------------------------------------------------------------
-			/// Constructor
-			///
-			/// @author S Downie
-			//----------------------------------------------------------------------------------------
-			HttpRequest() = default;
-			//----------------------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The type of the request (POST or GET)
-			//----------------------------------------------------------------------------------------
-			virtual Type GetType() const = 0;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The original url to which the request was sent
-            //----------------------------------------------------------------------------------------
-            virtual const std::string& GetUrl() const = 0;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The body of the POST request (GET request will return empty)
-            //----------------------------------------------------------------------------------------
-            virtual const std::string& GetBody() const = 0;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The original headers of the request as keys/values
-            //----------------------------------------------------------------------------------------
-            virtual const Core::ParamDictionary& GetHeaders() const = 0;
-            //----------------------------------------------------------------------------------------
-            /// @author N Tanda
-            ///
-            /// @return The expected total size of the request. This will be 0 until the first
-            ///         response arrives
-            //----------------------------------------------------------------------------------------
-            virtual u64 GetExpectedSize() const = 0;
-            //----------------------------------------------------------------------------------------
-            /// @author N Tanda
-            ///
-            /// @return The current transferred size of the request
-            //----------------------------------------------------------------------------------------
-            virtual u64 GetDownloadedBytes() const = 0;
-            //----------------------------------------------------------------------------------------
-            /// Cancel the request. Does not invoke the completion delegate
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            virtual void Cancel() = 0;
-            //----------------------------------------------------------------------------------------
-            /// Destructor
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            virtual ~HttpRequest(){}
-		};
-	}
+            k_get,
+            k_post
+        };
+        //----------------------------------------------------------------------------------------
+        /// Delegate called when the request completes (either with success of failure)
+        ///
+        /// @param Original request
+        /// @param Request response
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------------------------------
+        typedef std::function<void(const HttpRequest*, const HttpResponse&)> Delegate;
+        //----------------------------------------------------------------------------------------
+        /// Constructor
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------------------------------
+        HttpRequest() = default;
+        //----------------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The type of the request (POST or GET)
+        //----------------------------------------------------------------------------------------
+        virtual Type GetType() const = 0;
+        //----------------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The original url to which the request was sent
+        //----------------------------------------------------------------------------------------
+        virtual const std::string& GetUrl() const = 0;
+        //----------------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The body of the POST request (GET request will return empty)
+        //----------------------------------------------------------------------------------------
+        virtual const std::string& GetBody() const = 0;
+        //----------------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The original headers of the request as keys/values
+        //----------------------------------------------------------------------------------------
+        virtual const Core::ParamDictionary& GetHeaders() const = 0;
+        //----------------------------------------------------------------------------------------
+        /// @author N Tanda
+        ///
+        /// @return The expected total size of the request. This will be 0 until the first
+        ///         response arrives
+        //----------------------------------------------------------------------------------------
+        virtual u64 GetExpectedSize() const = 0;
+        //----------------------------------------------------------------------------------------
+        /// @author N Tanda
+        ///
+        /// @return The current transferred size of the request
+        //----------------------------------------------------------------------------------------
+        virtual u64 GetDownloadedBytes() const = 0;
+        //----------------------------------------------------------------------------------------
+        /// Cancel the request. Does not invoke the completion delegate
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------------------------------
+        virtual void Cancel() = 0;
+        //----------------------------------------------------------------------------------------
+        /// Destructor
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------------------------------
+        virtual ~HttpRequest(){}
+    };
 }
 
 

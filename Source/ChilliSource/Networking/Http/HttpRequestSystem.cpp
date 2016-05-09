@@ -40,41 +40,38 @@
 #include <CSBackend/Platform/Windows/Networking/Http/HttpRequestSystem.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Networking
+    CS_DEFINE_NAMEDTYPE(HttpRequestSystem);
+    
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    HttpRequestSystemUPtr HttpRequestSystem::Create()
     {
-		CS_DEFINE_NAMEDTYPE(HttpRequestSystem);
-        
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        HttpRequestSystemUPtr HttpRequestSystem::Create()
-        {
 #ifdef CS_TARGETPLATFORM_IOS
-            return HttpRequestSystemUPtr(new CSBackend::iOS::HttpRequestSystem());
+        return HttpRequestSystemUPtr(new CSBackend::iOS::HttpRequestSystem());
 #endif
 #ifdef CS_TARGETPLATFORM_ANDROID
-            return HttpRequestSystemUPtr(new CSBackend::Android::HttpRequestSystem());
+        return HttpRequestSystemUPtr(new CSBackend::Android::HttpRequestSystem());
 #endif
 #ifdef CS_TARGETPLATFORM_WINDOWS
-            return HttpRequestSystemUPtr(new CSBackend::Windows::HttpRequestSystem());
+        return HttpRequestSystemUPtr(new CSBackend::Windows::HttpRequestSystem());
 #endif
-            return nullptr;
-        }
-        //--------------------------------------------------------------------------------------------------
-        /// @author S Downie
-        ///
-        /// @param The number of bytes read before the buffer is flushed (0 is infinite)
-        //--------------------------------------------------------------------------------------------------
-        void HttpRequestSystem::SetMaxBufferSize(u32 in_sizeInBytes)
-        {
-            m_maxBufferSize = in_sizeInBytes;
-        }
-        //--------------------------------------------------------------------------------------------------
-        //--------------------------------------------------------------------------------------------------
-        u32 HttpRequestSystem::GetMaxBufferSize() const
-        {
-            return m_maxBufferSize;
-        }
-	}
+        return nullptr;
+    }
+    //--------------------------------------------------------------------------------------------------
+    /// @author S Downie
+    ///
+    /// @param The number of bytes read before the buffer is flushed (0 is infinite)
+    //--------------------------------------------------------------------------------------------------
+    void HttpRequestSystem::SetMaxBufferSize(u32 in_sizeInBytes)
+    {
+        m_maxBufferSize = in_sizeInBytes;
+    }
+    //--------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------
+    u32 HttpRequestSystem::GetMaxBufferSize() const
+    {
+        return m_maxBufferSize;
+    }
 }

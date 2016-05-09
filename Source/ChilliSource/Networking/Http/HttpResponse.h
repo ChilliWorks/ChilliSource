@@ -31,81 +31,78 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Networking
+    //----------------------------------------------------------------------------------------
+    /// The response result of an http request. This contains the http response code and
+    /// the response data. The response also contains the result which is whether the request
+    /// succeeded or failed. If the request fails then the response data will be empty
+    ///
+    /// @author S Downie
+    //----------------------------------------------------------------------------------------
+    class HttpResponse final
     {
+    public:
         //----------------------------------------------------------------------------------------
-        /// The response result of an http request. This contains the http response code and
-        /// the response data. The response also contains the result which is whether the request
-        /// succeeded or failed. If the request fails then the response data will be empty
+        /// Result of the http request
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        class HttpResponse final
+        enum class Result
         {
-        public:
-            //----------------------------------------------------------------------------------------
-            /// Result of the http request
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            enum class Result
-            {
-                k_completed,    //The request completed (response data is available)
-                k_failed,       //The request failed (no response data available)
-                k_timeout,      //The request timed out (no response data available)
-                k_flushed       //The request buffer is full and has been flushed. (response data is partial and more will follow)
-            };
-            //----------------------------------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @param Result
-            /// @param Response code
-            /// @param Response data
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------------------
-            HttpResponse(Result in_result, u32 in_responseCode, const std::string& in_data);
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The result of the request (determines whether data is available)
-            //----------------------------------------------------------------------------------------
-            Result GetResult() const;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The contents of the response. (This could be null if a failure occured)
-            //----------------------------------------------------------------------------------------
-            const u8* GetData() const;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Size of data in bytes (This could be 0 if a failure occured)
-            //----------------------------------------------------------------------------------------
-            u32 GetDataSize() const;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The contents of the response as a string. (This could be binary data and could
-            /// also be empty if the result is failure. Some string operations may fail on binary data).
-            //----------------------------------------------------------------------------------------
-            const std::string& GetDataAsString() const;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return HTTP response code (i.e. 200 = OK).
-            //----------------------------------------------------------------------------------------
-            u32 GetCode() const;
-            
-        private:
-            
-            const std::string m_data;
-            const Result m_result;
-            const u32 m_code;
+            k_completed,    //The request completed (response data is available)
+            k_failed,       //The request failed (no response data available)
+            k_timeout,      //The request timed out (no response data available)
+            k_flushed       //The request buffer is full and has been flushed. (response data is partial and more will follow)
         };
-    }
+        //----------------------------------------------------------------------------------------
+        /// Constructor
+        ///
+        /// @param Result
+        /// @param Response code
+        /// @param Response data
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------------------------------
+        HttpResponse(Result in_result, u32 in_responseCode, const std::string& in_data);
+        //----------------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The result of the request (determines whether data is available)
+        //----------------------------------------------------------------------------------------
+        Result GetResult() const;
+        //----------------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The contents of the response. (This could be null if a failure occured)
+        //----------------------------------------------------------------------------------------
+        const u8* GetData() const;
+        //----------------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Size of data in bytes (This could be 0 if a failure occured)
+        //----------------------------------------------------------------------------------------
+        u32 GetDataSize() const;
+        //----------------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The contents of the response as a string. (This could be binary data and could
+        /// also be empty if the result is failure. Some string operations may fail on binary data).
+        //----------------------------------------------------------------------------------------
+        const std::string& GetDataAsString() const;
+        //----------------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return HTTP response code (i.e. 200 = OK).
+        //----------------------------------------------------------------------------------------
+        u32 GetCode() const;
+        
+    private:
+        
+        const std::string m_data;
+        const Result m_result;
+        const u32 m_code;
+    };
 }
 
 #endif

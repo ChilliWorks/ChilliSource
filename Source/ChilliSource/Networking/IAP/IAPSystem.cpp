@@ -40,26 +40,23 @@
 #endif
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Networking
+    CS_DEFINE_NAMEDTYPE(IAPSystem);
+    //---------------------------------------------------------------
+    //---------------------------------------------------------------
+    IAPSystemUPtr IAPSystem::Create(const Core::ParamDictionary& inParams)
     {
-        CS_DEFINE_NAMEDTYPE(IAPSystem);
-        //---------------------------------------------------------------
-        //---------------------------------------------------------------
-        IAPSystemUPtr IAPSystem::Create(const Core::ParamDictionary& inParams)
-        {
 #ifdef CS_TARGETPLATFORM_IOS
-        	return IAPSystemUPtr(new CSBackend::iOS::IAPSystem());
+        return IAPSystemUPtr(new CSBackend::iOS::IAPSystem());
 #elif defined(CS_TARGETPLATFORM_ANDROID)
 #	ifdef CS_ANDROIDFLAVOUR_GOOGLEPLAY
-        	return IAPSystemUPtr(new CSBackend::Android::GooglePlayIAPSystem(inParams));
+        return IAPSystemUPtr(new CSBackend::Android::GooglePlayIAPSystem(inParams));
 #	elif defined(CS_ANDROIDFLAVOUR_AMAZON)
-        	return IAPSystemUPtr(new CSBackend::Android::AmazonIAPSystem(inParams));
+        return IAPSystemUPtr(new CSBackend::Android::AmazonIAPSystem(inParams));
 #	endif
 #endif
-        	return nullptr;
-        }
+        return nullptr;
     }
 }
 
