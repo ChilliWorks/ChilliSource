@@ -28,22 +28,19 @@
 
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffectorDef.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		CS_DEFINE_NAMEDTYPE(ParticleAffectorDef);
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		const ParticleEffect* ParticleAffectorDef::GetParticleEffect() const
-		{
-			return m_particleEffect;
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		void ParticleAffectorDef::SetParticleEffect(const ParticleEffect* in_particleEffect)
-		{
-			m_particleEffect = in_particleEffect;
-		}
-	}
+    CS_DEFINE_NAMEDTYPE(ParticleAffectorDef);
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    const ParticleEffect* ParticleAffectorDef::GetParticleEffect() const
+    {
+        return m_particleEffect;
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void ParticleAffectorDef::SetParticleEffect(const ParticleEffect* in_particleEffect)
+    {
+        m_particleEffect = in_particleEffect;
+    }
 }

@@ -31,80 +31,77 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//---------------------------------------------------------------------
-		/// The base class for all particle affectors. Particle affectors are 
-		/// reponsible for applying any sort of effect to particles every update
-		/// frame.
-		///
-		/// Particle affectors will be updated as part of a background task and 
-		/// should not be accessed from other threads.
-		//---------------------------------------------------------------------
-		class ParticleAffector
-		{
-		public:
-			CS_DECLARE_NOCOPY(ParticleAffector);
-			//----------------------------------------------------------------
-			/// Constructor.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The particle affector definition.
-			/// @param The particle array.
-			//----------------------------------------------------------------
-			ParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
-			//----------------------------------------------------------------
-			/// Activates the particle with the given index.
-			///
-			/// This will be called on a background thread.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The index of the particle to activate.
-            /// @param The current normalised (0.0 to 1.0) progress through
-            /// playback of the particle effect.
-			//----------------------------------------------------------------
-			virtual void ActivateParticle(u32 in_index, f32 in_effectProgress) = 0;
-			//----------------------------------------------------------------
-			/// Applies the affect to each of the active particles.
-			///
-			/// This will be called on a background thread.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The delta time.
-            /// @param The current normalised (0.0 to 1.0) progress through
-            /// playback of the particle effect.
-			//----------------------------------------------------------------
-			virtual void AffectParticles(f32 in_deltaTime, f32 in_effectProgress) = 0;
-			//----------------------------------------------------------------
-			/// Destructor
-			///
-			/// @author Ian Copland
-			//----------------------------------------------------------------
-			virtual ~ParticleAffector() {};
-		protected:
-			//----------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return The particle affector definition
-			//----------------------------------------------------------------
-			const ParticleAffectorDef* GetAffectorDef() const;
-			//----------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return The particle array.
-			//----------------------------------------------------------------
-			Core::dynamic_array<Particle>* GetParticleArray() const;
-		private:
+    //---------------------------------------------------------------------
+    /// The base class for all particle affectors. Particle affectors are 
+    /// reponsible for applying any sort of effect to particles every update
+    /// frame.
+    ///
+    /// Particle affectors will be updated as part of a background task and 
+    /// should not be accessed from other threads.
+    //---------------------------------------------------------------------
+    class ParticleAffector
+    {
+    public:
+        CS_DECLARE_NOCOPY(ParticleAffector);
+        //----------------------------------------------------------------
+        /// Constructor.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The particle affector definition.
+        /// @param The particle array.
+        //----------------------------------------------------------------
+        ParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
+        //----------------------------------------------------------------
+        /// Activates the particle with the given index.
+        ///
+        /// This will be called on a background thread.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The index of the particle to activate.
+        /// @param The current normalised (0.0 to 1.0) progress through
+        /// playback of the particle effect.
+        //----------------------------------------------------------------
+        virtual void ActivateParticle(u32 in_index, f32 in_effectProgress) = 0;
+        //----------------------------------------------------------------
+        /// Applies the affect to each of the active particles.
+        ///
+        /// This will be called on a background thread.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The delta time.
+        /// @param The current normalised (0.0 to 1.0) progress through
+        /// playback of the particle effect.
+        //----------------------------------------------------------------
+        virtual void AffectParticles(f32 in_deltaTime, f32 in_effectProgress) = 0;
+        //----------------------------------------------------------------
+        /// Destructor
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------------------
+        virtual ~ParticleAffector() {};
+    protected:
+        //----------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The particle affector definition
+        //----------------------------------------------------------------
+        const ParticleAffectorDef* GetAffectorDef() const;
+        //----------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The particle array.
+        //----------------------------------------------------------------
+        Core::dynamic_array<Particle>* GetParticleArray() const;
+    private:
 
-			const ParticleAffectorDef* m_affectorDef = nullptr;
-			Core::dynamic_array<Particle>* m_particleArray = nullptr;
-		};
-	}
+        const ParticleAffectorDef* m_affectorDef = nullptr;
+        Core::dynamic_array<Particle>* m_particleArray = nullptr;
+    };
 }
 
 #endif

@@ -28,26 +28,23 @@
 
 #include <ChilliSource/Rendering/Lighting/AmbientLightComponent.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		CS_DEFINE_NAMEDTYPE(AmbientLightComponent);
-        
-		//----------------------------------------------------------
-		/// Is A
-		//----------------------------------------------------------
-		bool AmbientLightComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
-		{
-			return inInterfaceID == LightComponent::InterfaceID || inInterfaceID == AmbientLightComponent::InterfaceID;
-		}
-        //----------------------------------------------------------
-        /// Get Light Matrix
-        //----------------------------------------------------------
-        const Core::Matrix4& AmbientLightComponent::GetLightMatrix() const
-        {
-            return mmatLight;
-        }
-	}
+    CS_DEFINE_NAMEDTYPE(AmbientLightComponent);
+    
+    //----------------------------------------------------------
+    /// Is A
+    //----------------------------------------------------------
+    bool AmbientLightComponent::IsA(CSCore::InterfaceIDType inInterfaceID) const
+    {
+        return inInterfaceID == LightComponent::InterfaceID || inInterfaceID == AmbientLightComponent::InterfaceID;
+    }
+    //----------------------------------------------------------
+    /// Get Light Matrix
+    //----------------------------------------------------------
+    const Core::Matrix4& AmbientLightComponent::GetLightMatrix() const
+    {
+        return mmatLight;
+    }
 }
 

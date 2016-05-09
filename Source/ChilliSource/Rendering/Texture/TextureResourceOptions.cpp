@@ -30,56 +30,53 @@
 
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        TextureResourceOptions::TextureResourceOptions(bool in_mipmaps, Texture::FilterMode in_filter, Texture::WrapMode in_wrapS, Texture::WrapMode in_wrapT, bool in_restoreTextureDataEnabled)
-        {
-            m_options.m_hasMipMaps = in_mipmaps;
-            m_options.m_filterMode = in_filter;
-            m_options.m_wrapModeS = in_wrapS;
-            m_options.m_wrapModeT = in_wrapT;
-            m_options.m_restoreTextureDataEnabled = in_restoreTextureDataEnabled;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        u32 TextureResourceOptions::GenerateHash() const
-        {
-            return Core::HashCRC32::GenerateHashCode((const s8*)&m_options, sizeof(Options));
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        bool TextureResourceOptions::IsMipMapsEnabled() const
-        {
-            return m_options.m_hasMipMaps;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        Texture::WrapMode TextureResourceOptions::GetWrapModeS() const
-        {
-            return m_options.m_wrapModeS;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        Texture::WrapMode TextureResourceOptions::GetWrapModeT() const
-        {
-            return m_options.m_wrapModeT;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        Texture::FilterMode TextureResourceOptions::GetFilterMode() const
-        {
-            return m_options.m_filterMode;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        bool TextureResourceOptions::IsRestoreTextureDataEnabled() const
-        {
-        	return m_options.m_restoreTextureDataEnabled;
-        }
-	}
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    TextureResourceOptions::TextureResourceOptions(bool in_mipmaps, Texture::FilterMode in_filter, Texture::WrapMode in_wrapS, Texture::WrapMode in_wrapT, bool in_restoreTextureDataEnabled)
+    {
+        m_options.m_hasMipMaps = in_mipmaps;
+        m_options.m_filterMode = in_filter;
+        m_options.m_wrapModeS = in_wrapS;
+        m_options.m_wrapModeT = in_wrapT;
+        m_options.m_restoreTextureDataEnabled = in_restoreTextureDataEnabled;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    u32 TextureResourceOptions::GenerateHash() const
+    {
+        return Core::HashCRC32::GenerateHashCode((const s8*)&m_options, sizeof(Options));
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    bool TextureResourceOptions::IsMipMapsEnabled() const
+    {
+        return m_options.m_hasMipMaps;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    Texture::WrapMode TextureResourceOptions::GetWrapModeS() const
+    {
+        return m_options.m_wrapModeS;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    Texture::WrapMode TextureResourceOptions::GetWrapModeT() const
+    {
+        return m_options.m_wrapModeT;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    Texture::FilterMode TextureResourceOptions::GetFilterMode() const
+    {
+        return m_options.m_filterMode;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    bool TextureResourceOptions::IsRestoreTextureDataEnabled() const
+    {
+        return m_options.m_restoreTextureDataEnabled;
+    }
 }
 

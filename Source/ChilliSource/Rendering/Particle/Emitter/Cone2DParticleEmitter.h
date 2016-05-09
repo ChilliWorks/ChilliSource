@@ -32,50 +32,47 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particle/Emitter/ParticleEmitter.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//-----------------------------------------------------------------------
-		/// A cone particle emitter. This spawns particles either within a 
-		/// 2D cone, on the 2D cones edge or at its base, with a random direction 
-		/// or moving away from the base of the 2D cone. 
-		///
-		/// Particle emitters will be updated as a background task and should not
-		/// be accessed from other threads.
-		///
-		/// @author Ian Copland
-		//-----------------------------------------------------------------------
-		class Cone2DParticleEmitter final : public ParticleEmitter
-		{
-		public:
-			//----------------------------------------------------------------
-			/// Generates the position and direction of a new emission. These 
-			/// values are in local space. This will be called as part of a 
-			/// background task.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The normalised emission playback time.
-			/// @param [Out] The generated position in local space.
-			/// @param [Out] The generate direction in local space.
-			//----------------------------------------------------------------
-			void GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction) override;
-		private:
-			friend class Cone2DParticleEmitterDef;
-			//----------------------------------------------------------------
-			/// Constructor.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The particle emitter definition.
-			/// @param The particle array.
-			//----------------------------------------------------------------
-			Cone2DParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
+    //-----------------------------------------------------------------------
+    /// A cone particle emitter. This spawns particles either within a
+    /// 2D cone, on the 2D cones edge or at its base, with a random direction 
+    /// or moving away from the base of the 2D cone. 
+    ///
+    /// Particle emitters will be updated as a background task and should not
+    /// be accessed from other threads.
+    ///
+    /// @author Ian Copland
+    //-----------------------------------------------------------------------
+    class Cone2DParticleEmitter final : public ParticleEmitter
+    {
+    public:
+        //----------------------------------------------------------------
+        /// Generates the position and direction of a new emission. These 
+        /// values are in local space. This will be called as part of a 
+        /// background task.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The normalised emission playback time.
+        /// @param [Out] The generated position in local space.
+        /// @param [Out] The generate direction in local space.
+        //----------------------------------------------------------------
+        void GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction) override;
+    private:
+        friend class Cone2DParticleEmitterDef;
+        //----------------------------------------------------------------
+        /// Constructor.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The particle emitter definition.
+        /// @param The particle array.
+        //----------------------------------------------------------------
+        Cone2DParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray);
 
-			const Cone2DParticleEmitterDef* m_coneParticleEmitterDef = nullptr;
-		};
-	}
+        const Cone2DParticleEmitterDef* m_coneParticleEmitterDef = nullptr;
+    };
 }
 
 #endif

@@ -31,35 +31,32 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Rendering
+    class ICullingPredicate
     {
-        class ICullingPredicate
-        {
-        public:
-            
-            virtual ~ICullingPredicate(){}
-            
-            virtual bool CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const = 0;
+    public:
+        
+        virtual ~ICullingPredicate(){}
+        
+        virtual bool CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const = 0;
 
-        private:
-        };
+    private:
+    };
+    
+    class ViewportCullPredicate : public ICullingPredicate
+    {
+    public:
         
-        class ViewportCullPredicate : public ICullingPredicate
-        {
-        public:
-            
-            bool CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const;
-        };
+        bool CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const;
+    };
+    
+    class FrustumCullPredicate : public ICullingPredicate
+    {
+    public:
         
-        class FrustumCullPredicate : public ICullingPredicate
-        {
-        public:
-            
-            bool CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const;
-        };
-    }
+        bool CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const;
+    };
 }
 
 #endif

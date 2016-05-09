@@ -32,97 +32,94 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Particle/ConcurrentParticleData.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//-----------------------------------------------------------------------
-		/// The base class for all particle drawables. Particle drawables are 
-		/// reponsible for the actual rendering  of the particles. 
-		///
-		/// Particle drawables are drawn from the main thread, however particles 
-		/// are updated from a background task. Information is passed between 
-		/// threads using the concurrent particle draw data array. This contains 
-		/// just the information needed to render a particle and can be locked 
-		/// before use.
-		///
-		/// @author Ian Copland
-		//-----------------------------------------------------------------------
-		class ParticleDrawable
-		{
-		public:
-			CS_DECLARE_NOCOPY(ParticleDrawable);
-			//----------------------------------------------------------------
-			/// Constructor.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The entity the effect is attached to.
-			/// @param The particle drawable definition.
-			/// @param The concurrent particle data.
-			//----------------------------------------------------------------
-			ParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData);
-			//----------------------------------------------------------------
-			/// Updates the particle drawable and renders all active particles
-			/// in the effect. 
-			///
-			/// This must be called on the main thread.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The camera component used to render.
-			//----------------------------------------------------------------
-			void Draw(const CameraComponent* in_camera);
-			//----------------------------------------------------------------
-			/// Destructor
-			///
-			/// @author Ian Copland
-			//----------------------------------------------------------------
-			virtual ~ParticleDrawable() {};
-		protected:
-			//----------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return The entity the owning particle component is attached 
-			/// to. This should never be null.
-			//----------------------------------------------------------------
-			const Core::Entity* GetEntity() const;
-			//----------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return The particle drawable definition
-			//----------------------------------------------------------------
-			const ParticleDrawableDef* GetDrawableDef() const;
-			//----------------------------------------------------------------
-			/// Activates the particle with the given index.
-			///
-			/// This is called on the main thread, but the particle data can 
-			/// be modified on other threads so make sure to lock it prior to 
-			/// use.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The particle draw data.
-			/// @param The index of the particle to activate.
-			//----------------------------------------------------------------
-			virtual void ActivateParticle(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, u32 in_index) = 0;
-			//----------------------------------------------------------------
-			/// Renders all active particles in the effect. 
-			///
-			/// This is always called on the main thread.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The particle draw data.
-			/// @param The camera component used to render.
-			//----------------------------------------------------------------
-			virtual void DrawParticles(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) = 0;
-		private:
-			const Core::Entity* m_entity = nullptr;
-			const ParticleDrawableDef* m_drawableDef = nullptr;
-			ConcurrentParticleData* m_concurrentParticleData = nullptr;
-		};
-	}
+    //-----------------------------------------------------------------------
+    /// The base class for all particle drawables. Particle drawables are 
+    /// reponsible for the actual rendering  of the particles. 
+    ///
+    /// Particle drawables are drawn from the main thread, however particles 
+    /// are updated from a background task. Information is passed between 
+    /// threads using the concurrent particle draw data array. This contains 
+    /// just the information needed to render a particle and can be locked 
+    /// before use.
+    ///
+    /// @author Ian Copland
+    //-----------------------------------------------------------------------
+    class ParticleDrawable
+    {
+    public:
+        CS_DECLARE_NOCOPY(ParticleDrawable);
+        //----------------------------------------------------------------
+        /// Constructor.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The entity the effect is attached to.
+        /// @param The particle drawable definition.
+        /// @param The concurrent particle data.
+        //----------------------------------------------------------------
+        ParticleDrawable(const Core::Entity* in_entity, const ParticleDrawableDef* in_drawableDef, ConcurrentParticleData* in_concurrentParticleData);
+        //----------------------------------------------------------------
+        /// Updates the particle drawable and renders all active particles
+        /// in the effect. 
+        ///
+        /// This must be called on the main thread.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The camera component used to render.
+        //----------------------------------------------------------------
+        void Draw(const CameraComponent* in_camera);
+        //----------------------------------------------------------------
+        /// Destructor
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------------------
+        virtual ~ParticleDrawable() {};
+    protected:
+        //----------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The entity the owning particle component is attached 
+        /// to. This should never be null.
+        //----------------------------------------------------------------
+        const Core::Entity* GetEntity() const;
+        //----------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The particle drawable definition
+        //----------------------------------------------------------------
+        const ParticleDrawableDef* GetDrawableDef() const;
+        //----------------------------------------------------------------
+        /// Activates the particle with the given index.
+        ///
+        /// This is called on the main thread, but the particle data can 
+        /// be modified on other threads so make sure to lock it prior to 
+        /// use.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The particle draw data.
+        /// @param The index of the particle to activate.
+        //----------------------------------------------------------------
+        virtual void ActivateParticle(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, u32 in_index) = 0;
+        //----------------------------------------------------------------
+        /// Renders all active particles in the effect. 
+        ///
+        /// This is always called on the main thread.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The particle draw data.
+        /// @param The camera component used to render.
+        //----------------------------------------------------------------
+        virtual void DrawParticles(const Core::dynamic_array<ConcurrentParticleData::Particle>& in_particleData, const CameraComponent* in_camera) = 0;
+    private:
+        const Core::Entity* m_entity = nullptr;
+        const ParticleDrawableDef* m_drawableDef = nullptr;
+        ConcurrentParticleData* m_concurrentParticleData = nullptr;
+    };
 }
 
 #endif

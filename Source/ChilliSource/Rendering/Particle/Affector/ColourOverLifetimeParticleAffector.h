@@ -34,77 +34,74 @@
 #include <ChilliSource/Core/Container/dynamic_array.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//---------------------------------------------------------------------
-		/// A particle affector which will change the colour of particles over
-		/// its lifetime.
-		///
-		/// @author Ian Copland
-		//---------------------------------------------------------------------
-		class ColourOverLifetimeParticleAffector final : public ParticleAffector
-		{
-		public:
-			//----------------------------------------------------------------
-			/// Stores the initial colour and generates a target colour for the
-			/// activated particle so it can be used to generate the 
-			/// interpolated colour during updates.
-			///
-			/// @author Ian Copland
-            ///
-            /// @param The index of the particle to activate.
-            /// @param The current normalised (0.0 to 1.0) progress through
-            /// playback of the particle effect.
-			//----------------------------------------------------------------
-			void ActivateParticle(u32 in_index, f32 in_effectProgress) override;
-			//----------------------------------------------------------------
-			/// Updates the colour of each particle.
-			///
-			/// @author Ian Copland
-            ///
-            /// @param The delta time.
-            /// @param The current normalised (0.0 to 1.0) progress through
-            /// playback of the particle effect.
-			//----------------------------------------------------------------
-			void AffectParticles(f32 in_deltaTime, f32 in_effectProgress) override;
-			//----------------------------------------------------------------
-			/// Destructor
-			///
-			/// @author Ian Copland
-			//----------------------------------------------------------------
-			virtual ~ColourOverLifetimeParticleAffector() {};
-            
-		private:
-			friend class ColourOverLifetimeParticleAffectorDef;
-            //----------------------------------------------------------------
-            /// A container for the colours of a single particle.
-            ///
-            /// @author Nicolas Tanda
-            //----------------------------------------------------------------
-            struct ColourData final
-            {
-                Core::Colour m_colour;
-                f32 m_time;
-            };
-			//----------------------------------------------------------------
-			/// Constructor.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The particle affector definition.
-			/// @param The particle array.
-			//----------------------------------------------------------------
-            ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
-            
-        private:
-			const ColourOverLifetimeParticleAffectorDef* m_colourOverLifetimeAffectorDef = nullptr;
-			Core::dynamic_array<ColourData> m_particleColourData;
-            
-            u32 m_intermediateParticles = 0;
-		};
-	}
+    //---------------------------------------------------------------------
+    /// A particle affector which will change the colour of particles over
+    /// its lifetime.
+    ///
+    /// @author Ian Copland
+    //---------------------------------------------------------------------
+    class ColourOverLifetimeParticleAffector final : public ParticleAffector
+    {
+    public:
+        //----------------------------------------------------------------
+        /// Stores the initial colour and generates a target colour for the
+        /// activated particle so it can be used to generate the 
+        /// interpolated colour during updates.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The index of the particle to activate.
+        /// @param The current normalised (0.0 to 1.0) progress through
+        /// playback of the particle effect.
+        //----------------------------------------------------------------
+        void ActivateParticle(u32 in_index, f32 in_effectProgress) override;
+        //----------------------------------------------------------------
+        /// Updates the colour of each particle.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The delta time.
+        /// @param The current normalised (0.0 to 1.0) progress through
+        /// playback of the particle effect.
+        //----------------------------------------------------------------
+        void AffectParticles(f32 in_deltaTime, f32 in_effectProgress) override;
+        //----------------------------------------------------------------
+        /// Destructor
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------------------
+        virtual ~ColourOverLifetimeParticleAffector() {};
+        
+    private:
+        friend class ColourOverLifetimeParticleAffectorDef;
+        //----------------------------------------------------------------
+        /// A container for the colours of a single particle.
+        ///
+        /// @author Nicolas Tanda
+        //----------------------------------------------------------------
+        struct ColourData final
+        {
+            Core::Colour m_colour;
+            f32 m_time;
+        };
+        //----------------------------------------------------------------
+        /// Constructor.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The particle affector definition.
+        /// @param The particle array.
+        //----------------------------------------------------------------
+        ColourOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
+        
+    private:
+        const ColourOverLifetimeParticleAffectorDef* m_colourOverLifetimeAffectorDef = nullptr;
+        Core::dynamic_array<ColourData> m_particleColourData;
+        
+        u32 m_intermediateParticles = 0;
+    };
 }
 
 #endif

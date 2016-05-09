@@ -29,22 +29,19 @@
 #ifndef _CHILLISOURCE_RENDERING_BASE_CULLFACE_H_
 #define _CHILLISOURCE_RENDERING_BASE_CULLFACE_H_
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-        //---------------------------------------------
-        /// Used in the face culling function to
-        /// describe which faces to remove.
-        ///
-        /// @author S Downie
-        //---------------------------------------------
-        enum class CullFace
-        {
-            k_front,
-            k_back
-        };
-	}
+    //---------------------------------------------
+    /// Used in the face culling function to
+    /// describe which faces to remove.
+    ///
+    /// @author S Downie
+    //---------------------------------------------
+    enum class CullFace
+    {
+        k_front,
+        k_back
+    };
 }
 
 #endif

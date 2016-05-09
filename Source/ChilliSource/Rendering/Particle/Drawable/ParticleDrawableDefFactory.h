@@ -39,59 +39,56 @@
 #include <functional>
 #include <unordered_map>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//--------------------------------------------------------------------------
-		/// A factory for creating particle drawable definitions. This allows 
-		/// particle drawable definition types to be registered with the class. A
-		/// Particle Provider can then create new instances of the registered 
-		/// drawable def with a Json descriptor.
-		///
-		/// @author Ian Copland
-		//--------------------------------------------------------------------------
-		class ParticleDrawableDefFactory final : public Core::GenericFactory<ParticleDrawableDef>
-		{
-		public:
-			CS_DECLARE_NAMEDTYPE(ParticleDrawableDefFactory);
-			//-----------------------------------------------------------------
-			/// Allows querying of whether or not this implements the interface
-			/// described by the given interface Id.
-			/// 
-			/// @author Ian Copland
-			///
-			/// @param The interface Id.
-			///
-			/// @return Whether this implements the interface.
-			//-----------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-		private:
-			friend class Core::Application;
-			//-----------------------------------------------------------------
-			/// A factory method for creating new instances of a particle 
-			/// drawable def factory.
-			///
-			/// @author Ian Copland
-			///
-			/// @return The new instance of the system.
-			//-----------------------------------------------------------------
-			static ParticleDrawableDefFactoryUPtr Create();
-			//-----------------------------------------------------------------
-			/// Default constructor. Declared private to force the use of the
-			/// CreateSystem() method in Application.
-			///
-			/// @author Ian Copland
-			//-----------------------------------------------------------------
-			ParticleDrawableDefFactory() = default;
-			//-----------------------------------------------------------------
-			/// Registers the default particle drawable definitions.
-			///
-			/// @author Ian Copland
-			//-----------------------------------------------------------------
-			void RegisterDefaults() override;
-		};
-	}
+    //--------------------------------------------------------------------------
+    /// A factory for creating particle drawable definitions. This allows 
+    /// particle drawable definition types to be registered with the class. A
+    /// Particle Provider can then create new instances of the registered 
+    /// drawable def with a Json descriptor.
+    ///
+    /// @author Ian Copland
+    //--------------------------------------------------------------------------
+    class ParticleDrawableDefFactory final : public Core::GenericFactory<ParticleDrawableDef>
+    {
+    public:
+        CS_DECLARE_NAMEDTYPE(ParticleDrawableDefFactory);
+        //-----------------------------------------------------------------
+        /// Allows querying of whether or not this implements the interface
+        /// described by the given interface Id.
+        /// 
+        /// @author Ian Copland
+        ///
+        /// @param The interface Id.
+        ///
+        /// @return Whether this implements the interface.
+        //-----------------------------------------------------------------
+        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+    private:
+        friend class Core::Application;
+        //-----------------------------------------------------------------
+        /// A factory method for creating new instances of a particle 
+        /// drawable def factory.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @return The new instance of the system.
+        //-----------------------------------------------------------------
+        static ParticleDrawableDefFactoryUPtr Create();
+        //-----------------------------------------------------------------
+        /// Default constructor. Declared private to force the use of the
+        /// CreateSystem() method in Application.
+        ///
+        /// @author Ian Copland
+        //-----------------------------------------------------------------
+        ParticleDrawableDefFactory() = default;
+        //-----------------------------------------------------------------
+        /// Registers the default particle drawable definitions.
+        ///
+        /// @author Ian Copland
+        //-----------------------------------------------------------------
+        void RegisterDefaults() override;
+    };
 }
 
 #endif

@@ -34,203 +34,200 @@
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Core/Math/Geometry/Shapes.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
+    //------------------------------------------------------------------------------
+    /// Base class for camera components. The camera is added to the scene and
+    /// provides the renderer with the view and projection matrices required to draw
+    /// the scene correctly
+    ///
+    /// @author S Downie
+    //------------------------------------------------------------------------------
+    class CameraComponent : public Core::Component
+    {
+    public:
+        CS_DECLARE_NAMEDTYPE(CameraComponent);
         //------------------------------------------------------------------------------
-        /// Base class for camera components. The camera is added to the scene and
-        /// provides the renderer with the view and projection matrices required to draw
-        /// the scene correctly
+        /// Governs how the viewport updates with screen resize
         ///
         /// @author S Downie
         //------------------------------------------------------------------------------
-		class CameraComponent : public Core::Component
-		{
-		public:
-			CS_DECLARE_NAMEDTYPE(CameraComponent);
-            //------------------------------------------------------------------------------
-            /// Governs how the viewport updates with screen resize
-            ///
-            /// @author S Downie
-            //------------------------------------------------------------------------------
-            enum class ViewportResizePolicy
-            {
-                k_none,
-                k_scaleWithScreen
-            };
-            //------------------------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
-            ///
-            /// @param Near plane
-            /// @param Far plane
-            //------------------------------------------------------------------------------
-            CameraComponent(f32 in_nearClip, f32 in_farClip);
-            //------------------------------------------------------------------------------
-            /// Virtual Destructor
-            ///
-            /// @author S Downie
-            //------------------------------------------------------------------------------
-            virtual ~CameraComponent(){}
-			//------------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @param Near Z clipping distance in view space
-			//------------------------------------------------------------------------------
-			void SetNearClipping(f32 in_near);
-			//------------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @param Far Z clipping distance in view space
-			//------------------------------------------------------------------------------
-			void SetFarClipping(f32 in_far);
-			//------------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return Projection matrix
-			//------------------------------------------------------------------------------
-			const Core::Matrix4& GetProjection();
-			//------------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return View matrix
-			//------------------------------------------------------------------------------
-			const Core::Matrix4& GetView();
-			//------------------------------------------------------------------------------
-			/// Unproject from a point in screen space to a ray in world space
-            ///
-			/// @param Point in screen space
-            ///
-			/// @return Ray in world space with camera view direction
-			//------------------------------------------------------------------------------
-            Core::Ray Unproject(const Core::Vector2& in_screenPos);
-			//------------------------------------------------------------------------------
-			/// Convert from a point in world space to a point in screen space
-            ///
-            /// @param World space pos
-            ///
-            /// @return Screen space pos
-			//------------------------------------------------------------------------------
-            Core::Vector2 Project(const Core::Vector3& in_worldPos);
-			//------------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return Camera frustum
-			//------------------------------------------------------------------------------
-			const Core::Frustum& GetFrustum();
-			//------------------------------------------------------------------------------
-            /// Orientate the given matrix to face the cameras view vector
-            ///
-            /// @author S Downie
-            ///
-            /// @param Matrix to billboard
-            ///
-            /// @return Billboarded matrix
-            //------------------------------------------------------------------------------
-            Core::Matrix4 Billboard(const Core::Matrix4& in_toBillboard);
-            //------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Gets the currently set opaque sort predicate for this camera
-            //------------------------------------------------------------------------------
-            const RendererSortPredicateSPtr& GetOpaqueSortPredicate() const;
-            //------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Gets the currently set opaque sort predicate for this camera
-            //------------------------------------------------------------------------------
-            const RendererSortPredicateSPtr& GetTransparentSortPredicate() const;
-            //------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Opaque sort predicate to use for this camera
-            //------------------------------------------------------------------------------
-            void SetOpaqueSortPredicate(const RendererSortPredicateSPtr& in_predicate);
-            //------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Transparent sort predicate to use for this camera
-            //------------------------------------------------------------------------------
-            void SetTransparentSortPredicate(const RendererSortPredicateSPtr& in_predicate);
-            //------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Culling predicate to use for this camera
-            //------------------------------------------------------------------------------
-            const ICullingPredicateSPtr& GetCullingPredicate() const;
-            //------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param Culling predicate to use for this camera.
-            //------------------------------------------------------------------------------
-            void SetCullingPredicate(const ICullingPredicateSPtr& in_predicate);
-            
-		private:
-			//------------------------------------------------------------------------------
-			/// Delegates the calculation of the projection matrix to the concrete camera
-            /// types.
-			///
-			/// @author S Downie
-            ///
-            /// @return Projection matrix
-			//------------------------------------------------------------------------------
-			virtual Core::Matrix4 CalculateProjectionMatrix() = 0;
-            //------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// Recalculate frustum planes
-            //------------------------------------------------------------------------------
-            virtual void UpdateFrustum() = 0;
-            //------------------------------------------------------------------------------
-            /// Called when the component is added to an entity.
-            ///
-            /// @author S Downie
-            //------------------------------------------------------------------------------
-            void OnAddedToEntity() override;
-            //------------------------------------------------------------------------------
-            /// Called when the component is added to the scene.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------------------
-            void OnAddedToScene() override;
-            //------------------------------------------------------------------------------
-            /// Called when the component is added to the scene.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------------------
-            void OnRemovedFromScene() override;
-            //------------------------------------------------------------------------------
-            /// Called when the component is removed from an entity.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------------------
-            void OnRemovedFromEntity() override;
-            
-        protected:
-            
-            Core::Frustum m_frustum;
-            f32 m_nearClip;
-            f32 m_farClip;
-            bool m_isProjCacheValid = false;
-            bool m_isFrustumCacheValid = false;
-            Core::Screen* m_screen = nullptr;
+        enum class ViewportResizePolicy
+        {
+            k_none,
+            k_scaleWithScreen
+        };
+        //------------------------------------------------------------------------------
+        /// Constructor
+        ///
+        /// @author S Downie
+        ///
+        /// @param Near plane
+        /// @param Far plane
+        //------------------------------------------------------------------------------
+        CameraComponent(f32 in_nearClip, f32 in_farClip);
+        //------------------------------------------------------------------------------
+        /// Virtual Destructor
+        ///
+        /// @author S Downie
+        //------------------------------------------------------------------------------
+        virtual ~CameraComponent(){}
+        //------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Near Z clipping distance in view space
+        //------------------------------------------------------------------------------
+        void SetNearClipping(f32 in_near);
+        //------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Far Z clipping distance in view space
+        //------------------------------------------------------------------------------
+        void SetFarClipping(f32 in_far);
+        //------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Projection matrix
+        //------------------------------------------------------------------------------
+        const Core::Matrix4& GetProjection();
+        //------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return View matrix
+        //------------------------------------------------------------------------------
+        const Core::Matrix4& GetView();
+        //------------------------------------------------------------------------------
+        /// Unproject from a point in screen space to a ray in world space
+        ///
+        /// @param Point in screen space
+        ///
+        /// @return Ray in world space with camera view direction
+        //------------------------------------------------------------------------------
+        Core::Ray Unproject(const Core::Vector2& in_screenPos);
+        //------------------------------------------------------------------------------
+        /// Convert from a point in world space to a point in screen space
+        ///
+        /// @param World space pos
+        ///
+        /// @return Screen space pos
+        //------------------------------------------------------------------------------
+        Core::Vector2 Project(const Core::Vector3& in_worldPos);
+        //------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Camera frustum
+        //------------------------------------------------------------------------------
+        const Core::Frustum& GetFrustum();
+        //------------------------------------------------------------------------------
+        /// Orientate the given matrix to face the cameras view vector
+        ///
+        /// @author S Downie
+        ///
+        /// @param Matrix to billboard
+        ///
+        /// @return Billboarded matrix
+        //------------------------------------------------------------------------------
+        Core::Matrix4 Billboard(const Core::Matrix4& in_toBillboard);
+        //------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Gets the currently set opaque sort predicate for this camera
+        //------------------------------------------------------------------------------
+        const RendererSortPredicateSPtr& GetOpaqueSortPredicate() const;
+        //------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Gets the currently set opaque sort predicate for this camera
+        //------------------------------------------------------------------------------
+        const RendererSortPredicateSPtr& GetTransparentSortPredicate() const;
+        //------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Opaque sort predicate to use for this camera
+        //------------------------------------------------------------------------------
+        void SetOpaqueSortPredicate(const RendererSortPredicateSPtr& in_predicate);
+        //------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Transparent sort predicate to use for this camera
+        //------------------------------------------------------------------------------
+        void SetTransparentSortPredicate(const RendererSortPredicateSPtr& in_predicate);
+        //------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Culling predicate to use for this camera
+        //------------------------------------------------------------------------------
+        const ICullingPredicateSPtr& GetCullingPredicate() const;
+        //------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Culling predicate to use for this camera.
+        //------------------------------------------------------------------------------
+        void SetCullingPredicate(const ICullingPredicateSPtr& in_predicate);
+        
+    private:
+        //------------------------------------------------------------------------------
+        /// Delegates the calculation of the projection matrix to the concrete camera
+        /// types.
+        ///
+        /// @author S Downie
+        ///
+        /// @return Projection matrix
+        //------------------------------------------------------------------------------
+        virtual Core::Matrix4 CalculateProjectionMatrix() = 0;
+        //------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// Recalculate frustum planes
+        //------------------------------------------------------------------------------
+        virtual void UpdateFrustum() = 0;
+        //------------------------------------------------------------------------------
+        /// Called when the component is added to an entity.
+        ///
+        /// @author S Downie
+        //------------------------------------------------------------------------------
+        void OnAddedToEntity() override;
+        //------------------------------------------------------------------------------
+        /// Called when the component is added to the scene.
+        ///
+        /// @author Ian Copland
+        //------------------------------------------------------------------------------
+        void OnAddedToScene() override;
+        //------------------------------------------------------------------------------
+        /// Called when the component is added to the scene.
+        ///
+        /// @author Ian Copland
+        //------------------------------------------------------------------------------
+        void OnRemovedFromScene() override;
+        //------------------------------------------------------------------------------
+        /// Called when the component is removed from an entity.
+        ///
+        /// @author Ian Copland
+        //------------------------------------------------------------------------------
+        void OnRemovedFromEntity() override;
+        
+    protected:
+        
+        Core::Frustum m_frustum;
+        f32 m_nearClip;
+        f32 m_farClip;
+        bool m_isProjCacheValid = false;
+        bool m_isFrustumCacheValid = false;
+        Core::Screen* m_screen = nullptr;
 
-		private:
-			
-            Core::Matrix4 m_projMat;
-			Core::Matrix4 m_viewMat;
-			
-            RendererSortPredicateSPtr m_opaqueSortPredicate;
-            RendererSortPredicateSPtr m_transparentSortPredicate;
-            
-            ICullingPredicateSPtr m_cullPredicate;
-            
-            Core::EventConnectionUPtr m_transformChangedConnection;
-            Core::EventConnectionUPtr m_resolutionChangedConnection;
-		};
-	}
+    private:
+        
+        Core::Matrix4 m_projMat;
+        Core::Matrix4 m_viewMat;
+        
+        RendererSortPredicateSPtr m_opaqueSortPredicate;
+        RendererSortPredicateSPtr m_transparentSortPredicate;
+        
+        ICullingPredicateSPtr m_cullPredicate;
+        
+        Core::EventConnectionUPtr m_transformChangedConnection;
+        Core::EventConnectionUPtr m_resolutionChangedConnection;
+    };
 }
 
 #endif

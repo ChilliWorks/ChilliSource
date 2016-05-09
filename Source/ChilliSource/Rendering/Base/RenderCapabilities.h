@@ -32,81 +32,78 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/System/AppSystem.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Rendering
+    //---------------------------------------------------------------
+    /// A system for getting information on the capabilities of the
+    /// renderer on this specfic device. This includes information
+    /// like whether specific features are available or the maximum
+    /// texture size. This should not be used prior to the render
+    /// system being initialised.
+    ///
+    /// @author Ian Copland
+    //---------------------------------------------------------------
+    class RenderCapabilities : public Core::AppSystem
     {
-        //---------------------------------------------------------------
-        /// A system for getting information on the capabilities of the
-        /// renderer on this specfic device. This includes information
-        /// like whether specific features are available or the maximum
-        /// texture size. This should not be used prior to the render
-        /// system being initialised.
+    public:
+        CS_DECLARE_NAMEDTYPE(RenderCapabilities);
+        
+        //-------------------------------------------------------
+        /// Create the platform dependent backend
+        ///
+        /// @author S Downie
+        ///
+        /// @return New backend instance
+        //-------------------------------------------------------
+        static RenderCapabilitiesUPtr Create();
+        //-------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return Whether or not shadow mapping is supported.
+        //-------------------------------------------------------
+        virtual bool IsShadowMappingSupported() const = 0;
+        //-------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return Whether or not depth textures are supported.
+        //-------------------------------------------------------
+        virtual bool IsDepthTextureSupported() const = 0;
+        //-------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return Whether or not map buffer is supported
+        //-------------------------------------------------
+        virtual bool IsMapBufferSupported() const = 0;
+        //-------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The maximum texture size available on this
+        /// device.
+        //-------------------------------------------------------
+        virtual u32 GetMaxTextureSize() const = 0;
+        //-------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The number of texture units supported by this
+        /// device.
+        //-------------------------------------------------------
+        virtual u32 GetNumTextureUnits() const = 0;
+        //-------------------------------------------------------
+        /// Destructor
         ///
         /// @author Ian Copland
-        //---------------------------------------------------------------
-        class RenderCapabilities : public Core::AppSystem
-        {
-        public:
-            CS_DECLARE_NAMEDTYPE(RenderCapabilities);
-            
-            //-------------------------------------------------------
-            /// Create the platform dependent backend
-            ///
-            /// @author S Downie
-            ///
-            /// @return New backend instance
-            //-------------------------------------------------------
-            static RenderCapabilitiesUPtr Create();
-            //-------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return Whether or not shadow mapping is supported.
-            //-------------------------------------------------------
-            virtual bool IsShadowMappingSupported() const = 0;
-            //-------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return Whether or not depth textures are supported.
-            //-------------------------------------------------------
-            virtual bool IsDepthTextureSupported() const = 0;
-            //-------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return Whether or not map buffer is supported
-            //-------------------------------------------------
-            virtual bool IsMapBufferSupported() const = 0;
-            //-------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The maximum texture size available on this
-            /// device.
-            //-------------------------------------------------------
-            virtual u32 GetMaxTextureSize() const = 0;
-            //-------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The number of texture units supported by this
-            /// device.
-            //-------------------------------------------------------
-            virtual u32 GetNumTextureUnits() const = 0;
-            //-------------------------------------------------------
-            /// Destructor
-            ///
-            /// @author Ian Copland
-            //-------------------------------------------------------
-            virtual ~RenderCapabilities(){};
-            
-        protected:
-            
-            //-------------------------------------------------------
-            /// Private constructor to force use of factory method
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------
-            RenderCapabilities() = default;
-        };
-    }
+        //-------------------------------------------------------
+        virtual ~RenderCapabilities(){};
+        
+    protected:
+        
+        //-------------------------------------------------------
+        /// Private constructor to force use of factory method
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------
+        RenderCapabilities() = default;
+    };
 }
 
 #endif

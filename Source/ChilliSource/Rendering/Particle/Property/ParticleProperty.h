@@ -31,42 +31,39 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//------------------------------------------------------------------------------
-		/// A base class for different particle property types. This allows properties
-        /// more complex than just a single value, for example a property that selects a
-        /// random value within a certain range, or that changes over the life of the
-        /// particle effect.
+    //------------------------------------------------------------------------------
+    /// A base class for different particle property types. This allows properties
+    /// more complex than just a single value, for example a property that selects a
+    /// random value within a certain range, or that changes over the life of the
+    /// particle effect.
+    ///
+    /// The documentation for Particle Property Factory describes the various types
+    /// of particle property that can be created.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------------
+    template <typename TPropertyType> class ParticleProperty
+    {
+    public:
+        //------------------------------------------------------------------------------
+        /// Generates a new value within the confines of the property's settings.
         ///
-        /// The documentation for Particle Property Factory describes the various types
-        /// of particle property that can be created.
-		///
-		/// @author Ian Copland
-		//------------------------------------------------------------------------------
-		template <typename TPropertyType> class ParticleProperty
-		{
-		public:
-			//------------------------------------------------------------------------------
-			/// Generates a new value within the confines of the property's settings.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The normalised (0.0 - 1.0) particle effect playback progress.
-			///
-			/// @return The generated value.
-			//------------------------------------------------------------------------------
-			virtual TPropertyType GenerateValue(f32 in_playbackProgress) const = 0;
-			//------------------------------------------------------------------------------
-			/// Destructor.
-			///
-			/// @author Ian Copland
-			//------------------------------------------------------------------------------
-			virtual ~ParticleProperty() {};
-		};
-	}
+        /// @author Ian Copland
+        ///
+        /// @param The normalised (0.0 - 1.0) particle effect playback progress.
+        ///
+        /// @return The generated value.
+        //------------------------------------------------------------------------------
+        virtual TPropertyType GenerateValue(f32 in_playbackProgress) const = 0;
+        //------------------------------------------------------------------------------
+        /// Destructor.
+        ///
+        /// @author Ian Copland
+        //------------------------------------------------------------------------------
+        virtual ~ParticleProperty() {};
+    };
 }
 
 #endif

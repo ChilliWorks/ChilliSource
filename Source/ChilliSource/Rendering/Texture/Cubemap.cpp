@@ -32,21 +32,18 @@
 #include <CSBackend/Rendering/OpenGL/Texture/Cubemap.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-        CS_DEFINE_NAMEDTYPE(Cubemap);
-        
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        CubemapUPtr Cubemap::Create()
-        {
+    CS_DEFINE_NAMEDTYPE(Cubemap);
+    
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    CubemapUPtr Cubemap::Create()
+    {
 #if defined(CS_TARGETPLATFORM_ANDROID) || defined(CS_TARGETPLATFORM_IOS) || defined(CS_TARGETPLATFORM_WINDOWS)
-            return CubemapUPtr(new CSBackend::OpenGL::Cubemap());
+        return CubemapUPtr(new CSBackend::OpenGL::Cubemap());
 #else
-            return nullptr;
+        return nullptr;
 #endif
-        }
-	}
+    }
 }

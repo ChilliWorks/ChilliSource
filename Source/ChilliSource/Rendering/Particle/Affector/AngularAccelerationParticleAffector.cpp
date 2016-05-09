@@ -33,37 +33,34 @@
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
 #include <ChilliSource/Rendering/Particle/Affector/AngularAccelerationParticleAffectorDef.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		AngularAccelerationParticleAffector::AngularAccelerationParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray)
-			: ParticleAffector(in_affectorDef, in_particleArray), m_particleAngularAcceleration(in_particleArray->size())
-		{
-			//This can only be created by the AngularAccelerationParticleAffectorDef so this is safe.
-			m_angularAccelerationAffectorDef = static_cast<const AngularAccelerationParticleAffectorDef*>(in_affectorDef);
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		void AngularAccelerationParticleAffector::ActivateParticle(u32 in_index, f32 in_effectProgress)
-		{
-			CS_ASSERT(in_index >= 0 && in_index < m_particleAngularAcceleration.size(), "Index out of bounds!");
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    AngularAccelerationParticleAffector::AngularAccelerationParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray)
+        : ParticleAffector(in_affectorDef, in_particleArray), m_particleAngularAcceleration(in_particleArray->size())
+    {
+        //This can only be created by the AngularAccelerationParticleAffectorDef so this is safe.
+        m_angularAccelerationAffectorDef = static_cast<const AngularAccelerationParticleAffectorDef*>(in_affectorDef);
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void AngularAccelerationParticleAffector::ActivateParticle(u32 in_index, f32 in_effectProgress)
+    {
+        CS_ASSERT(in_index >= 0 && in_index < m_particleAngularAcceleration.size(), "Index out of bounds!");
 
-			m_particleAngularAcceleration[in_index] = m_angularAccelerationAffectorDef->GetAngularAccelerationProperty()->GenerateValue(in_effectProgress);
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		void AngularAccelerationParticleAffector::AffectParticles(f32 in_deltaTime, f32 in_effectProgress)
-		{
-			Core::dynamic_array<Particle>* particleArray = GetParticleArray();
-			for (u32 i = 0; i < particleArray->size(); ++i)
-			{
-				Particle& particle = particleArray->at(i);
-				f32 angularAcceleration = m_particleAngularAcceleration[i];
-				particle.m_angularVelocity += angularAcceleration * in_deltaTime;
-			}
-		}
-	}
+        m_particleAngularAcceleration[in_index] = m_angularAccelerationAffectorDef->GetAngularAccelerationProperty()->GenerateValue(in_effectProgress);
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void AngularAccelerationParticleAffector::AffectParticles(f32 in_deltaTime, f32 in_effectProgress)
+    {
+        Core::dynamic_array<Particle>* particleArray = GetParticleArray();
+        for (u32 i = 0; i < particleArray->size(); ++i)
+        {
+            Particle& particle = particleArray->at(i);
+            f32 angularAcceleration = m_particleAngularAcceleration[i];
+            particle.m_angularVelocity += angularAcceleration * in_deltaTime;
+        }
+    }
 }

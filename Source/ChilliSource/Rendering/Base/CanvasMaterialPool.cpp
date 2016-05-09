@@ -31,48 +31,45 @@
 #include <ChilliSource/Rendering/Material/Material.h>
 #include <ChilliSource/Rendering/Material/MaterialFactory.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Rendering
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    CanvasMaterialPool::CanvasMaterialPool(MaterialFactory* in_materialFactory)
+        : m_materialFactory(in_materialFactory)
     {
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        CanvasMaterialPool::CanvasMaterialPool(MaterialFactory* in_materialFactory)
-            : m_materialFactory(in_materialFactory)
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    MaterialCSPtr CanvasMaterialPool::GetMaterial(const TextureCSPtr& in_texture)
+    {
+        auto it = m_associations.find(in_texture.get());
+        if(it != m_associations.end())
         {
+            return it->second;
         }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        MaterialCSPtr CanvasMaterialPool::GetMaterial(const TextureCSPtr& in_texture)
+        
+        if (m_nextMaterial >= m_materials.size())
         {
-            auto it = m_associations.find(in_texture.get());
-            if(it != m_associations.end())
-            {
-                return it->second;
-            }
-            
-            if (m_nextMaterial >= m_materials.size())
-            {
-                m_materials.push_back(m_materialFactory->CreateGUI("_Canvas-" + Core::ToString(m_materials.size())));
-                CS_ASSERT(m_nextMaterial < m_materials.size(), "We've added a new material yet we still don't have enough - something has gone wrong.");
-            }
-            
-            auto material = m_materials[m_nextMaterial++];
-            material->AddTexture(in_texture);
-            m_associations.emplace(in_texture.get(), material);
-            return material;
+            m_materials.push_back(m_materialFactory->CreateGUI("_Canvas-" + Core::ToString(m_materials.size())));
+            CS_ASSERT(m_nextMaterial < m_materials.size(), "We've added a new material yet we still don't have enough - something has gone wrong.");
         }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void CanvasMaterialPool::Clear()
+        
+        auto material = m_materials[m_nextMaterial++];
+        material->AddTexture(in_texture);
+        m_associations.emplace(in_texture.get(), material);
+        return material;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void CanvasMaterialPool::Clear()
+    {
+        m_nextMaterial = 0;
+        m_associations.clear();
+        
+        for (auto& material : m_materials)
         {
-            m_nextMaterial = 0;
-            m_associations.clear();
-            
-            for (auto& material : m_materials)
-            {
-                material->RemoveAllTextures();
-            }
+            material->RemoveAllTextures();
         }
     }
 }

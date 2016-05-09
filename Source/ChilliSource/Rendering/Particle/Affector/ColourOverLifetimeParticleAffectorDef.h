@@ -37,151 +37,148 @@
 
 #include <json/json.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//------------------------------------------------------------------------------
-		/// The definition for a Colour Over Lifetime particle affector. This
-		/// describes a particle effector which will change the colour of a particle 
-		/// from its initial colour to the defined colour over the course of the 
-		/// particles life.
-		///
-		/// A colour over lifetime particle affector contains the following params:
-		///
-		/// "TargetColourProperty": The property describing the target colour.
+    //------------------------------------------------------------------------------
+    /// The definition for a Colour Over Lifetime particle affector. This
+    /// describes a particle effector which will change the colour of a particle 
+    /// from its initial colour to the defined colour over the course of the 
+    /// particles life.
+    ///
+    /// A colour over lifetime particle affector contains the following params:
+    ///
+    /// "TargetColourProperty": The property describing the target colour.
+    ///
+    /// "IntermediateColours": The list of intermediate colours to go through
+    /// before interpolating to the target colour. Each intermediate colour
+    /// has the following properties:
+    ///
+    ///     "ColourProperty": The property describing the intermediate colour.
+    ///
+    ///     "TimeProperty": The property defining the target time for that
+    ///     colour.
+    ///
+    /// "Interpolation": The interpolation curve used to transition from one
+    /// colour to another.
+    ///
+    /// @author Nicolas Tanda
+    //------------------------------------------------------------------------------
+    class ColourOverLifetimeParticleAffectorDef final : public ParticleAffectorDef
+    {
+    public:
+        CS_DECLARE_NAMEDTYPE(ColourOverLifetimeParticleAffectorDef);
+        //------------------------------------------------------------------------------
+        /// Definition of an intermediate colour of a single particle.
         ///
-        /// "IntermediateColours": The list of intermediate colours to go through
-        /// before interpolating to the target colour. Each intermediate colour
-        /// has the following properties:
-        ///
-        ///     "ColourProperty": The property describing the intermediate colour.
-        ///
-        ///     "TimeProperty": The property defining the target time for that
-        ///     colour.
-        ///
-        /// "Interpolation": The interpolation curve used to transition from one
-        /// colour to another.
-		///
-		/// @author Nicolas Tanda
-		//------------------------------------------------------------------------------
-		class ColourOverLifetimeParticleAffectorDef final : public ParticleAffectorDef
-		{
-		public:
-            CS_DECLARE_NAMEDTYPE(ColourOverLifetimeParticleAffectorDef);
-			//------------------------------------------------------------------------------
-            /// Definition of an intermediate colour of a single particle.
-            ///
-            /// @author Nicolas Tanda
-			//------------------------------------------------------------------------------
-            struct IntermediateColour final
-            {
-                ParticlePropertyUPtr<Core::Colour> m_colourProperty;
-                ParticlePropertyUPtr<f32> m_timeProperty;
+        /// @author Nicolas Tanda
+        //------------------------------------------------------------------------------
+        struct IntermediateColour final
+        {
+            ParticlePropertyUPtr<Core::Colour> m_colourProperty;
+            ParticlePropertyUPtr<f32> m_timeProperty;
 
-				//------------------------------------------------------------------------------
-				/// As the move constructor is explicit, the constructor also needs to be.
-				///
-				/// @author Ian Copland
-				//------------------------------------------------------------------------------
-				IntermediateColour() = default;
-				//------------------------------------------------------------------------------
-				/// Visual C++ 12 doesn't support implicit move constructors so for now they 
-				/// need to be manually specified.
-				///
-				/// @author Ian Copland
-				//------------------------------------------------------------------------------
-				IntermediateColour(IntermediateColour&& in_toMove);
-				//------------------------------------------------------------------------------
-				/// Visual C++ 12 doesn't support implicit move assignment operators so for now
-				/// they need to be manually specified.
-				///
-				/// @author Ian Copland
-				//------------------------------------------------------------------------------
-				IntermediateColour& operator=(IntermediateColour&& in_toMove);
-            };
-			//------------------------------------------------------------------------------
-			/// Constructor.
-			///
-			/// @author Ian Copland
-			///
-			/// @param in_targetColour - The property which describes the colour to change 
-			/// to.
-			/// @param in_intermediateColours - [Optional] Intermediate colours to transition
-			/// to between the initial and target colours. 
-			/// @param in_interpolation - [Optional] The function used for interpolation
-			/// between colours. Defaults to linear interpolation.
-			//------------------------------------------------------------------------------
-			ColourOverLifetimeParticleAffectorDef(ParticlePropertyUPtr<Core::Colour> in_targetColour, std::vector<IntermediateColour> in_intermediateColours = std::vector<IntermediateColour>(), 
-				const std::function<f32(f32)>& in_interpolation = Core::Interpolate::Linear);
-			//------------------------------------------------------------------------------
-			/// Constructor. Loads the params for the affector def from the given param 
-			/// dictionary. If the async delegate is not null, then any resource loading 
-			/// will occur as a background task. Once complete the delegate will be called.
-			/// The parameters read from json are described in the class documentation.
-			///
-			/// @author Ian Copland
-			///
-			/// @param in_paramsJson - A json object describing the parameters for the 
-			/// particle emitter def.
-			/// @param in_asyncDelegate - The loaded delegate. If this is supplied any
-			/// resources will be loaded as a background task. Once complete, this delegate 
-			/// will be called.
-			//------------------------------------------------------------------------------
-			ColourOverLifetimeParticleAffectorDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate = nullptr);
-			//------------------------------------------------------------------------------
-			/// Allows querying of whether or not this implements the interface described 
-			/// by the given Id.
-			///
-			/// @author Ian Copland
-			///
-			/// @param in_interfaceId - The interface Id.
-			///
-			/// @return Whether or not the interface is implemented.
-			//------------------------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-			//------------------------------------------------------------------------------
-			/// Creates an instance of the particle affector described by this.
-			///
-			/// @author Ian Copland.
-			///
-			/// @param in_particleArray - The particle array.
-			///
-			/// @return the instance.
-			//------------------------------------------------------------------------------
-            ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const override;
-			//------------------------------------------------------------------------------
+            //------------------------------------------------------------------------------
+            /// As the move constructor is explicit, the constructor also needs to be.
+            ///
             /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            IntermediateColour() = default;
+            //------------------------------------------------------------------------------
+            /// Visual C++ 12 doesn't support implicit move constructors so for now they 
+            /// need to be manually specified.
             ///
-            /// @return A property describing the target colour.
-			//------------------------------------------------------------------------------
-            const ParticleProperty<Core::Colour>* GetTargetColourProperty() const;
-			//------------------------------------------------------------------------------
             /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            IntermediateColour(IntermediateColour&& in_toMove);
+            //------------------------------------------------------------------------------
+            /// Visual C++ 12 doesn't support implicit move assignment operators so for now
+            /// they need to be manually specified.
             ///
-            /// @return The interpolation function used to transition between colours.
-			//------------------------------------------------------------------------------
-            const std::function<f32(f32)>& GetInterpolation() const;
-			//------------------------------------------------------------------------------
-            /// @author Nicolas Tanda
-            ///
-            /// @return An array of intermediate colours
-			//------------------------------------------------------------------------------
-            const std::vector<IntermediateColour>& GetIntermediateColours() const;
-			//------------------------------------------------------------------------------
-			/// Destructor
-			///
-			/// @author Ian Copland.
-			//------------------------------------------------------------------------------
-			virtual ~ColourOverLifetimeParticleAffectorDef() {}
-            
-        private:
-			std::function<f32(f32)> m_interpolation;
-			ParticlePropertyUPtr<Core::Colour> m_targetColourProperty;
-            
-            std::vector<IntermediateColour> m_intermediateColours;
-		};
-	}
+            /// @author Ian Copland
+            //------------------------------------------------------------------------------
+            IntermediateColour& operator=(IntermediateColour&& in_toMove);
+        };
+        //------------------------------------------------------------------------------
+        /// Constructor.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_targetColour - The property which describes the colour to change 
+        /// to.
+        /// @param in_intermediateColours - [Optional] Intermediate colours to transition
+        /// to between the initial and target colours. 
+        /// @param in_interpolation - [Optional] The function used for interpolation
+        /// between colours. Defaults to linear interpolation.
+        //------------------------------------------------------------------------------
+        ColourOverLifetimeParticleAffectorDef(ParticlePropertyUPtr<Core::Colour> in_targetColour, std::vector<IntermediateColour> in_intermediateColours = std::vector<IntermediateColour>(), 
+            const std::function<f32(f32)>& in_interpolation = Core::Interpolate::Linear);
+        //------------------------------------------------------------------------------
+        /// Constructor. Loads the params for the affector def from the given param 
+        /// dictionary. If the async delegate is not null, then any resource loading 
+        /// will occur as a background task. Once complete the delegate will be called.
+        /// The parameters read from json are described in the class documentation.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_paramsJson - A json object describing the parameters for the 
+        /// particle emitter def.
+        /// @param in_asyncDelegate - The loaded delegate. If this is supplied any
+        /// resources will be loaded as a background task. Once complete, this delegate 
+        /// will be called.
+        //------------------------------------------------------------------------------
+        ColourOverLifetimeParticleAffectorDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate = nullptr);
+        //------------------------------------------------------------------------------
+        /// Allows querying of whether or not this implements the interface described 
+        /// by the given Id.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param in_interfaceId - The interface Id.
+        ///
+        /// @return Whether or not the interface is implemented.
+        //------------------------------------------------------------------------------
+        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        //------------------------------------------------------------------------------
+        /// Creates an instance of the particle affector described by this.
+        ///
+        /// @author Ian Copland.
+        ///
+        /// @param in_particleArray - The particle array.
+        ///
+        /// @return the instance.
+        //------------------------------------------------------------------------------
+        ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const override;
+        //------------------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return A property describing the target colour.
+        //------------------------------------------------------------------------------
+        const ParticleProperty<Core::Colour>* GetTargetColourProperty() const;
+        //------------------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The interpolation function used to transition between colours.
+        //------------------------------------------------------------------------------
+        const std::function<f32(f32)>& GetInterpolation() const;
+        //------------------------------------------------------------------------------
+        /// @author Nicolas Tanda
+        ///
+        /// @return An array of intermediate colours
+        //------------------------------------------------------------------------------
+        const std::vector<IntermediateColour>& GetIntermediateColours() const;
+        //------------------------------------------------------------------------------
+        /// Destructor
+        ///
+        /// @author Ian Copland.
+        //------------------------------------------------------------------------------
+        virtual ~ColourOverLifetimeParticleAffectorDef() {}
+        
+    private:
+        std::function<f32(f32)> m_interpolation;
+        ParticlePropertyUPtr<Core::Colour> m_targetColourProperty;
+        
+        std::vector<IntermediateColour> m_intermediateColours;
+    };
 }
 
 #endif

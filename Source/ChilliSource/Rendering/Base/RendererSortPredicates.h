@@ -34,57 +34,54 @@
 
 #include <vector>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
+    //---------------------------------------------------------
+    /// An abstract base for classes representing different ordering operations
+    //---------------------------------------------------------
+    class RendererSortPredicate
     {
-		//---------------------------------------------------------
-		/// An abstract base for classes representing different ordering operations
-		//---------------------------------------------------------
-		class RendererSortPredicate
+    public:
+        virtual ~RendererSortPredicate(){}
+        virtual void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) = 0;
+        virtual bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const = 0;
+        bool operator()(const RenderComponent* p1, const RenderComponent* p2) const
         {
-		public:
-			virtual ~RendererSortPredicate(){}
-			virtual void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) = 0;
-			virtual bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const = 0;
-			bool operator()(const RenderComponent* p1, const RenderComponent* p2) const
-            {
-				return SortItem(p1, p2);
-			}
-		};
+            return SortItem(p1, p2);
+        }
+    };
 
-		//---------------------------------------------------------
-		/// This class doesn't really sort objects at all
-		//---------------------------------------------------------
-		class NullSortPredicate final : public RendererSortPredicate
-        {
-		public:
-            void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) override {}
-            bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const override {return false;}
-		};
-		
-		//---------------------------------------------------------
-		/// This class sorts objects in order of far to near projected screen Z depth
-		//---------------------------------------------------------
-		class BackToFrontSortPredicate final : public RendererSortPredicate
-        {
-		public:
-            void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) override;
-            bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const override;
-		private:
-			Core::Matrix4 mCameraViewProj;
-		};
-        
-        //---------------------------------------------------------
-		/// This class sorts objects by material pointer
-		//---------------------------------------------------------
-		class MaterialSortPredicate final : public RendererSortPredicate
-        {
-		public:
-            void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) override {}
-            bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const override;
-		};
-	}
+    //---------------------------------------------------------
+    /// This class doesn't really sort objects at all
+    //---------------------------------------------------------
+    class NullSortPredicate final : public RendererSortPredicate
+    {
+    public:
+        void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) override {}
+        bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const override {return false;}
+    };
+    
+    //---------------------------------------------------------
+    /// This class sorts objects in order of far to near projected screen Z depth
+    //---------------------------------------------------------
+    class BackToFrontSortPredicate final : public RendererSortPredicate
+    {
+    public:
+        void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) override;
+        bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const override;
+    private:
+        Core::Matrix4 mCameraViewProj;
+    };
+    
+    //---------------------------------------------------------
+    /// This class sorts objects by material pointer
+    //---------------------------------------------------------
+    class MaterialSortPredicate final : public RendererSortPredicate
+    {
+    public:
+        void PrepareForSort(std::vector<RenderComponent*> * inpRenderables = nullptr) override {}
+        bool SortItem(const RenderComponent* p1, const RenderComponent* p2) const override;
+    };
 }
 
 #endif

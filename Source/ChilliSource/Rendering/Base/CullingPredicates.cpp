@@ -30,19 +30,16 @@
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 #include <ChilliSource/Rendering/Base/RenderComponent.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Rendering
+    bool ViewportCullPredicate::CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const
     {
-        bool ViewportCullPredicate::CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const
-        {
-            return false;
-        }
-        
-        bool FrustumCullPredicate::CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const
-        {
-            return !inpCamera->GetFrustum().SphereCullTest(inpItem->GetBoundingSphere());
-        }
+        return false;
+    }
+    
+    bool FrustumCullPredicate::CullItem(CameraComponent* inpCamera, RenderComponent* inpItem) const
+    {
+        return !inpCamera->GetFrustum().SphereCullTest(inpItem->GetBoundingSphere());
     }
 }
 

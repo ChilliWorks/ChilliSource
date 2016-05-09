@@ -31,49 +31,46 @@
 #include <ChilliSource/Rendering/Particle/Affector/AccelerationParticleAffector.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		CS_DEFINE_NAMEDTYPE(AccelerationParticleAffectorDef);
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		AccelerationParticleAffectorDef::AccelerationParticleAffectorDef(ParticlePropertyUPtr<Core::Vector3> in_accelerationProperty)
-			: m_accelerationProperty(std::move(in_accelerationProperty))
-		{
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		AccelerationParticleAffectorDef::AccelerationParticleAffectorDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate)
-		{
-			//Acceleration
-			Json::Value jsonValue = in_paramsJson.get("AccelerationProperty", Json::nullValue);
-			CS_ASSERT(jsonValue.isNull() == false, "No acceleration property provided.");
-			m_accelerationProperty = ParticlePropertyFactory::CreateProperty<Core::Vector3>(jsonValue);
+    CS_DEFINE_NAMEDTYPE(AccelerationParticleAffectorDef);
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    AccelerationParticleAffectorDef::AccelerationParticleAffectorDef(ParticlePropertyUPtr<Core::Vector3> in_accelerationProperty)
+        : m_accelerationProperty(std::move(in_accelerationProperty))
+    {
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    AccelerationParticleAffectorDef::AccelerationParticleAffectorDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate)
+    {
+        //Acceleration
+        Json::Value jsonValue = in_paramsJson.get("AccelerationProperty", Json::nullValue);
+        CS_ASSERT(jsonValue.isNull() == false, "No acceleration property provided.");
+        m_accelerationProperty = ParticlePropertyFactory::CreateProperty<Core::Vector3>(jsonValue);
 
-			//call the loaded delegate if required.
-			if (in_asyncDelegate != nullptr)
-			{
-				in_asyncDelegate(this);
-			}
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		bool AccelerationParticleAffectorDef::IsA(Core::InterfaceIDType in_interfaceId) const
-		{
-			return (ParticleAffectorDef::InterfaceID == in_interfaceId || AccelerationParticleAffectorDef::InterfaceID == in_interfaceId);
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		ParticleAffectorUPtr AccelerationParticleAffectorDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
-		{
-			return ParticleAffectorUPtr(new AccelerationParticleAffector(this, in_particleArray));
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		const ParticleProperty<Core::Vector3>* AccelerationParticleAffectorDef::GetAccelerationProperty() const
-		{
-			return m_accelerationProperty.get();
-		}
-	}
+        //call the loaded delegate if required.
+        if (in_asyncDelegate != nullptr)
+        {
+            in_asyncDelegate(this);
+        }
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    bool AccelerationParticleAffectorDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    {
+        return (ParticleAffectorDef::InterfaceID == in_interfaceId || AccelerationParticleAffectorDef::InterfaceID == in_interfaceId);
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    ParticleAffectorUPtr AccelerationParticleAffectorDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
+    {
+        return ParticleAffectorUPtr(new AccelerationParticleAffector(this, in_particleArray));
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    const ParticleProperty<Core::Vector3>* AccelerationParticleAffectorDef::GetAccelerationProperty() const
+    {
+        return m_accelerationProperty.get();
+    }
 }

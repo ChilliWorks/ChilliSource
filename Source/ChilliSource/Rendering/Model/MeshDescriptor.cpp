@@ -28,38 +28,35 @@
 
 #include <ChilliSource/Rendering/Model/MeshDescriptor.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//-------------------------------------------------------------------------
-		/// Describes the features used in this mesh.
-		//-------------------------------------------------------------------------
-		MeshFeatureDescriptor::MeshFeatureDescriptor()
-		{
-			mbHasAnimationData = false;
-            mbHasMaterial = false;
-            mbHasTexture = false;
-		}
-		//-------------------------------------------------------------------------
-		/// Container for information required to build a sub-mesh. 
-		//-------------------------------------------------------------------------
-		SubMeshDescriptor::SubMeshDescriptor()
-		{
-			mudwNumVertices = 0;
-			mudwNumIndices = 0;
-			mvMinBounds = CSCore::Vector3(0.0f, 0.0f, 0.0f);
-			mvMaxBounds = CSCore::Vector3(0.0f, 0.0f, 0.0f);
-			mpVertexData = nullptr;
-			mpIndexData = nullptr;
-            ePrimitiveType = PrimitiveType::k_tri;
-		}
-		//-------------------------------------------------------------------------
-		/// Container for information required to build a mesh.
-		//-------------------------------------------------------------------------
-		MeshDescriptor::MeshDescriptor()
-		{
-			mudwIndexSize = 0;
-		}
-	}
+    //-------------------------------------------------------------------------
+    /// Describes the features used in this mesh.
+    //-------------------------------------------------------------------------
+    MeshFeatureDescriptor::MeshFeatureDescriptor()
+    {
+        mbHasAnimationData = false;
+        mbHasMaterial = false;
+        mbHasTexture = false;
+    }
+    //-------------------------------------------------------------------------
+    /// Container for information required to build a sub-mesh. 
+    //-------------------------------------------------------------------------
+    SubMeshDescriptor::SubMeshDescriptor()
+    {
+        mudwNumVertices = 0;
+        mudwNumIndices = 0;
+        mvMinBounds = CSCore::Vector3(0.0f, 0.0f, 0.0f);
+        mvMaxBounds = CSCore::Vector3(0.0f, 0.0f, 0.0f);
+        mpVertexData = nullptr;
+        mpIndexData = nullptr;
+        ePrimitiveType = PrimitiveType::k_tri;
+    }
+    //-------------------------------------------------------------------------
+    /// Container for information required to build a mesh.
+    //-------------------------------------------------------------------------
+    MeshDescriptor::MeshDescriptor()
+    {
+        mudwIndexSize = 0;
+    }
 }

@@ -32,128 +32,125 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Resource/ResourceProvider.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-        //-------------------------------------------------------
-        /// Factory loader for creating cubemap resources
-        /// from files. This loader is responsible for loading the
-        /// image data for the 6 faces and building the texture.
+    //-------------------------------------------------------
+    /// Factory loader for creating cubemap resources
+    /// from files. This loader is responsible for loading the
+    /// image data for the 6 faces and building the texture.
+    ///
+    /// @author S Downie
+    //-------------------------------------------------------
+    class CubemapProvider final : public Core::ResourceProvider
+    {
+    public:
+        
+        CS_DECLARE_NAMEDTYPE(CubemapProvider);
+        
+        //----------------------------------------------------------------------------
+        /// Called when the system is initialised. Retrieves the image providers
+        /// to delegate image loading to
         ///
         /// @author S Downie
+        //----------------------------------------------------------------------------
+        void PostCreate();
+        //-------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Interface to compare
+        ///
+        /// @return Whether the object implements the given interface
+        //-------------------------------------------------------------------------
+        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        //----------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The resource type this provider loads
+        //----------------------------------------------------------------------------
+        Core::InterfaceIDType GetResourceType() const override;
+        //----------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Extension to compare
+        ///
+        /// @return Whether the object can create a resource with the given extension
+        //----------------------------------------------------------------------------
+        bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
+        //----------------------------------------------------------------------------
+        /// Loads the 6 face images and generate the cubemap via the output resource.
+        /// Check the resource load state for success or failure.
+        ///
+        /// Note: The path given is the path to a theoretical image and the face
+        /// indices are appended i.e. myCubemap.png is actually myCubemap1.png,
+        /// myCubemap2.png, etc.
+        ///
+        /// @author S Downie
+        ///
+        /// @param Location to load from
+        /// @param File path
+        /// @param Options to customise the creation
+        /// @param [Out] Resource object
+        //----------------------------------------------------------------------------
+        void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
+        //----------------------------------------------------------------------------
+        /// Loads the 6 face images on a background thread and generate the cubemap via the output resource.
+        /// Delegate is called on completion. Check the resource load state for success or failure
+        ///
+        /// Note: The path given is the path to a theoretical image and the face
+        /// indices are appended i.e. myCubemap.png is actually myCubemap1.png,
+        /// myCubemap2.png, etc.
+        ///
+        /// @author S Downie
+        ///
+        /// @param Location to load from
+        /// @param File path
+        /// @param Options to customise the creation
+        /// @param Completion delegate
+        /// @param [Out] Resource object
+        //----------------------------------------------------------------------------
+        void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
+        //----------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @retrun Default options for cubemap loading
+        //----------------------------------------------------
+        Core::IResourceOptionsBaseCSPtr GetDefaultOptions() const override;
+        
+    private:
+        friend class Core::Application;
         //-------------------------------------------------------
-		class CubemapProvider final : public Core::ResourceProvider
-		{
-		public:
-            
-            CS_DECLARE_NAMEDTYPE(CubemapProvider);
-            
-            //----------------------------------------------------------------------------
-            /// Called when the system is initialised. Retrieves the image providers
-            /// to delegate image loading to
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------
-            void PostCreate();
-			//-------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @param Interface to compare
-            ///
-			/// @return Whether the object implements the given interface
-			//-------------------------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-			//----------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @return The resource type this provider loads
-			//----------------------------------------------------------------------------
-			Core::InterfaceIDType GetResourceType() const override;
-			//----------------------------------------------------------------------------
-			/// @author S Downie
-			///
-			/// @param Extension to compare
-            ///
-			/// @return Whether the object can create a resource with the given extension
-			//----------------------------------------------------------------------------
-			bool CanCreateResourceWithFileExtension(const std::string& in_extension) const override;
-            //----------------------------------------------------------------------------
-			/// Loads the 6 face images and generate the cubemap via the output resource.
-            /// Check the resource load state for success or failure.
-            ///
-            /// Note: The path given is the path to a theoretical image and the face
-            /// indices are appended i.e. myCubemap.png is actually myCubemap1.png,
-            /// myCubemap2.png, etc.
-            ///
-            /// @author S Downie
-			///
-			/// @param Location to load from
-			/// @param File path
-            /// @param Options to customise the creation
-			/// @param [Out] Resource object
-			//----------------------------------------------------------------------------
-			void CreateResourceFromFile(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceSPtr& out_resource) override;
-            //----------------------------------------------------------------------------
-			/// Loads the 6 face images on a background thread and generate the cubemap via the output resource.
-            /// Delegate is called on completion. Check the resource load state for success or failure
-            ///
-            /// Note: The path given is the path to a theoretical image and the face
-            /// indices are appended i.e. myCubemap.png is actually myCubemap1.png,
-            /// myCubemap2.png, etc.
-            ///
-            /// @author S Downie
-			///
-			/// @param Location to load from
-			/// @param File path
-            /// @param Options to customise the creation
-            /// @param Completion delegate
-			/// @param [Out] Resource object
-			//----------------------------------------------------------------------------
-			void CreateResourceFromFileAsync(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource) override;
-            //----------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @retrun Default options for cubemap loading
-            //----------------------------------------------------
-            Core::IResourceOptionsBaseCSPtr GetDefaultOptions() const override;
-            
-		private:
-            friend class Core::Application;
-            //-------------------------------------------------------
-            /// Factory method
-            ///
-            /// @author S Downie
-            ///
-            /// @return New provider with ownership transferred
-            //-------------------------------------------------------
-            static CubemapProviderUPtr Create();
-            //----------------------------------------------------------------------------
-            /// Private constructor to force use of factory method
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------------------------
-            CubemapProvider() = default;
-            //----------------------------------------------------------------------------
-			/// Does the heavy lifting for the 2 create methods. The building of the cubemap
-            /// is always done on the main thread
-            ///
-            /// @author S Downie
-			///
-			/// @param Location to load from
-			/// @param Filename
-            /// @param Options to customise the creation
-            /// @param Completion delegate
-			/// @param [Out] Resource object
-			//----------------------------------------------------------------------------
-			void LoadCubemap(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
-            
-        private:
-            
-            std::vector<Core::ResourceProvider*> m_imageProviders;
-            static const Core::IResourceOptionsBaseCSPtr s_defaultOptions;
-		};
-	}
+        /// Factory method
+        ///
+        /// @author S Downie
+        ///
+        /// @return New provider with ownership transferred
+        //-------------------------------------------------------
+        static CubemapProviderUPtr Create();
+        //----------------------------------------------------------------------------
+        /// Private constructor to force use of factory method
+        ///
+        /// @author S Downie
+        //----------------------------------------------------------------------------
+        CubemapProvider() = default;
+        //----------------------------------------------------------------------------
+        /// Does the heavy lifting for the 2 create methods. The building of the cubemap
+        /// is always done on the main thread
+        ///
+        /// @author S Downie
+        ///
+        /// @param Location to load from
+        /// @param Filename
+        /// @param Options to customise the creation
+        /// @param Completion delegate
+        /// @param [Out] Resource object
+        //----------------------------------------------------------------------------
+        void LoadCubemap(Core::StorageLocation in_location, const std::string& in_filePath, const Core::IResourceOptionsBaseCSPtr& in_options, const Core::ResourceProvider::AsyncLoadDelegate& in_delegate, const Core::ResourceSPtr& out_resource);
+        
+    private:
+        
+        std::vector<Core::ResourceProvider*> m_imageProviders;
+        static const Core::IResourceOptionsBaseCSPtr s_defaultOptions;
+    };
 }
 
 #endif

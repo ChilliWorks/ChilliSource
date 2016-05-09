@@ -30,32 +30,29 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Rendering
+    //-------------------------------------------------------------------
+    //-------------------------------------------------------------------
+    HorizontalTextJustification ParseHorizontalTextJustification(const std::string& in_string)
     {
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        HorizontalTextJustification ParseHorizontalTextJustification(const std::string& in_string)
+        std::string verticalJustificationString = in_string;
+        Core::StringUtils::ToLowerCase(verticalJustificationString);
+        
+        if (verticalJustificationString == "left")
         {
-            std::string verticalJustificationString = in_string;
-            Core::StringUtils::ToLowerCase(verticalJustificationString);
-            
-            if (verticalJustificationString == "left")
-            {
-                return Rendering::HorizontalTextJustification::k_left;
-            }
-            else if (verticalJustificationString == "centre")
-            {
-                return Rendering::HorizontalTextJustification::k_centre;
-            }
-            else if (verticalJustificationString == "right")
-            {
-                return Rendering::HorizontalTextJustification::k_right;
-            }
-            
-            CS_LOG_FATAL("Invalid vertical justification.");
+            return Rendering::HorizontalTextJustification::k_left;
+        }
+        else if (verticalJustificationString == "centre")
+        {
             return Rendering::HorizontalTextJustification::k_centre;
         }
+        else if (verticalJustificationString == "right")
+        {
+            return Rendering::HorizontalTextJustification::k_right;
+        }
+        
+        CS_LOG_FATAL("Invalid vertical justification.");
+        return Rendering::HorizontalTextJustification::k_centre;
     }
 }

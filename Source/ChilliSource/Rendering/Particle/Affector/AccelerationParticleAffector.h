@@ -34,61 +34,58 @@
 #include <ChilliSource/Core/Container/dynamic_array.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//---------------------------------------------------------------------
-		/// A particle affector which will change the speed of particles over
-		/// time.
-		///
-		/// @author Ian Copland
-		//---------------------------------------------------------------------
-		class AccelerationParticleAffector final : public ParticleAffector
-		{
-		public:
-			//----------------------------------------------------------------
-			/// Generates an acceleration for the activated particle.
-			///
-			/// @author Ian Copland
-			///
-            /// @param The index of the particle to activate.
-			/// @param The current normalised (0.0 to 1.0) progress through
-            /// playback of the particle effect.
-			//----------------------------------------------------------------
-			void ActivateParticle(u32 in_index, f32 in_effectProgress) override;
-			//----------------------------------------------------------------
-			/// Accelerates all active particles.
-			///
-			/// @author Ian Copland
-            ///
-            /// @param The delta time.
-            /// @param The current normalised (0.0 to 1.0) progress through
-            /// playback of the particle effect.
-			//----------------------------------------------------------------
-			void AffectParticles(f32 in_deltaTime, f32 in_effectProgress) override;
-			//----------------------------------------------------------------
-			/// Destructor
-			///
-			/// @author Ian Copland
-			//----------------------------------------------------------------
-			virtual ~AccelerationParticleAffector() {};
-		private:
-			friend class AccelerationParticleAffectorDef;
-			//----------------------------------------------------------------
-			/// Constructor.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The particle affector definition.
-			/// @param The particle array.
-			//----------------------------------------------------------------
-			AccelerationParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
+    //---------------------------------------------------------------------
+    /// A particle affector which will change the speed of particles over
+    /// time.
+    ///
+    /// @author Ian Copland
+    //---------------------------------------------------------------------
+    class AccelerationParticleAffector final : public ParticleAffector
+    {
+    public:
+        //----------------------------------------------------------------
+        /// Generates an acceleration for the activated particle.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The index of the particle to activate.
+        /// @param The current normalised (0.0 to 1.0) progress through
+        /// playback of the particle effect.
+        //----------------------------------------------------------------
+        void ActivateParticle(u32 in_index, f32 in_effectProgress) override;
+        //----------------------------------------------------------------
+        /// Accelerates all active particles.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The delta time.
+        /// @param The current normalised (0.0 to 1.0) progress through
+        /// playback of the particle effect.
+        //----------------------------------------------------------------
+        void AffectParticles(f32 in_deltaTime, f32 in_effectProgress) override;
+        //----------------------------------------------------------------
+        /// Destructor
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------------------
+        virtual ~AccelerationParticleAffector() {};
+    private:
+        friend class AccelerationParticleAffectorDef;
+        //----------------------------------------------------------------
+        /// Constructor.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The particle affector definition.
+        /// @param The particle array.
+        //----------------------------------------------------------------
+        AccelerationParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
 
-			const AccelerationParticleAffectorDef* m_accelerationAffectorDef = nullptr;
-			Core::dynamic_array<Core::Vector3> m_particleAcceleration;
-		};
-	}
+        const AccelerationParticleAffectorDef* m_accelerationAffectorDef = nullptr;
+        Core::dynamic_array<Core::Vector3> m_particleAcceleration;
+    };
 }
 
 #endif

@@ -33,57 +33,54 @@
 #include <ChilliSource/Core/Math/Random.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticleProperty.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace Rendering
+    //------------------------------------------------------------------------------
+    /// A particle property for getting a random value between the given lower and
+    /// upper value. If the value has multiple components (i.e Vector2, Matrix4,
+    /// Colour, etc) then each component will be randomised individually.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------------
+    template <typename TPropertyType> class ComponentwiseRandomConstantParticleProperty final : public ParticleProperty<TPropertyType>
     {
+    public:
         //------------------------------------------------------------------------------
-        /// A particle property for getting a random value between the given lower and
-        /// upper value. If the value has multiple components (i.e Vector2, Matrix4,
-        /// Colour, etc) then each component will be randomised individually.
+        /// Constructor.
         ///
         /// @author Ian Copland
+        ///
+        /// @param The lower value.
+        /// @param The upper value.
         //------------------------------------------------------------------------------
-        template <typename TPropertyType> class ComponentwiseRandomConstantParticleProperty final : public ParticleProperty<TPropertyType>
-        {
-        public:
-            //------------------------------------------------------------------------------
-            /// Constructor.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The lower value.
-            /// @param The upper value.
-            //------------------------------------------------------------------------------
-            ComponentwiseRandomConstantParticleProperty(TPropertyType in_lowerValue, TPropertyType in_upperValue);
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @param The normalised (0.0 - 1.0) particle effect playback progress. This is
-            /// ignored for a random property.
-            ///
-            /// @return a random value between the lower and upper values the property was
-            /// created with.
-            //------------------------------------------------------------------------------
-            TPropertyType GenerateValue(f32 in_playbackProgress) const override;
-            
-        private:
-            TPropertyType m_lowerValue;
-            TPropertyType m_upperValue;
-        };
+        ComponentwiseRandomConstantParticleProperty(TPropertyType in_lowerValue, TPropertyType in_upperValue);
+        //------------------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @param The normalised (0.0 - 1.0) particle effect playback progress. This is
+        /// ignored for a random property.
+        ///
+        /// @return a random value between the lower and upper values the property was
+        /// created with.
+        //------------------------------------------------------------------------------
+        TPropertyType GenerateValue(f32 in_playbackProgress) const override;
         
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        template <typename TPropertyType> ComponentwiseRandomConstantParticleProperty<TPropertyType>::ComponentwiseRandomConstantParticleProperty(TPropertyType in_lowerValue, TPropertyType in_upperValue)
-            : m_lowerValue(in_lowerValue), m_upperValue(in_upperValue)
-        {
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        template <typename TPropertyType> TPropertyType ComponentwiseRandomConstantParticleProperty<TPropertyType>::GenerateValue(f32 in_playbackProgress) const
-        {
-            return Core::Random::GenerateComponentwise(m_lowerValue, m_upperValue);
-        }
+    private:
+        TPropertyType m_lowerValue;
+        TPropertyType m_upperValue;
+    };
+    
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    template <typename TPropertyType> ComponentwiseRandomConstantParticleProperty<TPropertyType>::ComponentwiseRandomConstantParticleProperty(TPropertyType in_lowerValue, TPropertyType in_upperValue)
+        : m_lowerValue(in_lowerValue), m_upperValue(in_upperValue)
+    {
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    template <typename TPropertyType> TPropertyType ComponentwiseRandomConstantParticleProperty<TPropertyType>::GenerateValue(f32 in_playbackProgress) const
+    {
+        return Core::Random::GenerateComponentwise(m_lowerValue, m_upperValue);
     }
 }
 

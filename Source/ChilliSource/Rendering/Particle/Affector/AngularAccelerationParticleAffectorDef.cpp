@@ -31,49 +31,46 @@
 #include <ChilliSource/Rendering/Particle/Affector/AngularAccelerationParticleAffector.h>
 #include <ChilliSource/Rendering/Particle/Property/ParticlePropertyFactory.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		CS_DEFINE_NAMEDTYPE(AngularAccelerationParticleAffectorDef);
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		AngularAccelerationParticleAffectorDef::AngularAccelerationParticleAffectorDef(ParticlePropertyUPtr<f32> in_angularAccelerationProperty)
-			: m_angularAccelerationProperty(std::move(in_angularAccelerationProperty))
-		{
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		AngularAccelerationParticleAffectorDef::AngularAccelerationParticleAffectorDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate)
-		{
-			//Angular Acceleration
-			Json::Value jsonValue = in_paramsJson.get("AngularAccelerationProperty", Json::nullValue);
-			CS_ASSERT(jsonValue.isNull() == false, "No angular acceleration property provided.");
-			m_angularAccelerationProperty = ParticlePropertyFactory::CreateProperty<f32>(jsonValue);
+    CS_DEFINE_NAMEDTYPE(AngularAccelerationParticleAffectorDef);
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    AngularAccelerationParticleAffectorDef::AngularAccelerationParticleAffectorDef(ParticlePropertyUPtr<f32> in_angularAccelerationProperty)
+        : m_angularAccelerationProperty(std::move(in_angularAccelerationProperty))
+    {
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    AngularAccelerationParticleAffectorDef::AngularAccelerationParticleAffectorDef(const Json::Value& in_paramsJson, const LoadedDelegate& in_asyncDelegate)
+    {
+        //Angular Acceleration
+        Json::Value jsonValue = in_paramsJson.get("AngularAccelerationProperty", Json::nullValue);
+        CS_ASSERT(jsonValue.isNull() == false, "No angular acceleration property provided.");
+        m_angularAccelerationProperty = ParticlePropertyFactory::CreateProperty<f32>(jsonValue);
 
-			//call the loaded delegate if required.
-			if (in_asyncDelegate != nullptr)
-			{
-				in_asyncDelegate(this);
-			}
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		bool AngularAccelerationParticleAffectorDef::IsA(Core::InterfaceIDType in_interfaceId) const
-		{
-			return (ParticleAffectorDef::InterfaceID == in_interfaceId || AngularAccelerationParticleAffectorDef::InterfaceID == in_interfaceId);
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		ParticleAffectorUPtr AngularAccelerationParticleAffectorDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
-		{
-			return ParticleAffectorUPtr(new AngularAccelerationParticleAffector(this, in_particleArray));
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		const ParticleProperty<f32>* AngularAccelerationParticleAffectorDef::GetAngularAccelerationProperty() const
-		{
-			return m_angularAccelerationProperty.get();
-		}
-	}
+        //call the loaded delegate if required.
+        if (in_asyncDelegate != nullptr)
+        {
+            in_asyncDelegate(this);
+        }
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    bool AngularAccelerationParticleAffectorDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    {
+        return (ParticleAffectorDef::InterfaceID == in_interfaceId || AngularAccelerationParticleAffectorDef::InterfaceID == in_interfaceId);
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    ParticleAffectorUPtr AngularAccelerationParticleAffectorDef::CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const
+    {
+        return ParticleAffectorUPtr(new AngularAccelerationParticleAffector(this, in_particleArray));
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    const ParticleProperty<f32>* AngularAccelerationParticleAffectorDef::GetAngularAccelerationProperty() const
+    {
+        return m_angularAccelerationProperty.get();
+    }
 }

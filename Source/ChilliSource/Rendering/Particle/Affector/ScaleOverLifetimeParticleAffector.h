@@ -34,74 +34,71 @@
 #include <ChilliSource/Core/Container/dynamic_array.h>
 #include <ChilliSource/Rendering/Particle/Affector/ParticleAffector.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//---------------------------------------------------------------------
-		/// A particle affector which will change the size of particles over
-		/// its lifetime by the calculated scale factor.
-		///
-		/// @author Ian Copland
-		//---------------------------------------------------------------------
-		class ScaleOverLifetimeParticleAffector final : public ParticleAffector
-		{
-		public:
-			//----------------------------------------------------------------
-			/// Stores the initial size and generates the scale factor for the
-			/// activated particle so it can be used to generate the 
-			/// interpolated size during updates.
-			///
-			/// @author Ian Copland
-            ///
-            /// @param The index of the particle to activate.
-            /// @param The current normalised (0.0 to 1.0) progress through
-            /// playback of the particle effect.
-			//----------------------------------------------------------------
-			void ActivateParticle(u32 in_index, f32 in_effectProgress) override;
-			//----------------------------------------------------------------
-			/// Updates the size of each particle.
-			///
-			/// @author Ian Copland
-            ///
-            /// @param The delta time.
-            /// @param The current normalised (0.0 to 1.0) progress through
-            /// playback of the particle effect.
-			//----------------------------------------------------------------
-			void AffectParticles(f32 in_deltaTime, f32 in_effectProgress) override;
-			//----------------------------------------------------------------
-			/// Destructor
-			///
-			/// @author Ian Copland
-			//----------------------------------------------------------------
-			virtual ~ScaleOverLifetimeParticleAffector() {};
-		private:
-			friend class ScaleOverLifetimeParticleAffectorDef;
-			//----------------------------------------------------------------
-			/// Constructor.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The particle affector definition.
-			/// @param The particle array.
-			//----------------------------------------------------------------
-			ScaleOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
-			//----------------------------------------------------------------
-			/// A container for the initial scale and scale factor of a single 
-			/// particle.
-			///
-			/// @author Ian Copland.
-			//----------------------------------------------------------------
-			struct ScaleData
-			{
-				Core::Vector2 m_initialScale;
-				Core::Vector2 m_targetScale;
-			};
+    //---------------------------------------------------------------------
+    /// A particle affector which will change the size of particles over
+    /// its lifetime by the calculated scale factor.
+    ///
+    /// @author Ian Copland
+    //---------------------------------------------------------------------
+    class ScaleOverLifetimeParticleAffector final : public ParticleAffector
+    {
+    public:
+        //----------------------------------------------------------------
+        /// Stores the initial size and generates the scale factor for the
+        /// activated particle so it can be used to generate the 
+        /// interpolated size during updates.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The index of the particle to activate.
+        /// @param The current normalised (0.0 to 1.0) progress through
+        /// playback of the particle effect.
+        //----------------------------------------------------------------
+        void ActivateParticle(u32 in_index, f32 in_effectProgress) override;
+        //----------------------------------------------------------------
+        /// Updates the size of each particle.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The delta time.
+        /// @param The current normalised (0.0 to 1.0) progress through
+        /// playback of the particle effect.
+        //----------------------------------------------------------------
+        void AffectParticles(f32 in_deltaTime, f32 in_effectProgress) override;
+        //----------------------------------------------------------------
+        /// Destructor
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------------------
+        virtual ~ScaleOverLifetimeParticleAffector() {};
+    private:
+        friend class ScaleOverLifetimeParticleAffectorDef;
+        //----------------------------------------------------------------
+        /// Constructor.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The particle affector definition.
+        /// @param The particle array.
+        //----------------------------------------------------------------
+        ScaleOverLifetimeParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray);
+        //----------------------------------------------------------------
+        /// A container for the initial scale and scale factor of a single 
+        /// particle.
+        ///
+        /// @author Ian Copland.
+        //----------------------------------------------------------------
+        struct ScaleData
+        {
+            Core::Vector2 m_initialScale;
+            Core::Vector2 m_targetScale;
+        };
 
-			const ScaleOverLifetimeParticleAffectorDef* m_scaleOverLifetimeAffectorDef = nullptr;
-			Core::dynamic_array<ScaleData> m_particleScaleData;
-		};
-	}
+        const ScaleOverLifetimeParticleAffectorDef* m_scaleOverLifetimeAffectorDef = nullptr;
+        Core::dynamic_array<ScaleData> m_particleScaleData;
+    };
 }
 
 #endif

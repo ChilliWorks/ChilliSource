@@ -33,38 +33,35 @@
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
 #include <ChilliSource/Rendering/Particle/Affector/AccelerationParticleAffectorDef.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		AccelerationParticleAffector::AccelerationParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray)
-			: ParticleAffector(in_affectorDef, in_particleArray), m_particleAcceleration(in_particleArray->size())
-		{
-			//This can only be created by the AccelerationParticleAffectorDef so this is safe.
-			m_accelerationAffectorDef = static_cast<const AccelerationParticleAffectorDef*>(in_affectorDef);
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		void AccelerationParticleAffector::ActivateParticle(u32 in_index, f32 in_effectProgress)
-		{
-			CS_ASSERT(in_index >= 0 && in_index < m_particleAcceleration.size(), "Index out of bounds!");
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    AccelerationParticleAffector::AccelerationParticleAffector(const ParticleAffectorDef* in_affectorDef, Core::dynamic_array<Particle>* in_particleArray)
+        : ParticleAffector(in_affectorDef, in_particleArray), m_particleAcceleration(in_particleArray->size())
+    {
+        //This can only be created by the AccelerationParticleAffectorDef so this is safe.
+        m_accelerationAffectorDef = static_cast<const AccelerationParticleAffectorDef*>(in_affectorDef);
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void AccelerationParticleAffector::ActivateParticle(u32 in_index, f32 in_effectProgress)
+    {
+        CS_ASSERT(in_index >= 0 && in_index < m_particleAcceleration.size(), "Index out of bounds!");
 
-			m_particleAcceleration[in_index] = m_accelerationAffectorDef->GetAccelerationProperty()->GenerateValue(in_effectProgress);
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		void AccelerationParticleAffector::AffectParticles(f32 in_deltaTime, f32 in_effectProgress)
-		{
-			Core::dynamic_array<Particle>* particleArray = GetParticleArray();
-			for (u32 i = 0; i < particleArray->size(); ++i)
-			{
-				Particle& particle = particleArray->at(i);
-				Core::Vector3& acceleration = m_particleAcceleration[i];
+        m_particleAcceleration[in_index] = m_accelerationAffectorDef->GetAccelerationProperty()->GenerateValue(in_effectProgress);
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void AccelerationParticleAffector::AffectParticles(f32 in_deltaTime, f32 in_effectProgress)
+    {
+        Core::dynamic_array<Particle>* particleArray = GetParticleArray();
+        for (u32 i = 0; i < particleArray->size(); ++i)
+        {
+            Particle& particle = particleArray->at(i);
+            Core::Vector3& acceleration = m_particleAcceleration[i];
 
-				particle.m_velocity += acceleration * in_deltaTime;
-			}
-		}
-	}
+            particle.m_velocity += acceleration * in_deltaTime;
+        }
+    }
 }

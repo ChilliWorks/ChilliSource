@@ -34,92 +34,89 @@
 #include <ChilliSource/Core/Entity/Component.h>
 #include <ChilliSource/Core/Math/Matrix4.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		class LightComponent : public Core::Component
-		{
-		public:
-			CS_DECLARE_NAMEDTYPE(LightComponent);
-            
-            //----------------------------------------------------------
-            /// Constructor
-            //----------------------------------------------------------
-			LightComponent();
-            //----------------------------------------------------------
-            /// Destructor
-            //----------------------------------------------------------
-			virtual ~LightComponent(){}
-            //----------------------------------------------------------
-			/// Set Colour
-			///
-			/// @param Colour of the light
-			//----------------------------------------------------------
-			void SetColour(const Core::Colour &inColour);
-            //----------------------------------------------------------
-			/// Get Colour
-			///
-			/// @return Colour of the light with intensity applied
-			//----------------------------------------------------------
-            Core::Colour GetColour() const;
-            //----------------------------------------------------------
-			/// Get World Position
-			///
-			/// @return Position in world space
-			//----------------------------------------------------------
-			const Core::Vector3& GetWorldPosition() const;
-            //----------------------------------------------------------
-			/// Set Intensity
-			///
-			/// @param Intensity scaler
-			//----------------------------------------------------------
-			void SetIntensity(f32 infIntensity);
-            //----------------------------------------------------------
-			/// Get Intensity
-			///
-			/// @return Intensity scaler
-			//----------------------------------------------------------
-			f32 GetIntensity() const;
-            //----------------------------------------------------------
-            /// Get Light Matrix
-            ///
-            /// @return Matrix to transform into light space
-            //----------------------------------------------------------
-            virtual const Core::Matrix4& GetLightMatrix() const = 0;
-            //----------------------------------------------------------
-            /// Is Cache Valid
-            ///
-            /// @return Have any lighting values changed since the last
-            /// render
-            //----------------------------------------------------------
-            bool IsCacheValid() const;
-            //----------------------------------------------------------
-            /// Calculate Lighting Values
-            ///
-            /// This calculates any lighting values that are based upon
-            /// other lighting values. This is called whenever the light
-            /// cache is invalidated.
-            //----------------------------------------------------------
-            virtual void CalculateLightingValues() {};
-            //----------------------------------------------------------
-            /// Set Cache Valid
-            ///
-            /// After rendering the cache is validated
-            //----------------------------------------------------------
-            void SetCacheValid();
-            
-        protected:
-            
-            mutable Core::Matrix4 mmatLight;
-            
-            Core::Colour mColour;
-            
-            f32 mfIntensity;
-            
-            bool mbCacheValid;
-		};
-    }
+    class LightComponent : public Core::Component
+    {
+    public:
+        CS_DECLARE_NAMEDTYPE(LightComponent);
+        
+        //----------------------------------------------------------
+        /// Constructor
+        //----------------------------------------------------------
+        LightComponent();
+        //----------------------------------------------------------
+        /// Destructor
+        //----------------------------------------------------------
+        virtual ~LightComponent(){}
+        //----------------------------------------------------------
+        /// Set Colour
+        ///
+        /// @param Colour of the light
+        //----------------------------------------------------------
+        void SetColour(const Core::Colour &inColour);
+        //----------------------------------------------------------
+        /// Get Colour
+        ///
+        /// @return Colour of the light with intensity applied
+        //----------------------------------------------------------
+        Core::Colour GetColour() const;
+        //----------------------------------------------------------
+        /// Get World Position
+        ///
+        /// @return Position in world space
+        //----------------------------------------------------------
+        const Core::Vector3& GetWorldPosition() const;
+        //----------------------------------------------------------
+        /// Set Intensity
+        ///
+        /// @param Intensity scaler
+        //----------------------------------------------------------
+        void SetIntensity(f32 infIntensity);
+        //----------------------------------------------------------
+        /// Get Intensity
+        ///
+        /// @return Intensity scaler
+        //----------------------------------------------------------
+        f32 GetIntensity() const;
+        //----------------------------------------------------------
+        /// Get Light Matrix
+        ///
+        /// @return Matrix to transform into light space
+        //----------------------------------------------------------
+        virtual const Core::Matrix4& GetLightMatrix() const = 0;
+        //----------------------------------------------------------
+        /// Is Cache Valid
+        ///
+        /// @return Have any lighting values changed since the last
+        /// render
+        //----------------------------------------------------------
+        bool IsCacheValid() const;
+        //----------------------------------------------------------
+        /// Calculate Lighting Values
+        ///
+        /// This calculates any lighting values that are based upon
+        /// other lighting values. This is called whenever the light
+        /// cache is invalidated.
+        //----------------------------------------------------------
+        virtual void CalculateLightingValues() {};
+        //----------------------------------------------------------
+        /// Set Cache Valid
+        ///
+        /// After rendering the cache is validated
+        //----------------------------------------------------------
+        void SetCacheValid();
+        
+    protected:
+        
+        mutable Core::Matrix4 mmatLight;
+        
+        Core::Colour mColour;
+        
+        f32 mfIntensity;
+        
+        bool mbCacheValid;
+    };
 }
 
 #endif

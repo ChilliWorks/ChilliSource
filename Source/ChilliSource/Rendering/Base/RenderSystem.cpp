@@ -35,52 +35,49 @@
 #include <CSBackend/Rendering/OpenGL/Base/RenderSystem.h>
 #endif
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-        CS_DEFINE_NAMEDTYPE(RenderSystem);
-        
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        RenderSystemUPtr RenderSystem::Create(RenderCapabilities* in_renderCapabilities)
-        {
+    CS_DEFINE_NAMEDTYPE(RenderSystem);
+    
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    RenderSystemUPtr RenderSystem::Create(RenderCapabilities* in_renderCapabilities)
+    {
 #if defined CS_TARGETPLATFORM_IOS || defined CS_TARGETPLATFORM_ANDROID || defined CS_TARGETPLATFORM_WINDOWS
-            return RenderSystemUPtr(new CSBackend::OpenGL::RenderSystem(in_renderCapabilities));
+        return RenderSystemUPtr(new CSBackend::OpenGL::RenderSystem(in_renderCapabilities));
 #else
-            return nullptr;
+        return nullptr;
 #endif
-        }
-		//-------------------------------------------------------
-		/// Constructor
-		///
-		/// Default
-		//-------------------------------------------------------
-		RenderSystem::RenderSystem()
-        : mpSpriteBatcher(nullptr)
-		{
+    }
+    //-------------------------------------------------------
+    /// Constructor
+    ///
+    /// Default
+    //-------------------------------------------------------
+    RenderSystem::RenderSystem()
+    : mpSpriteBatcher(nullptr)
+    {
 
-		}
-        //----------------------------------------------------
-        /// Get Dynamic Sprite Batch Pointer
-        ///
-        /// @return Pointer to dynamic sprite batcher
-        //----------------------------------------------------
-        DynamicSpriteBatch* RenderSystem::GetDynamicSpriteBatchPtr()
+    }
+    //----------------------------------------------------
+    /// Get Dynamic Sprite Batch Pointer
+    ///
+    /// @return Pointer to dynamic sprite batcher
+    //----------------------------------------------------
+    DynamicSpriteBatch* RenderSystem::GetDynamicSpriteBatchPtr()
+    {
+        if(mpSpriteBatcher == nullptr)
         {
-            if(mpSpriteBatcher == nullptr)
-            {
-                mpSpriteBatcher = new DynamicSpriteBatch(this);
-            }
-            
-            return mpSpriteBatcher;
+            mpSpriteBatcher = new DynamicSpriteBatch(this);
         }
-		//-------------------------------------------------------
-		/// Destructor
-		//-------------------------------------------------------
-		RenderSystem::~RenderSystem()
-		{
-            CS_SAFEDELETE(mpSpriteBatcher);
-		}
-	}
+        
+        return mpSpriteBatcher;
+    }
+    //-------------------------------------------------------
+    /// Destructor
+    //-------------------------------------------------------
+    RenderSystem::~RenderSystem()
+    {
+        CS_SAFEDELETE(mpSpriteBatcher);
+    }
 }

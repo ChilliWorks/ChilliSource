@@ -31,84 +31,81 @@
 
 #include <ChilliSource/Rendering/Camera/CameraComponent.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
+    //----------------------------------------------------------
+    /// An orthographic camera. Objects do not scale with
+    /// distance from the camera.
+    ///
+    /// @author S Downie
+    //----------------------------------------------------------
+    class OrthographicCameraComponent final : public CameraComponent
+    {
+    public:
+
+        CS_DECLARE_NAMEDTYPE(OrthographicCameraComponent);
         //----------------------------------------------------------
-        /// An orthographic camera. Objects do not scale with
-        /// distance from the camera.
+        /// Constructor
         ///
         /// @author S Downie
+        ///
+        /// @param Viewport size
+        /// @param Resize policy
+        /// @param Near plane
+        /// @param Far plane
         //----------------------------------------------------------
-		class OrthographicCameraComponent final : public CameraComponent
-		{
-		public:
+        OrthographicCameraComponent(const Core::Vector2& in_viewportSize, ViewportResizePolicy in_resizePolicy, f32 in_nearClip, f32 in_farClip);
+        //----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Comparison Type
+        ///
+        /// @return Whether the class matches the comparison type
+        //----------------------------------------------------------
+        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        //----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param Vector containing width and height of viewport
+        //----------------------------------------------------------
+        void SetViewportSize(const Core::Vector2& in_size);
+        
+    private:
 
-			CS_DECLARE_NAMEDTYPE(OrthographicCameraComponent);
-            //----------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
-            ///
-            /// @param Viewport size
-            /// @param Resize policy
-            /// @param Near plane
-            /// @param Far plane
-            //----------------------------------------------------------
-            OrthographicCameraComponent(const Core::Vector2& in_viewportSize, ViewportResizePolicy in_resizePolicy, f32 in_nearClip, f32 in_farClip);
-			//----------------------------------------------------------
-			/// @author S Downie
-            ///
-			/// @param Comparison Type
-            ///
-			/// @return Whether the class matches the comparison type
-			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-            //----------------------------------------------------------
-            /// @author S Downie
-			///
-			/// @param Vector containing width and height of viewport
-			//----------------------------------------------------------
-			void SetViewportSize(const Core::Vector2& in_size);
-            
-		private:
+        //------------------------------------------------------
+        /// Calculate the orthographic projection matrix
+        /// based on the current viewport size and near and
+        /// far planes
+        ///
+        /// @author S Downie
+        ///
+        /// @return Projection matrix
+        //------------------------------------------------------
+        Core::Matrix4 CalculateProjectionMatrix() override;
+        //------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// Recalculate frustum planes
+        //------------------------------------------------------
+        void UpdateFrustum() override;
+        //------------------------------------------------------
+        /// Called when the resolution changes and resize with
+        /// screen is enabled.
+        ///
+        /// @author I Copland
+        //------------------------------------------------------
+        void OnResolutionChanged(const Core::Vector2& in_resolution);
 
-			//------------------------------------------------------
-			/// Calculate the orthographic projection matrix
-            /// based on the current viewport size and near and
-            /// far planes
-			///
-			/// @author S Downie
-            ///
-            /// @return Projection matrix
-			//------------------------------------------------------
-            Core::Matrix4 CalculateProjectionMatrix() override;
-            //------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// Recalculate frustum planes
-            //------------------------------------------------------
-            void UpdateFrustum() override;
-            //------------------------------------------------------
-			/// Called when the resolution changes and resize with
-			/// screen is enabled.
-            ///
-			/// @author I Copland
-			//------------------------------------------------------
-			void OnResolutionChanged(const Core::Vector2& in_resolution);
-
-		private:
-			
-            ViewportResizePolicy m_resizePolicy;
-            
-            Core::Vector2 m_viewportSize;
-            Core::Vector2 m_currentViewportSize;
-            Core::Vector2 m_referenceScreenSize;
-            
-            Core::EventConnectionUPtr m_screenResizedConnection;
-		};
-	}
+    private:
+        
+        ViewportResizePolicy m_resizePolicy;
+        
+        Core::Vector2 m_viewportSize;
+        Core::Vector2 m_currentViewportSize;
+        Core::Vector2 m_referenceScreenSize;
+        
+        Core::EventConnectionUPtr m_screenResizedConnection;
+    };
 }
 
 #endif

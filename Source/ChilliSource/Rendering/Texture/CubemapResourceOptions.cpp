@@ -30,56 +30,53 @@
 
 #include <ChilliSource/Core/Cryptographic/HashCRC32.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        CubemapResourceOptions::CubemapResourceOptions(bool in_mipmaps, Texture::FilterMode in_filter, Texture::WrapMode in_wrapS, Texture::WrapMode in_wrapT, bool in_restoreCubemapDataEnabled)
-        {
-            m_options.m_hasMipMaps = in_mipmaps;
-            m_options.m_filterMode = in_filter;
-            m_options.m_wrapModeS = in_wrapS;
-            m_options.m_wrapModeT = in_wrapT;
-            m_options.m_restoreCubemapDataEnabled = in_restoreCubemapDataEnabled;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        u32 CubemapResourceOptions::GenerateHash() const
-        {
-            return Core::HashCRC32::GenerateHashCode((const s8*)&m_options, sizeof(Options));
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        bool CubemapResourceOptions::IsMipMapsEnabled() const
-        {
-            return m_options.m_hasMipMaps;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        Texture::WrapMode CubemapResourceOptions::GetWrapModeS() const
-        {
-            return m_options.m_wrapModeS;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        Texture::WrapMode CubemapResourceOptions::GetWrapModeT() const
-        {
-            return m_options.m_wrapModeT;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        Texture::FilterMode CubemapResourceOptions::GetFilterMode() const
-        {
-            return m_options.m_filterMode;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        bool CubemapResourceOptions::IsRestoreCubemapDataEnabled() const
-        {
-            return m_options.m_restoreCubemapDataEnabled;
-        }
-	}
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    CubemapResourceOptions::CubemapResourceOptions(bool in_mipmaps, Texture::FilterMode in_filter, Texture::WrapMode in_wrapS, Texture::WrapMode in_wrapT, bool in_restoreCubemapDataEnabled)
+    {
+        m_options.m_hasMipMaps = in_mipmaps;
+        m_options.m_filterMode = in_filter;
+        m_options.m_wrapModeS = in_wrapS;
+        m_options.m_wrapModeT = in_wrapT;
+        m_options.m_restoreCubemapDataEnabled = in_restoreCubemapDataEnabled;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    u32 CubemapResourceOptions::GenerateHash() const
+    {
+        return Core::HashCRC32::GenerateHashCode((const s8*)&m_options, sizeof(Options));
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    bool CubemapResourceOptions::IsMipMapsEnabled() const
+    {
+        return m_options.m_hasMipMaps;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    Texture::WrapMode CubemapResourceOptions::GetWrapModeS() const
+    {
+        return m_options.m_wrapModeS;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    Texture::WrapMode CubemapResourceOptions::GetWrapModeT() const
+    {
+        return m_options.m_wrapModeT;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    Texture::FilterMode CubemapResourceOptions::GetFilterMode() const
+    {
+        return m_options.m_filterMode;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    bool CubemapResourceOptions::IsRestoreCubemapDataEnabled() const
+    {
+        return m_options.m_restoreCubemapDataEnabled;
+    }
 }
 

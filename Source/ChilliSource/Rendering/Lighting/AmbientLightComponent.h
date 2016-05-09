@@ -32,31 +32,28 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Lighting/LightComponent.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		class AmbientLightComponent : public LightComponent
-		{
-		public:
-			CS_DECLARE_NAMEDTYPE(AmbientLightComponent);
-			
-			//----------------------------------------------------------
-			/// Is A
-			///
-			/// Returns if it is of the type given
-			/// @param Comparison Type
-			/// @return Whether the class matches the comparison type
-			//----------------------------------------------------------
-			bool IsA(Core::InterfaceIDType inInterfaceID) const override;
-            //----------------------------------------------------------
-            /// Get Light Matrix
-            ///
-            /// @return Light transform
-            //----------------------------------------------------------
-            const Core::Matrix4& GetLightMatrix() const override;
-		};
-    }
+    class AmbientLightComponent : public LightComponent
+    {
+    public:
+        CS_DECLARE_NAMEDTYPE(AmbientLightComponent);
+        
+        //----------------------------------------------------------
+        /// Is A
+        ///
+        /// Returns if it is of the type given
+        /// @param Comparison Type
+        /// @return Whether the class matches the comparison type
+        //----------------------------------------------------------
+        bool IsA(Core::InterfaceIDType inInterfaceID) const override;
+        //----------------------------------------------------------
+        /// Get Light Matrix
+        ///
+        /// @return Light transform
+        //----------------------------------------------------------
+        const Core::Matrix4& GetLightMatrix() const override;
+    };
 }
 
 #endif

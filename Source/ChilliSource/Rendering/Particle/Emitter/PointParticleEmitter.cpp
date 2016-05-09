@@ -32,22 +32,19 @@
 #include <ChilliSource/Rendering/Particle/ParticleEffect.h>
 #include <ChilliSource/Rendering/Particle/Emitter/PointParticleEmitterDef.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		PointParticleEmitter::PointParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray)
-			: ParticleEmitter(in_particleEmitter, in_particleArray)
-		{
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		void PointParticleEmitter::GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
-		{
-			out_position = Core::Vector3::k_zero;
-			out_direction = Core::Random::GenerateDirection3D<f32>();
-		}
-	}
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    PointParticleEmitter::PointParticleEmitter(const ParticleEmitterDef* in_particleEmitter, Core::dynamic_array<Particle>* in_particleArray)
+        : ParticleEmitter(in_particleEmitter, in_particleArray)
+    {
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void PointParticleEmitter::GenerateEmission(f32 in_normalisedEmissionTime, Core::Vector3& out_position, Core::Vector3& out_direction)
+    {
+        out_position = Core::Vector3::k_zero;
+        out_direction = Core::Random::GenerateDirection3D<f32>();
+    }
 }

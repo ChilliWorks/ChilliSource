@@ -31,70 +31,67 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-        //--------------------------------------------------------------
-        /// Holds the description of UV coordinates (normalised)
-        /// U-V (Top-Left) S-T (Width-Height)
+    //--------------------------------------------------------------
+    /// Holds the description of UV coordinates (normalised)
+    /// U-V (Top-Left) S-T (Width-Height)
+    ///
+    /// @author S Downie
+    //--------------------------------------------------------------
+    class UVs
+    {
+    public:
+        //----------------------------------------------------------
+        /// Constructor
         ///
         /// @author S Downie
-        //--------------------------------------------------------------
-        class UVs
-        {
-        public:
-            //----------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
-            //----------------------------------------------------------
-            UVs() = default;
-            //----------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
-            ///
-            /// @param U (normalised 0.0 - 1.0)
-            /// @param V (normalised 0.0 - 1.0)
-            /// @param S (normalised 0.0 - 1.0)
-            /// @param T (normalised 0.0 - 1.0)
-            //----------------------------------------------------------
-            UVs(f32 in_u, f32 in_v, f32 in_s, f32 in_t);
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param UVs
-            ///
-            /// @return UVs flipped around the horizontal axis
-            //----------------------------------------------------------
-            static UVs FlipVertically(const UVs& in_uvs);
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param UVs
-            ///
-            /// @return UVs flipped around the vertical axis
-            //----------------------------------------------------------
-            static UVs FlipHorizontally(const UVs& in_uvs);
-            //----------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @param UVs
-            ///
-            /// @return UVs flipped around the vertical axis and the
-            /// horizontal axis
-            //----------------------------------------------------------
-            static UVs FlipDiagonally(const UVs& in_uvs);
-            
-        public:
-            
-            f32 m_u = 0.0f;
-            f32 m_v = 0.0f;
-            f32 m_s = 1.0f;
-            f32 m_t = 1.0f;
-        };
-	}
+        //----------------------------------------------------------
+        UVs() = default;
+        //----------------------------------------------------------
+        /// Constructor
+        ///
+        /// @author S Downie
+        ///
+        /// @param U (normalised 0.0 - 1.0)
+        /// @param V (normalised 0.0 - 1.0)
+        /// @param S (normalised 0.0 - 1.0)
+        /// @param T (normalised 0.0 - 1.0)
+        //----------------------------------------------------------
+        UVs(f32 in_u, f32 in_v, f32 in_s, f32 in_t);
+        //----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param UVs
+        ///
+        /// @return UVs flipped around the horizontal axis
+        //----------------------------------------------------------
+        static UVs FlipVertically(const UVs& in_uvs);
+        //----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param UVs
+        ///
+        /// @return UVs flipped around the vertical axis
+        //----------------------------------------------------------
+        static UVs FlipHorizontally(const UVs& in_uvs);
+        //----------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @param UVs
+        ///
+        /// @return UVs flipped around the vertical axis and the
+        /// horizontal axis
+        //----------------------------------------------------------
+        static UVs FlipDiagonally(const UVs& in_uvs);
+        
+    public:
+        
+        f32 m_u = 0.0f;
+        f32 m_v = 0.0f;
+        f32 m_s = 1.0f;
+        f32 m_t = 1.0f;
+    };
 }
 
 #endif

@@ -34,82 +34,79 @@
 
 #include <functional>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		//-----------------------------------------------------------------------
-		/// A particle affector def describes the properties that should be used 
-		/// to create a particle affector and creates the affector instances.
-		///
-		/// As a particle affector def's contents can potentially be read from 
-		/// multiple threads, it is immutable after construction. The exception 
-		/// to this is if it was created from a param dictionary with a 
-		/// asynchronous delegate, in which case it is immutable after the
-		/// delegate is called. Classes inheriting from this should also follow 
-		/// these rules.
-		///
-		/// @author Ian Copland
-		//-----------------------------------------------------------------------
-		class ParticleAffectorDef : public Core::QueryableInterface
-		{
-		public:
-			CS_DECLARE_NAMEDTYPE(ParticleAffectorDef);
-			CS_DECLARE_NOCOPY(ParticleAffectorDef);
-			//----------------------------------------------------------------
-			/// The affector def loaded delegate. This is used when background 
-			/// loading the particle affector def, once it has finished loading 
-			/// this delegate should be called.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The particle affector def.
-			//----------------------------------------------------------------
-			using LoadedDelegate = std::function<void(ParticleAffectorDef* in_affectorDef)>;
-			//----------------------------------------------------------------
-			/// Constructor.
-			///
-			/// @author Ian Copland
-			//----------------------------------------------------------------
-			ParticleAffectorDef() = default;
-			//----------------------------------------------------------------
-			/// Creates an instance of the particle affector described by this.
-			///
-			/// @author Ian Copland.
-			///
-			/// @param The particle array.
-			///
-			/// @return the instance.
-			//----------------------------------------------------------------
-			virtual ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const = 0;
-			//----------------------------------------------------------------
-			/// @author Ian Copland
-			///
-			/// @return The particle effect that owns this particle drawable
-			/// definition.
-			//----------------------------------------------------------------
-			const ParticleEffect* GetParticleEffect() const;
-			//----------------------------------------------------------------
-			/// Destructor
-			///
-			/// @author Ian Copland.
-			//----------------------------------------------------------------
-			virtual ~ParticleAffectorDef() {}
-		private:
-			friend class ParticleEffect;
-			//----------------------------------------------------------------
-			/// Sets the owning particle effect. This can only be called by the 
-			/// particle effect itself when this is added to it.
-			///
-			/// @author Ian Copland
-			///
-			/// @param The particle effect.
-			//----------------------------------------------------------------
-			void SetParticleEffect(const ParticleEffect* in_particleEffect);
+    //-----------------------------------------------------------------------
+    /// A particle affector def describes the properties that should be used 
+    /// to create a particle affector and creates the affector instances.
+    ///
+    /// As a particle affector def's contents can potentially be read from 
+    /// multiple threads, it is immutable after construction. The exception 
+    /// to this is if it was created from a param dictionary with a 
+    /// asynchronous delegate, in which case it is immutable after the
+    /// delegate is called. Classes inheriting from this should also follow 
+    /// these rules.
+    ///
+    /// @author Ian Copland
+    //-----------------------------------------------------------------------
+    class ParticleAffectorDef : public Core::QueryableInterface
+    {
+    public:
+        CS_DECLARE_NAMEDTYPE(ParticleAffectorDef);
+        CS_DECLARE_NOCOPY(ParticleAffectorDef);
+        //----------------------------------------------------------------
+        /// The affector def loaded delegate. This is used when background 
+        /// loading the particle affector def, once it has finished loading 
+        /// this delegate should be called.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The particle affector def.
+        //----------------------------------------------------------------
+        using LoadedDelegate = std::function<void(ParticleAffectorDef* in_affectorDef)>;
+        //----------------------------------------------------------------
+        /// Constructor.
+        ///
+        /// @author Ian Copland
+        //----------------------------------------------------------------
+        ParticleAffectorDef() = default;
+        //----------------------------------------------------------------
+        /// Creates an instance of the particle affector described by this.
+        ///
+        /// @author Ian Copland.
+        ///
+        /// @param The particle array.
+        ///
+        /// @return the instance.
+        //----------------------------------------------------------------
+        virtual ParticleAffectorUPtr CreateInstance(Core::dynamic_array<Particle>* in_particleArray) const = 0;
+        //----------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The particle effect that owns this particle drawable
+        /// definition.
+        //----------------------------------------------------------------
+        const ParticleEffect* GetParticleEffect() const;
+        //----------------------------------------------------------------
+        /// Destructor
+        ///
+        /// @author Ian Copland.
+        //----------------------------------------------------------------
+        virtual ~ParticleAffectorDef() {}
+    private:
+        friend class ParticleEffect;
+        //----------------------------------------------------------------
+        /// Sets the owning particle effect. This can only be called by the 
+        /// particle effect itself when this is added to it.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The particle effect.
+        //----------------------------------------------------------------
+        void SetParticleEffect(const ParticleEffect* in_particleEffect);
 
-			const ParticleEffect* m_particleEffect = nullptr;
-		};
-	}
+        const ParticleEffect* m_particleEffect = nullptr;
+    };
 }
 
 #endif

@@ -28,22 +28,19 @@
 
 #include <ChilliSource/Rendering/Particle/Drawable/ParticleDrawableDef.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace Rendering
-	{
-		CS_DEFINE_NAMEDTYPE(ParticleDrawableDef);
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		const ParticleEffect* ParticleDrawableDef::GetParticleEffect() const
-		{
-			return m_particleEffect;
-		}
-		//----------------------------------------------------------------
-		//----------------------------------------------------------------
-		void ParticleDrawableDef::SetParticleEffect(const ParticleEffect* in_particleEffect)
-		{
-			m_particleEffect = in_particleEffect;
-		}
-	}
+    CS_DEFINE_NAMEDTYPE(ParticleDrawableDef);
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    const ParticleEffect* ParticleDrawableDef::GetParticleEffect() const
+    {
+        return m_particleEffect;
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void ParticleDrawableDef::SetParticleEffect(const ParticleEffect* in_particleEffect)
+    {
+        m_particleEffect = in_particleEffect;
+    }
 }
