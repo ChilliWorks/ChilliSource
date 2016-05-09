@@ -30,50 +30,47 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    namespace
     {
-        namespace
-        {
-            const char k_typeFill[] = "fill";
-            const char k_typeStretch[] = "stretch";
-        }
+        const char k_typeFill[] = "fill";
+        const char k_typeStretch[] = "stretch";
+    }
+    
+    //------------------------------------------------------------------------
+    //------------------------------------------------------------------------
+    ProgressBarType ParseProgressBarType(const std::string& in_stringType)
+    {
+        std::string lowerType = in_stringType;
+        Core::StringUtils::ToLowerCase(lowerType);
         
-        //------------------------------------------------------------------------
-        //------------------------------------------------------------------------
-        ProgressBarType ParseProgressBarType(const std::string& in_stringType)
+        if (lowerType == k_typeFill)
         {
-            std::string lowerType = in_stringType;
-            Core::StringUtils::ToLowerCase(lowerType);
-            
-            if (lowerType == k_typeFill)
-            {
-                return ProgressBarType::k_fill;
-            }
-            else if (lowerType == k_typeStretch)
-            {
-                return ProgressBarType::k_stretch;
-            }
-            
-            CS_LOG_FATAL("Could not parse progress bar type: " + in_stringType);
             return ProgressBarType::k_fill;
         }
-        //------------------------------------------------------------------------
-        //------------------------------------------------------------------------
-        std::string ToString(ProgressBarType in_direction)
+        else if (lowerType == k_typeStretch)
         {
-            switch (in_direction)
-            {
-                case ProgressBarType::k_fill:
-                    return k_typeFill;
-                case ProgressBarType::k_stretch:
-                    return k_typeStretch;
-                default:
-                    CS_LOG_FATAL("Invalid progress bar type.");
-                    return k_typeFill;
-                    
-            }
+            return ProgressBarType::k_stretch;
+        }
+        
+        CS_LOG_FATAL("Could not parse progress bar type: " + in_stringType);
+        return ProgressBarType::k_fill;
+    }
+    //------------------------------------------------------------------------
+    //------------------------------------------------------------------------
+    std::string ToString(ProgressBarType in_direction)
+    {
+        switch (in_direction)
+        {
+            case ProgressBarType::k_fill:
+                return k_typeFill;
+            case ProgressBarType::k_stretch:
+                return k_typeStretch;
+            default:
+                CS_LOG_FATAL("Invalid progress bar type.");
+                return k_typeFill;
+                
         }
     }
 }

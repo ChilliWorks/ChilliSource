@@ -36,93 +36,89 @@
 #include <ChilliSource/Core/String/StringUtils.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 
-
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    CS_DEFINE_NAMEDTYPE(Component);
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    Component::Component(const std::string& in_name)
+        : m_widget(nullptr), m_name(in_name)
     {
-        CS_DEFINE_NAMEDTYPE(Component);
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        Component::Component(const std::string& in_name)
-            : m_widget(nullptr), m_name(in_name)
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    const std::string& Component::GetName() const
+    {
+        return m_name;
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    bool Component::HasProperty(const std::string& in_propertyName) const
+    {
+        std::string lowerPropertyName = in_propertyName;
+        Core::StringUtils::ToLowerCase(lowerPropertyName);
+        
+        auto it = m_properties.find(lowerPropertyName);
+        return (it != m_properties.end());
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void Component::SetProperty(const std::string& in_propertyName, const char* in_propertyValue)
+    {
+        SetProperty(in_propertyName, std::string(in_propertyValue));
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    Widget* Component::GetWidget()
+    {
+        return m_widget;
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    const Widget* Component::GetWidget() const
+    {
+        return m_widget;
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void Component::ApplyRegisteredProperties(const Core::PropertyMap& in_properties)
+    {
+        CS_ASSERT(m_propertyRegistrationComplete == false, "Registered properties have already been applied.");
+        
+        m_propertyRegistrationComplete = true;
+        
+        for (const auto& key : in_properties.GetKeys())
         {
-        }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        const std::string& Component::GetName() const
-        {
-            return m_name;
-        }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        bool Component::HasProperty(const std::string& in_propertyName) const
-        {
-            std::string lowerPropertyName = in_propertyName;
-            Core::StringUtils::ToLowerCase(lowerPropertyName);
-            
-            auto it = m_properties.find(lowerPropertyName);
-            return (it != m_properties.end());
-        }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        void Component::SetProperty(const std::string& in_propertyName, const char* in_propertyValue)
-        {
-            SetProperty(in_propertyName, std::string(in_propertyValue));
-        }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        Widget* Component::GetWidget()
-        {
-            return m_widget;
-        }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        const Widget* Component::GetWidget() const
-        {
-            return m_widget;
-        }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        void Component::ApplyRegisteredProperties(const Core::PropertyMap& in_properties)
-        {
-            CS_ASSERT(m_propertyRegistrationComplete == false, "Registered properties have already been applied.");
-            
-            m_propertyRegistrationComplete = true;
-            
-            for (const auto& key : in_properties.GetKeys())
+            if (in_properties.HasValue(key) == true)
             {
-                if (in_properties.HasValue(key) == true)
-                {
-                    SetProperty(key, in_properties.GetPropertyObject(key));
-                }
+                SetProperty(key, in_properties.GetPropertyObject(key));
             }
         }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        void Component::SetWidget(Widget* in_widget)
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void Component::SetWidget(Widget* in_widget)
+    {
+        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot add component to a widget before property registration is complete.");
+        CS_ASSERT(m_widget == nullptr, "Cannot change the owning widget on a component.");
+        
+        m_widget = in_widget;
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void Component::SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property)
+    {
+        CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot set a property on a UI::Component prior to property registration completion.");
+        
+        std::string lowerPropertyName = in_propertyName;
+        Core::StringUtils::ToLowerCase(lowerPropertyName);
+        
+        auto it = m_properties.find(lowerPropertyName);
+        if(it == m_properties.end())
         {
-            CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot add component to a widget before property registration is complete.");
-            CS_ASSERT(m_widget == nullptr, "Cannot change the owning widget on a component.");
-            
-            m_widget = in_widget;
+            CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::Component.");
         }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        void Component::SetProperty(const std::string& in_propertyName, const Core::IProperty* in_property)
-        {
-            CS_ASSERT(m_propertyRegistrationComplete == true, "Cannot set a property on a UI::Component prior to property registration completion.");
-            
-            std::string lowerPropertyName = in_propertyName;
-            Core::StringUtils::ToLowerCase(lowerPropertyName);
-            
-            auto it = m_properties.find(lowerPropertyName);
-            if(it == m_properties.end())
-            {
-                CS_LOG_FATAL("Cannot find property with name '" + in_propertyName + "' in UI::Component.");
-            }
-            
-            it->second->Set(in_property);
-        }
+        
+        it->second->Set(in_property);
     }
 }

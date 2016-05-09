@@ -31,43 +31,40 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    //------------------------------------------------------------------------
+    /// An enum describing the type of a progress bar: fill or stretch.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------
+    enum class ProgressBarType
     {
-        //------------------------------------------------------------------------
-        /// An enum describing the type of a progress bar: fill or stretch.
-        ///
-        /// @author Ian Copland
-        //------------------------------------------------------------------------
-        enum class ProgressBarType
-        {
-            k_fill,
-            k_stretch
-        };
-        //------------------------------------------------------------------------
-        /// Parse a progress bar type from string. This is case insensitive.
-        /// If the string is not a valid type then the app is considered to
-        /// be in an irrecoverable state and will terminate.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param The string to parse.
-        ///
-        /// @return The parsed direction.
-        //------------------------------------------------------------------------
-        ProgressBarType ParseProgressBarType(const std::string& in_stringType);
-        //------------------------------------------------------------------------
-        /// Converts the given progress bar type to a string.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param The progress bar type to convert to string.
-        ///
-        /// @return The type in string form.
-        //------------------------------------------------------------------------
-        std::string ToString(ProgressBarType in_type);
-    }
+        k_fill,
+        k_stretch
+    };
+    //------------------------------------------------------------------------
+    /// Parse a progress bar type from string. This is case insensitive.
+    /// If the string is not a valid type then the app is considered to
+    /// be in an irrecoverable state and will terminate.
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param The string to parse.
+    ///
+    /// @return The parsed direction.
+    //------------------------------------------------------------------------
+    ProgressBarType ParseProgressBarType(const std::string& in_stringType);
+    //------------------------------------------------------------------------
+    /// Converts the given progress bar type to a string.
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param The progress bar type to convert to string.
+    ///
+    /// @return The type in string form.
+    //------------------------------------------------------------------------
+    std::string ToString(ProgressBarType in_type);
 }
 
 #endif

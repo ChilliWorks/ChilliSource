@@ -33,8 +33,6 @@
 #include <ChilliSource/Core/Entity/Entity.h>
 #include <ChilliSource/Core/Entity/Transform.h>
 
-using namespace ChilliSource::Core;
-
 namespace CS
 {
     void BackToFrontSortPredicate::PrepareForSort(std::vector<RenderComponent*> * inpRenderable)

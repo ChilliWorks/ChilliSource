@@ -35,126 +35,123 @@
 #include <ChilliSource/UI/Layout/HListLayout.h>
 #include <ChilliSource/UI/Layout/LayoutDef.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    //------------------------------------------------------------------------------
+    /// A definition of a HList Layout which can be built from a json object. This is
+    /// effectively an immutable container for the properties of a HList Layout.
+    ///
+    /// A HList Layout Def contains the following property in addition to those
+    /// defined in the Layouy Def base class documentation:
+    ///
+    /// "NumCells": The number of cells.
+    ///
+    /// "RelMargins": The relative padding from the widget edge to the cells
+    ///
+    /// "AbsMargins": The absolute padding from the widget edge to the cells
+    ///
+    /// "RelSpacing": The relative spacing between cells
+    ///
+    /// "AbsSpacing": The absolute spacing between cells
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------------
+    class HListLayoutDef final : public LayoutDef
     {
+    public:
+        CS_DECLARE_NAMEDTYPE(HListLayoutDef);
         //------------------------------------------------------------------------------
-        /// A definition of a HList Layout which can be built from a json object. This is
-        /// effectively an immutable container for the properties of a HList Layout.
-        ///
-        /// A HList Layout Def contains the following property in addition to those
-        /// defined in the Layouy Def base class documentation:
-        ///
-        /// "NumCells": The number of cells.
-        ///
-        /// "RelMargins": The relative padding from the widget edge to the cells
-        ///
-        /// "AbsMargins": The absolute padding from the widget edge to the cells
-        ///
-        /// "RelSpacing": The relative spacing between cells
-        ///
-        /// "AbsSpacing": The absolute spacing between cells
+        /// Constructor. Creates an empty hlist layout definition.
         ///
         /// @author Ian Copland
         //------------------------------------------------------------------------------
-        class HListLayoutDef final : public LayoutDef
-        {
-        public:
-            CS_DECLARE_NAMEDTYPE(HListLayoutDef);
-            //------------------------------------------------------------------------------
-            /// Constructor. Creates an empty hlist layout definition.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------------------
-            HListLayoutDef() = default;
-            //------------------------------------------------------------------------------
-            /// Constructor. Creates a standard hlist layout definition from json.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The JSON object containing the drawable properties.
-            //------------------------------------------------------------------------------
-            HListLayoutDef(const Json::Value& in_json);
-            //------------------------------------------------------------------------------
-            /// Constructor. Creates a hlist layout definition with the given properties.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The cell order.
-            /// @param The number of cells.
-            /// @param The relative margins.
-            /// @param The absolute margins.
-            /// @param The relative spacing.
-            /// @param The absolute spacing.
-            //------------------------------------------------------------------------------
-            HListLayoutDef(u32 in_numCells, const Core::Vector4& in_relMargins, const Core::Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing);
-            //------------------------------------------------------------------------------
-            /// Allows querying of whether or not this system implements the interface
-            /// described by the given interface Id. Typically this is not called directly
-            /// as the templated equivalent IsA<Interface>() is preferred.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The interface Id.
-            ///
-            /// @return Whether or not the interface is implemented.
-            //------------------------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The number of cells.
-            //------------------------------------------------------------------------------
-            u32 GetNumCells() const;
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The relative border size margins for each edge. These are relative
-            /// to the overall layout size (i.e owning widget size). X is top, Y is right,
-            /// Z is bottom and W is left.
-            //------------------------------------------------------------------------------
-            Core::Vector4 GetRelativeMargins() const;
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The absolute border size margins for each edge. X is top, Y is
-            /// right, Z is bottom and W is left.
-            //------------------------------------------------------------------------------
-            Core::Vector4 GetAbsoluteMargins() const;
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The relative spacing between cells.
-            //------------------------------------------------------------------------------
-            f32 GetRelativeSpacing() const;
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The absolute spacing between cells.
-            //------------------------------------------------------------------------------
-            f32 GetAbsoluteSpacing() const;
-            
-        protected:
-            //------------------------------------------------------------------------------
-            /// Creates a new instance of a hlist layout as described by this definition.
-            /// This should typically only be called by a layout component.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The owning component.
-            ///
-            /// @return a new layout instance.
-            //------------------------------------------------------------------------------
-            LayoutUPtr CreateLayout(LayoutComponent* in_owner) const override;
-            
-            u32 m_numCells = 1;
-            Core::Vector4 m_relativeMargins;
-            Core::Vector4 m_absoluteMargins;
-            f32 m_relativeSpacing = 0.0f;
-            f32 m_absoluteSpacing = 0.0f;
-        };
-    }
+        HListLayoutDef() = default;
+        //------------------------------------------------------------------------------
+        /// Constructor. Creates a standard hlist layout definition from json.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The JSON object containing the drawable properties.
+        //------------------------------------------------------------------------------
+        HListLayoutDef(const Json::Value& in_json);
+        //------------------------------------------------------------------------------
+        /// Constructor. Creates a hlist layout definition with the given properties.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The cell order.
+        /// @param The number of cells.
+        /// @param The relative margins.
+        /// @param The absolute margins.
+        /// @param The relative spacing.
+        /// @param The absolute spacing.
+        //------------------------------------------------------------------------------
+        HListLayoutDef(u32 in_numCells, const Core::Vector4& in_relMargins, const Core::Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing);
+        //------------------------------------------------------------------------------
+        /// Allows querying of whether or not this system implements the interface
+        /// described by the given interface Id. Typically this is not called directly
+        /// as the templated equivalent IsA<Interface>() is preferred.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The interface Id.
+        ///
+        /// @return Whether or not the interface is implemented.
+        //------------------------------------------------------------------------------
+        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        //------------------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The number of cells.
+        //------------------------------------------------------------------------------
+        u32 GetNumCells() const;
+        //------------------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The relative border size margins for each edge. These are relative
+        /// to the overall layout size (i.e owning widget size). X is top, Y is right,
+        /// Z is bottom and W is left.
+        //------------------------------------------------------------------------------
+        Core::Vector4 GetRelativeMargins() const;
+        //------------------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The absolute border size margins for each edge. X is top, Y is
+        /// right, Z is bottom and W is left.
+        //------------------------------------------------------------------------------
+        Core::Vector4 GetAbsoluteMargins() const;
+        //------------------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The relative spacing between cells.
+        //------------------------------------------------------------------------------
+        f32 GetRelativeSpacing() const;
+        //------------------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The absolute spacing between cells.
+        //------------------------------------------------------------------------------
+        f32 GetAbsoluteSpacing() const;
+        
+    protected:
+        //------------------------------------------------------------------------------
+        /// Creates a new instance of a hlist layout as described by this definition.
+        /// This should typically only be called by a layout component.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The owning component.
+        ///
+        /// @return a new layout instance.
+        //------------------------------------------------------------------------------
+        LayoutUPtr CreateLayout(LayoutComponent* in_owner) const override;
+        
+        u32 m_numCells = 1;
+        Core::Vector4 m_relativeMargins;
+        Core::Vector4 m_absoluteMargins;
+        f32 m_relativeSpacing = 0.0f;
+        f32 m_absoluteSpacing = 0.0f;
+    };
 }
 
 #endif

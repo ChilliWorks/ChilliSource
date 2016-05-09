@@ -37,180 +37,177 @@
 
 #include <json/json.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    CS_DEFINE_NAMEDTYPE(StandardDrawableDef);
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    StandardDrawableDef::StandardDrawableDef(const Json::Value& in_json, Core::StorageLocation in_defaultLocation, const std::string& in_defaultPath)
     {
-        CS_DEFINE_NAMEDTYPE(StandardDrawableDef);
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        StandardDrawableDef::StandardDrawableDef(const Json::Value& in_json, Core::StorageLocation in_defaultLocation, const std::string& in_defaultPath)
+        const char k_typeKey[] = "Type";
+        const char k_textureLocationKey[] = "TextureLocation";
+        const char k_textureFilePathKey[] = "TexturePath";
+        const char k_atlasLocationKey[] = "AtlasLocation";
+        const char k_atlasFilePathKey[] = "AtlasPath";
+        const char k_atlasIdKey[] = "AtlasId";
+        const char k_uvsKey[] = "UVs";
+        const char k_colourKey[] = "Colour";
+        
+        CS_ASSERT(in_json.isObject() == true, "Drawable Def must be created from a json value of type Object.");
+        
+        //read all the properties from JSON.
+        Core::StorageLocation textureLocation = Core::StorageLocation::k_none;
+        Core::StorageLocation atlasLocation = Core::StorageLocation::k_none;
+        std::string texturePath;
+        std::string atlasPath;
+        for(auto it = in_json.begin(); it != in_json.end(); ++it)
         {
-            const char k_typeKey[] = "Type";
-            const char k_textureLocationKey[] = "TextureLocation";
-            const char k_textureFilePathKey[] = "TexturePath";
-            const char k_atlasLocationKey[] = "AtlasLocation";
-            const char k_atlasFilePathKey[] = "AtlasPath";
-            const char k_atlasIdKey[] = "AtlasId";
-            const char k_uvsKey[] = "UVs";
-            const char k_colourKey[] = "Colour";
+            CS_ASSERT((*it).isString() == true, "All properties in a Drawable Def must be a string: " + std::string(it.memberName()));
             
-            CS_ASSERT(in_json.isObject() == true, "Drawable Def must be created from a json value of type Object.");
+            std::string key = it.memberName();
+            std::string value = (*it).asString();
             
-            //read all the properties from JSON.
-            Core::StorageLocation textureLocation = Core::StorageLocation::k_none;
-            Core::StorageLocation atlasLocation = Core::StorageLocation::k_none;
-            std::string texturePath;
-            std::string atlasPath;
-            for(auto it = in_json.begin(); it != in_json.end(); ++it)
+            if (key == k_textureLocationKey)
             {
-                CS_ASSERT((*it).isString() == true, "All properties in a Drawable Def must be a string: " + std::string(it.memberName()));
-                
-                std::string key = it.memberName();
-                std::string value = (*it).asString();
-                
-                if (key == k_textureLocationKey)
-                {
-                    textureLocation = Core::ParseStorageLocation(value);
-                }
-                else if (key == k_textureFilePathKey)
-                {
-                    texturePath = value;
-                }
-                else if (key == k_atlasLocationKey)
-                {
-                    atlasLocation = Core::ParseStorageLocation(value);
-                }
-                else if (key == k_atlasFilePathKey)
-                {
-                    atlasPath = value;
-                }
-                else if (key == k_atlasIdKey)
-                {
-                    m_atlasId = value;
-                }
-                else if (key == k_uvsKey)
-                {
-                    auto vec =  Core::ParseVector4(value);;
-                    m_uvs = Rendering::UVs(vec.x, vec.y, vec.z, vec.w);
-                }
-                else if (key == k_colourKey)
-                {
-                    m_colour = Core::ParseColour(value);
-                }
-                else if (key == k_typeKey)
-                {
-                    //ignore
-                }
-                else
-                {
-                    CS_LOG_FATAL("Invalid property found in a Standard Drawable Def: " + key);
-                }
+                textureLocation = Core::ParseStorageLocation(value);
             }
-            
-            //load the texture.
-            CS_ASSERT(texturePath.empty() == false, "A texture must be supplied in a Standard Drawable Def.")
-            
-            auto resPool = Core::Application::Get()->GetResourcePool();
-            if (textureLocation == Core::StorageLocation::k_none)
+            else if (key == k_textureFilePathKey)
             {
-                textureLocation = in_defaultLocation;
-                texturePath = Core::StringUtils::StandardiseDirectoryPath(in_defaultPath) + texturePath;
+                texturePath = value;
             }
-            
-            m_texture = resPool->LoadResource<Rendering::Texture>(textureLocation, texturePath);
-            CS_ASSERT(m_texture != nullptr, "Invalid texture supplied in a Standard Drawable Def.");
-            
-            //try and load the atlas
-            if (atlasPath.empty() == false)
+            else if (key == k_atlasLocationKey)
             {
-                if (atlasLocation == Core::StorageLocation::k_none)
-                {
-                    atlasLocation = in_defaultLocation;
-                    atlasPath = Core::StringUtils::StandardiseDirectoryPath(in_defaultPath) + atlasPath;
-                }
-                
-                m_atlas = resPool->LoadResource<Rendering::TextureAtlas>(atlasLocation, atlasPath);
-                CS_ASSERT(m_texture, "Invalid texture atlas supplied in a Standard Drawable Def.");
-                CS_ASSERT(m_atlasId.empty() == false, "A texture atlas Id must be specified when using a texture atlas in a Standard Drawable Def.");
+                atlasLocation = Core::ParseStorageLocation(value);
+            }
+            else if (key == k_atlasFilePathKey)
+            {
+                atlasPath = value;
+            }
+            else if (key == k_atlasIdKey)
+            {
+                m_atlasId = value;
+            }
+            else if (key == k_uvsKey)
+            {
+                auto vec =  Core::ParseVector4(value);;
+                m_uvs = Rendering::UVs(vec.x, vec.y, vec.z, vec.w);
+            }
+            else if (key == k_colourKey)
+            {
+                m_colour = Core::ParseColour(value);
+            }
+            else if (key == k_typeKey)
+            {
+                //ignore
             }
             else
             {
-                CS_ASSERT(m_atlasId.empty() == true, "Cannot specify a texture atlas Id without a texture atlas in a Standard Drawable Def.");
+                CS_LOG_FATAL("Invalid property found in a Standard Drawable Def: " + key);
             }
         }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        StandardDrawableDef::StandardDrawableDef(const Rendering::TextureCSPtr& in_texture, const Core::Colour& in_colour, const Rendering::UVs& in_uvs)
-            : m_texture(in_texture), m_colour(in_colour), m_uvs(in_uvs)
+        
+        //load the texture.
+        CS_ASSERT(texturePath.empty() == false, "A texture must be supplied in a Standard Drawable Def.")
+        
+        auto resPool = Core::Application::Get()->GetResourcePool();
+        if (textureLocation == Core::StorageLocation::k_none)
         {
-            CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Standard Drawable Def.");
+            textureLocation = in_defaultLocation;
+            texturePath = Core::StringUtils::StandardiseDirectoryPath(in_defaultPath) + texturePath;
         }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        StandardDrawableDef::StandardDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Core::Colour& in_colour, const Rendering::UVs& in_uvs)
-            : m_texture(in_texture), m_atlas(in_atlas), m_atlasId(in_atlasId), m_colour(in_colour), m_uvs(in_uvs)
+        
+        m_texture = resPool->LoadResource<Rendering::Texture>(textureLocation, texturePath);
+        CS_ASSERT(m_texture != nullptr, "Invalid texture supplied in a Standard Drawable Def.");
+        
+        //try and load the atlas
+        if (atlasPath.empty() == false)
         {
-            CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Standard Drawable Def.");
-            CS_ASSERT(m_atlas != nullptr, "Cannot specify a null texture atlas in a Standard Drawable Def. Use the texture only constructor instead.");
-            CS_ASSERT(m_atlas->HasFrameWithId(m_atlasId) == true, "Invalid texture atlas Id provided in a Standard Drawable Def.");
-        }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        bool StandardDrawableDef::IsA(Core::InterfaceIDType in_interfaceId) const
-        {
-            return (DrawableDef::InterfaceID == in_interfaceId || StandardDrawableDef::InterfaceID == in_interfaceId);
-        }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        const Rendering::TextureCSPtr& StandardDrawableDef::GetTexture() const
-        {
-            return m_texture;
-        }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        const Rendering::TextureAtlasCSPtr& StandardDrawableDef::GetAtlas() const
-        {
-            return m_atlas;
-        }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        const std::string& StandardDrawableDef::GetAtlasId() const
-        {
-            return m_atlasId;
-        }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        const Rendering::UVs& StandardDrawableDef::GetUVs() const
-        {
-            return m_uvs;
-        }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        const Core::Colour& StandardDrawableDef::GetColour() const
-        {
-            return m_colour;
-        }
-        //--------------------------------------------------------------
-        //--------------------------------------------------------------
-        DrawableUPtr StandardDrawableDef::CreateDrawable() const
-        {
-            StandardDrawableUPtr drawable;
-            
-            if (m_atlas != nullptr)
+            if (atlasLocation == Core::StorageLocation::k_none)
             {
-                drawable = StandardDrawableUPtr(new StandardDrawable(m_texture, m_atlas, m_atlasId));
-            }
-            else
-            {
-                drawable = StandardDrawableUPtr(new StandardDrawable(m_texture));
+                atlasLocation = in_defaultLocation;
+                atlasPath = Core::StringUtils::StandardiseDirectoryPath(in_defaultPath) + atlasPath;
             }
             
-            drawable->SetUVs(m_uvs);
-            drawable->SetColour(m_colour);
+            m_atlas = resPool->LoadResource<Rendering::TextureAtlas>(atlasLocation, atlasPath);
+            CS_ASSERT(m_texture, "Invalid texture atlas supplied in a Standard Drawable Def.");
+            CS_ASSERT(m_atlasId.empty() == false, "A texture atlas Id must be specified when using a texture atlas in a Standard Drawable Def.");
+        }
+        else
+        {
+            CS_ASSERT(m_atlasId.empty() == true, "Cannot specify a texture atlas Id without a texture atlas in a Standard Drawable Def.");
+        }
+    }
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    StandardDrawableDef::StandardDrawableDef(const Rendering::TextureCSPtr& in_texture, const Core::Colour& in_colour, const Rendering::UVs& in_uvs)
+        : m_texture(in_texture), m_colour(in_colour), m_uvs(in_uvs)
+    {
+        CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Standard Drawable Def.");
+    }
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    StandardDrawableDef::StandardDrawableDef(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Core::Colour& in_colour, const Rendering::UVs& in_uvs)
+        : m_texture(in_texture), m_atlas(in_atlas), m_atlasId(in_atlasId), m_colour(in_colour), m_uvs(in_uvs)
+    {
+        CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Standard Drawable Def.");
+        CS_ASSERT(m_atlas != nullptr, "Cannot specify a null texture atlas in a Standard Drawable Def. Use the texture only constructor instead.");
+        CS_ASSERT(m_atlas->HasFrameWithId(m_atlasId) == true, "Invalid texture atlas Id provided in a Standard Drawable Def.");
+    }
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    bool StandardDrawableDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    {
+        return (DrawableDef::InterfaceID == in_interfaceId || StandardDrawableDef::InterfaceID == in_interfaceId);
+    }
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    const Rendering::TextureCSPtr& StandardDrawableDef::GetTexture() const
+    {
+        return m_texture;
+    }
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    const Rendering::TextureAtlasCSPtr& StandardDrawableDef::GetAtlas() const
+    {
+        return m_atlas;
+    }
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    const std::string& StandardDrawableDef::GetAtlasId() const
+    {
+        return m_atlasId;
+    }
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    const Rendering::UVs& StandardDrawableDef::GetUVs() const
+    {
+        return m_uvs;
+    }
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    const Core::Colour& StandardDrawableDef::GetColour() const
+    {
+        return m_colour;
+    }
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    DrawableUPtr StandardDrawableDef::CreateDrawable() const
+    {
+        StandardDrawableUPtr drawable;
+        
+        if (m_atlas != nullptr)
+        {
+            drawable = StandardDrawableUPtr(new StandardDrawable(m_texture, m_atlas, m_atlasId));
+        }
+        else
+        {
+            drawable = StandardDrawableUPtr(new StandardDrawable(m_texture));
+        }
+        
+        drawable->SetUVs(m_uvs);
+        drawable->SetColour(m_colour);
 
-            DrawableUPtr output = std::move(drawable);
-            return output;
-        }
+        DrawableUPtr output = std::move(drawable);
+        return output;
     }
 }

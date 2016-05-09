@@ -40,482 +40,479 @@
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Base/Widget.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    namespace
     {
-        namespace
+        const char k_imageReplacementKey = ':';
+        
+        const char k_fontKey[] = "Font";
+        const char k_localisedTextKey[] = "LocalisedText";
+        const char k_localisedTextIdKey[] = "LocalisedTextId";
+        const char k_textKey[] = "Text";
+        const char k_textColourKey[] = "TextColour";
+        const char k_horizontalJustificationKey[] = "HorizontalJustification";
+        const char k_verticalJustificationKey[] = "VerticalJustification";
+        const char k_absCharSpacingOffsetKey[] = "AbsCharSpacingOffset";
+        const char k_absLineSpacingOffsetKey[] = "AbsLineSpacingOffset";
+        const char k_lineSpacingScaleKey[] = "LineSpacingScale";
+        const char k_maxNumberOfLinesKey[] = "MaxNumberOfLines";
+        const char k_textScaleKey[] = "TextScale";
+        const char k_minTextScaleKey[] = "MinTextAutoScale";
+        const char k_enableAutoScaledTextKey[] = "EnableAutoTextScale";
+        
+        const char k_keywordImage[] = "img";
+        const char k_keywordVariable[] = "var";
+        
+        
+        const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
         {
-            const char k_imageReplacementKey = ':';
-            
-            const char k_fontKey[] = "Font";
-            const char k_localisedTextKey[] = "LocalisedText";
-            const char k_localisedTextIdKey[] = "LocalisedTextId";
-            const char k_textKey[] = "Text";
-            const char k_textColourKey[] = "TextColour";
-            const char k_horizontalJustificationKey[] = "HorizontalJustification";
-            const char k_verticalJustificationKey[] = "VerticalJustification";
-            const char k_absCharSpacingOffsetKey[] = "AbsCharSpacingOffset";
-            const char k_absLineSpacingOffsetKey[] = "AbsLineSpacingOffset";
-            const char k_lineSpacingScaleKey[] = "LineSpacingScale";
-            const char k_maxNumberOfLinesKey[] = "MaxNumberOfLines";
-            const char k_textScaleKey[] = "TextScale";
-            const char k_minTextScaleKey[] = "MinTextAutoScale";
-            const char k_enableAutoScaledTextKey[] = "EnableAutoTextScale";
-            
-            const char k_keywordImage[] = "img";
-            const char k_keywordVariable[] = "var";
-            
-            
-            const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
-            {
-                {PropertyTypes::Font(), k_fontKey},
-                {PropertyTypes::LocalisedText(), k_localisedTextKey},
-                {Core::PropertyTypes::String(), k_localisedTextIdKey},
-                {Core::PropertyTypes::String(), k_textKey},
-                {Core::PropertyTypes::Colour(), k_textColourKey},
-                {PropertyTypes::HorizontalTextJustification(), k_horizontalJustificationKey},
-                {PropertyTypes::VerticalTextJustification(), k_verticalJustificationKey},
-                {Core::PropertyTypes::Float(), k_absCharSpacingOffsetKey},
-                {Core::PropertyTypes::Float(), k_absLineSpacingOffsetKey},
-                {Core::PropertyTypes::Float(), k_lineSpacingScaleKey},
-                {Core::PropertyTypes::Int(), k_maxNumberOfLinesKey},
-                {Core::PropertyTypes::Float(), k_textScaleKey},
-                {Core::PropertyTypes::Float(), k_minTextScaleKey},
-                {Core::PropertyTypes::Bool(), k_enableAutoScaledTextKey}
-            };
+            {PropertyTypes::Font(), k_fontKey},
+            {PropertyTypes::LocalisedText(), k_localisedTextKey},
+            {Core::PropertyTypes::String(), k_localisedTextIdKey},
+            {Core::PropertyTypes::String(), k_textKey},
+            {Core::PropertyTypes::Colour(), k_textColourKey},
+            {PropertyTypes::HorizontalTextJustification(), k_horizontalJustificationKey},
+            {PropertyTypes::VerticalTextJustification(), k_verticalJustificationKey},
+            {Core::PropertyTypes::Float(), k_absCharSpacingOffsetKey},
+            {Core::PropertyTypes::Float(), k_absLineSpacingOffsetKey},
+            {Core::PropertyTypes::Float(), k_lineSpacingScaleKey},
+            {Core::PropertyTypes::Int(), k_maxNumberOfLinesKey},
+            {Core::PropertyTypes::Float(), k_textScaleKey},
+            {Core::PropertyTypes::Float(), k_minTextScaleKey},
+            {Core::PropertyTypes::Bool(), k_enableAutoScaledTextKey}
+        };
+    }
+    
+    CS_DEFINE_NAMEDTYPE(TextComponent);
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    const std::vector<Core::PropertyMap::PropertyDesc>& TextComponent::GetPropertyDescs()
+    {
+        return k_propertyDescs;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    TextComponent::TextComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
+        : Component(in_componentName)
+    {
+        auto resourcePool = Core::Application::Get()->GetResourcePool();
+        SetFont(resourcePool->LoadResource<Rendering::Font>(Core::StorageLocation::k_chilliSource, "Fonts/CarlitoMed.csfont"));
+        
+        RegisterProperty<Rendering::FontCSPtr>(PropertyTypes::Font(), k_fontKey, CSCore::MakeDelegate(this, &TextComponent::GetFont), CSCore::MakeDelegate(this, &TextComponent::SetFont));
+        RegisterProperty<Core::LocalisedTextCSPtr>(PropertyTypes::LocalisedText(), k_localisedTextKey, CSCore::MakeDelegate(this, &TextComponent::GetLocalisedText), CSCore::MakeDelegate(this, &TextComponent::SetLocalisedText));
+        RegisterProperty<std::string>(Core::PropertyTypes::String(), k_localisedTextIdKey, CSCore::MakeDelegate(this, &TextComponent::GetLocalisedTextId), CSCore::MakeDelegate<TextComponent, TextComponent, void, const std::string&>(this, &TextComponent::SetLocalisedTextId));
+        RegisterProperty<std::string>(Core::PropertyTypes::String(), k_textKey, CSCore::MakeDelegate(this, &TextComponent::GetText), CSCore::MakeDelegate<TextComponent, TextComponent, void, const std::string&>(this, &TextComponent::SetText));
+        RegisterProperty<Core::Colour>(Core::PropertyTypes::Colour(), k_textColourKey, CSCore::MakeDelegate(this, &TextComponent::GetTextColour), CSCore::MakeDelegate(this, &TextComponent::SetTextColour));
+        RegisterProperty<Rendering::HorizontalTextJustification>(PropertyTypes::HorizontalTextJustification(), k_horizontalJustificationKey, CSCore::MakeDelegate(this, &TextComponent::GetHorizontalJustification), CSCore::MakeDelegate(this, &TextComponent::SetHorizontalJustification));
+        RegisterProperty<Rendering::VerticalTextJustification>(PropertyTypes::VerticalTextJustification(), k_verticalJustificationKey, CSCore::MakeDelegate(this, &TextComponent::GetVerticalJustification), CSCore::MakeDelegate(this, &TextComponent::SetVerticalJustification));
+        RegisterProperty<f32>(Core::PropertyTypes::Float(), k_absCharSpacingOffsetKey, CSCore::MakeDelegate(this, &TextComponent::GetAbsoluteCharacterSpacingOffset), CSCore::MakeDelegate(this, &TextComponent::SetAbsoluteCharacterSpacingOffset));
+        RegisterProperty<f32>(Core::PropertyTypes::Float(), k_absLineSpacingOffsetKey, CSCore::MakeDelegate(this, &TextComponent::GetAbsoluteLineSpacingOffset), CSCore::MakeDelegate(this, &TextComponent::SetAbsoluteLineSpacingOffset));
+        RegisterProperty<f32>(Core::PropertyTypes::Float(), k_lineSpacingScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetLineSpacingScale), CSCore::MakeDelegate(this, &TextComponent::SetLineSpacingScale));
+        RegisterProperty<s32>(Core::PropertyTypes::Int(), k_maxNumberOfLinesKey, CSCore::MakeDelegate(this, &TextComponent::GetMaxNumberOfLines), CSCore::MakeDelegate(this, &TextComponent::SetMaxNumberOfLines));
+        RegisterProperty<f32>(Core::PropertyTypes::Float(), k_textScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetTextScale), CSCore::MakeDelegate(this, &TextComponent::SetTextScale));
+        RegisterProperty<f32>(Core::PropertyTypes::Float(), k_minTextScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetMinAutoTextScale), CSCore::MakeDelegate(this, &TextComponent::SetMinAutoTextScale));
+        RegisterProperty<bool>(Core::PropertyTypes::Bool(), k_enableAutoScaledTextKey, CSCore::MakeDelegate(this, &TextComponent::IsTextAutoScaleEnabled), CSCore::MakeDelegate(this, &TextComponent::SetTextAutoScaleEnabled));
+        
+        ApplyRegisteredProperties(in_properties);
+        
+        // Register a new parser
+        CSCore::MarkupDef markupDef;
+        markupDef.AddKeyword(k_keywordImage, false);
+        markupDef.AddKeyword(k_keywordVariable, true);
+        m_markupParser = CSCore::StringMarkupParser(markupDef);
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    bool TextComponent::IsA(Core::InterfaceIDType in_interfaceId) const
+    {
+        return (Component::InterfaceID == in_interfaceId || TextComponent::InterfaceID == in_interfaceId);
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    const Rendering::FontCSPtr& TextComponent::GetFont() const
+    {
+        return m_font;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    const Core::LocalisedTextCSPtr& TextComponent::GetLocalisedText() const
+    {
+        return m_localisedText;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    const std::string& TextComponent::GetLocalisedTextId() const
+    {
+        return m_localisedTextId;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    const std::string& TextComponent::GetText() const
+    {
+        return m_text;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    const Core::Colour& TextComponent::GetTextColour() const
+    {
+        return m_textColour;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    Rendering::HorizontalTextJustification TextComponent::GetHorizontalJustification() const
+    {
+        return m_textProperties.m_horizontalJustification;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    Rendering::VerticalTextJustification TextComponent::GetVerticalJustification() const
+    {
+        return m_textProperties.m_verticalJustification;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    f32 TextComponent::GetAbsoluteCharacterSpacingOffset() const
+    {
+        return m_textProperties.m_absCharSpacingOffset;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    f32 TextComponent::GetAbsoluteLineSpacingOffset() const
+    {
+        return m_textProperties.m_absLineSpacingOffset;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    f32 TextComponent::GetLineSpacingScale() const
+    {
+        return m_textProperties.m_lineSpacingScale;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    s32 TextComponent::GetMaxNumberOfLines() const
+    {
+        return m_textProperties.m_maxNumLines;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    f32 TextComponent::GetTextScale() const
+    {
+        return m_textProperties.m_textScale;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    f32 TextComponent::GetMinAutoTextScale() const
+    {
+        return m_textProperties.m_minTextScale;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    bool TextComponent::IsTextAutoScaleEnabled() const
+    {
+        return m_textProperties.m_shouldAutoScale;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetFont(const Rendering::FontCSPtr& in_font)
+    {
+        CS_ASSERT(in_font != nullptr, "Cannot set a null font on a Text Drawable.");
+        CS_ASSERT(in_font->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot set an incomplete font on a Text Drawable.");
+        
+        m_font = in_font;
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetLocalisedText(const Core::LocalisedTextCSPtr& in_localisedText)
+    {
+#ifdef CS_ENABLE_DEBUG
+        if (in_localisedText != nullptr)
+        {
+            CS_ASSERT(in_localisedText->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot set text using an incomplete localised text.");
+        }
+#endif
+        
+        m_iconIndices.clear();
+        m_localisedText = in_localisedText;
+        
+        if (m_localisedText != nullptr && m_localisedText->Contains(m_localisedTextId) == true)
+        {
+            m_text = m_localisedText->GetText(m_localisedTextId);
+        }
+        else
+        {
+            m_text = "";
         }
         
-        CS_DEFINE_NAMEDTYPE(TextComponent);
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        const std::vector<Core::PropertyMap::PropertyDesc>& TextComponent::GetPropertyDescs()
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetLocalisedTextId(const std::string& in_localisedTextId)
+    {
+        m_iconIndices.clear();
+        m_localisedTextId = in_localisedTextId;
+        
+        if (m_localisedText != nullptr && m_localisedText->Contains(m_localisedTextId) == true)
         {
-            return k_propertyDescs;
+            m_text = m_localisedText->GetText(m_localisedTextId);
         }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        TextComponent::TextComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
-            : Component(in_componentName)
+        else
         {
-            auto resourcePool = Core::Application::Get()->GetResourcePool();
-            SetFont(resourcePool->LoadResource<Rendering::Font>(Core::StorageLocation::k_chilliSource, "Fonts/CarlitoMed.csfont"));
-            
-            RegisterProperty<Rendering::FontCSPtr>(PropertyTypes::Font(), k_fontKey, CSCore::MakeDelegate(this, &TextComponent::GetFont), CSCore::MakeDelegate(this, &TextComponent::SetFont));
-            RegisterProperty<Core::LocalisedTextCSPtr>(PropertyTypes::LocalisedText(), k_localisedTextKey, CSCore::MakeDelegate(this, &TextComponent::GetLocalisedText), CSCore::MakeDelegate(this, &TextComponent::SetLocalisedText));
-            RegisterProperty<std::string>(Core::PropertyTypes::String(), k_localisedTextIdKey, CSCore::MakeDelegate(this, &TextComponent::GetLocalisedTextId), CSCore::MakeDelegate<TextComponent, TextComponent, void, const std::string&>(this, &TextComponent::SetLocalisedTextId));
-            RegisterProperty<std::string>(Core::PropertyTypes::String(), k_textKey, CSCore::MakeDelegate(this, &TextComponent::GetText), CSCore::MakeDelegate<TextComponent, TextComponent, void, const std::string&>(this, &TextComponent::SetText));
-            RegisterProperty<Core::Colour>(Core::PropertyTypes::Colour(), k_textColourKey, CSCore::MakeDelegate(this, &TextComponent::GetTextColour), CSCore::MakeDelegate(this, &TextComponent::SetTextColour));
-            RegisterProperty<Rendering::HorizontalTextJustification>(PropertyTypes::HorizontalTextJustification(), k_horizontalJustificationKey, CSCore::MakeDelegate(this, &TextComponent::GetHorizontalJustification), CSCore::MakeDelegate(this, &TextComponent::SetHorizontalJustification));
-            RegisterProperty<Rendering::VerticalTextJustification>(PropertyTypes::VerticalTextJustification(), k_verticalJustificationKey, CSCore::MakeDelegate(this, &TextComponent::GetVerticalJustification), CSCore::MakeDelegate(this, &TextComponent::SetVerticalJustification));
-            RegisterProperty<f32>(Core::PropertyTypes::Float(), k_absCharSpacingOffsetKey, CSCore::MakeDelegate(this, &TextComponent::GetAbsoluteCharacterSpacingOffset), CSCore::MakeDelegate(this, &TextComponent::SetAbsoluteCharacterSpacingOffset));
-            RegisterProperty<f32>(Core::PropertyTypes::Float(), k_absLineSpacingOffsetKey, CSCore::MakeDelegate(this, &TextComponent::GetAbsoluteLineSpacingOffset), CSCore::MakeDelegate(this, &TextComponent::SetAbsoluteLineSpacingOffset));
-            RegisterProperty<f32>(Core::PropertyTypes::Float(), k_lineSpacingScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetLineSpacingScale), CSCore::MakeDelegate(this, &TextComponent::SetLineSpacingScale));
-            RegisterProperty<s32>(Core::PropertyTypes::Int(), k_maxNumberOfLinesKey, CSCore::MakeDelegate(this, &TextComponent::GetMaxNumberOfLines), CSCore::MakeDelegate(this, &TextComponent::SetMaxNumberOfLines));
-            RegisterProperty<f32>(Core::PropertyTypes::Float(), k_textScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetTextScale), CSCore::MakeDelegate(this, &TextComponent::SetTextScale));
-            RegisterProperty<f32>(Core::PropertyTypes::Float(), k_minTextScaleKey, CSCore::MakeDelegate(this, &TextComponent::GetMinAutoTextScale), CSCore::MakeDelegate(this, &TextComponent::SetMinAutoTextScale));
-            RegisterProperty<bool>(Core::PropertyTypes::Bool(), k_enableAutoScaledTextKey, CSCore::MakeDelegate(this, &TextComponent::IsTextAutoScaleEnabled), CSCore::MakeDelegate(this, &TextComponent::SetTextAutoScaleEnabled));
-            
-            ApplyRegisteredProperties(in_properties);
-            
-            // Register a new parser
-            CSCore::MarkupDef markupDef;
-            markupDef.AddKeyword(k_keywordImage, false);
-            markupDef.AddKeyword(k_keywordVariable, true);
-            m_markupParser = CSCore::StringMarkupParser(markupDef);
+            m_text = "";
         }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        bool TextComponent::IsA(Core::InterfaceIDType in_interfaceId) const
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData)
+    {
+        CS_ASSERT(m_localisedText != nullptr, "Cannot set text using a null localised text.");
+        
+        ReplaceVariables(m_localisedText->GetText(in_localisedTextId), in_params, in_imageData);
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetText(const std::string& in_text)
+    {
+        m_iconIndices.clear();
+        m_text = in_text;
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetText(const std::string& in_text, const TextIconDictionary& in_imageData)
+    {
+        ReplaceVariables(in_text, {}, in_imageData);
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetTextColour(const Core::Colour& in_textColour)
+    {
+        m_textColour = in_textColour;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetHorizontalJustification(Rendering::HorizontalTextJustification in_horizontalJustification)
+    {
+        m_textProperties.m_horizontalJustification = in_horizontalJustification;
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetVerticalJustification(Rendering::VerticalTextJustification in_verticalJustification)
+    {
+        m_textProperties.m_verticalJustification = in_verticalJustification;
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetAbsoluteCharacterSpacingOffset(f32 in_offset)
+    {
+        m_textProperties.m_absCharSpacingOffset = in_offset;
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetAbsoluteLineSpacingOffset(f32 in_offset)
+    {
+        m_textProperties.m_absLineSpacingOffset = in_offset;
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetLineSpacingScale(f32 in_scale)
+    {
+        m_textProperties.m_lineSpacingScale = in_scale;
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetMaxNumberOfLines(s32 in_numLines)
+    {
+        CS_ASSERT(in_numLines >= 0, "The maximum number of lines cannot be below 0.");
+        
+        m_textProperties.m_maxNumLines = in_numLines;
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetTextScale(f32 in_scale)
+    {
+        m_textProperties.m_textScale = in_scale;
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetMinAutoTextScale(f32 in_scale)
+    {
+        m_textProperties.m_minTextScale = in_scale;
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::SetTextAutoScaleEnabled(bool in_enable)
+    {
+        m_textProperties.m_shouldAutoScale = in_enable;
+        
+        m_invalidateCache = true;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::ReplaceVariables(const std::string& in_text, const Core::ParamDictionary& in_params, const TextIconDictionary& in_iconDictionary)
+    {
+        m_text.clear();
+        m_text.shrink_to_fit();
+        
+        m_iconIndices.clear();
+        m_iconIndices.shrink_to_fit();
+        
+        // Marker for images
+        Rendering::Font::CharacterInfo markerInfo;
+        m_font->TryGetCharacterInfo(k_imageReplacementKey, markerInfo);
+        
+        // Spacing info
+        Rendering::Font::CharacterInfo spaceInfo;
+        m_font->TryGetCharacterInfo(' ', spaceInfo);
+        
+        // Parses the text to replace variables
+        m_text = m_markupParser.Parse(in_text, [=](const std::string& in_name, const std::string& in_keywordValue, u32 in_indexInString) -> std::string
         {
-            return (Component::InterfaceID == in_interfaceId || TextComponent::InterfaceID == in_interfaceId);
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        const Rendering::FontCSPtr& TextComponent::GetFont() const
-        {
-            return m_font;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        const Core::LocalisedTextCSPtr& TextComponent::GetLocalisedText() const
-        {
-            return m_localisedText;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        const std::string& TextComponent::GetLocalisedTextId() const
-        {
-            return m_localisedTextId;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        const std::string& TextComponent::GetText() const
-        {
-            return m_text;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        const Core::Colour& TextComponent::GetTextColour() const
-        {
-            return m_textColour;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        Rendering::HorizontalTextJustification TextComponent::GetHorizontalJustification() const
-        {
-            return m_textProperties.m_horizontalJustification;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        Rendering::VerticalTextJustification TextComponent::GetVerticalJustification() const
-        {
-            return m_textProperties.m_verticalJustification;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        f32 TextComponent::GetAbsoluteCharacterSpacingOffset() const
-        {
-            return m_textProperties.m_absCharSpacingOffset;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        f32 TextComponent::GetAbsoluteLineSpacingOffset() const
-        {
-            return m_textProperties.m_absLineSpacingOffset;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        f32 TextComponent::GetLineSpacingScale() const
-        {
-            return m_textProperties.m_lineSpacingScale;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        s32 TextComponent::GetMaxNumberOfLines() const
-        {
-            return m_textProperties.m_maxNumLines;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        f32 TextComponent::GetTextScale() const
-        {
-            return m_textProperties.m_textScale;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        f32 TextComponent::GetMinAutoTextScale() const
-        {
-            return m_textProperties.m_minTextScale;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        bool TextComponent::IsTextAutoScaleEnabled() const
-        {
-            return m_textProperties.m_shouldAutoScale;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetFont(const Rendering::FontCSPtr& in_font)
-        {
-            CS_ASSERT(in_font != nullptr, "Cannot set a null font on a Text Drawable.");
-            CS_ASSERT(in_font->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot set an incomplete font on a Text Drawable.");
-            
-            m_font = in_font;
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetLocalisedText(const Core::LocalisedTextCSPtr& in_localisedText)
-        {
-#ifdef CS_ENABLE_DEBUG
-            if (in_localisedText != nullptr)
+            std::string value;
+            if (in_name == k_keywordVariable)
             {
-                CS_ASSERT(in_localisedText->GetLoadState() == Core::Resource::LoadState::k_loaded, "Cannot set text using an incomplete localised text.");
+                in_params.TryGetValue(in_keywordValue, value);
             }
-#endif
-            
-            m_iconIndices.clear();
-            m_localisedText = in_localisedText;
-            
-            if (m_localisedText != nullptr && m_localisedText->Contains(m_localisedTextId) == true)
+            else if (in_name == k_keywordImage)
             {
-                m_text = m_localisedText->GetText(m_localisedTextId);
-            }
-            else
-            {
-                m_text = "";
+                value = AddIcon(m_font, in_iconDictionary, in_keywordValue, spaceInfo, markerInfo, in_indexInString, m_iconIndices);
             }
             
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetLocalisedTextId(const std::string& in_localisedTextId)
+            return value;
+        });
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    std::string TextComponent::AddIcon(const Rendering::FontCSPtr& in_font, const TextIconDictionary& in_iconDictionary, const std::string& in_iconName, const Rendering::Font::CharacterInfo& in_spaceInfo,
+                                       const Rendering::Font::CharacterInfo& in_markerInfo, u32& out_index, std::vector<TextIconIndex>& out_iconIndices)
+    {
+        std::string iconText;
+        
+        auto iconIt = in_iconDictionary.find(in_iconName);
+        
+        CS_ASSERT(iconIt != in_iconDictionary.end(), "Unknown icon name in TextComponent: " + in_iconName);
+        
+        //Create the Text Icon Index entry.
+        TextIconIndex iconIndex;
+        iconIndex.m_icon = iconIt->second;
+        iconIndex.m_indexInText = out_index + static_cast<u32>(out_iconIndices.size());
+        out_iconIndices.push_back(iconIndex);
+        
+        //Make space for the Icon in the string. This doesn't include the text scale since that will be accounted for later.
+        f32 aspectRatio = iconIndex.m_icon.GetOriginalSize().x / iconIndex.m_icon.GetOriginalSize().y;
+        f32 width = aspectRatio * in_font->GetLineHeight() * iconIndex.m_icon.GetScale();
+        
+        u32 spacesNeeded = 0;
+        if(in_spaceInfo.m_advance > 0.0f)
         {
-            m_iconIndices.clear();
-            m_localisedTextId = in_localisedTextId;
-            
-            if (m_localisedText != nullptr && m_localisedText->Contains(m_localisedTextId) == true)
+            spacesNeeded = u32(std::ceil((width - in_spaceInfo.m_size.x) / in_spaceInfo.m_advance));
+            if(spacesNeeded % 2 == 1)
             {
-                m_text = m_localisedText->GetText(m_localisedTextId);
+                ++spacesNeeded;
             }
-            else
+        }
+        
+        iconText.append(&k_imageReplacementKey, 1);
+        for(u32 i = 0; i < spacesNeeded / 2; ++i)
+        {
+            iconText = " " + iconText + " ";
+        }
+        
+        ++out_index;
+        
+        return iconText;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    std::vector<TextComponent::TextIconCachedData> TextComponent::BuildIcons(const Rendering::FontCSPtr& in_font, const Rendering::CanvasRenderer::BuiltText& in_builtText,
+                                                                             const std::vector<TextIconIndex>& in_iconIndices, f32 in_textScale)
+    {
+        std::vector<TextIconCachedData> output;
+        
+        for(const auto& iconIndex : in_iconIndices)
+        {
+            if (iconIndex.m_indexInText < in_builtText.m_characters.size())
             {
-                m_text = "";
-            }
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetLocalisedTextId(const std::string& in_localisedTextId, const Core::ParamDictionary& in_params, const TextIconDictionary& in_imageData)
-        {
-            CS_ASSERT(m_localisedText != nullptr, "Cannot set text using a null localised text.");
-            
-            ReplaceVariables(m_localisedText->GetText(in_localisedTextId), in_params, in_imageData);
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetText(const std::string& in_text)
-        {
-            m_iconIndices.clear();
-            m_text = in_text;
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetText(const std::string& in_text, const TextIconDictionary& in_imageData)
-        {
-            ReplaceVariables(in_text, {}, in_imageData);
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetTextColour(const Core::Colour& in_textColour)
-        {
-            m_textColour = in_textColour;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetHorizontalJustification(Rendering::HorizontalTextJustification in_horizontalJustification)
-        {
-            m_textProperties.m_horizontalJustification = in_horizontalJustification;
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetVerticalJustification(Rendering::VerticalTextJustification in_verticalJustification)
-        {
-            m_textProperties.m_verticalJustification = in_verticalJustification;
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetAbsoluteCharacterSpacingOffset(f32 in_offset)
-        {
-            m_textProperties.m_absCharSpacingOffset = in_offset;
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetAbsoluteLineSpacingOffset(f32 in_offset)
-        {
-            m_textProperties.m_absLineSpacingOffset = in_offset;
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetLineSpacingScale(f32 in_scale)
-        {
-            m_textProperties.m_lineSpacingScale = in_scale;
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetMaxNumberOfLines(s32 in_numLines)
-        {
-            CS_ASSERT(in_numLines >= 0, "The maximum number of lines cannot be below 0.");
-            
-            m_textProperties.m_maxNumLines = in_numLines;
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetTextScale(f32 in_scale)
-        {
-            m_textProperties.m_textScale = in_scale;
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetMinAutoTextScale(f32 in_scale)
-        {
-            m_textProperties.m_minTextScale = in_scale;
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::SetTextAutoScaleEnabled(bool in_enable)
-        {
-            m_textProperties.m_shouldAutoScale = in_enable;
-            
-            m_invalidateCache = true;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::ReplaceVariables(const std::string& in_text, const Core::ParamDictionary& in_params, const TextIconDictionary& in_iconDictionary)
-        {
-            m_text.clear();
-            m_text.shrink_to_fit();
-            
-            m_iconIndices.clear();
-            m_iconIndices.shrink_to_fit();
-            
-            // Marker for images
-            Rendering::Font::CharacterInfo markerInfo;
-            m_font->TryGetCharacterInfo(k_imageReplacementKey, markerInfo);
-            
-            // Spacing info
-            Rendering::Font::CharacterInfo spaceInfo;
-            m_font->TryGetCharacterInfo(' ', spaceInfo);
-            
-            // Parses the text to replace variables
-            m_text = m_markupParser.Parse(in_text, [=](const std::string& in_name, const std::string& in_keywordValue, u32 in_indexInString) -> std::string
-            {
-                std::string value;
-                if (in_name == k_keywordVariable)
-                {
-                    in_params.TryGetValue(in_keywordValue, value);
-                }
-                else if (in_name == k_keywordImage)
-                {
-                    value = AddIcon(m_font, in_iconDictionary, in_keywordValue, spaceInfo, markerInfo, in_indexInString, m_iconIndices);
-                }
+                const Core::Vector2& charSize = in_builtText.m_characters[iconIndex.m_indexInText].m_packedImageSize;
+                f32 charPosX = in_builtText.m_characters[iconIndex.m_indexInText].m_position.x + charSize.x * 0.5f;
+                f32 charPosY = in_builtText.m_characters[iconIndex.m_indexInText].m_position.y - charSize.y * 0.5f;
                 
-                return value;
-            });
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        std::string TextComponent::AddIcon(const Rendering::FontCSPtr& in_font, const TextIconDictionary& in_iconDictionary, const std::string& in_iconName, const Rendering::Font::CharacterInfo& in_spaceInfo,
-                                           const Rendering::Font::CharacterInfo& in_markerInfo, u32& out_index, std::vector<TextIconIndex>& out_iconIndices)
-        {
-            std::string iconText;
-            
-            auto iconIt = in_iconDictionary.find(in_iconName);
-            
-            CS_ASSERT(iconIt != in_iconDictionary.end(), "Unknown icon name in TextComponent: " + in_iconName);
-            
-            //Create the Text Icon Index entry.
-            TextIconIndex iconIndex;
-            iconIndex.m_icon = iconIt->second;
-            iconIndex.m_indexInText = out_index + static_cast<u32>(out_iconIndices.size());
-            out_iconIndices.push_back(iconIndex);
-            
-            //Make space for the Icon in the string. This doesn't include the text scale since that will be accounted for later.
-            f32 aspectRatio = iconIndex.m_icon.GetOriginalSize().x / iconIndex.m_icon.GetOriginalSize().y;
-            f32 width = aspectRatio * in_font->GetLineHeight() * iconIndex.m_icon.GetScale();
-            
-            u32 spacesNeeded = 0;
-            if(in_spaceInfo.m_advance > 0.0f)
-            {
-                spacesNeeded = u32(std::ceil((width - in_spaceInfo.m_size.x) / in_spaceInfo.m_advance));
-                if(spacesNeeded % 2 == 1)
-                {
-                    ++spacesNeeded;
-                }
-            }
-            
-            iconText.append(&k_imageReplacementKey, 1);
-            for(u32 i = 0; i < spacesNeeded / 2; ++i)
-            {
-                iconText = " " + iconText + " ";
-            }
-            
-            ++out_index;
-            
-            return iconText;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        std::vector<TextComponent::TextIconCachedData> TextComponent::BuildIcons(const Rendering::FontCSPtr& in_font, const Rendering::CanvasRenderer::BuiltText& in_builtText,
-                                                                                 const std::vector<TextIconIndex>& in_iconIndices, f32 in_textScale)
-        {
-            std::vector<TextIconCachedData> output;
-            
-            for(const auto& iconIndex : in_iconIndices)
-            {
-                if (iconIndex.m_indexInText < in_builtText.m_characters.size())
-                {
-                    const Core::Vector2& charSize = in_builtText.m_characters[iconIndex.m_indexInText].m_packedImageSize;
-                    f32 charPosX = in_builtText.m_characters[iconIndex.m_indexInText].m_position.x + charSize.x * 0.5f;
-                    f32 charPosY = in_builtText.m_characters[iconIndex.m_indexInText].m_position.y - charSize.y * 0.5f;
-                    
-                    f32 croppedHeightRatio = iconIndex.m_icon.GetCroppedSize().y / iconIndex.m_icon.GetOriginalSize().y;
-                    f32 height = in_font->GetLineHeight() * croppedHeightRatio * iconIndex.m_icon.GetScale() * in_textScale;
-                    
-                    f32 croppedIconAspectRatio = iconIndex.m_icon.GetCroppedSize().x / iconIndex.m_icon.GetCroppedSize().y;
-                    f32 width = croppedIconAspectRatio * height;
-                    
-                    //calculate the offset from the centre of the original image quad to cropped
-                    f32 croppedOffsetFromCentreX = iconIndex.m_icon.GetOffset().x + iconIndex.m_icon.GetCroppedSize().x * 0.5f - iconIndex.m_icon.GetOriginalSize().x * 0.5f;
-                    f32 croppedOffsetFromCentreY = -(iconIndex.m_icon.GetOffset().y + iconIndex.m_icon.GetCroppedSize().y * 0.5f - iconIndex.m_icon.GetOriginalSize().y * 0.5f);
-                    auto croppedOffset = Core::Vector2(croppedOffsetFromCentreX, croppedOffsetFromCentreY) * iconIndex.m_icon.GetScale() * in_textScale;
-                    
-                    TextIconCachedData iconData;
-                    iconData.m_texture = iconIndex.m_icon.GetTexture();
-                    iconData.m_size = Core::Vector2(width, height);
-                    iconData.m_uvs = iconIndex.m_icon.GetUVs();
-                    iconData.m_offset.x = croppedOffset.x + charPosX;
-                    iconData.m_offset.y = croppedOffset.y + charPosY;
-                    
-                    output.push_back(iconData);
-                }
-            }
-            
-            return output;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void TextComponent::OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
-        {
-            if (m_cachedSize != in_absSize)
-            {
-                m_cachedSize = in_absSize;
-                m_invalidateCache = true;
-            }
-            
-            if (m_invalidateCache == true)
-            {
-                m_invalidateCache = false;
+                f32 croppedHeightRatio = iconIndex.m_icon.GetCroppedSize().y / iconIndex.m_icon.GetOriginalSize().y;
+                f32 height = in_font->GetLineHeight() * croppedHeightRatio * iconIndex.m_icon.GetScale() * in_textScale;
                 
-                f32 textScale = 1.0f;
-                m_cachedText = in_renderer->BuildText(m_text, m_font, in_absSize, m_textProperties, textScale);
-                m_cachedIcons = BuildIcons(m_font, m_cachedText, m_iconIndices, textScale);
+                f32 croppedIconAspectRatio = iconIndex.m_icon.GetCroppedSize().x / iconIndex.m_icon.GetCroppedSize().y;
+                f32 width = croppedIconAspectRatio * height;
+                
+                //calculate the offset from the centre of the original image quad to cropped
+                f32 croppedOffsetFromCentreX = iconIndex.m_icon.GetOffset().x + iconIndex.m_icon.GetCroppedSize().x * 0.5f - iconIndex.m_icon.GetOriginalSize().x * 0.5f;
+                f32 croppedOffsetFromCentreY = -(iconIndex.m_icon.GetOffset().y + iconIndex.m_icon.GetCroppedSize().y * 0.5f - iconIndex.m_icon.GetOriginalSize().y * 0.5f);
+                auto croppedOffset = Core::Vector2(croppedOffsetFromCentreX, croppedOffsetFromCentreY) * iconIndex.m_icon.GetScale() * in_textScale;
+                
+                TextIconCachedData iconData;
+                iconData.m_texture = iconIndex.m_icon.GetTexture();
+                iconData.m_size = Core::Vector2(width, height);
+                iconData.m_uvs = iconIndex.m_icon.GetUVs();
+                iconData.m_offset.x = croppedOffset.x + charPosX;
+                iconData.m_offset.y = croppedOffset.y + charPosY;
+                
+                output.push_back(iconData);
             }
+        }
+        
+        return output;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void TextComponent::OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
+    {
+        if (m_cachedSize != in_absSize)
+        {
+            m_cachedSize = in_absSize;
+            m_invalidateCache = true;
+        }
+        
+        if (m_invalidateCache == true)
+        {
+            m_invalidateCache = false;
             
-            // Draw text
-            in_renderer->DrawText(m_cachedText.m_characters, in_transform, m_textColour * GetWidget()->GetFinalColour(), m_font->GetTexture());
-            
-            // Draw images
-            for(const auto& iconData : m_cachedIcons)
-            {
-				in_renderer->DrawBox(in_transform, iconData.m_size, iconData.m_offset, iconData.m_texture, iconData.m_uvs, GetWidget()->GetFinalColour(), Rendering::AlignmentAnchor::k_middleCentre);
-            }
+            f32 textScale = 1.0f;
+            m_cachedText = in_renderer->BuildText(m_text, m_font, in_absSize, m_textProperties, textScale);
+            m_cachedIcons = BuildIcons(m_font, m_cachedText, m_iconIndices, textScale);
+        }
+        
+        // Draw text
+        in_renderer->DrawText(m_cachedText.m_characters, in_transform, m_textColour * GetWidget()->GetFinalColour(), m_font->GetTexture());
+        
+        // Draw images
+        for(const auto& iconData : m_cachedIcons)
+        {
+            in_renderer->DrawBox(in_transform, iconData.m_size, iconData.m_offset, iconData.m_texture, iconData.m_uvs, GetWidget()->GetFinalColour(), Rendering::AlignmentAnchor::k_middleCentre);
         }
     }
 }

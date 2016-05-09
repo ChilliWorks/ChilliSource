@@ -33,79 +33,76 @@
 #include <ChilliSource/UI/Drawable/Drawable.h>
 #include <ChilliSource/UI/Drawable/DrawableDef.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    namespace
     {
-        namespace
-        {
-            const char k_drawableKey[] = "Drawable";
-            
-            const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
-            {
-                {PropertyTypes::DrawableDef(), k_drawableKey},
-            };
-        }
+        const char k_drawableKey[] = "Drawable";
         
-        CS_DEFINE_NAMEDTYPE(DrawableComponent);
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        const std::vector<Core::PropertyMap::PropertyDesc>& DrawableComponent::GetPropertyDescs()
+        const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
         {
-            return k_propertyDescs;
+            {PropertyTypes::DrawableDef(), k_drawableKey},
+        };
+    }
+    
+    CS_DEFINE_NAMEDTYPE(DrawableComponent);
+    //-------------------------------------------------------------------
+    //-------------------------------------------------------------------
+    const std::vector<Core::PropertyMap::PropertyDesc>& DrawableComponent::GetPropertyDescs()
+    {
+        return k_propertyDescs;
+    }
+    //-------------------------------------------------------------------
+    //-------------------------------------------------------------------
+    DrawableComponent::DrawableComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
+        : Component(in_componentName)
+    {
+        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_drawableKey, Core::MakeDelegate(this, &DrawableComponent::GetDrawableDef), Core::MakeDelegate(this, &DrawableComponent::ApplyDrawableDef));
+        ApplyRegisteredProperties(in_properties);
+    }
+    //-------------------------------------------------------------------
+    //-------------------------------------------------------------------
+    bool DrawableComponent::IsA(Core::InterfaceIDType in_interfaceId) const
+    {
+        return (Component::InterfaceID == in_interfaceId || DrawableComponent::InterfaceID == in_interfaceId);
+    }
+    //-------------------------------------------------------------------
+    //-------------------------------------------------------------------
+    Drawable* DrawableComponent::GetDrawable()
+    {
+        return m_drawable.get();
+    }
+    //-------------------------------------------------------------------
+    //-------------------------------------------------------------------
+    const Drawable* DrawableComponent::GetDrawable() const
+    {
+        return m_drawable.get();
+    }
+    //-------------------------------------------------------------------
+    //-------------------------------------------------------------------
+    void DrawableComponent::ApplyDrawableDef(const DrawableDefCSPtr& in_drawableDef)
+    {
+        m_drawable.reset();
+        m_drawableDef = in_drawableDef;
+        
+        if (m_drawableDef != nullptr)
+        {
+            m_drawable = m_drawableDef->CreateDrawable();
         }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        DrawableComponent::DrawableComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
-            : Component(in_componentName)
+    }
+    //-------------------------------------------------------------------
+    //-------------------------------------------------------------------
+    const DrawableDefCSPtr& DrawableComponent::GetDrawableDef() const
+    {
+        return m_drawableDef;
+    }
+    //----------------------------------------------------------------
+    //----------------------------------------------------------------
+    void DrawableComponent::OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
+    {
+        if (m_drawable != nullptr)
         {
-            RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_drawableKey, Core::MakeDelegate(this, &DrawableComponent::GetDrawableDef), Core::MakeDelegate(this, &DrawableComponent::ApplyDrawableDef));
-            ApplyRegisteredProperties(in_properties);
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        bool DrawableComponent::IsA(Core::InterfaceIDType in_interfaceId) const
-        {
-            return (Component::InterfaceID == in_interfaceId || DrawableComponent::InterfaceID == in_interfaceId);
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        Drawable* DrawableComponent::GetDrawable()
-        {
-            return m_drawable.get();
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        const Drawable* DrawableComponent::GetDrawable() const
-        {
-            return m_drawable.get();
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        void DrawableComponent::ApplyDrawableDef(const DrawableDefCSPtr& in_drawableDef)
-        {
-            m_drawable.reset();
-            m_drawableDef = in_drawableDef;
-            
-            if (m_drawableDef != nullptr)
-            {
-                m_drawable = m_drawableDef->CreateDrawable();
-            }
-        }
-        //-------------------------------------------------------------------
-        //-------------------------------------------------------------------
-        const DrawableDefCSPtr& DrawableComponent::GetDrawableDef() const
-        {
-            return m_drawableDef;
-        }
-        //----------------------------------------------------------------
-        //----------------------------------------------------------------
-        void DrawableComponent::OnDraw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour)
-        {
-            if (m_drawable != nullptr)
-            {
-                m_drawable->Draw(in_renderer, in_transform, in_absSize, in_absColour);
-            }
+            m_drawable->Draw(in_renderer, in_transform, in_absSize, in_absColour);
         }
     }
 }

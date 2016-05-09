@@ -38,25 +38,22 @@
 #include <ChilliSource/Rendering/Base/HorizontalTextJustification.h>
 #include <ChilliSource/Rendering/Base/VerticalTextJustification.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    namespace PropertyTypes
     {
-        namespace PropertyTypes
-        {
-            CS_DEFINE_PROPERTYTYPE(Rendering::AlignmentAnchor, AlignmentAnchor, Rendering::AlignmentAnchor::k_middleCentre, &Rendering::ParseAlignmentAnchor);
-            CS_DEFINE_PROPERTYTYPE(UI::SizePolicy, SizePolicy, UI::SizePolicy::k_none, &ParseSizePolicy);
-            CS_DEFINE_PROPERTYTYPE(DrawableDefCSPtr, DrawableDef, nullptr, nullptr);
-            CS_DEFINE_PROPERTYTYPE(LayoutDefCSPtr, LayoutDef, nullptr, nullptr);
-            CS_DEFINE_PROPERTYTYPE(Rendering::TextureCSPtr, Texture, nullptr, nullptr);
-            CS_DEFINE_PROPERTYTYPE(Rendering::TextureAtlasCSPtr, TextureAtlas, nullptr, nullptr);
-            CS_DEFINE_PROPERTYTYPE(Rendering::FontCSPtr, Font, nullptr, nullptr);
-            CS_DEFINE_PROPERTYTYPE(Core::LocalisedTextCSPtr, LocalisedText, nullptr, nullptr);
-            CS_DEFINE_PROPERTYTYPE(Rendering::HorizontalTextJustification, HorizontalTextJustification, Rendering::HorizontalTextJustification::k_centre, &Rendering::ParseHorizontalTextJustification);
-            CS_DEFINE_PROPERTYTYPE(Rendering::VerticalTextJustification, VerticalTextJustification, Rendering::VerticalTextJustification::k_centre, &Rendering::ParseVerticalTextJustification);
-            CS_DEFINE_PROPERTYTYPE(UI::SliderDirection, SliderDirection, UI::SliderDirection::k_horizontal, &ParseSliderDirection);
-            CS_DEFINE_PROPERTYTYPE(UI::ProgressBarDirection, ProgressBarDirection, UI::ProgressBarDirection::k_horizontal, &ParseProgressBarDirection);
-            CS_DEFINE_PROPERTYTYPE(UI::ProgressBarType, ProgressBarType, UI::ProgressBarType::k_stretch, &ParseProgressBarType);
-        }
+        CS_DEFINE_PROPERTYTYPE(Rendering::AlignmentAnchor, AlignmentAnchor, Rendering::AlignmentAnchor::k_middleCentre, &Rendering::ParseAlignmentAnchor);
+        CS_DEFINE_PROPERTYTYPE(UI::SizePolicy, SizePolicy, UI::SizePolicy::k_none, &ParseSizePolicy);
+        CS_DEFINE_PROPERTYTYPE(DrawableDefCSPtr, DrawableDef, nullptr, nullptr);
+        CS_DEFINE_PROPERTYTYPE(LayoutDefCSPtr, LayoutDef, nullptr, nullptr);
+        CS_DEFINE_PROPERTYTYPE(Rendering::TextureCSPtr, Texture, nullptr, nullptr);
+        CS_DEFINE_PROPERTYTYPE(Rendering::TextureAtlasCSPtr, TextureAtlas, nullptr, nullptr);
+        CS_DEFINE_PROPERTYTYPE(Rendering::FontCSPtr, Font, nullptr, nullptr);
+        CS_DEFINE_PROPERTYTYPE(Core::LocalisedTextCSPtr, LocalisedText, nullptr, nullptr);
+        CS_DEFINE_PROPERTYTYPE(Rendering::HorizontalTextJustification, HorizontalTextJustification, Rendering::HorizontalTextJustification::k_centre, &Rendering::ParseHorizontalTextJustification);
+        CS_DEFINE_PROPERTYTYPE(Rendering::VerticalTextJustification, VerticalTextJustification, Rendering::VerticalTextJustification::k_centre, &Rendering::ParseVerticalTextJustification);
+        CS_DEFINE_PROPERTYTYPE(UI::SliderDirection, SliderDirection, UI::SliderDirection::k_horizontal, &ParseSliderDirection);
+        CS_DEFINE_PROPERTYTYPE(UI::ProgressBarDirection, ProgressBarDirection, UI::ProgressBarDirection::k_horizontal, &ParseProgressBarDirection);
+        CS_DEFINE_PROPERTYTYPE(UI::ProgressBarType, ProgressBarType, UI::ProgressBarType::k_stretch, &ParseProgressBarType);
     }
 }

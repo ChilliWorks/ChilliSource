@@ -30,40 +30,37 @@
 
 #include <ChilliSource/Core/Container/Property/PropertyMap.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    CS_DEFINE_NAMEDTYPE(WidgetTemplate);
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    WidgetTemplateUPtr WidgetTemplate::Create()
     {
-        CS_DEFINE_NAMEDTYPE(WidgetTemplate);
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        WidgetTemplateUPtr WidgetTemplate::Create()
-        {
-            return WidgetTemplateUPtr(new WidgetTemplate());
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        WidgetTemplate::WidgetTemplate()
-            : m_desc("", Core::PropertyMap(), std::vector<WidgetDesc>())
-        {
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        bool WidgetTemplate::IsA(Core::InterfaceIDType in_interfaceId) const
-        {
-            return in_interfaceId == WidgetTemplate::InterfaceID;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        void WidgetTemplate::Build(const WidgetDesc& in_desc)
-        {
-            m_desc = in_desc;
-        }
-        //-------------------------------------------------------
-        //-------------------------------------------------------
-        const WidgetDesc& WidgetTemplate::GetWidgetDesc() const
-        {
-            return m_desc;
-        }
+        return WidgetTemplateUPtr(new WidgetTemplate());
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    WidgetTemplate::WidgetTemplate()
+        : m_desc("", Core::PropertyMap(), std::vector<WidgetDesc>())
+    {
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    bool WidgetTemplate::IsA(Core::InterfaceIDType in_interfaceId) const
+    {
+        return in_interfaceId == WidgetTemplate::InterfaceID;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    void WidgetTemplate::Build(const WidgetDesc& in_desc)
+    {
+        m_desc = in_desc;
+    }
+    //-------------------------------------------------------
+    //-------------------------------------------------------
+    const WidgetDesc& WidgetTemplate::GetWidgetDesc() const
+    {
+        return m_desc;
     }
 }

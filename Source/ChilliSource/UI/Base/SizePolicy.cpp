@@ -30,26 +30,23 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    //----------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------
+    SizePolicy ParseSizePolicy(const std::string& in_policy)
     {
-        //----------------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------------
-        SizePolicy ParseSizePolicy(const std::string& in_policy)
-        {
-            std::string lowerCase = in_policy;
-            Core::StringUtils::ToLowerCase(lowerCase);
-            
-            if(lowerCase == "none") return SizePolicy::k_none;
-            if(lowerCase == "usepreferredsize") return SizePolicy::k_usePreferredSize;
-            if(lowerCase == "usewidthmaintainingaspect") return SizePolicy::k_useWidthMaintainingAspect;
-            if(lowerCase == "useheightmaintainingaspect") return SizePolicy::k_useHeightMaintainingAspect;
-            if(lowerCase == "fitmaintainingaspect") return SizePolicy::k_fitMaintainingAspect;
-            if(lowerCase == "fillmaintainingaspect") return SizePolicy::k_fillMaintainingAspect;
-            
-            CS_LOG_FATAL("Cannot parse size policy type: " + in_policy);
-            return SizePolicy::k_none;
-        }
+        std::string lowerCase = in_policy;
+        Core::StringUtils::ToLowerCase(lowerCase);
+        
+        if(lowerCase == "none") return SizePolicy::k_none;
+        if(lowerCase == "usepreferredsize") return SizePolicy::k_usePreferredSize;
+        if(lowerCase == "usewidthmaintainingaspect") return SizePolicy::k_useWidthMaintainingAspect;
+        if(lowerCase == "useheightmaintainingaspect") return SizePolicy::k_useHeightMaintainingAspect;
+        if(lowerCase == "fitmaintainingaspect") return SizePolicy::k_fitMaintainingAspect;
+        if(lowerCase == "fillmaintainingaspect") return SizePolicy::k_fillMaintainingAspect;
+        
+        CS_LOG_FATAL("Cannot parse size policy type: " + in_policy);
+        return SizePolicy::k_none;
     }
 }

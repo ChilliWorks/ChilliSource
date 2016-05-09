@@ -34,93 +34,90 @@
 #include <ChilliSource/UI/Layout/Layout.h>
 #include <ChilliSource/UI/Layout/LayoutDef.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    namespace
     {
-        namespace
-        {
-            const char k_layoutKey[] = "Layout";
-            
-            const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
-            {
-                {PropertyTypes::LayoutDef(), k_layoutKey},
-            };
-        }
+        const char k_layoutKey[] = "Layout";
         
-        CS_DEFINE_NAMEDTYPE(LayoutComponent);
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        const std::vector<Core::PropertyMap::PropertyDesc>& LayoutComponent::GetPropertyDescs()
+        const std::vector<Core::PropertyMap::PropertyDesc> k_propertyDescs =
         {
-            return k_propertyDescs;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        LayoutComponent::LayoutComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
-            : Component(in_componentName)
-        {
-            RegisterProperty<LayoutDefCSPtr>(PropertyTypes::LayoutDef(), k_layoutKey, Core::MakeDelegate(this, &LayoutComponent::GetLayoutDef), Core::MakeDelegate(this, &LayoutComponent::ApplyLayoutDef));
-            ApplyRegisteredProperties(in_properties);
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        bool LayoutComponent::IsA(Core::InterfaceIDType in_interfaceId) const
-        {
-            return (LayoutComponent::InterfaceID == in_interfaceId);
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        Layout* LayoutComponent::GetLayout()
-        {
-            return m_layout.get();
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        const Layout* LayoutComponent::GetLayout() const
-        {
-            return m_layout.get();
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void LayoutComponent::ApplyLayoutDef(const LayoutDefCSPtr& in_layoutDef)
-        {
-            CS_ASSERT(in_layoutDef != nullptr, "Cannot set null layout def on a layout component.");
-            
-            m_layoutDef = in_layoutDef;
-            m_layout = m_layoutDef->CreateLayout(this);
-            
-            OnLayoutChanged();
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void LayoutComponent::BuildLayout()
-        {
-            m_layout->BuildLayout();
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        Core::Vector2 LayoutComponent::GetSizeForIndex(u32 in_index) const
-        {
-            return m_layout->GetSizeForIndex(in_index);
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        Core::Vector2 LayoutComponent::GetPositionForIndex(u32 in_index) const
-        {
-            return m_layout->GetPositionForIndex(in_index);
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        const LayoutDefCSPtr& LayoutComponent::GetLayoutDef() const
-        {
-            return m_layoutDef;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        void LayoutComponent::OnLayoutChanged()
-        {
-            GetWidget()->ForceLayout();
-        }
+            {PropertyTypes::LayoutDef(), k_layoutKey},
+        };
+    }
+    
+    CS_DEFINE_NAMEDTYPE(LayoutComponent);
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    const std::vector<Core::PropertyMap::PropertyDesc>& LayoutComponent::GetPropertyDescs()
+    {
+        return k_propertyDescs;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    LayoutComponent::LayoutComponent(const std::string& in_componentName, const Core::PropertyMap& in_properties)
+        : Component(in_componentName)
+    {
+        RegisterProperty<LayoutDefCSPtr>(PropertyTypes::LayoutDef(), k_layoutKey, Core::MakeDelegate(this, &LayoutComponent::GetLayoutDef), Core::MakeDelegate(this, &LayoutComponent::ApplyLayoutDef));
+        ApplyRegisteredProperties(in_properties);
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    bool LayoutComponent::IsA(Core::InterfaceIDType in_interfaceId) const
+    {
+        return (LayoutComponent::InterfaceID == in_interfaceId);
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    Layout* LayoutComponent::GetLayout()
+    {
+        return m_layout.get();
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    const Layout* LayoutComponent::GetLayout() const
+    {
+        return m_layout.get();
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void LayoutComponent::ApplyLayoutDef(const LayoutDefCSPtr& in_layoutDef)
+    {
+        CS_ASSERT(in_layoutDef != nullptr, "Cannot set null layout def on a layout component.");
+        
+        m_layoutDef = in_layoutDef;
+        m_layout = m_layoutDef->CreateLayout(this);
+        
+        OnLayoutChanged();
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void LayoutComponent::BuildLayout()
+    {
+        m_layout->BuildLayout();
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    Core::Vector2 LayoutComponent::GetSizeForIndex(u32 in_index) const
+    {
+        return m_layout->GetSizeForIndex(in_index);
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    Core::Vector2 LayoutComponent::GetPositionForIndex(u32 in_index) const
+    {
+        return m_layout->GetPositionForIndex(in_index);
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    const LayoutDefCSPtr& LayoutComponent::GetLayoutDef() const
+    {
+        return m_layoutDef;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    void LayoutComponent::OnLayoutChanged()
+    {
+        GetWidget()->ForceLayout();
     }
 }

@@ -34,63 +34,60 @@
 
 #include <vector>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    //--------------------------------------------------------------------------
+    /// A container for a description of a single widget, comprising of a type
+    /// and a map of properties for the given widget type and a list of child
+    /// widgets. Typically this is only used in the creation of a WidgetDef and
+    /// in most cases this does not need to be dealt with directly as the
+    /// resource provider handles it when loading a widget from file. This is
+    /// immutable after construction.
+    ///
+    /// @param Ian Copland
+    //--------------------------------------------------------------------------
+    class WidgetDesc final
     {
-        //--------------------------------------------------------------------------
-        /// A container for a description of a single widget, comprising of a type
-        /// and a map of properties for the given widget type and a list of child
-        /// widgets. Typically this is only used in the creation of a WidgetDef and
-        /// in most cases this does not need to be dealt with directly as the
-        /// resource provider handles it when loading a widget from file. This is
-        /// immutable after construction.
+    public:
+        //------------------------------------------------------------------
+        /// Constructor. Creates an empty description.
         ///
-        /// @param Ian Copland
-        //--------------------------------------------------------------------------
-        class WidgetDesc final
-        {
-        public:
-            //------------------------------------------------------------------
-            /// Constructor. Creates an empty description.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------
-            WidgetDesc() = default;
-            //------------------------------------------------------------------
-            /// Constructor.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The name of the widget type this desc will create.
-            /// @param The map of properties the widget should be created with.
-            /// @param The list of child widget descriptions.
-            //------------------------------------------------------------------
-            WidgetDesc(const std::string& in_type, const Core::PropertyMap& in_properties, const std::vector<WidgetDesc>& in_childDescs);
-            //------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The name of the widget type this desc will create.
-            //------------------------------------------------------------------
-            const std::string& GetType() const;
-            //------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The map of properties the widget should be created with.
-            //------------------------------------------------------------------
-            const Core::PropertyMap& GetProperties() const;
-            //------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The list of child widget descriptions.
-            //------------------------------------------------------------------
-            const std::vector<WidgetDesc>& GetChildDescs() const;
-        private:
-            std::string m_type = "";
-            Core::PropertyMap m_propertyMap;
-            std::vector<WidgetDesc> m_childDescs;
-        };
-    }
+        /// @author Ian Copland
+        //------------------------------------------------------------------
+        WidgetDesc() = default;
+        //------------------------------------------------------------------
+        /// Constructor.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The name of the widget type this desc will create.
+        /// @param The map of properties the widget should be created with.
+        /// @param The list of child widget descriptions.
+        //------------------------------------------------------------------
+        WidgetDesc(const std::string& in_type, const Core::PropertyMap& in_properties, const std::vector<WidgetDesc>& in_childDescs);
+        //------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The name of the widget type this desc will create.
+        //------------------------------------------------------------------
+        const std::string& GetType() const;
+        //------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The map of properties the widget should be created with.
+        //------------------------------------------------------------------
+        const Core::PropertyMap& GetProperties() const;
+        //------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The list of child widget descriptions.
+        //------------------------------------------------------------------
+        const std::vector<WidgetDesc>& GetChildDescs() const;
+    private:
+        std::string m_type = "";
+        Core::PropertyMap m_propertyMap;
+        std::vector<WidgetDesc> m_childDescs;
+    };
 }
 
 #endif

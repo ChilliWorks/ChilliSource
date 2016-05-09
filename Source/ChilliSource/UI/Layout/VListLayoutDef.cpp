@@ -34,106 +34,103 @@
 
 #include <json/json.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    CS_DEFINE_NAMEDTYPE(VListLayoutDef);
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    VListLayoutDef::VListLayoutDef(const Json::Value& in_json)
     {
-        CS_DEFINE_NAMEDTYPE(VListLayoutDef);
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        VListLayoutDef::VListLayoutDef(const Json::Value& in_json)
+        const char k_typeKey[] = "Type";
+        const char k_numCellsKey[] = "NumCells";
+        const char k_relativeMarginsKey[] = "RelMargins";
+        const char k_absoluteMarginsKey[] = "AbsMargins";
+        const char k_relativeSpacingKey[] = "RelSpacing";
+        const char k_absoluteSpacingKey[] = "AbsSpacing";
+        
+        for(auto it = in_json.begin(); it != in_json.end(); ++it)
         {
-            const char k_typeKey[] = "Type";
-            const char k_numCellsKey[] = "NumCells";
-            const char k_relativeMarginsKey[] = "RelMargins";
-            const char k_absoluteMarginsKey[] = "AbsMargins";
-            const char k_relativeSpacingKey[] = "RelSpacing";
-            const char k_absoluteSpacingKey[] = "AbsSpacing";
+            CS_ASSERT((*it).isString() == true, "All properties in a Layout Description must be a string: " + std::string(it.memberName()));
             
-            for(auto it = in_json.begin(); it != in_json.end(); ++it)
+            std::string key = it.memberName();
+            std::string value = (*it).asString();
+            
+            if (key == k_relativeMarginsKey)
             {
-                CS_ASSERT((*it).isString() == true, "All properties in a Layout Description must be a string: " + std::string(it.memberName()));
-                
-                std::string key = it.memberName();
-                std::string value = (*it).asString();
-                
-                if (key == k_relativeMarginsKey)
-                {
-                    m_relativeMargins = Core::ParseVector4(value);
-                }
-                else if (key == k_absoluteMarginsKey)
-                {
-                    m_absoluteMargins = Core::ParseVector4(value);
-                }
-                else if (key == k_numCellsKey)
-                {
-                    m_numCells = Core::ParseU32(value);
-                }
-                else if (key == k_relativeSpacingKey)
-                {
-                    m_relativeSpacing = Core::ParseF32(value);
-                }
-                else if (key == k_absoluteSpacingKey)
-                {
-                    m_absoluteSpacing = Core::ParseF32(value);
-                }
-                else if (key == k_typeKey)
-                {
-                    //ignore
-                }
-                else
-                {
-                    CS_LOG_FATAL("Invalid property found in a List layout description: " + key);
-                }
+                m_relativeMargins = Core::ParseVector4(value);
+            }
+            else if (key == k_absoluteMarginsKey)
+            {
+                m_absoluteMargins = Core::ParseVector4(value);
+            }
+            else if (key == k_numCellsKey)
+            {
+                m_numCells = Core::ParseU32(value);
+            }
+            else if (key == k_relativeSpacingKey)
+            {
+                m_relativeSpacing = Core::ParseF32(value);
+            }
+            else if (key == k_absoluteSpacingKey)
+            {
+                m_absoluteSpacing = Core::ParseF32(value);
+            }
+            else if (key == k_typeKey)
+            {
+                //ignore
+            }
+            else
+            {
+                CS_LOG_FATAL("Invalid property found in a List layout description: " + key);
             }
         }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        VListLayoutDef::VListLayoutDef(u32 in_numCells, const Core::Vector4& in_relMargins, const Core::Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing)
-        : m_numCells(in_numCells), m_relativeMargins(in_relMargins), m_absoluteMargins(in_absMargins), m_relativeSpacing(in_relSpacing), m_absoluteSpacing(in_absSpacing)
-        {
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        bool VListLayoutDef::IsA(Core::InterfaceIDType in_interfaceId) const
-        {
-            return (LayoutDef::InterfaceID == in_interfaceId || VListLayoutDef::InterfaceID == in_interfaceId);
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        u32 VListLayoutDef::GetNumCells() const
-        {
-            return m_numCells;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        Core::Vector4 VListLayoutDef::GetRelativeMargins() const
-        {
-            return m_relativeMargins;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        Core::Vector4 VListLayoutDef::GetAbsoluteMargins() const
-        {
-            return m_absoluteMargins;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        f32 VListLayoutDef::GetRelativeSpacing() const
-        {
-            return m_relativeSpacing;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        f32 VListLayoutDef::GetAbsoluteSpacing() const
-        {
-            return m_absoluteSpacing;
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        LayoutUPtr VListLayoutDef::CreateLayout(LayoutComponent* in_owner) const
-        {
-            return LayoutUPtr(new VListLayout(in_owner, m_numCells, m_relativeMargins, m_absoluteMargins, m_relativeSpacing, m_absoluteSpacing));
-        }
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    VListLayoutDef::VListLayoutDef(u32 in_numCells, const Core::Vector4& in_relMargins, const Core::Vector4& in_absMargins, f32 in_relSpacing, f32 in_absSpacing)
+    : m_numCells(in_numCells), m_relativeMargins(in_relMargins), m_absoluteMargins(in_absMargins), m_relativeSpacing(in_relSpacing), m_absoluteSpacing(in_absSpacing)
+    {
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    bool VListLayoutDef::IsA(Core::InterfaceIDType in_interfaceId) const
+    {
+        return (LayoutDef::InterfaceID == in_interfaceId || VListLayoutDef::InterfaceID == in_interfaceId);
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    u32 VListLayoutDef::GetNumCells() const
+    {
+        return m_numCells;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    Core::Vector4 VListLayoutDef::GetRelativeMargins() const
+    {
+        return m_relativeMargins;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    Core::Vector4 VListLayoutDef::GetAbsoluteMargins() const
+    {
+        return m_absoluteMargins;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    f32 VListLayoutDef::GetRelativeSpacing() const
+    {
+        return m_relativeSpacing;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    f32 VListLayoutDef::GetAbsoluteSpacing() const
+    {
+        return m_absoluteSpacing;
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    LayoutUPtr VListLayoutDef::CreateLayout(LayoutComponent* in_owner) const
+    {
+        return LayoutUPtr(new VListLayout(in_owner, m_numCells, m_relativeMargins, m_absoluteMargins, m_relativeSpacing, m_absoluteSpacing));
     }
 }

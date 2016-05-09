@@ -33,73 +33,70 @@
 #include <ChilliSource/Core/Resource/Resource.h>
 #include <ChilliSource/UI/Base/WidgetDesc.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    //-------------------------------------------------------------
+    /// A resource that holds the description for creating new
+    /// widget instances. A widget template is used to create
+    /// instances of mutable UI i.e. screens. Widgets created
+    /// from templates are fully defined usually with drawables,
+    /// sizes, positions, etc and are ready for adding to the canvas.
+    ///
+    /// @author S Downie
+    //-------------------------------------------------------------
+    class WidgetTemplate final : public Core::Resource
     {
-        //-------------------------------------------------------------
-        /// A resource that holds the description for creating new
-        /// widget instances. A widget template is used to create
-        /// instances of mutable UI i.e. screens. Widgets created
-        /// from templates are fully defined usually with drawables,
-        /// sizes, positions, etc and are ready for adding to the canvas.
+    public:
+        CS_DECLARE_NAMEDTYPE(WidgetTemplate);
+        
+        //-------------------------------------------------------
+        /// Is the object of the given interface type.
         ///
         /// @author S Downie
-        //-------------------------------------------------------------
-        class WidgetTemplate final : public Core::Resource
-        {
-        public:
-            CS_DECLARE_NAMEDTYPE(WidgetTemplate);
-            
-            //-------------------------------------------------------
-            /// Is the object of the given interface type.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Interface type to query
-            ///
-            /// @return Whether the object is of given type
-            //-------------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-            //-------------------------------------------------------
-            /// Build the resource which consists of the description
-            /// of a widget and all its children
-            ///
-            /// @author S Downie
-            ///
-            /// @param The widget description.
-            //-------------------------------------------------------
-            void Build(const WidgetDesc& in_desc);
-            //-------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return Hierarchy description
-            //-------------------------------------------------------
-            const WidgetDesc& GetWidgetDesc() const;
-            
-        private:
-            
-            friend class Core::ResourcePool;
-            //-------------------------------------------------------
-            /// Factory method
-            ///
-            /// @author S Downie
-            ///
-            /// @return New backend with ownership transferred
-            //-------------------------------------------------------
-            static WidgetTemplateUPtr Create();
-            //-------------------------------------------------------
-            /// Private constructor to force use of factory method
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------
-            WidgetTemplate();
-            
-        private:
-            
-            WidgetDesc m_desc;
-        };
-    }
+        ///
+        /// @param Interface type to query
+        ///
+        /// @return Whether the object is of given type
+        //-------------------------------------------------------
+        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        //-------------------------------------------------------
+        /// Build the resource which consists of the description
+        /// of a widget and all its children
+        ///
+        /// @author S Downie
+        ///
+        /// @param The widget description.
+        //-------------------------------------------------------
+        void Build(const WidgetDesc& in_desc);
+        //-------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return Hierarchy description
+        //-------------------------------------------------------
+        const WidgetDesc& GetWidgetDesc() const;
+        
+    private:
+        
+        friend class Core::ResourcePool;
+        //-------------------------------------------------------
+        /// Factory method
+        ///
+        /// @author S Downie
+        ///
+        /// @return New backend with ownership transferred
+        //-------------------------------------------------------
+        static WidgetTemplateUPtr Create();
+        //-------------------------------------------------------
+        /// Private constructor to force use of factory method
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------
+        WidgetTemplate();
+        
+    private:
+        
+        WidgetDesc m_desc;
+    };
 }
 
 #endif

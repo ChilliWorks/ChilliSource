@@ -31,44 +31,41 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    //------------------------------------------------------------------------
+    /// An enum describing the direction of a slider: vertical or
+    /// horizontal.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------
+    enum class SliderDirection
     {
-        //------------------------------------------------------------------------
-        /// An enum describing the direction of a slider: vertical or
-        /// horizontal.
-        ///
-        /// @author Ian Copland
-        //------------------------------------------------------------------------
-        enum class SliderDirection
-        {
-            k_horizontal,
-            k_vertical
-        };
-        //------------------------------------------------------------------------
-        /// Parse a slider direction from string. This is case insensitive.
-        /// If the string is not a valid direction then the app is considered to
-        /// be in an irrecoverable state and will terminate.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param The string to parse.
-        ///
-        /// @return The parsed direction.
-        //------------------------------------------------------------------------
-        SliderDirection ParseSliderDirection(const std::string& in_stringDirection);
-        //------------------------------------------------------------------------
-        /// Converts the given slider direction to a string.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param The slider direction to convert to string.
-        ///
-        /// @return The direction in string form.
-        //------------------------------------------------------------------------
-        std::string ToString(SliderDirection in_direction);
-    }
+        k_horizontal,
+        k_vertical
+    };
+    //------------------------------------------------------------------------
+    /// Parse a slider direction from string. This is case insensitive.
+    /// If the string is not a valid direction then the app is considered to
+    /// be in an irrecoverable state and will terminate.
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param The string to parse.
+    ///
+    /// @return The parsed direction.
+    //------------------------------------------------------------------------
+    SliderDirection ParseSliderDirection(const std::string& in_stringDirection);
+    //------------------------------------------------------------------------
+    /// Converts the given slider direction to a string.
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param The slider direction to convert to string.
+    ///
+    /// @return The direction in string form.
+    //------------------------------------------------------------------------
+    std::string ToString(SliderDirection in_direction);
 }
 
 #endif

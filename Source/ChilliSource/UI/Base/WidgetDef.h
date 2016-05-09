@@ -38,126 +38,123 @@
 
 #include <vector>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    //-------------------------------------------------------------
+    /// A resource that holds the description for defining new
+    /// widget types. Widgets created from defines have provate implementation
+    /// details such as child widgets and are supposed to be treated as
+    /// as single widget rather than as a screen. Widgets created from
+    /// defines rarely have any properties set only their behaviour and
+    /// hiearchy is fixed and there they require positioning and drawables
+    /// etc before they can be added to the canvas.
+    ///
+    /// @author S Downie
+    //-------------------------------------------------------------
+    class WidgetDef final : public Core::Resource
     {
-        //-------------------------------------------------------------
-        /// A resource that holds the description for defining new
-        /// widget types. Widgets created from defines have provate implementation
-        /// details such as child widgets and are supposed to be treated as
-        /// as single widget rather than as a screen. Widgets created from
-        /// defines rarely have any properties set only their behaviour and
-        /// hiearchy is fixed and there they require positioning and drawables
-        /// etc before they can be added to the canvas.
+    public:
+        CS_DECLARE_NAMEDTYPE(WidgetDef);
+        //-------------------------------------------------------
+        /// Is the object of the given interface type.
         ///
         /// @author S Downie
-        //-------------------------------------------------------------
-        class WidgetDef final : public Core::Resource
-        {
-        public:
-            CS_DECLARE_NAMEDTYPE(WidgetDef);
-            //-------------------------------------------------------
-            /// Is the object of the given interface type.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Interface type to query
-            ///
-            /// @return Whether the object is of given type
-            //-------------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-            //-------------------------------------------------------
-            /// Build the widget def resource, consisting of its
-            /// default properties, components and children.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The name of the widget type.
-            /// @param The property map containing all of the keys
-            /// for this widget type--both the base properties all
-            /// widgets have and linked properties. The values of
-            /// each property is the default value in any instance
-            /// of the widget being used.
-            /// @param The list of components. This can be empty if
-            /// no components are required.
-            /// @param The links between properties of the widget def
-            /// and properties of components.
-            /// @param The list of internal child descriptions. This
-            /// can be empty if no internal children are required.
-            /// @param The links between properties of the widget
-            /// def and properties of internal children.
-            //-------------------------------------------------------
-            void Build(const std::string& in_typeName, const Core::PropertyMap& in_defaultProperties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
-                       const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks);
-            //-------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The name of the widget type.
-            //-------------------------------------------------------
-            const std::string& GetTypeName() const;
-            //-------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The property map containing all of the keys
-            /// for this widget type--both the base properties all
-            /// widgets have and linked properties. All values are
-            /// set to their default value.
-            //-------------------------------------------------------
-            const Core::PropertyMap& GetDefaultProperties() const;
-            //-------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The list of component descriptions.
-            //-------------------------------------------------------
-            const std::vector<ComponentDesc>& GetComponentDescs() const;
-            //-------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The links between properties of the widget
-            /// def and properties of components.
-            //-------------------------------------------------------
-            const std::vector<PropertyLink>& GetComponentPropertyLinks() const;
-            //-------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The list of internal child descriptions.
-            //-------------------------------------------------------
-            const std::vector<WidgetDesc>& GetChildDescs() const;
-            //-------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The links between properties of the widget
-            /// def and properties of internal children.
-            //-------------------------------------------------------
-            const std::vector<PropertyLink>& GetChildPropertyLinks() const;
-            
-        private:
-            friend class Core::ResourcePool;
-            //-------------------------------------------------------
-            /// Factory method
-            ///
-            /// @author S Downie
-            ///
-            /// @return New backend with ownership transferred
-            //-------------------------------------------------------
-            static WidgetDefUPtr Create();
-            //-------------------------------------------------------
-            /// Private constructor to force use of factory method
-            ///
-            /// @author S Downie
-            //-------------------------------------------------------
-            WidgetDef() = default;
-            
-        private:
-            std::string m_typeName;
-            Core::PropertyMap m_defaultProperties;
-            std::vector<ComponentDesc> m_componentDescs;
-            std::vector<PropertyLink> m_componentPropertyLinks;
-            std::vector<WidgetDesc> m_childDescs;
-            std::vector<PropertyLink> m_childPropertyLinks;
-        };
-    }
+        ///
+        /// @param Interface type to query
+        ///
+        /// @return Whether the object is of given type
+        //-------------------------------------------------------
+        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        //-------------------------------------------------------
+        /// Build the widget def resource, consisting of its
+        /// default properties, components and children.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The name of the widget type.
+        /// @param The property map containing all of the keys
+        /// for this widget type--both the base properties all
+        /// widgets have and linked properties. The values of
+        /// each property is the default value in any instance
+        /// of the widget being used.
+        /// @param The list of components. This can be empty if
+        /// no components are required.
+        /// @param The links between properties of the widget def
+        /// and properties of components.
+        /// @param The list of internal child descriptions. This
+        /// can be empty if no internal children are required.
+        /// @param The links between properties of the widget
+        /// def and properties of internal children.
+        //-------------------------------------------------------
+        void Build(const std::string& in_typeName, const Core::PropertyMap& in_defaultProperties, const std::vector<ComponentDesc>& in_componentDescs, const std::vector<PropertyLink>& in_componentPropertyLinks,
+                   const std::vector<WidgetDesc>& in_childDescs, const std::vector<PropertyLink>& in_childPropertyLinks);
+        //-------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The name of the widget type.
+        //-------------------------------------------------------
+        const std::string& GetTypeName() const;
+        //-------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The property map containing all of the keys
+        /// for this widget type--both the base properties all
+        /// widgets have and linked properties. All values are
+        /// set to their default value.
+        //-------------------------------------------------------
+        const Core::PropertyMap& GetDefaultProperties() const;
+        //-------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The list of component descriptions.
+        //-------------------------------------------------------
+        const std::vector<ComponentDesc>& GetComponentDescs() const;
+        //-------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The links between properties of the widget
+        /// def and properties of components.
+        //-------------------------------------------------------
+        const std::vector<PropertyLink>& GetComponentPropertyLinks() const;
+        //-------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The list of internal child descriptions.
+        //-------------------------------------------------------
+        const std::vector<WidgetDesc>& GetChildDescs() const;
+        //-------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The links between properties of the widget
+        /// def and properties of internal children.
+        //-------------------------------------------------------
+        const std::vector<PropertyLink>& GetChildPropertyLinks() const;
+        
+    private:
+        friend class Core::ResourcePool;
+        //-------------------------------------------------------
+        /// Factory method
+        ///
+        /// @author S Downie
+        ///
+        /// @return New backend with ownership transferred
+        //-------------------------------------------------------
+        static WidgetDefUPtr Create();
+        //-------------------------------------------------------
+        /// Private constructor to force use of factory method
+        ///
+        /// @author S Downie
+        //-------------------------------------------------------
+        WidgetDef() = default;
+        
+    private:
+        std::string m_typeName;
+        Core::PropertyMap m_defaultProperties;
+        std::vector<ComponentDesc> m_componentDescs;
+        std::vector<PropertyLink> m_componentPropertyLinks;
+        std::vector<WidgetDesc> m_childDescs;
+        std::vector<PropertyLink> m_childPropertyLinks;
+    };
 }
 
 #endif

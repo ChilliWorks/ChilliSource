@@ -35,57 +35,54 @@
 
 #include <json/forwards.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace UI
-	{
-        namespace WidgetParserUtils
-        {
-            //-------------------------------------------------------
-            /// Loads a storage location and file path from the given
-            /// json. If a storage location is not specified this
-            /// will use the resource is considered to be relative
-            /// to the given path and location.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The json object.
-            /// @param [Optional] The relative storage location.
-            /// @param [Optional] The relative directory path.
-            ///
-            /// @return a pair containing the storage location and
-            /// file path of the resource.
-            //-------------------------------------------------------
-            std::pair<Core::StorageLocation, std::string> ParseResource(const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation = Core::StorageLocation::k_package, const std::string& in_relDirectoryPath = "");
-            //-------------------------------------------------------
-            /// Sets a property in a property map from a json value.
-            /// The value type must be a string or a json object or
-            /// this will assert.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The property name.
-            /// @param The json value.
-            /// @param [Out] The output property map.
-            //-------------------------------------------------------
-            void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath, Core::PropertyMap& out_propertyMap);
-            //-------------------------------------------------------
-            /// From the given JSON value parse the values of the property
-            /// types into the given container. Some of the properties
-            /// require conversion from relative to absolute paths
-            /// hence the definition path info.
-            ///
-            /// @author S Downie
-            ///
-            /// @param The widget json.
-            /// @param Template location.
-            /// @param Template path (no file name)
-            ///
-            /// @return The output widget description.
-            //-------------------------------------------------------
-            WidgetDesc ParseWidget(const Json::Value& in_widget, Core::StorageLocation in_templateLocation, const std::string& in_templatePath);
-        }
-	}
+    namespace WidgetParserUtils
+    {
+        //-------------------------------------------------------
+        /// Loads a storage location and file path from the given
+        /// json. If a storage location is not specified this
+        /// will use the resource is considered to be relative
+        /// to the given path and location.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The json object.
+        /// @param [Optional] The relative storage location.
+        /// @param [Optional] The relative directory path.
+        ///
+        /// @return a pair containing the storage location and
+        /// file path of the resource.
+        //-------------------------------------------------------
+        std::pair<Core::StorageLocation, std::string> ParseResource(const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation = Core::StorageLocation::k_package, const std::string& in_relDirectoryPath = "");
+        //-------------------------------------------------------
+        /// Sets a property in a property map from a json value.
+        /// The value type must be a string or a json object or
+        /// this will assert.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The property name.
+        /// @param The json value.
+        /// @param [Out] The output property map.
+        //-------------------------------------------------------
+        void SetProperty(const std::string& in_propertyName, const Json::Value& in_jsonValue, Core::StorageLocation in_relStorageLocation, const std::string& in_relDirectoryPath, Core::PropertyMap& out_propertyMap);
+        //-------------------------------------------------------
+        /// From the given JSON value parse the values of the property
+        /// types into the given container. Some of the properties
+        /// require conversion from relative to absolute paths
+        /// hence the definition path info.
+        ///
+        /// @author S Downie
+        ///
+        /// @param The widget json.
+        /// @param Template location.
+        /// @param Template path (no file name)
+        ///
+        /// @return The output widget description.
+        //-------------------------------------------------------
+        WidgetDesc ParseWidget(const Json::Value& in_widget, Core::StorageLocation in_templateLocation, const std::string& in_templatePath);
+    }
 }
 
 #endif

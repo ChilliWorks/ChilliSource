@@ -32,34 +32,31 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    //----------------------------------------------------------------------------
+    /// Collection of utility methods shared by drawables
+    ///
+    /// @author S Downie
+    //----------------------------------------------------------------------------
+    namespace DrawableUtils
     {
         //----------------------------------------------------------------------------
-        /// Collection of utility methods shared by drawables
+        /// Creates the texture atlas frame from the given atlas, atlas id, and UVs.
+        /// If there is no atlas or atlas id, the frame will be calculated from the
+        /// texture and the UVs. If there is also no texture, a zero sized frame
+        /// will be created.
         ///
-        /// @author S Downie
+        /// @author Ian Copland
+        ///
+        /// @param The texture. Can be null.
+        /// @param The texture atlas. Can be null.
+        /// @param The atlas Id string. Can be null.
+        /// @param The virtual UVs.
+        ///
+        /// @return Atlas frame
         //----------------------------------------------------------------------------
-        namespace DrawableUtils
-        {
-            //----------------------------------------------------------------------------
-            /// Creates the texture atlas frame from the given atlas, atlas id, and UVs.
-            /// If there is no atlas or atlas id, the frame will be calculated from the
-            /// texture and the UVs. If there is also no texture, a zero sized frame
-            /// will be created.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The texture. Can be null.
-            /// @param The texture atlas. Can be null.
-            /// @param The atlas Id string. Can be null.
-            /// @param The virtual UVs.
-            ///
-            /// @return Atlas frame
-            //----------------------------------------------------------------------------
-            Rendering::TextureAtlas::Frame BuildFrame(const Rendering::Texture* in_texture, const Rendering::TextureAtlas* in_textureAtlas, const std::string& in_atlasId, const Rendering::UVs& in_virtualUVs);
-        }
+        Rendering::TextureAtlas::Frame BuildFrame(const Rendering::Texture* in_texture, const Rendering::TextureAtlas* in_textureAtlas, const std::string& in_atlasId, const Rendering::UVs& in_virtualUVs);
     }
 }
 

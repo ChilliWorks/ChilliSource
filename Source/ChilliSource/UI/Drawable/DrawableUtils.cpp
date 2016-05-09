@@ -31,43 +31,40 @@
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    namespace DrawableUtils
     {
-        namespace DrawableUtils
+        //----------------------------------------------------------------------------
+        //----------------------------------------------------------------------------
+        Rendering::TextureAtlas::Frame BuildFrame(const Rendering::Texture* in_texture, const Rendering::TextureAtlas* in_textureAtlas, const std::string& in_atlasId, const Rendering::UVs& in_virtualUVs)
         {
-            //----------------------------------------------------------------------------
-            //----------------------------------------------------------------------------
-            Rendering::TextureAtlas::Frame BuildFrame(const Rendering::Texture* in_texture, const Rendering::TextureAtlas* in_textureAtlas, const std::string& in_atlasId, const Rendering::UVs& in_virtualUVs)
+            Rendering::TextureAtlas::Frame outputFrame;
+            
+            if (in_textureAtlas != nullptr && in_atlasId.empty() == false)
             {
-                Rendering::TextureAtlas::Frame outputFrame;
-                
-                if (in_textureAtlas != nullptr && in_atlasId.empty() == false)
-                {
-                    outputFrame = in_textureAtlas->GetFrame(in_atlasId);
-                    outputFrame.m_uvs.m_u += (in_virtualUVs.m_u * outputFrame.m_uvs.m_s);
-                    outputFrame.m_uvs.m_v += (in_virtualUVs.m_v * outputFrame.m_uvs.m_t);
-                    outputFrame.m_uvs.m_s *= in_virtualUVs.m_s;
-                    outputFrame.m_uvs.m_t *= in_virtualUVs.m_t;
-                }
-                else
-                {
-                    Core::Vector2 texSize;
-                    if(in_texture != nullptr)
-                    {
-                        texSize.x = (f32)in_texture->GetWidth() * in_virtualUVs.m_s;
-                        texSize.y = (f32)in_texture->GetHeight() * in_virtualUVs.m_t;
-                    }
-                    
-                    outputFrame.m_croppedSize = texSize;
-                    outputFrame.m_originalSize = texSize;
-                    outputFrame.m_uvs = in_virtualUVs;
-                    outputFrame.m_offset = Core::Vector2::k_zero;
-                }
-                
-                return outputFrame;
+                outputFrame = in_textureAtlas->GetFrame(in_atlasId);
+                outputFrame.m_uvs.m_u += (in_virtualUVs.m_u * outputFrame.m_uvs.m_s);
+                outputFrame.m_uvs.m_v += (in_virtualUVs.m_v * outputFrame.m_uvs.m_t);
+                outputFrame.m_uvs.m_s *= in_virtualUVs.m_s;
+                outputFrame.m_uvs.m_t *= in_virtualUVs.m_t;
             }
+            else
+            {
+                Core::Vector2 texSize;
+                if(in_texture != nullptr)
+                {
+                    texSize.x = (f32)in_texture->GetWidth() * in_virtualUVs.m_s;
+                    texSize.y = (f32)in_texture->GetHeight() * in_virtualUVs.m_t;
+                }
+                
+                outputFrame.m_croppedSize = texSize;
+                outputFrame.m_originalSize = texSize;
+                outputFrame.m_uvs = in_virtualUVs;
+                outputFrame.m_offset = Core::Vector2::k_zero;
+            }
+            
+            return outputFrame;
         }
     }
 }

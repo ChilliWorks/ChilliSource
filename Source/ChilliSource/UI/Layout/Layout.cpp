@@ -28,23 +28,20 @@
 
 #include <ChilliSource/UI/Layout/Layout.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    CS_DEFINE_NAMEDTYPE(Layout);
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    Layout::Layout(LayoutComponent* in_layoutComponent)
+        : m_component(in_layoutComponent)
     {
-        CS_DEFINE_NAMEDTYPE(Layout);
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        Layout::Layout(LayoutComponent* in_layoutComponent)
-            : m_component(in_layoutComponent)
-        {
-            CS_ASSERT(m_component != nullptr, "A layout must have an owning component.");
-        }
-        //------------------------------------------------------------------------------
-        //------------------------------------------------------------------------------
-        LayoutComponent* Layout::GetComponent()
-        {
-            return m_component;
-        }
+        CS_ASSERT(m_component != nullptr, "A layout must have an owning component.");
+    }
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    LayoutComponent* Layout::GetComponent()
+    {
+        return m_component;
     }
 }

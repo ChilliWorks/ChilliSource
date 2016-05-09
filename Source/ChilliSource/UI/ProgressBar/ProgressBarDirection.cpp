@@ -30,47 +30,44 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    const char k_directionHorizontal[] = "horizontal";
+    const char k_directionVertical[] = "vertical";
+    
+    //------------------------------------------------------------------------
+    //------------------------------------------------------------------------
+    ProgressBarDirection ParseProgressBarDirection(const std::string& in_stringDirection)
     {
-        const char k_directionHorizontal[] = "horizontal";
-        const char k_directionVertical[] = "vertical";
+        std::string lowerDirection = in_stringDirection;
+        Core::StringUtils::ToLowerCase(lowerDirection);
         
-        //------------------------------------------------------------------------
-        //------------------------------------------------------------------------
-        ProgressBarDirection ParseProgressBarDirection(const std::string& in_stringDirection)
+        if (lowerDirection == k_directionHorizontal)
         {
-            std::string lowerDirection = in_stringDirection;
-            Core::StringUtils::ToLowerCase(lowerDirection);
-            
-            if (lowerDirection == k_directionHorizontal)
-            {
-                return ProgressBarDirection::k_horizontal;
-            }
-            else if (lowerDirection == k_directionVertical)
-            {
-                return ProgressBarDirection::k_vertical;
-            }
-            
-            CS_LOG_FATAL("Could not parse progress bar direction: " + in_stringDirection);
             return ProgressBarDirection::k_horizontal;
         }
-        //------------------------------------------------------------------------
-        //------------------------------------------------------------------------
-        std::string ToString(ProgressBarDirection in_direction)
+        else if (lowerDirection == k_directionVertical)
         {
-            switch (in_direction)
-            {
-                case ProgressBarDirection::k_horizontal:
-                    return k_directionHorizontal;
-                case ProgressBarDirection::k_vertical:
-                    return k_directionVertical;
-                default:
-                    CS_LOG_FATAL("Invalid progress bar direction.");
-                    return k_directionHorizontal;
-                    
-            }
+            return ProgressBarDirection::k_vertical;
+        }
+        
+        CS_LOG_FATAL("Could not parse progress bar direction: " + in_stringDirection);
+        return ProgressBarDirection::k_horizontal;
+    }
+    //------------------------------------------------------------------------
+    //------------------------------------------------------------------------
+    std::string ToString(ProgressBarDirection in_direction)
+    {
+        switch (in_direction)
+        {
+            case ProgressBarDirection::k_horizontal:
+                return k_directionHorizontal;
+            case ProgressBarDirection::k_vertical:
+                return k_directionVertical;
+            default:
+                CS_LOG_FATAL("Invalid progress bar direction.");
+                return k_directionHorizontal;
+                
         }
     }
 }

@@ -31,37 +31,34 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-	namespace UI
-	{
-        //----------------------------------------------------------------------------------------
-        /// Identifiers for functions that maintain the aspect ratio of the widget based on
-        /// current size and preferred size
-        ///
-        /// @author S Downie
-        //----------------------------------------------------------------------------------------
-        enum class SizePolicy
-        {
-            k_none,
-            k_usePreferredSize,
-            k_useWidthMaintainingAspect,
-            k_useHeightMaintainingAspect,
-            k_fitMaintainingAspect,
-            k_fillMaintainingAspect,
-            k_totalNum
-        };
-        //----------------------------------------------------------------------------------------
-        /// Parse the string and return the size policy
-        ///
-        /// @author S Downie
-        ///
-        /// @param String
-        ///
-        /// @return Size policy
-        //----------------------------------------------------------------------------------------
-        SizePolicy ParseSizePolicy(const std::string& in_policy);
-	}
+    //----------------------------------------------------------------------------------------
+    /// Identifiers for functions that maintain the aspect ratio of the widget based on
+    /// current size and preferred size
+    ///
+    /// @author S Downie
+    //----------------------------------------------------------------------------------------
+    enum class SizePolicy
+    {
+        k_none,
+        k_usePreferredSize,
+        k_useWidthMaintainingAspect,
+        k_useHeightMaintainingAspect,
+        k_fitMaintainingAspect,
+        k_fillMaintainingAspect,
+        k_totalNum
+    };
+    //----------------------------------------------------------------------------------------
+    /// Parse the string and return the size policy
+    ///
+    /// @author S Downie
+    ///
+    /// @param String
+    ///
+    /// @return Size policy
+    //----------------------------------------------------------------------------------------
+    SizePolicy ParseSizePolicy(const std::string& in_policy);
 }
 
 #endif

@@ -34,78 +34,75 @@
 
 #include <vector>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    //------------------------------------------------------------------------------
+    /// Interface for laying out widgets. This is used by Layout Component to
+    /// apply the described layout.
+    ///
+    /// @author S Downie
+    //------------------------------------------------------------------------------
+    class Layout : public Core::QueryableInterface
     {
+    public:
+        CS_DECLARE_NAMEDTYPE(ILayout);
+        CS_DECLARE_NOCOPY(Layout);
         //------------------------------------------------------------------------------
-        /// Interface for laying out widgets. This is used by Layout Component to
-        /// apply the described layout.
+        /// Constructor
+        ///
+        /// @author S Downie
+        ///
+        /// @param The layout component that owns this layout.
+        //------------------------------------------------------------------------------
+        Layout(LayoutComponent* in_layoutComponent);
+        //------------------------------------------------------------------------------
+        /// Virtual destructor
         ///
         /// @author S Downie
         //------------------------------------------------------------------------------
-        class Layout : public Core::QueryableInterface
-        {
-        public:
-            CS_DECLARE_NAMEDTYPE(ILayout);
-            CS_DECLARE_NOCOPY(Layout);
-            //------------------------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author S Downie
-            ///
-            /// @param The layout component that owns this layout.
-            //------------------------------------------------------------------------------
-            Layout(LayoutComponent* in_layoutComponent);
-            //------------------------------------------------------------------------------
-            /// Virtual destructor
-            ///
-            /// @author S Downie
-            //------------------------------------------------------------------------------
-            virtual ~Layout() {}
-            
-        protected:
-            //------------------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The owning component.
-            //------------------------------------------------------------------------------
-            LayoutComponent* GetComponent();
-            
-        private:
-            friend class LayoutComponent;
-            //------------------------------------------------------------------------------
-            /// Create the layout sizes and positions based on the current layout properties
-            /// and the owning widget.
-            ///
-            /// @author S Downie
-            //------------------------------------------------------------------------------
-            virtual void BuildLayout() = 0;
-            //------------------------------------------------------------------------------
-            /// Get the final size of the widget that occupies the space at the given index
-            ///
-            /// @author S Downie
-            ///
-            /// @param Space index
-            ///
-            /// @return Final absolute screen size
-            //------------------------------------------------------------------------------
-            virtual Core::Vector2 GetSizeForIndex(u32 in_index) const = 0;
-            //------------------------------------------------------------------------------
-            /// Get the local position of the widget that occupies the space at the given
-            /// index
-            ///
-            /// @author S Downie
-            ///
-            /// @param Space index
-            ///
-            /// @return Local position (aligned middle centre of the cell)
-            //------------------------------------------------------------------------------
-            virtual Core::Vector2 GetPositionForIndex(u32 in_index) const = 0;
-            
-            LayoutComponent* m_component = nullptr;
-        };
-    }
+        virtual ~Layout() {}
+        
+    protected:
+        //------------------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The owning component.
+        //------------------------------------------------------------------------------
+        LayoutComponent* GetComponent();
+        
+    private:
+        friend class LayoutComponent;
+        //------------------------------------------------------------------------------
+        /// Create the layout sizes and positions based on the current layout properties
+        /// and the owning widget.
+        ///
+        /// @author S Downie
+        //------------------------------------------------------------------------------
+        virtual void BuildLayout() = 0;
+        //------------------------------------------------------------------------------
+        /// Get the final size of the widget that occupies the space at the given index
+        ///
+        /// @author S Downie
+        ///
+        /// @param Space index
+        ///
+        /// @return Final absolute screen size
+        //------------------------------------------------------------------------------
+        virtual Core::Vector2 GetSizeForIndex(u32 in_index) const = 0;
+        //------------------------------------------------------------------------------
+        /// Get the local position of the widget that occupies the space at the given
+        /// index
+        ///
+        /// @author S Downie
+        ///
+        /// @param Space index
+        ///
+        /// @return Local position (aligned middle centre of the cell)
+        //------------------------------------------------------------------------------
+        virtual Core::Vector2 GetPositionForIndex(u32 in_index) const = 0;
+        
+        LayoutComponent* m_component = nullptr;
+    };
 }
 
 #endif

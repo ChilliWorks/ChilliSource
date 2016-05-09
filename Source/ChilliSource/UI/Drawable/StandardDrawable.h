@@ -37,165 +37,162 @@
 #include <ChilliSource/Rendering/Texture/UVs.h>
 #include <ChilliSource/UI/Drawable/Drawable.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    //----------------------------------------------------------------------------------------
+    /// Interface for rendering widget with a texture and UVs.
+    ///
+    /// @author S Downie
+    //----------------------------------------------------------------------------------------
+    class StandardDrawable final : public Drawable
     {
+    public:
+        CS_DECLARE_NAMEDTYPE(StandardDrawable);
         //----------------------------------------------------------------------------------------
-        /// Interface for rendering widget with a texture and UVs.
+        /// Allows querying of whether or not the component implements the interface associated
+        /// with the given interface Id. Typically this won't be called directly, instead the
+        /// templated version IsA<Interface>() should be used.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The interface Id.
+        ///
+        /// @return Whether the object implements the given interface.
+        //----------------------------------------------------------------------------------------
+        bool IsA(Core::InterfaceIDType in_interfaceId) const override;
+        //----------------------------------------------------------------------------------------
+        /// Get the texture that is currently used.
+        ///
+        /// @author HMcLaughlin
+        ///
+        /// @return Texture
+        //----------------------------------------------------------------------------------------
+        const Rendering::TextureCSPtr& GetTexture() const override;
+        //----------------------------------------------------------------------------------------
+        /// Get the texture atlas that is currently used.
+        ///
+        /// @author HMcLaughlin
+        ///
+        /// @return Texture atlas
+        //----------------------------------------------------------------------------------------
+        const Rendering::TextureAtlasCSPtr& GetTextureAtlas() const override;
+        //----------------------------------------------------------------------------------------
+        /// Get the texture atlas frame Id that is currently used.
+        ///
+        /// @author HMcLaughlin
+        ///
+        /// @return Frame Id
+        //----------------------------------------------------------------------------------------
+        const std::string& GetTextureAtlasId() const override;
+        //----------------------------------------------------------------------------------------
+        /// Get the UVs that are currently used. UVs are relative to the
+        /// frame and not the overall atlas
+        ///
+        /// @author HMcLaughlin
+        ///
+        /// @return Rectangle containing U, V, S, T
+        //----------------------------------------------------------------------------------------
+        const Rendering::UVs& GetUVs() const override;
+        //----------------------------------------------------------------------------------------
+        /// Gets the colour of the drawable.
+        ///
+        /// @author HMcLaughlin
+        ///
+        /// @param The colour.
+        //----------------------------------------------------------------------------------------
+        const Core::Colour& GetColour() const override;
+        //----------------------------------------------------------------------------------------
+        /// Set the texture that should be used in subsequent draws
         ///
         /// @author S Downie
+        ///
+        /// @param Texture
         //----------------------------------------------------------------------------------------
-        class StandardDrawable final : public Drawable
-        {
-        public:
-            CS_DECLARE_NAMEDTYPE(StandardDrawable);
-            //----------------------------------------------------------------------------------------
-            /// Allows querying of whether or not the component implements the interface associated
-            /// with the given interface Id. Typically this won't be called directly, instead the
-            /// templated version IsA<Interface>() should be used.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The interface Id.
-            ///
-            /// @return Whether the object implements the given interface.
-            //----------------------------------------------------------------------------------------
-            bool IsA(Core::InterfaceIDType in_interfaceId) const override;
-            //----------------------------------------------------------------------------------------
-            /// Get the texture that is currently used.
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @return Texture
-            //----------------------------------------------------------------------------------------
-            const Rendering::TextureCSPtr& GetTexture() const override;
-            //----------------------------------------------------------------------------------------
-            /// Get the texture atlas that is currently used.
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @return Texture atlas
-            //----------------------------------------------------------------------------------------
-            const Rendering::TextureAtlasCSPtr& GetTextureAtlas() const override;
-            //----------------------------------------------------------------------------------------
-            /// Get the texture atlas frame Id that is currently used.
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @return Frame Id
-            //----------------------------------------------------------------------------------------
-            const std::string& GetTextureAtlasId() const override;
-            //----------------------------------------------------------------------------------------
-            /// Get the UVs that are currently used. UVs are relative to the
-            /// frame and not the overall atlas
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @return Rectangle containing U, V, S, T
-            //----------------------------------------------------------------------------------------
-            const Rendering::UVs& GetUVs() const override;
-            //----------------------------------------------------------------------------------------
-            /// Gets the colour of the drawable.
-            ///
-            /// @author HMcLaughlin
-            ///
-            /// @param The colour.
-            //----------------------------------------------------------------------------------------
-            const Core::Colour& GetColour() const override;
-            //----------------------------------------------------------------------------------------
-            /// Set the texture that should be used in subsequent draws
-            ///
-            /// @author S Downie
-            ///
-            /// @param Texture
-            //----------------------------------------------------------------------------------------
-            void SetTexture(const Rendering::TextureCSPtr& in_texture) override;
-            //----------------------------------------------------------------------------------------
-            /// Set the texture atlas that should be used in subsequent draws.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Texture atlas
-            //----------------------------------------------------------------------------------------
-            void SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas) override;
-            //----------------------------------------------------------------------------------------
-            /// Set the texture atlas frame Id that should be used in subsequent draws.
-            ///
-            /// NOTE: An atlas must have been set prior to calling this
-            ///
-            /// @author S Downie
-            ///
-            /// @param Frame Id
-            //----------------------------------------------------------------------------------------
-            void SetTextureAtlasId(const std::string& in_atlasId) override;
-            //----------------------------------------------------------------------------------------
-            /// Set the UVs that should be used in subsequent draws. UVs are relative to the
-            /// frame and not the overall atlas
-            ///
-            /// @author S Downie
-            ///
-            /// @param Rectangle containing U, V, S, T
-            //----------------------------------------------------------------------------------------
-            void SetUVs(const Rendering::UVs& in_UVs) override;
-            //----------------------------------------------------------------------------------------
-            /// Sets the colour of the drawable. The final colour of the drawable takes into account
-            /// the owning widgets colour and this colour.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The colour.
-            //----------------------------------------------------------------------------------------
-            void SetColour(const Core::Colour& in_colour) override;
-            //----------------------------------------------------------------------------------------
-            /// @author S Downie
-            ///
-            /// @return The preferred size that the drawable wishes to de drawn at based on the
-            /// texture size
-            //----------------------------------------------------------------------------------------
-            Core::Vector2 GetPreferredSize() const override;
-            //----------------------------------------------------------------------------------------
-            /// Render the widget using the canvas renderer. The widget has is rendered using the
-            /// set texture and UVs.
-            ///
-            /// @author S Downie
-            ///
-            /// @param Renderer
-            /// @param Absolute screen transform
-            /// @param Asbolute screen size
-            /// @param Absolute colour
-            //----------------------------------------------------------------------------------------
-            void Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) override;
-            
-        private:
-            friend class StandardDrawableDef;
-            //----------------------------------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The texture.
-            //----------------------------------------------------------------------------------------
-            StandardDrawable(const Rendering::TextureCSPtr& in_texture);
-            //----------------------------------------------------------------------------------------
-            /// Constructor
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The texture.
-            /// @param The texture atlas.
-            /// @param The atlas id.
-            //----------------------------------------------------------------------------------------
-            StandardDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId);
-            
-            Rendering::TextureCSPtr m_texture;
-            Rendering::TextureAtlasCSPtr m_atlas;
-            Rendering::TextureAtlas::Frame m_atlasFrame;
-            Rendering::UVs m_uvs;
-            std::string m_atlasId;
-            Core::Colour m_colour;
-        };
-    }
+        void SetTexture(const Rendering::TextureCSPtr& in_texture) override;
+        //----------------------------------------------------------------------------------------
+        /// Set the texture atlas that should be used in subsequent draws.
+        ///
+        /// @author S Downie
+        ///
+        /// @param Texture atlas
+        //----------------------------------------------------------------------------------------
+        void SetTextureAtlas(const Rendering::TextureAtlasCSPtr& in_atlas) override;
+        //----------------------------------------------------------------------------------------
+        /// Set the texture atlas frame Id that should be used in subsequent draws.
+        ///
+        /// NOTE: An atlas must have been set prior to calling this
+        ///
+        /// @author S Downie
+        ///
+        /// @param Frame Id
+        //----------------------------------------------------------------------------------------
+        void SetTextureAtlasId(const std::string& in_atlasId) override;
+        //----------------------------------------------------------------------------------------
+        /// Set the UVs that should be used in subsequent draws. UVs are relative to the
+        /// frame and not the overall atlas
+        ///
+        /// @author S Downie
+        ///
+        /// @param Rectangle containing U, V, S, T
+        //----------------------------------------------------------------------------------------
+        void SetUVs(const Rendering::UVs& in_UVs) override;
+        //----------------------------------------------------------------------------------------
+        /// Sets the colour of the drawable. The final colour of the drawable takes into account
+        /// the owning widgets colour and this colour.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The colour.
+        //----------------------------------------------------------------------------------------
+        void SetColour(const Core::Colour& in_colour) override;
+        //----------------------------------------------------------------------------------------
+        /// @author S Downie
+        ///
+        /// @return The preferred size that the drawable wishes to de drawn at based on the
+        /// texture size
+        //----------------------------------------------------------------------------------------
+        Core::Vector2 GetPreferredSize() const override;
+        //----------------------------------------------------------------------------------------
+        /// Render the widget using the canvas renderer. The widget has is rendered using the
+        /// set texture and UVs.
+        ///
+        /// @author S Downie
+        ///
+        /// @param Renderer
+        /// @param Absolute screen transform
+        /// @param Asbolute screen size
+        /// @param Absolute colour
+        //----------------------------------------------------------------------------------------
+        void Draw(Rendering::CanvasRenderer* in_renderer, const Core::Matrix3& in_transform, const Core::Vector2& in_absSize, const Core::Colour& in_absColour) override;
+        
+    private:
+        friend class StandardDrawableDef;
+        //----------------------------------------------------------------------------------------
+        /// Constructor
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The texture.
+        //----------------------------------------------------------------------------------------
+        StandardDrawable(const Rendering::TextureCSPtr& in_texture);
+        //----------------------------------------------------------------------------------------
+        /// Constructor
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The texture.
+        /// @param The texture atlas.
+        /// @param The atlas id.
+        //----------------------------------------------------------------------------------------
+        StandardDrawable(const Rendering::TextureCSPtr& in_texture, const Rendering::TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId);
+        
+        Rendering::TextureCSPtr m_texture;
+        Rendering::TextureAtlasCSPtr m_atlas;
+        Rendering::TextureAtlas::Frame m_atlasFrame;
+        Rendering::UVs m_uvs;
+        std::string m_atlasId;
+        Core::Colour m_colour;
+    };
 }
 
 #endif

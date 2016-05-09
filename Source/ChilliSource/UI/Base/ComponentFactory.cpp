@@ -36,58 +36,55 @@
 #include <ChilliSource/UI/Slider/SliderComponent.h>
 #include <ChilliSource/UI/Text/TextComponent.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    CS_DEFINE_NAMEDTYPE(ComponentFactory);
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    ComponentFactoryUPtr ComponentFactory::Create()
     {
-        CS_DEFINE_NAMEDTYPE(ComponentFactory);
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        ComponentFactoryUPtr ComponentFactory::Create()
-        {
-            return ComponentFactoryUPtr(new ComponentFactory());
-        }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        bool ComponentFactory::IsA(Core::InterfaceIDType in_interfaceId) const
-        {
-            return (ComponentFactory::InterfaceID == in_interfaceId);
-        }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        std::vector<Core::PropertyMap::PropertyDesc> ComponentFactory::GetPropertyDescs(const std::string& in_componentTypeName) const
-        {
-            auto descsIt = m_descsMap.find(in_componentTypeName);
-            CS_ASSERT(descsIt != m_descsMap.end(), "Could not get property descs for component with name: " + in_componentTypeName);
-            
-            return descsIt->second;
-        }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        ComponentUPtr ComponentFactory::CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const Core::PropertyMap& in_propertyMap) const
-        {
-            auto delegateIt = m_creatorDelegateMap.find(in_componentTypeName);
-            CS_ASSERT(delegateIt != m_creatorDelegateMap.end(), "Could not create component with name: " + in_componentTypeName);
-            
-            return delegateIt->second(in_name, in_propertyMap);
-        }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        void ComponentFactory::OnInit()
-        {
-            Register<DrawableComponent>("Drawable");
-            Register<LayoutComponent>("Layout");
-            Register<HighlightComponent>("Highlight");
-            Register<ToggleHighlightComponent>("ToggleHighlight");
-            Register<TextComponent>("Text");
-            Register<ProgressBarComponent>("ProgressBar");
-            Register<SliderComponent>("Slider");
-        }
-        //-----------------------------------------------------------------
-        //-----------------------------------------------------------------
-        void ComponentFactory::OnDestroy()
-        {
-            m_creatorDelegateMap.clear();
-        }
+        return ComponentFactoryUPtr(new ComponentFactory());
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    bool ComponentFactory::IsA(Core::InterfaceIDType in_interfaceId) const
+    {
+        return (ComponentFactory::InterfaceID == in_interfaceId);
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    std::vector<Core::PropertyMap::PropertyDesc> ComponentFactory::GetPropertyDescs(const std::string& in_componentTypeName) const
+    {
+        auto descsIt = m_descsMap.find(in_componentTypeName);
+        CS_ASSERT(descsIt != m_descsMap.end(), "Could not get property descs for component with name: " + in_componentTypeName);
+        
+        return descsIt->second;
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    ComponentUPtr ComponentFactory::CreateComponent(const std::string& in_componentTypeName, const std::string& in_name, const Core::PropertyMap& in_propertyMap) const
+    {
+        auto delegateIt = m_creatorDelegateMap.find(in_componentTypeName);
+        CS_ASSERT(delegateIt != m_creatorDelegateMap.end(), "Could not create component with name: " + in_componentTypeName);
+        
+        return delegateIt->second(in_name, in_propertyMap);
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    void ComponentFactory::OnInit()
+    {
+        Register<DrawableComponent>("Drawable");
+        Register<LayoutComponent>("Layout");
+        Register<HighlightComponent>("Highlight");
+        Register<ToggleHighlightComponent>("ToggleHighlight");
+        Register<TextComponent>("Text");
+        Register<ProgressBarComponent>("ProgressBar");
+        Register<SliderComponent>("Slider");
+    }
+    //-----------------------------------------------------------------
+    //-----------------------------------------------------------------
+    void ComponentFactory::OnDestroy()
+    {
+        m_creatorDelegateMap.clear();
     }
 }

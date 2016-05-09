@@ -30,47 +30,44 @@
 
 #include <ChilliSource/Core/String/StringUtils.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    const char k_directionHorizontal[] = "horizontal";
+    const char k_directionVertical[] = "vertical";
+    
+    //------------------------------------------------------------------------
+    //------------------------------------------------------------------------
+    SliderDirection ParseSliderDirection(const std::string& in_stringDirection)
     {
-        const char k_directionHorizontal[] = "horizontal";
-        const char k_directionVertical[] = "vertical";
+        std::string lowerDirection = in_stringDirection;
+        Core::StringUtils::ToLowerCase(lowerDirection);
         
-        //------------------------------------------------------------------------
-        //------------------------------------------------------------------------
-        SliderDirection ParseSliderDirection(const std::string& in_stringDirection)
+        if (lowerDirection == k_directionHorizontal)
         {
-            std::string lowerDirection = in_stringDirection;
-            Core::StringUtils::ToLowerCase(lowerDirection);
-            
-            if (lowerDirection == k_directionHorizontal)
-            {
-                return SliderDirection::k_horizontal;
-            }
-            else if (lowerDirection == k_directionVertical)
-            {
-                return SliderDirection::k_vertical;
-            }
-            
-            CS_LOG_FATAL("Could not parse slider direction: " + in_stringDirection);
             return SliderDirection::k_horizontal;
         }
-        //------------------------------------------------------------------------
-        //------------------------------------------------------------------------
-        std::string ToString(SliderDirection in_direction)
+        else if (lowerDirection == k_directionVertical)
         {
-            switch (in_direction)
-            {
-                case SliderDirection::k_horizontal:
-                    return k_directionHorizontal;
-                case SliderDirection::k_vertical:
-                    return k_directionVertical;
-                default:
-                    CS_LOG_FATAL("Invalid slider direction.");
-                    return k_directionHorizontal;
-                    
-            }
+            return SliderDirection::k_vertical;
+        }
+        
+        CS_LOG_FATAL("Could not parse slider direction: " + in_stringDirection);
+        return SliderDirection::k_horizontal;
+    }
+    //------------------------------------------------------------------------
+    //------------------------------------------------------------------------
+    std::string ToString(SliderDirection in_direction)
+    {
+        switch (in_direction)
+        {
+            case SliderDirection::k_horizontal:
+                return k_directionHorizontal;
+            case SliderDirection::k_vertical:
+                return k_directionVertical;
+            default:
+                CS_LOG_FATAL("Invalid slider direction.");
+                return k_directionHorizontal;
+                
         }
     }
 }

@@ -34,76 +34,72 @@
 
 #include <json/json.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    namespace
     {
-        namespace
-        {
-            //------------------------------------------------------------------------------
-            /// Identifiers for classes that are responsible for laying out the child content
-            /// of a widget
-            ///
-            /// @author S Downie
-            //------------------------------------------------------------------------------
-            enum class LayoutType
-            {
-                k_none,
-                k_grid,
-                k_hList,
-                k_vList
-            };
-            //------------------------------------------------------------------------------
-            /// Converts a string to a drawable type
-            ///
-            /// @author S Downie
-            ///
-            /// @param String
-            ///
-            /// @return Drawable type
-            //------------------------------------------------------------------------------
-            LayoutType ParseLayoutType(const std::string& in_type)
-            {
-                std::string lowerCase = in_type;
-                Core::StringUtils::ToLowerCase(lowerCase);
-
-                if(lowerCase == "none") return LayoutType::k_none;
-                if(lowerCase == "grid") return LayoutType::k_grid;
-                if(lowerCase == "hlist") return LayoutType::k_hList;
-                if(lowerCase == "vlist") return LayoutType::k_vList;
-
-                CS_LOG_FATAL("Cannot parse layout type: " + in_type);
-                return LayoutType::k_none;
-            }
-        }
-        
-        CS_DEFINE_NAMEDTYPE(LayoutDef);
         //------------------------------------------------------------------------------
+        /// Identifiers for classes that are responsible for laying out the child content
+        /// of a widget
+        ///
+        /// @author S Downie
         //------------------------------------------------------------------------------
-        LayoutDefCUPtr LayoutDef::Create(const Json::Value& in_json)
+        enum class LayoutType
         {
-            const char k_typeKey[] = "Type";
-            
-            CS_ASSERT(in_json.isObject() == true, "Layout Def must be created from a json value of type Object.");
-            
-            const auto& typeJson = in_json.get(k_typeKey, Json::nullValue);
-            CS_ASSERT(typeJson != Json::nullValue, "'" + std::string(k_typeKey) + "' must be specified in a Layout Def.");
-            
-            LayoutType type = ParseLayoutType(typeJson.asString());
-            
-            switch (type)
-            {
-                case LayoutType::k_grid:
-                    return LayoutDefCUPtr(new GridLayoutDef(in_json));
-                case LayoutType::k_hList:
-                    return LayoutDefCUPtr(new HListLayoutDef(in_json));
-                case LayoutType::k_vList:
-                    return LayoutDefCUPtr(new VListLayoutDef(in_json));
-                default:
-                    CS_LOG_FATAL("Invalid layout def type.");
-                    return nullptr;
-            }
+            k_none,
+            k_grid,
+            k_hList,
+            k_vList
+        };
+        //------------------------------------------------------------------------------
+        /// Converts a string to a drawable type
+        ///
+        /// @author S Downie
+        ///
+        /// @param String
+        ///
+        /// @return Drawable type
+        //------------------------------------------------------------------------------
+        LayoutType ParseLayoutType(const std::string& in_type)
+        {
+            std::string lowerCase = in_type;
+            Core::StringUtils::ToLowerCase(lowerCase);
+
+            if(lowerCase == "none") return LayoutType::k_none;
+            if(lowerCase == "grid") return LayoutType::k_grid;
+            if(lowerCase == "hlist") return LayoutType::k_hList;
+            if(lowerCase == "vlist") return LayoutType::k_vList;
+
+            CS_LOG_FATAL("Cannot parse layout type: " + in_type);
+            return LayoutType::k_none;
         }
+    }
+    
+    CS_DEFINE_NAMEDTYPE(LayoutDef);
+    //------------------------------------------------------------------------------
+    //------------------------------------------------------------------------------
+    LayoutDefCUPtr LayoutDef::Create(const Json::Value& in_json)
+    {
+        const char k_typeKey[] = "Type";
         
+        CS_ASSERT(in_json.isObject() == true, "Layout Def must be created from a json value of type Object.");
+        
+        const auto& typeJson = in_json.get(k_typeKey, Json::nullValue);
+        CS_ASSERT(typeJson != Json::nullValue, "'" + std::string(k_typeKey) + "' must be specified in a Layout Def.");
+        
+        LayoutType type = ParseLayoutType(typeJson.asString());
+        
+        switch (type)
+        {
+            case LayoutType::k_grid:
+                return LayoutDefCUPtr(new GridLayoutDef(in_json));
+            case LayoutType::k_hList:
+                return LayoutDefCUPtr(new HListLayoutDef(in_json));
+            case LayoutType::k_vList:
+                return LayoutDefCUPtr(new VListLayoutDef(in_json));
+            default:
+                CS_LOG_FATAL("Invalid layout def type.");
+                return nullptr;
+        }
     }
 }

@@ -28,33 +28,30 @@
 
 #include <ChilliSource/UI/Base/ComponentDesc.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    ComponentDesc::ComponentDesc(const std::string& in_type, const std::string& in_name, const Core::PropertyMap& in_propertyMap)
+        : m_type(in_type), m_name(in_name), m_propertyMap(in_propertyMap)
     {
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        ComponentDesc::ComponentDesc(const std::string& in_type, const std::string& in_name, const Core::PropertyMap& in_propertyMap)
-            : m_type(in_type), m_name(in_name), m_propertyMap(in_propertyMap)
-        {
-        }
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        const std::string& ComponentDesc::GetType() const
-        {
-            return m_type;
-        }
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        const std::string& ComponentDesc::GetName() const
-        {
-            return m_name;
-        }
-        //------------------------------------------------------------------
-        //------------------------------------------------------------------
-        const Core::PropertyMap& ComponentDesc::GetProperties() const
-        {
-            return m_propertyMap;
-        }
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    const std::string& ComponentDesc::GetType() const
+    {
+        return m_type;
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    const std::string& ComponentDesc::GetName() const
+    {
+        return m_name;
+    }
+    //------------------------------------------------------------------
+    //------------------------------------------------------------------
+    const Core::PropertyMap& ComponentDesc::GetProperties() const
+    {
+        return m_propertyMap;
     }
 }

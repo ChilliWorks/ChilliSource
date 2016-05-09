@@ -31,44 +31,41 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    //------------------------------------------------------------------------
+    /// An enum describing the direction of a progress bar: vertical or
+    /// horizontal.
+    ///
+    /// @author Ian Copland
+    //------------------------------------------------------------------------
+    enum class ProgressBarDirection
     {
-        //------------------------------------------------------------------------
-        /// An enum describing the direction of a progress bar: vertical or
-        /// horizontal.
-        ///
-        /// @author Ian Copland
-        //------------------------------------------------------------------------
-        enum class ProgressBarDirection
-        {
-            k_horizontal,
-            k_vertical
-        };
-        //------------------------------------------------------------------------
-        /// Parse a progress bar direction from string. This is case insensitive.
-        /// If the string is not a valid direction then the app is considered to
-        /// be in an irrecoverable state and will terminate.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param The string to parse.
-        ///
-        /// @return The parsed direction.
-        //------------------------------------------------------------------------
-        ProgressBarDirection ParseProgressBarDirection(const std::string& in_stringDirection);
-        //------------------------------------------------------------------------
-        /// Converts the given progress bar direction to a string.
-        ///
-        /// @author Ian Copland
-        ///
-        /// @param The progress bar direction to convert to string.
-        ///
-        /// @return The direction in string form.
-        //------------------------------------------------------------------------
-        std::string ToString(ProgressBarDirection in_direction);
-    }
+        k_horizontal,
+        k_vertical
+    };
+    //------------------------------------------------------------------------
+    /// Parse a progress bar direction from string. This is case insensitive.
+    /// If the string is not a valid direction then the app is considered to
+    /// be in an irrecoverable state and will terminate.
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param The string to parse.
+    ///
+    /// @return The parsed direction.
+    //------------------------------------------------------------------------
+    ProgressBarDirection ParseProgressBarDirection(const std::string& in_stringDirection);
+    //------------------------------------------------------------------------
+    /// Converts the given progress bar direction to a string.
+    ///
+    /// @author Ian Copland
+    ///
+    /// @param The progress bar direction to convert to string.
+    ///
+    /// @return The direction in string form.
+    //------------------------------------------------------------------------
+    std::string ToString(ProgressBarDirection in_direction);
 }
 
 #endif

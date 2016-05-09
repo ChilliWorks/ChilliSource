@@ -31,60 +31,57 @@
 
 #include <ChilliSource/ChilliSource.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    //--------------------------------------------------------------------------
+    /// A container for a description of a property which links to another. This
+    /// provides a name for the link, the name of the linked propery owner and
+    /// the linked property name. This is immutable after construction.
+    ///
+    /// @param Ian Copland
+    //--------------------------------------------------------------------------
+    class PropertyLink final
     {
-        //--------------------------------------------------------------------------
-        /// A container for a description of a property which links to another. This
-        /// provides a name for the link, the name of the linked propery owner and
-        /// the linked property name. This is immutable after construction.
+    public:
+        //------------------------------------------------------------------
+        /// Constructor. Creates an empty property link.
         ///
-        /// @param Ian Copland
-        //--------------------------------------------------------------------------
-        class PropertyLink final
-        {
-        public:
-            //------------------------------------------------------------------
-            /// Constructor. Creates an empty property link.
-            ///
-            /// @author Ian Copland
-            //------------------------------------------------------------------
-            PropertyLink() = default;
-            //------------------------------------------------------------------
-            /// Constructor.
-            ///
-            /// @author Ian Copland
-            ///
-            /// @param The name of the property link.
-            /// @param The name of the linked property owner.
-            /// @param The name of the linked property.
-            //------------------------------------------------------------------
-            PropertyLink(const std::string& in_linkName, const std::string& in_linkedOwner, const std::string& in_linkedProperty);
-            //------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The name of the property link.
-            //------------------------------------------------------------------
-            const std::string& GetLinkName() const;
-            //------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The name of the linked property owner
-            //------------------------------------------------------------------
-            const std::string& GetLinkedOwner() const;
-            //------------------------------------------------------------------
-            /// @author Ian Copland
-            ///
-            /// @return The name of the linked property.
-            //------------------------------------------------------------------
-            const std::string& GetLinkedProperty() const;
-        private:
-            std::string m_linkName = "";
-            std::string m_linkedOwner = "";
-            std::string m_linkedProperty = "";
-        };
-    }
+        /// @author Ian Copland
+        //------------------------------------------------------------------
+        PropertyLink() = default;
+        //------------------------------------------------------------------
+        /// Constructor.
+        ///
+        /// @author Ian Copland
+        ///
+        /// @param The name of the property link.
+        /// @param The name of the linked property owner.
+        /// @param The name of the linked property.
+        //------------------------------------------------------------------
+        PropertyLink(const std::string& in_linkName, const std::string& in_linkedOwner, const std::string& in_linkedProperty);
+        //------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The name of the property link.
+        //------------------------------------------------------------------
+        const std::string& GetLinkName() const;
+        //------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The name of the linked property owner
+        //------------------------------------------------------------------
+        const std::string& GetLinkedOwner() const;
+        //------------------------------------------------------------------
+        /// @author Ian Copland
+        ///
+        /// @return The name of the linked property.
+        //------------------------------------------------------------------
+        const std::string& GetLinkedProperty() const;
+    private:
+        std::string m_linkName = "";
+        std::string m_linkedOwner = "";
+        std::string m_linkedProperty = "";
+    };
 }
 
 #endif

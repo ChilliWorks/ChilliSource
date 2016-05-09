@@ -34,77 +34,73 @@
 
 #include <json/json.h>
 
-namespace ChilliSource
+namespace CS
 {
-    namespace UI
+    namespace
     {
-        namespace
-        {
-            //--------------------------------------------------------------
-            /// Identifiers for the different drawable definition types.
-            ///
-            /// @author S Downie
-            //--------------------------------------------------------------
-            enum class DrawableType
-            {
-                k_none,
-                k_standard,
-                k_ninePatch,
-                k_threePatch
-            };
-            //--------------------------------------------------------------
-            /// Converts a string to a drawable type
-            ///
-            /// @author S Downie
-            ///
-            /// @param String
-            ///
-            /// @return Drawable type
-            //--------------------------------------------------------------
-            DrawableType ParseDrawableType(const std::string& in_type)
-            {
-                std::string lowerCase = in_type;
-                Core::StringUtils::ToLowerCase(lowerCase);
-                
-                if(lowerCase == "none") return DrawableType::k_none;
-                if(lowerCase == "standard") return DrawableType::k_standard;
-                if(lowerCase == "ninepatch") return DrawableType::k_ninePatch;
-                if(lowerCase == "threepatch") return DrawableType::k_threePatch;
-                
-                CS_LOG_FATAL("Cannot parse drawable type: " + in_type);
-                return DrawableType::k_none;
-            }
-        }
-        
-        CS_DEFINE_NAMEDTYPE(DrawableDef);
         //--------------------------------------------------------------
+        /// Identifiers for the different drawable definition types.
+        ///
+        /// @author S Downie
         //--------------------------------------------------------------
-        DrawableDefCUPtr DrawableDef::Create(const Json::Value& in_json, Core::StorageLocation in_defaultLocation, const std::string& in_defaultPath)
+        enum class DrawableType
         {
-            const char k_typeKey[] = "Type";
+            k_none,
+            k_standard,
+            k_ninePatch,
+            k_threePatch
+        };
+        //--------------------------------------------------------------
+        /// Converts a string to a drawable type
+        ///
+        /// @author S Downie
+        ///
+        /// @param String
+        ///
+        /// @return Drawable type
+        //--------------------------------------------------------------
+        DrawableType ParseDrawableType(const std::string& in_type)
+        {
+            std::string lowerCase = in_type;
+            Core::StringUtils::ToLowerCase(lowerCase);
             
-            CS_ASSERT(in_json.isObject() == true, "Drawable Def must be created from a json value of type Object.");
+            if(lowerCase == "none") return DrawableType::k_none;
+            if(lowerCase == "standard") return DrawableType::k_standard;
+            if(lowerCase == "ninepatch") return DrawableType::k_ninePatch;
+            if(lowerCase == "threepatch") return DrawableType::k_threePatch;
             
-            const auto& typeJson = in_json.get(k_typeKey, Json::nullValue);
-            CS_ASSERT(typeJson != Json::nullValue, "'" + std::string(k_typeKey) + "' must be specified in a Drawable Def.");
-            
-            DrawableType type = ParseDrawableType(typeJson.asString());
-            
-            switch (type)
-            {
-                case DrawableType::k_standard:
-                    return DrawableDefCUPtr(new StandardDrawableDef(in_json, in_defaultLocation, in_defaultPath));
-                case DrawableType::k_threePatch:
-                    return DrawableDefCUPtr(new ThreePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
-                case DrawableType::k_ninePatch:
-                    return DrawableDefCUPtr(new NinePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
-                case DrawableType::k_none:
-                    return nullptr;
-                default:
-                    CS_LOG_FATAL("Invalid drawable def type.");
-                    return nullptr;
-            }
+            CS_LOG_FATAL("Cannot parse drawable type: " + in_type);
+            return DrawableType::k_none;
         }
+    }
+    
+    CS_DEFINE_NAMEDTYPE(DrawableDef);
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    DrawableDefCUPtr DrawableDef::Create(const Json::Value& in_json, Core::StorageLocation in_defaultLocation, const std::string& in_defaultPath)
+    {
+        const char k_typeKey[] = "Type";
         
+        CS_ASSERT(in_json.isObject() == true, "Drawable Def must be created from a json value of type Object.");
+        
+        const auto& typeJson = in_json.get(k_typeKey, Json::nullValue);
+        CS_ASSERT(typeJson != Json::nullValue, "'" + std::string(k_typeKey) + "' must be specified in a Drawable Def.");
+        
+        DrawableType type = ParseDrawableType(typeJson.asString());
+        
+        switch (type)
+        {
+            case DrawableType::k_standard:
+                return DrawableDefCUPtr(new StandardDrawableDef(in_json, in_defaultLocation, in_defaultPath));
+            case DrawableType::k_threePatch:
+                return DrawableDefCUPtr(new ThreePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
+            case DrawableType::k_ninePatch:
+                return DrawableDefCUPtr(new NinePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
+            case DrawableType::k_none:
+                return nullptr;
+            default:
+                CS_LOG_FATAL("Invalid drawable def type.");
+                return nullptr;
+        }
     }
 }
