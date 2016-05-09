@@ -1,5 +1,5 @@
 //
-//  DrawableDef.h
+//  UIDrawableDef.h
 //  Chilli Source
 //  Created by Ian Copland on 21/11/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_DRAWABLEDEF_H_
-#define _CHILLISOURCE_UI_DRAWABLE_DRAWABLEDEF_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_UIDRAWABLEDEF_H_
+#define _CHILLISOURCE_UI_DRAWABLE_UIDRAWABLEDEF_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
@@ -42,7 +42,7 @@ namespace ChilliSource
     /// This is effectively an immutable container for the properties of a
     /// specific type of drawable.
     ///
-    /// Drawable Defs can be either created using the concrete def's
+    /// UIDrawable Defs can be either created using the concrete def's
     /// constructor or using the Create() method. This creates the def
     /// from json which describes the type and properties of the def.
     ///
@@ -75,10 +75,10 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //---------------------------------------------------------------------
-    class DrawableDef : public QueryableInterface
+    class UIDrawableDef : public QueryableInterface
     {
     public:
-        CS_DECLARE_NAMEDTYPE(DrawableDef);
+        CS_DECLARE_NAMEDTYPE(UIDrawableDef);
         //--------------------------------------------------------------
         /// Creates a new drawable def from json which describes the
         /// type of def and its properties.
@@ -93,7 +93,7 @@ namespace ChilliSource
         /// there is no storage location specified in the json. Defaults
         /// to empty.
         //--------------------------------------------------------------
-        static DrawableDefCUPtr Create(const Json::Value& in_json, StorageLocation in_defaultLocation = StorageLocation::k_package, const std::string& in_defaultPath = "");
+        static UIDrawableDefCUPtr Create(const Json::Value& in_json, StorageLocation in_defaultLocation = StorageLocation::k_package, const std::string& in_defaultPath = "");
         //--------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -134,7 +134,7 @@ namespace ChilliSource
         ///
         /// @author Ian Copland
         //--------------------------------------------------------------
-        virtual ~DrawableDef() {};
+        virtual ~UIDrawableDef() {};
     protected:
         friend class DrawableComponent;
         //--------------------------------------------------------------
@@ -146,7 +146,7 @@ namespace ChilliSource
         ///
         /// @return a new drawable instance.
         //--------------------------------------------------------------
-        virtual DrawableUPtr CreateDrawable() const = 0;
+        virtual UIDrawableUPtr CreateDrawable() const = 0;
     };
 }
 

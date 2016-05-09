@@ -1,5 +1,5 @@
 //
-//  DrawableUtils.cpp
+//  UIDrawableUtils.cpp
 //  Chilli Source
 //  Created by Scott Downie on 03/10/2014.
 //
@@ -26,14 +26,14 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Drawable/DrawableUtils.h>
+#include <ChilliSource/UI/Drawable/UIDrawableUtils.h>
 
 #include <ChilliSource/Rendering/Texture/Texture.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
 
 namespace ChilliSource
 {
-    namespace DrawableUtils
+    namespace UIDrawableUtils
     {
         //----------------------------------------------------------------------------
         //----------------------------------------------------------------------------

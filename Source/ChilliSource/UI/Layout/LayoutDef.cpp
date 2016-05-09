@@ -58,7 +58,7 @@ namespace ChilliSource
         ///
         /// @param String
         ///
-        /// @return Drawable type
+        /// @return UIDrawable type
         //------------------------------------------------------------------------------
         LayoutType ParseLayoutType(const std::string& in_type)
         {

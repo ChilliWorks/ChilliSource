@@ -30,18 +30,18 @@
 
 #include <ChilliSource/Core/Delegate/MakeDelegate.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
-#include <ChilliSource/UI/Drawable/Drawable.h>
-#include <ChilliSource/UI/Drawable/DrawableDef.h>
+#include <ChilliSource/UI/Drawable/UIDrawable.h>
+#include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 
 namespace ChilliSource
 {
     namespace
     {
-        const char k_drawableKey[] = "Drawable";
+        const char k_drawableKey[] = "UIDrawable";
         
         const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
         {
-            {PropertyTypes::DrawableDef(), k_drawableKey},
+            {PropertyTypes::UIDrawableDef(), k_drawableKey},
         };
     }
     
@@ -57,7 +57,7 @@ namespace ChilliSource
     DrawableComponent::DrawableComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName)
     {
-        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_drawableKey, MakeDelegate(this, &DrawableComponent::GetDrawableDef), MakeDelegate(this, &DrawableComponent::ApplyDrawableDef));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_drawableKey, MakeDelegate(this, &DrawableComponent::GetDrawableDef), MakeDelegate(this, &DrawableComponent::ApplyDrawableDef));
         ApplyRegisteredProperties(in_properties);
     }
     //-------------------------------------------------------------------
@@ -68,19 +68,19 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    Drawable* DrawableComponent::GetDrawable()
+    UIDrawable* DrawableComponent::GetDrawable()
     {
         return m_drawable.get();
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const Drawable* DrawableComponent::GetDrawable() const
+    const UIDrawable* DrawableComponent::GetDrawable() const
     {
         return m_drawable.get();
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void DrawableComponent::ApplyDrawableDef(const DrawableDefCSPtr& in_drawableDef)
+    void DrawableComponent::ApplyDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
     {
         m_drawable.reset();
         m_drawableDef = in_drawableDef;
@@ -92,7 +92,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const DrawableDefCSPtr& DrawableComponent::GetDrawableDef() const
+    const UIDrawableDefCSPtr& DrawableComponent::GetDrawableDef() const
     {
         return m_drawableDef;
     }

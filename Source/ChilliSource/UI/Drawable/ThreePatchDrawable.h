@@ -35,7 +35,7 @@
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
-#include <ChilliSource/UI/Drawable/Drawable.h>
+#include <ChilliSource/UI/Drawable/UIDrawable.h>
 
 #include <array>
 #include <functional>
@@ -51,7 +51,7 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //----------------------------------------------------------------------------------------
-    class ThreePatchDrawable final : public Drawable
+    class ThreePatchDrawable final : public UIDrawable
     {
     public:
         CS_DECLARE_NAMEDTYPE(ThreePatchDrawable);

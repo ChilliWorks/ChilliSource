@@ -32,21 +32,21 @@
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
-#include <ChilliSource/UI/Drawable/DrawableDef.h>
+#include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 
 namespace ChilliSource
 {
     //---------------------------------------------------------------------
-    /// A definition of a Standard Drawable which can be built from a json
+    /// A definition of a Standard UIDrawable which can be built from a json
     /// object. This is effectively an immutable container for the
-    /// properties of a Standard Drawable.
+    /// properties of a Standard UIDrawable.
     ///
     /// A standard drawable def doesn't contain any additional properties
-    /// over those described in the Drawable Def base class documentation.
+    /// over those described in the UIDrawable Def base class documentation.
     ///
     /// @author Ian Copland
     //---------------------------------------------------------------------
-    class StandardDrawableDef final : public DrawableDef
+    class StandardDrawableDef final : public UIDrawableDef
     {
     public:
         CS_DECLARE_NAMEDTYPE(StandardDrawableDef);
@@ -155,7 +155,7 @@ namespace ChilliSource
         ///
         /// @return a new drawable instance.
         //--------------------------------------------------------------
-        DrawableUPtr CreateDrawable() const override;
+        UIDrawableUPtr CreateDrawable() const override;
         
         TextureCSPtr m_texture;
         TextureAtlasCSPtr m_atlas;

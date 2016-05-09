@@ -57,11 +57,11 @@ namespace ChilliSource
     CS_FORWARDDECLARE_CLASS(HighlightComponent);
     CS_FORWARDDECLARE_CLASS(ToggleHighlightComponent);
     //---------------------------------------------------------
-    /// Drawable
+    /// UIDrawable
     //---------------------------------------------------------
-    CS_FORWARDDECLARE_CLASS(Drawable);
+    CS_FORWARDDECLARE_CLASS(UIDrawable);
     CS_FORWARDDECLARE_CLASS(DrawableComponent);
-    CS_FORWARDDECLARE_CLASS(DrawableDef);
+    CS_FORWARDDECLARE_CLASS(UIDrawableDef);
     CS_FORWARDDECLARE_CLASS(NinePatchDrawable);
     CS_FORWARDDECLARE_CLASS(NinePatchDrawableDef);
     CS_FORWARDDECLARE_CLASS(StandardDrawable);

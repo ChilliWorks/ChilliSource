@@ -34,7 +34,7 @@
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
-#include <ChilliSource/UI/Drawable/DrawableDef.h>
+#include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 
 namespace ChilliSource
 {
@@ -50,11 +50,11 @@ namespace ChilliSource
         
         const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
         {
-            {PropertyTypes::DrawableDef(), k_normalOffDrawableKey},
-            {PropertyTypes::DrawableDef(), k_highlightOffDrawableKey},
+            {PropertyTypes::UIDrawableDef(), k_normalOffDrawableKey},
+            {PropertyTypes::UIDrawableDef(), k_highlightOffDrawableKey},
             {PropertyTypes::Colour(), k_highlightOffColourKey},
-            {PropertyTypes::DrawableDef(), k_normalOnDrawableKey},
-            {PropertyTypes::DrawableDef(), k_highlightOnDrawableKey},
+            {PropertyTypes::UIDrawableDef(), k_normalOnDrawableKey},
+            {PropertyTypes::UIDrawableDef(), k_highlightOnDrawableKey},
             {PropertyTypes::Colour(), k_highlightOnColourKey},
             {PropertyTypes::Bool(), k_toggledOnKey}
         };
@@ -72,11 +72,11 @@ namespace ChilliSource
     ToggleHighlightComponent::ToggleHighlightComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName)
     {
-        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_normalOffDrawableKey, MakeDelegate(this, &ToggleHighlightComponent::GetNormalOffDrawableDef), MakeDelegate(this, &ToggleHighlightComponent::SetNormalOffDrawableDef));
-        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_highlightOffDrawableKey, MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOffDrawableDef), MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOffDrawableDef));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_normalOffDrawableKey, MakeDelegate(this, &ToggleHighlightComponent::GetNormalOffDrawableDef), MakeDelegate(this, &ToggleHighlightComponent::SetNormalOffDrawableDef));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_highlightOffDrawableKey, MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOffDrawableDef), MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOffDrawableDef));
         RegisterProperty<Colour>(PropertyTypes::Colour(), k_highlightOffColourKey, MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOffColour), MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOffColour));
-        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_normalOnDrawableKey, MakeDelegate(this, &ToggleHighlightComponent::GetNormalOnDrawableDef), MakeDelegate(this, &ToggleHighlightComponent::SetNormalOnDrawableDef));
-        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_highlightOnDrawableKey, MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOnDrawableDef), MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOnDrawableDef));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_normalOnDrawableKey, MakeDelegate(this, &ToggleHighlightComponent::GetNormalOnDrawableDef), MakeDelegate(this, &ToggleHighlightComponent::SetNormalOnDrawableDef));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_highlightOnDrawableKey, MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOnDrawableDef), MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOnDrawableDef));
         RegisterProperty<Colour>(PropertyTypes::Colour(), k_highlightOnColourKey, MakeDelegate(this, &ToggleHighlightComponent::GetHighlightOnColour), MakeDelegate(this, &ToggleHighlightComponent::SetHighlightOnColour));
         RegisterProperty<bool>(PropertyTypes::Bool(), k_toggledOnKey, MakeDelegate(this, &ToggleHighlightComponent::IsToggledOn), MakeDelegate(this, &ToggleHighlightComponent::SetToggleOn));
         ApplyRegisteredProperties(in_properties);
@@ -89,13 +89,13 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const DrawableDefCSPtr& ToggleHighlightComponent::GetNormalOffDrawableDef() const
+    const UIDrawableDefCSPtr& ToggleHighlightComponent::GetNormalOffDrawableDef() const
     {
         return m_normalOffDrawableDef;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const DrawableDefCSPtr& ToggleHighlightComponent::GetHighlightOffDrawableDef() const
+    const UIDrawableDefCSPtr& ToggleHighlightComponent::GetHighlightOffDrawableDef() const
     {
         return m_highlightOffDrawableDef;
     }
@@ -107,13 +107,13 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const DrawableDefCSPtr& ToggleHighlightComponent::GetNormalOnDrawableDef() const
+    const UIDrawableDefCSPtr& ToggleHighlightComponent::GetNormalOnDrawableDef() const
     {
         return m_normalOnDrawableDef;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const DrawableDefCSPtr& ToggleHighlightComponent::GetHighlightOnDrawableDef() const
+    const UIDrawableDefCSPtr& ToggleHighlightComponent::GetHighlightOnDrawableDef() const
     {
         return m_normalOffDrawableDef;
     }
@@ -131,7 +131,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::SetNormalOffDrawableDef(const DrawableDefCSPtr& in_drawableDef)
+    void ToggleHighlightComponent::SetNormalOffDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
     {
         m_normalOffDrawableDef = in_drawableDef;
         
@@ -142,7 +142,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::SetHighlightOffDrawableDef(const DrawableDefCSPtr& in_drawableDef)
+    void ToggleHighlightComponent::SetHighlightOffDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
     {
         m_highlightOffDrawableDef = in_drawableDef;
         
@@ -164,7 +164,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::SetNormalOnDrawableDef(const DrawableDefCSPtr& in_drawableDef)
+    void ToggleHighlightComponent::SetNormalOnDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
     {
         m_normalOnDrawableDef = in_drawableDef;
         
@@ -175,7 +175,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void ToggleHighlightComponent::SetHighlightOnDrawableDef(const DrawableDefCSPtr& in_drawableDef)
+    void ToggleHighlightComponent::SetHighlightOnDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
     {
         m_highlightOnDrawableDef = in_drawableDef;
         
@@ -348,7 +348,7 @@ namespace ChilliSource
     void ToggleHighlightComponent::OnInit()
     {
         m_drawableComponent = GetWidget()->GetComponent<DrawableComponent>();
-        CS_ASSERT(m_drawableComponent != nullptr, "Widgets with a Toggle Highlight UIComponent must also contain a Drawable UIComponent.");
+        CS_ASSERT(m_drawableComponent != nullptr, "Widgets with a Toggle Highlight UIComponent must also contain a UIDrawable UIComponent.");
         
         if (IsToggledOn() == false)
         {

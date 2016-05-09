@@ -88,7 +88,7 @@ namespace ChilliSource
         const char k_insetsKey[] = "Insets";
         const char k_directionKey[] = "Direction";
         
-        CS_ASSERT(in_json.isObject() == true, "Drawable Def must be created from a json value of type Object.");
+        CS_ASSERT(in_json.isObject() == true, "UIDrawable Def must be created from a json value of type Object.");
         
         //read all the properties from JSON.
         StorageLocation textureLocation = StorageLocation::k_none;
@@ -97,7 +97,7 @@ namespace ChilliSource
         std::string atlasPath;
         for(auto it = in_json.begin(); it != in_json.end(); ++it)
         {
-            CS_ASSERT((*it).isString() == true, "All properties in a Drawable Def must be a string: " + std::string(it.memberName()));
+            CS_ASSERT((*it).isString() == true, "All properties in a UIDrawable Def must be a string: " + std::string(it.memberName()));
             
             std::string key = it.memberName();
             std::string value = (*it).asString();
@@ -145,12 +145,12 @@ namespace ChilliSource
             }
             else
             {
-                CS_LOG_FATAL("Invalid property found in a Three-Patch Drawable Def: " + key);
+                CS_LOG_FATAL("Invalid property found in a Three-Patch UIDrawable Def: " + key);
             }
         }
         
         //load the texture.
-        CS_ASSERT(texturePath.empty() == false, "A texture must be supplied in a Three-Patch Drawable Def.")
+        CS_ASSERT(texturePath.empty() == false, "A texture must be supplied in a Three-Patch UIDrawable Def.")
         
         auto resPool = Application::Get()->GetResourcePool();
         if (textureLocation == StorageLocation::k_none)
@@ -160,7 +160,7 @@ namespace ChilliSource
         }
         
         m_texture = resPool->LoadResource<Texture>(textureLocation, texturePath);
-        CS_ASSERT(m_texture != nullptr, "Invalid texture supplied in a Three-Patch Drawable Def.");
+        CS_ASSERT(m_texture != nullptr, "Invalid texture supplied in a Three-Patch UIDrawable Def.");
         
         //try and load the atlas
         if (atlasPath.empty() == false)
@@ -172,12 +172,12 @@ namespace ChilliSource
             }
             
             m_atlas = resPool->LoadResource<TextureAtlas>(atlasLocation, atlasPath);
-            CS_ASSERT(m_texture, "Invalid texture atlas supplied in a Three-Patch Drawable Def.");
-            CS_ASSERT(m_atlasId.empty() == false, "A texture atlas Id must be specified when using a texture atlas in a Three-Patch Drawable Def.");
+            CS_ASSERT(m_texture, "Invalid texture atlas supplied in a Three-Patch UIDrawable Def.");
+            CS_ASSERT(m_atlasId.empty() == false, "A texture atlas Id must be specified when using a texture atlas in a Three-Patch UIDrawable Def.");
         }
         else
         {
-            CS_ASSERT(m_atlasId.empty() == true, "Cannot specify a texture atlas Id without a texture atlas in a Three-Patch Drawable Def.");
+            CS_ASSERT(m_atlasId.empty() == true, "Cannot specify a texture atlas Id without a texture atlas in a Three-Patch UIDrawable Def.");
         }
     }
     //--------------------------------------------------------------
@@ -185,7 +185,7 @@ namespace ChilliSource
     ThreePatchDrawableDef::ThreePatchDrawableDef(const TextureCSPtr& in_texture, const Vector2& in_insets, ThreePatchDrawable::Direction in_direction, const Colour& in_colour, const UVs& in_uvs)
         : m_texture(in_texture), m_insets(in_insets), m_direction(in_direction), m_colour(in_colour), m_uvs(in_uvs)
     {
-        CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Three-Patch Drawable Def.");
+        CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Three-Patch UIDrawable Def.");
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
@@ -193,15 +193,15 @@ namespace ChilliSource
                                                  const Colour& in_colour, const UVs& in_uvs)
         : m_texture(in_texture), m_atlas(in_atlas), m_atlasId(in_atlasId), m_insets(in_insets), m_direction(in_direction), m_colour(in_colour), m_uvs(in_uvs)
     {
-        CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Three-Patch Drawable Def.");
-        CS_ASSERT(m_atlas != nullptr, "Cannot specify a null texture atlas in a Three-Patch Drawable Def. Use the texture only constructor instead.");
-        CS_ASSERT(m_atlas->HasFrameWithId(m_atlasId) == true, "Invalid texture atlas Id provided in a Three-Patch Drawable Def.");
+        CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Three-Patch UIDrawable Def.");
+        CS_ASSERT(m_atlas != nullptr, "Cannot specify a null texture atlas in a Three-Patch UIDrawable Def. Use the texture only constructor instead.");
+        CS_ASSERT(m_atlas->HasFrameWithId(m_atlasId) == true, "Invalid texture atlas Id provided in a Three-Patch UIDrawable Def.");
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
     bool ThreePatchDrawableDef::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (DrawableDef::InterfaceID == in_interfaceId || ThreePatchDrawableDef::InterfaceID == in_interfaceId);
+        return (UIDrawableDef::InterfaceID == in_interfaceId || ThreePatchDrawableDef::InterfaceID == in_interfaceId);
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
@@ -247,7 +247,7 @@ namespace ChilliSource
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    DrawableUPtr ThreePatchDrawableDef::CreateDrawable() const
+    UIDrawableUPtr ThreePatchDrawableDef::CreateDrawable() const
     {
         ThreePatchDrawableUPtr drawable;
         
@@ -263,7 +263,7 @@ namespace ChilliSource
         drawable->SetUVs(m_uvs);
         drawable->SetColour(m_colour);
         
-        DrawableUPtr output = std::move(drawable);
+        UIDrawableUPtr output = std::move(drawable);
         return output;
     }
 }

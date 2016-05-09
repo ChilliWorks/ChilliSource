@@ -84,14 +84,14 @@ namespace ChilliSource
         /// @return the drawable that will be set on the owning widget when
         /// it is not pressed.
         //-------------------------------------------------------------------
-        const DrawableDefCSPtr& GetNormalDrawableDef() const;
+        const UIDrawableDefCSPtr& GetNormalDrawableDef() const;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return the drawable that will be set on the owning widget when
         /// it is pressed.
         //-------------------------------------------------------------------
-        const DrawableDefCSPtr& GetHighlightDrawableDef() const;
+        const UIDrawableDefCSPtr& GetHighlightDrawableDef() const;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -106,7 +106,7 @@ namespace ChilliSource
         ///
         /// @param The drawable.
         //-------------------------------------------------------------------
-        void SetNormalDrawableDef(const DrawableDefCSPtr& in_drawableDef);
+        void SetNormalDrawableDef(const UIDrawableDefCSPtr& in_drawableDef);
         //-------------------------------------------------------------------
         /// Sets the drawable that will be set on the owning widget when
         /// it is pressed.
@@ -115,7 +115,7 @@ namespace ChilliSource
         ///
         /// @param The drawable.
         //-------------------------------------------------------------------
-        void SetHighlightDrawableDef(const DrawableDefCSPtr& in_drawableDef);
+        void SetHighlightDrawableDef(const UIDrawableDefCSPtr& in_drawableDef);
         //-------------------------------------------------------------------
         /// Sets the highlight colour.
         ///
@@ -220,8 +220,8 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void OnDestroy() override;
         
-        DrawableDefCSPtr m_normalDrawableDef;
-        DrawableDefCSPtr m_highlightDrawableDef;
+        UIDrawableDefCSPtr m_normalDrawableDef;
+        UIDrawableDefCSPtr m_highlightDrawableDef;
         Colour m_highlightColour;
         
         DrawableComponent* m_drawableComponent = nullptr;

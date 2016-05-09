@@ -33,18 +33,18 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector2.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
-#include <ChilliSource/UI/Drawable/DrawableDef.h>
+#include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 #include <ChilliSource/UI/Drawable/ThreePatchDrawable.h>
 
 namespace ChilliSource
 {
     //---------------------------------------------------------------------
-    /// A definition of a Three-Patch Drawable which can be built from a
+    /// A definition of a Three-Patch UIDrawable which can be built from a
     /// json object. This is effectively an immutable container for the
-    /// properties of a Three-Patch Drawable.
+    /// properties of a Three-Patch UIDrawable.
     ///
-    /// A Three-Patch Drawable Def contains the following properties in
-    /// addition to those defined in the Drawable Def base class
+    /// A Three-Patch UIDrawable Def contains the following properties in
+    /// addition to those defined in the UIDrawable Def base class
     /// documentation:
     ///
     /// "Insets": The insets from the edges of the stretchable portion of
@@ -55,7 +55,7 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //---------------------------------------------------------------------
-    class ThreePatchDrawableDef final : public DrawableDef
+    class ThreePatchDrawableDef final : public UIDrawableDef
     {
     public:
         CS_DECLARE_NAMEDTYPE(ThreePatchDrawableDef);
@@ -182,7 +182,7 @@ namespace ChilliSource
         ///
         /// @return a new drawable instance.
         //--------------------------------------------------------------
-        DrawableUPtr CreateDrawable() const override;
+        UIDrawableUPtr CreateDrawable() const override;
         
         TextureCSPtr m_texture;
         TextureAtlasCSPtr m_atlas;

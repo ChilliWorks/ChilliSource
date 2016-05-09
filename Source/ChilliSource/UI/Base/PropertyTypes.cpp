@@ -29,7 +29,7 @@
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 
 #include <ChilliSource/UI/Base/SizePolicy.h>
-#include <ChilliSource/UI/Drawable/DrawableDef.h>
+#include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 #include <ChilliSource/UI/Layout/LayoutDef.h>
 #include <ChilliSource/UI/ProgressBar/ProgressBarDirection.h>
 #include <ChilliSource/UI/ProgressBar/ProgressBarType.h>
@@ -44,7 +44,7 @@ namespace ChilliSource
     {
         CS_DEFINE_PROPERTYTYPE(ChilliSource::AlignmentAnchor, AlignmentAnchor, AlignmentAnchor::k_middleCentre, &ParseAlignmentAnchor);
         CS_DEFINE_PROPERTYTYPE(ChilliSource::SizePolicy, SizePolicy, SizePolicy::k_none, &ParseSizePolicy);
-        CS_DEFINE_PROPERTYTYPE(DrawableDefCSPtr, DrawableDef, nullptr, nullptr);
+        CS_DEFINE_PROPERTYTYPE(UIDrawableDefCSPtr, UIDrawableDef, nullptr, nullptr);
         CS_DEFINE_PROPERTYTYPE(LayoutDefCSPtr, LayoutDef, nullptr, nullptr);
         CS_DEFINE_PROPERTYTYPE(TextureCSPtr, Texture, nullptr, nullptr);
         CS_DEFINE_PROPERTYTYPE(TextureAtlasCSPtr, TextureAtlas, nullptr, nullptr);

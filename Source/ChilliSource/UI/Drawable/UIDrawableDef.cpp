@@ -1,5 +1,5 @@
 //
-//  DrawableDef.cpp
+//  UIDrawableDef.cpp
 //  Chilli Source
 //  Created by Ian Copland on 21/11/2014.
 //
@@ -26,7 +26,7 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Drawable/DrawableDef.h>
+#include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 
 #include <ChilliSource/UI/Drawable/NinePatchDrawableDef.h>
 #include <ChilliSource/UI/Drawable/StandardDrawableDef.h>
@@ -57,7 +57,7 @@ namespace ChilliSource
         ///
         /// @param String
         ///
-        /// @return Drawable type
+        /// @return UIDrawable type
         //--------------------------------------------------------------
         DrawableType ParseDrawableType(const std::string& in_type)
         {
@@ -74,28 +74,28 @@ namespace ChilliSource
         }
     }
     
-    CS_DEFINE_NAMEDTYPE(DrawableDef);
+    CS_DEFINE_NAMEDTYPE(UIDrawableDef);
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    DrawableDefCUPtr DrawableDef::Create(const Json::Value& in_json, StorageLocation in_defaultLocation, const std::string& in_defaultPath)
+    UIDrawableDefCUPtr UIDrawableDef::Create(const Json::Value& in_json, StorageLocation in_defaultLocation, const std::string& in_defaultPath)
     {
         const char k_typeKey[] = "Type";
         
-        CS_ASSERT(in_json.isObject() == true, "Drawable Def must be created from a json value of type Object.");
+        CS_ASSERT(in_json.isObject() == true, "UIDrawable Def must be created from a json value of type Object.");
         
         const auto& typeJson = in_json.get(k_typeKey, Json::nullValue);
-        CS_ASSERT(typeJson != Json::nullValue, "'" + std::string(k_typeKey) + "' must be specified in a Drawable Def.");
+        CS_ASSERT(typeJson != Json::nullValue, "'" + std::string(k_typeKey) + "' must be specified in a UIDrawable Def.");
         
         DrawableType type = ParseDrawableType(typeJson.asString());
         
         switch (type)
         {
             case DrawableType::k_standard:
-                return DrawableDefCUPtr(new StandardDrawableDef(in_json, in_defaultLocation, in_defaultPath));
+                return UIDrawableDefCUPtr(new StandardDrawableDef(in_json, in_defaultLocation, in_defaultPath));
             case DrawableType::k_threePatch:
-                return DrawableDefCUPtr(new ThreePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
+                return UIDrawableDefCUPtr(new ThreePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
             case DrawableType::k_ninePatch:
-                return DrawableDefCUPtr(new NinePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
+                return UIDrawableDefCUPtr(new NinePatchDrawableDef(in_json, in_defaultLocation, in_defaultPath));
             case DrawableType::k_none:
                 return nullptr;
             default:

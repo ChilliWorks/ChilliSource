@@ -35,7 +35,7 @@
 #include <ChilliSource/Rendering/Texture/UVs.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Base/Widget.h>
-#include <ChilliSource/UI/Drawable/Drawable.h>
+#include <ChilliSource/UI/Drawable/UIDrawable.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
 
 namespace ChilliSource

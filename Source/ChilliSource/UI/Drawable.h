@@ -1,5 +1,5 @@
 //
-//  Drawable.h
+//  UIDrawable.h
 //  Chilli Source
 //  Created by Scott Downie on 25/07/2014.
 //
@@ -30,9 +30,9 @@
 #define _CHILLISOURCE_UI_DRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
-#include <ChilliSource/UI/Drawable/Drawable.h>
+#include <ChilliSource/UI/Drawable/UIDrawable.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
-#include <ChilliSource/UI/Drawable/DrawableDef.h>
+#include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawable.h>
 #include <ChilliSource/UI/Drawable/NinePatchDrawableDef.h>
 #include <ChilliSource/UI/Drawable/StandardDrawable.h>

@@ -27,8 +27,8 @@
 //
 
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_DRAWABLE_H_
-#define _CHILLISOURCE_UI_DRAWABLE_DRAWABLE_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_UIDRAWABLE_H_
+#define _CHILLISOURCE_UI_DRAWABLE_UIDRAWABLE_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Core/Base/QueryableInterface.h>
@@ -40,17 +40,17 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //------------------------------------------------------------------------
-    class Drawable : public QueryableInterface
+    class UIDrawable : public QueryableInterface
     {
     public:
-        CS_DECLARE_NAMEDTYPE(Drawable);
-        CS_DECLARE_NOCOPY(Drawable);
+        CS_DECLARE_NAMEDTYPE(UIDrawable);
+        CS_DECLARE_NOCOPY(UIDrawable);
         //----------------------------------------------------------------------------------------
         /// Constructor
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        Drawable() = default;
+        UIDrawable() = default;
         //----------------------------------------------------------------------------------------
         /// @author S Downie
         ///
@@ -161,7 +161,7 @@ namespace ChilliSource
         ///
         /// @author S Downie
         //----------------------------------------------------------------------------------------
-        virtual ~Drawable(){};
+        virtual ~UIDrawable(){};
     };
 }
 

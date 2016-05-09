@@ -34,7 +34,7 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
-#include <ChilliSource/UI/Drawable/Drawable.h>
+#include <ChilliSource/UI/Drawable/UIDrawable.h>
 
 #include <array>
 
@@ -51,7 +51,7 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //----------------------------------------------------------------------------------------
-    class NinePatchDrawable final : public Drawable
+    class NinePatchDrawable final : public UIDrawable
     {
     public:
         CS_DECLARE_NAMEDTYPE(NinePatchDrawable);

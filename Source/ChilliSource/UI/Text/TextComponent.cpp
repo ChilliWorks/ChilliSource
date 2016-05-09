@@ -216,8 +216,8 @@ namespace ChilliSource
     //------------------------------------------------------------------------------
     void TextComponent::SetFont(const FontCSPtr& in_font)
     {
-        CS_ASSERT(in_font != nullptr, "Cannot set a null font on a Text Drawable.");
-        CS_ASSERT(in_font->GetLoadState() == Resource::LoadState::k_loaded, "Cannot set an incomplete font on a Text Drawable.");
+        CS_ASSERT(in_font != nullptr, "Cannot set a null font on a Text UIDrawable.");
+        CS_ASSERT(in_font->GetLoadState() == Resource::LoadState::k_loaded, "Cannot set an incomplete font on a Text UIDrawable.");
         
         m_font = in_font;
         

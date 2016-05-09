@@ -1,5 +1,5 @@
 //
-//  Drawable.cpp
+//  UIDrawable.cpp
 //  Chilli Source
 //  Created by Scott Downie on 18/04/2014.
 //
@@ -26,9 +26,9 @@
 //  THE SOFTWARE.
 //
 
-#include <ChilliSource/UI/Drawable/Drawable.h>
+#include <ChilliSource/UI/Drawable/UIDrawable.h>
 
 namespace ChilliSource
 {
-    CS_DEFINE_NAMEDTYPE(Drawable);
+    CS_DEFINE_NAMEDTYPE(UIDrawable);
 }

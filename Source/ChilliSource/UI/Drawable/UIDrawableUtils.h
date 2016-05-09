@@ -1,5 +1,5 @@
 //
-//  DrawableUtils.h
+//  UIDrawableUtils.h
 //  Chilli Source
 //  Created by Scott Downie on 03/10/2014.
 //
@@ -26,8 +26,8 @@
 //  THE SOFTWARE.
 //
 
-#ifndef _CHILLISOURCE_UI_DRAWABLE_DRAWABLEUTILS_H_
-#define _CHILLISOURCE_UI_DRAWABLE_DRAWABLEUTILS_H_
+#ifndef _CHILLISOURCE_UI_DRAWABLE_UIDRAWABLEUTILS_H_
+#define _CHILLISOURCE_UI_DRAWABLE_UIDRAWABLEUTILS_H_
 
 #include <ChilliSource/ChilliSource.h>
 #include <ChilliSource/Rendering/Texture/TextureAtlas.h>
@@ -39,7 +39,7 @@ namespace ChilliSource
     ///
     /// @author S Downie
     //----------------------------------------------------------------------------
-    namespace DrawableUtils
+    namespace UIDrawableUtils
     {
         //----------------------------------------------------------------------------
         /// Creates the texture atlas frame from the given atlas, atlas id, and UVs.

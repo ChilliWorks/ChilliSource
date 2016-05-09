@@ -35,7 +35,7 @@
 #include <ChilliSource/Rendering/Base/AspectRatioUtils.h>
 #include <ChilliSource/Rendering/Base/CanvasRenderer.h>
 #include <ChilliSource/Rendering/Texture/Texture.h>
-#include <ChilliSource/UI/Drawable/DrawableUtils.h>
+#include <ChilliSource/UI/Drawable/UIDrawableUtils.h>
 
 namespace ChilliSource
 {
@@ -399,7 +399,7 @@ namespace ChilliSource
     //----------------------------------------------------------------------------------------
     bool NinePatchDrawable::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (Drawable::InterfaceID == in_interfaceId || NinePatchDrawable::InterfaceID == in_interfaceId);
+        return (UIDrawable::InterfaceID == in_interfaceId || NinePatchDrawable::InterfaceID == in_interfaceId);
     }
     //----------------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------------
@@ -439,7 +439,7 @@ namespace ChilliSource
         
         m_texture = in_texture;
         
-        m_atlasFrame = DrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
+        m_atlasFrame = UIDrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
         m_isPatchCatchValid = false;
     }
     //----------------------------------------------------------------------------------------
@@ -449,7 +449,7 @@ namespace ChilliSource
         m_atlas = in_atlas;
         m_atlasId = "";
         
-        m_atlasFrame = DrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
+        m_atlasFrame = UIDrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
         m_isPatchCatchValid = false;
     }
     //----------------------------------------------------------------------------------------
@@ -460,7 +460,7 @@ namespace ChilliSource
         
         m_atlasId = in_atlasId;
         
-        m_atlasFrame = DrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
+        m_atlasFrame = UIDrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
         m_isPatchCatchValid = false;
     }
     //----------------------------------------------------------------------------------------
@@ -469,7 +469,7 @@ namespace ChilliSource
     {
         m_uvs = in_UVs;
         
-        m_atlasFrame = DrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
+        m_atlasFrame = UIDrawableUtils::BuildFrame(m_texture.get(), m_atlas.get(), m_atlasId, m_uvs);
         m_isPatchCatchValid = false;
     }
     //----------------------------------------------------------------------------------------

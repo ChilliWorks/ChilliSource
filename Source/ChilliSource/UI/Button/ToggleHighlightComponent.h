@@ -95,14 +95,14 @@ namespace ChilliSource
         /// @return the drawable that will be set on the owning widget when
         /// it is not pressed while toggled off.
         //-------------------------------------------------------------------
-        const DrawableDefCSPtr& GetNormalOffDrawableDef() const;
+        const UIDrawableDefCSPtr& GetNormalOffDrawableDef() const;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return the drawable that will be set on the owning widget when
         /// it is pressed while toggled off.
         //-------------------------------------------------------------------
-        const DrawableDefCSPtr& GetHighlightOffDrawableDef() const;
+        const UIDrawableDefCSPtr& GetHighlightOffDrawableDef() const;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -115,14 +115,14 @@ namespace ChilliSource
         /// @return the drawable that will be set on the owning widget when
         /// it is not pressed while toggled on.
         //-------------------------------------------------------------------
-        const DrawableDefCSPtr& GetNormalOnDrawableDef() const;
+        const UIDrawableDefCSPtr& GetNormalOnDrawableDef() const;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return the drawable that will be set on the owning widget when
         /// it is pressed while toggled on.
         //-------------------------------------------------------------------
-        const DrawableDefCSPtr& GetHighlightOnDrawableDef() const;
+        const UIDrawableDefCSPtr& GetHighlightOnDrawableDef() const;
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
@@ -143,7 +143,7 @@ namespace ChilliSource
         ///
         /// @param The drawable.
         //-------------------------------------------------------------------
-        void SetNormalOffDrawableDef(const DrawableDefCSPtr& in_drawableDef);
+        void SetNormalOffDrawableDef(const UIDrawableDefCSPtr& in_drawableDef);
         //-------------------------------------------------------------------
         /// Sets the drawable that will be set on the owning widget when
         /// it is pressed and is toggled off.
@@ -152,7 +152,7 @@ namespace ChilliSource
         ///
         /// @param The drawable.
         //-------------------------------------------------------------------
-        void SetHighlightOffDrawableDef(const DrawableDefCSPtr& in_drawableDef);
+        void SetHighlightOffDrawableDef(const UIDrawableDefCSPtr& in_drawableDef);
         //-------------------------------------------------------------------
         /// Sets the colour used when the button is highlighted while off.
         ///
@@ -169,7 +169,7 @@ namespace ChilliSource
         ///
         /// @param The drawable.
         //-------------------------------------------------------------------
-        void SetNormalOnDrawableDef(const DrawableDefCSPtr& in_drawableDef);
+        void SetNormalOnDrawableDef(const UIDrawableDefCSPtr& in_drawableDef);
         //-------------------------------------------------------------------
         /// Sets the drawable that will be set on the owning widget when
         /// it is pressed and is toggled on.
@@ -178,7 +178,7 @@ namespace ChilliSource
         ///
         /// @param The drawable.
         //-------------------------------------------------------------------
-        void SetHighlightOnDrawableDef(const DrawableDefCSPtr& in_drawableDef);
+        void SetHighlightOnDrawableDef(const UIDrawableDefCSPtr& in_drawableDef);
         //-------------------------------------------------------------------
         /// Sets the colour used when the button is highlighted while on.
         ///
@@ -341,11 +341,11 @@ namespace ChilliSource
         //-------------------------------------------------------------------
         void OnDestroy() override;
         
-        DrawableDefCSPtr m_normalOffDrawableDef;
-        DrawableDefCSPtr m_highlightOffDrawableDef;
+        UIDrawableDefCSPtr m_normalOffDrawableDef;
+        UIDrawableDefCSPtr m_highlightOffDrawableDef;
         Colour m_highlightOffColour;
-        DrawableDefCSPtr m_normalOnDrawableDef;
-        DrawableDefCSPtr m_highlightOnDrawableDef;
+        UIDrawableDefCSPtr m_normalOnDrawableDef;
+        UIDrawableDefCSPtr m_highlightOnDrawableDef;
         Colour m_highlightOnColour;
 
         DrawableComponent* m_drawableComponent = nullptr;

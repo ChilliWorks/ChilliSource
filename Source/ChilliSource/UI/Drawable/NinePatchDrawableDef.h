@@ -33,17 +33,17 @@
 #include <ChilliSource/Core/Base/Colour.h>
 #include <ChilliSource/Core/Math/Vector4.h>
 #include <ChilliSource/Rendering/Texture/UVs.h>
-#include <ChilliSource/UI/Drawable/DrawableDef.h>
+#include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 
 namespace ChilliSource
 {
     //---------------------------------------------------------------------
-    /// A definition of a Nine-Patch Drawable which can be built from a
+    /// A definition of a Nine-Patch UIDrawable which can be built from a
     /// json object. This is effectively an immutable container for the
-    /// properties of a Nine-Patch Drawable.
+    /// properties of a Nine-Patch UIDrawable.
     ///
-    /// A Nine-Patch Drawable Def contains the following property in
-    /// addition to those defined in the Drawable Def base class
+    /// A Nine-Patch UIDrawable Def contains the following property in
+    /// addition to those defined in the UIDrawable Def base class
     /// documentation:
     ///
     /// "Insets": The insets from the edges of the stretchable portion of
@@ -51,7 +51,7 @@ namespace ChilliSource
     ///
     /// @author Ian Copland
     //---------------------------------------------------------------------
-    class NinePatchDrawableDef final : public DrawableDef
+    class NinePatchDrawableDef final : public UIDrawableDef
     {
     public:
         CS_DECLARE_NAMEDTYPE(NinePatchDrawableDef);
@@ -169,7 +169,7 @@ namespace ChilliSource
         ///
         /// @return a new drawable instance.
         //--------------------------------------------------------------
-        DrawableUPtr CreateDrawable() const override;
+        UIDrawableUPtr CreateDrawable() const override;
         
         TextureCSPtr m_texture;
         TextureAtlasCSPtr m_atlas;

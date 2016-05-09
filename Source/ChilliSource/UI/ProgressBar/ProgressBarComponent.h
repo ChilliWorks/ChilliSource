@@ -57,7 +57,7 @@ namespace ChilliSource
     /// fill progress bar will also alter the UVs of the widgets drawable
     /// such that it appears to reveal more of the bar as it progresses. This
     /// defaults to "Fill". If using Fill the underlying bar widget must
-    /// have a Drawable UIComponent, otherwise the app is considered to be in an
+    /// have a UIDrawable UIComponent, otherwise the app is considered to be in an
     /// irrecoverable state and will terminate.
     ///
     /// "BarDirection": A string describing the direction of the progress bar.

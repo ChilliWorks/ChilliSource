@@ -73,7 +73,7 @@ namespace ChilliSource
     //-----------------------------------------------------------------
     void UIComponentFactory::OnInit()
     {
-        Register<DrawableComponent>("Drawable");
+        Register<DrawableComponent>("UIDrawable");
         Register<LayoutComponent>("Layout");
         Register<HighlightComponent>("Highlight");
         Register<ToggleHighlightComponent>("ToggleHighlight");

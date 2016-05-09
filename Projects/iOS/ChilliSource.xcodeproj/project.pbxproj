@@ -208,10 +208,10 @@
 		8158F7111C89D2AD00B13109 /* WidgetTemplateProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F43C1C89D2AD00B13109 /* WidgetTemplateProvider.cpp */; };
 		8158F7121C89D2AD00B13109 /* HighlightComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4401C89D2AD00B13109 /* HighlightComponent.cpp */; };
 		8158F7131C89D2AD00B13109 /* ToggleHighlightComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4421C89D2AD00B13109 /* ToggleHighlightComponent.cpp */; };
-		8158F7141C89D2AD00B13109 /* Drawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4461C89D2AD00B13109 /* Drawable.cpp */; };
+		8158F7141C89D2AD00B13109 /* UIDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4461C89D2AD00B13109 /* UIDrawable.cpp */; };
 		8158F7151C89D2AD00B13109 /* DrawableComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4481C89D2AD00B13109 /* DrawableComponent.cpp */; };
-		8158F7161C89D2AD00B13109 /* DrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F44A1C89D2AD00B13109 /* DrawableDef.cpp */; };
-		8158F7171C89D2AD00B13109 /* DrawableUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F44C1C89D2AD00B13109 /* DrawableUtils.cpp */; };
+		8158F7161C89D2AD00B13109 /* UIDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F44A1C89D2AD00B13109 /* UIDrawableDef.cpp */; };
+		8158F7171C89D2AD00B13109 /* UIDrawableUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F44C1C89D2AD00B13109 /* UIDrawableUtils.cpp */; };
 		8158F7181C89D2AD00B13109 /* NinePatchDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F44E1C89D2AD00B13109 /* NinePatchDrawable.cpp */; };
 		8158F7191C89D2AD00B13109 /* NinePatchDrawableDef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4501C89D2AD00B13109 /* NinePatchDrawableDef.cpp */; };
 		8158F71A1C89D2AD00B13109 /* StandardDrawable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8158F4521C89D2AD00B13109 /* StandardDrawable.cpp */; };
@@ -859,14 +859,14 @@
 		8158F4421C89D2AD00B13109 /* ToggleHighlightComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ToggleHighlightComponent.cpp; sourceTree = "<group>"; };
 		8158F4431C89D2AD00B13109 /* ToggleHighlightComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToggleHighlightComponent.h; sourceTree = "<group>"; };
 		8158F4441C89D2AD00B13109 /* Button.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Button.h; sourceTree = "<group>"; };
-		8158F4461C89D2AD00B13109 /* Drawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Drawable.cpp; sourceTree = "<group>"; };
-		8158F4471C89D2AD00B13109 /* Drawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Drawable.h; sourceTree = "<group>"; };
+		8158F4461C89D2AD00B13109 /* UIDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIDrawable.cpp; sourceTree = "<group>"; };
+		8158F4471C89D2AD00B13109 /* UIDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDrawable.h; sourceTree = "<group>"; };
 		8158F4481C89D2AD00B13109 /* DrawableComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableComponent.cpp; sourceTree = "<group>"; };
 		8158F4491C89D2AD00B13109 /* DrawableComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableComponent.h; sourceTree = "<group>"; };
-		8158F44A1C89D2AD00B13109 /* DrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableDef.cpp; sourceTree = "<group>"; };
-		8158F44B1C89D2AD00B13109 /* DrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableDef.h; sourceTree = "<group>"; };
-		8158F44C1C89D2AD00B13109 /* DrawableUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DrawableUtils.cpp; sourceTree = "<group>"; };
-		8158F44D1C89D2AD00B13109 /* DrawableUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawableUtils.h; sourceTree = "<group>"; };
+		8158F44A1C89D2AD00B13109 /* UIDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIDrawableDef.cpp; sourceTree = "<group>"; };
+		8158F44B1C89D2AD00B13109 /* UIDrawableDef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDrawableDef.h; sourceTree = "<group>"; };
+		8158F44C1C89D2AD00B13109 /* UIDrawableUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UIDrawableUtils.cpp; sourceTree = "<group>"; };
+		8158F44D1C89D2AD00B13109 /* UIDrawableUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDrawableUtils.h; sourceTree = "<group>"; };
 		8158F44E1C89D2AD00B13109 /* NinePatchDrawable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NinePatchDrawable.cpp; sourceTree = "<group>"; };
 		8158F44F1C89D2AD00B13109 /* NinePatchDrawable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NinePatchDrawable.h; sourceTree = "<group>"; };
 		8158F4501C89D2AD00B13109 /* NinePatchDrawableDef.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NinePatchDrawableDef.cpp; sourceTree = "<group>"; };
@@ -2222,14 +2222,14 @@
 		8158F4451C89D2AD00B13109 /* Drawable */ = {
 			isa = PBXGroup;
 			children = (
-				8158F4461C89D2AD00B13109 /* Drawable.cpp */,
-				8158F4471C89D2AD00B13109 /* Drawable.h */,
+				8158F4461C89D2AD00B13109 /* UIDrawable.cpp */,
+				8158F4471C89D2AD00B13109 /* UIDrawable.h */,
 				8158F4481C89D2AD00B13109 /* DrawableComponent.cpp */,
 				8158F4491C89D2AD00B13109 /* DrawableComponent.h */,
-				8158F44A1C89D2AD00B13109 /* DrawableDef.cpp */,
-				8158F44B1C89D2AD00B13109 /* DrawableDef.h */,
-				8158F44C1C89D2AD00B13109 /* DrawableUtils.cpp */,
-				8158F44D1C89D2AD00B13109 /* DrawableUtils.h */,
+				8158F44A1C89D2AD00B13109 /* UIDrawableDef.cpp */,
+				8158F44B1C89D2AD00B13109 /* UIDrawableDef.h */,
+				8158F44C1C89D2AD00B13109 /* UIDrawableUtils.cpp */,
+				8158F44D1C89D2AD00B13109 /* UIDrawableUtils.h */,
 				8158F44E1C89D2AD00B13109 /* NinePatchDrawable.cpp */,
 				8158F44F1C89D2AD00B13109 /* NinePatchDrawable.h */,
 				8158F4501C89D2AD00B13109 /* NinePatchDrawableDef.cpp */,
@@ -3030,7 +3030,7 @@
 				8158F7231C89D2AD00B13109 /* LayoutComponent.cpp in Sources */,
 				8158F66A1C89D2AD00B13109 /* CSBinaryChunk.cpp in Sources */,
 				8158F6E31C89D2AD00B13109 /* CircleParticleEmitter.cpp in Sources */,
-				8158F7171C89D2AD00B13109 /* DrawableUtils.cpp in Sources */,
+				8158F7171C89D2AD00B13109 /* UIDrawableUtils.cpp in Sources */,
 				8158F7311C89D2AD00B13109 /* WebView.cpp in Sources */,
 				8158F68A1C89D2AD00B13109 /* StringParser.cpp in Sources */,
 				8158F6BA1C89D2AD00B13109 /* CameraComponent.cpp in Sources */,
@@ -3059,7 +3059,7 @@
 				8158F64B1C89D2AD00B13109 /* CkBank.cpp in Sources */,
 				8158F6831C89D2AD00B13109 /* ResourcePool.cpp in Sources */,
 				8158F7E51C89D2AD00B13109 /* WebViewDelegate.mm in Sources */,
-				8158F7141C89D2AD00B13109 /* Drawable.cpp in Sources */,
+				8158F7141C89D2AD00B13109 /* UIDrawable.cpp in Sources */,
 				8158F6861C89D2AD00B13109 /* State.cpp in Sources */,
 				8158F6D71C89D2AD00B13109 /* ParticleAffector.cpp in Sources */,
 				8158F7241C89D2AD00B13109 /* LayoutDef.cpp in Sources */,
@@ -3173,7 +3173,7 @@
 				8158F6A81C89D2AD00B13109 /* HttpResponse.cpp in Sources */,
 				8158F7C81C89D2AD00B13109 /* FileSystem.mm in Sources */,
 				8158F6A61C89D2AD00B13109 /* MoContentDownloader.cpp in Sources */,
-				8158F7161C89D2AD00B13109 /* DrawableDef.cpp in Sources */,
+				8158F7161C89D2AD00B13109 /* UIDrawableDef.cpp in Sources */,
 				8158F7F71C89D2AD00B13109 /* ContextRestorer.cpp in Sources */,
 				8158F71A1C89D2AD00B13109 /* StandardDrawable.cpp in Sources */,
 				8158F6531C89D2AD00B13109 /* ColourUtils.cpp in Sources */,

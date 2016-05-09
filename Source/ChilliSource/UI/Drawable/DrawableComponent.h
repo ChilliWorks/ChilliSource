@@ -34,13 +34,13 @@
 #include <ChilliSource/Core/Event/EventConnection.h>
 #include <ChilliSource/Input/Pointer/Pointer.h>
 #include <ChilliSource/UI/Base/UIComponent.h>
-#include <ChilliSource/UI/Drawable/Drawable.h>
+#include <ChilliSource/UI/Drawable/UIDrawable.h>
 
 namespace ChilliSource
 {
     //--------------------------------------------------------------------------
     /// A component for rendering image in a widget. This is handled through
-    /// setting a Drawable. Drawables come in 3 different types: Standard,
+    /// setting a UIDrawable. Drawables come in 3 different types: Standard,
     /// Three-Patch and Nine-Patch. A Standard drawable renders a basic image,
     /// A Three-Patch drawable will stretch without distorting the image in
     /// 1 direction and a Nine-Patch can stretch in any direction without
@@ -50,7 +50,7 @@ namespace ChilliSource
     ///
     /// A DrawableComponent contains the following properties:
     ///
-    /// "Drawable": The description of the drawable that will be rendered. The
+    /// "UIDrawable": The description of the drawable that will be rendered. The
     /// contents of a drawable are described in each of the drawable def types
     /// documentation.
     ///
@@ -86,14 +86,14 @@ namespace ChilliSource
         /// can be used to directly change properties such as the UVs and
         /// colour of the rendered image.
         //-------------------------------------------------------------------
-        Drawable* GetDrawable();
+        UIDrawable* GetDrawable();
         //-------------------------------------------------------------------
         /// @author Ian Copland
         ///
         /// @return A const pointer to the drawable object that performs the
         /// rendering. 
         //-------------------------------------------------------------------
-        const Drawable* GetDrawable() const;
+        const UIDrawable* GetDrawable() const;
         //-------------------------------------------------------------------
         /// Sets the drawable definition that is used to create the underlying
         /// drawable object.
@@ -102,7 +102,7 @@ namespace ChilliSource
         ///
         /// @param The drawable defintion.
         //-------------------------------------------------------------------
-        void ApplyDrawableDef(const DrawableDefCSPtr& in_drawableDef);
+        void ApplyDrawableDef(const UIDrawableDefCSPtr& in_drawableDef);
         
     private:
         friend class UIComponentFactory;
@@ -123,7 +123,7 @@ namespace ChilliSource
         /// @return The drawable definition that was used to create the
         /// underlying drawable object.
         //-------------------------------------------------------------------
-        const DrawableDefCSPtr& GetDrawableDef() const;
+        const UIDrawableDefCSPtr& GetDrawableDef() const;
         //----------------------------------------------------------------
         /// This is called during the draw event whenever the application
         /// is active and the owning widget in on the canvas. This will
@@ -138,8 +138,8 @@ namespace ChilliSource
         //----------------------------------------------------------------
         void OnDraw(CanvasRenderer* in_renderer, const Matrix3& in_transform, const Vector2& in_absSize, const Colour& in_absColour) override;
         
-        DrawableDefCSPtr m_drawableDef;
-        DrawableUPtr m_drawable;
+        UIDrawableDefCSPtr m_drawableDef;
+        UIDrawableUPtr m_drawable;
     };
 }
 

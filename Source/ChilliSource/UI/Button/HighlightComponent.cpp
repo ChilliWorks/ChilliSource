@@ -35,7 +35,7 @@
 #include <ChilliSource/UI/Base/Widget.h>
 #include <ChilliSource/UI/Base/PropertyTypes.h>
 #include <ChilliSource/UI/Drawable/DrawableComponent.h>
-#include <ChilliSource/UI/Drawable/DrawableDef.h>
+#include <ChilliSource/UI/Drawable/UIDrawableDef.h>
 
 
 namespace ChilliSource
@@ -48,8 +48,8 @@ namespace ChilliSource
         
         const std::vector<PropertyMap::PropertyDesc> k_propertyDescs =
         {
-            {PropertyTypes::DrawableDef(), k_normalDrawableKey},
-            {PropertyTypes::DrawableDef(), k_highlightDrawableKey},
+            {PropertyTypes::UIDrawableDef(), k_normalDrawableKey},
+            {PropertyTypes::UIDrawableDef(), k_highlightDrawableKey},
             {PropertyTypes::Colour(), k_highlightColourKey}
         };
     }
@@ -66,8 +66,8 @@ namespace ChilliSource
     HighlightComponent::HighlightComponent(const std::string& in_componentName, const PropertyMap& in_properties)
         : UIComponent(in_componentName)
     {
-        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_normalDrawableKey, MakeDelegate(this, &HighlightComponent::GetNormalDrawableDef), MakeDelegate(this, &HighlightComponent::SetNormalDrawableDef));
-        RegisterProperty<DrawableDefCSPtr>(PropertyTypes::DrawableDef(), k_highlightDrawableKey, MakeDelegate(this, &HighlightComponent::GetHighlightDrawableDef), MakeDelegate(this, &HighlightComponent::SetHighlightDrawableDef));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_normalDrawableKey, MakeDelegate(this, &HighlightComponent::GetNormalDrawableDef), MakeDelegate(this, &HighlightComponent::SetNormalDrawableDef));
+        RegisterProperty<UIDrawableDefCSPtr>(PropertyTypes::UIDrawableDef(), k_highlightDrawableKey, MakeDelegate(this, &HighlightComponent::GetHighlightDrawableDef), MakeDelegate(this, &HighlightComponent::SetHighlightDrawableDef));
         RegisterProperty<Colour>(PropertyTypes::Colour(), k_highlightColourKey, MakeDelegate(this, &HighlightComponent::GetHighlightColour), MakeDelegate(this, &HighlightComponent::SetHighlightColour));
         ApplyRegisteredProperties(in_properties);
     }
@@ -79,13 +79,13 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const DrawableDefCSPtr& HighlightComponent::GetNormalDrawableDef() const
+    const UIDrawableDefCSPtr& HighlightComponent::GetNormalDrawableDef() const
     {
         return m_normalDrawableDef;
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    const DrawableDefCSPtr& HighlightComponent::GetHighlightDrawableDef() const
+    const UIDrawableDefCSPtr& HighlightComponent::GetHighlightDrawableDef() const
     {
         return m_highlightDrawableDef;
     }
@@ -97,7 +97,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::SetNormalDrawableDef(const DrawableDefCSPtr& in_drawableDef)
+    void HighlightComponent::SetNormalDrawableDef(const UIDrawableDefCSPtr& in_drawableDef)
     {
         m_normalDrawableDef = in_drawableDef;
         
@@ -108,7 +108,7 @@ namespace ChilliSource
     }
     //-------------------------------------------------------------------
     //-------------------------------------------------------------------
-    void HighlightComponent::SetHighlightDrawableDef(const DrawableDefCSPtr& in_drawable)
+    void HighlightComponent::SetHighlightDrawableDef(const UIDrawableDefCSPtr& in_drawable)
     {
         m_highlightDrawableDef = in_drawable;
         
@@ -168,7 +168,7 @@ namespace ChilliSource
     void HighlightComponent::OnInit()
     {
         m_drawableComponent = GetWidget()->GetComponent<DrawableComponent>();
-        CS_ASSERT(m_drawableComponent != nullptr, "Widgets with a Highlight UIComponent must also contain a Drawable UIComponent.");
+        CS_ASSERT(m_drawableComponent != nullptr, "Widgets with a Highlight UIComponent must also contain a UIDrawable UIComponent.");
         
         if (m_highlighted == false)
         {

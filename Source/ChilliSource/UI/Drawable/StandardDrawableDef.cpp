@@ -53,7 +53,7 @@ namespace ChilliSource
         const char k_uvsKey[] = "UVs";
         const char k_colourKey[] = "Colour";
         
-        CS_ASSERT(in_json.isObject() == true, "Drawable Def must be created from a json value of type Object.");
+        CS_ASSERT(in_json.isObject() == true, "UIDrawable Def must be created from a json value of type Object.");
         
         //read all the properties from JSON.
         StorageLocation textureLocation = StorageLocation::k_none;
@@ -62,7 +62,7 @@ namespace ChilliSource
         std::string atlasPath;
         for(auto it = in_json.begin(); it != in_json.end(); ++it)
         {
-            CS_ASSERT((*it).isString() == true, "All properties in a Drawable Def must be a string: " + std::string(it.memberName()));
+            CS_ASSERT((*it).isString() == true, "All properties in a UIDrawable Def must be a string: " + std::string(it.memberName()));
             
             std::string key = it.memberName();
             std::string value = (*it).asString();
@@ -102,12 +102,12 @@ namespace ChilliSource
             }
             else
             {
-                CS_LOG_FATAL("Invalid property found in a Standard Drawable Def: " + key);
+                CS_LOG_FATAL("Invalid property found in a Standard UIDrawable Def: " + key);
             }
         }
         
         //load the texture.
-        CS_ASSERT(texturePath.empty() == false, "A texture must be supplied in a Standard Drawable Def.")
+        CS_ASSERT(texturePath.empty() == false, "A texture must be supplied in a Standard UIDrawable Def.")
         
         auto resPool = Application::Get()->GetResourcePool();
         if (textureLocation == StorageLocation::k_none)
@@ -117,7 +117,7 @@ namespace ChilliSource
         }
         
         m_texture = resPool->LoadResource<Texture>(textureLocation, texturePath);
-        CS_ASSERT(m_texture != nullptr, "Invalid texture supplied in a Standard Drawable Def.");
+        CS_ASSERT(m_texture != nullptr, "Invalid texture supplied in a Standard UIDrawable Def.");
         
         //try and load the atlas
         if (atlasPath.empty() == false)
@@ -129,12 +129,12 @@ namespace ChilliSource
             }
             
             m_atlas = resPool->LoadResource<TextureAtlas>(atlasLocation, atlasPath);
-            CS_ASSERT(m_texture, "Invalid texture atlas supplied in a Standard Drawable Def.");
-            CS_ASSERT(m_atlasId.empty() == false, "A texture atlas Id must be specified when using a texture atlas in a Standard Drawable Def.");
+            CS_ASSERT(m_texture, "Invalid texture atlas supplied in a Standard UIDrawable Def.");
+            CS_ASSERT(m_atlasId.empty() == false, "A texture atlas Id must be specified when using a texture atlas in a Standard UIDrawable Def.");
         }
         else
         {
-            CS_ASSERT(m_atlasId.empty() == true, "Cannot specify a texture atlas Id without a texture atlas in a Standard Drawable Def.");
+            CS_ASSERT(m_atlasId.empty() == true, "Cannot specify a texture atlas Id without a texture atlas in a Standard UIDrawable Def.");
         }
     }
     //--------------------------------------------------------------
@@ -142,22 +142,22 @@ namespace ChilliSource
     StandardDrawableDef::StandardDrawableDef(const TextureCSPtr& in_texture, const Colour& in_colour, const UVs& in_uvs)
         : m_texture(in_texture), m_colour(in_colour), m_uvs(in_uvs)
     {
-        CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Standard Drawable Def.");
+        CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Standard UIDrawable Def.");
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
     StandardDrawableDef::StandardDrawableDef(const TextureCSPtr& in_texture, const TextureAtlasCSPtr& in_atlas, const std::string& in_atlasId, const Colour& in_colour, const UVs& in_uvs)
         : m_texture(in_texture), m_atlas(in_atlas), m_atlasId(in_atlasId), m_colour(in_colour), m_uvs(in_uvs)
     {
-        CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Standard Drawable Def.");
-        CS_ASSERT(m_atlas != nullptr, "Cannot specify a null texture atlas in a Standard Drawable Def. Use the texture only constructor instead.");
-        CS_ASSERT(m_atlas->HasFrameWithId(m_atlasId) == true, "Invalid texture atlas Id provided in a Standard Drawable Def.");
+        CS_ASSERT(m_texture != nullptr, "The texture cannot be null in a Standard UIDrawable Def.");
+        CS_ASSERT(m_atlas != nullptr, "Cannot specify a null texture atlas in a Standard UIDrawable Def. Use the texture only constructor instead.");
+        CS_ASSERT(m_atlas->HasFrameWithId(m_atlasId) == true, "Invalid texture atlas Id provided in a Standard UIDrawable Def.");
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
     bool StandardDrawableDef::IsA(InterfaceIDType in_interfaceId) const
     {
-        return (DrawableDef::InterfaceID == in_interfaceId || StandardDrawableDef::InterfaceID == in_interfaceId);
+        return (UIDrawableDef::InterfaceID == in_interfaceId || StandardDrawableDef::InterfaceID == in_interfaceId);
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
@@ -191,7 +191,7 @@ namespace ChilliSource
     }
     //--------------------------------------------------------------
     //--------------------------------------------------------------
-    DrawableUPtr StandardDrawableDef::CreateDrawable() const
+    UIDrawableUPtr StandardDrawableDef::CreateDrawable() const
     {
         StandardDrawableUPtr drawable;
         
@@ -207,7 +207,7 @@ namespace ChilliSource
         drawable->SetUVs(m_uvs);
         drawable->SetColour(m_colour);
 
-        DrawableUPtr output = std::move(drawable);
+        UIDrawableUPtr output = std::move(drawable);
         return output;
     }
 }
